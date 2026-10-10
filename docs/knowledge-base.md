@@ -6,10 +6,18 @@
 
 ---
 
+## KB-029 ｜ storage-domain 内嵌「只增留痕数组」做法（沉淀：doubao-work，2026-10-10）
+
+- **场景**：需要在一条记录内保留版本/状态变更历史（R10 交付物 `history[]`），但 storage-domain 无跨表事务、无二级索引，不想为此单开一张表。
+- **做法**：在记录 schema（zod strictObject）里声明 `history: z.array(changeSchema)`，`changeSchema` 也是 strictObject（at/field/from/to/by/note）；更新时在 `enqueueDomainWrite` 内取出 `current.history` 展开为新数组、`push` 新条目后随整条 `put` 回去——**只增不改、不接受用户直接传入 history**（create/update schema 不含 history 字段，strictObject 会拒绝越权字段）。
+- **要点**：① 是否追加由「新值 !== 旧值」判定，值未变不追加，避免噪声；② 多个字段同批变化按固定顺序（先 status 后 version）各追加一条；③ 留痕的操作人/说明用独立的瞬态参数 `operator/changeNote`，它们进 update schema 但不进 record schema，不会被持久化为业务列（update schema 的 refine 要排除这两个键再判断「至少一个业务字段」）。
+- **适用/边界**：适合条目数量可控、随记录一起读取的审计轨迹；若留痕量大、需跨记录查询/分页，应升级为独立表。同类「内嵌稳定子项」先例：会议纪要行动项（KB 相关 meeting 设计）。
+
 ## KB-028 ｜ 无 GUI 时用 HTTP 探测 dsh web：插件 client 资源走合并路由且只认 cookie（沉淀：doubao-work，2026-10-10）
 
 - **结论**：`pnpm dsh --profile pm --no-open --port 0` 随机端口启动后，首页 `http://127.0.0.1:<port>/?token=<t>` 返回 **303** 并种下 HttpOnly 鉴权 cookie，需 `curl -L -c jar -b jar` 跟随；不带凭证访问 `/` 返回 **401**。
-- **插件浏览器半侧不是单文件路径**：`/plugins/<pkg>/client.js` 直接请求会 404；客户端 JS 以合并路由下发，形如 `/plugins/??<pkgA>/client.js,<pkgB>/client.js,dsh-pm-tool/client.js&rev=<hash>`（首页 HTML 里以 `&amp;` 转义，需先 unescape）。
+- **插件浏览器半侧不是单文件路径**：`/plugins/<pkg>/client.js` 直接请求会 404；客户端 JS 以合并路由下发，形如 `plugins/??<pkgA>/client.js,<pkgB>/client.js,dsh-pm-tool/client.js&rev=<hash>`（首页 HTML 中为**相对路径**、无前导 `/`，且以 `&amp;` 转义，抓取时需补前导 `/` 并 unescape）。
+- **想只抓本插件 bundle，用单插件合并路由**：首页 HTML 里另有一条独立条目 `plugins/??dsh-pm-tool/client.js&rev=<hash>`，请求 `http://127.0.0.1:<port>/plugins/??dsh-pm-tool/client.js&rev=<hash>`（带 cookie）即只返回本插件浏览器半侧，R10 实测 200、字节数与 `lib/client.js` 构建产物一致，是断言「跑的是新构建」最省事的抓取目标。
 - **合并路由只认 cookie、不认 query token**：对该路由追加 `&token=` 仍 404；必须用 `-b <cookie-jar>` 携带 303 种下的 cookie 才返回 200。
 - **用途**：在无法驱动本机浏览器时，用「启动日志确认存储领域打开 + 首页鉴权码 + 抓取运行中实际下发的合并 bundle 并 grep 新功能界面串」证明跑的是新构建、插件已装载（配合 ADL-027 证据组合）。
 - **来源/佐证**：R9 独立复核实测（端口 55111）；ISS-019（隔离 DSH_HOME 启动法）、KB-014（loopback/browser-trust 边界）。

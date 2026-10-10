@@ -290,6 +290,7 @@
 .pm-risk-table { min-width: 1080px; }
 .pm-meeting-table { min-width: 980px; }
 .pm-report-table { min-width: 980px; }
+.pm-deliverable-table { min-width: 920px; }
 .pm-data-table th, .pm-data-table td {
   height: 39px;
   padding: 6px 10px;
@@ -398,8 +399,10 @@
 .pm-tag[data-value="in_progress"], .pm-tag[data-value="active"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); color: var(--pm-blue); }
 .pm-tag[data-value="monitoring"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); color: var(--pm-blue); }
 .pm-tag[data-value="blocked"], .pm-tag[data-value="at_risk"], .pm-tag[data-value="paused"],
+.pm-tag[data-value="submitted"],
 .pm-priority-tag[data-value="P1"] { background: color-mix(in srgb, var(--pm-warning) 12%, transparent); color: var(--pm-warning); }
-.pm-tag[data-value="done"], .pm-tag[data-value="achieved"], .pm-tag[data-value="closed"] { background: color-mix(in srgb, var(--pm-success) 10%, transparent); color: var(--pm-success); }
+.pm-tag[data-value="done"], .pm-tag[data-value="achieved"], .pm-tag[data-value="closed"],
+.pm-tag[data-value="accepted"] { background: color-mix(in srgb, var(--pm-success) 10%, transparent); color: var(--pm-success); }
 .pm-tag[data-value="missed"], .pm-priority-tag[data-value="P0"] { background: color-mix(in srgb, var(--pm-danger) 10%, transparent); color: var(--pm-danger); }
 .pm-reference { background: var(--dsw-alias-bg-module-platform); color: var(--pm-secondary); }
 .pm-type-tag[data-value="risk"] { background: color-mix(in srgb, var(--pm-warning) 12%, transparent); color: var(--pm-warning); }
@@ -609,6 +612,14 @@
 .pm-report-snapshot li[data-severity="critical"] { border-left-color: var(--pm-danger); }
 .pm-report-snapshot li span, .pm-report-snapshot li small, .pm-report-snapshot > p { color: var(--pm-secondary); }
 .pm-report-snapshot li small { font-size: 11px; }
+
+.pm-deliverable-history { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--pm-line); }
+.pm-deliverable-history h3 { margin: 0 0 12px; font-size: 14px; font-weight: 650; }
+.pm-deliverable-history ul { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.pm-deliverable-history li { display: grid; gap: 3px; padding: 9px 10px; border-left: 3px solid var(--pm-blue); background: var(--pm-surface); }
+.pm-deliverable-history li strong { font-size: 13px; }
+.pm-deliverable-history li span, .pm-deliverable-history li small, .pm-deliverable-history > p { color: var(--pm-secondary); }
+.pm-deliverable-history li small { font-size: 11px; }
 
 .pm-empty-workspace {
   min-height: calc(100% - 64px);

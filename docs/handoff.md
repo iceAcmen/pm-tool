@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（doubao-work 独立复核通过并提交推送 R9，接续 R10）
+最后更新：2026-10-10（doubao-work 实现并通过验证 R10 交付物台账，接续 R12 / R11 取舍）
 
 ---
 
@@ -10,16 +10,16 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R9 已完成并推送。R9 固定快照进度汇报由 trae 实现、doubao-work 独立复核（冻结安装/构建/十项 verify/隔离真实宿主启动与下发 bundle）通过后随提交推送，未改业务代码；本机浏览器目视项以所有者手动确认为准（KB-014）。下一步 R10 交付物管理。
+- **当前状态**：R1–R10 已完成（R10 为 doubao-work 自研：项目维度交付物台账 + 版本/状态变更留痕，11 项 verify 与隔离真实宿主 bundle 断言通过，待提交推送）。R9 固定快照进度汇报由 trae 实现、doubao-work 独立复核通过后已推送；本机浏览器目视项以所有者手动确认为准（KB-014）。下一步：R12（多项目/检索/导入，协作裁剪评估）与 R11/生成型能力的实施或暂缓决策。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
   1. `README.md`（总览、目录、启动方式）
-  2. `docs/requirements.md` **v0.7**（**做什么、验收标准、当前实体模型、§5.1 落盘布局**——开发主依据）
+  2. `docs/requirements.md` **v0.8**（**做什么、验收标准、当前实体模型（含 4.7 交付物）、§5.1 落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
-  5. `docs/knowledge-base.md`（已验证 API/模式/约定，当前至 KB-025）与 `docs/issues-and-solutions.md`（当前至 ISS-020）
-  6. `docs/decision-log.md`（当前至 ADL-025；ADL-025 为 R8 模型与未来转任务边界）
+  5. `docs/knowledge-base.md`（已验证 API/模式/约定，当前至 KB-029）与 `docs/issues-and-solutions.md`（当前至 ISS-023）
+  6. `docs/decision-log.md`（当前至 ADL-028；ADL-028 为 R10 交付物台账「复用概念、数据层自研」决策）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
 - **硬约束（来自项目所有者，务必遵守）**：
@@ -97,7 +97,7 @@
 ### 当前交付点（R7 已验收）
 - **存储布局（ADL-011/024/025/026 / requirements v0.7 §5.1）**：单领域 `pmtool` 下业务实体分表 per-record，用表 `keys()/entries()` 枚举，不建 index.json；当前含 projects/tasks/milestones/risk_issues/meetings/reports。
 - **R7 结果**：统一风险问题台账、离线命令和 Web 工作台已完成；R4 已发布导出格式暂不包含 R7。
-- **下一步**：R9 已独立复核并推送；由 doubao-work 接续 **R10 交付物管理**，先核对 dsh `deliverables`（present / workspace-changes / ui-deliverables）可复用边界并报备文件级计划，再编码。
+- **下一步**：R10 已由 doubao-work 实现并通过本地验证（待提交推送）；其后推进 **R12**（多项目切换/关键字检索/统计看板、Markdown 任务表导入；多人协作与单用户本地定位冲突，倾向裁剪并记录理由），并对 **R11 里程碑到期提醒**与生成型能力给出实施/暂缓结论写入 decision-log。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步、首个业务增量及全部档案提交**均已推送 origin/main**（2026-10-10 经项目所有者确认）。
@@ -147,6 +147,7 @@ node scripts/verify-milestones.mjs  # 里程碑增查、排序与重启读回
 node scripts/verify-risk-issues.mjs # 风险问题 CRUD、筛选与重启读回
 node scripts/verify-meetings.mjs    # 会议、行动项、关联保护与重启读回
 node scripts/verify-reports.mjs     # 固定快照、异常汇总、Markdown 与重启读回
+node scripts/verify-deliverables.mjs # 交付物台账、版本/状态留痕、删除保护与重启读回
 node scripts/verify-export.mjs      # Markdown 内容、路径与覆盖保护
 node scripts/verify-web.mjs         # Web 快照、manifest 与动态 bundle 契约
 
@@ -172,7 +173,8 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 5. **R7 已完成并验收**：八项回归及隔离 profile 真实浏览器 CRUD、筛选、主题、窄屏和重启读回通过；项目所有者已确认手动验证通过并授权提交推送。
 6. **R8 已完成并验收**：首版手工结构化录入，不调用模型；行动项内嵌并使用稳定 ID，可关联任务/问题。九项回归、隔离浏览器和项目所有者手动验收均通过。
 7. **R9 已完成并推送**：自定义周期固定快照、精简 Markdown、离线命令和 Web 通过十项回归；trae 实现后由 doubao-work 独立复核（隔离真实宿主启动 + 运行中下发 bundle 断言）通过并提交推送，未改业务代码；首版不接 schedule、模型或 PDF。本机浏览器目视项待所有者抽空确认（KB-014）。
-8. **下一步 R10 交付物管理（doubao-work 接续）**：复用 dsh `deliverables`，补项目维度交付物台账（名称/版本/负责人/状态/位置）；其后 R12，R11 与生成型能力取舍见 decision-log。
+8. **R10 交付物台账已完成（doubao-work）**：pmtool 领域新增 `deliverables` 表与 `/pm deliverable` 离线命令、Web「交付物」标签，版本/状态变化自动只增留痕，有交付物禁删项目；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；11 项 verify 与隔离真实宿主 bundle 断言通过。
+9. **下一步 R12，随后 R11/生成型取舍**：R12 做多项目切换/关键字检索/统计看板与 Markdown 任务表离线导入，多人协作因与单用户本地定位冲突倾向裁剪并在 decision-log 写明；R11（复用 schedule 的里程碑到期提醒）与智能 WBS/纪要/周报等需 API Key 的生成型能力，按 ADL-009 离线优先倾向继续暂缓，给明确结论并归档。
 
 ## 5. SSH 密钥（已配置，备查）
 

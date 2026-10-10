@@ -1,8 +1,8 @@
 # MVP 测试与验收用例
 
-> 适用版本：R1-R9（v0.1.0 基线 + 后续 R7/R8/R9）。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
+> 适用版本：R1-R10（v0.1.0 基线 + 后续 R7/R8/R9/R10）。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
 
-最后更新：2026-10-10（trae / TRAE）
+最后更新：2026-10-10（doubao-work：新增 R10 交付物用例，共 11 个 verify）
 
 ## 1. 测试环境
 
@@ -36,6 +36,7 @@ node scripts/verify-milestones.mjs
 node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
 node scripts/verify-reports.mjs
+node scripts/verify-deliverables.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
@@ -60,6 +61,8 @@ node scripts/verify-web.mjs
 | R6 离线命令 | `verify-command.mjs` 及各实体脚本 | 无 API Key、中文输出、真实命令处理器 |
 | R7 风险与问题 | `verify-risk-issues.mjs`、`verify-web.mjs` + 手动用例 | CRUD、关闭、类型/状态筛选、专有字段、并发、故障恢复、项目删除保护、重启读回及 Web |
 | R8 会议纪要 | `verify-meetings.mjs`、`verify-web.mjs` + 手动用例 | 会议/行动项 CRUD、稳定 ID、任务/问题关联、删除保护、并发、故障恢复、权限、重启读回及 Web |
+| R9 进度汇报 | `verify-reports.mjs`、`verify-web.mjs` + 手动用例 | 自定义周期固定快照、五类异常聚合排序、旧快照不回写、人工字段更新、非法输入、Markdown、并发、删除保护、重启读回及 Web |
+| R10 交付物管理 | `verify-deliverables.mjs`、`verify-web.mjs` + 手动用例 | 交付物 CRUD、状态筛选、版本/状态只增留痕规则、负责人变更不留痕、并发编号、写盘失败恢复、有交付物禁删项目、0600/0700、重启读回续号及 Web |
 
 ## 4. 手动 Web 验收
 
@@ -123,7 +126,7 @@ pnpm dsh --profile pm --no-open
 
 ## 7. 当前验收结论
 
-- 自动化：冻结锁文件离线安装、构建与八个验证脚本已通过。
+- 自动化：冻结锁文件离线安装、构建与十一个验证脚本已通过（R10 新增 verify-deliverables.mjs）。
 - Web：项目所有者于 2026-10-10 确认 R5 手动验收通过。
 - R7 Web：隔离 profile 完成新增、编辑关闭、筛选、搜索、确认删除和重启读回；浅/深主题、786px 窄屏局部滚动、控制台和网络检查通过。
 - R8 Web：隔离 profile 完成项目、任务、问题、会议及行动项新增，验证关联、完成状态、筛选、搜索、深色主题、786px 横向滚动和重启读回；控制台和网络无错误。
@@ -131,4 +134,6 @@ pnpm dsh --profile pm --no-open
 - R9 固定快照：生成第一份报告后修改源任务，旧报告指标不变；新生成报告反映最新状态；编辑人工摘要不改变快照。
 - R9 Markdown：默认只含摘要、聚合、周期事件和异常项，不输出完整任务明细；覆盖须 `confirm`。
 - R9 Web：生成/编辑/筛选/搜索/导出可用，深色主题、786px 表格局部滚动、重启读回、控制台和网络检查通过。
+- R10 留痕：创建产生一条 `created`；仅当状态或版本实际变化时追加留痕（同批先状态后版本各一条），仅改负责人/名称/位置等不留痕；删除交付物须 `confirm`，有交付物的项目禁止删除。
+- R10 Web：交付物标签新增/编辑/状态筛选/搜索/变更时间线可用，项目栏显示交付物计数，深色主题、窄屏、重启读回待所有者本机目视确认（自动化 bundle 契约已通过）。
 - 未覆盖：Windows/Linux、Safari/Firefox、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性。

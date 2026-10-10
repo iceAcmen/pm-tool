@@ -20,13 +20,14 @@
 ## 3. 当前进展快照（细节以 `docs/progress.md`、`docs/handoff.md` 为准）
 
 - 阶段 1 环境搭建：✅ 完成并推送。
-- 阶段 2 需求分析：✅ 完成，当前开发依据 `docs/requirements.md` **v0.7**（含 ADL-026 R9 固定快照模型）。
+- 阶段 2 需求分析：✅ 完成，当前开发依据 `docs/requirements.md` **v0.8**（含 ADL-028 R10 交付物台账模型）。
 - 阶段 3 源码开发：🔄 **第 0 步「打通验证」已验收并推送**——最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 可用、可读 JSON 落盘 `pm-tool/data`（0700）。
 - **阶段 3 MVP 已完成（trae，2026-10-10）**：R1–R6 已实现并发布；R5 跟随 dsh 原生主题，项目所有者已确认手动验收通过。
 - **阶段 4 MVP 已完成并发布 v0.1.0（trae，2026-10-10）**：测试矩阵、交付说明、完整回归、profile 配置和真实启动验证均完成；发布说明见 `docs/releases/v0.1.0.md`。
 - **v0.1.0 后续 R7 已完成并获准提交推送（trae，2026-10-10）**：风险与问题离线 CRUD、持久化、筛选和 Web 工作台已通过八项回归、项目所有者手动验收与真实浏览器验证。
 - **R8 已完成并验收（trae，2026-10-10）**：会议纪要、内嵌稳定行动项、任务/问题关联、离线命令和 Web 已通过九项回归、真实浏览器验证及项目所有者手动验收。
 - **R9 已完成并推送（trae 实现 → doubao-work 独立复核，2026-10-10）**：自定义日期范围、固定快照、摘要与异常项 Markdown、离线命令和 Web 通过十项回归；doubao-work 以冻结安装/构建/十项 verify/隔离真实宿主启动与下发 bundle 复核通过、未改业务代码后提交推送；本机浏览器目视项以所有者手动确认为准（KB-014）。下一步 R10。
+- **R10 已完成（doubao-work 自研，2026-10-10）**：pmtool 领域新增 `deliverables` 表（`dlv-NNNN`、四态状态机、版本/状态只增留痕、有交付物禁删项目），离线 `/pm deliverable` 五子命令与 Web「交付物」标签；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；构建 + 十一项 verify（新增 verify-deliverables）+ 隔离真实宿主下发 bundle 断言通过。下一步 R12，R11/生成型能力取舍。
 
 > 每次开工都不要轻信本节快照，必须按第 4 节拉取并核对最新文档。
 
@@ -61,7 +62,7 @@
 | `docs/doubao-validation-prompt.md` | 豆包独立功能复核 + 下一步规划提示词 | 需要跨平台复核时整段发送；具体状态由豆包从仓库读取 |
 | `docs/handoff.md` | 最小迁移交接清单（第 0 节为移交说明） | 每阶段收尾刷新 |
 | `docs/progress.md` | 进度流水（已完成/进行中/待办） | 有进展即更新 |
-| `docs/requirements.md` | 需求：模块/优先级/验收/数据模型（v0.7，含 R9 模型） | 需求变更时更新并在 `decision-log.md` 记原因 |
+| `docs/requirements.md` | 需求：模块/优先级/验收/数据模型（v0.8，含 R10 交付物模型） | 需求变更时更新并在 `decision-log.md` 记原因 |
 | `docs/feasibility-map.md` | dsh 能力「复用 vs 新建」地图与来源 | 技术选型时读 |
 | `docs/tech-plugin-scaffold.md` | 插件骨架/装载规格 + **第 0 步实测结论** | 写插件前必读 |
 | `docs/decision-log.md` | 技术决策（时间/决策/理由/替代/结果，ADL-xxx） | 每做一个决策立即追加 |
@@ -116,6 +117,7 @@ node scripts/verify-milestones.mjs   # 里程碑增查、排序、并发与重�
 node scripts/verify-risk-issues.mjs  # 风险问题 CRUD、筛选、并发与重启读回
 node scripts/verify-meetings.mjs     # 会议纪要、行动项、关联保护与重启读回
 node scripts/verify-reports.mjs      # 固定快照、异常汇总、Markdown 与重启读回
+node scripts/verify-deliverables.mjs # 交付物台账、版本/状态留痕、删除保护与重启读回
 node scripts/verify-export.mjs       # Markdown 内容、路径、覆盖与失败清理
 node scripts/verify-web.mjs          # Web 快照、manifest 与动态 bundle 契约
 

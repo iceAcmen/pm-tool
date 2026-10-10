@@ -6,6 +6,15 @@
 
 ---
 
+## ADL-028 ｜ 2026-10-10 ｜ R10 交付物台账：复用 dsh deliverables 概念、数据层在 pmtool 领域自研
+
+- **决策**：R10 不直接挂载/依赖 dsh 原生 `@deepseek-ai/dsh-*deliverables`（tool-present / workspace-changes / ui-deliverables）运行时，而是在自研单领域 `pmtool` 新增 `deliverables` 表（per-record，id `dlv-NNNN`）实现项目维度交付物台账，配离线 `/pm deliverable` 命令与 Web「交付物」标签；仅复用其「交付声明 + 变更留痕」的产品概念。
+- **理由**：dsh 原生 deliverables 绑定**智能体轮次**（agent run）与 git 快照，记录的是「模型跑完一轮声明了哪些产物、改了哪些文件」，其触发依赖会话/工具调用，不满足本项目 ADL-009 确立的**离线优先、无 API Key 可手工增删改查**底线，也没有「按项目归集、维护名称/版本/负责人/状态/位置并持续登记」的 PM 台账形态。R7–R9 已验证 pmtool 领域 + ctx.commands + Web 标签这套自研模式可离线、可演示、可持久化，R10 沿用一致性最好、成本最低。
+- **数据模型要点**：字段 name/version/owner/status/location/description/dueDate + 内嵌 `history[]`；状态四态 planned→in_progress→submitted→accepted；仅 status/version 实际变化时追加只增留痕（可带 operator/changeNote）；有交付物的项目禁止删除；加表不升领域版本（KB-013）。
+- **替代方案**：① 直接复用 dsh deliverables 包（否决：依赖 agent 轮次/模型，离线不可手工维护，且数据形态不匹配）；② 交付物不单独建表、仅作为任务/报告的附属字段（否决：无法独立维护版本与状态变更历史，也不满足「交付物清单台账」诉求）。
+- **未来对接**：`location` 为自由文本，可指向 dsh present 产物路径或任意文件/URL；后续若需把智能体轮次产物自动登记进台账，可在工具层做映射写入本表，首版不做运行时绑定。
+- **最终结果**：R10 已实现并通过构建、11 项 verify（含新增 verify-deliverables.mjs）与隔离真实宿主 bundle 断言；需求文档升至 v0.8。
+
 ## ADL-027 ｜ 2026-10-10 ｜ R9 经独立复核「原样接收」，并固化无本机 GUI 时的验收证据组合
 
 - **决策**：doubao-work 对 trae 交付的未提交 R9 增量做独立复核，代码审查 + 冻结安装 + 构建 + 十项 verify + `git diff --check` + 隔离 DSH_HOME/数据/随机端口/无 Key 真实宿主启动与运行中下发 bundle 断言全部通过、未发现缺陷，因此**不修改任何业务代码、原样接收**并随档案一并提交推送。

@@ -21,7 +21,7 @@ dsh **没有**拿来即用的「项目管理成品」：其 `plan / todo / goal`
 | 风险与问题管理 | 无直接对应包 | —— | **全新自研**：基于存储域定义 Risk/Issue 实体，用命令/工具/界面暴露 |
 | 会议纪要 | 无直接业务包；可借 `session`（对话记录）、`skill`（模板）、`document`（导出） | 会话日志可作素材，Office 技能可成稿 | **全新自研**：纪要实体 + 模板生成；智能归纳属生成型能力（P1，需模型） |
 | 进度汇报（周报/月报） | `packages/schedule`（持久定时提醒，可周期触发）+ 项目存储数据 | schedule 负责「到点触发」，报告内容需自行汇总生成 | **内容已自研、触发待复用**：R9 已实现离线固定快照与 Markdown；后续再复用 schedule 做周期触发，智能撰写仍属生成型能力 |
-| 交付物管理 | `packages/deliverables`（`tool-present` 交付声明 + `workspace-changes` git 快照变更 + Web 轮尾渲染） | 声明「本轮交付了哪些工作区文件」并记录 git 变更 | **高度复用 + 轻扩展**：直接复用交付声明/变更记录，补一层项目维度的交付物台账（P1） |
+| 交付物管理 | `packages/deliverables`（`tool-present` 交付声明 + `workspace-changes` git 快照变更 + Web 轮尾渲染） | 声明「本轮交付了哪些工作区文件」并记录 git 变更，绑定 agent 轮次与 git 快照 | **复用概念、数据层自研（R10 已落地，ADL-028）**：原生包依赖模型轮次、不满足无 Key 离线手工台账，故复用「交付声明 + 变更留痕」概念，在 pmtool 领域自建 `deliverables` 表（`dlv-NNNN`、四态状态机、内嵌只增 history）+ `/pm deliverable` 离线命令 + Web 标签；`location` 自由文本为未来对接 present 留口 |
 
 辅助可复用能力：
 

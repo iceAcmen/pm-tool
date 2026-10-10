@@ -9,6 +9,7 @@ import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import MilestoneIcon from 'lucide-react/dist/esm/icons/milestone.mjs'
 import NotebookTabs from 'lucide-react/dist/esm/icons/notebook-tabs.mjs'
+import Package from 'lucide-react/dist/esm/icons/package.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.mjs'
@@ -130,6 +131,30 @@ type ProgressReport = {
   }
 }
 
+type DeliverableChange = {
+  at: string
+  field: string
+  from: string
+  to: string
+  by: string
+  note: string
+}
+
+type Deliverable = {
+  id: string
+  projectId: string
+  name: string
+  version: string
+  owner: string
+  status: 'planned' | 'in_progress' | 'submitted' | 'accepted'
+  location: string
+  description: string
+  dueDate: string | null
+  history: DeliverableChange[]
+  createdAt: string
+  updatedAt: string
+}
+
 type Snapshot = {
   projects: Project[]
   tasks: Task[]
@@ -137,8 +162,9 @@ type Snapshot = {
   riskIssues: RiskIssue[]
   meetings: Meeting[]
   reports: ProgressReport[]
+  deliverables: Deliverable[]
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'overview'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
@@ -147,12 +173,13 @@ type Drawer =
   | { kind: 'risk-issue', record?: RiskIssue }
   | { kind: 'meeting', meeting?: Meeting }
   | { kind: 'report', report?: ProgressReport }
+  | { kind: 'deliverable', deliverable?: Deliverable }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
 }
 
-const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [] }
+const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
 const projectStatus: Record<string, string> = {
   planning: '计划中',
   active: '进行中',
@@ -185,6 +212,9 @@ const meetingActionStatus: Record<string, string> = {
   todo: '未开始', in_progress: '进行中', done: '已完成', cancelled: '已取消',
 }
 const progressReportStatus: Record<string, string> = { draft: '草稿', final: '已定稿' }
+const deliverableStatus: Record<string, string> = {
+  planned: '计划中', in_progress: '制作中', submitted: '已提交', accepted: '已验收',
+}
 
 export function PmPanel({ execute }: PmPanelApi) {
   const [data, setData] = useState<Snapshot>(empty)
@@ -248,6 +278,10 @@ export function PmPanel({ execute }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd) || b.id.localeCompare(a.id)),
   [data.reports, selected])
+  const deliverables = useMemo(() => data.deliverables
+    .filter(item => item.projectId === selected)
+    .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
+  [data.deliverables, selected])
 
   return <>
     <style>{styles}</style>
@@ -303,6 +337,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               riskIssues={riskIssues}
               meetings={meetings}
               reports={reports}
+              deliverables={deliverables}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
@@ -320,6 +355,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               </ViewTab>
               <ViewTab active={view === 'reports'} icon={<FileText size={15}/>} count={reports.length} onClick={() => setView('reports')}>
                 进度汇报
+              </ViewTab>
+              <ViewTab active={view === 'deliverables'} icon={<Package size={15}/>} count={deliverables.length} onClick={() => setView('deliverables')}>
+                交付物
               </ViewTab>
               <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => setView('overview')}>
                 项目概览
@@ -356,6 +394,11 @@ export function PmPanel({ execute }: PmPanelApi) {
                 reports={reports}
                 onCreate={() => setDrawer({ kind: 'report' })}
                 onEdit={report => setDrawer({ kind: 'report', report })}
+              />}
+              {view === 'deliverables' && <DeliverableTable
+                deliverables={deliverables}
+                onCreate={() => setDrawer({ kind: 'deliverable' })}
+                onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones}/>}
             </section>
@@ -412,6 +455,13 @@ export function PmPanel({ execute }: PmPanelApi) {
           run={run}
           onSaved={() => setDrawer(undefined)}
         />}
+        {drawer.kind === 'deliverable' && project && <DeliverableForm
+          projectId={project.id}
+          deliverable={drawer.deliverable}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -424,7 +474,8 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'milestone') return drawer.milestone ? '编辑里程碑' : '新增里程碑'
   if (drawer.kind === 'risk-issue') return drawer.record ? '编辑风险或问题' : '新增风险或问题'
   if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
-  return drawer.report ? '编辑进度汇报' : '生成进度汇报'
+  if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
+  return drawer.deliverable ? '编辑交付物' : '新增交付物'
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
@@ -451,6 +502,7 @@ function ProjectBar({
   riskIssues,
   meetings,
   reports,
+  deliverables,
   onEdit,
 }: {
   project: Project
@@ -459,6 +511,7 @@ function ProjectBar({
   riskIssues: RiskIssue[]
   meetings: Meeting[]
   reports: ProgressReport[]
+  deliverables: Deliverable[]
   onEdit: () => void
 }) {
   const completed = tasks.filter(task => task.status === 'done').length
@@ -479,6 +532,7 @@ function ProjectBar({
       <span><ShieldAlert size={14}/>{riskIssues.filter(item => item.status !== 'closed').length} 项待处理风险/问题</span>
       <span><NotebookTabs size={14}/>{meetings.length} 份会议纪要</span>
       <span><FileText size={14}/>{reports.length} 份进度汇报</span>
+      <span><Package size={14}/>{deliverables.length} 项交付物</span>
     </div>
   </section>
 }
@@ -925,6 +979,64 @@ function ProgressReportTable({
   </>
 }
 
+function DeliverableTable({
+  deliverables,
+  onCreate,
+  onEdit,
+}: {
+  deliverables: Deliverable[]
+  onCreate: () => void
+  onEdit: (deliverable: Deliverable) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState('all')
+  const visible = deliverables.filter(item => {
+    const text = `${item.name} ${item.version} ${item.owner} ${item.location} ${item.description}`
+      .toLocaleLowerCase()
+    return text.includes(query.trim().toLocaleLowerCase())
+      && (status === 'all' || item.status === status)
+  })
+  return <>
+    <TableToolbar query={query} setQuery={setQuery} primaryLabel="新增交付物" onCreate={onCreate}>
+      <label className="pm-toolbar-select">
+        <Filter size={14}/>
+        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选交付物状态">
+          <option value="all">全部状态</option>
+          {Object.entries(deliverableStatus).map(([value, label]) =>
+            <option key={value} value={value}>{label}</option>)}
+        </select>
+      </label>
+    </TableToolbar>
+    <div className="pm-table-frame">
+      <div className="pm-table-scroll">
+        <table className="pm-data-table pm-deliverable-table">
+          <thead><tr>
+            <th className="pm-col-title">交付物名称</th><th>版本</th><th>状态</th>
+            <th>负责人</th><th>计划交付日期</th><th>位置</th><th>变更次数</th><th className="pm-col-actions"/>
+          </tr></thead>
+          <tbody>{visible.map(item => <tr className="pm-record-row" key={item.id}>
+            <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(item)}>{item.name}</button></td>
+            <td>{item.version
+              ? <span className="pm-cell-value">{item.version}</span>
+              : <span className="pm-cell-empty">-</span>}</td>
+            <td><StatusTag kind="deliverable" value={item.status}/></td>
+            <td>{item.owner
+              ? <span className="pm-person"><span>{item.owner.slice(0, 1)}</span>{item.owner}</span>
+              : <span className="pm-cell-empty">未指定</span>}</td>
+            <td>{item.dueDate || <span className="pm-cell-empty">-</span>}</td>
+            <td className="pm-description-cell">{item.location || <span className="pm-cell-empty">未登记位置</span>}</td>
+            <td>{item.history.length}</td>
+            <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${item.name}`} onClick={() => onEdit(item)}><Pencil size={14}/></button></td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+      {!visible.length && <TableEmpty text={deliverables.length ? '没有符合筛选条件的交付物' : '暂无交付物台账'}/>}
+      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>新增交付物</button>
+    </div>
+    <div className="pm-table-footer">{visible.length} 条记录</div>
+  </>
+}
+
 function TableToolbar({
   query,
   setQuery,
@@ -948,7 +1060,7 @@ function TableToolbar({
   </div>
 }
 
-function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting' | 'report', value: string }) {
+function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting' | 'report' | 'deliverable', value: string }) {
   const labels = kind === 'project'
     ? projectStatus
     : kind === 'task'
@@ -959,7 +1071,9 @@ function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | '
           ? riskIssueStatus
           : kind === 'meeting'
             ? meetingStatus
-            : progressReportStatus
+            : kind === 'report'
+              ? progressReportStatus
+              : deliverableStatus
   return <span className="pm-tag" data-kind={kind} data-value={value}>
     <i/>{labels[value] ?? value}
   </span>
@@ -1607,6 +1721,88 @@ function ProgressReportForm({
             <small>{item.owner || '未指定负责人'} · {item.dueDate ?? '无截止日期'}</small>
           </li>)}</ul>
         : <p>快照生成时没有异常项。</p>}
+    </section>}
+  </>
+}
+
+function DeliverableForm({
+  projectId,
+  deliverable,
+  disabled,
+  run,
+  onSaved,
+}: {
+  projectId: string
+  deliverable?: Deliverable
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const dueDate = String(form.get('dueDate') ?? '')
+    const changeNote = String(form.get('changeNote') ?? '').trim()
+    const common = {
+      name: form.get('name'),
+      version: String(form.get('version') ?? '').trim(),
+      owner: form.get('owner'),
+      status: form.get('status'),
+      location: form.get('location'),
+      description: form.get('description'),
+      dueDate: dueDate || null,
+      ...(changeNote ? { changeNote } : {}),
+    }
+    const success = await run(deliverable
+      ? `deliverable update ${deliverable.id} ${JSON.stringify(common)}`
+      : `deliverable add ${JSON.stringify({ projectId, ...common })}`)
+    if (success) onSaved()
+  }
+  return <>
+    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+      <Field label="交付物名称" wide><input name="name" defaultValue={deliverable?.name} required autoFocus/></Field>
+      <Field label="版本"><input name="version" defaultValue={deliverable?.version} placeholder="如 v1.0"/></Field>
+      <Field label="状态"><select name="status" defaultValue={deliverable?.status ?? 'planned'}>
+        {Object.entries(deliverableStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      <Field label="负责人"><input name="owner" defaultValue={deliverable?.owner}/></Field>
+      <Field label="计划交付日期" wide><input name="dueDate" type="date" defaultValue={deliverable?.dueDate ?? ''}/></Field>
+      <Field label="位置（路径 / 链接 / 存放说明）" wide><input name="location" defaultValue={deliverable?.location} placeholder="exports/交付物.md 或 https://..."/></Field>
+      <Field label="说明" wide><textarea name="description" rows={4} defaultValue={deliverable?.description}/></Field>
+      {deliverable && <Field label="本次变更说明（版本/状态变化时留痕）" wide>
+        <input name="changeNote" placeholder="如：提交评审、验收通过"/>
+      </Field>}
+      <div className="pm-drawer-actions">
+        {deliverable && <button
+          className="pm-button pm-button-danger"
+          type="button"
+          disabled={disabled}
+          onClick={() => {
+            if (window.confirm(`删除交付物 ${deliverable.name}？`)) {
+              void run(`deliverable delete ${deliverable.id} confirm`).then(success => success && onSaved())
+            }
+          }}
+        ><Trash2 size={15}/>删除</button>}
+        <button className="pm-button pm-button-primary" disabled={disabled}>
+          {deliverable ? '保存更改' : '新增交付物'}
+        </button>
+      </div>
+    </form>
+    {deliverable && <section className="pm-deliverable-history">
+      <h3>版本 / 状态变更留痕（{deliverable.history.length}）</h3>
+      {deliverable.history.length
+        ? <ul>{[...deliverable.history].reverse().map((change, index) => {
+          const target = change.field === 'created' ? '创建' : change.field === 'status' ? '状态' : '版本'
+          const transition = change.field === 'created'
+            ? (deliverableStatus[change.to] ?? change.to)
+            : `${deliverableStatus[change.from] ?? change.from} → ${deliverableStatus[change.to] ?? change.to}`
+          return <li key={`${change.at}-${index}`}>
+            <strong>{target}：{transition}</strong>
+            <span>{change.at.slice(0, 10)}{change.by ? ` · ${change.by}` : ''}</span>
+            {change.note && <small>{change.note}</small>}
+          </li>
+        })}</ul>
+        : <p>暂无变更留痕。</p>}
     </section>}
   </>
 }

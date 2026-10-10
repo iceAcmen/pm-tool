@@ -11,6 +11,7 @@ import {
   ProjectHasRiskIssuesError,
   ProjectHasMeetingsError,
   ProjectHasReportsError,
+  ProjectHasDeliverablesError,
   ProjectNameConflictError,
   updateProject,
 } from '../core/projects.js'
@@ -180,6 +181,9 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
     }
     if (error instanceof ProjectHasReportsError) {
       return { kind: 'error', text: `项目 ${error.projectId} 仍有进度汇报，不能删除。请先删除项目下的进度汇报。` }
+    }
+    if (error instanceof ProjectHasDeliverablesError) {
+      return { kind: 'error', text: `项目 ${error.projectId} 仍有交付物，不能删除。请先删除项目下的交付物台账。` }
     }
     console.error('[pm-tool] 项目操作失败：', error)
     return { kind: 'error', text: '项目操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。' }

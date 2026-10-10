@@ -2,10 +2,10 @@
 
 > 本文件记录产品「要做哪些功能、优先级如何、怎样算验收通过」，并给出 MVP 的数据模型与落盘约定；给开发与验收使用，按模块增删条目。本文档经项目所有者评审确认后作为阶段 3 开发依据。
 
-- 文档状态：**阶段 3 开发依据（v0.7）**，R9 固定快照进度汇报模型已确认
+- 文档状态：**阶段 3 开发依据（v0.8）**，R10 项目维度交付物台账（含版本/状态变更留痕）已实现
 - 最后更新：2026-10-10（R9 已按 ADL-026 实现并完成自动化与真实浏览器验证）
 - 技术可行性依据：见 [feasibility-map.md](./feasibility-map.md)
-- **需求变更追溯**：任何需求/范围调整都在 [decision-log.md](./decision-log.md) 记录「时间、变更、原因、替代方案、结果、改动平台」（v0.1→v0.2 见 ADL-007/008，v0.2→v0.3 见 ADL-009，v0.3→v0.4 见 ADL-011，v0.4→v0.5 见 ADL-024，v0.5→v0.6 见 ADL-025，v0.6→v0.7 见 ADL-026），并在 [changelog.md](./changelog.md) 留痕；多平台协作规则见根 `AGENTS.md` 与 [collaboration.md](./collaboration.md)。
+- **需求变更追溯**：任何需求/范围调整都在 [decision-log.md](./decision-log.md) 记录「时间、变更、原因、替代方案、结果、改动平台」（v0.1→v0.2 见 ADL-007/008，v0.2→v0.3 见 ADL-009，v0.3→v0.4 见 ADL-011，v0.4→v0.5 见 ADL-024，v0.5→v0.6 见 ADL-025，v0.6→v0.7 见 ADL-026，v0.7→v0.8 见 ADL-028），并在 [changelog.md](./changelog.md) 留痕；多平台协作规则见根 `AGENTS.md` 与 [collaboration.md](./collaboration.md)。
 
 ## 一、目标用户与核心场景
 
@@ -39,7 +39,7 @@
 | R7 | 风险与问题管理 | P1 | 共用风险问题台账：风险含概率/影响/应对，问题含影响/解决方案，通用负责人/截止日期/状态；支持类型与状态筛选 | 能离线新增、查看、编辑、关闭、筛选和确认删除风险与问题；JSON 持久化且重启不丢；Web 无 Key 可完成核心操作 | 已完成：离线命令、`risk_issues` 持久化、高密度 Web 表格与右侧抽屉均已实现并回归通过 |
 | R8 | 会议纪要 | P1 | 首版离线录入结构化纪要，包含议题、决议和稳定 ID 的内嵌行动项；行动项关联任务/问题/责任人，未来可转 WBS 任务 | 能离线完成纪要与行动项 CRUD、关联同项目任务/问题、筛选并持久化；未来新增转任务能力时无需迁移现有纪要 | 已实现并验收 |
 | R9 | 进度汇报 | P1 | 自定义日期范围生成固定快照，汇总任务、里程碑、会议及异常项；人工维护摘要/计划/阻塞并导出精简 Markdown | 无 Key 可生成、查询、编辑人工字段、确认删除和导出；源数据变化不改写旧快照，新快照反映最新状态；Web 可操作 | 已完成：trae 实现，doubao-work 独立复核（冻结安装/构建/十项 verify/隔离真实宿主启动与下发 bundle）通过并随提交推送；本机浏览器目视项以所有者手动确认为准（KB-014） |
-| R10 | 交付物管理 | P1 | 复用 dsh deliverables（交付声明 + git 变更），补项目维度交付物台账：名称/版本/负责人/状态/位置 | 能维护交付物清单并记录版本与状态变更 | 未开始 |
+| R10 | 交付物管理 | P1 | 复用 dsh deliverables「交付声明 + 变更留痕」概念，在自研 pmtool 领域补项目维度交付物台账：名称/版本/负责人/状态/位置/计划交付日期，版本与状态变化自动留痕（ADL-028） | 能离线增删改查交付物、按状态筛选、查看变更历史；有交付物的项目禁止删除；含 Web 标签与专项验证 | ✅ 已完成（doubao-work，2026-10-10） |
 | R11 | 里程碑提醒 | P2（暂缓） | 复用 dsh schedule，对临近/逾期里程碑提醒 | 阶段 2 决策：第一版不做，后续迭代再启用 | 暂缓 |
 | R12 | 多项目与检索 / 导入 / 协作 | P2 | 多项目切换、关键字检索、统计看板；导入 Excel/Markdown（借 skill-office）；多人协作 | 多项目切换与检索可用；能导入一份外部任务表 | 未开始 |
 
@@ -128,6 +128,14 @@
 
 生成后项目、周期和快照不可修改；源数据变化不回写旧报告。任务没有状态变更历史，首版只保存生成瞬间的全量任务当前状态，不推断“本周期完成任务”。
 
+### 4.7 Deliverable（交付物台账）
+
+交付物字段：`id`（`dlv-NNNN`）、`projectId`、`name`（非空）、`version`（文本，可空，如 `v1.0`）、`owner`、`status`、`location`（文件路径 / URL / 存放位置的文字说明，离线优先不强制可访问）、`description`、`dueDate`（计划交付日期，可空）、内嵌 `history[]` 变更留痕、`createdAt/updatedAt`。
+
+状态机四态：`planned`（计划中）→ `in_progress`（制作中）→ `submitted`（已提交，待验收）→ `accepted`（已验收）。`history[]` 只增不改：创建时写一条 `created`；此后仅当 `status` 或 `version` 实际变化时各追加一条 `{at, field, from, to, by, note}`，可带 `operator/changeNote` 记录操作人与说明；仅改名称、负责人、位置、说明、计划日期不产生留痕。项目归属、ID、变更历史与时间戳不可由用户直接改写；有交付物的项目禁止删除。
+
+定位说明（ADL-028）：dsh 原生 `deliverables`（tool-present / workspace-changes / ui-deliverables）绑定 agent 轮次与 git 快照，是「智能体跑完一轮声明产物」的机制，不适合无 API Key 的离线手工台账，故 R10 复用其「交付声明 + 变更留痕」**概念**，数据层按 R7–R9 同款 pmtool 领域模式自研；`location` 自由文本可指向 dsh present 产物或任意文件/链接，为未来对接保留空间，首版不做运行时自动绑定。
+
 ## 五、数据落盘与目录约定（人类可读、可 git）
 
 ### 5.1 目录布局（已定稿，2026-10-10，决策见 ADL-011）
@@ -149,14 +157,16 @@ pm-tool/
 │       │   └── <riskIssueId>.json # 一条风险或问题一个文件（表 risk_issues；记录含 projectId / type）
 │       ├── meetings/
 │       │   └── <meetingId>.json   # 一条会议纪要一个文件，行动项内嵌并使用稳定 ID
-│       └── reports/
-│           └── <reportId>.json    # 一份固定快照进度汇报一个文件
+│       ├── reports/
+│       │   └── <reportId>.json    # 一份固定快照进度汇报一个文件
+│       └── deliverables/
+│           └── <deliverableId>.json # 一项交付物台账一个文件（表 deliverables，内嵌 history 留痕）
 └── packages/dsh-pm-tool/          # 自研插件包
 ```
 
 - **不设手工 `index.json`**：storage-domain 的表提供 `keys()` / `entries()` 迭代器（上游 `storage-domain/src/domain.ts` 已确认），项目列表、某项目下的任务/里程碑通过遍历表并按 `projectId` 过滤得到，避免双写索引导致不一致。
 - 项目 `README.md` 概览、周报等 Markdown 是 **R4 的渲染导出产物**（导出到用户指定目录或随 JSON 打包），**不写入存储域、不作为数据源**；数据始终以上述 JSON 为准。
-- 记录键名仅允许 `[a-zA-Z0-9_-]+`：各实体使用短 id（如 `p-0001`、`t-0001`、`m-0001`、`ri-0001`、`mtg-0001`、`rpt-0001`）。storage-domain 表名仅允许小写字母、数字和下划线，因此风险问题表使用 `risk_issues`。
+- 记录键名仅允许 `[a-zA-Z0-9_-]+`：各实体使用短 id（如 `p-0001`、`t-0001`、`m-0001`、`ri-0001`、`mtg-0001`、`rpt-0001`、`dlv-0001`）。storage-domain 表名仅允许小写字母、数字和下划线，因此风险问题表使用 `risk_issues`。
 - 本布局替代早期「按项目聚合的嵌套目录（`projects/<id>/project.json` 等）」设想——嵌套目录与 per-record 扁平键规则不兼容，故不采用（见 ADL-011）。
 
 ### 5.2 读写原则

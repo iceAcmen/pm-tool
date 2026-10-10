@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R9 已完成并推送；R9 由 trae 实现、doubao-work 独立复核（冻结安装/构建/十项 verify/隔离真实宿主）通过，本机浏览器目视项以所有者手动确认为准。下一步 R10。
+- 当前阶段：R1–R10 已完成；R10 交付物台账由 doubao-work 自研（冻结安装/构建/十一项 verify/隔离真实宿主下发 bundle 断言）通过，本机浏览器目视项以所有者手动确认为准。下一步 R12，R11/生成型能力取舍。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -15,6 +15,7 @@
 - `/pm risk-issue add/list/get/update/delete`：风险与问题统一台账、关闭及类型/状态筛选。
 - `/pm meeting add/list/get/update/delete` 与 `meeting action add/update/delete`：会议纪要、稳定行动项及任务/问题关联。
 - `/pm report generate/list/get/update/delete/export`：自定义周期固定快照、异常汇总与精简 Markdown。
+- `/pm deliverable add/list/get/update/delete`：项目维度交付物台账，状态四态（计划中/制作中/已提交/已验收），版本或状态变化自动只增留痕，删除须 `confirm`，有交付物的项目禁止删除。
 - `/pm export markdown <projectId> [目录] [confirm]`：导出项目、WBS 和里程碑 Markdown 报告。
 - `/pm export json [目录] [confirm]`：导出整库业务数据包（不含 checks）。
 
@@ -95,6 +96,8 @@ Web 端通过侧栏“项目管理”进入顶级面板；采用高密度表格�
 
 进度汇报写入 `data/pmtool/reports/<id>.json`。日期范围筛选周期会议和里程碑，任务统计取生成瞬间当前状态；快照生成后不可修改，源数据变化不会改写旧报告。默认 Markdown 只含摘要、聚合指标、周期事件和异常项，不包含完整任务明细。
 
+交付物写入 `data/pmtool/deliverables/<id>.json`（id `dlv-NNNN`），字段含名称、版本、负责人、状态、位置（路径/URL/文字说明）、计划交付日期与内嵌只增 `history[]`。创建写一条 `created`；此后仅当状态或版本实际变化时追加留痕（可带操作人与说明），仅改名称/负责人/位置等不留痕；状态为 `planned / in_progress / submitted / accepted`。dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，R10 复用其概念、数据层自研（ADL-028）。
+
 Markdown 导出默认写入产品仓库 `exports/<projectId>-report.md`；相对目录也以产品仓库为基准，绝对目录和 `~/` 可直接指定。报告包含项目概览、按真实父子关系展开的 WBS 和按日期排序的里程碑。已有文件默认拒绝覆盖，末尾加 `confirm` 才原子覆盖；报告不写入 storage-domain，JSON 始终是唯一数据源。
 
 整库 JSON 默认写入 `exports/pmtool-backup.json`，包含格式版本、导出时间和按 ID 排序的 projects/tasks/milestones，不包含 checks 自检数据；覆盖规则与 Markdown 相同。为保持 v0.1.0 格式稳定，R7 的 risk_issues、R8 的 meetings 和 R9 的 reports 暂未加入该导出。
@@ -115,11 +118,12 @@ node scripts/verify-milestones.mjs
 node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
 node scripts/verify-reports.mjs
+node scripts/verify-deliverables.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
 
-八个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务与 Web 脚本使用独立系统临时目录。
+十一个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务与 Web 脚本使用独立系统临时目录。
 
 项目脚本验证真实插件处理器与真实 JSON 后端：增删改查、日期与同名校验、confirm 防误操作、旧表兼容、并发写入不覆盖、落盘可读性与 0700/0600 权限、全新进程读回更新/删除结果及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。命令验证不代表 R5 Web 管理界面完成。
 
@@ -174,7 +178,8 @@ dsh-pm-tool/
 ├── src/core/milestone.ts # Milestone schema、状态与字段提示
 ├── src/core/risk-issue.ts # RiskIssue schema、枚举与类型专有字段
 ├── src/core/meeting.ts # Meeting/MeetingAction schema 与稳定 ID
-├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects + tasks + milestones + risk_issues）
+├── src/core/deliverable.ts # Deliverable schema、四态状态机与变更留痕
+├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects + tasks + milestones + risk_issues + meetings + reports + deliverables）
 ├── src/core/projects.ts # 项目增删改查与领域统一写队列
 ├── src/core/tasks.ts    # 任务管理、关系校验、移动与 WBS 编号
 ├── src/core/milestones.ts # 里程碑增查与时间线排序
@@ -182,6 +187,7 @@ dsh-pm-tool/
 ├── src/core/meetings.ts # 会议、行动项 CRUD 与跨表关联保护
 ├── src/core/progress-reports.ts # 固定快照聚合与进度汇报 CRUD
 ├── src/core/progress-report-markdown.ts # 摘要与异常项 Markdown
+├── src/core/deliverables.ts # 交付物台账 CRUD、编号与版本/状态只增留痕
 ├── src/core/report.ts   # 项目/WBS/里程碑 Markdown 渲染
 ├── src/core/export.ts   # 导出路径、覆盖保护与原子写入
 ├── src/commands/project.ts # 命令解析与中文输出
@@ -190,6 +196,7 @@ dsh-pm-tool/
 ├── src/commands/risk-issue.ts # 风险问题命令解析与中文输出
 ├── src/commands/meeting.ts # 会议纪要与行动项命令
 ├── src/commands/progress-report.ts # 进度汇报命令与导出
+├── src/commands/deliverable.ts # 交付物台账命令与中文留痕渲染
 ├── src/commands/export.ts # Markdown 导出命令
 ├── scripts/verify-projects.mjs # 项目增删改查与重启验证
 ├── scripts/verify-tasks.mjs # 任务完整回归、并发编号与重启验证
@@ -197,6 +204,7 @@ dsh-pm-tool/
 ├── scripts/verify-risk-issues.mjs # 风险问题完整回归与重启验证
 ├── scripts/verify-meetings.mjs # 会议、行动项、关联和重启验证
 ├── scripts/verify-reports.mjs # 固定快照、异常与 Markdown 验证
+├── scripts/verify-deliverables.mjs # 交付物台账、留痕规则与删除保护验证
 ├── scripts/verify-export.mjs # Markdown 内容、路径与覆盖验证
 ├── scripts/verify-web.mjs # Web 快照、manifest 与 bundle 验证
 ├── scripts/verify-command.mjs  # 命令自检

@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R10 项目维度交付物台账（2026-10-10，平台：doubao-work / 豆包工作）
+
+- 新增文件：
+  - `packages/dsh-pm-tool/src/core/deliverable.ts`：交付物字段与 zod 校验（四态状态机、内嵌 `history[]` 变更留痕 schema、create/update 校验与中文错误描述）。
+  - `packages/dsh-pm-tool/src/core/deliverables.ts`：离线 CRUD；创建写 `created` 留痕，状态/版本实际变化时按序追加只增留痕（支持 operator/changeNote），编号 `dlv-NNNN` 扫表续号，写操作走 `enqueueDomainWrite`。
+  - `packages/dsh-pm-tool/src/commands/deliverable.ts`：`/pm deliverable add/list/get/update/delete` 五子命令，全中文输出与删除二次确认，详情倒序展示变更留痕（状态显示中文标签）。
+  - `packages/dsh-pm-tool/scripts/verify-deliverables.mjs`：专项验证（CRUD、状态筛选、留痕追加规则、并发编号、写盘失败恢复、项目删除保护、0600/0700 权限、全新子进程 `--reopen` 读回续号）。
+- 修改文件：
+  - `core/storage.ts`：pmtool 领域注册新表 `deliverables`（**领域版本仍为 1**，KB-013）。
+  - `core/projects.ts` + `commands/project.ts`：新增 `ProjectHasDeliverablesError`，有交付物的项目禁止删除并给中文提示。
+  - `index.ts`：注册 deliverable 路由与帮助、命令描述/hint，`web snapshot` 增加 `deliverables`。
+  - `client/panel.tsx`：新增「交付物」视图标签、交付物表格（状态筛选/搜索/变更次数列）、新增/编辑抽屉与只读变更留痕时间线、项目栏交付物计数，状态标签配色复用宿主 token。
+  - `client/panel.css`：`.pm-deliverable-table` 与 `.pm-deliverable-history` 样式，submitted/accepted 状态色，无硬编码色值。
+  - `scripts/verify-web.mjs`：种子数据、快照断言与 bundle/css 契约增加交付物项。
+- 为什么：实现需求 R10「项目维度交付物台账，记录版本与状态变更」。dsh 原生 deliverables 绑定 agent 轮次/git 快照、不适合无 Key 离线手工台账，故复用其概念、数据层按 R7–R9 同款模式自研（ADL-028）。
+- 验证：`pnpm install --frozen-lockfile` 干净；`pnpm run build` 退出码 0（tsc 零错误，client bundle 140.47 kB）；**11 个** `verify-*.mjs` 全部退出码 0；`git diff --check` 干净；隔离 DSH_HOME + 临时数据 + 随机端口 + 无 Key 真实宿主启动，存储领域打开、首页带 cookie 200，经单插件合并路由 `/plugins/??dsh-pm-tool/client.js&rev=` 抓到运行中 bundle（140500 B）断言含「交付物/筛选交付物状态/deliverable add/变更留痕/新增交付物」。
+- 影响范围：仅新增交付物实体与其界面/测试，不改既有实体；业务数据与上游零改动，隔离临时数据仅含宿主 `workspace.json`。本机浏览器目视项以项目所有者手动确认为准（KB-014/ADL-027）。
+
 ## [未发布] — R9 独立复核通过并提交推送（2026-10-10，平台：doubao-work / 豆包工作）
 
 - 改动文件：仅文档（本条及需求/进度/交接/决策/知识库等档案）；**未改动任何 R9 业务代码**——独立复核未发现缺陷，按 TRAE 交付原样接收。
