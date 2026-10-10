@@ -15,6 +15,7 @@
 - 完成：`pnpm run build`（原生 addon + host + 357 个 client 产物，退出码 0）。
 - 完成：运行验证 `pnpm dsh web --no-open`，http://127.0.0.1:3080 启动；带一次性令牌认证后根路径 HTTP 200，页面标题 `DSH Local Build`、含 `id="root"` 与 `/assets/index-*.js`；验证后已关闭服务。
 - 新增：生成 GitHub SSH ed25519 密钥；配置仓库级提交身份 Ice \<835687152@qq.com\>（不改全局）；配置远程 `git@github.com:iceAcmen/pm-tool.git`。
+- 完成：项目所有者将公钥添加到 GitHub 账户 iceAcmen，`ssh -T git@github.com` 认证通过；首次提交 `12bcad3` 并 `git push -u origin main` 成功，main 跟踪 origin/main。
 
 ### 文档（本仓库 pm-tool）
 - 新增：`README.md`（项目总入口、目录结构、环境依赖与启动方式）。
@@ -32,7 +33,7 @@
 - 落实「从第一天起建立独立、通用、可迁移的标准 Markdown + git 成果档案」要求，档案与环境搭建同步建立。
 
 ### 尚未完成 / 已知限制
-- 远程推送尚未完成：等待项目所有者把 SSH 公钥添加到 GitHub（`ssh -T git@github.com` 当前为 Permission denied），生效后首次提交并推送 main。
+- 阶段 1 已全部完成并推送；仅待项目所有者确认后进入阶段 2 需求分析。
 - dsh 处于开发者预览期（v0.2.1-alpha.2），后续升级可能有破坏性变更，已记录基线以便复现。
 - 上游为浅克隆（depth=1），如需完整历史需 `git fetch --unshallow`。
 - 尚未产生任何自研插件代码（属阶段 3）。

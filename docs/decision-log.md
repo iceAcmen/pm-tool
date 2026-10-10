@@ -44,7 +44,7 @@
 
 ## ADL-006 ｜ 2026-10-10 ｜ 远程仓库接入方式
 
-- **决策**：（待定）项目所有者选择第一阶段即接入远程，但平台 / 空仓库地址 / 提交身份 / 认证方式待提供。
-- **理由**：—
-- **替代方案**：先纯本地 git、稍后再接远程。
-- **最终结果**：⏳ 待项目所有者补充信息后补全本条目。
+- **决策**：第一阶段即接入 GitHub 远程 `git@github.com:iceAcmen/pm-tool.git`，使用本机生成的 ed25519 SSH 密钥认证；提交身份 Ice \<835687152@qq.com\> 仅配置在本仓库（不写全局）。
+- **理由**：项目所有者选择尽早接入远程以满足备份与可迁移；SSH 免密、私钥仅留存本机，比 HTTPS+Token 更适合长期使用。
+- **替代方案**：先纯本地 git、稍后再接远程；HTTPS + Personal Access Token。
+- **最终结果**：已完成。公钥由项目所有者添加到 GitHub 账户 iceAcmen（公钥指纹 `SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`），`ssh -T git@github.com` 返回认证成功；main 首次推送成功并跟踪 origin/main（首次提交 `12bcad3`）。
