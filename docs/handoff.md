@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae / TRAE 完成首个项目增查业务增量并本地提交，待所有者验收，未推送；后续由 trae 或所有者指定平台接续）
+最后更新：2026-10-10（trae / TRAE 完成首个项目增查增量、自动化与真实 Web 功能验证；代码提交 b2ca50f，本地未推送；待豆包独立复核及所有者验收）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。首批文件清单已获确认，trae 已完成 projects 表、Project zod schema、离线 `/pm project add/list/get` 与确定性校验。R1/R4/R6 进行中；R2/R3/R5 待办，本批未做 Web、编辑或导出。
+- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。trae 已完成 projects 表、Project zod schema、离线 `/pm project add/list/get`，并通过确定性脚本及真实 dsh Web add/list/get 验证。R1/R4/R6 进行中；R2/R3/R5 待办。这里的 Web 验证是命令入口，不是 R5 项目管理面板。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -80,10 +80,11 @@
 - 同一插件包内部增加 core/commands 模块，pmtool 版本 1 保留 checks，新增 projects；路径 `data/pmtool/projects/<id>.json`。
 - 新增离线 `/pm project add {JSON}`、`list`、`get <ID>`；完整示例与必填字段见 `packages/dsh-pm-tool/README.md`。无新增插件包、Skill、依赖或 profile 改动。
 - `pnpm run build` 与三个 `scripts/verify-*.mjs` 通过（退出码 0），验证增查、非法输入不落盘、10 次并发新增不覆盖、失败后恢复、旧 checks 兼容、0700、全新进程读回。项目测试独立临时库，保留结果路径供查看。
-- 本批只做 Host 确定性验证，未重跑浏览器交互及完整 dsh 重启验收；R5 仍未开始。新增为单进程队列，暂不支持多个宿主共享目录写入。
+- 已用真实 dsh Web 无 API Key 执行 add/list/get：p-0001/p-0002 页面字段与 JSON 一致，目录 0700、文件 0600；服务已停止。新增仍为单进程队列，不支持多个宿主共享目录写入，R5 仍未开始。
 - 本地提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`，未推送。实际提交号用 `git log -1 --oneline` 查看。
 
-### 下一步（由 trae 或所有者指定平台接续；新一批先报备）
+### 下一步（先由 doubao-work 独立复核，再由所有者确认新一批）
+- 把 `docs/doubao-validation-prompt.md` 整段发给豆包工作；豆包本轮只验证、复核代码并提交 R2 文件级计划，不改代码/文档、不提交、不推送。
 - **存储布局已定稿（ADL-011 / requirements v0.4 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record（`data/pmtool/<表>/<id>.json`），用表 `keys()/entries()` 枚举、不建 index.json；直接照此实现，不要再用旧的嵌套目录设想。
 - **下一批**：报备 R2 任务树；之后 R3 里程碑、R4 导出，补齐 R1 编辑及 R6 其余命令；R5 Web 最后，先设置卡片/区块再顶级页面验证。未获新批次授权前不扩展范围。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。

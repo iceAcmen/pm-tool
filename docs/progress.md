@@ -7,10 +7,10 @@
 ## 当前阶段：阶段 3 进行中；首个业务增量「项目新增 / 列表 / 详情」已完成（trae，2026-10-10）
 
 - **已完成**：按所有者确认的文件清单，新增 Project zod schema、统一领域中的 projects 表、离线 `/pm project add/list/get`、确定性验证脚本。
-- **验证通过**：`pnpm run build`、`node scripts/verify-projects.mjs`、`node scripts/verify-command.mjs`、`node scripts/verify-storage.mjs` 全部退出码 0。覆盖非法输入不落盘、旧 checks 兼容、10 次并发新增不覆盖、写入失败恢复、0700、全新进程读回与编号接续。
+- **验证通过**：构建及三个 verify 脚本全部退出码 0；真实 dsh Web 无 API Key 完成 add/list/get，页面字段与 `data/pmtool/projects/p-0001.json`、`p-0002.json` 一致，目录 0700、文件 0600。项目命令可在 Web 使用不代表 R5 管理面板完成。
 - **进行中**：R1（增查已完成，编辑/界面待办）、R4（项目持久化已完成，完整导出待办）、R6（项目增查已完成，其余命令待办）。
 - **待办**：R2 任务树、R3 里程碑、R4 导出，最后 R5 设置卡片/区块及顶级页面验证；后续每批先报备文件清单。项目编辑仍需补齐，不能宣称 R1 整体完成。
-- **交付状态**：本批由 TRAE 实现并本地提交，待所有者验收；未获推送授权，不推送。浏览器交互与完整宿主重启验收本批未执行，当前证据来自真实处理器和 JSON 后端。
+- **交付状态**：代码提交 `b2ca50f` 已在本地，真实 Web 功能验证已通过；新增豆包独立复核提示词，待豆包复核与所有者验收。未获 `git push` 明确授权，不推送。
 
 ### 🧭 跨平台协作基座（2026-10-10 新增，已就绪）
 - 根 `AGENTS.md`（任何 AI/IDE 接手先读）、`docs/collaboration.md`（多方同步规则 + 平台标识）、`docs/knowledge-base.md`（KB-001～010 已验证知识）、`docs/handover-archive-doubao.md`（豆包阶段完整存档）。

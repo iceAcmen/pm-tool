@@ -8,6 +8,27 @@
 
 ---
 
+## [未发布] — 补齐真实 Web 功能验收与豆包独立复核提示词（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `docs/changelog.md`：补记真实宿主、浏览器 add/list/get、落盘与权限验证证据。
+- `docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`：把首个项目增查增量更新为已通过真实 Web 功能验证，明确待豆包独立复核与下一步 R2 规划。
+- 新增 `docs/doubao-validation-prompt.md`：可直接发送给豆包工作的完整提示词，要求独立执行自动化与 Web 验收、只读代码复核，并提交 R2 WBS 文件级计划；未经确认不编码。
+
+### 为什么 / 背景
+- 项目所有者要求不能只验证构建和脚本，还需验证真实功能；随后要求提交现有代码，并让豆包工作再做一次独立功能复核和下一步规划。
+
+### 影响范围
+- 仅新增/更新文档，不改变插件行为、依赖、profile 或数据模型。
+- 浏览器验收产生 `data/pmtool/projects/p-0001.json`、`p-0002.json` 两条“浏览器功能验收”数据，位于已 gitignore 的 data 目录，按项目规则保留且不入库。
+- 测试使用仓库内 `.tmp/dsh-home-functional` 作为一次性 DSH_HOME，未修改真实 `~/.dsh` 或上游文件；`.tmp/` 已被 Git 忽略。
+
+### 验证
+- 用临时 DSH_HOME 执行 `pnpm dsh --profile pm --dump-config`：可见 pm-tool、storage-domain、storage-json，root 指向 `pm-tool/data`。
+- 启动真实 `pnpm dsh --profile pm --no-open`，浏览器无 API Key 验证：命令候选出现 pm；add 两次落盘为 p-0001/p-0002；list 显示 2 个项目；get p-0001 返回完整中文字段。
+- 两个 JSON 与页面字段一致，projects 目录权限 0700、文件权限 0600；服务已停止，产品仓库除本次文档外无受跟踪运行产物，上游工作区干净。
+- 初次自动化把参数拆成普通消息时复现 `MISSING_CREDENTIAL`，随后按 ISS-009 通过“候选中选择 pm → 同一命令后追加参数”完成验证；该现象不影响 pm 命令功能。
+
 ## [未发布] — 离线项目新增、列表与详情及持久化验证（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件
@@ -40,7 +61,7 @@
 - 环境：macOS 15.6.1 arm64、nvm Node v22.23.3、pnpm 11.28.5；同步基线 `f9bda6e`。
 - 包目录 `pnpm install`、`pnpm run build`、`node scripts/verify-projects.mjs`、`node scripts/verify-command.mjs`、`node scripts/verify-storage.mjs` 全部退出码 0。
 - 项目脚本：真实命令处理器新增/列表/详情、中文输出及大小写保留、22 项错误输入拒绝且已有文件不变、默认字段、10 次并发新增不覆盖、主动模拟一次写盘失败并恢复、读取副本隔离、旧 checks 兼容、可读 JSON 与目录 0700；全新 Node 进程读回 13 个项目并继续新增第 14 个。
-- 项目验证仅写独立系统临时目录（脚本打印路径并保留），原有脚本更新 data 下自检记录。未执行本批浏览器交互或完整 dsh 宿主重启验收，不将确定性脚本视为 R5 完成。
+- 项目脚本验证使用独立系统临时目录（脚本打印路径并保留），原有脚本更新 data 下自检记录；真实浏览器功能验收随后完成，证据见上方独立条目。项目命令可在 Web 执行不代表 R5 项目管理面板完成。
 - 提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`。仅本地提交，未推送。
 
 ## [未发布] — 新增跨平台启动提示词 SOP（onboarding-prompt）并接线强制读写（2026-10-10，平台：doubao-work）
