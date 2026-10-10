@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — 阶段 4 测试与交付首批（2026-10-10，平台：trae / TRAE）
+
+- 新增 `docs/test-cases.md`：建立 R1–R6 发布门禁、自动化覆盖矩阵、Web 手动用例、命令冒烟、数据迁移检查和未覆盖边界。
+- 新增 `docs/delivery.md`：整理交付范围、文件清单、环境要求、构建装载、演示、备份恢复、已知限制和常见问题。
+- 修改根/包 README、AGENTS、requirements、progress、handoff、onboarding：同步 R5 已验收、`9487c24` 已推送及阶段 4 MVP 测试交付完成状态。
+- 原因与影响：让 MVP 可由新环境独立恢复、验证和演示；本批不改变业务代码、数据模型或上游源码。
+- 验证：Node v22.23.3 / pnpm 11.28.5；冻结锁文件离线安装、构建、全部七个 verify 脚本和 profile 配置检查均退出码 0。因 TRAE 沙箱不能写真实 `~/.dsh`，按 ISS-019 复制到隔离 `DSH_HOME` 启动：插件存储领域打开，随机端口页面 HTTP 200，boot roster 包含 `dsh-pm-tool/client.js`；服务已停止。
+
 ## [未发布] — R5 所有者手动验收通过（2026-10-10，平台：trae / TRAE）
 
 - 修改 `AGENTS.md`、`docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md` 和本档案：记录项目所有者确认 R5 手动验收通过，阶段 3 MVP 完成，阶段 4 待启动。

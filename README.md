@@ -22,8 +22,8 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | ✅ MVP 代码完成，待 R5 手动验收 | R1–R6 已实现并完成自动回归 |
-| 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
+| 阶段 3 源码开发 | ✅ MVP 完成并验收 | R1–R6 已实现；R5 已由项目所有者手动验收 |
+| 阶段 4 测试交付 | ✅ MVP 已完成，待提交 | 测试矩阵、交付说明、完整回归与真实启动验证通过 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
 
@@ -50,6 +50,8 @@
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案（ISS）
     │   ├── handoff.md               # 最小迁移交接清单（第0节为移交说明）
+    │   ├── test-cases.md            # R1–R6 自动化矩阵与手动验收用例
+    │   ├── delivery.md              # MVP 安装、启动、演示、备份和限制
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/

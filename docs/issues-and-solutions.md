@@ -179,6 +179,23 @@
 - **避坑要点**：界面重构后必须同步检查结构契约测试；构建通过不等于专项验证通过，也不能直接删除失败断言。
 - **状态**：已修复，`verify-web.mjs` 退出码 0。
 
+## ISS-019 ｜ TRAE 沙箱不允许 dsh 重写真实 profile 的 cordis.yml（2026-10-10，trae / TRAE）
+
+- **现象**：阶段 4 在工具终端执行 `pnpm dsh --profile pm --no-open --port 0` 时，CLI 准备 profile 需要重写 `~/.dsh/profiles/pm/cordis.yml`，被沙箱以 `EACCES` 拒绝；用户自己的终端不受该沙箱规则影响。
+- **根因**：TRAE 当前只允许写工作区，`~/.dsh` 在工作区外。dsh 每次启动会根据 bundles 和 patch 重新组合 `cordis.yml`，即使 profile 已存在也需要写权限。
+- **解决办法**：交付自动验证时把现有 `~/.dsh/profiles/pm` 复制到 `/tmp`，设置临时 `DSH_HOME` 后启动。注意 profile 内 `node_modules/dsh-pm-tool` 原本是相对软链接，复制后须改为指向产品包的绝对软链接，否则会跳过插件：
+  ```sh
+  export DSH_HOME="$(mktemp -d /tmp/dsh-pm-stage4.XXXXXX)"
+  mkdir -p "$DSH_HOME/profiles"
+  cp -R "$HOME/.dsh/profiles/pm" "$DSH_HOME/profiles/pm"
+  ln -sfn /Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool \
+    "$DSH_HOME/profiles/pm/node_modules/dsh-pm-tool"
+  pnpm dsh --profile pm --no-open --port 0
+  ```
+- **验证**：隔离 profile 成功打印 `[pm-tool] 存储领域 pmtool 已打开` 和随机端口 URL；带 token 请求返回 HTTP 200，boot roster 包含 `dsh-pm-tool/client.js`。
+- **适用场景**：Agent 沙箱内做真实 dsh 启动验证；日常用户终端仍直接使用 `~/.dsh/profiles/pm`。
+- **状态**：已规避并沉淀（2026-10-10）。
+
 ---
 
 ## 待补充（占位）

@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R6 MVP 代码完成；R5 顶级 Web 面板待项目所有者手动验收。
+- 当前阶段：R1–R6 MVP 已完成；R5 顶级 Web 面板已由项目所有者手动验收，阶段 4 MVP 测试交付已完成。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -136,7 +136,7 @@ dsh-pm-tool/
 ├── src/index.ts        # 插件入口：注册 /pm 命令、打开存储领域
 ├── src/client/         # 项目管理顶级面板与侧栏入口
 │   ├── panel.tsx       # 工作台结构、标签页与交互
-│   └── panel.css       # 蓝绿视觉系统与容器响应式布局
+│   └── panel.css       # dsh 原生主题 token 与容器响应式布局
 ├── src/core/project.ts  # Project schema 与字段提示
 ├── src/core/task.ts     # Task schema、枚举与字段提示
 ├── src/core/milestone.ts # Milestone schema、状态与字段提示
