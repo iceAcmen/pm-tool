@@ -35,6 +35,7 @@
     ├── docs/
     │   ├── requirements.md          # 需求：功能模块 / 优先级 / 验收标准 / 数据模型
     │   ├── feasibility-map.md       # dsh 能力可行性地图（复用 vs 新建 + 来源）
+    │   ├── tech-plugin-scaffold.md  # 阶段3 插件骨架与装载技术方案（开工前报备）
     │   ├── decision-log.md          # 技术决策日志（时间/决策/理由/替代/结果）
     │   ├── changelog.md             # 版本更新记录（改了哪些文件/内容/原因）
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
