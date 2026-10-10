@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae / TRAE 完成首个项目增查增量、自动化与真实 Web 功能验证；代码提交 b2ca50f，本地未推送；待豆包独立复核及所有者验收）
+最后更新：2026-10-10（doubao-work 独立复核通过；trae 三个提交已推送 origin/main，HEAD=9dbb3f9；所有者五项开发决策已固化 ADL-012～014；下一批由 trae 报备 R1 收尾）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。trae 已完成 projects 表、Project zod schema、离线 `/pm project add/list/get`，并通过确定性脚本及真实 dsh Web add/list/get 验证。R1/R4/R6 进行中；R2/R3/R5 待办。这里的 Web 验证是命令入口，不是 R5 项目管理面板。
+- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。trae 已完成 projects 表、Project zod schema、离线 `/pm project add/list/get`，通过确定性脚本及真实 dsh Web add/list/get 验证，并**经 doubao-work 独立复核通过、所有者验收、已推送 origin/main（HEAD `9dbb3f9`）**。R1/R4/R6 进行中；R2/R3/R5 待办。这里的 Web 验证是命令入口，不是 R5 项目管理面板。所有者已就下一批定下五项规则（ADL-012/013/014）：删除 `confirm` 关键字、日期先后与同名校验、R5 排序与降级、Node 口径 v22.23.3。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -18,8 +18,8 @@
   2. `docs/requirements.md` **v0.4**（**做什么、验收标准、Project/Task/Milestone 数据模型、§5.1 已定稿落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
-  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～013）与 `docs/issues-and-solutions.md`（ISS-001～009）
-  6. `docs/decision-log.md`（ADL-001～ADL-011，所有已定决策与约束；ADL-011 为落盘布局定稿）
+  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～015；KB-014 讲 Web loopback/信任围栏与验证边界、KB-015 讲沙箱 node 遮蔽）与 `docs/issues-and-solutions.md`（ISS-001～010；ISS-010 讲非本机浏览器 503）
+  6. `docs/decision-log.md`（ADL-001～ADL-014，所有已定决策与约束；ADL-011 为落盘布局定稿，ADL-012/013/014 为复核后最新规则）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
 - **硬约束（来自项目所有者，务必遵守）**：
@@ -38,10 +38,10 @@
 | 项 | 值 |
 |---|---|
 | 本产品仓库（核心成果）远程地址 | **`git@github.com:iceAcmen/pm-tool.git`**（GitHub，SSH，分支 `main`） |
-| 本产品仓库本地路径 | `~/Projects/dsh-pm/pm-tool/`（main 工作区；阶段 3 起本地领先 origin/main） |
+| 本产品仓库本地路径 | `~/Projects/dsh-pm/pm-tool/`（main 工作区；正常情况下与 origin/main 一致，`git pull --ff-only` 后开工） |
 | 首次提交 | `12bcad3` —— "chore: 阶段1 环境搭建与项目档案初始化" |
-| 阶段 2 提交 | `70815a0`（需求 v0.2 + 可行性地图）、`54767e1`（需求 v0.3 + ADL-009）、`e7211c1`（阶段 2 收尾，**= origin/main**） |
-| 阶段 3 提交 | `186fb34`（技术骨架方案报备文档）、`9e5d539`（第 0 步最小插件 + 档案同步）、最新一条 `docs(移交)` 为第 0 步验收/推送/移交 Trae 说明；**以上均已推送 origin/main（2026-10-10）** |
+| 阶段 2 提交 | `70815a0`（需求 v0.2 + 可行性地图）、`54767e1`（需求 v0.3 + ADL-009）、`e7211c1`（阶段 2 收尾） |
+| 阶段 3 提交 | 第 0 步：`186fb34`、`9e5d539` 及 `docs(移交)` 说明；首个业务增量（trae）：`b2ca50f`（项目增查）、`0128203`（Web 验收+复核提示词）、`9dbb3f9`（精简复核提示词）。**以上均已推送 origin/main（2026-10-10），当前 origin/main HEAD = `9dbb3f9`**；其后的文档决策提交以 `git log -1 --oneline` 为准 |
 | dsh 专属 profile | `~/.dsh/profiles/pm/`（由 web 模板派生；以 `link:` 挂载本插件；补丁把存储 root 指向 `pm-tool/data`） |
 | 上游框架源码本地路径 | `~/Projects/dsh-pm/deepseek-harness/`（只读，勿改） |
 | 上游仓库 | <https://github.com/deepseek-ai/deepseek-harness>（分支 `master`） |
@@ -81,21 +81,26 @@
 - 新增离线 `/pm project add {JSON}`、`list`、`get <ID>`；完整示例与必填字段见 `packages/dsh-pm-tool/README.md`。无新增插件包、Skill、依赖或 profile 改动。
 - `pnpm run build` 与三个 `scripts/verify-*.mjs` 通过（退出码 0），验证增查、非法输入不落盘、10 次并发新增不覆盖、失败后恢复、旧 checks 兼容、0700、全新进程读回。项目测试独立临时库，保留结果路径供查看。
 - 已用真实 dsh Web 无 API Key 执行 add/list/get：p-0001/p-0002 页面字段与 JSON 一致，目录 0700、文件 0600；服务已停止。新增仍为单进程队列，不支持多个宿主共享目录写入，R5 仍未开始。
-- 本地提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`，未推送。实际提交号用 `git log -1 --oneline` 查看。
+- 提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`（`b2ca50f`），连同 `0128203`、`9dbb3f9` **均已推送 origin/main（2026-10-10，HEAD `9dbb3f9`）**。
 
-### 下一步（先由 doubao-work 独立复核，再由所有者确认新一批）
-- 把 `docs/doubao-validation-prompt.md` 整段发给豆包工作；豆包本轮只验证、复核代码并提交 R2 文件级计划，不改代码/文档、不提交、不推送。
+### 已完成（doubao-work 独立复核 + 五项决策，2026-10-10）
+- 独立复核结论：首批功能合格、建议验收（构建 + 三 verify 脚本退出 0；真实宿主加载插件；真实浏览器落盘 p-0001/p-0002 权限/内容正确；全新进程读回成功、无 Key 可用）。
+- 复核边界：doubao-work 当前角色无 Mac 本机 GUI 权限、隔离浏览器被 browser-trust 503 拦截（安全设计），本机浏览器点击以 trae 已执行 + 落盘/进程级证据佐证（KB-014 / ISS-010）。
+- 所有者五项决策已固化：删除 `confirm` 关键字、`targetDate>=startDate`、同名默认阻止+confirm 放行（ADL-012）；R5 排序与降级（ADL-013）；Node 口径 v22.23.3（ADL-014 / KB-015）。
+
+### 下一步（由 trae 或指定平台先报备、所有者确认后编码）
 - **存储布局已定稿（ADL-011 / requirements v0.4 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record（`data/pmtool/<表>/<id>.json`），用表 `keys()/entries()` 枚举、不建 index.json；直接照此实现，不要再用旧的嵌套目录设想。
-- **下一批**：报备 R2 任务树；之后 R3 里程碑、R4 导出，补齐 R1 编辑及 R6 其余命令；R5 Web 最后，先设置卡片/区块再顶级页面验证。未获新批次授权前不扩展范围。
+- **第 1 步（R1 收尾，规则见 ADL-012 / requirements §5.3）**：补 `project update <id> {JSON片段}` 与 `project delete <id> confirm`；新增/更新校验日期先后；同名默认阻止、加 `confirm` 放行；扩展 `verify-projects.mjs`。
+- **其后**：R2 WBS 任务树（父任务/同级自动编号/移动删除手动重编号）→ R3 里程碑（状态默认手动；R11 提醒不做）→ R4 Markdown/JSON 导出（导出不进存储域）→ 最后 R5 Web（先设置卡片/插件详情区块，再 spike 独立顶级页面；不可行则按 ADL-013 降级）。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
-- 第 0 步及全部档案提交**已推送 origin/main**（2026-10-10 经项目所有者确认）。
+- 第 0 步、首个业务增量及全部档案提交**均已推送 origin/main**（2026-10-10 经项目所有者确认）。
 
 ## 3. 环境依赖清单
 
 - 操作系统：macOS 15.6.1，Apple Silicon（arm64），shell 为 zsh。
 - Git：2.39.5（macOS 自带）。
-- Node.js：v22.23.3，经 **nvm** 安装于 `~/.nvm`（dsh 要求 `^22.19.0 || >=24`）。
+- Node.js：v22.23.3，经 **nvm** 安装于 `~/.nvm`、`nvm alias default 22` 指向它（dsh 要求 `^22.19.0 || >=24`）。注意：在豆包工作沙箱命令行里可能显示其自带的 v22.23.2（PATH 遮蔽 nvm），不影响使用，标准口径仍为 v22.23.3（见 ADL-014 / KB-015）。
 - pnpm：**11.28.5**，经 Node 自带 **corepack** 启用（版本以上游 `packageManager` 字段为准）。
 - GitHub 认证：本机 ed25519 SSH 私钥 `~/.ssh/id_ed25519`（无密码，仅本机留存），公钥已登记在 GitHub 账户 iceAcmen，指纹 `SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`。
 - 磁盘：工作区位于 `~/Projects/dsh-pm/`；上游含 `node_modules` 与构建产物，占用数 GB。
@@ -149,7 +154,7 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 1. 阶段 2 已完成；当前开发依据 v0.4，落盘布局见 ADL-011。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
-3. **首个项目增查增量已完成，待验收**。由 trae 或指定平台报备下一批 R2，之后 R3/R4，补齐项目编辑与其余命令；R5 收尾，浏览器半侧需实测（KB-010）。现有插件仅需重新 build 并重启，无须修改 profile 或上游。
+3. **首个项目增查增量已通过独立复核、所有者验收并推送（origin/main `9dbb3f9`）**。下一批由 trae 或指定平台**先报备文件清单**：第 1 步 R1 收尾（`project update` / `project delete <id> confirm`、日期先后与同名校验，ADL-012），随后 R2 WBS → R3 里程碑 → R4 导出，R5 最后并按 ADL-013 预留降级；浏览器半侧需实测（KB-010）。现有插件仅需重新 build 并重启，无须修改 profile 或上游。
 4. 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。
 
 ## 5. SSH 密钥（已配置，备查）

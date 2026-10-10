@@ -182,3 +182,24 @@
 - **适用场景**：仅新增表且旧记录格式不变的兼容扩展；不能推广为任意 schema 修改都免迁移。
 - **可复现实例**：macOS + nvm Node v22.23.3 + pnpm 11.28.5，在包目录执行 `pnpm run build && node scripts/verify-projects.mjs`。脚本先用只有 checks 的旧声明写入记录，再用新插件打开并验证旧记录；随后在全新 Node 进程读回 13 个项目并新增第 14 个，退出码 0。
 - **来源/佐证**：本包 `src/core/storage.ts`、`scripts/verify-projects.mjs` 的真实 JSON 后端实测。项目验证数据使用系统临时目录，真实 `data/` 中仅原有自检记录被自检脚本更新。
+
+## KB-014 ｜ dsh Web 只信任本机 loopback：网络绑定、browser-trust 围栏与真实验证边界（沉淀：doubao-work，2026-10-10）
+
+- **结论**：
+  - dsh Web 默认只监听 `127.0.0.1:3080`；`--host` **只接受具体 IP，明确拒绝 `0.0.0.0`（通配地址）**，报错原文大意为"绑定所有接口会把远程代码执行暴露到网络"。
+  - 即使 `--host <本机LAN IP> --trusted-host <该IP>` 让端口可达，**非本机浏览器**打开根路径仍被 `/api` **browser-trust 围栏以 HTTP 503 拦截**（带 token 走完 303、用 CDP 注入认证 cookie 后依然 503）；而宿主机 `curl -L` 带 cookie 可得 200。这是框架**有意的防 DNS-rebinding / 远程访问安全控制，不要尝试绕过**。
+  - `dsh headless "<任务>"` 是**独立的 shipped profile**（`--profile headless`），不含本项目 pm profile 的插件与存储；要在 headless 里跑 pm 命令需另建 headless 派生 profile 并 link 插件、配存储，且无模型时斜杠命令是否被 headless 直接派发未证实。
+  - 聊天/命令在 Web 端走控制器 + WebSocket（前端为 SPA，主 bundle 里没有简单的 REST 发消息路由），不适合用 curl 脚本化。
+- **对验证方式的指导（可复用结论）**：
+  - **离线功能回归以包内 `scripts/verify-*.mjs` 确定性脚本为准**——它们装载真实 Cordis + 真实 storage-json + 已构建插件的真实命令处理器，覆盖增查/校验/并发/权限/全新进程重启读回，可重复、可进 CI。
+  - **"真实浏览器点击"必须在宿主机本机 GUI 的 Chrome 上完成**（打开终端打印的 `127.0.0.1:3080/?token=...` URL）；隔离/远端浏览器、容器内浏览器都到不了或会被围栏拦截。部分 Agent 角色（如 OrganizeAgent）拿不到 Mac 本机 GUI 自动化能力时，应以"确定性脚本 + 真实宿主启动日志加载插件 + 本机浏览器产物落盘核验 + 全新进程读回"作为证据链，并如实标注"本机浏览器点击由具备 GUI 能力的一方执行"，**不得把该工具权限边界误判为产品缺陷，也不得伪造点击结论**。
+  - 真实 Web 会话写出的记录是可信旁证：`data/pmtool/projects/*.json`（目录 0700、文件 0600、内容 `{version,record}`）只能由真实运行宿主的命令派发写出（确定性脚本写的是系统临时目录，仅 checks/selftest 写产品 data）。
+- **适用场景**：所有"在真实 dsh Web 验证 / 远程或容器访问 dsh / 无界面执行"相关任务。
+- **来源**：本机实测（macOS，dsh v0.2.1-alpha.2，profile pm）；`pnpm dsh web --help`、`pnpm dsh headless --help`；对应踩坑见 ISS-010。
+
+## KB-015 ｜ Doubao 沙箱自带 node 会遮蔽 nvm 的 node（判断版本时注意）（沉淀：doubao-work，2026-10-10；决策 ADL-014）
+
+- **结论**：在豆包工作的命令行沙箱里，即使执行了 `nvm use 22`，`which node` 仍可能指向 Doubao 自带运行时 `~/Library/Application Support/DoubaoWork/sandbox_runtime/bases/<id>/bin/node`，其版本为 **v22.23.2**，会遮蔽 nvm 安装的 node。本机 nvm 实际安装且 `nvm alias default 22` 指向的是 **v22.23.3**（用 `nvm ls`、`nvm alias default` 可核实；用户自己的终端与 TRAE 等本机环境用的是 v22.23.3）。
+- **影响**：两者都满足 dsh 引擎要求 `^22.19.0 || >=24`，构建/测试/运行不受影响；但文档与交接的标准 Node 口径以 **nvm 的 v22.23.3** 为准，不要据沙箱里的 `node -v` 误改文档。
+- **适用场景**：在豆包沙箱内排查 Node 版本、或发现 `node -v` 与文档不一致时；以 `export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22` 后再结合 `nvm ls` 判断真实安装版本。
+- **来源**：本机 `nvm ls` / `nvm alias default` / `which node` 实测，2026-10-10。

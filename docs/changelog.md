@@ -8,6 +8,32 @@
 
 ---
 
+## [未发布] — 首批功能独立复核通过、推送并固化五项开发决策（2026-10-10，平台：doubao-work）
+
+### 改动文件
+- `docs/decision-log.md`：新增 ADL-012（删除 `confirm` 关键字、日期先后校验、同名默认阻止+confirm 放行）、ADL-013（R5 排在 R2/R3/R4 之后 + 顶级页面不可行时降级为卡片/区块+离线命令）、ADL-014（Node 版本口径澄清：以 nvm v22.23.3 为准）。
+- `docs/requirements.md`：头部加复核后同步注记；R1 验收标准补编辑/删除 confirm、日期先后、同名规则并更新状态；R5 行补排序与降级形态；§5.3 增补项目删除/日期/同名/开发顺序四条业务规则。字段模型仍为 v0.4，未改字段。
+- `docs/knowledge-base.md`：新增 KB-014（dsh Web 仅信任 loopback、拒绝 0.0.0.0、browser-trust 503、headless 为独立 profile、确定性脚本为离线回归准、真实浏览器点击须宿主机本机 GUI）、KB-015（Doubao 沙箱自带 node v22.23.2 遮蔽 nvm v22.23.3）。
+- `docs/issues-and-solutions.md`：新增 ISS-010（非本机浏览器 503 / 0.0.0.0 被拒 / 部分 Agent 无本机 GUI 权限的定性与处理）。
+- `docs/changelog.md`、`docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`：本条及进度/交接快照同步为「复核通过、已推送 origin/main、下一步交 trae 做 R1 收尾」。
+
+### 做了什么 / 为什么
+- 所有者授权后，把 trae 的 3 个本地提交（`b2ca50f`、`0128203`、`9dbb3f9`）**推送 origin/main**（`f9bda6e..9dbb3f9`），仓库与远程一致。
+- 豆包工作对首批「项目新增/列表/详情」做了独立复核：构建与三个 verify 脚本全部退出码 0；真实 dsh Web 宿主启动确认加载插件；核验真实浏览器写出的 `p-0001/p-0002`（目录 0700、文件 0600）；用全新真实进程经同一命令处理器读回成功、无 Key 可用。结论：功能合格、建议验收。
+- 所有者就复核报告的 5 个待确认项拍板（决定 2/3/4/5），按"仓库即唯一事实来源"要求立即固化，供 trae 克隆后直接照做。
+- 关于决定 5（Node 版本）：复核时沙箱报告 v22.23.2，经 `nvm ls` 核实是 Doubao 沙箱自带 node 遮蔽，本机 nvm 默认实为 v22.23.3，故文档**维持 v22.23.3**（ADL-014 / KB-015）。
+
+### 影响范围
+- **仅文档与 git 推送，无任何业务代码/依赖/profile/上游改动**；不改变已推送的 3 个提交内容。
+- 复核期间曾临时用 `--host 192.168.10.53` 绑定 LAN 做连通测试，服务已停止、未写入 profile；为安全 dsh 拒绝了 `--host 0.0.0.0`。
+- 清理了仓库根 `.tmp/` 探测 scratch（含一个可按包 README 五条命令重建的一次性功能验证 DSH_HOME，本就 gitignore）；产品 `data/` 与受跟踪文件未受影响。
+- 上游 `deepseek-harness` 工作区干净、HEAD 仍为基线 `d7432673`。
+
+### 验证
+- 推送后 `git status -sb` 显示本地与 origin/main 一致，`origin/main` HEAD = `9dbb3f9`。
+- 复核证据：`pnpm run build` 退出 0；`verify-command/storage/projects.mjs` 退出 0（含约 20 类非法输入不落盘、10 并发不覆盖、写盘失败恢复、全新子进程重启读回与编号续增）；真实宿主日志 `[pm-tool] 存储领域 pmtool 已打开`；`p-0001/p-0002` 内容符合 schema、权限正确。
+- 测试服务已停止，3080 端口空闲；产品仓库与上游均无意外改动。
+
 ## [未发布] — 精简豆包独立复核提示词（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

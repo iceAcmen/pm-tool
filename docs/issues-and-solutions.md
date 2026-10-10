@@ -104,8 +104,19 @@
 - **解决办法**：① 真人演示时正常整行键入 `/pm selftest` 回车即可（自然输入会正确分词）；② 自动化/回归用包内确定性脚本 `node scripts/verify-command.mjs` 直接跑已构建插件的处理器，不依赖页面输入。
 - **状态**：已规避（2026-10-10）。
 
+## ISS-010 ｜ 非本机浏览器访问 dsh Web 被 503 拦截 / 部分 Agent 无法驱动本机 Chrome（2026-10-10，doubao-work）
+
+- **现象**：① 在隔离/远端运行时的浏览器里打开 `http://127.0.0.1:3080` 报 `ERR_CONNECTION_REFUSED`（其 loopback 不指向宿主机）；② 改用 `--host <本机LAN IP>` 让端口可达后，浏览器主文档返回 **HTTP ERROR 503**（页面"该网页无法正常运作"），即便已用 token 换 cookie、用 CDP 注入认证 cookie 仍 503；③ 尝试 `--host 0.0.0.0` 直接被 dsh 拒绝启动。
+- **根因**：dsh Web 默认仅绑定 loopback，且明确禁止通配地址（防止把远程代码执行暴露到网络）；对非本机浏览器，`/api` browser-trust 围栏返回 503（防 DNS-rebinding / 远程访问）。宿主机本机 `curl -L` 带 cookie 可 200，说明服务本身正常，拦截是**有意的安全设计**。另：某些 Agent 角色（如 OrganizeAgent）调用 Mac 本机 GUI 自动化会返回"Subagent 暂不支持，请在 MainAgent 完成"，属工具权限边界。
+- **解决办法**：
+  1. **不要绕过信任围栏、不要绑定 0.0.0.0**；真实浏览器演示一律在宿主机本机 Chrome 打开终端打印的 `http://127.0.0.1:3080/?token=...` URL。
+  2. 自动化/回归用包内确定性脚本 `node scripts/verify-{command,storage,projects}.mjs`（真实 Cordis + 真实 storage-json + 真实命令处理器）。
+  3. 不具备本机 GUI 能力的 Agent，用"确定性脚本 + 真实宿主启动日志（`[pm-tool] 存储领域 pmtool 已打开`）+ 真实 Web 落盘文件核验（`data/pmtool/projects/*.json`，目录 0700/文件 0600）+ 全新进程读回"组成证据链，并把"本机浏览器点击"明确标注为由具备 GUI 能力的一方执行，不伪造结论。
+  4. 临时用 `--host` 绑定过 LAN 做测试的，结束后务必停服；该绑定是命令行临时参数、不写入 profile（可 `grep -r host ~/.dsh/profiles/pm` 确认无残留）。
+- **状态**：已定性为安全设计 + 工具权限边界，非产品缺陷（2026-10-10）。详见 KB-014。
+
 ---
 
 ## 待补充（占位）
 
-> 后续在依赖安装、构建、运行、插件开发中遇到的新问题，按上述格式持续追加（ISS-010、ISS-011……）。
+> 后续在依赖安装、构建、运行、插件开发中遇到的新问题，按上述格式持续追加（ISS-011、ISS-012……）。
