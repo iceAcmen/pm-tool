@@ -64,7 +64,7 @@
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-Web 端通过侧栏“项目管理”进入顶级面板，可操作项目、WBS 任务和里程碑；无需 API Key。项目有任务或里程碑时禁止删除。当前仍为单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+Web 端通过侧栏“项目管理”进入顶级面板；采用高密度表格工作台，颜色、字体及字号跟随 dsh 原生主题，支持顶部项目切换、任务/里程碑表格、项目概览、搜索筛选、状态分组和右侧新增/编辑抽屉，无需 API Key。项目有任务或里程碑时禁止删除。当前仍为单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
 
 任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。`milestoneId` 可关联同项目已存在里程碑，更新时用 `null` 解除关联。`update` 可用 `null` 清空可选日期，但不能直接修改项目、父任务、编号和系统字段。删除、移动与重新编号必须带 `confirm` 才写盘；有子任务时禁止删除父任务，移动不能跨项目或形成循环。
 
@@ -135,6 +135,8 @@ dsh-pm-tool/
 ├── cordis.patch.yml    # 组合包补丁：激活本插件，复用现有 pm profile 存储配置
 ├── src/index.ts        # 插件入口：注册 /pm 命令、打开存储领域
 ├── src/client/         # 项目管理顶级面板与侧栏入口
+│   ├── panel.tsx       # 工作台结构、标签页与交互
+│   └── panel.css       # 蓝绿视觉系统与容器响应式布局
 ├── src/core/project.ts  # Project schema 与字段提示
 ├── src/core/task.ts     # Task schema、枚举与字段提示
 ├── src/core/milestone.ts # Milestone schema、状态与字段提示

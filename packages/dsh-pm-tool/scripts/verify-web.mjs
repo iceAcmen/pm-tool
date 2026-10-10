@@ -62,9 +62,20 @@ try {
   assert.match(bundle, /sidebar\.panellist/)
   assert.match(bundle, /web snapshot/)
   assert.match(bundle, /项目管理/)
+  assert.match(bundle, /项目工作台/)
+  assert.match(bundle, /\.pm-view-tabs/)
+  assert.match(bundle, /\.pm-data-table/)
+  assert.match(bundle, /\.pm-drawer/)
+  assert.match(bundle, /按状态分组/)
+  assert.match(bundle, /搜索记录/)
+  assert.doesNotMatch(bundle, /require\("lucide-react/)
+  const css = readFileSync(join(here, '..', 'src', 'client', 'panel.css'), 'utf8')
+  assert.match(css, /--dsw-alias-bg-layer-2/)
+  assert.match(css, /--dsw-font-family/)
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
 
   console.log('通过：Web 快照包含项目、任务、里程碑，且无需 API Key。')
-  console.log('通过：dsh.client manifest、顶级面板入口与动态 client bundle 契约正确。')
+  console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')
 } finally {
   await facility.closeAll()
 }

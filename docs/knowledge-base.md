@@ -255,3 +255,16 @@
 - **构建要点**：本包 `tsc` 的 JS 输出是 `lib/client/index.js`，声明输出才在 `lib/types/client/index.d.ts`；`tsdown` 应以前者为 entry，且 `clean:false` 避免清除 Host 构建产物。React 由 dsh 模块系统作为默认 external 提供。
 - **验证**：`scripts/verify-web.mjs` 固化 snapshot/manifest/bundle 契约；真实 pm profile roster 包含 `dsh-pm-tool/client.js`，本机浏览器无 Key 完成项目、任务、里程碑 CRUD，控制台和网络无错误。
 - **适用场景**：后续给风险、问题、交付物等模块增加 dsh Web 顶级工作台。
+
+## KB-023 ｜ 外部 clientBundle 的样式与图标须内嵌或显式注册（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：dsh 动态客户端 roster 只加载 `./client` 的 JS；仓库外包不能假设额外 CSS 文件会自动加载。可在 bundle 阶段将 CSS 作为文本读入，并由 React 根组件输出 `<style>`，从而保持单 bundle 交付。
+- **图标边界**：`tsdown` 默认把普通 dependency 外部化；dsh 模块表只提供已注册模块，不能直接 `require("lucide-react")`。使用 Lucide 单图标 ESM 入口，并用 `noExternal: [/^lucide-react(?:\/|$)/]` 打入 bundle，可将产物控制在约 60 kB，同时保留 React 为宿主 external。
+- **响应式模式**：嵌入 dsh 主布局后，面板右侧宽度可能远小于浏览器视口。表单与统计区优先使用 CSS container query 按工作区自身宽度重排，不能只依赖 viewport media query。
+- **来源/佐证**：`src/client/panel.css`、`tsdown.config.ts`、`verify-web.mjs`；真实页面右侧 453px 宽度无横向溢出。
+
+## KB-024 ｜ 嵌入式项目工作台优先让表格局部滚动，编辑放右侧抽屉（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：dsh 自带全局侧栏会显著压缩插件主面板；项目管理的多字段任务不应在窄宽度下退化成卡片。保持固定表格列语义，让 `.pm-table-scroll` 局部横向滚动，页面根容器不溢出，项目经理仍可横向比较记录。
+- **交互模式**：顶部选择器承担项目切换，任务/里程碑以 38–39px 行高呈现；搜索、状态筛选与分组放在紧凑工具栏。新增和编辑统一在右侧抽屉完成，避免表单长期占据工作区，也避免复杂单元格编辑的焦点与校验成本。
+- **来源/佐证**：`src/client/panel.tsx`、`panel.css`；真实 dsh 725px 工作区验证表格 1200px 局部滚动、根容器宽度一致，任务创建/删除和抽屉开关正常。

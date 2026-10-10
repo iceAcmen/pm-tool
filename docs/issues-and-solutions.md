@@ -163,6 +163,22 @@
 - **避坑要点**：先核对编译器真实输出目录再配置 bundler；外部面板须在真实宿主主题中做截图与交互验证，不能只看 TypeScript 构建。
 - **状态**：已修复；真实浏览器截图、CRUD、控制台/网络检查和完整回归均通过。
 
+## ISS-017 ｜ 新版面板空白：Lucide 被外部化但不在 dsh 模块表中（2026-10-10，trae / TRAE）
+
+- **现象**：新版 bundle 可下载，但 dsh 页面空白并报 `web boot: 1 entry did not activate`；产物含 `require("lucide-react")`。CSS `?raw` 初次也因 `tsc` 不复制静态文件而无法构建。
+- **根因**：`tsdown` 默认把 dependency 外部化，而 dsh 动态模块加载器只认识 roster 已注册模块；同时本包先运行 `tsc`、再以 `lib/client/index.js` 打包，CSS 不会自动进入 `lib/`。
+- **解决办法**：构建时复制 `panel.css`，通过本地 raw CSS 插件内嵌文本；Lucide 改用单图标 ESM 入口，并用 `noExternal` 正则把全部子路径打入 bundle。最终外部依赖只剩宿主提供的 React。
+- **避坑要点**：每次增加客户端依赖后检查 `rg -o 'require\\(\"[^\"]+\"\\)' lib/client.js`，确保动态模块表之外的包没有残留；真实宿主启动是必做验证。
+- **状态**：已修复；bundle 约 60 kB，真实页面正常激活，控制台无当前构建错误。
+
+## ISS-018 ｜ Web 结构重构后专项验证仍断言旧 CSS 选择器（2026-10-10，trae / TRAE）
+
+- **现象**：高密度表格版 `pnpm run build` 成功，但 `verify-web.mjs` 因继续匹配旧 `.pm-tabs` 选择器而失败。
+- **根因**：专项脚本把关键界面契约固化到 bundle 文本；组件结构变更时没有同步更新断言。
+- **解决办法**：将契约改为 `.pm-view-tabs`、`.pm-data-table`、`.pm-drawer`、搜索和分组控件，并保留 manifest、模块包装和无额外 Lucide `require()` 断言。
+- **避坑要点**：界面重构后必须同步检查结构契约测试；构建通过不等于专项验证通过，也不能直接删除失败断言。
+- **状态**：已修复，`verify-web.mjs` 退出码 0。
+
 ---
 
 ## 待补充（占位）
