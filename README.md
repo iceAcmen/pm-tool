@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 项目增查首个增量已完成，待验收、本地提交未推送 | trae 实现 `/pm project add/list/get`、projects 表、JSON 持久化与确定性验证；R1/R4/R6 进行中，R2/R3 待办，R5 最后实施 |
+| 阶段 3 源码开发 | 🔄 R1 离线项目命令已收尾 | `/pm project add/list/get/update/delete`、projects 表与 JSON 持久化已完成；R1 Web 待办，随后 R2/R3/R4，R5 最后实施 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -53,9 +53,9 @@
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/
-    │   └── dsh-pm-tool/     # ★自研插件包：项目增查 + 自检，统一 pmtool 领域
+    │   └── dsh-pm-tool/     # ★自研插件包：项目增删改查 + 自检，统一 pmtool 领域
     │       ├── src/index.ts          # 插件入口：注册 /pm、打开存储领域
-    │       ├── src/core/             # Project schema、统一领域、项目增查业务
+    │       ├── src/core/             # Project schema、统一领域、项目 CRUD 业务
     │       ├── src/commands/         # 项目命令解析与中文输出
     │       ├── cordis.patch.yml      # 组合包补丁（安装后自动激活本插件）
     │       ├── locale/               # 中英文标题/描述
@@ -117,9 +117,11 @@ pnpm dsh --profile pm --no-open
 /pm project add {"name":"首版交付","startDate":"2026-10-10","targetDate":"2026-10-31"}
 /pm project list
 /pm project get p-0001
+/pm project update p-0001 {"status":"active"}
+/pm project delete p-0001 confirm
 ```
 
-详情查询使用新增返回的实际 ID。字段、全部验证命令、首次安装与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。本批扩展现有插件，没有新增插件包或 Skill；项目编辑、任务树、里程碑、导出与 Web 表单仍待后续实现。
+详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。任务树、里程碑、导出与 Web 表单仍待后续实现。
 
 ## 五、文档使用约定（自解释 / 可迁移）
 

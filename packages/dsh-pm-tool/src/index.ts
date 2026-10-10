@@ -1,7 +1,7 @@
 /**
  * dsh-pm-tool：面向项目经理的项目管理工具。
  *
- * 离线项目增查：/pm project add/list/get。
+ * 离线项目增删改查：/pm project add/list/get/update/delete。
  * 保留 /pm ping 与 /pm selftest，所有记录经统一 pmtool 领域持久化。
  *
  * @module dsh-pm-tool
@@ -51,8 +51,8 @@ export async function apply(ctx: Context): Promise<void> {
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
-    description: '项目管理工作台：项目新增、列表、详情与存储自检',
-    input: { hint: '[project add/list/get|ping|selftest]', attachments: false },
+    description: '项目管理工作台：项目增删改查与存储自检',
+    input: { hint: '[project add/list/get/update/delete|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()

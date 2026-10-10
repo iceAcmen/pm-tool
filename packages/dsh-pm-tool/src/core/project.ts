@@ -24,6 +24,19 @@ const projectFields = {
   tags: z.array(z.string()).optional(),
 }
 
+function validateDateOrder(
+  value: { startDate?: string, targetDate?: string },
+  context: z.RefinementCtx,
+): void {
+  if (value.startDate && value.targetDate && value.targetDate < value.startDate) {
+    context.addIssue({
+      code: 'custom',
+      path: ['targetDate'],
+      message: '完成日期不得早于开始日期',
+    })
+  }
+}
+
 export const projectRecordSchema = z.strictObject({
   id: projectIdSchema,
   ...projectFields,
@@ -31,15 +44,24 @@ export const projectRecordSchema = z.strictObject({
   updatedAt: z.iso.datetime(),
 })
 
+/** 写入新记录时执行完整业务校验；读盘 schema 保持 v1 旧记录兼容。 */
+export const projectWriteSchema = projectRecordSchema.superRefine(validateDateOrder)
+
 /** 新增只接受业务字段；ID、时间戳由系统生成，禁止调用方覆盖。 */
 export const projectCreateSchema = z.strictObject({
   ...projectFields,
   description: projectFields.description.default(''),
   owner: projectFields.owner.default(''),
   status: projectStatusSchema.default('planning'),
-})
+}).superRefine(validateDateOrder)
+
+/** 更新仅接受业务字段，最终日期关系由合并后的完整记录再次校验。 */
+export const projectUpdateSchema = z.strictObject(projectFields)
+  .partial()
+  .refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Project = z.infer<typeof projectRecordSchema>
+export type ProjectUpdate = z.infer<typeof projectUpdateSchema>
 
 /** 不直接输出 zod 英文错误，统一附上中文字段提示。 */
 export function describeProjectValidation(error: z.ZodError): string {
@@ -56,6 +78,8 @@ export function describeProjectValidation(error: z.ZodError): string {
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'
       ? '包含不支持的字段；ID 和时间戳由系统生成'
-      : (labels[String(issue.path[0])] ?? '项目字段格式不正确'),
+      : issue.code === 'custom'
+        ? issue.message
+        : (labels[String(issue.path[0])] ?? '项目字段格式不正确'),
   ))].join('；')
 }

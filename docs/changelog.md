@@ -8,6 +8,29 @@
 
 ---
 
+## [未发布] — R1 离线项目编辑、确认删除与输入防呆收尾（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `packages/dsh-pm-tool/src/core/project.ts`：增加更新片段 schema 与 `targetDate >= startDate` 联合校验。
+- `packages/dsh-pm-tool/src/core/projects.ts`：统一写队列，增加同名检查、项目更新与删除。
+- `packages/dsh-pm-tool/src/commands/project.ts`、`src/index.ts`：接入 `update` / `delete`、add/update 同名 `confirm`、删除预览及中文帮助。
+- `packages/dsh-pm-tool/scripts/verify-projects.mjs`：覆盖日期、同名、更新、删除确认、权限、失败恢复和全新进程读回。
+- `packages/dsh-pm-tool/README.md`、根 `README.md`、`AGENTS.md`：同步命令、规则、限制和当前状态。
+- `docs/requirements.md`、`docs/decision-log.md`：更新 R1/R6 状态并新增 ADL-015 落地语义。
+- `docs/knowledge-base.md`、`docs/issues-and-solutions.md`：新增 KB-016 统一业务队列模式、ISS-011 已确认重名项目更新边界。
+- `docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`：同步验证结果和下一步 R2 接续点。
+
+### 为什么 / 影响范围
+- 按 ADL-012 与 requirements §5.3 收尾 R1 离线项目能力；无新增依赖、插件包、profile、数据版本或迁移，不修改上游。
+- 名称 `trim` 后区分大小写精确比较；新增或实际改名同名时默认阻止，末尾 `confirm` 放行。删除不带 `confirm` 只提示，不写盘。
+- 当前删除仅涉及 projects 记录；任务和里程碑加入后需补关联删除约束。仍仅支持单宿主进程写入。
+- 数据版本保持 1；读盘 schema 不因新增日期业务规则而拒绝旧记录，日期关系在新增/更新写盘前校验，无需本批数据迁移。
+
+### 验证
+- macOS 15.6.1 arm64、nvm Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`node scripts/verify-command.mjs`、`node scripts/verify-storage.mjs`、`node scripts/verify-projects.mjs` 全部退出码 0。
+- 项目脚本验证增删改查、日期倒置拒绝、同名默认阻止/confirm 放行、删除预览不落盘、确认删除文件消失、0600 文件/0700 目录、并发写入、主动故障后恢复及全新进程读回更新/删除状态。
+
 ## [未发布] — 首批功能独立复核通过、推送并固化五项开发决策（2026-10-10，平台：doubao-work）
 
 ### 改动文件

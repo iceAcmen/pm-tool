@@ -2,14 +2,14 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：**阶段 3 首个业务增量已完成**——项目新增、列表、详情与 JSON 持久化；R1/R4/R6 整体仍进行中。
+- 当前阶段：**R1 离线项目命令已收尾**——项目新增、列表、详情、编辑、确认删除与 JSON 持久化；R1 Web 界面、R4 导出及 R6 任务/里程碑命令仍待后续。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
 
 - `/pm ping`：离线连通性自检，不依赖模型或 API Key。
 - `/pm selftest`：经 `@deepseek-ai/dsh-storage-domain` + `dsh-storage-json` 写入并读回一条记录，落为可读 JSON。
-- `/pm project add/list/get`：新增项目、查看列表、按 ID 查看详情，中文输出，无需配置模型。
+- `/pm project add/list/get/update/delete`：项目增删改查，中文输出，无需配置模型。
 
 ## 项目命令（在 dsh 对话输入框整行输入）
 
@@ -17,23 +17,28 @@
 /pm project add {"name":"PM 上线计划","description":"完成首版交付","owner":"Ice","status":"planning","startDate":"2026-10-10","targetDate":"2026-10-31","tags":["MVP","客户 A"]}
 /pm project list
 /pm project get p-0001
+/pm project update p-0001 {"owner":"史冰冰","status":"active","targetDate":"2026-11-15"}
+/pm project delete p-0001
+/pm project delete p-0001 confirm
 ```
 
-新增成功会返回实际 ID；`get` 请使用返回的 ID（`p-0001` 是空库的首个 ID）。`/pm project` 显示帮助。
+新增成功会返回实际 ID；后续命令请使用返回的 ID（`p-0001` 是空库的首个 ID）。删除不带 `confirm` 只返回项目摘要和确认命令，不会写盘；带 `confirm` 才删除。`/pm project` 显示帮助。
 
 | 新增字段 | 输入约定 |
 |---|---|
 | `name` | 必填非空文本，首尾空白会去除，正文大小写保留 |
-| `startDate`、`targetDate` | 必填真实日历日期 `YYYY-MM-DD`；不自动推算日期 |
+| `startDate`、`targetDate` | 必填真实日历日期 `YYYY-MM-DD`；`targetDate` 不得早于 `startDate` |
 | `description`、`owner` | 文本；省略时为空字符串 |
 | `status` | `planning` / `active` / `paused` / `done` / `archived`；省略时为 `planning` |
 | `tags` | 可选文本数组，例如 `["MVP","客户 A"]` |
 
-`add` 后使用一个 JSON 对象（英文双引号）。`id`、`createdAt`、`updatedAt` 自动生成，不接受手动传入；未知字段、类型错误和不存在的日期均在写盘前拒绝。重复执行合法新增命令会创建新项目，不覆盖同名项目。
+`add` 后使用完整 JSON 对象，`update <id>` 后使用只含待改字段的 JSON 片段（英文双引号）。`id`、`createdAt`、`updatedAt` 由系统维护；未知字段、空更新、类型错误、不存在或先后颠倒的日期均在写盘前拒绝。
+
+项目名称会去除首尾空白后做区分大小写的精确比较。新增同名项目、或把项目实际改名为已有名称时默认阻止；确认确需重名，可在原 `add` / `update` 命令末尾追加 `confirm`。已获准重名的项目更新其他字段时不会重复要求确认。
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-当前限制：项目编辑、删除、WBS、里程碑、导出和 Web 项目表单尚未实现；R5 最后开发。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。当前不校验起止日期之间的业务关系，仅校验各日期格式；后续规则变更需确认。
+当前限制：WBS、里程碑、导出和 Web 项目表单尚未实现；R5 最后开发。当前项目删除仅删除项目记录，因为任务和里程碑表尚未实现；关联实体加入后需补充删除约束。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
 
 ## 从源码构建
 
@@ -50,7 +55,7 @@ node scripts/verify-projects.mjs
 
 三个脚本应退出码 0。前两个写入 `data/pmtool/checks/selftest.json`；项目脚本每次在系统临时目录创建独立库，打印路径供查看，不污染真实项目，不删除文件。
 
-项目脚本验证真实插件处理器与真实 JSON 后端：增查、中文和大小写保留、校验拒绝、旧表兼容、并发新增不覆盖、落盘可读性与 0700 权限、全新进程读回及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。本增量未重新执行浏览器交互验收，也不代表 R5 完成。
+项目脚本验证真实插件处理器与真实 JSON 后端：增删改查、日期与同名校验、confirm 防误操作、旧表兼容、并发写入不覆盖、落盘可读性与 0700/0600 权限、全新进程读回更新/删除结果及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。命令验证不代表 R5 Web 管理界面完成。
 
 ## 装载到本地源码版 dsh（web profile 的派生 profile：pm）
 
@@ -84,9 +89,9 @@ dsh-pm-tool/
 ├── src/index.ts        # 插件入口：注册 /pm 命令、打开存储领域
 ├── src/core/project.ts  # Project schema 与字段提示
 ├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects）
-├── src/core/projects.ts # 项目增查、短编号与新增队列
+├── src/core/projects.ts # 项目增删改查、短编号与统一写队列
 ├── src/commands/project.ts # 命令解析与中文输出
-├── scripts/verify-projects.mjs # 项目增查与重启验证
+├── scripts/verify-projects.mjs # 项目增删改查与重启验证
 ├── scripts/verify-command.mjs  # 命令自检
 ├── scripts/verify-storage.mjs  # 存储自检
 ├── locale/{en,zh}.json # 界面展示标题/描述
