@@ -10,7 +10,7 @@
 - 上游官方文档：<https://deepseek-harness.github.io/deepseek-harness/>
 - 本产品定位：**不修改上游源码**，以独立插件包 + 配置组合的方式扩展 dsh，保持上游可随时升级。
 
-> 🤖 **任何 AI 编码助手 / IDE（TRAE、Cursor、豆包工作、Copilot 等）接手前，请先读根目录 [`AGENTS.md`](AGENTS.md)，并遵守 [`docs/collaboration.md`](docs/collaboration.md) 的多方协作规则。**
+> 🤖 **任何 AI 编码助手 / IDE（TRAE、Cursor、豆包工作、Copilot 等）接手前**：项目所有者可直接把 [`docs/onboarding-prompt.md`](docs/onboarding-prompt.md) 里的「标准启动提示词」整段发给它；Agent 开工前必读根 [`AGENTS.md`](AGENTS.md) 与该文件，并遵守 [`docs/collaboration.md`](docs/collaboration.md) 的多方协作规则（任务完成后须更新 onboarding-prompt 文末快照）。
 >
 > **仓库即唯一事实来源**：需求、决策、变更、进展、经验只以本仓库 Markdown 为准，不依赖任何平台的对话记录或私有格式；各平台地位平等、去中心化协作，clone 本仓库即可无缝接续。
 
@@ -42,6 +42,7 @@
     │   ├── feasibility-map.md       # dsh 能力可行性地图（复用 vs 新建 + 来源）
     │   ├── tech-plugin-scaffold.md  # 阶段3 插件骨架与装载技术方案（含第0步实测结论）
     │   ├── collaboration.md         # ★多方协作与同步规则（平台标识/开工收工 SOP/冲突处理）
+    │   ├── onboarding-prompt.md     # ★跨平台 Agent 标准启动提示词 + 当前交接快照（开工前必读、收工后必更新）
     │   ├── knowledge-base.md        # ★技术知识库（已验证 API/模式/约定/经验，KB 条目）
     │   ├── decision-log.md          # 技术决策日志（时间/决策/理由/替代/结果，ADL）
     │   ├── changelog.md             # 变更记录（文件/内容/原因/影响/日期/平台）

@@ -32,7 +32,7 @@
    git pull --ff-only origin main # 仅快进合并；若失败说明历史分叉，走第六节冲突处理
    ```
 2. **扫描最新档案**（按顺序，至少通读）：
-   `docs/handoff.md`（第 0 节）→ `docs/progress.md` → `docs/changelog.md`（**从最新一条往下看，确认其他平台刚改了什么**）→ `docs/requirements.md` → `docs/decision-log.md` → `docs/knowledge-base.md` → `docs/issues-and-solutions.md`。
+   **`docs/onboarding-prompt.md`（开工前必读，含标准启动提示词与文末「当前交接快照」）** → `docs/handoff.md`（第 0 节）→ `docs/progress.md` → `docs/changelog.md`（**从最新一条往下看，确认其他平台刚改了什么**）→ `docs/requirements.md` → `docs/decision-log.md` → `docs/knowledge-base.md` → `docs/issues-and-solutions.md`。
 3. **核对未完成/待办与「由谁继续」**：以 `progress.md` 与 `handoff.md` 写明的下一步为准；发现他人在途改动，先对齐再动手。
 4. **阶段 3 起先验证地基**：跑通 `packages/dsh-pm-tool` 的构建与 `node scripts/verify-command.mjs`（退出码 0）。
 5. **改代码前先报备**：列出「改哪些文件 / 为什么 / 影响范围」，经项目所有者确认后再动手（见 `AGENTS.md` 第 4、6 节）。
@@ -67,6 +67,7 @@
 ### 4.3 进度与交接（强制）
 - 有进展即更新 `docs/progress.md`（已完成/进行中/待办、下一步）。
 - 阶段收尾或暂停/移交时刷新 `docs/handoff.md`：当前进度快照、环境依赖、下一步从哪里继续、**「由谁继续」（写平台标识）**、最近改动平台。
+- **每次任务完成并提交后，必须更新 `docs/onboarding-prompt.md` 文末「当前交接快照」**（更新时间、改动平台、最新提交短 hash、当前状态、下一步、待确认项），随当次改动一起提交——保证任何新平台拿到该文件即可获得最新上下文。
 
 ### 4.4 提交与推送
 - 本地验证「能跑、能演示」后再提交；一个主题一个提交，信息清晰，建议前缀 `feat / fix / docs / chore / test`。
@@ -118,7 +119,7 @@
 
 ## 八、新平台首次接入清单（自检）
 
-- [ ] clone 仓库并读完 `AGENTS.md`、`docs/handoff.md` 第 0 节、`docs/requirements.md`、`progress.md`、最近的 `changelog.md`、`knowledge-base.md`、`issues-and-solutions.md`。
+- [ ] 由项目所有者把 `docs/onboarding-prompt.md` 的「标准启动提示词」整段发来；clone 仓库后读完该文件（含文末快照）、`AGENTS.md`、`docs/handoff.md` 第 0 节、`docs/requirements.md`、`progress.md`、最近的 `changelog.md`、`knowledge-base.md`、`issues-and-solutions.md`。
 - [ ] 在本文件「平台标识注册表」登记自己的平台标识（首次改动提交时带上）。
 - [ ] 按 `handoff.md` 第 3 节恢复/确认环境，跑通构建与 `verify-command.mjs`。
 - [ ] 明确本次接手的任务边界与「由谁继续」，必要时请项目所有者确认。

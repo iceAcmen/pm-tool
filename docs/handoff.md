@@ -8,17 +8,17 @@
 
 ## 0. 移交说明（给接手方：TRAE 或其他 IDE / Agent / 同事）
 
-> 接手第一步：先读仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
+> 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
 - **当前状态**：阶段 1（环境搭建）、阶段 2（需求分析 **v0.4**）已完成；阶段 3 第 0 步「打通验证」已完成并验收——最小插件已证明「独立仓库插件能被本地源码版 dsh 装载、离线命令可用、可读 JSON 落盘到产品目录」。**业务实体落盘布局已定稿（ADL-011）**；trae 已只读接手并停在开工报备，**业务功能（R1–R6）尚未开始**，待文件级清单获确认。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
-  0. 根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
+  0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
   1. `README.md`（总览、目录、启动方式）
   2. `docs/requirements.md` **v0.4**（**做什么、验收标准、Project/Task/Milestone 数据模型、§5.1 已定稿落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
-  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～010）与 `docs/issues-and-solutions.md`（ISS-001～009）
+  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～011）与 `docs/issues-and-solutions.md`（ISS-001～009）
   6. `docs/decision-log.md`（ADL-001～ADL-011，所有已定决策与约束；ADL-011 为落盘布局定稿）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
