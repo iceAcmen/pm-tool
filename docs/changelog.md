@@ -8,6 +8,22 @@
 
 ---
 
+## [未发布] — 固化任务完成后分别确认提交与推送（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `AGENTS.md`、`docs/collaboration.md`：把任务完成后的 `git commit` 和 `git push` 改为两个独立的显式授权项。
+- `docs/onboarding-prompt.md`：将“验证后主动询问是否提交、是否推送”接入标准启动提示词和交接快照。
+
+### 为什么 / 影响范围
+- 项目所有者要求每个任务完成后由执行平台主动询问是否提交和推送代码。
+- 后续任何平台在完整回归通过后也必须先停下来询问；未明确授权时保留工作区改动，不自行提交或推送。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`verify-command.mjs`、`verify-storage.mjs`、`verify-projects.mjs`、`verify-tasks.mjs` 全部退出码 0。
+- 覆盖命令/存储、项目 CRUD、三级 WBS、并发编号、主动故障恢复、权限和全新进程读回。
+- `git diff --check` 通过；本批仅改协作规则，未执行 Web 手动交互。
+
 ## [未发布] — 固化验证后主动规划并连续推进规则（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

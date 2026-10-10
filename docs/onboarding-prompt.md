@@ -41,7 +41,7 @@
 - 数据用 storage-domain + storage-json 落人类可读 JSON，root 指向 pm-tool/data；落盘布局以 requirements v0.4 §5.1 与 ADL-011 为准（单领域 pmtool 下 projects/tasks/milestones 三表 per-record，路径 data/pmtool/<表>/<id>.json，用表 keys()/entries() 枚举、不建 index.json；Markdown 概览仅 R4 导出）；data/、node_modules/、构建产物 lib/、密钥一律不入库。
 - 删除文件、覆盖他人成果、修改全局/系统配置、git push/对外发布，必须先经项目所有者同意；禁止 force push、禁止改写已推送历史。
 - 需求或方案有歧义先提问，可给推荐项与利弊，但不替项目所有者拍板；结论记入 docs/decision-log.md。
-- 每次改动后按 docs/collaboration.md 留痕：在 docs/changelog.md 顶部写变更（改了哪些文件/做了什么/为什么/影响范围/日期/平台标识 <平台标识>）；决策写 decision-log（ADL），踩坑写 issues-and-solutions（ISS），可复用知识写 knowledge-base（KB），更新 progress，阶段收尾刷新 handoff，并更新 docs/onboarding-prompt.md 文末“当前交接快照”。一个主题一个提交，提交信息清晰并在末尾加 [<平台标识>]；未经授权不要 git push。
+- 每次改动后按 docs/collaboration.md 留痕：在 docs/changelog.md 顶部写变更（改了哪些文件/做了什么/为什么/影响范围/日期/平台标识 <平台标识>）；决策写 decision-log（ADL），踩坑写 issues-and-solutions（ISS），可复用知识写 knowledge-base（KB），更新 progress，阶段收尾刷新 handoff，并更新 docs/onboarding-prompt.md 文末“当前交接快照”。任务完成并验证后主动询问是否提交、是否推送；两项分别授权，未经明确授权不得 commit 或 push。
 - 每个任务完成后必须运行构建、插件包内全部 `scripts/verify-*.mjs` 和本批专项功能验证；任一项失败不得标记完成或提交。最终回报逐项列出命令、退出码、关键覆盖、失败情况及未覆盖边界。
 - 每个任务通过完整回归后，主动依据仓库最新需求与进度输出下一批文件级改动计划；项目所有者确认后立即继续执行，不等待其再次指定下一步。
 - 文档一律简体中文 + 通用 Markdown；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node v22.23.3 + pnpm 11.28.5）；每次交付必须能跑、能演示并附验证证据，失败如实报告，不得伪造“已完成”。
@@ -75,6 +75,7 @@
 - **本批验证**：构建与四个 verify 脚本退出码 0；任务覆盖关系校验、并发编号、故障恢复、权限与全新进程读回。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
+- **版本控制确认规则**：每批任务完成并验证后，主动询问所有者是否提交、是否推送；提交与推送分别授权。
 - **所有者已定规则（ADL-012～015）**：删除 confirm、日期/同名规则及具体比较/更新语义已落实；R5 排在 R2/R3/R4 之后并允许降级；Node 标准口径为 nvm v22.23.3。
 - **下一步**：先报备 R2 任务编辑/删除/移动/重编号计划，确认后编码；随后 R3 → R4 → R5。
 - **当前待确认 / 遗留**：
