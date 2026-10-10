@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R4 单项目 Markdown 报告导出（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- 新增 `core/report.ts`、`core/export.ts`、`commands/export.ts`：聚合三类实体、渲染 Markdown、安全写入与覆盖保护。
+- 修改 `src/index.ts`：接入 `/pm export markdown`；修改 `.gitignore` 忽略默认 `exports/`。
+- 新增 `scripts/verify-export.mjs`：验证内容/顺序/转义、路径、权限、覆盖拒绝、confirm 原子覆盖、空项目和失败清理。
+- 更新 README/AGENTS 及 requirements、decision-log、knowledge-base、issues、progress、handoff、onboarding 快照。
+
+### 为什么 / 影响范围
+- 落实 R4 单项目可读报告；报告不进入 storage-domain，JSON 继续作为唯一数据源。
+- 默认导出目录稳定定位产品仓库，不受 dsh 启动目录影响；已有文件默认不覆盖。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`verify-command.mjs`、`verify-storage.mjs`、`verify-projects.mjs`、`verify-tasks.mjs`、`verify-milestones.mjs`、`verify-export.mjs` 全部退出码 0。
+- 导出专项覆盖内容/顺序/转义、默认路径定位、带空格目录、0700/0600、覆盖拒绝、confirm 原子覆盖、空项目和失败清理。
+- 两次测试预期错误已按 ISS-015 修正；业务错误日志均为主动负例。Web 管理界面不在本批验证范围。
+
 ## [未发布] — 固化 R5 完成前自动提交推送授权（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

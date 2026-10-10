@@ -22,7 +22,7 @@
 - 阶段 1 环境搭建：✅ 完成并推送。
 - 阶段 2 需求分析：✅ 完成，当前开发依据 `docs/requirements.md` **v0.4**（含 ADL-011 定稿落盘布局）。
 - 阶段 3 源码开发：🔄 **第 0 步「打通验证」已验收并推送**——最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 可用、可读 JSON 落盘 `pm-tool/data`（0700）。
-- **阶段 3 业务开发进行中（trae，2026-10-10）**：R1 项目、R2 WBS、R3 里程碑离线核心功能均已完成并通过回归；下一步 R4 Markdown/JSON 导出，R5 最后实施。
+- **阶段 3 业务开发进行中（trae，2026-10-10）**：R1–R3/R6 离线核心功能完成；R4 已实现单项目 Markdown 报告，整库 JSON 打包待下一批；R5 最后实施。
 - 阶段 4 测试交付：未开始。
 
 > 每次开工都不要轻信本节快照，必须按第 4 节拉取并核对最新文档。
@@ -107,6 +107,7 @@ node scripts/verify-storage.mjs      # 存储后端写入读回与权限
 node scripts/verify-projects.mjs     # 项目增查、校验、并发、全新进程读回；使用独立临时目录
 node scripts/verify-tasks.mjs        # WBS 完整命令、关系、编号与重启读回
 node scripts/verify-milestones.mjs   # 里程碑增查、排序、并发与重启读回
+node scripts/verify-export.mjs       # Markdown 内容、路径、覆盖与失败清理
 
 # 启动 dsh（在上游目录 ~/Projects/dsh-pm/deepseek-harness；指定 --profile 后不再加 web 动词）
 pnpm dsh --profile pm --no-open     # 终端打印带一次性 token 的 http://127.0.0.1:3080 URL

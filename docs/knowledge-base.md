@@ -240,3 +240,10 @@
 - **适用场景**：任何跨表外键式关系，例如后续风险关联任务、交付物关联项目。
 - **实现要点**：更新校验最终合并记录；解除关联使用明确 `null`；删除只拒绝并返回操作建议，不做隐式批量清理。
 - **来源/佐证**：ADL-018；`src/core/tasks.ts`、`src/core/milestones.ts` 和两个专项验证脚本。
+
+## KB-021 ｜ 可再生报告应纯渲染并使用同目录原子写（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：报告先从 domain 同步快照聚合 Project/Task/Milestone，再由纯函数渲染 Markdown；文件层不回写存储域。默认目录通过 `import.meta.url` 从插件安装位置反推产品仓库，不能依赖宿主 cwd。
+- **适用场景**：R4 Markdown、后续 JSON 打包和其他可再生交付物。
+- **实现要点**：Markdown 表格内容转义反斜杠/管道/换行；未确认覆盖用临时文件后 `link()` 原子创建目标，确认覆盖用 `rename()` 原子替换；临时文件与目标处于同目录。
+- **来源/佐证**：ADL-020；`core/report.ts`、`core/export.ts` 和 `verify-export.mjs`。

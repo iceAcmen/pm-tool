@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 R4 导出待开始 | R1 项目、R2 WBS、R3 里程碑离线核心功能已完成 |
+| 阶段 3 源码开发 | 🔄 R4 导出进行中 | 单项目 Markdown 报告已实现；整库 JSON 打包待下一批 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -111,6 +111,7 @@ node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
+node scripts/verify-export.mjs
 cd ~/Projects/dsh-pm/deepseek-harness
 pnpm dsh --profile pm --no-open
 ```
@@ -125,9 +126,11 @@ pnpm dsh --profile pm --no-open
 /pm project delete p-0001 confirm
 /pm task add {"projectId":"p-0001","title":"需求确认"}
 /pm task list p-0001
+/pm milestone add {"projectId":"p-0001","title":"首版发布","targetDate":"2026-10-31"}
+/pm export markdown p-0001
 ```
 
-详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。任务树、里程碑、导出与 Web 表单仍待后续实现。
+详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。整库 JSON 打包与 Web 管理界面仍待后续实现。
 
 ## 五、文档使用约定（自解释 / 可迁移）
 
