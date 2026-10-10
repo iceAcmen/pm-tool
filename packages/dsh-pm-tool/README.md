@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R8 已完成；R1–R6 已发布为 `v0.1.0`，R7 已推送，R8 待项目所有者验收。
+- 当前阶段：R1–R9 已完成并推送；R9 由 trae 实现、doubao-work 独立复核（冻结安装/构建/十项 verify/隔离真实宿主）通过，本机浏览器目视项以所有者手动确认为准。下一步 R10。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -14,6 +14,7 @@
 - `/pm milestone add/list/get/update/delete`：里程碑增查改删与按目标日期查看项目时间线。
 - `/pm risk-issue add/list/get/update/delete`：风险与问题统一台账、关闭及类型/状态筛选。
 - `/pm meeting add/list/get/update/delete` 与 `meeting action add/update/delete`：会议纪要、稳定行动项及任务/问题关联。
+- `/pm report generate/list/get/update/delete/export`：自定义周期固定快照、异常汇总与精简 Markdown。
 - `/pm export markdown <projectId> [目录] [confirm]`：导出项目、WBS 和里程碑 Markdown 报告。
 - `/pm export json [目录] [confirm]`：导出整库业务数据包（不含 checks）。
 
@@ -55,6 +56,12 @@
 /pm meeting action add mtg-0001 {"title":"完成验收","owner":"Ice","taskId":"t-0001"}
 /pm meeting action update mtg-0001 ai-001 {"status":"done"}
 /pm meeting action delete mtg-0001 ai-001 confirm
+/pm report generate p-0001 2026-10-01 2026-10-31 {"title":"十月进度汇报","executiveSummary":"总体可控"}
+/pm report list p-0001 all
+/pm report get rpt-0001
+/pm report update rpt-0001 {"status":"final","nextPlans":["完成验收"]}
+/pm report export rpt-0001
+/pm report delete rpt-0001 confirm
 /pm export markdown p-0001
 /pm export markdown p-0001 ./my-reports
 /pm export markdown p-0001 ./my-reports confirm
@@ -86,9 +93,11 @@ Web 端通过侧栏“项目管理”进入顶级面板；采用高密度表格�
 
 风险与问题共用 `data/pmtool/risk_issues/<id>.json`，以 `type=risk|issue` 区分。状态为 `open / monitoring / closed`，影响为 `low / medium / high / critical`；风险必须填写 `probability` 和可选 `responsePlan`，问题使用 `solution` 且概率固定为 `null`。创建后不能修改项目或类型，删除必须带 `confirm`。
 
+进度汇报写入 `data/pmtool/reports/<id>.json`。日期范围筛选周期会议和里程碑，任务统计取生成瞬间当前状态；快照生成后不可修改，源数据变化不会改写旧报告。默认 Markdown 只含摘要、聚合指标、周期事件和异常项，不包含完整任务明细。
+
 Markdown 导出默认写入产品仓库 `exports/<projectId>-report.md`；相对目录也以产品仓库为基准，绝对目录和 `~/` 可直接指定。报告包含项目概览、按真实父子关系展开的 WBS 和按日期排序的里程碑。已有文件默认拒绝覆盖，末尾加 `confirm` 才原子覆盖；报告不写入 storage-domain，JSON 始终是唯一数据源。
 
-整库 JSON 默认写入 `exports/pmtool-backup.json`，包含格式版本、导出时间和按 ID 排序的 projects/tasks/milestones，不包含 checks 自检数据；覆盖规则与 Markdown 相同。为保持 v0.1.0 格式稳定，R7 的 risk_issues 和 R8 的 meetings 暂未加入该导出。
+整库 JSON 默认写入 `exports/pmtool-backup.json`，包含格式版本、导出时间和按 ID 排序的 projects/tasks/milestones，不包含 checks 自检数据；覆盖规则与 Markdown 相同。为保持 v0.1.0 格式稳定，R7 的 risk_issues、R8 的 meetings 和 R9 的 reports 暂未加入该导出。
 
 ## 从源码构建
 
@@ -105,6 +114,7 @@ node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
 node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
+node scripts/verify-reports.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
@@ -118,6 +128,8 @@ node scripts/verify-web.mjs
 里程碑脚本覆盖增查改删、状态一致性、任务关联保护、时间线排序、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
 
 风险问题脚本覆盖增查改删、关闭、类型/状态筛选、类型专有字段、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
+
+进度汇报脚本覆盖自定义周期、固定快照、异常聚合、人工字段更新、精简 Markdown、并发编号、失败恢复、项目删除保护、权限和全新进程读回。
 
 导出脚本覆盖内容与排序、Markdown 转义、默认路径定位、0700/0600、覆盖保护、confirm 原子覆盖、空项目和失败清理。
 
@@ -168,6 +180,8 @@ dsh-pm-tool/
 ├── src/core/milestones.ts # 里程碑增查与时间线排序
 ├── src/core/risk-issues.ts # 风险问题 CRUD、筛选和编号
 ├── src/core/meetings.ts # 会议、行动项 CRUD 与跨表关联保护
+├── src/core/progress-reports.ts # 固定快照聚合与进度汇报 CRUD
+├── src/core/progress-report-markdown.ts # 摘要与异常项 Markdown
 ├── src/core/report.ts   # 项目/WBS/里程碑 Markdown 渲染
 ├── src/core/export.ts   # 导出路径、覆盖保护与原子写入
 ├── src/commands/project.ts # 命令解析与中文输出
@@ -175,12 +189,14 @@ dsh-pm-tool/
 ├── src/commands/milestone.ts # 里程碑命令解析与中文输出
 ├── src/commands/risk-issue.ts # 风险问题命令解析与中文输出
 ├── src/commands/meeting.ts # 会议纪要与行动项命令
+├── src/commands/progress-report.ts # 进度汇报命令与导出
 ├── src/commands/export.ts # Markdown 导出命令
 ├── scripts/verify-projects.mjs # 项目增删改查与重启验证
 ├── scripts/verify-tasks.mjs # 任务完整回归、并发编号与重启验证
 ├── scripts/verify-milestones.mjs # 里程碑增查、排序与重启验证
 ├── scripts/verify-risk-issues.mjs # 风险问题完整回归与重启验证
 ├── scripts/verify-meetings.mjs # 会议、行动项、关联和重启验证
+├── scripts/verify-reports.mjs # 固定快照、异常与 Markdown 验证
 ├── scripts/verify-export.mjs # Markdown 内容、路径与覆盖验证
 ├── scripts/verify-web.mjs # Web 快照、manifest 与 bundle 验证
 ├── scripts/verify-command.mjs  # 命令自检

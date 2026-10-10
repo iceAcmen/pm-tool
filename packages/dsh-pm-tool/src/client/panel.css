@@ -289,6 +289,7 @@
 .pm-milestone-table { min-width: 900px; }
 .pm-risk-table { min-width: 1080px; }
 .pm-meeting-table { min-width: 980px; }
+.pm-report-table { min-width: 980px; }
 .pm-data-table th, .pm-data-table td {
   height: 39px;
   padding: 6px 10px;
@@ -580,6 +581,34 @@
 .pm-action-editor .pm-row-button { justify-self: end; }
 .pm-action-create { border-style: dashed; }
 .pm-action-create .pm-button { grid-column: 1 / -1; justify-self: end; }
+
+.pm-exception-count {
+  display: inline-grid;
+  min-width: 24px;
+  height: 22px;
+  place-items: center;
+  border-radius: var(--dsw-radius-sm);
+  color: var(--pm-secondary);
+}
+.pm-exception-count[data-alert="true"] {
+  background: var(--dsw-alias-interactive-bg-hover-danger);
+  color: var(--pm-danger);
+  font-weight: 650;
+}
+.pm-report-snapshot { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--pm-line); }
+.pm-report-snapshot > header { display: flex; justify-content: space-between; gap: 12px; color: var(--pm-secondary); }
+.pm-report-snapshot > header span { font-weight: 650; color: var(--pm-ink); }
+.pm-report-snapshot > header time { font-size: 11px; }
+.pm-report-snapshot dl { margin: 14px 0 20px; border-top: 1px solid var(--pm-line-soft); }
+.pm-report-snapshot dl div { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--pm-line-soft); }
+.pm-report-snapshot dt { color: var(--pm-secondary); }
+.pm-report-snapshot dd { margin: 0; font-weight: 550; text-align: right; }
+.pm-report-snapshot h3 { margin: 0 0 10px; font-size: 13px; }
+.pm-report-snapshot ul { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.pm-report-snapshot li { display: grid; gap: 3px; padding: 9px 10px; border-left: 3px solid var(--pm-warning); background: var(--pm-surface); }
+.pm-report-snapshot li[data-severity="critical"] { border-left-color: var(--pm-danger); }
+.pm-report-snapshot li span, .pm-report-snapshot li small, .pm-report-snapshot > p { color: var(--pm-secondary); }
+.pm-report-snapshot li small { font-size: 11px; }
 
 .pm-empty-workspace {
   min-height: calc(100% - 64px);

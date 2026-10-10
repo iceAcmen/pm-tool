@@ -21,8 +21,8 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
-| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.6 | 含 ADL-025 R8 模型 |
-| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R8 已实现并验收；下一步规划 R9 |
+| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.7 | 含 ADL-026 R9 固定快照模型 |
+| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R9 已完成并推送（R9 经 doubao-work 独立复核）；下一步 R10 交付物管理 |
 | 阶段 4 测试交付 | ✅ MVP 已完成并发布 v0.1.0 | 测试矩阵、交付说明、完整回归与真实启动验证通过 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -50,7 +50,7 @@
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案（ISS）
     │   ├── handoff.md               # 最小迁移交接清单（第0节为移交说明）
-    │   ├── test-cases.md            # R1–R8 自动化矩阵与手动验收用例
+    │   ├── test-cases.md            # R1–R9 自动化矩阵与手动验收用例
     │   ├── delivery.md              # MVP 安装、启动、演示、备份和限制
     │   ├── releases/                # 版本发布说明、验收证据与已知限制
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
@@ -117,6 +117,7 @@ node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
 node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
+node scripts/verify-reports.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 cd ~/Projects/dsh-pm/deepseek-harness
@@ -141,6 +142,11 @@ pnpm dsh --profile pm --no-open
 /pm meeting add {"projectId":"p-0001","title":"项目周会","meetingDate":"2026-10-10"}
 /pm meeting action add mtg-0001 {"title":"完成验收","owner":"Ice","taskId":"t-0001"}
 /pm meeting action update mtg-0001 ai-001 {"status":"done"}
+
+# 固定快照进度汇报
+/pm report generate p-0001 2026-10-01 2026-10-31 {"title":"十月进度汇报"}
+/pm report update rpt-0001 {"status":"final","executiveSummary":"总体按计划"}
+/pm report export rpt-0001
 /pm export markdown p-0001
 ```
 

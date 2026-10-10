@@ -37,8 +37,8 @@
 
 三、必须遵守的红线（完整版见 AGENTS.md 第 6 节与 docs/collaboration.md）
 - 上游 deepseek-harness 只读；所有功能在 pm-tool/packages/ 下以外挂 dsh 插件实现，不破坏 dsh 原有能力。
-- 离线优先：核心增删改查走 ctx.commands（无 API Key 可用）；会议纪要/智能 WBS/周报等生成型能力一期仅预留接口、不实现；里程碑到期提醒 R11 第一版不做。
-- 数据用 storage-domain + storage-json 落人类可读 JSON，root 指向 pm-tool/data；落盘布局以 requirements v0.6 §5.1 与 ADL-011/024/025 为准（单领域 pmtool 下业务实体分表 per-record，路径 data/pmtool/<表>/<id>.json，用表 keys()/entries() 枚举、不建 index.json；Markdown 概览仅 R4 导出）；data/、node_modules/、构建产物 lib/、密钥一律不入库。
+- 离线优先：核心增删改查走 ctx.commands（无 API Key 可用）；智能 WBS/AI 撰写等模型生成能力一期仅预留接口不实现；R9 的确定性固定快照与 Markdown 离线可用；里程碑到期提醒 R11 第一版不做。
+- 数据用 storage-domain + storage-json 落人类可读 JSON，root 指向 pm-tool/data；落盘布局以 requirements v0.7 §5.1 与 ADL-011/024/025/026 为准（单领域 pmtool 下业务实体分表 per-record，路径 data/pmtool/<表>/<id>.json，用表 keys()/entries() 枚举、不建 index.json；Markdown 为导出产物）；data/、node_modules/、构建产物 lib/、密钥一律不入库。
 - 删除文件、覆盖他人成果、修改全局/系统配置、git push/对外发布，必须先经项目所有者同意；禁止 force push、禁止改写已推送历史。
 - 需求或方案有歧义先提问，可给推荐项与利弊，但不替项目所有者拍板；结论记入 docs/decision-log.md。
 - 每次改动后按 docs/collaboration.md 留痕：在 docs/changelog.md 顶部写变更（改了哪些文件/做了什么/为什么/影响范围/日期/平台标识 <平台标识>）；决策写 decision-log（ADL），踩坑写 issues-and-solutions（ISS），可复用知识写 knowledge-base（KB），更新 progress，阶段收尾刷新 handoff，并更新 docs/onboarding-prompt.md 文末“当前交接快照”。任务完成并验证后主动询问是否提交、是否推送；两项分别授权，未经明确授权不得 commit 或 push。
@@ -47,7 +47,7 @@
 - 文档一律简体中文 + 通用 Markdown；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node v22.23.3 + pnpm 11.28.5）；每次交付必须能跑、能演示并附验证证据，失败如实报告，不得伪造“已完成”。
 
 四、当前状态基线
-- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.6：R1–R12 及当前已确认数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
+- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.7：R1–R12 及当前已确认数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
 - 业务功能的实时进度、下一步与待确认项以本文件文末“当前交接快照”为准，并对照 docs/handoff.md「下一步」。
 - 第三方插件顶级 Web 页面与外部包浏览器构建已按 ADL-022 验证；后续直接复用现有 `dsh.client` + 动态 bundle 模式。
 
@@ -69,16 +69,17 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-10
-- **最近更新平台**：trae（完成 R8 实现与验证）
-- **main 提交定位**：R8 本批提交推送后以 `git log -1` 和 `origin/main` 为准；此前 R7 基线为 `59afd68`。
-- **当前阶段 / 状态**：R1–R8 已完成；R8 通过九项回归、真实浏览器验证和项目所有者手动验收。
-- **本批验证**：Node v22.23.3 / pnpm 11.28.5；冻结锁文件离线安装、构建和八个 verify 脚本全部退出码 0；隔离 profile 真实浏览器完成风险/问题新增、编辑关闭、筛选、搜索、确认删除和重启读回，浅/深主题、786px 窄屏、控制台与网络检查通过。
+- **最近更新平台**：doubao-work（独立复核并提交推送 R9，接续 R10）
+- **main 提交定位**：R8 基线 `64187b0`；R9 代码 + 档案随本次提交一并推送，当前 HEAD 以 `git log -1 --oneline` 与 `origin/main` 为准（本地与远程一致）。
+- **当前阶段 / 状态**：R1–R9 已完成并推送。R9 由 trae 实现、doubao-work 独立复核通过（未改业务代码）；下一步 R10 交付物管理。
+- **本批验证（doubao-work 独立复核）**：Node（nvm 口径 v22.23.3；沙箱内显示 v22.23.2 系 PATH 遮蔽，KB-015）/ pnpm 11.28.5；`pnpm install --frozen-lockfile`、`pnpm run build`、十个 verify 脚本全部退出码 0；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、带 token 200/无 token 401、启动清单含 `dsh-pm-tool/client.js`、运行中下发 bundle 含 R9 界面串）。本机浏览器目视（主题/窄屏/控制台）本角色无 GUI 权限，以 verify-web 契约 + TRAE 浏览器记录 + 所有者手动确认为准（KB-014/ISS-010）。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
-- **版本控制确认规则**：每批任务完成并验证后，主动询问所有者是否提交、是否推送；提交与推送分别授权。
-- **授权状态**：项目所有者已明确授权 R8 本批提交和推送；授权仅限本批。
-- **所有者已定规则（ADL-012～024）**：R7 采用风险问题单表模型；类型专有字段严格校验，R4 已发布导出格式本批不升级。
-- **下一步**：R8 推送后规划 R9 进度汇报，确认报告快照、时间范围和 Markdown 导出边界。
+- **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
+- **授权状态**：R9 已获提交与推送授权并完成；后续 R10/R12 在上述持续授权范围内逐主题提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
+- **所有者已定规则（ADL-012～027）**：R9 使用自定义日期范围和不可变固定快照，Markdown 默认只含摘要、周期事件和异常项；ADL-027 记录 R9 原样接收与本角色 GUI 验证边界。
+- **下一步**：doubao-work 接续 R10 交付物管理（先核对 dsh deliverables 可复用边界并报备文件级计划，再编码）；其后 R12；R11 与生成型能力取舍写入 decision-log。
 - **当前待确认 / 遗留**：
-  - 里程碑到期提醒 R11 第一版不做；生成型能力一期仅预留接口。
-- **最近一次交接**：trae 完成 R8 代码、问题修复、九项回归、隔离浏览器验证和项目所有者验收；上游保持只读，临时服务和数据已清理。
+  - 里程碑到期提醒 R11 第一版不做；生成型能力一期仅预留接口（本轮由 doubao-work 复核并给最终取舍结论）。
+  - 所有者可在本机对 R9 做最终目视确认；3080 端口曾有 TRAE 遗留测试进程（非 doubao 所启），如需释放可自行关闭。
+- **最近一次交接**：doubao-work 保护 TRAE 未提交 R9 现场，完成独立复核（十项 verify + 隔离真实宿主）后原样接收并提交推送，隔离服务已停、隔离数据仅含宿主 workspace.json、真实 data 与上游无改动。

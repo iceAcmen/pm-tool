@@ -5,6 +5,8 @@ import { isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { PmDomain } from './storage.js'
 import { collectProjectReport, renderProjectMarkdown } from './report.js'
+import { renderProgressReportMarkdown } from './progress-report-markdown.js'
+import { getProgressReport } from './progress-reports.js'
 
 export const defaultExportDirectory = fileURLToPath(new URL('../../../../exports/', import.meta.url))
 
@@ -71,4 +73,18 @@ export async function exportProjectMarkdown(
 
 export function resolveExportPath(directory: string | undefined, filename: string): string {
   return resolve(expandDirectory(directory), filename)
+}
+
+export async function exportProgressReportMarkdown(
+  domain: PmDomain,
+  reportId: string,
+  directory?: string,
+  overwrite = false,
+): Promise<{ path: string, content: string }> {
+  const report = getProgressReport(domain, reportId)
+  if (!report) throw new Error(`未找到进度汇报：${reportId}`)
+  const content = renderProgressReportMarkdown(report)
+  const target = resolve(expandDirectory(directory), `${report.id}-progress.md`)
+  await writeExportFile(target, content, overwrite)
+  return { path: target, content }
 }

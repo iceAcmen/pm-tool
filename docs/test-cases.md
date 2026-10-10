@@ -1,6 +1,6 @@
 # MVP 测试与验收用例
 
-> 适用版本：R1-R8（v0.1.0 基线 + 后续 R7/R8）。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
+> 适用版本：R1-R9（v0.1.0 基线 + 后续 R7/R8/R9）。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
 
 最后更新：2026-10-10（trae / TRAE）
 
@@ -35,6 +35,7 @@ node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
 node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
+node scripts/verify-reports.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
@@ -127,4 +128,7 @@ pnpm dsh --profile pm --no-open
 - R7 Web：隔离 profile 完成新增、编辑关闭、筛选、搜索、确认删除和重启读回；浅/深主题、786px 窄屏局部滚动、控制台和网络检查通过。
 - R8 Web：隔离 profile 完成项目、任务、问题、会议及行动项新增，验证关联、完成状态、筛选、搜索、深色主题、786px 横向滚动和重启读回；控制台和网络无错误。
 - R8 行动项表单：所有控件不得超出抽屉内行动项容器；新增或编辑行动项后直接点击“保存会议”，重开抽屉应读回行动项变更。
+- R9 固定快照：生成第一份报告后修改源任务，旧报告指标不变；新生成报告反映最新状态；编辑人工摘要不改变快照。
+- R9 Markdown：默认只含摘要、聚合、周期事件和异常项，不输出完整任务明细；覆盖须 `confirm`。
+- R9 Web：生成/编辑/筛选/搜索/导出可用，深色主题、786px 表格局部滚动、重启读回、控制台和网络检查通过。
 - 未覆盖：Windows/Linux、Safari/Firefox、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性。

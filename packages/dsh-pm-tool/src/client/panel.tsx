@@ -2,6 +2,7 @@ import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
+import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import FolderKanban from 'lucide-react/dist/esm/icons/folder-kanban.mjs'
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
@@ -99,14 +100,45 @@ type Meeting = {
   updatedAt: string
 }
 
+type ProgressReport = {
+  id: string
+  projectId: string
+  title: string
+  periodStart: string
+  periodEnd: string
+  status: 'draft' | 'final'
+  executiveSummary: string
+  completedWork: string[]
+  nextPlans: string[]
+  blockers: string[]
+  snapshotAt: string
+  snapshot: {
+    tasks: { total: number, done: number, blocked: number, averageProgress: number }
+    milestones: { total: number, achieved: number, atRisk: number, missed: number }
+    meetings: { inPeriod: number, decisions: number }
+    periodMilestones: { id: string, title: string, targetDate: string, status: string }[]
+    periodMeetings: { id: string, title: string, meetingDate: string, decisions: string[] }[]
+    exceptions: {
+      kind: string
+      severity: 'warning' | 'critical'
+      id: string
+      title: string
+      detail: string
+      owner: string
+      dueDate: string | null
+    }[]
+  }
+}
+
 type Snapshot = {
   projects: Project[]
   tasks: Task[]
   milestones: Milestone[]
   riskIssues: RiskIssue[]
   meetings: Meeting[]
+  reports: ProgressReport[]
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'overview'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'overview'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
@@ -114,12 +146,13 @@ type Drawer =
   | { kind: 'milestone', milestone?: Milestone }
   | { kind: 'risk-issue', record?: RiskIssue }
   | { kind: 'meeting', meeting?: Meeting }
+  | { kind: 'report', report?: ProgressReport }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
 }
 
-const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [] }
+const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [] }
 const projectStatus: Record<string, string> = {
   planning: '计划中',
   active: '进行中',
@@ -151,6 +184,7 @@ const meetingStatus: Record<string, string> = { draft: '草稿', final: '已定�
 const meetingActionStatus: Record<string, string> = {
   todo: '未开始', in_progress: '进行中', done: '已完成', cancelled: '已取消',
 }
+const progressReportStatus: Record<string, string> = { draft: '草稿', final: '已定稿' }
 
 export function PmPanel({ execute }: PmPanelApi) {
   const [data, setData] = useState<Snapshot>(empty)
@@ -210,6 +244,10 @@ export function PmPanel({ execute }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => b.meetingDate.localeCompare(a.meetingDate) || b.id.localeCompare(a.id)),
   [data.meetings, selected])
+  const reports = useMemo(() => data.reports
+    .filter(item => item.projectId === selected)
+    .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd) || b.id.localeCompare(a.id)),
+  [data.reports, selected])
 
   return <>
     <style>{styles}</style>
@@ -264,6 +302,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               milestones={milestones}
               riskIssues={riskIssues}
               meetings={meetings}
+              reports={reports}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
@@ -278,6 +317,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               </ViewTab>
               <ViewTab active={view === 'meetings'} icon={<NotebookTabs size={15}/>} count={meetings.length} onClick={() => setView('meetings')}>
                 会议纪要
+              </ViewTab>
+              <ViewTab active={view === 'reports'} icon={<FileText size={15}/>} count={reports.length} onClick={() => setView('reports')}>
+                进度汇报
               </ViewTab>
               <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => setView('overview')}>
                 项目概览
@@ -309,6 +351,11 @@ export function PmPanel({ execute }: PmPanelApi) {
                 meetings={meetings}
                 onCreate={() => setDrawer({ kind: 'meeting' })}
                 onEdit={meeting => setDrawer({ kind: 'meeting', meeting })}
+              />}
+              {view === 'reports' && <ProgressReportTable
+                reports={reports}
+                onCreate={() => setDrawer({ kind: 'report' })}
+                onEdit={report => setDrawer({ kind: 'report', report })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones}/>}
             </section>
@@ -358,6 +405,13 @@ export function PmPanel({ execute }: PmPanelApi) {
           run={run}
           onSaved={() => setDrawer(undefined)}
         />}
+        {drawer.kind === 'report' && project && <ProgressReportForm
+          projectId={project.id}
+          report={drawer.report}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -369,7 +423,8 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'task') return drawer.task ? '编辑任务' : '新增任务'
   if (drawer.kind === 'milestone') return drawer.milestone ? '编辑里程碑' : '新增里程碑'
   if (drawer.kind === 'risk-issue') return drawer.record ? '编辑风险或问题' : '新增风险或问题'
-  return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
+  if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
+  return drawer.report ? '编辑进度汇报' : '生成进度汇报'
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
@@ -395,6 +450,7 @@ function ProjectBar({
   milestones,
   riskIssues,
   meetings,
+  reports,
   onEdit,
 }: {
   project: Project
@@ -402,6 +458,7 @@ function ProjectBar({
   milestones: Milestone[]
   riskIssues: RiskIssue[]
   meetings: Meeting[]
+  reports: ProgressReport[]
   onEdit: () => void
 }) {
   const completed = tasks.filter(task => task.status === 'done').length
@@ -421,6 +478,7 @@ function ProjectBar({
       <span><MilestoneIcon size={14}/>{milestones.length} 个里程碑</span>
       <span><ShieldAlert size={14}/>{riskIssues.filter(item => item.status !== 'closed').length} 项待处理风险/问题</span>
       <span><NotebookTabs size={14}/>{meetings.length} 份会议纪要</span>
+      <span><FileText size={14}/>{reports.length} 份进度汇报</span>
     </div>
   </section>
 }
@@ -815,6 +873,58 @@ function MeetingTable({
   </>
 }
 
+function ProgressReportTable({
+  reports,
+  onCreate,
+  onEdit,
+}: {
+  reports: ProgressReport[]
+  onCreate: () => void
+  onEdit: (report: ProgressReport) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState('all')
+  const visible = reports.filter(report =>
+    `${report.title} ${report.executiveSummary}`.toLocaleLowerCase()
+      .includes(query.trim().toLocaleLowerCase())
+    && (status === 'all' || report.status === status))
+  return <>
+    <TableToolbar query={query} setQuery={setQuery} primaryLabel="生成快照" onCreate={onCreate}>
+      <label className="pm-toolbar-select">
+        <Filter size={14}/>
+        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选汇报状态">
+          <option value="all">全部状态</option>
+          {Object.entries(progressReportStatus).map(([value, label]) =>
+            <option key={value} value={value}>{label}</option>)}
+        </select>
+      </label>
+    </TableToolbar>
+    <div className="pm-table-frame">
+      <div className="pm-table-scroll">
+        <table className="pm-data-table pm-report-table">
+          <thead><tr>
+            <th>汇报周期</th><th className="pm-col-title">标题</th><th>状态</th>
+            <th>任务进度</th><th>里程碑</th><th>异常项</th><th>快照时间</th><th className="pm-col-actions"/>
+          </tr></thead>
+          <tbody>{visible.map(report => <tr className="pm-record-row" key={report.id}>
+            <td>{report.periodStart} 至 {report.periodEnd}</td>
+            <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(report)}>{report.title}</button></td>
+            <td><StatusTag kind="report" value={report.status}/></td>
+            <td><Progress value={report.snapshot.tasks.averageProgress}/></td>
+            <td>{report.snapshot.milestones.achieved}/{report.snapshot.milestones.total}</td>
+            <td><span className="pm-exception-count" data-alert={report.snapshot.exceptions.length > 0}>{report.snapshot.exceptions.length}</span></td>
+            <td>{report.snapshotAt.slice(0, 10)}</td>
+            <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${report.title}`} onClick={() => onEdit(report)}><Pencil size={14}/></button></td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+      {!visible.length && <TableEmpty text={reports.length ? '没有符合筛选条件的进度汇报' : '暂无进度汇报'}/>}
+      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>生成快照</button>
+    </div>
+    <div className="pm-table-footer">{visible.length} 条记录</div>
+  </>
+}
+
 function TableToolbar({
   query,
   setQuery,
@@ -838,7 +948,7 @@ function TableToolbar({
   </div>
 }
 
-function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting', value: string }) {
+function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting' | 'report', value: string }) {
   const labels = kind === 'project'
     ? projectStatus
     : kind === 'task'
@@ -847,7 +957,9 @@ function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | '
         ? milestoneStatus
         : kind === 'risk-issue'
           ? riskIssueStatus
-          : meetingStatus
+          : kind === 'meeting'
+            ? meetingStatus
+            : progressReportStatus
   return <span className="pm-tag" data-kind={kind} data-value={value}>
     <i/>{labels[value] ?? value}
   </span>
@@ -1409,4 +1521,92 @@ function MeetingActions({
       <button className="pm-button pm-button-primary" disabled={disabled}><Plus size={14}/>添加</button>
     </form>
   </section>
+}
+
+function ProgressReportForm({
+  projectId,
+  report,
+  disabled,
+  run,
+  onSaved,
+}: {
+  projectId: string
+  report?: ProgressReport
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const title = String(form.get('title') ?? '').trim()
+    const payload = {
+      ...(title ? { title } : {}),
+      status: form.get('status'),
+      executiveSummary: form.get('executiveSummary'),
+      completedWork: textList(form.get('completedWork')),
+      nextPlans: textList(form.get('nextPlans')),
+      blockers: textList(form.get('blockers')),
+    }
+    const success = await run(report
+      ? `report update ${report.id} ${JSON.stringify(payload)}`
+      : `report generate ${projectId} ${form.get('periodStart')} ${form.get('periodEnd')} ${JSON.stringify(payload)}`)
+    if (success) onSaved()
+  }
+  return <>
+    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+      <Field label="汇报标题" wide>
+        <input name="title" defaultValue={report?.title} placeholder="留空时按项目和周期自动生成" autoFocus/>
+      </Field>
+      <Field label="周期开始">
+        <input name="periodStart" type="date" required={!report} disabled={Boolean(report)} defaultValue={report?.periodStart}/>
+      </Field>
+      <Field label="周期结束">
+        <input name="periodEnd" type="date" required={!report} disabled={Boolean(report)} defaultValue={report?.periodEnd}/>
+      </Field>
+      <Field label="状态" wide><select name="status" defaultValue={report?.status ?? 'draft'}>
+        {Object.entries(progressReportStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      <Field label="管理摘要" wide><textarea name="executiveSummary" rows={4} defaultValue={report?.executiveSummary}/></Field>
+      <Field label="已完成事项（每行一项）" wide><textarea name="completedWork" rows={4} defaultValue={report?.completedWork.join('\n')}/></Field>
+      <Field label="下期计划（每行一项）" wide><textarea name="nextPlans" rows={4} defaultValue={report?.nextPlans.join('\n')}/></Field>
+      <Field label="阻塞说明（每行一项）" wide><textarea name="blockers" rows={3} defaultValue={report?.blockers.join('\n')}/></Field>
+      <div className="pm-drawer-actions">
+        {report && <>
+          <button
+            className="pm-button pm-button-danger"
+            type="button"
+            disabled={disabled}
+            onClick={() => {
+              if (window.confirm(`删除进度汇报 ${report.title}？`)) {
+                void run(`report delete ${report.id} confirm`).then(success => success && onSaved())
+              }
+            }}
+          ><Trash2 size={15}/>删除</button>
+          <button className="pm-button" type="button" disabled={disabled} onClick={() => void run(`report export ${report.id}`)}>
+            <FileText size={15}/>导出 Markdown
+          </button>
+        </>}
+        <button className="pm-button pm-button-primary" disabled={disabled}>
+          {report ? '保存汇报' : '生成固定快照'}
+        </button>
+      </div>
+    </form>
+    {report && <section className="pm-report-snapshot">
+      <header><span>固定快照</span><time>{report.snapshotAt}</time></header>
+      <dl>
+        <div><dt>任务进度</dt><dd>{report.snapshot.tasks.averageProgress}%（{report.snapshot.tasks.done}/{report.snapshot.tasks.total} 完成）</dd></div>
+        <div><dt>受阻任务</dt><dd>{report.snapshot.tasks.blocked}</dd></div>
+        <div><dt>里程碑</dt><dd>{report.snapshot.milestones.achieved}/{report.snapshot.milestones.total} 达成</dd></div>
+        <div><dt>周期会议</dt><dd>{report.snapshot.meetings.inPeriod} 场 / {report.snapshot.meetings.decisions} 项决议</dd></div>
+      </dl>
+      <h3>异常项（{report.snapshot.exceptions.length}）</h3>
+      {report.snapshot.exceptions.length
+        ? <ul>{report.snapshot.exceptions.map(item => <li key={`${item.kind}-${item.id}`} data-severity={item.severity}>
+            <strong>{item.title}</strong><span>{item.detail}</span>
+            <small>{item.owner || '未指定负责人'} · {item.dueDate ?? '无截止日期'}</small>
+          </li>)}</ul>
+        : <p>快照生成时没有异常项。</p>}
+    </section>}
+  </>
 }

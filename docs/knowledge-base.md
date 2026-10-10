@@ -6,6 +6,22 @@
 
 ---
 
+## KB-028 ｜ 无 GUI 时用 HTTP 探测 dsh web：插件 client 资源走合并路由且只认 cookie（沉淀：doubao-work，2026-10-10）
+
+- **结论**：`pnpm dsh --profile pm --no-open --port 0` 随机端口启动后，首页 `http://127.0.0.1:<port>/?token=<t>` 返回 **303** 并种下 HttpOnly 鉴权 cookie，需 `curl -L -c jar -b jar` 跟随；不带凭证访问 `/` 返回 **401**。
+- **插件浏览器半侧不是单文件路径**：`/plugins/<pkg>/client.js` 直接请求会 404；客户端 JS 以合并路由下发，形如 `/plugins/??<pkgA>/client.js,<pkgB>/client.js,dsh-pm-tool/client.js&rev=<hash>`（首页 HTML 里以 `&amp;` 转义，需先 unescape）。
+- **合并路由只认 cookie、不认 query token**：对该路由追加 `&token=` 仍 404；必须用 `-b <cookie-jar>` 携带 303 种下的 cookie 才返回 200。
+- **用途**：在无法驱动本机浏览器时，用「启动日志确认存储领域打开 + 首页鉴权码 + 抓取运行中实际下发的合并 bundle 并 grep 新功能界面串」证明跑的是新构建、插件已装载（配合 ADL-027 证据组合）。
+- **来源/佐证**：R9 独立复核实测（端口 55111）；ISS-019（隔离 DSH_HOME 启动法）、KB-014（loopback/browser-trust 边界）。
+
+## KB-027 ｜ 固定快照报告应存聚合结果而非重新查询源数据（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：需要历史追溯的进度汇报在生成时把聚合指标、周期事件和异常明细作为不可变快照写入报告记录；Web 和 Markdown 都读取该快照，不能在展示或导出时重新查询当前业务表。
+- **实现模式**：生成操作在领域统一写队列内读取项目相关表，计算任务/里程碑/会议摘要和异常项，与人工摘要一起原子写入 `reports`；更新 schema 只暴露人工字段。源数据变化后旧报告不变，再生成一份新报告反映最新状态。
+- **适用场景**：周报、月报、阶段复盘、审计留痕等必须保留历史口径的产物。
+- **限制**：没有状态事件历史时不能仅凭 `updatedAt` 宣称某任务“本周期完成”；应明确输出“生成时当前状态”，待未来增加事件日志后再扩展周期变更分析。
+- **来源/佐证**：ADL-026；`core/progress-reports.ts`、`verify-reports.mjs` 和隔离浏览器前后快照验证。
+
 ## KB-001 ｜ 纯 Host 侧外部插件用包内 `tsc` 独立构建即可（沉淀：doubao-work，2026-10-10）
 
 - **结论**：只注册命令/存储/后台逻辑（不做浏览器界面）的 dsh 插件，在独立仓库用一份最小 `tsconfig.json`（`module/moduleResolution: NodeNext`、ESM、`rootDir src`、`outDir lib`、`declarationDir lib/types`、`strict`、`skipLibCheck`、`types: ["node"]`）跑 `tsc` 即可产出可加载的 `lib/`，**无需**复刻 dsh monorepo 的 `tsconfig.base.json`/references，也无需 clientBundle。

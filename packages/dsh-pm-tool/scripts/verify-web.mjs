@@ -42,6 +42,7 @@ try {
   await run('risk-issue add {"projectId":"p-0001","type":"risk","title":"页面风险","impact":"high","probability":"medium"}')
   await run('meeting add {"projectId":"p-0001","title":"页面周会","meetingDate":"2026-10-10"}')
   await run('meeting action add mtg-0001 {"title":"页面行动项","taskId":"t-0001"}')
+  await run('report generate p-0001 2026-10-01 2026-10-31 {"title":"页面进度汇报"}')
 
   const snapshot = JSON.parse(await run('web snapshot'))
   assert.deepEqual(snapshot.projects.map(item => item.id), ['p-0001'])
@@ -49,10 +50,12 @@ try {
   assert.deepEqual(snapshot.milestones.map(item => item.id), ['m-0001'])
   assert.deepEqual(snapshot.riskIssues.map(item => item.id), ['ri-0001'])
   assert.deepEqual(snapshot.meetings.map(item => item.id), ['mtg-0001'])
+  assert.deepEqual(snapshot.reports.map(item => item.id), ['rpt-0001'])
   assert.equal(snapshot.tasks[0].projectId, snapshot.projects[0].id)
   assert.equal(snapshot.milestones[0].projectId, snapshot.projects[0].id)
   assert.equal(snapshot.riskIssues[0].projectId, snapshot.projects[0].id)
   assert.equal(snapshot.meetings[0].actions[0].taskId, snapshot.tasks[0].id)
+  assert.equal(snapshot.reports[0].snapshot.tasks.total, 1)
 
   const manifest = JSON.parse(readFileSync(join(here, '..', 'package.json'), 'utf8'))
   assert.equal(manifest.dsh.client.platform, 'web')
@@ -82,6 +85,9 @@ try {
   assert.match(bundle, /筛选会议状态/)
   assert.match(bundle, /meeting action add/)
   assert.match(bundle, /data-action-form/)
+  assert.match(bundle, /进度汇报/)
+  assert.match(bundle, /筛选汇报状态/)
+  assert.match(bundle, /report generate/)
   assert.doesNotMatch(bundle, /require\("lucide-react/)
   const css = readFileSync(join(here, '..', 'src', 'client', 'panel.css'), 'utf8')
   assert.match(css, /--dsw-alias-bg-layer-2/)
@@ -89,7 +95,7 @@ try {
   assert.match(css, /\.pm-action-editor[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
 
-  console.log('通过：Web 快照包含项目、任务、里程碑、风险问题和会议纪要，且无需 API Key。')
+  console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要和进度汇报，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')
 } finally {
   await facility.closeAll()

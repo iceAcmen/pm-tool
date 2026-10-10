@@ -17,6 +17,7 @@ import { handleMilestoneCommand, milestoneHelp } from './commands/milestone.js'
 import { exportHelp, handleExportCommand } from './commands/export.js'
 import { handleRiskIssueCommand, riskIssueHelp } from './commands/risk-issue.js'
 import { handleMeetingCommand, meetingHelp } from './commands/meeting.js'
+import { handleProgressReportCommand, progressReportHelp } from './commands/progress-report.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -45,6 +46,8 @@ function renderHelp(): CommandResult {
       '',
       meetingHelp,
       '',
+      progressReportHelp,
+      '',
       exportHelp,
     ].join('\n'),
   }
@@ -66,8 +69,8 @@ export async function apply(ctx: Context): Promise<void> {
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
-    description: '项目管理工作台：项目、WBS、里程碑、风险问题、会议纪要、报告导出与存储自检',
-    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|meeting ...|export ...|ping|selftest]', attachments: false },
+    description: '项目管理工作台：项目、WBS、里程碑、风险问题、会议纪要、进度汇报、导出与存储自检',
+    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|meeting ...|report ...|export ...|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
@@ -81,6 +84,7 @@ export async function apply(ctx: Context): Promise<void> {
             milestones: [...domain.table('milestones').entries()].map(([, value]) => value),
             riskIssues: [...domain.table('risk_issues').entries()].map(([, value]) => value),
             meetings: [...domain.table('meetings').entries()].map(([, value]) => value),
+            reports: [...domain.table('reports').entries()].map(([, value]) => value),
           }),
         }
       }
@@ -94,6 +98,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (riskIssueMatch) return handleRiskIssueCommand(riskIssueMatch[1] ?? '', domain)
       const meetingMatch = /^meeting(?:\s+([\s\S]*))?$/i.exec(raw)
       if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain)
+      const reportMatch = /^report(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (reportMatch) return handleProgressReportCommand(reportMatch[1] ?? '', domain)
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()

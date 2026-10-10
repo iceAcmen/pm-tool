@@ -8,6 +8,29 @@
 
 ---
 
+## [未发布] — R9 独立复核通过并提交推送（2026-10-10，平台：doubao-work / 豆包工作）
+
+- 改动文件：仅文档（本条及需求/进度/交接/决策/知识库等档案）；**未改动任何 R9 业务代码**——独立复核未发现缺陷，按 TRAE 交付原样接收。
+- 做了什么：接手 TRAE 未提交的 R9 增量，先 `git status` 保护现场（未 pull、未覆盖、未重做），完成独立复核后随本提交一并推送 origin/main。
+- 独立验证证据（命令与结果均在本机实测）：
+  - 冻结安装 `pnpm install --frozen-lockfile` → Already up to date，退出码 0；
+  - 构建 `pnpm run build`（tsc + 复制 css + tsdown client bundle）→ 退出码 0，无类型错误，产出 `lib/core/progress-report*.js` 与 `lib/client.js`；
+  - 十个 `scripts/verify-*.mjs` 全部退出码 0，其中 `verify-reports.mjs` 覆盖自定义周期、五类异常聚合与排序、旧快照不回写/新快照更新、人工字段更新、8 类非法输入、Markdown 内容与 0600/拒覆盖/confirm、写盘失败恢复、4 并发编号、删除提示与 confirm、有报告禁删项目、全新子进程 `--reopen` 读回 5 份并续增 rpt-0007；
+  - `git diff --check` 与新增文件行尾检查无空白错误；
+  - 隔离 `DSH_HOME`（仓库内 `.tmp/r9-verify/`，已 gitignore）+ 隔离数据目录 + 随机端口 + 无 API Key 启动真实 `pnpm dsh --profile pm --no-open --port 0`：日志出现 `[pm-tool] 存储领域 pmtool 已打开`；带 token 首页跟随重定向 HTTP 200、无 token 401；启动清单含 `dsh-pm-tool/client.js`；抓取运行中服务实际下发的合并 client bundle（cookie 鉴权）断言含「进度汇报/筛选汇报状态/report generate/report export/固定快照/异常项/pm-report-table」。
+- 边界（如实记录）：doubao-work 当前角色无 Mac 本机 GUI 驱动权限（`mac_computer_use_tool` 不支持、`computer_use_tool` 的 `cu` 不支持、`bu` 为隔离 Linux 且 loopback 不通），浅/深主题点击、786px 窄屏点击、控制台/网络的**人工目视**项无法由本侧独立复现；这些项由 ① `verify-web.mjs` 主题 token/无硬编码色/响应式契约、② 真实宿主下发新 bundle、③ TRAE 已完成的隔离真实浏览器记录（见下条与 test-cases）共同覆盖，最终以项目所有者本机手动确认为准（KB-014 / ISS-010）。
+- 收尾：隔离测试服务已停止、随机端口已释放、隔离数据仅含宿主 `workspace.json`；真实 `data/` 与上游 `deepseek-harness` 无改动。
+- 影响范围：R9 状态由「待验收」推进为「独立复核通过并推送」；不改变 R9 功能与数据模型。
+
+## [未发布] — R9 固定快照进度汇报（2026-10-10，平台：trae / TRAE）
+
+- 新增 `progress-report.ts`、`progress-reports.ts`、`progress-report-markdown.ts` 和 `commands/progress-report.ts`：实现自定义周期、固定快照、异常聚合、离线 CRUD 和精简 Markdown 导出。
+- 修改 `storage.ts`、`projects.ts`、`commands/project.ts`、`index.ts`：增加 `reports` 表、项目删除保护、命令路由和 Web snapshot。
+- 修改 `client/panel.tsx`、`panel.css`：新增“进度汇报”高密度表格、状态筛选、搜索、固定快照抽屉、异常列表和导出入口。
+- 新增 `verify-reports.mjs`，扩展 `verify-web.mjs`；新增两份 R9 设计/实施计划，并同步需求、决策、测试、交付和接续档案。
+- 原因与影响：按项目所有者确认的“自定义日期范围 + 固定快照 + 默认只含摘要和异常项”实现 R9；新增 `data/pmtool/reports/`，不修改上游。
+- 验证：冻结安装、构建和十个验证脚本全部退出码 0；隔离 profile 真实浏览器验证旧快照不随任务变化、新快照反映最新状态、编辑、Markdown 导出、筛选、深色主题、786px 窄屏及重启读回。
+
 ## [未发布] — R8 会议纪要管理（2026-10-10，平台：trae / TRAE）
 
 - 修复行动项表单固定列宽超过抽屉内容区的问题，改为两列自适应网格，窄屏退化为单列。
