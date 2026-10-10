@@ -127,9 +127,28 @@ try {
   assert.match(emptyReport, /## WBS 任务[\s\S]*暂无任务。/)
   assert.match(emptyReport, /## 里程碑时间线[\s\S]*暂无里程碑。/)
 
+  const jsonCommand = `export json "${outputDirectory}"`
+  assert.match(await run(jsonCommand), /JSON 数据包已生成/)
+  const backupPath = join(outputDirectory, 'pmtool-backup.json')
+  const backupText = readFileSync(backupPath, 'utf8')
+  const backup = JSON.parse(backupText)
+  assert.equal(backup.format, 'pm-tool-backup')
+  assert.equal(backup.formatVersion, 1)
+  assert.match(backup.exportedAt, /^\d{4}-\d{2}-\d{2}T/)
+  assert.deepEqual(backup.projects.map(item => item.id), ['p-0001', 'p-0002'])
+  assert.deepEqual(backup.tasks.map(item => item.id), ['t-0001', 't-0002'])
+  assert.deepEqual(backup.milestones.map(item => item.id), ['m-0001', 'm-0002'])
+  assert.equal('checks' in backup, false)
+  assert.match(backupText, /\n  "projects": \[/)
+  assert.match(await run(jsonCommand, 'error'), /已存在/)
+  await run(`project update ${project.id} {"owner":"JSON 覆盖后"}`)
+  assert.match(await run(`${jsonCommand} confirm`), /JSON 数据包已生成或覆盖/)
+  assert.equal(JSON.parse(readFileSync(backupPath, 'utf8')).projects[0].owner, 'JSON 覆盖后')
+  assert.equal(statSync(backupPath).mode & 0o777, 0o600)
+
   assert.match(await run('export'), /导出命令/)
   for (const input of [
-    'export json p-0001', 'export markdown', 'export markdown p-9999',
+    'export zip', 'export markdown', 'export markdown p-9999',
   ]) await run(input, 'error')
 
   const notDirectory = join(outputRoot, 'not-a-directory')
@@ -139,7 +158,7 @@ try {
   assert.equal(domain.table('projects').size, 2)
   assert.equal(domain.table('tasks').size, 2)
   assert.equal(domain.table('milestones').size, 2)
-  console.log('通过：Markdown 内容/顺序/转义、默认路径、0700/0600、覆盖保护、confirm 覆盖与失败清理。')
+  console.log('通过：Markdown 与整库 JSON 内容/排序、默认路径、0700/0600、覆盖保护、confirm 覆盖与失败清理。')
   console.log(`全部导出校验通过。临时导出目录：${outputRoot}`)
 } finally {
   await facility.closeAll()

@@ -25,21 +25,16 @@ function expandDirectory(directory: string | undefined): string {
   return isAbsolute(expanded) ? resolve(expanded) : resolve(defaultExportDirectory, '..', expanded)
 }
 
-export async function exportProjectMarkdown(
-  domain: PmDomain,
-  projectId: string,
-  directory?: string,
-  overwrite = false,
-): Promise<{ path: string, content: string }> {
-  const report = collectProjectReport(domain, projectId)
-  const content = renderProjectMarkdown(report)
-  const outputDirectory = expandDirectory(directory)
-  const target = resolve(outputDirectory, `${report.project.id}-report.md`)
+export async function writeExportFile(
+  target: string,
+  content: string,
+  overwrite: boolean,
+): Promise<void> {
+  const outputDirectory = resolve(target, '..')
   await mkdir(outputDirectory, { recursive: true, mode: 0o700 })
-
   const temporary = resolve(
     outputDirectory,
-    `.${report.project.id}-report.${process.pid}.${Date.now()}.tmp`,
+    `.${target.split('/').at(-1)}.${process.pid}.${Date.now()}.tmp`,
   )
   await writeFile(temporary, content, { encoding: 'utf8', mode: 0o600, flag: 'wx' })
   try {
@@ -58,5 +53,22 @@ export async function exportProjectMarkdown(
     await unlink(temporary).catch(() => {})
     throw error
   }
+}
+
+export async function exportProjectMarkdown(
+  domain: PmDomain,
+  projectId: string,
+  directory?: string,
+  overwrite = false,
+): Promise<{ path: string, content: string }> {
+  const report = collectProjectReport(domain, projectId)
+  const content = renderProjectMarkdown(report)
+  const outputDirectory = expandDirectory(directory)
+  const target = resolve(outputDirectory, `${report.project.id}-report.md`)
+  await writeExportFile(target, content, overwrite)
   return { path: target, content }
+}
+
+export function resolveExportPath(directory: string | undefined, filename: string): string {
+  return resolve(expandDirectory(directory), filename)
 }

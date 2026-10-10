@@ -8,6 +8,13 @@
 
 ---
 
+## [未发布] — R4 整库 JSON 数据包（2026-10-10，平台：trae / TRAE）
+
+- 新增 `core/backup.ts`，扩展 `core/export.ts` / `commands/export.ts` / `verify-export.mjs`，支持 `/pm export json [目录] [confirm]`。
+- 数据包格式版本 1，稳定排序，不含 checks；复用 0700/0600、覆盖拒绝和原子替换。
+- 环境 Node v22.23.3 / pnpm 11.28.5；构建和 command/export/milestones/projects/storage/tasks 六个 verify 脚本全部退出码 0。
+- JSON 专项覆盖格式版本、稳定排序、不含 checks、可读缩进、权限、覆盖保护与源数据不变；错误日志为主动负例/故障注入。
+
 ## [未发布] — R4 单项目 Markdown 报告导出（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

@@ -1,6 +1,7 @@
 /** /pm export markdown：把一个项目的当前 JSON 数据导出为 Markdown 报告。 */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import { ExportFileExistsError, exportProjectMarkdown } from '../core/export.js'
+import { exportBackupJson } from '../core/backup.js'
 import { ReportProjectNotFoundError } from '../core/report.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -9,6 +10,8 @@ export const exportHelp = [
   '  /pm export markdown p-0001',
   '  /pm export markdown p-0001 ./my-reports',
   '  /pm export markdown p-0001 ./my-reports confirm',
+  '  /pm export json',
+  '  /pm export json ./my-backups confirm',
   '默认写入 pm-tool/exports/<项目ID>-report.md；相对目录以 pm-tool 为基准。',
   '文件已存在时默认拒绝覆盖，末尾加 confirm 才覆盖。',
 ].join('\n')
@@ -27,10 +30,11 @@ export async function handleExportCommand(rawInput: string, domain?: PmDomain): 
   if (!input || input.toLowerCase() === 'help') return { kind: 'success', text: exportHelp }
   if (!domain) return { kind: 'error', text: '导出所需存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
 
-  const match = /^markdown\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
-  if (!match) return { kind: 'error', text: `请使用 Markdown 导出格式。\n${exportHelp}` }
-  const projectId = match[1]
-  let remainder = match[2]?.trim() ?? ''
+  const markdownMatch = /^markdown\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
+  const jsonMatch = /^json(?:\s+([\s\S]+))?$/i.exec(input)
+  if (!markdownMatch && !jsonMatch) return { kind: 'error', text: `不支持的导出格式。\n${exportHelp}` }
+  const projectId = markdownMatch?.[1]
+  let remainder = (markdownMatch?.[2] ?? jsonMatch?.[1] ?? '').trim()
   let confirm = false
   if (/^confirm$/i.test(remainder)) {
     confirm = true
@@ -46,13 +50,16 @@ export async function handleExportCommand(rawInput: string, domain?: PmDomain): 
   if (directory === '') return { kind: 'error', text: '导出目录不能为空。' }
 
   try {
-    const result = await exportProjectMarkdown(domain, projectId, directory, confirm)
+    const result = markdownMatch
+      ? await exportProjectMarkdown(domain, projectId!, directory, confirm)
+      : await exportBackupJson(domain, directory, confirm)
+    const kind = markdownMatch ? 'Markdown 报告' : 'JSON 数据包'
     return {
       kind: 'success',
       text: [
-        confirm ? 'Markdown 报告已生成或覆盖。' : 'Markdown 报告已生成。',
+        confirm ? `${kind}已生成或覆盖。` : `${kind}已生成。`,
         `文件：${result.path}`,
-        '报告是 JSON 数据的只读导出视图，不会写入 storage-domain。',
+        '导出产物不会写入 storage-domain。',
       ].join('\n'),
     }
   } catch (error) {
@@ -63,7 +70,7 @@ export async function handleExportCommand(rawInput: string, domain?: PmDomain): 
         text: `${error.message}。确认覆盖时请在原命令末尾追加 confirm。`,
       }
     }
-    console.error('[pm-tool] Markdown 导出失败：', error)
-    return { kind: 'error', text: 'Markdown 导出失败；请检查目录是否可写及宿主日志后重试。' }
+    console.error('[pm-tool] 导出失败：', error)
+    return { kind: 'error', text: '导出失败；请检查目录是否可写及宿主日志后重试。' }
   }
 }
