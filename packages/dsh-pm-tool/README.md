@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：**R1 离线项目命令已收尾**——项目新增、列表、详情、编辑、确认删除与 JSON 持久化；R1 Web 界面、R4 导出及 R6 任务/里程碑命令仍待后续。
+- 当前阶段：R1 离线项目 CRUD 已完成；R2 首个纵切已实现 tasks 表和 `/pm task add/list/get`。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -10,6 +10,7 @@
 - `/pm ping`：离线连通性自检，不依赖模型或 API Key。
 - `/pm selftest`：经 `@deepseek-ai/dsh-storage-domain` + `dsh-storage-json` 写入并读回一条记录，落为可读 JSON。
 - `/pm project add/list/get/update/delete`：项目增删改查，中文输出，无需配置模型。
+- `/pm task add/list/get`：按项目新增 WBS 任务、查看任务树与详情，支持至少三级父子结构。
 
 ## 项目命令（在 dsh 对话输入框整行输入）
 
@@ -20,6 +21,10 @@
 /pm project update p-0001 {"owner":"史冰冰","status":"active","targetDate":"2026-11-15"}
 /pm project delete p-0001
 /pm project delete p-0001 confirm
+/pm task add {"projectId":"p-0001","title":"需求确认"}
+/pm task add {"projectId":"p-0001","parentId":"t-0001","title":"访谈用户"}
+/pm task list p-0001
+/pm task get t-0001
 ```
 
 新增成功会返回实际 ID；后续命令请使用返回的 ID（`p-0001` 是空库的首个 ID）。删除不带 `confirm` 只返回项目摘要和确认命令，不会写盘；带 `confirm` 才删除。`/pm project` 显示帮助。
@@ -38,7 +43,9 @@
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-当前限制：WBS、里程碑、导出和 Web 项目表单尚未实现；R5 最后开发。当前项目删除仅删除项目记录，因为任务和里程碑表尚未实现；关联实体加入后需补充删除约束。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+当前限制：WBS 仅支持新增和查询；里程碑、导出和 Web 项目表单尚未实现，R5 最后开发。项目有任务时禁止删除；里程碑加入后还需补充其关联约束。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+
+任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。当前 `milestoneId` 仅支持 `null`；任务编辑、删除、移动和重新编号留待下一批。有任务的项目不能删除。
 
 ## 从源码构建
 
@@ -51,9 +58,10 @@ pnpm run build      # 产物输出到 lib/（不入库）
 node scripts/verify-command.mjs
 node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
+node scripts/verify-tasks.mjs
 ```
 
-三个脚本应退出码 0。前两个写入 `data/pmtool/checks/selftest.json`；项目脚本每次在系统临时目录创建独立库，打印路径供查看，不污染真实项目，不删除文件。
+四个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；项目和任务脚本使用独立系统临时目录。
 
 项目脚本验证真实插件处理器与真实 JSON 后端：增删改查、日期与同名校验、confirm 防误操作、旧表兼容、并发写入不覆盖、落盘可读性与 0700/0600 权限、全新进程读回更新/删除结果及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。命令验证不代表 R5 Web 管理界面完成。
 
@@ -88,10 +96,14 @@ dsh-pm-tool/
 ├── cordis.patch.yml    # 组合包补丁：激活本插件，复用现有 pm profile 存储配置
 ├── src/index.ts        # 插件入口：注册 /pm 命令、打开存储领域
 ├── src/core/project.ts  # Project schema 与字段提示
-├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects）
-├── src/core/projects.ts # 项目增删改查、短编号与统一写队列
+├── src/core/task.ts     # Task schema、枚举与字段提示
+├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects + tasks）
+├── src/core/projects.ts # 项目增删改查与领域统一写队列
+├── src/core/tasks.ts    # 任务增查、关系校验与 WBS 自动编号
 ├── src/commands/project.ts # 命令解析与中文输出
+├── src/commands/task.ts # WBS 任务命令解析与中文输出
 ├── scripts/verify-projects.mjs # 项目增删改查与重启验证
+├── scripts/verify-tasks.mjs # 三级 WBS、并发编号与重启验证
 ├── scripts/verify-command.mjs  # 命令自检
 ├── scripts/verify-storage.mjs  # 存储自检
 ├── locale/{en,zh}.json # 界面展示标题/描述

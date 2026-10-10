@@ -3,6 +3,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import { defineDomain, domainTable } from '@deepseek-ai/dsh-storage-domain'
 import { z } from 'zod'
 import { projectRecordSchema } from './project.js'
+import { taskRecordSchema } from './task.js'
 
 export const checkRecordSchema = z.object({
   ok: z.boolean(),
@@ -18,6 +19,7 @@ export const pmDomainSpec = defineDomain({
   tables: {
     checks: domainTable(checkRecordSchema),
     projects: domainTable(projectRecordSchema),
+    tasks: domainTable(taskRecordSchema),
   },
 })
 

@@ -123,6 +123,14 @@
 - **避坑要点**：防重是对“创建新名称占用关系”的约束，不是对已有数据每次写入的全量重新授权。测试须覆盖“确认重名后更新非名称字段”。
 - **状态**：已修复并由 `scripts/verify-projects.mjs` 回归通过（2026-10-10）。
 
+## ISS-012 ｜ DomainTable 没有 values() 枚举方法（2026-10-10，trae / TRAE）
+
+- **现象**：实现任务列表时按原生 Map 习惯调用 `domain.table('tasks').values()`，TypeScript 构建报 `KvTable ... 不存在属性 values`。
+- **根因**：当前 dsh storage-domain 的 `DomainTable` 公开 `keys()` 与 `entries()`，但不公开 `values()`。
+- **解决办法**：使用 `[...table.entries()].map(([, value]) => value)`，再做过滤和排序。
+- **避坑要点**：表枚举严格以 KB-011 和类型声明为准，不假设拥有完整 Map API。
+- **状态**：已修复，构建及 `verify-tasks.mjs` 通过。
+
 ---
 
 ## 待补充（占位）

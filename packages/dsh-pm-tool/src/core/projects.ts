@@ -19,7 +19,7 @@ export class ProjectNameConflictError extends Error {
   }
 }
 
-function enqueueWrite<T>(domain: PmDomain, operation: () => Promise<T>): Promise<T> {
+export function enqueueDomainWrite<T>(domain: PmDomain, operation: () => Promise<T>): Promise<T> {
   const result = (writeQueues.get(domain) ?? Promise.resolve()).then(operation)
   writeQueues.set(domain, result.then(() => {}, () => {}))
   return result
@@ -35,7 +35,7 @@ function findProjectByName(domain: PmDomain, name: string, exceptId?: string): P
 
 export function addProject(domain: PmDomain, input: unknown, allowDuplicateName = false): Promise<Project> {
   const fields = projectCreateSchema.parse(input)
-  return enqueueWrite(domain, async () => {
+  return enqueueDomainWrite(domain, async () => {
     const table = domain.table('projects')
     const conflicting = findProjectByName(domain, fields.name)
     if (conflicting && !allowDuplicateName) throw new ProjectNameConflictError(structuredClone(conflicting))
@@ -77,7 +77,7 @@ export function updateProject(
 ): Promise<Project | undefined> {
   projectIdSchema.parse(id)
   const fields: ProjectUpdate = projectUpdateSchema.parse(input)
-  return enqueueWrite(domain, async () => {
+  return enqueueDomainWrite(domain, async () => {
     const table = domain.table('projects')
     const current = table.get(id)
     if (!current) return undefined
@@ -99,11 +99,21 @@ export function updateProject(
 
 export function deleteProject(domain: PmDomain, id: string): Promise<Project | undefined> {
   projectIdSchema.parse(id)
-  return enqueueWrite(domain, async () => {
+  return enqueueDomainWrite(domain, async () => {
     const table = domain.table('projects')
     const current = table.get(id)
     if (!current) return undefined
+    for (const [, task] of domain.table('tasks').entries()) {
+      if (task.projectId === id) throw new ProjectHasTasksError(id)
+    }
     await table.delete(id)
     return structuredClone(current)
   })
+}
+
+export class ProjectHasTasksError extends Error {
+  constructor(readonly projectId: string) {
+    super(`项目 ${projectId} 仍有任务`)
+    this.name = 'ProjectHasTasksError'
+  }
 }

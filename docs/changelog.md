@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R2 WBS 任务增查首个纵切（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- 新增 `src/core/task.ts`、`src/core/tasks.ts`、`src/commands/task.ts`：Task schema、三级 WBS 业务逻辑与 `/pm task add/list/get`。
+- 修改 `src/core/storage.ts`、`src/core/projects.ts`、`src/commands/project.ts`、`src/index.ts`：增加 tasks 表、共享领域写队列、项目删除保护与 task 命令分发。
+- 新增 `scripts/verify-tasks.mjs`：验证三级树、关系、默认值、并发编号、故障恢复、权限和重启读回。
+- 更新 README/AGENTS 及 requirements、decision-log、knowledge-base、progress、handoff、onboarding 快照。
+- `docs/issues-and-solutions.md`：新增 ISS-012，记录 DomainTable 无 `values()`、须用 `entries()` 的 API 边界。
+
+### 为什么 / 影响范围
+- 按 R2 最窄纵切先完成任务新增与查询，不同时引入编辑、删除、移动和重新编号。
+- pmtool 仍为 per-record 版本 1，仅增加 tasks 表，无迁移；有任务的项目现在禁止删除。
+- 项目所有者已手动验证 R1 update/delete 与日期/同名/confirm 功能通过。
+
+### 验证
+- `pnpm run build` 及 `verify-command/storage/projects/tasks.mjs` 全部退出码 0。
+- 任务脚本覆盖至少三级 WBS、跨项目父任务拒绝、并发同级编号唯一、写盘故障恢复、0700/0600 和全新进程读回。
+
 ## [未发布] — R1 离线项目编辑、确认删除与输入防呆收尾（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

@@ -12,6 +12,7 @@ import { CommandDefinitionId } from '@deepseek-ai/dsh-commands/brand'
 import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
 import { openPmDomain, type PmDomain } from './core/storage.js'
 import { handleProjectCommand, projectHelp } from './commands/project.js'
+import { handleTaskCommand, taskHelp } from './commands/task.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -31,6 +32,8 @@ function renderHelp(): CommandResult {
       '  /pm selftest  写入并读回一条记录，验证可读 JSON 文件存储',
       '',
       projectHelp,
+      '',
+      taskHelp,
     ].join('\n'),
   }
 }
@@ -51,13 +54,15 @@ export async function apply(ctx: Context): Promise<void> {
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
-    description: '项目管理工作台：项目增删改查与存储自检',
-    input: { hint: '[project add/list/get/update/delete|ping|selftest]', attachments: false },
+    description: '项目管理工作台：项目 CRUD、WBS 任务增查与存储自检',
+    input: { hint: '[project ...|task add/list/get|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
       const projectMatch = /^project(?:\s+([\s\S]*))?$/i.exec(raw)
       if (projectMatch) return handleProjectCommand(projectMatch[1] ?? '', domain)
+      const taskMatch = /^task(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

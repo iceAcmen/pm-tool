@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae 完成 R1 离线项目 CRUD 与防误操作收尾；全部确定性验证通过，本地提交、未推送；下一批先报备 R2）
+最后更新：2026-10-10（trae 完成 R2 tasks 表与 task add/list/get；全部脚本通过，下一批接续任务编辑/删除/移动/重编号）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。首批项目增查已独立复核并推送；trae 本批补齐离线 `/pm project update/delete`、日期与同名校验、confirm 防误操作，构建与三个 verify 脚本通过。R1 仅余 R5 Web 界面；R2/R3/R5 待办，R4/R6 进行中。
+- **当前状态**：R1 离线项目 CRUD 已完成并由所有者手动验收；R2 已完成 tasks 表、`/pm task add/list/get`、三级树和自动编号。任务编辑/删除/移动/重编号待下一批；R3/R5 待办，R4/R6 进行中。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -159,7 +159,7 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 1. 阶段 2 已完成；当前开发依据 v0.4，落盘布局见 ADL-011。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
-3. **R1 离线项目 CRUD 已完成**：首批增查已推送，编辑/确认删除与日期/同名防呆由 trae 本批完成并通过全部脚本。下一批先报备 R2 WBS 文件清单；随后 R3 → R4 → R5。现有插件只需重新 build 并重启，无须修改 profile 或上游。
+3. **R2 首个纵切已完成**：tasks 表、add/list/get、三级 WBS 与持久化已通过确定性验证。下一批先报备 task update/delete/move/renumber；随后 R3 → R4 → R5。
 4. 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。
 
 ## 5. SSH 密钥（已配置，备查）

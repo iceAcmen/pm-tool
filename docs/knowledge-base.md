@@ -212,3 +212,10 @@
 - **可复现实例**：`packages/dsh-pm-tool/src/core/projects.ts` 的 `enqueueWrite()`；运行 `pnpm run build && node scripts/verify-projects.mjs`，可验证同名/编号检查、并发新增、写盘失败恢复、更新和删除后的全新进程读回。
 - **边界**：仅保证单宿主进程；多个 dsh 宿主共享同一数据目录不在 MVP 支持范围。已有合法重名记录更新非名称字段时不应重新触发同名拦截。
 - **来源/佐证**：ADL-015；storage-domain README 的“每领域一条写入链”只覆盖表写操作，本项目确定性脚本实测通过。
+
+## KB-017 ｜ WBS 编号按同级最大顺序追加并共享领域业务队列（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：新增任务在同一领域业务队列内依次校验项目/父任务、计算全局任务 ID、取同级最大 `order + 1`，再生成根编号或 `${parent.code}.${order}` 并写盘。项目删除也走该队列并检查 tasks 表，可避免与任务新增并发时产生孤儿记录。
+- **适用场景**：R2 单宿主 WBS 新增；移动/删除后不自动复用空洞编号，后续由显式重新编号动作处理。
+- **可复现实例**：`src/core/tasks.ts`、`scripts/verify-tasks.mjs`；并发新增 6 个同级任务得到连续且唯一的 `1.2`～`1.7`。
+- **来源/佐证**：ADL-016、requirements §5.3，真实 JSON 后端与全新进程读回验证。

@@ -6,6 +6,7 @@ import {
   deleteProject,
   getProject,
   listProjects,
+  ProjectHasTasksError,
   ProjectNameConflictError,
   updateProject,
 } from '../core/projects.js'
@@ -150,6 +151,12 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
           `已存在同名项目：${error.conflicting.id}｜${error.conflicting.name}。`,
           '默认不创建或改为同名；确认确需重名时，请在原命令末尾追加 confirm。',
         ].join('\n'),
+      }
+    }
+    if (error instanceof ProjectHasTasksError) {
+      return {
+        kind: 'error',
+        text: `项目 ${error.projectId} 仍有 WBS 任务，不能删除。请先处理项目下的任务。`,
       }
     }
     console.error('[pm-tool] 项目操作失败：', error)

@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 R1 离线项目命令已收尾 | `/pm project add/list/get/update/delete`、projects 表与 JSON 持久化已完成；R1 Web 待办，随后 R2/R3/R4，R5 最后实施 |
+| 阶段 3 源码开发 | 🔄 R2 WBS 进行中 | R1 离线 CRUD 已完成；tasks 表与 `/pm task add/list/get` 已实现，任务编辑/删除等待下一批 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -119,6 +119,8 @@ pnpm dsh --profile pm --no-open
 /pm project get p-0001
 /pm project update p-0001 {"status":"active"}
 /pm project delete p-0001 confirm
+/pm task add {"projectId":"p-0001","title":"需求确认"}
+/pm task list p-0001
 ```
 
 详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。任务树、里程碑、导出与 Web 表单仍待后续实现。
