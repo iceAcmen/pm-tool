@@ -70,7 +70,7 @@
 
 - **快照更新时间**：2026-10-11
 - **最近更新平台**：doubao-work（实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入）
-- **main 提交定位**：R12 代码 + 档案随本次提交推送，当前 HEAD 以 `git log -1 --oneline` 与 `origin/main` 为准（推送后核对本地与远程一致）。
+- **main 提交定位**：R12 代码 + 档案已推送，HEAD `8b601cc`（与 `origin/main` 一致）；后续以 `git log -1 --oneline` 为准。
 - **当前阶段 / 状态**：R1–R12 已完成。R12 由 doubao-work 自研：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS），Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索（ADL-029）；检索/看板不新增表、领域版本仍为 1。
 - **本批验证（doubao-work R12）**：Node（nvm 口径 v22.23.3；沙箱内显示 v22.23.2 系 PATH 遮蔽，KB-015）/ pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 152.96 kB）、**12 个** verify 脚本全部退出码 0（新增 verify-r12.mjs，verify-web.mjs 扩展 R12 契约）；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、cookie 鉴权，抓取含 dsh-pm-tool 的合并路由 HTTP 200 / 578732 B，断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」，KB-028）。本机浏览器目视（看板卡片/全局搜索/窄屏）本角色无 GUI 权限，以 verify-web 契约 + 所有者手动确认为准（KB-014/ISS-010/ADL-027）。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
