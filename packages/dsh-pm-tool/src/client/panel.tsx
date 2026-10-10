@@ -11,6 +11,7 @@ import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
+import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
@@ -53,19 +54,40 @@ type Milestone = {
   achievedDate: string | null
 }
 
-type Snapshot = { projects: Project[], tasks: Task[], milestones: Milestone[] }
-type View = 'tasks' | 'milestones' | 'overview'
+type RiskIssue = {
+  id: string
+  projectId: string
+  type: 'risk' | 'issue'
+  title: string
+  description: string
+  owner: string
+  dueDate: string | null
+  status: 'open' | 'monitoring' | 'closed'
+  probability: 'low' | 'medium' | 'high' | null
+  impact: 'low' | 'medium' | 'high' | 'critical'
+  responsePlan: string
+  solution: string
+}
+
+type Snapshot = {
+  projects: Project[]
+  tasks: Task[]
+  milestones: Milestone[]
+  riskIssues: RiskIssue[]
+}
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'overview'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
   | { kind: 'task', task?: Task }
   | { kind: 'milestone', milestone?: Milestone }
+  | { kind: 'risk-issue', record?: RiskIssue }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
 }
 
-const empty: Snapshot = { projects: [], tasks: [], milestones: [] }
+const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [] }
 const projectStatus: Record<string, string> = {
   planning: '计划中',
   active: '进行中',
@@ -85,6 +107,14 @@ const milestoneStatus: Record<string, string> = {
   achieved: '已达成',
   missed: '已错过',
 }
+const riskIssueStatus: Record<string, string> = {
+  open: '待处理',
+  monitoring: '跟进中',
+  closed: '已关闭',
+}
+const riskIssueType: Record<string, string> = { risk: '风险', issue: '问题' }
+const probabilityLabels: Record<string, string> = { low: '低', medium: '中', high: '高' }
+const impactLabels: Record<string, string> = { low: '低', medium: '中', high: '高', critical: '严重' }
 
 export function PmPanel({ execute }: PmPanelApi) {
   const [data, setData] = useState<Snapshot>(empty)
@@ -136,6 +166,10 @@ export function PmPanel({ execute }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => a.targetDate.localeCompare(b.targetDate) || a.id.localeCompare(b.id)),
   [data.milestones, selected])
+  const riskIssues = useMemo(() => data.riskIssues
+    .filter(item => item.projectId === selected)
+    .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
+  [data.riskIssues, selected])
 
   return <>
     <style>{styles}</style>
@@ -188,6 +222,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               project={project}
               tasks={tasks}
               milestones={milestones}
+              riskIssues={riskIssues}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
@@ -196,6 +231,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               </ViewTab>
               <ViewTab active={view === 'milestones'} icon={<MilestoneIcon size={15}/>} count={milestones.length} onClick={() => setView('milestones')}>
                 里程碑
+              </ViewTab>
+              <ViewTab active={view === 'risk-issues'} icon={<ShieldAlert size={15}/>} count={riskIssues.length} onClick={() => setView('risk-issues')}>
+                风险与问题
               </ViewTab>
               <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => setView('overview')}>
                 项目概览
@@ -216,6 +254,12 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onCreate={() => setDrawer({ kind: 'milestone' })}
                 onEdit={milestone => setDrawer({ kind: 'milestone', milestone })}
                 run={run}
+              />}
+              {view === 'risk-issues' && <RiskIssueTable
+                records={riskIssues}
+                disabled={busy}
+                onCreate={() => setDrawer({ kind: 'risk-issue' })}
+                onEdit={record => setDrawer({ kind: 'risk-issue', record })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones}/>}
             </section>
@@ -249,6 +293,13 @@ export function PmPanel({ execute }: PmPanelApi) {
           run={run}
           onSaved={() => setDrawer(undefined)}
         />}
+        {drawer.kind === 'risk-issue' && project && <RiskIssueForm
+          projectId={project.id}
+          record={drawer.record}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -258,7 +309,8 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'project-create') return '新建项目'
   if (drawer.kind === 'project-edit') return '编辑项目'
   if (drawer.kind === 'task') return drawer.task ? '编辑任务' : '新增任务'
-  return drawer.milestone ? '编辑里程碑' : '新增里程碑'
+  if (drawer.kind === 'milestone') return drawer.milestone ? '编辑里程碑' : '新增里程碑'
+  return drawer.record ? '编辑风险或问题' : '新增风险或问题'
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
@@ -282,11 +334,13 @@ function ProjectBar({
   project,
   tasks,
   milestones,
+  riskIssues,
   onEdit,
 }: {
   project: Project
   tasks: Task[]
   milestones: Milestone[]
+  riskIssues: RiskIssue[]
   onEdit: () => void
 }) {
   const completed = tasks.filter(task => task.status === 'done').length
@@ -304,6 +358,7 @@ function ProjectBar({
       <span><CalendarDays size={14}/>{project.startDate} 至 {project.targetDate}</span>
       <span><ListTree size={14}/>{completed}/{tasks.length} 任务完成</span>
       <span><MilestoneIcon size={14}/>{milestones.length} 个里程碑</span>
+      <span><ShieldAlert size={14}/>{riskIssues.filter(item => item.status !== 'closed').length} 项待处理风险/问题</span>
     </div>
   </section>
 }
@@ -542,6 +597,102 @@ function MilestoneTable({
   </>
 }
 
+function RiskIssueTable({
+  records,
+  disabled,
+  onCreate,
+  onEdit,
+}: {
+  records: RiskIssue[]
+  disabled: boolean
+  onCreate: () => void
+  onEdit: (record: RiskIssue) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [type, setType] = useState('all')
+  const [status, setStatus] = useState('all')
+  const visible = records.filter(record => {
+    const text = `${record.title} ${record.owner} ${record.description} ${record.responsePlan} ${record.solution}`
+      .toLocaleLowerCase()
+    return text.includes(query.trim().toLocaleLowerCase())
+      && (type === 'all' || record.type === type)
+      && (status === 'all' || record.status === status)
+  })
+  return <>
+    <TableToolbar query={query} setQuery={setQuery} primaryLabel="添加记录" onCreate={onCreate}>
+      <label className="pm-toolbar-select">
+        <ShieldAlert size={14}/>
+        <select value={type} onChange={event => setType(event.currentTarget.value)} aria-label="筛选记录类型">
+          <option value="all">全部类型</option>
+          <option value="risk">风险</option>
+          <option value="issue">问题</option>
+        </select>
+      </label>
+      <label className="pm-toolbar-select">
+        <Filter size={14}/>
+        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选风险问题状态">
+          <option value="all">全部状态</option>
+          {Object.entries(riskIssueStatus).map(([value, label]) =>
+            <option key={value} value={value}>{label}</option>,
+          )}
+        </select>
+      </label>
+    </TableToolbar>
+    <div className="pm-table-frame">
+      <div className="pm-table-scroll">
+        <table className="pm-data-table pm-risk-table">
+          <thead>
+            <tr>
+              <th>类型</th>
+              <th className="pm-col-title">标题</th>
+              <th>状态</th>
+              <th>概率</th>
+              <th>影响</th>
+              <th>负责人</th>
+              <th>截止日期</th>
+              <th>应对 / 解决方案</th>
+              <th className="pm-col-actions"/>
+            </tr>
+          </thead>
+          <tbody>
+            {visible.map(record => <tr className="pm-record-row" key={record.id}>
+              <td><span className="pm-type-tag" data-value={record.type}>{riskIssueType[record.type]}</span></td>
+              <td className="pm-col-title">
+                <button className="pm-title-cell" onClick={() => onEdit(record)}>{record.title}</button>
+              </td>
+              <td><StatusTag kind="risk-issue" value={record.status}/></td>
+              <td>{record.probability
+                ? <span className="pm-cell-value">{probabilityLabels[record.probability]}</span>
+                : <span className="pm-cell-empty">-</span>}</td>
+              <td><span className="pm-impact-tag" data-value={record.impact}>{impactLabels[record.impact]}</span></td>
+              <td>{record.owner
+                ? <span className="pm-person"><span>{record.owner.slice(0, 1)}</span>{record.owner}</span>
+                : <span className="pm-cell-empty">未指定</span>}</td>
+              <td>{record.dueDate || <span className="pm-cell-empty">-</span>}</td>
+              <td className="pm-description-cell">
+                {record.type === 'risk'
+                  ? record.responsePlan || <span className="pm-cell-empty">暂无应对措施</span>
+                  : record.solution || <span className="pm-cell-empty">暂无解决方案</span>}
+              </td>
+              <td className="pm-col-actions">
+                <button
+                  className="pm-row-button"
+                  disabled={disabled}
+                  aria-label={`编辑 ${record.title}`}
+                  onClick={() => onEdit(record)}
+                ><Pencil size={14}/></button>
+              </td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
+      {!visible.length && <TableEmpty text={records.length ? '没有符合筛选条件的风险或问题' : '暂无风险或问题记录'}/>}
+      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>添加记录</button>
+    </div>
+    <div className="pm-table-footer">{visible.length} 条记录</div>
+  </>
+}
+
 function TableToolbar({
   query,
   setQuery,
@@ -565,8 +716,14 @@ function TableToolbar({
   </div>
 }
 
-function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone', value: string }) {
-  const labels = kind === 'project' ? projectStatus : kind === 'task' ? taskStatus : milestoneStatus
+function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue', value: string }) {
+  const labels = kind === 'project'
+    ? projectStatus
+    : kind === 'task'
+      ? taskStatus
+      : kind === 'milestone'
+        ? milestoneStatus
+        : riskIssueStatus
   return <span className="pm-tag" data-kind={kind} data-value={value}>
     <i/>{labels[value] ?? value}
   </span>
@@ -850,6 +1007,86 @@ function MilestoneForm({
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button pm-button-primary" disabled={disabled}>{milestone ? '保存更改' : '添加里程碑'}</button>
+    </div>
+  </form>
+}
+
+function RiskIssueForm({
+  projectId,
+  record,
+  disabled,
+  run,
+  onSaved,
+}: {
+  projectId: string
+  record?: RiskIssue
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const [type, setType] = useState<'risk' | 'issue'>(record?.type ?? 'risk')
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const dueDate = String(form.get('dueDate') ?? '')
+    const common = {
+      title: form.get('title'),
+      description: form.get('description'),
+      owner: form.get('owner'),
+      dueDate: dueDate || null,
+      status: form.get('status'),
+      impact: form.get('impact'),
+      probability: type === 'risk' ? form.get('probability') : null,
+      responsePlan: type === 'risk' ? form.get('responsePlan') : '',
+      solution: type === 'issue' ? form.get('solution') : '',
+    }
+    const success = await run(record
+      ? `risk-issue update ${record.id} ${JSON.stringify(common)}`
+      : `risk-issue add ${JSON.stringify({ projectId, type, ...common })}`)
+    if (success) onSaved()
+  }
+  return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+    <Field label="记录类型" wide>
+      <select
+        name="type"
+        value={type}
+        disabled={Boolean(record)}
+        onChange={event => setType(event.currentTarget.value as 'risk' | 'issue')}
+      >
+        <option value="risk">风险</option>
+        <option value="issue">问题</option>
+      </select>
+    </Field>
+    <Field label="标题" wide><input name="title" defaultValue={record?.title} required autoFocus/></Field>
+    <Field label="说明" wide><textarea name="description" defaultValue={record?.description} rows={4}/></Field>
+    <Field label="状态"><select name="status" defaultValue={record?.status ?? 'open'}>
+      {Object.entries(riskIssueStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    </select></Field>
+    <Field label="影响程度"><select name="impact" defaultValue={record?.impact ?? 'medium'}>
+      {Object.entries(impactLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    </select></Field>
+    {type === 'risk' && <Field label="发生概率"><select name="probability" defaultValue={record?.probability ?? 'medium'}>
+      {Object.entries(probabilityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    </select></Field>}
+    <Field label="负责人"><input name="owner" defaultValue={record?.owner}/></Field>
+    <Field label="截止日期" wide><input name="dueDate" type="date" defaultValue={record?.dueDate ?? ''}/></Field>
+    {type === 'risk'
+      ? <Field label="应对措施" wide><textarea name="responsePlan" defaultValue={record?.responsePlan} rows={5}/></Field>
+      : <Field label="解决方案" wide><textarea name="solution" defaultValue={record?.solution} rows={5}/></Field>}
+    <div className="pm-drawer-actions">
+      {record && <button
+        className="pm-button pm-button-danger"
+        type="button"
+        disabled={disabled}
+        onClick={() => {
+          if (window.confirm(`删除${riskIssueType[record.type]} ${record.title}？`)) {
+            void run(`risk-issue delete ${record.id} confirm`).then(success => success && onSaved())
+          }
+        }}
+      ><Trash2 size={15}/>删除</button>}
+      <button className="pm-button pm-button-primary" disabled={disabled}>
+        {record ? '保存更改' : '添加记录'}
+      </button>
     </div>
   </form>
 }

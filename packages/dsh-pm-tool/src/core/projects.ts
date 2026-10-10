@@ -109,6 +109,9 @@ export function deleteProject(domain: PmDomain, id: string): Promise<Project | u
     for (const [, milestone] of domain.table('milestones').entries()) {
       if (milestone.projectId === id) throw new ProjectHasMilestonesError(id)
     }
+    for (const [, record] of domain.table('risk_issues').entries()) {
+      if (record.projectId === id) throw new ProjectHasRiskIssuesError(id)
+    }
     await table.delete(id)
     return structuredClone(current)
   })
@@ -125,5 +128,12 @@ export class ProjectHasMilestonesError extends Error {
   constructor(readonly projectId: string) {
     super(`项目 ${projectId} 仍有里程碑`)
     this.name = 'ProjectHasMilestonesError'
+  }
+}
+
+export class ProjectHasRiskIssuesError extends Error {
+  constructor(readonly projectId: string) {
+    super(`项目 ${projectId} 仍有风险或问题`)
+    this.name = 'ProjectHasRiskIssuesError'
   }
 }

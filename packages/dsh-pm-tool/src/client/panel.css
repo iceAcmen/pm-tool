@@ -287,6 +287,7 @@
   table-layout: fixed;
 }
 .pm-milestone-table { min-width: 900px; }
+.pm-risk-table { min-width: 1080px; }
 .pm-data-table th, .pm-data-table td {
   height: 39px;
   padding: 6px 10px;
@@ -376,7 +377,7 @@
 .pm-group-row svg { margin-right: 7px; }
 .pm-group-row .pm-tag { margin-right: 8px; }
 
-.pm-tag, .pm-priority-tag, .pm-reference {
+.pm-tag, .pm-priority-tag, .pm-reference, .pm-type-tag, .pm-impact-tag {
   display: inline-flex;
   max-width: 100%;
   align-items: center;
@@ -393,11 +394,19 @@
 }
 .pm-tag i, .pm-priority-tag i { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: currentColor; }
 .pm-tag[data-value="in_progress"], .pm-tag[data-value="active"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); color: var(--pm-blue); }
+.pm-tag[data-value="monitoring"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); color: var(--pm-blue); }
 .pm-tag[data-value="blocked"], .pm-tag[data-value="at_risk"], .pm-tag[data-value="paused"],
 .pm-priority-tag[data-value="P1"] { background: color-mix(in srgb, var(--pm-warning) 12%, transparent); color: var(--pm-warning); }
-.pm-tag[data-value="done"], .pm-tag[data-value="achieved"] { background: color-mix(in srgb, var(--pm-success) 10%, transparent); color: var(--pm-success); }
+.pm-tag[data-value="done"], .pm-tag[data-value="achieved"], .pm-tag[data-value="closed"] { background: color-mix(in srgb, var(--pm-success) 10%, transparent); color: var(--pm-success); }
 .pm-tag[data-value="missed"], .pm-priority-tag[data-value="P0"] { background: color-mix(in srgb, var(--pm-danger) 10%, transparent); color: var(--pm-danger); }
 .pm-reference { background: var(--dsw-alias-bg-module-platform); color: var(--pm-secondary); }
+.pm-type-tag[data-value="risk"] { background: color-mix(in srgb, var(--pm-warning) 12%, transparent); color: var(--pm-warning); }
+.pm-type-tag[data-value="issue"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); color: var(--pm-blue); }
+.pm-impact-tag[data-value="low"] { color: var(--pm-success); }
+.pm-impact-tag[data-value="medium"] { color: var(--pm-blue); }
+.pm-impact-tag[data-value="high"] { color: var(--pm-warning); }
+.pm-impact-tag[data-value="critical"] { background: color-mix(in srgb, var(--pm-danger) 10%, transparent); color: var(--pm-danger); }
+.pm-cell-value { color: var(--pm-secondary); }
 .pm-person { display: inline-flex; min-width: 0; align-items: center; gap: 6px; }
 .pm-person > span {
   width: 22px;

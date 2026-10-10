@@ -8,6 +8,26 @@
 
 ---
 
+## [未发布] — R7 风险与问题管理（2026-10-10，平台：trae / TRAE）
+
+### 改动文件与内容
+- 新增 `src/core/risk-issue.ts`、`risk-issues.ts` 和 `src/commands/risk-issue.ts`：实现 strict schema、类型专有字段约束、统一业务队列、`ri-NNNN` 编号及 `/pm risk-issue` 离线 CRUD/筛选/确认删除。
+- 修改 `storage.ts`、`projects.ts`、`commands/project.ts`、`index.ts`：增加 `risk_issues` 表、项目删除保护、命令路由和 Web snapshot。
+- 修改 `src/client/panel.tsx`、`panel.css`：增加风险与问题标签页、高密度表格、搜索、类型/状态筛选及右侧新增/编辑抽屉，继续跟随 dsh 原生主题。
+- 新增 `scripts/verify-risk-issues.mjs`，扩展 `verify-web.mjs`；新增两份 R7 设计/实施计划。
+- 更新根/包 README、AGENTS 及 requirements、decision-log、knowledge-base、issues、test-cases、delivery、progress、handoff、onboarding 等权威档案。
+
+### 原因与影响
+- 按项目所有者确认的单表模型完成 P1 的 R7；不新增插件包、不修改上游、不依赖 API Key。
+- `pmtool` 领域版本保持 1，只新增 `risk_issues` 表；现有项目数据无需迁移。R4 Markdown 和整库 JSON 格式本批不升级。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm install --offline --frozen-lockfile`、`pnpm run build` 和 command/export/milestones/projects/risk-issues/storage/tasks/web 八个脚本全部退出码 0；风险问题专项覆盖 CRUD、筛选、字段组合、并发编号、失败恢复、权限、项目删除保护和全新进程读回。
+- 隔离 `DSH_HOME` 和隔离数据目录真实浏览器验证：新增风险/问题、编辑关闭、类型/状态筛选、搜索、确认删除、重启读回均通过；786px 窄屏表格局部滚动，浅色/深色随宿主切换，控制台和网络无错误；临时服务已停止。
+- 项目所有者随后使用真实 `pm-tool/data` 手动验证通过，并明确授权本批提交和推送。
+- 首次表名使用连字符失败，已按 ISS-020 改为 `risk_issues`。
+
 ## [0.1.0] — MVP 首个可用版本（2026-10-10，平台：trae / TRAE）
 
 - 发布 R1–R6 MVP：项目计划、三级 WBS、里程碑、可读 JSON 持久化、Markdown/整库 JSON 导出、离线命令和 dsh 顶级 Web 工作台。

@@ -21,8 +21,8 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
-| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | ✅ MVP 完成并验收 | R1–R6 已实现；R5 已由项目所有者手动验收 |
+| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.5 | 含 ADL-024 R7 模型 |
+| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R7 已实现；R7 已验收并获准提交推送 |
 | 阶段 4 测试交付 | ✅ MVP 已完成并发布 v0.1.0 | 测试矩阵、交付说明、完整回归与真实启动验证通过 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -50,13 +50,13 @@
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案（ISS）
     │   ├── handoff.md               # 最小迁移交接清单（第0节为移交说明）
-    │   ├── test-cases.md            # R1–R6 自动化矩阵与手动验收用例
+    │   ├── test-cases.md            # R1–R7 自动化矩阵与手动验收用例
     │   ├── delivery.md              # MVP 安装、启动、演示、备份和限制
     │   ├── releases/                # 版本发布说明、验收证据与已知限制
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/
-    │   └── dsh-pm-tool/     # ★自研插件包：项目、WBS、里程碑离线管理 + 自检
+    │   └── dsh-pm-tool/     # ★自研插件包：项目、WBS、里程碑、风险问题管理 + 自检
     │       ├── src/index.ts          # Host 入口：注册 /pm、打开存储领域
     │       ├── src/client/           # Web 顶级项目管理面板与侧栏入口
     │       ├── src/core/             # Project/Task schema、统一领域与业务逻辑
@@ -66,7 +66,7 @@
     │       ├── scripts/              # command/storage/projects/tasks 全量确定性验证
     │       ├── package.json / tsconfig.json / README.md
     │       └── lib/（构建产物，不入库）
-    └── data/                # pmtool 下 checks/projects/tasks/milestones 数据；不入库（ADL-009/011）
+    └── data/                # pmtool 下 checks/projects/tasks/milestones/risk_issues 数据；不入库
 ```
 
 插件包的构建、装载与验证命令见 [`packages/dsh-pm-tool/README.md`](packages/dsh-pm-tool/README.md)；第 0 步实测结论见 [`docs/tech-plugin-scaffold.md`](docs/tech-plugin-scaffold.md) 文末附节。
@@ -115,6 +115,7 @@ node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
+node scripts/verify-risk-issues.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 cd ~/Projects/dsh-pm/deepseek-harness
@@ -132,6 +133,8 @@ pnpm dsh --profile pm --no-open
 /pm task add {"projectId":"p-0001","title":"需求确认"}
 /pm task list p-0001
 /pm milestone add {"projectId":"p-0001","title":"首版发布","targetDate":"2026-10-31"}
+/pm risk-issue add {"projectId":"p-0001","type":"risk","title":"供应商延期","impact":"high","probability":"medium","responsePlan":"准备备选供应商"}
+/pm risk-issue list p-0001 all open
 /pm export markdown p-0001
 ```
 

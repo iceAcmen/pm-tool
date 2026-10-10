@@ -196,6 +196,15 @@
 - **适用场景**：Agent 沙箱内做真实 dsh 启动验证；日常用户终端仍直接使用 `~/.dsh/profiles/pm`。
 - **状态**：已规避并沉淀（2026-10-10）。
 
+## ISS-020 ｜ storage-domain 表名不接受连字符（2026-10-10，trae / TRAE）
+
+- **现象**：R7 初次把表名写为 `risk-issues`，打开领域时报错：`table name 'risk-issues' must match /^[a-z][a-z0-9_]*$/`。
+- **根因**：记录 key 可使用连字符，但 storage-domain 的 table name 规则更严格，只允许小写字母开头，后续使用小写字母、数字或下划线。
+- **解决办法**：表名改为 `risk_issues`，物理路径同步为 `data/pmtool/risk_issues/<id>.json`；命令名称仍可使用用户更易读的 `risk-issue`。
+- **避坑要点**：设计存储表时区分“表名规则”和“记录键规则”，新增表先用真实领域声明执行最小构建/打开验证。
+- **适用场景**：所有基于 `domainTable()` 新增表的插件开发。
+- **状态**：已修复，R7 专项与完整回归通过。
+
 ---
 
 ## 待补充（占位）

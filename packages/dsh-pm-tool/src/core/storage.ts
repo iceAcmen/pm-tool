@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { projectRecordSchema } from './project.js'
 import { taskRecordSchema } from './task.js'
 import { milestoneRecordSchema } from './milestone.js'
+import { riskIssueRecordSchema } from './risk-issue.js'
 
 export const checkRecordSchema = z.object({
   ok: z.boolean(),
@@ -22,6 +23,7 @@ export const pmDomainSpec = defineDomain({
     projects: domainTable(projectRecordSchema),
     tasks: domainTable(taskRecordSchema),
     milestones: domainTable(milestoneRecordSchema),
+    risk_issues: domainTable(riskIssueRecordSchema),
   },
 })
 

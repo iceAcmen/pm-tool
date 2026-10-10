@@ -1,6 +1,6 @@
 # MVP 测试与验收用例
 
-> 适用版本：阶段 3 MVP（R1-R6），基线提交 `9487c24`。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
+> 适用版本：R1-R7（v0.1.0 基线 + 未发布 R7）。本文给开发者、验收人和后续接手平台使用；自动化脚本是回归依据，真实 dsh Web 是交付验收依据。
 
 最后更新：2026-10-10（trae / TRAE）
 
@@ -33,6 +33,7 @@ node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
+node scripts/verify-risk-issues.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
@@ -55,6 +56,7 @@ node scripts/verify-web.mjs
 | R4 持久化/导出 | `verify-storage.mjs`、`verify-export.mjs` | 可读 JSON、Markdown/整库 JSON、排序、权限、覆盖确认、原子写与失败清理 |
 | R5 Web | `verify-web.mjs` + 手动用例 | 快照、manifest、动态 bundle、主题 token、三类实体界面操作 |
 | R6 离线命令 | `verify-command.mjs` 及各实体脚本 | 无 API Key、中文输出、真实命令处理器 |
+| R7 风险与问题 | `verify-risk-issues.mjs`、`verify-web.mjs` + 手动用例 | CRUD、关闭、类型/状态筛选、专有字段、并发、故障恢复、项目删除保护、重启读回及 Web |
 
 ## 4. 手动 Web 验收
 
@@ -83,6 +85,10 @@ pnpm dsh --profile pm --no-open
 | WEB-12 | 在 dsh 设置切换浅色/深色/跟随系统 | 表格、标签、输入框和抽屉同步切换 |
 | WEB-13 | 收窄窗口 | 页面根容器不横向溢出；宽表仅在表格区域滚动 |
 | WEB-14 | 打开浏览器控制台 | 当前构建无 error；网络中 `client.js` 正常加载 |
+| WEB-15 | 新增一条风险和一条问题 | 风险显示概率/应对，问题显示解决方案，刷新后仍在 |
+| WEB-16 | 编辑问题并将状态改为已关闭 | 表格状态更新为“已关闭”，重启后保留 |
+| WEB-17 | 使用类型、状态筛选和搜索 | 结果只包含符合条件的记录 |
+| WEB-18 | 在抽屉中确认删除风险或问题 | 确认后记录删除；项目下仍有记录时项目删除被阻止 |
 
 ## 5. 离线命令冒烟
 
@@ -93,6 +99,7 @@ pnpm dsh --profile pm --no-open
 /pm project list
 /pm task list <projectId>
 /pm milestone list <projectId>
+/pm risk-issue list <projectId> all all
 /pm export markdown <projectId>
 /pm export json
 ```
@@ -105,7 +112,7 @@ pnpm dsh --profile pm --no-open
 
 ## 6. 数据与迁移检查
 
-1. `data/pmtool/projects|tasks|milestones/<id>.json` 一条记录一文件，可直接阅读。
+1. `data/pmtool/projects|tasks|milestones|risk_issues/<id>.json` 一条记录一文件，可直接阅读。
 2. 目录权限为 0700，记录文件为 0600。
 3. 关闭并重启 dsh 后记录仍可读取。
 4. 导出 JSON 不包含 `checks` 自检记录。
@@ -113,6 +120,7 @@ pnpm dsh --profile pm --no-open
 
 ## 7. 当前验收结论
 
-- 自动化：构建与七个验证脚本已通过。
+- 自动化：冻结锁文件离线安装、构建与八个验证脚本已通过。
 - Web：项目所有者于 2026-10-10 确认 R5 手动验收通过。
+- R7 Web：隔离 profile 完成新增、编辑关闭、筛选、搜索、确认删除和重启读回；浅/深主题、786px 窄屏局部滚动、控制台和网络检查通过。
 - 未覆盖：Windows/Linux、Safari/Firefox、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性。

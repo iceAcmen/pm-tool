@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R6 MVP 已完成并发布为 `v0.1.0`；R5 顶级 Web 面板已由项目所有者手动验收，阶段 4 MVP 测试交付已完成。
+- 当前阶段：R1–R7 已完成；R1–R6 已发布为 `v0.1.0`，R7 已验收并获准提交推送。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -12,6 +12,7 @@
 - `/pm project add/list/get/update/delete`：项目增删改查，中文输出，无需配置模型。
 - `/pm task add/list/get/update/delete/move/renumber`：WBS 任务增查改删、移动与显式重新编号，支持至少三级父子结构。
 - `/pm milestone add/list/get/update/delete`：里程碑增查改删与按目标日期查看项目时间线。
+- `/pm risk-issue add/list/get/update/delete`：风险与问题统一台账、关闭及类型/状态筛选。
 - `/pm export markdown <projectId> [目录] [confirm]`：导出项目、WBS 和里程碑 Markdown 报告。
 - `/pm export json [目录] [confirm]`：导出整库业务数据包（不含 checks）。
 
@@ -41,6 +42,12 @@
 /pm milestone update m-0001 {"status":"achieved","achievedDate":"2026-12-30"}
 /pm milestone delete m-0001
 /pm milestone delete m-0001 confirm
+/pm risk-issue add {"projectId":"p-0001","type":"risk","title":"供应商延期","impact":"high","probability":"medium","responsePlan":"准备备选供应商"}
+/pm risk-issue add {"projectId":"p-0001","type":"issue","title":"测试环境不可用","impact":"critical","solution":"联系运维修复"}
+/pm risk-issue list p-0001 all open
+/pm risk-issue get ri-0001
+/pm risk-issue update ri-0001 {"status":"closed"}
+/pm risk-issue delete ri-0001 confirm
 /pm export markdown p-0001
 /pm export markdown p-0001 ./my-reports
 /pm export markdown p-0001 ./my-reports confirm
@@ -64,15 +71,17 @@
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-Web 端通过侧栏“项目管理”进入顶级面板；采用高密度表格工作台，颜色、字体及字号跟随 dsh 原生主题，支持顶部项目切换、任务/里程碑表格、项目概览、搜索筛选、状态分组和右侧新增/编辑抽屉，无需 API Key。项目有任务或里程碑时禁止删除。当前仍为单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+Web 端通过侧栏“项目管理”进入顶级面板；采用高密度表格工作台，颜色、字体及字号跟随 dsh 原生主题，支持顶部项目切换、任务/里程碑/风险问题表格、项目概览、搜索筛选、状态分组和右侧新增/编辑抽屉，无需 API Key。项目有任务、里程碑或风险问题时禁止删除。当前仍为单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
 
 任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。`milestoneId` 可关联同项目已存在里程碑，更新时用 `null` 解除关联。`update` 可用 `null` 清空可选日期，但不能直接修改项目、父任务、编号和系统字段。删除、移动与重新编号必须带 `confirm` 才写盘；有子任务时禁止删除父任务，移动不能跨项目或形成循环。
 
 里程碑新增要求项目、标题和目标日期；默认状态 `planned`、实际达成日期 `null`、说明为空。状态支持 `planned / at_risk / achieved / missed`，由用户手动维护；`achieved` 必须填写 `achievedDate`，其他状态必须为 `null`。删除必须带 `confirm`，有关联任务时禁止删除。列表按目标日期升序、同日按 ID 排序；到期提醒第一版不做。
 
+风险与问题共用 `data/pmtool/risk_issues/<id>.json`，以 `type=risk|issue` 区分。状态为 `open / monitoring / closed`，影响为 `low / medium / high / critical`；风险必须填写 `probability` 和可选 `responsePlan`，问题使用 `solution` 且概率固定为 `null`。创建后不能修改项目或类型，删除必须带 `confirm`。
+
 Markdown 导出默认写入产品仓库 `exports/<projectId>-report.md`；相对目录也以产品仓库为基准，绝对目录和 `~/` 可直接指定。报告包含项目概览、按真实父子关系展开的 WBS 和按日期排序的里程碑。已有文件默认拒绝覆盖，末尾加 `confirm` 才原子覆盖；报告不写入 storage-domain，JSON 始终是唯一数据源。
 
-整库 JSON 默认写入 `exports/pmtool-backup.json`，包含格式版本、导出时间和按 ID 排序的 projects/tasks/milestones，不包含 checks 自检数据；覆盖规则与 Markdown 相同。
+整库 JSON 默认写入 `exports/pmtool-backup.json`，包含格式版本、导出时间和按 ID 排序的 projects/tasks/milestones，不包含 checks 自检数据；覆盖规则与 Markdown 相同。为保持 v0.1.0 格式稳定，R7 的 risk_issues 暂未加入该导出。
 
 ## 从源码构建
 
@@ -87,17 +96,20 @@ node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
+node scripts/verify-risk-issues.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 ```
 
-七个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务与 Web 脚本使用独立系统临时目录。
+八个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务与 Web 脚本使用独立系统临时目录。
 
 项目脚本验证真实插件处理器与真实 JSON 后端：增删改查、日期与同名校验、confirm 防误操作、旧表兼容、并发写入不覆盖、落盘可读性与 0700/0600 权限、全新进程读回更新/删除结果及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。命令验证不代表 R5 Web 管理界面完成。
 
 任务脚本覆盖三级任务树、更新与日期清空、确认删除、父任务保护、跨项目/循环移动拒绝、移动后保留编号、显式重新编号、并发新增和全新进程读回。
 
 里程碑脚本覆盖增查改删、状态一致性、任务关联保护、时间线排序、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
+
+风险问题脚本覆盖增查改删、关闭、类型/状态筛选、类型专有字段、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
 
 导出脚本覆盖内容与排序、Markdown 转义、默认路径定位、0700/0600、覆盖保护、confirm 原子覆盖、空项目和失败清理。
 
@@ -140,19 +152,23 @@ dsh-pm-tool/
 ├── src/core/project.ts  # Project schema 与字段提示
 ├── src/core/task.ts     # Task schema、枚举与字段提示
 ├── src/core/milestone.ts # Milestone schema、状态与字段提示
-├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects + tasks + milestones）
+├── src/core/risk-issue.ts # RiskIssue schema、枚举与类型专有字段
+├── src/core/storage.ts  # 统一 pmtool 领域（checks + projects + tasks + milestones + risk_issues）
 ├── src/core/projects.ts # 项目增删改查与领域统一写队列
 ├── src/core/tasks.ts    # 任务管理、关系校验、移动与 WBS 编号
 ├── src/core/milestones.ts # 里程碑增查与时间线排序
+├── src/core/risk-issues.ts # 风险问题 CRUD、筛选和编号
 ├── src/core/report.ts   # 项目/WBS/里程碑 Markdown 渲染
 ├── src/core/export.ts   # 导出路径、覆盖保护与原子写入
 ├── src/commands/project.ts # 命令解析与中文输出
 ├── src/commands/task.ts # WBS 任务命令解析与中文输出
 ├── src/commands/milestone.ts # 里程碑命令解析与中文输出
+├── src/commands/risk-issue.ts # 风险问题命令解析与中文输出
 ├── src/commands/export.ts # Markdown 导出命令
 ├── scripts/verify-projects.mjs # 项目增删改查与重启验证
 ├── scripts/verify-tasks.mjs # 任务完整回归、并发编号与重启验证
 ├── scripts/verify-milestones.mjs # 里程碑增查、排序与重启验证
+├── scripts/verify-risk-issues.mjs # 风险问题完整回归与重启验证
 ├── scripts/verify-export.mjs # Markdown 内容、路径与覆盖验证
 ├── scripts/verify-web.mjs # Web 快照、manifest 与 bundle 验证
 ├── scripts/verify-command.mjs  # 命令自检
