@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae 完成阶段 4 MVP 测试交付）
+最后更新：2026-10-10（trae 发布 MVP v0.1.0）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R6 MVP 完成并验收，阶段 4 MVP 测试交付完成；测试矩阵见 `docs/test-cases.md`，安装与交付见 `docs/delivery.md`。阶段 3 最新提交 `9487c24` 已推送；阶段 4 当前批次尚未提交、未推送。
+- **当前状态**：R1–R6 MVP 完成并验收，阶段 4 测试交付完成，正式版本为 `v0.1.0`；发布说明见 `docs/releases/v0.1.0.md`，测试矩阵见 `docs/test-cases.md`，安装与交付见 `docs/delivery.md`。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -41,7 +41,7 @@
 | 本产品仓库本地路径 | `~/Projects/dsh-pm/pm-tool/`（main 工作区；正常情况下与 origin/main 一致，`git pull --ff-only` 后开工） |
 | 首次提交 | `12bcad3` —— "chore: 阶段1 环境搭建与项目档案初始化" |
 | 阶段 2 提交 | `70815a0`（需求 v0.2 + 可行性地图）、`54767e1`（需求 v0.3 + ADL-009）、`e7211c1`（阶段 2 收尾） |
-| 阶段 3 提交 | 第 0 步与 R1–R4 提交详见 git 历史；R5 主功能与档案提交为 `9bce006`。**阶段 3 MVP 代码均已推送 origin/main（2026-10-10）**；最新交接收尾以 `git log -1 --oneline` 为准 |
+| 阶段 3/4 发布 | R5 主功能 `9bce006`，原生主题工作台 `9487c24`，测试交付 `71b4212`；正式版本以 tag `v0.1.0` 为准 |
 | dsh 专属 profile | `~/.dsh/profiles/pm/`（由 web 模板派生；以 `link:` 挂载本插件；补丁把存储 root 指向 `pm-tool/data`） |
 | 上游框架源码本地路径 | `~/Projects/dsh-pm/deepseek-harness/`（只读，勿改） |
 | 上游仓库 | <https://github.com/deepseek-ai/deepseek-harness>（分支 `master`） |
@@ -164,7 +164,8 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 1. 阶段 2 已完成；当前开发依据 v0.4，落盘布局见 ADL-011。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
 3. **R1–R6 MVP 已完成**；R5 高密度表格、右侧抽屉和原生主题切换通过自动验证，所有者于 2026-10-10 确认手动验收通过。
-4. **阶段 4 MVP 已完成**：冻结锁文件安装、构建、七项回归、profile 配置和隔离 profile 真实启动均通过；本批提交和推送分别等待所有者授权。
+4. **阶段 4 MVP 已完成并发布 v0.1.0**：冻结锁文件安装、构建、七项回归、profile 配置和隔离 profile 真实启动均通过。
+5. 下一步由项目所有者决定收集版本反馈或规划 R7–R10；后续提交和推送恢复分别确认。
 
 ## 5. SSH 密钥（已配置，备查）
 
