@@ -13,6 +13,7 @@ import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands
 import { openPmDomain, type PmDomain } from './core/storage.js'
 import { handleProjectCommand, projectHelp } from './commands/project.js'
 import { handleTaskCommand, taskHelp } from './commands/task.js'
+import { handleMilestoneCommand, milestoneHelp } from './commands/milestone.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -34,6 +35,8 @@ function renderHelp(): CommandResult {
       projectHelp,
       '',
       taskHelp,
+      '',
+      milestoneHelp,
     ].join('\n'),
   }
 }
@@ -54,8 +57,8 @@ export async function apply(ctx: Context): Promise<void> {
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
-    description: '项目管理工作台：项目 CRUD、WBS 任务管理与存储自检',
-    input: { hint: '[project ...|task ...|ping|selftest]', attachments: false },
+    description: '项目管理工作台：项目、WBS 任务、里程碑与存储自检',
+    input: { hint: '[project ...|task ...|milestone add/list/get|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
@@ -63,6 +66,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (projectMatch) return handleProjectCommand(projectMatch[1] ?? '', domain)
       const taskMatch = /^task(?:\s+([\s\S]*))?$/i.exec(raw)
       if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain)
+      const milestoneMatch = /^milestone(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (milestoneMatch) return handleMilestoneCommand(milestoneMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R3 里程碑增查首个纵切（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- 新增 `src/core/milestone.ts`、`src/core/milestones.ts`、`src/commands/milestone.ts`：Milestone schema、增查业务与 `/pm milestone add/list/get`。
+- 修改 `src/core/storage.ts`、`src/core/projects.ts`、`src/commands/project.ts`、`src/index.ts`：增加 milestones 表、项目删除保护与命令分发。
+- 新增 `scripts/verify-milestones.mjs`：覆盖时间线排序、字段/状态/日期校验、默认值、并发编号、失败恢复、权限和重启读回。
+- 更新 README/AGENTS 及 requirements、knowledge-base、issues、progress、handoff、onboarding 快照。
+
+### 为什么 / 影响范围
+- 按 R3 最窄纵切先完成里程碑新增与查询；状态继续由用户手动维护，R11 自动提醒仍不做。
+- pmtool 仍为 per-record 版本 1，仅增加 milestones 表，无数据迁移；有里程碑的项目禁止删除。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`verify-command.mjs`、`verify-storage.mjs`、`verify-projects.mjs`、`verify-tasks.mjs`、`verify-milestones.mjs` 全部退出码 0。
+- 里程碑专项覆盖增查、时间线排序、全部状态、日期/字段校验、默认值、并发编号、写入失败恢复、项目删除保护、0700/0600 和全新进程读回。
+- 首次测试断言错误已按 ISS-013 修正；四条失败日志均为主动故障注入。真实 Web 管理界面尚未实现，不在本批验证范围。
+
 ## [未发布] — R2 WBS 任务编辑、删除、移动与重新编号收尾（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

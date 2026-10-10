@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 R3 里程碑待开始 | R1 项目与 R2 WBS 离线功能已完成；下一批实现里程碑增查 |
+| 阶段 3 源码开发 | 🔄 R3 里程碑进行中 | milestones 表与 `/pm milestone add/list/get` 已实现；编辑/删除待下一批 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -53,7 +53,7 @@
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/
-    │   └── dsh-pm-tool/     # ★自研插件包：项目 CRUD + WBS 任务管理 + 自检
+    │   └── dsh-pm-tool/     # ★自研插件包：项目、WBS、里程碑离线管理 + 自检
     │       ├── src/index.ts          # 插件入口：注册 /pm、打开存储领域
     │       ├── src/core/             # Project/Task schema、统一领域与业务逻辑
     │       ├── src/commands/         # 项目与 WBS 命令解析、中文输出
@@ -62,7 +62,7 @@
     │       ├── scripts/              # command/storage/projects/tasks 全量确定性验证
     │       ├── package.json / tsconfig.json / README.md
     │       └── lib/（构建产物，不入库）
-    └── data/                # pmtool 下 checks/projects/tasks 数据；不入库（ADL-009/011）
+    └── data/                # pmtool 下 checks/projects/tasks/milestones 数据；不入库（ADL-009/011）
 ```
 
 插件包的构建、装载与验证命令见 [`packages/dsh-pm-tool/README.md`](packages/dsh-pm-tool/README.md)；第 0 步实测结论见 [`docs/tech-plugin-scaffold.md`](docs/tech-plugin-scaffold.md) 文末附节。
@@ -106,7 +106,11 @@ pnpm dsh web        # 启动 Web UI；加 --no-open 可只起服务不弹浏览�
 export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
 cd ~/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool
 pnpm run build
+node scripts/verify-command.mjs
+node scripts/verify-storage.mjs
 node scripts/verify-projects.mjs
+node scripts/verify-tasks.mjs
+node scripts/verify-milestones.mjs
 cd ~/Projects/dsh-pm/deepseek-harness
 pnpm dsh --profile pm --no-open
 ```

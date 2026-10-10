@@ -7,6 +7,7 @@ import {
   getProject,
   listProjects,
   ProjectHasTasksError,
+  ProjectHasMilestonesError,
   ProjectNameConflictError,
   updateProject,
 } from '../core/projects.js'
@@ -157,6 +158,12 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
       return {
         kind: 'error',
         text: `项目 ${error.projectId} 仍有 WBS 任务，不能删除。请先处理项目下的任务。`,
+      }
+    }
+    if (error instanceof ProjectHasMilestonesError) {
+      return {
+        kind: 'error',
+        text: `项目 ${error.projectId} 仍有里程碑，不能删除。请先处理项目下的里程碑。`,
       }
     }
     console.error('[pm-tool] 项目操作失败：', error)
