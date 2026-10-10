@@ -4,7 +4,12 @@
 
 最后更新：2026-10-10
 
-## 当前阶段：阶段 3 第 0 步「打通验证」✅ 已验收通过并推送 origin/main；业务编码与测试移交 Trae，本侧暂停
+## 当前阶段：阶段 3 第 0 步「打通验证」✅ 已验收并推送；跨平台协作基座已建立；业务编码/测试将由 TRAE 或其他 IDE/Agent 接手（本侧暂停）
+
+### 🧭 跨平台协作基座（2026-10-10 新增，已就绪）
+- 根 `AGENTS.md`（任何 AI/IDE 接手先读）、`docs/collaboration.md`（多方同步规则 + 平台标识）、`docs/knowledge-base.md`（KB-001～010 已验证知识）、`docs/handover-archive-doubao.md`（豆包阶段完整存档）。
+- 约定：仓库即唯一事实来源；任何平台开工前先 pull + 扫描 `docs/` 最新档案，改动后在 `changelog.md` 标注平台标识并同步需求/决策/踩坑/知识；禁 force push。
+- 接手平台不局限于 TRAE：新平台首次接入按 `docs/collaboration.md` 第八节自检并登记平台标识。
 
 ### ✅ 阶段 3 第 0 步已完成（最小插件端到端打通）
 - 在独立仓库新建最小插件包 `packages/dsh-pm-tool/`（`/pm` 离线命令 + 存储领域 `pmtool`），`pnpm install` 与 `tsc` 构建一次通过。
@@ -13,10 +18,10 @@
 - Web 斜杠命令目录列出 `pm`，无 API Key 执行 `/pm ping` 返回中文 pong（有截图）。
 - 两个确定性脚本（`scripts/verify-storage.mjs`、`scripts/verify-command.mjs`）直接运行已构建插件的真实代码：selftest 写入并读回 `pm-tool/data/pmtool/checks/selftest.json`（人类可读、目录 0700）。
 - 实测发现并修复真实 bug：`table.put()` 异步写盘漏 `await`（处理器改为 async）。
-- 已提交（`9e5d539`）并经项目所有者**验收通过、推送 origin/main**；同步补一条 docs(移交) 提交说明验收/推送/移交 Trae。
-- **后续阶段 3 业务编码与阶段 4 测试移交 Trae 执行，本侧暂停**；Trae 接手导引见 `docs/handoff.md` 第 0 节。
+- 已提交（`9e5d539`）并经项目所有者**验收通过、推送 origin/main**；随后补 `41b9db5` 说明验收/推送与移交。
+- **后续阶段 3 业务编码与阶段 4 测试移交 TRAE 或其他 IDE/Agent 执行，本侧暂停**；接手导引见根 `AGENTS.md` 与 `docs/handoff.md` 第 0 节。
 
-### ⬜ 阶段 3 业务功能（第 1 步起，未开始，移交 Trae，动手前需先报备）
+### ⬜ 阶段 3 业务功能（第 1 步起，未开始，移交 TRAE/其他平台，动手前需先报备）
 - 按需求 v0.3 实现 MVP：项目计划 R1 / WBS R2 / 里程碑 R3 / 持久化与 Markdown 导出 R4 / Web 界面 R5 / 离线命令 R6。
 - 仍待业务阶段验证：第三方独立顶级 Web 页面（第 0 步未做浏览器半侧）。
 
