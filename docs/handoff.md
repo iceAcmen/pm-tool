@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae 完成 R2 tasks 表与 task add/list/get；全部脚本通过，下一批接续任务编辑/删除/移动/重编号）
+最后更新：2026-10-10（trae 完成 R2 离线任务管理；下一批 R3 里程碑增查）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1 离线项目 CRUD 已完成并由所有者手动验收；R2 已完成 tasks 表、`/pm task add/list/get`、三级树和自动编号。任务编辑/删除/移动/重编号待下一批；R3/R5 待办，R4/R6 进行中。
+- **当前状态**：R1 离线项目 CRUD、R2 WBS 任务完整命令均已完成；支持三级树、移动/循环保护与显式重编号。下一步 R3 里程碑；R5 待办，R4/R6 进行中。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -28,7 +28,7 @@
   - 数据落人类可读 JSON（storage-domain + storage-json，root=`pm-tool/data`，**`data/` 不入库**）；
   - 里程碑到期提醒 R11 **第一版不做**；
   - 每次改代码前先说明「改哪个文件/为什么/影响范围」，删除、全局配置、对外推送先征得同意；每阶段更新 docs 并做清晰提交。
-- **起步动作**：按第 3 节确认环境，运行构建与三个 verify 脚本，均应退出码 0；按包 README 可演示项目增删改查，下一批 R2 先报备文件清单。
+- **起步动作**：按第 3 节确认环境，运行构建与全部 verify 脚本，均应退出码 0；按包 README 可演示项目与 WBS 命令，下一批 R3 先报备文件清单。
 - 唯一遗留技术【待验证】：第三方插件**独立顶级 Web 页面**接入方式（做 R5 Web 界面时验证；内置先例 `packages/client/ui-schedule`，稳妥路径先走设置卡片/插件详情区块）。
 
 ---
@@ -96,7 +96,7 @@
 
 ### 下一步（由 trae 或指定平台先报备、所有者确认后编码）
 - **存储布局已定稿（ADL-011 / requirements v0.4 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record（`data/pmtool/<表>/<id>.json`），用表 `keys()/entries()` 枚举、不建 index.json；直接照此实现，不要再用旧的嵌套目录设想。
-- **下一批**：R2 WBS 任务树（父任务/同级自动编号/移动删除手动重编号）→ R3 里程碑（状态默认手动；R11 提醒不做）→ R4 Markdown/JSON 导出（导出不进存储域）→ 最后 R5 Web（先设置卡片/插件详情区块，再 spike 独立顶级页面；不可行则按 ADL-013 降级）。
+- **下一批**：R3 里程碑（状态默认手动；R11 提醒不做）→ R4 Markdown/JSON 导出（导出不进存储域）→ 最后 R5 Web（先设置卡片/插件详情区块，再 spike 独立顶级页面；不可行则按 ADL-013 降级）。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步、首个业务增量及全部档案提交**均已推送 origin/main**（2026-10-10 经项目所有者确认）。
@@ -159,7 +159,7 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 1. 阶段 2 已完成；当前开发依据 v0.4，落盘布局见 ADL-011。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
-3. **R2 首个纵切已完成**：tasks 表、add/list/get、三级 WBS 与持久化已通过确定性验证。下一批先报备 task update/delete/move/renumber；随后 R3 → R4 → R5。
+3. **R2 离线功能已完成**：task add/list/get/update/delete/move/renumber、三级 WBS、关系保护与持久化均通过确定性验证。下一批先报备 R3 milestones 表与 add/list/get；随后补里程碑编辑/删除 → R4 → R5。
 4. 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。
 
 ## 5. SSH 密钥（已配置，备查）

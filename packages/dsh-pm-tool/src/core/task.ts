@@ -14,6 +14,7 @@ export const taskStatusLabels: Record<z.infer<typeof taskStatusSchema>, string> 
 }
 
 const optionalDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).optional()
+const clearableDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).nullable().optional()
 const taskFields = {
   projectId: projectIdSchema,
   parentId: taskIdSchema.nullable(),
@@ -62,7 +63,21 @@ export const taskCreateSchema = z.strictObject({
   milestoneId: z.null().default(null),
 }).superRefine(validateDateOrder)
 
+/** 更新不允许直接改变归属、父任务、编号、顺序与时间戳；移动使用独立动作。 */
+export const taskUpdateSchema = z.strictObject({
+  title: taskFields.title.optional(),
+  description: taskFields.description.optional(),
+  assignee: taskFields.assignee.optional(),
+  status: taskStatusSchema.optional(),
+  priority: taskPrioritySchema.optional(),
+  startDate: clearableDateSchema,
+  dueDate: clearableDateSchema,
+  progress: taskFields.progress.optional(),
+  milestoneId: z.null().optional(),
+}).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
+
 export type Task = z.infer<typeof taskRecordSchema>
+export type TaskUpdate = z.infer<typeof taskUpdateSchema>
 
 export function describeTaskValidation(error: z.ZodError): string {
   const labels: Record<string, string> = {

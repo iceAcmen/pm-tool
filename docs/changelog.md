@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R2 WBS 任务编辑、删除、移动与重新编号收尾（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `src/core/task.ts`、`src/core/tasks.ts`：增加更新片段校验、任务更新/删除/移动/整树重新编号及循环保护。
+- `src/commands/task.ts`、`src/index.ts`：接入 `/pm task update/delete/move/renumber`、confirm 预览与中文结果；树展示改用真实关系计算缩进。
+- `scripts/verify-tasks.mjs`：覆盖更新合并校验、日期清空、父任务删除保护、root/跨项目/循环移动、编号保留、显式重编号、空洞与重启读回。
+- 更新根/包 README、AGENTS 及 requirements、decision-log、knowledge-base、progress、handoff、onboarding 快照。
+
+### 为什么 / 影响范围
+- 完成 R2 离线 WBS 验收闭环；结构移动与编号重建分离，避免未确认的大范围编号改写。
+- 不改变数据版本和落盘布局；现有任务记录无需迁移。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`verify-command.mjs`、`verify-storage.mjs`、`verify-projects.mjs`、`verify-tasks.mjs` 全部退出码 0。
+- 任务专项覆盖更新合并校验、日期清空、删除预览/确认、父任务保护、root/跨项目/循环移动、移动后编号保留、显式重编号、编号空洞、并发新增、0700/0600 和全新进程读回。
+- 三条写入失败日志是主动故障注入；新增的重新编号中途失败验证确认已写记录可恢复、整棵树保持原编号。真实 Web 管理界面尚未实现，不在本批验证范围。
+
 ## [未发布] — 固化任务完成后分别确认提交与推送（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件
