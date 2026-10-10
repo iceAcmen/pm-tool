@@ -18,7 +18,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已定稿 v0.3（已推送） | 需求 `docs/requirements.md`、可行性地图、技术骨架方案 |
-| 阶段 3 源码开发 | 🔄 进行中：第 0 步「打通验证」已跑通 | 最小插件 `packages/dsh-pm-tool/` 已被本地 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘验证通过；业务功能待报备后开发 |
+| 阶段 3 源码开发 | 🔄 第 0 步「打通验证」✅ 已验收并推送；业务开发移交 Trae（暂停） | 最小插件 `packages/dsh-pm-tool/` 已被本地 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘验证通过；R1–R6 业务功能待 Trae 报备后开发，接手见 `docs/handoff.md` 第 0 节 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
