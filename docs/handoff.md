@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（阶段 3 第 0 步已验收并推送 origin/main；跨平台协作基座——根 `AGENTS.md`、`docs/collaboration.md`、`docs/knowledge-base.md`、豆包阶段存档——已建立；后续业务编码与测试由 **TRAE 或其他 IDE/Agent** 接手，本侧暂停）
+最后更新：2026-10-10（trae / TRAE 完成首个项目增查业务增量并本地提交，待所有者验收，未推送；后续由 trae 或所有者指定平台接续）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：阶段 1（环境搭建）、阶段 2（需求分析 **v0.4**）已完成；阶段 3 第 0 步「打通验证」已完成并验收——最小插件已证明「独立仓库插件能被本地源码版 dsh 装载、离线命令可用、可读 JSON 落盘到产品目录」。**业务实体落盘布局已定稿（ADL-011）**；trae 已只读接手并停在开工报备，**业务功能（R1–R6）尚未开始**，待文件级清单获确认。
+- **当前状态**：阶段 1、阶段 2 已完成，开发依据 v0.4；阶段 3 第 0 步已验收。首批文件清单已获确认，trae 已完成 projects 表、Project zod schema、离线 `/pm project add/list/get` 与确定性校验。R1/R4/R6 进行中；R2/R3/R5 待办，本批未做 Web、编辑或导出。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -18,7 +18,7 @@
   2. `docs/requirements.md` **v0.4**（**做什么、验收标准、Project/Task/Milestone 数据模型、§5.1 已定稿落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
-  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～011）与 `docs/issues-and-solutions.md`（ISS-001～009）
+  5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～013）与 `docs/issues-and-solutions.md`（ISS-001～009）
   6. `docs/decision-log.md`（ADL-001～ADL-011，所有已定决策与约束；ADL-011 为落盘布局定稿）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
@@ -28,7 +28,7 @@
   - 数据落人类可读 JSON（storage-domain + storage-json，root=`pm-tool/data`，**`data/` 不入库**）；
   - 里程碑到期提醒 R11 **第一版不做**；
   - 每次改代码前先说明「改哪个文件/为什么/影响范围」，删除、全局配置、对外推送先征得同意；每阶段更新 docs 并做清晰提交。
-- **起步动作**：按第 3 节恢复/确认环境与 pm profile，跑通 `node scripts/verify-command.mjs`（应退出码 0）确认地基正常，再就业务功能的分包与首批文件出改动报备。
+- **起步动作**：按第 3 节确认环境，运行构建与三个 verify 脚本，均应退出码 0；按包 README 可演示项目增查，下一批先报备文件清单。
 - 唯一遗留技术【待验证】：第三方插件**独立顶级 Web 页面**接入方式（做 R5 Web 界面时验证；内置先例 `packages/client/ui-schedule`，稳妥路径先走设置卡片/插件详情区块）。
 
 ---
@@ -76,9 +76,16 @@
 - 修复真实 bug：`table.put()` 异步写盘漏 `await`（见 ISS-005）。
 - 唯一遗留【待验证】：第三方独立顶级 Web 页面（业务功能阶段再验）。
 
-### 下一步（阶段 3 业务开发，移交 TRAE 或其他 IDE/Agent；动手前仍需向项目所有者报备具体文件改动）
+### 已完成（首个业务增量，trae / TRAE，2026-10-10）
+- 同一插件包内部增加 core/commands 模块，pmtool 版本 1 保留 checks，新增 projects；路径 `data/pmtool/projects/<id>.json`。
+- 新增离线 `/pm project add {JSON}`、`list`、`get <ID>`；完整示例与必填字段见 `packages/dsh-pm-tool/README.md`。无新增插件包、Skill、依赖或 profile 改动。
+- `pnpm run build` 与三个 `scripts/verify-*.mjs` 通过（退出码 0），验证增查、非法输入不落盘、10 次并发新增不覆盖、失败后恢复、旧 checks 兼容、0700、全新进程读回。项目测试独立临时库，保留结果路径供查看。
+- 本批只做 Host 确定性验证，未重跑浏览器交互及完整 dsh 重启验收；R5 仍未开始。新增为单进程队列，暂不支持多个宿主共享目录写入。
+- 本地提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`，未推送。实际提交号用 `git log -1 --oneline` 查看。
+
+### 下一步（由 trae 或所有者指定平台接续；新一批先报备）
 - **存储布局已定稿（ADL-011 / requirements v0.4 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record（`data/pmtool/<表>/<id>.json`），用表 `keys()/entries()` 枚举、不建 index.json；直接照此实现，不要再用旧的嵌套目录设想。
-- **建议首个业务增量（最窄纵切，先不做 Web）**：新增 `projects` 表 + zod schema + 离线 `/pm project add/list/get` + 扩展确定性校验脚本（`scripts/verify-*.mjs`）；跑通后再 R2 任务树、R3 里程碑、R4 导出，R5 Web 最后。
+- **下一批**：报备 R2 任务树；之后 R3 里程碑、R4 导出，补齐 R1 编辑及 R6 其余命令；R5 Web 最后，先设置卡片/区块再顶级页面验证。未获新批次授权前不扩展范围。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步及全部档案提交**已推送 origin/main**（2026-10-10 经项目所有者确认）。
@@ -121,6 +128,8 @@ pnpm dsh web        # 终端会打印带 token 的本地访问 URL（token 每�
 cd ~/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool
 pnpm install && pnpm run build
 node scripts/verify-command.mjs     # 离线确定性自检（应退出码 0，落盘 pm-tool/data/.../selftest.json）
+node scripts/verify-storage.mjs     # 统一领域声明与旧自检记录
+node scripts/verify-projects.mjs    # 系统临时库，项目增查及全新进程读回
 
 # 2) 首次：由 web 模板派生 pm profile（会启动，Ctrl-C 即可），再 link 装入插件
 cd ~/Projects/dsh-pm/deepseek-harness
@@ -137,9 +146,9 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 ## 4. 下一步从哪里继续
 
-1. 阶段 2 已定稿并获确认（`docs/requirements.md` v0.3，决策见 ADL-007/008/009）。
+1. 阶段 2 已完成；当前开发依据 v0.4，落盘布局见 ADL-011。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
-3. **下一步＝阶段 3 业务功能（需先报备具体文件改动）**：落盘布局已定稿（ADL-011，requirements v0.4 §5.1：单领域 `pmtool` 三表 per-record）；建议首个增量做 projects 表 + zod + 离线 `/pm project add/list/get` + 确定性校验脚本（先不做 Web），接手平台先出文件级清单报备，获确认后实现，再依次 R2/R3/R4、R5 收尾；全程不改上游源码、不依赖 API Key；独立顶级 Web 页面与外部包浏览器构建在做 R5 时实测（KB-010 待验证项）。
+3. **首个项目增查增量已完成，待验收**。由 trae 或指定平台报备下一批 R2，之后 R3/R4，补齐项目编辑与其余命令；R5 收尾，浏览器半侧需实测（KB-010）。现有插件仅需重新 build 并重启，无须修改 profile 或上游。
 4. 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。
 
 ## 5. SSH 密钥（已配置，备查）

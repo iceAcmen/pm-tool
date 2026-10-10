@@ -166,4 +166,19 @@
 
 ## 待补充
 
-> 后续平台在开发中验证的新 API、模式与约定，按 KB-011、KB-012…… 持续追加（模板见 `docs/collaboration.md` 第 5.2 节）；更正既有条目时同步在 changelog 留痕，不要制造相互矛盾的条目。
+> 后续平台在开发中验证的新 API、模式与约定，按现有编号递增追加（模板见 `docs/collaboration.md` 第 5.2 节）；更正既有条目时同步在 changelog 留痕，不要制造相互矛盾的条目。
+
+## KB-012 ｜ 写盘前显式校验，新增编号与写入一起串行化（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：基线 v0.2.1-alpha.2 的 `DomainFacility.open()` 会校验读盘记录，但 `KvTableImpl.put()` / `update()` 不执行 zod 校验；不能把 TypeScript 类型约束当成运行时输入校验。业务入口必须先 `schema.parse(input)`，再 `await table.put(id, record)`。
+- **结论**：`put()` 是插入或覆盖，没有“仅当不存在时新增”接口；其写入队列不包含调用方提前执行的编号分配。短编号的“枚举已有键 → 分配下一编号 → 写入”须在同一领域的业务队列中执行，避免并发新增覆盖记录。失败后队列须可继续执行。
+- **适用场景**：项目新增，以及后续任务、里程碑的用户输入与短编号分配。仅保证单宿主进程，不支持多进程共同写同一数据根目录。
+- **可复现实例**：上游 `packages/storage/storage-domain/src/domain.ts` 的 `KvTableImpl.put()`、`update()`；`src/index.ts` 的 `DomainFacility.open()`。本包 `src/core/projects.ts` 已落实校验和新增队列；在包目录运行 `pnpm run build && node scripts/verify-projects.mjs`，非法输入无写入、10 次并发新增不覆盖、写入失败后恢复均验证通过（退出码 0）。
+- **来源/更正范围**：本次只读核对上游源码；KB-002 中“schema 校验”特指打开领域的读盘边界，不能理解为任意写调用自动校验。
+
+## KB-013 ｜ 逐条记录布局增加表可保留旧自检数据（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：在 `pmtool` 的 per-record 版本 1 声明中新增 `projects` 表、保留 `checks` 及其 schema，可读取旧 checks 记录；新增表从空表开始。本次不提高数据版本、不迁移旧记录。
+- **适用场景**：仅新增表且旧记录格式不变的兼容扩展；不能推广为任意 schema 修改都免迁移。
+- **可复现实例**：macOS + nvm Node v22.23.3 + pnpm 11.28.5，在包目录执行 `pnpm run build && node scripts/verify-projects.mjs`。脚本先用只有 checks 的旧声明写入记录，再用新插件打开并验证旧记录；随后在全新 Node 进程读回 13 个项目并新增第 14 个，退出码 0。
+- **来源/佐证**：本包 `src/core/storage.ts`、`scripts/verify-projects.mjs` 的真实 JSON 后端实测。项目验证数据使用系统临时目录，真实 `data/` 中仅原有自检记录被自检脚本更新。

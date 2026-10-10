@@ -20,9 +20,9 @@
 ## 3. 当前进展快照（细节以 `docs/progress.md`、`docs/handoff.md` 为准）
 
 - 阶段 1 环境搭建：✅ 完成并推送。
-- 阶段 2 需求分析：✅ 定稿 `docs/requirements.md` **v0.3**（R1–R12、数据模型、验收标准）并推送。
+- 阶段 2 需求分析：✅ 完成，当前开发依据 `docs/requirements.md` **v0.4**（含 ADL-011 定稿落盘布局）。
 - 阶段 3 源码开发：🔄 **第 0 步「打通验证」已验收并推送**——最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 可用、可读 JSON 落盘 `pm-tool/data`（0700）。
-- **业务功能（R1–R6）尚未开始**，是接手后的主要工作；里程碑提醒 R11 第一版不做，生成型能力一期仅预留接口。
+- **首个项目增查增量已完成（trae，2026-10-10）**：projects 表、zod schema、离线 `/pm project add/list/get` 及确定性验证；本地提交、待验收、未推送。R1/R4/R6 进行中，R2/R3 待办；R5 最后实施且需真实界面验收。里程碑提醒 R11 第一版不做，生成型能力一期仅预留接口。
 - 阶段 4 测试交付：未开始。
 
 > 每次开工都不要轻信本节快照，必须按第 4 节拉取并核对最新文档。
@@ -99,6 +99,7 @@
 pnpm install
 pnpm run build
 node scripts/verify-command.mjs      # 应退出码 0：中文 pong + selftest 落盘可读 JSON
+node scripts/verify-projects.mjs     # 项目增查、校验、并发、全新进程读回；使用独立临时目录
 
 # 启动 dsh（在上游目录 ~/Projects/dsh-pm/deepseek-harness；指定 --profile 后不再加 web 动词）
 pnpm dsh --profile pm --no-open     # 终端打印带一次性 token 的 http://127.0.0.1:3080 URL

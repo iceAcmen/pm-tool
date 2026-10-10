@@ -17,6 +17,7 @@
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { existsSync, readFileSync, statSync } from 'node:fs'
+import assert from 'node:assert/strict'
 
 import { Context } from '@deepseek-ai/cordis'
 import Storage from '@deepseek-ai/dsh-storage'
@@ -57,11 +58,15 @@ console.log('已注册命令：', captured.name, '—', captured.description)
 const ping = await captured.handler({ rawInput: 'ping', attachments: [] })
 console.log('\n===== /pm ping =====')
 console.log('[' + ping.kind + ']', ping.text)
+assert.equal(ping.kind, 'success')
+assert.match(ping.text, /pong：/)
 
 const selftest = await captured.handler({ rawInput: 'selftest', attachments: [] })
 console.log('\n===== /pm selftest =====')
 console.log('[' + selftest.kind + ']')
 console.log(selftest.text)
+assert.equal(selftest.kind, 'success')
+assert.match(selftest.text, /存储自检通过/)
 
 const file = join(dataRoot, 'pmtool', 'checks', 'selftest.json')
 const dir = join(dataRoot, 'pmtool', 'checks')
@@ -71,4 +76,8 @@ console.log('目录权限位 =', '0' + (statSync(dir).mode & 0o777).toString(8))
 console.log('---- 文件内容（人类可读 JSON）----')
 console.log(readFileSync(file, 'utf8'))
 
-process.exit(selftest.kind === 'success' ? 0 : 1)
+const saved = JSON.parse(readFileSync(file, 'utf8'))
+assert.equal(saved.version, 1)
+assert.equal(saved.record.ok, true)
+assert.equal(statSync(dir).mode & 0o777, 0o700)
+await facility.closeAll()

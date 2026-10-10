@@ -8,6 +8,41 @@
 
 ---
 
+## [未发布] — 离线项目新增、列表与详情及持久化验证（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- 新增 `packages/dsh-pm-tool/src/core/project.ts`：Project zod schema、类型、中文校验提示。
+- 新增 `packages/dsh-pm-tool/src/core/storage.ts`：统一 pmtool 版本 1 声明，保留 checks、新增 projects 表。
+- 新增 `packages/dsh-pm-tool/src/core/projects.ts`：项目增查、短 ID、同领域新增队列、读取返回副本。
+- 新增 `packages/dsh-pm-tool/src/commands/project.ts`：`/pm project add {JSON}`、`list`、`get <ID>` 解析与中文结果。
+- 修改 `packages/dsh-pm-tool/src/index.ts`：接入统一领域与项目命令、帮助、句柄释放，保留参数正文大小写及 ping/selftest。
+- 新增 `packages/dsh-pm-tool/scripts/verify-projects.mjs`：真实插件处理器与后端的项目增查/异常/并发/全新进程读回验证。
+- 修改 `packages/dsh-pm-tool/scripts/verify-command.mjs`：强化原有自检断言并关闭领域。
+- 修改 `packages/dsh-pm-tool/scripts/verify-storage.mjs`：复用统一领域定义、增加落盘断言并关闭句柄。
+- 修改 `packages/dsh-pm-tool/README.md`：项目命令、字段、启动和验证说明、边界及源文件目录。
+- 修改根 `README.md`、`AGENTS.md`：同步当前能力、使用入口、目录和进度。
+- 修改 `docs/progress.md`、`docs/requirements.md`：R1/R4/R6 标为进行中，区分本批完成与整体待办，不改变 v0.4 验收标准。
+- 修改 `docs/collaboration.md`：登记 trae 首次参与日期。
+- 修改 `docs/handoff.md`、`docs/onboarding-prompt.md` 文末快照：本批结果、验证边界、接续点及提交定位。
+- 修改 `docs/knowledge-base.md`：新增 KB-012（写盘前显式校验、编号与新增一起排队）、KB-013（加表兼容旧记录实测）。
+
+### 为什么 / 背景
+- 项目所有者已确认最窄纵切与逐文件清单，先落实 R1/R4/R6 的项目新增和查询部分。复用 ADL-011 定稿的 per-record 布局，不建索引，不手写业务 JSON。
+- 原生 put 为插入或覆盖且写盘前不调用 zod，因此业务层显式校验，并串行执行编号分配与写入，防止并发新增覆盖。结论及源码依据立即沉淀至 KB-012。
+
+### 影响范围
+- 仅现有 dsh-pm-tool 插件增加 Host 业务能力；没有新增插件包、Skill、依赖、profile 配置或上游改动。重建插件并重启 dsh 即可生效。
+- 落盘 `data/pmtool/projects/<id>.json`，保留版本 1 与旧 checks 记录，无需迁移；data/lib/node_modules 不入库。
+- add 使用 JSON 参数，必填名称和两个日历日期，默认描述/负责人为空、状态 planning；系统生成 ID/时间戳。同名新增产生新项目，不提供覆盖、编辑、删除。日期不自动推算，日期间业务关系未作额外限制。
+- 当前仅支持单宿主进程写入；R1 编辑、R2/R3、R4 导出与 R5 Web 后续实现。首个增量完成不代表 R1/R4/R6 整体完成。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、nvm Node v22.23.3、pnpm 11.28.5；同步基线 `f9bda6e`。
+- 包目录 `pnpm install`、`pnpm run build`、`node scripts/verify-projects.mjs`、`node scripts/verify-command.mjs`、`node scripts/verify-storage.mjs` 全部退出码 0。
+- 项目脚本：真实命令处理器新增/列表/详情、中文输出及大小写保留、22 项错误输入拒绝且已有文件不变、默认字段、10 次并发新增不覆盖、主动模拟一次写盘失败并恢复、读取副本隔离、旧 checks 兼容、可读 JSON 与目录 0700；全新 Node 进程读回 13 个项目并继续新增第 14 个。
+- 项目验证仅写独立系统临时目录（脚本打印路径并保留），原有脚本更新 data 下自检记录。未执行本批浏览器交互或完整 dsh 宿主重启验收，不将确定性脚本视为 R5 完成。
+- 提交主题：`feat(项目): 实现离线项目新增与查询及持久化验证 [trae]`。仅本地提交，未推送。
+
 ## [未发布] — 新增跨平台启动提示词 SOP（onboarding-prompt）并接线强制读写（2026-10-10，平台：doubao-work）
 
 - **背景**：项目所有者要求把「给 TRAE/其他 IDE·Agent 的启动提示词」固化进仓库，并作为所有协作平台的 SOP——开工前必读、任务完成后必更新。

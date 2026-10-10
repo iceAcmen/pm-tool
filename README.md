@@ -21,8 +21,8 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
-| 阶段 2 需求分析 | ✅ 已定稿 v0.3（已推送） | 需求 `docs/requirements.md`、可行性地图、技术骨架方案 |
-| 阶段 3 源码开发 | 🔄 第 0 步「打通验证」✅ 已验收并推送；业务开发移交 TRAE/其他平台（暂停） | 最小插件 `packages/dsh-pm-tool/` 已被本地 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘验证通过；R1–R6 业务功能待接手平台报备后开发，接手先读根 `AGENTS.md`、再看 `docs/handoff.md` 第 0 节 |
+| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
+| 阶段 3 源码开发 | 🔄 项目增查首个增量已完成，待验收、本地提交未推送 | trae 实现 `/pm project add/list/get`、projects 表、JSON 持久化与确定性验证；R1/R4/R6 进行中，R2/R3 待办，R5 最后实施 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -52,14 +52,16 @@
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/
-    │   └── dsh-pm-tool/     # ★自研 dsh 插件包（阶段3 第0步打通：/pm 离线命令 + 存储领域 pmtool）
+    │   └── dsh-pm-tool/     # ★自研插件包：项目增查 + 自检，统一 pmtool 领域
     │       ├── src/index.ts          # 插件入口：注册 /pm、打开存储领域
+    │       ├── src/core/             # Project schema、统一领域、项目增查业务
+    │       ├── src/commands/         # 项目命令解析与中文输出
     │       ├── cordis.patch.yml      # 组合包补丁（安装后自动激活本插件）
     │       ├── locale/               # 中英文标题/描述
-    │       ├── scripts/              # verify-storage.mjs / verify-command.mjs 离线确定性验证
+    │       ├── scripts/              # verify-storage / verify-command / verify-projects 离线确定性验证
     │       ├── package.json / tsconfig.json / README.md
     │       └── lib/（构建产物，不入库）
-    └── data/                # 业务数据：项目/任务/里程碑 JSON 与渲染的 Markdown（运行时生成，已 gitignore 不入库，见 ADL-009）
+    └── data/                # pmtool/projects/<id>.json 与 checks 自检数据；不入库（ADL-009/011）
 ```
 
 插件包的构建、装载与验证命令见 [`packages/dsh-pm-tool/README.md`](packages/dsh-pm-tool/README.md)；第 0 步实测结论见 [`docs/tech-plugin-scaffold.md`](docs/tech-plugin-scaffold.md) 文末附节。
@@ -97,7 +99,26 @@ pnpm dsh web        # 启动 Web UI；加 --no-open 可只起服务不弹浏览�
 
 免克隆快速体验官方版（不用于开发）：`npx @deepseek-ai/dsh web`
 
-> 本产品自身的启动命令将在阶段 3 插件落地后补充于此。
+日常使用本产品（本机已有 pm profile，macOS + nvm Node v22.23.3 + pnpm 11.28.5）：
+
+```sh
+export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
+cd ~/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool
+pnpm run build
+node scripts/verify-projects.mjs
+cd ~/Projects/dsh-pm/deepseek-harness
+pnpm dsh --profile pm --no-open
+```
+
+打开终端打印的带 token URL，在对话框整行输入：
+
+```text
+/pm project add {"name":"首版交付","startDate":"2026-10-10","targetDate":"2026-10-31"}
+/pm project list
+/pm project get p-0001
+```
+
+详情查询使用新增返回的实际 ID。字段、全部验证命令、首次安装与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。本批扩展现有插件，没有新增插件包或 Skill；项目编辑、任务树、里程碑、导出与 Web 表单仍待后续实现。
 
 ## 五、文档使用约定（自解释 / 可迁移）
 

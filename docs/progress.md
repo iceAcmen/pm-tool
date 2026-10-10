@@ -4,7 +4,13 @@
 
 最后更新：2026-10-10
 
-## 当前阶段：阶段 3 第 0 步「打通验证」✅ 已验收并推送；跨平台协作基座已建立；业务编码/测试将由 TRAE 或其他 IDE/Agent 接手（本侧暂停）
+## 当前阶段：阶段 3 进行中；首个业务增量「项目新增 / 列表 / 详情」已完成（trae，2026-10-10）
+
+- **已完成**：按所有者确认的文件清单，新增 Project zod schema、统一领域中的 projects 表、离线 `/pm project add/list/get`、确定性验证脚本。
+- **验证通过**：`pnpm run build`、`node scripts/verify-projects.mjs`、`node scripts/verify-command.mjs`、`node scripts/verify-storage.mjs` 全部退出码 0。覆盖非法输入不落盘、旧 checks 兼容、10 次并发新增不覆盖、写入失败恢复、0700、全新进程读回与编号接续。
+- **进行中**：R1（增查已完成，编辑/界面待办）、R4（项目持久化已完成，完整导出待办）、R6（项目增查已完成，其余命令待办）。
+- **待办**：R2 任务树、R3 里程碑、R4 导出，最后 R5 设置卡片/区块及顶级页面验证；后续每批先报备文件清单。项目编辑仍需补齐，不能宣称 R1 整体完成。
+- **交付状态**：本批由 TRAE 实现并本地提交，待所有者验收；未获推送授权，不推送。浏览器交互与完整宿主重启验收本批未执行，当前证据来自真实处理器和 JSON 后端。
 
 ### 🧭 跨平台协作基座（2026-10-10 新增，已就绪）
 - 根 `AGENTS.md`（任何 AI/IDE 接手先读）、`docs/collaboration.md`（多方同步规则 + 平台标识）、`docs/knowledge-base.md`（KB-001～010 已验证知识）、`docs/handover-archive-doubao.md`（豆包阶段完整存档）。
@@ -21,9 +27,9 @@
 - 已提交（`9e5d539`）并经项目所有者**验收通过、推送 origin/main**；随后补 `41b9db5` 说明验收/推送与移交。
 - **后续阶段 3 业务编码与阶段 4 测试移交 TRAE 或其他 IDE/Agent 执行，本侧暂停**；接手导引见根 `AGENTS.md` 与 `docs/handoff.md` 第 0 节。
 
-### ⬜ 阶段 3 业务功能（第 1 步起，未开始，移交 TRAE/其他平台，动手前需先报备）
+### 🔄 阶段 3 业务功能（第 1 步起，进行中，由 trae 接续）
 - 按需求 **v0.4** 实现 MVP：项目计划 R1 / WBS R2 / 里程碑 R3 / 持久化与 Markdown 导出 R4 / Web 界面 R5 / 离线命令 R6。
-- **落盘布局已定稿（ADL-011）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record，取消 index.json；trae 已完成只读接手并报备，待其提交首个业务增量（建议：projects 表 + zod schema + 离线 `/pm project add/list/get` + 扩展确定性校验脚本，先不做 Web）的**文件级清单**，经项目所有者确认后再写码。
+- **落盘布局已定稿（ADL-011）**：单领域 `pmtool` 三张业务表 per-record、不建 index.json；本批已实现 projects，tasks/milestones 按后续批次加入，checks 保留。首批文件清单已获所有者确认并完成实现。
 - 仍待业务阶段验证：第三方独立顶级 Web 页面与外部包浏览器构建（第 0 步只做了 Host 侧，R5 未打通；建议 R5 排在 R1/R2/R3/R6 之后并先做设置卡片/区块、再做顶级页面 spike）。
 
 ---
@@ -55,6 +61,6 @@
 - 生成 GitHub SSH 密钥并由项目所有者添加到账户 iceAcmen，`ssh -T git@github.com` 认证通过。
 - 配置仓库级提交身份 Ice \<835687152@qq.com\>（未改全局）；首次提交 `12bcad3` 并推送 main 到 `git@github.com:iceAcmen/pm-tool.git`，跟踪 origin/main。
 
-## 后续阶段（未开始）
-- 阶段 3 源码开发：先验证「第三方 Web 界面形态」与「独立仓库插件包被本地 profile 装载」两个技术点，再按定稿需求新增自研 PM 插件包（MVP：项目计划 / WBS / 里程碑 / 持久化导出 + Web 界面 + 离线命令）。
+## 后续任务
+- 阶段 3 源码开发：在已完成的项目增查上接续 R2/R3/R4，补齐项目编辑与其余离线命令；R5 最后处理，浏览器半侧须实测。
 - 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。

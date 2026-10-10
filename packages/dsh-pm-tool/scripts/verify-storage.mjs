@@ -12,29 +12,17 @@
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { existsSync, readFileSync, statSync } from 'node:fs'
+import assert from 'node:assert/strict'
 
 import { Context } from '@deepseek-ai/cordis'
 import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
-import { DomainFacility, defineDomain, domainTable } from '@deepseek-ai/dsh-storage-domain'
-import { z } from 'zod'
+import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
+import { pmDomainSpec } from '../lib/core/storage.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 // scripts/ 上三级即产品仓库根：packages/dsh-pm-tool/scripts -> pm-tool
 const dataRoot = process.env.PM_DATA_ROOT || join(here, '..', '..', '..', 'data')
-
-// 与 src/index.ts 保持一致的领域定义（单元 pmtool / per-record / 表 checks）
-const checkRecordSchema = z.object({
-  ok: z.boolean(),
-  at: z.string(),
-  note: z.string(),
-})
-const spec = defineDomain({
-  name: 'pmtool',
-  version: 1,
-  layout: 'per-record',
-  tables: { checks: domainTable(checkRecordSchema) },
-})
 
 // 按官方 storage-domain 测试的惯用法在裸 Cordis 上下文手动挂载：
 // 裸 new Context() 不会触发插件 apply 内的 ctx.effect 生命周期，因此不直接
@@ -50,7 +38,7 @@ const facility = new DomainFacility(ctx, { backend: 'json', routes: {} })
 ctx.storage.mount('domain', facility)
 
 console.log('已手动注册 json 存储后端（裸上下文不触发 effect，按官方测试惯用法手动挂载）')
-const domain = await facility.open(spec)
+const domain = await facility.open(pmDomainSpec)
 const table = domain.table('checks')
 
 const at = new Date().toISOString()
@@ -68,4 +56,7 @@ console.log('目录权限位 =', '0' + (statSync(dir).mode & 0o777).toString(8))
 console.log('---- 文件内容（人类可读 JSON）----')
 console.log(readFileSync(file, 'utf8'))
 
-process.exit(0)
+assert.deepEqual(JSON.parse(readFileSync(file, 'utf8')).record, back)
+assert.equal(back?.ok, true)
+assert.equal(statSync(dir).mode & 0o777, 0o700)
+await domain.close()
