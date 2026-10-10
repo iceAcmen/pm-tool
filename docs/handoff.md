@@ -41,7 +41,7 @@
 | 本产品仓库本地路径 | `~/Projects/dsh-pm/pm-tool/`（main 工作区；正常情况下与 origin/main 一致，`git pull --ff-only` 后开工） |
 | 首次提交 | `12bcad3` —— "chore: 阶段1 环境搭建与项目档案初始化" |
 | 阶段 2 提交 | `70815a0`（需求 v0.2 + 可行性地图）、`54767e1`（需求 v0.3 + ADL-009）、`e7211c1`（阶段 2 收尾） |
-| 阶段 3 提交 | 第 0 步：`186fb34`、`9e5d539` 及 `docs(移交)` 说明；首个业务增量（trae）：`b2ca50f`（项目增查）、`0128203`（Web 验收+复核提示词）、`9dbb3f9`（精简复核提示词）。**以上均已推送 origin/main（2026-10-10），当前 origin/main HEAD = `9dbb3f9`**；其后的文档决策提交以 `git log -1 --oneline` 为准 |
+| 阶段 3 提交 | 第 0 步与 R1–R4 提交详见 git 历史；R5 主功能与档案提交为 `9bce006`。**阶段 3 MVP 代码均已推送 origin/main（2026-10-10）**；最新交接收尾以 `git log -1 --oneline` 为准 |
 | dsh 专属 profile | `~/.dsh/profiles/pm/`（由 web 模板派生；以 `link:` 挂载本插件；补丁把存储 root 指向 `pm-tool/data`） |
 | 上游框架源码本地路径 | `~/Projects/dsh-pm/deepseek-harness/`（只读，勿改） |
 | 上游仓库 | <https://github.com/deepseek-ai/deepseek-harness>（分支 `master`） |
