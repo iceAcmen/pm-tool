@@ -1,0 +1,7 @@
+# dsh-pm-tool 的组合包补丁（bundle patch）
+# 第 0 步阶段 A：仅激活本插件，先打通“独立仓库插件被 dsh 装载 + /pm ping”。
+# 存储三件套已包含在 web profile 的 base 组合包中；storage-json 的 root 与
+# storage-domain 的 backend 在阶段 B（确认插件可加载后）于 profile 补丁中配置。
+- insert:
+    - id: pm-tool
+      name: 'dsh-pm-tool'

@@ -6,6 +6,42 @@
 
 ---
 
+## [未发布] — 阶段 3 第 0 步「打通验证」（2026-10-10）
+
+### 新增（最小可加载插件包 `packages/dsh-pm-tool/`，12 个入库文件）
+- `package.json`：插件清单 `dsh-pm-tool@0.1.0`（private、ESM、`tsc` 构建、声明 `dsh.bundle.patch`）；peer 依赖固定 cordis `~4.0.5-alpha.1`、dsh-* `0.2.1-alpha.2`，运行时依赖 `zod`。
+- `tsconfig.json`：独立 NodeNext/ESM 编译配置（不依赖 monorepo 的 tsconfig）。
+- `src/index.ts`：插件入口——打开存储领域 `pmtool`（per-record，表 `checks`，zod 校验），注册离线斜杠命令 `/pm`（无参帮助 / `ping` 连通性自检 / `selftest` 写入并读回一条 JSON 记录）。
+- `cordis.patch.yml`：组合包补丁，激活本插件（存储三件套由 base 组合包默认提供）。
+- `locale/en.json`、`locale/zh.json`：插件标题/描述（中文「项目管理工作台」）。
+- `README.md`：包用途、构建与 `link:` 装载命令、目录说明。
+- `.gitignore`：忽略构建产物 `lib/` 与 `node_modules/`。
+- `scripts/verify-storage.mjs`、`scripts/verify-command.mjs`：可重复的离线验证脚本（真实 Cordis + 真实 storage-json，直接运行已构建插件的 apply 与命令处理器）。
+- `pnpm-lock.yaml`、`pnpm-workspace.yaml`：锁定依赖版本与 pnpm11 供应链策略（`minimumReleaseAgeExclude` 收录 alpha 包），保证可复现安装。
+
+### 环境/配置（本机，不入库）
+- 基于 web 模板派生专属 profile `pm`（`~/.dsh/profiles/pm`）；以 `link:` 绝对路径装入本插件并自动激活。
+- 在 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id `storage-json` 覆盖 `root` 为 `/Users/bytedance/Projects/dsh-pm/pm-tool/data`（业务数据目录，已被仓库 `.gitignore` 忽略）。
+
+### 变更（文档）
+- `docs/tech-plugin-scaffold.md`：回填第 0 步实测结果，7 项【待验证】给出结论（仅剩「第三方独立顶级 Web 页面」留待业务阶段）。
+- `docs/decision-log.md`：新增 ADL-010（第 0 步装载/存储实测结论）。
+- `docs/issues-and-solutions.md`：新增 ISS-005～ISS-008（put 异步需 await、裸上下文 effect 不触发、CLI 参数顺序、link peer 警告的判定）。
+- `docs/progress.md`、`docs/handoff.md`、`README.md`：同步第 0 步进度、交接信息与目录树。
+
+### 修复
+- `src/index.ts`：`table.put()` 为异步写盘，命令处理器改为 `async` 并 `await put` 后再读回（初版漏 await 导致记录不落地）。
+
+### 验证证据
+- `pnpm dsh --profile pm --dump-config` 可见 `pm-tool` 与存储三件套，root 指向 `pm-tool/data`。
+- 启动日志出现 `[pm-tool] 存储领域 pmtool 已打开`；Web 斜杠命令目录列出 `pm`，`/pm ping` 无 Key 返回中文 pong（有截图）。
+- `node scripts/verify-command.mjs` 退出码 0：真实插件处理器跑通 ping 与 selftest，生成 `pm-tool/data/pmtool/checks/selftest.json`（人类可读、目录 0700）。
+
+### 原因
+- 开发者预览期外部插件装载链路有不确定点，先用最小插件端到端打通「独立仓库插件 → 被本地源码版 dsh 装载 → 离线命令可用 → 可读 JSON 落盘到产品目录」，再写业务功能，确保后续每步可跑可演示。
+
+---
+
 ## [未发布] — 阶段 3 源码开发（启动，2026-10-10）
 
 ### 新增

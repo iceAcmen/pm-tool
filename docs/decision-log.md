@@ -80,3 +80,14 @@
 - **理由**：真实业务数据含个人项目内容、暂不适合入库；最小闭环优先、避免摊大阶段 3 范围；生成型能力依赖模型与 Key，与「离线优先」决策一致，后置以保证 MVP 无 Key 可演示。
 - **替代方案**：数据目录入库便于共享示例（暂不需要）；一期就做提醒与生成功能（扩大首版范围、增加 Key 依赖）。
 - **最终结果**：已落实到 `.gitignore` 与 `docs/requirements.md` v0.3（R11 暂缓、第九节补充决策、pm-tools 仅预留接口）。
+
+## ADL-010 ｜ 2026-10-10 ｜ 第 0 步打通验证：link 外挂装载、存储根目录落点与确定性验证策略
+
+- **决策**（第 0 步实测后确定）：
+  1. **插件以 `link:` 绝对路径外挂到专属 profile `pm`**：`pnpm dsh plugin --profile pm add link:/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool`；包内声明 `dsh.bundle.patch` 实现安装即自动激活，不改上游、不进 monorepo。
+  2. **业务数据根目录固定为产品仓库的 `pm-tool/data`**：在 profile 用户补丁层 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id `storage-json` 覆盖 `config.root`（storage-domain 默认 backend 已是 json，无需改）；该目录由仓库 `.gitignore` 忽略（ADL-009）。
+  3. **纯 Host 命令插件用包内 `tsc` 独立构建即可**，不复刻 dsh 的 clientBundle（浏览器半侧留到做 Web 界面时再处理）。
+  4. **回归验证以确定性脚本为准**：包内 `scripts/verify-storage.mjs`、`scripts/verify-command.mjs` 直接用真实 Cordis + 真实 storage-json 运行「已构建插件」的 apply 与命令处理器；Web 页面用于真人演示，不依赖其富文本自动化输入。
+- **理由**：`link:` 开发期改完 rebuild+restart 即生效、最省事，且实测对本插件（服务靠 ctx 注入、cordis 仅 type-only）无 peer 身份问题；数据落在产品仓库目录便于查看/迁移/演示，又不污染 git；独立 tsc 降低第 0 步复杂度；确定性脚本可重复、可进 CI，规避页面自动化 flaky。
+- **替代方案**：`file:` 或发布 npm 包（适合发布期，开发期反馈慢）；数据放 dsh 默认 `~/.dsh/storages`（脱离产品目录、不便演示与迁移）；复刻完整 clientBundle 构建（第 0 步无浏览器半侧、属过度工程）；只靠手点页面验证（不可重复）。
+- **最终结果**：第 0 步三项验收全部通过（配置树可见、离线 `/pm ping` 返回中文、selftest 在 `pm-tool/data` 落可读 JSON 且目录 0700）；实测发现并修复 `put()` 漏 await 的真实 bug；详见 `docs/tech-plugin-scaffold.md` 附节与 ISS-005～ISS-009。剩余唯一【待验证】=第三方独立顶级 Web 页面，留待业务功能阶段。

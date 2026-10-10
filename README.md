@@ -17,8 +17,8 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
-| 阶段 2 需求分析 | ⬜ 未开始 | 产出并评审 `docs/requirements.md` |
-| 阶段 3 源码开发 | ⬜ 未开始 | 在 `packages/` 内开发 PM 插件 |
+| 阶段 2 需求分析 | ✅ 已定稿 v0.3（已推送） | 需求 `docs/requirements.md`、可行性地图、技术骨架方案 |
+| 阶段 3 源码开发 | 🔄 进行中：第 0 步「打通验证」已跑通 | 最小插件 `packages/dsh-pm-tool/` 已被本地 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘验证通过；业务功能待报备后开发 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -42,9 +42,18 @@
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案
     │   └── handoff.md               # 最小迁移交接清单（每阶段收尾更新）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
-    ├── packages/            # 自研 PM 插件包（阶段 3 起填充）
+    ├── packages/
+    │   └── dsh-pm-tool/     # ★自研 dsh 插件包（阶段3 第0步打通：/pm 离线命令 + 存储领域 pmtool）
+    │       ├── src/index.ts          # 插件入口：注册 /pm、打开存储领域
+    │       ├── cordis.patch.yml      # 组合包补丁（安装后自动激活本插件）
+    │       ├── locale/               # 中英文标题/描述
+    │       ├── scripts/              # verify-storage.mjs / verify-command.mjs 离线确定性验证
+    │       ├── package.json / tsconfig.json / README.md
+    │       └── lib/（构建产物，不入库）
     └── data/                # 业务数据：项目/任务/里程碑 JSON 与渲染的 Markdown（运行时生成，已 gitignore 不入库，见 ADL-009）
 ```
+
+插件包的构建、装载与验证命令见 [`packages/dsh-pm-tool/README.md`](packages/dsh-pm-tool/README.md)；第 0 步实测结论见 [`docs/tech-plugin-scaffold.md`](docs/tech-plugin-scaffold.md) 文末附节。
 
 ## 四、环境依赖与启动方式
 

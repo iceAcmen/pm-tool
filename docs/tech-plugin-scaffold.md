@@ -132,3 +132,46 @@ pnpm dsh web --profile pm
 - `packages/storage/storage-domain/README.zh.md` 与 `src/spec.ts`、`packages/storage/storage-json/README.zh.md`
 - `packages/goal/command-goal/src/index.ts`（离线命令范本）、`packages/client/ui-schedule/package.json` 与 `src/index.ts`（Web 半侧范本）
 - 在线：<https://github.com/deepseek-ai/deepseek-harness/tree/master/docs/cookbook>
+
+---
+
+## 附：第 0 步实测结果（2026-10-10，全部验收项已跑通）
+
+> 本节为「打通验证」执行后的结论回填。最小插件包 `packages/dsh-pm-tool/` 已创建、构建、装载并验证通过。
+
+### 一、第七节【待验证】项的实测结论
+
+1. **独立包 tsc 构建足够**【已证实】：纯 Host 命令插件用包内 `tsconfig.json`（NodeNext/ESM）`tsc` 即可产出可加载的 `lib/`，无需复刻 clientBundle（浏览器半侧才需要，第 0 步未做）。
+2. **`link:` 对等依赖解析**【已证实，有注意点】：`pnpm dsh plugin add link:<绝对路径>` 会提示「链接包不从目标 node_modules 解析 peer」。实测对本插件**无副作用**——运行时服务全部通过注入的 `ctx` 获取（`ctx.commands` / `ctx.storageDomain`），且 `@deepseek-ai/cordis` 仅作 `import type` 使用（编译后零运行时导入），因此不会产生「第二份 cordis/服务身份不一致」问题；插件成功加载、存储领域成功打开。
+3. **安装命令形式**【已证实】：在上游目录执行 `pnpm dsh plugin --profile pm add link:/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool` 即可；未触发版本不兼容，无需 `allow-version`。
+4. **bundle 自动激活**【已证实】：包内声明 `dsh.bundle.patch` 后，安装即自动激活，`--dump-config` 直接出现 `pm-tool`，无需手动 insert；存储三件套本就由 base 组合包默认挂载。
+5. **配置树可见 + root 覆盖**【已证实】：`--dump-config` 可见 `storage` / `storage-json` / `storage-domain` 与 `pm-tool`；存储默认 root 为 `dshHomePath('storages')`，通过 **profile 用户补丁层**按 id `storage-json` 覆盖 `root` 为 `/Users/bytedance/Projects/dsh-pm/pm-tool/data` 后，dump-config 与宿主实际写入均已指向该目录（宿主自身的 `workspace.json`、会话缓存也落在其中）。
+6. **离线 `/pm ping`**【已证实】：未配置任何 API Key，Web 斜杠命令目录列出 `pm`，执行返回约定中文「pong：…当前未使用任何模型或 API Key」。命令事件在官方类型中明确为「log-only，no turn wraps them」，单条命令行不触发模型轮次。
+7. **第三方独立顶级 Web 页面**：仍为【待验证】（第 0 步只做 Host 命令，未构建浏览器半侧）；MVP 按既定方针先走设置卡片/插件详情区块，独立页面在业务功能阶段再验证。
+
+### 二、第八节验收标准达成情况
+
+1. `--dump-config` 可见 `dsh-pm-tool`、存储三件套，root 指向 `pm-tool/data` —— ✅。
+2. Web 中 `/pm ping` 无 Key 返回中文 —— ✅（有界面截图证据）。
+3. 存储自检后 `pm-tool/data/pmtool/checks/selftest.json` 出现、内容人类可读、目录 `0o700` —— ✅（由「已构建插件」的真实处理器写入，见下）。
+4. 改动仅限新增文件、附验证证据 —— ✅。
+
+### 三、确定性验证脚本（不依赖手点页面，可重复执行）
+
+富文本输入框对自动化合成事件不太稳定（命令参数 chip 易被拆成同级文本而误触发模型轮次；真人正常整行输入不受影响）。为得到可重复的离线证据，在包内新增两个脚本，直接用真实 Cordis + 真实 storage-json 后端装配并运行**已构建的发货插件代码**：
+
+```sh
+cd packages/dsh-pm-tool
+pnpm install && pnpm run build
+node scripts/verify-storage.mjs   # 真实存储栈 open/put/get，打印落盘 JSON
+node scripts/verify-command.mjs   # 导入 lib/index.js，执行真实 apply 与 /pm ping、/pm selftest 处理器
+```
+
+两脚本退出码 0，输出包含：中文 pong、selftest 写入并读回的记录、`pm-tool/data/pmtool/checks/selftest.json` 路径与内容、目录权限 `0700`。
+
+### 四、实测中发现并修正的问题（详见 issues-and-solutions.md）
+
+- `table.put()` 为**异步**写盘，必须 `await`（初版漏写导致脚本里读不到、文件不落地）；已把插件命令处理器改为 `async` 并 `await put`，重新构建。
+- storage-json 在 `ctx.effect` 中注册后端，裸 `new Context()` 不触发生命周期 effect；独立校验脚本需按官方测试惯用法手动 `backend.register('json', …)` 与挂载 DomainFacility。
+- CLI 参数顺序：`--profile` 必须位于 app 动词之前；一旦指定 `--profile pm` 就不再写 app 动词（正确：`pnpm dsh --profile pm`，错误：`pnpm dsh --profile pm web`）。
+

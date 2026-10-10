@@ -1,0 +1,4 @@
+# 构建产物（不入库，构建后生成）
+lib/
+# 依赖（根 .gitignore 已全局忽略 node_modules，这里再次声明以便单包独立使用）
+node_modules/
