@@ -41,7 +41,8 @@
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案
     │   └── handoff.md               # 最小迁移交接清单（每阶段收尾更新）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
-    └── packages/            # 自研 PM 插件包（阶段 3 起填充）
+    ├── packages/            # 自研 PM 插件包（阶段 3 起填充）
+    └── data/                # 业务数据：项目/任务/里程碑 JSON 与渲染的 Markdown（运行时生成，已 gitignore 不入库，见 ADL-009）
 ```
 
 ## 四、环境依赖与启动方式

@@ -10,10 +10,11 @@
 - 完成 dsh 能力可行性调研（本地官方源码 + 官方 cookbook/包 README 双路印证），沉淀 `docs/feasibility-map.md`。
 - 经项目所有者交互确认四项关键决策（见 ADL-007）：离线优先混合模型、人类可读 JSON+Markdown 存储、先做 dsh Web 界面、最小闭环 MVP。
 - 确定 MVP 技术架构（见 ADL-008）：`storage-domain` + `storage-json` 落盘、用户命令（离线）/模型工具（在线）双入口、独立插件包 + 专属 profile。
-- 产出需求评审稿 v0.2：R1–R12 模块与可测试验收标准、Project/Task/Milestone 数据模型、数据落盘目录约定与业务规则、非功能需求。
+- 产出需求评审稿 v0.3：R1–R12 模块与可测试验收标准、Project/Task/Milestone 数据模型、数据落盘目录约定与业务规则、非功能需求。
+- 项目所有者确认三项补充决策（ADL-009）：`data/` 暂不入库（已写入 `.gitignore`）、里程碑到期提醒暂缓（R11→P2）、生成型能力一期仅预留接口不实现。
 
 ### ⬜ 阶段 2 待办
-- 项目所有者评审 `docs/requirements.md`；确认后阶段 2 收尾、刷新 `docs/handoff.md`，再进入阶段 3（开发前会先就插件包结构与具体改动文件报备）。
+- 项目所有者对需求 v0.3 做最终确认；确认后刷新 `docs/handoff.md` 收尾阶段 2，再进入阶段 3（开发前会先就插件包结构与具体改动文件报备）。
 
 ---
 
