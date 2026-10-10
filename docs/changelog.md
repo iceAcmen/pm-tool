@@ -8,6 +8,37 @@
 
 ---
 
+## [未发布] — 固化 R5 完成前自动提交推送授权（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `AGENTS.md`、`docs/collaboration.md`、`docs/onboarding-prompt.md`：记录临时授权起止范围、测试门槛和 R5 手动验收要求。
+- `docs/decision-log.md`：新增 ADL-019。
+
+### 为什么 / 影响范围
+- 项目所有者授权 R5 完成前在每批全量回归通过后自动提交推送；R5 完成后自动终止并通知所有者手动验证。
+- 不改变功能方案确认门槛、禁止 force push 等红线。
+
+### 验证
+- 与当前 R3 收尾一起执行构建和全部 verify 脚本，全部通过后自动提交推送。
+
+## [未发布] — R3 里程碑编辑、确认删除与任务关联收尾（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- 修改 `core/milestone.ts`、`core/milestones.ts`、`commands/milestone.ts`：增加状态一致性、更新和 confirm 删除。
+- 修改 `core/task.ts`、`core/tasks.ts`、`commands/task.ts`：支持任务关联/解除同项目里程碑，并拒绝不存在或跨项目引用。
+- 扩展 `verify-milestones.mjs`、`verify-tasks.mjs`：覆盖编辑、删除保护、关联、跨项目拒绝和重启读回。
+- 更新 README/AGENTS 及 requirements、decision-log、knowledge-base、issues、progress、handoff、onboarding 快照。
+
+### 为什么 / 影响范围
+- 完成 R3/R6 离线闭环；防止里程碑状态与达成日期矛盾，以及删除产生任务悬空引用。
+- 数据版本与布局不变；旧记录在读盘边界保持兼容，新增/更新按新规则校验最终记录。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build`、`verify-command.mjs`、`verify-storage.mjs`、`verify-projects.mjs`、`verify-tasks.mjs`、`verify-milestones.mjs` 全部退出码 0。
+- tasks/milestones 专项覆盖同项目关联、跨项目/不存在引用拒绝、状态与达成日期一致性、更新、删除预览/确认、关联删除保护和重启读回。
+- 首次负例对象选择错误已按 ISS-014 修正；四条错误日志为主动故障注入。Web 界面尚未实现，不在本批验证范围。
+
 ## [未发布] — R3 里程碑增查首个纵切（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件

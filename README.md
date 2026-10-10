@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 R3 里程碑进行中 | milestones 表与 `/pm milestone add/list/get` 已实现；编辑/删除待下一批 |
+| 阶段 3 源码开发 | 🔄 R4 导出待开始 | R1 项目、R2 WBS、R3 里程碑离线核心功能已完成 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。

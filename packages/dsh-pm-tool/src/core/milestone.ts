@@ -17,28 +17,51 @@ export const milestoneStatusLabels: Record<z.infer<typeof milestoneStatusSchema>
 
 const dateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' })
 
-export const milestoneRecordSchema = z.strictObject({
-  id: milestoneIdSchema,
-  projectId: projectIdSchema,
+const milestoneFields = {
   title: z.string().trim().min(1, '里程碑标题不能为空'),
   targetDate: dateSchema,
   status: milestoneStatusSchema,
   achievedDate: dateSchema.nullable(),
   description: z.string(),
+}
+
+function validateStatus(
+  value: { status?: z.infer<typeof milestoneStatusSchema>, achievedDate?: string | null },
+  context: z.RefinementCtx,
+): void {
+  if (value.status === 'achieved' && !value.achievedDate) {
+    context.addIssue({ code: 'custom', path: ['achievedDate'], message: '状态为 achieved 时必须填写实际达成日期' })
+  }
+  if (value.status && value.status !== 'achieved' && value.achievedDate) {
+    context.addIssue({ code: 'custom', path: ['achievedDate'], message: '状态不是 achieved 时实际达成日期必须为 null' })
+  }
+}
+
+export const milestoneRecordSchema = z.strictObject({
+  id: milestoneIdSchema,
+  projectId: projectIdSchema,
+  ...milestoneFields,
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
 
+export const milestoneWriteSchema = milestoneRecordSchema.superRefine(validateStatus)
+
 export const milestoneCreateSchema = z.strictObject({
   projectId: projectIdSchema,
-  title: z.string().trim().min(1, '里程碑标题不能为空'),
-  targetDate: dateSchema,
+  title: milestoneFields.title,
+  targetDate: milestoneFields.targetDate,
   status: milestoneStatusSchema.default('planned'),
   achievedDate: dateSchema.nullable().default(null),
   description: z.string().default(''),
-})
+}).superRefine(validateStatus)
+
+export const milestoneUpdateSchema = z.strictObject(milestoneFields)
+  .partial()
+  .refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Milestone = z.infer<typeof milestoneRecordSchema>
+export type MilestoneUpdate = z.infer<typeof milestoneUpdateSchema>
 
 export function describeMilestoneValidation(error: z.ZodError): string {
   const labels: Record<string, string> = {
@@ -52,6 +75,8 @@ export function describeMilestoneValidation(error: z.ZodError): string {
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'
       ? '包含不支持的字段；ID 和时间戳由系统生成'
-      : (labels[String(issue.path[0])] ?? '里程碑字段格式不正确'),
+      : issue.code === 'custom'
+        ? issue.message
+        : (labels[String(issue.path[0])] ?? '里程碑字段格式不正确'),
   ))].join('；')
 }

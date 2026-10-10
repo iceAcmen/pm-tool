@@ -12,6 +12,7 @@ import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { addProject, deleteProject } from '../lib/core/projects.js'
+import { addMilestone } from '../lib/core/milestones.js'
 import { getTask, listTasks } from '../lib/core/tasks.js'
 import { taskRecordSchema } from '../lib/core/task.js'
 import { apply } from '../lib/index.js'
@@ -51,6 +52,7 @@ try {
     assert.equal(tasks.length, 8)
     assert.equal(getTask(domain, 't-0002').parentId, 't-0004')
     assert.equal(getTask(domain, 't-0002').code, '2.1')
+    assert.equal(getTask(domain, 't-0004').milestoneId, 'm-0001')
     assert.equal(getTask(domain, 't-0005'), undefined)
     assert.match(await run('task list p-0001'), /  2\.1｜t-0002/)
     assert.match(await run(create({ projectId: 'p-0001', parentId: 't-0001', title: '重启后子任务' })), /WBS：1\.7/)
@@ -63,6 +65,12 @@ try {
       name: '另一项目', startDate: '2026-10-10', targetDate: '2026-12-31',
     })
     assert.equal(project.id, 'p-0001')
+    const milestone = await addMilestone(domain, {
+      projectId: project.id, title: '项目里程碑', targetDate: '2026-12-15',
+    })
+    const otherMilestone = await addMilestone(domain, {
+      projectId: other.id, title: '其他项目里程碑', targetDate: '2026-12-15',
+    })
     assert.match(await run('task list p-0001'), /暂无任务/)
 
     assert.match(await run(create({ projectId: project.id, title: '阶段一' })), /WBS：1/)
@@ -77,6 +85,7 @@ try {
       startDate: '2026-11-01',
       dueDate: '2026-11-30',
       progress: 20,
+      milestoneId: milestone.id,
     })), /WBS：2/)
 
     const first = taskRecordSchema.parse(readTask('t-0001').record)
@@ -95,7 +104,8 @@ try {
       create({ projectId: project.id, title: '  ' }),
       create({ projectId: project.id, title: '错误进度', progress: 101 }),
       create({ projectId: project.id, title: '错误日期', startDate: '2026-12-01', dueDate: '2026-11-01' }),
-      create({ projectId: project.id, title: '暂不关联里程碑', milestoneId: 'm-0001' }),
+      create({ projectId: project.id, title: '不存在里程碑', milestoneId: 'm-9999' }),
+      create({ projectId: project.id, title: '跨项目里程碑', milestoneId: otherMilestone.id }),
       create({ projectId: project.id, title: '系统字段', code: '9' }),
       'task list', 'task list p-9999', 'task list p-0001 extra',
       'task get', 'task get t-9999', 'task get ../escape',
@@ -125,6 +135,7 @@ try {
     )
     assert.match(await run('task list p-0001'), /1\.1\.1/)
     assert.match(await run('task get t-0004'), /负责人：Ice/)
+    assert.equal(getTask(domain, 't-0004').milestoneId, milestone.id)
 
     const createdAt = getTask(domain, 't-0004').createdAt
     await new Promise(resolve => setTimeout(resolve, 2))
@@ -140,9 +151,13 @@ try {
       'task update t-0004 {"parentId":"t-0001"}',
       'task update t-0004 {"dueDate":"2026-10-01"}',
       'task update t-0004 {"progress":101}',
+      'task update t-0004 {"milestoneId":"m-9999"}',
+      `task update t-0004 {"milestoneId":"${otherMilestone.id}"}`,
     ]) await run(input, 'error')
     assert.equal(getTask(domain, 't-0004').dueDate, '2026-11-30')
     assert.match(await run('task update t-0004 {"startDate":null,"dueDate":null}'), /开始日期：未填写[\s\S]*截止日期：未填写/)
+    assert.match(await run('task update t-0004 {"milestoneId":null}'), /里程碑：无/)
+    assert.match(await run(`task update t-0004 {"milestoneId":"${milestone.id}"}`), /里程碑：m-0001/)
 
     // 删除和移动均先预览；父任务、跨项目和循环关系受到保护。
     assert.match(await run('task delete t-0003'), /当前未执行删除/)

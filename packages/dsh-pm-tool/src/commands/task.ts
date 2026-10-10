@@ -12,6 +12,8 @@ import {
   renumberTasks,
   TaskHasChildrenError,
   TaskMoveCycleError,
+  TaskMilestoneNotFoundError,
+  TaskMilestoneProjectMismatchError,
   TaskProjectNotFoundError,
   updateTask,
 } from '../core/tasks.js'
@@ -31,8 +33,8 @@ export const taskHelp = [
   '  /pm task renumber p-0001 confirm',
   '删除、移动和重新编号不带 confirm 只显示提示，不会写盘。',
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
-  '更新用 null 清空 startDate/dueDate；移动用 root 表示移到根层级。',
-  'ID、WBS 编号、同级顺序和时间戳由系统生成；milestoneId 当前仅支持 null。',
+  '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
+  'milestoneId 必须指向同项目已存在里程碑；ID、WBS 编号、同级顺序和时间戳由系统生成。',
 ].join('\n')
 
 function renderTask(task: Task): string {
@@ -219,7 +221,9 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
       || error instanceof ParentTaskNotFoundError
       || error instanceof ParentTaskProjectMismatchError
       || error instanceof TaskHasChildrenError
-      || error instanceof TaskMoveCycleError) {
+      || error instanceof TaskMoveCycleError
+      || error instanceof TaskMilestoneNotFoundError
+      || error instanceof TaskMilestoneProjectMismatchError) {
       return { kind: 'error', text: error.message }
     }
     console.error('[pm-tool] 任务操作失败：', error)

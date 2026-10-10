@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1/R2 离线功能完成；R3 已实现 milestones 表与 `/pm milestone add/list/get`。
+- 当前阶段：R1/R2/R3 离线核心功能均已完成；下一步 R4 导出。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -11,7 +11,7 @@
 - `/pm selftest`：经 `@deepseek-ai/dsh-storage-domain` + `dsh-storage-json` 写入并读回一条记录，落为可读 JSON。
 - `/pm project add/list/get/update/delete`：项目增删改查，中文输出，无需配置模型。
 - `/pm task add/list/get/update/delete/move/renumber`：WBS 任务增查改删、移动与显式重新编号，支持至少三级父子结构。
-- `/pm milestone add/list/get`：新增里程碑、按目标日期查看项目时间线、查询详情。
+- `/pm milestone add/list/get/update/delete`：里程碑增查改删与按目标日期查看项目时间线。
 
 ## 项目命令（在 dsh 对话输入框整行输入）
 
@@ -36,6 +36,9 @@
 /pm milestone add {"projectId":"p-0001","title":"首版发布","targetDate":"2026-12-31"}
 /pm milestone list p-0001
 /pm milestone get m-0001
+/pm milestone update m-0001 {"status":"achieved","achievedDate":"2026-12-30"}
+/pm milestone delete m-0001
+/pm milestone delete m-0001 confirm
 ```
 
 新增成功会返回实际 ID；后续命令请使用返回的 ID（`p-0001` 是空库的首个 ID）。删除不带 `confirm` 只返回项目摘要和确认命令，不会写盘；带 `confirm` 才删除。`/pm project` 显示帮助。
@@ -54,11 +57,11 @@
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-当前限制：里程碑编辑/删除和任务关联、导出、Web 管理界面尚未实现，R5 最后开发。项目有任务或里程碑时禁止删除。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+当前限制：导出和 Web 管理界面尚未实现，R5 最后开发。项目有任务或里程碑时禁止删除。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
 
-任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。`update` 可用 `null` 清空 `startDate`/`dueDate`，但不能直接修改项目、父任务、编号和系统字段。删除、移动与重新编号必须带 `confirm` 才写盘；有子任务时禁止删除父任务，移动不能跨项目或形成循环。移动、删除不自动改写 WBS 编号，`renumber <projectId> confirm` 才按当前树重建连续编号。当前 `milestoneId` 仅支持 `null`。
+任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。`milestoneId` 可关联同项目已存在里程碑，更新时用 `null` 解除关联。`update` 可用 `null` 清空可选日期，但不能直接修改项目、父任务、编号和系统字段。删除、移动与重新编号必须带 `confirm` 才写盘；有子任务时禁止删除父任务，移动不能跨项目或形成循环。
 
-里程碑新增要求项目、标题和目标日期；默认状态 `planned`、实际达成日期 `null`、说明为空。状态支持 `planned / at_risk / achieved / missed`，当前由用户手动提供；列表按目标日期升序、同日按 ID 排序。到期提醒第一版不做。
+里程碑新增要求项目、标题和目标日期；默认状态 `planned`、实际达成日期 `null`、说明为空。状态支持 `planned / at_risk / achieved / missed`，由用户手动维护；`achieved` 必须填写 `achievedDate`，其他状态必须为 `null`。删除必须带 `confirm`，有关联任务时禁止删除。列表按目标日期升序、同日按 ID 排序；到期提醒第一版不做。
 
 ## 从源码构建
 
@@ -81,7 +84,7 @@ node scripts/verify-milestones.mjs
 
 任务脚本覆盖三级任务树、更新与日期清空、确认删除、父任务保护、跨项目/循环移动拒绝、移动后保留编号、显式重新编号、并发新增和全新进程读回。
 
-里程碑脚本覆盖新增/列表/详情、时间线排序、状态与日期校验、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
+里程碑脚本覆盖增查改删、状态一致性、任务关联保护、时间线排序、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
 
 ## 装载到本地源码版 dsh（web profile 的派生 profile：pm）
 

@@ -16,6 +16,17 @@ export class ParentTaskNotFoundError extends Error {}
 export class ParentTaskProjectMismatchError extends Error {}
 export class TaskHasChildrenError extends Error {}
 export class TaskMoveCycleError extends Error {}
+export class TaskMilestoneNotFoundError extends Error {}
+export class TaskMilestoneProjectMismatchError extends Error {}
+
+function validateMilestoneRelation(domain: PmDomain, projectId: string, milestoneId: string | null): void {
+  if (!milestoneId) return
+  const milestone = domain.table('milestones').get(milestoneId)
+  if (!milestone) throw new TaskMilestoneNotFoundError(`未找到里程碑：${milestoneId}`)
+  if (milestone.projectId !== projectId) {
+    throw new TaskMilestoneProjectMismatchError('里程碑不属于指定项目')
+  }
+}
 
 export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
   const fields = taskCreateSchema.parse(input)
@@ -29,6 +40,7 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
     if (parent && parent.projectId !== fields.projectId) {
       throw new ParentTaskProjectMismatchError('父任务不属于指定项目')
     }
+    validateMilestoneRelation(domain, fields.projectId, fields.milestoneId)
 
     let maxId = 0n
     let maxOrder = 0
@@ -119,6 +131,9 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     const table = domain.table('tasks')
     const current = table.get(id)
     if (!current) return undefined
+    if (fields.milestoneId !== undefined) {
+      validateMilestoneRelation(domain, current.projectId, fields.milestoneId)
+    }
     const nextInput: Record<string, unknown> = {
       ...current,
       ...fields,

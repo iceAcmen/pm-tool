@@ -1,6 +1,7 @@
 /** WBS 任务字段与运行时校验；字段来源：requirements v0.4 §4.2。 */
 import { z } from 'zod'
 import { projectIdSchema } from './project.js'
+import { milestoneIdSchema } from './milestone.js'
 
 export const taskIdSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/, '任务 ID 只能包含字母、数字、下划线和连字符')
 export const taskStatusSchema = z.enum(['todo', 'in_progress', 'blocked', 'done'])
@@ -26,7 +27,7 @@ const taskFields = {
   startDate: optionalDateSchema,
   dueDate: optionalDateSchema,
   progress: z.number().int().min(0).max(100),
-  milestoneId: z.null(),
+  milestoneId: milestoneIdSchema.nullable(),
 }
 
 function validateDateOrder(
@@ -60,7 +61,7 @@ export const taskCreateSchema = z.strictObject({
   startDate: optionalDateSchema,
   dueDate: optionalDateSchema,
   progress: taskFields.progress.default(0),
-  milestoneId: z.null().default(null),
+  milestoneId: milestoneIdSchema.nullable().default(null),
 }).superRefine(validateDateOrder)
 
 /** 更新不允许直接改变归属、父任务、编号、顺序与时间戳；移动使用独立动作。 */
@@ -73,7 +74,7 @@ export const taskUpdateSchema = z.strictObject({
   startDate: clearableDateSchema,
   dueDate: clearableDateSchema,
   progress: taskFields.progress.optional(),
-  milestoneId: z.null().optional(),
+  milestoneId: milestoneIdSchema.nullable().optional(),
 }).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Task = z.infer<typeof taskRecordSchema>
@@ -91,7 +92,7 @@ export function describeTaskValidation(error: z.ZodError): string {
     startDate: '开始日期（有效 YYYY-MM-DD）',
     dueDate: '截止日期（有效 YYYY-MM-DD）',
     progress: '进度（0 到 100 的整数）',
-    milestoneId: '里程碑关联（当前仅支持 null）',
+    milestoneId: '里程碑 ID 或 null',
   }
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'

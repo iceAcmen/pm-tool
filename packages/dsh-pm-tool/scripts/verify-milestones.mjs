@@ -48,9 +48,10 @@ try {
 
   if (reopening) {
     const milestones = listMilestones(domain, 'p-0001')
-    assert.equal(milestones.length, 9)
+    assert.equal(milestones.length, 8)
     assert.deepEqual(milestones.slice(0, 2).map(item => item.id), ['m-0002', 'm-0003'])
-    assert.equal(milestones.at(-1).id, 'm-0001')
+    assert.equal(getMilestone(domain, 'm-0001'), undefined)
+    assert.equal(getMilestone(domain, 'm-0002').title, '需求冻结（更新）')
     assert.match(await run('milestone list p-0001'), /里程碑时间线/)
     assert.match(await run(create({
       projectId: 'p-0001', title: '重启后里程碑', targetDate: '2027-01-01',
@@ -102,6 +103,8 @@ try {
       create({ projectId: project.id, title: '错误日期', targetDate: '2026-02-30' }),
       create({ projectId: project.id, title: '错误状态', targetDate: '2026-12-01', status: 'done' }),
       create({ projectId: project.id, title: '错误达成日', targetDate: '2026-12-01', achievedDate: '2026-02-30' }),
+      create({ projectId: project.id, title: '状态不一致', targetDate: '2026-12-01', status: 'planned', achievedDate: '2026-11-30' }),
+      create({ projectId: project.id, title: '缺达成日', targetDate: '2026-12-01', status: 'achieved' }),
       create({ projectId: project.id, title: '系统字段', targetDate: '2026-12-01', id: 'm-custom' }),
       'milestone list', 'milestone list p-9999', 'milestone list p-0001 extra',
       'milestone get', 'milestone get m-9999', 'milestone get ../escape',
@@ -136,22 +139,50 @@ try {
       'm-0006', 'm-0007', 'm-0008', 'm-0009',
     ])
 
-    getMilestone(domain, 'm-0001').title = '不能写入'
+    const milestoneCreatedAt = getMilestone(domain, 'm-0002').createdAt
+    await new Promise(resolve => setTimeout(resolve, 2))
+    assert.match(await run('milestone update m-0002 {"title":"需求冻结（更新）","status":"achieved","achievedDate":"2026-11-28"}'), /里程碑已更新并保存/)
+    assert.equal(getMilestone(domain, 'm-0002').createdAt, milestoneCreatedAt)
+    assert.notEqual(getMilestone(domain, 'm-0002').updatedAt, milestoneCreatedAt)
+    assert.match(await run('milestone get m-0002'), /状态：已达成[\s\S]*实际达成日期：2026-11-28/)
+    for (const input of [
+      'milestone update', 'milestone update m-0002', 'milestone update m-0002 {',
+      'milestone update m-9999 {"title":"不存在"}',
+      'milestone update m-0002 {}',
+      'milestone update m-0002 {"projectId":"p-0002"}',
+      'milestone update m-0002 {"status":"planned"}',
+      'milestone update m-0002 {"achievedDate":null}',
+      'milestone update m-0001 {"achievedDate":"2026-11-29"}',
+    ]) await run(input, 'error')
+
+    assert.match(await run('milestone delete m-0001'), /当前未执行删除/)
+    assert.ok(getMilestone(domain, 'm-0001'))
+    assert.match(await run('task add {"projectId":"p-0001","title":"关联任务","milestoneId":"m-0001"}'), /里程碑：m-0001/)
+    assert.match(await run('milestone delete m-0001 confirm', 'error'), /仍有关联任务/)
+    assert.match(await run('task update t-0001 {"milestoneId":null}'), /里程碑：无/)
+    assert.match(await run('milestone delete m-0001 confirm'), /里程碑已删除/)
+    assert.equal(getMilestone(domain, 'm-0001'), undefined)
+    assert.match(await run('task delete t-0001 confirm'), /任务已删除/)
+    for (const input of [
+      'milestone delete', 'milestone delete m-9999 confirm', 'milestone delete m-0002 extra',
+    ]) await run(input, 'error')
+
+    getMilestone(domain, 'm-0002').title = '不能写入'
     listMilestones(domain, project.id)[0].title = '不能写入'
-    assert.equal(getMilestone(domain, 'm-0001').title, '正式发布')
+    assert.equal(getMilestone(domain, 'm-0002').title, '需求冻结（更新）')
 
     await assert.rejects(() => deleteProject(domain, project.id), /仍有里程碑/)
     assert.ok(domain.table('projects').get(project.id))
     const deletedOther = await deleteProject(domain, other.id)
     assert.equal(deletedOther.id, other.id)
 
-    const file = join(root, 'pmtool', 'milestones', 'm-0001.json')
+    const file = join(root, 'pmtool', 'milestones', 'm-0002.json')
     assert.equal(existsSync(file), true)
     assert.equal(statSync(join(root, 'pmtool', 'milestones')).mode & 0o777, 0o700)
     assert.equal(statSync(file).mode & 0o777, 0o600)
     assert.match(readFileSync(file, 'utf8'), /\n  "version": 1,/)
 
-    console.log('通过：里程碑增查、时间线排序、字段校验、默认值、并发编号、项目删除保护、可读 JSON 与权限。')
+    console.log('通过：里程碑增查改删、状态一致性、任务关联保护、时间线排序、并发编号、项目删除保护、可读 JSON 与权限。')
     await facility.closeAll()
     const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--reopen', root], {
       encoding: 'utf8', env: process.env, timeout: 30_000,

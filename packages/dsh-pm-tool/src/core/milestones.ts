@@ -4,12 +4,15 @@ import { enqueueDomainWrite } from './projects.js'
 import {
   milestoneCreateSchema,
   milestoneIdSchema,
-  milestoneRecordSchema,
+  milestoneUpdateSchema,
+  milestoneWriteSchema,
   type Milestone,
+  type MilestoneUpdate,
 } from './milestone.js'
 import type { PmDomain } from './storage.js'
 
 export class MilestoneProjectNotFoundError extends Error {}
+export class MilestoneHasTasksError extends Error {}
 
 export function addMilestone(domain: PmDomain, input: unknown): Promise<Milestone> {
   const fields = milestoneCreateSchema.parse(input)
@@ -25,7 +28,7 @@ export function addMilestone(domain: PmDomain, input: unknown): Promise<Mileston
     }
     const id = `m-${String(max + 1n).padStart(4, '0')}`
     const at = new Date().toISOString()
-    const record = milestoneRecordSchema.parse({ ...fields, id, createdAt: at, updatedAt: at })
+    const record = milestoneWriteSchema.parse({ ...fields, id, createdAt: at, updatedAt: at })
     await table.put(id, record)
     return structuredClone(record)
   })
@@ -50,4 +53,42 @@ export function getMilestone(domain: PmDomain, id: string): Milestone | undefine
   milestoneIdSchema.parse(id)
   const record = domain.table('milestones').get(id)
   return record ? structuredClone(record) : undefined
+}
+
+export function updateMilestone(
+  domain: PmDomain,
+  id: string,
+  input: unknown,
+): Promise<Milestone | undefined> {
+  milestoneIdSchema.parse(id)
+  const fields: MilestoneUpdate = milestoneUpdateSchema.parse(input)
+  return enqueueDomainWrite(domain, async () => {
+    const table = domain.table('milestones')
+    const current = table.get(id)
+    if (!current) return undefined
+    const next = milestoneWriteSchema.parse({
+      ...current,
+      ...fields,
+      id: current.id,
+      projectId: current.projectId,
+      createdAt: current.createdAt,
+      updatedAt: new Date().toISOString(),
+    })
+    await table.put(id, next)
+    return structuredClone(next)
+  })
+}
+
+export function deleteMilestone(domain: PmDomain, id: string): Promise<Milestone | undefined> {
+  milestoneIdSchema.parse(id)
+  return enqueueDomainWrite(domain, async () => {
+    const table = domain.table('milestones')
+    const current = table.get(id)
+    if (!current) return undefined
+    for (const [, task] of domain.table('tasks').entries()) {
+      if (task.milestoneId === id) throw new MilestoneHasTasksError(`里程碑 ${id} 仍有关联任务`)
+    }
+    await table.delete(id)
+    return structuredClone(current)
+  })
 }

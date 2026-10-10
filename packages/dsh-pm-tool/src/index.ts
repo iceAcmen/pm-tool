@@ -58,7 +58,7 @@ export async function apply(ctx: Context): Promise<void> {
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
     description: '项目管理工作台：项目、WBS 任务、里程碑与存储自检',
-    input: { hint: '[project ...|task ...|milestone add/list/get|ping|selftest]', attachments: false },
+    input: { hint: '[project ...|task ...|milestone ...|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
