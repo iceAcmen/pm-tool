@@ -16,6 +16,7 @@ import {
 import type { PmDomain } from './storage.js'
 
 export class RiskIssueProjectNotFoundError extends Error {}
+export class RiskIssueReferencedByMeetingError extends Error {}
 
 export function addRiskIssue(domain: PmDomain, input: unknown): Promise<RiskIssue> {
   const fields = riskIssueCreateSchema.parse(input)
@@ -102,6 +103,11 @@ export function deleteRiskIssue(domain: PmDomain, id: string): Promise<RiskIssue
     const table = domain.table('risk_issues')
     const current = table.get(id)
     if (!current) return undefined
+    for (const [, meeting] of domain.table('meetings').entries()) {
+      if (meeting.actions.some(action => action.riskIssueId === id)) {
+        throw new RiskIssueReferencedByMeetingError(`风险/问题 ${id} 仍被会议 ${meeting.id} 的行动项关联`)
+      }
+    }
     await table.delete(id)
     return structuredClone(current)
   })

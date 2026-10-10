@@ -18,6 +18,7 @@ export class TaskHasChildrenError extends Error {}
 export class TaskMoveCycleError extends Error {}
 export class TaskMilestoneNotFoundError extends Error {}
 export class TaskMilestoneProjectMismatchError extends Error {}
+export class TaskReferencedByMeetingError extends Error {}
 
 function validateMilestoneRelation(domain: PmDomain, projectId: string, milestoneId: string | null): void {
   if (!milestoneId) return
@@ -161,6 +162,11 @@ export function deleteTask(domain: PmDomain, id: string): Promise<Task | undefin
     if (!current) return undefined
     for (const [, task] of table.entries()) {
       if (task.parentId === id) throw new TaskHasChildrenError(`任务 ${id} 仍有子任务`)
+    }
+    for (const [, meeting] of domain.table('meetings').entries()) {
+      if (meeting.actions.some(action => action.taskId === id)) {
+        throw new TaskReferencedByMeetingError(`任务 ${id} 仍被会议 ${meeting.id} 的行动项关联`)
+      }
     }
     await table.delete(id)
     return structuredClone(current)

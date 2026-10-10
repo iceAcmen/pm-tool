@@ -16,6 +16,7 @@ import { handleTaskCommand, taskHelp } from './commands/task.js'
 import { handleMilestoneCommand, milestoneHelp } from './commands/milestone.js'
 import { exportHelp, handleExportCommand } from './commands/export.js'
 import { handleRiskIssueCommand, riskIssueHelp } from './commands/risk-issue.js'
+import { handleMeetingCommand, meetingHelp } from './commands/meeting.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -42,6 +43,8 @@ function renderHelp(): CommandResult {
       '',
       riskIssueHelp,
       '',
+      meetingHelp,
+      '',
       exportHelp,
     ].join('\n'),
   }
@@ -63,8 +66,8 @@ export async function apply(ctx: Context): Promise<void> {
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
-    description: '项目管理工作台：项目、WBS、里程碑、风险问题、报告导出与存储自检',
-    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|export ...|ping|selftest]', attachments: false },
+    description: '项目管理工作台：项目、WBS、里程碑、风险问题、会议纪要、报告导出与存储自检',
+    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|meeting ...|export ...|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
@@ -77,6 +80,7 @@ export async function apply(ctx: Context): Promise<void> {
             tasks: [...domain.table('tasks').entries()].map(([, value]) => value),
             milestones: [...domain.table('milestones').entries()].map(([, value]) => value),
             riskIssues: [...domain.table('risk_issues').entries()].map(([, value]) => value),
+            meetings: [...domain.table('meetings').entries()].map(([, value]) => value),
           }),
         }
       }
@@ -88,6 +92,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (milestoneMatch) return handleMilestoneCommand(milestoneMatch[1] ?? '', domain)
       const riskIssueMatch = /^risk-issue(?:\s+([\s\S]*))?$/i.exec(raw)
       if (riskIssueMatch) return handleRiskIssueCommand(riskIssueMatch[1] ?? '', domain)
+      const meetingMatch = /^meeting(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain)
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()

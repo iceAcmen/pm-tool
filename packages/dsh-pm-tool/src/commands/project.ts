@@ -9,6 +9,7 @@ import {
   ProjectHasTasksError,
   ProjectHasMilestonesError,
   ProjectHasRiskIssuesError,
+  ProjectHasMeetingsError,
   ProjectNameConflictError,
   updateProject,
 } from '../core/projects.js'
@@ -172,6 +173,9 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
         kind: 'error',
         text: `项目 ${error.projectId} 仍有风险或问题，不能删除。请先处理项目下的风险与问题。`,
       }
+    }
+    if (error instanceof ProjectHasMeetingsError) {
+      return { kind: 'error', text: `项目 ${error.projectId} 仍有会议纪要，不能删除。请先删除项目下的会议纪要。` }
     }
     console.error('[pm-tool] 项目操作失败：', error)
     return { kind: 'error', text: '项目操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。' }

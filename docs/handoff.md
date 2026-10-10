@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（trae 完成 R7，项目所有者已验收并授权提交推送）
+最后更新：2026-10-10（trae 完成 R8 实现与验证）
 
 ---
 
@@ -10,16 +10,16 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R6 已发布为 `v0.1.0`；R7 风险与问题管理已完成代码、八项回归、真实浏览器验证和项目所有者手动验收，本批已获准提交推送。
+- **当前状态**：R1–R8 已完成；R8 会议纪要、稳定行动项、关联、离线命令和 Web 已完成九项回归、真实浏览器验证和项目所有者手动验收，本批已获准提交推送。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
   1. `README.md`（总览、目录、启动方式）
-  2. `docs/requirements.md` **v0.5**（**做什么、验收标准、Project/Task/Milestone/RiskIssue 数据模型、§5.1 落盘布局**——开发主依据）
+  2. `docs/requirements.md` **v0.6**（**做什么、验收标准、当前实体模型、§5.1 落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
   5. `docs/knowledge-base.md`（已验证 API/模式/约定，当前至 KB-025）与 `docs/issues-and-solutions.md`（当前至 ISS-020）
-  6. `docs/decision-log.md`（当前至 ADL-024；ADL-024 为 R7 模型与范围）
+  6. `docs/decision-log.md`（当前至 ADL-025；ADL-025 为 R8 模型与未来转任务边界）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
 - **硬约束（来自项目所有者，务必遵守）**：
@@ -95,9 +95,9 @@
 - 所有者五项决策已固化：删除 `confirm` 关键字、`targetDate>=startDate`、同名默认阻止+confirm 放行（ADL-012）；R5 排序与降级（ADL-013）；Node 口径 v22.23.3（ADL-014 / KB-015）。
 
 ### 当前交付点（R7 已验收）
-- **存储布局（ADL-011/024 / requirements v0.5 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones`/`risk_issues` 分表 per-record，用表 `keys()/entries()` 枚举，不建 index.json。
+- **存储布局（ADL-011/024/025 / requirements v0.6 §5.1）**：单领域 `pmtool` 下业务实体分表 per-record，用表 `keys()/entries()` 枚举，不建 index.json；R8 将新增 `meetings`。
 - **R7 结果**：统一风险问题台账、离线命令和 Web 工作台已完成；R4 已发布导出格式暂不包含 R7。
-- **下一步**：R7 提交推送后，确认 R8 会议纪要一期边界。
+- **下一步**：R8 推送后规划 R9 进度汇报，先确认报告快照、时间范围和 Markdown 导出边界。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步、首个业务增量及全部档案提交**均已推送 origin/main**（2026-10-10 经项目所有者确认）。
@@ -145,6 +145,7 @@ node scripts/verify-projects.mjs    # 系统临时库，项目完整回归
 node scripts/verify-tasks.mjs       # WBS 完整回归
 node scripts/verify-milestones.mjs  # 里程碑增查、排序与重启读回
 node scripts/verify-risk-issues.mjs # 风险问题 CRUD、筛选与重启读回
+node scripts/verify-meetings.mjs    # 会议、行动项、关联保护与重启读回
 node scripts/verify-export.mjs      # Markdown 内容、路径与覆盖保护
 node scripts/verify-web.mjs         # Web 快照、manifest 与动态 bundle 契约
 
@@ -163,12 +164,12 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 ## 4. 下一步从哪里继续
 
-1. 阶段 2 已完成；当前开发依据 v0.5，落盘布局见 ADL-011/024。
+1. 阶段 2 已完成；当前开发依据 v0.6，落盘布局见 ADL-011/024/025。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
 3. **R1–R6 MVP 已完成**；R5 高密度表格、右侧抽屉和原生主题切换通过自动验证，所有者于 2026-10-10 确认手动验收通过。
 4. **阶段 4 MVP 已完成并发布 v0.1.0**：冻结锁文件安装、构建、七项回归、profile 配置和隔离 profile 真实启动均通过。
 5. **R7 已完成并验收**：八项回归及隔离 profile 真实浏览器 CRUD、筛选、主题、窄屏和重启读回通过；项目所有者已确认手动验证通过并授权提交推送。
-6. 下一步确认 R8 会议纪要的手工录入与生成型能力边界。
+6. **R8 已完成并验收**：首版手工结构化录入，不调用模型；行动项内嵌并使用稳定 ID，可关联任务/问题。九项回归、隔离浏览器和项目所有者手动验收均通过。
 
 ## 5. SSH 密钥（已配置，备查）
 

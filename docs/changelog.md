@@ -8,6 +8,20 @@
 
 ---
 
+## [未发布] — R8 会议纪要管理（2026-10-10，平台：trae / TRAE）
+
+- 修复行动项表单固定列宽超过抽屉内容区的问题，改为两列自适应网格，窄屏退化为单列。
+- 修复“保存会议”只保存会议基础字段的问题：现在会顺序保存所有已有行动项，并保存已填写但未单独点击“添加”的新行动项；任一步失败均保持抽屉打开。
+- 新增 `docs/plans/2026-10-10-r8-meeting-notes-design.md`：固化完整字段、业务规则、离线命令、Web 交互、错误处理和验收标准。
+- 新增 `docs/plans/2026-10-10-r8-meeting-notes.md`：给出 schema、CRUD、行动项关联、Web、回归和档案同步的文件级实施步骤。
+- 新增 `src/core/meeting.ts`、`src/core/meetings.ts`、`src/commands/meeting.ts`：实现会议与稳定行动项 schema、离线 CRUD、排序、任务/问题关联和删除保护。
+- 修改 `storage.ts`、`projects.ts`、`tasks.ts`、`risk-issues.ts` 及对应命令：增加 `meetings` 表、项目删除保护和被会议引用对象的删除保护。
+- 修改 `index.ts`、`client/panel.tsx`、`client/panel.css`：接入 Web 快照、会议高密度表格、筛选搜索和会议/行动项右侧抽屉。
+- 新增 `scripts/verify-meetings.mjs` 并扩展 `verify-web.mjs`；同步 README、测试、交付、进度、交接和知识档案。
+- 更新 `docs/requirements.md` 至 v0.6，并新增 ADL-025：首版采用内嵌稳定行动项，未来通过幂等 promote 操作转 WBS 任务。
+- 原因与影响：落实项目所有者选择的方案 1，并为方案 3 保持数据兼容；新增 `data/pmtool/meetings/`，不修改上游和已发布导出格式。
+- 验证：冻结锁文件安装、构建和九个 `verify-*.mjs` 全部退出码 0；隔离 profile 真实浏览器 CRUD、关联、筛选、深色主题、786px 窄屏及重启读回通过。
+
 ## [未发布] — R7 风险与问题管理（2026-10-10，平台：trae / TRAE）
 
 ### 改动文件与内容

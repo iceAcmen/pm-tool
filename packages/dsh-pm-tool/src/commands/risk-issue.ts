@@ -7,6 +7,7 @@ import {
   getRiskIssue,
   listRiskIssues,
   RiskIssueProjectNotFoundError,
+  RiskIssueReferencedByMeetingError,
   updateRiskIssue,
 } from '../core/risk-issues.js'
 import {
@@ -162,6 +163,9 @@ export async function handleRiskIssueCommand(rawInput: string, domain?: PmDomain
     }
     if (error instanceof RiskIssueProjectNotFoundError) {
       return { kind: 'error', text: error.message }
+    }
+    if (error instanceof RiskIssueReferencedByMeetingError) {
+      return { kind: 'error', text: `${error.message}，请先解除关联。` }
     }
     console.error('[pm-tool] 风险/问题操作失败：', error)
     return { kind: 'error', text: '风险/问题操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。' }

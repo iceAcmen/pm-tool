@@ -276,3 +276,11 @@
 - **适用场景**：字段和生命周期高度重合、需要统一列表筛选，但仍有少量类型专有约束的业务实体。
 - **边界**：该模式不适合专有字段远多于通用字段或生命周期明显不同的实体；storage-domain 表名须匹配 `^[a-z][a-z0-9_]*$`。
 - **来源/佐证**：ADL-024；`src/core/risk-issue.ts`、`src/core/risk-issues.ts`、`scripts/verify-risk-issues.mjs`。
+
+## KB-026 ｜ 内嵌子实体使用稳定 ID 可兼顾首版简洁与后续转化（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：行动项随会议读取和保存，适合内嵌在 meeting 记录中；但必须使用稳定 `ai-NNN` ID，并通过 `meetingId + actionId` 操作，不能依赖数组下标。
+- **实现模式**：新增行动项按当前会议最大编号加一，删除后不复用；关联任务/问题、更新和删除均进入领域业务队列。任务/问题删除扫描会议引用并拒绝悬空关系。
+- **未来演进**：显式 promote 可根据行动项创建 WBS 任务并回写 `taskId`；已有 `taskId` 时拒绝重复创建。现有标题、负责人、截止日期和状态可直接映射，无需迁移 meetings 表。
+- **适用场景**：子实体主要依附父记录，但未来需要被单独引用、转换或审计的场景。
+- **来源/佐证**：ADL-025；`src/core/meeting.ts`、`src/core/meetings.ts`、`scripts/verify-meetings.mjs`。

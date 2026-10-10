@@ -15,10 +15,11 @@
 - R5 Web：dsh 顶级项目管理面板，高密度表格、右侧抽屉、宿主主题跟随。
 - R6 离线命令：无 API Key 可使用 `/pm` 完成核心操作。
 - R7 风险与问题：统一台账、离线 CRUD、关闭、筛选、持久化和 Web 抽屉。
+- R8 会议纪要：离线 CRUD、稳定行动项、任务/问题关联、删除保护和 Web 抽屉。
 
 未纳入本次：
 
-- R8-R10 会议纪要、进度汇报、交付物台账。
+- R9-R10 进度汇报、交付物台账。
 - R11 到期提醒。
 - 生成型 AI 功能、多人协作、多宿主并发写、导入 Excel/Markdown。
 
@@ -36,7 +37,7 @@
 | 数据目录 | `data/`，本机生成且不入 git |
 | 默认导出目录 | `exports/`，可再生且不入 git |
 
-已发布基线为 Git tag `v0.1.0`；R7 当前为未发布改动，提交状态见 `docs/onboarding-prompt.md`。
+已发布基线为 Git tag `v0.1.0`；R7 已推送，R8 当前为未提交改动，状态见 `docs/onboarding-prompt.md`。
 
 ## 3. 环境要求
 
@@ -155,7 +156,7 @@ pnpm dsh --profile pm --no-open
 
 - 仅支持单用户、单宿主进程写同一数据目录。
 - 当前没有数据导入命令；JSON 数据包用于备份、审阅和后续迁移实现。
-- v0.1.0 的 Markdown 与整库 JSON 导出格式尚未包含 R7 风险问题；完整迁移请备份整个 `data/`。
+- v0.1.0 的 Markdown 与整库 JSON 导出格式尚未包含 R7 风险问题和 R8 会议纪要；完整迁移请备份整个 `data/`。
 - dsh Web 只支持本机 loopback 安全访问，不提供局域网远程访问。
 - 插件使用 `link:`，源码变更后必须重新构建并重启 dsh。
 - 上游固定为 v0.2.1-alpha.2；升级前需重新验证 manifest、动态 bundle 和主题 token。
@@ -181,9 +182,10 @@ pnpm dsh --profile pm --no-open
 
 ## 11. 验收状态
 
-- R1-R7 自动化完整回归：通过。
+- R1-R8 自动化完整回归：通过（构建 + 九个验证脚本）。
 - R5 真实界面手动验收：项目所有者于 2026-10-10 确认通过。
 - profile 配置：包含 `dsh-pm-tool`，存储根目录指向 `pm-tool/data`。
 - 真实宿主：隔离 profile 成功加载插件并启动随机端口；带 token 页面 HTTP 200，boot roster 包含 `dsh-pm-tool/client.js`。
 - 阶段 4 MVP 测试与交付：通过；Windows/Linux、其他浏览器和上游升级兼容性仍为未覆盖边界。
 - R7 真实浏览器：隔离 profile 下 CRUD、筛选、重启读回、浅/深主题及 786px 窄屏通过。
+- R8 真实浏览器：隔离 profile 下会议/行动项 CRUD、任务/问题关联、筛选、深色主题、786px 窄屏和重启读回通过。

@@ -7,6 +7,7 @@ import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import MilestoneIcon from 'lucide-react/dist/esm/icons/milestone.mjs'
+import NotebookTabs from 'lucide-react/dist/esm/icons/notebook-tabs.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.mjs'
@@ -15,7 +16,7 @@ import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import styles from './panel.css?raw'
 
 type Project = {
@@ -69,25 +70,56 @@ type RiskIssue = {
   solution: string
 }
 
+type MeetingAction = {
+  id: string
+  title: string
+  owner: string
+  dueDate: string | null
+  status: 'todo' | 'in_progress' | 'done' | 'cancelled'
+  taskId: string | null
+  riskIssueId: string | null
+}
+
+type Meeting = {
+  id: string
+  projectId: string
+  title: string
+  meetingDate: string
+  startTime: string | null
+  durationMinutes: number | null
+  location: string
+  facilitator: string
+  recorder: string
+  participants: string[]
+  status: 'draft' | 'final'
+  summary: string
+  topics: string[]
+  decisions: string[]
+  actions: MeetingAction[]
+  updatedAt: string
+}
+
 type Snapshot = {
   projects: Project[]
   tasks: Task[]
   milestones: Milestone[]
   riskIssues: RiskIssue[]
+  meetings: Meeting[]
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'overview'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'overview'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
   | { kind: 'task', task?: Task }
   | { kind: 'milestone', milestone?: Milestone }
   | { kind: 'risk-issue', record?: RiskIssue }
+  | { kind: 'meeting', meeting?: Meeting }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
 }
 
-const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [] }
+const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [] }
 const projectStatus: Record<string, string> = {
   planning: '计划中',
   active: '进行中',
@@ -115,6 +147,10 @@ const riskIssueStatus: Record<string, string> = {
 const riskIssueType: Record<string, string> = { risk: '风险', issue: '问题' }
 const probabilityLabels: Record<string, string> = { low: '低', medium: '中', high: '高' }
 const impactLabels: Record<string, string> = { low: '低', medium: '中', high: '高', critical: '严重' }
+const meetingStatus: Record<string, string> = { draft: '草稿', final: '已定稿' }
+const meetingActionStatus: Record<string, string> = {
+  todo: '未开始', in_progress: '进行中', done: '已完成', cancelled: '已取消',
+}
 
 export function PmPanel({ execute }: PmPanelApi) {
   const [data, setData] = useState<Snapshot>(empty)
@@ -170,6 +206,10 @@ export function PmPanel({ execute }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
   [data.riskIssues, selected])
+  const meetings = useMemo(() => data.meetings
+    .filter(item => item.projectId === selected)
+    .sort((a, b) => b.meetingDate.localeCompare(a.meetingDate) || b.id.localeCompare(a.id)),
+  [data.meetings, selected])
 
   return <>
     <style>{styles}</style>
@@ -223,6 +263,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               tasks={tasks}
               milestones={milestones}
               riskIssues={riskIssues}
+              meetings={meetings}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
@@ -234,6 +275,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               </ViewTab>
               <ViewTab active={view === 'risk-issues'} icon={<ShieldAlert size={15}/>} count={riskIssues.length} onClick={() => setView('risk-issues')}>
                 风险与问题
+              </ViewTab>
+              <ViewTab active={view === 'meetings'} icon={<NotebookTabs size={15}/>} count={meetings.length} onClick={() => setView('meetings')}>
+                会议纪要
               </ViewTab>
               <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => setView('overview')}>
                 项目概览
@@ -260,6 +304,11 @@ export function PmPanel({ execute }: PmPanelApi) {
                 disabled={busy}
                 onCreate={() => setDrawer({ kind: 'risk-issue' })}
                 onEdit={record => setDrawer({ kind: 'risk-issue', record })}
+              />}
+              {view === 'meetings' && <MeetingTable
+                meetings={meetings}
+                onCreate={() => setDrawer({ kind: 'meeting' })}
+                onEdit={meeting => setDrawer({ kind: 'meeting', meeting })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones}/>}
             </section>
@@ -300,6 +349,15 @@ export function PmPanel({ execute }: PmPanelApi) {
           run={run}
           onSaved={() => setDrawer(undefined)}
         />}
+        {drawer.kind === 'meeting' && project && <MeetingForm
+          projectId={project.id}
+          meeting={drawer.meeting}
+          tasks={tasks}
+          issues={riskIssues.filter(item => item.type === 'issue')}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -310,7 +368,8 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'project-edit') return '编辑项目'
   if (drawer.kind === 'task') return drawer.task ? '编辑任务' : '新增任务'
   if (drawer.kind === 'milestone') return drawer.milestone ? '编辑里程碑' : '新增里程碑'
-  return drawer.record ? '编辑风险或问题' : '新增风险或问题'
+  if (drawer.kind === 'risk-issue') return drawer.record ? '编辑风险或问题' : '新增风险或问题'
+  return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
@@ -335,12 +394,14 @@ function ProjectBar({
   tasks,
   milestones,
   riskIssues,
+  meetings,
   onEdit,
 }: {
   project: Project
   tasks: Task[]
   milestones: Milestone[]
   riskIssues: RiskIssue[]
+  meetings: Meeting[]
   onEdit: () => void
 }) {
   const completed = tasks.filter(task => task.status === 'done').length
@@ -359,6 +420,7 @@ function ProjectBar({
       <span><ListTree size={14}/>{completed}/{tasks.length} 任务完成</span>
       <span><MilestoneIcon size={14}/>{milestones.length} 个里程碑</span>
       <span><ShieldAlert size={14}/>{riskIssues.filter(item => item.status !== 'closed').length} 项待处理风险/问题</span>
+      <span><NotebookTabs size={14}/>{meetings.length} 份会议纪要</span>
     </div>
   </section>
 }
@@ -693,6 +755,66 @@ function RiskIssueTable({
   </>
 }
 
+function MeetingTable({
+  meetings,
+  onCreate,
+  onEdit,
+}: {
+  meetings: Meeting[]
+  onCreate: () => void
+  onEdit: (meeting: Meeting) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState('all')
+  const visible = meetings.filter(meeting => {
+    const text = `${meeting.title} ${meeting.summary} ${meeting.facilitator} ${meeting.participants.join(' ')}`
+      .toLocaleLowerCase()
+    return text.includes(query.trim().toLocaleLowerCase())
+      && (status === 'all' || meeting.status === status)
+  })
+  return <>
+    <TableToolbar query={query} setQuery={setQuery} primaryLabel="新增会议" onCreate={onCreate}>
+      <label className="pm-toolbar-select">
+        <Filter size={14}/>
+        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选会议状态">
+          <option value="all">全部状态</option>
+          {Object.entries(meetingStatus).map(([value, label]) =>
+            <option key={value} value={value}>{label}</option>,
+          )}
+        </select>
+      </label>
+    </TableToolbar>
+    <div className="pm-table-frame">
+      <div className="pm-table-scroll">
+        <table className="pm-data-table pm-meeting-table">
+          <thead><tr>
+            <th>会议日期</th><th className="pm-col-title">标题</th><th>状态</th><th>主持人</th>
+            <th>参会人数</th><th>行动项</th><th>摘要</th><th className="pm-col-actions"/>
+          </tr></thead>
+          <tbody>
+            {visible.map(meeting => {
+              const done = meeting.actions.filter(action => action.status === 'done').length
+              return <tr className="pm-record-row" key={meeting.id}>
+                <td>{meeting.meetingDate}{meeting.startTime ? ` ${meeting.startTime}` : ''}</td>
+                <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(meeting)}>{meeting.title}</button></td>
+                <td><StatusTag kind="meeting" value={meeting.status}/></td>
+                <td>{meeting.facilitator || <span className="pm-cell-empty">未指定</span>}</td>
+                <td>{meeting.participants.length}</td>
+                <td>{done}/{meeting.actions.length}</td>
+                <td className="pm-description-cell">{meeting.summary || <span className="pm-cell-empty">暂无摘要</span>}</td>
+                <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${meeting.title}`} onClick={() => onEdit(meeting)}><Pencil size={14}/></button></td>
+              </tr>
+            })}
+          </tbody>
+        </table>
+      </div>
+      {!visible.length && <TableEmpty text={meetings.length ? '没有符合筛选条件的会议' : '暂无会议纪要'}/>}
+      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>新增会议</button>
+    </div>
+    <div className="pm-table-footer">{visible.length} 条记录</div>
+  </>
+}
+
 function TableToolbar({
   query,
   setQuery,
@@ -716,14 +838,16 @@ function TableToolbar({
   </div>
 }
 
-function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue', value: string }) {
+function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting', value: string }) {
   const labels = kind === 'project'
     ? projectStatus
     : kind === 'task'
       ? taskStatus
       : kind === 'milestone'
         ? milestoneStatus
-        : riskIssueStatus
+        : kind === 'risk-issue'
+          ? riskIssueStatus
+          : meetingStatus
   return <span className="pm-tag" data-kind={kind} data-value={value}>
     <i/>{labels[value] ?? value}
   </span>
@@ -1089,4 +1213,200 @@ function RiskIssueForm({
       </button>
     </div>
   </form>
+}
+
+function textList(value: FormDataEntryValue | null): string[] {
+  return String(value ?? '').split(/\n|、|，/).map(item => item.trim()).filter(Boolean)
+}
+
+function MeetingForm({
+  projectId,
+  meeting,
+  tasks,
+  issues,
+  disabled,
+  run,
+  onSaved,
+}: {
+  projectId: string
+  meeting?: Meeting
+  tasks: Task[]
+  issues: RiskIssue[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const actionsRef = useRef<HTMLElement>(null)
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const startTime = String(form.get('startTime') ?? '')
+    const duration = String(form.get('durationMinutes') ?? '')
+    const payload = {
+      title: form.get('title'),
+      meetingDate: form.get('meetingDate'),
+      startTime: startTime || null,
+      durationMinutes: duration ? Number(duration) : null,
+      location: form.get('location'),
+      facilitator: form.get('facilitator'),
+      recorder: form.get('recorder'),
+      participants: textList(form.get('participants')),
+      status: form.get('status'),
+      summary: form.get('summary'),
+      topics: textList(form.get('topics')),
+      decisions: textList(form.get('decisions')),
+    }
+    const meetingSaved = await run(meeting
+      ? `meeting update ${meeting.id} ${JSON.stringify(payload)}`
+      : `meeting add ${JSON.stringify({ projectId, ...payload })}`)
+    if (!meetingSaved) return
+    if (meeting && actionsRef.current) {
+      const actionForms = [...actionsRef.current.querySelectorAll<HTMLFormElement>('form[data-action-form]')]
+      for (const actionForm of actionForms) {
+        const actionId = actionForm.dataset.actionId
+        const actionPayload = meetingActionPayload(new FormData(actionForm))
+        if (!actionId && !String(actionPayload.title).trim()) continue
+        const actionSaved = await run(actionId
+          ? `meeting action update ${meeting.id} ${actionId} ${JSON.stringify(actionPayload)}`
+          : `meeting action add ${meeting.id} ${JSON.stringify(actionPayload)}`)
+        if (!actionSaved) return
+      }
+    }
+    onSaved()
+  }
+  return <>
+    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+      <Field label="会议标题" wide><input name="title" defaultValue={meeting?.title} required autoFocus/></Field>
+      <Field label="会议日期"><input name="meetingDate" type="date" required defaultValue={meeting?.meetingDate}/></Field>
+      <Field label="开始时间"><input name="startTime" type="time" defaultValue={meeting?.startTime ?? ''}/></Field>
+      <Field label="时长（分钟）"><input name="durationMinutes" type="number" min="1" max="1440" defaultValue={meeting?.durationMinutes ?? ''}/></Field>
+      <Field label="状态"><select name="status" defaultValue={meeting?.status ?? 'draft'}>
+        {Object.entries(meetingStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      <Field label="地点 / 链接" wide><input name="location" defaultValue={meeting?.location}/></Field>
+      <Field label="主持人"><input name="facilitator" defaultValue={meeting?.facilitator}/></Field>
+      <Field label="记录人"><input name="recorder" defaultValue={meeting?.recorder}/></Field>
+      <Field label="参会人（每行一人）" wide><textarea name="participants" rows={3} defaultValue={meeting?.participants.join('\n')}/></Field>
+      <Field label="会议摘要" wide><textarea name="summary" rows={4} defaultValue={meeting?.summary}/></Field>
+      <Field label="议题（每行一项）" wide><textarea name="topics" rows={4} defaultValue={meeting?.topics.join('\n')}/></Field>
+      <Field label="决议（每行一项）" wide><textarea name="decisions" rows={4} defaultValue={meeting?.decisions.join('\n')}/></Field>
+      <div className="pm-drawer-actions">
+        {meeting && <button
+          className="pm-button pm-button-danger"
+          type="button"
+          disabled={disabled}
+          onClick={() => {
+            if (window.confirm(`删除会议 ${meeting.title}？`)) {
+              void run(`meeting delete ${meeting.id} confirm`).then(success => success && onSaved())
+            }
+          }}
+        ><Trash2 size={15}/>删除会议</button>}
+        <button className="pm-button pm-button-primary" disabled={disabled}>{meeting ? '保存会议' : '创建会议'}</button>
+      </div>
+    </form>
+    {meeting && <MeetingActions
+      sectionRef={actionsRef}
+      meeting={meeting}
+      tasks={tasks}
+      issues={issues}
+      disabled={disabled}
+      run={run}
+      onSaved={onSaved}
+    />}
+  </>
+}
+
+function meetingActionPayload(form: FormData) {
+  const dueDate = String(form.get('dueDate') ?? '')
+  const taskId = String(form.get('taskId') ?? '')
+  const riskIssueId = String(form.get('riskIssueId') ?? '')
+  return {
+    title: form.get('title'),
+    owner: form.get('owner'),
+    dueDate: dueDate || null,
+    status: form.get('status'),
+    taskId: taskId || null,
+    riskIssueId: riskIssueId || null,
+  }
+}
+
+function MeetingActions({
+  sectionRef,
+  meeting,
+  tasks,
+  issues,
+  disabled,
+  run,
+  onSaved,
+}: {
+  sectionRef: RefObject<HTMLElement>
+  meeting: Meeting
+  tasks: Task[]
+  issues: RiskIssue[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const saveAction = async (event: FormEvent<HTMLFormElement>, action?: MeetingAction) => {
+    event.preventDefault()
+    const payload = meetingActionPayload(new FormData(event.currentTarget))
+    const success = await run(action
+      ? `meeting action update ${meeting.id} ${action.id} ${JSON.stringify(payload)}`
+      : `meeting action add ${meeting.id} ${JSON.stringify(payload)}`)
+    if (success) onSaved()
+  }
+  return <section className="pm-meeting-actions" ref={sectionRef}>
+    <h3>行动项</h3>
+    {meeting.actions.map(action => <form
+      className="pm-action-editor"
+      key={action.id}
+      data-action-form
+      data-action-id={action.id}
+      onSubmit={event => void saveAction(event, action)}
+    >
+      <strong>{action.id}</strong>
+      <input name="title" aria-label={`${action.id} 标题`} defaultValue={action.title} required/>
+      <input name="owner" aria-label={`${action.id} 负责人`} placeholder="负责人" defaultValue={action.owner}/>
+      <input name="dueDate" aria-label={`${action.id} 截止日期`} type="date" defaultValue={action.dueDate ?? ''}/>
+      <select name="status" aria-label={`${action.id} 状态`} defaultValue={action.status}>
+        {Object.entries(meetingActionStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select>
+      <select name="taskId" aria-label={`${action.id} 关联任务`} defaultValue={action.taskId ?? ''}>
+        <option value="">不关联任务</option>
+        {tasks.map(task => <option key={task.id} value={task.id}>{task.code} {task.title}</option>)}
+      </select>
+      <select name="riskIssueId" aria-label={`${action.id} 关联问题`} defaultValue={action.riskIssueId ?? ''}>
+        <option value="">不关联问题</option>
+        {issues.map(issue => <option key={issue.id} value={issue.id}>{issue.title}</option>)}
+      </select>
+      <button className="pm-row-button" disabled={disabled} aria-label={`保存 ${action.title}`}><Check size={14}/></button>
+      <button
+        className="pm-row-button"
+        type="button"
+        disabled={disabled}
+        aria-label={`删除 ${action.title}`}
+        onClick={() => {
+          if (window.confirm(`删除行动项 ${action.title}？`)) {
+            void run(`meeting action delete ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
+          }
+        }}
+      ><Trash2 size={14}/></button>
+    </form>)}
+    <form className="pm-action-editor pm-action-create" data-action-form onSubmit={event => void saveAction(event)}>
+      <strong>新增</strong>
+      <input name="title" aria-label="新行动项标题" placeholder="行动项标题" required/>
+      <input name="owner" aria-label="新行动项负责人" placeholder="负责人"/>
+      <input name="dueDate" aria-label="新行动项截止日期" type="date"/>
+      <select name="status" aria-label="新行动项状态" defaultValue="todo">
+        {Object.entries(meetingActionStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select>
+      <select name="taskId" aria-label="新行动项关联任务"><option value="">不关联任务</option>
+        {tasks.map(task => <option key={task.id} value={task.id}>{task.code} {task.title}</option>)}
+      </select>
+      <select name="riskIssueId" aria-label="新行动项关联问题"><option value="">不关联问题</option>
+        {issues.map(issue => <option key={issue.id} value={issue.id}>{issue.title}</option>)}
+      </select>
+      <button className="pm-button pm-button-primary" disabled={disabled}><Plus size={14}/>添加</button>
+    </form>
+  </section>
 }

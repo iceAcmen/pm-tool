@@ -15,6 +15,7 @@ import {
   TaskMilestoneNotFoundError,
   TaskMilestoneProjectMismatchError,
   TaskProjectNotFoundError,
+  TaskReferencedByMeetingError,
   updateTask,
 } from '../core/tasks.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
@@ -223,7 +224,8 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
       || error instanceof TaskHasChildrenError
       || error instanceof TaskMoveCycleError
       || error instanceof TaskMilestoneNotFoundError
-      || error instanceof TaskMilestoneProjectMismatchError) {
+      || error instanceof TaskMilestoneProjectMismatchError
+      || error instanceof TaskReferencedByMeetingError) {
       return { kind: 'error', text: error.message }
     }
     console.error('[pm-tool] 任务操作失败：', error)

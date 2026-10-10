@@ -38,7 +38,7 @@
 三、必须遵守的红线（完整版见 AGENTS.md 第 6 节与 docs/collaboration.md）
 - 上游 deepseek-harness 只读；所有功能在 pm-tool/packages/ 下以外挂 dsh 插件实现，不破坏 dsh 原有能力。
 - 离线优先：核心增删改查走 ctx.commands（无 API Key 可用）；会议纪要/智能 WBS/周报等生成型能力一期仅预留接口、不实现；里程碑到期提醒 R11 第一版不做。
-- 数据用 storage-domain + storage-json 落人类可读 JSON，root 指向 pm-tool/data；落盘布局以 requirements v0.5 §5.1 与 ADL-011/024 为准（单领域 pmtool 下 projects/tasks/milestones/risk_issues 分表 per-record，路径 data/pmtool/<表>/<id>.json，用表 keys()/entries() 枚举、不建 index.json；Markdown 概览仅 R4 导出）；data/、node_modules/、构建产物 lib/、密钥一律不入库。
+- 数据用 storage-domain + storage-json 落人类可读 JSON，root 指向 pm-tool/data；落盘布局以 requirements v0.6 §5.1 与 ADL-011/024/025 为准（单领域 pmtool 下业务实体分表 per-record，路径 data/pmtool/<表>/<id>.json，用表 keys()/entries() 枚举、不建 index.json；Markdown 概览仅 R4 导出）；data/、node_modules/、构建产物 lib/、密钥一律不入库。
 - 删除文件、覆盖他人成果、修改全局/系统配置、git push/对外发布，必须先经项目所有者同意；禁止 force push、禁止改写已推送历史。
 - 需求或方案有歧义先提问，可给推荐项与利弊，但不替项目所有者拍板；结论记入 docs/decision-log.md。
 - 每次改动后按 docs/collaboration.md 留痕：在 docs/changelog.md 顶部写变更（改了哪些文件/做了什么/为什么/影响范围/日期/平台标识 <平台标识>）；决策写 decision-log（ADL），踩坑写 issues-and-solutions（ISS），可复用知识写 knowledge-base（KB），更新 progress，阶段收尾刷新 handoff，并更新 docs/onboarding-prompt.md 文末“当前交接快照”。任务完成并验证后主动询问是否提交、是否推送；两项分别授权，未经明确授权不得 commit 或 push。
@@ -47,7 +47,7 @@
 - 文档一律简体中文 + 通用 Markdown；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node v22.23.3 + pnpm 11.28.5）；每次交付必须能跑、能演示并附验证证据，失败如实报告，不得伪造“已完成”。
 
 四、当前状态基线
-- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.5：R1–R12、Project/Task/Milestone/RiskIssue 数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
+- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.6：R1–R12 及当前已确认数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
 - 业务功能的实时进度、下一步与待确认项以本文件文末“当前交接快照”为准，并对照 docs/handoff.md「下一步」。
 - 第三方插件顶级 Web 页面与外部包浏览器构建已按 ADL-022 验证；后续直接复用现有 `dsh.client` + 动态 bundle 模式。
 
@@ -69,16 +69,16 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-10
-- **最近更新平台**：trae（完成 R7 风险与问题管理）
-- **main 提交定位**：R7 本批提交推送以 `git log -1` 和 `origin/main` 为准；已发布基线仍为 Git tag `v0.1.0`。
-- **当前阶段 / 状态**：v0.1.0 后续迭代；R1–R7 已实现，R7 已通过项目所有者手动验证并获准提交推送。
+- **最近更新平台**：trae（完成 R8 实现与验证）
+- **main 提交定位**：R8 本批提交推送后以 `git log -1` 和 `origin/main` 为准；此前 R7 基线为 `59afd68`。
+- **当前阶段 / 状态**：R1–R8 已完成；R8 通过九项回归、真实浏览器验证和项目所有者手动验收。
 - **本批验证**：Node v22.23.3 / pnpm 11.28.5；冻结锁文件离线安装、构建和八个 verify 脚本全部退出码 0；隔离 profile 真实浏览器完成风险/问题新增、编辑关闭、筛选、搜索、确认删除和重启读回，浅/深主题、786px 窄屏、控制台与网络检查通过。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
 - **版本控制确认规则**：每批任务完成并验证后，主动询问所有者是否提交、是否推送；提交与推送分别授权。
-- **授权状态**：项目所有者已明确授权 R7 本批提交和推送；授权仅限本批。
+- **授权状态**：项目所有者已明确授权 R8 本批提交和推送；授权仅限本批。
 - **所有者已定规则（ADL-012～024）**：R7 采用风险问题单表模型；类型专有字段严格校验，R4 已发布导出格式本批不升级。
-- **下一步**：R7 推送完成后，规划 R8 会议纪要并确认一期范围。
+- **下一步**：R8 推送后规划 R9 进度汇报，确认报告快照、时间范围和 Markdown 导出边界。
 - **当前待确认 / 遗留**：
   - 里程碑到期提醒 R11 第一版不做；生成型能力一期仅预留接口。
-- **最近一次交接**：trae 完成 R7 代码、自动化和真实浏览器验收及档案同步；上游保持只读，临时服务已停止。
+- **最近一次交接**：trae 完成 R8 代码、问题修复、九项回归、隔离浏览器验证和项目所有者验收；上游保持只读，临时服务和数据已清理。
