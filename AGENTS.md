@@ -55,7 +55,7 @@
 | **`AGENTS.md`**（本文件） | 跨平台入职说明与强制准则 | 每次开工先读；协作规则变化时更新 |
 | `docs/collaboration.md` | **多方协作与同步规则、平台标识、冲突处理**（权威细则） | 开工前读；协作机制变化时更新 |
 | **`docs/onboarding-prompt.md`** | **标准启动提示词 + 当前交接快照（接入 SOP）** | **开工前必读；每次任务完成后必更新快照** |
-| `docs/doubao-validation-prompt.md` | 豆包独立功能复核 + R2 文件级规划提示词 | 首个项目增查增量复核时整段发送 |
+| `docs/doubao-validation-prompt.md` | 豆包独立功能复核 + 下一步规划提示词 | 需要跨平台复核时整段发送；具体状态由豆包从仓库读取 |
 | `docs/handoff.md` | 最小迁移交接清单（第 0 节为移交说明） | 每阶段收尾刷新 |
 | `docs/progress.md` | 进度流水（已完成/进行中/待办） | 有进展即更新 |
 | `docs/requirements.md` | 需求：模块/优先级/验收/数据模型（v0.4，含 §5.1 落盘布局） | 需求变更时更新并在 `decision-log.md` 记原因 |

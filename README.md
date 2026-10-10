@@ -43,7 +43,7 @@
     │   ├── tech-plugin-scaffold.md  # 阶段3 插件骨架与装载技术方案（含第0步实测结论）
     │   ├── collaboration.md         # ★多方协作与同步规则（平台标识/开工收工 SOP/冲突处理）
     │   ├── onboarding-prompt.md     # ★跨平台 Agent 标准启动提示词 + 当前交接快照（开工前必读、收工后必更新）
-    │   ├── doubao-validation-prompt.md # 豆包独立功能复核 + R2 规划提示词
+    │   ├── doubao-validation-prompt.md # 豆包独立功能复核 + 下一步规划提示词
     │   ├── knowledge-base.md        # ★技术知识库（已验证 API/模式/约定/经验，KB 条目）
     │   ├── decision-log.md          # 技术决策日志（时间/决策/理由/替代/结果，ADL）
     │   ├── changelog.md             # 变更记录（文件/内容/原因/影响/日期/平台）
