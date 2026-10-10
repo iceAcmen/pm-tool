@@ -22,7 +22,7 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.4 | 含 ADL-011 定稿落盘布局 |
-| 阶段 3 源码开发 | 🔄 R5 Web 待实施 | R1–R4/R6 离线 MVP 已完成并回归通过 |
+| 阶段 3 源码开发 | ✅ MVP 代码完成，待 R5 手动验收 | R1–R6 已实现并完成自动回归 |
 | 阶段 4 测试交付 | ⬜ 未开始 | 本地运行验证、可演示、发布 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -54,7 +54,8 @@
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
     ├── packages/
     │   └── dsh-pm-tool/     # ★自研插件包：项目、WBS、里程碑离线管理 + 自检
-    │       ├── src/index.ts          # 插件入口：注册 /pm、打开存储领域
+    │       ├── src/index.ts          # Host 入口：注册 /pm、打开存储领域
+    │       ├── src/client/           # Web 顶级项目管理面板与侧栏入口
     │       ├── src/core/             # Project/Task schema、统一领域与业务逻辑
     │       ├── src/commands/         # 项目与 WBS 命令解析、中文输出
     │       ├── cordis.patch.yml      # 组合包补丁（安装后自动激活本插件）
@@ -112,11 +113,12 @@ node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
 node scripts/verify-export.mjs
+node scripts/verify-web.mjs
 cd ~/Projects/dsh-pm/deepseek-harness
 pnpm dsh --profile pm --no-open
 ```
 
-打开终端打印的带 token URL，在对话框整行输入：
+打开终端打印的带 token URL，点击左侧“项目管理”即可使用 Web 面板；也可在对话框整行输入：
 
 ```text
 /pm project add {"name":"首版交付","startDate":"2026-10-10","targetDate":"2026-10-31"}
@@ -130,7 +132,7 @@ pnpm dsh --profile pm --no-open
 /pm export markdown p-0001
 ```
 
-详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。整库 JSON 打包与 Web 管理界面仍待后续实现。
+详情、更新和删除使用新增返回的实际 ID。字段、同名/日期/确认规则、全部验证命令与限制见[插件使用说明](packages/dsh-pm-tool/README.md)。
 
 ## 五、文档使用约定（自解释 / 可迁移）
 

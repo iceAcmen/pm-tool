@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R4/R6 离线 MVP 功能完成；下一步 R5 Web。
+- 当前阶段：R1–R6 MVP 代码完成；R5 顶级 Web 面板待项目所有者手动验收。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -64,7 +64,7 @@
 
 数据经 `ctx.storageDomain` 落到 `data/pmtool/projects/<id>.json`，格式为 `{ "version": 1, "record": {...} }`，一条项目一文件。列表枚举表，不维护 `index.json`；保留旧 `checks` 表。新增表不改变既有自检记录格式，无需迁移。
 
-当前限制：Web 管理界面尚未实现。项目有任务或里程碑时禁止删除。单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
+Web 端通过侧栏“项目管理”进入顶级面板，可操作项目、WBS 任务和里程碑；无需 API Key。项目有任务或里程碑时禁止删除。当前仍为单用户、单宿主进程使用，禁止多个宿主同时写同一数据目录。
 
 任务新增时系统生成全局短 ID、同级 `order` 和 WBS 编号（如 `1`、`1.2`、`1.2.1`）。默认 `parentId:null`、状态 `todo`、优先级 `P1`、进度 `0`；项目和父任务必须存在且属于同一项目。`milestoneId` 可关联同项目已存在里程碑，更新时用 `null` 解除关联。`update` 可用 `null` 清空可选日期，但不能直接修改项目、父任务、编号和系统字段。删除、移动与重新编号必须带 `confirm` 才写盘；有子任务时禁止删除父任务，移动不能跨项目或形成循环。
 
@@ -88,9 +88,10 @@ node scripts/verify-projects.mjs
 node scripts/verify-tasks.mjs
 node scripts/verify-milestones.mjs
 node scripts/verify-export.mjs
+node scripts/verify-web.mjs
 ```
 
-六个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务脚本使用独立系统临时目录。
+七个脚本应退出码 0。command/storage 写入 `data/pmtool/checks/selftest.json`；业务与 Web 脚本使用独立系统临时目录。
 
 项目脚本验证真实插件处理器与真实 JSON 后端：增删改查、日期与同名校验、confirm 防误操作、旧表兼容、并发写入不覆盖、落盘可读性与 0700/0600 权限、全新进程读回更新/删除结果及编号接续。输出中的“验证用写入失败”为主动注入的预期错误，用来验证失败后队列恢复。命令验证不代表 R5 Web 管理界面完成。
 
@@ -99,6 +100,8 @@ node scripts/verify-export.mjs
 里程碑脚本覆盖增查改删、状态一致性、任务关联保护、时间线排序、并发编号、写入失败恢复、项目删除保护、权限和全新进程读回。
 
 导出脚本覆盖内容与排序、Markdown 转义、默认路径定位、0700/0600、覆盖保护、confirm 原子覆盖、空项目和失败清理。
+
+Web 脚本覆盖只读快照、`dsh.client` manifest 和动态 bundle 契约；真实页面验收需启动 pm profile 后点击侧栏“项目管理”。
 
 ## 装载到本地源码版 dsh（web profile 的派生 profile：pm）
 
@@ -116,7 +119,7 @@ pnpm dsh plugin --profile pm add link:/Users/bytedance/Projects/dsh-pm/pm-tool/p
 pnpm dsh --profile pm --dump-config
 
 # 4) 启动（指定 --profile 后不要再加 app 动词 web；加 --no-open 可不弹浏览器）
-#    终端会打印带一次性 token 的 http://127.0.0.1:3080 URL，浏览器打开后输入 /pm ping
+#    终端会打印带一次性 token 的 URL，浏览器打开后点击侧栏“项目管理”
 pnpm dsh --profile pm
 ```
 
@@ -128,8 +131,10 @@ pnpm dsh --profile pm
 dsh-pm-tool/
 ├── package.json        # 插件清单与 dsh.bundle 声明
 ├── tsconfig.json       # 独立 ESM/NodeNext 编译配置
+├── tsdown.config.ts    # 浏览器动态 client bundle 构建
 ├── cordis.patch.yml    # 组合包补丁：激活本插件，复用现有 pm profile 存储配置
 ├── src/index.ts        # 插件入口：注册 /pm 命令、打开存储领域
+├── src/client/         # 项目管理顶级面板与侧栏入口
 ├── src/core/project.ts  # Project schema 与字段提示
 ├── src/core/task.ts     # Task schema、枚举与字段提示
 ├── src/core/milestone.ts # Milestone schema、状态与字段提示
@@ -147,6 +152,7 @@ dsh-pm-tool/
 ├── scripts/verify-tasks.mjs # 任务完整回归、并发编号与重启验证
 ├── scripts/verify-milestones.mjs # 里程碑增查、排序与重启验证
 ├── scripts/verify-export.mjs # Markdown 内容、路径与覆盖验证
+├── scripts/verify-web.mjs # Web 快照、manifest 与 bundle 验证
 ├── scripts/verify-command.mjs  # 命令自检
 ├── scripts/verify-storage.mjs  # 存储自检
 ├── locale/{en,zh}.json # 界面展示标题/描述

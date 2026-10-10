@@ -133,13 +133,13 @@
 - **适用场景**：新增任何 dsh 系列依赖、升级基线版本时。
 - **来源**：npm registry 实测；本项目 `packages/dsh-pm-tool/{package.json,pnpm-workspace.yaml}`。
 
-## KB-010 ｜ Web 浏览器半侧（设置卡片/页面）怎么做、什么仍待验证（沉淀：doubao-work，2026-10-10）
+## KB-010 ｜ Web 浏览器半侧（设置卡片/页面）初始调研（沉淀：doubao-work，2026-10-10）
 
 - **结论**：
   - 浏览器半侧包在 `package.json` 声明 `"dsh": { "client": { "inject": [...], "platform": "web" } }`，并导出 `"./client"`（默认 `./lib/client.js`，须为 lazy-CJS factory）；内置先例 `packages/client/ui-schedule`（node 半侧 `src/index.ts` 是空 `apply(){}`，行为全在 `src/client/`）。
   - 设置卡片用 Config schema（schemastery `z.object`，敏感字段 `.volatile()`/`role('secret')`）配合 `form.state` / `form.mutate`；向他人插件详情页贡献区块用 `ctx.slots.inject('plugins.detail.actions'|'badge'|'section', ...)`。
   - **clientBundle 的 tsdown preset 不在发布的 npm 包内**，仓库外的包要自己复刻这一步构建（cookbook 原话）。
-- **【待确认】**：第三方插件新增**独立顶级路由/页面**的接入方式，官方无第三方示例；最接近先例是 ui-schedule 的侧边栏页面。做 R5 时先做官方明确支持的「设置卡片/插件详情区块」，再实测独立页面。
+- **后续实测结论**：第三方插件新增独立顶级页面已经 R5 验证可行，最终模式与复现证据见 KB-022 / ADL-022。
 - **来源**：上游 `docs/cookbook/adding-a-settings-card.zh.md`、`extension-cookbook.zh.md`、`packages/client/ui-schedule/{package.json,src/index.ts}`。
 
 ## KB-011 ｜ 业务实体布局：单领域分表 + 表枚举，无需自建索引（沉淀：doubao-work，2026-10-10；决策 ADL-011）
@@ -247,3 +247,11 @@
 - **适用场景**：R4 Markdown、后续 JSON 打包和其他可再生交付物。
 - **实现要点**：Markdown 表格内容转义反斜杠/管道/换行；未确认覆盖用临时文件后 `link()` 原子创建目标，确认覆盖用 `rename()` 原子替换；临时文件与目标处于同目录。
 - **来源/佐证**：ADL-020；`core/report.ts`、`core/export.ts` 和 `verify-export.mjs`。
+
+## KB-022 ｜ 仓库外 dsh 插件可用动态 bundle 注册顶级 Web 面板（沉淀：trae / TRAE，2026-10-10）
+
+- **结论**：独立插件包只要声明 `dsh.client.platform=web`、导出 `./client`，并把产物包装为 `window.__ModuleLoader__.load({ id, factory })`，就会被 Web Host 扫描进 `__DSH_BOOT__` roster；无需进入上游 monorepo或修改上游源码。
+- **实现模式**：客户端向 `main` 注册面板、向 `sidebar.panellist` 注册入口；通过 `remote.commands.execute(sessionId, "/pm ...", [])` 调用 Host。若当前没有会话，可先用 `sessions.create()` 创建，核心业务规则继续只维护在 Host。
+- **构建要点**：本包 `tsc` 的 JS 输出是 `lib/client/index.js`，声明输出才在 `lib/types/client/index.d.ts`；`tsdown` 应以前者为 entry，且 `clean:false` 避免清除 Host 构建产物。React 由 dsh 模块系统作为默认 external 提供。
+- **验证**：`scripts/verify-web.mjs` 固化 snapshot/manifest/bundle 契约；真实 pm profile roster 包含 `dsh-pm-tool/client.js`，本机浏览器无 Key 完成项目、任务、里程碑 CRUD，控制台和网络无错误。
+- **适用场景**：后续给风险、问题、交付物等模块增加 dsh Web 顶级工作台。

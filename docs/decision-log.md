@@ -190,3 +190,11 @@
 - **决策**：`/pm export json [目录] [confirm]` 输出 `pmtool-backup.json`，顶层包含 `format=pm-tool-backup`、`formatVersion=1`、`exportedAt` 和按 ID 排序的 projects/tasks/milestones；不包含 checks。
 - **理由**：稳定格式便于后续导入与迁移；排除运行自检数据，保持业务包纯净。
 - **最终结果**：复用 ADL-020 的路径、权限和原子覆盖规则，R4 离线导出完成。
+
+## ADL-022 ｜ 2026-10-10 ｜ R5 外部 clientBundle 直接注册顶级项目管理面板
+
+- **决策**：`dsh-pm-tool` 在同一插件包内声明 `dsh.client.platform=web` 与 `./client` 导出，用独立 `tsdown` 配置生成 dsh lazy-CJS 动态 bundle；客户端向 `main` 和 `sidebar.panellist` 插槽注册“项目管理”顶级面板及入口。
+- **数据通路**：Web 端不复制业务规则，通过现有 `remote.commands.execute` 调用 `/pm` Host 命令；新增只读 `/pm web snapshot` 聚合 projects/tasks/milestones，所有写操作继续复用已经回归的命令处理器。
+- **理由**：上游 `ui-schedule` 已验证相同插槽模式；实测 pm profile 的 `__DSH_BOOT__` roster 能发现外部 bundle，浏览器可在无 API Key 下完成项目、任务、里程碑操作。
+- **替代方案**：仅做设置卡片/插件详情区块（顶级页面已可行，无需降级）；在浏览器复制 CRUD 逻辑（会形成两套校验，被否）；修改上游路由（违反上游只读红线）。
+- **最终结果**：R5 代码和自动化/浏览器验证完成，待项目所有者手动验收。ADL-019 的临时自动提交推送授权在本批提交并推送后终止，后续恢复逐次确认。

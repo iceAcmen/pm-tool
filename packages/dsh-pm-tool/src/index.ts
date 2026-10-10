@@ -65,6 +65,19 @@ export async function apply(ctx: Context): Promise<void> {
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
+      if (/^web\s+snapshot$/i.test(raw)) {
+        if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+        const records = (name: 'projects' | 'tasks' | 'milestones') =>
+          [...domain.table(name).entries()].map(([, value]) => value)
+        return {
+          kind: 'success',
+          text: JSON.stringify({
+            projects: records('projects'),
+            tasks: records('tasks'),
+            milestones: records('milestones'),
+          }),
+        }
+      }
       const projectMatch = /^project(?:\s+([\s\S]*))?$/i.exec(raw)
       if (projectMatch) return handleProjectCommand(projectMatch[1] ?? '', domain)
       const taskMatch = /^task(?:\s+([\s\S]*))?$/i.exec(raw)

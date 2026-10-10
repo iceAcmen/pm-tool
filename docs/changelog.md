@@ -8,6 +8,25 @@
 
 ---
 
+## [未发布] — R5 顶级 Web 项目管理面板（2026-10-10，平台：trae / TRAE）
+
+### 改动文件
+- `package.json`、`pnpm-lock.yaml`、`tsconfig.json`、`tsdown.config.ts`：增加 React 客户端类型与动态 bundle 构建、`dsh.client` manifest 和 `./client` 导出。
+- `src/client/index.tsx`、`src/client/panel.tsx`：注册侧栏“项目管理”和顶级主面板，提供项目、WBS、里程碑基础操作及响应式布局。
+- `src/index.ts`：新增只读 `/pm web snapshot`；所有写操作继续复用既有 Host 命令。
+- `scripts/verify-web.mjs`：验证无 Key 快照、manifest 与动态 bundle 契约。
+- 更新 README/AGENTS 及 requirements、decision-log、knowledge-base、issues、progress、handoff、onboarding 快照。
+
+### 为什么 / 影响范围
+- 完成 R5 MVP，并实证独立外挂包可新增 dsh 顶级 Web 页面，无需修改上游或降级到设置卡片。
+- Web 端不另建业务规则，继续以 Host 命令和 JSON 存储为唯一写入路径。
+
+### 验证
+- 环境：macOS 15.6.1 arm64、Node v22.23.3、pnpm 11.28.5。
+- `pnpm run build` 与全部七个 `scripts/verify-*.mjs` 均退出码 0；`git diff --check` 通过后提交。
+- 临时 pm profile 的 boot roster 包含 `dsh-pm-tool/client.js`；真实浏览器无 Key完成项目新建/编辑/删除、任务新建/完成/删除、里程碑新建/达成/删除并清理数据。
+- 786px 窄屏截图无横向溢出，控件对比度正常；浏览器控制台和网络检查无错误。独立本地 Playwright npm 包未安装，浏览器验证使用 TRAE 集成自动化。
+
 ## [未发布] — R4 整库 JSON 数据包（2026-10-10，平台：trae / TRAE）
 
 - 新增 `core/backup.ts`，扩展 `core/export.ts` / `commands/export.ts` / `verify-export.mjs`，支持 `/pm export json [目录] [confirm]`。
