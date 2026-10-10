@@ -63,6 +63,7 @@ node scripts/verify-web.mjs
 | R8 会议纪要 | `verify-meetings.mjs`、`verify-web.mjs` + 手动用例 | 会议/行动项 CRUD、稳定 ID、任务/问题关联、删除保护、并发、故障恢复、权限、重启读回及 Web |
 | R9 进度汇报 | `verify-reports.mjs`、`verify-web.mjs` + 手动用例 | 自定义周期固定快照、五类异常聚合排序、旧快照不回写、人工字段更新、非法输入、Markdown、并发、删除保护、重启读回及 Web |
 | R10 交付物管理 | `verify-deliverables.mjs`、`verify-web.mjs` + 手动用例 | 交付物 CRUD、状态筛选、版本/状态只增留痕规则、负责人变更不留痕、并发编号、写盘失败恢复、有交付物禁删项目、0600/0700、重启读回续号及 Web |
+| R12 检索/看板/导入 | `verify-r12.mjs`、`verify-web.mjs` + 手动用例 | 检索跨类与 `--type` 过滤、空关键字/非法类型负例、统计全量/单项目口径与完成率/逾期/风险聚合、导入 dry-run 不写盘与 confirm 落盘、缩进→WBS、[x] 已完成、空清单/坏项目/坏路径负例、重启读回；Web 总览看板与全局搜索 bundle 契约 |
 
 ## 4. 手动 Web 验收
 
@@ -95,6 +96,9 @@ pnpm dsh --profile pm --no-open
 | WEB-16 | 编辑问题并将状态改为已关闭 | 表格状态更新为“已关闭”，重启后保留 |
 | WEB-17 | 使用类型、状态筛选和搜索 | 结果只包含符合条件的记录 |
 | WEB-18 | 在抽屉中确认删除风险或问题 | 确认后记录删除；项目下仍有记录时项目删除被阻止 |
+| WEB-19 | 点击顶部「总览看板」 | 出现跨项目统计卡片（项目总数/任务完成率/逾期项/未关闭风险）与逐项目明细，逾期项高亮 |
+| WEB-20 | 在看板搜索框输入关键字 | 跨项目分组命中任务/里程碑/风险/会议/汇报/交付物，点击可跳转所属项目 |
+| WEB-21 | 收窄看板窗口 | 逐项目卡片单列排布，无横向溢出 |
 
 ## 5. 离线命令冒烟
 
@@ -106,6 +110,12 @@ pnpm dsh --profile pm --no-open
 /pm task list <projectId>
 /pm milestone list <projectId>
 /pm risk-issue list <projectId> all all
+/pm search 需求
+/pm search 需求 --type task
+/pm stats
+/pm stats <projectId>
+/pm task import <projectId> 任务表.md
+/pm task import <projectId> 任务表.md confirm
 /pm export markdown <projectId>
 /pm export json
 ```
@@ -113,6 +123,7 @@ pnpm dsh --profile pm --no-open
 预期：
 
 - 输出简体中文，命令不触发模型调用。
+- `search`/`stats` 为只读、不写盘；`task import` 不带 `confirm` 只预览，带 `confirm` 才落盘。
 - 导出文件分别位于 `exports/<projectId>-report.md` 和 `exports/pmtool-backup.json`。
 - 已有导出文件不带 `confirm` 时拒绝覆盖。
 
@@ -126,7 +137,7 @@ pnpm dsh --profile pm --no-open
 
 ## 7. 当前验收结论
 
-- 自动化：冻结锁文件离线安装、构建与十一个验证脚本已通过（R10 新增 verify-deliverables.mjs）。
+- 自动化：冻结锁文件离线安装、构建与十二个验证脚本已通过（R12 新增 verify-r12.mjs，R10 新增 verify-deliverables.mjs）。
 - Web：项目所有者于 2026-10-10 确认 R5 手动验收通过。
 - R7 Web：隔离 profile 完成新增、编辑关闭、筛选、搜索、确认删除和重启读回；浅/深主题、786px 窄屏局部滚动、控制台和网络检查通过。
 - R8 Web：隔离 profile 完成项目、任务、问题、会议及行动项新增，验证关联、完成状态、筛选、搜索、深色主题、786px 横向滚动和重启读回；控制台和网络无错误。
@@ -136,4 +147,6 @@ pnpm dsh --profile pm --no-open
 - R9 Web：生成/编辑/筛选/搜索/导出可用，深色主题、786px 表格局部滚动、重启读回、控制台和网络检查通过。
 - R10 留痕：创建产生一条 `created`；仅当状态或版本实际变化时追加留痕（同批先状态后版本各一条），仅改负责人/名称/位置等不留痕；删除交付物须 `confirm`，有交付物的项目禁止删除。
 - R10 Web：交付物标签新增/编辑/状态筛选/搜索/变更时间线可用，项目栏显示交付物计数，深色主题、窄屏、重启读回待所有者本机目视确认（自动化 bundle 契约已通过）。
+- R12 检索/看板：`/pm search` 跨七类实体不区分大小写命中、`--type` 过滤正确；`/pm stats` 完成率/逾期/未关闭风险按严重度聚合口径与 verify-r12 一致；导入 dry-run 不写盘、confirm 按缩进还原 WBS 父子、`[x]` 落为已完成，重启读回正确。
+- R12 Web：顶部「总览看板」跨项目统计卡片、逐项目明细与全局搜索为浏览器端基于 snapshot 的派生，bundle 契约（verify-web）已通过；本机目视（卡片/搜索交互/窄屏）待所有者确认。
 - 未覆盖：Windows/Linux、Safari/Firefox、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性。

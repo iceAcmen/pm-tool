@@ -2,7 +2,7 @@
 
 > 这个目录是什么、给谁用、怎么用：它是本项目自研的 **DeepSeek Harness（dsh）插件包**，在 dsh 之上提供面向项目经理的能力（项目计划、WBS 任务拆解、里程碑、可读文件存储）。给开发与迁移者阅读；按本文命令即可构建并装载到本地 dsh。
 
-- 当前阶段：R1–R10 已完成；R10 交付物台账由 doubao-work 自研（冻结安装/构建/十一项 verify/隔离真实宿主下发 bundle 断言）通过，本机浏览器目视项以所有者手动确认为准。下一步 R12，R11/生成型能力取舍。
+- 当前阶段：R1–R12 已完成；R12 关键字检索/统计看板/Markdown 任务表导入由 doubao-work 自研（冻结安装/构建/十二项 verify/隔离真实宿主下发 bundle 断言）通过，Web「总览看板」基于 snapshot 派生，本机浏览器目视项以所有者手动确认为准。R11/生成型/多人协作/Excel 导入按 ADL-030~032 暂缓。
 - 运行环境：macOS 15.6.1 arm64 + Node v22.23.3（nvm）+ pnpm 11.28.5；上游 dsh 基线 **v0.2.1-alpha.2**（MIT）。
 
 ## 当前能力
@@ -16,6 +16,10 @@
 - `/pm meeting add/list/get/update/delete` 与 `meeting action add/update/delete`：会议纪要、稳定行动项及任务/问题关联。
 - `/pm report generate/list/get/update/delete/export`：自定义周期固定快照、异常汇总与精简 Markdown。
 - `/pm deliverable add/list/get/update/delete`：项目维度交付物台账，状态四态（计划中/制作中/已提交/已验收），版本或状态变化自动只增留痕，删除须 `confirm`，有交付物的项目禁止删除。
+- `/pm search <关键字> [--type ...]`：全库只读关键字检索（项目/任务/里程碑/风险问题/会议/汇报/交付物），不区分大小写子串匹配，按类型分组输出；`--type` 可选 project/task/milestone/risk/meeting/report/deliverable。
+- `/pm stats [项目ID]`：只读统计看板。不带参数为全项目汇总与逐项目明细，带项目 ID 为单项目明细（任务完成率、逾期、未关闭风险按严重度、交付物四态）。
+- `/pm task import <项目ID> <清单.md> [confirm]`：按 GitHub 缩进勾选清单（`- [ ]`/`- [x]`）把外部任务表导入为 WBS；不带 `confirm` 只预览不落盘，`[x]` 记为已完成。
+- Web 顶部「总览看板」：跨项目统计卡片、逐项目明细与全局搜索框，基于最新 snapshot 在浏览器端派生，不新增宿主路由。
 - `/pm export markdown <projectId> [目录] [confirm]`：导出项目、WBS 和里程碑 Markdown 报告。
 - `/pm export json [目录] [confirm]`：导出整库业务数据包（不含 checks）。
 

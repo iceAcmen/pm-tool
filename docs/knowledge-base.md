@@ -6,6 +6,18 @@
 
 ---
 
+## KB-031 ｜ GitHub 缩进勾选清单 → WBS 树：以「观测到的最小正缩进」为一层，用缩进栈还原父子（沉淀：doubao-work，R12）
+
+- **结论**：解析 `- [ ]`/`- [x]` 清单时，先收集所有清单项的前导空格数，取**最小的正缩进**作为一层（兼容 2 空格/4 空格风格），`depth = round(indent / unit)`；再按文档顺序维护 `栈{depth,id}`，新项深度更浅时弹出对应层级、栈顶即父任务。逐项复用既有的 `addTask`（它自带编号/父级校验/落盘），无需自建编号。
+- **适用场景**：把外部任务清单、需求 backlog 批量导入既有 WBS；dry-run 时用 `counters[]` 投影 1/1.1/1.2 结构即可预览，确认后再真正写盘。
+- **来源/佐证**：`core/task-import.ts`、`scripts/verify-r12.mjs`（dry-run 不写盘、confirm 落盘、全新进程读回）。
+
+## KB-030 ｜ 跨项目看板/全局搜索优先做成「浏览器端基于 snapshot 的派生」，不新增宿主路由（沉淀：doubao-work，R12）
+
+- **结论**：当 `web snapshot` 已包含全部实体表时，跨项目统计卡片与全局检索**先在 React 端基于 snapshot 做等价过滤/聚合**（与离线只读命令同口径），避免新增宿主路由或索引表；离线侧再提供同名只读命令（`/pm stats`、`/pm search`）。配色一律用宿主 token/既有 `.pm-summary` 卡片，不引入 hex。
+- **适用场景**：任何只读的汇总/检索类需求；「写操作」才走命令与领域写队列，只读派生不写盘。
+- **来源/佐证**：ADL-029、`client/panel.tsx` 的 `GlobalBoard`/`collectBoardMatches`、`verify-web.mjs` 契约断言。
+
 ## KB-029 ｜ storage-domain 内嵌「只增留痕数组」做法（沉淀：doubao-work，2026-10-10）
 
 - **场景**：需要在一条记录内保留版本/状态变更历史（R10 交付物 `history[]`），但 storage-domain 无跨表事务、无二级索引，不想为此单开一张表。

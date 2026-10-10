@@ -47,7 +47,7 @@
 - 文档一律简体中文 + 通用 Markdown；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node v22.23.3 + pnpm 11.28.5）；每次交付必须能跑、能演示并附验证证据，失败如实报告，不得伪造“已完成”。
 
 四、当前状态基线
-- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.8：R1–R12 及当前已确认数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
+- 阶段 1 环境搭建、阶段 2 需求分析（requirements v0.9：R1–R12 及当前已确认数据模型、§5.1 落盘布局）已完成；阶段 3 第 0 步“打通验证”已验收——最小插件 packages/dsh-pm-tool 能被本地源码版 dsh 装载，/pm ping 离线可用、可读 JSON 落盘 pm-tool/data（目录 0700）。
 - 业务功能的实时进度、下一步与待确认项以本文件文末“当前交接快照”为准，并对照 docs/handoff.md「下一步」。
 - 第三方插件顶级 Web 页面与外部包浏览器构建已按 ADL-022 验证；后续直接复用现有 `dsh.client` + 动态 bundle 模式。
 
@@ -68,18 +68,15 @@
 
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
-- **快照更新时间**：2026-10-10
-- **最近更新平台**：doubao-work（实现并通过验证 R10 交付物台账）
-- **main 提交定位**：R9 已推送 HEAD `6563da2`；R10 代码 + 档案随本次提交推送，当前 HEAD 以 `git log -1 --oneline` 与 `origin/main` 为准（推送后核对本地与远程一致）。
-- **当前阶段 / 状态**：R1–R10 已完成。R10 由 doubao-work 自研（pmtool 领域 `deliverables` 表 + `/pm deliverable` 离线命令 + Web「交付物」标签 + 版本/状态只增留痕 + 有交付物禁删项目，ADL-028）；下一步 R12，R11 与生成型能力给取舍结论。
-- **本批验证（doubao-work R10）**：Node（nvm 口径 v22.23.3；沙箱内显示 v22.23.2 系 PATH 遮蔽，KB-015）/ pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 140.47 kB）、**11 个** verify 脚本全部退出码 0（新增 verify-deliverables.mjs）；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、cookie 鉴权 200、经单插件合并路由 `/plugins/??dsh-pm-tool/client.js&rev=` 抓到运行中 bundle 140500 B 含 R10 界面串，KB-028）。本机浏览器目视（主题/窄屏/控制台）本角色无 GUI 权限，以 verify-web 契约 + 所有者手动确认为准（KB-014/ISS-010/ADL-027）。
+- **快照更新时间**：2026-10-11
+- **最近更新平台**：doubao-work（实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入）
+- **main 提交定位**：R12 代码 + 档案随本次提交推送，当前 HEAD 以 `git log -1 --oneline` 与 `origin/main` 为准（推送后核对本地与远程一致）。
+- **当前阶段 / 状态**：R1–R12 已完成。R12 由 doubao-work 自研：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS），Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索（ADL-029）；检索/看板不新增表、领域版本仍为 1。
+- **本批验证（doubao-work R12）**：Node（nvm 口径 v22.23.3；沙箱内显示 v22.23.2 系 PATH 遮蔽，KB-015）/ pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 152.96 kB）、**12 个** verify 脚本全部退出码 0（新增 verify-r12.mjs，verify-web.mjs 扩展 R12 契约）；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、cookie 鉴权，抓取含 dsh-pm-tool 的合并路由 HTTP 200 / 578732 B，断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」，KB-028）。本机浏览器目视（看板卡片/全局搜索/窄屏）本角色无 GUI 权限，以 verify-web 契约 + 所有者手动确认为准（KB-014/ISS-010/ADL-027）。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
 - **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
-- **授权状态**：R10 在持续授权范围内逐主题提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）；其后 R12 同。
-- **所有者已定规则（ADL-012～028）**：R9 使用自定义日期范围和不可变固定快照；ADL-027 记录 R9 原样接收与本角色 GUI 验证边界；ADL-028 确定 R10 复用 dsh deliverables「交付声明+变更留痕」概念、数据层在 pmtool 领域自研（dsh 原生包绑定 agent 轮次、不适用无 Key 离线台账）。
-- **下一步**：R12（多项目切换/关键字检索/统计看板、Markdown 任务表离线导入；多人协作与单用户本地定位冲突，倾向裁剪并在 decision-log 写明理由）；随后对 R11（复用 schedule 的里程碑到期提醒）与生成型能力（智能 WBS/纪要/周报，需 API Key）给实施/暂缓最终结论并归档。
-- **当前待确认 / 遗留**：
-  - 里程碑到期提醒 R11 第一版不做；生成型能力一期仅预留接口（在 R12 后由执行方给最终取舍结论）。
-  - 所有者可在本机对 R9/R10 Web 做最终目视确认；3080 端口曾有 TRAE 遗留测试进程（非 doubao 所启），如需释放可自行关闭。
-- **最近一次交接**：doubao-work 自研 R10 交付物台账（新增 4 个源文件 + 专项 verify，改 storage/projects/index/Web 接线与档案），构建 + 11 项 verify + 隔离真实宿主 bundle 断言通过；隔离服务已停、隔离数据仅含宿主 workspace.json、真实 data 与上游无改动。
+- **授权状态**：R12 在持续授权范围内逐主题提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
+- **所有者已定规则（ADL-012～032）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪。
+- **下一步 / 遗留**：R11 与生成型能力、多人协作、Excel 导入均已决策暂缓/裁剪；待所有者提供可用 Key 或改变离线定位后再评估。所有者可在本机对 R12 Web「总览看板」做最终目视确认。
+- **最近一次交接**：doubao-work 自研 R12（新增 core/commands 共 5 个源文件 + verify-r12.mjs，改 task/index/panel.tsx/css 接线与全部档案），构建 + 12 项 verify + 隔离真实宿主 bundle 断言通过；隔离服务已停、隔离临时数据已清理、真实 data 与上游无改动。

@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-10（doubao-work 实现并通过验证 R10 交付物台账，接续 R12 / R11 取舍）
+最后更新：2026-10-11（doubao-work 实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入，R11/生成型/协作/Excel 导入按决策暂缓）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R10 已完成（R10 为 doubao-work 自研：项目维度交付物台账 + 版本/状态变更留痕，11 项 verify 与隔离真实宿主 bundle 断言通过，待提交推送）。R9 固定快照进度汇报由 trae 实现、doubao-work 独立复核通过后已推送；本机浏览器目视项以所有者手动确认为准（KB-014）。下一步：R12（多项目/检索/导入，协作裁剪评估）与 R11/生成型能力的实施或暂缓决策。
+- **当前状态**：R1–R12 已完成。R12（doubao-work）为只读关键字检索 `/pm search`、只读统计看板 `/pm stats` 与 Markdown 任务表离线导入 `/pm task import`，Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索；12 项 verify 与隔离真实宿主 bundle 断言通过，待提交推送。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入已按 ADL-030/031/032 决策暂缓/裁剪。本机浏览器目视项以所有者手动确认为准（KB-014）。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -18,8 +18,8 @@
   2. `docs/requirements.md` **v0.8**（**做什么、验收标准、当前实体模型（含 4.7 交付物）、§5.1 落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
-  5. `docs/knowledge-base.md`（已验证 API/模式/约定，当前至 KB-029）与 `docs/issues-and-solutions.md`（当前至 ISS-023）
-  6. `docs/decision-log.md`（当前至 ADL-028；ADL-028 为 R10 交付物台账「复用概念、数据层自研」决策）
+  5. `docs/knowledge-base.md`（已验证 API/模式/约定，当前至 KB-031）与 `docs/issues-and-solutions.md`（当前至 ISS-023）
+  6. `docs/decision-log.md`（当前至 ADL-032；ADL-029 为 R12 只读派生方案，ADL-030/031/032 为 Excel 导入/多人协作/R11 生成型暂缓决策）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
 - **硬约束（来自项目所有者，务必遵守）**：
@@ -148,6 +148,7 @@ node scripts/verify-risk-issues.mjs # 风险问题 CRUD、筛选与重启读回
 node scripts/verify-meetings.mjs    # 会议、行动项、关联保护与重启读回
 node scripts/verify-reports.mjs     # 固定快照、异常汇总、Markdown 与重启读回
 node scripts/verify-deliverables.mjs # 交付物台账、版本/状态留痕、删除保护与重启读回
+node scripts/verify-r12.mjs         # 关键字检索、统计看板、Markdown 任务表导入与重启读回
 node scripts/verify-export.mjs      # Markdown 内容、路径与覆盖保护
 node scripts/verify-web.mjs         # Web 快照、manifest 与动态 bundle 契约
 
@@ -174,7 +175,8 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 6. **R8 已完成并验收**：首版手工结构化录入，不调用模型；行动项内嵌并使用稳定 ID，可关联任务/问题。九项回归、隔离浏览器和项目所有者手动验收均通过。
 7. **R9 已完成并推送**：自定义周期固定快照、精简 Markdown、离线命令和 Web 通过十项回归；trae 实现后由 doubao-work 独立复核（隔离真实宿主启动 + 运行中下发 bundle 断言）通过并提交推送，未改业务代码；首版不接 schedule、模型或 PDF。本机浏览器目视项待所有者抽空确认（KB-014）。
 8. **R10 交付物台账已完成（doubao-work）**：pmtool 领域新增 `deliverables` 表与 `/pm deliverable` 离线命令、Web「交付物」标签，版本/状态变化自动只增留痕，有交付物禁删项目；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；11 项 verify 与隔离真实宿主 bundle 断言通过。
-9. **下一步 R12，随后 R11/生成型取舍**：R12 做多项目切换/关键字检索/统计看板与 Markdown 任务表离线导入，多人协作因与单用户本地定位冲突倾向裁剪并在 decision-log 写明；R11（复用 schedule 的里程碑到期提醒）与智能 WBS/纪要/周报等需 API Key 的生成型能力，按 ADL-009 离线优先倾向继续暂缓，给明确结论并归档。
+9. **R12 检索/看板/导入已完成（doubao-work）**：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS，dry-run 不写盘）；Web 顶部「总览看板」基于 snapshot 派生跨项目统计卡片与全局搜索，不新增宿主路由、无硬编码色。12 项 verify（含新增 verify-r12.mjs）与隔离真实宿主 bundle 断言通过。
+10. **剩余需求均已决策**：R11 里程碑提醒与智能 WBS/纪要/周报等生成型能力（ADL-032）、多人实时协作（ADL-031）、Excel 导入（ADL-030）暂缓/裁剪；待项目所有者提供可用 Key 或改变离线定位后再评估。本机浏览器目视（看板/全局搜索/窄屏）以所有者确认为准。
 
 ## 5. SSH 密钥（已配置，备查）
 

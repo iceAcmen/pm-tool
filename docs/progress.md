@@ -2,10 +2,13 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-10（doubao-work 实现并通过验证 R10 交付物台账）
+最后更新：2026-10-11（doubao-work 实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入）
 
-## 当前阶段：v0.1.0 后续迭代，R1–R10 已完成，下一步 R12 / R11 取舍（2026-10-10）
+## 当前阶段：v0.1.0 后续迭代，R1–R12 已完成，R11/生成型/协作/Excel 导入按决策暂缓（2026-10-11）
 
+- **R12 已实现并通过验证（doubao-work）**：新增只读全库关键字检索 `/pm search <关键字> [--type ...]`（七类实体不区分大小写子串、按类型分组）与只读统计看板 `/pm stats [项目ID]`（项目状态计数、任务完成率、逾期、未关闭风险按严重度、交付物四态）；新增 Markdown 任务表离线导入 `/pm task import <项目ID> <清单.md> [confirm]`（GitHub 缩进勾选清单还原 WBS，`[x]` 记已完成，dry-run 不写盘）。Web 顶部新增「总览看板」，基于最新 snapshot 在浏览器端派生跨项目统计卡片、逐项目明细与全局搜索，不新增宿主路由、配色只用宿主 token。检索/看板不新增表、领域版本仍为 1（ADL-029）。
+- **R12 验证通过**：冻结安装干净、构建退出码 0（client bundle 152.96 kB）、**12 个** verify 全部退出码 0（新增 verify-r12.mjs，含跨类/类型过滤、统计口径、导入 dry-run vs confirm、缩进→WBS、负例与全新进程读回；verify-web.mjs 扩展 R12 界面串/`.pm-board` 契约）；`git diff --check` 干净；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动，存储领域打开、cookie 鉴权，抓取含 dsh-pm-tool 的合并 bundle（HTTP 200）断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」。本机浏览器目视项以所有者手动确认为准（KB-014）。
+- **R12 裁剪与暂缓结论**：Excel 导入（依赖 skill-office/LibreOffice，ADL-030）、多人实时协作（与单用户本地定位冲突，ADL-031）本期不做；R11 里程碑提醒与智能 WBS/纪要/周报等生成型能力（依赖常驻调度与 API Key）继续暂缓（ADL-032），需求中如实保留为「暂缓/裁剪」。
 - **R10 已实现并通过验证（doubao-work）**：pmtool 领域新增 `deliverables` 表（id `dlv-NNNN`，字段名称/版本/负责人/状态/位置/计划交付日期/说明 + 内嵌只增 `history[]`）；离线 `/pm deliverable add/list/get/update/delete`，状态四态 planned/in_progress/submitted/accepted，状态或版本变化自动留痕（可带操作人与说明），有交付物的项目禁止删除；Web 新增「交付物」标签（筛选/搜索/台账表格/编辑抽屉/变更时间线/项目栏计数）。dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研。
 - **R10 验证通过**：冻结安装干净、构建退出码 0（client bundle 140.47 kB）、**11 个** verify 全部退出码 0（新增 verify-deliverables.mjs，含留痕规则、并发、失败恢复、删除保护、权限、全新进程读回续号）；隔离 DSH_HOME + 无 Key 真实宿主启动并抓到运行中 bundle 断言含 R10 界面；业务数据与上游零改动。本机浏览器目视项以所有者手动确认为准（KB-014）。
 - **R9 已独立复核并推送（doubao-work）**：冻结安装、构建、十项 verify 全部退出码 0；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、带 token 200/无 token 401、启动清单与运行中下发 bundle 含 R9 界面）；未改业务代码原样接收；本机浏览器目视项边界见 KB-014。
@@ -82,7 +85,6 @@
 - 配置仓库级提交身份 Ice \<835687152@qq.com\>（未改全局）；首次提交 `12bcad3` 并推送 main 到 `git@github.com:iceAcmen/pm-tool.git`，跟踪 origin/main。
 
 ## 后续任务
-- R9 已由 doubao-work 独立复核通过并提交推送；项目所有者可在本机 `pnpm dsh --profile pm web` 做最终目视确认（主题/窄屏）。
-- 下一优先项 **R10 交付物管理**（doubao-work 接续）：先核对 dsh `deliverables`（present/workspace-changes/ui-deliverables）可复用边界，再补项目维度交付物台账。
-- 其后 R12（多项目切换/检索/统计、Markdown 任务表导入；多人协作裁剪）；R11 里程碑提醒与生成型能力的取舍见 decision-log。
+- R12 已由 doubao-work 实现、验证并随提交推送；项目所有者可在本机 `pnpm dsh --profile pm web` 打开顶部「总览看板」做最终目视确认（卡片、全局搜索、窄屏）。
+- 剩余需求均已决策暂缓/裁剪：R11 里程碑提醒与生成型能力（ADL-032）、多人实时协作（ADL-031）、Excel 导入（ADL-030）；待项目所有者明确提供可用 Key/接受常驻联网依赖后再评估。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。

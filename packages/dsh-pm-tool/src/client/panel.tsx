@@ -223,6 +223,7 @@ export function PmPanel({ execute }: PmPanelApi) {
   const [drawer, setDrawer] = useState<Drawer>()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
+  const [dashOpen, setDashOpen] = useState(false)
 
   const refresh = async () => {
     setBusy(true)
@@ -312,6 +313,14 @@ export function PmPanel({ execute }: PmPanelApi) {
           </div>
         </div>
         <div className="pm-top-actions">
+          <button
+            className="pm-button"
+            aria-pressed={dashOpen}
+            title="跨项目总览看板与全局搜索"
+            onClick={() => setDashOpen(value => !value)}
+          >
+            <LayoutDashboard size={15}/>总览看板
+          </button>
           <button className="pm-button" onClick={() => setDrawer({ kind: 'project-create' })}>
             <Plus size={15}/>新建项目
           </button>
@@ -327,9 +336,15 @@ export function PmPanel({ execute }: PmPanelApi) {
         </div>
       </header>
 
-      {!project
-        ? <EmptyWorkspace onCreate={() => setDrawer({ kind: 'project-create' })}/>
-        : <>
+      {dashOpen
+        ? <GlobalBoard
+            data={data}
+            onPickProject={(id) => { setSelected(id); setDashOpen(false) }}
+            onClose={() => setDashOpen(false)}
+          />
+        : !project
+          ? <EmptyWorkspace onCreate={() => setDrawer({ kind: 'project-create' })}/>
+          : <>
             <ProjectBar
               project={project}
               tasks={tasks}
@@ -1137,6 +1152,150 @@ function Summary({ label, value, note, tone }: { label: string, value: string | 
     <strong>{value}</strong>
     <small>{note}</small>
   </section>
+}
+
+type BoardHit = { type: string, label: string, id: string, title: string, projectId: string, projectName: string }
+
+/** 浏览器端基于 snapshot 的全局检索：与离线 /pm search 同一口径的不区分大小写子串匹配。 */
+function collectBoardMatches(data: Snapshot, q: string): BoardHit[] {
+  const nameById = new Map(data.projects.map(project => [project.id, project.name]))
+  const nameOf = (projectId: string): string => nameById.get(projectId) ?? '（未关联项目）'
+  const hits: BoardHit[] = []
+  const push = (type: string, label: string, id: string, title: string, projectId: string): void => {
+    hits.push({ type, label, id, title, projectId, projectName: nameOf(projectId) })
+  }
+  const has = (...fields: unknown[]): boolean =>
+    fields.some(field => String(field ?? '').toLowerCase().includes(q))
+
+  for (const project of data.projects) {
+    if (has(project.name, project.description, project.owner, project.id)) push('project', '项目', project.id, project.name, project.id)
+  }
+  for (const task of data.tasks) {
+    if (has(task.title, task.description, task.assignee, task.id, task.code)) push('task', '任务', task.id, task.title, task.projectId)
+  }
+  for (const milestone of data.milestones) {
+    if (has(milestone.title, milestone.description, milestone.id)) push('milestone', '里程碑', milestone.id, milestone.title, milestone.projectId)
+  }
+  for (const record of data.riskIssues) {
+    if (has(record.title, record.description, record.owner, record.id, record.solution, record.responsePlan)) {
+      push('risk', '风险/问题', record.id, record.title, record.projectId)
+    }
+  }
+  for (const meeting of data.meetings) {
+    if (has(meeting.title, meeting.summary, meeting.location, meeting.facilitator, meeting.recorder, meeting.id)) {
+      push('meeting', '会议纪要', meeting.id, meeting.title, meeting.projectId)
+    }
+  }
+  for (const report of data.reports) {
+    if (has(report.title, report.executiveSummary, report.id)) push('report', '进度汇报', report.id, report.title, report.projectId)
+  }
+  for (const deliverable of data.deliverables) {
+    if (has(deliverable.name, deliverable.version, deliverable.location, deliverable.description, deliverable.id)) {
+      push('deliverable', '交付物', deliverable.id, deliverable.name, deliverable.projectId)
+    }
+  }
+  const order = ['project', 'task', 'milestone', 'risk', 'meeting', 'report', 'deliverable']
+  return hits.sort((a, b) =>
+    order.indexOf(a.type) - order.indexOf(b.type)
+    || a.projectId.localeCompare(b.projectId)
+    || a.id.localeCompare(b.id, 'en', { numeric: true }))
+}
+
+function GlobalBoard({ data, onPickProject, onClose }: {
+  data: Snapshot
+  onPickProject: (id: string) => void
+  onClose: () => void
+}) {
+  const [query, setQuery] = useState('')
+  const today = new Date().toISOString().slice(0, 10)
+  const q = query.trim().toLowerCase()
+  const matches = useMemo(() => (q ? collectBoardMatches(data, q) : []), [data, q])
+
+  const totalTasks = data.tasks.length
+  const doneTasks = data.tasks.filter(task => task.status === 'done').length
+  const overdueTasks = data.tasks.filter(task =>
+    task.dueDate && task.dueDate < today && task.status !== 'done').length
+  const openRisks = data.riskIssues.filter(record => record.status !== 'closed').length
+  const achieved = data.milestones.filter(milestone => milestone.status === 'achieved').length
+  const completionRate = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0
+  const activeProjects = data.projects.filter(project => project.status === 'active').length
+
+  return <div className="pm-board">
+    <div className="pm-board-head">
+      <div>
+        <h2>总览看板</h2>
+        <p>跨项目统计与全局检索，数据来自最新快照；点击任意项目进入其工作台。</p>
+      </div>
+      <button className="pm-icon-button" aria-label="关闭总览看板" onClick={onClose}><X size={16}/></button>
+    </div>
+    <label className="pm-board-search">
+      <Search size={15}/>
+      <input
+        value={query}
+        onChange={event => setQuery(event.currentTarget.value)}
+        placeholder="跨项目搜索：任务 / 里程碑 / 风险 / 会议 / 汇报 / 交付物"
+        aria-label="跨项目搜索"
+      />
+      {query && <button className="pm-plain-icon" type="button" aria-label="清空搜索" onClick={() => setQuery('')}><X size={13}/></button>}
+    </label>
+
+    {q
+      ? (matches.length
+        ? <div className="pm-board-matches">
+            <p className="pm-board-note">命中 {matches.length} 条：</p>
+            {['project', 'task', 'milestone', 'risk', 'meeting', 'report', 'deliverable'].map(type => {
+              const group = matches.filter(hit => hit.type === type)
+              if (!group.length) return null
+              return <section key={type} className="pm-board-section">
+                <h2>{group[0]!.label}（{group.length}）</h2>
+                <ul className="pm-board-hit-list">
+                  {group.map(hit =>
+                    <li key={`${hit.type}-${hit.id}`}>
+                      <button type="button" onClick={() => onPickProject(hit.projectId)}>
+                        <span>{hit.id}｜{hit.title}</span>
+                        <small>所属项目：{hit.projectName}</small>
+                      </button>
+                    </li>)}
+                </ul>
+              </section>
+            })}
+          </div>
+        : <div className="pm-table-empty"><Search size={24}/><span>未找到匹配「{query.trim()}」的记录</span></div>)
+      : <>
+          <div className="pm-summary-grid">
+            <Summary label="项目总数" value={data.projects.length} note={`${activeProjects} 个进行中`}/>
+            <Summary label="任务完成率" value={`${completionRate}%`} note={`${doneTasks}/${totalTasks} 已完成`}/>
+            <Summary label="逾期项" value={overdueTasks} note={overdueTasks ? '需要优先处理' : '当前无逾期任务'} tone={overdueTasks ? 'danger' : undefined}/>
+            <Summary label="未关闭风险/问题" value={openRisks} note={`里程碑已达成 ${achieved}/${data.milestones.length}`}/>
+          </div>
+          <div className="pm-board-section">
+            <h2>逐项目明细</h2>
+            {data.projects.length
+              ? <div className="pm-board-projects">
+                  {data.projects.map(project => {
+                    const tasks = data.tasks.filter(task => task.projectId === project.id)
+                    const done = tasks.filter(task => task.status === 'done').length
+                    const overdue = tasks.filter(task =>
+                      task.dueDate && task.dueDate < today && task.status !== 'done').length
+                    const milestones = data.milestones.filter(item => item.projectId === project.id)
+                    const achievedCount = milestones.filter(item => item.status === 'achieved').length
+                    const risks = data.riskIssues.filter(item =>
+                      item.projectId === project.id && item.status !== 'closed').length
+                    const deliverables = data.deliverables.filter(item => item.projectId === project.id)
+                    return <button key={project.id} type="button" className="pm-board-project" onClick={() => onPickProject(project.id)}>
+                      <span className="pm-board-project-name">{project.name}<StatusTag kind="project" value={project.status}/></span>
+                      <span>任务 {done}/{tasks.length}</span>
+                      <span>里程碑 {achievedCount}/{milestones.length}</span>
+                      <span>未关闭风险 {risks}</span>
+                      <span>交付物 {deliverables.length}</span>
+                      {overdue > 0 && <span className="pm-board-overdue">⚠ 逾期 {overdue}</span>}
+                    </button>
+                  })}
+                </div>
+              : <p className="pm-board-note">暂无项目数据，先新建一个项目。</p>}
+          </div>
+        </>}
+  </div>
 }
 
 function DrawerPanel({ title, onClose, children }: { title: string, onClose: () => void, children: ReactNode }) {

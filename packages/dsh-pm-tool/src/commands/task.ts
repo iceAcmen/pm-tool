@@ -1,5 +1,6 @@
 /** /pm task：解析离线 WBS 命令并渲染中文结果。 */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
+import { readFileSync } from 'node:fs'
 import { z } from 'zod'
 import {
   addTask,
@@ -18,6 +19,12 @@ import {
   TaskReferencedByMeetingError,
   updateTask,
 } from '../core/tasks.js'
+import {
+  importTasksFromMarkdown,
+  planTaskImport,
+  TaskImportEmptyError,
+  TaskImportNoProjectError,
+} from '../core/task-import.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -32,6 +39,8 @@ export const taskHelp = [
   '  /pm task move t-0003 root confirm',
   '  /pm task delete t-0003 confirm',
   '  /pm task renumber p-0001 confirm',
+  '  /pm task import p-0001 任务表.md          解析并预览将创建的任务（不落盘）',
+  '  /pm task import p-0001 任务表.md confirm  按 GitHub 缩进勾选清单（- [ ] / - [x]）导入为 WBS 任务',
   '删除、移动和重新编号不带 confirm 只显示提示，不会写盘。',
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
@@ -87,7 +96,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -191,6 +200,38 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
           }
         : { kind: 'error', text: `未找到任务：${id}。` }
     }
+    if (action === 'import') {
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      if (tokens.length < 2 || tokens.length > 3) {
+        return { kind: 'error', text: '请使用：/pm task import <项目ID> <清单文件路径.md> [confirm]' }
+      }
+      const [projectId, filePath, confirmation] = tokens
+      let markdown: string
+      try {
+        markdown = readFileSync(filePath, 'utf8')
+      } catch {
+        return { kind: 'error', text: `无法读取清单文件：${filePath}（请确认路径存在且可读）。` }
+      }
+      const plan = planTaskImport(domain, projectId, markdown)
+      if (confirmation !== 'confirm') {
+        return {
+          kind: 'success',
+          text: [
+            `已解析清单：将为项目 ${projectId} 创建 ${plan.total} 个任务（其中 ${plan.done} 个为已完成）。当前未写入。`,
+            ...plan.outline.map(item => `${'  '.repeat(item.depth)}${item.code}｜${item.done ? '[x]' : '[ ]'} ${item.title}`),
+            `确认命令：/pm task import ${projectId} ${filePath} confirm`,
+          ].join('\n'),
+        }
+      }
+      const created = await importTasksFromMarkdown(domain, projectId, markdown)
+      return {
+        kind: 'success',
+        text: [
+          `已导入 ${created.length} 个任务到项目 ${projectId}（${created.filter(task => task.done).length} 个标记为已完成）：`,
+          ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
+        ].join('\n'),
+      }
+    }
     const renumberMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!renumberMatch) {
       return { kind: 'error', text: '请使用：/pm task renumber <项目ID> confirm' }
@@ -225,7 +266,9 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
       || error instanceof TaskMoveCycleError
       || error instanceof TaskMilestoneNotFoundError
       || error instanceof TaskMilestoneProjectMismatchError
-      || error instanceof TaskReferencedByMeetingError) {
+      || error instanceof TaskReferencedByMeetingError
+      || error instanceof TaskImportNoProjectError
+      || error instanceof TaskImportEmptyError) {
       return { kind: 'error', text: error.message }
     }
     console.error('[pm-tool] 任务操作失败：', error)

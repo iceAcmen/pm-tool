@@ -21,8 +21,8 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
-| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.8 | 含 ADL-028 R10 交付物台账模型 |
-| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R10 已完成（R10 交付物台账由 doubao-work 自研）；下一步 R12，R11/生成型能力取舍 |
+| 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.9 | 含 ADL-028 R10 交付物台账与 ADL-029 R12 检索/看板/导入模型 |
+| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R12 已完成（R12 检索/看板/导入由 doubao-work 自研）；R11/生成型/多人协作/Excel 导入按决策暂缓 |
 | 阶段 4 测试交付 | ✅ MVP 已完成并发布 v0.1.0 | 测试矩阵、交付说明、完整回归与真实启动验证通过 |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
@@ -119,6 +119,7 @@ node scripts/verify-risk-issues.mjs
 node scripts/verify-meetings.mjs
 node scripts/verify-reports.mjs
 node scripts/verify-deliverables.mjs
+node scripts/verify-r12.mjs
 node scripts/verify-export.mjs
 node scripts/verify-web.mjs
 cd ~/Projects/dsh-pm/deepseek-harness

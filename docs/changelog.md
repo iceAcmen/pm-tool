@@ -8,6 +8,24 @@
 
 ---
 
+## [未发布] — R12 关键字检索 / 统计看板 / Markdown 任务表导入（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增文件：
+  - `packages/dsh-pm-tool/src/core/search.ts`：全库关键字检索（只读、不写盘）。对项目/任务/里程碑/风险问题/会议/汇报/交付物的关键文本做不区分大小写子串匹配，按类型分组稳定排序；`--type` 可选七类之一，非法类型中文报错。
+  - `packages/dsh-pm-tool/src/core/stats.ts`：统计看板聚合（只读）。全项目或单项目：项目按状态计数、任务完成率、逾期任务/里程碑、未关闭风险按严重度、会议/汇报计数、交付物四态计数；`today` 可注入以保证验证确定性。
+  - `packages/dsh-pm-tool/src/core/task-import.ts`：Markdown 任务表离线导入。解析 GitHub 风格缩进勾选清单（`- [ ]`/`- [x]`），按观测到的最小缩进步长归一化为 WBS 层级，缩进栈还原父子关系，复用 `addTask` 的编号/父级校验；`[x]` 记为已完成（progress=100）。dry-run 只投影预览不落盘。
+  - `packages/dsh-pm-tool/src/commands/search.ts`、`src/commands/stats.ts`：`/pm search`、`/pm stats` 离线命令，全中文输出。
+  - `packages/dsh-pm-tool/scripts/verify-r12.mjs`：专项验证（检索跨类与类型过滤、统计口径与逾期/风险聚合、导入 dry-run 不写盘与 confirm 落盘、缩进→WBS、[x] 已完成、负例与全新子进程读回）。
+- 修改文件：
+  - `commands/task.ts`：新增 `task import <projectId> <filePath> [confirm]` 子命令与帮助、错误类接线。
+  - `index.ts`：注册 `search`/`stats` 路由与帮助、命令描述/hint；snapshot 已含全部表，无需扩。
+  - `client/panel.tsx`：顶部新增「总览看板」开关，浏览器端基于 snapshot 派生跨项目统计卡片（项目总数/任务完成率/逾期项/未关闭风险）、逐项目明细与全局搜索框（与离线 `/pm search` 同口径）；颜色全部复用宿主 token。
+  - `client/panel.css`：`.pm-board*` 样式（统计卡片、逐项目卡片、命中列表），容器查询窄屏单列，无硬编码 hex。
+  - `scripts/verify-web.mjs`：bundle/css 契约增加 R12 界面串与 `.pm-board-projects` 断言。
+- 为什么：实现需求 R12「关键字检索 + 统计看板 + 外部任务表导入」。检索/看板为只读派生视图，数据始终以各表现状为准；Web 看板与全局搜索做成浏览器端基于现有 snapshot 的派生，不新增宿主路由、不引入硬编码色（ADL-029）。Excel 导入（依赖 skill-office/LibreOffice、重）与多人实时协作（与 ADL-009 单用户本地离线定位冲突）本期裁剪（ADL-030/ADL-031）。
+- 验证：`pnpm install --frozen-lockfile` 干净；`pnpm run build` 退出码 0（tsc 零错误，client bundle 152.96 kB）；**12 个** `verify-*.mjs` 全部退出码 0（新增 verify-r12.mjs）；`git diff --check` 干净；隔离 DSH_HOME + 隔离临时数据 + 随机端口 + 无 Key 真实宿主启动，存储领域打开、首页 303 种 cookie 鉴权，抓取含 `dsh-pm-tool/client.js` 的合并路由（HTTP 200，578732 B）断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」。
+- 影响范围：仅新增检索/统计/导入能力与对应界面/测试，不改既有实体字段；业务数据与上游零改动。本机浏览器目视（看板卡片、全局搜索交互、窄屏）以项目所有者手动确认为准（KB-014/ADL-027）。
+
 ## [未发布] — R10 项目维度交付物台账（2026-10-10，平台：doubao-work / 豆包工作）
 
 - 新增文件：
