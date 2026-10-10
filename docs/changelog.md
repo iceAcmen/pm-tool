@@ -8,6 +8,19 @@
 
 ---
 
+## [未发布] — 定稿业务实体落盘布局（ADL-011）并收敛过时文档（2026-10-10，平台：doubao-work）
+
+- **背景**：trae 只读接手、停在开工报备（符合根 `AGENTS.md` 第 4 节），报告 3 处过时文档与存储路径待确认；项目所有者确认采用「单领域 per-record 扁平分表」布局并授权直接修正文档。
+- **改了哪些文件 / 做了什么**：
+  - `docs/requirements.md`：§5.1 落盘布局**定稿**——单一领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表、一条记录一个 JSON；**取消手工 index.json**（表可枚举）；项目 README 仅作 R4 导出；文档版本 v0.3 → v0.4，变更追溯补 ADL-011。
+  - `docs/decision-log.md`：新增 **ADL-011**（落盘布局定稿，含理由与被否替代方案）。
+  - `docs/knowledge-base.md`：新增 **KB-011**（`DomainTable.keys()/entries()` 同步枚举、业务实体布局与示例）。
+  - `docs/feasibility-map.md`：旧服务名 `ctx.storage.domain` → **`ctx.storageDomain`**。
+  - `docs/tech-plugin-scaffold.md`：修正 2 处错误启动命令 `pnpm dsh web --profile pm` → **`pnpm dsh --profile pm`**（第 94、124 行）。
+  - `packages/dsh-pm-tool/README.md`：修正 1 处同样的启动命令（第 38 行），并补充「指定 profile 后不加 web 动词、token URL、`--no-open`」说明。
+- **为什么改**：让接手平台拉到的文档与上游真实 API 一致、消除同一文档自相矛盾；存储布局在写业务代码前定稿，避免返工。
+- **影响范围**：**仅文档**，不改插件代码与运行行为；R1–R6 业务功能仍未开始。（注：issues/knowledge-base/handover-archive 及 tech-scaffold 第 176 行中出现的错误命令是在**记录/讲解该错误**，按存档原则保留。）
+
 ## [未发布] — 建立跨平台可移植协作基座（2026-10-10，平台：doubao-work）
 
 ### 改动文件（新增）

@@ -2,10 +2,10 @@
 
 > 本文件记录产品「要做哪些功能、优先级如何、怎样算验收通过」，并给出 MVP 的数据模型与落盘约定；给开发与验收使用，按模块增删条目。本文档经项目所有者评审确认后作为阶段 3 开发依据。
 
-- 文档状态：**阶段 2 评审稿（v0.3）**，关键决策与补充决策均已确认，作为阶段 3 开发依据
-- 最后更新：2026-10-10
+- 文档状态：**阶段 3 开发依据（v0.4）**，关键/补充决策与落盘布局均已确认
+- 最后更新：2026-10-10（v0.4：§5.1 落盘目录布局定稿，见 ADL-011）
 - 技术可行性依据：见 [feasibility-map.md](./feasibility-map.md)
-- **需求变更追溯**：任何需求/范围调整都在 [decision-log.md](./decision-log.md) 记录「时间、变更、原因、替代方案、结果、改动平台」（v0.1→v0.2 见 ADL-007/008，v0.2→v0.3 见 ADL-009），并在 [changelog.md](./changelog.md) 留痕；多平台协作规则见根 `AGENTS.md` 与 [collaboration.md](./collaboration.md)。
+- **需求变更追溯**：任何需求/范围调整都在 [decision-log.md](./decision-log.md) 记录「时间、变更、原因、替代方案、结果、改动平台」（v0.1→v0.2 见 ADL-007/008，v0.2→v0.3 见 ADL-009，v0.3→v0.4 见 ADL-011），并在 [changelog.md](./changelog.md) 留痕；多平台协作规则见根 `AGENTS.md` 与 [collaboration.md](./collaboration.md)。
 
 ## 一、目标用户与核心场景
 
@@ -97,20 +97,28 @@
 
 ## 五、数据落盘与目录约定（人类可读、可 git）
 
-### 5.1 目录布局（建议，阶段 3 开发前会就最终路径再报备确认）
+### 5.1 目录布局（已定稿，2026-10-10，决策见 ADL-011）
+
+采用 dsh `storage-domain` 的 **per-record（逐条记录）扁平布局**：在单一存储领域 `pmtool` 下按「实体类型分表、一条记录一个可读 JSON 文件」组织。物理路径规则为 `<root>/<领域 unit>/<表 table>/<键 key>.json`，文件内容 `{ "version": n, "record": <值> }`，目录权限 `0700`、原子写。
 
 ```
 pm-tool/
-├── data/                          # 业务数据根目录（storage-json 的 root；ADL-009：暂不纳入 git、已 gitignore，首次写入时自动创建）
-│   └── projects/
-│       ├── index.json             # 全部项目的轻量索引（id/名称/状态/日期）
-│       └── <projectId>/
-│           ├── project.json       # 项目信息（美化打印的可读 JSON）
-│           ├── tasks.json         # 该项目全部 WBS 任务
-│           ├── milestones.json    # 该项目里程碑
-│           └── README.md          # 由 JSON 渲染生成的人类可读项目概览（计划/任务树/里程碑时间线）
-└── packages/                      # 自研 dsh 插件包（阶段 3 创建）
+├── data/                          # storage-json 的 root（ADL-009：不纳入 git、已 gitignore，首次写入自动创建）
+│   └── pmtool/                    # 存储领域 unit = pmtool（与第 0 步自检同一领域）
+│       ├── checks/                # 第 0 步自检表（selftest.json，保留）
+│       ├── projects/
+│       │   └── <projectId>.json   # 一条项目一个文件（表 projects，键 = projectId）
+│       ├── tasks/
+│       │   └── <taskId>.json      # 一条任务一个文件（表 tasks；记录含 projectId / parentId / 同级顺序 / WBS 编号）
+│       └── milestones/
+│           └── <milestoneId>.json # 一条里程碑一个文件（表 milestones；记录含 projectId）
+└── packages/dsh-pm-tool/          # 自研插件包
 ```
+
+- **不设手工 `index.json`**：storage-domain 的表提供 `keys()` / `entries()` 迭代器（上游 `storage-domain/src/domain.ts` 已确认），项目列表、某项目下的任务/里程碑通过遍历表并按 `projectId` 过滤得到，避免双写索引导致不一致。
+- 项目 `README.md` 概览、周报等 Markdown 是 **R4 的渲染导出产物**（导出到用户指定目录或随 JSON 打包），**不写入存储域、不作为数据源**；数据始终以上述 JSON 为准。
+- 记录键名仅允许 `[a-zA-Z0-9_-]+`：`projectId / taskId / milestoneId` 取该字符集，建议短 id（如 `p-0001`、`t-0001`、`m-0001`）。
+- 本布局替代早期「按项目聚合的嵌套目录（`projects/<id>/project.json` 等）」设想——嵌套目录与 per-record 扁平键规则不兼容，故不采用（见 ADL-011）。
 
 ### 5.2 读写原则
 

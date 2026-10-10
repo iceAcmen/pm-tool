@@ -142,6 +142,26 @@
 - **【待确认】**：第三方插件新增**独立顶级路由/页面**的接入方式，官方无第三方示例；最接近先例是 ui-schedule 的侧边栏页面。做 R5 时先做官方明确支持的「设置卡片/插件详情区块」，再实测独立页面。
 - **来源**：上游 `docs/cookbook/adding-a-settings-card.zh.md`、`extension-cookbook.zh.md`、`packages/client/ui-schedule/{package.json,src/index.ts}`。
 
+## KB-011 ｜ 业务实体布局：单领域分表 + 表枚举，无需自建索引（沉淀：doubao-work，2026-10-10；决策 ADL-011）
+
+- **结论**：
+  - 表支持**同步枚举**：`[...table.keys()]` 列出全部键、`[...table.entries()]` 列出 `[键, 值]`（上游 `storage-domain/src/domain.ts`，`DomainTable` 暴露 `keys()`/`entries()` 迭代器）。因此「项目列表」「某项目下任务/里程碑」直接遍历表按 `projectId` 过滤即可，**不要手工维护 index.json**（双写易不一致）。
+  - Project/Task/Milestone 落在单一领域 `pmtool` 的三张表（per-record）：
+    - 表 `projects`，键 `projectId` → `data/pmtool/projects/<projectId>.json`
+    - 表 `tasks`，键 `taskId`（记录含 `projectId`/`parentId`/同级顺序/WBS 编号）→ `data/pmtool/tasks/<taskId>.json`
+    - 表 `milestones`，键 `milestoneId`（记录含 `projectId`）→ `data/pmtool/milestones/<milestoneId>.json`
+  - 键名只能用 `[a-zA-Z0-9_-]+`，建议短 id（`p-0001`/`t-0001`/`m-0001`）；Markdown 概览是 R4 导出产物，不进存储域。
+- **适用场景**：R1–R3、R6 的存储层实现与一切「列出/按项目筛选」需求。
+- **可复现实例**：
+  ```ts
+  const allProjects = [...domain.table('projects').entries()]      // [id, project][]
+  const tasksOf = (pid: string) =>
+    [...domain.table('tasks').entries()]
+      .filter(([, t]) => t.projectId === pid)
+      .sort((a, b) => a[1].order - b[1].order)
+  ```
+- **来源**：上游 `packages/storage/storage-domain/src/domain.ts`；本项目 `docs/requirements.md` v0.4 §5.1、ADL-011。
+
 ---
 
 ## 待补充

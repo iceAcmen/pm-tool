@@ -22,8 +22,9 @@
 - **后续阶段 3 业务编码与阶段 4 测试移交 TRAE 或其他 IDE/Agent 执行，本侧暂停**；接手导引见根 `AGENTS.md` 与 `docs/handoff.md` 第 0 节。
 
 ### ⬜ 阶段 3 业务功能（第 1 步起，未开始，移交 TRAE/其他平台，动手前需先报备）
-- 按需求 v0.3 实现 MVP：项目计划 R1 / WBS R2 / 里程碑 R3 / 持久化与 Markdown 导出 R4 / Web 界面 R5 / 离线命令 R6。
-- 仍待业务阶段验证：第三方独立顶级 Web 页面（第 0 步未做浏览器半侧）。
+- 按需求 **v0.4** 实现 MVP：项目计划 R1 / WBS R2 / 里程碑 R3 / 持久化与 Markdown 导出 R4 / Web 界面 R5 / 离线命令 R6。
+- **落盘布局已定稿（ADL-011）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record，取消 index.json；trae 已完成只读接手并报备，待其提交首个业务增量（建议：projects 表 + zod schema + 离线 `/pm project add/list/get` + 扩展确定性校验脚本，先不做 Web）的**文件级清单**，经项目所有者确认后再写码。
+- 仍待业务阶段验证：第三方独立顶级 Web 页面与外部包浏览器构建（第 0 步只做了 Host 侧，R5 未打通；建议 R5 排在 R1/R2/R3/R6 之后并先做设置卡片/区块、再做顶级页面 spike）。
 
 ---
 

@@ -10,16 +10,16 @@
 
 > 接手第一步：先读仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：阶段 1（环境搭建）、阶段 2（需求分析 v0.3）已完成；阶段 3 第 0 步「打通验证」已完成并验收——最小插件已证明「独立仓库插件能被本地源码版 dsh 装载、离线命令可用、可读 JSON 落盘到产品目录」。**业务功能（R1–R6）尚未开始**。
+- **当前状态**：阶段 1（环境搭建）、阶段 2（需求分析 **v0.4**）已完成；阶段 3 第 0 步「打通验证」已完成并验收——最小插件已证明「独立仓库插件能被本地源码版 dsh 装载、离线命令可用、可读 JSON 落盘到产品目录」。**业务实体落盘布局已定稿（ADL-011）**；trae 已只读接手并停在开工报备，**业务功能（R1–R6）尚未开始**，待文件级清单获确认。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. 根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
   1. `README.md`（总览、目录、启动方式）
-  2. `docs/requirements.md` v0.3（**做什么、验收标准、Project/Task/Milestone 数据模型、落盘约定**——开发主依据）
+  2. `docs/requirements.md` **v0.4**（**做什么、验收标准、Project/Task/Milestone 数据模型、§5.1 已定稿落盘布局**——开发主依据）
   3. `docs/feasibility-map.md`（dsh 哪些能力复用/新建）
   4. `docs/tech-plugin-scaffold.md`（**怎么挂插件、真实 API、第 0 步实测结论**——开发主依据，重点读文末附节）
   5. `docs/knowledge-base.md`（已验证 API/模式/约定，KB-001～010）与 `docs/issues-and-solutions.md`（ISS-001～009）
-  6. `docs/decision-log.md`（ADL-001～ADL-010，所有已定决策与约束）
+  6. `docs/decision-log.md`（ADL-001～ADL-011，所有已定决策与约束；ADL-011 为落盘布局定稿）
   7. `docs/handover-archive-doubao.md`（豆包工作阶段完整来龙去脉，需要背景时读）
   8. 本文件（环境恢复、装载/验证命令、下一步）
 - **硬约束（来自项目所有者，务必遵守）**：
@@ -77,7 +77,9 @@
 - 唯一遗留【待验证】：第三方独立顶级 Web 页面（业务功能阶段再验）。
 
 ### 下一步（阶段 3 业务开发，移交 TRAE 或其他 IDE/Agent；动手前仍需向项目所有者报备具体文件改动）
-- 实现 MVP 业务功能：pm-core 业务实体（Project/Task/Milestone）与存储、离线 CRUD 命令、Web 界面、Markdown/JSON 导出（R1–R6）。
+- **存储布局已定稿（ADL-011 / requirements v0.4 §5.1）**：单领域 `pmtool` 下 `projects`/`tasks`/`milestones` 三表 per-record（`data/pmtool/<表>/<id>.json`），用表 `keys()/entries()` 枚举、不建 index.json；直接照此实现，不要再用旧的嵌套目录设想。
+- **建议首个业务增量（最窄纵切，先不做 Web）**：新增 `projects` 表 + zod schema + 离线 `/pm project add/list/get` + 扩展确定性校验脚本（`scripts/verify-*.mjs`）；跑通后再 R2 任务树、R3 里程碑、R4 导出，R5 Web 最后。
+- 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步及全部档案提交**已推送 origin/main**（2026-10-10 经项目所有者确认）。
 
@@ -137,7 +139,7 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 
 1. 阶段 2 已定稿并获确认（`docs/requirements.md` v0.3，决策见 ADL-007/008/009）。
 2. **阶段 3 第 0 步「打通验证」已完成**：最小插件 `packages/dsh-pm-tool/` 已被本地源码版 dsh 装载，离线 `/pm ping` 与可读 JSON 落盘（`pm-tool/data`，0700）均验证通过；结论见 `docs/tech-plugin-scaffold.md` 文末附节、ADL-010、ISS-005～009。
-3. **下一步＝阶段 3 业务功能（需先报备具体文件改动）**：就 pm-core 实体（Project/Task/Milestone）存储、离线 CRUD 命令、Web 界面、Markdown/JSON 导出的分包与首批文件做改动报备，获确认后实现 MVP（R1–R6），全程不改上游源码、不依赖 API Key；独立顶级 Web 页面接入方式在做界面时验证。
+3. **下一步＝阶段 3 业务功能（需先报备具体文件改动）**：落盘布局已定稿（ADL-011，requirements v0.4 §5.1：单领域 `pmtool` 三表 per-record）；建议首个增量做 projects 表 + zod + 离线 `/pm project add/list/get` + 确定性校验脚本（先不做 Web），接手平台先出文件级清单报备，获确认后实现，再依次 R2/R3/R4、R5 收尾；全程不改上游源码、不依赖 API Key；独立顶级 Web 页面与外部包浏览器构建在做 R5 时实测（KB-010 待验证项）。
 4. 阶段 4 测试交付：本地运行验证、现场演示、版本迭代与发布。
 
 ## 5. SSH 密钥（已配置，备查）

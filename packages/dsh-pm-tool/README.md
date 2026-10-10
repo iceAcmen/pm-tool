@@ -34,8 +34,9 @@ pnpm dsh plugin --profile pm add link:/Users/bytedance/Projects/dsh-pm/pm-tool/p
 # 3) 检查配置树，确认 pm-tool 已生效
 pnpm dsh --profile pm --dump-config
 
-# 4) 启动并在浏览器用终端打印的带 token URL 打开，输入 /pm ping
-pnpm dsh web --profile pm
+# 4) 启动（指定 --profile 后不要再加 app 动词 web；加 --no-open 可不弹浏览器）
+#    终端会打印带一次性 token 的 http://127.0.0.1:3080 URL，浏览器打开后输入 /pm ping
+pnpm dsh --profile pm
 ```
 
 > 改动本包源码后需重新 `pnpm run build` 并重启 dsh。

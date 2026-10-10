@@ -36,7 +36,7 @@ dsh **没有**拿来即用的「项目管理成品」：其 `plan / todo / goal`
 
 - dsh 存储四件套【官方明确，来源：`packages/storage/*/README.zh.md`】：
   - `@deepseek-ai/dsh-storage`：存储中枢（`ctx.storage`），注册具名后端；
-  - `@deepseek-ai/dsh-storage-domain`：**领域数据形态（`ctx.storage.domain`）**——带 schema 校验、可发变更事件的类型化键值域，**这是定义 Project/Task/Milestone 等实体的正确位置**；
+  - `@deepseek-ai/dsh-storage-domain`：**领域数据形态（高层服务为 `ctx.storageDomain`，注意不是 `ctx.storage.domain`）**——带 schema 校验、可发变更事件的类型化键值域，**这是定义 Project/Task/Milestone 等实体的正确位置**；
   - `@deepseek-ai/dsh-storage-json`：**JSON 文件后端（后端名 `json`）**，在配置的 `root` 目录下把领域数据存为**美化打印、可读可编辑的 JSON**；默认 `single` 布局每个单元一份 `<unit>.json`，另有 `per-record` 每条记录一文件；原子写入、目录权限 `0o700`、记录键名限 `[a-zA-Z0-9_-]+`；
   - `@deepseek-ai/dsh-storage-sqlite`：SQLite 后端（数据量大/高并发时备选，单用户 MVP 不需要）。
 - 会话数据默认走 `session-persistence-jsonl`（`session.vN.jsonl[.zstd]`），属对话日志，**不应用来存项目业务数据**。

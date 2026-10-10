@@ -90,9 +90,9 @@ pnpm dsh plugin --profile pm add link:/Users/bytedance/Projects/dsh-pm/pm-tool/p
 # 4) 不启动、检查组合后的配置树，确认存储三件套与本插件都在
 pnpm dsh --profile pm --dump-config
 
-# 5) 启动 Web 并在浏览器用终端打印的带 token 的 URL 打开
-pnpm dsh web --profile pm
-# 6) 在对话里输入：/pm ping   —— 期望返回一句中文；即打通成功
+# 5) 启动 Web（指定 --profile 后不要再加 app 动词 web；--no-open 可不弹浏览器）
+pnpm dsh --profile pm
+# 6) 用终端打印的带 token URL 在浏览器打开，对话里输入：/pm ping   —— 期望返回一句中文；即打通成功
 ```
 
 - `file:` / `link:` 本地路径官方明确支持，按 profile 目录解析为绝对路径、`~` 会展开；源码运行官方自用 `link:`【官方明确，plugin-manager README】。
@@ -121,7 +121,7 @@ pnpm dsh web --profile pm
 ## 八、第 0 步验收标准（可演示）
 
 1. `pnpm dsh --profile pm --dump-config` 输出中能看到 `dsh-pm-tool` 与存储三件套、root 指向 `pm-tool/data`。
-2. `pnpm dsh web --profile pm` 启动后，带 token URL 打开页面，输入 `/pm ping` 返回约定中文，且**全程未配置 API Key**。
+2. `pnpm dsh --profile pm` 启动后（指定 profile 不再加 web 动词），用带 token URL 打开页面，输入 `/pm ping` 返回约定中文，且**全程未配置 API Key**。
 3. 触发一次存储自检后，`pm-tool/data/` 下出现人能直接阅读的 JSON 文件（权限 `0o700`）。
 4. 以上有命令输出/截图作为验证证据；改动仅限本方案所列新增文件。
 

@@ -91,3 +91,17 @@
 - **理由**：`link:` 开发期改完 rebuild+restart 即生效、最省事，且实测对本插件（服务靠 ctx 注入、cordis 仅 type-only）无 peer 身份问题；数据落在产品仓库目录便于查看/迁移/演示，又不污染 git；独立 tsc 降低第 0 步复杂度；确定性脚本可重复、可进 CI，规避页面自动化 flaky。
 - **替代方案**：`file:` 或发布 npm 包（适合发布期，开发期反馈慢）；数据放 dsh 默认 `~/.dsh/storages`（脱离产品目录、不便演示与迁移）；复刻完整 clientBundle 构建（第 0 步无浏览器半侧、属过度工程）；只靠手点页面验证（不可重复）。
 - **最终结果**：第 0 步三项验收全部通过（配置树可见、离线 `/pm ping` 返回中文、selftest 在 `pm-tool/data` 落可读 JSON 且目录 0700）；实测发现并修复 `put()` 漏 await 的真实 bug；详见 `docs/tech-plugin-scaffold.md` 附节与 ISS-005～ISS-009。剩余唯一【待验证】=第三方独立顶级 Web 页面，留待业务功能阶段。
+
+## ADL-011 ｜ 2026-10-10 ｜ 业务实体落盘布局定稿：单领域 per-record 扁平分表，取消 index.json
+
+- **决策**（项目所有者确认；由 trae 接手核查时提出、doubao-work 复核上游能力后定稿）：
+  1. Project/Task/Milestone 全部建在**单一存储领域 `pmtool`** 的三张表上：`projects` / `tasks` / `milestones`，采用 storage-json 的 **per-record** 布局，**一条记录一个可读 JSON 文件**：
+     - `data/pmtool/projects/<projectId>.json`
+     - `data/pmtool/tasks/<taskId>.json`（记录含 `projectId`/`parentId`/同级顺序/WBS 编号）
+     - `data/pmtool/milestones/<milestoneId>.json`（记录含 `projectId`）
+  2. **取消需求 v0.3 设想的手工 `index.json`**：storage-domain 的表已提供 `keys()` / `entries()` 迭代器（上游 `storage-domain/src/domain.ts` 核实），列表与「某项目下的任务/里程碑」靠遍历表 + 按 `projectId` 过滤得到，不双写索引。
+  3. 项目 `README.md` 概览/周报等 Markdown 仅作为 **R4 渲染导出产物**，不写入存储域、不作数据源；数据一律以 JSON 为准。
+  4. 记录键名遵循存储后端约束 `[a-zA-Z0-9_-]+`，采用短 id（如 `p-0001`/`t-0001`/`m-0001`）；第 0 步的 `checks` 表保留。
+- **理由**：per-record 扁平布局是 storage-domain/storage-json 的原生形态（路径 `<root>/<unit>/<table>/<key>.json`），最省改动、天然得到人类可读文件与原子写/0700 权限；早期 v0.3 的「按项目聚合嵌套目录（`projects/<id>/tasks.json` 等）」要求键名含 `/` 或按项目动态开领域，与扁平键规则不兼容，强行实现需绕开 schema 校验手写文件，得不偿失。
+- **替代方案**：① 按项目嵌套目录（与框架 per-record 模型冲突，被否）；② 每项目一个独立存储领域（领域需静态定义、动态开领域用法非常规，被否）；③ 仍维护一份 index.json（与表数据双写、易不一致，且表已可枚举，被否）；④ SQLite 后端（单用户 MVP 过重、可读性弱，ADL-008 已否）。
+- **最终结果**：更新 `docs/requirements.md` 至 v0.4（§5.1 定稿）；新增 KB-011 记录表枚举能力；作为 trae 实现 R1–R3/R6 存储层的权威依据。
