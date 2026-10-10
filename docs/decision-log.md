@@ -48,3 +48,25 @@
 - **理由**：项目所有者选择尽早接入远程以满足备份与可迁移；SSH 免密、私钥仅留存本机，比 HTTPS+Token 更适合长期使用。
 - **替代方案**：先纯本地 git、稍后再接远程；HTTPS + Personal Access Token。
 - **最终结果**：已完成。公钥由项目所有者添加到 GitHub 账户 iceAcmen（公钥指纹 `SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`），`ssh -T git@github.com` 返回认证成功；main 首次推送成功并跟踪 origin/main（首次提交 `12bcad3`）。
+
+## ADL-007 ｜ 2026-10-10 ｜ 需求阶段四项关键产品决策
+
+- **决策**（经项目所有者交互确认，均采纳推荐项）：
+  1. **模型接入＝离线优先的混合模式**：结构化增删改查离线可用，会议纪要/智能 WBS/周报等生成型功能按需配置 `DEEPSEEK_API_KEY`；
+  2. **数据存储＝人类可读的 Markdown/JSON 文件**（可 git 版本管理、可迁移）；
+  3. **交互形态＝先做 dsh Web 可视化界面**，斜杠命令作为离线入口；
+  4. **首批范围＝最小闭环 MVP**：项目计划 → WBS 任务拆解 → 里程碑 → 保存/导出。
+- **理由**：先端到端跑通最小闭环，风险最低、最快可演示；离线优先保证无 Key/无网络也能用，契合非技术使用者「当场可演示」诉求；文件存储契合可移植档案机制。
+- **替代方案**：全面接入模型（依赖联网与额度、离线不可用）；用 dsh 私有 storage（迁移与可读性弱）；先做对话式（可视化弱）；七大模块一次做完（周期长风险高）。
+- **最终结果**：写入 `docs/requirements.md` 第二节，作为 MVP 范围依据。默认单用户本地；导入/多项目/协作列 P2。
+
+## ADL-008 ｜ 2026-10-10 ｜ MVP 技术架构：storage-domain + storage-json、命令/工具双入口、独立插件包 + 专属 profile
+
+- **决策**：基于官方源码与 cookbook 可行性调研（见 `docs/feasibility-map.md`）确定技术路线：
+  1. 业务实体（Project/Task/Milestone）建在 `@deepseek-ai/dsh-storage-domain`（schema 校验的类型化键值域）之上，后端用 `@deepseek-ai/dsh-storage-json`（可读 JSON 文件落盘，`root` 指向产品仓库数据目录），Markdown 概览/报告由 JSON 渲染导出；
+  2. 采用「**用户命令（ctx.commands，离线）+ Web 表单**承载核心 CRUD，**模型工具（ctx.tools，在线）**留给 P1 生成能力」的双入口设计（官方 goal 包已示范）；
+  3. Web 界面先走官方明确支持的设置卡片/插件详情区块/工具卡片路径，独立顶级页面接入方式待技术验证；
+  4. 自研能力以独立仓库内的 dsh 插件包 + 专属 profile 外挂挂载，不改上游源码。
+- **理由**：dsh 的 plan/todo/goal 均为会话内能力、非跨会话项目档案，需自建持久实体；storage-json 与「人类可读文件」决策天然契合；命令离线、工具在线满足 D1；外挂 profile 满足「上游只读、clone 可接续」。
+- **替代方案**：直接复用 todo/goal 存项目数据（会话级、不持久、结构不符）；用 SQLite 后端（单用户 MVP 过重、可读性弱）；fork monorepo 改内部（升级困难，ADL-003 已否决）。
+- **最终结果**：作为阶段 3 开发架构基线；两个待验证点（第三方 Web 界面形态、本地插件包装载链路）列入阶段 3 首批技术验证。

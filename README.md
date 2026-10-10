@@ -33,7 +33,8 @@
 └── pm-tool/                 # ★本产品独立 git 仓库（所有核心成果都在这里）
     ├── README.md            # 本文件：总入口
     ├── docs/
-    │   ├── requirements.md          # 需求：功能模块清单 / 优先级 / 验收标准
+    │   ├── requirements.md          # 需求：功能模块 / 优先级 / 验收标准 / 数据模型
+    │   ├── feasibility-map.md       # dsh 能力可行性地图（复用 vs 新建 + 来源）
     │   ├── decision-log.md          # 技术决策日志（时间/决策/理由/替代/结果）
     │   ├── changelog.md             # 版本更新记录（改了哪些文件/内容/原因）
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
