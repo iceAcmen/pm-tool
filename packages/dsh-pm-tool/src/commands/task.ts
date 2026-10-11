@@ -30,7 +30,7 @@ import {
   TaskImportEmptyError,
   TaskImportNoProjectError,
 } from '../core/task-import.js'
-import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, parseCsv as parseCsvLocal } from '../core/csv-import.js'
+import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, readXlsxGridFromBuffer, parseCsv as parseCsvLocal } from '../core/csv-import.js'
 import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
@@ -112,7 +112,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'batch', 'wbs'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'import-content', 'batch', 'wbs'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -340,6 +340,57 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
           kind: 'success',
           text: [
             `已按编辑后的清单创建 ${created.length} 个任务：`,
+            ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
+          ].join('\n'),
+        }
+      } catch (error) {
+        return { kind: 'error', text: `导入失败：${error instanceof Error ? error.message : String(error)}` }
+      }
+    }
+    if (action === 'import-content') {
+      // OPT-12：/pm task import-content <项目ID> <文件名> <JSON编码内容> [confirm]
+      // csv: 内容为 CSV 原文；xlsx: 内容为 base64。网页 FileReader 读取后经 execute 桥传入。
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      if (tokens.length < 3) {
+        return { kind: 'error', text: '请使用：/pm task import-content <项目ID> <文件名.csv|.xlsx> "<JSON 编码内容>" [confirm]' }
+      }
+      const projectId = tokens[0]
+      const filename = tokens[1]
+      const confirmation = tokens[tokens.length - 1].toLowerCase() === 'confirm'
+      const jsonArg = confirmation ? tokens.slice(2, -1).join(' ') : tokens.slice(2).join(' ')
+      const isCsv = /\.csv$/i.test(filename)
+      const isXlsx = /\.xlsx$/i.test(filename)
+      if (!isCsv && !isXlsx) {
+        return { kind: 'error', text: `不支持的文件类型：${filename}（仅 .csv / .xlsx）` }
+      }
+      try {
+        let grid: string[][]
+        if (isCsv) {
+          let csvText: string
+          try { csvText = JSON.parse(jsonArg); if (typeof csvText !== 'string') throw new Error() }
+          catch { return { kind: 'error', text: 'CSV 内容不是有效的 JSON 字符串（请由 Web 面板生成）。' } }
+          grid = parseCsvLocal(csvText)
+        } else {
+          let b64: string
+          try { b64 = JSON.parse(jsonArg); if (typeof b64 !== 'string') throw new Error() }
+          catch { return { kind: 'error', text: 'XLSX 内容不是有效的 base64 JSON（请由 Web 面板生成）。' } }
+          grid = await readXlsxGridFromBuffer(Uint8Array.from(Buffer.from(b64, 'base64')))
+        }
+        const plan = planGridCsvImport(domain, projectId, grid)
+        if (!confirmation) {
+          return {
+            kind: 'success',
+            text: [
+              `已解析上传文件 ${filename}：将为项目 ${projectId} 创建 ${plan.total} 个任务（按层级列还原父子树）。当前未写入。`,
+              ...plan.outline.map(item => `${'  '.repeat(item.depth)}${item.code}｜${item.title}`),
+            ].join('\n'),
+          }
+        }
+        const created = await importTasksFromGrid(domain, projectId, grid)
+        return {
+          kind: 'success',
+          text: [
+            `已从上传文件导入 ${created.length} 个任务到项目 ${projectId}：`,
             ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
           ].join('\n'),
         }

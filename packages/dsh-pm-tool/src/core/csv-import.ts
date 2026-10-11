@@ -148,6 +148,23 @@ export async function readXlsxGrid(path: string): Promise<string[][]> {
   return grid.map(row => row.map(cell => (cell == null ? '' : String(cell)).trim()))
 }
 
+/** OPT-12：直接从 buffer/array 解析 xlsx 首表（供网页上传，不经服务端路径）。 */
+export async function readXlsxGridFromBuffer(data: ArrayBuffer | Uint8Array): Promise<string[][]> {
+  let mod: typeof import('xlsx')
+  try {
+    mod = (await import('xlsx')) as typeof import('xlsx')
+  } catch (error) {
+    throw new CsvImportError(`未能加载 xlsx 解析库：${error instanceof Error ? error.message : String(error)}`)
+  }
+  const XLSX = (mod as unknown as { readFile?: unknown }).readFile ? mod : (mod as unknown as { default: typeof import('xlsx') }).default
+  const wb = XLSX.read(data, { type: 'buffer' })
+  const first = wb.SheetNames[0]
+  if (!first) throw new CsvImportError('xlsx 文件中没有工作表')
+  const sheet = wb.Sheets[first]
+  const grid = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: false, defval: '' })
+  return grid.map(row => row.map(cell => (cell == null ? '' : String(cell)).trim()))
+}
+
 /** 已用二维数组（来自 CSV 或 XLSX）解析为任务计划。 */
 export function planGridCsvImport(domain: PmDomain, projectId: string, grid: string[][]): { total: number, outline: { depth: number, code: string, title: string }[] } {
   ensureProject(domain, projectId)

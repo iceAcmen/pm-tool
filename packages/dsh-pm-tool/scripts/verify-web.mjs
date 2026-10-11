@@ -179,6 +179,10 @@ try {
   assert.match(bundle, /data-pick-project/)        // OPT-01 提醒切项目
   assert.match(bundle, /pm-selected-project/)      // OPT-03 记住上次项目
   assert.match(bundle, /pm-empty-ai-cta/)          // OPT-11 空状态 AI CTA
+  assert.match(bundle, /pm-kbd-help/)             // OPT-09 快捷键帮助
+  assert.match(bundle, /import-content/)          // OPT-12 按内容导入命令
+  assert.match(bundle, /pm-import-file/)          // OPT-12 网页文件上传
+  assert.match(bundle, /pm-import-dropzone/)       // OPT-12 拖拽/选择区
   assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')

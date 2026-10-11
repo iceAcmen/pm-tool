@@ -1,3 +1,4 @@
+import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -916,6 +917,13 @@ function BatchField({ className, placeholder, type = 'text', onApply }: {
   </span>
 }
 
+function arrayBufferToB64(buf: ArrayBuffer): string {
+  const bytes = new Uint8Array(buf)
+  let bin = ''
+  for (const b of bytes) bin += String.fromCharCode(b)
+  return btoa(bin)
+}
+
 function downloadText(filename: string, text: string, mime: string) {  try {
     const blob = new Blob([text], { type: mime })
     const url = URL.createObjectURL(blob)
@@ -1053,6 +1061,28 @@ function TaskTable({
     })
   }
   const batchIds = [...selected].join(',')
+  // OPT-09：纯键盘导航（j/k 移动、空格勾选、Del 走批量删除确认）。
+  const [activeIdx, setActiveIdx] = useState(0)
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      const action = panelKeyboard(fromKeyboardEvent(ev))
+      if (!action) return
+      ev.preventDefault()
+      if (action.type === 'move') {
+        setActiveIdx(i => Math.max(0, Math.min(visible.length - 1, i + action.delta)))
+      } else if (action.type === 'toggleActive') {
+        const row = visible[activeIdx]
+        if (row) toggleSelect(row.id)
+      } else if (action.type === 'deleteSelected') {
+        confirmBatchDelete()
+      } else if (action.type === 'openActive') {
+        const row = visible[activeIdx]
+        if (row) onEdit?.(row)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
   const confirmBatchDelete = () => {
     if (!selected.size) return
     void run(`task batch delete ${batchIds}`).then(() => {
@@ -1097,6 +1127,32 @@ function TaskTable({
       <button className="pm-tool-button" aria-pressed={grouped} onClick={() => setGrouped(value => !value)}>
         <ListFilter size={14}/>按状态分组
       </button>
+      {/* OPT-12：网页上传 csv/xlsx，前端读内容交 import-content（xlsx 仍 node 侧解析）。 */}
+      <label className="pm-tool-button pm-import-dropzone" title="选择 .csv / .xlsx 任务表导入（先预览，再在确认中落盘）">
+        <FileText size={14}/>导入文件
+        <input
+          type="file"
+          accept=".csv,.xlsx"
+          hidden
+          className="pm-import-file"
+          onChange={(e) => {
+            const file = e.currentTarget.files?.[0]
+            const pid = tasks[0]?.projectId
+            e.currentTarget.value = ''
+            if (!file) return
+            if (!pid) { window.alert('请先选择项目'); return }
+            const isCsv = /\.csv$/i.test(file.name)
+            const reader = new FileReader()
+            reader.onload = () => {
+              const content = isCsv ? String(reader.result ?? '') : arrayBufferToB64(reader.result as ArrayBuffer)
+              void run(`task import-content ${pid} ${file.name} ${JSON.stringify(content)}`).then(ok => {
+                if (ok) window.alert(`已解析 ${file.name}，请在确认中落盘。`)
+              })
+            }
+            if (isCsv) reader.readAsText(file); else reader.readAsArrayBuffer(file)
+          }}
+        />
+      </label>
     </TableToolbar>
 
     {selected.size > 0 && (
@@ -1131,6 +1187,8 @@ function TaskTable({
         <button className="pm-tool-button" onClick={() => setSelected(new Set())}>取消选择</button>
       </div>
     )}
+
+    <p className="pm-kbd-help" title="j/k 移动行 · 空格勾选 · Enter 打开 · Del 批量删除">⌨ j/k 移动 · 空格勾选 · Enter 打开 · Del 批量删除</p>
 
     <div className="pm-table-frame">
       <div className="pm-table-scroll">
