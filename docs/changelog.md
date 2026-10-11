@@ -8,6 +8,13 @@
 
 ---
 
+## [未发布] — 第二档体验增强 T2-A/T2-C（2026-10-11，平台：doubao-work / 豆包工作）
+
+- **T2-A**：AI 助手内置 WBS 模板一键填入 + localStorage 记忆上次模式/目标（不入库）。
+- **T2-C**：`core/csv-import.ts` 纯 JS 离线解析 CSV（引号/转义/CRLF），`/pm task import *.csv [confirm]` 按表头「层级/标题/负责人/优先级/开始/截止/进度」还原父子树，复用 `addTask`；替代被裁的 LibreOffice，零新增依赖。
+- 裁剪（ADL-042）：XLSX 导入、WBS 可编辑预览二次落盘、任务多选批量删除/列排序本期不做。
+- 验证：新增 `verify-csv.mjs`；修复 R4 export 不覆盖报错语义回归；全 20 项 verify + build + frozen-lockfile 退出 0。
+
 ## [未发布] — 第一档离线增强 R16/R17/R18（2026-10-11，平台：doubao-work / 豆包工作）
 
 - **R16 临期/逾期提醒**：新增 `core/reminders.ts`、`commands/due.ts`（`/pm due [天数] [项目ID?]`）、Web `ReminderStrip`；纯读时派生、不新增表、不做常驻调度（ADL-039）。验证：`verify-reminders.mjs`。
