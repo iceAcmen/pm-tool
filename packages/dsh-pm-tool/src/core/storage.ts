@@ -16,6 +16,12 @@ export const checkRecordSchema = z.object({
   note: z.string(),
 })
 
+/** 自由键值设置表（如 AI 车道模式 aiModelMode）；passthrough 容纳后续小开关。 */
+export const settingRecordSchema = z.object({
+  value: z.unknown(),
+  updatedAt: z.string(),
+}).passthrough()
+
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
   // 只增加表，既有 checks 记录格式不变，继续读取版本 1。
@@ -23,6 +29,7 @@ export const pmDomainSpec = defineDomain({
   layout: 'per-record',
   tables: {
     checks: domainTable(checkRecordSchema),
+    settings: domainTable(settingRecordSchema),
     projects: domainTable(projectRecordSchema),
     tasks: domainTable(taskRecordSchema),
     milestones: domainTable(milestoneRecordSchema),

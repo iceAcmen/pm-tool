@@ -3,7 +3,7 @@
  *   /pm model mode poc|prod   切换并回显当前车道/模型/就绪状态
  *   /pm model status          列出两车道 provider/model/Key 状态（不回显明文 Key）
  */
-import { describeLanes, getModelMode, resolveModelRoute, setModelMode, type ModelMode } from '../core/model-route.js'
+import { describeLanes, getModelMode, resolveModelRoute, setModelMode, PROD_KEY_MISSING_TEXT, type ModelMode } from '../core/model-route.js'
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import type { PmDomain } from '../core/storage.js'
 
@@ -42,9 +42,8 @@ export async function handleModelCommand(argument: string, domain: PmDomain | un
       return {
         kind: 'success',
         text: [
-          `已切到生产车道（prod），但当前进程环境未检测到 Key。`,
-          '请在启动 dsh 的终端配置 DEEPSEEK_API_KEY 或 KIMI_API_KEY（见 docs/model-providers.md），再重启 dsh。',
-          '在那之前 AI 草稿会给出友好提示，核心台账不受影响。',
+          '已切到生产车道（prod），但当前进程环境未检测到 Key。',
+          PROD_KEY_MISSING_TEXT,
         ].join('\n'),
       }
     }

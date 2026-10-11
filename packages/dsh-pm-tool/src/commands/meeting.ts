@@ -31,7 +31,7 @@ import {
   rememberSummary,
   recallSummary,
 } from '../core/meeting-summarize.js'
-import { getModelMode, resolveModelRoute } from '../core/model-route.js'
+import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const meetingHelp = [
@@ -104,7 +104,7 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         }
       } catch (error) {
         if (error instanceof Error && error.message === 'PROD_KEY_MISSING') {
-          return { kind: 'error', text: '生产车道未配置 Key（DEEPSEEK_API_KEY / KIMI_API_KEY）。请配置后重启 dsh，或用 /pm model mode poc 切回免费验证车道。详见 docs/model-providers.md。' }
+          return { kind: 'error', text: PROD_KEY_MISSING_TEXT }
         }
         throw error
       }

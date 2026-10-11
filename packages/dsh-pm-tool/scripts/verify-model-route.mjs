@@ -15,6 +15,7 @@ import {
   getModelMode,
   resolveModelRoute,
   setModelMode,
+  PROD_KEY_MISSING_TEXT,
 } from '../lib/core/model-route.js'
 
 delete process.env.DEEPSEEK_API_KEY
@@ -41,6 +42,10 @@ try {
 
   // prod 无 Key：抛结构化错误（绝不回退免费）。
   assert.throws(() => resolveModelRoute('prod'), /PROD_KEY_MISSING/)
+  // 统一无 Key 提示含可复制切回命令，且不回显 Key 明文。
+  assert.match(PROD_KEY_MISSING_TEXT, /\/pm model mode poc/)
+  assert.match(PROD_KEY_MISSING_TEXT, /DEEPSEEK_API_KEY|KIMI_API_KEY/)
+  assert.doesNotMatch(PROD_KEY_MISSING_TEXT, /sk-[A-Za-z0-9]{6}/)
 
   // 有 DeepSeek Key：优先 DeepSeek；无则 Kimi。
   process.env.DEEPSEEK_API_KEY = 'fake'

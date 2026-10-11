@@ -48,6 +48,10 @@ function envPresent(names: readonly string[]): boolean {
   })
 }
 
+/** 生产车道无 Key 的统一中文提示（命令行与 Web 面板一致，含可复制切回命令）。 */
+export const PROD_KEY_MISSING_TEXT =
+  '生产车道未配置 Key（DEEPSEEK_API_KEY / KIMI_API_KEY）。请在启动 dsh 的终端配置后重启 dsh；或运行 `/pm model mode poc` 切回免费 PoC 车道。详见 docs/model-providers.md。'
+
 /** 解析当前模式到具体 provider/model。prod 无 Key 时抛错（结构化 AiDraftError 由调用方归一）。 */
 export function resolveModelRoute(mode: ModelMode): { provider: string, model: string } {
   if (mode === 'poc') return { provider: POC_LANE.provider, model: POC_LANE.model }
@@ -89,12 +93,12 @@ const SETTINGS_KEY = 'aiModelMode'
 /** 读取持久化模式（缺省 poc）。 */
 export function getModelMode(domain: PmDomain | undefined): ModelMode {
   if (!domain) return 'poc'
-  const row = domain.table('checks').get(SETTINGS_KEY) as { mode?: string } | undefined
-  return row?.mode === 'prod' ? 'prod' : 'poc'
+  const row = domain.table('settings').get(SETTINGS_KEY) as { value?: string } | undefined
+  return row?.value === 'prod' ? 'prod' : 'poc'
 }
 
 /** 持久化模式。 */
 export async function setModelMode(domain: PmDomain | undefined, mode: ModelMode): Promise<void> {
   if (!domain) return
-  await domain.table('checks').put(SETTINGS_KEY, { mode, updatedAt: new Date().toISOString() } as never)
+  await domain.table('settings').put(SETTINGS_KEY, { value: mode, updatedAt: new Date().toISOString() })
 }
