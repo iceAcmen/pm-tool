@@ -1,4 +1,5 @@
 import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
+import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -1067,7 +1068,13 @@ function TaskTable({
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
-  const [grouped, setGrouped] = useState(true)
+  const [grouped, setGrouped] = useState(false) // PROD-01：默认树视图，状态分组降为可选开关
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const toggleCollapse = (id: string) => setCollapsed(prev => {
+    const next = new Set(prev)
+    if (next.has(id)) next.delete(id); else next.add(id)
+    return next
+  })
   const [sort, setSort] = useState<'code' | 'dueDate' | 'priority' | 'progress'>('code')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const priorityRank = (p: string) => ({ P0: 0, P1: 1, P2: 2 }[p] ?? 3)
@@ -1155,8 +1162,8 @@ function TaskTable({
           <option value="progress">按进度</option>
         </select>
       </label>
-      <button className="pm-tool-button" aria-pressed={grouped} onClick={() => setGrouped(value => !value)}>
-        <ListFilter size={14}/>按状态分组
+      <button className="pm-tool-button pm-group-toggle" aria-pressed={grouped} onClick={() => setGrouped(value => !value)}>
+        <ListFilter size={14}/>{grouped ? '按状态分组（开）' : '按状态分组'}
       </button>
       {/* OPT-12：网页上传 csv/xlsx，前端读内容交 import-content（xlsx 仍 node 侧解析）。 */}
       <label className="pm-tool-button pm-import-dropzone" title="选择 .csv / .xlsx 任务表导入（先预览，再在确认中落盘）">
@@ -1261,16 +1268,30 @@ function TaskTable({
             </tr>
           </thead>
           <tbody>
-            {groups.map(group => <TaskGroup
-              key={group.key}
-              group={group}
-              milestones={milestones}
-              disabled={disabled}
-              onEdit={onEdit}
-              run={run}
-              selected={selected}
-              onToggle={toggleSelect}
-            />)}
+            {grouped
+              ? groups.map(group => <TaskGroup
+                  key={group.key}
+                  group={group}
+                  milestones={milestones}
+                  disabled={disabled}
+                  onEdit={onEdit}
+                  run={run}
+                  selected={selected}
+                  onToggle={toggleSelect}
+                />)
+              : <TaskGroup
+                  key="tree"
+                  group={{ key: 'all', label: '全部任务', rows: visible }}
+                  milestones={milestones}
+                  disabled={disabled}
+                  onEdit={onEdit}
+                  run={run}
+                  selected={selected}
+                  onToggle={toggleSelect}
+                  tree={flattenTaskTree(visible, collapsed)}
+                  collapsed={collapsed}
+                  onToggleCollapse={toggleCollapse}
+                />}
           </tbody>
         </table>
       </div>
@@ -1294,6 +1315,9 @@ function TaskGroup({
   run,
   selected,
   onToggle,
+  tree,
+  collapsed,
+  onToggleCollapse,
 }: {
   group: { key: string, label: string, rows: Task[] }
   milestones: Milestone[]
@@ -1302,15 +1326,68 @@ function TaskGroup({
   run: (line: string) => Promise<boolean>
   selected: Set<string>
   onToggle: (id: string) => void
+  tree?: { task: Task, depth: number, hasChildren: boolean, childIds: string[] }[]
+  collapsed?: Set<string>
+  onToggleCollapse?: (id: string) => void
 }) {
-  return <>
+  const rows = tree ?? group.rows.map(task => ({ task, depth: Math.max(0, task.code.split('.').length - 1), hasChildren: false, childIds: [] }))
+  if (!tree) {
+    return <>
     <tr className="pm-group-row">
       <td colSpan={11}><ChevronDown size={14}/><StatusTag kind="task" value={group.key}/><span>{group.rows.length} 条记录</span></td>
     </tr>
-    {group.rows.map(task => {
-      const milestone = milestones.find(item => item.id === task.milestoneId)
-      const depth = Math.max(0, task.code.split('.').length - 1)
-      return <tr className="pm-record-row" key={task.id}>
+    {rows.map(({ task: task }) => <TaskRow
+      key={task.id}
+      task={task}
+      depth={Math.max(0, task.code.split('.').length - 1)}
+      milestones={milestones}
+      disabled={disabled}
+      onEdit={onEdit}
+      run={run}
+      selected={selected}
+      onToggle={onToggle}
+    />)}
+  </>
+  }
+  return <>
+    {rows.map(({ task, depth, hasChildren, childIds }) => {
+      const isCollapsed = hasChildren && collapsed?.has(task.id)
+      return <TaskRow
+        key={task.id}
+        task={task}
+        depth={depth}
+        hasChildren={hasChildren}
+        collapsed={isCollapsed}
+        onToggleCollapse={onToggleCollapse}
+        milestones={milestones}
+        disabled={disabled}
+        onEdit={onEdit}
+        run={run}
+        selected={selected}
+        onToggle={onToggle}
+      />
+    })}
+  </>
+}
+
+function TaskRow({
+  task, depth, milestones, disabled, onEdit, run, selected, onToggle,
+  hasChildren, collapsed, onToggleCollapse,
+}: {
+  task: Task
+  depth: number
+  milestones: Milestone[]
+  disabled: boolean
+  onEdit: (task: Task) => void
+  run: (line: string) => Promise<boolean>
+  selected: Set<string>
+  onToggle: (id: string) => void
+  hasChildren?: boolean
+  collapsed?: boolean
+  onToggleCollapse?: (id: string) => void
+}) {
+    {const milestone = milestones.find(item => item.id === task.milestoneId)
+      return <tr className="pm-record-row pm-task-row">
         <td className="pm-col-check">
           <input
             type="checkbox"
@@ -1332,6 +1409,13 @@ function TaskGroup({
         </td>
         <td className="pm-col-code">{task.code}</td>
         <td className="pm-col-title">
+          {hasChildren ? (
+            <button
+              className="pm-task-toggle"
+              aria-label={collapsed ? `展开 ${task.title}` : `折叠 ${task.title}`}
+              onClick={() => onToggleCollapse?.(task.id)}
+            >{collapsed ? '▸' : '▾'}</button>
+          ) : <span className="pm-task-toggle pm-task-toggle--leaf"/>}
           <button
             className="pm-title-cell"
             data-done={task.status === 'done'}
@@ -1356,8 +1440,7 @@ function TaskGroup({
           </button>
         </td>
       </tr>
-    })}
-  </>
+    }
 }
 
 function MilestoneTable({
