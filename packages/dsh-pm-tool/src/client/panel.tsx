@@ -233,7 +233,17 @@ export function PmPanel({ execute }: PmPanelApi) {
     setSelectedRaw(id ?? '')
     try { id ? localStorage.setItem('pm-selected-project', id) : localStorage.removeItem('pm-selected-project') } catch { /* ignore */ }
   }
-  const [view, setView] = useState<View>('tasks')
+  const [view, setView] = useState<View>(() => {
+    try {
+      const v = localStorage.getItem('pm-view')
+      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview') return v
+    } catch { /* ignore */ }
+    return 'tasks'
+  })
+  const changeView = (v: View) => {
+    setView(v)
+    try { localStorage.setItem('pm-view', v) } catch { /* ignore */ }
+  }
   const [drawer, setDrawer] = useState<Drawer>()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
@@ -453,25 +463,25 @@ export function PmPanel({ execute }: PmPanelApi) {
             />
             <ReminderStrip data={data} onPickProject={(id) => setSelected(id)}/>
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
-              <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => setView('tasks')}>
+              <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => changeView('tasks')}>
                 全部任务
               </ViewTab>
-              <ViewTab active={view === 'milestones'} icon={<MilestoneIcon size={15}/>} count={milestones.length} onClick={() => setView('milestones')}>
+              <ViewTab active={view === 'milestones'} icon={<MilestoneIcon size={15}/>} count={milestones.length} onClick={() => changeView('milestones')}>
                 里程碑
               </ViewTab>
-              <ViewTab active={view === 'risk-issues'} icon={<ShieldAlert size={15}/>} count={riskIssues.length} onClick={() => setView('risk-issues')}>
+              <ViewTab active={view === 'risk-issues'} icon={<ShieldAlert size={15}/>} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
                 风险与问题
               </ViewTab>
-              <ViewTab active={view === 'meetings'} icon={<NotebookTabs size={15}/>} count={meetings.length} onClick={() => setView('meetings')}>
+              <ViewTab active={view === 'meetings'} icon={<NotebookTabs size={15}/>} count={meetings.length} onClick={() => changeView('meetings')}>
                 会议纪要
               </ViewTab>
-              <ViewTab active={view === 'reports'} icon={<FileText size={15}/>} count={reports.length} onClick={() => setView('reports')}>
+              <ViewTab active={view === 'reports'} icon={<FileText size={15}/>} count={reports.length} onClick={() => changeView('reports')}>
                 进度汇报
               </ViewTab>
-              <ViewTab active={view === 'deliverables'} icon={<Package size={15}/>} count={deliverables.length} onClick={() => setView('deliverables')}>
+              <ViewTab active={view === 'deliverables'} icon={<Package size={15}/>} count={deliverables.length} onClick={() => changeView('deliverables')}>
                 交付物
               </ViewTab>
-              <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => setView('overview')}>
+              <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => changeView('overview')}>
                 项目概览
               </ViewTab>
             </nav>
