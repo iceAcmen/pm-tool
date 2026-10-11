@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 完成 Chrome 139 真实浏览器自动目视闭环 27/27，窄屏标签微调，固化浏览器/上游兼容决策）
+最后更新：2026-10-11（doubao-work 配好零成本 OpenRouter 免费 LLM 通道 openrouter/free + 其他官方厂商预留接入位；无 key 全量回归通过，真实对话待所有者给 key）
 
-## 当前阶段：v0.1.0 后续迭代，R1–R12 已完成；本批为验收手段升级 + 兼容边界固化（2026-10-11）
+## 当前阶段：v0.1.0 后续迭代；本批为「零成本模型通道就绪」（2026-10-11，doubao-work）
+
+- **零成本 OpenRouter 免费 LLM 通道已配置（doubao-work，ADL-035）**：通过已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`（原本零路由休眠、无需新装），在本机 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 补上 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（Free Models Router，OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`）。**key 不入库、不写 patch**，只引用环境变量。
+- **本批不实现任何生成型业务功能**：智能 WBS/纪要/周报仍按 ADL-032 暂缓；本批只做「通道配置 + 可移植文档 `docs/model-providers.md` + 加载验证」。DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱/百炼/本地 Ollama 以注释 YAML 模板预留，当前全部不启用。
+- **本批验证（全部无 Key）**：`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全 0、`git diff --check` 干净；`--dump-config` 退出码 0 且 `providers.openrouter-free` 出现、storage-json root 与 dsh-pm-tool 完好；无 Key 真实宿主启动（随机端口、`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 报错），运行中下发 `plugins/??dsh-pm-tool/client.js` bundle HTTP 200（153033 B、含 pm 界面串；无 cookie 401）。
+- **待所有者操作**：按 `docs/model-providers.md` 第 4 节注册 OpenRouter、`export OPENROUTER_API_KEY=...`、启动 dsh、设置→模型选 openrouter-free 发一句测试；无 key 时直连返回 401 属预期。
+- **本批决策/知识沉淀**：ADL-035、KB-033（llm-pi-ai 第三方 OpenAI 兼容端点配置 + profile 按 id 外挂 + apiKeyEnv 不入库、不自动读 .env）。
+
+## 上一批：Chrome 真实浏览器自动目视闭环 + 窄屏标签修复 + 浏览器/上游兼容决策（2026-10-11）
 
 - **Chrome 真实浏览器自动目视闭环（doubao-work）**：按 KB-032 用 puppeteer-core 25.13 驱动本机已装 Google Chrome 139（headless，不另装 Chromium、不要系统辅助功能授权）。隔离 DSH_HOME（ISS-019）+ 覆盖每类实体的富种子 + 随机端口 + 无 Key 启动真实宿主，对 R5 面板/R7/R8/R9/R10/R12 做真实点击：七个 ViewTab 逐屏渲染、项目切换、总览看板统计数值（项目总数 2 / 完成率 40% / 逾期 1 / 未关闭风险 4，与种子一致）、全局搜索跨类分组命中、新增交付物→编辑抽屉→删除确认弹窗取消/confirm 删除、浅色与深色对比可读、786px 与 390px 整页无横向溢出。**27/27 用例通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**。
 - **本批唯一代码改动**：`client/panel.css` `.pm-view-tab` 加 `white-space:nowrap; flex:0 0 auto`，修复 390px 窄屏视图标签中文逐字断行，改为标签单行、标签条内部横滚。

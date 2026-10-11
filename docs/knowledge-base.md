@@ -6,6 +6,15 @@
 
 ---
 
+## KB-033 ｜ 第三方 OpenAI 兼容模型走 llm-pi-ai 的 providers 字典，按 id 外挂 config；apiKeyEnv 密钥不入库、也不自动读 .env（沉淀：doubao-work，2026-10-11）
+
+- **结论**：dsh 要接第三方 / OpenAI 兼容模型，用的是**已随 base bundle 装载但默认零路由休眠**的 `@deepseek-ai/dsh-llm-pi-ai`（`id: llm-pi-ai`），**无需额外安装**。在 profile 的 `cordis.patch.yml` 里加一条 `- id: llm-pi-ai, name: '@deepseek-ai/dsh-llm-pi-ai', config: { providers: { <路由名>: {...} } }` 即按 id **整体替换**其 config（app boot 不做深度合并）。
+- **providers 条目真实字段**（以上游 `src/config.ts` / `README.zh.md` 为准，勿臆造）：`apiKeyEnv`(环境变量名)、`displayName`、`api`(仅 `openai-completions`/`openai-responses`/`anthropic-messages` 三选一)、`baseURL`、`models[]`(每项 `id` 必填，`name`/`contextWindow`/`maxTokens` 选填)、`compat`、`defaultContextWindow`(缺省 262144)、`defaultMaxTokens`(缺省 32768)、`headers`、`reasoning`、`retryPolicy`。**pi-ai 目录不认识的自建网关**必须同时给 `api`+`baseURL`+非空 `models[]`，否则组合时报校验错。
+- **密钥怎么解析 / 放哪**：`apiKeyEnv: OPENROUTER_API_KEY` 经 `ctx.credentials` 先查 dsh 凭据存储记录，查不到再回落到**启动进程环境变量**（`src/auth.ts` 的 `authContextFrom`）。**dsh 不自动加载 `.env`**（上游无 dotenv 依赖），所以 key 必须在启动 dsh 的 shell 里 `export`，或由用户自己写进 `~/.zshrc`（Agent 不代改）。key 绝不入任何入库文件。
+- **免费随机模型的能力边界**：OpenRouter 免费自动路由 `openrouter/free`（实测 $0/$0、200k ctx）每次在免费池随机落一个模型——纯文本生成可用，**稳定驱动 agent 工具调用（function calling）不保证**；定位「尽力而为」，核心台账始终离线不依赖它。
+- **验证姿势**：改完 patch 用 `DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config`（上游目录跑）确认 provider 出现、无 `PiAiCatalogError`；无 key 时真实宿主照常启动（configured-but-keyless 只在真正发请求时才 `MISSING_CREDENTIAL`），不会阻塞启动。
+- **来源/佐证**：`deepseek-harness/packages/llm/llm-pi-ai/{README.zh.md,src/config.ts,src/provider.ts,src/auth.ts}`；`docs/model-providers.md`（含 9 家预留厂商模板与开通验证 curl）；ADL-035。
+
 ## KB-032 ｜ 无 GUI 权限时用 puppeteer-core 驱动本机已装 Chrome（headless=new）做真实点击/截图/主题/窄屏/控制台网络断言（沉淀：doubao-work，2026-10-11）
 
 - **结论**：本角色此前因无本机 GUI 权限，浏览器目视只能依赖所有者手动或退化为 HTTP bundle 探测（KB-028/KB-014）。实测**可以不下载 Chromium、不申请系统辅助功能授权**：在 gitignored 的 `.tmp/ui-verify/work/` 下 `npm i puppeteer-core`（25.13），launch 时 `executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'`、`headless:true`（v23+ 即 new headless）、`args:['--no-first-run','--disable-default-apps','--no-sandbox']`，由 puppeteer 托管 `--remote-debugging-port`。这样能**真实点击、输入、处理 `window.confirm` 对话框、全页截图、读 DOM 断言**，不再是只抓 HTML。

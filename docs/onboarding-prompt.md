@@ -69,14 +69,15 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-11
-- **最近更新平台**：doubao-work（首次用 puppeteer-core + 本机 Chrome 139 无头 CDP 完成 R5/R7–R12 真实浏览器自动目视，27/27 全绿；窄屏视图标签微调；新增 ADL-033/034、KB-032）
-- **main 提交定位**：本批 Chrome 自动目视闭环已推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
-- **当前阶段 / 状态**：R1–R12 已完成。本批无新增业务功能，做的是**验收手段升级 + 兼容边界固化**：浏览器目视从「等所有者手动 / HTTP bundle 探测」升级为「自动化真实 Chrome 点击/截图/主题/窄屏/控制台网络断言」（KB-032），并把浏览器兼容范围（仅 Chrome，ADL-033）与上游新版本兼容策略（ADL-034）写死。
-- **本批验证（doubao-work Chrome 目视）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 脚本全 0、`git diff --check` 干净；隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key 真实宿主启动，puppeteer-core 驱动系统 Chrome 139 逐屏操作，**27/27 通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**；看板数值与种子一致，浅/深色可读，786/390 无整页溢出。
+- **最近更新平台**：doubao-work（配好零成本 OpenRouter 免费 LLM 通道 openrouter/free + 其他官方厂商预留接入位；新增 ADL-035、KB-033、`docs/model-providers.md`）
+- **main 提交定位**：本批通道配置 + 文档已提交并推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
+- **当前阶段 / 状态**：R1–R12 已完成。本批（doubao-work）**无新增业务功能**，做的是**零成本模型通道就绪**：按 ADL-035 用已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`（原本零路由休眠、未新装插件），在仓库外 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 追加 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`，key 只放进程环境变量、绝不入库）。其他官方厂商（DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱/百炼/Ollama）以注释 YAML 模板**预留但不启用**。
+- **本批验证（doubao-work，全部无 Key）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全 0、`git diff --check` 干净；`DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config` 退出码 0、组合中 `providers.openrouter-free` 出现且 storage-json root / dsh-pm-tool 完好；无 Key 真实宿主（随机端口）启动成功（`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 报错），运行中 `plugins/??dsh-pm-tool/client.js` bundle HTTP 200（无 cookie 401）。
+- **待所有者操作（约 3 分钟）**：按 `docs/model-providers.md` 第 4 节注册 OpenRouter → Keys 拿 `sk-or-v1-...` → `export OPENROUTER_API_KEY=...`（或自行写入 `~/.zshrc`，Agent 不代改）→ 启动 dsh → 设置→模型选 openrouter-free/openrouter/free → 发一句测试。**当前无 key，直连返回 401 属预期**；真实对话待给 key 后确认。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
 - **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
 - **授权状态**：本批在持续授权范围内提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
-- **所有者已定规则（ADL-012～034）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪；**浏览器兼容仅 Chrome（ADL-033）；上游 dsh 新版本按 peer 锁定 + 升级冒烟（ADL-034）**。
-- **下一步 / 遗留**：R11 与生成型能力、多人协作、Excel 导入均已决策暂缓/裁剪。所有者可在本机 Chrome 对本批自动目视结论做 5 分钟抽检（见 handoff 清单）；其余暂缓项待所有者提供可用 Key 或改变离线定位后再评估。
-- **最近一次交接**：doubao-work 完成 Chrome 真实浏览器自动目视闭环（仅 1 处 CSS 窄屏标签微调 + 文档），构建 + 12 项 verify + 真实宿主 Chrome 27/27 全绿；隔离服务已停、临时进程已清、真实 data 与上游无改动。
+- **所有者已定规则（ADL-012～035）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪；浏览器兼容仅 Chrome（ADL-033）；上游 dsh 新版本按 peer 锁定 + 升级冒烟（ADL-034）；**OpenRouter 免费自动路由作零成本尽力而为 LLM 通道、核心保持离线、其他官方厂商预留模板（ADL-035）**。
+- **下一步 / 遗留**：R11、生成型业务功能（智能 WBS/纪要/周报）、多人协作、Excel 导入均已决策暂缓/裁剪。模型**通道已就绪**，待所有者给 `OPENROUTER_API_KEY` 跑通一次真实对话后，再决定是否立项做具体生成型功能。
+- **最近一次交接**：doubao-work 完成 OpenRouter 免费通道配置（仅 profile 外挂 patch + 文档，业务代码零改动）；构建 + 12 项 verify + `--dump-config` + 无 Key 真实宿主 bundle 断言全绿；临时启动的宿主已停、真实 data 与上游无改动。

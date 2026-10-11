@@ -6,6 +6,13 @@
 
 ---
 
+## ADL-035 ｜ 2026-10-11 ｜ 采用 OpenRouter 免费自动路由（openrouter/free）作为零成本「尽力而为」LLM 通道；核心保持离线；其他官方厂商以预留模板保留
+
+- **决策**：给 dsh 配置一条**零成本的第三方模型通道**，但定位严格限定为「尽力而为的文本生成」：① 通过 `@deepseek-ai/dsh-llm-pi-ai` 的 `providers` 字典，在本机 `pm` profile（`~/.dsh/profiles/pm/cordis.patch.yml`，仓库外）新增路由 `openrouter-free`，指向 OpenRouter 免费自动路由模型 `openrouter/free`（Free Models Router，OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`）；② **核心台账（项目/任务/里程碑/风险/纪要/汇报/交付物）始终离线、不依赖该通道**，无 key 也能完整运行；③ DeepSeek 官方 / OpenAI / Anthropic / Gemini / Groq / 硅基流动 / 智谱 GLM / 阿里百炼 / 本地 Ollama 等官方端点**只以注释 YAML 模板形式预留**在 `docs/model-providers.md`，当前一律不启用；④ **不实现任何具体生成型业务功能**（智能 WBS/纪要/周报仍按 ADL-032 暂缓），本批只做「通道配置 + 可移植文档 + 加载验证」。
+- **理由**：① 项目所有者要求「先按方案 B 配好零成本 OpenRouter 免费通道，同时预留其他官方模型接入位但暂不使用」；② OpenRouter 免费档**不能指定具体模型**，由平台在免费池自动分配（`openrouter/free`，实测 $0/$0、200k 上下文、免费档约 20 次/分、充值 <$10 时 50 次/天），因此只能当「尽力而为」通道，不能承诺稳定驱动 agent 工具调用；③ 用第三方 OpenAI 兼容通道必须走 `llm-pi-ai`，而**不是**改 `DEEPSEEK_BASE_URL`（后者是内置 DeepSeek 直连适配器专用），二者路由不冲突；④ 通道与业务解耦，既为将来生成型能力备好「不花钱也能先跑通」的试验位，又不让核心离线能力背任何外部依赖风险。
+- **替代方案**：① 直接用付费官方 key（DeepSeek/OpenAI）作默认——违背「零成本先跑通 + 预留不启用」要求；② 只内置 OpenRouter、不留其他厂商模板——将来换厂商要重摸 schema，可移植性差；③ 顺带把智能 WBS/纪要做了——违背 ADL-032 与「通道先行、功能后立项」的边界。
+- **最终结果**：`llm-pi-ai` 本就随 base bundle 装载（原本零路由休眠），无需额外安装；按 id 在 `cordis.patch.yml` 补上 `providers.openrouter-free`。实测：`--dump-config` 退出码 0、provider 出现且 storage-json root / dsh-pm-tool 完好；`pnpm run build` 退出码 0；**12 个** `verify-*.mjs` 全 0；无 Key 真实宿主启动（随机端口、`[pm-tool] 存储领域 pmtool 已打开`）+ 运行中下发的 `dsh-pm-tool/client.js` 合并 bundle HTTP 200（无 cookie 401）均通过。**key 尚未获得，真实对话待所有者填入 `OPENROUTER_API_KEY` 后按 `docs/model-providers.md` 第 4 节跑一次确认**（当前无 key 时直连返回 401 属预期）。配置细节、预留厂商模板、开通验证步骤全部沉淀在 `docs/model-providers.md`。
+
 ## ADL-034 ｜ 2026-10-11 ｜ 上游 dsh 新版本兼容策略：peer 锁 v0.2.1-alpha.2 + profile link 装载 + 升级冒烟流程
 
 - **决策**：面向上游 `deepseek-harness` 未来新版本，确立三条硬约束：① `packages/dsh-pm-tool/package.json` 中 `@deepseek-ai/*` peer/devDependencies 一律锁定 `0.2.1-alpha.2`（cordis `~4.0.5-alpha.1`），不随手跟随上游升级；② 运行/开发一律用 **本地源码版上游**（`~/Projects/dsh-pm/deepseek-harness`）+ 专属 `pm` profile 以 `link:` 绝对路径装载本插件；③ 上游升级时按「只读拉新 → 重建 → 全量回归 → 隔离真实宿主冒烟」的固定流程验证，不在运行中混用版本。

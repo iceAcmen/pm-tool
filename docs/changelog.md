@@ -8,6 +8,20 @@
 
 ---
 
+## [未发布] — 配置零成本 OpenRouter 免费 LLM 通道（openrouter/free）+ 预留其他官方厂商接入位（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增文件：
+  - `docs/model-providers.md`：模型接入通道可移植文档。记录工作原理（第三方 OpenAI 兼容模型走 `@deepseek-ai/dsh-llm-pi-ai` 的 `providers` 字典，不改 `DEEPSEEK_BASE_URL`）、当前启用的 OpenRouter 免费自动路由完整配置、key 从哪取/放哪（只放进程环境变量、dsh 不自动读 `.env`、绝不入库）、9 家预留但不启用的官方端点（DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱 GLM/阿里百炼/本地 Ollama）注释 YAML 模板、切换/停用/升级上游复查点，以及所有者「约 3 分钟开通+验证」步骤与不依赖 dsh 的直连自检 curl。
+- 修改文件：
+  - `docs/decision-log.md`：新增 ADL-035（采用 OpenRouter 免费自动路由作零成本尽力而为 LLM 通道、核心保持离线、其他官方厂商以预留模板保留、免费随机模型不保证工具调用）。
+  - `docs/knowledge-base.md`：新增 KB-033（llm-pi-ai 第三方 OpenAI 兼容端点配置 + profile 按 id 外挂 + apiKeyEnv 密钥不入库、不自动读 .env）。
+  - `docs/requirements.md`、`README.md`、`docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`：生成型能力注记（**通道已就绪、具体功能仍待立项**）、文档地图加 `model-providers.md`、交接快照刷新。
+- **仓库外改动（不入库，仅记录便于他机复现）**：`~/.dsh/profiles/pm/cordis.patch.yml` 在原有 `storage-json`、`ui-settings-general` 之外追加 `- id: llm-pi-ai ... providers.openrouter-free`（改前已备份为同目录 `cordis.patch.yml.bak-before-openrouter`）。`@deepseek-ai/dsh-llm-pi-ai` 本就随 base bundle 装载（原本零路由休眠），**未新装任何插件、未写任何 key**。
+- 为什么：项目所有者拍板方案 B——先把零成本 OpenRouter 免费通道配好用于未来生成型能力，同时预留其他官方模型接入位但暂不启用；本批只做「模型通道配置 + 可移植文档 + 加载验证」，不实现具体 AI 业务功能（智能 WBS/纪要/周报仍按 ADL-032 暂缓）。
+- 验证：`pnpm install --frozen-lockfile` 干净；`pnpm run build` 退出码 0（client bundle 153.00 kB）；**12 个** `verify-*.mjs` 全部退出码 0；`DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config` 退出码 0、组合中出现 `providers.openrouter-free` 且 `storage-json` root / `dsh-pm-tool` 完好；无 Key 真实宿主启动（随机端口、`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 启动报错），运行中下发的 `plugins/??dsh-pm-tool/client.js` 合并 bundle HTTP 200（153033 B、含 70 处 pm 界面串；无 cookie 访问根路径 401）。
+- 边界与待办：当前**无 `OPENROUTER_API_KEY`**，真实对话未测（无 key 时 OpenRouter 直连返回 401 属预期）；待所有者填入 key 后按 `docs/model-providers.md` 第 4 节做一次真实对话即可最终确认。OpenRouter 免费限额（约 20 次/分、充值 <$10 时 50 次/天）与 slug 均以官网为准、可能变动。
+- 影响范围：仅新增通道配置文档与档案；业务代码、数据、上游零改动；核心离线台账能力不受影响。
+
 ## [未发布] — Chrome 真实浏览器自动目视闭环 + 窄屏标签修复 + 浏览器/上游兼容决策（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 修改文件：
