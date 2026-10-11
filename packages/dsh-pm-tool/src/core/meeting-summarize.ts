@@ -84,7 +84,7 @@ export async function summarizeTranscript(
   return generateDraft(llm, {
     system: SUMMARIZE_SYSTEM_PROMPT,
     user: `请归纳以下会议原始速记：\n${transcript}`,
-    maxTokens: 1200,
+    maxTokens: 3500,
     provider: route?.provider,
     model: route?.model,
   })

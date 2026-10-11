@@ -59,7 +59,7 @@ export async function generateNarrative(
   return generateDraft(llm, {
     system: NARRATE_SYSTEM_PROMPT,
     user: `以下是本周确定性项目数据，请据此写进度汇报叙述：\n${JSON.stringify(brief, null, 2)}`,
-    maxTokens: 900,
+    maxTokens: 2500,
     provider: route?.provider,
     model: route?.model,
   })

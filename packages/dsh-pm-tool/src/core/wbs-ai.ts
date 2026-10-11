@@ -30,7 +30,7 @@ export async function generateWbsMarkdown(
   return generateDraft(llm, {
     system: WBS_SYSTEM_PROMPT,
     user: `请把以下项目目标拆解为 WBS 勾选清单：\n${goal}`,
-    maxTokens: 1400,
+    maxTokens: 4000,
     provider: route?.provider,
     model: route?.model,
   })

@@ -95,6 +95,22 @@ export async function generateDraft(llm: LlmGateway | undefined, options: Genera
   if (!llm) {
     throw new AiDraftError('NO_LLM', '当前宿主未装载 LLM 服务，AI 草稿不可用；你仍可手工录入。')
   }
+  // PoC 免费池随机模型偶发「思考耗尽正文为空」或「上游 finish=error」：
+  // 先按给定预算试一次，若正文为空/被截断，自动放大预算重试一次（免费池不稳定，ADL-044）。
+  const first = await attempt(llm, options)
+  if (first.text) return first.text
+  if (first.retriable) {
+    const retry = await attempt(llm, { ...options, maxTokens: Math.round((options.maxTokens ?? 1200) * 2) })
+    if (retry.text) return retry.text
+    throw retry.error
+  }
+  throw first.error
+}
+
+async function attempt(
+  llm: LlmGateway,
+  options: GenerateDraftOptions,
+): Promise<{ text: string, retriable: boolean, error: AiDraftError }> {
   const provider = options.provider ?? AI_PROVIDER
   const model = options.model ?? AI_MODEL
   const maxTokens = options.maxTokens ?? AI_DEFAULT_MAX_TOKENS
@@ -115,10 +131,11 @@ export async function generateDraft(llm: LlmGateway | undefined, options: Genera
 
   const config = call.config as Record<string, unknown>
   const assembler = new BlockAssembler()
+  let upstreamError: unknown
   try {
     for await (const chunk of call.stream({ ...config, system: options.system, messages, signal: options.signal })) {
-      // BlockAssembler 按 chunk.type 分发；真实适配器产出合法 StreamChunk。
       assembler.push(chunk as Parameters<typeof assembler.push>[0])
+      if ((chunk as { error?: unknown })?.error) upstreamError = (chunk as { error?: unknown }).error
     }
   } catch (error) {
     throw normalize(error)
@@ -130,14 +147,17 @@ export async function generateDraft(llm: LlmGateway | undefined, options: Genera
     .join('')
     .trim()
 
-  if (!text) {
-    const kind = assembler.finish?.kind
-    throw new AiDraftError(
-      kind === 'max-tokens' ? 'MAX_TOKENS' : 'EMPTY_RESPONSE',
-      kind === 'max-tokens'
-        ? '模型在输出结束前达到 max_tokens（推理占满），正文为空；请重试或精简目标后再生成。'
+  if (text) return { text, retriable: false, error: new AiDraftError('EMPTY', '') }
+
+  const kind = assembler.finish?.kind
+  const retriable = kind === 'max-tokens' || !!upstreamError
+  const error = new AiDraftError(
+    kind === 'max-tokens' ? 'MAX_TOKENS' : 'EMPTY_RESPONSE',
+    kind === 'max-tokens'
+      ? '模型在输出结束前达到 max_tokens（推理占满），已自动放大预算重试一次仍为空；请精简目标后再生成或手工录入。'
+      : upstreamError
+        ? '免费池上游返回异常（随机模型不稳），已自动重试一次仍失败；请稍后再试或手工录入。'
         : '模型未返回可用正文，请换一种说法重试或手工录入。',
-    )
-  }
-  return text
+  )
+  return { text: '', retriable, error }
 }
