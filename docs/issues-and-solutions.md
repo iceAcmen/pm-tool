@@ -6,6 +6,13 @@
 
 ---
 
+## ISS-025 ｜ 已知限制：任务删除不级联，需叶子→根逐层删（2026-10-11，doubao-work / 豆包工作）
+
+- **现象**：删根/父任务报「仍有子任务」；项目在有子任务时拒绝删除。
+- **根因/设计**：为避免误删整棵子树（删除安全），R 系列刻意**不级联删除**——必须先删全部叶子子任务，再删其父任务，逐层上溯。
+- **处置**：按 叶子→根 顺序逐个 `/pm task delete <id> confirm`。
+- **待评估**：是否后续提供「级联删除（二次确认）」作为显式选项；涉及删除安全，本期不改。
+
 ## ISS-024 ｜ dsh 应用内选免费模型报 MISSING_CREDENTIAL：旧进程没继承新环境变量（2026-10-11，doubao-work / 豆包工作）
 
 - **现象**：在 dsh 网页底部模型选择器选 Free Models Router（openrouter-free）发消息，报错 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（错误码 `MISSING_CREDENTIAL`）。但 key 本身有效——同一 key 直连 `curl .../chat/completions` 已 `$0` 成功。

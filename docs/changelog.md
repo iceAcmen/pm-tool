@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — R13/R14/R15 真实 openrouter/free 端到端验证通过 + 超时中文归一加固（2026-10-11，平台：doubao-work / 豆包工作）
+
+- **真实端到端（凭据库启动、无环境变量）**：
+  - R13 `/pm task wbs p-0005 <企业官网改版目标>` → AI 产出 5 级 WBS，confirm 落盘 25 个任务（t-0003~t-0027，需求梳理/视觉设计/前后端开发/测试验收/上线 及 1.1~5.4 子任务）。
+  - R14 `/pm report narrate p-0005` confirm → rpt-0002，executiveSummary 为依据确定性数字（0/25 完成、0%）撰写的真实中文叙述，**数字未被改动**。
+  - R15 `/pm meeting summarize p-0005 <周会速记>` confirm → mtg-0001，解析出 议题3/决议2/行动项3（ai-001~003：张三/李四/王二）。
+  - 无环境变量重启后 list 均读回；验证后临时项目 p-0005 及关联数据已删净。约 4~5 次真实模型调用。
+- **加固**：`core/ai-client.ts` 的 `normalize()` 增加超时/中断识别（AbortError/ABORTED/TIMEOUT/ETIMEDOUT/匹配 abort|timeout 文案），归一为中文 `MODEL_TIMEOUT` 提示，不再把英文 `This operation was aborted` 直抛界面、不落库；verify-wbs 新增对应降级断言（stream reject AbortError → 中文提示、不写盘）。
+- 新增档案：KB-036（免费池偶发超时 + Web 斜杠命令须点发送按钮、不能回车）、ISS-025（任务删除不级联，叶子→根逐层删）。
+
 ## [未发布] — R15 会议纪要归纳（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增能力：`/pm meeting summarize <项目ID> <粘贴速记> [confirm]`——AI 把原始速记归纳为 标题/摘要/议题/决议/行动项(负责人·截止日)，先预览草稿不落盘，confirm 才建 draft 会议并逐条挂行动项（复用既有 `addMeeting`/`addMeetingAction`）。

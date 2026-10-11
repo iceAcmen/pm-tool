@@ -2,7 +2,7 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 生成型功能 R13/R14/R15 三功能代码全部完成并推送：智能 WBS、进度汇报叙述、会议纪要归纳；15 项 verify 全过）
+最后更新：2026-10-11（doubao-work R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回；超时归一为中文 MODEL_TIMEOUT；新增 KB-036、ISS-025）
 
 ## 当前阶段：生成型功能（R13/R14/R15）已实现（2026-10-11，doubao-work）
 
@@ -11,7 +11,8 @@
 - **R15 会议纪要归纳**：`/pm meeting summarize <项目ID> <速记> [confirm]`——AI JSON 草稿（防御解析）→confirm 建 draft 会议并挂行动项（commit 35affa8）。
 - **统一落地（ADL-036）**：`core/ai-client.ts` 一次性文本生成封装（`ctx.llm.prepareCall`+`BlockAssembler`，按 `error.code` 中文降级）；AI 一律草稿 confirm 才入库；失败/无 key 优雅降级到手工/确定性路径；confirm 复用草稿不重复调模型省免费额度；核心台账离线可用。
 - **验证**：每个功能配 verify-wbs / verify-report-ai / verify-meeting-ai（含成功路径与失败降级）；全 15 项 verify 退出 0、`pnpm run build` 通过。
-- **待所有者**：在已加载 `OPENROUTER_API_KEY` 的终端启动 dsh，Web 内对三功能各发一次真实生成（每个只 1 次模型请求，约 50 次/天额度内）做最终端到端确认；Web 按钮为第二里程碑（v1 先斜杠命令）。
+- **真实端到端已通过（2026-10-11）**：已用真实 openrouter/free（凭据库、无环境变量启动）对三功能跑通——R13 confirm 落盘 25 任务、R14 rpt-0002 executiveSummary 数字未改、R15 mtg-0001 三行动项；无环境变量重启读回正常；临时项目已删净。免费池偶发超时已归一为中文 MODEL_TIMEOUT（重试即恢复）。
+- **下一步**：Web 按钮为第二里程碑（v1 先斜杠命令）；「任务删除不级联」「免费池偶发超时重试」为已知限制。
 
 ## 上一阶段：生成型功能立项（2026-10-11）
 

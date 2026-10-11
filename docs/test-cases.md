@@ -150,4 +150,10 @@ pnpm dsh --profile pm --no-open
 - R12 检索/看板：`/pm search` 跨七类实体不区分大小写命中、`--type` 过滤正确；`/pm stats` 完成率/逾期/未关闭风险按严重度聚合口径与 verify-r12 一致；导入 dry-run 不写盘、confirm 按缩进还原 WBS 父子、`[x]` 落为已完成，重启读回正确。
 - R12 Web：顶部「总览看板」跨项目统计卡片、逐项目明细与全局搜索为浏览器端基于 snapshot 的派生，bundle 契约（verify-web）已通过；本机目视（卡片/搜索交互/窄屏）待所有者确认。
 - **Chrome 139 无头 CDP 自动目视（2026-10-11，doubao-work，macOS arm64 / Chrome 139.0.7258.155 / dsh v0.2.1-alpha.2）**：按 KB-032 用 puppeteer-core 驱动本机已装 Chrome（headless，不另装 Chromium、不要辅助功能授权），隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key，对 R5/R7/R8/R9/R10/R12 做真实点击：侧栏进入面板、七个 ViewTab 逐屏渲染、项目切换、总览看板统计卡片数值（项目总数 2 / 任务完成率 40% / 逾期 1 / 未关闭风险 4，与种子一致）、全局搜索跨类分组命中、新增交付物→编辑抽屉→删除确认弹窗取消（记录仍在）→confirm 删除（记录消失）、浅色与深色均对比可读、786px 与 390px 整页无横向溢出（表格内部局部横滚）。**结果 27/27 用例通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**。期间修了一处窄屏体验：`.pm-view-tab` 加 `white-space:nowrap; flex:0 0 auto`，使 390px 下视图标签单行、标签条内部横滚而非中文断行。
+- **R13/R14/R15 真实 openrouter/free 端到端（2026-10-11，doubao-work，凭据库启动、无环境变量）**：
+  - R13 `/pm task wbs p-0005 <企业官网改版目标>` → AI 产出 5 级 WBS，confirm 落盘 25 个任务（t-0003~t-0027，需求梳理/视觉设计/前后端开发/测试验收/上线 及 1.1~5.4 子任务）。✅
+  - R14 `/pm report narrate p-0005` confirm → rpt-0002，executiveSummary 为依据确定性数字（0/25 完成、0%）撰写的中文叙述，数字未被改动。✅
+  - R15 `/pm meeting summarize p-0005 <周会速记>` confirm → mtg-0001，解析出 议题3/决议2/行动项3（ai-001 张三、ai-002 李四、ai-003 王二）。✅
+  - 无环境变量重启后 task/meeting/report list 均读回上述内容；验证后临时项目 p-0005 及关联数据已删净。约 4~5 次真实模型调用（免费档按次计，<50/天）。
+  - 已知限制：免费池偶发 `This operation was aborted`/超时，重试即恢复（已归一中文 MODEL_TIMEOUT，KB-036）；斜杠命令在 Web 须点发送按钮、不能回车（KB-036）；任务删除不级联、需叶子→根逐层删（ISS-025）。
 - 未覆盖：Windows/Linux、Safari/Firefox（按 ADL-033 本期不支持，仅承诺 Chrome）、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性（升级冒烟流程见 ADL-034）。

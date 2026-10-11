@@ -6,6 +6,13 @@
 
 ---
 
+## KB-036 ｜ 免费池偶发 `This operation was aborted`/超时：现象、根因与中文归一（沉淀：doubao-work，2026-10-11）
+
+- **现象**：真实 openrouter/free 端到端跑 R13/R14/R15 时偶发命令直接抛英文 `This operation was aborted`（或 dsh 步骤超时）。
+- **根因**：`openrouter/free` 把请求随机分给免费池模型，部分模型延迟较高或触发 dsh 单步超时；**不是配置/凭据问题**（同 key 重发即成功）。
+- **处置**：直接重试一次通常恢复；代码侧已在 `src/core/ai-client.ts` 的 `normalize()` 识别 `name==='AbortError'`、code∈{ABORTED,TIMEOUT,ETIMEDOUT}、或 message 命中 /abort|timeout|timed out/i，归一为 `AiDraftError('MODEL_TIMEOUT', '免费模型响应超时或被中断…请重试一次')`，命令层返回 `{kind:'error', 中文 text}` 且不落库。verify-wbs 已覆盖（stream reject AbortError → 友好中文、不写盘）。
+- **Web 自动化经验（斜杠命令提交方式，puppeteer-core）**：dsh 输入框是 **contenteditable `<div>`** 而非 `<textarea>`；输入「/」会触发斜杠命令自动补全并**截获 Enter**，故斜杠命令**必须点蓝色发送按钮提交、不能用回车**；发送后需点侧栏最新会话以加载线程；**不要点「新会话」**。（接 KB-032 的真实 Chrome 驱动法）
+
 ## KB-035 ｜ MISSING_CREDENTIAL 排查：dsh 进程环境 vs credentials service（沉淀：doubao-work，2026-10-11）
 
 - **现象**：dsh 网页选 Free Models Router（openrouter-free）发消息报 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（`MISSING_CREDENTIAL`）；但 key 本身有效、直连 curl 已 `$0` 成功。

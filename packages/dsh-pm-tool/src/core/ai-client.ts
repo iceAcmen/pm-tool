@@ -57,11 +57,23 @@ function friendlyCode(code: string | undefined): string {
   }
 }
 
-/** 把 prepareCall / stream 抛出的错误归一为 AiDraftError（按 code 路由，不解析 message）。 */
+/** 把 prepareCall / stream 抛出的错误归一为 AiDraftError（按 code/name/message 路由）。 */
 function normalize(error: unknown): AiDraftError {
-  const code = typeof error === 'object' && error !== null && 'code' in error
-    ? String((error as { code: unknown }).code)
-    : undefined
+  const record = typeof error === 'object' && error !== null ? (error as Record<string, unknown>) : {}
+  const name = typeof record.name === 'string' ? record.name : ''
+  const code = typeof record.code === 'string' ? record.code : undefined
+  const message = typeof record.message === 'string' ? record.message : ''
+
+  // 超时/中断（免费池随机模型偶发延迟或 dsh 步骤超时）：不再让英文 abort 文案直抛到界面。
+  const looksTimeout = name === 'AbortError'
+    || code === 'ABORTED' || code === 'TIMEOUT' || code === 'ETIMEDOUT'
+    || /abort|timeout|timed out/i.test(message)
+  if (looksTimeout) {
+    return new AiDraftError(
+      'MODEL_TIMEOUT',
+      '免费模型响应超时或被中断（免费池偶发），请重试一次；核心台账不受影响，你也可以手工录入。',
+    )
+  }
   return new AiDraftError(code ?? 'UNKNOWN', friendlyCode(code))
 }
 

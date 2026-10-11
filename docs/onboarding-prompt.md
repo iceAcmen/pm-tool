@@ -69,9 +69,11 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-11
-- **最近更新平台**：doubao-work（dsh 应用内选 Free Models Router 发「你好」第 1 次即成功，模型通道全打通；新增 KB-035 / ISS-024 MISSING_CREDENTIAL 排查；本批仅文档）
-- **main 提交定位**：本批通道配置 + 文档已提交并推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
-- **当前阶段 / 状态**：R1–R12 已完成。本批（doubao-work）**无新增业务功能**，做的是**零成本模型通道就绪**：按 ADL-035 用已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`（原本零路由休眠、未新装插件），在仓库外 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 追加 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`，key 只放进程环境变量、绝不入库）。其他官方厂商（DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱/百炼/Ollama）以注释 YAML 模板**预留但不启用**。
+- **最近更新平台**：doubao-work（R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回；超时归一中文 MODEL_TIMEOUT；新增 KB-036 / ISS-025）
+- **main 提交定位**：本批已提交并推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
+- **当前阶段 / 状态**：R1–R15 已完成。生成型三功能落地：R13 `/pm task wbs`（智能 WBS）、R14 `/pm report narrate`（进度汇报 AI 叙述）、R15 `/pm meeting summarize`（会议纪要归纳），统一走 `core/ai-client.ts`（一次性文本生成、草稿 confirm 才入库、失败中文降级）。
+- **真实端到端已通过（2026-10-11）**：凭据库、无环境变量启动下——R13 confirm 落盘 25 任务、R14 rpt-0002 executiveSummary 数字未改、R15 mtg-0001 三行动项；无环境变量重启 list 读回正常；临时项目已删净。约 4~5 次真实模型调用。免费池偶发 `This operation was aborted`/超时已归一中文 MODEL_TIMEOUT（重试即恢复，KB-036）。
+- **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **本批验证（doubao-work，全部无 Key）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全 0、`git diff --check` 干净；`DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config` 退出码 0、组合中 `providers.openrouter-free` 出现且 storage-json root / dsh-pm-tool 完好；无 Key 真实宿主（随机端口）启动成功（`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 报错），运行中 `plugins/??dsh-pm-tool/client.js` bundle HTTP 200（无 cookie 401）。
 - **key 已配置、端点已实测（2026-10-11 更新）**：key 已由所有者写在其本机 `~/.zshrc`（仓库外、不入库；改前已备份 `~/.zshrc.bak-20261011-130537`）。所有者本机直连实测：`GET /v1/key` 返回 `is_free_tier: true`、`free_model_daily_requests.limit=50`；`POST /v1/chat/completions`（`model=openrouter/free`）两次真实调用均成功、`cost=$0`、`finish_reason=stop`（随机落到 `liquid/lfm-2.5-2.6b:free`、`nvidia/nemotron-3-ultra-550b-a55b:free`）。经验见 KB-034（推理型模型先吃满 reasoning tokens，`max_tokens` 要给足 ≥400）。
 - **应用内已实测打通（2026-10-11 更新）**：在 dsh 网页底部模型选择器选 **Free Models Router**（openrouter-free/openrouter/free）发「你好，用一句话介绍你自己」，**第 1 次即成功**（puppeteer-core + 系统 Chrome 139 无头，KB-032）：助手正常回复、无 MISSING_CREDENTIAL/401/429。期间曾踩一次 `MISSING_CREDENTIAL`（“OPENROUTER_API_KEY which is not set”）——根因是 dsh 进程由「写 key 前的旧终端」启动、进程环境无该变量；停旧进程、用已 `source ~/.zshrc` 的环境重启即解（KB-035 / ISS-024，永久做法是在 Web「设置→模型」页把密钥录进 credentials service）。
@@ -80,5 +82,5 @@
 - **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
 - **授权状态**：本批在持续授权范围内提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
 - **所有者已定规则（ADL-012～035）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪；浏览器兼容仅 Chrome（ADL-033）；上游 dsh 新版本按 peer 锁定 + 升级冒烟（ADL-034）；**OpenRouter 免费自动路由作零成本尽力而为 LLM 通道、核心保持离线、其他官方厂商预留模板（ADL-035）**。
-- **下一步 / 遗留**：R11、生成型业务功能（智能 WBS/纪要/周报）、多人协作、Excel 导入均已决策暂缓/裁剪。模型**通道（配置 + 直连 + dsh 应用内对话）已全部实测打通**；**是否立项做具体生成型功能由所有者决定**。
-- **最近一次交接**：doubao-work 完成「模型通道」收尾——dsh 应用内选 Free Models Router 发「你好」第 1 次即成功，模型通道全打通；本批**仅文档**同步状态并新增 KB-035 / ISS-024（MISSING_CREDENTIAL 排查）。业务代码/数据/上游/profile 配置零改动；下一步是否立项生成型功能由所有者决定。
+- **下一步 / 遗留**：R11 里程碑提醒、多人协作、Excel 导入仍暂缓/裁剪。生成型三功能已完成并真实端到端验证；**Web 按钮为第二里程碑（v1 先斜杠命令）**。已知限制：免费池偶发超时重试即恢复（KB-036）、任务删除不级联需叶子→根逐层删（ISS-025）。
+- **最近一次交接**：doubao-work 完成 R13/R14/R15 实现与真实 openrouter/free 端到端验证（含重启读回），并把免费池偶发超时归一为中文 MODEL_TIMEOUT；新增 KB-036、ISS-025。上游/profile/真实数据零改动（临时验证项目已删净）。

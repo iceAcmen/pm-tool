@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-11（doubao-work 生成型功能 R13/R14/R15 已实现并推送：智能 WBS `task wbs`、进度汇报 `report narrate`、会议纪要 `meeting summarize`；统一走 `core/ai-client.ts`，草稿 confirm 才入库，15 项 verify 全过。待所有者在 dsh 内各做一次真实生成端到端确认）
+最后更新：2026-10-11（doubao-work R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回：task wbs 落盘25任务、report narrate rpt-0002 数字未改、meeting summarize mtg-0001 三行动项；免费池偶发超时已归一中文 MODEL_TIMEOUT；新增 KB-036、ISS-025）
 
 ---
 

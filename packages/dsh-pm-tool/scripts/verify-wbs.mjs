@@ -108,6 +108,26 @@ try {
     console.log('通过：空正文时优雅降级，台账未被写入。')
   }
 
+  // ---- 路径 4：stream reject AbortError（免费池偶发超时/中断）→ 归一为中文 MODEL_TIMEOUT ----
+  {
+    const abortLlm = {
+      prepareCall: async () => ({
+        config: {},
+        stream: async function* stream() {
+          throw Object.assign(new Error('This operation was aborted'), { name: 'AbortError' })
+        },
+      }),
+    }
+    const { domain, run } = await build(abortLlm)
+    await run('project add {"name":"超时项目","startDate":"2026-01-01","targetDate":"2026-12-31"}')
+    const r = await run(`task wbs p-0001 ${goalArgs}`)
+    assert.equal(r.kind, 'error', 'AbortError 应返回 error')
+    assert.match(r.text, /超时或被中断|重试一次/, `应归一为中文超时提示：${r.text}`)
+    assert.doesNotMatch(r.text, /aborted/, '不应把英文 abort 文案直抛到界面')
+    assert.equal(listTasks(domain, 'p-0001').length, 0, '超时时不得写盘')
+    console.log('通过：stream 超时/中断归一为中文 MODEL_TIMEOUT，台账未被写入。')
+  }
+
   console.log('R13 verify-wbs 全部通过。')
 } catch (error) {
   console.error('verify-wbs 失败：', error)
