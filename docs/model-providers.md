@@ -229,7 +229,8 @@ curl -X POST https://openrouter.ai/api/v1/chat/completions \
   }'
 ```
 
-**预期判读**：
-- **未设置 key（当前状态）**：直连会返回 **401 Unauthorized**——这是**预期**，不代表配置错误；只要返回 401 说明端点与网络通、只是缺 key。
-- **设置 key 后**：`/key` 返回账户限额 JSON；`/chat/completions` 返回一段模型回复（具体模型由免费池随机决定）。
-- 本项目当前**尚未获得所有者的 key**，因此「真实对话成功」这一步待所有者填入 key 后按本节跑一次即可最终确认；通道配置本身已通过 `--dump-config` 与无 Key 真实宿主启动验证（见 changelog / ADL-035）。
+**预期判读（已实测，2026-10-11）**：
+- **未设置 key**：直连会返回 **401 Unauthorized**——这是预期，说明端点与网络通、只是缺 key。
+- **设置 key 后（本项目现状）**：`/key` 返回账户限额 JSON；本项目实测 `is_free_tier: true`、`free_model_daily_requests.limit = 50`。`/chat/completions`（`model=openrouter/free`）返回一段模型回复，**具体模型由免费池随机分配**（实测两次分别随机到 `liquid/lfm-2.5-2.6b:free` 与 `nvidia/nemotron-3-ultra-550b-a55b:free`），两次均 `cost=$0`、`finish_reason=stop`。
+- **当前状态（2026-10-11）**：key 已由所有者配置在其本机 `~/.zshrc`（`export OPENROUTER_API_KEY=...`，仓库外、不入库；改前已备份 `~/.zshrc.bak-20261011-130537`），**openrouter/free 直连已实测成功**。**唯一剩余动作**：所有者在 dsh Web「设置→模型」点选 `openrouter-free`/`openrouter/free` 后发一句测试做应用内确认——注意**启动 dsh 的终端必须是已加载 `~/.zshrc` 的全新 zsh**，否则读不到该变量。
+- **经验（推理型免费模型）**：随机分到的若为推理型模型，会先把 `max_tokens` 预算**全部计入 `reasoning_tokens`**，导致正文为空。**务必把 `max_tokens` 给足（建议 ≥400）**，正文才留得下空间。稳定工具调用仍不保证（ADL-035 口径）。

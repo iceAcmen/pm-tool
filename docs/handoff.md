@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-11（doubao-work 配好零成本 OpenRouter 免费 LLM 通道 openrouter/free + 其他官方厂商预留接入位；通道配置/可移植文档/加载验证完成，真实对话待所有者给 OPENROUTER_API_KEY）
+最后更新：2026-10-11（doubao-work 文档状态同步：OpenRouter key 已由所有者配在本机 ~/.zshrc、openrouter/free 直连实测成功 $0，新增 KB-034；仅剩 dsh Web 内点选做应用内确认）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态（本批，2026-10-11 doubao-work）**：无新增业务功能，做的是**零成本模型通道就绪**。按 ADL-035 用已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`，在仓库外 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 追加 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（OpenAI 兼容端点，`apiKeyEnv=OPENROUTER_API_KEY`，key 不入库）。新增可移植文档 `docs/model-providers.md`（含 9 家预留但不启用的官方厂商模板、开通验证 curl）。12 项 verify + build + `--dump-config` + 无 Key 真实宿主 bundle 断言全绿。**待所有者给 key 后按该文档第 4 节跑一次真实对话即可最终确认**（无 key 直连 401 属预期）。生成型业务功能（智能 WBS/纪要/周报）仍按 ADL-032 暂缓、待通道实测后单独立项。
+- **当前状态（本批，2026-10-11 doubao-work）**：无新增业务功能，做的是**零成本模型通道就绪**。按 ADL-035 用已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`，在仓库外 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 追加 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（OpenAI 兼容端点，`apiKeyEnv=OPENROUTER_API_KEY`，key 不入库）。新增可移植文档 `docs/model-providers.md`（含 9 家预留但不启用的官方厂商模板、开通验证 curl）。12 项 verify + build + `--dump-config` + 无 Key 真实宿主 bundle 断言全绿。**key 已由所有者配置在本机 `~/.zshrc`（仓库外、不入库），openrouter/free 直连已于 2026-10-11 实测成功（$0、随机模型，见 KB-034）；唯一剩余动作为所有者在 dsh Web「设置→模型」点选 openrouter-free 发一句做应用内确认（须从已加载 `~/.zshrc` 的全新终端启动 dsh）**。生成型业务功能（智能 WBS/纪要/周报）仍按 ADL-032 暂缓、是否立项待所有者决定。
 - **上一批状态**：R1–R12 已完成。此前一批（doubao-work）做的是**验收手段升级**：按 KB-032 用 puppeteer-core 驱动本机已装 Chrome 139（headless、不另装 Chromium、不要辅助功能授权），在隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key 的真实宿主上对 R5/R7–R12 做了**真实点击/截图/浅深色/786/390 窄屏/控制台网络**自动目视，27/27 通过、0 console error/pageerror/失败请求。仅一处 CSS 微调（窄屏视图标签单行横滚）。12 项 verify + build + git diff --check 全绿。浏览器兼容按 ADL-033 仅承诺 Chrome；上游 dsh 新版本按 ADL-034 的 peer 锁定 + 升级冒烟处理。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入仍按决策暂缓/裁剪。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：

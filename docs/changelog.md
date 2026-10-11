@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — OpenRouter key 已本机配置、openrouter/free 直连实测成功（仅文档状态同步）（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 修改文件（**仅 docs，无业务代码、无 key 本体**）：
+  - `docs/model-providers.md`：第 4.1 节「尚未获得 key / 直连 401 属预期」改写为「key 已在所有者本机 `~/.zshrc` 配置（不入库）、openrouter/free 直连已于 2026-10-11 实测成功（$0、随机模型示例见 KB-034）」；并补一条经验——推理型免费模型会先吃满 `reasoning_tokens`，`max_tokens` 要给足（建议 ≥400），否则正文为空。
+  - `docs/knowledge-base.md`：新增 KB-034（openrouter/free 免费自动路由实测行为：随机分配模型、纯文本 $0 可用、推理型吃满 reasoning tokens、每日 50 次、稳定 function-calling 不保证、核心台账保持离线）。
+  - `docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`、`docs/requirements.md`：把「待所有者给 key / 当前无 key / 直连 401 属预期」统一刷新为「key 已本机配置、端点实测通过，仅剩所有者在 dsh Web 设置→模型点选 openrouter-free 发一句做应用内确认」。
+- 实测事实（2026-10-11，所有者授权本机直连）：`GET /v1/key` 返回 `is_free_tier: true`、`free_model_daily_requests.limit = 50`、key 到期 2027-04-09；`POST /v1/chat/completions`（`model=openrouter/free`）两次真实调用均成功、`cost=$0`、`finish_reason=stop`（随机落到 `liquid/lfm-2.5-2.6b:free` 与 `nvidia/nemotron-3-ultra-550b-a55b:free`）。key 本体只在所有者本机 `~/.zshrc`（改前已备份 `~/.zshrc.bak-20261011-130537`），**不入库、不写入任何仓库文件**。
+- 为什么：模型通道已从「待给 key」推进到「端点实测打通」，需同步档案口径，避免后续接手者误以为还在等 key。
+- 影响范围：仅文档；业务代码、数据、上游、profile 配置零改动；下一步是否立项做生成型功能（智能 WBS/纪要/周报）仍待所有者决定。
+
 ## [未发布] — 配置零成本 OpenRouter 免费 LLM 通道（openrouter/free）+ 预留其他官方厂商接入位（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增文件：

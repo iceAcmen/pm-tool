@@ -6,6 +6,15 @@
 
 ---
 
+## KB-034 ｜ openrouter/free 免费自动路由实测行为（随机模型 / 推理型吃满 reasoning tokens / 每日 50 次 / 工具调用不保证）（沉淀：doubao-work，2026-10-11）
+
+- **结论**：OpenRouter 免费自动路由 `openrouter/free` 直连已于 2026-10-11 实测打通（`cost=$0`、`finish_reason=stop`）。它**不是固定模型**，每次请求由免费池**随机分配**一个 `:free` 模型——同一批两次调用就可能落到不同模型（实测：第 1 次 `liquid/lfm-2.5-2.6b:free`、第 2 次 `nvidia/nemotron-3-ultra-550b-a55b:free`）。
+- **推理型模型的坑（重要）**：随机落到推理型小模型时，它会先把 `max_tokens` 预算**全部计入 `reasoning_tokens`**，导致 `max_tokens=60` 时**正文为空**。**对策：把 `max_tokens` 给足（实测提到 400 后正常返回正文）**。做生成型功能时这是默认要设的参数，别让默认小值把正文全挤没。
+- **免费档限额（已实测 `/key` 返回）**：`is_free_tier: true`、`free_model_daily_requests.limit = 50`（配合官方文档的 20 次/分；key 到期 2027-04-09）。数值会变，以 `/key` 与官网为准。
+- **能力边界（维持 ADL-035）**：纯文本问答 `$0` 可用；但模型每次随机、能力参差，**稳定驱动 agent 的 function calling 不保证**。因此核心台账（项目/任务/里程碑/纪要/汇报/交付物）必须保持离线、不依赖此通道；接它的生成型功能按「能跑就跑、失败优雅降级」设计。
+- **配置侧回顾**：key 由所有者写在本机 `~/.zshrc`（仓库外、不入库）；启动 dsh 的终端须是已加载 `~/.zshrc` 的全新 zsh，否则 pi-ai 按进程环境取不到 `OPENROUTER_API_KEY`（见 KB-033）。
+- **来源/佐证**：`curl https://openrouter.ai/api/v1/key` 与 `.../chat/completions`（`model=openrouter/free`）两次真实调用；ADL-035、`docs/model-providers.md` 第 4 节。
+
 ## KB-033 ｜ 第三方 OpenAI 兼容模型走 llm-pi-ai 的 providers 字典，按 id 外挂 config；apiKeyEnv 密钥不入库、也不自动读 .env（沉淀：doubao-work，2026-10-11）
 
 - **结论**：dsh 要接第三方 / OpenAI 兼容模型，用的是**已随 base bundle 装载但默认零路由休眠**的 `@deepseek-ai/dsh-llm-pi-ai`（`id: llm-pi-ai`），**无需额外安装**。在 profile 的 `cordis.patch.yml` 里加一条 `- id: llm-pi-ai, name: '@deepseek-ai/dsh-llm-pi-ai', config: { providers: { <路由名>: {...} } }` 即按 id **整体替换**其 config（app boot 不做深度合并）。
