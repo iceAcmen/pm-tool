@@ -490,6 +490,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onSaved={refresh}
                 run={run}
                 execute={execute}
+                projectId={project.id}
               />}
               {view === 'milestones' && <MilestoneTable
                 milestones={milestones}
@@ -1041,6 +1042,7 @@ function TaskTable({
   onSaved,
   run,
   execute,
+  projectId,
 }: {
   tasks: Task[]
   milestones: Milestone[]
@@ -1051,6 +1053,7 @@ function TaskTable({
   onSaved: () => void
   run: (line: string) => Promise<boolean>
   execute: (line: string) => Promise<string>
+  projectId: string
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
@@ -1155,7 +1158,7 @@ function TaskTable({
           className="pm-import-file"
           onChange={(e) => {
             const file = e.currentTarget.files?.[0]
-            const pid = tasks[0]?.projectId
+            const pid = projectId
             e.currentTarget.value = ''
             if (!file) return
             if (!pid) { setImportPreview({ text: '请先在顶部选择项目，再上传任务表。', confirm: '' }); return }
