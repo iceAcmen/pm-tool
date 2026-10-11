@@ -108,7 +108,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'wbs'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'wbs'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -304,6 +304,45 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         ].join('\n'),
       }
     }
+    if (action === 'importmd') {
+      // `/pm task importmd <项目ID> <JSON编码的Markdown> [confirm]`：按（Web 编辑后的）Markdown 清单落盘，不再调模型。
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      if (tokens.length < 2) {
+        return { kind: 'error', text: '请使用：/pm task importmd <项目ID> "<JSON 编码的 Markdown 清单>" [confirm]' }
+      }
+      const projectId = tokens[0]
+      const confirmation = tokens[tokens.length - 1].toLowerCase() === 'confirm'
+      const jsonArg = confirmation ? tokens.slice(1, -1).join(' ') : tokens.slice(1).join(' ')
+      let markdown: string
+      try {
+        markdown = JSON.parse(jsonArg)
+        if (typeof markdown !== 'string') throw new Error('not string')
+      } catch {
+        return { kind: 'error', text: 'Markdown 参数不是有效的 JSON 字符串（请由 Web 面板生成）。' }
+      }
+      try {
+        const plan = planTaskImport(domain, projectId, markdown)
+        if (!confirmation) {
+          return {
+            kind: 'success',
+            text: [
+              `已解析编辑后的清单：将创建 ${plan.total} 个任务。当前未写入。`,
+              ...plan.outline.map(item => `${'  '.repeat(item.depth)}${item.code}｜${item.done ? '[x]' : '[ ]'} ${item.title}`),
+            ].join('\n'),
+          }
+        }
+        const created = await importTasksFromMarkdown(domain, projectId, markdown)
+        return {
+          kind: 'success',
+          text: [
+            `已按编辑后的清单创建 ${created.length} 个任务：`,
+            ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
+          ].join('\n'),
+        }
+      } catch (error) {
+        return { kind: 'error', text: `导入失败：${error instanceof Error ? error.message : String(error)}` }
+      }
+    }
     if (action === 'wbs') {
       const tokens = argument.split(/\s+/).filter(Boolean)
       if (tokens.length < 2) {
@@ -313,13 +352,15 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       let rest = tokens.slice(1)
       const confirmation = rest[rest.length - 1].toLowerCase() === 'confirm'
       if (confirmation) rest = rest.slice(0, -1)
+      // 无 confirm：生成草稿（调一次模型）并缓存，只预览不落盘。
+      // 带 confirm：优先复用上次缓存草稿（不再调模型）；未命中才现场生成后直接落盘。
+      // --raw：仅返回原始 Markdown 草稿（供 Web 可编辑预览，再用 task importmd 落盘）。
+      const wantRaw = rest.includes('--raw')
+      if (wantRaw) rest = rest.filter(tok => tok !== '--raw')
       const goal = rest.join(' ').trim()
       if (!goal) {
         return { kind: 'error', text: '请给一句话目标，例如：/pm task wbs p-0001 「做一个移动端打卡小程序」' }
       }
-
-      // 无 confirm：生成草稿（调一次模型）并缓存，只预览不落盘。
-      // 带 confirm：优先复用上次缓存草稿（不再调模型）；未命中才现场生成后直接落盘。
       let markdown: string
       if (confirmation) {
         markdown = recallDraft(projectId, goal) ?? await generateWbsMarkdown(llm, goal)
@@ -329,6 +370,9 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       }
 
       const plan = previewWbsDraft(domain, projectId, markdown) // 校验项目存在且非空清单
+      if (wantRaw) {
+        return { kind: 'success', text: markdown }
+      }
       if (!confirmation) {
         return {
           kind: 'success',

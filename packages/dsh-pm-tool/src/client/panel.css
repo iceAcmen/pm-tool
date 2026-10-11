@@ -789,3 +789,5 @@
 .pm-ai-templates { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
 .pm-chip { font-size: 11px; padding: 3px 9px; border: 1px solid var(--pm-line-soft); border-radius: 999px; background: transparent; color: var(--pm-secondary); cursor: pointer; }
 .pm-chip:hover { color: var(--pm-ink); border-color: var(--pm-line); }
+
+.pm-ai-markdown { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre; }

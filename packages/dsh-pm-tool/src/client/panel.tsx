@@ -604,7 +604,8 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
     }
     if (mode === 'wbs') {
       const goal = text.trim()
-      return { preview: `task wbs ${projectId} ${goal}`, confirm: `task wbs ${projectId} ${goal} confirm` }
+      // --raw：只返回原始 Markdown 清单，供下方可编辑预览；确认时用编辑后文本走 importmd（不调模型）。
+      return { preview: `task wbs ${projectId} ${goal} --raw`, confirm: `task importmd ${projectId} ${JSON.stringify(preview)} confirm` }
     }
     const transcript = text.trim()
     return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm` }
@@ -705,7 +706,19 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
         onClick={() => void confirm()}
       >确认入库</button>
     </div>
-    {preview && <pre className="pm-ai-preview">{preview}</pre>}
+    {mode === 'wbs' && preview && (
+      <div className="pm-ai-preview-edit">
+        <p className="pm-ai-note">可在下方修改清单（缩进代表父子层级，`- [ ]`/`- [x]` 代表未完成/已完成），点「确认入库」按编辑结果落盘，不再调用模型。</p>
+        <textarea
+          className="pm-ai-input pm-ai-markdown"
+          rows={10}
+          value={preview}
+          disabled={working}
+          onChange={event => setPreview(event.currentTarget.value)}
+        />
+      </div>
+    )}
+    {mode !== 'wbs' && preview && <pre className="pm-ai-preview">{preview}</pre>}
     <p className="pm-ai-note">AI 结果为草稿，需点“确认入库”才写入项目；失败（如免费模型超时/限流）会显示中文提示，可重试或改用手工录入，核心台账不受影响。</p>
   </div>
 }
