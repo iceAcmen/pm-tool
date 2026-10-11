@@ -754,3 +754,23 @@
   .pm-action-editor strong, .pm-action-editor input, .pm-action-editor select { grid-column: 1; }
   .pm-action-create .pm-button { grid-column: 1 / -1; }
 }
+
+/* AI 助手面板（A1） */
+.pm-ai { display: grid; gap: 10px; }
+.pm-ai-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.pm-ai-tab { min-height: 28px; padding: 4px 10px; }
+.pm-ai-hint { margin: 0; font-size: 12px; color: var(--pm-secondary); }
+.pm-ai-input {
+  width: 100%; box-sizing: border-box; resize: vertical;
+  border: 1px solid var(--pm-line); border-radius: 8px;
+  padding: 8px 10px; font: inherit; color: var(--pm-ink);
+  background: var(--dsw-alias-bg);
+}
+.pm-ai-actions { display: flex; gap: 8px; }
+.pm-ai-preview {
+  margin: 0; padding: 10px; border-radius: 8px;
+  border: 1px solid var(--pm-line-soft); background: var(--dsw-alias-interactive-bg-active);
+  white-space: pre-wrap; word-break: break-word; font-size: 12px; line-height: 1.5;
+  max-height: 320px; overflow: auto;
+}
+.pm-ai-note { margin: 0; font-size: 11px; color: var(--pm-muted); }

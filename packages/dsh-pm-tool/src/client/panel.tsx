@@ -15,6 +15,7 @@ import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
@@ -174,6 +175,7 @@ type Drawer =
   | { kind: 'meeting', meeting?: Meeting }
   | { kind: 'report', report?: ProgressReport }
   | { kind: 'deliverable', deliverable?: Deliverable }
+  | { kind: 'ai' }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
@@ -323,6 +325,14 @@ export function PmPanel({ execute }: PmPanelApi) {
           </button>
           <button className="pm-button" onClick={() => setDrawer({ kind: 'project-create' })}>
             <Plus size={15}/>新建项目
+          </button>
+          <button
+            className="pm-button"
+            disabled={!project || dashOpen}
+            title="AI 拆解 WBS / 生成汇报叙述 / 归纳会议纪要（结果为草稿，需确认才入库）"
+            onClick={() => setDrawer({ kind: 'ai' })}
+          >
+            <Sparkles size={15}/>AI 助手
           </button>
           <button
             className="pm-icon-button"
@@ -477,6 +487,12 @@ export function PmPanel({ execute }: PmPanelApi) {
           run={run}
           onSaved={() => setDrawer(undefined)}
         />}
+        {drawer.kind === 'ai' && project && <AiAssistant
+          projectId={project.id}
+          execute={execute}
+          disabled={busy}
+          onConfirmed={() => { void refresh(); setDrawer(undefined) }}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -490,7 +506,121 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'risk-issue') return drawer.record ? '编辑风险或问题' : '新增风险或问题'
   if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
   if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
+  if (drawer.kind === 'ai') return 'AI 助手'
   return drawer.deliverable ? '编辑交付物' : '新增交付物'
+}
+
+/**
+ * AI 助手面板：完全复用斜杠命令的 core 草稿→confirm 逻辑。
+ * “生成草稿”发一次预览命令（调一次模型），“确认入库”发对应 confirm 命令
+ * （复用进程内草稿缓存，不再调模型）。AI 结果一律先预览、显式确认才落库。
+ */
+function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
+  projectId: string
+  execute: (line: string) => Promise<string>
+  disabled?: boolean
+  onConfirmed: () => void
+}) {
+  const [mode, setMode] = useState<'wbs' | 'narrate' | 'summarize'>('wbs')
+  const [text, setText] = useState('')
+  const [preview, setPreview] = useState('')
+  const [working, setWorking] = useState(false)
+
+  const needsInput = mode !== 'narrate'
+  const canGenerate = !working && !(needsInput && !text.trim())
+
+  const lines = (): { preview: string; confirm: string } => {
+    if (mode === 'narrate') {
+      return { preview: `/pm report narrate ${projectId}`, confirm: `/pm report narrate ${projectId} confirm` }
+    }
+    if (mode === 'wbs') {
+      const goal = text.trim()
+      return { preview: `/pm task wbs ${projectId} ${goal}`, confirm: `/pm task wbs ${projectId} ${goal} confirm` }
+    }
+    const transcript = text.trim()
+    return { preview: `/pm meeting summarize ${projectId} ${transcript}`, confirm: `/pm meeting summarize ${projectId} ${transcript} confirm` }
+  }
+
+  const switchMode = (next: 'wbs' | 'narrate' | 'summarize') => {
+    if (working) return
+    setMode(next); setText(''); setPreview('')
+  }
+
+  const generate = async () => {
+    if (!canGenerate) return
+    setWorking(true); setPreview('')
+    try {
+      setPreview(await execute(lines().preview))
+    } catch (error) {
+      setPreview(error instanceof Error ? error.message : String(error))
+    } finally {
+      setWorking(false)
+    }
+  }
+
+  const confirm = async () => {
+    if (working || !preview) return
+    setWorking(true)
+    try {
+      await execute(lines().confirm)
+      onConfirmed()
+    } catch (error) {
+      setPreview(error instanceof Error ? error.message : String(error))
+      setWorking(false)
+    }
+  }
+
+  const hints: Record<typeof mode, string> = {
+    wbs: '一句话目标，例如：为企业官网改版做拆解（需求/设计/开发/测试/上线）',
+    narrate: '将基于项目确定性数据（任务/里程碑进度）生成本周进展、风险与下周计划叙述。',
+    summarize: '粘贴会议速记/原始记录，AI 归纳议题、结论与行动项（负责人/截止日）。',
+  }
+
+  return <div className="pm-ai">
+    <div className="pm-ai-tabs">
+      {([
+        ['wbs', 'AI 拆解 WBS'],
+        ['narrate', 'AI 汇报叙述'],
+        ['summarize', 'AI 会议纪要'],
+      ] as const).map(([key, label]) =>
+        <button
+          key={key}
+          type="button"
+          className={`pm-button pm-ai-tab${mode === key ? ' pm-button-primary' : ''}`}
+          aria-pressed={mode === key}
+          disabled={working}
+          onClick={() => switchMode(key)}
+        >{label}</button>,
+      )}
+    </div>
+    <p className="pm-ai-hint">{hints[mode]}</p>
+    {needsInput && (
+      <textarea
+        className="pm-ai-input"
+        rows={mode === 'summarize' ? 6 : 2}
+        value={text}
+        disabled={working}
+        placeholder={hints[mode]}
+        onChange={event => setText(event.currentTarget.value)}
+      />
+    )}
+    <div className="pm-ai-actions">
+      <button
+        type="button"
+        className="pm-button pm-button-primary"
+        disabled={!canGenerate || disabled}
+        onClick={() => void generate()}
+      >{working ? '生成中…' : '生成草稿'}</button>
+      <button
+        type="button"
+        className="pm-button"
+        disabled={working || !preview}
+        onClick={() => void confirm()}
+      >确认入库</button>
+    </div>
+    {preview && <pre className="pm-ai-preview">{preview}</pre>}
+    <p className="pm-ai-note">AI 结果为草稿，需点“确认入库”才写入项目；失败（如免费模型超时/限流）会显示中文提示，可重试或改用手工录入，核心台账不受影响。</p>
+  </div>
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
