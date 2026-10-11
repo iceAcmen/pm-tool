@@ -817,3 +817,6 @@
   .pm-batch-bar { animation: pm-fade-in .18s ease-out; }
   @keyframes pm-fade-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
 }
+
+.pm-import-preview { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; padding: 8px; border: 1px solid var(--pm-border); border-radius: 8px; }
+.pm-import-preview-text { margin: 0; font-size: 12px; white-space: pre-wrap; }

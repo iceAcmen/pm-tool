@@ -185,6 +185,8 @@ try {
   assert.match(bundle, /import-content/)          // OPT-12 按内容导入命令
   assert.match(bundle, /pm-import-file/)          // OPT-12 网页文件上传
   assert.match(bundle, /pm-import-dropzone/)       // OPT-12 拖拽/选择区
+  assert.match(bundle, /pm-import-confirm/)         // OPT-12 预览后确认落盘按钮
+  assert.match(bundle, /pm-import-preview/)         // OPT-12 预览容器
   assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')

@@ -489,6 +489,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 }}
                 onSaved={refresh}
                 run={run}
+                execute={execute}
               />}
               {view === 'milestones' && <MilestoneTable
                 milestones={milestones}
@@ -1039,6 +1040,7 @@ function TaskTable({
   onGenWbs,
   onSaved,
   run,
+  execute,
 }: {
   tasks: Task[]
   milestones: Milestone[]
@@ -1048,6 +1050,7 @@ function TaskTable({
   onGenWbs?: () => void
   onSaved: () => void
   run: (line: string) => Promise<boolean>
+  execute: (line: string) => Promise<string>
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
@@ -1076,6 +1079,8 @@ function TaskTable({
   const batchIds = [...selected].join(',')
   // OPT-09：纯键盘导航（j/k 移动、空格勾选、Del 走批量删除确认）。
   const [activeIdx, setActiveIdx] = useState(0)
+  // OPT-12：导入预览（dry-run 文本 + 确认落盘命令）。
+  const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
       const action = panelKeyboard(fromKeyboardEvent(ev))
@@ -1153,20 +1158,41 @@ function TaskTable({
             const pid = tasks[0]?.projectId
             e.currentTarget.value = ''
             if (!file) return
-            if (!pid) { window.alert('请先选择项目'); return }
+            if (!pid) { setImportPreview({ text: '请先在顶部选择项目，再上传任务表。', confirm: '' }); return }
             const isCsv = /\.csv$/i.test(file.name)
             const reader = new FileReader()
-            reader.onload = () => {
+            reader.onload = async () => {
               const content = isCsv ? String(reader.result ?? '') : arrayBufferToB64(reader.result as ArrayBuffer)
-              void run(`task import-content ${pid} ${file.name} ${JSON.stringify(content)}`).then(ok => {
-                if (ok) window.alert(`已解析 ${file.name}，请在确认中落盘。`)
-              })
+              const enc = JSON.stringify(content)
+              try {
+                const text = await execute(`task import-content ${pid} ${file.name} ${enc}`)
+                if (/失败|错误|不支持|无法/.test(text)) { setImportPreview({ text, confirm: '' }); return }
+                setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc} confirm` })
+              } catch (err) {
+                setImportPreview({ text: `解析失败：${err instanceof Error ? err.message : String(err)}`, confirm: '' })
+              }
             }
             if (isCsv) reader.readAsText(file); else reader.readAsArrayBuffer(file)
           }}
         />
       </label>
     </TableToolbar>
+
+    {importPreview && (
+      <div className="pm-import-preview">
+        <pre className="pm-import-preview-text">{importPreview.text}</pre>
+        {importPreview.confirm && (
+          <button
+            className="pm-button pm-button-primary pm-import-confirm"
+            disabled={disabled}
+            onClick={() => {
+              void run(importPreview.confirm).then(ok => { if (ok) { setImportPreview(null); onSaved() } })
+            }}
+          >确认落盘</button>
+        )}
+        <button className="pm-tool-button" onClick={() => setImportPreview(null)}>取消</button>
+      </div>
+    )}
 
     {selected.size > 0 && (
       <div className="pm-batch-bar">
