@@ -31,6 +31,7 @@ export const progressReportHelp = [
   '  /pm report delete rpt-0001 confirm',
   '  /pm report narrate p-0001            基于确定性数据，AI 写本周进展/风险/下周计划叙述（预览，不落盘）',
   '  /pm report narrate p-0001 confirm   按上次叙述生成带 executiveSummary 的进度快照（复用草稿）',
+  '  /pm report narrateuse p-0001 "<编辑后叙述>"  按编辑后文本直接落快照（不再调模型）',
   'AI 叙述只基于确定性数字、confirm 才落快照；失败时退化为确定性快照。',
 ].join('\n')
 
@@ -105,6 +106,20 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
         kind: 'success',
         text: [`已按 AI 叙述生成进度快照（executiveSummary 已写入）。\n${render(report)}`].join('\n'),
       }
+    }
+    // OPT-08：/pm report narrateuse <项目ID> "<JSON编码的编辑后叙述>" —— 按用户编辑后的文本直接落快照，不再调模型。
+    const narrateUseMatch = /^narrateuse\s+(\S+)\s+([\s\S]+)$/i.exec(input)
+    if (narrateUseMatch) {
+      const projectId = narrateUseMatch[1]
+      let text = unquote(narrateUseMatch[2].trim())
+      try { text = JSON.parse(narrateUseMatch[2].trim()) } catch { /* 非 JSON 编码则按原文 */ }
+      if (typeof text !== 'string' || !text.trim()) return { kind: 'error', text: '请使用：/pm report narrateuse <项目ID> "<编辑后的三段叙述>"' }
+      buildBrief(domain, projectId) // 校验项目存在
+      const { periodStart, periodEnd } = defaultPeriod(7)
+      const report = await generateProgressReport(domain, {
+        projectId, periodStart, periodEnd, executiveSummary: text.trim(), status: 'draft',
+      })
+      return { kind: 'success', text: `已按编辑后叙述生成进度快照（不再调用模型）。\n${render(report)}` }
     }
     const generateMatch = /^generate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
     if (generateMatch) {
