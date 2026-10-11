@@ -12,7 +12,7 @@ pm-tool 的 AI 生成功能（智能 WBS / 汇报叙述 / 纪要归纳）现按*
 
 | 车道 | provider | 默认模型 | Key | 用途红线 |
 |---|---|---|---|---|
-| `poc`（默认） | `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，clone 于 `~/Projects/dsh-pm/dsh-our-free-model`，commit 7e3a1da） | `openrouter/free`（该插件免费自动路由） | 免 | **仅概念验证/界面原型/需求推演**；公共网关可能记录内容，**不得用于核心代码合并、生产提交** |
+| `poc`（默认） | `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，clone 于 `~/Projects/dsh-pm/dsh-our-free-model`，commit 7e3a1da） | `kilo-auto/free`（Kilo 免费自动路由；2026-10-11 实测免 Key 一次成功，~5.6s 返回正文） | 免 | **仅概念验证/界面原型/需求推演**；公共网关可能记录内容，**不得用于核心代码合并、生产提交** |
 | `prod` | 优先 `deepseek-official`（base 内置），其次 `kimi-official`（baseURL https://api.moonshot.cn/v1） | deepseek-chat / kimi-k2-0905-preview | 需 `DEEPSEEK_API_KEY` / `KIMI_API_KEY` | 生产开发；**未给 Key 时给中文引导，不回退免费车道** |
 
 - 切换：`/pm model mode poc` ｜ `/pm model mode prod` ｜ `/pm model status`（不回显明文 Key）。Web：AI 助手抽屉顶部分段开关。

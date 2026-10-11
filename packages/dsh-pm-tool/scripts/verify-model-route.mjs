@@ -37,7 +37,7 @@ try {
   // poc 路由固定到免费插件。
   const poc = resolveModelRoute('poc')
   assert.equal(poc.provider, 'our-free-model')
-  assert.equal(poc.model, 'openrouter/free')
+  assert.equal(poc.model, 'kilo-auto/free')
 
   // prod 无 Key：抛结构化错误（绝不回退免费）。
   assert.throws(() => resolveModelRoute('prod'), /PROD_KEY_MISSING/)

@@ -367,7 +367,7 @@
 ## ADL-044 ｜ 2026-10-11 ｜ 双模型车道：PoC 免费公共网关 vs 生产官方 API；生产不得用免费车道
 
 - **决定**：引入统一车道路由 `core/model-route.ts`，AI 功能（task wbs / report narrate / meeting summarize）按当前模式选路：
-  - `poc`（默认）→ provider `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，commit 7e3a1da），模型 `openrouter/free`（该插件免费自动路由，免 Key）。**仅用于概念验证/界面原型/需求推演，不得用于核心代码合并、生产级编码、版本提交**（公共网关可能记录内容）。
+  - `poc`（默认）→ provider `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，commit 7e3a1da），模型 `kilo-auto/free`（Kilo 免费自动路由；2026-10-11 用宿主 ctx.llm 实测免 Key 一次成功，~5.6s 返回正文。注：插件 catalog 里虽也有 `openrouter/free`，但那是与旧 pi-ai 通道同名的值；本插件 Kilo 侧稳定自动路由 id 为 `kilo-auto/free`，故默认用它）。**仅用于概念验证/界面原型/需求推演，不得用于核心代码合并、生产级编码、版本提交**（公共网关可能记录内容）。
   - `prod` → 按 Key 优先 DeepSeek 官方（provider `deepseek-official`，base 内置，env `DEEPSEEK_API_KEY`）其次 Kimi/Moonshot 官方（provider `kimi-official`，baseURL https://api.moonshot.cn/v1，env `KIMI_API_KEY`）。**所有者尚未给 Key**：provider 已配置但休眠，切到 prod 而无 Key 时返回中文友好提示，**绝不回退免费车道做生产活**。
 - **持久化**：模式存 pmtool 领域 `checks` 表键 `aiModelMode`（复用既有表，不新增表），默认 poc。命令 `/pm model mode poc|prod`、`/pm model status`；Web AI 助手抽屉顶部加分段开关并显示 PoC 醒目警示。
 - **运行时安装**：插件 clone 到 `~/Projects/dsh-pm/dsh-our-free-model`（仓库外），`dsh plugin --profile pm add <路径>`，不再往 cordis.patch.yml 加条目（避免 duplicate loader id）。llm-pi-ai 只追加 `kimi-official`；`deepseek-official` 已由 base 内置声明，重复声明会启动报错，故不重复加。

@@ -22,8 +22,8 @@ export interface ModelLane {
   note: string
 }
 
-/** PoC 车道：免费插件 provider id 固定为 our-free-model；默认用其自动路由模型。 */
-export const POC_LANE = { provider: 'our-free-model', model: 'openrouter/free' } as const
+/** PoC 车道：免费插件 provider id 固定为 our-free-model；默认用其 Kilo 免费自动路由模型 kilo-auto/free。 */
+export const POC_LANE = { provider: 'our-free-model', model: 'kilo-auto/free' } as const
 
 /** 生产车道候选（按优先级）：DeepSeek 官方 → Kimi/Moonshot 官方。 */
 export const PROD_CANDIDATES = [
