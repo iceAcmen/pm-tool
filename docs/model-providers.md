@@ -232,5 +232,17 @@ curl -X POST https://openrouter.ai/api/v1/chat/completions \
 **预期判读（已实测，2026-10-11）**：
 - **未设置 key**：直连会返回 **401 Unauthorized**——这是预期，说明端点与网络通、只是缺 key。
 - **设置 key 后（本项目现状）**：`/key` 返回账户限额 JSON；本项目实测 `is_free_tier: true`、`free_model_daily_requests.limit = 50`。`/chat/completions`（`model=openrouter/free`）返回一段模型回复，**具体模型由免费池随机分配**（实测两次分别随机到 `liquid/lfm-2.5-2.6b:free` 与 `nvidia/nemotron-3-ultra-550b-a55b:free`），两次均 `cost=$0`、`finish_reason=stop`。
-- **当前状态（2026-10-11）**：key 已由所有者配置在其本机 `~/.zshrc`（`export OPENROUTER_API_KEY=...`，仓库外、不入库；改前已备份 `~/.zshrc.bak-20261011-130537`），**openrouter/free 直连已实测成功**。**唯一剩余动作**：所有者在 dsh Web「设置→模型」点选 `openrouter-free`/`openrouter/free` 后发一句测试做应用内确认——注意**启动 dsh 的终端必须是已加载 `~/.zshrc` 的全新 zsh**，否则读不到该变量。
+- **当前状态（2026-10-11，全部打通）**：key 已由所有者配置在其本机 `~/.zshrc`（`export OPENROUTER_API_KEY=...`，仓库外、不入库；改前已备份 `~/.zshrc.bak-20261011-130537`），**openrouter/free 直连已实测成功**，**dsh 应用内对话也已实测通过**：在 Web 底部模型选择器选 **Free Models Router**（openrouter-free / openrouter/free）发「你好，用一句话介绍你自己」，第 1 次即成功（助手正常回复、状态「已完成」、无 MISSING_CREDENTIAL/401/429）。至此模型通道（配置 + 直连 + 应用内）全部打通；**下一步仅待所有者决定是否立项做生成型功能（智能 WBS/纪要/周报）**。
 - **经验（推理型免费模型）**：随机分到的若为推理型模型，会先把 `max_tokens` 预算**全部计入 `reasoning_tokens`**，导致正文为空。**务必把 `max_tokens` 给足（建议 ≥400）**，正文才留得下空间。稳定工具调用仍不保证（ADL-035 口径）。
+
+### 4.2 故障排查：应用内报 `MISSING_CREDENTIAL` / “OPENROUTER_API_KEY which is not set”
+
+- **现象**：网页选 Free Models Router 发消息，报错 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（错误码 `MISSING_CREDENTIAL`）。但 key 本身有效、直连 curl 能成功。
+- **根因**：dsh 的 `apiKeyEnv` 读的是**启动该 dsh 进程时的进程环境变量**（见 KB-033）。若 dsh 是在「往 `~/.zshrc` 写入 key **之前**就开着的旧终端」里启动的，进程环境里根本没有 `OPENROUTER_API_KEY`，与 shell 后来加载与否无关。
+- **诊断**（把 `<dsh pid>` 换成实际进程号）：
+  ```sh
+  ps eww -p <dsh pid> | tr ' ' '\n' | grep OPENROUTER_API_KEY   # 无输出=旧进程没继承到该变量
+  ```
+- **解法（二选一）**：
+  1. **重启到新环境**：停掉旧 dsh，用已 `source ~/.zshrc`（能 `echo $OPENROUTER_API_KEY` 看到值）的**全新终端**重启 dsh（等价 `pnpm dsh --profile pm`）。
+  2. **永久且与启动终端无关（推荐）**：在 dsh Web「**设置 → 模型（Models）**」页直接为该 provider 录入密钥——写入 dsh **credentials service**（正是上面报错提示的目标），此后任何终端启动的 dsh 都能取到，不必依赖 shell 环境。

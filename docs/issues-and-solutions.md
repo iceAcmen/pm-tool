@@ -6,6 +6,16 @@
 
 ---
 
+## ISS-024 ｜ dsh 应用内选免费模型报 MISSING_CREDENTIAL：旧进程没继承新环境变量（2026-10-11，doubao-work / 豆包工作）
+
+- **现象**：在 dsh 网页底部模型选择器选 Free Models Router（openrouter-free）发消息，报错 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（错误码 `MISSING_CREDENTIAL`）。但 key 本身有效——同一 key 直连 `curl .../chat/completions` 已 `$0` 成功。
+- **根因**：pi-ai 的 `apiKeyEnv` 读的是**启动该 dsh 进程时的进程环境变量**（见 KB-033/KB-035）。这次 dsh 是在「往 `~/.zshrc` 写入 key **之前**就开着的旧终端」里启动的，进程环境里根本没有 `OPENROUTER_API_KEY`；之后 shell source 与否、新终端能否 `echo` 到，都不影响这个已运行的旧进程。**不是 key 错、不是网络问题**。
+- **解决办法**（二选一）：① 停掉旧 dsh，用已 `source ~/.zshrc`（能 `echo $OPENROUTER_API_KEY`）的**全新终端**重启（等价 `pnpm dsh --profile pm`）；② **推荐、且与启动终端无关**：在 dsh Web「设置→模型（Models）」页直接为该 provider 录密钥，写入 dsh credentials service（正是报错提示的目标），此后任何终端启动的 dsh 都取得到。
+- **诊断命令**（`<dsh pid>` 换成实际进程号）：`ps eww -p <dsh pid> | tr ' ' '\n' | grep OPENROUTER_API_KEY`——无输出即旧进程没继承到该变量（实测新 zsh 能读到、长度 73）。
+- **避坑要点**：改完 `~/.zshrc` 加 key 后，**必须新开终端或重启 dsh**才生效；想一劳永逸就把密钥录进 dsh Web 的 Models 页（credentials service），别依赖 shell 环境。
+- **适用场景**：任何「改了环境变量但运行中的 dsh/Node 进程没生效」的 MISSING_CREDENTIAL / 类似报错。
+- **状态**：已解决——重启到新环境后，Free Models Router 发「你好」第 1 次即成功，无 MISSING_CREDENTIAL/401/429。
+
 ## ISS-023 ｜ 汇报异常测试错误依赖具体排序（2026-10-10，trae / TRAE）
 
 - **现象**：R9 首次专项验证中，五类异常均被正确收集，但测试因期待固定类型顺序而失败。

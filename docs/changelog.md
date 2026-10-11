@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — dsh 应用内 openrouter/free 实测打通 + MISSING_CREDENTIAL 排查沉淀（仅文档）（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 修改文件（**仅 docs，无业务代码、无 key 本体、无临时 PID/端口**）：
+  - `docs/model-providers.md`：第 4.1 节状态推进为「dsh 应用内对话已实测通过（Free Models Router 一次成功）」；新增 **4.2 故障排查小节**（应用内报 `MISSING_CREDENTIAL`/“OPENROUTER_API_KEY which is not set” 的现象、根因、两种解法与诊断命令）。
+  - `docs/knowledge-base.md`：新增 KB-035（MISSING_CREDENTIAL 排查：dsh 进程环境 vs credentials service；含「dsh 单轮约 9.5K tok、免费档按次计费不按 token」观察）。
+  - `docs/issues-and-solutions.md`：新增 ISS-024（对应 MISSING_CREDENTIAL：现象/根因/解法/避坑）。
+  - `docs/progress.md`、`docs/handoff.md`、`docs/onboarding-prompt.md`：把「仅剩 Web 点选确认」刷新为「模型通道（含 dsh 应用内对话）已全部实测打通；下一步仅待所有者决定是否立项生成型功能」。
+- 实测事实（2026-10-11）：所有者首次在 dsh 网页选 Free Models Router 发「你好」报 `MISSING_CREDENTIAL`——根因是当时运行的 dsh 进程由「写 key 之前的旧终端」启动、进程环境无 `OPENROUTER_API_KEY`（key 本身有效，直连已 $0）；`ps eww -p <dsh pid>` 核实旧进程无该变量、全新 zsh 能读到（长度 73）。停旧 dsh、用已 `source ~/.zshrc` 的环境重启后，底部模型选择器选 Free Models Router 发「你好，用一句话介绍你自己」**第 1 次即成功**（puppeteer-core + 系统 Chrome 139 无头，KB-032）：助手正常回复、状态「已完成」、无 MISSING_CREDENTIAL/401/429，页脚约 9.5K tok（免费档按次计费，不按 token）。截图 `.tmp/ui-verify/llm-04-result-1.png`（gitignored，不入库）。
+- 影响范围：仅文档口径同步；业务代码、数据、上游、profile 配置零改动。
+
 ## [未发布] — 修正一处残留错误启动命令并实测正确启动（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 修改文件（仅 docs）：`docs/progress.md` 第 103 行把错误的 `pnpm dsh --profile pm web` 改为 `pnpm dsh --profile pm`（指定 profile 后再加 `web` 会被当成 Web 应用的多余位置参数，报 "too many arguments. Expected 0 arguments but got 1: web"，即 ISS-007 记录的坑）；并把生成型能力前置条件刷新为「模型通道已就绪（ADL-035/KB-034），是否立项待所有者决定」。

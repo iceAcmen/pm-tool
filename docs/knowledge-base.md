@@ -6,6 +6,16 @@
 
 ---
 
+## KB-035 ｜ MISSING_CREDENTIAL 排查：dsh 进程环境 vs credentials service（沉淀：doubao-work，2026-10-11）
+
+- **现象**：dsh 网页选 Free Models Router（openrouter-free）发消息报 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（`MISSING_CREDENTIAL`）；但 key 本身有效、直连 curl 已 `$0` 成功。
+- **根因**：pi-ai 的 `apiKeyEnv` 读的是**启动该 dsh 进程时的进程环境变量**（KB-033）。dsh 是在「往 `~/.zshrc` 写 key **之前**就开着的旧终端」启动的，进程环境里没有 `OPENROUTER_API_KEY`；shell 后来 source 与否、新终端能否 `echo` 到，都不影响这个已运行的旧进程。**不是 key 错、不是网络问题**。
+- **诊断**（`<dsh pid>` 换成实际进程号）：`ps eww -p <dsh pid> | tr ' ' '\n' | grep OPENROUTER_API_KEY`——无输出即旧进程没继承到该变量；全新 zsh 能 `echo $OPENROUTER_API_KEY`（实测长度 73）则变量本身没问题。
+- **两种修复**：① 停旧 dsh，用已 `source ~/.zshrc` 的全新终端重启（等价 `pnpm dsh --profile pm`）；② **推荐、且与启动终端无关**：在 dsh Web「设置→模型（Models）」页直接为该 provider 录密钥，写入 dsh **credentials service**（即报错提示的目标），此后任何终端启动的 dsh 都取得到。
+- **应用内复测结论**：重启后底部模型选择器选 Free Models Router 发「你好…」**第 1 次即成功**（puppeteer-core + 系统 Chrome 139 无头，KB-032），无 MISSING_CREDENTIAL/401/429。
+- **附带观察**：dsh 单轮带较大系统提示/工具 schema，简单问候也约 **9.5K tok**（152 tok/s）；但 OpenRouter 免费档按**请求次数**计（50 次/天）、不按 token 计费，故单轮 token 大对免费额度无影响——只是次数敏感，别让 agent 空转刷屏。
+- **来源/佐证**：ISS-024；`docs/model-providers.md` 第 4.2 节；截图 `.tmp/ui-verify/llm-04-result-1.png`（gitignored）。
+
 ## KB-034 ｜ openrouter/free 免费自动路由实测行为（随机模型 / 推理型吃满 reasoning tokens / 每日 50 次 / 工具调用不保证）（沉淀：doubao-work，2026-10-11）
 
 - **结论**：OpenRouter 免费自动路由 `openrouter/free` 直连已于 2026-10-11 实测打通（`cost=$0`、`finish_reason=stop`）。它**不是固定模型**，每次请求由免费池**随机分配**一个 `:free` 模型——同一批两次调用就可能落到不同模型（实测：第 1 次 `liquid/lfm-2.5-2.6b:free`、第 2 次 `nvidia/nemotron-3-ultra-550b-a55b:free`）。
