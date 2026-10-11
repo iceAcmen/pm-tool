@@ -113,7 +113,21 @@ export async function readBackupFile(path: string): Promise<PmBackup> {
  */
 export async function restoreBackup(domain: PmDomain, path: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   const backup = await readBackupFile(path)
+  return applyBackup(domain, backup)
+}
 
+/** OPT-06：按备份 JSON 内容（浏览器 FileReader 读入）恢复，区别于服务端路径。 */
+export async function restoreBackupFromContent(domain: PmDomain, jsonText: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
+  let backup: PmBackup
+  try {
+    backup = validateBackup(JSON.parse(jsonText))
+  } catch (error) {
+    throw new Error(`备份内容无法解析（不是合法的 pmtool 备份 JSON）：${error instanceof Error ? error.message : String(error)}`)
+  }
+  return applyBackup(domain, backup)
+}
+
+async function applyBackup(domain: PmDomain, backup: PmBackup): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   // 恢复前自动安全快照（仅当当前已有任一实体）。
   let safetySnapshot: string | undefined
   const hasData = BACKUP_TABLES.some(name => (domain.table(name as never) as unknown as AnyTable).entries().next().done === false)

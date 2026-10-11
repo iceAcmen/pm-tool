@@ -129,7 +129,8 @@ try {
   assert.match(css, /\.pm-ai-preview/)
   // R16：临期/逾期提醒条（客户端派生）。
   assert.match(bundle, /pm-reminders/)
-  assert.match(bundle, /未来 7 天/)
+  assert.match(bundle, /天内没有临期或逾期事项/)  // OPT-02 提醒空态
+  assert.match(bundle, /临期与逾期提醒/)
   assert.match(bundle, /meeting action promote /)
   assert.match(bundle, /已转 /)
   // R18：面板一键备份入口。
@@ -170,6 +171,13 @@ try {
   assert.match(bundle, /report narrateuse /)        // OPT-08 按编辑文本落盘
   assert.match(bundle, /pm-batch-bar/)             // OPT-05 批量工具条
   assert.match(bundle, /pm-reminders/)             // OPT-01/02 提醒区
+  assert.match(bundle, /pm-restore-btn/)           // OPT-06 网页选备份恢复
+  assert.match(bundle, /restore-content/)          // OPT-06 按内容恢复入口
+  assert.match(bundle, /pm-batch-assignee/)         // OPT-05 批量负责人
+  assert.match(bundle, /pm-batch-due/)             // OPT-05 批量截止
+  assert.match(bundle, /pm-reminder-range/)        // OPT-02 3/7/14/30 天切换
+  assert.match(bundle, /data-pick-project/)        // OPT-01 提醒切项目
+  assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')

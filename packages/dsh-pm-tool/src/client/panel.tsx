@@ -351,6 +351,27 @@ export function PmPanel({ execute }: PmPanelApi) {
           >
             <Database size={15}/>备份
           </button>
+          <label className="pm-button pm-restore-btn" title="选择本地备份 JSON 恢复（先演练，确认后才替换）">
+            <Package size={15}/>从备份恢复
+            <input
+              type="file"
+              accept=".json,application/json"
+              className="pm-file-input pm-restore-file"
+              hidden
+              onChange={(e) => {
+                const file = e.currentTarget.files?.[0]
+                if (!file) return
+                const reader = new FileReader()
+                reader.onload = () => {
+                  const content = String(reader.result ?? '')
+                  const json = JSON.stringify(content)
+                  void execute(`restore-content ${json}`).then(setMessage)
+                }
+                reader.readAsText(file)
+                e.currentTarget.value = ''
+              }}
+            />
+          </label>
           <button
             className="pm-button pm-export-md-btn"
             disabled={busy || !project}
@@ -423,7 +444,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               deliverables={deliverables}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
-            <ReminderStrip data={data}/>
+            <ReminderStrip data={data} onPickProject={(id) => setSelected(id)}/>
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
               <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => setView('tasks')}>
                 全部任务
@@ -558,44 +579,91 @@ export function PmPanel({ execute }: PmPanelApi) {
   </>
 }
 
-/** R16 提醒：客户端基于 snapshot 派生临期/逾期（纯展示，不入库、不调模型）。 */
-function ReminderStrip({ data }: { data: Snapshot }) {
+/** R16/OPT-01/02 提醒：客户端基于 snapshot 派生临期/逾期（纯展示，不入库、不调模型）。 */
+function ReminderStrip({ data, onPickProject }: { data: Snapshot, onPickProject?: (id: string) => void }) {
   const today = useMemo(() => {
     const n = new Date()
     return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
   }, [])
+  const [range, setRange] = useState(7)
   const items = useMemo(() => {
-    const within = 7
     const projName = new Map(data.projects.map(p => [p.id, p.name]))
     const days = (date: string) => Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000)
-    const out: { severity: 'overdue' | 'soon'; text: string }[] = []
+    const out: { severity: 'overdue' | 'soon', projectId: string, refId: string, label: string }[] = []
     for (const t of data.tasks) {
       if (t.status === 'done' || t.progress >= 100 || !t.dueDate) continue
       const d = days(t.dueDate)
-      if (d < 0) out.push({ severity: 'overdue', text: `${projName.get(t.projectId) ?? t.projectId}｜任务 ${t.title}｜已逾期 ${-d} 天` })
-      else if (d <= within) out.push({ severity: 'soon', text: `${projName.get(t.projectId) ?? t.projectId}｜任务 ${t.title}｜还有 ${d} 天到期` })
+      if (d < 0) out.push({ severity: 'overdue', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（逾期 ${-d} 天）` })
+      else if (d <= range) out.push({ severity: 'soon', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（还有 ${d} 天）` })
     }
     for (const m of data.milestones) {
       if (m.status === 'achieved') continue
       const d = days(m.targetDate)
-      if (d < 0) out.push({ severity: 'overdue', text: `${projName.get(m.projectId) ?? m.projectId}｜里程碑 ${m.title}｜已逾期 ${-d} 天` })
-      else if (d <= within) out.push({ severity: 'soon', text: `${projName.get(m.projectId) ?? m.projectId}｜里程碑 ${m.title}｜还有 ${d} 天` })
+      if (d < 0) out.push({ severity: 'overdue', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（逾期 ${-d} 天）` })
+      else if (d <= range) out.push({ severity: 'soon', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（还有 ${d} 天）` })
     }
     out.sort((a, b) => (a.severity === 'overdue' ? -1 : 1) - (b.severity === 'overdue' ? -1 : 1))
-    return out.slice(0, 8)
-  }, [data, today])
-  if (!items.length) return null
-  const overdue = items.filter(i => i.severity === 'overdue').length
+    // 按项目分组。
+    const groups = new Map<string, typeof out>()
+    for (const it of out) {
+      const g = groups.get(it.projectId) ?? []
+      g.push(it); groups.set(it.projectId, g)
+    }
+    return { groups, projName }
+  }, [data, today, range])
+
+  const total = Array.from(items.groups.values()).reduce((n, g) => n + g.length, 0)
+  if (!total) {
+    return <section className="pm-reminders pm-reminders-empty" aria-label="临期与逾期提醒">
+      <div className="pm-reminders-head">
+        <span className="pm-reminders-title"><Bell size={14}/>提醒</span>
+        <RangePicker range={range} setRange={setRange}/>
+      </div>
+      <p className="pm-reminders-none">未来 {range} 天内没有临期或逾期事项。</p>
+    </section>
+  }
+  const overdue = Array.from(items.groups.values()).flat().filter(i => i.severity === 'overdue').length
   return <section className="pm-reminders" aria-label="临期与逾期提醒">
     <div className="pm-reminders-head">
-      <span className="pm-reminders-title"><Bell size={14}/>提醒（未来 7 天）</span>
+      <span className="pm-reminders-title"><Bell size={14}/>提醒</span>
+      <RangePicker range={range} setRange={setRange}/>
       {overdue > 0 && <span className="pm-reminders-count pm-reminders-overdue">逾期 {overdue}</span>}
-      {items.length - overdue > 0 && <span className="pm-reminders-count pm-reminders-soon">临期 {items.length - overdue}</span>}
+      {total - overdue > 0 && <span className="pm-reminders-count pm-reminders-soon">临期 {total - overdue}</span>}
     </div>
-    <ul>{items.map((item, idx) =>
-      <li key={idx} className={item.severity === 'overdue' ? 'pm-reminders-row-overdue' : 'pm-reminders-row-soon'}>{item.text}</li>,
-    )}</ul>
+    {Array.from(items.groups.entries()).map(([pid, list]) =>
+      <div key={pid} className="pm-reminder-group" data-pid={pid}>
+        <button
+          type="button"
+          className="pm-reminder-project"
+          data-pick-project={pid}
+          onClick={() => onPickProject?.(pid)}
+          title={`切换到项目 ${items.projName.get(pid) ?? pid}`}
+        >{items.projName.get(pid) ?? pid}</button>
+        <ul>{list.map((it, idx) =>
+          <li
+            key={`${it.refId}-${idx}`}
+            className={it.severity === 'overdue' ? 'pm-reminders-row pm-reminders-row-overdue' : 'pm-reminders-row pm-reminders-row-soon'}
+            data-reminder-ref={it.refId}
+            onClick={() => onPickProject?.(it.projectId)}
+          >{it.label}</li>,
+        )}</ul>
+      </div>,
+    )}
   </section>
+}
+
+function RangePicker({ range, setRange }: { range: number, setRange: (n: number) => void }) {
+  return <span className="pm-reminder-ranges" role="group" aria-label="提醒范围">
+    {[3, 7, 14, 30].map(d =>
+      <button
+        key={d}
+        type="button"
+        className={`pm-reminder-range${range === d ? ' pm-button-primary' : ''}`}
+        aria-pressed={range === d}
+        onClick={() => setRange(d)}
+      >{d} 天</button>,
+    )}
+  </span>
 }
 
 function drawerTitle(drawer: Drawer): string {
@@ -809,8 +877,40 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   </div>
 }
 
-function downloadText(filename: string, text: string, mime: string) {
-  try {
+/** OPT-05：批量字段输入（负责人文本 / 截止日期），回车或按钮触发应用。 */
+function BatchField({ className, placeholder, type = 'text', onApply }: {
+  className?: string
+  placeholder: string
+  type?: string
+  onApply: (json: string) => Promise<boolean | void>
+}) {
+  const [value, setValue] = useState('')
+  const field = type === 'date' ? 'dueDate' : 'assignee'
+  return <span className={`pm-batch-field-wrap ${className ?? ''}`}>
+    <input
+      type={type}
+      className="pm-batch-input"
+      value={value}
+      placeholder={placeholder}
+      aria-label={placeholder}
+      onChange={(e) => setValue(e.currentTarget.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && value.trim()) {
+          e.preventDefault()
+          void onApply(JSON.stringify({ [field]: value.trim() })).then(() => setValue(''))
+        }
+      }}
+    />
+    <button
+      type="button"
+      className="pm-tool-button"
+      disabled={!value.trim()}
+      onClick={() => { void onApply(JSON.stringify({ [field]: value.trim() })).then(() => setValue('')) }}
+    >应用</button>
+  </span>
+}
+
+function downloadText(filename: string, text: string, mime: string) {  try {
     const blob = new Blob([text], { type: mime })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -994,6 +1094,30 @@ function TaskTable({
       <div className="pm-batch-bar">
         <span>已选 {selected.size} 项</span>
         <button className="pm-tool-button pm-batch-complete" disabled={disabled} onClick={() => { void run(`task batch update ${batchIds} {"status":"done"}`).then(ok => ok && onSaved()) }}>标为完成</button>
+        {/* OPT-05：批量改负责人/优先级/截止，复用 task batch update。 */}
+        <BatchField
+          className="pm-batch-field pm-batch-assignee"
+          placeholder="负责人"
+          onApply={(json) => run(`task batch update ${batchIds} ${json}`).then(ok => ok && onSaved())}
+        />
+        <label className="pm-batch-field pm-batch-priority">
+          <select defaultValue="" aria-label="批量优先级"
+            onChange={(e) => {
+              const v = e.currentTarget.value
+              if (!v) return
+              void run(`task batch update ${batchIds} ${JSON.stringify({ priority: v })}`).then(ok => ok && onSaved())
+              e.currentTarget.value = ''
+            }}>
+            <option value="" disabled>批量优先级</option>
+            {['low', 'medium', 'high'].map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </label>
+        <BatchField
+          className="pm-batch-field pm-batch-due"
+          type="date"
+          placeholder="截止日"
+          onApply={(json) => run(`task batch update ${batchIds} ${json}`).then(ok => ok && onSaved())}
+        />
         <button className="pm-tool-button pm-batch-delete pm-danger" disabled={disabled} onClick={confirmBatchDelete}>批量删除</button>
         <button className="pm-tool-button" onClick={() => setSelected(new Set())}>取消选择</button>
       </div>

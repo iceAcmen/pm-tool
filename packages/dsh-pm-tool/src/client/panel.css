@@ -802,3 +802,18 @@
 .pm-model-lane { display: flex; gap: 6px; margin-bottom: 6px; }
 .pm-lane-warning { padding: 6px 8px; border: 1px solid var(--pm-line-soft); border-radius: 6px; font-size: 12px; color: var(--dsw-alias-state-warning-text, inherit); }
 .pm-lane-note { padding: 4px 8px; font-size: 12px; opacity: .8; }
+
+/* === OPT 优化清单 === */
+.pm-reminder-ranges { display: inline-flex; gap: 4px; margin-left: 8px; }
+.pm-reminder-range { font-size: 12px; padding: 2px 8px; border: 1px solid var(--pm-border); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
+.pm-reminder-group { margin: 4px 0; }
+.pm-reminder-project { background: none; border: none; color: var(--pm-accent); cursor: pointer; font-weight: 600; padding: 0; font-size: 13px; }
+.pm-reminders-row { cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.pm-reminders-row:hover { background: var(--pm-hover); }
+.pm-batch-field-wrap { display: inline-flex; gap: 4px; align-items: center; }
+.pm-batch-input { font-size: 12px; padding: 3px 6px; border: 1px solid var(--pm-border); border-radius: 6px; background: transparent; color: inherit; width: 90px; }
+.pm-restore-btn { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  .pm-batch-bar { animation: pm-fade-in .18s ease-out; }
+  @keyframes pm-fade-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+}

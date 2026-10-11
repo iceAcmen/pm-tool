@@ -4,7 +4,7 @@
  */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import type { PmDomain } from '../core/storage.js'
-import { createBackup, readBackupFile, restoreBackup } from '../core/backup.js'
+import { createBackup, readBackupFile, restoreBackup, restoreBackupFromContent } from '../core/backup.js'
 
 export const backupHelp = [
   '备份/恢复命令（离线，仅 pmtool 七类实体，不含宿主会话与密钥）：',
@@ -16,6 +16,31 @@ export const backupHelp = [
 
 export async function handleBackupCommand(argument: string, domain: PmDomain | undefined): Promise<CommandResult> {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+  // OPT-06：/pm restore-content <JSON编码的备份内容> [confirm] —— 网页选文件后按内容恢复。
+  if (/^restore-content\b/i.test(argument.trim())) {
+    const rest = argument.trim().replace(/^restore-content\s*/i, '')
+    const isConfirm = /\sconfirm$/.test(rest)
+    const jsonText = rest.replace(/\sconfirm$/, '').trim()
+    if (!jsonText) return { kind: 'error', text: '请使用：/pm restore-content "<备份JSON>" [confirm]' }
+    try {
+      if (!isConfirm) {
+        return { kind: 'success', text: [
+          '已读取备份内容（演练，尚未恢复）。确认将用此备份替换当前七类实体（恢复前自动先存安全快照）：',
+          '  /pm restore-content "<同上JSON>" confirm',
+        ].join('\n') }
+      }
+      const result = await restoreBackupFromContent(domain, JSON.parse(jsonText))
+      return {
+        kind: 'success',
+        text: [
+          '已按所选备份文件恢复。',
+          result.safetySnapshot ? `恢复前自动安全快照：${result.safetySnapshot}` : '当前库为空，未生成安全快照。',
+        ].join('\n'),
+      }
+    } catch (error) {
+      return { kind: 'error', text: `恢复失败：${error instanceof Error ? error.message : String(error)}` }
+    }
+  }
   const tokens = argument.trim().split(/\s+/).filter(Boolean)
   if (tokens[0] === 'restore' || (tokens[0] ?? '').toLowerCase() === 'restore') {
     const [, filePath, confirmWord] = tokens
