@@ -20,6 +20,9 @@ import {
   TaskProjectNotFoundError,
   TaskReferencedByMeetingError,
   updateTask,
+  batchUpdateTasks,
+  planBatchDelete,
+  batchDeleteCascade,
 } from '../core/tasks.js'
 import {
   importTasksFromMarkdown,
@@ -108,7 +111,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'wbs'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'batch', 'wbs'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -342,6 +345,47 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       } catch (error) {
         return { kind: 'error', text: `导入失败：${error instanceof Error ? error.message : String(error)}` }
       }
+    }
+    if (action === 'batch') {
+      // `/pm task batch update t-0001,t-0002 {"status":"done"}`
+      // `/pm task batch delete t-0001,t-0002 [confirm]`（级联含后代，dry-run 先列总数）
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      const sub = (tokens[0] ?? '').toLowerCase()
+      if (sub === 'update') {
+        const ids = (tokens[1] ?? '').split(',').filter(Boolean)
+        const json = tokens.slice(2).join(' ')
+        if (!ids.length || !json) return { kind: 'error', text: '请使用：/pm task batch update <id,id,...> {JSON 字段}' }
+        let fields
+        try { fields = JSON.parse(json) } catch { return { kind: 'error', text: '字段参数不是有效 JSON。' } }
+        try {
+          const r = await batchUpdateTasks(domain!, ids, fields)
+          return { kind: 'success', text: `批量更新完成：成功 ${r.updated} 个${r.skipped ? `，跳过 ${r.skipped} 个（不存在）` : ''}。` }
+        } catch (error) {
+          return { kind: 'error', text: `批量更新失败：${error instanceof Error ? error.message : String(error)}` }
+        }
+      }
+      if (sub === 'delete') {
+        const ids = (tokens[1] ?? '').split(',').filter(Boolean)
+        const confirmation = tokens[tokens.length - 1]?.toLowerCase() === 'confirm'
+        if (!ids.length) return { kind: 'error', text: '请使用：/pm task batch delete <id,id,...> [confirm]' }
+        const plan = planBatchDelete(domain!, ids)
+        if (!confirmation) {
+          return {
+            kind: 'success',
+            text: [
+              `即将级联删除所选 ${plan.selected} 个任务及其全部后代，共 ${plan.totalWithDescendants} 个（旁支保留）。`,
+              `确认命令：/pm task batch delete ${ids.join(',')} confirm`,
+            ].join('\n'),
+          }
+        }
+        try {
+          const removed = await batchDeleteCascade(domain!, ids)
+          return { kind: 'success', text: `已批量级联删除 ${removed} 个任务（含后代）。` }
+        } catch (error) {
+          return { kind: 'error', text: `批量删除被阻止：${error instanceof Error ? error.message : String(error)}` }
+        }
+      }
+      return { kind: 'error', text: '请使用：/pm task batch update <id,id,...> {JSON} ｜ /pm task batch delete <id,id,...> [confirm]' }
     }
     if (action === 'wbs') {
       const tokens = argument.split(/\s+/).filter(Boolean)

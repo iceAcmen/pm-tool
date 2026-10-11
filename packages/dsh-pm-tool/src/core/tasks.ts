@@ -225,6 +225,49 @@ export function deleteTaskCascade(domain: PmDomain, id: string): Promise<string[
   })
 }
 
+/** 批量更新：对给定任务 id 列表逐个套用同一字段片段，返回成功/失败计数。 */
+export async function batchUpdateTasks(
+  domain: PmDomain,
+  ids: string[],
+  input: unknown,
+): Promise<{ updated: number; skipped: number; ids: string[] }> {
+  let updated = 0
+  let skipped = 0
+  const doneIds: string[] = []
+  for (const id of ids) {
+    const result = await updateTask(domain, id, input)
+    if (result) { updated++; doneIds.push(id) } else { skipped++ }
+  }
+  return { updated, skipped, ids: doneIds }
+}
+
+/**
+ * 批量级联删除：对每个所选任务用 collectTaskSubtree 计算将删除的整棵子树（去重）。
+ * dry-run 返回计划删除总数（含后代）；confirm 逐个 deleteTaskCascade。跨表保护沿用单删逻辑。
+ */
+export function planBatchDelete(
+  domain: PmDomain,
+  ids: string[],
+): { selected: number; totalWithDescendants: number; subtreeIds: string[] } {
+  const seen = new Set<string>()
+  for (const id of ids) {
+    for (const task of collectTaskSubtree(domain, id)) seen.add(task.id)
+  }
+  return { selected: ids.length, totalWithDescendants: seen.size, subtreeIds: [...seen] }
+}
+
+export async function batchDeleteCascade(
+  domain: PmDomain,
+  ids: string[],
+): Promise<number> {
+  let deleted = 0
+  for (const id of ids) {
+    const removed = await deleteTaskCascade(domain, id)
+    deleted += removed.length
+  }
+  return deleted
+}
+
 export function moveTask(
   domain: PmDomain,
   id: string,

@@ -1,6 +1,8 @@
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
+import ArrowDownWideNarrow from 'lucide-react/dist/esm/icons/arrow-down-wide-narrow.mjs'
+import Download from 'lucide-react/dist/esm/icons/download.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
@@ -349,6 +351,36 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Database size={15}/>备份
           </button>
           <button
+            className="pm-button"
+            disabled={busy || !project}
+            title="导出当前项目为 Markdown（运行导出命令，弹窗显示路径）"
+            onClick={async () => {
+              try {
+                const text = await execute(`export markdown ${project!.id}`)
+                window.alert(`Markdown 导出完成：\n${text}`)
+              } catch (error) {
+                window.alert(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+              }
+            }}
+          >
+            <Download size={15}/>导出 Markdown
+          </button>
+          <button
+            className="pm-button"
+            disabled={busy}
+            title="导出整库 JSON 数据包（浏览器直接下载）"
+            onClick={async () => {
+              try {
+                const snapshot = await execute('web snapshot')
+                downloadText('pmtool-snapshot.json', snapshot, 'application/json')
+              } catch (error) {
+                window.alert(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+              }
+            }}
+          >
+            <Download size={15}/>导出 JSON
+          </button>
+          <button
             className="pm-icon-button"
             disabled={busy}
             aria-label="刷新数据"
@@ -410,6 +442,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 disabled={busy}
                 onCreate={() => setDrawer({ kind: 'task' })}
                 onEdit={task => setDrawer({ kind: 'task', task })}
+                onSaved={refresh}
                 run={run}
               />}
               {view === 'milestones' && <MilestoneTable
@@ -723,6 +756,22 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   </div>
 }
 
+function downloadText(filename: string, text: string, mime: string) {
+  try {
+    const blob = new Blob([text], { type: mime })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  } catch {
+    window.alert(`当前环境无法直接下载，请改用命令行导出。内容已生成：\n${text.slice(0, 200)}`)
+  }
+}
+
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
   return <div className="pm-notice" role="status">
     <Check size={15}/>
@@ -806,6 +855,7 @@ function TaskTable({
   disabled,
   onCreate,
   onEdit,
+  onSaved,
   run,
 }: {
   tasks: Task[]
@@ -813,16 +863,42 @@ function TaskTable({
   disabled: boolean
   onCreate: () => void
   onEdit: (task: Task) => void
+  onSaved: () => void
   run: (line: string) => Promise<boolean>
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
   const [grouped, setGrouped] = useState(true)
-  const visible = tasks.filter(task => {
+  const [sort, setSort] = useState<'code' | 'dueDate' | 'priority' | 'progress'>('code')
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const priorityRank = (p: string) => ({ P0: 0, P1: 1, P2: 2 }[p] ?? 3)
+  const sorted = [...tasks].sort((a, b) => {
+    if (sort === 'dueDate') return String(a.dueDate ?? '9999').localeCompare(String(b.dueDate ?? '9999'))
+    if (sort === 'priority') return priorityRank(a.priority) - priorityRank(b.priority)
+    if (sort === 'progress') return (b.progress ?? 0) - (a.progress ?? 0)
+    return a.code.localeCompare(b.code, 'en', { numeric: true })
+  })
+  const visible = sorted.filter(task => {
     const matchesText = `${task.code} ${task.title} ${task.assignee}`.toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase())
     return matchesText && (status === 'all' || task.status === status)
   })
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
+  }
+  const batchIds = [...selected].join(',')
+  const confirmBatchDelete = () => {
+    if (!selected.size) return
+    void run(`task batch delete ${batchIds}`).then(() => {
+      if (window.confirm(`将级联删除所选 ${selected.size} 个任务及其全部后代（旁支保留），确定继续吗？`)) {
+        void run(`task batch delete ${batchIds} confirm`).then(ok => { if (ok) { setSelected(new Set()); onSaved() } })
+      }
+    })
+  }
   const groups = grouped
     ? Object.keys(taskStatus).map(value => ({
         key: value,
@@ -847,10 +923,28 @@ function TaskTable({
           )}
         </select>
       </label>
+      <label className="pm-toolbar-select">
+        <ArrowDownWideNarrow size={14}/>
+        <select value={sort} onChange={event => setSort(event.currentTarget.value as typeof sort)} aria-label="任务排序">
+          <option value="code">按 WBS 编号</option>
+          <option value="dueDate">按截止日期</option>
+          <option value="priority">按优先级</option>
+          <option value="progress">按进度</option>
+        </select>
+      </label>
       <button className="pm-tool-button" aria-pressed={grouped} onClick={() => setGrouped(value => !value)}>
         <ListFilter size={14}/>按状态分组
       </button>
     </TableToolbar>
+
+    {selected.size > 0 && (
+      <div className="pm-batch-bar">
+        <span>已选 {selected.size} 项</span>
+        <button className="pm-tool-button" disabled={disabled} onClick={() => { void run(`task batch update ${batchIds} {"status":"done"}`).then(ok => ok && onSaved()) }}>标为完成</button>
+        <button className="pm-tool-button pm-danger" disabled={disabled} onClick={confirmBatchDelete}>批量删除</button>
+        <button className="pm-tool-button" onClick={() => setSelected(new Set())}>取消选择</button>
+      </div>
+    )}
 
     <div className="pm-table-frame">
       <div className="pm-table-scroll">
@@ -878,6 +972,8 @@ function TaskTable({
               disabled={disabled}
               onEdit={onEdit}
               run={run}
+              selected={selected}
+              onToggle={toggleSelect}
             />)}
           </tbody>
         </table>
@@ -895,12 +991,16 @@ function TaskGroup({
   disabled,
   onEdit,
   run,
+  selected,
+  onToggle,
 }: {
   group: { key: string, label: string, rows: Task[] }
   milestones: Milestone[]
   disabled: boolean
   onEdit: (task: Task) => void
   run: (line: string) => Promise<boolean>
+  selected: Set<string>
+  onToggle: (id: string) => void
 }) {
   return <>
     <tr className="pm-group-row">
@@ -911,6 +1011,13 @@ function TaskGroup({
       const depth = Math.max(0, task.code.split('.').length - 1)
       return <tr className="pm-record-row" key={task.id}>
         <td className="pm-col-check">
+          <input
+            type="checkbox"
+            className="pm-row-check"
+            aria-label={`选择 ${task.title}`}
+            checked={selected.has(task.id)}
+            onChange={() => onToggle(task.id)}
+          />
           <button
             className="pm-check-button"
             data-checked={task.status === 'done'}

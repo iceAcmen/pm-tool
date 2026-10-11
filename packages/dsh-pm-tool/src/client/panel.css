@@ -791,3 +791,7 @@
 .pm-chip:hover { color: var(--pm-ink); border-color: var(--pm-line); }
 
 .pm-ai-markdown { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre; }
+
+.pm-batch-bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; padding: 6px 10px; border: 1px solid var(--pm-line-soft); border-radius: 8px; font-size: 12px; }
+.pm-row-check { margin-right: 4px; }
+.pm-danger { color: var(--dsw-alias-state-danger); }
