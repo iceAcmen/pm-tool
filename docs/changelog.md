@@ -8,6 +8,13 @@
 
 ---
 
+## [未发布] — 双模型车道（PoC 免费网关 / 生产官方 API，2026-10-11，平台：doubao-work）
+
+- 新增 `core/model-route.ts` 统一选路：默认 `poc`（provider `our-free-model` / `openrouter/free`，第三方免费插件 dsh-our-free-model v2.1.0，免 Key，仅概念验证）；`prod` 按 Key 优先 DeepSeek 官方、其次 Kimi 官方（休眠，待所有者给 Key）。
+- 新命令 `/pm model mode poc|prod`、`/pm model status`；模式持久化于 pmtool checks 表；Web AI 助手加 PoC/生产分段开关与 PoC 警示。
+- 生产车道无 Key 时中文友好提示，**不回退免费车道**；verify-model-route 新增。全 24 项 verify 绿。
+- 详见 ADL-044。
+
 ## [未发布] — 可达性修复 + 导出/打磨（2026-10-11，平台：doubao-work）
 
 - **必修**：会议表整行可点击打开详情抽屉（`.pm-meeting-row`），行末新增「详情/右箭头」按钮（`.pm-meeting-detail-btn[data-id]`），hover 高亮+可点击光标；行动项「转任务」按钮补 `.pm-action-promote[data-meeting][data-action]`、已转换 `.pm-action-promoted`。

@@ -76,11 +76,17 @@ export function parseSummarizedDraft(raw: string): SummarizedMeeting {
 }
 
 /** 生成归纳草稿（只调一次模型，返回原始文本，由调用方 parseSummarizedDraft）。 */
-export async function summarizeTranscript(llm: LlmGateway | undefined, transcript: string): Promise<string> {
+export async function summarizeTranscript(
+  llm: LlmGateway | undefined,
+  transcript: string,
+  route?: { provider: string, model: string },
+): Promise<string> {
   return generateDraft(llm, {
     system: SUMMARIZE_SYSTEM_PROMPT,
     user: `请归纳以下会议原始速记：\n${transcript}`,
     maxTokens: 1200,
+    provider: route?.provider,
+    model: route?.model,
   })
 }
 

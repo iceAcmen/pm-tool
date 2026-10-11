@@ -153,6 +153,13 @@ try {
   assert.match(bundle, /pm-sort-select/)
   assert.match(bundle, /pmtool-snapshot-/)
   assert.match(css, /\.pm-meeting-row/)
+  // 双模型车道路由契约。
+  assert.match(bundle, /pm-model-lane/)
+  assert.match(bundle, /pm-lane-poc/)
+  assert.match(bundle, /pm-lane-prod/)
+  assert.match(bundle, /pm-lane-warning/)
+  assert.match(bundle, /model mode /)
+  assert.match(css, /\.pm-model-lane/)
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')

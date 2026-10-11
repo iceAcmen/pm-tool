@@ -624,6 +624,11 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   const [text, setText] = useState(() => {
     try { return mode === 'wbs' ? (localStorage.getItem('pm-ai-goal') || '') : '' } catch { return '' }
   })
+  const [lane, setLane] = useState<'poc' | 'prod'>('poc')
+  const switchLane = (next: 'poc' | 'prod') => {
+    setLane(next)
+    void execute(`model mode ${next}`)
+  }
   const [preview, setPreview] = useState('')
   const [working, setWorking] = useState(false)
 
@@ -708,6 +713,30 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
         >{label}</button>,
       )}
     </div>
+    <div className="pm-model-lane" role="tablist" aria-label="模型车道">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={lane === 'poc'}
+        className={`pm-lane-poc pm-button${lane === 'poc' ? ' pm-button-primary' : ''}`}
+        disabled={working}
+        onClick={() => switchLane('poc')}
+      >PoC 验证（免费网关）</button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={lane === 'prod'}
+        className={`pm-lane-prod pm-button${lane === 'prod' ? ' pm-button-primary' : ''}`}
+        disabled={working}
+        onClick={() => switchLane('prod')}
+      >生产开发（官方 API）</button>
+    </div>
+    {lane === 'poc' && (
+      <p className="pm-lane-warning" role="note">⚠ 免费公共网关仅用于概念验证/界面原型，勿用于核心代码合并或生产提交；公共网关可能记录内容。</p>
+    )}
+    {lane === 'prod' && (
+      <p className="pm-lane-note" role="note">生产车道使用官方 API + 自有 Key（DeepSeek 优先 / Kimi 次之）；未配置 Key 时会给出中文引导。</p>
+    )}
     <p className="pm-ai-hint">{hints[mode]}</p>
     {needsInput && mode === 'wbs' && (
       <div className="pm-ai-templates">

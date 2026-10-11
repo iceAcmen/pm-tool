@@ -363,3 +363,13 @@
 - **理由**：上游 `ui-schedule` 已验证相同插槽模式；实测 pm profile 的 `__DSH_BOOT__` roster 能发现外部 bundle，浏览器可在无 API Key 下完成项目、任务、里程碑操作。
 - **替代方案**：仅做设置卡片/插件详情区块（顶级页面已可行，无需降级）；在浏览器复制 CRUD 逻辑（会形成两套校验，被否）；修改上游路由（违反上游只读红线）。
 - **最终结果**：R5 代码和自动化/浏览器验证完成，待项目所有者手动验收。ADL-019 的临时自动提交推送授权在本批提交并推送后终止，后续恢复逐次确认。
+
+## ADL-044 ｜ 2026-10-11 ｜ 双模型车道：PoC 免费公共网关 vs 生产官方 API；生产不得用免费车道
+
+- **决定**：引入统一车道路由 `core/model-route.ts`，AI 功能（task wbs / report narrate / meeting summarize）按当前模式选路：
+  - `poc`（默认）→ provider `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，commit 7e3a1da），模型 `openrouter/free`（该插件免费自动路由，免 Key）。**仅用于概念验证/界面原型/需求推演，不得用于核心代码合并、生产级编码、版本提交**（公共网关可能记录内容）。
+  - `prod` → 按 Key 优先 DeepSeek 官方（provider `deepseek-official`，base 内置，env `DEEPSEEK_API_KEY`）其次 Kimi/Moonshot 官方（provider `kimi-official`，baseURL https://api.moonshot.cn/v1，env `KIMI_API_KEY`）。**所有者尚未给 Key**：provider 已配置但休眠，切到 prod 而无 Key 时返回中文友好提示，**绝不回退免费车道做生产活**。
+- **持久化**：模式存 pmtool 领域 `checks` 表键 `aiModelMode`（复用既有表，不新增表），默认 poc。命令 `/pm model mode poc|prod`、`/pm model status`；Web AI 助手抽屉顶部加分段开关并显示 PoC 醒目警示。
+- **运行时安装**：插件 clone 到 `~/Projects/dsh-pm/dsh-our-free-model`（仓库外），`dsh plugin --profile pm add <路径>`，不再往 cordis.patch.yml 加条目（避免 duplicate loader id）。llm-pi-ai 只追加 `kimi-official`；`deepseek-official` 已由 base 内置声明，重复声明会启动报错，故不重复加。
+- **替代/裁剪**：未启用 EAC、局域网中继、出口代理、应用内自动更新/热替换（固定克隆版本，防止运行期第三方代码被远程热替换）。
+- **最终结果**：verify-model-route 新增（poc/prod 路由、prod 无 Key 抛错不回退、模式持久化、非法模式）；dsh web 冒烟启动无 already-declared 错误；真实免费对话由独立浏览器验收。

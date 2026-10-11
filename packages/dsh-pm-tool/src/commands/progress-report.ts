@@ -18,6 +18,7 @@ import {
 } from '../core/progress-report.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { buildBrief, defaultPeriod, generateNarrative, rememberNarrative, recallNarrative } from '../core/report-narrate.js'
+import { getModelMode, resolveModelRoute } from '../core/model-route.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const progressReportHelp = [
@@ -69,11 +70,19 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       const confirmation = narrateMatch[2]?.toLowerCase() === 'confirm'
       const brief = buildBrief(domain, projectId) // 确定性采集（含项目存在校验）
       let narrative: string
-      if (confirmation) {
-        narrative = recallNarrative(projectId) ?? await generateNarrative(llm, brief)
-      } else {
-        narrative = await generateNarrative(llm, brief)
-        rememberNarrative(projectId, narrative)
+      try {
+        const route = resolveModelRoute(getModelMode(domain))
+        if (confirmation) {
+          narrative = recallNarrative(projectId) ?? await generateNarrative(llm, brief, route)
+        } else {
+          narrative = await generateNarrative(llm, brief, route)
+          rememberNarrative(projectId, narrative)
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === 'PROD_KEY_MISSING') {
+          return { kind: 'error', text: '生产车道未配置 Key（DEEPSEEK_API_KEY / KIMI_API_KEY）。请配置后重启 dsh，或用 /pm model mode poc 切回免费验证车道。详见 docs/model-providers.md。' }
+        }
+        throw error
       }
       const { periodStart, periodEnd } = defaultPeriod(7)
       if (!confirmation) {

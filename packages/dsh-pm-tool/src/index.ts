@@ -24,6 +24,7 @@ import type { LlmGateway } from './core/ai-client.js'
 import { handleStatsCommand, statsHelp } from './commands/stats.js'
 import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
+import { handleModelCommand, modelHelp } from './commands/model.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -129,6 +130,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (backupMatch) return handleBackupCommand([backupMatch[1].toLowerCase(), backupMatch[2] ?? ''].join(' ').trim(), domain)
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
+      const modelMatch = /^model(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (modelMatch) return handleModelCommand(modelMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

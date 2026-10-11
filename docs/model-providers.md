@@ -6,6 +6,22 @@
 
 ---
 
+## 双车道（ADL-044，2026-10-11）
+
+pm-tool 的 AI 生成功能（智能 WBS / 汇报叙述 / 纪要归纳）现按**当前车道**选路，默认 `poc`。
+
+| 车道 | provider | 默认模型 | Key | 用途红线 |
+|---|---|---|---|---|
+| `poc`（默认） | `our-free-model`（第三方插件 dsh-our-free-model v2.1.0，clone 于 `~/Projects/dsh-pm/dsh-our-free-model`，commit 7e3a1da） | `openrouter/free`（该插件免费自动路由） | 免 | **仅概念验证/界面原型/需求推演**；公共网关可能记录内容，**不得用于核心代码合并、生产提交** |
+| `prod` | 优先 `deepseek-official`（base 内置），其次 `kimi-official`（baseURL https://api.moonshot.cn/v1） | deepseek-chat / kimi-k2-0905-preview | 需 `DEEPSEEK_API_KEY` / `KIMI_API_KEY` | 生产开发；**未给 Key 时给中文引导，不回退免费车道** |
+
+- 切换：`/pm model mode poc` ｜ `/pm model mode prod` ｜ `/pm model status`（不回显明文 Key）。Web：AI 助手抽屉顶部分段开关。
+- 模式持久化在 pmtool checks 表（`aiModelMode`），默认 poc。
+- 插件安装：`dsh plugin --profile pm add ~/Projects/dsh-pm/dsh-our-free-model`；**不要再在 cordis.patch.yml 加该插件条目**（重复 loader id 会报错）。llm-pi-ai 只追加了 `kimi-official`；`deepseek-official` 由 base 内置，重复声明会启动报 "already declared"。
+- 生产 Key 待所有者提供：配置到启动 dsh 的进程环境（如 `~/.zshrc`，不入库），重启 dsh 后 `/pm model status` 显示就绪。
+
+---
+
 ## 0. 一句话工作原理
 
 pm-tool 的核心台账（项目/任务/里程碑/风险/纪要/汇报/交付物）**始终离线、不依赖任何模型**。要接第三方模型，走的是 dsh 自带的 `@deepseek-ai/dsh-llm-pi-ai` 适配器（通过它的 `providers` 字典声明网关端点与模型），**而不是**去改 `DEEPSEEK_BASE_URL`——后者是 dsh 内置 DeepSeek 官方直连适配器（`dsh-llm-deepseek`，走 `anthropic-messages` 协议）专用的，二者路由名不冲突、可同时存在。pi-ai 适配器对「目录不认识的自建网关」要求同时给出 `api`（协议）、`baseURL`、非空 `models` 列表与 `apiKeyEnv`（密钥引用）。**本地/无密码服务（如 Ollama）也必须给一个占位 key**，因为 pi-ai 的 OpenAI 兼容实现坚持要 key 或 `Authorization` 头。

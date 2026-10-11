@@ -22,11 +22,17 @@ const WBS_SYSTEM_PROMPT = [
  * 生成 WBS 勾选清单草稿（只调一次模型，不落盘）。
  * @throws {AiDraftError} 模型不可用或正文为空时抛出，由命令层降级。
  */
-export async function generateWbsMarkdown(llm: LlmGateway | undefined, goal: string): Promise<string> {
+export async function generateWbsMarkdown(
+  llm: LlmGateway | undefined,
+  goal: string,
+  route?: { provider: string, model: string },
+): Promise<string> {
   return generateDraft(llm, {
     system: WBS_SYSTEM_PROMPT,
     user: `请把以下项目目标拆解为 WBS 勾选清单：\n${goal}`,
     maxTokens: 1400,
+    provider: route?.provider,
+    model: route?.model,
   })
 }
 

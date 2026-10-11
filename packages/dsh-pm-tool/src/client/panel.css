@@ -798,3 +798,7 @@
 
 .pm-meeting-row { cursor: pointer; }
 .pm-meeting-row:hover { background: var(--pm-line-soft); }
+
+.pm-model-lane { display: flex; gap: 6px; margin-bottom: 6px; }
+.pm-lane-warning { padding: 6px 8px; border: 1px solid var(--pm-line-soft); border-radius: 6px; font-size: 12px; color: var(--dsw-alias-state-warning-text, inherit); }
+.pm-lane-note { padding: 4px 8px; font-size: 12px; opacity: .8; }

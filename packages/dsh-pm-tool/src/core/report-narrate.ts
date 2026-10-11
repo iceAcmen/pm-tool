@@ -51,11 +51,17 @@ export function buildBrief(domain: PmDomain, projectId: string): Record<string, 
 }
 
 /** 生成 AI 叙述段落（只调一次模型，不落盘）。 */
-export async function generateNarrative(llm: LlmGateway | undefined, brief: Record<string, unknown>): Promise<string> {
+export async function generateNarrative(
+  llm: LlmGateway | undefined,
+  brief: Record<string, unknown>,
+  route?: { provider: string, model: string },
+): Promise<string> {
   return generateDraft(llm, {
     system: NARRATE_SYSTEM_PROMPT,
     user: `以下是本周确定性项目数据，请据此写进度汇报叙述：\n${JSON.stringify(brief, null, 2)}`,
     maxTokens: 900,
+    provider: route?.provider,
+    model: route?.model,
   })
 }
 

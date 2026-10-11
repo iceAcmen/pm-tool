@@ -32,6 +32,7 @@ import {
 } from '../core/task-import.js'
 import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, parseCsv as parseCsvLocal } from '../core/csv-import.js'
 import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
+import { getModelMode, resolveModelRoute } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
 import type { PmDomain } from '../core/storage.js'
@@ -406,11 +407,19 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         return { kind: 'error', text: '请给一句话目标，例如：/pm task wbs p-0001 「做一个移动端打卡小程序」' }
       }
       let markdown: string
-      if (confirmation) {
-        markdown = recallDraft(projectId, goal) ?? await generateWbsMarkdown(llm, goal)
-      } else {
-        markdown = await generateWbsMarkdown(llm, goal)
-        rememberDraft(projectId, goal, markdown)
+      try {
+        const route = resolveModelRoute(getModelMode(domain))
+        if (confirmation) {
+          markdown = recallDraft(projectId, goal) ?? await generateWbsMarkdown(llm, goal, route)
+        } else {
+          markdown = await generateWbsMarkdown(llm, goal, route)
+          rememberDraft(projectId, goal, markdown)
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === 'PROD_KEY_MISSING') {
+          return { kind: 'error', text: '生产车道未配置 Key（DEEPSEEK_API_KEY / KIMI_API_KEY）。请配置后重启 dsh，或用 /pm model mode poc 切回免费验证车道。详见 docs/model-providers.md。' }
+        }
+        throw error
       }
 
       const plan = previewWbsDraft(domain, projectId, markdown) // 校验项目存在且非空清单
