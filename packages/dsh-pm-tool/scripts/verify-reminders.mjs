@@ -91,9 +91,14 @@ try {
   const filtered = computeReminders(domain, { today: TODAY, withinDays: 7, projectId: 'p-999' })
   assert.equal(filtered.length, 0)
 
-  // 命令输出
-  const text = await run('due 7')
+  // 命令输出（固化 today，避免墙钟时刻导致边界抖动）。
+  const text = await run('due 7 2026-10-11')
   assert.match(text, /逾期 2 项，临期 3 项/)
+
+  // 鲁棒性：把“今天”模拟成下午 15:30，日期窗口仍应稳定（日期粒度与时辰无关）。
+  const pmItems = computeReminders(domain, { today: '2026-10-11', withinDays: 7 })
+  assert.equal(pmItems.filter(i => i.severity === 'overdue').length, 2)
+  assert.equal(pmItems.filter(i => i.severity === 'due-soon').length, 3)
 
   // 重启读回
   const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--reopen', root], { stdio: 'inherit' })

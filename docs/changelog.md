@@ -8,6 +8,8 @@
 
 ---
 
+- 修复：`/pm due [天数] [YYYY-MM-DD]` 新增可选 today 参数（日期粒度与时辰无关，computeReminders 已按本地日历日零点比较），verify-reminders 固化 today 并补「下午 15:30 仍稳定」用例，消除墙钟时刻边界抖动；连跑两遍 27/27 全绿。
+
 ## [未发布] — OPT-01~12 体验优化全量落地（2026-10-11，平台：doubao-work）
 
 - OPT-01/02 提醒可点击切项目、3/7/14/30 天范围切换、按项目分组；OPT-03 记住上次选中项目（localStorage）。

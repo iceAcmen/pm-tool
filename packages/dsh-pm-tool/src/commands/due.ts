@@ -18,13 +18,15 @@ export function handleDueCommand(argument: string, domain: PmDomain | undefined)
   const tokens = argument.trim().split(/\s+/).filter(Boolean)
   let withinDays = 7
   let projectId: string | undefined
+  let today: string | undefined
   for (const token of tokens) {
     if (/^\d+$/.test(token)) withinDays = Number(token)
+    else if (/^\d{4}-\d{2}-\d{2}$/.test(token)) today = token  // 可选：固化“今天”，便于测试
     else projectId = token
   }
   if (withinDays < 1 || withinDays > 365) {
     return { kind: 'error', text: '天数需为 1~365 的整数。' }
   }
-  const items = computeReminders(domain, { withinDays, projectId })
+  const items = computeReminders(domain, { withinDays, projectId, today })
   return { kind: 'success', text: renderReminders(items, withinDays) }
 }
