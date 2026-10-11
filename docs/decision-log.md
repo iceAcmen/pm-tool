@@ -6,6 +6,26 @@
 
 ---
 
+## ADL-034 ｜ 2026-10-11 ｜ 上游 dsh 新版本兼容策略：peer 锁 v0.2.1-alpha.2 + profile link 装载 + 升级冒烟流程
+
+- **决策**：面向上游 `deepseek-harness` 未来新版本，确立三条硬约束：① `packages/dsh-pm-tool/package.json` 中 `@deepseek-ai/*` peer/devDependencies 一律锁定 `0.2.1-alpha.2`（cordis `~4.0.5-alpha.1`），不随手跟随上游升级；② 运行/开发一律用 **本地源码版上游**（`~/Projects/dsh-pm/deepseek-harness`）+ 专属 `pm` profile 以 `link:` 绝对路径装载本插件；③ 上游升级时按「只读拉新 → 重建 → 全量回归 → 隔离真实宿主冒烟」的固定流程验证，不在运行中混用版本。
+- **理由**：本插件深度依赖 dsh 的**宿主内部契约**——client bundle 合并路由格式（KB-028）、`dsh.client.inject` 清单、`slots.inject('main'/'sidebar.panellist')`、`web snapshot` 协议、storage 三件套装配（KB-014）。这些都不是稳定公开 API，alpha 版本间随时可能变；贸然跟版本会把「本插件能否被装载」变成不可控变量。锁定 peer 版本可让开发/验收始终复现同一宿主行为。
+- **升级冒烟流程（上游升新版时照做）**：
+  1. 上游只读 `git pull`（不改上游一行）；`pnpm install && pnpm run build` 通过。
+  2. 本插件 `pnpm install --frozen-lockfile && pnpm run build`；若 peer 版本不再兼容，按 dsh 官方 `allow-version`/版本豁免流程处理，或在本包 peerDependencies 同步上调并 lockfile 对齐。
+  3. 跑**全部 12 个** `scripts/verify-*.mjs`（退出码全 0）+ `verify-web.mjs` 的 bundle/manifest 契约断言。
+  4. 按 ISS-019 隔离 DSH_HOME 启动 `pnpm dsh --profile pm --no-open --port 0`，用 puppeteer-core + 系统 Chrome 做一次「进入面板→各 ViewTab→看板→搜索」冒烟（KB-032）。
+- **已知潜在断点（升级时重点看）**：① clientBundle preset/外部化名单（tsdown.config 的 `noExternal`，KB-023）；② peer 版本不匹配触发的 `allow-version`；③ 合并路由格式变化导致 KB-028 探测 404；④ `web snapshot` 字段增减导致面板 snapshot 解析错位。
+- **替代方案**：直接发布到 npm 并依赖最新上游——会丢失对内部契约的控制、无法离线复现；每版跟最新——回归成本与 breakage 风险不可接受。
+- **最终结果**：peer 版本已锁定 `0.2.1-alpha.2`；本批已在 dsh v0.2.1-alpha.2 上完成真实 Chrome 全量目视（KB-032）；后续上游升级按上述流程走。
+
+## ADL-033 ｜ 2026-10-11 ｜ 浏览器兼容范围明确为仅 Google Chrome（Safari/Firefox 暂不支持）
+
+- **决策**：本项目 R5/R7–R12 的 Web 工作台**只承诺兼容 Google Chrome**（验收环境实测 Chrome 139.0.7258.155，macOS Apple Silicon）；Safari、Firefox、Edge 及其它内核本期**不做兼容承诺、不投入适配**。
+- **理由**：① 项目所有者明确要求「目前只要在谷歌浏览器能兼容即可」；② dsh 宿主本身面向 Chromium 系（其构建/布局/无障碍基于现代 Chrome 行为），本插件又完全复用宿主 CSS 变量与布局，没有自管的跨浏览器样式层；③ 单人本地离线 PM 工作台，用户在自己的 Mac 上用 Chrome 打开即可，跨浏览器适配的成本（如 Safari flex/container-query 差异、Firefox 滚动与表单行为）对当前单用户场景收益极低。
+- **替代方案**：全浏览器兼容——需要额外的 CSS reset、flex/grid 回退与三套手工验收矩阵，当前阶段不划算；如需支持其它浏览器，后续按「先 Edge(Chromium)、再 Firefox、最后 Safari」的优先级增量投入。
+- **最终结果**：验收用例与本次自动目视均以 Chrome 为准；test-cases.md「未覆盖」栏保留 Safari/Firefox 为不支持项；自动化目视改用 puppeteer-core 驱动本机 Chrome（KB-032），不再要求所有者本机手动点。
+
 ## ADL-032 ｜ 2026-10-11 ｜ R11 里程碑到期提醒与生成型能力（智能 WBS/纪要/周报）本期继续暂缓
 - **决策**：R11 里程碑到期提醒、智能 WBS、会议纪要总结、周报自动生成等需要定时器或模型推理的能力本期继续**暂缓**，不在 R12 批次实现，需求中保留为「暂缓」而非「已实现」。
 - **理由**：① 离线优先定位（ADL-009）下，提醒依赖 dsh schedule/后台调度与常驻进程，与「单用户本地、可随时关闭、无 Key 也能用」的最小闭环相冲突；② 生成型能力需要可用的 DeepSeek API Key 与模型稳定性，当前验证/交付环境无 Key（每次启动 `unset DEEPSEEK_API_KEY`），无法在本批做真实验收；③ 现有 `/pm report generate` 固定快照（R9）已以确定性方式沉淀了周期性复盘数据，生成型周报可在其上叠加，不阻塞当前验收。

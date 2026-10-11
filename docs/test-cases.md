@@ -149,4 +149,5 @@ pnpm dsh --profile pm --no-open
 - R10 Web：交付物标签新增/编辑/状态筛选/搜索/变更时间线可用，项目栏显示交付物计数，深色主题、窄屏、重启读回待所有者本机目视确认（自动化 bundle 契约已通过）。
 - R12 检索/看板：`/pm search` 跨七类实体不区分大小写命中、`--type` 过滤正确；`/pm stats` 完成率/逾期/未关闭风险按严重度聚合口径与 verify-r12 一致；导入 dry-run 不写盘、confirm 按缩进还原 WBS 父子、`[x]` 落为已完成，重启读回正确。
 - R12 Web：顶部「总览看板」跨项目统计卡片、逐项目明细与全局搜索为浏览器端基于 snapshot 的派生，bundle 契约（verify-web）已通过；本机目视（卡片/搜索交互/窄屏）待所有者确认。
-- 未覆盖：Windows/Linux、Safari/Firefox、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性。
+- **Chrome 139 无头 CDP 自动目视（2026-10-11，doubao-work，macOS arm64 / Chrome 139.0.7258.155 / dsh v0.2.1-alpha.2）**：按 KB-032 用 puppeteer-core 驱动本机已装 Chrome（headless，不另装 Chromium、不要辅助功能授权），隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key，对 R5/R7/R8/R9/R10/R12 做真实点击：侧栏进入面板、七个 ViewTab 逐屏渲染、项目切换、总览看板统计卡片数值（项目总数 2 / 任务完成率 40% / 逾期 1 / 未关闭风险 4，与种子一致）、全局搜索跨类分组命中、新增交付物→编辑抽屉→删除确认弹窗取消（记录仍在）→confirm 删除（记录消失）、浅色与深色均对比可读、786px 与 390px 整页无横向溢出（表格内部局部横滚）。**结果 27/27 用例通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**。期间修了一处窄屏体验：`.pm-view-tab` 加 `white-space:nowrap; flex:0 0 auto`，使 390px 下视图标签单行、标签条内部横滚而非中文断行。
+- 未覆盖：Windows/Linux、Safari/Firefox（按 ADL-033 本期不支持，仅承诺 Chrome）、多个宿主并发写、超大数据量性能、上游 dsh 新版本兼容性（升级冒烟流程见 ADL-034）。

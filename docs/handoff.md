@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-11（doubao-work 实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入，R11/生成型/协作/Excel 导入按决策暂缓）
+最后更新：2026-10-11（doubao-work 首次用 puppeteer-core + 本机 Chrome 139 无头 CDP 完成 R5/R7–R12 真实浏览器自动目视 27/27 全绿；窄屏视图标签微调；固化浏览器=仅 Chrome 与上游兼容策略）
 
 ---
 
@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R12 已完成。R12（doubao-work）为只读关键字检索 `/pm search`、只读统计看板 `/pm stats` 与 Markdown 任务表离线导入 `/pm task import`，Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索；12 项 verify 与隔离真实宿主 bundle 断言通过，并已提交推送（origin/main HEAD `cbd50b6`）。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入已按 ADL-030/031/032 决策暂缓/裁剪。本机浏览器目视项以所有者手动确认为准（KB-014）。
+- **当前状态**：R1–R12 已完成。本批（doubao-work）无新增业务功能，做的是**验收手段升级**：按 KB-032 用 puppeteer-core 驱动本机已装 Chrome 139（headless、不另装 Chromium、不要辅助功能授权），在隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key 的真实宿主上对 R5/R7–R12 做了**真实点击/截图/浅深色/786/390 窄屏/控制台网络**自动目视，27/27 通过、0 console error/pageerror/失败请求。仅一处 CSS 微调（窄屏视图标签单行横滚）。12 项 verify + build + git diff --check 全绿。浏览器兼容按 ADL-033 仅承诺 Chrome；上游 dsh 新版本按 ADL-034 的 peer 锁定 + 升级冒烟处理。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入仍按决策暂缓/裁剪。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）

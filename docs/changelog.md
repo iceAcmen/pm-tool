@@ -8,6 +8,15 @@
 
 ---
 
+## [未发布] — Chrome 真实浏览器自动目视闭环 + 窄屏标签修复 + 浏览器/上游兼容决策（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 修改文件：
+  - `packages/dsh-pm-tool/src/client/panel.css`：`.pm-view-tab` 增加 `white-space:nowrap; flex:0 0 auto`。为什么：390px 窄屏下视图标签此前被压到中文逐字断行（「全部任务」折成「部/任」），不美观；改为标签保持单行、标签条在 `≤760px` 容器查询下已有的 `overflow-x:auto` 内局部横滚，整页仍无横向溢出。
+- 为什么：项目所有者要求「在请他本机抽检前，先用真实 Google Chrome 把 R5/R7–R12 面板完整自验一遍」。本角色此前无 GUI 权限，浏览器目视只能退化为 HTTP bundle 探测（KB-028）或等所有者手动。本批按 KB-032 首次做到了**无辅助功能授权、不另装 Chromium** 的真实 Chrome 自动点击/截图/主题/窄屏/控制台网络断言。
+- 验证：`pnpm install --frozen-lockfile` 干净；`pnpm run build` 退出码 0（client bundle 153.00 kB）；**12 个** `verify-*.mjs` 全部退出码 0；`git diff --check` 干净。隔离 DSH_HOME（ISS-019）+ 富种子 + 随机端口 + 无 Key 启动真实宿主后，puppeteer-core 驱动本机 Chrome 139 逐屏操作：**27/27 用例通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**；看板统计数值与种子一致；浅/深色可读；786px 与 390px 整页无溢出。
+- 决策沉淀：ADL-033（浏览器兼容仅 Chrome，Safari/Firefox 本期不支持）、ADL-034（上游 dsh 新版本兼容策略：peer 锁 v0.2.1-alpha.2 + profile link 装载 + 升级冒烟流程）；新增 KB-032（puppeteer-core + 系统 Chrome headless 自动目视法）。
+- 影响范围：仅一处 CSS 窄屏体验微调 + 文档；业务逻辑、数据、上游零改动。截图存 `.tmp/ui-verify/shots/`（gitignored，不入库）。
+
 ## [未发布] — R12 关键字检索 / 统计看板 / Markdown 任务表导入（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增文件：

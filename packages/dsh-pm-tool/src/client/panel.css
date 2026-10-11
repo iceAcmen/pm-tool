@@ -194,6 +194,8 @@
   color: var(--pm-secondary);
   cursor: pointer;
   font-weight: 550;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 .pm-view-tab:hover { background: var(--pm-hover); color: var(--pm-ink); }
 .pm-view-tab[aria-selected="true"] { color: var(--pm-ink); }

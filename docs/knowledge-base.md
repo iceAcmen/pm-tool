@@ -6,6 +6,15 @@
 
 ---
 
+## KB-032 ｜ 无 GUI 权限时用 puppeteer-core 驱动本机已装 Chrome（headless=new）做真实点击/截图/主题/窄屏/控制台网络断言（沉淀：doubao-work，2026-10-11）
+
+- **结论**：本角色此前因无本机 GUI 权限，浏览器目视只能依赖所有者手动或退化为 HTTP bundle 探测（KB-028/KB-014）。实测**可以不下载 Chromium、不申请系统辅助功能授权**：在 gitignored 的 `.tmp/ui-verify/work/` 下 `npm i puppeteer-core`（25.13），launch 时 `executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'`、`headless:true`（v23+ 即 new headless）、`args:['--no-first-run','--disable-default-apps','--no-sandbox']`，由 puppeteer 托管 `--remote-debugging-port`。这样能**真实点击、输入、处理 `window.confirm` 对话框、全页截图、读 DOM 断言**，不再是只抓 HTML。
+- **关键做法**：① goto 带 `?token=` 的 URL（303 自动种 cookie）；② 首次会弹「添加 API Key」引导弹窗，先点「稍后配置」关掉再点侧栏；③ 侧栏条目按 `title/aria-label/textContent` 匹配「项目管理」点击；④ 主题用 `page.emulateMediaFeatures([{name:'prefers-color-scheme',value:'light'|'dark'}])`；⑤ 窄屏 `page.setViewport({width:786|390})` 后断言 `documentElement.scrollWidth - clientWidth <= 1`（整页不溢出即合格，表格内部 `.pm-table-scroll` 局部横滚是既有约定）；⑥ 全程监听 `console`(error)/`pageerror`/`requestfailed`/`response(>=400)`，并过滤 favicon/fonts/第三方噪音。
+- **种子数据**：按 ISS-019 复制 `~/.dsh/profiles/pm` 到隔离 `DSH_HOME`、把 `node_modules/dsh-pm-tool` 软链改指产品包绝对路径、改 `cordis.patch.yml` 的 storage root 到临时目录；再用与 verify-web 相同的 harness（真实 Context + JsonStorageBackend(临时 root) + DomainFacility + apply）跑一个 node 种子脚本，覆盖每类实体后 `closeAll`，再由隔离 dsh 读同一目录——**绝不写真实 `pm-tool/data/`**。
+- **适用场景**：以后任何 R* 的 Web 回归都能自动做「逐屏截图 + 控制台/网络零错误 + 看板数值断言 + 浅深色 + 窄屏」，截图存 `.tmp/ui-verify/shots/`（gitignored，不入库）。
+- **踩坑**：① 「删除确认」断言要把范围限定到 `.pm-table-frame`，否则成功 toast（含被删记录名）会被误判为「没删掉」；② 全局搜索是子串匹配，造种子时要用标题里**真的包含**的关键字（如「原型」），不要想当然用「风险/交付」这种记录标题里没有的词。
+- **来源/佐证**：`.tmp/ui-verify/work/verify-ui.mjs`（本批 27/27 通过、0 console error/0 pageerror/0 failed request）；Chrome 139.0.7258.155 + dsh v0.2.1-alpha.2。
+
 ## KB-031 ｜ GitHub 缩进勾选清单 → WBS 树：以「观测到的最小正缩进」为一层，用缩进栈还原父子（沉淀：doubao-work，R12）
 
 - **结论**：解析 `- [ ]`/`- [x]` 清单时，先收集所有清单项的前导空格数，取**最小的正缩进**作为一层（兼容 2 空格/4 空格风格），`depth = round(indent / unit)`；再按文档顺序维护 `栈{depth,id}`，新项深度更浅时弹出对应层级、栈顶即父任务。逐项复用既有的 `addTask`（它自带编号/父级校验/落盘），无需自建编号。

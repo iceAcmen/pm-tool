@@ -2,9 +2,15 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入）
+最后更新：2026-10-11（doubao-work 完成 Chrome 139 真实浏览器自动目视闭环 27/27，窄屏标签微调，固化浏览器/上游兼容决策）
 
-## 当前阶段：v0.1.0 后续迭代，R1–R12 已完成，R11/生成型/协作/Excel 导入按决策暂缓（2026-10-11）
+## 当前阶段：v0.1.0 后续迭代，R1–R12 已完成；本批为验收手段升级 + 兼容边界固化（2026-10-11）
+
+- **Chrome 真实浏览器自动目视闭环（doubao-work）**：按 KB-032 用 puppeteer-core 25.13 驱动本机已装 Google Chrome 139（headless，不另装 Chromium、不要系统辅助功能授权）。隔离 DSH_HOME（ISS-019）+ 覆盖每类实体的富种子 + 随机端口 + 无 Key 启动真实宿主，对 R5 面板/R7/R8/R9/R10/R12 做真实点击：七个 ViewTab 逐屏渲染、项目切换、总览看板统计数值（项目总数 2 / 完成率 40% / 逾期 1 / 未关闭风险 4，与种子一致）、全局搜索跨类分组命中、新增交付物→编辑抽屉→删除确认弹窗取消/confirm 删除、浅色与深色对比可读、786px 与 390px 整页无横向溢出。**27/27 用例通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**。
+- **本批唯一代码改动**：`client/panel.css` `.pm-view-tab` 加 `white-space:nowrap; flex:0 0 auto`，修复 390px 窄屏视图标签中文逐字断行，改为标签单行、标签条内部横滚。
+- **本批验证**：`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全部退出码 0、`git diff --check` 干净。
+- **本批决策/知识沉淀**：ADL-033（浏览器兼容仅 Chrome，Safari/Firefox 本期不支持）、ADL-034（上游 dsh 新版本：peer 锁 v0.2.1-alpha.2 + profile link 装载 + 升级冒烟流程）、KB-032（puppeteer-core + 系统 Chrome headless 自动目视法）。截图存 `.tmp/ui-verify/shots/`（gitignored）。
+- **暂缓项仍不变**：R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入继续暂缓/裁剪（ADL-030/031/032）。
 
 - **R12 已实现并通过验证（doubao-work）**：新增只读全库关键字检索 `/pm search <关键字> [--type ...]`（七类实体不区分大小写子串、按类型分组）与只读统计看板 `/pm stats [项目ID]`（项目状态计数、任务完成率、逾期、未关闭风险按严重度、交付物四态）；新增 Markdown 任务表离线导入 `/pm task import <项目ID> <清单.md> [confirm]`（GitHub 缩进勾选清单还原 WBS，`[x]` 记已完成，dry-run 不写盘）。Web 顶部新增「总览看板」，基于最新 snapshot 在浏览器端派生跨项目统计卡片、逐项目明细与全局搜索，不新增宿主路由、配色只用宿主 token。检索/看板不新增表、领域版本仍为 1（ADL-029）。
 - **R12 验证通过**：冻结安装干净、构建退出码 0（client bundle 152.96 kB）、**12 个** verify 全部退出码 0（新增 verify-r12.mjs，含跨类/类型过滤、统计口径、导入 dry-run vs confirm、缩进→WBS、负例与全新进程读回；verify-web.mjs 扩展 R12 界面串/`.pm-board` 契约）；`git diff --check` 干净；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动，存储领域打开、cookie 鉴权，抓取含 dsh-pm-tool 的合并 bundle（HTTP 200）断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」。本机浏览器目视项以所有者手动确认为准（KB-014）。

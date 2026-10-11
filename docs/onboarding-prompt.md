@@ -69,14 +69,14 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-11
-- **最近更新平台**：doubao-work（实现并通过验证 R12 关键字检索/统计看板/Markdown 任务表导入）
-- **main 提交定位**：R12 代码 + 档案已推送，HEAD `8b601cc`（与 `origin/main` 一致）；后续以 `git log -1 --oneline` 为准。
-- **当前阶段 / 状态**：R1–R12 已完成。R12 由 doubao-work 自研：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS），Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索（ADL-029）；检索/看板不新增表、领域版本仍为 1。
-- **本批验证（doubao-work R12）**：Node（nvm 口径 v22.23.3；沙箱内显示 v22.23.2 系 PATH 遮蔽，KB-015）/ pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 152.96 kB）、**12 个** verify 脚本全部退出码 0（新增 verify-r12.mjs，verify-web.mjs 扩展 R12 契约）；隔离 DSH_HOME + 隔离数据 + 随机端口 + 无 Key 真实宿主启动成功（存储领域打开、cookie 鉴权，抓取含 dsh-pm-tool 的合并路由 HTTP 200 / 578732 B，断言含「总览看板/跨项目搜索/项目总数/任务完成率/逐项目明细」，KB-028）。本机浏览器目视（看板卡片/全局搜索/窄屏）本角色无 GUI 权限，以 verify-web 契约 + 所有者手动确认为准（KB-014/ISS-010/ADL-027）。
+- **最近更新平台**：doubao-work（首次用 puppeteer-core + 本机 Chrome 139 无头 CDP 完成 R5/R7–R12 真实浏览器自动目视，27/27 全绿；窄屏视图标签微调；新增 ADL-033/034、KB-032）
+- **main 提交定位**：本批 Chrome 自动目视闭环已推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
+- **当前阶段 / 状态**：R1–R12 已完成。本批无新增业务功能，做的是**验收手段升级 + 兼容边界固化**：浏览器目视从「等所有者手动 / HTTP bundle 探测」升级为「自动化真实 Chrome 点击/截图/主题/窄屏/控制台网络断言」（KB-032），并把浏览器兼容范围（仅 Chrome，ADL-033）与上游新版本兼容策略（ADL-034）写死。
+- **本批验证（doubao-work Chrome 目视）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 脚本全 0、`git diff --check` 干净；隔离 DSH_HOME + 富种子 + 随机端口 + 无 Key 真实宿主启动，puppeteer-core 驱动系统 Chrome 139 逐屏操作，**27/27 通过，0 console error / 0 pageerror / 0 失败请求 / 0 同源 4xx-5xx**；看板数值与种子一致，浅/深色可读，786/390 无整页溢出。
 - **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
 - **连续推进规则**：每批验证完成后，执行平台主动提交下一批文件级计划；所有者确认后直接继续编码。
 - **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
-- **授权状态**：R12 在持续授权范围内逐主题提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
-- **所有者已定规则（ADL-012～032）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪。
-- **下一步 / 遗留**：R11 与生成型能力、多人协作、Excel 导入均已决策暂缓/裁剪；待所有者提供可用 Key 或改变离线定位后再评估。所有者可在本机对 R12 Web「总览看板」做最终目视确认。
-- **最近一次交接**：doubao-work 自研 R12（新增 core/commands 共 5 个源文件 + verify-r12.mjs，改 task/index/panel.tsx/css 接线与全部档案），构建 + 12 项 verify + 隔离真实宿主 bundle 断言通过；隔离服务已停、隔离临时数据已清理、真实 data 与上游无改动。
+- **授权状态**：本批在持续授权范围内提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
+- **所有者已定规则（ADL-012～034）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪；**浏览器兼容仅 Chrome（ADL-033）；上游 dsh 新版本按 peer 锁定 + 升级冒烟（ADL-034）**。
+- **下一步 / 遗留**：R11 与生成型能力、多人协作、Excel 导入均已决策暂缓/裁剪。所有者可在本机 Chrome 对本批自动目视结论做 5 分钟抽检（见 handoff 清单）；其余暂缓项待所有者提供可用 Key 或改变离线定位后再评估。
+- **最近一次交接**：doubao-work 完成 Chrome 真实浏览器自动目视闭环（仅 1 处 CSS 窄屏标签微调 + 文档），构建 + 12 项 verify + 真实宿主 Chrome 27/27 全绿；隔离服务已停、临时进程已清、真实 data 与上游无改动。
