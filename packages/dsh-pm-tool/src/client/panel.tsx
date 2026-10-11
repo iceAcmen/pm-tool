@@ -225,7 +225,13 @@ const deliverableStatus: Record<string, string> = {
 
 export function PmPanel({ execute }: PmPanelApi) {
   const [data, setData] = useState<Snapshot>(empty)
-  const [selected, setSelected] = useState<string>()
+  const [selected, setSelectedRaw] = useState<string>(() => {
+    try { return localStorage.getItem('pm-selected-project') ?? '' } catch { return '' }
+  })
+  const setSelected = (id: string | undefined) => {
+    setSelectedRaw(id ?? '')
+    try { id ? localStorage.setItem('pm-selected-project', id) : localStorage.removeItem('pm-selected-project') } catch { /* ignore */ }
+  }
   const [view, setView] = useState<View>('tasks')
   const [drawer, setDrawer] = useState<Drawer>()
   const [busy, setBusy] = useState(false)
@@ -237,9 +243,9 @@ export function PmPanel({ execute }: PmPanelApi) {
     try {
       const next = JSON.parse(await execute('web snapshot')) as Snapshot
       setData(next)
-      setSelected(current =>
-        current && next.projects.some(project => project.id === current)
-          ? current
+      setSelected(
+        selected && next.projects.some(project => project.id === selected)
+          ? selected
           : next.projects[0]?.id,
       )
     } catch (error) {
@@ -933,12 +939,15 @@ function Notice({ message, onClose }: { message: string, onClose: () => void }) 
   </div>
 }
 
-function EmptyWorkspace({ onCreate }: { onCreate: () => void }) {
+function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () => void }) {
   return <div className="pm-empty-workspace">
     <FolderKanban size={38} strokeWidth={1.4}/>
     <strong>建立第一个项目</strong>
     <p>创建项目后即可拆分任务与里程碑。</p>
-    <button className="pm-button pm-button-primary" onClick={onCreate}><Plus size={15}/>新建项目</button>
+    <div className="pm-empty-ctas">
+      <button className="pm-button pm-button-primary" onClick={onCreate}><Plus size={15}/>新建项目</button>
+      {onAI && <button className="pm-button pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
+    </div>
   </div>
 }
 
