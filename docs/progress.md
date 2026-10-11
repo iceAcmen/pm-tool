@@ -111,6 +111,7 @@
 - 配置仓库级提交身份 Ice \<835687152@qq.com\>（未改全局）；首次提交 `12bcad3` 并推送 main 到 `git@github.com:iceAcmen/pm-tool.git`，跟踪 origin/main。
 
 ## 后续任务
-- R12 已由 doubao-work 实现、验证并随提交推送；项目所有者可在本机 `pnpm dsh --profile pm`（指定 profile 后**不再加 web 动词**，否则报 "too many arguments"，见 ISS-007）打开顶部「总览看板」做最终目视确认（卡片、全局搜索、窄屏）。
-- 剩余需求均已决策暂缓/裁剪：R11 里程碑提醒与生成型能力（ADL-032）、多人实时协作（ADL-031）、Excel 导入（ADL-030）。其中生成型能力的**模型通道已就绪**：OpenRouter 免费自动路由 `openrouter/free` 已配置并直连实测通过（$0，ADL-035/KB-034，key 在所有者本机 ~/.zshrc、不入库）；是否正式立项开发智能 WBS/纪要/周报，待项目所有者决定。
+- R13/R14/R15（智能 WBS/进度汇报叙述/会议纪要归纳）已完成并真实 openrouter/free 端到端验证（含重启读回，临时项目已删净）；随后完成 **A1（Web 端「AI 助手」面板，复用 core 草稿→confirm）** 与 **A2（任务显式级联删除 `/pm task delete <id> [cascade] confirm`）**，全 16 个 verify + build + frozen lockfile 绿。
+- 首页 `/pm` 经上游只读核查确认注册正确、问题属宿主斜杠补全/会话跳转（ADL-038/KB-037/ISS-026）；以 Web 面板为稳定入口。v0.2.0 发布说明已起草（`docs/releases/v0.2.0.md`，**未打 tag**，待组织者独立验收）。
+- 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。

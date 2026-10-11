@@ -6,6 +6,13 @@
 
 ---
 
+## KB-037 ｜ 首页/欢迎页用 `/pm`「没反应」：根因是宿主 composer 斜杠补全截获 + 发送后主区不自动跳转（沉淀：doubao-work，2026-10-11）
+
+- **现象**：所有者反馈在 dsh「首页/欢迎页」对话框里用不了 `/pm`；实际斜杠命令经蓝色发送按钮**是能执行的**，但发送后看起来「没反应」。
+- **根因（上游只读证实，【官方明确】）**：`/pm` 注册结构与内置 `command-goal` 一致（`packages/goal/command-goal/src/index.ts`：`name:'goal'` + `input:{hint,attachments}`）；`CommandDescriptor`（`packages/interaction/commands/lib/types/types.d.ts`）只有 `name/description/input`，**插件无法控制**「回车放行」与「发送后主区跳转」。输入「/」触发宿主斜杠命令补全弹窗并**截获 Enter**（KB-036），回车不会直接执行；点蓝色发送按钮可执行，但欢迎页发送后**新建了会话而主区不自动切过去**，故像没反应。
+- **正确做法（插件侧可复用）**：（1）斜杠命令一律**点蓝色发送按钮**、发送后到**侧栏点最新会话**查看结果；（2）日常操作优先用常驻可见的「项目管理」Web 面板（本项目已把三 AI 功能 + 增删改全部做成面板按钮），绕开首页 composer 的不确定性。
+- **边界**：回车放行、主区自动跳转属宿主行为，插件无扩展点，**不要试图在插件侧伪造修复**；如实记录残留限制（见 ISS-026 / ADL-038）。
+
 ## KB-036 ｜ 免费池偶发 `This operation was aborted`/超时：现象、根因与中文归一（沉淀：doubao-work，2026-10-11）
 
 - **现象**：真实 openrouter/free 端到端跑 R13/R14/R15 时偶发命令直接抛英文 `This operation was aborted`（或 dsh 步骤超时）。

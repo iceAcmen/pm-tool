@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — A1 AI 助手 Web 面板 + A2 任务级联删除 + 首页 /pm 根因定位（2026-10-11，平台：doubao-work / 豆包工作）
+
+- **改动文件**：`src/core/tasks.ts`、`src/commands/task.ts`、`scripts/verify-cascade.mjs`、`src/client/panel.tsx`、`src/client/panel.css`、`scripts/verify-web.mjs`，及 docs（ADL-037/038、KB-037、ISS-025/026、本 changelog、release v0.2.0 草稿）。
+- **做了什么**：
+  - **A2 级联删除**（ADL-037）：新增 `collectTaskSubtree`/`deleteTaskCascade`；`/pm task delete <id>` 无 confirm 先 dry-run 列出整棵子树；`confirm` 有子任务仍拒绝并引导；`cascade confirm` 才真删整棵、旁支不动；保留会议行动项跨表引用保护。新增 verify-cascade（dry-run 不落盘/拒绝不写盘/删3留旁支/重启读回）。
+  - **A1 AI 助手 Web 面板**：项目工作台顶栏新增「AI 助手」按钮，三模式（拆解 WBS/汇报叙述/会议纪要）弹窗——「生成草稿」发一次预览命令（调一次模型），「确认入库」发 confirm 命令（复用进程内草稿缓存、不再调模型）；含 loading/按钮禁用防重复/中文错误/结果先预览显式确认才入库。**完全复用既有 core 与斜杠命令，未另写 LLM 调用层**。
+  - **首页 /pm 根因**（ADL-038 / KB-037 / ISS-026）：注册结构与内置 command-goal 一致，问题属宿主 composer（斜杠补全截获 Enter、发送后主区不自动跳转）；插件无扩展点改宿主行为，以「点发送按钮+侧栏点最新会话」用法与 Web 面板为稳定入口，不假装修好。
+- **验证**：`pnpm run build` 绿；**全部 16 个 verify-*.mjs 退出 0**（含新增 verify-cascade 与 verify-web 的 AI 面板契约）；`pnpm install --frozen-lockfile` 通过；`git diff --check` 干净。
+- **影响范围**：新增 Web 入口与显式级联删除；旧命令行为与离线/确定性能力不变；配色仅用宿主 token。
+
 ## [未发布] — R13/R14/R15 真实 openrouter/free 端到端验证通过 + 超时中文归一加固（2026-10-11，平台：doubao-work / 豆包工作）
 
 - **真实端到端（凭据库启动、无环境变量）**：

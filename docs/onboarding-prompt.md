@@ -69,11 +69,11 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-11
-- **最近更新平台**：doubao-work（R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回；超时归一中文 MODEL_TIMEOUT；新增 KB-036 / ISS-025）
+- **最近更新平台**：doubao-work（A1 Web 端「AI 助手」面板 + A2 任务显式级联删除 + 首页 /pm 根因定位为宿主 composer；新增 ADL-037/038、KB-037、ISS-026、release v0.2.0 草稿）
 - **main 提交定位**：本批已提交并推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
-- **当前阶段 / 状态**：R1–R15 已完成。生成型三功能落地：R13 `/pm task wbs`（智能 WBS）、R14 `/pm report narrate`（进度汇报 AI 叙述）、R15 `/pm meeting summarize`（会议纪要归纳），统一走 `core/ai-client.ts`（一次性文本生成、草稿 confirm 才入库、失败中文降级）。
-- **真实端到端已通过（2026-10-11）**：凭据库、无环境变量启动下——R13 confirm 落盘 25 任务、R14 rpt-0002 executiveSummary 数字未改、R15 mtg-0001 三行动项；无环境变量重启 list 读回正常；临时项目已删净。约 4~5 次真实模型调用。免费池偶发 `This operation was aborted`/超时已归一中文 MODEL_TIMEOUT（重试即恢复，KB-036）。
-- **新增协作硬规则**：每个任务完成后必须执行构建、当前全部 verify 脚本和本批专项验证；最终回报逐项列出环境、命令、退出码、关键证据和未覆盖边界，任一失败不得标记完成或提交。
+- **当前阶段 / 状态**：R1–R15 完成；本批在其上交付 **A1（Web 三 AI 按钮，复用 core 草稿→confirm）** 与 **A2（`/pm task delete <id> [cascade] confirm` 两步防误删级联）**。首页 `/pm` 经上游只读核查确认注册正确、问题属宿主斜杠补全/会话跳转（ADL-038），以 Web 面板为稳定入口。
+- **验证**：`pnpm run build` + **全部 16 个 verify-*.mjs** + frozen lockfile + `git diff --check` 全绿；R13/R14/R15 已真实 openrouter/free 端到端并重启读回（临时项目已删净）。
+- **已知限制**：免费池随机模型纯文本可用、工具调用不保证、约 50 次/天、偶发超时重试即恢复；删根须叶子→根或用 cascade confirm；首页斜杠命令点发送按钮、发送后到侧栏点最新会话。
 - **本批验证（doubao-work，全部无 Key）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全 0、`git diff --check` 干净；`DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config` 退出码 0、组合中 `providers.openrouter-free` 出现且 storage-json root / dsh-pm-tool 完好；无 Key 真实宿主（随机端口）启动成功（`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 报错），运行中 `plugins/??dsh-pm-tool/client.js` bundle HTTP 200（无 cookie 401）。
 - **key 已配置、端点已实测（2026-10-11 更新）**：key 已由所有者写在其本机 `~/.zshrc`（仓库外、不入库；改前已备份 `~/.zshrc.bak-20261011-130537`）。所有者本机直连实测：`GET /v1/key` 返回 `is_free_tier: true`、`free_model_daily_requests.limit=50`；`POST /v1/chat/completions`（`model=openrouter/free`）两次真实调用均成功、`cost=$0`、`finish_reason=stop`（随机落到 `liquid/lfm-2.5-2.6b:free`、`nvidia/nemotron-3-ultra-550b-a55b:free`）。经验见 KB-034（推理型模型先吃满 reasoning tokens，`max_tokens` 要给足 ≥400）。
 - **应用内已实测打通（2026-10-11 更新）**：在 dsh 网页底部模型选择器选 **Free Models Router**（openrouter-free/openrouter/free）发「你好，用一句话介绍你自己」，**第 1 次即成功**（puppeteer-core + 系统 Chrome 139 无头，KB-032）：助手正常回复、无 MISSING_CREDENTIAL/401/429。期间曾踩一次 `MISSING_CREDENTIAL`（“OPENROUTER_API_KEY which is not set”）——根因是 dsh 进程由「写 key 前的旧终端」启动、进程环境无该变量；停旧进程、用已 `source ~/.zshrc` 的环境重启即解（KB-035 / ISS-024，永久做法是在 Web「设置→模型」页把密钥录进 credentials service）。

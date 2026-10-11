@@ -6,6 +6,20 @@
 
 ---
 
+## ADL-038 ｜ 2026-10-11 ｜ 首页/欢迎页无法用 `/pm` 命令：根因属宿主 composer 行为，插件侧不强行修补、以 Web 面板 + 用法提示兜底
+
+- **决策**：经上游只读核查，`/pm` 的注册结构与内置命令（`packages/goal/command-goal`）完全一致（`ctx.commands.register({ definitionId, name:'pm', input:{hint, attachments:false}, handler })`）；`CommandDescriptor`（`packages/interaction/commands/lib/types/types.d.ts`）只有 `name/description/input`，**没有任何能控制「回车放行」或「发送后主区自动跳转新会话」的插件侧字段**。因此首页问题归因为宿主 composer：输入「/」触发斜杠命令补全弹窗并截获 Enter，需从弹窗选择或改点蓝色发送按钮；发送后会新建会话但主区不自动跳转（与 KB-036 观察一致）。插件侧**不**改宿主行为，改为：（1）用法提示——在 README/面板说明斜杠命令点发送按钮、发送后到侧栏点最新会话查看；（2）以常驻可见的「项目管理」Web 面板作为主要操作入口，绕开首页 composer 的不确定性。
+- **理由**：强行伪造可放行回车或自动跳转会触碰宿主内部、且插件无对应扩展点，风险高收益低；Web 面板本就是为非会话场景设计的稳定入口。
+- **替代方案**：尝试多个子命令分别注册为独立斜杠命令（如 `/pm-task-wbs`）以求补全可发现——放弃，因为会让命令面爆炸、且仍受同一 Enter 拦截/会话跳转影响。
+- **最终结果/状态**：根因已定位并记录（本 ADL + ISS-026 + KB-037）；命令注册本身正确，无需改动；主要入口切换到 Web 面板。残留宿主行为如实标注，不假装修好。
+
+## ADL-037 ｜ 2026-10-11 ｜ 任务级联删除采用「显式 cascade confirm」的两步防误删设计，而非静默级联
+
+- **决策**：`/pm task delete <id>` 无 confirm 时先 **dry-run** 预览（有子任务则列出将被级联删除的整棵子树数量与清单，否则普通单删预览）；`confirm` 但缺 `cascade` 且有子任务时**仍拒绝**并引导；只有 `<id> cascade confirm` 才真正删除该任务及其全部后代，并回报删除数量、强调旁支不受影响。删除前保留既有跨表保护：整棵子树任一节点被会议行动项引用即抛 `TaskReferencedByMeetingError` 阻止。
+- **理由**：删除是高危操作，免费/AI 生成的 WBS 常带多层子任务，误删一整棵代价高。两步（先预览、再显式 cascade confirm）与既有「confirm 才落盘」的安全哲学一致，且默认行为不变（老的无子任务单删命令继续可用）。
+- **替代方案**：（a）`confirm` 直接级联——拒绝，易误删；（b）软删除/回收站——本期不做，增加存储复杂度。
+- **最终结果/状态**：已实现（core `collectTaskSubtree`/`deleteTaskCascade` + 命令改写 + verify-cascade），dry-run 不落盘 / 缺 cascade 拒绝 / cascade 删整棵留旁支 / 重启读回全部验证通过。
+
 ## ADL-036 ｜ 2026-10-11 ｜ 生成型功能（智能 WBS/会议纪要/进度汇报叙述）正式立项：LLM 只做文本生成、AI 结果一律草稿、确定性落盘在我方代码
 
 - **决策**：正式立项三个生成型功能——R13 智能 WBS 任务拆解、R14 会议纪要归纳、R15 进度汇报 AI 叙述。统一约束：① **LLM 只做一次性文本生成、不挂 function calling**（免费池随机模型工具调用不保证，KB-034）；② **确定性数据采集/校验/落盘全在我方代码**——智能 WBS 复用 `task-import` 的 dry-run/confirm、纪要映射既有 meeting schema、汇报叙述叠加在 `collectProjectReport` 的确定性数字之上；③ **AI 输出一律是草稿，必须用户 confirm 才入库**，绝不自动改台账；④ 无 key / 模型失败按 `error.code`（RATE_LIMIT/QUOTA/INVALID_CREDENTIAL 等）优雅降级到手工/确定性路径，核心台账始终离线可用；⑤ 每次生成只发一次模型请求、草稿缓存以省免费额度（约 50 次/天）。

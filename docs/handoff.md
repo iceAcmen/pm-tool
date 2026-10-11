@@ -178,6 +178,7 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 8. **R10 交付物台账已完成（doubao-work）**：pmtool 领域新增 `deliverables` 表与 `/pm deliverable` 离线命令、Web「交付物」标签，版本/状态变化自动只增留痕，有交付物禁删项目；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；11 项 verify 与隔离真实宿主 bundle 断言通过。
 9. **R12 检索/看板/导入已完成（doubao-work）**：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS，dry-run 不写盘）；Web 顶部「总览看板」基于 snapshot 派生跨项目统计卡片与全局搜索，不新增宿主路由、无硬编码色。12 项 verify（含新增 verify-r12.mjs）与隔离真实宿主 bundle 断言通过。
 10. **剩余需求均已决策**：R11 里程碑提醒与智能 WBS/纪要/周报等生成型能力（ADL-032）、多人实时协作（ADL-031）、Excel 导入（ADL-030）暂缓/裁剪；待项目所有者提供可用 Key 或改变离线定位后再评估。本机浏览器目视（看板/全局搜索/窄屏）以所有者确认为准。
+11. **R13/R14/R15 + A1/A2 已完成（doubao-work，2026-10-11）**：生成型三功能（`/pm task wbs`、`/pm report narrate`、`/pm meeting summarize`）已用真实 openrouter/free 端到端跑通并重启读回；随后 A1 在项目工作台加「AI 助手」面板（复用同一 core 草稿→confirm，未另写 LLM 层），A2 实现任务显式级联删除（dry-run/缺 cascade 拒绝/cascade confirm，旁支不动、跨表引用保护保留）。全 16 个 verify + build + frozen lockfile + `git diff --check` 绿。首页 `/pm` 问题已定位为宿主 composer 行为（ADL-038/KB-037/ISS-026），以 Web 面板为稳定入口。v0.2.0 发布说明已起草但**未打 tag**，待组织者独立验收。
 
 ## 5. SSH 密钥（已配置，备查）
 
