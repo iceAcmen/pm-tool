@@ -6,17 +6,25 @@
 
 ---
 
-## ADL-042 ｜ 2026-10-11 ｜ 第二档体验增强取舍：CSV 用纯 JS 自解析、XLSX/批量多选/可编辑预览本期裁剪
+## ADL-042 ｜ 2026-10-11 ｜ 第二档体验增强取舍：CSV+XLSX 纯 JS 离线导入；可编辑预览/批量已补做
 
-- **已实现**：T2-A（AI 助手内置 WBS 模板一键填入 + localStorage 记忆上次模式/目标，不入库）；T2-C（`core/csv-import.ts` 纯 JS 解析 CSV，约定表头「层级/标题/负责人/优先级/开始/截止/进度」，复用 `addTask` 父子树与字段落盘，`task import *.csv` 按扩展名分流）。
-- **裁剪（理由）**：
-  - **XLSX 导入本期不做**：引入 SheetJS 等纯 JS 二进制解析库会增加体积与许可证/打包风险；CSV 已覆盖「从表格软件另存为 CSV」的主流迁移路径，待确有需要再单独评估依赖（保持 frozen-lockfile）。
-  - **WBS 可编辑预览二次落盘本期不做**：现状 confirm 复用服务端缓存草稿，若允许用户编辑后落盘需新增「按给定 Markdown 文本直接 import」的命令入口与解析路径；本期保持草稿预览→confirm 复用，避免与 task import 双套落盘逻辑。
-  - **任务列表多选/批量删除/列排序本期裁剪**：批量删除需严格复用 A2 级联规则与二次确认，交互成本高、误删风险大；当前单条删除 + 级联 dry-run 已满足安全要求。
-- **理由**：离线优先、零新增依赖、误操作安全高于「界面花哨」；裁剪项均为「可后续增量加」的体验优化，不阻塞核心台账。
-- **最终结果**：verify-csv 新增；全 20 项 verify + build + frozen-lockfile 退出 0。
+- **已实现（本轮补齐，原为初版裁剪项）**：
+  - **T2-A 可编辑 WBS 预览**：`task wbs <pid> <goal> --raw` 返回原始 Markdown 清单，Web 渲染为可编辑 textarea；`task importmd <pid> <jsonMd> [confirm]` 按**编辑后**文本落盘（复用 `importTasksFromMarkdown`，不再调模型）。
+  - **T2-B 列表效率**：`core.batchUpdateTasks / planBatchDelete / batchDeleteCascade`；`task batch update|delete <id,id,...> [confirm]`；Web 任务行复选框多选 + 批量工具条（标为完成/批量删除，批量删除用级联显式二次确认）+ 排序下拉（截止/优先级/进度）。
+  - **T2-C XLSX**：命令侧/node core 用 SheetJS `xlsx@0.18.5`（Apache-2.0）离线解析 .xlsx 首表，**动态 import 不进 client bundle**；表头约定同 CSV。
+  - **T2-D 导出**：导出 JSON 用 `web snapshot` 经浏览器 Blob + `a[download]` 直接下载；导出 Markdown 运行命令并弹窗路径（双分支）。
+- **真正的裁剪（保留，带理由）**：
+  - **R14 narrate 三段文本可编辑后写入 / R15 summarize 结构化编辑**：本期保持只读预览，未新增「按给定叙述文本落盘」入口；理由：WBS 编辑是所有者点名重点，narrate/summarize 编辑的边际价值低于其新增落盘入口成本，待有需要再补。
+  - **任务多选的「批量改负责人」高级表单**：v1 只提供「批量标为完成」与「批量删除」；批量改负责人/进度的 Web 表单暂不做（core `batch update` 已支持任意 JSON 字段，可命令行用）。
+  - **快捷键**：低价值，不做。
+- **理由**：离线优先、零侵入 client bundle 体积、误操作安全（批量删除复用 A2 级联语义）。
+- **最终结果**：verify-importmd / verify-batch / verify-xlsx 新增；全 23 项 verify + build + frozen-lockfile 退出 0。
 
-## ADL-041 ｜ 2026-10-11 ｜ R18 备份仅覆盖 pmtool 七实体、恢复前自动安全快照、云同步采用「单写者」
+## ADL-043 ｜ 2026-10-11 ｜ CSV + XLSX 纯 JS 离线导入（supersede ADL-030 的「不做 Excel」）
+
+- **决定**：以纯 JS 离线实现 CSV（自解析）+ XLSX（SheetJS `xlsx@0.18.5`，Apache-2.0）任务导入；xlsx 仅在命令侧/node core 用**动态 import**，不打进 client bundle。表头约定「层级/标题/负责人/优先级/开始/截止/进度」，dry-run 预览→confirm 复用 `addTask` 父子树。
+- **理由**：替代原被裁的 LibreOffice 方案；离线可用；动态 import 避免网页包体积膨胀；许可证 Apache-2.0 兼容。
+- **最终结果**：ADL-030「不做 Excel」被本决策取代；verify-csv / verify-xlsx 通过。
 
 - **决策**：备份/恢复只覆盖 pmtool 七类实体（不含宿主会话、checks 自检表、任何密钥）；恢复为两步 `confirm`，且恢复前若当前库有数据则**自动先存一份时间戳安全快照**；多设备同步只给指引（iCloud/坚果云），不擅自改存储路径，强调单写者（同步前关 dsh、不同时两端写）。
 - **理由**：备份的价值是「可回退」，自动安全快照把误恢复风险降到最低；含密钥/宿主数据会带来安全与隐私风险；pmtool 是单写者应用，跨端并发写必然冲突。

@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — 第二档补齐（T2-A 可编辑/T2-B 批量/T2-C XLSX/T2-D 导出，2026-10-11，平台：doubao-work）
+
+- **T2-A**：WBS 预览改为可编辑 Markdown textarea，`task wbs --raw` 取草稿、`task importmd` 按编辑后文本落盘（不调模型）。
+- **T2-B**：任务多选复选框 + 批量工具条（标为完成/批量删除级联二次确认）+ 排序下拉（截止/优先级/进度）；core `task batch update|delete`。
+- **T2-C**：`.xlsx` 离线导入（SheetJS 0.18.5 Apache-2.0，动态 import 不进 client bundle）。
+- **T2-D**：导出 JSON 经浏览器 Blob 直接下载；导出 Markdown 运行命令弹窗路径（双分支）。
+- 验证：新增 verify-importmd / verify-batch / verify-xlsx；全 **23** 项 verify + build + frozen-lockfile 退出 0。裁剪见 ADL-042（narrate/summarize 可编辑、批量改负责人表单、快捷键）。
+
 ## [未发布] — 第二档体验增强 T2-A/T2-C（2026-10-11，平台：doubao-work / 豆包工作）
 
 - **T2-A**：AI 助手内置 WBS 模板一键填入 + localStorage 记忆上次模式/目标（不入库）。
