@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-11（doubao-work R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回：task wbs 落盘25任务、report narrate rpt-0002 数字未改、meeting summarize mtg-0001 三行动项；免费池偶发超时已归一中文 MODEL_TIMEOUT；新增 KB-036、ISS-025）
+最后更新：2026-10-11（doubao-work 第一档离线增强 R16/R17/R18 已实现：/pm due 临期逾期提醒、meeting action promote 行动项转任务、/pm backup·restore 七实体备份恢复含恢复前安全快照；新增 ADL-039/040/041、docs/backup-sync.md）
 
 ---
 

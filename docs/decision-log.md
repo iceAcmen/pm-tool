@@ -6,6 +6,27 @@
 
 ---
 
+## ADL-041 ｜ 2026-10-11 ｜ R18 备份仅覆盖 pmtool 七实体、恢复前自动安全快照、云同步采用「单写者」
+
+- **决策**：备份/恢复只覆盖 pmtool 七类实体（不含宿主会话、checks 自检表、任何密钥）；恢复为两步 `confirm`，且恢复前若当前库有数据则**自动先存一份时间戳安全快照**；多设备同步只给指引（iCloud/坚果云），不擅自改存储路径，强调单写者（同步前关 dsh、不同时两端写）。
+- **理由**：备份的价值是「可回退」，自动安全快照把误恢复风险降到最低；含密钥/宿主数据会带来安全与隐私风险；pmtool 是单写者应用，跨端并发写必然冲突。
+- **替代方案**：整库深拷贝（含宿主数据/密钥，否）；恢复前不做安全快照（危险，否）；内置后台自动云同步（超出离线优先、违反不做常驻原则，否）。
+- **最终结果**：`core/backup.ts` 七实体 + `commands/backup.ts` + Web 备份按钮；`verify-backup.mjs` 覆盖七实体/往返/缺 confirm 不落盘/安全快照/不含 checks。
+
+## ADL-040 ｜ 2026-10-11 ｜ R17 会议行动项「一键转任务」采用幂等设计（重复转不重复建）
+
+- **决策**：`/pm meeting action promote <mtg> <ai> [confirm]` 复用既有 `addTask` 编号链路在会议所属项目下建任务（标题=行动项标题、负责人=owner、截止=dueDate、无父任务），再把新任务 id 回写 `action.taskId`；**已有 taskId 时直接返回不重复创建**（幂等）。
+- **理由**：行动项与任务是多对一映射的预期，重复 promote 不应产生脏任务；复用 addTask 保证编号/校验/写队列一致。
+- **替代方案**：每次 promote 都新建（会产生重复任务，否）；要求人工手填任务（降低价值，否）。
+- **最终结果**：`core/meetings.promoteActionToTask` + Web 转任务按钮（已转显示「已转 t-xxxx」并禁用）；`verify-promote.mjs` 覆盖 dry-run/回写/幂等/重启读回。
+
+## ADL-039 ｜ 2026-10-11 ｜ R16 临期/逾期提醒采用「打开面板即派生」，不做后台常驻/调度
+
+- **决策**：提醒是纯离线派生数据（逾期=未完成任务 dueDate<今天 / 未达成里程碑 targetDate<今天；临期=落在未来 N 天内，默认 7 天），由 `core/reminders.computeReminders` 基于当前数据现算，命令 `/pm due [天数] [项目ID?]` 与 Web 提醒条都在读时计算，不新增表、不做定时器/常驻进程。
+- **理由**：离线优先、无后台常驻是项目基调；提醒只在用户打开面板/命令时才需要，派生即可，避免调度带来的权限与复杂度。
+- **替代方案**：后台 daemon 轮询并推送（需常驻、违反基调，否）；持久化提醒表（会与实时数据漂移，否）。
+- **最终结果**：`core/reminders.ts` + `commands/due.ts` + Web `ReminderStrip`；`verify-reminders.mjs` 覆盖边界/完成排除/项目过滤/排序/读回。
+
 ## ADL-038 ｜ 2026-10-11 ｜ 首页/欢迎页无法用 `/pm` 命令：根因属宿主 composer 行为，插件侧不强行修补、以 Web 面板 + 用法提示兜底
 
 - **决策**：经上游只读核查，`/pm` 的注册结构与内置命令（`packages/goal/command-goal`）完全一致（`ctx.commands.register({ definitionId, name:'pm', input:{hint, attachments:false}, handler })`）；`CommandDescriptor`（`packages/interaction/commands/lib/types/types.d.ts`）只有 `name/description/input`，**没有任何能控制「回车放行」或「发送后主区自动跳转新会话」的插件侧字段**。因此首页问题归因为宿主 composer：输入「/」触发斜杠命令补全弹窗并截获 Enter，需从弹窗选择或改点蓝色发送按钮；发送后会新建会话但主区不自动跳转（与 KB-036 观察一致）。插件侧**不**改宿主行为，改为：（1）用法提示——在 README/面板说明斜杠命令点发送按钮、发送后到侧栏点最新会话查看；（2）以常驻可见的「项目管理」Web 面板作为主要操作入口，绕开首页 composer 的不确定性。

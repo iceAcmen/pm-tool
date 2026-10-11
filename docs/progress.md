@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work R13/R14/R15 已用真实 openrouter/free 端到端跑通并重启读回；超时归一为中文 MODEL_TIMEOUT；新增 KB-036、ISS-025）
+最后更新：2026-10-11（doubao-work 第一档离线增强 R16/R17/R18 已实现并 verify 通过：临期/逾期提醒、会议行动项转任务、七实体备份/恢复；新增 ADL-039/040/041、docs/backup-sync.md）
 
-## 当前阶段：生成型功能（R13/R14/R15）已实现（2026-10-11，doubao-work）
+## 当前阶段：第一档离线增强 R16/R17/R18 已实现（2026-10-11，doubao-work）
+
+- **R16 临期/逾期提醒**：`/pm due [天数] [项目ID?]`（默认全部项目 7 天）+ Web 面板提醒条；纯读时派生、不做常驻调度（ADL-039）（commit 1b9bf67）。
+- **R17 会议行动项转任务**：`/pm meeting action promote <mtg> <ai> [confirm]`（幂等回写 action.taskId）+ Web 「转任务」按钮（ADL-040）（commit 93a8c71）。
+- **R18 备份/恢复**：`/pm backup` / `/pm restore <文件> confirm`（恢复前自动安全快照）+ Web 一键备份按钮 + `docs/backup-sync.md`（ADL-041）（commit 0a27862）。
+- **验证**：新增 verify-reminders / verify-promote / verify-backup 三个专项；build + 全量 verify 退出 0；`backups/` 已 gitignore。
+- **下一步**：第二档体验增强（AI 助手体验/列表效率/纯 JS CSV·XLSX 导入/导出入口）进行中或待办；生成型功能（R13-15）已端到端跑通。
+
+## 历史阶段：生成型功能（R13/R14/R15）已实现（2026-10-11，doubao-work）
 
 - **R13 智能 WBS**：`/pm task wbs <项目ID> <目标> [confirm]`——AI 拆解为勾选清单草稿→dry-run 预览→confirm 复用草稿落盘为任务树（commit 9775cf3）。
 - **R14 进度汇报 AI 叙述**：`/pm report narrate <项目ID> [confirm]`——确定性数字→AI 段落→confirm 写入既有 `executiveSummary`（零 schema 改动）（commit cd07b94）。

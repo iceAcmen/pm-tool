@@ -52,6 +52,9 @@
 | R13 | 智能 WBS 任务拆解 | P1 | `/pm task wbs <项目ID> "<目标文本>" [confirm]`：AI 产出 Markdown 缩进勾选清单，复用现有 dry-run 预览→confirm 落盘 | 预览树形与 `planTaskImport` 一致；confirm 后任务入库、编号/父子正确；无 key/失败给中文降级提示不崩；新增 verify-wbs | ✅ 已实现（doubao-work）：AI 草稿预览不落盘、confirm 复用草稿落盘；限流/空正文降级；不新增表 |
 | R14 | 进度汇报 AI 叙述 | P1 | `/pm report narrate <项目ID> [confirm]`：基于 `collectProjectReport` 确定性数字，AI 写「本周进展/风险/下周计划」叙述段落，并入 R9 快照与 Markdown 导出 | 叙述数字与确定性采集一致；confirm 后叙述可被读、导出含该段；失败时仍生成无叙述的确定性快照 | ✅ 已实现（doubao-work）：叙述写入既有 `executiveSummary` 字段（零 schema 改动）；失败降级确定性快照 |
 | R15 | 会议纪要归纳 | P1 | `/pm meeting summarize <项目ID> "<速记>" [confirm]`：AI 归纳议题/结论/行动项(负责人/截止日)，映射既有 meeting 草稿 | 行动项负责人/截止日落入 actions[]；confirm 后存为 draft meeting、可被 list/get 读到；JSON 解析失败降级为「原文入 summary」 | ✅ 已实现（doubao-work）：```json ``` 围栏防御解析；confirm 建 draft 会议并挂行动项；复用 addMeeting/addMeetingAction |
+| R16 | 临期/逾期提醒 | P1 | `/pm due [天数] [项目ID?]`（默认全部项目 7 天）：派生逾期（未完成任务 dueDate<今天 / 未达成里程碑 targetDate<今天）与临期；Web 面板打开即显示提醒条 | 已完成/已达成不计；按日期升序跨项目分组；第 7/8 天边界正确；Web 逾期红临期黄仅用宿主 token；不新增表 | ✅ 已实现（doubao-work）：`core/reminders.computeReminders` 读时派生；Web `ReminderStrip` 基于 snapshot；见 ADL-039 |
+| R17 | 会议行动项转任务 | P1 | `/pm meeting action promote <会议ID> <行动项ID> [confirm]`：在会议所属项目下创建任务并回写 `action.taskId`（幂等） | dry-run 不落盘；confirm 任务标题/负责人/截止正确并回写；重复 promote 不重复建；Web 行动项加「转任务」按钮、已转禁用 | ✅ 已实现（doubao-work）：复用 `addTask` 编号链路；见 ADL-040 |
+| R18 | 数据备份/恢复 + 云同步指引 | P1 | `/pm backup [目录?]` / `/pm restore <文件> [confirm]`：备份七类实体为带时间戳 JSON；恢复两步且恢复前自动安全快照；Web 一键备份入口 | 备份含七实体、不含 checks/密钥；恢复往返一致；缺 confirm 不执行；恢复后续号/读回正常；云同步单写者指引 | ✅ 已实现（doubao-work）：见 `docs/backup-sync.md` 与 ADL-041 |
 
 ### R12 命令与格式约定（v0.9 补充）
 

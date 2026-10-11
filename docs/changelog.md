@@ -8,6 +8,13 @@
 
 ---
 
+## [未发布] — 第一档离线增强 R16/R17/R18（2026-10-11，平台：doubao-work / 豆包工作）
+
+- **R16 临期/逾期提醒**：新增 `core/reminders.ts`、`commands/due.ts`（`/pm due [天数] [项目ID?]`）、Web `ReminderStrip`；纯读时派生、不新增表、不做常驻调度（ADL-039）。验证：`verify-reminders.mjs`。
+- **R17 会议行动项转任务**：`core/meetings.promoteActionToTask`（幂等回写 `action.taskId`）+ `meeting action promote` 命令 + Web 「转任务」按钮（ADL-040）。验证：`verify-promote.mjs`。
+- **R18 备份/恢复**：`core/backup.ts` 扩到七实体、`commands/backup.ts`（`/pm backup` / `/pm restore ... confirm` 两步且恢复前自动安全快照）+ Web 一键备份按钮 + 新增 `docs/backup-sync.md`（云同步单写者指引）（ADL-041）。验证：`verify-backup.mjs`。
+- 影响：均离线、不依赖 LLM、不新增宿主路由、配色仅用宿主 token；`backups/` 已加入 `.gitignore`。全量 build + verify（含新增 3 个专项）退出 0。
+
 ## [未发布] — A1 修复：AI 助手命令误带 /pm 前缀导致「不支持的命令」 + 补全不可发现深挖（2026-10-11，平台：doubao-work / 豆包工作）
 
 - **改动文件**：`src/client/panel.tsx`、`scripts/verify-web.mjs`，及 KB-037 / ISS-026 / 本 changelog / 发布说明。
