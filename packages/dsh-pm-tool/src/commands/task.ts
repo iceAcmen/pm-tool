@@ -27,7 +27,7 @@ import {
   TaskImportEmptyError,
   TaskImportNoProjectError,
 } from '../core/task-import.js'
-import { planCsvImport, importTasksFromCsv } from '../core/csv-import.js'
+import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, parseCsv as parseCsvLocal } from '../core/csv-import.js'
 import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
@@ -49,6 +49,7 @@ export const taskHelp = [
   '  /pm task import p-0001 任务表.md          解析并预览将创建的任务（不落盘）',
   '  /pm task import p-0001 任务表.md confirm  按 GitHub 缩进勾选清单（- [ ] / - [x]）导入为 WBS 任务',
   '  /pm task import p-0001 任务表.csv confirm  按约定表头(层级/标题/负责人/优先级/开始/截止/进度)导入任务树',
+  '  /pm task import p-0001 任务表.xlsx confirm  同上,从 .xlsx 首表导入(SheetJS 离线解析)',
   '  /pm task wbs p-0001 「一句话目标」          AI 拆解为 WBS 勾选清单草稿（预览，不落盘；调用一次模型）',
   '  /pm task wbs p-0001 「一句话目标」confirm  按上次草稿确认落盘（复用草稿，不再调模型）',
   'AI 草稿经预览确认才入库；无 key/模型失败时优雅降级到手工 task add。',
@@ -247,40 +248,41 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         return { kind: 'error', text: '请使用：/pm task import <项目ID> <清单文件路径.md> [confirm]' }
       }
       const [projectId, filePath, confirmation] = tokens
-      let csvMode = false
-      try {
-        csvMode = /\.csv$/i.test(filePath)
-      } catch { /* ignore */ }
-      let markdown: string
-      try {
-        markdown = readFileSync(filePath, 'utf8')
-      } catch {
-        return { kind: 'error', text: `无法读取清单文件：${filePath}（请确认路径存在且可读）。` }
-      }
-      if (csvMode) {
+      const isCsv = /\.csv$/i.test(filePath)
+      const isXlsx = /\.xlsx$/i.test(filePath)
+      if (isCsv || isXlsx) {
         try {
-          const plan = planCsvImport(domain, projectId, markdown)
+          const parsedGrid = isCsv
+            ? parseCsvLocal(readFileSync(filePath, 'utf8'))
+            : await readXlsxGrid(filePath)
+          const plan = planGridCsvImport(domain, projectId, parsedGrid)
           if (confirmation !== 'confirm') {
             return {
               kind: 'success',
               text: [
-                `已解析 CSV：将为项目 ${projectId} 创建 ${plan.total} 个任务（按层级列还原父子树）。当前未写入。`,
+                `已解析 ${isCsv ? 'CSV' : 'XLSX'}：将为项目 ${projectId} 创建 ${plan.total} 个任务（按层级列还原父子树）。当前未写入。`,
                 ...plan.outline.map(item => `${'  '.repeat(item.depth)}${item.code}｜${item.title}`),
                 `确认命令：/pm task import ${projectId} ${filePath} confirm`,
               ].join('\n'),
             }
           }
-          const created = await importTasksFromCsv(domain, projectId, markdown)
+          const created = await importTasksFromGrid(domain, projectId, parsedGrid)
           return {
             kind: 'success',
             text: [
-              `已从 CSV 导入 ${created.length} 个任务到项目 ${projectId}：`,
+              `已从 ${isCsv ? 'CSV' : 'XLSX'} 导入 ${created.length} 个任务到项目 ${projectId}：`,
               ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
             ].join('\n'),
           }
         } catch (error) {
-          return { kind: 'error', text: `CSV 导入失败：${error instanceof Error ? error.message : String(error)}` }
+          return { kind: 'error', text: `${isCsv ? 'CSV' : 'XLSX'} 导入失败：${error instanceof Error ? error.message : String(error)}` }
         }
+      }
+      let markdown: string
+      try {
+        markdown = readFileSync(filePath, 'utf8')
+      } catch {
+        return { kind: 'error', text: `无法读取清单文件：${filePath}（请确认路径存在且可读）。` }
       }
       const plan = planTaskImport(domain, projectId, markdown)
       if (confirmation !== 'confirm') {

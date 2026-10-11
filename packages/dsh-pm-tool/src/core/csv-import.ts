@@ -115,8 +115,43 @@ function ensureProject(domain: PmDomain, projectId: string): void {
 
 /** 预览：计算投影 WBS 编号（与既有任务无关）。 */
 export function planCsvImport(domain: PmDomain, projectId: string, csv: string): { total: number, outline: { depth: number, code: string, title: string }[] } {
+  return planGridCsvImport(domain, projectId, parseCsv(csv))
+}
+
+/** 真正导入：缩进栈还原父子，逐项 addTask（带负责人/截止/进度）。 */
+export async function importTasksFromCsv(
+  domain: PmDomain,
+  projectId: string,
+  csv: string,
+): Promise<{ id: string, code: string, title: string }[]> {
+  return importTasksFromGrid(domain, projectId, parseCsv(csv))
+}
+
+export function readCsvFile(path: string): string {
+  return readFileSync(path, 'utf8')
+}
+
+/** 用 SheetJS（命令侧/node，不进 client bundle）读取 .xlsx 首个工作表为二维字符串数组。 */
+export async function readXlsxGrid(path: string): Promise<string[][]> {
+  let mod: typeof import('xlsx')
+  try {
+    mod = (await import('xlsx')) as typeof import('xlsx')
+  } catch (error) {
+    throw new CsvImportError(`未能加载 xlsx 解析库：${error instanceof Error ? error.message : String(error)}`)
+  }
+  const XLSX = (mod as unknown as { readFile?: unknown }).readFile ? mod : (mod as unknown as { default: typeof import('xlsx') }).default
+  const wb = XLSX.readFile(path, { type: 'file' })
+  const first = wb.SheetNames[0]
+  if (!first) throw new CsvImportError('xlsx 文件中没有工作表')
+  const sheet = wb.Sheets[first]
+  const grid = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: false, defval: '' })
+  return grid.map(row => row.map(cell => (cell == null ? '' : String(cell)).trim()))
+}
+
+/** 已用二维数组（来自 CSV 或 XLSX）解析为任务计划。 */
+export function planGridCsvImport(domain: PmDomain, projectId: string, grid: string[][]): { total: number, outline: { depth: number, code: string, title: string }[] } {
   ensureProject(domain, projectId)
-  const rows = parseCsvTasks(csv)
+  const rows = parseGridTasks(grid)
   const counters: number[] = []
   const outline = rows.map(row => {
     counters.length = row.depth + 1
@@ -126,14 +161,9 @@ export function planCsvImport(domain: PmDomain, projectId: string, csv: string):
   return { total: rows.length, outline }
 }
 
-/** 真正导入：缩进栈还原父子，逐项 addTask（带负责人/截止/进度）。 */
-export async function importTasksFromCsv(
-  domain: PmDomain,
-  projectId: string,
-  csv: string,
-): Promise<{ id: string, code: string, title: string }[]> {
+export async function importTasksFromGrid(domain: PmDomain, projectId: string, grid: string[][]): Promise<{ id: string, code: string, title: string }[]> {
   ensureProject(domain, projectId)
-  const rows = parseCsvTasks(csv)
+  const rows = parseGridTasks(grid)
   const stack: { depth: number, id: string }[] = []
   const created: { id: string, code: string, title: string }[] = []
   for (const row of rows) {
@@ -158,6 +188,35 @@ export async function importTasksFromCsv(
   return created
 }
 
-export function readCsvFile(path: string): string {
-  return readFileSync(path, 'utf8')
+/** 把已解析的文本（CSV 字符串）当网格。 */
+function parseGridTasks(grid: string[][]): CsvRow[] {
+  if (grid.length < 2) throw new CsvImportError('至少需要一行表头和一行数据')
+  const header = grid[0].map(h => h.trim())
+  const colIndex = new Map<keyof CsvRow, number>()
+  header.forEach((h, idx) => {
+    const key = HEADER_MAP[h] || HEADER_MAP[h.toLowerCase?.()]
+    if (key && !colIndex.has(key)) colIndex.set(key, idx)
+  })
+  if (!colIndex.has('title')) {
+    throw new CsvImportError('表头缺少「标题」列；约定表头：层级/标题/负责人/优先级/开始/截止/进度')
+  }
+  const rows: CsvRow[] = []
+  for (let r = 1; r < grid.length; r++) {
+    const cells = grid[r]
+    const title = (cells[colIndex.get('title')!] ?? '').trim()
+    if (!title) continue
+    const depthRaw = colIndex.has('depth') ? (cells[colIndex.get('depth')!] ?? '').trim() : ''
+    const progressRaw = colIndex.has('progress') ? (cells[colIndex.get('progress')!] ?? '').trim() : ''
+    rows.push({
+      depth: depthRaw ? Math.max(0, parseInt(depthRaw, 10) - 1) : 0,
+      title,
+      assignee: cell(cells, colIndex.get('assignee')),
+      priority: cell(cells, colIndex.get('priority')),
+      startDate: cell(cells, colIndex.get('startDate')),
+      dueDate: cell(cells, colIndex.get('dueDate')),
+      progress: progressRaw ? clampProgress(progressRaw) : undefined,
+    })
+  }
+  if (!rows.length) throw new CsvImportError('没有可导入的数据行')
+  return rows
 }
