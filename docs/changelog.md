@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — A1 修复：AI 助手命令误带 /pm 前缀导致「不支持的命令」 + 补全不可发现深挖（2026-10-11，平台：doubao-work / 豆包工作）
+
+- **改动文件**：`src/client/panel.tsx`、`scripts/verify-web.mjs`，及 KB-037 / ISS-026 / 本 changelog / 发布说明。
+- **做了什么**：
+  - **必修 bug（真实 Chrome 验收发现）**：`AiAssistant.lines()` 三条命令误拼了 `/pm ` 前缀（`/pm task wbs …`、`/pm report narrate …`、`/pm meeting summarize …`），而面板 execute 桥把整行直接喂给 `pm` handler、handler 只匹配裸子命令（`task`/`report`/`meeting`…），故三条都落空走到「不支持的命令」、根本没调模型。已改为裸子命令（`task wbs …` / `report narrate …` / `meeting summarize …` 及其 confirm 变体），与面板其它调用一致。
+  - **Web 级联删除链路自查**：任务表单删除按钮现按 `data.tasks` 现场计算该任务子树大小——有子任务时弹窗明确「将同时删除 N 个子任务…不可撤销」并走 `task delete <id> cascade confirm`；无子任务维持原 `task delete <id> confirm`。
+  - **补全调研结论**：欢迎页斜杠补全无 pm，经上游只读确认为宿主 `commands.list(agent)` 与会话/预置缓存决定，且插件侧 `commandUi.register` contribution 与 host 重名会抛 collision，**无受支持的插件侧做法**让 pm 进补全（详见 KB-037 源码路径）。
+- **验证**：`pnpm run build` 绿；**全部 16 个 verify-*.mjs 退出 0**（verify-web 新增「裸子命令串 + 禁止 `/pm ` 前缀回归」断言）；`git diff --check` 干净。
+- **影响范围**：A1 三按钮现在能真正调起模型草稿；Web 删除父任务走级联确认。
+
 ## [未发布] — A1 AI 助手 Web 面板 + A2 任务级联删除 + 首页 /pm 根因定位（2026-10-11，平台：doubao-work / 豆包工作）
 
 - **改动文件**：`src/core/tasks.ts`、`src/commands/task.ts`、`scripts/verify-cascade.mjs`、`src/client/panel.tsx`、`src/client/panel.css`、`scripts/verify-web.mjs`，及 docs（ADL-037/038、KB-037、ISS-025/026、本 changelog、release v0.2.0 草稿）。

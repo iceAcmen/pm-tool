@@ -531,14 +531,14 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
 
   const lines = (): { preview: string; confirm: string } => {
     if (mode === 'narrate') {
-      return { preview: `/pm report narrate ${projectId}`, confirm: `/pm report narrate ${projectId} confirm` }
+      return { preview: `report narrate ${projectId}`, confirm: `report narrate ${projectId} confirm` }
     }
     if (mode === 'wbs') {
       const goal = text.trim()
-      return { preview: `/pm task wbs ${projectId} ${goal}`, confirm: `/pm task wbs ${projectId} ${goal} confirm` }
+      return { preview: `task wbs ${projectId} ${goal}`, confirm: `task wbs ${projectId} ${goal} confirm` }
     }
     const transcript = text.trim()
-    return { preview: `/pm meeting summarize ${projectId} ${transcript}`, confirm: `/pm meeting summarize ${projectId} ${transcript} confirm` }
+    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm` }
   }
 
   const switchMode = (next: 'wbs' | 'narrate' | 'summarize') => {
@@ -1587,8 +1587,30 @@ function TaskForm({
         type="button"
         disabled={disabled}
         onClick={() => {
-          if (window.confirm(`删除任务 ${task.title}？`)) {
-            void run(`task delete ${task.id} confirm`).then(success => success && onSaved())
+          // 计算该任务的整棵子树大小（含自身），用于决定普通删除还是级联删除。
+          const byParent = new Map<string, string[]>()
+          for (const item of tasks) {
+            if (item.parentId) {
+              const list = byParent.get(item.parentId) ?? []
+              list.push(item.id)
+              byParent.set(item.parentId, list)
+            }
+          }
+          let subtree = 1
+          const queue = [task.id]
+          while (queue.length) {
+            const current = queue.shift()!
+            for (const child of byParent.get(current) ?? []) { subtree += 1; queue.push(child) }
+          }
+          const hasChildren = subtree > 1
+          const message = hasChildren
+            ? `任务「${task.title}」含 ${subtree - 1} 个子任务。确定删除该任务及其全部 ${subtree - 1} 个子任务吗？旁支任务不受影响，此操作不可撤销。`
+            : `删除任务 ${task.title}？`
+          if (window.confirm(message)) {
+            const line = hasChildren
+              ? `task delete ${task.id} cascade confirm`
+              : `task delete ${task.id} confirm`
+            void run(line).then(success => success && onSaved())
           }
         }}
       ><Trash2 size={15}/>删除</button>}

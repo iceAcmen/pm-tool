@@ -12,6 +12,7 @@
 - **根因（上游只读证实，【官方明确】）**：`/pm` 注册结构与内置 `command-goal` 一致（`packages/goal/command-goal/src/index.ts`：`name:'goal'` + `input:{hint,attachments}`）；`CommandDescriptor`（`packages/interaction/commands/lib/types/types.d.ts`）只有 `name/description/input`，**插件无法控制**「回车放行」与「发送后主区跳转」。输入「/」触发宿主斜杠命令补全弹窗并**截获 Enter**（KB-036），回车不会直接执行；点蓝色发送按钮可执行，但欢迎页发送后**新建了会话而主区不自动切过去**，故像没反应。
 - **正确做法（插件侧可复用）**：（1）斜杠命令一律**点蓝色发送按钮**、发送后到**侧栏点最新会话**查看结果；（2）日常操作优先用常驻可见的「项目管理」Web 面板（本项目已把三 AI 功能 + 增删改全部做成面板按钮），绕开首页 composer 的不确定性。
 - **边界**：回车放行、主区自动跳转属宿主行为，插件无扩展点，**不要试图在插件侧伪造修复**；如实记录残留限制（见 ISS-026 / ADL-038）。
+- **深挖：为什么斜杠补全里有内置 goal、却没有 pm（上游只读结论）**：补全候选直接来自 host `commands.list(agent)`（`packages/client/ui-commands/src/client/service.ts` 的 `candidates()` 把 list 返回的每个 `CommandDescriptor` 都列成行，**本身不按内置/外部过滤**）。host 侧 `list(agent)` = `layers.merge(agent, layer.commands)`（`packages/interaction/commands/src/index.ts` 的 `view()`），全局注册的命令对任意 agent 生效——我们的 pm 确已全局注册（点蓝色发送可执行即证明）。要在补全里**新增**一行，唯一客户端钩子是 `ctx.commandUi.register(contribution)`，但其与 host 重名时 `candidates()` 会直接抛「contribution collides with a host command」；而 pm 本就是 host 命令，故**无法**用 contribution 让 pm 出现在欢迎页补全。结论：无受支持的插件侧做法，补全列表由宿主按会话/预置缓存决定，保持文档说明即可，左侧「项目管理」GUI 面板是不依赖首页斜杠框的稳定入口。
 
 ## KB-036 ｜ 免费池偶发 `This operation was aborted`/超时：现象、根因与中文归一（沉淀：doubao-work，2026-10-11）
 
