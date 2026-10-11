@@ -25,14 +25,15 @@ const WBS_SYSTEM_PROMPT = [
 export async function generateWbsMarkdown(
   llm: LlmGateway | undefined,
   goal: string,
-  route?: { provider: string, model: string },
+  route?: { provider: string, model: string, models?: string[] },
 ): Promise<string> {
   return generateDraft(llm, {
     system: WBS_SYSTEM_PROMPT,
     user: `请把以下项目目标拆解为 WBS 勾选清单：\n${goal}`,
-    maxTokens: 4000,
+    maxTokens: 8192,
     provider: route?.provider,
     model: route?.model,
+    models: route?.models,
   })
 }
 

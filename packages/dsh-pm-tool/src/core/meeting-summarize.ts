@@ -79,14 +79,15 @@ export function parseSummarizedDraft(raw: string): SummarizedMeeting {
 export async function summarizeTranscript(
   llm: LlmGateway | undefined,
   transcript: string,
-  route?: { provider: string, model: string },
+  route?: { provider: string, model: string, models?: string[] },
 ): Promise<string> {
   return generateDraft(llm, {
     system: SUMMARIZE_SYSTEM_PROMPT,
     user: `请归纳以下会议原始速记：\n${transcript}`,
-    maxTokens: 3500,
+    maxTokens: 6000,
     provider: route?.provider,
     model: route?.model,
+    models: route?.models,
   })
 }
 

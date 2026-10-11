@@ -54,14 +54,15 @@ export function buildBrief(domain: PmDomain, projectId: string): Record<string, 
 export async function generateNarrative(
   llm: LlmGateway | undefined,
   brief: Record<string, unknown>,
-  route?: { provider: string, model: string },
+  route?: { provider: string, model: string, models?: string[] },
 ): Promise<string> {
   return generateDraft(llm, {
     system: NARRATE_SYSTEM_PROMPT,
     user: `以下是本周确定性项目数据，请据此写进度汇报叙述：\n${JSON.stringify(brief, null, 2)}`,
-    maxTokens: 2500,
+    maxTokens: 6000,
     provider: route?.provider,
     model: route?.model,
+    models: route?.models,
   })
 }
 

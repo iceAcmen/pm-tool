@@ -25,6 +25,14 @@ export interface ModelLane {
 /** PoC 车道：免费插件 provider id 固定为 our-free-model；默认用其 Kilo 免费自动路由模型 kilo-auto/free。 */
 export const POC_LANE = { provider: 'our-free-model', model: 'kilo-auto/free' } as const
 
+/**
+ * PoC 免费池降级链（ADL-044 补充，2026-10-11 实测）。
+ * 插件 our-free-model 只暴露两个免费自动路由池：kilo-auto/free（Kilo）、openrouter/free（OpenCode/OpenRouter）。
+ * 单池约 80% 成功（随机推理模型可能「思考耗尽正文为空」或快速 finish=error）；
+ * 故按链跨池轮换，任一失败即换下一池（ai-client 实现短退避换模）。
+ */
+export const POC_CANDIDATE_MODELS = ['kilo-auto/free', 'openrouter/free', 'kilo-auto/free', 'openrouter/free'] as const
+
 /** 生产车道候选（按优先级）：DeepSeek 官方 → Kimi/Moonshot 官方。 */
 export const PROD_CANDIDATES = [
   {
@@ -52,9 +60,11 @@ function envPresent(names: readonly string[]): boolean {
 export const PROD_KEY_MISSING_TEXT =
   '生产车道未配置 Key（DEEPSEEK_API_KEY / KIMI_API_KEY）。请在启动 dsh 的终端配置后重启 dsh；或运行 `/pm model mode poc` 切回免费 PoC 车道。详见 docs/model-providers.md。'
 
-/** 解析当前模式到具体 provider/model。prod 无 Key 时抛错（结构化 AiDraftError 由调用方归一）。 */
-export function resolveModelRoute(mode: ModelMode): { provider: string, model: string } {
-  if (mode === 'poc') return { provider: POC_LANE.provider, model: POC_LANE.model }
+/** 解析当前模式到具体 provider/model（poc 附带降级链 models）。prod 无 Key 时抛错。 */
+export function resolveModelRoute(mode: ModelMode): { provider: string, model: string, models?: string[] } {
+  if (mode === 'poc') {
+    return { provider: POC_LANE.provider, model: POC_LANE.model, models: [...POC_CANDIDATE_MODELS] }
+  }
   for (const candidate of PROD_CANDIDATES) {
     if (envPresent(candidate.envCandidates)) {
       return { provider: candidate.provider, model: candidate.model }
@@ -70,7 +80,7 @@ export function describeLanes(current: ModelMode): ModelLane[] {
     provider: POC_LANE.provider,
     model: POC_LANE.model,
     ready: true,
-    note: '免费公共网关（OpenCode Zen / Kilo），免 Key。仅概念验证，勿用于核心代码/生产提交。',
+    note: `免费公共网关（免 Key）。降级链：${POC_CANDIDATE_MODELS.join(' → ')}（跨池轮换提成功率）。仅概念验证，勿用于核心代码/生产提交。`,
   }
   const prod: ModelLane[] = PROD_CANDIDATES.map(c => {
     const ready = envPresent(c.envCandidates)

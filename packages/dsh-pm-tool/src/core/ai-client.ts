@@ -83,28 +83,53 @@ export interface GenerateDraftOptions {
   maxTokens?: number
   provider?: string
   model?: string
+  /** 有序候选模型链（PoC 免费池跨池降级用）；缺省单模型。失败时依次换下一个。 */
+  models?: string[]
   signal?: AbortSignal
 }
 
+const sleep = (ms: number) => new Promise<void>(resolve => { setTimeout(resolve, ms) })
+
 /**
  * 发起一次纯文本生成，返回模型输出的拼接正文（已 trim）。
- * 不挂 tools；不解析返回结构——结构化需求由调用方防御性解析。
- * @throws {AiDraftError} 未装载 LLM、无 key、限流、失败或正文为空时抛出。
+ * PoC 免费池（kilo/openrouter 两池各自约 80% 成功）偶发「思考耗尽正文为空 / finish=error」，
+ * 故沿候选模型链依次换不同池重试（最多链长次、短退避），仍全失败才抛中文错误（ADL-044）。
+ * @throws {AiDraftError} 未装载 LLM、无 key、限流、或链上全部失败时抛出。
  */
 export async function generateDraft(llm: LlmGateway | undefined, options: GenerateDraftOptions): Promise<string> {
   if (!llm) {
     throw new AiDraftError('NO_LLM', '当前宿主未装载 LLM 服务，AI 草稿不可用；你仍可手工录入。')
   }
-  // PoC 免费池随机模型偶发「思考耗尽正文为空」或「上游 finish=error」：
-  // 先按给定预算试一次，若正文为空/被截断，自动放大预算重试一次（免费池不稳定，ADL-044）。
-  const first = await attempt(llm, options)
-  if (first.text) return first.text
-  if (first.retriable) {
-    const retry = await attempt(llm, { ...options, maxTokens: Math.round((options.maxTokens ?? 1200) * 2) })
-    if (retry.text) return retry.text
-    throw retry.error
+  const chain = (options.models && options.models.length > 0)
+    ? options.models
+    : [options.model ?? AI_MODEL]
+
+  const tried: string[] = []
+  let lastError: AiDraftError | null = null
+  for (let i = 0; i < chain.length; i += 1) {
+    const model = chain[i]
+    tried.push(model)
+    let result: { text: string, retriable: boolean, error: AiDraftError }
+    try {
+      result = await attempt(llm, { ...options, model })
+    } catch (error) {
+      // 硬错误不换池；其余可退避换下一池。
+      const err = error instanceof AiDraftError ? error : normalize(error)
+      result = { text: '', retriable: !['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM'].includes(err.code), error: err }
+    }
+    if (result.text) return result.text
+    lastError = result.error
+    const hard = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM']
+    if (hard.includes(result.error.code) || i === chain.length - 1) break
+    await sleep(400)
   }
-  throw first.error
+  const hard = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM']
+  // 硬错误（限流/认证/上下文）直接抛原中文，不套通用链文案。
+  if (lastError && hard.includes(lastError.code)) throw lastError
+  throw new AiDraftError(
+    lastError?.code ?? 'EMPTY_RESPONSE',
+    `免费池多次尝试（${tried.join(' → ')}）均未返回可用正文；请稍后再试或手工录入。`,
+  )
 }
 
 async function attempt(
@@ -154,10 +179,10 @@ async function attempt(
   const error = new AiDraftError(
     kind === 'max-tokens' ? 'MAX_TOKENS' : 'EMPTY_RESPONSE',
     kind === 'max-tokens'
-      ? '模型在输出结束前达到 max_tokens（推理占满），已自动放大预算重试一次仍为空；请精简目标后再生成或手工录入。'
+      ? '模型在输出结束前达到 max_tokens（推理占满），正文为空。'
       : upstreamError
-        ? '免费池上游返回异常（随机模型不稳），已自动重试一次仍失败；请稍后再试或手工录入。'
-        : '模型未返回可用正文，请换一种说法重试或手工录入。',
+        ? '免费池上游返回异常（随机模型不稳）。'
+        : '模型未返回可用正文。',
   )
   return { text: '', retriable, error }
 }
