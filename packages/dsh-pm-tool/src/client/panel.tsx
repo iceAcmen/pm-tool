@@ -340,7 +340,7 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Sparkles size={15}/>AI 助手
           </button>
           <button
-            className="pm-button"
+            className="pm-button pm-backup-btn"
             disabled={busy}
             title="一键备份 pmtool 七类实体到仓库 backups/（恢复请用 /pm restore <文件> confirm）"
             onClick={async () => {
@@ -352,13 +352,20 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Database size={15}/>备份
           </button>
           <button
-            className="pm-button"
+            className="pm-button pm-export-md-btn"
             disabled={busy || !project}
-            title="导出当前项目为 Markdown（运行导出命令，弹窗显示路径）"
+            title="导出当前项目为 Markdown（浏览器直接下载）"
             onClick={async () => {
               try {
-                const text = await execute(`export markdown ${project!.id}`)
-                setMessage(`Markdown 已导出：${text}`)
+                // OPT-04：前端基于 snapshot 组装 Markdown 并走 Blob 直接下载，文件名带项目名与时间戳。
+                const snap = JSON.parse(await execute('web snapshot')) as Snapshot
+                const ts = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 12)
+                const pname = (project!.name || project!.id).replace(/[\\/:*?"<>|\s]+/g, '-')
+                const rows: string[] = [`# ${project!.name}（${project!.id}）`, '']
+                const tasks = (snap.tasks ?? [] as { title: string, assignee?: string, progress?: number, dueDate?: string }[])
+                if (tasks.length) { rows.push('## 任务', ''); for (const t of tasks) rows.push(`- [ ] ${t.title}${t.assignee ? `（负责人：${t.assignee}）` : ''}${typeof t.progress === 'number' ? ` ${t.progress}%` : ''}${t.dueDate ? ` 截止 ${t.dueDate}` : ''}`) }
+                downloadText(`pmtool-${pname}-${ts}.md`, rows.join('\n'), 'text/markdown')
+                setMessage(`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`)
               } catch (error) {
                 setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
               }
@@ -367,7 +374,7 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Download size={15}/>导出 Markdown
           </button>
           <button
-            className="pm-button"
+            className="pm-button pm-export-json-btn"
             disabled={busy}
             title="导出整库 JSON 数据包（浏览器直接下载）"
             onClick={async () => {
@@ -643,7 +650,8 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
 
   const lines = (): { preview: string; confirm: string } => {
     if (mode === 'narrate') {
-      return { preview: `report narrate ${projectId}`, confirm: `report narrate ${projectId} confirm` }
+      // OPT-08：预览可编辑，确认按编辑后文本落盘（report narrateuse，不再调模型）。
+      return { preview: `report narrate ${projectId}`, confirm: `report narrateuse ${projectId} ${JSON.stringify(preview)}` }
     }
     if (mode === 'wbs') {
       const goal = text.trim()
@@ -785,7 +793,18 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
         />
       </div>
     )}
-    {mode !== 'wbs' && preview && <pre className="pm-ai-preview">{preview}</pre>}
+    {mode !== 'wbs' && preview && (
+      <div className="pm-ai-preview-edit">
+        <p className="pm-ai-note">可在下方修改{mode === 'narrate' ? '叙述段落' : '归纳内容'}，点「确认入库」按编辑结果落盘，不再调用模型。</p>
+        <textarea
+          className="pm-ai-input pm-ai-markdown pm-ai-raw"
+          rows={8}
+          value={preview}
+          disabled={working}
+          onChange={event => setPreview(event.currentTarget.value)}
+        />
+      </div>
+    )}
     <p className="pm-ai-note">AI 结果为草稿，需点“确认入库”才写入项目；失败（如免费模型超时/限流）会显示中文提示，可重试或改用手工录入，核心台账不受影响。</p>
   </div>
 }

@@ -161,6 +161,16 @@ try {
   assert.match(bundle, /model mode /)
   assert.match(css, /\.pm-model-lane/)
 
+  // OPT 优化清单契约（稳定选择器）。
+  assert.match(bundle, /pm-export-md-btn/)          // OPT-04 Markdown Blob 下载
+  assert.match(bundle, /pm-export-json-btn/)        // OPT-04
+  assert.match(bundle, /pm-backup-btn/)             // OPT-010 顶栏按钮
+  assert.match(bundle, /pm-ai-wbs-raw/)             // OPT-08 WBS 可编辑
+  assert.match(bundle, /pm-ai-raw/)                 // OPT-08 narrate/summarize 可编辑
+  assert.match(bundle, /report narrateuse /)        // OPT-08 按编辑文本落盘
+  assert.match(bundle, /pm-batch-bar/)             // OPT-05 批量工具条
+  assert.match(bundle, /pm-reminders/)             // OPT-01/02 提醒区
+
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')
 } finally {
