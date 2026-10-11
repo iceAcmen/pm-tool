@@ -8,6 +8,12 @@
 
 ---
 
+## [未发布] — 修正一处残留错误启动命令并实测正确启动（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 修改文件（仅 docs）：`docs/progress.md` 第 103 行把错误的 `pnpm dsh --profile pm web` 改为 `pnpm dsh --profile pm`（指定 profile 后再加 `web` 会被当成 Web 应用的多余位置参数，报 "too many arguments. Expected 0 arguments but got 1: web"，即 ISS-007 记录的坑）；并把生成型能力前置条件刷新为「模型通道已就绪（ADL-035/KB-034），是否立项待所有者决定」。
+- 为什么 / 影响范围：所有者照该命令启动时实际踩到该报错；仓库其余位置（tech-plugin-scaffold、knowledge-base、issues-and-solutions）口径本就正确，仅此一处残留。仅文档，无业务代码改动。
+- 验证（2026-10-11，本机）：在上游目录用修正后的命令（等价 `node --import tsx/esm apps/cli/src/bin.ts --profile pm --no-open --port 0`，继承 ~/.zshrc 的 key）启动成功——日志出现 `[pm-tool] 存储领域 pmtool 已打开` 并打印带 token 的 `http://127.0.0.1:<port>/?token=...`，首页 HTTP 303（loopback cookie 鉴权正常），无 pi-ai/openrouter 报错；验证后已结束该测试进程、端口释放。
+
 ## [未发布] — OpenRouter key 已本机配置、openrouter/free 直连实测成功（仅文档状态同步）（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 修改文件（**仅 docs，无业务代码、无 key 本体**）：
