@@ -1,0 +1,163 @@
+/**
+ * T2-C 纯 JS 离线 CSV 任务导入（替代被裁的 LibreOffice Excel 方案）。
+ * 约定表头（中文，列顺序任意，按表头名匹配）：层级 / 标题 / 负责人 / 优先级 / 开始 / 截止 / 进度。
+ * 纯离线、确定性，复用 addTask 的编号、父子校验与落盘。无 confirm 只预览不落盘。
+ */
+import { readFileSync } from 'node:fs'
+import { addTask } from './tasks.js'
+import { getProject } from './projects.js'
+import { projectIdSchema } from './project.js'
+import type { PmDomain } from './storage.js'
+
+export class CsvImportError extends Error {}
+
+export interface CsvRow {
+  depth: number
+  title: string
+  assignee?: string
+  priority?: string
+  startDate?: string
+  dueDate?: string
+  progress?: number
+}
+
+/** 轻量 CSV 解析：支持引号包裹、转义双引号、逗号内逗号、CRLF。 */
+export function parseCsv(text: string): string[][] {
+  const rows: string[][] = []
+  let field = ''
+  let row: string[] = []
+  let inQuotes = false
+  const chars = text.replace(/^\uFEFF/, '')
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i]
+    if (inQuotes) {
+      if (ch === '"') {
+        if (chars[i + 1] === '"') { field += '"'; i++ } else { inQuotes = false }
+      } else {
+        field += ch
+      }
+      continue
+    }
+    if (ch === '"') { inQuotes = true; continue }
+    if (ch === ',') { row.push(field); field = ''; continue }
+    if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && chars[i + 1] === '\n') i++
+      row.push(field); rows.push(row); row = []; field = ''
+    } else {
+      field += ch
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row) }
+  return rows.filter(r => r.some(c => c.trim() !== ''))
+}
+
+const HEADER_MAP: Record<string, keyof CsvRow> = {
+  '层级': 'depth', '深度': 'depth', 'level': 'depth',
+  '标题': 'title', '任务': 'title', '任务标题': 'title', 'title': 'title',
+  '负责人': 'assignee', '指派': 'assignee', 'assignee': 'assignee', 'owner': 'assignee',
+  '优先级': 'priority', 'priority': 'priority',
+  '开始': 'startDate', '开始日期': 'startDate', 'start': 'startDate',
+  '截止': 'dueDate', '截止日期': 'dueDate', 'due': 'dueDate', 'end': 'dueDate',
+  '进度': 'progress', '完成度': 'progress', 'progress': 'progress',
+}
+
+/** 把 CSV 文本解析为结构化行序列。表头必须含「标题」。 */
+export function parseCsvTasks(text: string): CsvRow[] {
+  const grid = parseCsv(text)
+  if (grid.length < 2) throw new CsvImportError('CSV 至少需要一行表头和一行数据')
+  const header = grid[0].map(h => h.trim())
+  const colIndex = new Map<keyof CsvRow, number>()
+  header.forEach((h, idx) => {
+    const key = HEADER_MAP[h] || HEADER_MAP[h.toLowerCase?.()]
+    if (key && !colIndex.has(key)) colIndex.set(key, idx)
+  })
+  if (!colIndex.has('title')) {
+    throw new CsvImportError('CSV 表头缺少「标题」列；约定表头：层级/标题/负责人/优先级/开始/截止/进度')
+  }
+  const rows: CsvRow[] = []
+  for (let r = 1; r < grid.length; r++) {
+    const cells = grid[r]
+    const title = (cells[colIndex.get('title')!] ?? '').trim()
+    if (!title) continue
+    const depthRaw = colIndex.has('depth') ? (cells[colIndex.get('depth')!] ?? '').trim() : ''
+    const progressRaw = colIndex.has('progress') ? (cells[colIndex.get('progress')!] ?? '').trim() : ''
+    rows.push({
+      depth: depthRaw ? Math.max(0, parseInt(depthRaw, 10) - 1) : 0,
+      title,
+      assignee: cell(cells, colIndex.get('assignee')),
+      priority: cell(cells, colIndex.get('priority')),
+      startDate: cell(cells, colIndex.get('startDate')),
+      dueDate: cell(cells, colIndex.get('dueDate')),
+      progress: progressRaw ? clampProgress(progressRaw) : undefined,
+    })
+  }
+  if (!rows.length) throw new CsvImportError('CSV 中没有可导入的数据行')
+  return rows
+}
+
+function cell(cells: string[], idx: number | undefined): string | undefined {
+  if (idx == null) return undefined
+  const v = (cells[idx] ?? '').trim()
+  return v || undefined
+}
+
+function clampProgress(raw: string): number | undefined {
+  // 支持 "80" 或 "80%"
+  const n = parseInt(raw.replace('%', ''), 10)
+  if (Number.isNaN(n)) return undefined
+  return Math.min(100, Math.max(0, n))
+}
+
+function ensureProject(domain: PmDomain, projectId: string): void {
+  projectIdSchema.parse(projectId)
+  if (!getProject(domain, projectId)) throw new CsvImportError(`未找到项目：${projectId}`)
+}
+
+/** 预览：计算投影 WBS 编号（与既有任务无关）。 */
+export function planCsvImport(domain: PmDomain, projectId: string, csv: string): { total: number, outline: { depth: number, code: string, title: string }[] } {
+  ensureProject(domain, projectId)
+  const rows = parseCsvTasks(csv)
+  const counters: number[] = []
+  const outline = rows.map(row => {
+    counters.length = row.depth + 1
+    counters[row.depth] = (counters[row.depth] ?? 0) + 1
+    return { depth: row.depth, code: counters.slice(0, row.depth + 1).join('.'), title: row.title }
+  })
+  return { total: rows.length, outline }
+}
+
+/** 真正导入：缩进栈还原父子，逐项 addTask（带负责人/截止/进度）。 */
+export async function importTasksFromCsv(
+  domain: PmDomain,
+  projectId: string,
+  csv: string,
+): Promise<{ id: string, code: string, title: string }[]> {
+  ensureProject(domain, projectId)
+  const rows = parseCsvTasks(csv)
+  const stack: { depth: number, id: string }[] = []
+  const created: { id: string, code: string, title: string }[] = []
+  for (const row of rows) {
+    while (stack.length && stack[stack.length - 1].depth >= row.depth) stack.pop()
+    const parentId = stack.length ? stack[stack.length - 1].id : null
+    const done = row.progress === 100
+    const priority = row.priority && /^P[012]$/i.test(row.priority) ? row.priority.toUpperCase() : undefined
+    const task = await addTask(domain, {
+      projectId,
+      parentId,
+      title: row.title,
+      assignee: row.assignee ?? '',
+      dueDate: row.dueDate,
+      startDate: row.startDate,
+      ...(priority ? { priority } : {}),
+      progress: row.progress ?? 0,
+      status: done ? 'done' : (row.progress && row.progress > 0 ? 'in_progress' : 'todo'),
+    })
+    stack.push({ depth: row.depth, id: task.id })
+    created.push({ id: task.id, code: task.code, title: task.title })
+  }
+  return created
+}
+
+export function readCsvFile(path: string): string {
+  return readFileSync(path, 'utf8')
+}

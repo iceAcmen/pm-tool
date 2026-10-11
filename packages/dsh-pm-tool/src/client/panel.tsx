@@ -576,10 +576,24 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   disabled?: boolean
   onConfirmed: () => void
 }) {
-  const [mode, setMode] = useState<'wbs' | 'narrate' | 'summarize'>('wbs')
-  const [text, setText] = useState('')
+  const [mode, setMode] = useState<'wbs' | 'narrate' | 'summarize'>(() => {
+    try {
+      const m = localStorage.getItem('pm-ai-mode')
+      if (m === 'wbs' || m === 'narrate' || m === 'summarize') return m
+    } catch { /* ignore */ }
+    return 'wbs'
+  })
+  const [text, setText] = useState(() => {
+    try { return mode === 'wbs' ? (localStorage.getItem('pm-ai-goal') || '') : '' } catch { return '' }
+  })
   const [preview, setPreview] = useState('')
   const [working, setWorking] = useState(false)
+
+  const WBS_TEMPLATES: [string, string][] = [
+    ['官网改版', '为一个小型企业官网改版项目制定工作分解，覆盖需求梳理、视觉设计、前后端开发、测试验收、上线'],
+    ['App 版本迭代', '为一个 App 新版本迭代制定工作分解，覆盖需求、设计、开发、联调、灰度发布、复盘'],
+    ['活动筹备', '为一次线上活动筹备制定工作分解，覆盖方案、物料、推广、执行、数据复盘'],
+  ]
 
   const needsInput = mode !== 'narrate'
   const canGenerate = !working && !(needsInput && !text.trim())
@@ -599,6 +613,13 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   const switchMode = (next: 'wbs' | 'narrate' | 'summarize') => {
     if (working) return
     setMode(next); setText(''); setPreview('')
+    try { localStorage.setItem('pm-ai-mode', next) } catch {}
+  }
+
+  const fillTemplate = (goal: string) => {
+    if (working) return
+    setText(goal); setPreview('')
+    try { localStorage.setItem('pm-ai-goal', goal) } catch {}
   }
 
   const generate = async () => {
@@ -649,6 +670,13 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
       )}
     </div>
     <p className="pm-ai-hint">{hints[mode]}</p>
+    {needsInput && mode === 'wbs' && (
+      <div className="pm-ai-templates">
+        {WBS_TEMPLATES.map(([label, goal]) =>
+          <button key={label} type="button" className="pm-chip" disabled={working} onClick={() => fillTemplate(goal)}>{label}</button>,
+        )}
+      </div>
+    )}
     {needsInput && (
       <textarea
         className="pm-ai-input"
@@ -656,7 +684,11 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
         value={text}
         disabled={working}
         placeholder={hints[mode]}
-        onChange={event => setText(event.currentTarget.value)}
+        onChange={event => {
+          const v = event.currentTarget.value
+          setText(v)
+          if (mode === 'wbs') try { localStorage.setItem('pm-ai-goal', v) } catch {}
+        }}
       />
     )}
     <div className="pm-ai-actions">

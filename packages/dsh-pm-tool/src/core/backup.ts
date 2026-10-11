@@ -3,8 +3,9 @@
  * 备份为带时间戳与 manifest 的 JSON；恢复前自动生成一份安全快照。
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { writeExportFile } from './export.js'
 import type { Milestone } from './milestone.js'
 import type { Project } from './project.js'
 import type { PmDomain } from './storage.js'
@@ -149,8 +150,6 @@ export async function exportBackupJson(
   const dir = directory ? resolve(directory) : defaultBackupDirectory
   await mkdir(dir, { recursive: true, mode: 0o700 })
   const path = resolve(dir, 'pmtool-backup.json')
-  await writeFile(path, content, { encoding: 'utf8', mode: overwrite ? 0o600 : 0o600 })
+  await writeExportFile(path, content, overwrite)
   return { path, content, backup }
 }
-
-export { dirname as _backupDirname }
