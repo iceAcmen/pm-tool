@@ -43,6 +43,16 @@
 | R11 | 里程碑提醒 | P2（暂缓） | 复用 dsh schedule，对临近/逾期里程碑提醒 | 阶段 2 决策：第一版不做，后续迭代再启用；ADL-032 进一步说明暂缓理由（依赖常驻调度与 Key，与离线优先定位冲突） | 暂缓 |
 | R12 | 多项目与检索 / 导入 / 协作 | P2 | 多项目切换（Web 已有）、关键字检索、统计看板；导入外部任务表（Markdown 清单）；多人协作 | ① `/pm search <关键字> [--type ...]` 跨七类实体不区分大小写子串匹配、按类型分组输出；② `/pm stats [项目ID]` 全项目/单项目只读聚合（完成率、逾期、未关闭风险按严重度、交付物四态）；③ `/pm task import <项目ID> <清单.md> [confirm]` 按 GitHub 缩进勾选清单导入为 WBS 任务，dry-run 不写盘、confirm 落盘、重启读回；④ Web「总览看板」与全局搜索基于 snapshot 派生。**裁剪**：Excel 导入（ADL-030）、多人实时协作（ADL-031）本期不做 | ✅ 已完成（doubao-work，2026-10-11）：检索/看板只读、Markdown 导入落盘、Web 看板与全局搜索、verify-r12 + 扩展 verify-web 及隔离真实宿主 bundle 断言通过；Excel 导入与多人协作为「裁剪/暂缓」 |
 
+### 拟新增（评审稿·待编码，ADL-036，详见 docs/generative-features-plan.md）
+
+> 以下三条为**生成型功能立项评审稿**：LLM 只做一次性文本生成、不依赖 function calling；AI 输出一律为「草稿」，经 confirm 才入库；无 key/模型失败优雅降级到手工/确定性路径；核心台账始终离线可用。设计与技术依据见 `docs/generative-features-plan.md`。
+
+| 编号 | 名称 | 优先级 | 功能 | 验收标准 | 数据模型影响 |
+| --- | --- | --- | --- | --- | --- |
+| R13 | 智能 WBS 任务拆解 | P1（拟） | `/pm task wbs <项目ID> "<目标文本>" [confirm]`：AI 产出 Markdown 缩进勾选清单，复用现有 dry-run 预览→confirm 落盘 | 预览树形与 `planTaskImport` 一致；confirm 后任务入库、编号/父子正确；无 key/失败给中文降级提示不崩；新增 verify-wbs | **不新增表**，复用 tasks 表与 task-import 链路 |
+| R14 | 进度汇报 AI 叙述 | P1（拟） | `/pm report narrate <项目ID> [confirm]`：基于 `collectProjectReport` 确定性数字，AI 写「本周进展/风险/下周计划」叙述段落，并入 R9 快照与 Markdown 导出 | 叙述数字与确定性采集一致；confirm 后叙述可被读、导出含该段；失败时仍生成无叙述的确定性快照 | report 记录新增可选 `aiNarrative`（nullable），不改既有快照 schema |
+| R15 | 会议纪要归纳 | P1（拟） | `/pm meeting summarize <项目ID> "<速记>" [confirm]`：AI 归纳议题/结论/行动项(负责人/截止日)，映射既有 meeting 草稿 | 行动项负责人/截止日落入 actions[]；confirm 后存为 draft meeting、可被 list/get 读到；JSON 解析失败降级为「原文入 summary」；新增 verify-meeting-ai | **不新增表**，复用 meetings 实体与预留 sourceType/sourceSessionId |
+
 ### R12 命令与格式约定（v0.9 补充）
 
 ```text

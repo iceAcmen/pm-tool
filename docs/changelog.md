@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — 生成型功能（智能 WBS/会议纪要/进度汇报叙述）正式立项：设计评审稿 + ADL-036（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增文件：`docs/generative-features-plan.md`——三功能立项设计与技术依据（一次性 LLM 调用真实 API 骨架、落点复用、降级策略、推荐开发顺序、文件级改动计划、待所有者拍板的决策点）。
+- 修改文件：`docs/decision-log.md`（新增 ADL-036）、`docs/requirements.md`（新增 R13/R14/R15 评审稿，标注待编码）。
+- 核心设计原则（ADL-036）：LLM 只做一次性文本生成、不依赖 function calling；确定性采集/校验/落盘全在我方代码；AI 输出一律草稿、confirm 才入库；无 key/失败优雅降级；每次生成只发一次模型请求省免费额度。
+- 技术依据（已核实上游源码）：一次性调用范本 `packages/session/session-title-llm/src/index.ts`（`ctx.llm.prepareCall` + `BlockAssembler`）；错误按 `error.code`（RATE_LIMIT/QUOTA/INVALID_CREDENTIAL…）归一；智能 WBS 复用 `core/task-import.ts`、纪要复用 meeting 实体、汇报叙述叠加 `collectProjectReport` 确定性数字。
+- 状态：本批为**立项设计 + 档案**，尚未编码；随后按里程碑逐个实现（智能 WBS → 进度汇报叙述 → 会议纪要归纳）。
+
 ## [未发布] — dsh 应用内 openrouter/free 实测打通 + MISSING_CREDENTIAL 排查沉淀（仅文档）（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 修改文件（**仅 docs，无业务代码、无 key 本体、无临时 PID/端口**）：

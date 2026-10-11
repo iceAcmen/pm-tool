@@ -6,6 +6,14 @@
 
 ---
 
+## ADL-036 ｜ 2026-10-11 ｜ 生成型功能（智能 WBS/会议纪要/进度汇报叙述）正式立项：LLM 只做文本生成、AI 结果一律草稿、确定性落盘在我方代码
+
+- **决策**：正式立项三个生成型功能——R13 智能 WBS 任务拆解、R14 会议纪要归纳、R15 进度汇报 AI 叙述。统一约束：① **LLM 只做一次性文本生成、不挂 function calling**（免费池随机模型工具调用不保证，KB-034）；② **确定性数据采集/校验/落盘全在我方代码**——智能 WBS 复用 `task-import` 的 dry-run/confirm、纪要映射既有 meeting schema、汇报叙述叠加在 `collectProjectReport` 的确定性数字之上；③ **AI 输出一律是草稿，必须用户 confirm 才入库**，绝不自动改台账；④ 无 key / 模型失败按 `error.code`（RATE_LIMIT/QUOTA/INVALID_CREDENTIAL 等）优雅降级到手工/确定性路径，核心台账始终离线可用；⑤ 每次生成只发一次模型请求、草稿缓存以省免费额度（约 50 次/天）。
+- **理由**：通道已打通并在 dsh 应用内实测成功（ADL-035、KB-035）；但免费随机模型能力参差，把「创造性文本」与「确定性台账」解耦——模型只负责把人写的目标/速记/数字组织成可读草稿，入库与校验由我方既有的 Zod/task-import 链路保证，避免模型幻觉污染离线台账。斜杠命令无交互会话上下文，故显式指定 provider/model（`openrouter-free`/`openrouter/free`）。
+- **推荐开发顺序**：智能 WBS（最复用现有 import 链路、风险最低）→ 进度汇报叙述（最安全，失败退化为确定性快照）→ 会议纪要归纳（JSON 围栏解析最复杂，放最后）。v1 先做斜杠命令，Web 按钮第二里程碑。
+- **替代方案**：① 让模型直接 function-calling 写库——免费随机模型不稳定，会导致落盘不可控，否决；② 一次性把三功能 Web/命令全做——范围过大、风险高，否决，按里程碑逐个落地。
+- **最终结果**：设计评审稿见 `docs/generative-features-plan.md`；实现按里程碑推进，每个功能一个 `[doubao-work]` 提交。
+
 ## ADL-035 ｜ 2026-10-11 ｜ 采用 OpenRouter 免费自动路由（openrouter/free）作为零成本「尽力而为」LLM 通道；核心保持离线；其他官方厂商以预留模板保留
 
 - **决策**：给 dsh 配置一条**零成本的第三方模型通道**，但定位严格限定为「尽力而为的文本生成」：① 通过 `@deepseek-ai/dsh-llm-pi-ai` 的 `providers` 字典，在本机 `pm` profile（`~/.dsh/profiles/pm/cordis.patch.yml`，仓库外）新增路由 `openrouter-free`，指向 OpenRouter 免费自动路由模型 `openrouter/free`（Free Models Router，OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`）；② **核心台账（项目/任务/里程碑/风险/纪要/汇报/交付物）始终离线、不依赖该通道**，无 key 也能完整运行；③ DeepSeek 官方 / OpenAI / Anthropic / Gemini / Groq / 硅基流动 / 智谱 GLM / 阿里百炼 / 本地 Ollama 等官方端点**只以注释 YAML 模板形式预留**在 `docs/model-providers.md`，当前一律不启用；④ **不实现任何具体生成型业务功能**（智能 WBS/纪要/周报仍按 ADL-032 暂缓），本批只做「通道配置 + 可移植文档 + 加载验证」。

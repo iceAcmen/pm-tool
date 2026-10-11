@@ -2,9 +2,16 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 文档收尾：dsh 应用内选 Free Models Router 发「你好」第 1 次即成功，模型通道全打通；新增 KB-035、ISS-024 MISSING_CREDENTIAL 排查）
+最后更新：2026-10-11（doubao-work 生成型功能正式立项：设计评审稿 generative-features-plan.md + ADL-036 + R13/R14/R15 拟新增；随后按里程碑逐个实现）
 
-## 当前阶段：v0.1.0 后续迭代；本批为「零成本模型通道就绪」（2026-10-11，doubao-work）
+## 当前阶段：生成型功能（R13/R14/R15）立项并开工（2026-10-11，doubao-work）
+
+- **已立项（ADL-036）**：智能 WBS 拆解（R13）、进度汇报 AI 叙述（R14）、会议纪要归纳（R15）。统一原则：LLM 只做一次性文本生成、不依赖 function calling；确定性采集/校验/落盘在我方代码；AI 输出一律草稿、confirm 才入库；无 key/失败优雅降级；每次生成只发一次模型请求省免费额度。
+- **设计评审稿**：`docs/generative-features-plan.md`（一次性 LLM 调用真实 API 骨架、落点复用、降级、推荐开发顺序、文件级计划）。
+- **推荐开发顺序**：智能 WBS（最复用 task-import 链路、风险最低）→ 进度汇报叙述（最安全）→ 会议纪要归纳（JSON 解析最复杂）。
+- **状态**：本批为立项设计 + 档案，尚未编码；持续授权内按里程碑逐个实现并各自提交。
+
+## 上一阶段：零成本模型通道就绪（2026-10-11）
 
 - **零成本 OpenRouter 免费 LLM 通道已配置（doubao-work，ADL-035）**：通过已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`（原本零路由休眠、无需新装），在本机 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 补上 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（Free Models Router，OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`）。**key 不入库、不写 patch**，只引用环境变量。
 - **本批不实现任何生成型业务功能**：智能 WBS/纪要/周报仍按 ADL-032 暂缓；本批只做「通道配置 + 可移植文档 `docs/model-providers.md` + 加载验证」。DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱/百炼/本地 Ollama 以注释 YAML 模板预留，当前全部不启用。
