@@ -22,6 +22,7 @@ import { handleDeliverableCommand, deliverableHelp } from './commands/deliverabl
 import { handleSearchCommand, searchHelp } from './commands/search.js'
 import type { LlmGateway } from './core/ai-client.js'
 import { handleStatsCommand, statsHelp } from './commands/stats.js'
+import { dueHelp, handleDueCommand } from './commands/due.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -58,6 +59,8 @@ function renderHelp(): CommandResult {
       '',
       statsHelp,
       '',
+      dueHelp,
+      '',
       exportHelp,
     ].join('\n'),
   }
@@ -80,7 +83,7 @@ export async function apply(ctx: Context): Promise<void> {
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
     description: '项目管理工作台：项目、WBS、里程碑、风险问题、会议纪要、进度汇报、交付物台账、关键字检索、统计看板、任务表导入、导出与存储自检',
-    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|meeting ...|report ...|deliverable ...|search ...|stats ...|export ...|ping|selftest]', attachments: false },
+    input: { hint: '[project ...|task ...|milestone ...|risk-issue ...|meeting ...|report ...|deliverable ...|search ...|stats ...|due ...|export ...|ping|selftest]', attachments: false },
     handler: async (invocation: CommandInvocation): Promise<CommandResult> => {
       // 仅命令词忽略大小写，名称、描述、负责人和 JSON 正文保持原样。
       const raw = invocation.rawInput.trim()
@@ -117,6 +120,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (searchMatch) return handleSearchCommand(searchMatch[1] ?? '', domain)
       const statsMatch = /^stats(?:\s+([\s\S]*))?$/i.exec(raw)
       if (statsMatch) return handleStatsCommand(statsMatch[1] ?? '', domain)
+      const dueMatch = /^due(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (dueMatch) return handleDueCommand(dueMatch[1] ?? '', domain)
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()

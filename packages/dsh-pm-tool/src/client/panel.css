@@ -774,3 +774,14 @@
   max-height: 320px; overflow: auto;
 }
 .pm-ai-note { margin: 0; font-size: 11px; color: var(--pm-muted); }
+
+/* R16 临期/逾期提醒条 */
+.pm-reminders { margin: 8px 0 4px; padding: 8px 10px; border: 1px solid var(--pm-line-soft); border-radius: 8px; }
+.pm-reminders-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.pm-reminders-title { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--pm-ink); }
+.pm-reminders-count { font-size: 11px; padding: 1px 6px; border-radius: 999px; }
+.pm-reminders-overdue { background: var(--dsw-alias-interactive-bg-hover-danger); color: var(--dsw-alias-state-danger); }
+.pm-reminders-soon { background: var(--dsw-alias-interactive-bg-active); color: var(--pm-ink); }
+.pm-reminders ul { margin: 0; padding-left: 16px; font-size: 12px; line-height: 1.6; }
+.pm-reminders-row-overdue { color: var(--dsw-alias-state-danger); }
+.pm-reminders-row-soon { color: var(--pm-secondary); }

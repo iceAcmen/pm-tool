@@ -1,4 +1,5 @@
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
+import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
@@ -365,6 +366,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               deliverables={deliverables}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
+            <ReminderStrip data={data}/>
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
               <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => setView('tasks')}>
                 全部任务
@@ -496,6 +498,46 @@ export function PmPanel({ execute }: PmPanelApi) {
       </DrawerPanel>}
     </main>
   </>
+}
+
+/** R16 提醒：客户端基于 snapshot 派生临期/逾期（纯展示，不入库、不调模型）。 */
+function ReminderStrip({ data }: { data: Snapshot }) {
+  const today = useMemo(() => {
+    const n = new Date()
+    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
+  }, [])
+  const items = useMemo(() => {
+    const within = 7
+    const projName = new Map(data.projects.map(p => [p.id, p.name]))
+    const days = (date: string) => Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000)
+    const out: { severity: 'overdue' | 'soon'; text: string }[] = []
+    for (const t of data.tasks) {
+      if (t.status === 'done' || t.progress >= 100 || !t.dueDate) continue
+      const d = days(t.dueDate)
+      if (d < 0) out.push({ severity: 'overdue', text: `${projName.get(t.projectId) ?? t.projectId}｜任务 ${t.title}｜已逾期 ${-d} 天` })
+      else if (d <= within) out.push({ severity: 'soon', text: `${projName.get(t.projectId) ?? t.projectId}｜任务 ${t.title}｜还有 ${d} 天到期` })
+    }
+    for (const m of data.milestones) {
+      if (m.status === 'achieved') continue
+      const d = days(m.targetDate)
+      if (d < 0) out.push({ severity: 'overdue', text: `${projName.get(m.projectId) ?? m.projectId}｜里程碑 ${m.title}｜已逾期 ${-d} 天` })
+      else if (d <= within) out.push({ severity: 'soon', text: `${projName.get(m.projectId) ?? m.projectId}｜里程碑 ${m.title}｜还有 ${d} 天` })
+    }
+    out.sort((a, b) => (a.severity === 'overdue' ? -1 : 1) - (b.severity === 'overdue' ? -1 : 1))
+    return out.slice(0, 8)
+  }, [data, today])
+  if (!items.length) return null
+  const overdue = items.filter(i => i.severity === 'overdue').length
+  return <section className="pm-reminders" aria-label="临期与逾期提醒">
+    <div className="pm-reminders-head">
+      <span className="pm-reminders-title"><Bell size={14}/>提醒（未来 7 天）</span>
+      {overdue > 0 && <span className="pm-reminders-count pm-reminders-overdue">逾期 {overdue}</span>}
+      {items.length - overdue > 0 && <span className="pm-reminders-count pm-reminders-soon">临期 {items.length - overdue}</span>}
+    </div>
+    <ul>{items.map((item, idx) =>
+      <li key={idx} className={item.severity === 'overdue' ? 'pm-reminders-row-overdue' : 'pm-reminders-row-soon'}>{item.text}</li>,
+    )}</ul>
+  </section>
 }
 
 function drawerTitle(drawer: Drawer): string {

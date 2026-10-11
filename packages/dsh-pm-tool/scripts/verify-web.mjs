@@ -127,6 +127,11 @@ try {
   assert.match(css, /\.pm-board-projects/)
   assert.match(css, /\.pm-ai-actions/)
   assert.match(css, /\.pm-ai-preview/)
+  // R16：临期/逾期提醒条（客户端派生）。
+  assert.match(bundle, /pm-reminders/)
+  assert.match(bundle, /未来 7 天/)
+  assert.match(css, /\.pm-reminders-overdue/)
+  assert.match(css, /\.pm-reminders-row-soon/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
