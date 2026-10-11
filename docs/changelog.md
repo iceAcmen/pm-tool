@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — R13 智能 WBS 任务拆解（AI 草稿）（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增能力：`/pm task wbs <项目ID> <一句话目标> [confirm]`——AI 把目标拆解为 GitHub 缩进勾选清单，先 dry-run 预览（WBS 投影编号、不落盘），confirm 才复用草稿落盘为任务树（父子/编号沿用 `task import` 链路，confirm 不重复调模型）。
+- 新增文件：`packages/dsh-pm-tool/src/core/ai-client.ts`（一次性文本生成封装：`ctx.llm.prepareCall`+`BlockAssembler`，按 `error.code` 归一为中文降级提示）、`src/core/wbs-ai.ts`（WBS 提示词 + 草稿缓存）、`scripts/verify-wbs.mjs`。
+- 修改文件：`src/commands/task.ts`（wbs 子命令）、`src/index.ts`（inject 加 `llm`）、`package.json`（peer+dev 加 `@deepseek-ai/dsh-llm@0.2.1-alpha.2`）。
+- 降级：无 key / 限流 / 空正文 → 中文提示并引导手工 `/pm task add`；核心任务台账离线可用（inject 缺 llm 时插件照常加载，13 项 verify 全过）。
+- 技术依据：一次性调用范本 `deepseek-harness/packages/session/session-title-llm/src/index.ts`；默认路由 `openrouter-free`/`openrouter/free`。
+
 ## [未发布] — 生成型功能（智能 WBS/会议纪要/进度汇报叙述）正式立项：设计评审稿 + ADL-036（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增文件：`docs/generative-features-plan.md`——三功能立项设计与技术依据（一次性 LLM 调用真实 API 骨架、落点复用、降级策略、推荐开发顺序、文件级改动计划、待所有者拍板的决策点）。

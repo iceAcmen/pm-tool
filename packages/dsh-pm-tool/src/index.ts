@@ -20,13 +20,14 @@ import { handleMeetingCommand, meetingHelp } from './commands/meeting.js'
 import { handleProgressReportCommand, progressReportHelp } from './commands/progress-report.js'
 import { handleDeliverableCommand, deliverableHelp } from './commands/deliverable.js'
 import { handleSearchCommand, searchHelp } from './commands/search.js'
+import type { LlmGateway } from './core/ai-client.js'
 import { handleStatsCommand, statsHelp } from './commands/stats.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
 
-/** 依赖的宿主服务：commands=离线斜杠命令；storageDomain=类型化文件存储。 */
-export const inject = ['commands', 'storageDomain'] as const
+/** 依赖的宿主服务：commands=离线斜杠命令；storageDomain=类型化文件存储；llm=一次性文本生成（可选能力，失败优雅降级）。 */
+export const inject = ['commands', 'storageDomain', 'llm'] as const
 
 /** `/pm` 帮助文本。 */
 function renderHelp(): CommandResult {
@@ -101,7 +102,7 @@ export async function apply(ctx: Context): Promise<void> {
       const projectMatch = /^project(?:\s+([\s\S]*))?$/i.exec(raw)
       if (projectMatch) return handleProjectCommand(projectMatch[1] ?? '', domain)
       const taskMatch = /^task(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain)
+      if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
       const milestoneMatch = /^milestone(?:\s+([\s\S]*))?$/i.exec(raw)
       if (milestoneMatch) return handleMilestoneCommand(milestoneMatch[1] ?? '', domain)
       const riskIssueMatch = /^risk-issue(?:\s+([\s\S]*))?$/i.exec(raw)

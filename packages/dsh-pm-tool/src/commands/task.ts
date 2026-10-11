@@ -25,6 +25,8 @@ import {
   TaskImportEmptyError,
   TaskImportNoProjectError,
 } from '../core/task-import.js'
+import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
+import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -41,6 +43,9 @@ export const taskHelp = [
   '  /pm task renumber p-0001 confirm',
   '  /pm task import p-0001 任务表.md          解析并预览将创建的任务（不落盘）',
   '  /pm task import p-0001 任务表.md confirm  按 GitHub 缩进勾选清单（- [ ] / - [x]）导入为 WBS 任务',
+  '  /pm task wbs p-0001 「一句话目标」          AI 拆解为 WBS 勾选清单草稿（预览，不落盘；调用一次模型）',
+  '  /pm task wbs p-0001 「一句话目标」confirm  按上次草稿确认落盘（复用草稿，不再调模型）',
+  'AI 草稿经预览确认才入库；无 key/模型失败时优雅降级到手工 task add。',
   '删除、移动和重新编号不带 confirm 只显示提示，不会写盘。',
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
@@ -90,13 +95,13 @@ function parseJson(argument: string): unknown | undefined {
   }
 }
 
-export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Promise<CommandResult> {
+export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm?: LlmGateway): Promise<CommandResult> {
   const input = rawInput.trim()
   if (!input || input.toLowerCase() === 'help') return { kind: 'success', text: taskHelp }
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'wbs'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -232,6 +237,50 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
         ].join('\n'),
       }
     }
+    if (action === 'wbs') {
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      if (tokens.length < 2) {
+        return { kind: 'error', text: '请使用：/pm task wbs <项目ID> <一句话目标> [confirm]' }
+      }
+      const projectId = tokens[0]
+      let rest = tokens.slice(1)
+      const confirmation = rest[rest.length - 1].toLowerCase() === 'confirm'
+      if (confirmation) rest = rest.slice(0, -1)
+      const goal = rest.join(' ').trim()
+      if (!goal) {
+        return { kind: 'error', text: '请给一句话目标，例如：/pm task wbs p-0001 「做一个移动端打卡小程序」' }
+      }
+
+      // 无 confirm：生成草稿（调一次模型）并缓存，只预览不落盘。
+      // 带 confirm：优先复用上次缓存草稿（不再调模型）；未命中才现场生成后直接落盘。
+      let markdown: string
+      if (confirmation) {
+        markdown = recallDraft(projectId, goal) ?? await generateWbsMarkdown(llm, goal)
+      } else {
+        markdown = await generateWbsMarkdown(llm, goal)
+        rememberDraft(projectId, goal, markdown)
+      }
+
+      const plan = previewWbsDraft(domain, projectId, markdown) // 校验项目存在且非空清单
+      if (!confirmation) {
+        return {
+          kind: 'success',
+          text: [
+            `AI 拆解草稿（项目 ${projectId}）：将创建 ${plan.total} 个任务（其中 ${plan.done} 个标记为已完成）。当前未写入。`,
+            ...plan.outline.map(item => `${'  '.repeat(item.depth)}${item.code}｜${item.done ? '[x]' : '[ ]'} ${item.title}`),
+            `确认命令：/pm task wbs ${projectId} ${goal} confirm`,
+          ].join('\n'),
+        }
+      }
+      const created = await importTasksFromMarkdown(domain, projectId, markdown)
+      return {
+        kind: 'success',
+        text: [
+          `已按 AI 草稿创建 ${created.length} 个任务到项目 ${projectId}（${created.filter(task => task.done).length} 个标记为已完成）：`,
+          ...created.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
+        ].join('\n'),
+      }
+    }
     const renumberMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!renumberMatch) {
       return { kind: 'error', text: '请使用：/pm task renumber <项目ID> confirm' }
@@ -270,6 +319,9 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain): Pr
       || error instanceof TaskImportNoProjectError
       || error instanceof TaskImportEmptyError) {
       return { kind: 'error', text: error.message }
+    }
+    if (error instanceof AiDraftError) {
+      return { kind: 'error', text: `AI 拆解暂不可用：${error.message}你仍可用 /pm task add 手工录入。` }
     }
     console.error('[pm-tool] 任务操作失败：', error)
     return { kind: 'error', text: '任务操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。' }
