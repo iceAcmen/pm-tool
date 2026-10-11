@@ -1,5 +1,6 @@
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
+import Database from 'lucide-react/dist/esm/icons/database.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
@@ -334,6 +335,18 @@ export function PmPanel({ execute }: PmPanelApi) {
             onClick={() => setDrawer({ kind: 'ai' })}
           >
             <Sparkles size={15}/>AI 助手
+          </button>
+          <button
+            className="pm-button"
+            disabled={busy}
+            title="一键备份 pmtool 七类实体到仓库 backups/（恢复请用 /pm restore <文件> confirm）"
+            onClick={async () => {
+              const text = await execute('backup')
+              window.alert(`备份完成：\n${text}`)
+              void refresh()
+            }}
+          >
+            <Database size={15}/>备份
           </button>
           <button
             className="pm-icon-button"

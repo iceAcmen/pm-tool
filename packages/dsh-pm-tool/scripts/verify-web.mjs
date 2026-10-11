@@ -132,6 +132,9 @@ try {
   assert.match(bundle, /未来 7 天/)
   assert.match(bundle, /meeting action promote /)
   assert.match(bundle, /已转 /)
+  // R18：面板一键备份入口。
+  assert.match(bundle, /execute\("backup"\)/)
+  assert.match(bundle, /备份完成/)
   assert.match(css, /\.pm-reminders-overdue/)
   assert.match(css, /\.pm-reminders-row-soon/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
