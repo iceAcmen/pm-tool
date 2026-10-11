@@ -27,7 +27,7 @@
 - **v0.1.0 后续 R7 已完成并获准提交推送（trae，2026-10-10）**：风险与问题离线 CRUD、持久化、筛选和 Web 工作台已通过八项回归、项目所有者手动验收与真实浏览器验证。
 - **R8 已完成并验收（trae，2026-10-10）**：会议纪要、内嵌稳定行动项、任务/问题关联、离线命令和 Web 已通过九项回归、真实浏览器验证及项目所有者手动验收。
 - **R9 已完成并推送（trae 实现 → doubao-work 独立复核，2026-10-10）**：自定义日期范围、固定快照、摘要与异常项 Markdown、离线命令和 Web 通过十项回归；doubao-work 以冻结安装/构建/十项 verify/隔离真实宿主启动与下发 bundle 复核通过、未改业务代码后提交推送；本机浏览器目视项以所有者手动确认为准（KB-014）。下一步 R10。
-- **R10 已完成（doubao-work 自研，2026-10-10）**：pmtool 领域新增 `deliverables` 表（`dlv-NNNN`、四态状态机、版本/状态只增留痕、有交付物禁删项目），离线 `/pm deliverable` 五子命令与 Web「交付物」标签；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；构建 + 十一项 verify（新增 verify-deliverables）+ 隔离真实宿主下发 bundle 断言通过。下一步 R12，R11/生成型能力取舍。
+- **R10 已完成（doubao-work 自研，2026-10-10）**：pmtool 领域新增 `deliverables` 表（`dlv-NNNN`、四态状态机、版本/状态只增留痕、有交付物禁删项目），离线 `/pm deliverable` 五子命令与 Web「交付物」标签；dsh 原生 deliverables 绑定 agent 轮次不适用离线台账，按 ADL-028 复用概念、数据层自研；构建 + 十一项 verify（新增 verify-deliverables）+ 隔离真实宿主下发 bundle 断言通过（R12 见下条）。
 - **R12 已完成（doubao-work 自研，2026-10-11）**：只读 `/pm search`（跨七类实体、`--type` 过滤）、只读 `/pm stats`（全项目/单项目聚合）、`/pm task import <项目ID> <清单.md> [confirm]`（缩进勾选清单→WBS）；Web 顶部「总览看板」基于 snapshot 派生跨项目统计卡片与全局搜索，不新增宿主路由、无硬编码色（ADL-029）。Excel 导入（ADL-030）、多人协作（ADL-031）、R11/生成型能力（ADL-032）暂缓/裁剪；构建 + 十二项 verify（新增 verify-r12）+ 隔离真实宿主 bundle 断言通过。
 
 > 每次开工都不要轻信本节快照，必须按第 4 节拉取并核对最新文档。

@@ -10,7 +10,7 @@
 
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
-- **当前状态**：R1–R12 已完成。R12（doubao-work）为只读关键字检索 `/pm search`、只读统计看板 `/pm stats` 与 Markdown 任务表离线导入 `/pm task import`，Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索；12 项 verify 与隔离真实宿主 bundle 断言通过，待提交推送。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入已按 ADL-030/031/032 决策暂缓/裁剪。本机浏览器目视项以所有者手动确认为准（KB-014）。
+- **当前状态**：R1–R12 已完成。R12（doubao-work）为只读关键字检索 `/pm search`、只读统计看板 `/pm stats` 与 Markdown 任务表离线导入 `/pm task import`，Web 顶部新增基于 snapshot 派生的「总览看板」与全局搜索；12 项 verify 与隔离真实宿主 bundle 断言通过，并已提交推送（origin/main HEAD `cbd50b6`）。R11 里程碑提醒与生成型能力、多人实时协作、Excel 导入已按 ADL-030/031/032 决策暂缓/裁剪。本机浏览器目视项以所有者手动确认为准（KB-014）。
 - **协作模式**：仓库是唯一事实来源，TRAE、豆包工作等多平台**地位平等、去中心化**；开工前先 `git pull --ff-only` 并扫描最新档案，改动后在 `changelog.md` 标注平台标识并同步知识/决策（细则见 `docs/collaboration.md`）。
 - **建议阅读顺序**（均为本仓库标准中文 Markdown，自解释）：
   0. `docs/onboarding-prompt.md`（**启动提示词 + 当前交接快照**）、根 `AGENTS.md` 与 `docs/collaboration.md`（**接手准则与同步规则，最先读**）
@@ -97,7 +97,7 @@
 ### 当前交付点（R7 已验收）
 - **存储布局（ADL-011/024/025/026 / requirements v0.7 §5.1）**：单领域 `pmtool` 下业务实体分表 per-record，用表 `keys()/entries()` 枚举，不建 index.json；当前含 projects/tasks/milestones/risk_issues/meetings/reports。
 - **R7 结果**：统一风险问题台账、离线命令和 Web 工作台已完成；R4 已发布导出格式暂不包含 R7。
-- **下一步**：R10 已由 doubao-work 实现并通过本地验证（待提交推送）；其后推进 **R12**（多项目切换/关键字检索/统计看板、Markdown 任务表导入；多人协作与单用户本地定位冲突，倾向裁剪并记录理由），并对 **R11 里程碑到期提醒**与生成型能力给出实施/暂缓结论写入 decision-log。
+- **下一步（R1–R12 已全部完成）**：仓库定义的 R1–R12 已全部实现、验证并推送（HEAD `cbd50b6`）。后续仅余：① 项目所有者在本机对 R7–R12 Web 做最终目视确认（KB-014）；② 被裁剪/暂缓项（R11 里程碑到期提醒、智能 WBS/纪要/周报等生成型能力、多人实时协作、Excel 导入）需在具备 API Key/常驻调度或改变单用户离线定位后，按 ADL-030/031/032 重新评估，不属当前待开发。
 - 接手平台须先提交该增量的**新增/修改文件清单**报备，获项目所有者确认后再写码；改动按 `docs/collaboration.md` 标平台标识并留痕。
 - 里程碑提醒 R11 暂缓；生成型能力一期仅预留接口（ADL-009）。
 - 第 0 步、首个业务增量及全部档案提交**均已推送 origin/main**（2026-10-10 经项目所有者确认）。
