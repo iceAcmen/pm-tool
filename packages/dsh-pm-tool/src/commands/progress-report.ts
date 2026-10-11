@@ -16,6 +16,8 @@ import {
   type ProgressReport,
   type ProgressReportStatus,
 } from '../core/progress-report.js'
+import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
+import { buildBrief, defaultPeriod, generateNarrative, rememberNarrative, recallNarrative } from '../core/report-narrate.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const progressReportHelp = [
@@ -26,6 +28,9 @@ export const progressReportHelp = [
   '  /pm report update rpt-0001 {"status":"final","executiveSummary":"总体按计划"}',
   '  /pm report export rpt-0001 [目录] [confirm]',
   '  /pm report delete rpt-0001 confirm',
+  '  /pm report narrate p-0001            基于确定性数据，AI 写本周进展/风险/下周计划叙述（预览，不落盘）',
+  '  /pm report narrate p-0001 confirm   按上次叙述生成带 executiveSummary 的进度快照（复用草稿）',
+  'AI 叙述只基于确定性数字、confirm 才落快照；失败时退化为确定性快照。',
 ].join('\n')
 
 function render(report: ProgressReport): string {
@@ -53,11 +58,45 @@ function unquote(value: string): string {
   return value
 }
 
-export async function handleProgressReportCommand(rawInput: string, domain?: PmDomain): Promise<CommandResult> {
+export async function handleProgressReportCommand(rawInput: string, domain?: PmDomain, llm?: LlmGateway): Promise<CommandResult> {
   const input = rawInput.trim()
   if (!input || input.toLowerCase() === 'help') return { kind: 'success', text: progressReportHelp }
   if (!domain) return { kind: 'error', text: '进度汇报存储未就绪，请检查 pm profile 的存储配置。' }
   try {
+    const narrateMatch = /^narrate\s+(\S+)(?:\s+(confirm))?$/i.exec(input)
+    if (narrateMatch) {
+      const projectId = narrateMatch[1]
+      const confirmation = narrateMatch[2]?.toLowerCase() === 'confirm'
+      const brief = buildBrief(domain, projectId) // 确定性采集（含项目存在校验）
+      let narrative: string
+      if (confirmation) {
+        narrative = recallNarrative(projectId) ?? await generateNarrative(llm, brief)
+      } else {
+        narrative = await generateNarrative(llm, brief)
+        rememberNarrative(projectId, narrative)
+      }
+      const { periodStart, periodEnd } = defaultPeriod(7)
+      if (!confirmation) {
+        return {
+          kind: 'success',
+          text: [
+            `AI 进度叙述草稿（项目 ${projectId}，周期 ${periodStart} 至 ${periodEnd}）：`,
+            '',
+            narrative,
+            '',
+            '以上为草稿（基于确定性数字生成），尚未写入。',
+            `确认命令：/pm report narrate ${projectId} confirm`,
+          ].join('\n'),
+        }
+      }
+      const report = await generateProgressReport(domain, {
+        projectId, periodStart, periodEnd, executiveSummary: narrative, status: 'draft',
+      })
+      return {
+        kind: 'success',
+        text: [`已按 AI 叙述生成进度快照（executiveSummary 已写入）。\n${render(report)}`].join('\n'),
+      }
+    }
     const generateMatch = /^generate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
     if (generateMatch) {
       const options = parseJson(generateMatch[4])
@@ -138,6 +177,9 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
     if (error instanceof SyntaxError) return { kind: 'error', text: '进度汇报参数须为合法 JSON 对象，请使用英文双引号。' }
     if (error instanceof z.ZodError) return { kind: 'error', text: `进度汇报参数不正确：${describeProgressReportValidation(error)}。` }
     if (error instanceof ProgressReportProjectNotFoundError) return { kind: 'error', text: error.message }
+    if (error instanceof AiDraftError) {
+      return { kind: 'error', text: `AI 叙述暂不可用：${error.message}你仍可用 /pm report generate 生成确定性快照。` }
+    }
     if (error instanceof ExportFileExistsError) {
       return { kind: 'error', text: `${error.message}。确认覆盖时请在原命令末尾追加 confirm。` }
     }

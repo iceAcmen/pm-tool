@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — R14 进度汇报 AI 叙述（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增能力：`/pm report narrate <项目ID> [confirm]`——基于确定性采集（任务/里程碑/逾期统计）让 AI 只写「本周进展/风险/下周计划」段落，先预览不落盘，confirm 才把叙述写入既有进度快照的 `executiveSummary` 字段（**零 schema 改动**，复用 R9 `generateProgressReport`）。
+- 新增文件：`src/core/report-narrate.ts`（确定性 brief 构造 + 叙述生成 + 草稿缓存）、`scripts/verify-report-ai.mjs`。
+- 修改文件：`src/commands/progress-report.ts`（narrate 子命令）、`src/index.ts`（report 分发传入 llm）。
+- 降级：模型失败（QUOTA/RATE_LIMIT…）→ 中文提示并引导 `/pm report generate` 确定性快照，台账不受影响。
+- 安全：AI 只用我方给的数字，不编造、不碰台账；叙述为草稿，confirm 才落库。
+
 ## [未发布] — R13 智能 WBS 任务拆解（AI 草稿）（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增能力：`/pm task wbs <项目ID> <一句话目标> [confirm]`——AI 把目标拆解为 GitHub 缩进勾选清单，先 dry-run 预览（WBS 投影编号、不落盘），confirm 才复用草稿落盘为任务树（父子/编号沿用 `task import` 链路，confirm 不重复调模型）。
