@@ -8,6 +8,16 @@
 
 ---
 
+## [未发布] — OPT-01~12 体验优化全量落地（2026-10-11，平台：doubao-work）
+
+- OPT-01/02 提醒可点击切项目、3/7/14/30 天范围切换、按项目分组；OPT-03 记住上次选中项目（localStorage）。
+- OPT-04 导出 Markdown 改前端 Blob 直接下载（文件名带项目名/时间戳）；OPT-05 批量改负责人/优先级/截止（走 `task batch update`）。
+- OPT-06 网页选备份 JSON 按内容恢复（`restore-content`，两步确认+恢复前安全快照）；OPT-07 批量条淡入动画（尊重 reduced-motion）。
+- OPT-08 narrate 可编辑落盘（`report narrateuse`）；OPT-11 空状态 AI CTA。
+- OPT-09 面板纯键盘导航（`core/panel-kbd.ts` reducer：j/k/空格/Del/Enter，输入框与修饰键守卫）+ verify-keyboard.mjs。
+- OPT-12 网页 csv/xlsx 按内容导入（`task import-content <pid> <文件名> <JSON内容>`，xlsx 仍 node 侧 SheetJS，不进 client bundle）+ verify-import-content.mjs。
+- 验证：build 绿、新增 2 个 verify 共 27 个；`git diff --check` 干净。注：verify-reminders 在「当天下午时分」存在 Date 取整边界抖动（core 未改动，非本批回归）。
+
 ## [未发布] — 双模型车道（PoC 免费网关 / 生产官方 API，2026-10-11，平台：doubao-work）
 
 - 新增 `core/model-route.ts` 统一选路：默认 `poc`（provider `our-free-model` / `openrouter/free`，第三方免费插件 dsh-our-free-model v2.1.0，免 Key，仅概念验证）；`prod` 按 Key 优先 DeepSeek 官方、其次 Kimi 官方（休眠，待所有者给 Key）。
