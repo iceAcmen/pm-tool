@@ -173,6 +173,58 @@ export function deleteTask(domain: PmDomain, id: string): Promise<Task | undefin
   })
 }
 
+/** 收集某任务及其全部后代（按 id 遍历 parentId 链）；用于级联删除 dry-run 预览。 */
+export function collectTaskSubtree(domain: PmDomain, id: string): Task[] {
+  taskIdSchema.parse(id)
+  const table = domain.table('tasks')
+  const root = table.get(id)
+  if (!root) return []
+  const byParent = new Map<string, Task[]>()
+  for (const [key, task] of table.entries()) {
+    if (task.parentId) {
+      const list = byParent.get(task.parentId) ?? []
+      list.push(task)
+      byParent.set(task.parentId, list)
+    }
+  }
+  const result: Task[] = []
+  const queue: Task[] = [root]
+  const seen = new Set<string>([root.id])
+  while (queue.length) {
+    const node = queue.shift()!
+    result.push(node)
+    for (const child of byParent.get(node.id) ?? []) {
+      if (!seen.has(child.id)) {
+        seen.add(child.id)
+        queue.push(child)
+      }
+    }
+  }
+  return result.map(task => structuredClone(task))
+}
+
+/**
+ * 显式级联删除：删除该任务及其全部后代。删除前检查整棵子树是否被会议行动项引用，
+ * 任一被引用即拒绝（与单删一致的跨表保护）。返回被删除的任务 id 列表。
+ */
+export function deleteTaskCascade(domain: PmDomain, id: string): Promise<string[]> {
+  taskIdSchema.parse(id)
+  return enqueueDomainWrite(domain, async () => {
+    const subtree = collectTaskSubtree(domain, id)
+    if (!subtree.length) return []
+    const subtreeIds = new Set(subtree.map(task => task.id))
+    for (const [, meeting] of domain.table('meetings').entries()) {
+      const referenced = meeting.actions.find(action => action.taskId && subtreeIds.has(action.taskId))
+      if (referenced) {
+        throw new TaskReferencedByMeetingError(`任务 ${referenced.taskId} 仍被会议 ${meeting.id} 的行动项关联，级联删除被阻止`)
+      }
+    }
+    const table = domain.table('tasks')
+    for (const task of subtree) await table.delete(task.id)
+    return subtree.map(task => task.id)
+  })
+}
+
 export function moveTask(
   domain: PmDomain,
   id: string,

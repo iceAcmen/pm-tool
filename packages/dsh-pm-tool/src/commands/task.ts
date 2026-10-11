@@ -4,7 +4,9 @@ import { readFileSync } from 'node:fs'
 import { z } from 'zod'
 import {
   addTask,
+  collectTaskSubtree,
   deleteTask,
+  deleteTaskCascade,
   getTask,
   listTasks,
   moveTask,
@@ -39,7 +41,9 @@ export const taskHelp = [
   '  /pm task update t-0001 {"status":"in_progress","progress":30}',
   '  /pm task move t-0003 t-0002 confirm',
   '  /pm task move t-0003 root confirm',
-  '  /pm task delete t-0003 confirm',
+  '  /pm task delete t-0003 confirm          删除无子任务的任务',
+  '  /pm task delete t-0003                  含子任务时 dry-run 列出将级联删除的整棵子树（不落盘）',
+  '  /pm task delete t-0003 cascade confirm  显式级联删除该任务及其全部后代（旁支不受影响）',
   '  /pm task renumber p-0001 confirm',
   '  /pm task import p-0001 任务表.md          解析并预览将创建的任务（不落盘）',
   '  /pm task import p-0001 任务表.md confirm  按 GitHub 缩进勾选清单（- [ ] / - [x]）导入为 WBS 任务',
@@ -157,19 +161,49 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         : { kind: 'error', text: `未找到任务：${updateMatch[1]}。` }
     }
     if (action === 'delete') {
-      const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
-      if (!deleteMatch) return { kind: 'error', text: '请使用：/pm task delete <任务ID> confirm' }
-      const [, id, confirmation] = deleteMatch
+      const deleteMatch = /^(\S+)(?:\s+(cascade))?(?:\s+(confirm))?$/i.exec(argument)
+      if (!deleteMatch) return { kind: 'error', text: '请使用：/pm task delete <任务ID> [cascade] confirm' }
+      const [, id, cascadeWord, confirmWord] = deleteMatch
       const current = getTask(domain, id)
       if (!current) return { kind: 'error', text: `未找到任务：${id}。` }
-      if (!confirmation) {
+      const subtree = collectTaskSubtree(domain, id)
+      const hasChildren = subtree.length > 1
+
+      if (!confirmWord) {
+        if (hasChildren) {
+          return {
+            kind: 'success',
+            text: [
+              `任务 ${current.code}｜${current.id}｜${current.title} 含 ${subtree.length - 1} 个子任务。`,
+              '当前未删除。级联删除将同时移除以下整棵子树：',
+              ...subtree.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
+              `如确需级联删除，确认命令：/pm task delete ${id} cascade confirm`,
+            ].join('\n'),
+          }
+        }
         return {
           kind: 'success',
           text: [
             `即将删除任务：${current.code}｜${current.id}｜${current.title}。`,
-            '当前未执行删除；有子任务时即使确认也会被阻止。',
+            '当前未执行删除。',
             `确认命令：/pm task delete ${current.id} confirm`,
           ].join('\n'),
+        }
+      }
+
+      if (hasChildren && !cascadeWord) {
+        return {
+          kind: 'error',
+          text: `任务 ${id} 仍有子任务，未删除。请先逐层删除，或显式级联：/pm task delete ${id} cascade confirm`,
+        }
+      }
+      if (cascadeWord) {
+        const deleted = await deleteTaskCascade(domain, id)
+        return {
+          kind: 'success',
+          text: deleted.length
+            ? `已级联删除 ${deleted.length} 个任务（${current.code} 及其 ${deleted.length - 1} 个后代）；旁支任务不受影响。`
+            : `未删除任何任务：${id}。`,
         }
       }
       const deleted = await deleteTask(domain, id)
