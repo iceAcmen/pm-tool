@@ -795,3 +795,6 @@
 .pm-batch-bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; padding: 6px 10px; border: 1px solid var(--pm-line-soft); border-radius: 8px; font-size: 12px; }
 .pm-row-check { margin-right: 4px; }
 .pm-danger { color: var(--dsw-alias-state-danger); }
+
+.pm-meeting-row { cursor: pointer; }
+.pm-meeting-row:hover { background: var(--pm-line-soft); }

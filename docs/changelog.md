@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — 可达性修复 + 导出/打磨（2026-10-11，平台：doubao-work）
+
+- **必修**：会议表整行可点击打开详情抽屉（`.pm-meeting-row`），行末新增「详情/右箭头」按钮（`.pm-meeting-detail-btn[data-id]`），hover 高亮+可点击光标；行动项「转任务」按钮补 `.pm-action-promote[data-meeting][data-action]`、已转换 `.pm-action-promoted`。
+- 导出 JSON 文件名加时间戳 `pmtool-snapshot-YYYYMMDD-HHmm.json`；导出/备份成功改为顶部 Notice 反馈（含路径/计数）。
+- 顶栏备份/导出按钮补 tooltip；会议行动项计数补「已转任务 x / 共 y」tooltip。
+- 第二档控件补稳定选择器并在 verify-web 加契约：`.pm-ai-wbs-raw`、`.pm-ai-confirm`、`.pm-row-select`、`.pm-batch-bar`、`.pm-batch-complete`、`.pm-batch-delete`、`.pm-sort-select`。
+- 验证：全 23 项 verify + build 退出 0。
+
 ## [未发布] — 第二档补齐（T2-A 可编辑/T2-B 批量/T2-C XLSX/T2-D 导出，2026-10-11，平台：doubao-work）
 
 - **T2-A**：WBS 预览改为可编辑 Markdown textarea，`task wbs --raw` 取草稿、`task importmd` 按编辑后文本落盘（不调模型）。

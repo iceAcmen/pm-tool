@@ -3,6 +3,7 @@ import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
 import ArrowDownWideNarrow from 'lucide-react/dist/esm/icons/arrow-down-wide-narrow.mjs'
 import Download from 'lucide-react/dist/esm/icons/download.mjs'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
@@ -344,7 +345,7 @@ export function PmPanel({ execute }: PmPanelApi) {
             title="一键备份 pmtool 七类实体到仓库 backups/（恢复请用 /pm restore <文件> confirm）"
             onClick={async () => {
               const text = await execute('backup')
-              window.alert(`备份完成：\n${text}`)
+              setMessage(`备份完成：${text}`)
               void refresh()
             }}
           >
@@ -357,9 +358,9 @@ export function PmPanel({ execute }: PmPanelApi) {
             onClick={async () => {
               try {
                 const text = await execute(`export markdown ${project!.id}`)
-                window.alert(`Markdown 导出完成：\n${text}`)
+                setMessage(`Markdown 已导出：${text}`)
               } catch (error) {
-                window.alert(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+                setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
               }
             }}
           >
@@ -372,9 +373,13 @@ export function PmPanel({ execute }: PmPanelApi) {
             onClick={async () => {
               try {
                 const snapshot = await execute('web snapshot')
-                downloadText('pmtool-snapshot.json', snapshot, 'application/json')
+                const ts = new Date()
+                  .toISOString().replace(/[-:T]/g, '').slice(0, 12)
+                downloadText(`pmtool-snapshot-${ts}.json`, snapshot, 'application/json')
+                const count = (() => { try { const s = JSON.parse(snapshot); return Object.values(s).reduce((n: number, t) => n + (Array.isArray(t) ? t.length : 0), 0) } catch { return 0 } })()
+                setMessage(`已导出整库 JSON${count ? `（约 ${count} 条记录）` : ''}。`)
               } catch (error) {
-                window.alert(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+                setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
               }
             }}
           >
@@ -734,7 +739,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
       >{working ? '生成中…' : '生成草稿'}</button>
       <button
         type="button"
-        className="pm-button"
+        className="pm-button pm-ai-confirm"
         disabled={working || !preview}
         onClick={() => void confirm()}
       >确认入库</button>
@@ -743,7 +748,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
       <div className="pm-ai-preview-edit">
         <p className="pm-ai-note">可在下方修改清单（缩进代表父子层级，`- [ ]`/`- [x]` 代表未完成/已完成），点「确认入库」按编辑结果落盘，不再调用模型。</p>
         <textarea
-          className="pm-ai-input pm-ai-markdown"
+          className="pm-ai-input pm-ai-markdown pm-ai-wbs-raw"
           rows={10}
           value={preview}
           disabled={working}
@@ -925,7 +930,7 @@ function TaskTable({
       </label>
       <label className="pm-toolbar-select">
         <ArrowDownWideNarrow size={14}/>
-        <select value={sort} onChange={event => setSort(event.currentTarget.value as typeof sort)} aria-label="任务排序">
+        <select value={sort} onChange={event => setSort(event.currentTarget.value as typeof sort)} className="pm-sort-select" aria-label="任务排序">
           <option value="code">按 WBS 编号</option>
           <option value="dueDate">按截止日期</option>
           <option value="priority">按优先级</option>
@@ -940,8 +945,8 @@ function TaskTable({
     {selected.size > 0 && (
       <div className="pm-batch-bar">
         <span>已选 {selected.size} 项</span>
-        <button className="pm-tool-button" disabled={disabled} onClick={() => { void run(`task batch update ${batchIds} {"status":"done"}`).then(ok => ok && onSaved()) }}>标为完成</button>
-        <button className="pm-tool-button pm-danger" disabled={disabled} onClick={confirmBatchDelete}>批量删除</button>
+        <button className="pm-tool-button pm-batch-complete" disabled={disabled} onClick={() => { void run(`task batch update ${batchIds} {"status":"done"}`).then(ok => ok && onSaved()) }}>标为完成</button>
+        <button className="pm-tool-button pm-batch-delete pm-danger" disabled={disabled} onClick={confirmBatchDelete}>批量删除</button>
         <button className="pm-tool-button" onClick={() => setSelected(new Set())}>取消选择</button>
       </div>
     )}
@@ -1013,7 +1018,7 @@ function TaskGroup({
         <td className="pm-col-check">
           <input
             type="checkbox"
-            className="pm-row-check"
+            className="pm-row-select"
             aria-label={`选择 ${task.title}`}
             checked={selected.has(task.id)}
             onChange={() => onToggle(task.id)}
@@ -1258,15 +1263,30 @@ function MeetingTable({
           <tbody>
             {visible.map(meeting => {
               const done = meeting.actions.filter(action => action.status === 'done').length
-              return <tr className="pm-record-row" key={meeting.id}>
+              const promoted = meeting.actions.filter(action => action.taskId).length
+              return <tr
+                className="pm-record-row pm-meeting-row"
+                key={meeting.id}
+                data-id={meeting.id}
+                onClick={() => onEdit(meeting)}
+              >
                 <td>{meeting.meetingDate}{meeting.startTime ? ` ${meeting.startTime}` : ''}</td>
-                <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(meeting)}>{meeting.title}</button></td>
+                <td className="pm-col-title"><button className="pm-title-cell" onClick={event => { event.stopPropagation(); onEdit(meeting) }}>{meeting.title}</button></td>
                 <td><StatusTag kind="meeting" value={meeting.status}/></td>
                 <td>{meeting.facilitator || <span className="pm-cell-empty">未指定</span>}</td>
                 <td>{meeting.participants.length}</td>
-                <td>{done}/{meeting.actions.length}</td>
+                <td title={`已转任务 ${promoted} / 共 ${meeting.actions.length} 个行动项`}>{done}/{meeting.actions.length}</td>
                 <td className="pm-description-cell">{meeting.summary || <span className="pm-cell-empty">暂无摘要</span>}</td>
-                <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${meeting.title}`} onClick={() => onEdit(meeting)}><Pencil size={14}/></button></td>
+                <td className="pm-col-actions">
+                  <button className="pm-row-button" aria-label={`编辑 ${meeting.title}`} onClick={event => { event.stopPropagation(); onEdit(meeting) }}><Pencil size={14}/></button>
+                  <button
+                    className="pm-meeting-detail-btn pm-row-button"
+                    data-id={meeting.id}
+                    aria-label={`查看 ${meeting.title} 详情`}
+                    title="查看详情/转任务"
+                    onClick={event => { event.stopPropagation(); onEdit(meeting) }}
+                  ><ChevronRight size={14}/></button>
+                </td>
               </tr>
             })}
           </tbody>
@@ -2125,10 +2145,12 @@ function MeetingActions({
       </select>
       <button className="pm-row-button" disabled={disabled} aria-label={`保存 ${action.title}`}><Check size={14}/></button>
       {action.taskId
-        ? <span className="pm-action-promoted" title="该行动项已转为任务">已转 {action.taskId}</span>
+        ? <span className="pm-action-promoted" data-meeting={meeting.id} data-action={action.id} title="该行动项已转为任务">已转 {action.taskId}</span>
         : <button
-            className="pm-row-button"
+            className="pm-action-promote pm-row-button"
             type="button"
+            data-meeting={meeting.id}
+            data-action={action.id}
             disabled={disabled}
             title="把行动项转为项目任务"
             aria-label={`转任务 ${action.title}`}

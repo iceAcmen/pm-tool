@@ -139,6 +139,21 @@ try {
   assert.match(css, /\.pm-reminders-row-soon/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
 
+  // 可达性修复 + 第二档控件稳定选择器契约。
+  assert.match(bundle, /pm-meeting-row/)
+  assert.match(bundle, /pm-meeting-detail-btn/)
+  assert.match(bundle, /pm-action-promote/)
+  assert.match(bundle, /pm-action-promoted/)
+  assert.match(bundle, /pm-ai-wbs-raw/)
+  assert.match(bundle, /pm-ai-confirm/)
+  assert.match(bundle, /pm-row-select/)
+  assert.match(bundle, /pm-batch-bar/)
+  assert.match(bundle, /pm-batch-complete/)
+  assert.match(bundle, /pm-batch-delete/)
+  assert.match(bundle, /pm-sort-select/)
+  assert.match(bundle, /pmtool-snapshot-/)
+  assert.match(css, /\.pm-meeting-row/)
+
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')
 } finally {
