@@ -130,6 +130,8 @@ try {
   // R16：临期/逾期提醒条（客户端派生）。
   assert.match(bundle, /pm-reminders/)
   assert.match(bundle, /未来 7 天/)
+  assert.match(bundle, /meeting action promote /)
+  assert.match(bundle, /已转 /)
   assert.match(css, /\.pm-reminders-overdue/)
   assert.match(css, /\.pm-reminders-row-soon/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')

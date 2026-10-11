@@ -14,6 +14,7 @@ import {
   MeetingRelationNotFoundError,
   updateMeeting,
   updateMeetingAction,
+  promoteActionToTask,
 } from '../core/meetings.js'
 import {
   describeMeetingValidation,
@@ -42,6 +43,7 @@ export const meetingHelp = [
   '  /pm meeting action add mtg-0001 {"title":"完成验收","owner":"Ice","taskId":"t-0001"}',
   '  /pm meeting action update mtg-0001 ai-001 {"status":"done"}',
   '  /pm meeting action delete mtg-0001 ai-001 confirm',
+  '  /pm meeting action promote mtg-0001 ai-001 [confirm]  把行动项转为项目任务并回写关联（幂等）',
   '  /pm meeting summarize p-0001 「粘贴的速记」     AI 归纳议题/结论/行动项草稿（预览，不落盘）',
   '  /pm meeting summarize p-0001 「粘贴的速记」confirm 按草稿建 draft 会议并挂行动项',
   'AI 纪要为草稿、confirm 才入库；失败时可手工 /pm meeting add。',
@@ -137,7 +139,7 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       }
     }
 
-    const actionMatch = /^action\s+(add|update|delete)\s+([\s\S]+)$/i.exec(input)
+    const actionMatch = /^action\s+(add|update|delete|promote)\s+([\s\S]+)$/i.exec(input)
     if (actionMatch) {
       const operation = actionMatch[1].toLowerCase()
       const argument = actionMatch[2].trim()
@@ -154,6 +156,34 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         return result
           ? { kind: 'success', text: `行动项已更新：${renderAction(result)}` }
           : { kind: 'error', text: `未找到行动项：${match[2]}。` }
+      }
+      if (operation === 'promote') {
+        const match = /^(\S+)\s+(\S+)(?:\s+(confirm))?$/i.exec(argument)
+        if (!match) return { kind: 'error', text: '请使用：/pm meeting action promote <会议ID> <行动项ID> [confirm]' }
+        const meeting = getMeeting(domain, match[1])
+        const current = meeting?.actions.find(item => item.id === match[2])
+        if (!current) return { kind: 'error', text: `未找到行动项：${match[1]}/${match[2]}。` }
+        if (current.taskId) {
+          return { kind: 'success', text: `该行动项已转为任务 ${current.taskId}，无需重复转换。` }
+        }
+        if (!match[3]) {
+          return {
+            kind: 'success',
+            text: [
+              '即将把行动项转为项目任务（不新增父任务）：',
+              `  标题：${current.title}`,
+              `  负责人：${current.owner || '未填写'}`,
+              `  截止：${current.dueDate || '未设置'}`,
+              `  所属项目：${meeting!.projectId}`,
+              '当前未创建任务。',
+              `确认命令：/pm meeting action promote ${match[1]} ${match[2]} confirm`,
+            ].join('\n'),
+          }
+        }
+        const result = await promoteActionToTask(domain, match[1], match[2])
+        return result.created
+          ? { kind: 'success', text: `已创建任务 ${result.taskId}（${result.title}）并回写行动项关联。` }
+          : { kind: 'success', text: `该行动项已转为任务 ${result.taskId}，无需重复转换。` }
       }
       const match = /^(\S+)\s+(\S+)(?:\s+(confirm))?$/i.exec(argument)
       if (!match) return { kind: 'error', text: '请使用：/pm meeting action delete <会议ID> <行动项ID> confirm' }

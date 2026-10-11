@@ -17,9 +17,11 @@ import {
 } from './meeting.js'
 import { projectIdSchema } from './project.js'
 import { enqueueDomainWrite } from './projects.js'
+import { addTask } from './tasks.js'
 import type { PmDomain } from './storage.js'
 
 export class MeetingProjectNotFoundError extends Error {}
+export class MeetingNotFoundError extends Error {}
 export class MeetingRelationNotFoundError extends Error {}
 export class MeetingRelationMismatchError extends Error {}
 export class MeetingActionNotFoundError extends Error {}
@@ -237,4 +239,41 @@ export function findMeetingActionByRiskIssue(domain: PmDomain, riskIssueId: stri
     if (action) return { meeting: structuredClone(meeting), action: structuredClone(action) }
   }
   return undefined
+}
+
+export interface PromoteResult {
+  created: boolean
+  taskId: string
+  title: string
+  owner: string
+  dueDate?: string
+}
+
+/**
+ * R17：把会议行动项提升为项目任务（幂等）。
+ * 行动项已有 taskId 时直接返回（不重复创建）；否则在会议所属项目下创建任务（无父任务），
+ * 并把新任务 id 回写到行动项 taskId。复用既有 addTask 编号链路。
+ */
+export async function promoteActionToTask(
+  domain: PmDomain,
+  meetingId: string,
+  actionId: string,
+): Promise<PromoteResult> {
+  meetingIdSchema.parse(meetingId)
+  meetingActionIdSchema.parse(actionId)
+  const meeting = domain.table('meetings').get(meetingId)
+  if (!meeting) throw new MeetingNotFoundError(`未找到会议：${meetingId}`)
+  const action = meeting.actions.find(item => item.id === actionId)
+  if (!action) throw new MeetingActionNotFoundError(`未找到行动项：${meetingId}/${actionId}`)
+  if (action.taskId) {
+    return { created: false, taskId: action.taskId, title: action.title, owner: action.owner, dueDate: action.dueDate ?? undefined }
+  }
+  const task = await addTask(domain, {
+    projectId: meeting.projectId,
+    title: action.title,
+    assignee: action.owner ?? '',
+    ...(action.dueDate ? { dueDate: action.dueDate } : {}),
+  })
+  await updateMeetingAction(domain, meetingId, actionId, { taskId: task.id })
+  return { created: true, taskId: task.id, title: task.title, owner: action.owner, dueDate: action.dueDate ?? undefined }
 }

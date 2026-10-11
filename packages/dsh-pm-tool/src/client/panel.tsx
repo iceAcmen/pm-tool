@@ -1959,6 +1959,20 @@ function MeetingActions({
         {issues.map(issue => <option key={issue.id} value={issue.id}>{issue.title}</option>)}
       </select>
       <button className="pm-row-button" disabled={disabled} aria-label={`保存 ${action.title}`}><Check size={14}/></button>
+      {action.taskId
+        ? <span className="pm-action-promoted" title="该行动项已转为任务">已转 {action.taskId}</span>
+        : <button
+            className="pm-row-button"
+            type="button"
+            disabled={disabled}
+            title="把行动项转为项目任务"
+            aria-label={`转任务 ${action.title}`}
+            onClick={() => {
+              if (window.confirm(`把行动项「${action.title}」转为项目任务？（负责人/截止日一并带入）`)) {
+                void run(`meeting action promote ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
+              }
+            }}
+          ><ListTree size={14}/></button>}
       <button
         className="pm-row-button"
         type="button"
