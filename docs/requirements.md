@@ -49,9 +49,9 @@
 
 | 编号 | 名称 | 优先级 | 功能 | 验收标准 | 数据模型影响 |
 | --- | --- | --- | --- | --- | --- |
-| R13 | 智能 WBS 任务拆解 | P1（拟） | `/pm task wbs <项目ID> "<目标文本>" [confirm]`：AI 产出 Markdown 缩进勾选清单，复用现有 dry-run 预览→confirm 落盘 | 预览树形与 `planTaskImport` 一致；confirm 后任务入库、编号/父子正确；无 key/失败给中文降级提示不崩；新增 verify-wbs | **不新增表**，复用 tasks 表与 task-import 链路 |
-| R14 | 进度汇报 AI 叙述 | P1（拟） | `/pm report narrate <项目ID> [confirm]`：基于 `collectProjectReport` 确定性数字，AI 写「本周进展/风险/下周计划」叙述段落，并入 R9 快照与 Markdown 导出 | 叙述数字与确定性采集一致；confirm 后叙述可被读、导出含该段；失败时仍生成无叙述的确定性快照 | report 记录新增可选 `aiNarrative`（nullable），不改既有快照 schema |
-| R15 | 会议纪要归纳 | P1（拟） | `/pm meeting summarize <项目ID> "<速记>" [confirm]`：AI 归纳议题/结论/行动项(负责人/截止日)，映射既有 meeting 草稿 | 行动项负责人/截止日落入 actions[]；confirm 后存为 draft meeting、可被 list/get 读到；JSON 解析失败降级为「原文入 summary」；新增 verify-meeting-ai | **不新增表**，复用 meetings 实体与预留 sourceType/sourceSessionId |
+| R13 | 智能 WBS 任务拆解 | P1 | `/pm task wbs <项目ID> "<目标文本>" [confirm]`：AI 产出 Markdown 缩进勾选清单，复用现有 dry-run 预览→confirm 落盘 | 预览树形与 `planTaskImport` 一致；confirm 后任务入库、编号/父子正确；无 key/失败给中文降级提示不崩；新增 verify-wbs | ✅ 已实现（doubao-work）：AI 草稿预览不落盘、confirm 复用草稿落盘；限流/空正文降级；不新增表 |
+| R14 | 进度汇报 AI 叙述 | P1 | `/pm report narrate <项目ID> [confirm]`：基于 `collectProjectReport` 确定性数字，AI 写「本周进展/风险/下周计划」叙述段落，并入 R9 快照与 Markdown 导出 | 叙述数字与确定性采集一致；confirm 后叙述可被读、导出含该段；失败时仍生成无叙述的确定性快照 | ✅ 已实现（doubao-work）：叙述写入既有 `executiveSummary` 字段（零 schema 改动）；失败降级确定性快照 |
+| R15 | 会议纪要归纳 | P1 | `/pm meeting summarize <项目ID> "<速记>" [confirm]`：AI 归纳议题/结论/行动项(负责人/截止日)，映射既有 meeting 草稿 | 行动项负责人/截止日落入 actions[]；confirm 后存为 draft meeting、可被 list/get 读到；JSON 解析失败降级为「原文入 summary」 | ✅ 已实现（doubao-work）：```json ``` 围栏防御解析；confirm 建 draft 会议并挂行动项；复用 addMeeting/addMeetingAction |
 
 ### R12 命令与格式约定（v0.9 补充）
 

@@ -2,16 +2,18 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 生成型功能正式立项：设计评审稿 generative-features-plan.md + ADL-036 + R13/R14/R15 拟新增；随后按里程碑逐个实现）
+最后更新：2026-10-11（doubao-work 生成型功能 R13/R14/R15 三功能代码全部完成并推送：智能 WBS、进度汇报叙述、会议纪要归纳；15 项 verify 全过）
 
-## 当前阶段：生成型功能（R13/R14/R15）立项并开工（2026-10-11，doubao-work）
+## 当前阶段：生成型功能（R13/R14/R15）已实现（2026-10-11，doubao-work）
 
-- **已立项（ADL-036）**：智能 WBS 拆解（R13）、进度汇报 AI 叙述（R14）、会议纪要归纳（R15）。统一原则：LLM 只做一次性文本生成、不依赖 function calling；确定性采集/校验/落盘在我方代码；AI 输出一律草稿、confirm 才入库；无 key/失败优雅降级；每次生成只发一次模型请求省免费额度。
-- **设计评审稿**：`docs/generative-features-plan.md`（一次性 LLM 调用真实 API 骨架、落点复用、降级、推荐开发顺序、文件级计划）。
-- **推荐开发顺序**：智能 WBS（最复用 task-import 链路、风险最低）→ 进度汇报叙述（最安全）→ 会议纪要归纳（JSON 解析最复杂）。
-- **状态**：本批为立项设计 + 档案，尚未编码；持续授权内按里程碑逐个实现并各自提交。
+- **R13 智能 WBS**：`/pm task wbs <项目ID> <目标> [confirm]`——AI 拆解为勾选清单草稿→dry-run 预览→confirm 复用草稿落盘为任务树（commit 9775cf3）。
+- **R14 进度汇报 AI 叙述**：`/pm report narrate <项目ID> [confirm]`——确定性数字→AI 段落→confirm 写入既有 `executiveSummary`（零 schema 改动）（commit cd07b94）。
+- **R15 会议纪要归纳**：`/pm meeting summarize <项目ID> <速记> [confirm]`——AI JSON 草稿（防御解析）→confirm 建 draft 会议并挂行动项（commit 35affa8）。
+- **统一落地（ADL-036）**：`core/ai-client.ts` 一次性文本生成封装（`ctx.llm.prepareCall`+`BlockAssembler`，按 `error.code` 中文降级）；AI 一律草稿 confirm 才入库；失败/无 key 优雅降级到手工/确定性路径；confirm 复用草稿不重复调模型省免费额度；核心台账离线可用。
+- **验证**：每个功能配 verify-wbs / verify-report-ai / verify-meeting-ai（含成功路径与失败降级）；全 15 项 verify 退出 0、`pnpm run build` 通过。
+- **待所有者**：在已加载 `OPENROUTER_API_KEY` 的终端启动 dsh，Web 内对三功能各发一次真实生成（每个只 1 次模型请求，约 50 次/天额度内）做最终端到端确认；Web 按钮为第二里程碑（v1 先斜杠命令）。
 
-## 上一阶段：零成本模型通道就绪（2026-10-11）
+## 上一阶段：生成型功能立项（2026-10-11）
 
 - **零成本 OpenRouter 免费 LLM 通道已配置（doubao-work，ADL-035）**：通过已随 base bundle 装载的 `@deepseek-ai/dsh-llm-pi-ai`（原本零路由休眠、无需新装），在本机 `~/.dsh/profiles/pm/cordis.patch.yml` 按 id 补上 `providers.openrouter-free` → OpenRouter 免费自动路由模型 `openrouter/free`（Free Models Router，OpenAI 兼容 `https://openrouter.ai/api/v1`，`api=openai-completions`，`apiKeyEnv=OPENROUTER_API_KEY`）。**key 不入库、不写 patch**，只引用环境变量。
 - **本批不实现任何生成型业务功能**：智能 WBS/纪要/周报仍按 ADL-032 暂缓；本批只做「通道配置 + 可移植文档 `docs/model-providers.md` + 加载验证」。DeepSeek 官方/OpenAI/Anthropic/Gemini/Groq/硅基流动/智谱/百炼/本地 Ollama 以注释 YAML 模板预留，当前全部不启用。
