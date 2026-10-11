@@ -244,11 +244,11 @@ export function PmPanel({ execute }: PmPanelApi) {
     try {
       const next = JSON.parse(await execute('web snapshot')) as Snapshot
       setData(next)
-      setSelected(
-        selected && next.projects.some(project => project.id === selected)
-          ? selected
-          : next.projects[0]?.id,
-      )
+      // OPT-03：刷新后回填记住的项目；已删除则回退到当前首个项目，不留脏值。
+      const ids = next.projects.map(p => p.id)
+      let stored = ''
+      try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }
+      setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error))
     } finally {
@@ -482,6 +482,11 @@ export function PmPanel({ execute }: PmPanelApi) {
                 disabled={busy}
                 onCreate={() => setDrawer({ kind: 'task' })}
                 onEdit={task => setDrawer({ kind: 'task', task })}
+                onGenWbs={() => {
+                  if (!selected) { window.alert('请先选择或新建一个项目，再用 AI 拆解 WBS。'); return }
+                  try { localStorage.setItem('pm-ai-mode', 'wbs') } catch { /* ignore */ }
+                  setDrawer({ kind: 'ai' })
+                }}
                 onSaved={refresh}
                 run={run}
               />}
@@ -917,6 +922,12 @@ function BatchField({ className, placeholder, type = 'text', onApply }: {
   </span>
 }
 
+/** OPT-03：从 localStorage 记住的项目 id 解析出有效选中值；已删除/空则回退。 */
+export function resolveRememberedProject(storedId: string | undefined, projectIds: string[], fallback?: string): string {
+  if (storedId && projectIds.includes(storedId)) return storedId
+  return fallback ?? projectIds[0] ?? ''
+}
+
 function arrayBufferToB64(buf: ArrayBuffer): string {
   const bytes = new Uint8Array(buf)
   let bin = ''
@@ -1025,6 +1036,7 @@ function TaskTable({
   disabled,
   onCreate,
   onEdit,
+  onGenWbs,
   onSaved,
   run,
 }: {
@@ -1033,6 +1045,7 @@ function TaskTable({
   disabled: boolean
   onCreate: () => void
   onEdit: (task: Task) => void
+  onGenWbs?: () => void
   onSaved: () => void
   run: (line: string) => Promise<boolean>
 }) {
@@ -1222,7 +1235,12 @@ function TaskTable({
           </tbody>
         </table>
       </div>
-      {!visible.length && <TableEmpty text={tasks.length ? '没有符合筛选条件的任务' : '暂无任务记录'}/>}
+      {!visible.length && <TableEmpty
+        text={tasks.length ? '没有符合筛选条件的任务' : '暂无任务记录'}
+        action={onGenWbs && <button className="pm-button pm-button-primary pm-empty-ai-cta" onClick={onGenWbs}>
+          <Sparkles size={14}/>用 AI 一键生成 WBS
+        </button>}
+      />}
       <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>添加记录</button>
     </div>
     <div className="pm-table-footer">{visible.length} 条记录</div>
@@ -1701,8 +1719,8 @@ function Progress({ value }: { value: number }) {
   </span>
 }
 
-function TableEmpty({ text }: { text: string }) {
-  return <div className="pm-table-empty"><ListTree size={24}/><span>{text}</span></div>
+function TableEmpty({ text, action }: { text: string, action?: React.ReactNode }) {
+  return <div className="pm-table-empty"><ListTree size={24}/><span>{text}</span>{action}</div>
 }
 
 function Overview({

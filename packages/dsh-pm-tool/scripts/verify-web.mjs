@@ -178,7 +178,9 @@ try {
   assert.match(bundle, /pm-reminder-range/)        // OPT-02 3/7/14/30 天切换
   assert.match(bundle, /data-pick-project/)        // OPT-01 提醒切项目
   assert.match(bundle, /pm-selected-project/)      // OPT-03 记住上次项目
-  assert.match(bundle, /pm-empty-ai-cta/)          // OPT-11 空状态 AI CTA
+  assert.match(bundle, /pm-empty-ai-cta/)          // OPT-11 空状态 AI CTA（任务表空态）
+  assert.match(bundle, /暂无任务记录/)              // 任务表空态文案
+  assert.match(bundle, /pm-ai-mode/)               // CTA 切到 WBS 模式接线
   assert.match(bundle, /pm-kbd-help/)             // OPT-09 快捷键帮助
   assert.match(bundle, /import-content/)          // OPT-12 按内容导入命令
   assert.match(bundle, /pm-import-file/)          // OPT-12 网页文件上传
