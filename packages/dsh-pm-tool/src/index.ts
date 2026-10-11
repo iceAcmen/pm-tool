@@ -108,7 +108,7 @@ export async function apply(ctx: Context): Promise<void> {
       const riskIssueMatch = /^risk-issue(?:\s+([\s\S]*))?$/i.exec(raw)
       if (riskIssueMatch) return handleRiskIssueCommand(riskIssueMatch[1] ?? '', domain)
       const meetingMatch = /^meeting(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain)
+      if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
       const reportMatch = /^report(?:\s+([\s\S]*))?$/i.exec(raw)
       if (reportMatch) return handleProgressReportCommand(reportMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
       const deliverableMatch = /^deliverable(?:\s+([\s\S]*))?$/i.exec(raw)

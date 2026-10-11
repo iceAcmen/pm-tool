@@ -23,6 +23,13 @@ import {
   type MeetingAction,
   type MeetingStatus,
 } from '../core/meeting.js'
+import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
+import {
+  parseSummarizedDraft,
+  summarizeTranscript,
+  rememberSummary,
+  recallSummary,
+} from '../core/meeting-summarize.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const meetingHelp = [
@@ -35,6 +42,9 @@ export const meetingHelp = [
   '  /pm meeting action add mtg-0001 {"title":"完成验收","owner":"Ice","taskId":"t-0001"}',
   '  /pm meeting action update mtg-0001 ai-001 {"status":"done"}',
   '  /pm meeting action delete mtg-0001 ai-001 confirm',
+  '  /pm meeting summarize p-0001 「粘贴的速记」     AI 归纳议题/结论/行动项草稿（预览，不落盘）',
+  '  /pm meeting summarize p-0001 「粘贴的速记」confirm 按草稿建 draft 会议并挂行动项',
+  'AI 纪要为草稿、confirm 才入库；失败时可手工 /pm meeting add。',
 ].join('\n')
 
 function renderAction(action: MeetingAction): string {
@@ -64,11 +74,69 @@ function parseJson(value: string): unknown {
   return JSON.parse(value)
 }
 
-export async function handleMeetingCommand(rawInput: string, domain?: PmDomain): Promise<CommandResult> {
+export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, llm?: LlmGateway): Promise<CommandResult> {
   const input = rawInput.trim()
   if (!input || input.toLowerCase() === 'help') return { kind: 'success', text: meetingHelp }
   if (!domain) return { kind: 'error', text: '会议纪要存储未就绪，请检查 pm profile 的存储配置。' }
   try {
+    const summarizeMatch = /^summarize\s+(\S+)\s+([\s\S]+)$/i.exec(input)
+    if (summarizeMatch) {
+      const projectId = summarizeMatch[1]
+      let rest = summarizeMatch[2].trim()
+      let confirmation = false
+      const tail = /\s+confirm$/i.exec(rest)
+      if (tail) { confirmation = true; rest = rest.slice(0, -tail[0].length).trim() }
+      const transcript = rest
+      if (!transcript) return { kind: 'error', text: '请粘贴会议速记：/pm meeting summarize p-0001 「速记内容」' }
+      const key = `${projectId}\n${transcript}`
+
+      let draft
+      if (confirmation) {
+        draft = recallSummary(key) ?? parseSummarizedDraft(await summarizeTranscript(llm, transcript))
+      } else {
+        draft = parseSummarizedDraft(await summarizeTranscript(llm, transcript))
+        rememberSummary(key, draft)
+      }
+
+      if (!confirmation) {
+        return {
+          kind: 'success',
+          text: [
+            'AI 归纳草稿（当前未写入）：',
+            `标题：${draft.title}`,
+            `摘要：${draft.summary || '（空）'}`,
+            `议题：${draft.topics.join('；') || '（无）'}`,
+            `决议：${draft.decisions.join('；') || '（无）'}`,
+            `行动项（${draft.actions.length}）：`,
+            ...(draft.actions.length
+              ? draft.actions.map(a => `  - ${a.title}｜负责人 ${a.owner || '待定'}｜截止 ${a.dueDate ?? '未定'}`)
+              : ['  （无）']),
+            `确认命令：/pm meeting summarize ${projectId} ${transcript} confirm`,
+          ].join('\n'),
+        }
+      }
+
+      const meeting = await addMeeting(domain, {
+        projectId,
+        title: draft.title,
+        meetingDate: new Date().toISOString().slice(0, 10),
+        summary: draft.summary,
+        topics: draft.topics,
+        decisions: draft.decisions,
+        status: 'draft',
+      })
+      for (const action of draft.actions) {
+        await addMeetingAction(domain, meeting.id, {
+          title: action.title, owner: action.owner, dueDate: action.dueDate ?? undefined,
+        })
+      }
+      const saved = getMeeting(domain, meeting.id)!
+      return {
+        kind: 'success',
+        text: [`已按 AI 草稿创建 draft 会议纪要并挂载 ${draft.actions.length} 个行动项。\n${renderMeeting(saved)}`].join('\n'),
+      }
+    }
+
     const actionMatch = /^action\s+(add|update|delete)\s+([\s\S]+)$/i.exec(input)
     if (actionMatch) {
       const operation = actionMatch[1].toLowerCase()
@@ -155,6 +223,9 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain):
       || error instanceof MeetingRelationMismatchError
       || error instanceof MeetingActionNotFoundError) {
       return { kind: 'error', text: error.message }
+    }
+    if (error instanceof AiDraftError) {
+      return { kind: 'error', text: `AI 纪要归纳暂不可用：${error.message}你仍可手工 /pm meeting add。` }
     }
     console.error('[pm-tool] 会议纪要操作失败：', error)
     return { kind: 'error', text: '会议纪要操作失败，请检查存储配置、目录权限及宿主日志后重试。' }

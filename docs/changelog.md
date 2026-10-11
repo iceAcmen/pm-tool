@@ -8,6 +8,14 @@
 
 ---
 
+## [未发布] — R15 会议纪要归纳（2026-10-11，平台：doubao-work / 豆包工作）
+
+- 新增能力：`/pm meeting summarize <项目ID> <粘贴速记> [confirm]`——AI 把原始速记归纳为 标题/摘要/议题/决议/行动项(负责人·截止日)，先预览草稿不落盘，confirm 才建 draft 会议并逐条挂行动项（复用既有 `addMeeting`/`addMeetingAction`）。
+- 新增文件：`src/core/meeting-summarize.ts`（```json ``` 围栏剥取 + 防御性归一 + 草稿缓存）、`scripts/verify-meeting-ai.mjs`。
+- 修改文件：`src/commands/meeting.ts`（summarize 子命令）、`src/index.ts`（meeting 分发传入 llm）。
+- 降级：模型返回非 JSON / 失败 → 中文提示并引导手工 `/pm meeting add`；既有会议 CRUD 不受影响。
+- 至此三功能（R13/R14/R15）代码完成，共 15 项 verify 全过。
+
 ## [未发布] — R14 进度汇报 AI 叙述（2026-10-11，平台：doubao-work / 豆包工作）
 
 - 新增能力：`/pm report narrate <项目ID> [confirm]`——基于确定性采集（任务/里程碑/逾期统计）让 AI 只写「本周进展/风险/下周计划」段落，先预览不落盘，confirm 才把叙述写入既有进度快照的 `executiveSummary` 字段（**零 schema 改动**，复用 R9 `generateProgressReport`）。
