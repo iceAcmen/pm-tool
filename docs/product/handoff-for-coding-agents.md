@@ -11,47 +11,33 @@
 
 ## 一、这次（2026-10-12，doubao-work 产品角色）新增/修改了什么
 
-**只新增** `docs/product/` 下 8 份文档，未改任何 `src/`、`package.json`、脚本，未动 changelog/requirements/decision-log。新增清单：
-- `README.md`（索引 + 30 秒结论）
-- `01-current-state-personas.md`（现状+画像）
-- `02-ux-evaluation.md`（16 条 UX 问题，定位到 panel.tsx 行号）
-- `03-incremental-proposals.md`（增量方案+线框）
-- `04-disruptive-concepts.md`（颠覆构想+A/B）
-- `05-roadmap-and-tasks.md`（**权威 PROD-01~23 任务表**）
-- `06-tradeoffs-and-risks.md`（取舍+风险）
-- `handoff-for-coding-agents.md`（本文件）
+**只新增** `docs/product/` 下 8 份文档，未改任何 `src/`、`package.json`、脚本。新增清单：
+- `README.md`、`01-current-state-personas.md`、`02-ux-evaluation.md`、`03-incremental-proposals.md`、`04-disruptive-concepts.md`、`05-roadmap-and-tasks.md`（PROD 任务表）、`06-tradeoffs-and-risks.md`、`handoff-for-coding-agents.md`（本文件）。
 
-**核心结论**：产品台账（七实体 CRUD+AI 草稿）已扎实；短板在「可视化排期、跨人透视、记录直达、与代码仓库联动」。路线：v0.4 速赢 → v0.5 核心体验 → v0.6 架构演进(domain v2) → v0.7 AI 副驾。
+> **状态校正（2026-10-12，覆盖第三节旧排期）**：下文第三节列的 `PROD-01/02/03/05/22`（任务树 / 记录直达 / 行内编辑 / 概览作战室 / 甘特）**均已实现**；`PROD-20` 是**对话式 AI 项目副驾**，不是早先三个固定 AI 按钮。当前版本保持 **v0.4.0**，下一版本号未定、不得擅定 v0.4.1。这些 PROD 是否还欠收尾，以 `docs/changelog.md` 与最新代码为准。
 
 ## 二、开工前必须知道的术语与事实
 
-- **面板是唯一真实界面**：宿主斜杠补全不显示 `/pm`、发送后主区不跳转（ADL-038/KB-037）。所有产品改动默认改 Web 面板 `packages/dsh-pm-tool/src/client/panel.tsx`（2619 行单文件）。
+- **【最高优先级】测试门控（ADL-045）**：当前处于测试稳定阶段。任何新增功能必须走「需求→测试用例→开发→独立测试(功能/集成/网页实测/样式/UX)→修复→复验与受影响回归→专家 PASS」才能开下一功能/进发布候选。`FAIL/BLOCKED/NOT_RUN≠通过`；阻塞期只做修复/补测/文档；完整浏览器实测是硬门槛，不能用 HTTP200/离线 verify 替代；轻微问题不默认豁免。测试产物归 `docs/testing/`（测试专家所有，**不要动该目录**）。细则见 `docs/collaboration.md` 第九节。
+- **面板是唯一真实界面**：宿主斜杠补全不显示 `/pm`、发送后主区不跳转（ADL-038/KB-037）。所有产品改动默认改 Web 面板 `packages/dsh-pm-tool/src/client/panel.tsx`。
 - **通信模型**：面板只有 `execute(line)` 写（翻译成 `/pm 子命令`）和 `web snapshot` 全量读。**新增前端交互优先复用既有后端命令**，别轻易加后端命令。
-- **派生都在前端做**：提醒、总览、全局搜索、概览全部基于 snapshot 在浏览器算，不请求后端。新视图照此惯例。
+- **派生都在前端做**：提醒、总览、全局搜索、概览全部基于 snapshot 在浏览器算。新视图照此惯例。
 - **数据实体**：projects/tasks/milestones/risk_issues/meetings/reports/deliverables 七表 + checks/settings。schema 在 `src/core/*.ts`（zod）。
-- **已有、可直接复用的后端能力**：`task move <id> <newParentId|null>`（改父，带环路保护，core/tasks.ts L271）；`task batch update <ids> {json}`；`task update <id> {json}`。
 - **三条红线**：离线优先 / AI 草稿确认制 / 单用户本地。别引入常驻进程、别做自动写库。
 
-## 三、建议实施顺序（从这里开始）
+## 三、当前该做什么（2026-10-12 更新）
 
-1. **先做 v0.4.0 速赢（纯前端、零 schema，最快见效）**：
-   - `PROD-02` 提醒/搜索命中直达记录（最高优先，S 成本）。
-   - `PROD-08` 顶栏收进「⋯更多」+ 记住 tab。
-   - `PROD-09` 汇报趋势徽标、`PROD-10` 会议↔任务反向链接。
-2. **再做 v0.5.0 核心体验**：`PROD-01` 任务树视图 → `PROD-03` 行内编辑 → `PROD-06/07` 人员与按人视图 → `PROD-05` 概览作战室。
-3. **v0.6.0 才动 schema（domain v2）**：`PROD-11` 依赖字段 → `PROD-22` 甘特 → `PROD-21` 仓库链接 → `PROD-23` 健康分。
-4. **v0.7.0+ 旗舰**：`PROD-20` AI 副驾（依赖生产车道 Key）。
+- **当前主线不是排新功能，而是把现有改动（含 PROD-20 对话副驾）在真实浏览器里测稳、闭环缺陷、由测试专家 PASS**。
+- 离线 `verify-*.mjs` 全绿（36 项）**不代表**真面板可用——曾出现离线全绿、真浏览器因 bundle 残留 zod require 崩溃（见 `9b15baa`）。GUI 实测是硬门槛。
+- 下一步候选功能（仅建议、须等测试门放行后再议）：先对照 `docs/changelog.md` 核实哪些 PROD 真已落地，再从 `05-roadmap-and-tasks.md` 挑尚未实现且未受阻塞者；**不要凭本文旧排期直接开工**。
 
 ## 四、不要重复调研 / 不要踩的坑
 
-- **不要**重新做用户调研或需求分析——01/02 已经把现状和 16 条问题、证据行号列好了。
-- **不要**在 v0.4/v0.5 改 `core/storage.ts` 的 domain version——schema 变更只在 v0.6.0 一批做，避免反复迁移。
-- **不要**碰另一开发线正在修的文件（OPT-03 项目记忆持久化、OPT-11 空态 CTA）及其关联代码；提交前 `git pull --rebase`。
-- **不要**把 Git 自动桥、常驻推送、关键路径排期排进近期——已在 06 标记为「明确不做/长期观望」。
-- 新控件务必加稳定 `data-*`/class 选择器（verify-web 依赖契约），每个 PROD 补或扩展一个 `scripts/verify-*.mjs`。
-- 开发认领 PROD 时，按仓库惯例在 `decision-log.md` 记 ADL、在 `changelog.md` 留痕（平台标识 `trae`/`doubao-work`），并回写 05 任务表的状态。
+- **不要**重新做用户调研或需求分析——01/02 已把现状与问题、证据行号列好。
+- **不要**在测试阻塞期开新功能；不要自改产品后自己验收；不要用 HTTP200/纯函数测试冒充 GUI 通过。
+- 新控件务必加稳定 `data-*`/class 选择器（verify-web 依赖契约），并补或扩展 `scripts/verify-*.mjs`。
+- 开发/测试认领后按仓库惯例在 `decision-log.md` 记 ADL、在 `changelog.md` 留痕（平台标识），并回写 05 任务表状态。
 
 ## 五、与既有编号体系的映射
 
-- 本目录 `PROD-xx` 是**新需求**；开发落地后，功能层面若要进 requirements，建议映射为 R19+。
-- UX 问题溯源见 `02-ux-evaluation.md`；取舍理由见 `06-tradeoffs-and-risks.md`。
+- 本目录 `PROD-xx` 是**产品需求**；流程门控见 `ADL-045`。UX 问题溯源见 `02-ux-evaluation.md`；取舍理由见 `06-tradeoffs-and-risks.md`。
