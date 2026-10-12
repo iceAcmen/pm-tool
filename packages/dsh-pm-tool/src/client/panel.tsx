@@ -354,7 +354,9 @@ export function PmPanel({ execute }: PmPanelApi) {
             className="pm-button pm-button-primary pm-restore-confirm"
             onClick={() => {
               const enc = JSON.stringify(restorePreview.content)
-              void execute(`restore-content ${enc} confirm`).then((r) => { setMessage(String(r ?? '已恢复')); setRestorePreview(null); void refresh() })
+              void execute(`restore-content ${enc} confirm`)
+                .then((r) => { setMessage(String(r ?? '已恢复')); setRestorePreview(null); void refresh() })
+                .catch((e) => setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`))
             }}
           >确认恢复</button>
           <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
