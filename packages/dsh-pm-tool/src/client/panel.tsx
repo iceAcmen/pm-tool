@@ -500,6 +500,7 @@ export function PmPanel({ execute }: PmPanelApi) {
         ? <GlobalBoard
             data={data}
             onPickProject={(id) => { setSelected(id); setDashOpen(false) }}
+            onOpenRecord={(pid, type, id) => { setDashOpen(false); openRecord(pid, type, id) }}
             onClose={() => setDashOpen(false)}
           />
         : !project
@@ -2072,14 +2073,24 @@ function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
       if (v.accepted.length || v.rejected.length) setDraft({ accepted: v.accepted, rejected: v.rejected })
     } catch (e) { setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }]) }
   }
+  const [busy, setBusy] = useState(false)
   const confirm = async () => {
-    if (!draft) return
+    if (!draft || busy) return
+    // 确认前用最新的当前项目任务集合重验：渲染→确认之间若目标被删/跨项目，过期草稿自动剔除，不静默执行旧 draft。
+    const live = validateActions(draft.accepted, { taskIds })
+    const dropped = live.rejected.length
+    if (!live.accepted.length) {
+      setMsgs(m => [...m, { role: 'sys', text: `草稿已失效（${dropped} 条目标不存在或已移出本项目），未执行任何改动。` }])
+      setDraft(null); return
+    }
+    setBusy(true)
     let ok = 0, bad = 0
-    for (const a of draft.accepted) {
+    for (const a of live.accepted) {
       const line = `task update ${a.id} ${JSON.stringify(a.patch ?? {})}`
       if (await run(line)) ok++; else bad++
     }
-    setMsgs(m => [...m, { role: 'sys', text: `已执行 ${ok} 条${bad ? `，失败 ${bad} 条` : ''}。` }])
+    setBusy(false)
+    setMsgs(m => [...m, { role: 'sys', text: `已执行 ${ok} 条${bad ? `，失败 ${bad} 条` : ''}${dropped ? `；已自动剔除失效 ${dropped} 条` : ''}。` }])
     setDraft(null); onSaved()
   }
   return <div className="pm-copilot">
@@ -2092,7 +2103,7 @@ function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
         {draft.accepted.map((a, i) => <div key={i}>· {a.op} {a.id} → {JSON.stringify(a.patch)}</div>)}
         {draft.rejected.map((r, i) => <div key={`r${i}`} className="pm-copilot-rejected">已拒绝：{r.reason}</div>)}
         <div className="pm-copilot-actions">
-          <button className="pm-button pm-copilot-confirm" onClick={() => void confirm()}>确认执行</button>
+          <button className="pm-button pm-copilot-confirm" disabled={busy} onClick={() => void confirm()}>确认执行</button>
           <button className="pm-button pm-copilot-dismiss" onClick={() => setDraft(null)}>再聊聊/取消</button>
         </div>
       </div>
@@ -2232,9 +2243,10 @@ function collectBoardMatches(data: Snapshot, q: string): BoardHit[] {
     || a.id.localeCompare(b.id, 'en', { numeric: true }))
 }
 
-function GlobalBoard({ data, onPickProject, onClose }: {
+function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
   data: Snapshot
   onPickProject: (id: string) => void
+  onOpenRecord: (projectId: string, type: string, id: string) => void
   onClose: () => void
 }) {
   const [query, setQuery] = useState('')
@@ -2282,7 +2294,10 @@ function GlobalBoard({ data, onPickProject, onClose }: {
                 <ul className="pm-board-hit-list">
                   {group.map(hit =>
                     <li key={`${hit.type}-${hit.id}`}>
-                      <button type="button" onClick={() => onPickProject(hit.projectId)}>
+                      <button type="button" data-open-record={hit.id} data-open-type={hit.type}
+                        onClick={() => (hit.type === 'project'
+                          ? onPickProject(hit.projectId)
+                          : onOpenRecord(hit.projectId, hit.type, hit.id))}>
                         <span>{hit.id}｜{hit.title}</span>
                         <small>所属项目：{hit.projectName}</small>
                       </button>

@@ -1,33 +1,64 @@
 /**
  * PROD-20 后端编排：把当前项目快照压成中文上下文，调当前车道模型给只读诊断 + 草稿动作。
  * 写动作一律不自动执行——由前端草稿卡点【确认执行】才落库。
+ * 上下文只喂"当前真实数据"：缺会议/汇报/交付物时显式标注"无"，禁止模型把缺信息推断为事实。
  */
 import { generateDraft, type LlmGateway } from './ai-client.js'
 import { parseCopilotActions, validateActions, type CopilotAction } from './copilot.js'
 
+/** 对外暴露的统一 SYSTEM（ask.ts 复用同一处，避免状态枚举等口径漂移）。 */
+export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数据（含"今天"日期），先用一段简洁中文回答用户问题（只读诊断）。
+所有相对时间判断必须以给定的"今天"为锚，不要假设今天是别的日期；数据里没有的实体（会议/汇报/交付物）就说"暂无"，不要编造。
+若确有可改进处，再在最后输出一个 json 代码块：{"actions":[{"op":"task.update","id":"任务ID","patch":{"字段":"值"}}]}。
+patch 仅允许 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，且 start 不得晚于 due)。禁止删除、禁止批量、禁止未知字段。没有建议动作就不要输出 json 块。`
+
 export interface AskContext {
   projectName: string
-  tasks: { id: string, title: string, status: string, progress: number, assignee?: string, dueDate?: string }[]
-  risks: { id: string, title: string, severity?: string, probability?: string, impact?: string }[]
+  today: string // YYYY-MM-DD（本地日零点日期，由调用方注入，便于离线测试）
+  tasks: { id: string, title: string, status: string, progress: number, assignee?: string, dueDate?: string, startDate?: string }[]
+  risks: { id: string, title: string, status?: string, severity?: string, probability?: string, impact?: string }[]
   milestones: { id: string, title: string, targetDate?: string, status: string }[]
+  meetings?: { id: string, title: string, date?: string, actions?: { id: string, text: string, status?: string }[] }[]
+  reports?: { id: string, title: string, date?: string, kind?: string }[]
+  deliverables?: { id: string, title: string, status?: string, dueDate?: string }[]
+}
+
+/** 把实体列表压成一行；为空时显式标注，避免模型误以为"没提到=不存在"以外的结论。 */
+function joinOrNote(label: string, items: string[]): string {
+  return items.length ? `${label}（${items.length}）：` + items.join('；') : `${label}：暂无`
 }
 
 export function buildAskContext(c: AskContext): string {
-  const lines: string[] = [`项目：${c.projectName}`]
-  lines.push(`任务（${c.tasks.length}）：` + c.tasks.map(t => `${t.id} ${t.title}[${t.status} ${t.progress}%${t.assignee ? ` 负责人=${t.assignee}` : ''}${t.dueDate ? ` 截止=${t.dueDate}` : ''}]`).join('；'))
-  lines.push(`里程碑（${c.milestones.length}）：` + c.milestones.map(m => `${m.id} ${m.title}[${m.status}${m.targetDate ? ` ${m.targetDate}` : ''}]`).join('；'))
-  lines.push(`风险（${c.risks.length}）：` + c.risks.map(r => `${r.id} ${r.title}[${[r.probability, r.impact, r.severity].filter(Boolean).join('/')}]`).join('；'))
+  const lines: string[] = [
+    `项目：${c.projectName}`,
+    `今天（本地日期）：${c.today}。请以此为唯一日历锚点判断逾期/临期。`,
+  ]
+  lines.push(joinOrNote('任务', c.tasks.map(t =>
+    `${t.id} ${t.title}[${t.status} ${t.progress}%${t.assignee ? ` 负责人=${t.assignee}` : ''}${t.startDate ? ` 起=${t.startDate}` : ''}${t.dueDate ? ` 截止=${t.dueDate}` : ''}]`)))
+  lines.push(joinOrNote('里程碑', c.milestones.map(m =>
+    `${m.id} ${m.title}[${m.status}${m.targetDate ? ` ${m.targetDate}` : ''}]`)))
+  lines.push(joinOrNote('风险/问题', c.risks.map(r =>
+    `${r.id} ${r.title}[状态=${r.status ?? '未知'}${[r.severity, r.probability, r.impact].filter(Boolean).join('/')}]`)))
+  // 会议行动项 / 汇报 / 交付物：有则摘要，无则显式"暂无"，不推断。
+  lines.push(joinOrNote('会议及行动项', (c.meetings ?? []).map(m =>
+    `${m.id} ${m.title}${m.date ? `(${m.date})` : ''}${m.actions?.length ? ' 行动项：' + m.actions.map(a => `${a.id}:${a.text}[${a.status ?? '?'}]`).join('，') : ''}`)))
+  lines.push(joinOrNote('进度汇报', (c.reports ?? []).map(r => `${r.id} ${r.title}${r.date ? `(${r.date})` : ''}`)))
+  lines.push(joinOrNote('交付物', (c.deliverables ?? []).map(d => `${d.id} ${d.title}[${d.status ?? '?'}${d.dueDate ? ` ${d.dueDate}` : ''}]`)))
   return lines.join('\n')
 }
-
-const SYSTEM = `你是项目经理副驾。基于给定项目数据，先用一段简洁中文回答用户问题（只读诊断）。
-若确有可改进处，再在最后输出一个 json 代码块：{"actions":[{"op":"task.update","id":"任务ID","patch":{"字段":"值"}}]}。
-patch 仅允许 assignee(字符串)/status(todo|doing|done)/progress(0-100整数)/dueDate(YYYY-MM-DD)。禁止删除、禁止批量、禁止未知字段。没有建议动作就不要输出 json 块。`
 
 export interface AskResult {
   diagnosis: string
   accepted: CopilotAction[]
   rejected: { action: CopilotAction, reason: string }[]
+}
+
+/** 本地日零点 YYYY-MM-DD（Asia/Shanghai 语义由调用方环境决定；离线测试直接传 today）。 */
+export function localToday(d = new Date()): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
 export async function askCopilot(
@@ -38,7 +69,7 @@ export async function askCopilot(
   taskIds: string[],
 ): Promise<AskResult> {
   const raw = await generateDraft(llm, {
-    system: SYSTEM,
+    system: COPILOT_SYSTEM,
     user: `【项目数据】\n${ctxText}\n\n【用户问题】${question}`,
     maxTokens: 4000,
     provider: route.provider,
