@@ -52,63 +52,80 @@ await run('task add {"projectId":"p-0001","title":"任务A","assignee":"ice","st
 await run('task add {"projectId":"p-0001","title":"任务B","assignee":"","status":"todo","priority":"P2"}')
 const t1 = 't-0001'
 
-// ===== 1) 同草稿首次 Promise.all 并发：真实领域写入计数恰 1 =====
+// ===== 1) 同草稿首次 Promise.all 并发：spy 真实 tasks 表 put 计数恰 1 =====
 {
   const acts = [{ op: 'task.update', id: t1, patch: { progress: 40 } }]
-  // spy：包住 updateTask 已有的真实写路径（通过观察 tasks 表 updatedAt 被推进次数）
-  const before = domain.table('tasks').get(t1).updatedAt
-  await Promise.all([
-    run('ask-apply p-0001 ' + JSON.stringify(acts)),
-    run('ask-apply p-0001 ' + JSON.stringify(acts)),
-  ])
-  const u1 = domain.table('tasks').get(t1).updatedAt
-  assert.notEqual(u1, before, '首次并发应产生一次领域写')
+  // spy：包住真实 tasks 表 put，count++ 后 await 原函数，finally 还原
+  const tasksTable = domain.table('tasks')
+  const origPut = tasksTable.put.bind(tasksTable)
+  let putCount = 0
+  tasksTable.put = async (id, val) => { putCount++; return origPut(id, val) }
+  try {
+    const [rA, rB] = await Promise.all([
+      run('ask-apply p-0001 ' + JSON.stringify(acts)),
+      run('ask-apply p-0001 ' + JSON.stringify(acts)),
+    ])
+    assert.equal(putCount, 1, '同草稿首次并发只应真实写库一次')
+    assert.equal(rA.text, rB.text, '两次并发返回一致')
+    // 顺序重复同一草稿：TTL 幂等，count 不增
+    await run('ask-apply p-0001 ' + JSON.stringify(acts))
+    assert.equal(putCount, 1, '顺序重复同一草稿不应再写')
+  } finally {
+    tasksTable.put = origPut
+  }
   assert.equal(domain.table('tasks').get(t1).progress, 40, '合法 patch 生效')
-  // 立即再发同一草稿：TTL 幂等拦截，updatedAt 不得再推进（证明未第二次写）
-  await run('ask-apply p-0001 ' + JSON.stringify(acts))
-  assert.equal(domain.table('tasks').get(t1).updatedAt, u1, '同草稿二次确认不应再写（updatedAt 不变）')
 }
 
-// ===== 2) restore dry-run：不 confirm，快照不变 =====
+// ===== 2) restore dry-run（合法备份不带 confirm）：domain 与备份文件列表均不变 =====
 const { createBackup, restoreBackupFromContent, collectBackup } = await import('../lib/core/backup.js')
+const { handleBackupCommand } = await import('../lib/commands/backup.js')
 {
   const bak = await createBackup(domain, BAKDIR)
-  const snap1 = JSON.parse(readFileSync(bak.path, 'utf8'))
-  // dry-run：仅 validate，不 apply
+  const legalTxt = readFileSync(bak.path, 'utf8')
+  const filesBefore = readdirSync(BAKDIR).length
   const beforeCollect = collectBackup(domain)
-  // 模拟坏内容直接抛错 = dry-run 不写
-  await assert.rejects(() => restoreBackupFromContent(domain, '{}', BAKDIR), /格式不认识|无法解析/)
-  const afterCollect = collectBackup(domain)
-  assert.deepEqual(norm(beforeCollect), norm(afterCollect), 'dry-run/坏内容后 domain 实体不变')
+  // 通过命令 dry-run：合法备份 + 不带 confirm -> 仅预览不写
+  const preview = await handleBackupCommand('restore-content ' + legalTxt, domain)
+  assert.notEqual(preview.kind, 'error', '合法备份预览不应报错')
+  assert.match(preview.text, /预览|confirm|确认/, '应为预览提示而非已执行')
+  assert.deepEqual(norm(collectBackup(domain)), norm(beforeCollect), 'dry-run 后 domain 实体不变')
+  assert.equal(readdirSync(BAKDIR).length, filesBefore, 'dry-run 后备份文件列表不变')
 }
 
-// ===== 3) 修改字段后恢复旧备份 -> 回旧值；安全快照=恢复前值；去 exportedAt deepEqual =====
+// ===== 3) 修改字段后恢复旧备份 -> collectBackup 与旧备份一致；安全快照=恢复前全量 =====
 {
   const oldTxt = readFileSync(readdirSync(BAKDIR).filter(f=>f.endsWith('.json')).map(f=>join(BAKDIR,f)).sort()[0],'utf8')
-  // 当前修改任务A assignee -> 新人
+  // 修改任务A assignee -> 新人
   await run('task update ' + t1 + ' ' + JSON.stringify({ assignee: '新人' }))
   assert.equal(domain.table('tasks').get(t1).assignee, '新人')
-  const modTxt = readFileSync(readdirSync(BAKDIR).filter(f=>f.endsWith('.json')).map(f=>join(BAKDIR,f)).sort()[0],'utf8')
+  const preRestore = collectBackup(domain)
   // 恢复旧备份
   const res = await restoreBackupFromContent(domain, oldTxt, BAKDIR)
   assert.ok(res.safetySnapshot, '应生成安全快照')
   assert.equal(domain.table('tasks').get(t1).assignee, 'ice', '恢复后回到旧值')
-  // 安全快照内容 == 修改后的恢复前值（任务A assignee=新人）
+  // 恢复后 domain 实体 与 旧备份 deepEqual（非自证 res.backup）
+  assert.deepEqual(norm(collectBackup(domain)), norm(JSON.parse(oldTxt)), '恢复后 domain 与旧备份一致')
+  // 安全快照全实体 与 恢复前(已修改)全量 deepEqual
   const snap = JSON.parse(readFileSync(res.safetySnapshot, 'utf8'))
-  const snapA = snap.tasks.find(t => t.id === t1)
-  assert.equal(snapA.assignee, '新人', '安全快照应=恢复前(已修改)的值')
-  // 恢复结果去 exportedAt 与旧备份 deepEqual
-  assert.deepEqual(norm(res.backup), norm(JSON.parse(oldTxt)), '恢复结果与旧备份一致')
+  assert.deepEqual(norm(snap), norm(preRestore), '安全快照应=恢复前全量')
 }
 
-// ===== 4) 备份预校验：语法合法但 schema/关系非法 -> domain 与文件集合不变 =====
+// ===== 4) 备份预校验：schema 非法 + 关系非法单例 -> domain 与文件集合不变 =====
 {
-  const beforeFiles = readdirSync(BAKDIR).length
-  const bad = { format: 'pm-tool-backup', formatVersion: 1, exportedAt: '2026-01-01T00:00:00Z',
-    projects: [], tasks: [{ id: 'bad-1', projectId: 'p-x', title: '', description: '', assignee: '', status: 'bogus', priority: 'P1', progress: 0, code: 'x', order: 1, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' }],
+  const filesBefore = readdirSync(BAKDIR).length
+  const colBefore = collectBackup(domain)
+  // schema 非法：status='bogus'
+  const badSchema = { format: 'pm-tool-backup', formatVersion: 1, exportedAt: '2026-01-01T00:00:00Z',
+    projects: [], tasks: [{ id: 'bad-1', projectId: 'p-x', title: 'x', description: '', assignee: '', status: 'bogus', priority: 'P1', progress: 0, code: '1', order: 1, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' }],
     milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
-  await assert.rejects(() => restoreBackupFromContent(domain, JSON.stringify(bad), BAKDIR), /.+/)
-  assert.equal(readdirSync(BAKDIR).length, beforeFiles, '坏备份后 backups 文件集合不变')
+  await assert.rejects(() => restoreBackupFromContent(domain, JSON.stringify(badSchema), BAKDIR), /.+/)
+  // 关系非法：schema 合法但 projectId 指向不存在项目
+  const badRel = { format: 'pm-tool-backup', formatVersion: 1, exportedAt: '2026-01-01T00:00:00Z',
+    projects: [], tasks: [{ id: 'bad-2', projectId: 'nope', title: 'x', description: '', assignee: '', status: 'todo', priority: 'P1', progress: 0, code: '1', order: 1, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' }],
+    milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
+  await assert.rejects(() => restoreBackupFromContent(domain, JSON.stringify(badRel), BAKDIR), /.+/)
+  assert.deepEqual(norm(collectBackup(domain)), norm(colBefore), '坏备份后 domain 实体不变')
+  assert.equal(readdirSync(BAKDIR).length, filesBefore, '坏备份后 backups 文件集合不变')
 }
 
 function norm(b){ const c=JSON.parse(JSON.stringify(b)); delete c.exportedAt; return c }
