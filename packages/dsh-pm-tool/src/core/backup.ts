@@ -98,7 +98,7 @@ export async function createBackup(domain: PmDomain, directory?: string): Promis
   }
 }
 
-function validateBackup(value: unknown): PmBackup {
+export function validateBackup(value: unknown): PmBackup {
   if (!value || typeof value !== 'object') throw new Error('备份文件不是有效 JSON 对象')
   const b = value as PmBackup
   if (b.format !== 'pm-tool-backup' || b.formatVersion !== 1) throw new Error('备份文件格式不认识（format/formatVersion 不符）')

@@ -4,7 +4,7 @@
  */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import type { PmDomain } from '../core/storage.js'
-import { createBackup, readBackupFile, restoreBackup, restoreBackupFromContent } from '../core/backup.js'
+import { createBackup, readBackupFile, restoreBackup, restoreBackupFromContent, validateBackup } from '../core/backup.js'
 
 export const backupHelp = [
   '备份/恢复命令（离线，仅 pmtool 七类实体，不含宿主会话与密钥）：',
@@ -24,12 +24,13 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
     if (!jsonText) return { kind: 'error', text: '请使用：/pm restore-content "<备份JSON>" [confirm]' }
     try {
       if (!isConfirm) {
+        validateBackup(JSON.parse(jsonText))
         return { kind: 'success', text: [
           '已读取备份内容（演练，尚未恢复）。确认将用此备份替换当前七类实体（恢复前自动先存安全快照）：',
           '  /pm restore-content "<同上JSON>" confirm',
         ].join('\n') }
       }
-      const result = await restoreBackupFromContent(domain, JSON.parse(jsonText))
+      const result = await restoreBackupFromContent(domain, jsonText)
       return {
         kind: 'success',
         text: [
