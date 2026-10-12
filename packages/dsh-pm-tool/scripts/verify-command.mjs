@@ -1,22 +1,28 @@
 /**
  * 第 0 步「打通验证」——直接运行“已构建插件”的命令处理器（不启动 Web、不经过模型）。
  *
- * 做法：用真实 Cordis 内核 + 真实 storage-json 后端（root 指向 pm-tool/data）+
- * 真实 DomainFacility 装配出 ctx.storageDomain；命令分发服务用一个仅捕获注册项的
- * 轻量桩代替（命令的 UI/会话分发与存储正确性无关）。随后导入已构建的
- * `lib/index.js`，执行其真实 apply()，再直接调用它注册的 `/pm` 处理器，
- * 依次跑 `ping` 与 `selftest`，验证：
+ * 做法：用真实 Cordis 内核 + 真实 storage-json 后端（root 指向一个**独立隔离的临时目录**，
+ * 绝不默认写正式 pm-tool/data）+ 真实 DomainFacility 装配出 ctx.storageDomain；
+ * 命令分发服务用一个仅捕获注册项的轻量桩代替（命令的 UI/会话分发与存储正确性无关）。
+ * 随后导入已构建的 `lib/index.js`，执行其真实 apply()，再直接调用它注册的 `/pm`
+ * 处理器，依次跑 `ping` 与 `selftest`，验证：
  *   - ping 离线返回中文 pong；
  *   - selftest 经真实处理器写入并读回记录，落为可读 JSON。
  *
+ * 隔离约定（ADL-verify-isolation）：
+ *   - 默认 dataRoot = os.tmpdir() 下一次性 mkdtemp，运行结束后自行保留（不删除），
+ *     与正式 pm-tool/data、共享 packages/backups、用户 home profile 完全隔离；
+ *   - 显式设置 PM_DATA_ROOT 时才使用指定目录（仅用于外层 guard 定向到独立样本）；
+ *   - 启动时打印所用 root，便于人工核对落点。
+ *
  * 运行环境：macOS + Node v22（nvm）；先 `pnpm run build`，再
  *   `node scripts/verify-command.mjs`
- * 可选环境变量 PM_DATA_ROOT 覆盖数据根目录。
  */
 
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, statSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import assert from 'node:assert/strict'
 
 import { Context } from '@deepseek-ai/cordis'
@@ -25,7 +31,11 @@ import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const dataRoot = process.env.PM_DATA_ROOT || join(here, '..', '..', '..', 'data')
+// 默认隔离到系统临时目录；只有显式 PM_DATA_ROOT 才使用调用方指定的目录。
+const dataRoot = process.env.PM_DATA_ROOT
+  || mkdtempSync(join(tmpdir(), 'pm-tool-verify-cmd-'))
+console.log('[verify-command] 数据根（隔离）= ' + dataRoot)
+console.log('[verify-command] PM_DATA_ROOT 环境变量 = ' + (process.env.PM_DATA_ROOT || '(未设置，使用一次性临时目录)'))
 
 // --- 真实存储栈装配（与 verify-storage.mjs 相同，均为官方测试惯用法）---
 const ctx = new Context()

@@ -24,7 +24,9 @@
     "locale/*.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && tsdown --config tsdown.config.ts"
+    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && tsdown --config tsdown.config.ts",
+    "verify": "node scripts/verify-isolation.mjs",
+    "verify:isolation-only": "node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs"
   },
   "dsh": {
     "client": {

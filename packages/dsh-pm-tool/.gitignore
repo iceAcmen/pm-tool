@@ -2,3 +2,8 @@
 lib/
 # 依赖（根 .gitignore 已全局忽略 node_modules，这里再次声明以便单包独立使用）
 node_modules/
+# 验证脚本一次性隔离目录（ADL-verify-isolation）：默认写系统 os.tmpdir；
+# 历史上 TMPDIR 指到本目录时累积的临时样本，属可再生 scratch，不入库、不删除。
+# 注意：若 .verify-tmp/ 下已有被误跟踪的文件，gitignore 不会自动 untrack，
+# 需项目所有者确认后再 `git rm --cached`，本任务不擅自处理。
+.verify-tmp/

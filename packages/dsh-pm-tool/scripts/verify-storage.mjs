@@ -6,12 +6,17 @@
  * defineDomain → open → put → get 流程，最后把落盘的可读 JSON 打印出来。
  *
  * 运行环境：macOS + Node v22（nvm）；在包目录执行 `node scripts/verify-storage.mjs`。
- * 可选环境变量 PM_DATA_ROOT：自定义数据根目录（默认 pm-tool/data）。
+ *
+ * 隔离约定（ADL-verify-isolation）：
+ *   - 默认 dataRoot = os.tmpdir() 下一次性 mkdtemp，**绝不默认写正式 pm-tool/data**；
+ *   - 仅当显式设置 PM_DATA_ROOT 时才使用指定目录（外层 guard 定向独立样本时使用）；
+ *   - 启动时打印所用 root，便于人工核对落点。
  */
 
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, statSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import assert from 'node:assert/strict'
 
 import { Context } from '@deepseek-ai/cordis'
@@ -22,7 +27,11 @@ import { pmDomainSpec } from '../lib/core/storage.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 // scripts/ 上三级即产品仓库根：packages/dsh-pm-tool/scripts -> pm-tool
-const dataRoot = process.env.PM_DATA_ROOT || join(here, '..', '..', '..', 'data')
+// 默认隔离到系统临时目录；只有显式 PM_DATA_ROOT 才使用调用方指定的目录。
+const dataRoot = process.env.PM_DATA_ROOT
+  || mkdtempSync(join(tmpdir(), 'pm-tool-verify-storage-'))
+console.log('[verify-storage] 数据根（隔离）= ' + dataRoot)
+console.log('[verify-storage] PM_DATA_ROOT 环境变量 = ' + (process.env.PM_DATA_ROOT || '(未设置，使用一次性临时目录)'))
 
 // 按官方 storage-domain 测试的惯用法在裸 Cordis 上下文手动挂载：
 // 裸 new Context() 不会触发插件 apply 内的 ctx.effect 生命周期，因此不直接
