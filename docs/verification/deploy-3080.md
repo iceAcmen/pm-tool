@@ -9,3 +9,8 @@
 - 启动: profile pm, --host 127.0.0.1 --no-open; DSH_PM_E2E 未开启; 未配 Key/未改凭据/未打 tag
 - HTTP: ?token= 303 -> cookie 会话 -> / 返回 200（日志 docs/verification/dsh-3080.log）
 - 已知限制: 真实浏览器 GUI 端到端本轮未运行（工具能力受限），独立验收待补；不代表生产已验收
+
+## 勘误（自检写入范围）
+- 早前未隔离运行时，verify-command/verify-storage 曾向真实 data/pmtool/checks/selftest.json 写自检记录（非业务项目实体，p-0001~4 未动）。
+- 本轮已用 PM_DATA_ROOT+TMPDIR=项目 .tmp/verify-root 隔离全量重跑：35/35 PASS，写入全部落在隔离根（日志 verify-all-isolated-*.log）。
+- 历史 selftest.json 保留未删；此后 runner 应默认带 PM_DATA_ROOT 隔离。
