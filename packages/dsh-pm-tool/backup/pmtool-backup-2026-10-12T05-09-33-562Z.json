@@ -1,0 +1,86 @@
+{
+  "format": "pm-tool-backup",
+  "formatVersion": 1,
+  "exportedAt": "2026-10-12T05:09:33.562Z",
+  "projects": [
+    {
+      "id": "p-0001",
+      "name": "集成测试",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-01-01",
+      "targetDate": "2026-12-31",
+      "createdAt": "2026-10-12T05:09:33.460Z",
+      "updatedAt": "2026-10-12T05:09:33.460Z"
+    },
+    {
+      "id": "p-0002",
+      "name": "另一项目",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-01-01",
+      "targetDate": "2026-12-31",
+      "createdAt": "2026-10-12T05:09:33.498Z",
+      "updatedAt": "2026-10-12T05:09:33.498Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t-0001",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "官网开发",
+      "description": "",
+      "assignee": "并发乙",
+      "status": "done",
+      "priority": "P1",
+      "startDate": "2026-03-01",
+      "dueDate": "2026-03-20",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "1",
+      "order": 1,
+      "createdAt": "2026-10-12T05:09:33.478Z",
+      "updatedAt": "2026-10-12T05:09:33.553Z"
+    },
+    {
+      "id": "t-0002",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "测试",
+      "description": "",
+      "assignee": "ice",
+      "status": "todo",
+      "priority": "P1",
+      "progress": 60,
+      "milestoneId": null,
+      "code": "2",
+      "order": 2,
+      "createdAt": "2026-10-12T05:09:33.489Z",
+      "updatedAt": "2026-10-12T05:09:33.525Z"
+    },
+    {
+      "id": "t-0003",
+      "projectId": "p-0002",
+      "parentId": null,
+      "title": "别人的任务",
+      "description": "",
+      "assignee": "x",
+      "status": "todo",
+      "priority": "P1",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "1",
+      "order": 1,
+      "createdAt": "2026-10-12T05:09:33.506Z",
+      "updatedAt": "2026-10-12T05:09:33.506Z"
+    }
+  ],
+  "milestones": [],
+  "riskIssues": [],
+  "meetings": [],
+  "reports": [],
+  "deliverables": []
+}
