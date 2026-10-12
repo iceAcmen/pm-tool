@@ -3,8 +3,8 @@
  * 恢复前生成安全快照、备份内容不含 checks/密钥字段。
  */
 import assert from 'node:assert/strict'
-import { mkdtempSync } from 'node:fs'
-import { readFileSync, existsSync } from 'node:fs'
+import { mkdtempSync, readdirSync, readFileSync, existsSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@deepseek-ai/cordis'
@@ -12,11 +12,17 @@ import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { apply } from '../lib/index.js'
-import { createBackup, readBackupFile, restoreBackup } from '../lib/core/backup.js'
+import { createBackup, readBackupFile, restoreBackup, defaultBackupDirectory } from '../lib/core/backup.js'
 
 delete process.env.DEEPSEEK_API_KEY
-const root = mkdtempSync(join(tmpdir(), 'pm-tool-backup-'))
-const backupDir = mkdtempSync(join(tmpdir(), 'pm-tool-backup-out-'))
+const ROOT_BASE = mkdtempSync(join(tmpdir(), 'pm-tool-space-'))
+const root = join(ROOT_BASE, 'data root with space')
+const backupDir = join(ROOT_BASE, 'backup dir with space')
+function hashSet(dir) {
+  try { return new Set(readdirSync(dir).map(f => f + ':' + createHash('sha256').update(readFileSync(join(dir,f))).digest('hex'))) }
+  catch { return new Set() }
+}
+const before = hashSet(defaultBackupDirectory)
 
 const ctx = new Context()
 await ctx.plugin(Storage)
@@ -62,18 +68,19 @@ try {
   assert.equal([...domain.table('tasks').entries()].length, 2)
 
   // 3) restore 缺 confirm 不执行（演练）
-  const drill = await run(`restore ${b.path}`)
+  const drill = await run(`restore "${b.path}"`)
   assert.match(drill.text, /演练/)
   assert.equal([...domain.table('tasks').entries()].length, 2, '缺 confirm 不得恢复')
 
   // 4) restore confirm：先存安全快照，再用备份替换（任务数回到 1）
-  const result = await restoreBackup(domain, b.path)
+  const result = await restoreBackup(domain, b.path, backupDir)
   assert.ok(result.safetySnapshot, '恢复前当前有数据，应生成安全快照')
   assert.ok(existsSync(result.safetySnapshot), '安全快照文件应已写出')
   assert.equal([...domain.table('tasks').entries()].length, 1, '恢复后任务数应回到备份时的 1')
   assert.equal([...domain.table('projects').entries()].length, 1)
 
-  console.log('verify-backup 全部通过。')
+  assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backups 在测试前后应不变')
+console.log('verify-backup 全部通过（隔离目录+默认backups未变）。')
 } finally {
   await facility.closeAll()
 }

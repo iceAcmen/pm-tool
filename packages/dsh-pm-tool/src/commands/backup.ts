@@ -41,7 +41,8 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
       return { kind: 'error', text: `恢复失败：${error instanceof Error ? error.message : String(error)}` }
     }
   }
-  const tokens = argument.trim().split(/\s+/).filter(Boolean)
+  // T-DEF-009：健壮 tokenizer，兼容 "/path with spaces" 引号路径（不 eval/不 shell）
+  const tokens = argument.trim().match(/"[^\"]*"|'[^']*'|\S+/g)?.map(t => t.replace(/^['"]|['"]$/g, '')) ?? []
   if (tokens[0] === 'restore' || (tokens[0] ?? '').toLowerCase() === 'restore') {
     const [, filePath, confirmWord] = tokens
     if (!filePath) return { kind: 'error', text: '请使用：/pm restore <备份文件> [confirm]' }
