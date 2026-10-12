@@ -16,7 +16,15 @@ import type { ProgressReport } from './progress-report.js'
 import type { Deliverable } from './deliverable.js'
 
 /** 默认备份目录：产品仓库 backups/（gitignored）。 */
-export const defaultBackupDirectory = fileURLToPath(new URL('../../../backups/', import.meta.url))
+const BUILTIN_DEFAULT = fileURLToPath(new URL('../../../backups/', import.meta.url))
+
+/** 默认备份目录：产品仓库 backups/，可由环境变量 DSH_PM_BACKUP_DIR 覆盖（隔离实例用）。 */
+export function resolveBackupDirectory(override?: string): string {
+  const env = override ?? process.env.DSH_PM_BACKUP_DIR
+  if (env && env.trim()) return resolve(env)
+  return BUILTIN_DEFAULT
+}
+export const defaultBackupDirectory = resolveBackupDirectory()
 
 export const BACKUP_TABLES = [
   'projects', 'tasks', 'milestones', 'risk_issues', 'meetings', 'reports', 'deliverables',
@@ -72,7 +80,7 @@ export function collectBackup(domain: PmDomain, exportedAt = new Date().toISOStr
 export async function createBackup(domain: PmDomain, directory?: string): Promise<BackupSummary> {
   const backup = collectBackup(domain)
   const stamp = backup.exportedAt.replace(/[:.]/g, '-')
-  const dir = directory ? resolve(directory) : defaultBackupDirectory
+  const dir = directory ? resolve(directory) : resolveBackupDirectory()
   await mkdir(dir, { recursive: true, mode: 0o700 })
   const path = resolve(dir, `pmtool-backup-${stamp}.json`)
   await writeFile(path, `${JSON.stringify(backup, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 })
@@ -196,7 +204,7 @@ export async function exportBackupJson(
 ): Promise<{ path: string, content: string, backup: PmBackup }> {
   const backup = collectBackup(domain)
   const content = `${JSON.stringify(backup, null, 2)}\n`
-  const dir = directory ? resolve(directory) : defaultBackupDirectory
+  const dir = directory ? resolve(directory) : resolveBackupDirectory()
   await mkdir(dir, { recursive: true, mode: 0o700 })
   const path = resolve(dir, 'pmtool-backup.json')
   await writeExportFile(path, content, overwrite)

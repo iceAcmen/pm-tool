@@ -79,7 +79,12 @@ try {
   assert.equal([...domain.table('tasks').entries()].length, 1, '恢复后任务数应回到备份时的 1')
   assert.equal([...domain.table('projects').entries()].length, 1)
 
-  assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backups 在测试前后应不变')
+  // T-DEF-010 env 覆盖
+process.env.DSH_PM_BACKUP_DIR = join(ROOT_BASE, 'env backup dir with space')
+const r2 = await restoreBackup(domain, b.path, undefined)
+assert.ok(r2.safetySnapshot.startsWith(process.env.DSH_PM_BACKUP_DIR), 'env 生效时安全快照落 env 目录')
+delete process.env.DSH_PM_BACKUP_DIR
+assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backups 在测试前后应不变')
 console.log('verify-backup 全部通过（隔离目录+默认backups未变）。')
 } finally {
   await facility.closeAll()
