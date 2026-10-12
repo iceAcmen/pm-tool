@@ -33,8 +33,34 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
+import {
+  setPointerOpener, setRowOpener, takeOpenerSpec, resolveDrawerFocusTarget,
+  type FocusDoc, type OpenerSpec,
+} from '../core/drawer-focus.js'
+import {
+  validateProjectForm, validateMilestoneForm, firstInvalidField,
+  type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
+} from './form-validation.js'
 import styles from './panel.css?raw'
+
+/** R3-OBS-002：把焦点归还解析接到真实 document（测试时由伪 DOM 注入，不在此硬编码）。 */
+const pmFocusDoc: FocusDoc = {
+  contains: (node) => typeof Node !== 'undefined' && node instanceof Node ? document.contains(node as Node) : false,
+  rowOpener: (rowId) => document.querySelector(`[data-pm-row="${rowId}"] .pm-title-cell, [data-pm-row="${rowId}"] .pm-row-button`) as HTMLElement | null,
+  fallbackControl: () => document.querySelector('.pm-add-row') as HTMLElement | null,
+  anyRowTitle: () => document.querySelector('.pm-title-cell') as HTMLElement | null,
+}
+
+/** R3-OBS-002：捕获打开抽屉的真实 opener。
+ *  pointerdown 覆盖鼠标点击；click 捕获额外覆盖「键盘 Tab 聚焦按钮后 Enter/Space」触发的原生 click
+ *  （该路径不经过 TaskTable 的 openActive，也无 pointerdown）。抽屉内交互一律不记录，避免污染已快照的 opener。 */
+function recordDrawerOpener(e: { target: EventTarget | null }) {
+  const t = (e.target as HTMLElement | null)
+  if (t?.closest?.('.pm-drawer-layer')) return
+  const el = t?.closest?.('button, a, [role="button"]')
+  setPointerOpener(el as HTMLElement | null)
+}
 
 type Project = {
   id: string
@@ -344,7 +370,11 @@ export function PmPanel({ execute }: PmPanelApi) {
 
   return <>
     <style>{styles}</style>
-    <main className="pm-shell">
+    <main
+      className="pm-shell"
+      onPointerDownCapture={recordDrawerOpener}
+      onClickCapture={recordDrawerOpener}
+    >
       {message && <Notice message={message} onClose={() => setMessage('')}/>}
 
       {restorePreview && (
@@ -1216,7 +1246,7 @@ function TaskTable({
         confirmBatchDelete()
       } else if (action.type === 'openActive') {
         const row = visible[activeIdx]
-        if (row) onEdit?.(row)
+        if (row) { setRowOpener(row.id); onEdit?.(row) }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -1499,7 +1529,7 @@ function TaskRow({
   onSaved: () => void
 }) {
     {const milestone = milestones.find(item => item.id === task.milestoneId)
-      return <tr className="pm-record-row pm-task-row">
+      return <tr className="pm-record-row pm-task-row" data-pm-row={task.id}>
         <td className="pm-col-check">
           <input
             type="checkbox"
@@ -2373,19 +2403,24 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
 }
 
 function DrawerPanel({ title, onClose, children }: { title: string, onClose: () => void, children: ReactNode }) {
-  const openerRef = useRef<HTMLElement | null>(null)
+  // R3-OBS-002：mount 时快照「打开动作发生那一刻」记录的 opener，
+  // 绝不在 mount 后读 document.activeElement（已被表单 autoFocus 抢成抽屉内 input）。
+  const openerRef = useRef<OpenerSpec>({ kind: 'none' })
+  useLayoutEffect(() => {
+    openerRef.current = takeOpenerSpec()
+  }, [])
   useEffect(() => {
-    openerRef.current = document.activeElement as HTMLElement | null
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') { ev.stopPropagation(); onClose() }
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose])
+  // 关闭/卸载时归还焦点：真实 opener → 行内 title/edit → 当前视图「添加记录」控件，
+  // opener 已删除才兜底，绝不落到全局 .pm-button-primary / 提醒条。
   useEffect(() => () => {
     requestAnimationFrame(() => {
-      const opener = openerRef.current
-      const target = opener && document.contains(opener) ? opener : document.querySelector('.pm-row-active button, .pm-button-primary')
+      const target = resolveDrawerFocusTarget(openerRef.current, pmFocusDoc)
       if (target instanceof HTMLElement) target.focus()
     })
   }, [])
@@ -2401,8 +2436,24 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   </div>
 }
 
-function Field({ label, children, wide }: { label: string, children: ReactNode, wide?: boolean }) {
-  return <label className="pm-field" data-wide={wide || undefined}><span>{label}</span>{children}</label>
+/** R3-UX-001：Field 增加可选 required（必填星号）与 error（受控中文内联错误）。
+ *  不传时渲染与旧版完全一致，其他实体表单不受影响。 */
+function Field({ label, children, wide, required, error, errorId }: {
+  label: string
+  children: ReactNode
+  wide?: boolean
+  required?: boolean
+  error?: string
+  errorId?: string
+}) {
+  return <label className="pm-field" data-wide={wide || undefined} data-invalid={error ? true : undefined}>
+    <span>
+      {label}
+      {required && <span className="pm-field-required" aria-hidden="true"> *</span>}
+    </span>
+    {children}
+    {error && <span className="pm-field-error" id={errorId} role="alert">{error}</span>}
+  </label>
 }
 
 function ProjectForm({
@@ -2416,39 +2467,90 @@ function ProjectForm({
   run: (line: string) => Promise<boolean>
   onSaved: () => void
 }) {
+  // R3-UX-001：name/startDate/targetDate 受控，校验错误内联常驻（替代原生转瞬气泡）。
+  const [values, setValues] = useState<ProjectFormValues>({
+    name: project?.name ?? '',
+    startDate: project?.startDate ?? '',
+    targetDate: project?.targetDate ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof ProjectFormValues, value: string) => {
+    setValues(prev => {
+      const next = { ...prev, [field]: value }
+      // 输入即重算：字段被纠正后自动清掉对应错误。
+      setErrors(validateProjectForm(next))
+      return next
+    })
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    // 受控校验：与按钮/Enter 同路径（submit 默认提交即此处）。不通过则定位到首个错误字段，不发命令。
+    const nextErrors = validateProjectForm(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['name', 'startDate', 'targetDate'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
+    // 前端校验通过后再交服务端；服务端 run 错误（重名等）仍由全局 Notice 展示，不在这里掩盖。
     const form = new FormData(event.currentTarget)
     const payload = project
       ? {
-          name: form.get('name'),
+          name: values.name,
           description: form.get('description'),
           owner: form.get('owner'),
           status: form.get('status'),
-          startDate: form.get('startDate'),
-          targetDate: form.get('targetDate'),
+          startDate: values.startDate,
+          targetDate: values.targetDate,
         }
       : {
-          name: form.get('name'),
+          name: values.name,
           description: form.get('description'),
           owner: form.get('owner'),
-          startDate: form.get('startDate'),
-          targetDate: form.get('targetDate'),
+          startDate: values.startDate,
+          targetDate: values.targetDate,
         }
     const success = await run(project
       ? `project update ${project.id} ${JSON.stringify(payload)}`
       : `project add ${JSON.stringify(payload)}`)
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-    <Field label="项目名称" wide><input name="name" defaultValue={project?.name} required autoFocus/></Field>
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+    <Field label="项目名称" wide required error={errors.name} errorId="project-name-error">
+      <input
+        name="name" value={values.name} autoFocus
+        onChange={e => setField('name', e.currentTarget.value)}
+        aria-required="true"
+        aria-invalid={errors.name ? true : undefined}
+        aria-describedby={errors.name ? 'project-name-error' : undefined}
+      />
+    </Field>
     <Field label="项目描述" wide><textarea name="description" defaultValue={project?.description} rows={4}/></Field>
     <Field label="负责人"><input name="owner" defaultValue={project?.owner}/></Field>
     {project && <Field label="项目状态"><select name="status" defaultValue={project.status}>
       {Object.entries(projectStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
     </select></Field>}
-    <Field label="开始日期"><input name="startDate" type="date" required defaultValue={project?.startDate}/></Field>
-    <Field label="目标日期"><input name="targetDate" type="date" required defaultValue={project?.targetDate}/></Field>
+    <Field label="开始日期" required error={errors.startDate} errorId="project-start-error">
+      <input
+        name="startDate" type="date" value={values.startDate}
+        onChange={e => setField('startDate', e.currentTarget.value)}
+        aria-required="true"
+        aria-invalid={errors.startDate ? true : undefined}
+        aria-describedby={errors.startDate ? 'project-start-error' : undefined}
+      />
+    </Field>
+    <Field label="目标日期" required error={errors.targetDate} errorId="project-target-error">
+      <input
+        name="targetDate" type="date" value={values.targetDate}
+        onChange={e => setField('targetDate', e.currentTarget.value)}
+        aria-required="true"
+        aria-invalid={errors.targetDate ? true : undefined}
+        aria-describedby={errors.targetDate ? 'project-target-error' : undefined}
+      />
+    </Field>
     <div className="pm-drawer-actions">
       {project && <button
         className="pm-button pm-button-danger"
@@ -2592,14 +2694,37 @@ function MilestoneForm({
   run: (line: string) => Promise<boolean>
   onSaved: () => void
 }) {
+  // R3-UX-001：title/targetDate 受控，必填错误内联常驻。
+  const [values, setValues] = useState<MilestoneFormValues>({
+    title: milestone?.title ?? '',
+    targetDate: milestone?.targetDate ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof MilestoneFormValues, value: string) => {
+    setValues(prev => {
+      const next = { ...prev, [field]: value }
+      setErrors(validateMilestoneForm(next))
+      return next
+    })
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const nextErrors = validateMilestoneForm(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['title', 'targetDate'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
     const form = new FormData(event.currentTarget)
     const status = String(form.get('status'))
     const payload = {
-      title: form.get('title'),
+      title: values.title,
       description: form.get('description'),
-      targetDate: form.get('targetDate'),
+      targetDate: values.targetDate,
       status,
       achievedDate: status === 'achieved' ? form.get('achievedDate') || new Date().toISOString().slice(0, 10) : null,
     }
@@ -2608,13 +2733,29 @@ function MilestoneForm({
       : `milestone add ${JSON.stringify({ projectId, ...payload })}`)
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-    <Field label="里程碑名称" wide><input name="title" defaultValue={milestone?.title} required autoFocus/></Field>
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+    <Field label="里程碑名称" wide required error={errors.title} errorId="milestone-title-error">
+      <input
+        name="title" value={values.title} autoFocus
+        onChange={e => setField('title', e.currentTarget.value)}
+        aria-required="true"
+        aria-invalid={errors.title ? true : undefined}
+        aria-describedby={errors.title ? 'milestone-title-error' : undefined}
+      />
+    </Field>
     <Field label="说明 / 达成标准" wide><textarea name="description" defaultValue={milestone?.description} rows={5}/></Field>
     <Field label="状态"><select name="status" defaultValue={milestone?.status ?? 'planned'}>
       {Object.entries(milestoneStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
     </select></Field>
-    <Field label="目标日期"><input name="targetDate" type="date" required defaultValue={milestone?.targetDate}/></Field>
+    <Field label="目标日期" required error={errors.targetDate} errorId="milestone-target-error">
+      <input
+        name="targetDate" type="date" value={values.targetDate}
+        onChange={e => setField('targetDate', e.currentTarget.value)}
+        aria-required="true"
+        aria-invalid={errors.targetDate ? true : undefined}
+        aria-describedby={errors.targetDate ? 'milestone-target-error' : undefined}
+      />
+    </Field>
     <Field label="实际达成日期" wide><input name="achievedDate" type="date" defaultValue={milestone?.achievedDate ?? ''}/></Field>
     <div className="pm-drawer-actions">
       {milestone && <button

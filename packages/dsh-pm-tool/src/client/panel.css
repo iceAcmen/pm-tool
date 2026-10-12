@@ -620,6 +620,27 @@
 }
 .pm-field input:hover, .pm-field select:hover, .pm-field textarea:hover { border-color: var(--dsw-alias-border-l4); }
 .pm-field input:focus, .pm-field select:focus, .pm-field textarea:focus { border-color: var(--pm-blue); }
+
+/* R3-UX-001：必填标识 + 受控内联错误（替代原生转瞬气泡）。配色全部走宿主主题 token，不写死 hex。 */
+.pm-field-required { color: var(--pm-danger); font-weight: 600; }
+.pm-field-error {
+  display: block;
+  color: var(--pm-danger);
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.35;
+}
+.pm-field[data-invalid="true"] input,
+.pm-field[data-invalid="true"] select,
+.pm-field[data-invalid="true"] textarea {
+  border-color: var(--pm-danger);
+}
+.pm-field[data-invalid="true"] input:focus,
+.pm-field[data-invalid="true"] select:focus,
+.pm-field[data-invalid="true"] textarea:focus {
+  border-color: var(--pm-danger);
+  outline-color: var(--pm-danger);
+}
 .pm-drawer-actions {
   grid-column: 1 / -1;
   display: flex;
