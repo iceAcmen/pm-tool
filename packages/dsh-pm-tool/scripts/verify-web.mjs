@@ -199,7 +199,11 @@ try {
   assert.match(bundle, /pm-war-room/)               // PROD-05 作战室
   assert.match(bundle, /pm-agenda/)                 // PROD-05 近期议程
   assert.match(bundle, /pm-risk-matrix/)            // PROD-05 风险矩阵
-  assert.match(bundle, /pm-kpi/)                    // PROD-05 指标条                // PROD-03 行内截止   // PROD-02 定位纯函数              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab
+  assert.match(bundle, /pm-kpi/)
+  assert.match(bundle, /pm-top-more/)              // PROD-08 顶栏更多
+  assert.match(bundle, /pm-top-menu/)               // PROD-08 更多菜单
+  assert.match(bundle, /pm-backup-btn/)             // PROD-08 收纳后备份仍在DOM
+  assert.match(bundle, /pm-export-json-btn/)        // PROD-08 收纳后导出仍在DOM                    // PROD-05 指标条                // PROD-03 行内截止   // PROD-02 定位纯函数              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab
   assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')

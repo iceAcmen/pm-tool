@@ -839,3 +839,7 @@
 .pm-risk-cell-critical { background: color-mix(in srgb, var(--pm-danger) 15%, transparent); border-color: var(--pm-danger); }
 .pm-risk-cell-head { display: block; opacity: .6; margin-bottom: 2px; }
 .pm-risk-cell-tag { display: block; cursor: pointer; }
+
+.pm-top-more-wrap { position: relative; display: inline-flex; }
+.pm-top-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; display: flex; flex-direction: column; gap: 4px; min-width: 150px; padding: 6px; background: var(--pm-bg); border: 1px solid var(--pm-border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.pm-top-menu .pm-button { justify-content: flex-start; }

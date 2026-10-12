@@ -15,6 +15,7 @@ import Filter from 'lucide-react/dist/esm/icons/filter.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import FolderKanban from 'lucide-react/dist/esm/icons/folder-kanban.mjs'
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard.mjs'
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import MilestoneIcon from 'lucide-react/dist/esm/icons/milestone.mjs'
@@ -274,6 +275,7 @@ export function PmPanel({ execute }: PmPanelApi) {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const [dashOpen, setDashOpen] = useState(false)
+  const [topMenuOpen, setTopMenuOpen] = useState(false)
 
   const refresh = async () => {
     setBusy(true)
@@ -382,6 +384,17 @@ export function PmPanel({ execute }: PmPanelApi) {
           >
             <Sparkles size={15}/>AI 助手
           </button>
+          <div className="pm-top-more-wrap">
+          <button
+            className="pm-button pm-top-more"
+            aria-expanded={topMenuOpen}
+            title="更多：备份 / 恢复 / 导出"
+            onClick={() => setTopMenuOpen(v => !v)}
+          >
+            <MoreHorizontal size={15}/>更多
+          </button>
+          {topMenuOpen && (
+            <div className="pm-top-menu" onMouseLeave={() => setTopMenuOpen(false)}>
           <button
             className="pm-button pm-backup-btn"
             disabled={busy}
@@ -456,6 +469,9 @@ export function PmPanel({ execute }: PmPanelApi) {
           >
             <Download size={15}/>导出 JSON
           </button>
+            </div>
+          )}
+          </div>
           <button
             className="pm-icon-button"
             disabled={busy}
