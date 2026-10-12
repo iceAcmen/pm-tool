@@ -854,3 +854,15 @@
 .pm-gantt-milestone { position: absolute; width: 10px; height: 10px; transform: rotate(45deg); background: var(--pm-warning, orange); }
 .pm-gantt-milestone-done { opacity: .4; }
 .pm-gantt-hint { font-size: 11px; opacity: .7; margin-top: 6px; }
+
+.pm-copilot { display: flex; flex-direction: column; gap: 8px; }
+.pm-copilot-messages { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
+.pm-copilot-msg { padding: 6px 8px; border-radius: 8px; background: var(--pm-bg); font-size: 12px; white-space: pre-wrap; }
+.pm-copilot-me { align-self: flex-end; }
+.pm-copilot-ai { align-self: flex-start; }
+.pm-copilot-sys { opacity: .7; }
+.pm-copilot-draft { padding: 8px; border: 1px solid var(--pm-border); border-radius: 8px; font-size: 12px; }
+.pm-copilot-rejected { opacity: .6; font-size: 11px; }
+.pm-copilot-actions { display: flex; gap: 6px; margin-top: 6px; }
+.pm-copilot-inputrow { display: flex; gap: 6px; }
+.pm-copilot-input { flex: 1; }

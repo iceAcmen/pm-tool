@@ -4,6 +4,7 @@ import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { buildUpdate } from '../core/task-inline.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
+import { parseCopilotActions, validateActions } from '../core/copilot.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -17,6 +18,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import FolderKanban from 'lucide-react/dist/esm/icons/folder-kanban.mjs'
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard.mjs'
 import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal.mjs'
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import MilestoneIcon from 'lucide-react/dist/esm/icons/milestone.mjs'
@@ -188,6 +190,7 @@ type Drawer =
   | { kind: 'report', report?: ProgressReport }
   | { kind: 'deliverable', deliverable?: Deliverable }
   | { kind: 'ai' }
+  | { kind: 'copilot' }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
@@ -384,6 +387,14 @@ export function PmPanel({ execute }: PmPanelApi) {
             onClick={() => setDrawer({ kind: 'ai' })}
           >
             <Sparkles size={15}/>AI 助手
+          </button>
+          <button
+            className="pm-button pm-copilot-open"
+            disabled={!project || dashOpen}
+            title="提问式副驾：只读诊断 + 操作草稿卡（确认才落库）"
+            onClick={() => setDrawer({ kind: 'copilot' })}
+          >
+            <MessageSquare size={15}/>AI 副驾
           </button>
           <div className="pm-top-more-wrap">
           <button
@@ -645,6 +656,14 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           onConfirmed={() => { void refresh(); setDrawer(undefined) }}
         />}
+        {drawer.kind === 'copilot' && project && <CopilotPanel
+          projectId={project.id}
+          taskIds={tasks.map(t => t.id)}
+          execute={execute}
+          run={run}
+          disabled={busy}
+          onSaved={() => void refresh()}
+        />}
       </DrawerPanel>}
     </main>
   </>
@@ -752,6 +771,7 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
   if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
   if (drawer.kind === 'ai') return 'AI 助手'
+  if (drawer.kind === 'copilot') return 'AI 项目副驾'
   return drawer.deliverable ? '编辑交付物' : '新增交付物'
 }
 
@@ -2024,6 +2044,63 @@ function Overview({
             </div>
           }))}
       </div>
+    </div>
+  </div>
+}
+
+/** PROD-20 AI 项目副驾 MVP：提问→只读诊断；写动作渲染草稿卡，确认才落库。 */
+function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
+  projectId: string
+  taskIds: string[]
+  execute: (line: string) => Promise<string>
+  run: (line: string) => Promise<boolean>
+  disabled: boolean
+  onSaved: () => void
+}) {
+  const [input, setInput] = useState('')
+  const [msgs, setMsgs] = useState<{ role: string, text: string }[]>([{ role: 'sys', text: '向副驾提问（只读诊断）；若建议改动，会先给操作草稿卡，确认才落库。' }])
+  const [draft, setDraft] = useState<{ accepted: ReturnType<typeof validateActions>['accepted'], rejected: ReturnType<typeof validateActions>['rejected'] } | null>(null)
+  const send = async () => {
+    const q = input.trim(); if (!q || disabled) return
+    setInput(''); setMsgs(m => [...m, { role: 'me', text: q }])
+    try {
+      const text = await execute(`ask ${JSON.stringify(q)}`)
+      setMsgs(m => [...m, { role: 'ai', text }])
+      const acts = parseCopilotActions(text)
+      const v = validateActions(acts, { taskIds })
+      if (v.accepted.length || v.rejected.length) setDraft({ accepted: v.accepted, rejected: v.rejected })
+    } catch (e) { setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }]) }
+  }
+  const confirm = async () => {
+    if (!draft) return
+    let ok = 0, bad = 0
+    for (const a of draft.accepted) {
+      const line = `task update ${a.id} ${JSON.stringify(a.patch ?? {})}`
+      if (await run(line)) ok++; else bad++
+    }
+    setMsgs(m => [...m, { role: 'sys', text: `已执行 ${ok} 条${bad ? `，失败 ${bad} 条` : ''}。` }])
+    setDraft(null); onSaved()
+  }
+  return <div className="pm-copilot">
+    <div className="pm-copilot-messages">
+      {msgs.map((m, i) => <div key={i} className={`pm-copilot-msg pm-copilot-${m.role}`}>{m.text}</div>)}
+    </div>
+    {draft && (
+      <div className="pm-copilot-draft">
+        <strong>操作草稿（将影响 {draft.accepted.length} 条，需确认）</strong>
+        {draft.accepted.map((a, i) => <div key={i}>· {a.op} {a.id} → {JSON.stringify(a.patch)}</div>)}
+        {draft.rejected.map((r, i) => <div key={`r${i}`} className="pm-copilot-rejected">已拒绝：{r.reason}</div>)}
+        <div className="pm-copilot-actions">
+          <button className="pm-button pm-copilot-confirm" onClick={() => void confirm()}>确认执行</button>
+          <button className="pm-button pm-copilot-dismiss" onClick={() => setDraft(null)}>再聊聊/取消</button>
+        </div>
+      </div>
+    )}
+    <div className="pm-copilot-inputrow">
+      <input className="pm-copilot-input" value={input} placeholder="例如：下周会不会延期？"
+        onChange={e => setInput(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter') void send() }}/>
+      <button className="pm-button pm-copilot-send" disabled={disabled || !input.trim()} onClick={() => void send()}>发送</button>
     </div>
   </div>
 }
