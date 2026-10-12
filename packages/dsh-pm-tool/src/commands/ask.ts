@@ -65,14 +65,18 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
   })
 }
 
-// ===== PROD-20 后端应用守卫（第1步加固） =====
+// ===== PROD-20 后端应用守卫（加固） =====
 // 前端确认不再直接循环 `task update`，而是把草稿动作交给后端：
 // 服务器从 domain 重读、校验「目标属于当前项目 + 允许字段 + 真实日期」，
-// 对有基线 updatedAt 的条目做冲突比较（他人已改则拒绝覆盖），并用内存 TTL 做草稿幂等，
-// 防止重复/并发确认重复写库。不新增表、不把任何 token 当授权。
+// 对有基线 updatedAt 的条目做冲突比较（他人已改则拒绝覆盖）。
+// 写库一律走既有 updateTask 领域路径（enqueueDomainWrite 串行 + 起止/关系校验），
+// 不再 table.put 绕过。同草稿并发：用 in-flight Promise 在 await 前原子占用，并发方共享同一结果，
+// 杜绝双写；完成后写 TTL，失败清理 in-flight。不新增表、不把任何 token 当授权。
 import { validateActions, type CopilotAction } from '../core/copilot.js'
+import { updateTask } from '../core/tasks.js'
 
-const appliedDrafts = new Map<string, number>() // key -> 过期时间戳
+const recentDrafts = new Map<string, number>() // key -> 过期时间戳（已成功执行）
+const inFlight = new Map<string, Promise<AskApplyResult>>() // key -> 正在执行的结果（并发去重）
 const DRAFT_TTL_MS = 60_000
 
 function draftKey(projectId: string, actions: CopilotAction[]): string {
@@ -84,6 +88,38 @@ export interface AskApplyResult {
   text: string
 }
 
+async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
+  // 清理过期 TTL
+  const now = Date.now()
+  for (const [k, exp] of recentDrafts) if (exp <= now) recentDrafts.delete(k)
+
+  // 从 domain 重读当前项目全部任务，后端校验归属/字段/日期
+  const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string, updatedAt?: string })
+  const liveIds = new Set(tasks.filter(t => t.projectId === projectId).map(t => t.id))
+  const v = validateActions(actions, { taskIds: [...liveIds] })
+
+  const applied: string[] = []
+  const rejected: string[] = []
+  for (const a of v.accepted) {
+    const rec = tasks.find(t => t.id === a.id) as { id: string, projectId?: string, updatedAt?: string } | undefined
+    if (!rec || rec.projectId !== projectId) { rejected.push(`${a.id}：不存在或不属于本项目`); continue }
+    // 冲突：草稿基线 updatedAt 与当前不一致 -> 他人已改，拒绝覆盖
+    const base = baseline[a.id ?? '']
+    if (base && rec.updatedAt && rec.updatedAt !== base) { rejected.push(`${a.id}：内容已被他人更新，为避免覆盖未执行`); continue }
+    try {
+      await updateTask(domain, a.id!, (a.patch ?? {}) as Record<string, unknown>)
+      applied.push(`${a.id}`)
+    } catch (e) {
+      rejected.push(`${a.id}：写库失败（${e instanceof Error ? e.message : String(e)}）`)
+    }
+  }
+  const extra = v.rejected.map(r => `${r.action.id ?? '(无id)'}：${r.reason}`)
+  const text = `已应用 ${applied.length} 条${applied.length ? `（${applied.join(', ')}）` : ''}`
+    + (rejected.length ? `；未执行 ${rejected.length} 条（${rejected.join('；')}）` : '')
+    + (extra.length ? `；拒绝 ${extra.length} 条（${extra.join('；')}）` : '')
+  return { kind: 'success', text }
+}
+
 export async function handleAskApplyCommand(argument: string, domain: PmDomain | undefined): Promise<AskApplyResult> {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
   // 形如: <projectId> <jsonActions> [--base <jsonUpdatedAtMap>]
@@ -91,7 +127,6 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
   if (!m) return { kind: 'error', text: '用法：ask-apply <项目ID> <json动作数组>' }
   const projectId = m[1]
   const rest = m[2]
-  // 拆分 --base
   const baseMatch = /--base\s+(\{[\s\S]*\})\s*$/.exec(rest)
   const actionsJson = baseMatch ? rest.slice(0, baseMatch.index).trim() : rest.trim()
   let actions: CopilotAction[]
@@ -103,42 +138,36 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
     return { kind: 'error', text: '动作 JSON 无法解析。' }
   }
   if (!domain.table('projects').get(projectId)) return { kind: 'error', text: `未找到项目 ${projectId}` }
+  // 基线：若传了必须是合法对象映射；malformed 直接报错（不再静默 ignore）。
   let baseline: Record<string, string> = {}
-  if (baseMatch) { try { baseline = JSON.parse(baseMatch[1]) } catch { /* ignore */ } }
+  if (baseMatch) {
+    try {
+      const parsed = JSON.parse(baseMatch[1])
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('基线须为对象')
+      baseline = parsed
+    } catch {
+      return { kind: 'error', text: '确认基线（--base）格式非法，已中止以防误覆盖。' }
+    }
+  }
 
   const key = draftKey(projectId, actions)
   const now = Date.now()
-  const seenAt = appliedDrafts.get(key)
+  const seenAt = recentDrafts.get(key)
   if (seenAt && seenAt > now) {
     return { kind: 'success', text: '该草稿已确认过，为避免重复写库未再次执行（幂等拦截）。' }
   }
+  // 并发去重：in-flight 中同一草稿直接共享结果，杜绝 await 前检查通过后双写。
+  const flying = inFlight.get(key)
+  if (flying) return flying
 
-  // 从 domain 重读当前项目全部任务，后端校验归属/字段/日期
-  const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string, updatedAt?: string })
-  const liveIds = new Set(tasks.filter(t => t.projectId === projectId).map(t => t.id))
-  const v = validateActions(actions, { taskIds: [...liveIds] })
-
-  const applied: string[] = []
-  const rejected: string[] = []
-  for (const a of v.accepted) {
-    const rec = tasks.find(t => t.id === a.id) as (Record<string, unknown> & { id: string, updatedAt?: string }) | undefined
-    if (!rec || rec.projectId !== projectId) { rejected.push(`${a.id}：不存在或不属于本项目`); continue }
-    // 冲突：草稿基线 updatedAt 与当前不一致 -> 他人已改，拒绝覆盖
-    const base = baseline[a.id ?? '']
-    if (base && rec.updatedAt && rec.updatedAt !== base) { rejected.push(`${a.id}：内容已被他人更新，为避免覆盖未执行`); continue }
-    const next = { ...rec, ...(a.patch ?? {}), updatedAt: new Date().toISOString() }
-    try {
-      await (domain.table("tasks") as any).put(a.id!, next)
-      applied.push(`${a.id}`)
-    } catch (e) {
-      rejected.push(`${a.id}：写库失败（${e instanceof Error ? e.message : String(e)}）`)
-    }
+  const promise = applyCore(projectId, actions, baseline, domain)
+  inFlight.set(key, promise)
+  try {
+    const res = await promise
+    if (res.text.includes('已应用 0 条') === false) recentDrafts.set(key, Date.now() + DRAFT_TTL_MS)
+    return res
+  } finally {
+    inFlight.delete(key)
   }
-  // 记录幂等（仅当确实执行了写动作）
-  if (applied.length) appliedDrafts.set(key, now + DRAFT_TTL_MS)
-  const extra = v.rejected.map(r => `${r.action.id ?? '(无id)'}：${r.reason}`)
-  const text = `已应用 ${applied.length} 条${applied.length ? `（${applied.join(', ')}）` : ''}`
-    + (rejected.length ? `；未执行 ${rejected.length} 条（${rejected.join('；')}）` : '')
-    + (extra.length ? `；拒绝 ${extra.length} 条（${extra.join('；')}）` : '')
-  return { kind: 'success', text }
 }
+
