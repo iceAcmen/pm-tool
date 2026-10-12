@@ -2,17 +2,13 @@
 import { z } from 'zod'
 import { projectIdSchema } from './project.js'
 import { milestoneIdSchema } from './milestone.js'
+import { TASK_STATUSES, taskStatusLabels } from './status.js'
 
 export const taskIdSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/, '任务 ID 只能包含字母、数字、下划线和连字符')
-export const taskStatusSchema = z.enum(['todo', 'in_progress', 'blocked', 'done'])
+export const taskStatusSchema = z.enum(TASK_STATUSES)
+export { taskStatusLabels }
 export const taskPrioritySchema = z.enum(['P0', 'P1', 'P2'])
 
-export const taskStatusLabels: Record<z.infer<typeof taskStatusSchema>, string> = {
-  todo: '未开始',
-  in_progress: '进行中',
-  blocked: '受阻',
-  done: '已完成',
-}
 
 const optionalDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).optional()
 const clearableDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).nullable().optional()

@@ -14,8 +14,8 @@ export interface CopilotAction {
 const ALLOWED_OPS = new Set(['task.update'])
 // 直接复用 task.ts 导出的 taskStatusSchema，避免复制常量导致两端漂移；
 // 旧版误用 'doing' 会通过校验却在写库时被 zod 拒绝。
-import { taskStatusSchema } from './task.js'
-const STATUS = new Set(taskStatusSchema.options)
+import { TASK_STATUSES } from './status.js'
+const STATUS = new Set(TASK_STATUSES)
 
 /** 真实日历合法性：YYYY-MM-DD 且不是 2 月 30 这类不存在的日期；过去/未来都可接受。 */
 export function isValidDateStr(v: unknown): boolean {
