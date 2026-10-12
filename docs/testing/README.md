@@ -23,6 +23,7 @@
 | [`defect-format.md`](defect-format.md) | 缺陷字段、严重度分级、生命周期（仅排修复先后，不自动豁免） |
 | [`acceptance-report-round1.md`](acceptance-report-round1.md) | 首轮（a8e8ea4）五类结论、缺陷清单、质量门结论与复验范围 |
 | [`reverification-round2.md`](reverification-round2.md) | T-DEF-008/004 修复后复验清单 + 修复前基线 hash（自包含证据） |
+| [`round3-gui-execution.md`](round3-gui-execution.md) | Round3 真实 Chrome GUI 执行包（选择器/预期/证据命名，待主端执行后专家判证） |
 
 ## 判定图例（与 ADL-045 严格一致）
 
