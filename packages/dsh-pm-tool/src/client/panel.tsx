@@ -112,6 +112,7 @@ type Meeting = {
   summary: string
   topics: string[]
   decisions: string[]
+  notes: string
   actions: MeetingAction[]
   updatedAt: string
 }
@@ -2733,6 +2734,7 @@ function MeetingForm({
       summary: form.get('summary'),
       topics: textList(form.get('topics')),
       decisions: textList(form.get('decisions')),
+      notes: String(form.get('notes') ?? ''),
     }
     const meetingSaved = await run(meeting
       ? `meeting update ${meeting.id} ${JSON.stringify(payload)}`
@@ -2768,6 +2770,7 @@ function MeetingForm({
       <Field label="会议摘要" wide><textarea name="summary" rows={4} defaultValue={meeting?.summary}/></Field>
       <Field label="议题（每行一项）" wide><textarea name="topics" rows={4} defaultValue={meeting?.topics.join('\n')}/></Field>
       <Field label="决议（每行一项）" wide><textarea name="decisions" rows={4} defaultValue={meeting?.decisions.join('\n')}/></Field>
+      <Field label="备注 / 手工编辑" wide><textarea name="notes" rows={4} defaultValue={meeting?.notes ?? ''}/></Field>
       <div className="pm-drawer-actions">
         {meeting && <button
           className="pm-button pm-button-danger"
