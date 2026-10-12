@@ -66,6 +66,7 @@ export const meetingRecordSchema = z.strictObject({
   topics: z.array(z.string()),
   decisions: z.array(z.string()),
   actions: z.array(meetingActionSchema),
+  notes: z.string().default(''),
   sourceType: meetingSourceTypeSchema,
   sourceSessionId: z.string().nullable(),
   createdAt: z.iso.datetime(),
@@ -86,6 +87,7 @@ export const meetingCreateSchema = z.strictObject({
   summary: z.string().default(''),
   topics: textListSchema.default([]),
   decisions: textListSchema.default([]),
+  notes: z.string().default(''),
 })
 
 export const meetingUpdateSchema = z.strictObject({

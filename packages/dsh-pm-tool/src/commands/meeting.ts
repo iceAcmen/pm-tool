@@ -87,8 +87,13 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       const projectId = summarizeMatch[1]
       let rest = summarizeMatch[2].trim()
       let confirmation = false
-      const tail = /\s+confirm$/i.exec(rest)
-      if (tail) { confirmation = true; rest = rest.slice(0, -tail[0].length).trim() }
+      let notes = ''
+      const tail = /\s+confirm(\s+("[\s\S]*"))?$/i.exec(rest)
+      if (tail) {
+        confirmation = true
+        rest = rest.slice(0, -tail[0].length).trim()
+        if (tail[2]) { try { notes = JSON.parse(tail[2]) } catch {} }
+      }
       const transcript = rest
       if (!transcript) return { kind: 'error', text: '请粘贴会议速记：/pm meeting summarize p-0001 「速记内容」' }
       const key = `${projectId}\n${transcript}`
@@ -135,6 +140,7 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         topics: draft.topics,
         decisions: draft.decisions,
         status: 'draft',
+        notes,
       })
       for (const action of draft.actions) {
         await addMeetingAction(domain, meeting.id, {

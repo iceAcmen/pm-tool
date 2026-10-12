@@ -850,7 +850,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
       return { preview: `task wbs ${projectId} ${goal} --raw`, confirm: `task importmd ${projectId} ${JSON.stringify(preview)} confirm` }
     }
     const transcript = text.trim()
-    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm` }
+    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(preview)}` }
   }
 
   const switchMode = (next: 'wbs' | 'narrate' | 'summarize') => {
