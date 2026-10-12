@@ -5,6 +5,15 @@ import { buildAskContext } from '../lib/core/ask-copilot.js'
 // 内存假域：仅实现 ask-apply 用到的 table().get/entries/put
 function makeDomain(records) {
   const store = JSON.parse(JSON.stringify(records))
+  for (const [id, t] of Object.entries(store.tasks ?? {})) {
+    if (!t.createdAt) t.createdAt = '2026-10-01T00:00:00Z'
+    if (t.code == null) t.code = '1'
+    if (t.order == null) t.order = 1
+    if (t.parentId === undefined) t.parentId = null
+    if (!t.description) t.description = ''
+    if (!t.priority) t.priority = 'P1'
+    if (t.milestoneId === undefined) t.milestoneId = null
+  }
   return {
     table(name) {
       return {
@@ -17,6 +26,7 @@ function makeDomain(records) {
   }
 }
 
+const _full = (t)=>({ code:'A', order:0, parentId:null, createdAt:'2026-10-01T00:00:00Z', ...t })
 const base = {
   projects: { 'p-1': { id: 'p-1', name: '项目一' } },
   tasks: {
