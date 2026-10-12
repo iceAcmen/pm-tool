@@ -1077,7 +1077,7 @@ function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () =>
     <p>创建项目后即可拆分任务与里程碑。</p>
     <div className="pm-empty-ctas">
       <button className="pm-button pm-button-primary" onClick={onCreate}><Plus size={15}/>新建项目</button>
-      {onAI && <button className="pm-button pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
+      {onAI && <button className="pm-button pm-button-primary pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
     </div>
   </div>
 }
