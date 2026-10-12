@@ -866,3 +866,11 @@
 .pm-copilot-actions { display: flex; gap: 6px; margin-top: 6px; }
 .pm-copilot-inputrow { display: flex; gap: 6px; }
 .pm-copilot-input { flex: 1; }
+.pm-empty-ctas { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.pm-empty-ai-cta {
+  min-height: 32px; padding: 6px 14px; font-size: 13px;
+  background: var(--pm-accent); color: var(--pm-on-accent);
+  border: 1px solid var(--pm-accent);
+}
+.pm-empty-ai-cta svg { color: var(--pm-on-accent); }
+.dark .pm-empty-ai-cta { background: var(--pm-accent-strong, var(--pm-accent)); color: var(--pm-bg); }
