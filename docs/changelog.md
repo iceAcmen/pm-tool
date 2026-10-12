@@ -759,3 +759,10 @@
 - dsh 处于开发者预览期（v0.2.1-alpha.2），后续升级可能有破坏性变更，已记录基线以便复现。
 - 上游为浅克隆（depth=1），如需完整历史需 `git fetch --unshallow`。
 - 尚未产生任何自研插件代码（属阶段 3）。
+
+## v0.4.1-integration（未打 tag，HEAD=main）
+- 副驾（PROD-20）写路径加固：ask-apply 后端守卫（重读 domain 归属/允许字段/真实日期、updatedAt 冲突检测）、in-flight 并发去重（60s TTL，**内存态重启不持久**）、写库改走既有 updateTask 领域校验；--base malformed 直接报错。
+- ask 上下文补齐：当前日历锚点 today/时区、会议行动项真实字段 title/owner/dueDate、汇报/交付物/风险状态摘要；缺实体明确标「暂无」，不臆断。
+- 备份恢复：applyBackup 删除前全量 record schema + 关系（projectId/parentId/milestoneId）预检，坏备份不破坏已有 domain；restoreBackup(FromContent) 新增可注入 directory（默认不变），测试备份目录隔离。
+- 新增非GUI集成回归 scripts/verify-integration.mjs（真实 storage 临时目录 + spawn 子进程 reopen 读盘）。
+- 状态勘误：本轮 35 个 verify + 非GUI集成通过；**真实浏览器 GUI 端到端本轮被工具能力限制未运行**（独立 GUI 工具报"SubAgent 不支持电脑操作"，未用 shell/puppeteer 绕过）；历史临时截图不等于入库可复跑；原 e2e-web-real.mjs 仅 CSV/项目记忆，关键 GUI 清单待独立验收。

@@ -373,3 +373,9 @@
 - **运行时安装**：插件 clone 到 `~/Projects/dsh-pm/dsh-our-free-model`（仓库外），`dsh plugin --profile pm add <路径>`，不再往 cordis.patch.yml 加条目（避免 duplicate loader id）。llm-pi-ai 只追加 `kimi-official`；`deepseek-official` 已由 base 内置声明，重复声明会启动报错，故不重复加。
 - **替代/裁剪**：未启用 EAC、局域网中继、出口代理、应用内自动更新/热替换（固定克隆版本，防止运行期第三方代码被远程热替换）。
 - **最终结果**：verify-model-route 新增（poc/prod 路由、prod 无 Key 抛错不回退、模式持久化、非法模式）；dsh web 冒烟启动无 already-declared 错误；真实免费对话由独立浏览器验收。
+
+## ADL（v0.4.1-integration）
+- **副驾写操作必经后端 ask-apply**：前端草稿卡仅收集，确认后由后端重读 domain、校验归属与字段、检测 updatedAt 冲突，杜绝前端旧快照误写；并发同草稿用 in-flight Promise 去重（内存 60s，不新增表、重启即失效——可接受的最终一致性边界）。
+- **写库一律复用领域 updateTask**：不 table.put 绕过，起止日期/子任务关系/里程碑校验继承既有 taskWriteSchema。
+- **备份恢复先预检后破坏**：schema+关系预检失败直接抛错且不删任何实体；安全快照仅在预检通过后生成。
+- **GUI 验收诚实降级**：本轮无 GUI 能力，以非GUI集成+离线 verify 替代；真实浏览器端到端留待独立验收，不称"全绿"。

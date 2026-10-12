@@ -262,3 +262,9 @@ curl -X POST https://openrouter.ai/api/v1/chat/completions \
 - **解法（二选一）**：
   1. **重启到新环境**：停掉旧 dsh，用已 `source ~/.zshrc`（能 `echo $OPENROUTER_API_KEY` 看到值）的**全新终端**重启 dsh（等价 `pnpm dsh --profile pm`）。
   2. **永久且与启动终端无关（推荐）**：在 dsh Web「**设置 → 模型（Models）**」页直接为该 provider 录入密钥——写入 dsh **credentials service**（正是上面报错提示的目标），此后任何终端启动的 dsh 都能取到，不必依赖 shell 环境。
+
+## PoC 车道说明（v0.4.1）
+- 默认 PoC provider=our-free-model / model=kilo-auto/free（随机路由，偶有思考耗尽正文空）。
+- 已实现按任务类型候选降级链（结构化任务给足预算/低思考）；免费池固有波动，成功率实测见 verify-model-route。
+- 官方 Key 暂不配置；生产无 Key → PROD_KEY_MISSING 文案，不回退、不静默用免费池。
+- DSH_PM_E2E=1 时 ask-fixture 测试缝可用（不调模型，固定诊断+动作，仍走同 parse/validate/ask-apply 写路径）。

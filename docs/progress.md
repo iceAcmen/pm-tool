@@ -123,3 +123,9 @@
 - 首页 `/pm` 经上游只读核查确认注册正确、问题属宿主斜杠补全/会话跳转（ADL-038/KB-037/ISS-026）；以 Web 面板为稳定入口。v0.2.0 发布说明已起草（`docs/releases/v0.2.0.md`，**未打 tag**，待组织者独立验收）。
 - 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。
+
+## 当前状态（v0.4.1-integration，未 tag）
+- 已落地未发版：PROD-22 甘特A、PROD-20 副驾（ask 后端编排 + ask-apply 守卫 + fixture 测试缝）、本轮集成回归。
+- 通过：build + 35 个 verify-*.mjs + verify-integration（非GUI）。
+- 未做/待验：真实浏览器 GUI 端到端（能力受限）；崩溃原子恢复、多步规划、PROD-11 关键路径（v0.6）。
+- 官方 Key 暂不配置：PoC 走免费降级链（kilo-auto/free），生产无 Key 沿用 PROD_KEY_MISSING 文案、不自动回退；模式 settings 非 checks 表。

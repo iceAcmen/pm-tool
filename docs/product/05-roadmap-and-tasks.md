@@ -59,3 +59,8 @@
 - **domain v2 兼容**：v0.6.0 新增字段全部 optional，读旧记录（无该字段）不得报错；storage.ts version 升到 2 并在 decision-log 记一条 ADL。
 - **verify 脚本**：每个 PROD 至少补一个 `scripts/verify-*.mjs` 或扩展 verify-web/verify-keyboard。
 - **不要碰**：另一开发线正在修的 OPT-03 持久化、OPT-11 空态 CTA 相关文件；本批只在 `docs/product/` 新增。
+
+## 落地状态勘误（v0.4.1-integration @ 9f6a6cf，未 tag）
+- PROD-22 甘特方案A（只读+拖拽改期，无关键路径）已实现未发版；PROD-20 副驾 MVP（只读诊断+确认草稿卡+ask-apply 后端守卫）已实现未发版。
+- 本轮 35 verify + 非GUI集成通过；真实浏览器 GUI 端到端未跑（工具受限），关键 GUI 清单待独立验收。
+- 下一步起点：PROD-11 关键路径/甘特B、崩溃原子恢复、副驾多步规划，均属 v0.6 架构演进。
