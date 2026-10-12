@@ -1156,3 +1156,50 @@ env 覆盖各分支行为正确，共享 backups 零泄漏。**保留**：core/b
 - 待 Main 真实 CU：KeyJ/K 键盘行、深色主题错误对比度、表单 Enter 同路径、真 390 viewport、Space 入口。
 - 待办：正式 3080 S0 先升级同 commit 再只读冒烟；commit 后 bundle hash 复跑终签。
 - **总门：NOT PASS / 不可发布。**
+
+---
+
+## 63. commit 终签（HEAD 3f0528a）
+
+### 证据（commit-recheck/ 独立核实）
+- HEAD `3f0528af…b56b3`；tracked clean（仅 1 untracked fixture script）。
+- 产物 hash 与已验候选完全一致：client.js `07c3edb2…767da14`、index.js `64a48aec…b7e8`、drawer-focus.js `60d1e11f…9aa86`、form-validation.js `aeec0350…da84`。
+- 项目空提交：焦点落首错 name、3 条 role=alert 错误、aria-required/invalid/describedby、3 星号；target<start 错误可见；浅色对比度 DOM 值同前；三路径 Esc 归还（title/edit/create）；交互 console 0；after.diff cancellationUnchanged=true（27 不变）。
+- 合并历史本身不构成产品变化（产物 hash 一致），A 类候选结论不因 merge 重开。
+
+### 正式终签（绑定 commit 3f0528a）
+- **7 实体 CRUD 全链** → PASS（hash 一致免重采）。
+- **R3-UX-001 核心**（持久错误/aria/星号/焦点/纠错清错/浅色调/其他表单回归）→ PASS，缺陷关闭。
+- **R3-OBS-002 点击路径**（title/edit/create Esc 归还 + 删除 fallback）→ PASS。
+- **R3-TDEF-002**（P1 测试隔离/数据安全，guard 149 文件守护）→ 关闭。
+
+### 仍 OPEN（不随 commit 自动关闭）
+- 桌面 CU 真实证据待补：KeyJ/K 键盘行 trusted、深色主题错误对比度、表单 Enter 同路径、真 390 viewport、Space 入口。
+- 正式 3080 S0：升级到 3f0528a 后只读冒烟（插件加载 console 0、只读视图）。
+
+### 总门
+- 已终签：A 类全 PASS。
+- 未终签：上述 CU 项与 3080 冒烟——任一未完成前总门仍 **NOT PASS / 不可发布**。
+
+---
+
+## 64. 正式 3080 S0 升级证据判定
+
+### 证据（s0-3080-final/ 独立核实）
+- HEAD `5b262c3`，产品 artifact 与 3f0528a 构建一致（index/client hash 同 §63），未重建。
+- 旧 3080(PID 69461) 优雅停止；新 3080(PID 98579) 同 cmd/cwd 监听 3080；3091 未触碰。
+- 健康探针 `GET /` → 401（auth 门，预期）；未读/未打印 token、env、启动日志。
+- 数据完整性：before=after=148（data/pmtool 27 + session_projcache 39 + workspace.json 1 + packages/backups 81）；diff added/removed/changed=0，DIFF_EMPTY=true。
+
+### 判定
+- **3080 升级 + 数据完整性 PASS**：重启未对正式 data/共享 backups 产生写入。
+- **S0 页面 DOM（S0-01..08）BLOCKED**：仅有已认证 3091 tab，无 3080 tab；遵守不读 token/不开新 tab/不动 3091。属 auth/设施阻塞，**非产品 FAIL**。
+- 解除前提：出现已认证可访问的 3080 tab，或项目所有者明确授权的受控认证方式。
+
+### 桌面 CU 五项：工具层 BLOCKED（同前）
+KeyJ/K 键盘行、深色主题错误对比度、表单 Enter 同路径、真 390 viewport、Space 入口——均受桌面 CU 工具层限制，BLOCKED 非产品 FAIL，**不豁免**。
+
+### 总门
+- 已终签：7 实体 CRUD、R3-UX-001 核心、R3-OBS-002 点击路径、R3-TDEF-002、3080 升级/数据完整性。
+- BLOCKED（设施/auth）：S0 页面 DOM、桌面 CU 五项。
+- 上述 BLOCKED 解除并取证前，总门 **NOT PASS / 不可发布**。
