@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "record": {
+    "id": "rpt-0001",
+    "projectId": "p-0001",
+    "periodStart": "2026-10-01",
+    "periodEnd": "2026-10-10",
+    "title": "十月进度汇报",
+    "status": "draft",
+    "executiveSummary": "",
+    "completedWork": [],
+    "nextPlans": [],
+    "blockers": [],
+    "snapshotAt": "2026-10-12T10:09:05.034Z",
+    "snapshot": {
+      "project": {
+        "name": "夹具项目",
+        "owner": "",
+        "status": "planning",
+        "targetDate": "2026-12-31"
+      },
+      "tasks": {
+        "total": 4,
+        "todo": 2,
+        "inProgress": 1,
+        "blocked": 0,
+        "done": 1,
+        "averageProgress": 30
+      },
+      "milestones": {
+        "total": 1,
+        "achieved": 0,
+        "atRisk": 0,
+        "missed": 0
+      },
+      "meetings": {
+        "inPeriod": 0,
+        "decisions": 0
+      },
+      "periodMilestones": [],
+      "periodMeetings": [],
+      "exceptions": [
+        {
+          "kind": "overdue_task",
+          "severity": "critical",
+          "id": "t-0001",
+          "title": "逾期任务",
+          "detail": "任务已逾期，当前进度 20%",
+          "owner": "甲",
+          "dueDate": "2026-10-10"
+        },
+        {
+          "kind": "risk_issue",
+          "severity": "warning",
+          "id": "ri-0001",
+          "title": "高风险",
+          "detail": "风险未关闭，影响为 high",
+          "owner": "",
+          "dueDate": null
+        }
+      ]
+    },
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T10:09:05.034Z",
+    "updatedAt": "2026-10-12T10:09:05.034Z"
+  }
+}

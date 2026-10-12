@@ -1,0 +1,17 @@
+{
+  "theme": "light (current)",
+  "measuredAt": "2026-10-12T19:00:00Z",
+  "bodyBg": "rgb(255, 255, 255)",
+  "errorTextColor": "rgb(97, 102, 107)",
+  "errorTextBg": "rgba(0, 0, 0, 0) -> effective rgb(255, 255, 255)",
+  "errorTextContrastRatio": 5.77,
+  "errorTextThreshold": 4.5,
+  "errorTextPasses": true,
+  "inputBorderColor": "rgb(236, 19, 19)",
+  "inputBorderWidth": "1px",
+  "inputBg": "rgb(255, 255, 255)",
+  "borderContrastRatio": 4.51,
+  "borderThreshold": 3.0,
+  "borderPasses": true,
+  "note": "Computed via getComputedStyle on .pm-field-error span and invalid input. Error text color appears grayish in computed style but rendered red in screenshot; recorded raw computed values as-is."
+}

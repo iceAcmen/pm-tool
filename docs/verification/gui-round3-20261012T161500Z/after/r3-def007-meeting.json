@@ -1,0 +1,36 @@
+{
+  "id": "mtg-0003",
+  "projectId": "p-0001",
+  "title": "二次复验会议纪要",
+  "meetingDate": "2026-10-12",
+  "startTime": null,
+  "durationMinutes": null,
+  "location": "",
+  "facilitator": "",
+  "recorder": "",
+  "participants": [],
+  "status": "draft",
+  "summary": "本次会议主要讨论了二次复验事宜，会议结论为验证编辑保留。同时明确了行动项，由王五负责验收，截止日期为2026年10月18日。",
+  "topics": [
+    "二次复验"
+  ],
+  "decisions": [
+    "验证编辑保留"
+  ],
+  "actions": [
+    {
+      "id": "ai-001",
+      "title": "负责验收",
+      "owner": "王五",
+      "dueDate": "2026-10-18",
+      "status": "todo",
+      "taskId": null,
+      "riskIssueId": null
+    }
+  ],
+  "notes": "AI 归纳草稿（当前未写入）：\n标题：二次复验会议纪要\n摘要：本次会议主要讨论了二次复验事宜，会议结论为验证编辑保留。同时明确了行动项，由王五负责验收，截止日期为2026年10月18日。\n议题：二次复验\n决议：验证编辑保留\n行动项（1）：\n  - 负责验收｜负责人 王五｜截止 2026-10-18\n确认命令：/pm meeting summarize p-0001 会议讨论二次复验。结论：验证编辑保留。行动项：王五负责验收，截止2026-10-18。 confirm\n【手工编辑】纪要二次验收保留。",
+  "sourceType": "manual",
+  "sourceSessionId": null,
+  "createdAt": "2026-10-12T13:31:37.135Z",
+  "updatedAt": "2026-10-12T13:31:37.151Z"
+}

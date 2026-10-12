@@ -1,0 +1,130 @@
+[
+  {
+    "id": "rpt-0002",
+    "projectId": "p-0001",
+    "periodStart": "2026-10-05",
+    "periodEnd": "2026-10-12",
+    "title": "夹具项目 2026-10-05 至 2026-10-12 进度汇报",
+    "status": "draft",
+    "executiveSummary": "AI 进度叙述草稿（项目 p-0001，周期 2026-10-05 至 2026-10-12）：\n\n本周进展：项目仍处于规划阶段，已完成 3 项任务，另有 2 项正在推进，剩余 12 项待办；近期里程碑（2026‑10‑25）尚未达成。  \n\n风险/阻塞：目前无逾期任务，但唯一里程碑仍未完成，若后续任务不能按时启动，可能影响 2026‑12‑31 的交付目标。  \n\n下周计划：重点推进那 2 项进行中的任务至完成，并启动至少 3 项待办任务，同时完善里程碑前的准备工作以确保按期达成。\n\n以上为草稿（基于确定性数字生成），尚未写入。\n确认命令：/pm report narrate p-0001 confirm\n\n【手工编辑】本周结论已复核。",
+    "completedWork": [],
+    "nextPlans": [],
+    "blockers": [],
+    "snapshotAt": "2026-10-12T13:22:21.228Z",
+    "snapshot": {
+      "project": {
+        "name": "夹具项目",
+        "owner": "",
+        "status": "planning",
+        "targetDate": "2026-12-31"
+      },
+      "tasks": {
+        "total": 17,
+        "todo": 12,
+        "inProgress": 2,
+        "blocked": 0,
+        "done": 3,
+        "averageProgress": 16
+      },
+      "milestones": {
+        "total": 1,
+        "achieved": 0,
+        "atRisk": 0,
+        "missed": 0
+      },
+      "meetings": {
+        "inPeriod": 1,
+        "decisions": 0
+      },
+      "periodMilestones": [],
+      "periodMeetings": [
+        {
+          "id": "mtg-0001",
+          "title": "周会",
+          "meetingDate": "2026-10-11",
+          "decisions": []
+        }
+      ],
+      "exceptions": [
+        {
+          "kind": "risk_issue",
+          "severity": "warning",
+          "id": "ri-0001",
+          "title": "高风险",
+          "detail": "风险未关闭，影响为 high",
+          "owner": "",
+          "dueDate": null
+        }
+      ]
+    },
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T13:22:21.228Z",
+    "updatedAt": "2026-10-12T13:22:21.228Z"
+  },
+  {
+    "id": "rpt-0001",
+    "projectId": "p-0001",
+    "periodStart": "2026-10-01",
+    "periodEnd": "2026-10-10",
+    "title": "十月进度汇报",
+    "status": "draft",
+    "executiveSummary": "",
+    "completedWork": [],
+    "nextPlans": [],
+    "blockers": [],
+    "snapshotAt": "2026-10-12T10:09:05.034Z",
+    "snapshot": {
+      "project": {
+        "name": "夹具项目",
+        "owner": "",
+        "status": "planning",
+        "targetDate": "2026-12-31"
+      },
+      "tasks": {
+        "total": 4,
+        "todo": 2,
+        "inProgress": 1,
+        "blocked": 0,
+        "done": 1,
+        "averageProgress": 30
+      },
+      "milestones": {
+        "total": 1,
+        "achieved": 0,
+        "atRisk": 0,
+        "missed": 0
+      },
+      "meetings": {
+        "inPeriod": 0,
+        "decisions": 0
+      },
+      "periodMilestones": [],
+      "periodMeetings": [],
+      "exceptions": [
+        {
+          "kind": "overdue_task",
+          "severity": "critical",
+          "id": "t-0001",
+          "title": "逾期任务",
+          "detail": "任务已逾期，当前进度 20%",
+          "owner": "甲",
+          "dueDate": "2026-10-10"
+        },
+        {
+          "kind": "risk_issue",
+          "severity": "warning",
+          "id": "ri-0001",
+          "title": "高风险",
+          "detail": "风险未关闭，影响为 high",
+          "owner": "",
+          "dueDate": null
+        }
+      ]
+    },
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T10:09:05.034Z",
+    "updatedAt": "2026-10-12T10:09:05.034Z"
+  }
+]

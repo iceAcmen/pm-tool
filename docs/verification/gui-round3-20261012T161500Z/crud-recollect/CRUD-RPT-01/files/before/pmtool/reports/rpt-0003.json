@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "record": {
+    "id": "rpt-0003",
+    "projectId": "p-0001",
+    "periodStart": "2026-10-01",
+    "periodEnd": "2026-10-12",
+    "title": "R3T快照汇报",
+    "status": "draft",
+    "executiveSummary": "",
+    "completedWork": [],
+    "nextPlans": [],
+    "blockers": [],
+    "snapshotAt": "2026-10-12T17:23:30.530Z",
+    "snapshot": {
+      "project": {
+        "name": "夹具项目",
+        "owner": "",
+        "status": "planning",
+        "targetDate": "2026-12-31"
+      },
+      "tasks": {
+        "total": 17,
+        "todo": 12,
+        "inProgress": 2,
+        "blocked": 0,
+        "done": 3,
+        "averageProgress": 16
+      },
+      "milestones": {
+        "total": 1,
+        "achieved": 1,
+        "atRisk": 0,
+        "missed": 0
+      },
+      "meetings": {
+        "inPeriod": 3,
+        "decisions": 2
+      },
+      "periodMilestones": [
+        {
+          "id": "m-0001",
+          "title": "近期里程碑",
+          "targetDate": "2026-10-25",
+          "status": "achieved"
+        }
+      ],
+      "periodMeetings": [
+        {
+          "id": "mtg-0001",
+          "title": "周会",
+          "meetingDate": "2026-10-11",
+          "decisions": []
+        },
+        {
+          "id": "mtg-0002",
+          "title": "测试发布会议",
+          "meetingDate": "2026-10-12",
+          "decisions": [
+            "本周完成回归测试"
+          ]
+        },
+        {
+          "id": "mtg-0003",
+          "title": "二次复验会议纪要",
+          "meetingDate": "2026-10-12",
+          "decisions": [
+            "验证编辑保留"
+          ]
+        }
+      ],
+      "exceptions": [
+        {
+          "kind": "risk_issue",
+          "severity": "warning",
+          "id": "ri-0001",
+          "title": "高风险",
+          "detail": "风险未关闭，影响为 high",
+          "owner": "",
+          "dueDate": null
+        }
+      ]
+    },
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T17:23:30.530Z",
+    "updatedAt": "2026-10-12T17:23:30.530Z"
+  }
+}

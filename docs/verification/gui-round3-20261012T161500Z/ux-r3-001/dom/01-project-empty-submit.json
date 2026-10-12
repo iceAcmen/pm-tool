@@ -1,0 +1,23 @@
+{
+  "test": "empty-project-submit",
+  "timestampUTC": "2026-10-12T18:56:00Z",
+  "activeElementAfterSubmit": {
+    "tag": "INPUT",
+    "name": "name",
+    "type": "text"
+  },
+  "inputs": [
+    { "name": "name", "type": "text", "ariaRequired": "true", "ariaInvalid": "true", "ariaDescribedby": "project-name-error", "value": "" },
+    { "name": "description", "type": "textarea", "ariaRequired": null, "ariaInvalid": null, "ariaDescribedby": null, "value": "" },
+    { "name": "owner", "type": "text", "ariaRequired": null, "ariaInvalid": null, "ariaDescribedby": null, "value": "" },
+    { "name": "startDate", "type": "date", "ariaRequired": "true", "ariaInvalid": "true", "ariaDescribedby": "project-start-error", "value": "" },
+    { "name": "targetDate", "type": "date", "ariaRequired": "true", "ariaInvalid": "true", "ariaDescribedby": "project-target-error", "value": "" }
+  ],
+  "errorSpans": [
+    { "role": "alert", "id": "project-name-error", "text": "项目名称不能为空", "className": "pm-field-error", "visible": true },
+    { "role": "alert", "id": "project-start-error", "text": "请选择开始日期", "className": "pm-field-error", "visible": true },
+    { "role": "alert", "id": "project-target-error", "text": "请选择目标日期", "className": "pm-field-error", "visible": true }
+  ],
+  "requiredAsterisks": 3,
+  "formNoValidate": true
+}

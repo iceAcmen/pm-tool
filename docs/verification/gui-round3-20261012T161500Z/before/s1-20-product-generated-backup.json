@@ -1,0 +1,283 @@
+{
+  "format": "pm-tool-backup",
+  "formatVersion": 1,
+  "exportedAt": "2026-10-12T13:00:21.309Z",
+  "projects": [
+    {
+      "id": "p-0001",
+      "name": "夹具项目",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-10-01",
+      "targetDate": "2026-12-31",
+      "createdAt": "2026-10-12T10:09:04.968Z",
+      "updatedAt": "2026-10-12T10:09:04.968Z"
+    },
+    {
+      "id": "p-0002",
+      "name": "空项目",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-11-01",
+      "targetDate": "2026-12-01",
+      "createdAt": "2026-10-12T10:09:05.049Z",
+      "updatedAt": "2026-10-12T10:09:05.049Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t-0001",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "逾期任务",
+      "description": "",
+      "assignee": "赵六",
+      "status": "done",
+      "priority": "P1",
+      "startDate": "2026-10-02",
+      "dueDate": "2026-10-11",
+      "progress": 20,
+      "milestoneId": null,
+      "code": "1",
+      "order": 1,
+      "createdAt": "2026-10-12T10:09:04.979Z",
+      "updatedAt": "2026-10-12T10:26:25.363Z"
+    },
+    {
+      "id": "t-0002",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "临期任务",
+      "description": "",
+      "assignee": "乙",
+      "status": "done",
+      "priority": "P1",
+      "startDate": "2026-10-13",
+      "dueDate": "2026-10-20",
+      "progress": 80,
+      "milestoneId": null,
+      "code": "2",
+      "order": 2,
+      "createdAt": "2026-10-12T10:09:04.988Z",
+      "updatedAt": "2026-10-12T10:23:53.049Z"
+    },
+    {
+      "id": "t-0003",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "无日期任务",
+      "description": "",
+      "assignee": "丙",
+      "status": "todo",
+      "priority": "P1",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "3",
+      "order": 3,
+      "createdAt": "2026-10-12T10:09:04.996Z",
+      "updatedAt": "2026-10-12T10:09:04.996Z"
+    },
+    {
+      "id": "t-0004",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "已完成任务",
+      "description": "",
+      "assignee": "甲",
+      "status": "done",
+      "priority": "P1",
+      "startDate": "2026-09-01",
+      "dueDate": "2026-09-30",
+      "progress": 100,
+      "milestoneId": null,
+      "code": "4",
+      "order": 4,
+      "createdAt": "2026-10-12T10:09:05.003Z",
+      "updatedAt": "2026-10-12T10:09:05.003Z"
+    },
+    {
+      "id": "t-0005",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "一级任务",
+      "description": "",
+      "assignee": "赵六",
+      "status": "todo",
+      "priority": "P1",
+      "startDate": "2026-11-01",
+      "dueDate": "2026-11-30",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "5",
+      "order": 5,
+      "createdAt": "2026-10-12T10:28:08.191Z",
+      "updatedAt": "2026-10-12T10:28:08.191Z"
+    },
+    {
+      "id": "t-0006",
+      "projectId": "p-0001",
+      "parentId": "t-0005",
+      "title": "二级子任务",
+      "description": "",
+      "assignee": "赵六",
+      "status": "in_progress",
+      "priority": "P1",
+      "startDate": "2026-11-05",
+      "dueDate": "2026-11-20",
+      "progress": 30,
+      "milestoneId": null,
+      "code": "5.1",
+      "order": 1,
+      "createdAt": "2026-10-12T10:28:08.210Z",
+      "updatedAt": "2026-10-12T10:28:08.210Z"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "m-0001",
+      "projectId": "p-0001",
+      "title": "近期里程碑",
+      "targetDate": "2026-10-25",
+      "status": "planned",
+      "achievedDate": null,
+      "description": "",
+      "createdAt": "2026-10-12T10:09:05.010Z",
+      "updatedAt": "2026-10-12T10:09:05.010Z"
+    }
+  ],
+  "riskIssues": [
+    {
+      "id": "ri-0001",
+      "projectId": "p-0001",
+      "type": "risk",
+      "title": "高风险",
+      "description": "",
+      "owner": "",
+      "dueDate": null,
+      "status": "open",
+      "probability": "high",
+      "impact": "high",
+      "responsePlan": "",
+      "solution": "",
+      "createdAt": "2026-10-12T10:09:05.017Z",
+      "updatedAt": "2026-10-12T10:09:05.017Z"
+    }
+  ],
+  "meetings": [
+    {
+      "id": "mtg-0001",
+      "projectId": "p-0001",
+      "title": "周会",
+      "meetingDate": "2026-10-11",
+      "startTime": null,
+      "durationMinutes": null,
+      "location": "",
+      "facilitator": "",
+      "recorder": "",
+      "participants": [],
+      "status": "draft",
+      "summary": "",
+      "topics": [],
+      "decisions": [],
+      "actions": [],
+      "sourceType": "manual",
+      "sourceSessionId": null,
+      "createdAt": "2026-10-12T10:09:05.025Z",
+      "updatedAt": "2026-10-12T10:09:05.025Z"
+    }
+  ],
+  "reports": [
+    {
+      "id": "rpt-0001",
+      "projectId": "p-0001",
+      "periodStart": "2026-10-01",
+      "periodEnd": "2026-10-10",
+      "title": "十月进度汇报",
+      "status": "draft",
+      "executiveSummary": "",
+      "completedWork": [],
+      "nextPlans": [],
+      "blockers": [],
+      "snapshotAt": "2026-10-12T10:09:05.034Z",
+      "snapshot": {
+        "project": {
+          "name": "夹具项目",
+          "owner": "",
+          "status": "planning",
+          "targetDate": "2026-12-31"
+        },
+        "tasks": {
+          "total": 4,
+          "todo": 2,
+          "inProgress": 1,
+          "blocked": 0,
+          "done": 1,
+          "averageProgress": 30
+        },
+        "milestones": {
+          "total": 1,
+          "achieved": 0,
+          "atRisk": 0,
+          "missed": 0
+        },
+        "meetings": {
+          "inPeriod": 0,
+          "decisions": 0
+        },
+        "periodMilestones": [],
+        "periodMeetings": [],
+        "exceptions": [
+          {
+            "kind": "overdue_task",
+            "severity": "critical",
+            "id": "t-0001",
+            "title": "逾期任务",
+            "detail": "任务已逾期，当前进度 20%",
+            "owner": "甲",
+            "dueDate": "2026-10-10"
+          },
+          {
+            "kind": "risk_issue",
+            "severity": "warning",
+            "id": "ri-0001",
+            "title": "高风险",
+            "detail": "风险未关闭，影响为 high",
+            "owner": "",
+            "dueDate": null
+          }
+        ]
+      },
+      "sourceType": "manual",
+      "sourceSessionId": null,
+      "createdAt": "2026-10-12T10:09:05.034Z",
+      "updatedAt": "2026-10-12T10:09:05.034Z"
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "dlv-0001",
+      "projectId": "p-0001",
+      "name": "交付物",
+      "version": "v1",
+      "owner": "甲",
+      "status": "in_progress",
+      "location": "",
+      "description": "",
+      "dueDate": null,
+      "history": [
+        {
+          "at": "2026-10-12T10:09:05.042Z",
+          "field": "created",
+          "from": "",
+          "to": "in_progress",
+          "by": "",
+          "note": "创建交付物"
+        }
+      ],
+      "createdAt": "2026-10-12T10:09:05.042Z",
+      "updatedAt": "2026-10-12T10:09:05.042Z"
+    }
+  ]
+}

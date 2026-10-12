@@ -1,0 +1,14 @@
+{
+  "candidateFingerprint": {
+    "baseCommit": "d88a3325275878a77129179dbf8578a25c5e6511",
+    "workingTreeCandidate": true,
+    "dirtyProductFiles": [
+      {"path": "packages/dsh-pm-tool/src/client/panel.tsx", "status": "M", "sha256": "8e66222e60f707416f54dfd8974f239eceecf8481be931a50c5c4e3fb10e8d94"},
+      {"path": "packages/dsh-pm-tool/src/core/drawer-focus.ts", "status": "??", "sha256": "381f634d77950b364befbf1b96ff943cbe3351f27f365a0704b6cb12084e20ef"},
+      {"path": "packages/dsh-pm-tool/scripts/verify-drawer-focus.mjs", "status": "??", "sha256": "fa1b6ed8e892ce70136507e1bc16b2414f50fded42913a65c8dc1260aa57205e"}
+    ],
+    "libClientJsSha256": "a3ba4f399796a1489a8443fa479c0fdf7219f1ecd89e8bffe62cd5125a20709b",
+    "libDrawerFocusJsSha256": "60d1e11fdee3bc7ae3c7a9f13cc5ef9489e3444bc3e0cee2bd9634f25e29aa86"
+  },
+  "preStopOldInstance": {"pid": 26939, "started": "Mon Oct 12 23:57:25 2026", "cmd": "node --import tsx/esm apps/cli/src/bin.ts --profile pm --port 3091 --no-open --host 127.0.0.1"}
+}

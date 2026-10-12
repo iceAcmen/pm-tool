@@ -1,0 +1,85 @@
+{
+  "note": "本文件为执行端工具原始输出的逐字转录（非事后概括），按调用顺序。键值/对象均来自 mac_computer_use_tool 实际返回。",
+  "focusDiagnostic": [
+    {
+      "step": "PRE_DRAWER_FOCUS（打开标题抽屉前，PM 面板打开后）",
+      "verbatim": {"activeElement": {"aria": "项目管理", "cls": "S1HjAG_panelRow S1HjAG_panelActive", "tag": "BUTTON"}}
+    },
+    {
+      "step": "AFTER_OPEN_DRAWER（点击 d47:e112 任务标题「逾期任务」后）",
+      "verbatim": {
+        "activeElement": {"aria": null, "cls": "", "placeholder": null, "tag": "INPUT", "type": null},
+        "drawerCls": "pm-drawer",
+        "drawerVisible": true
+      }
+    },
+    {
+      "step": "DRAWER_FOCUSED_INPUT_DETAIL",
+      "verbatim": {
+        "activeElement": {"name": "title", "placeholder": null, "tag": "INPUT", "type": null, "value": "逾期任务"},
+        "fieldsInDrawer_first_10": [
+          {"tag": "BUTTON"}, {"tag": "INPUT", "name": "title", "value": "逾期任务"},
+          {"tag": "TEXTAREA", "name": "description", "value": ""},
+          {"tag": "SELECT", "name": "status", "value": "done"},
+          {"tag": "SELECT", "name": "priority", "value": "P1"},
+          {"tag": "INPUT", "name": "assignee", "value": "赵六"},
+          {"tag": "INPUT", "name": "startDate", "type": "date", "value": "2026-10-02"},
+          {"tag": "INPUT", "name": "dueDate", "type": "date", "value": "2026-10-11"},
+          {"tag": "INPUT", "name": "progress", "type": "number", "value": "20"},
+          {"tag": "SELECT", "name": "milestoneId", "value": ""}
+        ]
+      }
+    },
+    {
+      "step": "AFTER_ESCAPE（真实 Esc 关抽屉后）",
+      "verbatim": {
+        "activeElement": {"aria": null, "cls": "pm-reminder-range pm-button-primary", "tag": "BUTTON", "text": "7 天"},
+        "drawerStillVisible": false,
+        "openerButtons": [
+          {"aria": "重新打开 逾期任务", "sameAsActive": false},
+          {"aria": "编辑 逾期任务", "sameAsActive": false}
+        ]
+      }
+    },
+    {
+      "step": "AFTER_ESC2（Enter 又开抽屉后再 Esc）",
+      "verbatim": {
+        "activeElement": {"cls": "pm-reminder-range pm-button-primary", "tag": "BUTTON", "text": "7 天"},
+        "drawerVisible": false,
+        "keyLogTail": [
+          {"code": "Enter", "isTrusted": true, "key": "Enter", "target": {"aria": null, "name": null, "tag": "BUTTON"}, "time": 1791821334289},
+          {"code": "Escape", "isTrusted": true, "key": "Escape", "target": {"aria": null, "name": "title", "tag": "INPUT"}, "time": 1791821396810}
+        ]
+      }
+    }
+  ],
+  "keyboardProbes": [
+    {"step": "BASE_ROWS", "verbatim": {"count": 17, "first_rows_aria": ["编辑 逾期任务", "编辑 临期任务", "编辑 无日期任务", "编辑 已完成任务", "编辑 一级任务", "编辑 二级子任务", "编辑 xlsx一级", "编辑 xlsx二级"], "anyActiveClass": "无 [class*=active] 元素"}},
+    {"step": "press_key('j') 字符形", "verbatim": {"keyLog": [], "marked": [], "activeElement_after": {"tag": "BUTTON", "aria": null}}},
+    {"step": "DIAG（装 document 监听 + 读 keyLog）", "verbatim": {"keyLogPersisted": true, "keyLogLen": 0, "activeElement": {"cls": "pm-reminder-range pm-button-primary", "tag": "BUTTON", "text": "7 天"}}},
+    {"step": "press_key(' ') 空格", "verbatim": {"docLog": [], "keyLog": [], "activeElement": {"text": "7 天"}}},
+    {"step": "对照 press_key('Enter')", "verbatim": {"keyLog": [{"code": "Enter", "isTrusted": true, "key": "Enter", "target": {"tag": "BUTTON"}}], "afterActiveElement": {"tag": "INPUT", "name": "title", "value": "逾期任务", "drawerVisible": true}}},
+    {"step": "press_key('KeyJ') code形", "verbatim": {"keyLogTail": [{"code": "KeyJ", "isTrusted": true, "key": "j", "target": {"tag": "BUTTON"}}]}},
+    {"step": "PROBE Enter after KeyJ（验 j 下行）", "verbatim": {"drawerVisible": true, "focusedTitle": "临期任务"}},
+    {"step": "PROBE Enter after KeyK（验 k 上行）", "verbatim": {"drawerVisible": true, "focusedTitle": "逾期任务"}},
+    {"step": "保存新行后 ACTIVE_PROBE", "verbatim": {"drawerVisible": true, "focusedTitle": "逾期任务", "keyLogTail": [{"code": "Enter", "isTrusted": true, "target": {"tag": "BODY"}}]}},
+    {"step": "KeyJ x17 后 PROBE", "verbatim": {"drawerVisible": true, "focusedTitle": "FBKB删除测试行", "keyLogCount": 28}},
+    {"step": "press_key('Space') / ('space')", "verbatim": {"checkboxChecked": false, "statusValue": "todo", "keyLog无新增"}}
+  ],
+  "deleteFlow": [
+    {"step": "BEFORE_SPACE（t-0018 勾选前）", "verbatim": {"checkboxChecked": false}},
+    {"step": "鼠标勾选 t-0018 checkbox", "verbatim": {"cbChecked": true, "statusValue": "todo", "rowClass": "pm-record-row pm-task-row"}},
+    {"step": "Delete（焦点=BUTTON，无选中行）", "verbatim": {"dialogs": [], "fbkbRowPresent": true, "keyLogTail": [{"code": "Delete", "isTrusted": true, "target": {"tag": "BUTTON"}}]}},
+    {"step": "Delete（焦点=checkbox INPUT）", "verbatim": {"dialogs": [], "fbkbRowPresent": true, "keyLogTail": [{"code": "Delete", "isTrusted": true, "target": {"aria": "选择 FBKB删除测试行", "tag": "INPUT"}}]}},
+    {"step": "Escape 后 Delete（焦点仍 INPUT）", "verbatim": {"dialogs": [], "fbkbRowPresent": true}},
+    {"step": "点空白 blur 后", "verbatim": {"activeElement": {"tag": "BODY"}, "cbStillChecked": true}},
+    {"step": "Delete（焦点=BODY，1 行选中）", "verbatim": {"note": "bu.js 评估超时（原生 confirm() 阻塞页面）→ handle_dialog(cancel)"}},
+    {"step": "AFTER_CANCEL", "verbatim": {"fbkbRowPresent": true, "cbChecked": true, "keyLogTail": [{"code": "Delete", "isTrusted": true, "target": {"tag": "BODY"}}]}},
+    {"step": "AFTER_ACCEPT", "verbatim": {"fbkbRowPresent": false, "toast": "已批量级联删除 1 个任务（含后代）"}}
+  ],
+  "hashEvidence": {
+    "t0018_after-create_vs_after-cancel_sha256": "ebb0821a455975bb5e33fac05b6903920697be6db75d64366e7d50cb0b0760b7 (两文件完全一致)",
+    "fixture_mtime_all_lt_session": "17 个夹具任务文件 mtime ≤ 1791811173；本次证据首写盘 1791821462 → 会话期间无夹具文件被写",
+    "gap": "17 个夹具行的内容级 sha256 未在会话前预先留存（仅文件名清单 + mtime 证据）；内容一致性断言缺口已标注。"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "test": "focus-keyboard-reverification",
+  "timestampUTC": "2026-10-12T19:05:00Z",
+  "bundleSHA": "07c3edb2c8f4f40b54bfb7473b77e287e9323367f5177d953796a4d4b767da14",
+  "paths": {
+    "title": {
+      "action": "click task title button '逾期任务'",
+      "afterOpen": { "tag": "INPUT", "name": "title" },
+      "afterEscape": { "tag": "BUTTON", "text": "逾期任务", "className": "pm-title-cell", "isTitleButton": true },
+      "result": "focus-returned-to-title-button"
+    },
+    "edit": {
+      "action": "click '编辑 逾期任务' button",
+      "afterOpen": { "tag": "INPUT", "name": "title" },
+      "afterEscape": { "tag": "BUTTON", "className": "pm-row-button" },
+      "result": "focus-returned-to-row-button"
+    },
+    "create": {
+      "action": "click '添加记录' button",
+      "afterOpen": { "tag": "INPUT", "name": "title" },
+      "afterEscape": { "tag": "BUTTON", "text": "添加记录", "className": "pm-add-button" },
+      "result": "focus-returned-to-add-button"
+    }
+  },
+  "keyboard": {
+    "KeyJ": { "captured": false, "note": "bu.press_key('j') did not produce trusted keydown reaching document. NOT_RUN (automation event limitation, consistent with prior sessions)" },
+    "KeyK": { "captured": false, "note": "bu.press_key('k') did not produce trusted keydown reaching document. NOT_RUN (automation event limitation)" },
+    "Enter": { "captured": true, "isTrusted": true, "target": "BUTTON.pm-title-cell:逾期任务", "result": "opened drawer, focus went to INPUT name=title" }
+  },
+  "deleteFallback": {
+    "note": "Project p-0003 and milestone m-0002 create+delete cycles completed via GUI. After project delete, drawer closed and project select returned to p-0001. After milestone delete, drawer closed and list returned to 1 item. activeElement after delete fallback observed as BUTTON (not body, not global primary button).",
+    "projectDelete": "p-0003 created then deleted via GUI confirm; disk after.diff cancellationUnchanged=true",
+    "milestoneDelete": "m-0002 created then deleted via GUI confirm; toast '里程碑已删除'"
+  },
+  "consoleErrors": 0
+}

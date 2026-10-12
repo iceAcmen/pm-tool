@@ -1,0 +1,68 @@
+[
+  {
+    "id": "mtg-0001",
+    "projectId": "p-0001",
+    "title": "周会",
+    "meetingDate": "2026-10-11",
+    "startTime": null,
+    "durationMinutes": null,
+    "location": "",
+    "facilitator": "",
+    "recorder": "",
+    "participants": [],
+    "status": "draft",
+    "summary": "",
+    "topics": [],
+    "decisions": [],
+    "actions": [],
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T10:09:05.025Z",
+    "updatedAt": "2026-10-12T10:09:05.025Z"
+  },
+  {
+    "id": "mtg-0002",
+    "projectId": "p-0001",
+    "title": "测试发布会议",
+    "meetingDate": "2026-10-12",
+    "startTime": null,
+    "durationMinutes": null,
+    "location": "",
+    "facilitator": "",
+    "recorder": "",
+    "participants": [],
+    "status": "draft",
+    "summary": "会议讨论测试发布事宜，确定本周完成回归测试。张三负责整理缺陷，李四负责更新文档。",
+    "topics": [
+      "测试发布",
+      "回归测试"
+    ],
+    "decisions": [
+      "本周完成回归测试"
+    ],
+    "actions": [
+      {
+        "id": "ai-001",
+        "title": "整理缺陷",
+        "owner": "张三",
+        "dueDate": "2026-10-15",
+        "status": "todo",
+        "taskId": null,
+        "riskIssueId": null
+      },
+      {
+        "id": "ai-002",
+        "title": "更新文档",
+        "owner": "李四",
+        "dueDate": "2026-10-16",
+        "status": "todo",
+        "taskId": null,
+        "riskIssueId": null
+      }
+    ],
+    "sourceType": "manual",
+    "sourceSessionId": null,
+    "createdAt": "2026-10-12T13:23:49.428Z",
+    "updatedAt": "2026-10-12T13:23:49.455Z"
+  }
+]

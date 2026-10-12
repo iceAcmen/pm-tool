@@ -1,0 +1,38 @@
+[
+  {
+    "id": "t-0005",
+    "projectId": "p-0001",
+    "parentId": null,
+    "title": "一级任务",
+    "description": "",
+    "assignee": "赵六",
+    "status": "todo",
+    "priority": "P1",
+    "startDate": "2026-11-01",
+    "dueDate": "2026-11-30",
+    "progress": 0,
+    "milestoneId": null,
+    "code": "5",
+    "order": 5,
+    "createdAt": "2026-10-12T10:28:08.191Z",
+    "updatedAt": "2026-10-12T10:28:08.191Z"
+  },
+  {
+    "id": "t-0006",
+    "projectId": "p-0001",
+    "parentId": "t-0005",
+    "title": "二级子任务",
+    "description": "",
+    "assignee": "赵六",
+    "status": "in_progress",
+    "priority": "P1",
+    "startDate": "2026-11-05",
+    "dueDate": "2026-11-20",
+    "progress": 30,
+    "milestoneId": null,
+    "code": "5.1",
+    "order": 1,
+    "createdAt": "2026-10-12T10:28:08.210Z",
+    "updatedAt": "2026-10-12T10:28:08.210Z"
+  }
+]

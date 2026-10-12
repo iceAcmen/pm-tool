@@ -1,0 +1,33 @@
+{
+  "candidateBaseCommit": "d88a3325275878a77129179dbf8578a25c5e6511",
+  "workingTreeCandidate": true,
+  "runStartedAtUTC": "2026-10-12T18:54:55Z",
+  "dirtyProductFiles": [
+    { "path": "packages/dsh-pm-tool/package.json", "status": "M", "sha256": "7bb02d71719d6cde7b45db27577105f6f70d23e33a7bb64f22d6d5d8831aca1f" },
+    { "path": "packages/dsh-pm-tool/src/client/panel.css", "status": "M", "sha256": "ce8791d1e76db794ab6104c307cc9834aee1cd2a9882f16fb40c7651fd2232d0" },
+    { "path": "packages/dsh-pm-tool/src/client/panel.tsx", "status": "M", "sha256": "ef1b6be64486eefe2775c00f8113ca70e01de46e70b19a2590914addffe6b41c" },
+    { "path": "packages/dsh-pm-tool/src/client/form-validation.ts", "status": "??", "sha256": "a9f8505036cf78787fd64ba64b8a4cb131632f5b66be920fea58e094860e2608" },
+    { "path": "packages/dsh-pm-tool/src/core/drawer-focus.ts", "status": "??", "sha256": "381f634d77950b364befbf1b96ff943cbe3351f27f365a0704b6cb12084e20ef" },
+    { "path": "packages/dsh-pm-tool/scripts/verify-form-validation.mjs", "status": "??", "sha256": "6c98a155cca4ab2fde2431b362367c34e1610bb184736fa284fad3ad7e3a732d" },
+    { "path": "packages/dsh-pm-tool/scripts/verify-drawer-focus.mjs", "status": "??", "sha256": "fa1b6ed8e892ce70136507e1bc16b2414f50fded42913a65c8dc1260aa57205e" }
+  ],
+  "dirtyDocFiles": [
+    "docs/requirements.md",
+    "docs/decision-log.md",
+    "docs/collaboration.md",
+    "docs/testing/reverification-round2.md",
+    "docs/testing/README.md",
+    "AGENTS.md"
+  ],
+  "artifacts": {
+    "lib/client.js": "07c3edb2c8f4f40b54bfb7473b77e287e9323367f5177d953796a4d4b767da14",
+    "lib/index.js": "64a48aecf941057f75df5e0906dba66622d42f464cd97b51261ff9a370e7b7e8",
+    "lib/core/drawer-focus.js": "60d1e11fdee3bc7ae3c7a9f13cc5ef9489e3444bc3e0cee2bd9634f25e29aa86"
+  },
+  "runningCommit": "CANDIDATE_SOURCE_PLUS_ARTIFACT_NOT_GITHEAD",
+  "port": 3091,
+  "profile": "pm",
+  "mode": "isolated",
+  "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/e2e-3082/home",
+  "DSH_PM_BACKUP_DIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/e2e-3082/backups"
+}
