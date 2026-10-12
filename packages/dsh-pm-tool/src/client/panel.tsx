@@ -2383,7 +2383,11 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose])
   useEffect(() => () => {
-    requestAnimationFrame(() => openerRef.current?.focus?.())
+    requestAnimationFrame(() => {
+      const opener = openerRef.current
+      const target = opener && document.contains(opener) ? opener : document.querySelector('.pm-row-active button, .pm-button-primary')
+      if (target instanceof HTMLElement) target.focus()
+    })
   }, [])
   return <div className="pm-drawer-layer">
     <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={onClose}/>
