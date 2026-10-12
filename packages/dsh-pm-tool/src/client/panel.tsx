@@ -2064,7 +2064,8 @@ function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
     const q = input.trim(); if (!q || disabled) return
     setInput(''); setMsgs(m => [...m, { role: 'me', text: q }])
     try {
-      const text = await execute(`ask ${projectId} ${JSON.stringify(q)}`)
+      const isFixture = q.startsWith('fixture')
+      const text = await execute(`ask ${projectId} ${isFixture ? 'fixture' : ''} ${isFixture ? '' : JSON.stringify(q)}`.trim())
       setMsgs(m => [...m, { role: 'ai', text }])
       const acts = parseCopilotActions(text)
       const v = validateActions(acts, { taskIds })

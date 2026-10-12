@@ -9,6 +9,21 @@ const SYSTEM = `你是项目经理副驾。基于给定项目数据，先用一�
 patch 仅允许 assignee(字符串)/status(todo|doing|done)/progress(0-100整数)/dueDate(YYYY-MM-DD)。禁止删除、禁止批量、禁止未知字段。没有建议动作就不要输出 json 块。`
 
 export function handleAskCommand(argument: string, domain: PmDomain | undefined, llm: LlmGateway | undefined) {
+  // PROD-20 E2E 测试缝：仅当 DSH_PM_E2E=1 时可用，不调模型，返回固定"模拟模型原始输出"，
+  // 后续 parseCopilotActions→validateActions→渲染→确认落盘与真实 ask 完全同路径；生产/所有者实例不注册。
+  if (process.env.DSH_PM_E2E === '1' && /(^|\s)fixture(\s|$)/.test(argument)) {
+    const projectId = argument.split(/\s+/).filter(t => t !== 'fixture')[0]
+    if (!domain || !domain.table('projects').get(projectId ?? '')) {
+      return { kind: 'error' as const, text: '未找到项目' }
+    }
+    return {
+      kind: 'success' as const,
+      text: `【E2E 固定诊断】该项目任务进度滞后，建议把 t-9001 收尾并指定负责人。
+\`\`\`json
+{"actions":[{"op":"task.update","id":"t-9001","patch":{"assignee":"赵六","status":"done"}},{"op":"task.delete","id":"t-9002"},{"op":"task.update","id":"t-9001","patch":{"progress":200}}]}
+\`\`\``,
+    }
+  }
   if (!domain) return { kind: 'error' as const, text: '项目存储未就绪。' }
   const tokens = argument.split(/\s+/)
   const projectId = tokens[0]
