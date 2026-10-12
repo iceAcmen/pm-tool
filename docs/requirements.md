@@ -85,8 +85,8 @@
 | description | string | 目标与范围描述 |
 | owner | string | 项目负责人 |
 | status | enum | `planning` 计划中 / `active` 进行中 / `paused` 已暂停 / `done` 已完成 / `archived` 已归档 |
-| startDate | date(YYYY-MM-DD) | 计划开始日期 |
-| targetDate | date | 计划完成日期 |
+| startDate | date(YYYY-MM-DD) | 计划开始日期（必填） |
+| targetDate | date | 计划完成日期（必填，且不得早于 startDate） |
 | tags | string[] | 标签（可选） |
 | createdAt / updatedAt | datetime | 创建/更新时间（自动） |
 
