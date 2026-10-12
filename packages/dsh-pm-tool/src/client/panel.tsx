@@ -1202,6 +1202,8 @@ function TaskTable({
   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
+      const tag = (document.activeElement?.tagName || '').toUpperCase()
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
       const action = panelKeyboard(fromKeyboardEvent(ev))
       if (!action) return
       ev.preventDefault()
@@ -2371,6 +2373,13 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
 }
 
 function DrawerPanel({ title, onClose, children }: { title: string, onClose: () => void, children: ReactNode }) {
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') { ev.stopPropagation(); onClose() }
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [onClose])
   return <div className="pm-drawer-layer">
     <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={onClose}/>
     <aside className="pm-drawer" role="dialog" aria-modal="true" aria-label={title}>
