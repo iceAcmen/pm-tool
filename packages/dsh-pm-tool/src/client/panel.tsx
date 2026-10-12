@@ -1,6 +1,7 @@
 import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
+import { buildUpdate } from '../core/task-inline.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -1307,6 +1308,7 @@ function TaskTable({
                   run={run}
                   selected={selected}
                   onToggle={toggleSelect}
+                  onSaved={onSaved}
                 />)
               : <TaskGroup
                   key="tree"
@@ -1320,6 +1322,7 @@ function TaskTable({
                   tree={flattenTaskTree(visible, collapsed)}
                   collapsed={collapsed}
                   onToggleCollapse={toggleCollapse}
+                  onSaved={onSaved}
                 />}
           </tbody>
         </table>
@@ -1344,6 +1347,7 @@ function TaskGroup({
   run,
   selected,
   onToggle,
+  onSaved,
   tree,
   collapsed,
   onToggleCollapse,
@@ -1355,6 +1359,7 @@ function TaskGroup({
   run: (line: string) => Promise<boolean>
   selected: Set<string>
   onToggle: (id: string) => void
+  onSaved: () => void
   tree?: { task: Task, depth: number, hasChildren: boolean, childIds: string[] }[]
   collapsed?: Set<string>
   onToggleCollapse?: (id: string) => void
@@ -1375,6 +1380,7 @@ function TaskGroup({
       run={run}
       selected={selected}
       onToggle={onToggle}
+      onSaved={onSaved}
     />)}
   </>
   }
@@ -1394,6 +1400,7 @@ function TaskGroup({
         run={run}
         selected={selected}
         onToggle={onToggle}
+        onSaved={onSaved}
       />
     })}
   </>
@@ -1401,7 +1408,7 @@ function TaskGroup({
 
 function TaskRow({
   task, depth, milestones, disabled, onEdit, run, selected, onToggle,
-  hasChildren, collapsed, onToggleCollapse,
+  hasChildren, collapsed, onToggleCollapse, onSaved,
 }: {
   task: Task
   depth: number
@@ -1414,6 +1421,7 @@ function TaskRow({
   hasChildren?: boolean
   collapsed?: boolean
   onToggleCollapse?: (id: string) => void
+  onSaved: () => void
 }) {
     {const milestone = milestones.find(item => item.id === task.milestoneId)
       return <tr className="pm-record-row pm-task-row">
@@ -1452,14 +1460,59 @@ function TaskRow({
             onClick={() => onEdit(task)}
           >{task.title}</button>
         </td>
-        <td><StatusTag kind="task" value={task.status}/></td>
+        <td>
+          <select
+            className="pm-row-status"
+            data-task-id={task.id}
+            value={task.status}
+            aria-label={`${task.title} 状态`}
+            disabled={disabled}
+            onChange={(e) => {
+              const upd = buildUpdate({ status: e.currentTarget.value })
+              void run(`task update ${task.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+            }}
+          >
+            <option value="todo">待办</option>
+            <option value="doing">进行中</option>
+            <option value="done">完成</option>
+          </select>
+        </td>
         <td><PriorityTag value={task.priority}/></td>
         <td>{task.assignee
           ? <span className="pm-person"><span>{task.assignee.slice(0, 1)}</span>{task.assignee}</span>
           : <span className="pm-cell-empty">未指定</span>}</td>
-        <td><Progress value={task.progress}/></td>
+        <td>
+          <input
+            type="number"
+            className="pm-row-progress"
+            data-task-id={task.id}
+            value={task.progress ?? 0}
+            min={0} max={100} step={10}
+            aria-label={`${task.title} 进度`}
+            disabled={disabled}
+            onChange={(e) => {
+              const upd = buildUpdate({ progress: e.currentTarget.value })
+              if (!Object.keys(upd).length) return
+              void run(`task update ${task.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+            }}
+          />
+        </td>
         <td>{task.startDate || <span className="pm-cell-empty">-</span>}</td>
-        <td>{task.dueDate || <span className="pm-cell-empty">-</span>}</td>
+        <td>
+          <input
+            type="date"
+            className="pm-row-due"
+            data-task-id={task.id}
+            value={task.dueDate ?? ''}
+            aria-label={`${task.title} 截止日期`}
+            disabled={disabled}
+            onChange={(e) => {
+              const upd = buildUpdate({ dueDate: e.currentTarget.value })
+              if (!Object.keys(upd).length) return
+              void run(`task update ${task.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+            }}
+          />
+        </td>
         <td>{milestone
           ? <span className="pm-reference">{milestone.title}</span>
           : <span className="pm-cell-empty">-</span>}</td>

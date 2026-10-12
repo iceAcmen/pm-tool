@@ -823,3 +823,7 @@
 
 .pm-task-toggle { width: 16px; height: 16px; padding: 0; margin-right: 2px; border: none; background: transparent; cursor: pointer; color: var(--pm-text); font-size: 11px; }
 .pm-task-toggle--leaf { cursor: default; visibility: hidden; }
+
+.pm-row-status, .pm-row-progress, .pm-row-due { font: inherit; font-size: 11px; padding: 1px 3px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--pm-text); max-width: 72px; }
+.pm-row-status:hover, .pm-row-progress:hover, .pm-row-due:hover { border-color: var(--pm-border); }
+.pm-row-progress { width: 52px; }
