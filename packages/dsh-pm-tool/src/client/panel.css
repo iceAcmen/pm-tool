@@ -108,7 +108,7 @@
   background: var(--pm-hover);
 }
 .pm-button:disabled, .pm-icon-button:disabled { cursor: not-allowed; opacity: .55; }
-.pm-button-primary { border-color: transparent; background: var(--dsw-alias-button-primary-fill); color: var(--dsw-alias-label-primary-foreground); }
+.pm-button-primary { border-color: transparent; background: var(--dsw-alias-button-primary-fill); color: var(--dsw-alias-label-primary); }
 .pm-button-primary:hover:not(:disabled) { border-color: transparent; background: var(--dsw-alias-button-primary-hover); }
 .pm-button-danger { margin-right: auto; border-color: transparent; color: var(--pm-danger); }
 .pm-button-danger:hover:not(:disabled) { border-color: transparent; background: var(--dsw-alias-interactive-bg-hover-danger); }
@@ -236,7 +236,7 @@
   border: 0;
   border-radius: var(--dsw-radius-sm);
   background: var(--dsw-alias-button-primary-fill);
-  color: var(--dsw-alias-label-primary-foreground);
+  color: var(--dsw-alias-label-primary);
   cursor: pointer;
   font-weight: 550;
 }
@@ -342,7 +342,7 @@
 }
 .pm-check-button { cursor: pointer; }
 .pm-check-button:hover:not(:disabled) { border-color: var(--pm-blue); }
-.pm-check-button[data-checked="true"] { border-color: var(--pm-success); background: var(--pm-success); color: var(--dsw-alias-label-primary-foreground); }
+.pm-check-button[data-checked="true"] { border-color: var(--pm-success); background: var(--pm-success); color: var(--dsw-alias-label-primary); }
 .pm-check-button:disabled { opacity: .65; }
 .pm-title-cell {
   max-width: 100%;
@@ -870,9 +870,9 @@
 .pm-empty-ctas { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 .pm-empty-ai-cta {
   min-height: 32px; padding: 6px 14px; font-size: 13px;
-  background: var(--dsw-alias-state-business-primary); color: var(--dsw-alias-label-primary-foreground);
+  background: var(--dsw-alias-state-business-primary); color: var(--dsw-alias-label-primary);
   border: 1px solid var(--dsw-alias-state-business-primary);
 }
-.pm-empty-ai-cta svg { color: var(--dsw-alias-label-primary-foreground); }
+.pm-empty-ai-cta svg { color: var(--dsw-alias-label-primary); }
 
-.pm-empty-ai-cta svg { color: var(--dsw-alias-label-primary-foreground); }
+.pm-empty-ai-cta svg { color: var(--dsw-alias-label-primary); }
