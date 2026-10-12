@@ -1,19 +1,41 @@
 /** 非GUI 真实 client bundle 激活测试：
- * 模拟宿主 ModuleLoader，按 externals 白名单(require 仅允许 react / react/jsx-runtime)执行 factory；
- * 任何 require("zod") 等非白名单即失败；并断言导出的安装函数可调用。 */
+ * vm 模拟宿主 ModuleLoader，require 仅允许 react/react-jsx-runtime（真实对象）；
+ * 任何残留外部 require(如 zod)即失败。随后取 factory 返回 exports，断言 apply 为函数，
+ * 并以最小 mock ctx（slots.inject/register + remote/sessions）调用 apply，
+ * 断言 main 与 sidebar.panellist 两个 slot 注册被触发。 */
 import vm from 'node:vm'
 import { readFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
+import module from 'node:module'
+const real = module.createRequire(import.meta.url)
+const provide = { react: real('react'), 'react/jsx-runtime': real('react/jsx-runtime') }
 const src = readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8')
 let captured = null
-const window = { __ModuleLoader__: { load: ({ factory }) => { captured = factory } } }
-const ctx = { window, console, process: { env: {} } }
+const win = { __ModuleLoader__: { load: ({ factory }) => { captured = factory } } }
+const ctx = { window: win, console, process: { env: {} } }
 vm.createContext(ctx)
 vm.runInContext(src, ctx, { filename: 'client.js' })
 assert.equal(typeof captured, 'function', '宿主 ModuleLoader 应收到 factory')
-const real = await import('node:module').then(m => m.createRequire(import.meta.url))
-const provide = { 'react': real('react'), 'react/jsx-runtime': real('react/jsx-runtime') }
-const require = (id) => { if (!(id in provide)) throw new Error('client bundle 引用了宿主未提供的模块: ' + id); return provide[id] }
 const mod = { exports: {} }
-captured(require, mod) // factory 执行不抛错 = bundle 在宿主 ModuleLoader 下可激活
-console.log('PASS verify-client-bundle: factory 激活成功, 仅 react 外部依赖')
+const exports_ = captured((id) => {
+  if (!(id in provide)) throw new Error('client bundle 引用了宿主未提供的模块: ' + id)
+  return provide[id]
+}, mod)
+const out = exports_ && typeof exports_ === 'object' ? exports_ : mod.exports
+assert.equal(typeof out.apply, 'function', '应导出 apply 安装函数')
+// 最小 mock ctx
+const registeredNames = []
+const slots = {
+  inject(name, cb) { registeredNames.push(name); cb() },
+  register() { return () => {} },
+}
+const mockCtx = {
+  slots,
+  remote: {},
+  'remote.commands': { execute: async () => ({ kind: 'success', text: '' }) },
+  sessions: { current: () => ({ on: () => {} }) },
+}
+out.apply(mockCtx)
+assert.deepEqual(new Set(registeredNames), new Set(['main', 'sidebar.panellist']),
+  'apply 应注册 main 与 sidebar.panellist')
+console.log('PASS verify-client-bundle: factory 激活, apply 注册 main/sidebar, 仅 react 外部依赖')
