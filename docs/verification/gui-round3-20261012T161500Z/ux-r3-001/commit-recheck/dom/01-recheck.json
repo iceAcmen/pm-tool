@@ -1,0 +1,43 @@
+{
+  "test": "commit-recheck-3f0528a",
+  "timestampUTC": "2026-10-12T19:53:00Z",
+  "HEAD": "3f0528af160f32d89c9bf59a9a561e788a7b56b3",
+  "trackedStatus": "clean (only 1 untracked fixture script)",
+  "artifacts": {
+    "lib/client.js": "07c3edb2c8f4f40b54bfb7473b77e287e9323367f5177d953796a4d4b767da14",
+    "lib/index.js": "64a48aecf941057f75df5e0906dba66622d42f464cd97b51261ff9a370e7b7e8",
+    "lib/core/drawer-focus.js": "60d1e11fdee3bc7ae3c7a9f13cc5ef9489e3444bc3e0cee2bd9634f25e29aa86",
+    "lib/client/form-validation.js": "aeec03504bedc0fc61cb1c0f9bfe9d59a7ffda185fc061338b5070dc9568da84"
+  },
+  "newPID": 95085,
+  "emptySubmit": {
+    "activeElement": { "tag": "INPUT", "name": "name" },
+    "errors": [
+      { "id": "project-name-error", "role": "alert", "text": "项目名称不能为空" },
+      { "id": "project-start-error", "role": "alert", "text": "请选择开始日期" },
+      { "id": "project-target-error", "role": "alert", "text": "请选择目标日期" }
+    ],
+    "nameAriaRequired": "true",
+    "nameAriaInvalid": "true",
+    "nameAriaDescribedby": "project-name-error",
+    "requiredMarks": 3
+  },
+  "targetLessThanStart": {
+    "errorText": "完成日期不得早于开始日期",
+    "ariaInvalid": "true",
+    "visible": true
+  },
+  "lightThemeContrast": {
+    "bodyBg": "rgb(255, 255, 255)",
+    "errorColor": "rgb(97, 102, 107)",
+    "inputBorderColor": "rgb(236, 19, 19)",
+    "inputBorderWidth": "1px"
+  },
+  "escPaths": {
+    "title": "BUTTON|逾期任务|pm-title-cell",
+    "edit": "BUTTON|pm-row-button",
+    "create": "BUTTON|添加记录|pm-add-button"
+  },
+  "consoleInteractionErrors": 0,
+  "dataWritten": false
+}
