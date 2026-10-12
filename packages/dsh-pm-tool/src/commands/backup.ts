@@ -23,14 +23,21 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
     const jsonText = rest.replace(/\sconfirm$/, '').trim()
     if (!jsonText) return { kind: 'error', text: '请使用：/pm restore-content "<备份JSON>" [confirm]' }
     try {
+      // 网页 panel 用 JSON.stringify(content) 包装：外层 parse 得到原始备份文本 string；
+      // CLI 直接传 raw JSON 对象则兼容。统一解码为原始备份文本。
+      const decoded = (() => {
+        const outer = JSON.parse(jsonText)
+        if (typeof outer === 'string') return outer
+        return JSON.stringify(outer)
+      })()
       if (!isConfirm) {
-        validateBackup(JSON.parse(jsonText))
+        validateBackup(JSON.parse(decoded))
         return { kind: 'success', text: [
           '已读取备份内容（演练，尚未恢复）。确认将用此备份替换当前七类实体（恢复前自动先存安全快照）：',
           '  /pm restore-content "<同上JSON>" confirm',
         ].join('\n') }
       }
-      const result = await restoreBackupFromContent(domain, jsonText)
+      const result = await restoreBackupFromContent(domain, decoded)
       return {
         kind: 'success',
         text: [
