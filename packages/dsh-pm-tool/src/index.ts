@@ -128,7 +128,7 @@ export async function apply(ctx: Context): Promise<void> {
       if (statsMatch) return handleStatsCommand(statsMatch[1] ?? '', domain)
       const dueMatch = /^due(?:\s+([\s\S]*))?$/i.exec(raw)
       if (dueMatch) return handleDueCommand(dueMatch[1] ?? '', domain)
-      const backupMatch = /^(backup|restore)(?:\s+([\s\S]*))?$/i.exec(raw)
+      const backupMatch = /^(backup|restore-content|restore)(?:\s+([\s\S]*))?$/i.exec(raw)
       if (backupMatch) return handleBackupCommand([backupMatch[1].toLowerCase(), backupMatch[2] ?? ''].join(' ').trim(), domain)
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
