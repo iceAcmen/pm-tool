@@ -129,7 +129,11 @@ export async function apply(ctx: Context): Promise<void> {
       const dueMatch = /^due(?:\s+([\s\S]*))?$/i.exec(raw)
       if (dueMatch) return handleDueCommand(dueMatch[1] ?? '', domain)
       const backupMatch = /^(backup|restore-content|restore)(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (backupMatch) return handleBackupCommand([backupMatch[1].toLowerCase(), backupMatch[2] ?? ''].join(' ').trim(), domain)
+      if (backupMatch) {
+        const sub = backupMatch[1].toLowerCase()
+        const rest = (backupMatch[2] ?? '').trim()
+        return handleBackupCommand(sub === 'backup' ? rest : `${sub} ${rest}`, domain)
+      }
       const exportMatch = /^export(?:\s+([\s\S]*))?$/i.exec(raw)
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const modelMatch = /^model(?:\s+([\s\S]*))?$/i.exec(raw)
