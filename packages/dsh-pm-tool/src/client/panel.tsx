@@ -234,6 +234,7 @@ const deliverableStatus: Record<string, string> = {
 }
 
 export function PmPanel({ execute }: PmPanelApi) {
+  const [restorePreview, setRestorePreview] = useState<{ fileName: string, content: string, text: string } | null>(null)
   const [data, setData] = useState<Snapshot>(empty)
   const [selected, setSelectedRaw] = useState<string>(() => {
     try { return localStorage.getItem('pm-selected-project') ?? '' } catch { return '' }
@@ -344,6 +345,21 @@ export function PmPanel({ execute }: PmPanelApi) {
     <style>{styles}</style>
     <main className="pm-shell">
       {message && <Notice message={message} onClose={() => setMessage('')}/>}
+
+      {restorePreview && (
+        <div className="pm-restore-preview">
+          <div className="pm-warn">危险：恢复将用「{restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照）。</div>
+          <pre className="pm-restore-preview-text">{restorePreview.text}</pre>
+          <button
+            className="pm-button pm-button-primary pm-restore-confirm"
+            onClick={() => {
+              const enc = JSON.stringify(restorePreview.content)
+              void execute(`restore-content ${enc} confirm`).then((r) => { setMessage(String(r ?? '已恢复')); setRestorePreview(null); void refresh() })
+            }}
+          >确认恢复</button>
+          <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
+        </div>
+      )}
       <header className="pm-topbar">
         <div className="pm-project-switch">
           <span className="pm-app-mark"><FolderKanban size={17}/></span>
@@ -433,7 +449,13 @@ export function PmPanel({ execute }: PmPanelApi) {
                 reader.onload = () => {
                   const content = String(reader.result ?? '')
                   const json = JSON.stringify(content)
-                  void execute(`restore-content ${json}`).then(setMessage)
+                  void execute(`restore-content ${json}`)
+                    .then((r) => {
+                      const text = String(r ?? '')
+                      if (/失败|错误|不支持|无法/.test(text)) { setMessage(text); return }
+                      setRestorePreview({ fileName: file.name, content, text })
+                    })
+                    .catch((e) => setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`))
                 }
                 reader.readAsText(file)
                 e.currentTarget.value = ''
@@ -1272,6 +1294,9 @@ function TaskTable({
       </label>
     </TableToolbar>
 
+
+
+
     {importPreview && (
       <div className="pm-import-preview">
         <pre className="pm-import-preview-text">{importPreview.text}</pre>
@@ -1287,6 +1312,7 @@ function TaskTable({
         <button className="pm-tool-button" onClick={() => setImportPreview(null)}>取消</button>
       </div>
     )}
+
 
     {selected.size > 0 && (
       <div className="pm-batch-bar">
