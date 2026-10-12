@@ -2373,13 +2373,18 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
 }
 
 function DrawerPanel({ title, onClose, children }: { title: string, onClose: () => void, children: ReactNode }) {
+  const openerRef = useRef<HTMLElement | null>(null)
   useEffect(() => {
+    openerRef.current = document.activeElement as HTMLElement | null
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') { ev.stopPropagation(); onClose() }
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose])
+  useEffect(() => () => {
+    requestAnimationFrame(() => openerRef.current?.focus?.())
+  }, [])
   return <div className="pm-drawer-layer">
     <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={onClose}/>
     <aside className="pm-drawer" role="dialog" aria-modal="true" aria-label={title}>
