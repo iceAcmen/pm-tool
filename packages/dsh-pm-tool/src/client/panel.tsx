@@ -3,6 +3,7 @@ import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { buildUpdate } from '../core/task-inline.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
+import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -176,7 +177,7 @@ type Snapshot = {
   reports: ProgressReport[]
   deliverables: Deliverable[]
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
@@ -241,7 +242,7 @@ export function PmPanel({ execute }: PmPanelApi) {
   const [view, setView] = useState<View>(() => {
     try {
       const v = localStorage.getItem('pm-view')
-      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview') return v
+      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview' || v === 'gantt') return v
     } catch { /* ignore */ }
     return 'tasks'
   })
@@ -526,6 +527,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => changeView('overview')}>
                 项目概览
               </ViewTab>
+              <ViewTab active={view === 'gantt'} icon={<CalendarDays size={15}/>} onClick={() => changeView('gantt')}>
+                甘特排期
+              </ViewTab>
             </nav>
             <section className="pm-view" role="tabpanel">
               {view === 'tasks' && <TaskTable
@@ -573,6 +577,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onSaved={() => void refresh()}/>}
             </section>
           </>}
 
@@ -2020,6 +2025,77 @@ function Overview({
           }))}
       </div>
     </div>
+  </div>
+}
+
+/** PROD-22 方案A：甘特排期（只读条 + 拖拽平移改期）。 */
+function GanttView({ tasks, milestones, run, onSaved }: {
+  tasks: Task[]
+  milestones: Milestone[]
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+}) {
+  const axis = dateRange([...tasks, ...milestones])
+  const today = new Date().toISOString().slice(0, 10)
+  if (!axis) return <p className="pm-cell-empty pm-gantt">暂无带起止日期的任务/里程碑，无法绘制时间轴。</p>
+  const axisDays = Math.max(1, daysFrom(axis.end, axis.start) + 1)
+  const PX = 16 // 每天像素
+  const [dragOver, setDragOver] = useState('')
+  const barRef = useRef<{ id: string, startX: number } | null>(null)
+  const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
+    barRef.current = { id: task.id, startX: e.clientX }
+    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onPointerUpBar = async (e: React.PointerEvent, task: Task) => {
+    const startX = barRef.current?.startX
+    barRef.current = null
+    if (startX === undefined || !task.startDate || !task.dueDate) return
+    const deltaPx = e.clientX - startX
+    if (Math.abs(deltaPx) < 4) return
+    const next = shiftDatesByDrag(task.startDate, task.dueDate, deltaPx, PX)
+    setDragOver(`${task.title} → ${next.startDate} ~ ${next.dueDate}`)
+    const ok = await run(`task update ${task.id} ${JSON.stringify(next)}`)
+    setDragOver(ok ? `已更新：${next.startDate} ~ ${next.dueDate}` : '更新失败，请重试')
+    if (ok) onSaved()
+  }
+  return <div className="pm-gantt">
+    <div className="pm-gantt-axis" style={{ width: `${axisDays * PX}px` }}>
+      {Array.from({ length: axisDays }, (_, i) => {
+        const d = new Date(Date.parse(axis.start) + i * 86_400_000).toISOString().slice(0, 10)
+        return <span key={d} className="pm-gantt-tick" style={{ left: `${i * PX}px` }}>{d.slice(5)}</span>
+      })}
+      {(() => { const off = todayOffset(axis.start, today); return off >= 0 && off <= axisDays
+        ? <div className="pm-gantt-today" style={{ left: `${off * PX + PX / 2}px` }}/> : null })()}
+    </div>
+    <div className="pm-gantt-rows">
+      {tasks.filter(t => t.startDate && t.dueDate).map(t => {
+        const g = barGeometry(t, axis.start, axisDays)
+        if (!g) return null
+        const done = t.status === 'done'
+        return <div key={t.id} className="pm-gantt-row">
+          <div
+            className={`pm-gantt-bar ${done ? 'pm-gantt-bar-done' : ''}`}
+            data-task-id={t.id}
+            data-start={t.startDate}
+            data-end={t.dueDate}
+            style={{ left: `${g.leftDays * PX}px`, width: `${g.widthDays * PX}px` }}
+            title={`${t.title}（${t.startDate} ~ ${t.dueDate}）拖动平移改期`}
+            onPointerDown={(e) => onPointerDownBar(e, t)}
+            onPointerUp={(e) => onPointerUpBar(e, t)}
+          >{t.title}</div>
+        </div>
+      })}
+      {milestones.filter(m => m.targetDate).map(m => {
+        const off = daysFrom(m.targetDate!, axis.start)
+        const done = m.status === 'achieved'
+        return <div key={m.id} className="pm-gantt-row">
+          <div className={`pm-gantt-milestone ${done ? 'pm-gantt-milestone-done' : ''}`}
+            data-milestone-id={m.id} title={`里程碑 ${m.title}（${m.targetDate}）`}
+            style={{ left: `${off * PX + PX / 2}px` }}/>
+        </div>
+      })}
+    </div>
+    <p className="pm-gantt-hint">{dragOver || '拖动任务条可整体平移起止日期（按天吸附）。'}</p>
   </div>
 }
 

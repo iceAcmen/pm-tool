@@ -843,3 +843,14 @@
 .pm-top-more-wrap { position: relative; display: inline-flex; }
 .pm-top-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; display: flex; flex-direction: column; gap: 4px; min-width: 150px; padding: 6px; background: var(--pm-bg); border: 1px solid var(--pm-border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
 .pm-top-menu .pm-button { justify-content: flex-start; }
+
+.pm-gantt { overflow-x: auto; padding: 8px 0; }
+.pm-gantt-axis, .pm-gantt-rows { position: relative; min-height: 24px; }
+.pm-gantt-tick { position: absolute; top: 0; font-size: 9px; opacity: .5; white-space: nowrap; }
+.pm-gantt-today { position: absolute; top: 0; bottom: -200px; width: 1px; background: var(--pm-danger); }
+.pm-gantt-row { display: flex; align-items: center; height: 24px; }
+.pm-gantt-bar { position: absolute; height: 18px; border-radius: 4px; background: color-mix(in srgb, var(--pm-accent) 70%, transparent);  font-size: 10px; padding: 0 4px; white-space: nowrap; overflow: hidden; cursor: grab; user-select: none; touch-action: none; }
+.pm-gantt-bar-done { opacity: .4; }
+.pm-gantt-milestone { position: absolute; width: 10px; height: 10px; transform: rotate(45deg); background: var(--pm-warning, orange); }
+.pm-gantt-milestone-done { opacity: .4; }
+.pm-gantt-hint { font-size: 11px; opacity: .7; margin-top: 6px; }
