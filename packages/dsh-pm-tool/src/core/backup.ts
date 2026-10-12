@@ -111,23 +111,23 @@ export async function readBackupFile(path: string): Promise<PmBackup> {
  * 恢复：用备份替换七类实体表。恢复前若 currently 有数据，自动写一份安全快照。
  * 表以「先清空再逐条 put」方式替换；ID 原样保留（续号由各表自增逻辑在后续 add 时基于现有 max id 计算）。
  */
-export async function restoreBackup(domain: PmDomain, path: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
+export async function restoreBackup(domain: PmDomain, path: string, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   const backup = await readBackupFile(path)
-  return applyBackup(domain, backup)
+  return applyBackup(domain, backup, directory)
 }
 
-/** OPT-06：按备份 JSON 内容（浏览器 FileReader 读入）恢复，区别于服务端路径。 */
-export async function restoreBackupFromContent(domain: PmDomain, jsonText: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
+/** OPT-06：按备份 JSON 内容（浏览器 FileReader 读入）恢复，区别于服务端路径。可注入 directory 使测试备份目录隔离。 */
+export async function restoreBackupFromContent(domain: PmDomain, jsonText: string, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   let backup: PmBackup
   try {
     backup = validateBackup(JSON.parse(jsonText))
   } catch (error) {
     throw new Error(`备份内容无法解析（不是合法的 pmtool 备份 JSON）：${error instanceof Error ? error.message : String(error)}`)
   }
-  return applyBackup(domain, backup)
+  return applyBackup(domain, backup, directory)
 }
 
-async function applyBackup(domain: PmDomain, backup: PmBackup): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
+async function applyBackup(domain: PmDomain, backup: PmBackup, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   // 1) 删除前先对全部七类实体做完整 schema + 关系预检；任何一条不合法直接抛错，不触碰现有数据。
   await precheckBackup(backup)
 
@@ -135,7 +135,7 @@ async function applyBackup(domain: PmDomain, backup: PmBackup): Promise<{ safety
   let safetySnapshot: string | undefined
   const hasData = BACKUP_TABLES.some(name => (domain.table(name as never) as unknown as AnyTable).entries().next().done === false)
   if (hasData) {
-    const safety = await createBackup(domain)
+    const safety = await createBackup(domain, directory)
     safetySnapshot = safety.path
   }
 

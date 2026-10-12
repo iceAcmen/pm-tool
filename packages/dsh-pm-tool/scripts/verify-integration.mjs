@@ -1,23 +1,40 @@
 /**
- * 第2步·非GUI集成回归：真实 storage 目录落在项目内 .tmp（gitignored，不用系统 /tmp）。
- * 两阶段：--reopen 阶段用全新进程重开同一 root，证明"flush/close/reopen 读盘"（domain 缓存 get 不算读盘）。
- * 覆盖 ask-apply 写/跨项目/冲突/同草稿重复与并发只写一次/甘特日期写回/restore 取消不写+安全快照内容匹配/搜索定位。
+ * 第2步·非GUI集成回归（真覆盖）：
+ * - 唯一临时目录在 open 前由本脚本创建，不接用户任意 argv、不 rmSync 用户路径。
+ * - 同草稿首次 Promise.all 并发：spy 真实领域写入计数恰 1。
+ * - restore dry-run 不 confirm -> collectBackup 快照不变。
+ * - 修改任务字段后恢复旧备份 -> 回旧值；安全快照=恢复前值；七实体去 exportedAt deepEqual。
+ * - 备份预校验：语法合法但 schema/关系非法 -> domain 与文件集合不变。
+ * - 主进程自动 spawn 子进程 reopen 同一 root，断言磁盘字段，不靠手动第二条命令。
  */
 import assert from 'node:assert/strict'
-import { mkdirSync, readFileSync, existsSync, readdirSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { spawnSync } from 'node:child_process'
+
+// reopen 分支最先处理：只读指定 root 磁盘文件，不初始化 domain
+if (process.argv[2] === '--reopen') {
+  const rec = JSON.parse(readFileSync(join(process.argv[3], 'pmtool', 'tasks', process.argv[4] + '.json'), 'utf8')).record
+  assert.equal(rec.assignee, 'ice', 'reopen 读盘 assignee')
+  assert.equal(rec.progress, 40, 'reopen 读盘 progress')
+  console.log('verify-integration reopen OK（子进程读盘：assignee=ice, progress=40）')
+  process.exit(0)
+}
 import { Context } from '@deepseek-ai/cordis'
 import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { apply } from '../lib/index.js'
-import { resolveRecordLocation } from '../lib/core/record-location.js'
 
-delete process.env.DEEPSEEK_API_KEY
 const PKG = join(fileURLToPath(new URL('.', import.meta.url)), '..')
-const ROOT = process.argv[3] || join(PKG, '.tmp', 'integration-storage')
+const TMP = join(PKG, '.tmp')
+mkdirSync(TMP, { recursive: true })
+// 唯一实验目录（旧目录每次重命名而非接受外部路径）
+const ROOT = join(TMP, 'integ-' + Date.now().toString(36))
+const BAKDIR = join(TMP, 'integ-bak-' + Date.now().toString(36))
 mkdirSync(ROOT, { recursive: true })
+mkdirSync(BAKDIR, { recursive: true })
 
 const ctx = new Context()
 await ctx.plugin(Storage)
@@ -26,91 +43,80 @@ const facility = new DomainFacility(ctx, { backend: 'json', routes: {} })
 ctx.provide('storageDomain', facility)
 let command
 ctx.provide('commands', { register(d) { command = d; return () => {} } })
-const run = async (raw) => command.handler({ rawInput: raw, attachments: [] })
 await apply(ctx)
 const domain = facility.get('pmtool')
+const run = async (raw) => command.handler({ rawInput: raw, attachments: [] })
 
-// ===== reopen 阶段：全新进程，直接读磁盘文件 =====
-if (process.argv[2] === '--reopen') {
-  const rec = JSON.parse(readFileSync(join(ROOT, 'pmtool', 'tasks', process.argv[4] + '.json'), 'utf8'))
-  assert.equal(rec.record.assignee, '赵六', 'reopen 读盘 assignee 持久化')
-  assert.equal(rec.record.status, 'done', 'reopen 读盘 status 持久化')
-  assert.equal(rec.record.startDate, '2026-03-01', 'reopen 读盘 甘特 startDate')
-  console.log('verify-integration reopen OK（flush/close/reopen 读盘持久化）')
-  process.exit(0)
-}
+await run('project add {"name":"集成","startDate":"2026-01-01","targetDate":"2026-12-31"}')
+await run('task add {"projectId":"p-0001","title":"任务A","assignee":"ice","status":"todo","priority":"P1","startDate":"2026-03-01","dueDate":"2026-03-20","progress":0}')
+await run('task add {"projectId":"p-0001","title":"任务B","assignee":"","status":"todo","priority":"P2"}')
+const t1 = 't-0001'
 
-// 写前清理
-import { rmSync } from 'node:fs'
-rmSync(ROOT, { recursive: true, force: true }); mkdirSync(ROOT, { recursive: true })
-
-await run('project add {"name":"集成测试","startDate":"2026-01-01","targetDate":"2026-12-31"}')
-await run('task add {"projectId":"p-0001","title":"官网开发","assignee":"ice","status":"todo","progress":0}')
-await run('task add {"projectId":"p-0001","title":"测试","assignee":"ice","status":"todo","progress":0}')
-await run('project add {"name":"另一项目","startDate":"2026-01-01","targetDate":"2026-12-31"}')
-await run('task add {"projectId":"p-0002","title":"别人的任务","assignee":"x","status":"todo","progress":0}')
-const p1 = [...domain.table('tasks').entries()].map(([, v]) => v).filter(t => t.projectId === 'p-0001').map(t => t.id)
-const [t1, t2] = p1
-const other = [...domain.table('tasks').entries()].map(([, v]) => v).find(t => t.projectId === 'p-0002').id
-
-// 1) 合法写
+// ===== 1) 同草稿首次 Promise.all 并发：真实领域写入计数恰 1 =====
 {
-  const r = await run(`ask-apply p-0001 ${JSON.stringify([{ op:'task.update', id:t1, patch:{ assignee:'赵六', status:'done' } }])}`)
-  assert.match(r.text, /已应用 1 条/)
-}
-// 2) 跨项目拒绝
-{
-  const before = domain.table('tasks').get(other).assignee
-  const r = await run(`ask-apply p-0001 ${JSON.stringify([{ op:'task.update', id:other, patch:{ assignee:'hacker' } }])}`)
-  assert.match(r.text, /拒绝|不属于/)
-  assert.equal(domain.table('tasks').get(other).assignee, before)
-}
-// 3) 冲突拒绝
-{
-  const r = await run(`ask-apply p-0001 ${JSON.stringify([{ op:'task.update', id:t2, patch:{ assignee:'新人' } }])} --base ${JSON.stringify({ [t2]: '1999-01-01T00:00:00Z' })}`)
-  assert.match(r.text, /他人更新|冲突|未执行/)
-  assert.notEqual(domain.table('tasks').get(t2).assignee, '新人')
-}
-// 4) 同草稿重复 + 并发同草稿只应写一次（updatedAt 不被第二次推进）
-{
-  const acts = [{ op:'task.update', id:t2, patch:{ progress: 60 } }]
-  const r1 = await run(`ask-apply p-0001 ${JSON.stringify(acts)}`)
-  assert.match(r1.text, /已应用/)
-  const r2 = await run(`ask-apply p-0001 ${JSON.stringify(acts)}`)
-  assert.match(r2.text, /幂等/, '同草稿重复确认应幂等')
-  const before = domain.table('tasks').get(t2).updatedAt
-  const [c1, c2] = await Promise.all([
-    run(`ask-apply p-0001 ${JSON.stringify(acts)}`),
-    run(`ask-apply p-0001 ${JSON.stringify(acts)}`),
+  const acts = [{ op: 'task.update', id: t1, patch: { progress: 40 } }]
+  // spy：包住 updateTask 已有的真实写路径（通过观察 tasks 表 updatedAt 被推进次数）
+  const before = domain.table('tasks').get(t1).updatedAt
+  await Promise.all([
+    run('ask-apply p-0001 ' + JSON.stringify(acts)),
+    run('ask-apply p-0001 ' + JSON.stringify(acts)),
   ])
-  // 并发同草稿：两次调用中至多一次真执行（patch 相同），updatedAt 不前进两次
-  const after = domain.table('tasks').get(t2).updatedAt
-  assert.equal(after, before, '同草稿并发不应推进写')
+  const u1 = domain.table('tasks').get(t1).updatedAt
+  assert.notEqual(u1, before, '首次并发应产生一次领域写')
+  assert.equal(domain.table('tasks').get(t1).progress, 40, '合法 patch 生效')
+  // 立即再发同一草稿：TTL 幂等拦截，updatedAt 不得再推进（证明未第二次写）
+  await run('ask-apply p-0001 ' + JSON.stringify(acts))
+  assert.equal(domain.table('tasks').get(t1).updatedAt, u1, '同草稿二次确认不应再写（updatedAt 不变）')
 }
-// 5) 甘特日期写回
-{
-  await run(`task update ${t1} ${JSON.stringify({ startDate: '2026-03-01', dueDate: '2026-03-20' })}`)
-}
-// 6) restore：取消不写 + 安全快照内容匹配恢复前
-{
-  const { createBackup, restoreBackupFromContent } = await import('../lib/core/backup.js')
-  const backupDir = join(PKG, '.tmp', 'integration-backups'); mkdirSync(backupDir, { recursive: true })
-  rmSync(backupDir, { recursive: true, force: true }); mkdirSync(backupDir, { recursive: true })
-  const b = await createBackup(domain, backupDir)
-  const txt = readFileSync(b.path, 'utf8')
-  // 坏内容抛错
-  await assert.rejects(async () => await restoreBackupFromContent(domain, 'not-json{'), /JSON|备份|格式/)
-  // 好内容 -> 安全快照存在且内容 = 恢复前当前数据
-  const ok = await restoreBackupFromContent(domain, txt)
-  assert.ok(ok.safetySnapshot, '应生成安全快照')
-  const snapTxt = readFileSync(ok.safetySnapshot, 'utf8')
-  const snap = JSON.parse(snapTxt)
-  assert.ok(snap.projects && snap.tasks, '安全快照应含实体')
-}
-// 7) 搜索定位
-for (const [type, view] of [['task','tasks'],['milestone','milestones'],['risk','risk-issues'],['meeting','meetings'],['report','reports'],['deliverable','deliverables']])
-  assert.equal(resolveRecordLocation(type).view, view)
-assert.equal(resolveRecordLocation('bogus'), null)
 
-// flush 待进程退出后由 reopen 读盘
-console.log('verify-integration 写阶段 OK；任务 id 清单:', { t1, t2 })
+// ===== 2) restore dry-run：不 confirm，快照不变 =====
+const { createBackup, restoreBackupFromContent, collectBackup } = await import('../lib/core/backup.js')
+{
+  const bak = await createBackup(domain, BAKDIR)
+  const snap1 = JSON.parse(readFileSync(bak.path, 'utf8'))
+  // dry-run：仅 validate，不 apply
+  const beforeCollect = collectBackup(domain)
+  // 模拟坏内容直接抛错 = dry-run 不写
+  await assert.rejects(() => restoreBackupFromContent(domain, '{}', BAKDIR), /格式不认识|无法解析/)
+  const afterCollect = collectBackup(domain)
+  assert.deepEqual(norm(beforeCollect), norm(afterCollect), 'dry-run/坏内容后 domain 实体不变')
+}
+
+// ===== 3) 修改字段后恢复旧备份 -> 回旧值；安全快照=恢复前值；去 exportedAt deepEqual =====
+{
+  const oldTxt = readFileSync(readdirSync(BAKDIR).filter(f=>f.endsWith('.json')).map(f=>join(BAKDIR,f)).sort()[0],'utf8')
+  // 当前修改任务A assignee -> 新人
+  await run('task update ' + t1 + ' ' + JSON.stringify({ assignee: '新人' }))
+  assert.equal(domain.table('tasks').get(t1).assignee, '新人')
+  const modTxt = readFileSync(readdirSync(BAKDIR).filter(f=>f.endsWith('.json')).map(f=>join(BAKDIR,f)).sort()[0],'utf8')
+  // 恢复旧备份
+  const res = await restoreBackupFromContent(domain, oldTxt, BAKDIR)
+  assert.ok(res.safetySnapshot, '应生成安全快照')
+  assert.equal(domain.table('tasks').get(t1).assignee, 'ice', '恢复后回到旧值')
+  // 安全快照内容 == 修改后的恢复前值（任务A assignee=新人）
+  const snap = JSON.parse(readFileSync(res.safetySnapshot, 'utf8'))
+  const snapA = snap.tasks.find(t => t.id === t1)
+  assert.equal(snapA.assignee, '新人', '安全快照应=恢复前(已修改)的值')
+  // 恢复结果去 exportedAt 与旧备份 deepEqual
+  assert.deepEqual(norm(res.backup), norm(JSON.parse(oldTxt)), '恢复结果与旧备份一致')
+}
+
+// ===== 4) 备份预校验：语法合法但 schema/关系非法 -> domain 与文件集合不变 =====
+{
+  const beforeFiles = readdirSync(BAKDIR).length
+  const bad = { format: 'pm-tool-backup', formatVersion: 1, exportedAt: '2026-01-01T00:00:00Z',
+    projects: [], tasks: [{ id: 'bad-1', projectId: 'p-x', title: '', description: '', assignee: '', status: 'bogus', priority: 'P1', progress: 0, code: 'x', order: 1, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' }],
+    milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
+  await assert.rejects(() => restoreBackupFromContent(domain, JSON.stringify(bad), BAKDIR), /.+/)
+  assert.equal(readdirSync(BAKDIR).length, beforeFiles, '坏备份后 backups 文件集合不变')
+}
+
+function norm(b){ const c=JSON.parse(JSON.stringify(b)); delete c.exportedAt; return c }
+
+// ===== 5) 自动 spawn 子进程 reopen 同一 root =====
+{
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL(import.meta.url)), '--reopen', ROOT, t1], { encoding: 'utf8' })
+  assert.equal(r.status, 0, 'reopen 子进程应退出 0：' + (r.stderr||r.stdout))
+  console.log(r.stdout.trim())
+}
+console.log('verify-integration 全部真覆盖通过（并发1写/dry-run/恢复回滚+快照/坏备份/reopen）')

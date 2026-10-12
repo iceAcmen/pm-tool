@@ -3,6 +3,8 @@
  * + OPT-03（项目选择 localStorage 记忆）。依赖真实 dsh 实例与系统 Chrome，
  * 与离线 mock verify（verify-*.mjs）区分开，不在构建/CI 中自动运行。
  *
+ * 状态：⚠️ 真实浏览器 GUI 点击部分当前【未覆盖】（公开 GUI 工具被拒：SubAgent 不支持电脑操作，
+ *   未用 shell/puppeteer 绕过）。本文件保留为可复跑骨架，非GUI等价断言已由 verify-integration.mjs 承担。
  * 一键运行（另开终端起独立实例，勿动所有者 3080）：
  *   cd /Users/bytedance/Projects/dsh-pm/deepseek-harness
  *   nvm use 22 && pnpm dsh --profile pm --port 3082 --no-open
