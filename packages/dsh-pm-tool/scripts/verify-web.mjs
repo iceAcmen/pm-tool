@@ -190,7 +190,9 @@ try {
   assert.match(bundle, /pm-view/)
   assert.match(bundle, /pm-task-toggle/)          // PROD-01 折叠/展开
   assert.match(bundle, /pm-group-toggle/)          // PROD-01 状态分组开关
-  assert.match(bundle, /pm-task-row/)              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab
+  assert.match(bundle, /pm-task-row/)
+  assert.match(bundle, /data-open-record/)        // PROD-02 记录直达入口
+  assert.match(bundle, /resolveRecordLocation/)   // PROD-02 定位纯函数              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab
   assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')

@@ -1,5 +1,6 @@
 import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
+import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -245,6 +246,28 @@ export function PmPanel({ execute }: PmPanelApi) {
     setView(v)
     try { localStorage.setItem('pm-view', v) } catch { /* ignore */ }
   }
+  // PROD-02：记录直达——切项目 -> 切视图 tab -> 打开对应抽屉；找不到则安全回退。
+  const openRecord = (projectId: string, type: string, id: string) => {
+    setSelected(projectId)
+    const loc = resolveRecordLocation(type)
+    if (!loc) return
+    changeView(loc.view as View)
+    const found = findRecord(data, type, id)
+    if (!found) return
+    const r = found.record as Record<string, unknown>
+    const drawer = (() => {
+      switch (type) {
+        case 'task': return { kind: 'task', task: r } as never
+        case 'milestone': return { kind: 'milestone', milestone: r } as never
+        case 'risk': return { kind: 'risk-issue', record: r } as never
+        case 'meeting': return { kind: 'meeting', meeting: r } as never
+        case 'report': return { kind: 'report', report: r } as never
+        case 'deliverable': return { kind: 'deliverable', deliverable: r } as never
+        default: return undefined
+      }
+    })()
+    if (drawer) setDrawer(drawer)
+  }
   const [drawer, setDrawer] = useState<Drawer>()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
@@ -462,7 +485,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               deliverables={deliverables}
               onEdit={() => setDrawer({ kind: 'project-edit', project })}
             />
-            <ReminderStrip data={data} onPickProject={(id) => setSelected(id)}/>
+            <ReminderStrip data={data} onPickProject={(id) => setSelected(id)} onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}/>
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
               <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => changeView('tasks')}>
                 全部任务
@@ -605,7 +628,11 @@ export function PmPanel({ execute }: PmPanelApi) {
 }
 
 /** R16/OPT-01/02 提醒：客户端基于 snapshot 派生临期/逾期（纯展示，不入库、不调模型）。 */
-function ReminderStrip({ data, onPickProject }: { data: Snapshot, onPickProject?: (id: string) => void }) {
+function ReminderStrip({ data, onPickProject, onOpenRecord }: {
+  data: Snapshot
+  onPickProject?: (id: string) => void
+  onOpenRecord?: (projectId: string, type: string, id: string) => void
+}) {
   const today = useMemo(() => {
     const n = new Date()
     return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
@@ -614,18 +641,18 @@ function ReminderStrip({ data, onPickProject }: { data: Snapshot, onPickProject?
   const items = useMemo(() => {
     const projName = new Map(data.projects.map(p => [p.id, p.name]))
     const days = (date: string) => Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000)
-    const out: { severity: 'overdue' | 'soon', projectId: string, refId: string, label: string }[] = []
+    const out: { severity: 'overdue' | 'soon', type: string, projectId: string, refId: string, label: string }[] = []
     for (const t of data.tasks) {
       if (t.status === 'done' || t.progress >= 100 || !t.dueDate) continue
       const d = days(t.dueDate)
-      if (d < 0) out.push({ severity: 'overdue', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（逾期 ${-d} 天）` })
-      else if (d <= range) out.push({ severity: 'soon', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（还有 ${d} 天）` })
+      if (d < 0) out.push({ severity: 'overdue', type: 'task', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（逾期 ${-d} 天）` })
+      else if (d <= range) out.push({ severity: 'soon', type: 'task', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（还有 ${d} 天）` })
     }
     for (const m of data.milestones) {
       if (m.status === 'achieved') continue
       const d = days(m.targetDate)
-      if (d < 0) out.push({ severity: 'overdue', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（逾期 ${-d} 天）` })
-      else if (d <= range) out.push({ severity: 'soon', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（还有 ${d} 天）` })
+      if (d < 0) out.push({ severity: 'overdue', type: 'milestone', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（逾期 ${-d} 天）` })
+      else if (d <= range) out.push({ severity: 'soon', type: 'milestone', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（还有 ${d} 天）` })
     }
     out.sort((a, b) => (a.severity === 'overdue' ? -1 : 1) - (b.severity === 'overdue' ? -1 : 1))
     // 按项目分组。
@@ -668,8 +695,10 @@ function ReminderStrip({ data, onPickProject }: { data: Snapshot, onPickProject?
           <li
             key={`${it.refId}-${idx}`}
             className={it.severity === 'overdue' ? 'pm-reminders-row pm-reminders-row-overdue' : 'pm-reminders-row pm-reminders-row-soon'}
-            data-reminder-ref={it.refId}
-            onClick={() => onPickProject?.(it.projectId)}
+            data-open-record
+            data-open-type={it.type}
+            data-open-id={it.refId}
+            onClick={() => onOpenRecord?.(it.projectId, it.type, it.refId) ?? onPickProject?.(it.projectId)}
           >{it.label}</li>,
         )}</ul>
       </div>,
