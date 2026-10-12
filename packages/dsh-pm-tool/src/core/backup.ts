@@ -128,7 +128,10 @@ export async function restoreBackupFromContent(domain: PmDomain, jsonText: strin
 }
 
 async function applyBackup(domain: PmDomain, backup: PmBackup): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
-  // 恢复前自动安全快照（仅当当前已有任一实体）。
+  // 1) 删除前先对全部七类实体做完整 schema + 关系预检；任何一条不合法直接抛错，不触碰现有数据。
+  await precheckBackup(backup)
+
+  // 2) 预检通过后，恢复前自动安全快照（仅当当前已有任一实体）。
   let safetySnapshot: string | undefined
   const hasData = BACKUP_TABLES.some(name => (domain.table(name as never) as unknown as AnyTable).entries().next().done === false)
   if (hasData) {
@@ -151,6 +154,38 @@ async function applyBackup(domain: PmDomain, backup: PmBackup): Promise<{ safety
     for (const row of data[name]) await table.put(row.id, row)
   }
   return { safetySnapshot, backup }
+}
+
+/** 删除前预检：逐条按 record schema 校验，并校验任务 projectId/parentId/milestoneId 关系。 */
+async function precheckBackup(backup: PmBackup): Promise<void> {
+  const { projectRecordSchema } = await import('./project.js')
+  const { taskRecordSchema } = await import('./task.js')
+  const { milestoneRecordSchema } = await import('./milestone.js')
+  const { riskIssueRecordSchema } = await import('./risk-issue.js')
+  const { meetingRecordSchema } = await import('./meeting.js')
+  const { progressReportRecordSchema } = await import('./progress-report.js')
+  const { deliverableRecordSchema } = await import('./deliverable.js')
+
+  const must = (rows: unknown[], schema: { parse(x: unknown): unknown }, kind: string): void => {
+    for (const r of rows) schema.parse(r)
+  }
+  must(backup.projects, projectRecordSchema, '项目')
+  must(backup.tasks, taskRecordSchema, '任务')
+  must(backup.milestones, milestoneRecordSchema, '里程碑')
+  must(backup.riskIssues, riskIssueRecordSchema, '风险')
+  must(backup.meetings, meetingRecordSchema, '会议')
+  must(backup.reports, progressReportRecordSchema, '汇报')
+  must(backup.deliverables, deliverableRecordSchema, '交付物')
+
+  // 关系：任务所属项目存在、parentId/milestoneId 同项目存在
+  const pids = new Set(backup.projects.map(p => p.id))
+  const mids = new Set(backup.milestones.map(m => m.id))
+  const tids = new Set(backup.tasks.map(t => t.id))
+  for (const t of backup.tasks) {
+    if (!pids.has(t.projectId)) throw new Error(`任务 ${t.id} 的 projectId ${t.projectId} 不在备份项目内`)
+    if (t.parentId != null && !tids.has(t.parentId)) throw new Error(`任务 ${t.id} 的 parentId 不存在`)
+    if (t.milestoneId != null && !mids.has(t.milestoneId)) throw new Error(`任务 ${t.id} 的 milestoneId 不存在`)
+  }
 }
 
 /** 兼容旧导出入口（保留 R4 整库 JSON 导出）。 */

@@ -12,11 +12,17 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
     if (!domain || !domain.table('projects').get(projectId ?? '')) {
       return { kind: 'error' as const, text: '未找到项目' }
     }
+    // 动态取本项目前两个任务，避免硬编码 t-9001/9002 与隔离夹具不一致
+    const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string })
+      .filter(t => t.projectId === projectId).map(t => t.id)
+    if (tasks.length < 1) return { kind: 'error' as const, text: '项目暂无任务，无法演示草稿' }
+    const okId = tasks[0]
+    const delId = tasks[1] ?? tasks[0]
     return {
       kind: 'success' as const,
-      text: `【E2E 固定诊断】今天是 ${localToday()}，该项目任务进度滞后，建议把 t-9001 收尾并指定负责人。
+      text: `【E2E 固定诊断】今天是 ${localToday()}，该项目任务进度滞后，建议把 ${okId} 收尾并指定负责人。
 \`\`\`json
-{"actions":[{"op":"task.update","id":"t-9001","patch":{"assignee":"赵六","status":"done"}},{"op":"task.delete","id":"t-9002"},{"op":"task.update","id":"t-9001","patch":{"progress":200}}]}
+{"actions":[{"op":"task.update","id":"${okId}","patch":{"assignee":"赵六","status":"done"}},{"op":"task.delete","id":"${delId}"},{"op":"task.update","id":"${okId}","patch":{"progress":200}}]}
 \`\`\``,
     }
   }
