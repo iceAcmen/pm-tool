@@ -12,9 +12,10 @@ export interface CopilotAction {
 }
 
 const ALLOWED_OPS = new Set(['task.update'])
-// 必须与 core/task.ts 的 taskStatusSchema 严格一致（todo/in_progress/blocked/done）；
-// 旧版误用 'doing' 会通过校验却在写库时被 zod 拒绝——这里对齐真实存储枚举。
-const STATUS = new Set(['todo', 'in_progress', 'blocked', 'done'])
+// 直接复用 task.ts 导出的 taskStatusSchema，避免复制常量导致两端漂移；
+// 旧版误用 'doing' 会通过校验却在写库时被 zod 拒绝。
+import { taskStatusSchema } from './task.js'
+const STATUS = new Set(taskStatusSchema.options)
 
 /** 真实日历合法性：YYYY-MM-DD 且不是 2 月 30 这类不存在的日期；过去/未来都可接受。 */
 export function isValidDateStr(v: unknown): boolean {
@@ -68,7 +69,7 @@ export function validateActions(
       let bad = ''
       for (const k of keys) {
         const v = patch[k]
-        if (k === 'status') { if (!STATUS.has(String(v))) bad = `非法状态 ${String(v)}` }
+        if (k === 'status') { if (!STATUS.has(String(v) as 'todo')) bad = `非法状态 ${String(v)}` }
         else if (k === 'progress') { const n = Number(v); if (!Number.isInteger(n) || n < 0 || n > 100) bad = '进度须 0-100 整数' }
         else if (k === 'dueDate' || k === 'startDate') { if (!isValidDateStr(v)) bad = '日期须合法 YYYY-MM-DD' }
         else if (k === 'assignee') { if (typeof v !== 'string') bad = '负责人须为字符串' }

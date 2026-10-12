@@ -660,6 +660,7 @@ export function PmPanel({ execute }: PmPanelApi) {
         {drawer.kind === 'copilot' && project && <CopilotPanel
           projectId={project.id}
           taskIds={tasks.map(t => t.id)}
+          baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
           execute={execute}
           run={run}
           disabled={busy}
@@ -2050,9 +2051,10 @@ function Overview({
 }
 
 /** PROD-20 AI 项目副驾 MVP：提问→只读诊断；写动作渲染草稿卡，确认才落库。 */
-function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
+function CopilotPanel({ projectId, taskIds, baselineMap, execute, run, disabled, onSaved }: {
   projectId: string
   taskIds: string[]
+  baselineMap: Record<string, string>
   execute: (line: string) => Promise<string>
   run: (line: string) => Promise<boolean>
   disabled: boolean
@@ -2065,7 +2067,7 @@ function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
     const q = input.trim(); if (!q || disabled) return
     setInput(''); setMsgs(m => [...m, { role: 'me', text: q }])
     try {
-      const isFixture = q.startsWith('fixture')
+      const isFixture = q === 'fixture' // 仅精确触发测试缝；普通用户 fixture 开头的原问题原样走真实 ask
       const text = await execute(`ask ${projectId} ${isFixture ? 'fixture' : ''} ${isFixture ? '' : JSON.stringify(q)}`.trim())
       setMsgs(m => [...m, { role: 'ai', text }])
       const acts = parseCopilotActions(text)
@@ -2076,22 +2078,17 @@ function CopilotPanel({ projectId, taskIds, execute, run, disabled, onSaved }: {
   const [busy, setBusy] = useState(false)
   const confirm = async () => {
     if (!draft || busy) return
-    // 确认前用最新的当前项目任务集合重验：渲染→确认之间若目标被删/跨项目，过期草稿自动剔除，不静默执行旧 draft。
-    const live = validateActions(draft.accepted, { taskIds })
-    const dropped = live.rejected.length
-    if (!live.accepted.length) {
-      setMsgs(m => [...m, { role: 'sys', text: `草稿已失效（${dropped} 条目标不存在或已移出本项目），未执行任何改动。` }])
-      setDraft(null); return
-    }
     setBusy(true)
-    let ok = 0, bad = 0
-    for (const a of live.accepted) {
-      const line = `task update ${a.id} ${JSON.stringify(a.patch ?? {})}`
-      if (await run(line)) ok++; else bad++
-    }
-    setBusy(false)
-    setMsgs(m => [...m, { role: 'sys', text: `已执行 ${ok} 条${bad ? `，失败 ${bad} 条` : ''}${dropped ? `；已自动剔除失效 ${dropped} 条` : ''}。` }])
-    setDraft(null); onSaved()
+    // 走后端 ask-apply：服务器重读当前项目、校验归属/字段/真实日期，按基线 updatedAt 做冲突比较，
+    // 并对同一份草稿做服务端幂等；前端不再直接循环 task update。
+    try {
+      const line = `ask-apply ${projectId} ${JSON.stringify(draft.accepted)} --base ${JSON.stringify(baselineMap)}`
+      const res = await execute(line)
+      setMsgs(m => [...m, { role: 'sys', text: res }])
+      setDraft(null); onSaved()
+    } catch (e) {
+      setMsgs(m => [...m, { role: 'ai', text: `执行失败：${e instanceof Error ? e.message : String(e)}` }])
+    } finally { setBusy(false) }
   }
   return <div className="pm-copilot">
     <div className="pm-copilot-messages">

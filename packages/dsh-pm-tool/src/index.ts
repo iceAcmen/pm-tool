@@ -26,6 +26,7 @@ import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
 import { handleModelCommand, modelHelp } from './commands/model.js'
 import { handleAskCommand } from './commands/ask.js'
+import { handleAskApplyCommand } from './commands/ask.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -133,6 +134,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const modelMatch = /^model(?:\s+([\s\S]*))?$/i.exec(raw)
       if (modelMatch) return handleModelCommand(modelMatch[1] ?? '', domain)
+      const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askMatch) return handleAskCommand(askMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
       const sub = raw.toLowerCase()

@@ -5,6 +5,7 @@
  */
 import { generateDraft, type LlmGateway } from './ai-client.js'
 import { parseCopilotActions, validateActions, type CopilotAction } from './copilot.js'
+import type { Meeting, MeetingAction } from './meeting.js'
 
 /** 对外暴露的统一 SYSTEM（ask.ts 复用同一处，避免状态枚举等口径漂移）。 */
 export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数据（含"今天"日期），先用一段简洁中文回答用户问题（只读诊断）。
@@ -18,7 +19,7 @@ export interface AskContext {
   tasks: { id: string, title: string, status: string, progress: number, assignee?: string, dueDate?: string, startDate?: string }[]
   risks: { id: string, title: string, status?: string, severity?: string, probability?: string, impact?: string }[]
   milestones: { id: string, title: string, targetDate?: string, status: string }[]
-  meetings?: { id: string, title: string, date?: string, actions?: { id: string, text: string, status?: string }[] }[]
+  meetings?: { id: string, title: string, date?: string, actions?: MeetingAction[] }[]
   reports?: { id: string, title: string, date?: string, kind?: string }[]
   deliverables?: { id: string, title: string, status?: string, dueDate?: string }[]
 }
@@ -41,7 +42,7 @@ export function buildAskContext(c: AskContext): string {
     `${r.id} ${r.title}[状态=${r.status ?? '未知'}${[r.severity, r.probability, r.impact].filter(Boolean).join('/')}]`)))
   // 会议行动项 / 汇报 / 交付物：有则摘要，无则显式"暂无"，不推断。
   lines.push(joinOrNote('会议及行动项', (c.meetings ?? []).map(m =>
-    `${m.id} ${m.title}${m.date ? `(${m.date})` : ''}${m.actions?.length ? ' 行动项：' + m.actions.map(a => `${a.id}:${a.text}[${a.status ?? '?'}]`).join('，') : ''}`)))
+    `${m.id} ${m.title}${m.date ? `(${m.date})` : ''}${m.actions?.length ? ' 行动项：' + m.actions.map(a => `${a.id}:${a.title}[${a.status}${a.owner ? ` 负责人=${a.owner}` : ''}${a.dueDate ? ` 截止=${a.dueDate}` : ''}]`).join('，') : ''}`)))
   lines.push(joinOrNote('进度汇报', (c.reports ?? []).map(r => `${r.id} ${r.title}${r.date ? `(${r.date})` : ''}`)))
   lines.push(joinOrNote('交付物', (c.deliverables ?? []).map(d => `${d.id} ${d.title}[${d.status ?? '?'}${d.dueDate ? ` ${d.dueDate}` : ''}]`)))
   return lines.join('\n')
