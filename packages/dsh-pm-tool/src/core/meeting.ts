@@ -103,6 +103,7 @@ export const meetingUpdateSchema = z.strictObject({
   summary: z.string().optional(),
   topics: textListSchema.optional(),
   decisions: textListSchema.optional(),
+  notes: z.string().optional(),
 }).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Meeting = z.infer<typeof meetingRecordSchema>
