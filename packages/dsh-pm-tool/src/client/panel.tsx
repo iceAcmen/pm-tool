@@ -2,6 +2,7 @@ import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { buildUpdate } from '../core/task-inline.js'
+import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -555,7 +556,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onCreate={() => setDrawer({ kind: 'deliverable' })}
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
-              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones}/>}
+              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
             </section>
           </>}
 
@@ -1931,17 +1932,23 @@ function Overview({
   project,
   tasks,
   milestones,
+  riskIssues,
 }: {
   project: Project
   tasks: Task[]
   milestones: Milestone[]
+  riskIssues: RiskIssue[]
 }) {
   const complete = tasks.filter(task => task.status === 'done').length
   const overdue = tasks.filter(task => task.dueDate && task.dueDate < new Date().toISOString().slice(0, 10) && task.status !== 'done').length
   const active = tasks.filter(task => task.status === 'in_progress').length
   const achieved = milestones.filter(item => item.status === 'achieved').length
   const days = Math.ceil((new Date(`${project.targetDate}T00:00:00`).getTime() - Date.now()) / 86_400_000)
-  return <div className="pm-overview">
+  const today = new Date().toISOString().slice(0, 10)
+  const kpi = computeKPI(tasks, milestones, riskIssues, today)
+  const agenda = buildAgenda(tasks, milestones, today)
+  const matrix = groupRiskMatrix(riskIssues)
+  return <div className="pm-overview pm-war-room">
     <div className="pm-summary-grid">
       <Summary label="总任务数" value={tasks.length} note={`${active} 项进行中`}/>
       <Summary label="已完成" value={complete} note={`${tasks.length ? Math.round(complete / tasks.length * 100) : 0}% 完成率`}/>
@@ -1959,6 +1966,42 @@ function Overview({
             <div><i data-status={value} style={{ width: `${width}%` }}/></div>
           </div>
         })}
+      </div>
+    </div>
+    {/* PROD-05：关键指标条 */}
+    <div className="pm-kpi-row">
+      <span className="pm-kpi" data-kpi="total"><b>{kpi.total}</b>任务</span>
+      <span className="pm-kpi" data-kpi="doneRate"><b>{kpi.doneRate}%</b>完成率</span>
+      <span className="pm-kpi" data-kpi="inProgress"><b>{kpi.inProgress}</b>进行中</span>
+      <span className="pm-kpi" data-kpi="overdue" data-tone="danger"><b>{kpi.overdueTasks}</b>逾期</span>
+      <span className="pm-kpi" data-kpi="upcoming"><b>{kpi.upcomingMilestones}</b>近期里程碑</span>
+      <span className="pm-kpi" data-kpi="openRisk"><b>{kpi.openRisks}</b>未闭环风险</span>
+    </div>
+    {/* PROD-05：近期议程时间线 */}
+    <div className="pm-overview-section pm-agenda">
+      <h2>接下来的日程</h2>
+      {agenda.length
+        ? <ol>{agenda.map(a =>
+            <li key={`${a.kind}-${a.id}`} className={a.overdue ? 'pm-agenda-item pm-agenda-overdue' : 'pm-agenda-item'}>
+              {a.overdue ? `逾期 ${-a.days} 天` : `${a.days} 天后`} · {a.label}
+            </li>)}</ol>
+        : <p className="pm-cell-empty">未来 7 天内无到期事项。</p>}
+    </div>
+    {/* PROD-05：风险矩阵（概率×影响） */}
+    <div className="pm-overview-section pm-risk-matrix">
+      <h2>风险矩阵（概率 × 影响）</h2>
+      <div className="pm-matrix-grid">
+        {(['high', 'medium', 'low'] as const).map(row =>
+          (['high', 'medium', 'low'] as const).map(col => {
+            const list = matrix[`${row}/${col}`] ?? []
+            return <div key={`${row}-${col}`}
+              className={`pm-risk-cell ${row === 'high' && col === 'high' ? 'pm-risk-cell-critical' : ''}`}
+              data-risk-cell={`${row}/${col}`}>
+              <span className="pm-risk-cell-head">{row}×{col}</span>
+              {list.map(r => <span key={r.id} className="pm-risk-cell-tag" data-risk-id={r.id} title={r.title}>{r.title}</span>)}
+              {!list.length && <span className="pm-cell-empty">0</span>}
+            </div>
+          }))}
       </div>
     </div>
   </div>

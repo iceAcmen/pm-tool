@@ -827,3 +827,15 @@
 .pm-row-status, .pm-row-progress, .pm-row-due { font: inherit; font-size: 11px; padding: 1px 3px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--pm-text); max-width: 72px; }
 .pm-row-status:hover, .pm-row-progress:hover, .pm-row-due:hover { border-color: var(--pm-border); }
 .pm-row-progress { width: 52px; }
+
+.pm-kpi-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.pm-kpi { font-size: 11px; color: var(--pm-text); }
+.pm-kpi b { margin-right: 2px; }
+.pm-agenda ol { margin: 4px 0 0 18px; padding: 0; }
+.pm-agenda-item { font-size: 12px; }
+.pm-agenda-overdue { color: var(--pm-danger); font-weight: 600; }
+.pm-matrix-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.pm-risk-cell { border: 1px solid var(--pm-border); border-radius: 6px; padding: 4px; min-height: 48px; font-size: 10px; }
+.pm-risk-cell-critical { background: color-mix(in srgb, var(--pm-danger) 15%, transparent); border-color: var(--pm-danger); }
+.pm-risk-cell-head { display: block; opacity: .6; margin-bottom: 2px; }
+.pm-risk-cell-tag { display: block; cursor: pointer; }
