@@ -2,10 +2,11 @@
  * R18 备份/恢复：只覆盖 pmtool 领域七类实体（不含宿主会话/checks/任何密钥）。
  * 备份为带时间戳与 manifest 的 JSON；恢复前自动生成一份安全快照。
  */
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { readFile, mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { writeExportFile } from './export.js'
+import { atomicWriteFile } from './fs-atomic.js'
 import type { Milestone } from './milestone.js'
 import type { Project } from './project.js'
 import type { PmDomain } from './storage.js'
@@ -76,14 +77,14 @@ export function collectBackup(domain: PmDomain, exportedAt = new Date().toISOStr
   }
 }
 
-/** 写带时间戳的备份文件到指定/默认目录，返回路径与各类计数。 */
-export async function createBackup(domain: PmDomain, directory?: string): Promise<BackupSummary> {
-  const backup = collectBackup(domain)
-  const stamp = backup.exportedAt.replace(/[:.]/g, '-')
+/** 把一份已收集的备份原子落盘到指定/默认目录，返回路径与各类计数。 */
+async function writeBackupFile(backup: PmBackup, directory?: string): Promise<BackupSummary> {
   const dir = directory ? resolve(directory) : resolveBackupDirectory()
   await mkdir(dir, { recursive: true, mode: 0o700 })
+  const stamp = backup.exportedAt.replace(/[:.]/g, '-')
   const path = resolve(dir, `pmtool-backup-${stamp}.json`)
-  await writeFile(path, `${JSON.stringify(backup, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 })
+  // 原子写：同目录 tmp + fsync + rename + fsync dir；崩溃不留撕裂备份。
+  await atomicWriteFile(path, `${JSON.stringify(backup, null, 2)}\n`, { mode: 0o600 })
   return {
     path,
     counts: {
@@ -96,6 +97,11 @@ export async function createBackup(domain: PmDomain, directory?: string): Promis
       deliverables: backup.deliverables.length,
     },
   }
+}
+
+/** 写带时间戳的备份文件到指定/默认目录，返回路径与各类计数。 */
+export function createBackup(domain: PmDomain, directory?: string): Promise<BackupSummary> {
+  return writeBackupFile(collectBackup(domain), directory)
 }
 
 export function validateBackup(value: unknown): PmBackup {
@@ -135,31 +141,88 @@ export async function restoreBackupFromContent(domain: PmDomain, jsonText: strin
   return applyBackup(domain, backup, directory)
 }
 
-async function applyBackup(domain: PmDomain, backup: PmBackup, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
+/** 把备份内容规整成「表名 → 行数组」，供逐表替换/回滚共用。 */
+function rowsOf(b: PmBackup): Record<string, { id: string }[]> {
+  return {
+    projects: b.projects,
+    tasks: b.tasks,
+    milestones: b.milestones,
+    risk_issues: b.riskIssues,
+    meetings: b.meetings,
+    reports: b.reports,
+    deliverables: b.deliverables,
+  }
+}
+
+/** 内部故障注入 seam：仅供测试在每次持久化写后观测/抛错，不进入任何用户命令面。 */
+export interface BackupWriteHooks {
+  onWrite?: (table: string, op: 'put' | 'delete', id: string) => void
+}
+
+/** 单域写链下逐表替换：先删当前全部 key，再 put 目标行。每步后触发 hooks.onWrite。 */
+async function replaceAll(
+  domain: PmDomain,
+  data: Record<string, { id: string }[]>,
+  hooks?: BackupWriteHooks,
+): Promise<void> {
+  for (const name of BACKUP_TABLES) {
+    const table = domain.table(name as never) as unknown as AnyTable
+    for (const [id] of [...table.entries()]) {
+      await table.delete(id)
+      hooks?.onWrite?.(name, 'delete', id)
+    }
+    for (const row of data[name]) {
+      await table.put(row.id, row)
+      hooks?.onWrite?.(name, 'put', row.id)
+    }
+  }
+}
+
+const errMsg = (e: unknown): string => (e instanceof Error ? e.message : String(e))
+
+/** 内部入口：与 restoreBackup 同逻辑，但暴露可选 hooks 供测试注入故障；不进入任何用户命令面。 */
+export async function applyBackup(
+  domain: PmDomain,
+  backup: PmBackup,
+  directory?: string,
+  hooks?: BackupWriteHooks,
+): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   // 1) 删除前先对全部七类实体做完整 schema + 关系预检；任何一条不合法直接抛错，不触碰现有数据。
   await precheckBackup(backup)
 
-  // 2) 预检通过后，恢复前自动安全快照（仅当当前已有任一实体）。
+  // 2) 预取 before 内存快照（entries 同步快照 + structuredClone，单 tick 一致）。
+  //    它既是安全快照的落盘内容，也是中途失败后自动回滚的唯一来源——不回读磁盘，保证回滚源与落盘字节同源、确定性。
+  const before = collectBackup(domain)
+  const hasData = Object.values(rowsOf(before)).some(rows => rows.length > 0)
   let safetySnapshot: string | undefined
-  const hasData = BACKUP_TABLES.some(name => (domain.table(name as never) as unknown as AnyTable).entries().next().done === false)
   if (hasData) {
-    const safety = await createBackup(domain, directory)
-    safetySnapshot = safety.path
+    // 安全快照先原子落盘；这一步失败即抛错，绝不进入破坏性写。
+    safetySnapshot = (await writeBackupFile(before, directory)).path
   }
 
-  const data: Record<string, { id: string }[]> = {
-    projects: backup.projects,
-    tasks: backup.tasks,
-    milestones: backup.milestones,
-    risk_issues: backup.riskIssues,
-    meetings: backup.meetings,
-    reports: backup.reports,
-    deliverables: backup.deliverables,
-  }
-  for (const name of BACKUP_TABLES) {
-    const table = domain.table(name as never) as unknown as AnyTable
-    for (const [id] of [...table.entries()]) await table.delete(id)
-    for (const row of data[name]) await table.put(row.id, row)
+  // 3) 破坏性替换。单域写链「先落盘再改内存」：第 K 步失败时，已 await 的写均已持久化且在内存，
+  //    后续表仍是旧态——因此 catch 里用 before 确定性重放回滚。
+  try {
+    await replaceAll(domain, rowsOf(backup), hooks)
+  } catch (applyError) {
+    let rollbackError: unknown
+    try {
+      await replaceAll(domain, rowsOf(before), hooks)
+    } catch (e) {
+      rollbackError = e
+    }
+    if (rollbackError == null) {
+      throw new Error(
+        `恢复中途失败，但已自动回滚到恢复前状态；安全快照：${safetySnapshot ?? '（当前库为空，未生成快照）'}。` +
+        `原始错误：${errMsg(applyError)}`,
+        { cause: applyError },
+      )
+    }
+    // 恢复失败 + 回滚也失败：合并为单一错误，明确指向安全快照人工恢复。
+    throw new Error(
+      `恢复失败且自动回滚失败；请勿继续操作，请用安全快照手动恢复：${safetySnapshot ?? '（无）'}。`,
+      { cause: new AggregateError([applyError, rollbackError], 'apply 与 rollback 均失败') },
+    )
   }
   return { safetySnapshot, backup }
 }

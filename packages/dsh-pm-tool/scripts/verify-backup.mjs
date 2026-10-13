@@ -3,7 +3,7 @@
  * 恢复前生成安全快照、备份内容不含 checks/密钥字段。
  */
 import assert from 'node:assert/strict'
-import { mkdtempSync, readdirSync, readFileSync, existsSync } from 'node:fs'
+import { mkdtempSync, readdirSync, readFileSync, existsSync, chmodSync, mkdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -12,7 +12,7 @@ import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { apply } from '../lib/index.js'
-import { createBackup, readBackupFile, restoreBackup, defaultBackupDirectory } from '../lib/core/backup.js'
+import { createBackup, readBackupFile, restoreBackup, defaultBackupDirectory, applyBackup, collectBackup, validateBackup } from '../lib/core/backup.js'
 
 delete process.env.DEEPSEEK_API_KEY
 const ROOT_BASE = mkdtempSync(join(tmpdir(), 'pm-tool-space-'))
@@ -85,7 +85,110 @@ const r2 = await restoreBackup(domain, b.path, undefined)
 assert.ok(r2.safetySnapshot.startsWith(process.env.DSH_PM_BACKUP_DIR), 'env 生效时安全快照落 env 目录')
 delete process.env.DSH_PM_BACKUP_DIR
 assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backups 在测试前后应不变')
-console.log('verify-backup 全部通过（隔离目录+默认backups未变）。')
+
+  // ============ 第二批：原子写 + 中途自动回滚 + 内部故障注入 seam（不进用户命令面）============
+  const tasksOf = () => [...domain.table('tasks').entries()].map(([, v]) => v)
+
+  // 造富 before 态：p-0001 下 3 个任务
+  await run('task add {"projectId":"p-0001","title":"回滚任务二"}')
+  await run('task add {"projectId":"p-0001","title":"回滚任务三"}')
+  assert.equal(tasksOf().length, 3, '预置 before：3 个任务')
+  const targetBackup = await readBackupFile(b.path) // 已知只含 1 个任务
+
+  // T1：原子写不留 .tmp 残留
+  const b1 = await createBackup(domain, backupDir)
+  assert.equal(readdirSync(backupDir).filter(f => f.startsWith('.') && f.endsWith('.tmp')).length, 0,
+    'T1 原子写后不得残留 .tmp 临时文件')
+  assert.ok(existsSync(b1.path), 'T1 备份文件已写出')
+
+  // T2：写盘失败（只读目录）不产生目标文件、不残留 tmp
+  const roDir = join(ROOT_BASE, 'ro-backup')
+  mkdirSync(roDir, { recursive: true, mode: 0o700 })
+  let t2err = null
+  try {
+    chmodSync(roDir, 0o500)
+    try { await createBackup(domain, roDir) } catch (e) { t2err = e }
+  } finally { chmodSync(roDir, 0o700) }
+  assert.ok(t2err, 'T2 只读目录下备份应失败')
+  assert.equal(readdirSync(roDir).filter(f => f.endsWith('.tmp')).length, 0, 'T2 失败不得残留 tmp')
+
+  // 一次性故障 hook：第 failAt 次写抛错一次后即自废（后续不再抛）
+  const oneShotHook = (failAt) => {
+    let count = 0
+    return { onWrite() { if (count++ === failAt) throw new Error('injected write') } }
+  }
+
+  // T3：前向中途失败 → 自动回滚到 before
+  // 写序：projects 删1+写1=2；tasks 删3 在 #2/#3/#4。#3 必落在 tasks 删除中途。
+  const beforeSnap = collectBackup(domain)
+  const titlesBefore = beforeSnap.tasks.map(t => t.title).sort()
+  let t3err = null
+  try { await applyBackup(domain, targetBackup, backupDir, oneShotHook(3)) } catch (e) { t3err = e }
+  assert.ok(t3err, 'T3 注入失败应抛错')
+  assert.match(String(t3err.message), /已自动回滚/, 'T3 应提示已自动回滚')
+  assert.equal(tasksOf().length, 3, 'T3 回滚后任务数应恢复 before=3')
+  assert.deepEqual(tasksOf().map(t => t.title).sort(), titlesBefore, 'T3 回滚后任务内容应与 before 一致')
+
+  // T6：持续故障（每次写都抛）→ 回滚也失败 → AggregateError
+  const alwaysFail = { onWrite() { throw new Error('injected persistent') } }
+  let t6err = null
+  try { await applyBackup(domain, targetBackup, backupDir, alwaysFail) } catch (e) { t6err = e }
+  assert.ok(t6err, 'T6 持续故障应抛错')
+  assert.match(String(t6err.message), /自动回滚失败/, 'T6 应提示回滚也失败')
+  assert.ok(t6err.cause instanceof AggregateError, 'T6 双重失败应聚合为 AggregateError')
+  assert.match(String(t6err.message), /pmtool-backup-[^]*\.json/, 'T6 应在消息中给出安全快照路径')
+  // 收敛到已知态
+  await restoreBackup(domain, b.path, backupDir)
+
+  // T4：precheck 失败（悬空 projectId）零触碰
+  const badBackup = structuredClone(targetBackup)
+  badBackup.tasks[0].projectId = 'p-NOPE'
+  const midCount = tasksOf().length
+  let t4err = null
+  try { await applyBackup(domain, badBackup, backupDir) } catch (e) { t4err = e }
+  assert.ok(t4err, 'T4 悬空 projectId 应被预检拒绝')
+  assert.equal(tasksOf().length, midCount, 'T4 precheck 失败不得触碰数据')
+
+  // T5：安全快照写失败（只读目录）→ 破坏性写不开始
+  let t5err = null
+  try {
+    chmodSync(roDir, 0o500)
+    try { await applyBackup(domain, targetBackup, roDir) } catch (e) { t5err = e }
+  } finally { chmodSync(roDir, 0o700) }
+  assert.ok(t5err, 'T5 安全快照写盘应失败')
+  assert.equal(tasksOf().length, midCount, 'T5 安全快照失败不得进入破坏性写')
+
+  // T7：空备份恢复；空库恢复时不生成安全快照
+  const emptyBackup = {
+    format: 'pm-tool-backup', formatVersion: 1, exportedAt: new Date().toISOString(),
+    projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [],
+  }
+  const r7a = await applyBackup(domain, emptyBackup, backupDir)
+  assert.ok(r7a.safetySnapshot, 'T7a 恢复前有数据，应生成安全快照')
+  assert.equal(tasksOf().length, 0, 'T7a 空备份后任务应为空')
+  const r7b = await applyBackup(domain, targetBackup, backupDir)
+  assert.equal(r7b.safetySnapshot, undefined, 'T7b 当前库为空，不应生成安全快照')
+
+  // T8：v1 旧备份（缺新可选字段 predecessorIds）正常往返；未知 extra 字段被 strict schema 拒绝
+  const oldTask = structuredClone(targetBackup.tasks[0])
+  delete oldTask.predecessorIds // v1 旧记录无此键
+  const v1old = {
+    format: 'pm-tool-backup', formatVersion: 1, exportedAt: '2026-01-01T00:00:00.000Z',
+    projects: targetBackup.projects, tasks: [oldTask],
+    milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [],
+  }
+  validateBackup(v1old) // 通过即 v1 格式兼容
+  await applyBackup(domain, v1old, backupDir)
+  const after8 = collectBackup(domain)
+  assert.equal(after8.tasks.length, 1, 'T8 v1 旧备份应往返')
+  assert.equal(after8.tasks[0].title, oldTask.title, 'T8 v1 旧备份内容应一致')
+  const withExtra = structuredClone(v1old)
+  withExtra.tasks[0].futureField = 'v2-new-field'
+  let t8err = null
+  try { await applyBackup(domain, withExtra, backupDir) } catch (e) { t8err = e }
+  assert.ok(t8err, 'T8 未知新字段应被 strict schema 拒绝（不得静默写入）')
+
+console.log('verify-backup 全部通过（隔离目录+默认backups未变+原子写+中途回滚T1-T9）。')
 } finally {
   await facility.closeAll()
 }
