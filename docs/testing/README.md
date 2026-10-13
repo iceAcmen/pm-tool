@@ -26,6 +26,7 @@
 | [`round3-gui-execution.md`](round3-gui-execution.md) | Round3 真实 Chrome GUI 执行包（选择器/预期/证据命名，待主端执行后专家判证） |
 | [`external-skills-acceptance.md`](external-skills-acceptance.md) | **外部（vendor）Agent Skills 集成验收门**（域 A–J，ADL-048 / AGENTS 6 / `docs/external-skills.md`）；导入方实现后由独立测试专家逐格给 PASS/FAIL/MANUAL_PENDING，其他角色只读引用、不改本文件 |
 | [`release-closeout-acceptance.md`](release-closeout-acceptance.md) | **发布收尾验收冻结门**（ADL-045/047）：冻结四块验收——provider ID 统一/poc-prod 路由、3080 最新 HEAD 且零写、历史残留不误删用户文件、版本号/路线图/发布说明一致；含自动化用例、MANUAL_PENDING（旧 H1–H6 不升级为阻塞）、证据格式与 PASS 门；独立测试专家所有 |
+| [`people-load-acceptance.md`](people-load-acceptance.md) | **人员与负载视图验收矩阵（开发前冻结，v0.5.1）**（PROD-07/08，契约 `product/07-people-load-view-design.md`）：纯函数归一/分组/未分配置顶/done/逾期临期(7天边界)/风险排序(含受阻与最近截止)/确定性/多负责人不拆multiOwner + 顶层「人员」tab跨项目/项目过滤/搜索/只看风险/排序下拉/4类空态/aria-expanded/只读openRecord直达/零写不改schema/窄窗堆叠与键盘标准按钮；29 项全部初始 NOT_RUN；P1 与旧 H1–H6 不重复阻塞；独立测试专家所有 |
 
 ## 判定图例（与 ADL-045 严格一致）
 

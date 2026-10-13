@@ -56,6 +56,17 @@
 | R17 | 会议行动项转任务 | P1 | `/pm meeting action promote <会议ID> <行动项ID> [confirm]`：在会议所属项目下创建任务并回写 `action.taskId`（幂等） | dry-run 不落盘；confirm 任务标题/负责人/截止正确并回写；重复 promote 不重复建；Web 行动项加「转任务」按钮、已转禁用 | ✅ 已实现（doubao-work）：复用 `addTask` 编号链路；见 ADL-040 |
 | R18 | 数据备份/恢复 + 云同步指引 | P1 | `/pm backup [目录?]` / `/pm restore <文件> [confirm]`：备份七类实体为带时间戳 JSON；恢复两步且恢复前自动安全快照；Web 一键备份入口 | 备份含七实体、不含 checks/密钥；恢复往返一致；缺 confirm 不执行；恢复后续号/读回正常；云同步单写者指引 | ✅ 已实现（doubao-work）：见 `docs/backup-sync.md` 与 ADL-041 |
 
+### 变更提案（Change Proposal）：PROD-07 顶层「人员与负载」视图（v0.5.1，未编码·待测试门）
+
+> 不新增 R 编号，复用并升级产品档案 PROD-07。仅产品文档阶段，实现待发布收尾测试门（ADL-045）PASS 后开工；期间不改 `src/`、不改 `docs/testing/`。
+
+- **一句话**：新增顶层「人员」tab，跨项目按 `task.assignee` 归一化聚合未完成任务，按风险（逾期→受阻→临期→最近截止）排序，未分配置顶，点任务直达详情；全程只读派生。
+- **数据模型影响：无**。分组键＝`assignee` 经 `trim()`+空白折叠+`casefold()`；不建人员表、不持久花名册、domain 仍 v1、不改任何 schema。不拆分多负责人字符串。
+- **P0**：人员卡（未完成/待办·进行中·受阻/逾期/临期/P0/跨项目数/最近截止）、风险排序、未分配桶、项目过滤+姓名搜索+只看有风险、任务行 `openRecord` 直达、空态。
+- **P1**：近相似名软提示（不自动合并）、j/k 导航+记忆、`project.owner/riskIssues.owner` 涉众提示。
+- **与版本规划关系**：归 **v0.5.1 体验增量**，不并入 v0.6（v0.6 才动 domain v2）；与 v0.6 零冲突。
+- **完整契约/验收/反例/建议文件清单**：见 [`docs/product/07-people-load-view-design.md`](product/07-people-load-view-design.md)；状态见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) 2026-10-13 勘误。
+
 ### R12 命令与格式约定（v0.9 补充）
 
 ```text
