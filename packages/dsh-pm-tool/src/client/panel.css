@@ -887,6 +887,17 @@
 .pm-copilot-actions { display: flex; gap: 6px; margin-top: 6px; }
 .pm-copilot-inputrow { display: flex; gap: 6px; }
 .pm-copilot-input { flex: 1; }
+/* 多步计划卡（PROD-24） */
+.pm-copilot-step { padding: 6px 4px; border-top: 1px dashed var(--pm-border); }
+.pm-copilot-stephead { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.pm-copilot-why { font-size: 11px; color: var(--pm-secondary); margin: 2px 0 0 22px; }
+.pm-copilot-needs { font-size: 10px; color: var(--pm-secondary); margin: 0 0 0 22px; opacity: .8; }
+.pm-copilot-editrow { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 0 22px; }
+.pm-copilot-editrow select, .pm-copilot-editrow input { padding: 2px 4px; font-size: 11px; border: 1px solid var(--pm-border); border-radius: 4px; background: var(--pm-surface); color: var(--pm-ink); }
+.pm-copilot-warn { font-size: 11px; color: var(--pm-warning); background: color-mix(in srgb, var(--pm-warning) 12%, transparent); padding: 2px 4px; border-radius: 4px; margin: 2px 0 0 22px; }
+.pm-copilot-err { font-size: 11px; color: var(--pm-danger); margin: 2px 0 0 22px; }
+.pm-copilot-step-invalid { background: color-mix(in srgb, var(--pm-danger) 8%, transparent); border-radius: 4px; }
+.pm-copilot-rejected { color: var(--pm-danger); opacity: .85; }
 .pm-empty-ctas { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
 .pm-empty-ai-cta svg { color: var(--dsw-alias-label-primary-foreground); }

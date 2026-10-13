@@ -10,8 +10,11 @@ import type { Meeting, MeetingAction } from './meeting.js'
 /** 对外暴露的统一 SYSTEM（ask.ts 复用同一处，避免状态枚举等口径漂移）。 */
 export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数据（含"今天"日期），先用一段简洁中文回答用户问题（只读诊断）。
 所有相对时间判断必须以给定的"今天"为锚，不要假设今天是别的日期；数据里没有的实体（会议/汇报/交付物）就说"暂无"，不要编造。
-若确有可改进处，再在最后输出一个 json 代码块：{"actions":[{"op":"task.update","id":"任务ID","patch":{"字段":"值"}}]}。
-patch 仅允许 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，且 start 不得晚于 due)。禁止删除、禁止批量、禁止未知字段。没有建议动作就不要输出 json 块。`
+若确有可改进处，再在最后输出一个 json 代码块，给出多步计划：{"plan":[{"stepId":"s1","title":"一句人话","reason":"为什么这样改","action":{"op":"task.update","id":"任务ID","patch":{"字段":"值"}},"needs":[],"riskNote":"可选软风险提示"}]}。
+- stepId 用 s1/s2…唯一编号；needs 填依赖的前置 stepId（无依赖填 []）；同一步要改同一任务的多个字段就合并成一步，不要拆成两步。
+- 整份计划不超过 8 步、不超过 10 条不同任务；做不到就少给几步。
+- 唯一允许的写操作是 task.update；patch 仅允许 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，且 start 不得晚于 due)。禁止删除、禁止新建、禁止移动、禁止未知字段、禁止改会议/汇报/交付物/里程碑/风险。
+- 没有建议动作就不要输出 json 块。`
 
 export interface AskContext {
   projectName: string

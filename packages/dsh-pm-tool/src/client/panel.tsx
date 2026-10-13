@@ -5,7 +5,7 @@ import { buildUpdate } from '../core/task-inline.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
-import { parseCopilotActions, validateActions } from '../core/copilot.js'
+import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
@@ -723,10 +723,9 @@ export function PmPanel({ execute }: PmPanelApi) {
         />}
         {drawer.kind === 'copilot' && project && <CopilotPanel
           projectId={project.id}
-          taskIds={tasks.map(t => t.id)}
+          tasks={tasks}
           baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
           execute={execute}
-          run={run}
           disabled={busy}
           onSaved={() => void refresh()}
         />}
@@ -2298,61 +2297,156 @@ function Overview({
   </div>
 }
 
-/** PROD-20 AI 项目副驾 MVP：提问→只读诊断；写动作渲染草稿卡，确认才落库。 */
-function CopilotPanel({ projectId, taskIds, baselineMap, execute, run, disabled, onSaved }: {
+/** PROD-20/24 AI 项目副驾：提问→只读诊断；多步计划卡（可勾选/行内标量编辑/整批或逐步执行），确认才落库。 */
+type PlanStepView = CopilotStep & { checked: boolean }
+
+function softRisks(step: CopilotStep, task: Task | undefined, assignees: Set<string>, today: string): string[] {
+  const out: string[] = []
+  const p = (step.action.patch ?? {}) as Record<string, unknown>
+  if (p.progress === 100 && p.status && p.status !== 'done') out.push('口径可能不一致：进度100但未标完成')
+  if (p.status === 'done' && typeof p.progress === 'number' && p.progress < 100) out.push('口径可能不一致：已完成但进度未满')
+  if (p.status === 'in_progress' && task?.dueDate && task.dueDate < today) out.push('该任务已逾期')
+  if (typeof p.assignee === 'string' && p.assignee && !assignees.has(p.assignee)) out.push('新负责人，确认不是错别字')
+  return out
+}
+
+function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSaved }: {
   projectId: string
-  taskIds: string[]
+  tasks: Task[]
   baselineMap: Record<string, string>
   execute: (line: string) => Promise<string>
-  run: (line: string) => Promise<boolean>
   disabled: boolean
   onSaved: () => void
 }) {
+  const taskIds = tasks.map(t => t.id)
+  const taskById = new Map(tasks.map(t => [t.id, t]))
+  const assignees = new Set(tasks.map(t => t.assignee).filter(Boolean))
+  const today = new Date().toISOString().slice(0, 10)
+
   const [input, setInput] = useState('')
-  const [msgs, setMsgs] = useState<{ role: string, text: string }[]>([{ role: 'sys', text: '向副驾提问（只读诊断）；若建议改动，会先给操作草稿卡，确认才落库。' }])
-  const [draft, setDraft] = useState<{ accepted: ReturnType<typeof validateActions>['accepted'], rejected: ReturnType<typeof validateActions>['rejected'] } | null>(null)
+  const [msgs, setMsgs] = useState<{ role: string, text: string }[]>([{ role: 'sys', text: '向副驾提问（只读诊断）；若给出多步计划，可勾选/编辑后整批或逐步执行，确认才落库。' }])
+  const [steps, setSteps] = useState<PlanStepView[]>([])
+  const [rejected, setRejected] = useState<{ stepId?: string, reason: string }[]>([])
+  const [openedAt, setOpenedAt] = useState<Record<string, string> | null>(null)
+  const [busy, setBusy] = useState(false)
+
   const send = async () => {
     const q = input.trim(); if (!q || disabled) return
     setInput(''); setMsgs(m => [...m, { role: 'me', text: q }])
     try {
       const isFixture = q === 'fixture' // 仅精确触发测试缝；普通用户 fixture 开头的原问题原样走真实 ask
       const text = await execute(`ask ${projectId} ${isFixture ? 'fixture' : ''} ${isFixture ? '' : JSON.stringify(q)}`.trim())
-      setMsgs(m => [...m, { role: 'ai', text }])
-      const acts = parseCopilotActions(text)
-      const v = validateActions(acts, { taskIds })
-      if (v.accepted.length || v.rejected.length) setDraft({ accepted: v.accepted, rejected: v.rejected })
+      const { diagnosis, rawSteps } = parseCopilotPlan(text)
+      setMsgs(m => [...m, { role: 'ai', text: diagnosis }])
+      const v = validatePlan(rawSteps, { taskIds })
+      if (v.steps.length || v.rejected.length) {
+        setSteps(v.steps.map(s => ({ ...s, checked: true })))
+        setRejected(v.rejected)
+        setOpenedAt({ ...baselineMap })
+      } else {
+        setMsgs(m => [...m, { role: 'sys', text: '模型未给出可执行步骤。' }])
+      }
     } catch (e) { setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }]) }
   }
-  const [busy, setBusy] = useState(false)
-  const confirm = async () => {
-    if (!draft || busy) return
+
+  // 行内标量编辑：仅允许白名单字段；改完即时重跑 validateActions，非法行标红。
+  const setPatch = (stepId: string, key: string, value: unknown) => {
+    setSteps(prev => prev.map(s => s.stepId === stepId
+      ? { ...s, action: { ...s.action, patch: { ...(s.action.patch ?? {}), [key]: value } } }
+      : s))
+  }
+  const invalidStepIds = new Set<string>()
+  for (const s of steps) {
+    if (!s.checked) continue
+    if (validateActions([s.action], { taskIds }).rejected.length) invalidStepIds.add(s.stepId)
+  }
+  const checked = steps.filter(s => s.checked)
+  const anyInvalid = invalidStepIds.size > 0
+  const buildActions = () => checked.map(s => ({
+    op: s.action.op, id: s.action.id, patch: s.action.patch,
+    stepId: s.stepId, title: s.title, needs: s.needs,
+  }))
+  // 卡顶琥珀提示：打开计划后有任务 updatedAt 变化（不自动重发模型）。
+  const staleHint = !!openedAt && tasks.some(t => (t as { updatedAt?: string }).updatedAt !== openedAt[t.id])
+
+  const clearPlan = () => { setSteps([]); setRejected([]); setOpenedAt(null) }
+
+  const runApply = async (mode: 'batch' | 'stepwise') => {
     setBusy(true)
-    // 走后端 ask-apply：服务器重读当前项目、校验归属/字段/真实日期，按基线 updatedAt 做冲突比较，
-    // 并对同一份草稿做服务端幂等；前端不再直接循环 task update。
     try {
-      const line = `ask-apply ${projectId} ${JSON.stringify(draft.accepted)} --base ${JSON.stringify(baselineMap)}`
-      const res = await execute(line)
-      setMsgs(m => [...m, { role: 'sys', text: res }])
-      setDraft(null); onSaved()
+      let base = { ...baselineMap }
+      const ordered = buildActions()
+      if (mode === 'batch') {
+        const res = await execute(`ask-apply ${projectId} ${JSON.stringify(ordered)} --base ${JSON.stringify(base)}`)
+        setMsgs(m => [...m, { role: 'sys', text: res }])
+      } else {
+        for (const s of checked) {
+          // 逐步模式：单步发送时剥掉 needs（避免服务端误判前置未执行而级联跳过）。
+          const one = forStepwiseApply(s)
+          const res = await execute(`ask-apply ${projectId} ${JSON.stringify([one])} --base ${JSON.stringify(base)}`)
+          setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：${res}` }])
+          // 逐步模式每步后重读 domain 刷新链式 baseline（每次 ask-apply 后端也重读）。
+          const snap = JSON.parse(await execute('web snapshot')) as { tasks: (Task & { updatedAt?: string })[] }
+          base = Object.fromEntries((snap.tasks ?? []).filter(t => t.projectId === projectId).map(t => [t.id, t.updatedAt ?? '']))
+        }
+      }
+      clearPlan(); onSaved()
     } catch (e) {
       setMsgs(m => [...m, { role: 'ai', text: `执行失败：${e instanceof Error ? e.message : String(e)}` }])
     } finally { setBusy(false) }
   }
+
+  const editablePatch = (s: PlanStepView) => (s.action.patch ?? {}) as Record<string, unknown>
   return <div className="pm-copilot">
     <div className="pm-copilot-messages">
       {msgs.map((m, i) => <div key={i} className={`pm-copilot-msg pm-copilot-${m.role}`}>{m.text}</div>)}
     </div>
-    {draft && (
-      <div className="pm-copilot-draft">
-        <strong>操作草稿（将影响 {draft.accepted.length} 条，需确认）</strong>
-        {draft.accepted.map((a, i) => <div key={i}>· {a.op} {a.id} → {JSON.stringify(a.patch)}</div>)}
-        {draft.rejected.map((r, i) => <div key={`r${i}`} className="pm-copilot-rejected">已拒绝：{r.reason}</div>)}
+    {steps.length > 0 || rejected.length > 0 ? (
+      <div className="pm-copilot-draft" data-copilot-plan>
+        <strong>操作计划（{steps.length} 步，将影响 {new Set(steps.map(s => s.action.id)).size} 条任务，需确认）</strong>
+        {staleHint && <div className="pm-copilot-warn">你打开草稿后台账有变化，确认时将逐行重新核对。</div>}
+        {steps.map(s => {
+          const invalid = invalidStepIds.has(s.stepId)
+          const risks = softRisks(s, taskById.get(String(s.action.id)), assignees, today)
+          const patch = editablePatch(s)
+          return <div key={s.stepId} data-copilot-step className={`pm-copilot-step${invalid ? ' pm-copilot-step-invalid' : ''}`}>
+            <label className="pm-copilot-stephead">
+              <input type="checkbox" checked={s.checked} data-copilot-check={s.stepId}
+                onChange={e => setSteps(prev => prev.map(p => p.stepId === s.stepId ? { ...p, checked: e.target.checked } : p))}/>
+              <span><b>{s.stepId}</b> · {s.title || s.action.id}</span>
+            </label>
+            <div className="pm-copilot-why">{s.reason ? `为什么：${s.reason}` : <span className="pm-copilot-warn">模型未说明原因</span>}</div>
+            {s.needs.length > 0 && <div className="pm-copilot-needs">依赖：{s.needs.join('、')}</div>}
+            <div className="pm-copilot-editrow">
+              <select value={String(patch.status ?? '')} data-copilot-edit={`${s.stepId}.status`}
+                onChange={e => e.target.value ? setPatch(s.stepId, 'status', e.target.value) : setPatch(s.stepId, 'status', undefined)}>
+                <option value="">状态</option>
+                {['todo', 'in_progress', 'blocked', 'done'].map(st => <option key={st} value={st}>{st}</option>)}
+              </select>
+              <input className="pm-copilot-num" type="number" placeholder="进度" min={0} max={100} value={patch.progress == null ? '' : Number(patch.progress)}
+                data-copilot-edit={`${s.stepId}.progress`}
+                onChange={e => setPatch(s.stepId, 'progress', e.target.value === '' ? undefined : Number(e.target.value))}/>
+              <input className="pm-copilot-assignee" placeholder="负责人" value={String(patch.assignee ?? '')}
+                data-copilot-edit={`${s.stepId}.assignee`}
+                onChange={e => setPatch(s.stepId, 'assignee', e.target.value)}/>
+              <input placeholder="起 YYYY-MM-DD" value={String(patch.startDate ?? '')} data-copilot-edit={`${s.stepId}.startDate`}
+                onChange={e => setPatch(s.stepId, 'startDate', e.target.value || undefined)}/>
+              <input placeholder="止 YYYY-MM-DD" value={String(patch.dueDate ?? '')} data-copilot-edit={`${s.stepId}.dueDate`}
+                onChange={e => setPatch(s.stepId, 'dueDate', e.target.value || undefined)}/>
+            </div>
+            {invalid && <div className="pm-copilot-err">该行字段不合法，已禁用确认</div>}
+            {risks.map((r, i) => <div key={i} className="pm-copilot-warn">⚠ {r}</div>)}
+            {s.riskNote && <div className="pm-copilot-warn">模型提示：{s.riskNote}</div>}
+          </div>
+        })}
+        {rejected.map((r, i) => <div key={`r${i}`} data-copilot-rejected className="pm-copilot-rejected">已拒绝：{r.stepId ? `${r.stepId} ` : ''}{r.reason}</div>)}
         <div className="pm-copilot-actions">
-          <button className="pm-button pm-copilot-confirm" disabled={busy} onClick={() => void confirm()}>确认执行</button>
-          <button className="pm-button pm-copilot-dismiss" onClick={() => setDraft(null)}>再聊聊/取消</button>
+          <button className="pm-button pm-copilot-confirm" data-copilot-apply-batch disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('batch')}>整批执行({checked.length}步)</button>
+          <button className="pm-button pm-copilot-confirm" data-copilot-apply-stepwise disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('stepwise')}>逐步执行</button>
+          <button className="pm-button pm-copilot-dismiss" data-copilot-cancel onClick={clearPlan}>再聊聊/取消</button>
         </div>
       </div>
-    )}
+    ) : null}
     <div className="pm-copilot-inputrow">
       <input className="pm-copilot-input" value={input} placeholder="例如：下周会不会延期？"
         onChange={e => setInput(e.target.value)}

@@ -12,17 +12,26 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
     if (!domain || !domain.table('projects').get(projectId ?? '')) {
       return { kind: 'error' as const, text: '未找到项目' }
     }
-    // 动态取本项目前两个任务，避免硬编码 t-9001/9002 与隔离夹具不一致
+    // 动态取本项目前几个任务，避免硬编码 t-9001/9002 与隔离夹具不一致
     const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string })
       .filter(t => t.projectId === projectId).map(t => t.id)
     if (tasks.length < 1) return { kind: 'error' as const, text: '项目暂无任务，无法演示草稿' }
     const okId = tasks[0]
     const delId = tasks[1] ?? tasks[0]
+    const cycleId = tasks[2] ?? delId
+    // 多步计划：s1 收尾（合法）→ s2 同任务改派（合法链式）；s3 删除步（应被白名单拒）；s4/s5 环依赖（应被 DAG 拒）。
+    const plan = [
+      { stepId: 's1', title: '收尾任务', reason: '进度已完成、阻塞已解', action: { op: 'task.update', id: okId, patch: { status: 'done', progress: 100 } }, needs: [], riskNote: '改完同步周会' },
+      { stepId: 's2', title: '改派负责人', reason: 's1 释放了人力', action: { op: 'task.update', id: okId, patch: { assignee: '赵六' } }, needs: ['s1'] },
+      { stepId: 's3', title: '删除任务(应被拒)', reason: '演示白名单拒绝', action: { op: 'task.delete', id: delId }, needs: [] },
+      { stepId: 's4', title: '环依赖a(应被拒)', reason: '演示环局部拒', action: { op: 'task.update', id: cycleId, patch: { progress: 10 } }, needs: ['s5'] },
+      { stepId: 's5', title: '环依赖b(应被拒)', reason: '演示环局部拒', action: { op: 'task.update', id: cycleId, patch: { progress: 20 } }, needs: ['s4'] },
+    ]
     return {
       kind: 'success' as const,
-      text: `【E2E 固定诊断】今天是 ${localToday()}，该项目任务进度滞后，建议把 ${okId} 收尾并指定负责人。
+      text: `【E2E 固定诊断】今天是 ${localToday()}，该项目任务进度滞后，建议先收尾 ${okId} 再改派。
 \`\`\`json
-{"actions":[{"op":"task.update","id":"${okId}","patch":{"assignee":"赵六","status":"done"}},{"op":"task.delete","id":"${delId}"},{"op":"task.update","id":"${okId}","patch":{"progress":200}}]}
+{"plan":${JSON.stringify(plan)}}
 \`\`\``,
     }
   }
@@ -85,13 +94,16 @@ const recentDrafts = new Map<string, number>() // key -> 过期时间戳（已�
 const inFlight = new Map<string, Promise<AskApplyResult>>() // key -> 正在执行的结果（并发去重）
 const DRAFT_TTL_MS = 60_000
 
-function draftKey(projectId: string, actions: CopilotAction[]): string {
-  return `${projectId}:${JSON.stringify(actions)}`
+// 幂等键 = projectId + JSON(selectedOrderedActions) + JSON(baseline)：
+// 同一勾选集合 60s 内重复确认才拦截；不同 baseline（重新生成计划）/ 不同子集（逐步模式）互不误拦。
+function draftKey(projectId: string, actions: CopilotAction[], baseline: Record<string, string>): string {
+  return `${projectId}:${JSON.stringify(actions)}:${JSON.stringify(baseline)}`
 }
 
 export interface AskApplyResult {
   kind: 'success' | 'error'
   text: string
+  appliedCount?: number
 }
 
 async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
@@ -104,26 +116,46 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   const liveIds = new Set(tasks.filter(t => t.projectId === projectId).map(t => t.id))
   const v = validateActions(actions, { taskIds: [...liveIds] })
 
+  // 计划步带 stepId/title/needs 元数据（旧扁平 action 无这些字段，行为不变）。
+  const isPlan = actions.some(a => typeof a.stepId === 'string')
+  const unit = isPlan ? '步' : '条'
+  const label = (a: CopilotAction): string => {
+    const sid = typeof a.stepId === 'string' ? a.stepId : ''
+    const title = typeof a.title === 'string' ? a.title : ''
+    const id = String(a.id ?? '(无id)')
+    return sid ? `${sid} ${id}${title ? ` ${title}` : ''}` : id
+  }
+
   const applied: string[] = []
-  const rejected: string[] = []
+  const blocked: string[] = []
+  const appliedStepIds = new Set<string>()
   for (const a of v.accepted) {
+    // 依赖级联：本步 needs 指向的前置 stepId 未全部落库 -> 本步跳过（不自动补偿/重试）。
+    const needs = Array.isArray(a.needs) ? a.needs.filter((n): n is string => typeof n === 'string') : []
+    if (needs.some(n => !appliedStepIds.has(n))) { blocked.push(`${label(a)}：依赖步骤未执行，已跳过`); continue }
     const rec = tasks.find(t => t.id === a.id) as { id: string, projectId?: string, updatedAt?: string } | undefined
-    if (!rec || rec.projectId !== projectId) { rejected.push(`${a.id}：不存在或不属于本项目`); continue }
+    if (!rec || rec.projectId !== projectId) { blocked.push(`${label(a)}：不存在或不属于本项目`); continue }
     // 冲突：草稿基线 updatedAt 与当前不一致 -> 他人已改，拒绝覆盖
     const base = baseline[a.id ?? '']
-    if (base && rec.updatedAt && rec.updatedAt !== base) { rejected.push(`${a.id}：内容已被他人更新，为避免覆盖未执行`); continue }
+    if (base && rec.updatedAt && rec.updatedAt !== base) { blocked.push(`${label(a)}：内容已被他人更新，为避免覆盖未执行`); continue }
     try {
-      await updateTask(domain, a.id!, (a.patch ?? {}) as Record<string, unknown>)
-      applied.push(`${a.id}`)
+      const next = await updateTask(domain, a.id!, (a.patch ?? {}) as Record<string, unknown>)
+      // 链式 baseline：同目标后续步用本次落库后的新 updatedAt 比较，不被误判「他人已改」；仅本次调用内存，不持久。
+      if (next?.updatedAt) {
+        baseline[a.id!] = next.updatedAt
+        rec.updatedAt = next.updatedAt // 同步本地快照，供同目标后续步冲突比较
+      }
+      if (typeof a.stepId === 'string') appliedStepIds.add(a.stepId)
+      applied.push(label(a))
     } catch (e) {
-      rejected.push(`${a.id}：写库失败（${e instanceof Error ? e.message : String(e)}）`)
+      blocked.push(`${label(a)}：写库失败（${e instanceof Error ? e.message : String(e)}）`)
     }
   }
   const extra = v.rejected.map(r => `${r.action.id ?? '(无id)'}：${r.reason}`)
-  const text = `已应用 ${applied.length} 条${applied.length ? `（${applied.join(', ')}）` : ''}`
-    + (rejected.length ? `；未执行 ${rejected.length} 条（${rejected.join('；')}）` : '')
-    + (extra.length ? `；拒绝 ${extra.length} 条（${extra.join('；')}）` : '')
-  return { kind: 'success', text }
+  const text = `已应用 ${applied.length} ${unit}${applied.length ? `（${applied.join('；')}）` : ''}`
+    + (blocked.length ? `；未执行 ${blocked.length} ${unit}（${blocked.join('；')}）` : '')
+    + (extra.length ? `；拒绝 ${extra.length} ${unit}（${extra.join('；')}）` : '')
+  return { kind: 'success', text, appliedCount: applied.length }
 }
 
 export async function handleAskApplyCommand(argument: string, domain: PmDomain | undefined): Promise<AskApplyResult> {
@@ -156,11 +188,11 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
     }
   }
 
-  const key = draftKey(projectId, actions)
+  const key = draftKey(projectId, actions, baseline)
   const now = Date.now()
   const seenAt = recentDrafts.get(key)
   if (seenAt && seenAt > now) {
-    return { kind: 'success', text: '该草稿已确认过，为避免重复写库未再次执行（幂等拦截）。' }
+    return { kind: 'success', text: '该计划已确认过，为避免重复写库未再次执行（幂等拦截）。' }
   }
   // 并发去重：in-flight 中同一草稿直接共享结果，杜绝 await 前检查通过后双写。
   const flying = inFlight.get(key)
@@ -170,7 +202,7 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
   inFlight.set(key, promise)
   try {
     const res = await promise
-    if (res.text.includes('已应用 0 条') === false) recentDrafts.set(key, Date.now() + DRAFT_TTL_MS)
+    if ((res.appliedCount ?? 0) > 0) recentDrafts.set(key, Date.now() + DRAFT_TTL_MS)
     return res
   } finally {
     inFlight.delete(key)

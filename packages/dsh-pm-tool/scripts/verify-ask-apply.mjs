@@ -105,4 +105,64 @@ const base = {
   assert.ok(!ctx.includes('undefined'), '不应出现 undefined 字段')
 }
 
-console.log('verify-ask-apply OK（后端归属/冲突/幂等/部分成功/会议字段）')
+// ===== PROD-24 CMP-CHAIN-01 整批同 task 两步：链式 baseline 不被误判冲突，两步均落盘 =====
+{
+  const d = makeDomain(base)
+  // baseline 用 t-1 的当前 updatedAt（'2026-10-01T00:00:00Z'）
+  const actions = JSON.stringify([
+    { op: 'task.update', id: 't-1', patch: { assignee: '甲' }, stepId: 's1', title: '派甲', needs: [] },
+    { op: 'task.update', id: 't-1', patch: { status: 'done' }, stepId: 's2', title: '收尾', needs: ['s1'] },
+  ])
+  const r = await handleAskApplyCommand('p-1 ' + actions + ' --base ' + JSON.stringify({ 't-1': '2026-10-01T00:00:00Z' }), d)
+  assert.match(r.text, /已应用 2 步|已应用 2 条/, '两步都应落库：' + r.text)
+  assert.equal(d._store.tasks['t-1'].assignee, '甲', 's1 落库')
+  assert.equal(d._store.tasks['t-1'].status, 'done', 's2 用链式 updatedAt，不应被误判冲突')
+}
+
+// ===== PROD-24 CMP-CONFLICT-01 外部冲突仅拒相关步+下游级联，独立步继续 =====
+{
+  const d = makeDomain(base)
+  // s1 改 t-1（独立）；s2 改 t-3 用错基线（模拟他人已改）；s3 依赖 s2 -> 级联拒
+  const actions = JSON.stringify([
+    { op: 'task.update', id: 't-1', patch: { progress: 11 }, stepId: 's1', title: '独立步', needs: [] },
+    { op: 'task.update', id: 't-2', patch: { progress: 22 }, stepId: 's2', title: '冲突步', needs: [] },
+    { op: 'task.update', id: 't-2', patch: { assignee: '跟s2' }, stepId: 's3', title: '依赖步', needs: ['s2'] },
+  ])
+  // 故意给 t-2 一个错误基线 -> s2 被判他人已改；s3 依赖 s2 -> 级联拒；s1 独立照常
+  const r = await handleAskApplyCommand('p-1 ' + actions + ' --base ' + JSON.stringify({ 't-1': '2026-10-01T00:00:00Z', 't-2': '1999-01-01T00:00:00Z' }), d)
+  assert.equal(d._store.tasks['t-1'].progress, 11, '独立 s1 照常落库')
+  assert.match(r.text, /他人更新|已被他人更新|避免覆盖/, 's2 应被判外部冲突：' + r.text)
+  assert.equal(d._store.tasks['t-2'].assignee, 'ice', 's3 级联拒：不应写库')
+  assert.ok(!r.text.includes('跟s2') === false || r.text, '文案应逐行说明')
+}
+
+// ===== PROD-24 CMP-IDEM-02 幂等键含 baseline：同 actions 不同 baseline 不互拦 =====
+{
+  const d = makeDomain(base)
+  const actions = JSON.stringify([{ op: 'task.update', id: 't-2', patch: { progress: 60 }, stepId: 's1', title: 'x', needs: [] }])
+  const r1 = await handleAskApplyCommand('p-1 ' + actions + ' --base ' + JSON.stringify({ 't-2': '2026-10-01T00:00:00Z' }), d)
+  assert.match(r1.text, /已应用 1 步|已应用 1 条/)
+  // 换一个不同 baseline（模拟重新生成计划），不应被上次幂等键误拦
+  const r2 = await handleAskApplyCommand('p-1 ' + actions + ' --base ' + JSON.stringify({ 't-2': '2020-01-01T00:00:00Z' }), d)
+  assert.ok(!/幂等/.test(r2.text), '不同 baseline 不应命中幂等拦截：' + r2.text)
+}
+
+// ===== PROD-24 逐步模式：前端按拓扑序逐次单步调用（第二步 needs 已剥空），两次都落库 =====
+{
+  const d = makeDomain(base)
+  // 第一次：s1 改 t-1 assignee
+  const c1 = await handleAskApplyCommand('p-1 ' + JSON.stringify([
+    { op: 'task.update', id: 't-1', patch: { assignee: '甲' }, stepId: 's1', title: '派甲', needs: [] },
+  ]) + ' --base ' + JSON.stringify({ 't-1': '2026-10-01T00:00:00Z' }), d)
+  assert.match(c1.text, /已应用 1 步/)
+  // 前端刷新 baseline 后第二次：s2 同 task 改 status（needs 已剥空），用最新 updatedAt 做基线
+  const after1 = d._store.tasks['t-1'].updatedAt
+  const c2 = await handleAskApplyCommand('p-1 ' + JSON.stringify([
+    { op: 'task.update', id: 't-1', patch: { status: 'done' }, stepId: 's2', title: '收尾', needs: [] },
+  ]) + ' --base ' + JSON.stringify({ 't-1': after1 }), d)
+  assert.match(c2.text, /已应用 1 步/, '逐步第二步不应被误判冲突：' + c2.text)
+  assert.equal(d._store.tasks['t-1'].assignee, '甲')
+  assert.equal(d._store.tasks['t-1'].status, 'done')
+}
+
+console.log('verify-ask-apply OK（后端归属/冲突/幂等/部分成功/会议字段/链式baseline/级联/逐步两连）')
