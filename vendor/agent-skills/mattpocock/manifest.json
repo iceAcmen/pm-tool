@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 3,
+  "purpose": "Selective, self-contained vendoring of pure-doc skill playbooks from mattpocock/skills for offline reference. No upstream scripts/installers are run. Third-party text is copied byte-for-byte and not edited.",
+  "source": {
+    "repo": "https://github.com/mattpocock/skills",
+    "branch": "main",
+    "commit": "49dd158d1076134a641b33efb035946536778336",
+    "authorName": "Matt Pocock",
+    "commitDate": "2026-10-09T11:56:49+0100",
+    "commitSubject": "wizard: template fixes (#1220, #1142, #1081, #1041, #1003) (#1237)",
+    "fetchedAtUtc": "2026-10-12T20:27:58Z",
+    "fetchedAtLocal": "2026-10-13 04:27:58 CST (+0800)",
+    "fetchMethod": "public read-only shallow git clone to .tmp/upstream-mattpocock-skills; HEAD resolved via git log. No write/push to upstream."
+  },
+  "entrySkillIds": ["grill-me", "tdd", "code-review", "diagnosing-bugs"],
+  "declaredDependencies": [
+    {
+      "entrySkillId": "grill-me",
+      "dependencySkillId": "grilling",
+      "reason": "grill-me/SKILL.md is a trigger-only stub (disable-model-invocation: true) whose sole instruction is 'Call the Skill tool with grilling'; it contains no interview methodology. grilling is vendored as a pure-doc runtime body so grill-me is self-contained and runnable.",
+      "exposed": false,
+      "pureDocumentation": true
+    }
+  ],
+  "license": {
+    "spdx": "MIT",
+    "copyright": "Copyright (c) 2026 Matt Pocock",
+    "file": "LICENSE",
+    "verified": "Root LICENSE read and confirmed MIT; included verbatim."
+  },
+  "policy": {
+    "projectRulesPrecedence": true,
+    "noInstallerRun": true,
+    "noHomeOrGlobalWrites": true
+  },
+  "projectRulesPriority": {
+    "statement": "Project AGENTS.md and its ADL decision-log entries are authoritative and override any vendored upstream skill guidance whenever they conflict.",
+    "upstreamSkillsDoNotGrant": [
+      "modifying the upstream deepseek-harness source (~/Projects/dsh-pm/deepseek-harness/)",
+      "writing DEEPSEEK_API_KEY or any credential into the repo",
+      "git push --force or rewriting already-pushed history",
+      "modifying user-home, global, IDE, or shell config",
+      "running upstream installers / setup-matt-pocock-skills / one-click setup",
+      "skipping the project independent-test gating (ADL-045) or its GUI-evidence requirement"
+    ],
+    "conflictResolution": "Where a vendored playbook suggests behavior the project forbids (offline-first, keys-not-in-repo, no-force-push, test gating, data/ stays out of git), the project rules win and the playbook is treated as reference only."
+  },
+  "skills": [
+    {
+      "id": "grill-me",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "grill-me",
+      "upstreamPath": "skills/productivity/grill-me",
+      "vendoredPath": "skills/grill-me",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Thin trigger stub (disable-model-invocation: true) whose only instruction is 'Call the Skill tool with grilling'.",
+      "reviewNotes": "Clean. Pure doc + interface metadata. Delegates runtime body to the grilling dependency, which is vendored (exposed:false) so grill-me is self-contained.",
+      "files": [
+        { "path": "skills/grill-me/SKILL.md", "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637", "bytes": 157 },
+        { "path": "skills/grill-me/agents/openai.yaml", "sha256": "c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b", "bytes": 137 }
+      ]
+    },
+    {
+      "id": "grilling",
+      "kind": "dependency",
+      "reviewStatus": "reviewed",
+      "name": "grilling",
+      "upstreamPath": "skills/productivity/grilling",
+      "vendoredPath": "skills/grilling",
+      "exposed": false,
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "REQUIRED RUNTIME DEPENDENCY of grill-me (grill-me has no body of its own). Vendored as pure doc to make grill-me self-contained; it is not an entry skill and is not directly exposed to the user.",
+      "reviewNotes": "Clean. Relentless-interview / design-tree methodology. No commands that touch the filesystem, no credential or force-push language.",
+      "files": [
+        { "path": "skills/grilling/SKILL.md", "sha256": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15", "bytes": 2049 },
+        { "path": "skills/grilling/agents/openai.yaml", "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b", "bytes": 113 }
+      ]
+    },
+    {
+      "id": "tdd",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "tdd",
+      "upstreamPath": "skills/engineering/tdd",
+      "vendoredPath": "skills/tdd",
+      "riskNotes": [
+        "mocking.md line 32 contains `new StripeClient(process.env.STRIPE_KEY)` as illustrative BAD-practice code (hard-to-mock / config-coupled); not a real credential. Kept verbatim; treat as example only."
+      ],
+      "externalProjectReferences": [
+        { "path": "GLOSSARY.md", "kind": "project-root-doc", "optional": true, "note": "SKILL.md says read it 'if it exists' to match domain vocabulary; not a vendored dependency. Absence permitted; if present, read under project policy." }
+      ],
+      "note": "Relative references inside SKILL.md: tests.md and mocking.md (both vendored). Also references project-root GLOSSARY.md 'if it exists' (project file, NOT vendored) and cross-skill 'codebase-design' (NOT vendored, out of fixed-4 scope — unavailable skill, policy-downgraded, not listed as a project reference).",
+      "reviewNotes": "Clean guidance. All relative配套文件 copied. See riskNotes for the illustrative STRIPE_KEY example.",
+      "files": [
+        { "path": "skills/tdd/SKILL.md", "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0", "bytes": 3629 },
+        { "path": "skills/tdd/tests.md", "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a", "bytes": 2214 },
+        { "path": "skills/tdd/mocking.md", "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef", "bytes": 1481 },
+        { "path": "skills/tdd/agents/openai.yaml", "sha256": "ea6f01cf1b8c06a4b0f5b649d74b1b8ce8685e72af1b38d70d877693e092af0b", "bytes": 87 }
+      ]
+    },
+    {
+      "id": "code-review",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "code-review",
+      "upstreamPath": "skills/engineering/code-review",
+      "vendoredPath": "skills/code-review",
+      "riskNotes": [
+        "CODING_STANDARDS.md and CONTRIBUTING.md are optional project-root standards files, not vendored dependencies; absence is permitted; if present read under project policy."
+      ],
+      "externalProjectReferences": [
+        { "path": "CODING_STANDARDS.md", "kind": "project-root-doc", "optional": true, "note": "Standards axis source if present; not vendored. Absence permitted." },
+        { "path": "CONTRIBUTING.md", "kind": "project-root-doc", "optional": true, "note": "Standards axis source if present; not vendored. Absence permitted." }
+      ],
+      "note": "No relative file references. Suggests running /setup-matt-pocock-skills if no issue tracker is configured — that upstream setup skill is NOT run and NOT vendored (project provides its own onboarding). Git commands cited are read-only (git diff/log/rev-parse).",
+      "reviewNotes": "Clean. Two-axis (Standards/Spec) review playbook. No writes, no force-push; 'forces'/'hard' hits are English wording, not git force.",
+      "files": [
+        { "path": "skills/code-review/SKILL.md", "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357", "bytes": 6670 },
+        { "path": "skills/code-review/agents/openai.yaml", "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352", "bytes": 100 }
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "diagnosing-bugs",
+      "upstreamPath": "skills/engineering/diagnosing-bugs",
+      "vendoredPath": "skills/diagnosing-bugs",
+      "riskNotes": [
+        "SKILL.md references scripts/hitl-loop.template.sh as a last-resort HITL loop; that upstream script is intentionally NOT vendored (see excludedArtifacts), so this fallback path is non-functional in this vendor."
+      ],
+      "externalProjectReferences": [
+        { "path": "GLOSSARY.md", "kind": "project-root-doc", "optional": true, "note": "SKILL.md says read it 'if it exists' for a mental model of the relevant modules; not a vendored dependency. Absence permitted; if present, read under project policy." }
+      ],
+      "note": "References project-root GLOSSARY.md 'if it exists' (project file, NOT vendored). References scripts/hitl-loop.template.sh — that upstream script is INTENTIONALLY EXCLUDED (see excludedArtifacts / riskNotes).",
+      "reviewNotes": "Clean methodology. Strong positive secret-redaction guidance. The HITL bash fallback is documented but its script was not vendored.",
+      "files": [
+        { "path": "skills/diagnosing-bugs/SKILL.md", "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d", "bytes": 8664 },
+        { "path": "skills/diagnosing-bugs/agents/openai.yaml", "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b", "bytes": 103 }
+      ]
+    }
+  ],
+  "rootFiles": [
+    { "path": "LICENSE", "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5", "bytes": 1068 }
+  ],
+  "excludedArtifacts": [
+    { "path": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh", "reason": "Upstream executable bash script. Policy forbids vendoring/running upstream scripts/installers. Audited but not copied: it is a benign terminal step/capture prompt template (set -euo pipefail; reads Enter/y-n into vars; prints KEY=VALUE). No credential exfiltration, no force push, no user-home writes, no network calls. Consequence: diagnosing-bugs' last-resort 'HITL bash loop' fallback is non-functional in this vendor; use a human-in-terminal checklist manually instead." },
+    "All other skills under skills/{engineering,productivity,in-progress,misc,deprecated}/ (not in the vendored set)",
+    ".git/ metadata, .changeset/, .claude-plugin/, .github/, scripts/ (repo root), docs/, GLOSSARY.md, SCOPE.md, CHANGELOG.md, README.md, CLAUDE.md, package.json, package-lock.json",
+    "Any installers / setup skills (e.g. setup-matt-pocock-skills) — not run, not copied"
+  ],
+  "negativeAudit": {
+    "checked": "Regex-scanned all 13 vendored files for: git force push (push -f / push --force), sudo, rm -rf, chmod/chown, systemctl/launchctl, /Users/ absolute paths, $HOME / ~/ home writes, real API-key/secret/token/password literals, set -x.",
+    "result": "None found. Git commands cited are read-only (diff/log/rev-parse/bisect guidance). No vendored file writes outside cwd, touches user home, or alters global/IDE config."
+  },
+  "integrity": {
+    "byteIdentity": "Every vendored file verified `diff -q` identical to upstream at the recorded commit (empty diff).",
+    "hashSelfCheck": "SHA256 values below recomputed locally after copy; on-disk recompute matches manifest with zero mismatches, zero extra files, zero missing files.",
+    "vendoredFileCount": 13,
+    "vendoredFileBreakdown": "1 root LICENSE + 12 skill files (grill-me 2, grilling 2, tdd 4, code-review 2, diagnosing-bugs 2). manifest.json is the manifest itself and is not counted among vendored upstream files.",
+    "entrySkillCount": 4,
+    "dependencySkillCount": 1
+  }
+}
