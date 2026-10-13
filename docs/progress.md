@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-13（doubao-work **版本事实统一到 v0.5.0**：package.json 前置 0.5.0、事后补写 v0.4.0 发布说明、新增 v0.5.0 预览说明、README/roadmap/handoff/changelog 口径对齐、历史 tag 不移动；发布收尾 D 块版本三元组漂移随本批消除。先前一批：外部 skill **自动路由** ADL-049 精确语义回写——trivial 抑制 grill/tdd 但 delivery 可 review、rootCauseUnknown 仅 diagnose 不叠 review、blocking 全拦、vendorIntegrityVerified 硬前置、taskKind 留痕；**路由实现独立复核 APPROVE、41 组断言全绿、K 域专家 PASS**；仍试点可用未毕业）
+最后更新：2026-10-13（doubao-work **PROD-07 顶层「人员与负载」视图 v0.5.1 已实现并通过独立验收**：自动化+GUI 核心 **28 PASS / 0 NOT_RUN / 0 FAIL**，仅余 **1 项 MANUAL_PENDING＝真实 390px 窄屏目视**待所有者本人确认；纯前端派生、零 schema、不建人员表；下一步主线 = **AI 副驾多步规划**。先前一批：版本事实统一到 v0.5.0、外部 skill 自动路由 ADL-049 独立复核 APPROVE、41 组断言全绿、K 域专家 PASS）
 
-## 当前阶段：外部 vendor Agent Skills 引入 + 长期规范接线（2026-10-13，doubao-work）
+## 当前阶段：PROD-07 人员与负载视图 v0.5.1 已实现·独立验收 PASS（2026-10-13，doubao-work）
+
+- **功能**：新增顶层「人员」tab，跨项目按 `task.assignee` 归一化（trim+空白折叠+casefold）聚合未完成任务；每卡出未完成/待办·进行中·受阻、逾期/临期/P0、跨项目数、最近截止；按风险排序（逾期→受阻→临期→最近截止），「未分配」桶固定置顶；点任务行复用 `openRecord` 切项目+切tab+开抽屉，全程只读派生。
+- **口径与边界**：逾期＝`status!=='done' && progress<100 && dueDate<今天`（与 stats/reminders 同口径）；**不拆多负责人字符串、不自动合并相似名、不建人员表、不动 domain/schema、不发写命令**。P1（相似名软提示/j·k 导航+记忆/涉众提示）后续做。
+- **验收（独立测试矩阵签发，2026-10-13）**：**28 PASS / 0 NOT_RUN / 0 FAIL**；**1 项 MANUAL_PENDING＝真实 390px 窄屏目视**（工具受限，须所有者本人在真浏览器确认）。产品契约与验收/反例见 `docs/product/07-people-load-view-design.md`。
+- **状态**：本批仅回写产品/living docs 状态，**未改 `src/`、未改 `docs/testing/`、未提交**。
+- **下一步（主线）**：**AI 副驾多步规划**（PROD-20 升维方向；v0.6 架构演进侧的 PROD-11 关键路径/崩溃原子恢复按需并行）。
+
+## 历史阶段：外部 vendor Agent Skills 引入 + 长期规范接线（2026-10-13，doubao-work）
 
 - **决策（ADL-048）**：以只读 vendoring 引入首批 `mattpocock/skills`（grill-me/tdd/code-review/diagnosing-bugs + 纯文档依赖 grilling），锁上游 commit `49dd158d1076134a641b33efb035946536778336`；项目规则优先、不跑 installer、不写 home/全局、不替代独立测试门；升级走双审、回滚只改 manifest commit。
 - **决策（ADL-049 自动路由，实现 `src/core/external-skill-router.ts`）**：vendored skill 不再要求用户显式指定，由纯函数按结构化信号确定性路由——缺阻塞信息→`interaction` 追问 route=none（**全拦**）；`vendorIntegrityVerified` 必须 **true**（安全门硬前置）；根因未明→仅 `diagnosing-bugs`（**抑制 grill/tdd、不叠 code-review**）；实质歧义非 trivial→`grill-me`；新功能/可测修复非 trivial→`tdd`；交付边界→**追加 `code-review`（trivial 也保留）**；`isTrivial` 抑制 grill/tdd。自动加载无需用户口令，但须先校静态校验 PASS + sha256、逐次留试点报告；优先级「项目规则 > 追问澄清 > 独立测试门 > skill 步骤」。

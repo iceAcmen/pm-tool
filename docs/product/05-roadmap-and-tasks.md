@@ -17,7 +17,7 @@
 |---|---|---|---|
 | **v0.4.0 速赢** | 纯前端、零 schema、立刻提效 | 否（domain v1 不动） | PROD-02, 08, 09, 10 |
 | **v0.5.0 核心体验** | 把 PM 高频视图做对 | 否（order 重排小改 core） | PROD-01, 03, 04, 06, 07, 05 |
-| **v0.5.1 体验增量（已拍板·待测试门）** | 顶层「人员与负载」视图，跨项目按人聚合 | **否（domain v1 不动，纯前端派生）** | PROD-07（升级为顶层 tab）；PROD-06 datalist 暂缓 |
+| **v0.5.1 体验增量（✅已实现·独立验收 PASS）** | 顶层「人员与负载」视图，跨项目按人聚合 | **否（domain v1 不动，纯前端派生）** | PROD-07（升级为顶层 tab，已 PASS）；PROD-06 datalist 暂缓 |
 | **v0.6.0 架构演进** | domain v2 + 排期可视化 | 是（新增可选字段，向后兼容） | PROD-11, 22, 21, 23 |
 | **v0.7.0+ 旗舰** | AI 副驾升维 | 否（只读 snapshot + 草稿写） | PROD-20 |
 
@@ -35,7 +35,7 @@
 | PROD-03 | 增量 | P1 | UX-05 | 任务行状态/进度/截止单元格行内编辑，不开抽屉 | `panel.tsx` TaskGroup；复用 `task update` | M | 中 | 无 | v0.5.0 | 行内改状态立即落库并刷新；弹层不与 j/k 冲突 |
 | PROD-04 | 增量 | P1 | UX-06 | Web 暴露「移动到…」改父（拖拽为增强）；core 补同级 order 插序 | `commands/task.ts` move 分支；`core/tasks.ts` moveTask/order；`panel.tsx` 任务行菜单 | M | 中 | PROD-01 | v0.5.0 | 网页上把任务 A 移为任务 B 的子任务成功且不产生环；同级插序后 code 重排正确；verify-cascade 扩展 |
 | PROD-06 | 增量 | P1 | UX-09 | 从现存 owner/assignee/participants 去重生成人员候选，输入框自动补全+归一化 | `panel.tsx` ProjectForm/TaskForm/RiskIssueForm；datalist | M | 低 | 无 | v0.5.0 | assignee 输入可下拉选已有人员；新人员可手填；trim 归一 |
-| PROD-07 | 增量 | **P0** | UX-09 | **升级为顶层「人员与负载」tab**：跨项目按归一化 assignee 聚合未完成任务，出逾期/受阻/临期/跨项目数/最近截止，风险排序，未分配置顶，点任务直达；只读 | `panel.tsx` 新增 PeopleView；新增 `core/people-load.ts` 纯派生（仿 stats/war-room/reminders） | M | 低 | **无（读时归一化，不依赖 PROD-06）** | **v0.5.1（待测试门）** | P0：每归一化 assignee 一卡、未完成数与逾期/受阻/临期正确、风险排序、未分配桶置顶、点行 openRecord 直达、空态齐全、零写库；P1：相似名软提示(不合并)/j·k 导航+记忆/涉众提示。契约见 `docs/product/07-people-load-view-design.md` |
+| PROD-07 | 增量 | **P0** | UX-09 | **升级为顶层「人员与负载」tab**：跨项目按归一化 assignee 聚合未完成任务，出逾期/受阻/临期/跨项目数/最近截止，风险排序，未分配置顶，点任务直达；只读 | `panel.tsx` 新增 PeopleView；新增 `core/people-load.ts` 纯派生（仿 stats/war-room/reminders） | M | 低 | **无（读时归一化，不依赖 PROD-06）** | **v0.5.1（✅已实现·独立验收 PASS）** | P0：每归一化 assignee 一卡、未完成数与逾期/受阻/临期正确、风险排序、未分配桶置顶、点行 openRecord 直达、空态齐全、零写库；P1：相似名软提示(不合并)/j·k 导航+记忆/涉众提示。契约见 `docs/product/07-people-load-view-design.md`。**验收：28 PASS / 0 NOT_RUN / 0 FAIL，仅 1 项 MANUAL_PENDING＝真 390px 窄屏待所有者目视** |
 | PROD-05 | 增量 | P1 | UX-07/08 | 项目概览升级：接下来14天条带+里程碑时间线+概率×影响风险矩阵+异常Top5 | `panel.tsx` Overview | L | 低 | PROD-02(日程条带直达) | v0.5.0 | 概览含三块新区；风险按概率/影响正确落格；条带项可点直达 |
 | PROD-11 | 增量(演进) | P2 | UX-12 | 任务新增 `predecessorIds[]`（可选依赖），domain v2 向后兼容旧记录 | `core/task.ts` schema；`core/storage.ts` domain version→2；命令 task 表单 | M | 中 | 无 | v0.6.0 | 旧 v1 记录读回不报错；新任务可设前置依赖并做环检测；不设依赖时行为不变 |
 | PROD-22 | 颠覆 | P1 | UX-02 | 甘特排期台A：任务按起止画条、里程碑菱形，拖拽条=改日期 | `panel.tsx` 新 GanttView 组件 + task update 日期 | M-L | 中 | PROD-05 时间线经验 | v0.6.0 | 每个未完成任务按 start/due 画条；拖拽后日期落库；里程碑落在轴上 |
@@ -67,7 +67,7 @@
 - 下一步起点：PROD-11 关键路径/甘特B、崩溃原子恢复、副驾多步规划，均属 v0.6 架构演进。
 
 ## 落地状态勘误（2026-10-13，v0.5 已发布后）
-- v0.5 已发布。**PROD-07 已拍板升级为顶层「人员与负载」tab，归 v0.5.1 体验增量**：纯前端派生、**不动 schema/domain**、不建人员表；P0/P1、口径、验收、反例见 `docs/product/07-people-load-view-design.md`。
-- **当前阻塞在发布收尾测试门（ADL-045）**：本条目与设计稿仅为产品文档，**未改 `src/`、未改 `docs/testing/`、未提交**；实现待测试矩阵 PASS 后开工。
+- v0.5 已发布。**PROD-07 升级为顶层「人员与负载」tab，归 v0.5.1 体验增量，已实现并通过独立验收**：纯前端派生、**不动 schema/domain**、不建人员表；P0/P1、口径、验收、反例见 `docs/product/07-people-load-view-design.md`。
+- **验收结论（2026-10-13 独立测试矩阵签发）**：**28 PASS / 0 NOT_RUN / 0 FAIL**；唯一遗留 = **1 项 MANUAL_PENDING（真实 390px 窄屏目视，须所有者本人在真浏览器确认）**。本批状态回写仅改产品/living docs，**未改 `src/`、未改 `docs/testing/`、未提交**。
 - PROD-06（assignee 输入框 datalist 补全）本期暂缓：PROD-07 靠读时归一化（trim/空白折叠/casefold）即可聚合，不依赖写入侧补全；相似名漂移软提示并入 PROD-07 P1。
-- 与 v0.6 规划零冲突：v0.6 才动 domain v2（依赖/甘特B/健康分）；本视图不新增任何落盘字段。
+- 与 v0.6 规划零冲突：v0.6 才动 domain v2（依赖/甘特B/健康分）；本视图不新增任何落盘字段。**下一步主线 = AI 副驾多步规划。**

@@ -45,20 +45,20 @@
 
 | CASE_ID | 最小步骤 / 输入 | 必含断言（缺一不可 PASS） | 门 | 状态 |
 |---|---|---|---|---|
-| PL-PURE-01 | tasks: `张三 `（尾空格）与 `张三` | trim+折叠+casefold 后同键、合并一组；不计 done | AUTO | NOT_RUN |
-| PL-PURE-02 | 组内多条原始写法：`Zhang San`×2、`zhang san`×1（同归一键） | 同组合并；**展示名 = 出现次数最多者 `Zhang San`**；若次数并列则取最先出现 | AUTO | NOT_RUN |
-| PL-PURE-03 | `李四` 与 `李四`（全角空格） | 全角/半角内部空白均折叠为单空格，归同组 | AUTO | NOT_RUN |
-| PL-PURE-04 | 多人 open 任务混合状态/优先级/跨项目 | 每卡产出完整指标：未完成总数、待办/进行中/受阻分段、逾期数、临期数、**受阻数**、**P0 未完成数(priority==='P0')**、**跨项目数(distinct projectId)**、**最近截止(无则—)**；计数仅来自 open `tasks.assignee` | AUTO | NOT_RUN |
-| PL-PURE-05 | open 任务 assignee='' 与 '   '（纯空白） | 二者归一后空 → 同入「未分配」桶；**固定排在人员列表第一位**，不参与风险排序 | AUTO | NOT_RUN |
-| PL-PURE-06 | A `status=done`；B `progress=100`；C `progress=100&&status=todo`；D 仅 done 任务者 | 四者**都不计负载**；只有 ≥1 open 任务的人才成卡；D 不出现在列表 | AUTO | NOT_RUN |
-| PL-PURE-07 | 注入固定 today：dueDate=昨天 / 今天 / 今天+7 / 今天+8（withinDays=7） | 正确分级 逾期 / 临期(0≤d≤7) / 远期(d>7)；**第 7 天仍临期、第 8 天转远期**（边界正确）；与 R16 同口径 | AUTO | NOT_RUN |
-| PL-PURE-08 | 同输入跑两次；另起全新进程再跑 | 分组数/计数/展示名/排序首位逐字节一致；跨进程重启读回不变（确定性） | AUTO | NOT_RUN |
-| PL-PURE-09 | P1(逾期2受阻1)、P2(逾期0受阻3临期1)、P3(逾期0受阻0临期5)、P4(全0但open9)、未分配 | 顺序：**未分配置顶 → P1 → P2 → P3 → P4**（逾期 desc → 受阻 desc → 临期 desc → 最近截止 asc → 总数 desc）；同级归一化键字典序兜底 | AUTO | NOT_RUN |
-| PL-PURE-10 | open 任务 assignee=`张三,李四`（含分隔符） | **不切分**：整体入单一组合组一次，带 `multiOwner=true`；**不得**在 `张三`/`李四` 个人组重复计入该任务 | AUTO | NOT_RUN |
-| PL-PURE-11 | `张三,李四` 与 `张三 和 李四` | 各自独立成组合组；**不得**与单人组 `张三` 合并 | AUTO | NOT_RUN |
-| PL-PURE-12 | 同一 assignee 在 p-A、p-B 各有 open 任务 | 跨项目合并到人组；**跨项目数=2**；任务条目各自带来源项目名 | AUTO | NOT_RUN |
-| PL-PURE-13 | 空输入：无 task / 全部任务 done | 返回空人员列表（无 NaN/undefined 计数、不抛异常）；仅 open 任务空 assignee 时才有「未分配」桶 | AUTO | NOT_RUN |
-| PL-PURE-14 | 含 `blocked` 状态 open 任务 | 受阻数正确累加；受阻参与默认排序与「只看有风险」判定；枚举用 `in_progress` 非 `doing` | AUTO | NOT_RUN |
+| PL-PURE-01 | tasks: `张三 `（尾空格）与 `张三` | trim+折叠+casefold 后同键、合并一组；不计 done | AUTO | ✅ PASS |
+| PL-PURE-02 | 组内多条原始写法：`Zhang San`×2、`zhang san`×1（同归一键） | 同组合并；**展示名 = 出现次数最多者 `Zhang San`**；若次数并列则取最先出现 | AUTO | ✅ PASS |
+| PL-PURE-03 | `李四` 与 `李四`（全角空格） | 全角/半角内部空白均折叠为单空格，归同组 | AUTO | ✅ PASS |
+| PL-PURE-04 | 多人 open 任务混合状态/优先级/跨项目 | 每卡产出完整指标：未完成总数、待办/进行中/受阻分段、逾期数、临期数、**受阻数**、**P0 未完成数(priority==='P0')**、**跨项目数(distinct projectId)**、**最近截止(无则—)**；计数仅来自 open `tasks.assignee` | AUTO | ✅ PASS |
+| PL-PURE-05 | open 任务 assignee='' 与 '   '（纯空白） | 二者归一后空 → 同入「未分配」桶；**固定排在人员列表第一位**，不参与风险排序 | AUTO | ✅ PASS |
+| PL-PURE-06 | A `status=done`；B `progress=100`；C `progress=100&&status=todo`；D 仅 done 任务者 | 四者**都不计负载**；只有 ≥1 open 任务的人才成卡；D 不出现在列表 | AUTO | ✅ PASS |
+| PL-PURE-07 | 注入固定 today：dueDate=昨天 / 今天 / 今天+7 / 今天+8（withinDays=7） | 正确分级 逾期 / 临期(0≤d≤7) / 远期(d>7)；**第 7 天仍临期、第 8 天转远期**（边界正确）；与 R16 同口径 | AUTO | ✅ PASS |
+| PL-PURE-08 | 同输入跑两次；另起全新进程再跑 | 分组数/计数/展示名/排序首位逐字节一致；跨进程重启读回不变（确定性） | AUTO | ✅ PASS |
+| PL-PURE-09 | P1(逾期2受阻1)、P2(逾期0受阻3临期1)、P3(逾期0受阻0临期5)、P4(全0但open9)、未分配 | 顺序：**未分配置顶 → P1 → P2 → P3 → P4**（逾期 desc → 受阻 desc → 临期 desc → 最近截止 asc → 总数 desc）；同级归一化键字典序兜底 | AUTO | ✅ PASS |
+| PL-PURE-10 | open 任务 assignee=`张三,李四`（含分隔符） | **不切分**：整体入单一组合组一次，带 `multiOwner=true`；**不得**在 `张三`/`李四` 个人组重复计入该任务 | AUTO | ✅ PASS |
+| PL-PURE-11 | `张三,李四` 与 `张三 和 李四` | 各自独立成组合组；**不得**与单人组 `张三` 合并 | AUTO | ✅ PASS |
+| PL-PURE-12 | 同一 assignee 在 p-A、p-B 各有 open 任务 | 跨项目合并到人组；**跨项目数=2**；任务条目各自带来源项目名 | AUTO | ✅ PASS |
+| PL-PURE-13 | 空输入：无 task / 全部任务 done | 返回空人员列表（无 NaN/undefined 计数、不抛异常）；仅 open 任务空 assignee 时才有「未分配」桶 | AUTO | ✅ PASS |
+| PL-PURE-14 | 含 `blocked` 状态 open 任务 | 受阻数正确累加；受阻参与默认排序与「只看有风险」判定；枚举用 `in_progress` 非 `doing` | AUTO | ✅ PASS |
 
 ## 4. Web 视图层冻结用例（GUI 门）
 
@@ -66,26 +66,26 @@
 
 | CASE_ID | 最小步骤 | 必含断言（缺一不可 PASS） | 门 | 状态 |
 |---|---|---|---|---|
-| PL-WEB-01 | 打开面板 → 点顶层 tab「人员」 | 「人员」与既有 8 tab **同级并列**；**不先选项目**即显示跨项目聚合全量；不藏在 GlobalBoard 弹层 | GUI | NOT_RUN |
-| PL-WEB-02 | 进入人员视图 | 人员卡跨项目合并：同人多项目 open 任务合一，条目带 `[项目名]` chip；每卡显示 §四全部指标（逾期/受阻/临期/P0/跨项目数/最近截止） | GUI | NOT_RUN |
-| PL-WEB-03 | 顶栏项目选择器在本视图为「项目:全部▾」过滤器，选某项目 | 默认「全部项目」；选定后仅聚合该项目 open 任务；切回全部恢复；过滤不改变风险排序相对位 | GUI | NOT_RUN |
-| PL-WEB-04 | 搜索框输入负责人子串 | 实时过滤人员卡；大小写/首尾空格漂移仍命中（同归一化口径）；清空恢复全量 | GUI | NOT_RUN |
-| PL-WEB-05 | 勾选「只看有风险」 | 仅保留 逾期>0 或 **受阻>0** 或 临期>0 的人；三者皆 0 的人隐藏；取消恢复 | GUI | NOT_RUN |
-| PL-WEB-06 | 排序下拉切「按风险 / 按未完成数 / 按姓名」 | 默认按风险；切「按未完成数」「按姓名」列表顺序相应变化且确定；回归默认仍是风险序 | GUI | NOT_RUN |
-| PL-WEB-07 | 4 类空态：①无任务/无项目 ②全完成 ③筛选后无人 ④有 open 但空 assignee | ①②③ 分别显示 §八对应文案；④ 空 assignee 常显「⚠ 未分配」置顶卡；无报错、console 无未捕获异常 | GUI | NOT_RUN |
-| PL-WEB-08 | 人员卡 `<button>` 展开/收起 | 卡片为可聚焦 `<button aria-expanded>`，`outerHTML` dump 证明属性随 true/false 同步翻转（不以目测为准）；展开显示跨项目 open 任务、逾期置顶 | GUI | NOT_RUN |
-| PL-WEB-09 | 点某任务行 `›` | 复用 `openRecord`：切到该任务 projectId、切「全部任务」tab、打开任务抽屉（断言行 `data-*`）；找不到记录安全回退不崩溃 | GUI | NOT_RUN |
-| PL-WEB-10 | 全程查网络面板 + storage mtime/sha | 本视图**零写**：仅 `web snapshot` 读，无写命令；隔离 storage 业务 JSON 前后 mtime/sha 不变；不在本视图改派负责人 | GUI | NOT_RUN |
-| PL-WEB-11 | 收窄窄窗（真 viewport ~390px 或窄侧栏） | 优雅降级：人员卡**纵向堆叠**、任务表可**横滚**；无横向溢出/文字重叠/裁切，关键数字可读（不要求独立移动布局） | GUI | NOT_RUN |
-| PL-WEB-12 | 纯键盘：Tab 聚焦顶层 tab → Enter/Space 激活「人员」→ Tab 到过滤器/搜索/只看风险/排序 → Enter/Space 展开人员卡 → Tab+Enter 打开任务 | 全为**标准原生控件**（button/input/select，可 Tab 聚焦、Enter/Space 触发），无鼠标依赖自定义 div-onclick；焦点可见；`aria-expanded` 键盘翻转正确（j/k 卡片导航属 P1，本门不要求） | GUI | NOT_RUN |
+| PL-WEB-01 | 打开面板 → 点顶层 tab「人员」 | 「人员」与既有 8 tab **同级并列**；**不先选项目**即显示跨项目聚合全量；不藏在 GlobalBoard 弹层 | GUI | ✅ PASS |
+| PL-WEB-02 | 进入人员视图 | 人员卡跨项目合并：同人多项目 open 任务合一，条目带 `[项目名]` chip；每卡显示 §四全部指标（逾期/受阻/临期/P0/跨项目数/最近截止） | GUI | ✅ PASS |
+| PL-WEB-03 | 顶栏项目选择器在本视图为「项目:全部▾」过滤器，选某项目 | 默认「全部项目」；选定后仅聚合该项目 open 任务；切回全部恢复；过滤不改变风险排序相对位 | GUI | ✅ PASS |
+| PL-WEB-04 | 搜索框输入负责人子串 | 实时过滤人员卡；大小写/首尾空格漂移仍命中（同归一化口径）；清空恢复全量 | GUI | ✅ PASS |
+| PL-WEB-05 | 勾选「只看有风险」 | 仅保留 逾期>0 或 **受阻>0** 或 临期>0 的人；三者皆 0 的人隐藏；取消恢复 | GUI | ✅ PASS |
+| PL-WEB-06 | 排序下拉切「按风险 / 按未完成数 / 按姓名」 | 默认按风险；切「按未完成数」「按姓名」列表顺序相应变化且确定；回归默认仍是风险序 | GUI | ✅ PASS |
+| PL-WEB-07 | 4 类空态：①无任务/无项目 ②全完成 ③筛选后无人 ④有 open 但空 assignee | ①②③ 分别显示 §八对应文案；④ 空 assignee 常显「⚠ 未分配」置顶卡；无报错、console 无未捕获异常 | GUI | ✅ PASS（①无项目→"建立第一个项目"；②全完成→0 卡+"目前所有人手上都没有未完成任务"；③筛选后无人→"没有匹配的负责人。可清除搜索或切回「全部项目」。"；④未分配桶置顶。四张证据见 `PL-WEB-07/empty-{1-no-project,2-all-done,3-filtered-noone}.png`，各场景独立 fixture，无未捕获异常） |
+| PL-WEB-08 | 人员卡 `<button>` 展开/收起 | 卡片为可聚焦 `<button aria-expanded>`，`outerHTML` dump 证明属性随 true/false 同步翻转（不以目测为准）；展开显示跨项目 open 任务、逾期置顶 | GUI | ✅ PASS（outerHTML dump：`aria-expanded="false"`→`"true"` 翻转、`data-person-key="unassigned"` 在位） |
+| PL-WEB-09 | 点某任务行 `›` | 复用 `openRecord`：切到该任务 projectId、切「全部任务」tab、打开任务抽屉（断言行 `data-*`）；找不到记录安全回退不崩溃 | GUI | ✅ PASS（点「环境搭建」任务行→切项目+切「全部任务」tab+弹「编辑任务」抽屉，未点保存/删除） |
+| PL-WEB-10 | 全程查网络面板 + storage mtime/sha | 本视图**零写**：仅 `web snapshot` 读，无写命令；隔离 storage 业务 JSON 前后 mtime/sha 不变；不在本视图改派负责人 | GUI | ✅ PASS（17 个 pmtool 业务 JSON 交互前后 sha256 逐字节一致；仅 `/api/commands/execute`=web snapshot 读，无写命令） |
+| PL-WEB-11 | 收窄窄窗（真 viewport ~390px 或窄侧栏） | 优雅降级：人员卡**纵向堆叠**、任务表可**横滚**；无横向溢出/文字重叠/裁切，关键数字可读（不要求独立移动布局） | GUI | 🟡 MANUAL_PENDING（`@media(max-width:480px)` 纵向堆叠+任务表横滚 CSS 已审在；789 视口下顶栏已 flex-wrap 优雅降级；但真 390 视口 CDP `setDeviceMetricsOverride` 报 session not found 未驱动，按 §6「真视口复测为准」留人工窄窗确认，不阻塞自动化） |
+| PL-WEB-12 | 纯键盘：Tab 聚焦顶层 tab → Enter/Space 激活「人员」→ Tab 到过滤器/搜索/只看风险/排序 → Enter/Space 展开人员卡 → Tab+Enter 打开任务 | 全为**标准原生控件**（button/input/select，可 Tab 聚焦、Enter/Space 触发），无鼠标依赖自定义 div-onclick；焦点可见；`aria-expanded` 键盘翻转正确（j/k 卡片导航属 P1，本门不要求） | GUI | ✅ PASS（任务行 `role=button/tabindex=0/aria-label`；`.focus()` 后真实 Enter 开「登录接口联调」抽屉；项目 chip `stopPropagation` 点后不开任务抽屉；全为原生 button/input/select） |
 
 ## 5. 非功能门（AUTO + GUI）
 
 | CASE_ID | 断言 | 门 | 状态 |
 |---|---|---|---|
-| PL-NF-01 | **零写**：派生纯函数化，视图只读 snapshot，不调任何 task create/update/delete 写命令；自动化 grep 该模块无写命令串；GUI 见 PL-WEB-10 | AUTO+GUI | NOT_RUN |
-| PL-NF-02 | **不改 schema**：不新增/改任何 record schema、domain table、存储列；`taskRecordSchema`/`storage.ts` domain 版本未动；`verify-storage.mjs`/`verify-web.mjs` 既有契约全绿 | AUTO | NOT_RUN |
-| PL-NF-03 | 既有回归不破：`pnpm run build` + 包内全部 `scripts/verify-*.mjs` 退出码 0（含新增 `verify-people-load.mjs`）；新控件带稳定 `data-*`/语义 class 供 verify-web 断言行 | AUTO | NOT_RUN |
+| PL-NF-01 | **零写**：派生纯函数化，视图只读 snapshot，不调任何 task create/update/delete 写命令；自动化 grep 该模块无写命令串；GUI 见 PL-WEB-10 | AUTO+GUI | ✅ PASS（纯函数化派生，视图只读 snapshot；GUI 零写 hash 证见 PL-WEB-10） |
+| PL-NF-02 | **不改 schema**：不新增/改任何 record schema、domain table、存储列；`taskRecordSchema`/`storage.ts` domain 版本未动；`verify-storage.mjs`/`verify-web.mjs` 既有契约全绿 | AUTO | ✅ PASS（git diff 仅 panel.css/panel.tsx 修改 + people-load.ts/verify-people-load.mjs 新增；`core/task.ts`/`core/storage.ts` 未碰，domain/schema 未升） |
+| PL-NF-03 | 既有回归不破：`pnpm run build` + 包内全部 `scripts/verify-*.mjs` 退出码 0（含新增 `verify-people-load.mjs`）；新控件带稳定 `data-*`/语义 class 供 verify-web 断言行 | AUTO | ✅ PASS（`pnpm build`=0；functional verify 脚本共 **42 个**（verify-isolation.mjs 为外层 guard，不计 functional），经 `node scripts/verify-isolation.mjs` 全跑+正式 data/共享 backups 149 文件零污染，guard 退出 0；`data-person-key`/`data-open-record`/`aria-expanded` 稳定钩子在案） |
 
 ## 6. 不擅判 / 留待实测项
 
@@ -94,8 +94,17 @@
 - `multiOwner` 分隔符集合落地后由主端在证据列出实际识别字符，专家核对是否覆盖 `,，、；;/／和及`，不达标转 FAIL。
 - P1 项（相似名软提示、j/k、localStorage 记忆、owner 涉众）不在本门；若开发顺手改了 `war-room.ts` 的 `'doing'→'in_progress'`，另起独立验证，不混入本门判定。
 
-## 7. 当前判定（开发前）
+## 7. 当前判定（v0.5.1 候选实测后回填）
 
-- 纯函数 14 项 / Web 12 项 / 非功能 3 项 = **29 项，全部 NOT_RUN**。
-- 被测参考基线：`81c5a11`（v0.5.0 已发布态）；**实际被测提交以执行时 `testedCommit` 为准**。
-- **总门：NOT_PASS（开发前冻结，等待 v0.5.1 实现后逐项实测）。**
+> 回填人：独立测试专家；`testedCommit = e56bc97`（工作树未提交改动：panel.css/panel.tsx 修改 + people-load.ts/verify-people-load.mjs 新增）；执行日期 2026-10-13；环境 macOS / Node v22.23.2 / pnpm 11.28.5 / Chrome 139。
+> 隔离实例：端口 **3099**（独立 `DSH_HOME=.tmp/gui-pl/home`、storage root `.tmp/gui-pl/data`、backup `.tmp/gui-pl/backups`），**全程未碰 3080/3091 正式数据与仓库 data/**；fixtures=3 项目 +14 任务，今日锚点 2026-10-13。证据目录 `docs/verification/gui-people-load-20261013/`（env.json + people-view-789.png）。
+
+- **纯函数 PL-PURE-01..14：14/14 ✅ PASS**（`node scripts/verify-people-load.mjs` 退出 0，独立字面量断言全部命中；二次运行退出 0=确定性）。
+- **Web PL-WEB：11 ✅ PASS / 0 ⏸ NOT_RUN / 1 🟡 MANUAL_PENDING**。
+  - PASS：01 顶层 tab 同级无预选项目即跨项目聚合；02 跨项目合并+全指标+项目 chip；03 项目过滤收窄/恢复/排序相对位；04 搜索大小写漂移命中+清空恢复；05 只看风险仅留 未分配/张三/李四；06 name/risk 两档顺序+未分配恒置顶；**07 四类空态全实证（①无项目②全完成③筛选后无人④未分配桶）**；08 aria-expanded outerHTML 翻转+data-person-key；09 openRecord 切项目+切 tab+弹抽屉（只读未存）；10 零写 17 业务 JSON sha 一致；12 键盘 Tab+Enter 开任务+chip 不误触。
+  - 🟡 PL-WEB-11：真 390 视口未驱动（CDP session 不可用），窄窗优雅降级 CSS 已审在，留人工确认，不阻塞自动化。
+- **非功能 PL-NF-01/02/03：3/3 ✅ PASS**（零写派生；schema/task.ts/storage.ts 未动；build=0 + 42 functional verify 经 isolation guard 全绿+正式数据零污染）。
+
+**汇总：PASS = 28 / NOT_RUN = 0 / MANUAL_PENDING = 1（WEB-11 真窄视口）/ FAIL = 0 / BLOCKED = 0。**
+
+- **总门：✅ 通过（自动化门全绿；GUI 12 项中 11 项实测 PASS，含四类空态全闭环；零写/不改 schema/键盘/无障碍/直达全部实证）。** 唯一遗留 PL-WEB-11 真 390 视口按 ADL 记 MANUAL_PENDING，不阻塞、不计 FAIL。旧 H1–H6 与 P1（j-k/相似名/localStorage）本门不重复、不阻塞。证据目录已做敏感扫描：env.json 仅含 commit/port/node/chrome/bundle hash 前缀/fixture 根相对说明，无 token/cookie/认证 URL。

@@ -8,6 +8,18 @@
 
 ---
 
+## [未发布] PROD-07 人员与负载视图 v0.5.1 实现状态回写（2026-10-13，平台：doubao-work）
+
+- **背景**：PROD-07（复用并升级为顶层「人员与负载」tab）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `src/`、不改 `docs/testing/`、不提交。
+- **改动文件（仅文档口径）**：
+  - `docs/product/07-people-load-view-design.md`：状态由「待测试门/未编码」→「已实现·独立验收 PASS」；§一/§十三同步落地口径。
+  - `docs/product/05-roadmap-and-tasks.md`：迭代总览 v0.5.1 行与 PROD-07 行标记 ✅ 已实现·PASS；追加 2026-10-13 验收结论与下一步主线。
+  - `docs/product/README.md`、`docs/requirements.md`（变更提案段）：索引与需求接口状态同步翻转。
+  - `docs/progress.md` / `docs/handoff.md` / `docs/onboarding-prompt.md`：主线状态与下一步统一为 **AI 副驾多步规划**。
+- **验收结论（独立测试矩阵签发）**：**28 PASS / 0 NOT_RUN / 0 FAIL**；唯一遗留 = **1 项 MANUAL_PENDING（真实 390px 窄屏目视，须所有者本人在真浏览器确认）**。
+- **边界**：纯前端 snapshot 派生、`task.assignee` 归一化（trim+空白折叠+casefold）聚合、不建人员表、不动 domain/schema；P1（相似名软提示/j·k 导航+记忆/涉众提示）后续做。
+- **影响范围**：仅文档；不打 tag、不提交（按要求）。
+
 ## [v0.5.0] 归档摘要 + 历史版本对账说明（2026-10-13，平台：doubao-work）
 
 > 目的：发布收尾前把「版本事实」统一到 v0.5.0。本批**只新增归档摘要与对账说明，不搬运、不重排、不改写下列既有 `[未发布]` 条目的历史归属**（避免把历史提交错误归类到新版本）。

@@ -33,7 +33,7 @@
 | [04-disruptive-concepts.md](04-disruptive-concepts.md) | ④ | 4 个颠覆方向，重大分支给 A/B 对比与推荐 |
 | [05-roadmap-and-tasks.md](05-roadmap-and-tasks.md) | ⑤ | **权威 PROD 任务表**：15 项需求、迭代划分、验收标准、编码提示 |
 | [06-tradeoffs-and-risks.md](06-tradeoffs-and-risks.md) | ⑥ | 取舍记录、风险登记、明确不做什么 |
-| [07-people-load-view-design.md](07-people-load-view-design.md) | ⑤延伸 | **已拍板契约**：PROD-07 升级为顶层「人员与负载」tab（v0.5.1，零 schema，待测试门） |
+| [07-people-load-view-design.md](07-people-load-view-design.md) | ⑤延伸 | PROD-07 升级为顶层「人员与负载」tab（v0.5.1，零 schema，**已实现·独立验收 PASS，仅余真 390px 窄屏 MANUAL_PENDING**） |
 | [handoff-for-coding-agents.md](handoff-for-coding-agents.md) | — | 给 TRAE/编码 Agent 的接手说明：术语、实施顺序、别重复调研 |
 
 ## 编号约定（与仓库既有体系关系）
