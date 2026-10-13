@@ -155,11 +155,9 @@
 - 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。
 
-## 当前状态（v0.5.0 预览 · 待打 tag；基线 2682fc7）
-- **版本事实已统一到 v0.5.0（2026-10-13 doubao-work 本批）**：`packages/dsh-pm-tool/package.json` 前置 `0.5.0`；补齐 `docs/releases/v0.4.0.md`（事后补记，tag 对象 `ca02969`→提交 `1af5490`）；新增 `docs/releases/v0.5.0.md`（预览）；README 版本导航、roadmap（OPT-01~12 标记已随 v0.4.0 交付）、handoff/changelog 口径同步。历史 tag `v0.1.0`–`v0.4.0` 均未移动。
-- 已落地未发版（v0.4.0 tag 之后）：PROD-22 甘特A、PROD-20 副驾（ask 后端编排 + ask-apply 守卫 + fixture 测试缝）、独立测试门 ADL-045 / 分层门 ADL-047、Round3 网页缺陷修复、外部 vendored Skills 接线 ADL-048 / 自动路由 ADL-049。
-- 自动化验收（独立测试专家冻结于 `2682fc7`）：functional verify **41 个全绿**（42 个 verify-*.mjs 减外层 guard）；隔离 guard `verify-isolation.mjs` 对正式资产（`data/` + 历史 `backups/` + 遗留 `backup/`）前后 sha256+mtime diff，**149 文件零变化**。
-- MANUAL_PENDING（ADL-047，不阻塞自动化门、不记 PASS）：M1/A5 生产与免费车道**真实 Key 对话**、M2/B3 3080 已认证真同源走查、H1–H6（暗色对比度 / j·k 导航 / Space / Enter / 390px 视口 / 七 Tab 走查）。
-- **A4 provider ID 文本统一（已修复并 PASS）**：`src/core/ai-client.ts` 旧 `openrouter-free` 运行期残留已清除，匿名 PoC 兜底统一为 `our-free-model`/`kilo-auto/free`（对齐 `model-route.ts` POC_LANE）；证据 `verify-ai-client.mjs`（标注 A4，断言兜底 provider/model + 鉴权文案不指 OPENROUTER）与 `verify-model-route.mjs`（poc→our-free-model/kilo-auto-free、prod 无 Key 抛 PROD_KEY_MISSING 不回退）。
-- 未做/待验：真实浏览器 GUI 端到端口视（能力受限，登记 MANUAL_PENDING H1–H6/M2）；崩溃原子恢复、多步规划、PROD-11 关键路径（v0.6）。
-- 官方 Key 暂不配置：PoC 走免费降级链（kilo-auto/free），生产无 Key 沿用 PROD_KEY_MISSING 文案、不自动回退；模式 settings 非 checks 表。
+## 当前状态（v0.6.0 预览 · 待打 tag；主线完成进入维护，基线 4b533ad）
+- **版本事实已统一到 v0.6.0（2026-10-13 doubao-work 本批）**：`packages/dsh-pm-tool/package.json` 前置 `0.6.0`；`docs/releases/v0.5.0.md` 对应已发布 tag（注解对象 `c8d3da52`→提交 `81c5a112`）；新增 `docs/releases/v0.6.0.md`（预览）；README 版本导航、changelog、handoff/onboarding 口径同步。历史 tag `v0.1.0`–`v0.5.0` 均未移动。
+- 已落地未发版（v0.5.0 tag 之后）：schema v2 数据契约升级（`d960445` 冻结契约 + `17ccc82` 依赖仓库/健康诊断）、跨项目人员负载视图（`bec5ae0`）、AI 副驾多步规划与确认执行（`c2b8268`）、Web 体验补齐（任务移动 + 汇报/会议，`8cdf04b`）、备份原子化并恢复失败自动回滚（`4b533ad`）。
+- 自动化验收（独立测试专家冻结于 `17ccc82`+`4b533ad`）：functional verify **52 个全绿**（53 个 verify-*.mjs 减外层 guard）；隔离 guard `verify-isolation.mjs` 对正式资产（`data/` + 共享 `backups/`）前后 sha256+mtime diff，**151 文件零变化**。schema-v2 验收矩阵 50 用例终态 = 48 PASS + 2 MANUAL_PENDING。
+- MANUAL_PENDING（ADL-047，不阻塞自动化门/GUI 门、不记 PASS）：G8（GUI 备份/恢复不可逆人工确认）、H5（不可逆动作人工确认：删除被引用 predecessor / 恢复备份）。待用户本人执行时据实回填。
+- 主线完成进入维护 / P1 backlog：后续以维护与 P1 backlog 项为主，不再开新主线功能。

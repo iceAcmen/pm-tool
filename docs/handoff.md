@@ -191,17 +191,16 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 - 公钥指纹：`SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`。
 - 换新机器时：重新生成密钥并把新公钥登记到 GitHub，再执行上面的 clone 即可。
 
-# 持久交接（TRAE 不必重梳理，版本事实统一线 @ 2682fc7 / v0.5.0 预览）
+# 持久交接（TRAE 不必重梳理，版本事实统一线 @ 4b533ad / v0.6.0 预览；主线完成进入维护）
 ## 仓库
 - 插件：packages/dsh-pm-tool；上游 deepseek-harness 只读。
-- **版本口径（2026-10-13 统一）**：`package.json` 前置 `0.5.0`；已发布 tag `v0.1.0`–`v0.4.0`（均注解 tag），`v0.5.0` tag **待打**。v0.4.0 注解 tag 对象 `ca02969` → 指向提交 `1af5490`（tag 对象与剥离提交是两个 SHA，勿混为"对不上"）。
+- **版本口径（2026-10-13 统一）**：`package.json` 前置 `0.6.0`；已发布 tag `v0.1.0`–`v0.5.0`（均注解 tag），`v0.6.0` tag **待打**。v0.5.0 注解 tag 对象 `c8d3da52` → 指向提交 `81c5a112`；tag 对象与剥离提交是两个 SHA，勿混为"对不上"。
 ## 运行
 - 构建：`cd packages/dsh-pm-tool && pnpm run build`。
 - 全量非GUI回归：`node scripts/verify-integration.mjs`（已含 spawn 子进程 reopen 读盘）；再 `for f in scripts/verify-*.mjs; do node $f; done`。
 - 隔离 GUI 实例（勿动所有者 3080）：DSH_HOME=项目内 .tmp/e2e-home、storage root=.tmp/e2e-data、DSH_PM_E2E=1、端口 3082、--no-open；token 从启动日志取，勿入库。
 ## 关键边界
 - ask-apply 去重为内存 60s，重启不持久；写库走 updateTask 领域校验；--base 必带且格式校验。
-- backup 默认目录=packages/dsh-pm-tool/backups（非 storage、非 DSH_HOME）；测试用注入 directory 隔离。
-- 真实浏览器 GUI 端到端当前未跑（工具受限）；待独立验收点 OPT-06/08/12、副驾草稿卡确认。
+- backup 默认目录=packages/dsh-pm-tool/backups（非 storage、非 DSH_HOME）；测试用注入 directory 隔离；恢复失败自动回滚（v0.6.0）。
 ## 未覆盖
-- 崩溃原子恢复、PROD-11 关键路径（v0.6）。**PROD-07 人员与负载视图已实现并 PASS（仅余真 390px 窄屏 MANUAL_PENDING）；下一步主线 = AI 副驾多步规划。**
+- 主线已完成进入维护 / P1 backlog；G8/H5 不可逆人工动作登记 MANUAL_PENDING，待用户本人执行备份/恢复与删除确认时据实回填。

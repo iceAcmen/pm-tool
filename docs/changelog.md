@@ -8,6 +8,24 @@
 
 ---
 
+## [v0.6.0] 归档摘要 + 版本对账（2026-10-13，平台：doubao-work）
+
+> 目的：主线 schema v2 完成、总门 PASS 后，把版本事实统一到 v0.6.0。本批**只新增归档摘要与对账，不搬运/重排既有条目历史**。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.5.0` → **`0.6.0`**。
+  - `docs/releases/v0.6.0.md`：**新建（预览）**，诚实列 schema v2 / 跨项目人员负载 / 副驾多步规划 / Web 体验补齐 / 备份原子回滚，自动化 **52 functional 绿** + guard **151 文件零变化**，G8/H5 不可逆人工动作 `MANUAL_PENDING`，并标注待打 tag。
+  - `README.md`：版本导航表新增 v0.6.0 预览行、v0.5.0 改标已发布；阶段导航口径对齐「主线完成·进入维护」。
+  - `docs/progress.md` / `docs/handoff.md` / `docs/onboarding-prompt.md`：HEAD 候选 `4b533ad`、主线完成进入维护/P1 backlog 口径同步。
+- **历史版本对账（tag ↔ 发布说明 ↔ package.json）**：
+  | 版本 | tag（注解）对象 → 指向提交 | 发布说明 | package.json |
+  |---|---|---|---|
+  | v0.5.0 | `c8d3da52` → `81c5a112`（2026-10-13 11:46:43） | `docs/releases/v0.5.0.md` ✅ | — |
+  | v0.6.0 | **待打 tag**（基线 `4b533ad`） | `docs/releases/v0.6.0.md`（预览） | **0.6.0（本批前置）** |
+  > 历史 tag `v0.1.0`–`v0.5.0` **一律未移动/未重打**。
+- **影响范围 / 状态**：纯版本事实与文档口径；不打 tag、不提交。自动化证据沿用独立测试专家冻结基线 `17ccc82`+`4b533ad`（52 绿 + guard 151），本批未改产品代码。
+- **验证**：`node -e JSON.parse(package.json)` 通过；`git diff --check` 干净；verifier `check-file-format` + `placeholder-audit` 通过。
+
 ## [未发布] Web polish 三件套 PROD-04/09/10 v0.5.2 实现状态回写（2026-10-13，平台：doubao-work）
 
 - **背景**：Web polish 三件套（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `docs/testing/`、不提交。
