@@ -1,13 +1,13 @@
 <!--
 产出角色：资深产品经理 / 设计裁决落档
-日期：2026-10-13
-变更摘要：v0.5.2 Web polish 批（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号）定稿为 P0 设计稿。所有者拍板：零 schema、纯前端为主 + core 小改（move+renumber 原子复合）；状态＝未开发、待独立测试门。
+日期：2026-10-13（状态回写：当日已实现并独立验收 27/27 PASS）
+变更摘要：v0.5.2 Web polish 批（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号）定稿为 P0 设计稿。所有者拍板：零 schema、纯前端为主 + core 小改（move+renumber 原子复合）；当日实现，独立验收总门 PASS（27/27，0 FAIL/BLOCKED/NOT_RUN/MANUAL_PENDING）。
 -->
 
-# 09 · Web 体验补齐三件套（Web Polish）设计稿 · 契约已定 · 未开发待测试门
+# 09 · Web 体验补齐三件套（Web Polish）设计稿 · 契约已定 · 已实现·独立验收 27/27 PASS
 
 > 本文把 v0.5 已发布后留在 Web 侧的三个高频缺口一次定清：**PROD-10** 任务抽屉「来自会议」直达、**PROD-09** 汇报表相邻对比徽标、**PROD-04** Web「移动到…」改父。三者同属 **v0.5.2 Web polish 批**：**不动 domain v1、不新增任何落盘字段**，全部为纯前端派生展示 + 一个 core 小改（move+renumber 原子复合，非 schema）。
-> **状态（2026-10-13）：契约已定稿，未开发。** 按 ADL-045 测试门控：实现后须经独立测试专家 PASS（含真实浏览器 GUI 实测）才算交付，禁止自行标完成。
+> **状态（2026-10-13）：已实现并通过独立验收总门 PASS。** 验收矩阵（`docs/testing/web-polish-acceptance.md`，测试专家所有）签发：**PASS = 27 / FAIL = 0 / BLOCKED = 0 / NOT_RUN = 0 / MANUAL_PENDING = 0**（真 390 窄窗沿用 PL-WEB-11，不在本门重复）；testedCommit = `85cb651`。AUTO 门 `build`=0、full isolation guard=0、3 个新专项 verify（`verify-meeting-source.mjs` / `verify-report-diff.mjs` / `verify-task-move-renumber.mjs`）全退出 0；GUI 门在隔离实例（端口 3095 独立 DSH_HOME，未碰 3080/3091 与仓库 data）真实 Chrome 逐用例过证，证据 `docs/verification/gui-web-polish-20261013/`；正式 data/ 与 backups 149 文件 hash+mtime 零污染。
 > **三条红线不可破**：离线优先 / 单用户本地 / 所有写动作经既有 `/pm ...` 统一写通道。
 
 ## 一、定位与落地顺序
@@ -126,5 +126,5 @@
 
 ## 六、状态与门控
 
-- **当前状态：契约已定稿，未开发。** 三个 PROD 实现并各自通过独立测试门（ADL-045：需求→用例→开发→独立测试含真实浏览器 GUI→修复→复验回归→专家 PASS）后，方可在 05-roadmap 与 progress/handoff 回写完成状态；本批 docs 不预先标完成。
-- **verifier**：本文档交付前经 verifier-hub 对 docs-only 产物做 Markdown/文本结构核验。
+- **当前状态（2026-10-13）：已实现并通过独立验收总门 PASS——27/27，0 FAIL / BLOCKED / NOT_RUN / MANUAL_PENDING**（testedCommit `85cb651`；矩阵 `docs/testing/web-polish-acceptance.md`，证据 `docs/verification/gui-web-polish-20261013/`）。落地物：`src/core/meeting-source.ts`、`src/core/report-diff.ts`、`src/core/tasks.ts`（move+renumber 原子复合）、`src/commands/task.ts`、`src/client/panel.tsx`/`panel.css`，3 个新 verify 脚本。
+- **下一步（主线）＝schema v2**：PROD-11 任务 `predecessorIds[]` 依赖、PROD-21 repoUrl/branch、PROD-23 项目健康分 + 崩溃原子恢复。

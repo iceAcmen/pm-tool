@@ -78,9 +78,9 @@
 - **验收**：见设计稿 11 条（拓扑/环、链式基线、冲突逐行拒、delete 步红行拒、行内编辑非法禁用、取消零写、乱码零落库、60s 幂等、降级、>8 整拒、旧格式兼容）。
 - **完整契约/页面草图/反例/文件级计划**：见 [`docs/product/08-copilot-multistep-design.md`](product/08-copilot-multistep-design.md)；roadmap 登记见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) PROD-24 行。
 
-### 变更提案（Change Proposal）：Web polish 三件套 PROD-10 → 09 → 04（v0.5.2，未开发·待测试门）
+### 变更提案（Change Proposal）：Web polish 三件套 PROD-10 → 09 → 04（v0.5.2，已实现·独立验收 27/27 PASS）
 
-> 不新增 R 编号，复用产品档案 PROD-10 / PROD-09 / PROD-04。**状态（2026-10-13）：契约已定稿，未开发。** 实现后须按 ADL-045 经独立测试专家 PASS（含真实浏览器 GUI 实测）才可回写完成。完整契约见 [`docs/product/09-web-polish-design.md`](product/09-web-polish-design.md)。
+> 不新增 R 编号，复用产品档案 PROD-10 / PROD-09 / PROD-04。**状态（2026-10-13）：已实现并通过独立验收总门 PASS——27/27，0 FAIL/BLOCKED/NOT_RUN/MANUAL_PENDING**（testedCommit `85cb651`；矩阵 `docs/testing/web-polish-acceptance.md`，证据 `docs/verification/gui-web-polish-20261013/`）。完整契约见 [`docs/product/09-web-polish-design.md`](product/09-web-polish-design.md)。
 
 - **一句话**：补齐 v0.5 留在 Web 侧的三个高频缺口——任务抽屉显示「来自会议 mtg-xxx」直达（PROD-10）、汇报表相邻快照对比徽标（PROD-09）、Web「移动到…」改父（PROD-04）。
 - **数据模型影响：无**。domain 仍 v1、9 表不变；PROD-04 的原子化是 core 写队列内编排与回滚，非字段变更。
@@ -88,7 +88,7 @@
 - **PROD-10**：前端反查 `meetings.actions[].taskId`（promote 已回写、`findMeetingActionByTask` 已在 core）；多来源按会议列表口径（meetingDate 倒序→id 倒序）确定性取第一条并提示「另关联 N 场会议」；只读行、复用既有 `openRecord` 直达；来源会议删除则安全隐藏。
 - **PROD-09**：全量按 periodEnd/id 排序对相邻**固定快照** diff（不受顶部搜索/状态筛选影响）三指标＝完成率(averageProgress)、overdue_task 异常数、总异常数；首份无徽标；delta=0 显示「持平0」；文字+箭头，不靠颜色单独传达。
 - **PROD-04**：Web 树选择器排除自身/后代（后端环检测仍为硬门）；**一次确认＝改父＋本项目全量 renumber 同一用户动作**，后端单写队列内原子复合、失败整体回滚，**禁止「move 成功 renumber 失败」半状态**；取消零写；P0 不做拖拽/中间插序。
-- **完整契约/用户故事/验收条件/文件级计划**：见 [`docs/product/09-web-polish-design.md`](product/09-web-polish-design.md)；roadmap 登记见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) PROD-04/09/10 行。
+- **完整契约/用户故事/验收条件/文件级计划**：见 [`docs/product/09-web-polish-design.md`](product/09-web-polish-design.md)；roadmap 登记见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) PROD-04/09/10 行。**下一步主线＝schema v2**：PROD-11（`predecessorIds[]` 依赖）、PROD-21（repoUrl/branch）、PROD-23（健康分 + 崩溃原子恢复）。
 
 ### R12 命令与格式约定（v0.9 补充）
 

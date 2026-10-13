@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-13（doubao-work **PROD-24 副驾多步规划已实现并通过独立验收总门**：**49 项 AUTO/GUI 可自动项全绿、0 NOT_RUN/0 FAIL/0 BLOCKED**，仅余 **2 项 MANUAL_PENDING＝真实免费模型实机降级 + 真 390px 窄屏目视**待所有者反馈；domain 仍 v1、零新表、唯一写 task.update；多步候选在工作树未提交。下一步主线 = **Web 体验补齐（PROD-04 任务改父 Web / PROD-09 汇报相邻对比徽标 / PROD-10 任务来源会议直达），其后才进 schema v2**。先前一批：PROD-07 人员负载 v0.5.1 已实现·28 PASS）
+最后更新：2026-10-13（doubao-work **Web polish 三件套 PROD-04/09/10 已实现并通过独立验收总门**：**27/27 PASS、0 FAIL/BLOCKED/NOT_RUN/MANUAL_PENDING**，testedCommit 85cb651；零 schema、domain 仍 v1。下一步主线 = **schema v2（PROD-11 predecessorIds + PROD-21 repoUrl + PROD-23 健康分/原子恢复）**。先前一批：PROD-24 副驾多步规划 49 PASS）
 
-## 当前阶段：PROD-24 副驾多步规划已实现·独立验收 PASS（2026-10-13，doubao-work）
+## 当前阶段：Web polish 三件套 PROD-10→09→04 已实现·独立验收 27/27 PASS（2026-10-13，doubao-work）
+
+- **功能**：v0.5.2 Web 侧三缺口一次补齐——PROD-10 任务抽屉顶部只读显示「来自会议 mtg-xxxx · 会议标题」并一键直达该会议（前端反查 `meetings.actions[].taskId`）；PROD-09 进度汇报表每行与时间相邻上一份固定快照 diff 三指标并出「↑5% / ↓1 / 持平0」文字箭头徽标；PROD-04 任务行「⋯ 移动到…」树选择器改父，一次确认＝原子改父+项目全量 renumber。
+- **口径与边界**：**零 schema**（domain 仍 v1、9 表）。PROD-10 多来源按会议日期倒序→id 倒序确定性取第一条、附「另 N 场」提示，来源会议删除则安全隐藏；PROD-09 在全量 periodEnd/id 排序列表上求相邻（不受搜索/状态筛选影响），三指标＝averageProgress / overdue_task 异常数 / exceptions 总数，首份无徽标、零差显「持平0」、文字+箭头非仅靠色；PROD-04 选择器排除自身+后代（后端环检测仍为硬门），后端单写队列内原子复合、失败整树回滚、取消零写，P0 不做拖拽/中间插序。
+- **验收（独立测试矩阵签发，2026-10-13）**：总门 **PASS——27/27**，0 FAIL/BLOCKED/NOT_RUN；MANUAL_PENDING=0（真 390 窄窗沿用 PL-WEB-11 不在本门重复）。AUTO：`build`=0、full isolation guard=0、3 个新专项 verify（`verify-meeting-source.mjs` / `verify-report-diff.mjs` / `verify-task-move-renumber.mjs`）全退出 0；GUI：隔离实例端口 3095 真实 Chrome 逐用例过证（证据 `docs/verification/gui-web-polish-20261013/`）；正式 data/ 与 backups 149 文件 hash+mtime 零污染。产品契约见 `docs/product/09-web-polish-design.md`；验收矩阵 `docs/testing/web-polish-acceptance.md`。
+- **状态**：本批仅回写产品/living docs 状态，**未改 `src/`、未改 `docs/testing/`、未提交**。
+- **下一步（主线）＝schema v2**：PROD-11（任务 `predecessorIds[]` 依赖）、PROD-21（repoUrl/branch 仓库联动）、PROD-23（项目健康分 + 崩溃原子恢复）。
+
+## 历史阶段：PROD-24 副驾多步规划已实现·独立验收 PASS（2026-10-13，doubao-work）
 
 - **功能**：把 PROD-20 副驾的扁平动作数组升级为多步计划卡——模型可输出 `{"plan":[…]}`（每步 stepId/title/reason/action/needs[]/riskNote?），前端按 DAG 拓扑渲染、每行 checkbox 默认全选、行内只允许改 5 标量（非法即时标红禁用确认）、3 条确定性软风险琥珀提示（不禁用）；【整批执行】一次 ask-apply，【逐步执行】前端逐步调（每次重读 domain）；拒绝红行（如 task.delete / 环依赖）不可勾选。
 - **口径与边界**：domain 仍 v1、零新表、不写 settings、计划只在前端内存（关面板即消散）；唯一写动作 `task.update`（patch：status/progress/assignee/startDate/dueDate）；DAG 环/悬空/自指**只拒该步**（其下游级联拒），整份 >8 步（或 >10 任务）**整份拒绝**；同目标任务隐式串行 + **链式 baseline**（整批内后者用前者落库后的 updatedAt，不误判冲突）；跨调用真实外部冲突仅拒相关步 + 依赖级联；幂等键扩为 `projectId+JSON(selectedOrderedActions)+JSON(baseline)`（60s）；取消/降级零写（27 个业务 JSON sha/mtime/size 全不变）；旧 `{"actions":[…]}` 输出自动包平凡计划、v0.5 链路回归不破。

@@ -8,6 +8,18 @@
 
 ---
 
+## [未发布] Web polish 三件套 PROD-04/09/10 v0.5.2 实现状态回写（2026-10-13，平台：doubao-work）
+
+- **背景**：Web polish 三件套（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `docs/testing/`、不提交。
+- **改动文件（仅文档口径）**：
+  - `docs/product/09-web-polish-design.md`：状态由「契约定稿·未开发待测试门」→「已实现·独立验收 27/27 PASS」；标题行、状态块、§六同步落地口径。
+  - `docs/product/05-roadmap-and-tasks.md`：PROD-04/09/10 三行与页脚勘误标记 ✅ 已实现·27/27 PASS；下一步主线＝schema v2。
+  - `docs/product/README.md`、`docs/requirements.md`（变更提案段）：索引与需求接口状态同步翻转。
+  - `docs/progress.md` / `docs/handoff.md` / `docs/onboarding-prompt.md`：主线状态与下一步统一为 **schema v2（PROD-11 predecessorIds + PROD-21 repoUrl + PROD-23 健康分/原子恢复）**。
+- **验收结论（独立测试矩阵签发）**：总门 **PASS——27 / FAIL = 0 / BLOCKED = 0 / NOT_RUN = 0 / MANUAL_PENDING = 0**（testedCommit `85cb651`；真 390 窄窗沿用 PL-WEB-11，不在本门重复）。AUTO 门 `pnpm run build`=0、full isolation guard=0、3 个新专项 verify（`verify-meeting-source.mjs` / `verify-report-diff.mjs` / `verify-task-move-renumber.mjs`）全退出 0；GUI 门在隔离实例（端口 3095 独立 DSH_HOME，未碰 3080/3091 与仓库 data）真实 Chrome 逐用例过证，证据 `docs/verification/gui-web-polish-20261013/`；正式 data/ 与 backups 149 文件 hash+mtime 零污染、敏感扫描无 token/cookie。
+- **契约兑现**：零 schema（domain 仍 v1、9 表）；PROD-10 纯前端反查 `meetings.actions[].taskId`（多来源按会议日期倒序取确定第一 +「另 N 场」）；PROD-09 全量按 periodEnd/id 排序相邻固定快照 diff 三指标（averageProgress / overdue_task / exceptions 总数，首份无徽标、零差「持平0」、文字+箭头非仅色）；PROD-04 一次确认＝原子改父+项目全量 renumber、失败整树回滚、取消零写。
+- **影响范围**：仅文档；不打 tag、不提交（按要求）。
+
 ## [未发布] PROD-24 副驾多步规划 v0.6 体验增量实现状态回写（2026-10-13，平台：doubao-work）
 
 - **背景**：PROD-24（PROD-20 AI 项目副驾的多步规划增量）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `src/`、不改 `docs/testing/`、不提交（多步候选仍在工作树）。

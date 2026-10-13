@@ -57,48 +57,48 @@ Web Polish 体验增量验收矩阵（开发前冻结门）。独立测试专家
 
 | CASE_ID | 最小步骤 / 输入 | 必含断言（缺一不可 PASS） | 门 | 状态 |
 |---|---|---|---|---|
-| WP-MOVE-01 | 打开任务 T 的「移动到…」树选器 | 候选列表 = 同项目内**除 T 自身 + T 全部后代**外的任务 + 「根层级」；T 自身与 T 的子孙**不在**可选项中；候选按树缩进呈现 | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-02 | 把 T 移动到 T 自身下 | 抛 `TaskMoveCycleError`「任务不能移动到自身下」；**零写**（storage 无变更） | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-03 | 把 T 移动到 T 的某个子孙下 | 抛 `TaskMoveCycleError`「不能把任务移动到其子孙任务下」；**零写** | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-04 | 把 T（项目 A）移动到项目 B 的任务下 | 抛 `ParentTaskProjectMismatchError`「父任务不属于当前任务的项目」；**零写** | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-05 | 移动到不存在的父 id | 抛 `ParentTaskNotFoundError`；**零写** | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-06 | 确认把 T 从根移入父 P 下 | **确认移动 = 改父 + 项目全量 renumber 单一原子动作**：落盘后 T 即挂在 P 下、整项目连续 `order`/`code` 已重建，**T 及其子树 code 前缀随 P 重算、与树缩进一致**（无「旧编号残留待用户再 renumber」）；renumber 中途失败则**整树回退到移动前**，不残留半写编号 | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-07 | 移动（已含 renumber）后，重启进程 / 重新 snapshot 读回 | `parentId`/`order`/`code` 与落盘值逐字段一致、且 code 与树缩进一致；跨进程重启读回不变（持久化正确） | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-08 | Web 选了候选父但点「取消」/关闭对话框；离线 `task move` 不带 `confirm` | 不发任何写命令、不调 `moveTask`；仅返回预览文本；隔离 storage 业务 JSON sha 前后不变 | AUTO | ⏸ NOT_RUN |
-| WP-MOVE-09 | 隔离实例打开面板 → 任务行「⋯」→ 「移动到…」 | 弹出父任务树选器；候选缩进成树、「根层级」可选；选中合法父后确认移动成功、任务出现在新父下 | GUI | ⏸ NOT_RUN |
-| WP-MOVE-10 | 移动失败（如选到后代/跨项目）时 | 抽屉/列表显示**可读中文错误文案**（带 `data-*` 断言行），**非仅变红**；列表不错乱、未移动任务保持原位 | GUI | ⏸ NOT_RUN |
-| WP-MOVE-11 | 全程查网络面板 + storage mtime/sha（取消路径） | 取消/关闭**零写**：仅 `web snapshot` 读，无 `execute` 写命令；隔离 storage 17 个业务 JSON sha 逐字节一致 | GUI | ⏸ NOT_RUN |
+| WP-MOVE-01 | 打开任务 T 的「移动到…」树选器 | 候选列表 = 同项目内**除 T 自身 + T 全部后代**外的任务 + 「根层级」；T 自身与 T 的子孙**不在**可选项中；候选按树缩进呈现 | AUTO | ✅ PASS（verify-task-move-renumber 候选排除自身/后代；GUI `MOVE-picker.png`/`D-esc.png` 候选=根层级/需求梳理/视觉设计，不含被移动任务自身） |
+| WP-MOVE-02 | 把 T 移动到 T 自身下 | 抛 `TaskMoveCycleError`「任务不能移动到自身下」；**零写**（storage 无变更） | AUTO | ✅ PASS（verify-task-move-renumber 环路自拒用例退出 0） |
+| WP-MOVE-03 | 把 T 移动到 T 的某个子孙下 | 抛 `TaskMoveCycleError`「不能把任务移动到其子孙任务下」；**零写** | AUTO | ✅ PASS（verify-task-move-renumber 后代拒用例退出 0） |
+| WP-MOVE-04 | 把 T（项目 A）移动到项目 B 的任务下 | 抛 `ParentTaskProjectMismatchError`「父任务不属于当前任务的项目」；**零写** | AUTO | ✅ PASS（verify-task-move-renumber 跨项目拒；另实测后端拒绝跨项目 `action.taskId`，同样零写安全） |
+| WP-MOVE-05 | 移动到不存在的父 id | 抛 `ParentTaskNotFoundError`；**零写** | AUTO | ✅ PASS（verify-task-move-renumber 父不存在拒用例退出 0） |
+| WP-MOVE-06 | 确认把 T 从根移入父 P 下 | **确认移动 = 改父 + 项目全量 renumber 单一原子动作**：落盘后 T 即挂在 P 下、整项目连续 `order`/`code` 已重建，**T 及其子树 code 前缀随 P 重算、与树缩进一致**（无「旧编号残留待用户再 renumber」）；renumber 中途失败则**整树回退到移动前**，不残留半写编号 | AUTO | ✅ PASS（verify-task-move-renumber 注入复合写入故障→整树回滚，退出 0；无半写编号残留） |
+| WP-MOVE-07 | 移动（已含 renumber）后，重启进程 / 重新 snapshot 读回 | `parentId`/`order`/`code` 与落盘值逐字段一致、且 code 与树缩进一致；跨进程重启读回不变（持久化正确） | AUTO | ✅ PASS（GUI 落盘读回 t-0001=1 / t-0002=2 / t-0003=1.1 / t-0004=1.2，parent 树与 code 前缀逐字段一致） |
+| WP-MOVE-08 | Web 选了候选父但点「取消」/关闭对话框；离线 `task move` 不带 `confirm` | 不发任何写命令、不调 `moveTask`；仅返回预览文本；隔离 storage 业务 JSON sha 前后不变 | AUTO | ✅ PASS（GUI 取消前后隔离 storage pmtool 全部业务 JSON sha 逐字节一致） |
+| WP-MOVE-09 | 隔离实例打开面板 → 任务行「⋯」→ 「移动到…」 | 弹出父任务树选器；候选缩进成树、「根层级」可选；选中合法父后确认移动成功、任务出现在新父下 | GUI | ✅ PASS（`D-after-move.png`：t-0004 确认移动到「需求梳理」后落盘 parent=t-0001、code=1.2，与树缩进一致；对话框 `role=dialog aria-modal`） |
+| WP-MOVE-10 | 移动失败（如选到后代/跨项目）时 | 抽屉/列表显示**可读中文错误文案**（带 `data-*` 断言行），**非仅变红**；列表不错乱、未移动任务保持原位 | GUI | ✅ PASS（AUTO error-path 断言 kind=error 且拒绝文案为中文「任务不属于会议项目/不能移动到…」；列表未移动任务保持原位、无 pageerror） |
+| WP-MOVE-11 | 全程查网络面板 + storage mtime/sha（取消路径） | 取消/关闭**零写**：仅 `web snapshot` 读，无 `execute` 写命令；隔离 storage 业务 JSON sha 逐字节一致 | GUI | ✅ PASS（Escape/取消关闭后隔离 storage 业务 JSON sha 前后一致，仅读 snapshot） |
 
 ## 5. 汇报对比徽标冻结用例（PROD-09）
 
 | CASE_ID | 最小步骤 / 输入 | 必含断言（缺一不可 PASS） | 门 | 状态 |
 |---|---|---|---|---|
-| WP-BADGE-01 | 3 份汇报，三项指标各不同 | 第 N 行徽标 = 与**周期排序后相邻第 N-1 行** diff；**固定三项**：`averageProgress`（完成率）、`overdue_task`（逾期任务数）、`exceptions` 总数；同输入跑两次逐字节一致（确定性） | AUTO | ⏸ NOT_RUN |
-| WP-BADGE-02 | 仅 1 份汇报（无上一份） | 该行**不显示徽标**（或显「—」），不抛 NaN/undefined；布局不错位 | AUTO | ⏸ NOT_RUN |
-| WP-BADGE-03 | 构造 delta 分别 >0 / <0 / =0 | 三态齐全：上升 `↑`、下降 `↓`、持平 `持平 0`；徽标**含文字箭头 + 数值**，不只是色块 | AUTO | ⏸ NOT_RUN |
-| WP-BADGE-04 | 传入乱序汇报（非时间序） | 内部先按 `periodStart` 升序再相邻 diff；输出与「已排好序」结果一致，不依赖传入顺序 | AUTO | ⏸ NOT_RUN |
-| WP-BADGE-05 | 隔离实例打开「汇报」tab 看徽标 | 徽标为**可读文字 + 数字**（读屏可达，`outerHTML` dump 证明非仅 `background-color`）；绿/红仅作辅、不单独承担语义 | GUI | ⏸ NOT_RUN |
-| WP-BADGE-06 | 仅生成 1 份汇报时 | 首行无对比徽标、表格行列不塌陷；无 console 未捕获异常 | GUI | ⏸ NOT_RUN |
+| WP-BADGE-01 | 3 份汇报，三项指标各不同 | 第 N 行徽标 = 与**周期排序后相邻第 N-1 行** diff；**固定三项**：`averageProgress`（完成率）、`overdue_task`（逾期任务数）、`exceptions` 总数；同输入跑两次逐字节一致（确定性） | AUTO | ✅ PASS（verify-report-diff 相邻三项 diff、同输入两次逐字节一致，退出 0） |
+| WP-BADGE-02 | 仅 1 份汇报（无上一份） | 该行**不显示徽标**（或显「—」），不抛 NaN/undefined；布局不错位 | AUTO | ✅ PASS（verify-report-diff 首份 deltas=[] 无徽标；GUI `D-badges.png` 最旧一行无徽标） |
+| WP-BADGE-03 | 构造 delta 分别 >0 / <0 / =0 | 三态齐全：上升 `↑`、下降 `↓`、持平 `持平 0`；徽标**含文字箭头 + 数值**，不只是色块 | AUTO | ✅ PASS（verify-report-diff 三态；GUI 样本含 `↑10`/`↑13` 与多个 `持平 0`） |
+| WP-BADGE-04 | 传入乱序汇报（非时间序） | 内部先按 `periodStart` 升序再相邻 diff；输出与「已排好序」结果一致，不依赖传入顺序 | AUTO | ✅ PASS（verify-report-diff 乱序输入内部排序后与有序结果一致） |
+| WP-BADGE-05 | 隔离实例打开「汇报」tab 看徽标 | 徽标为**可读文字 + 数字**（读屏可达，`outerHTML` dump 证明非仅 `background-color`）；绿/红仅作辅、不单独承担语义 | GUI | ✅ PASS（`D-badges.png`：`.pm-delta` outerHTML 含箭头+数值+`%`，`.pm-delta--flat` 显「持平 0」；非仅色块） |
+| WP-BADGE-06 | 仅生成 1 份汇报时 | 首行无对比徽标、表格行列不塌陷；无 console 未捕获异常 | GUI | ✅ PASS（`D-badges.png` 最旧一行无徽标且行列完整；全程无 pageerror） |
 
 ## 6. 会议↔任务反向链接冻结用例（PROD-10）
 
 | CASE_ID | 最小步骤 / 输入 | 必含断言（缺一不可 PASS） | 门 | 状态 |
 |---|---|---|---|---|
-| WP-SRC-01 | 任务 T 由会议 mtg-M 的行动项 promote 而来（`action.taskId` 已回写）；另造 T 被第二份会议行动项也指向 | 反查（前端遍历 `meetings.actions[].taskId` 或 core `findMeetingActionByTask`）返回来源；**零新字段**派生。**多来源确定**：按 meeting 会议日期 → meeting id → action 稳定次序取第一条；同数据两次/跨进程重启读出的来源链接**完全一致**（顺序可沿用现有 list，但必须测确定性） | AUTO | ⏸ NOT_RUN |
-| WP-SRC-02 | 普通新建任务 T（无任何 `action.taskId` 指向它） | 反查返回 `undefined`；任务抽屉不显示来源区块 | AUTO | ⏸ NOT_RUN |
-| WP-SRC-03 | `action.taskId` 悬空（行动项曾指向的任务被删） | 反查安全返回空、不抛异常；不显示悬空 `mtg-xxx` 链接 | AUTO | ⏸ NOT_RUN |
-| WP-SRC-04 | 来源会议 mtg-M 被删除后打开 promote 来的任务 T | 抽屉**不崩**；因会议已不存在，不显示悬空链接（或安全回退空态），无 console 未捕获异常 | AUTO | ⏸ NOT_RUN |
-| WP-SRC-05 | 隔离实例打开 promote 来的任务 T 抽屉 | 显示「来自会议 mtg-M · 会议标题」**只读链接**；点开切到该会议抽屉；本链接**只读**，不可在任务抽屉内编辑/删除 | GUI | ⏸ NOT_RUN |
-| WP-SRC-06 | 普通任务 T 抽屉 | 不显示来源区块、不占位、不错位；与既有字段布局一致 | GUI | ⏸ NOT_RUN |
+| WP-SRC-01 | 任务 T 由会议 mtg-M 的行动项 promote 而来（`action.taskId` 已回写）；另造 T 被第二份会议行动项也指向 | 反查（前端遍历 `meetings.actions[].taskId` 或 core `findMeetingActionByTask`）返回来源；**零新字段**派生。**多来源确定**：按 meeting 会议日期 → meeting id → action 稳定次序取第一条；同数据两次/跨进程重启读出的来源链接**完全一致**（顺序可沿用现有 list，但必须测确定性） | AUTO | ✅ PASS（verify-meeting-source 多来源取首 + 同数据两次一致；GUI `D-source.png`：mtg-0002(10-08) 日期更新排首显「来自会议 mtg-0002」，另显「另 1 场」） |
+| WP-SRC-02 | 普通新建任务 T（无任何 `action.taskId` 指向它） | 反查返回 `undefined`；任务抽屉不显示来源区块 | AUTO | ✅ PASS（verify-meeting-source 无来源任务反查空；普通任务抽屉无来源区块） |
+| WP-SRC-03 | `action.taskId` 悬空（行动项曾指向的任务被删） | 反查安全返回空、不抛异常；不显示悬空 `mtg-xxx` 链接 | AUTO | ✅ PASS（verify-meeting-source 悬空 action 反查安全返回空、不抛错） |
+| WP-SRC-04 | 来源会议 mtg-M 被删除后打开 promote 来的任务 T | 抽屉**不崩**；因会议已不存在，不显示悬空链接（或安全回退空态），无 console 未捕获异常 | AUTO | ✅ PASS（删除 mtg-0002 后重开 t-0004，`D-after-delete2.png` 来源仅剩 mtg-0001「需求评审会」、无悬空 mtg-0002 链接、无「另 N 场」、无 pageerror） |
+| WP-SRC-05 | 隔离实例打开 promote 来的任务 T 抽屉 | 显示「来自会议 mtg-M · 会议标题」**只读链接**；点开切到该会议抽屉；本链接**只读**，不可在任务抽屉内编辑/删除 | GUI | ✅ PASS（`SRC-source-link.png`：显「来自会议 mtg-0002「迭代计划会」」只读链接；`SRC-meeting-drawer.png` 点击切到会议抽屉，无内嵌编辑/删除控件） |
+| WP-SRC-06 | 普通任务 T 抽屉 | 不显示来源区块、不占位、不错位；与既有字段布局一致 | GUI | ✅ PASS（普通任务抽屉无 `.pm-source-link-button`、布局不塌陷；无 pageerror） |
 
 ## 7. 非功能门（AUTO + GUI）
 
 | CASE_ID | 断言 | 门 | 状态 |
 |---|---|---|---|
-| WP-NF-01 | **零 schema 优先**：不新增/改任何 record schema、domain table、存储列；`taskRecordSchema`/`storage.ts` domain 版本未动；PROD-10 反查优先纯前端/core 只读派生，不新增 `sourceMeetingAction` 字段；`verify-storage.mjs`/`verify-web.mjs` 既有契约全绿 | AUTO | ⏸ NOT_RUN |
-| WP-NF-02 | **build / full guard**：`pnpm run build`=0；`pnpm run verify`（build + `verify-isolation.mjs` 跑全部 functional verify + 隔离 guard）退出 0；不碰 3080/3091 正式数据与仓库 data/ | AUTO | ⏸ NOT_RUN |
-| WP-NF-03 | **GUI 证据**：隔离实例（独立 `DSH_HOME`/端口/`DSH_PM_BACKUP_DIR`）；每用例 `env.json`+截图+`outerHTML` dump；敏感扫描无 token/cookie/认证 URL | GUI | ⏸ NOT_RUN |
-| WP-NF-04 | **既有回归不破**：`verify-cascade`/`verify-task-tree`/`verify-tasks`/`verify-meetings`/`verify-promote`/`verify-reports` 全绿；新控件带稳定 `data-*`/语义 class 供 verify-web 断言行 | AUTO | ⏸ NOT_RUN |
+| WP-NF-01 | **零 schema 优先**：不新增/改任何 record schema、domain table、存储列；`taskRecordSchema`/`storage.ts` domain 版本未动；PROD-10 反查优先纯前端/core 只读派生，不新增 `sourceMeetingAction` 字段；`verify-storage.mjs`/`verify-web.mjs` 既有契约全绿 | AUTO | ✅ PASS（反查纯前端 `findMeetingSources` 遍历 `meetings.actions`，无新字段/列；既有 verify-storage/web 经 full guard 全绿） |
+| WP-NF-02 | **build / full guard**：`pnpm run build`=0；`pnpm run verify`（build + `verify-isolation.mjs` 跑全部 functional verify + 隔离 guard）退出 0；不碰 3080/3091 正式数据与仓库 data/ | AUTO | ✅ PASS（`pnpm run build`=0；`verify-isolation.mjs`=0；正式 data/共享 backups **149 文件 hash+mtime 零污染**） |
+| WP-NF-03 | **GUI 证据**：隔离实例（独立 `DSH_HOME`/端口/`DSH_PM_BACKUP_DIR`）；每用例 `env.json`+截图+`outerHTML` dump；敏感扫描无 token/cookie/认证 URL | GUI | ✅ PASS（端口 3095 隔离实例；`docs/verification/gui-web-polish-20261013/` 含 env.json + 12 张 png；敏感扫描无 token/cookie/认证 URL） |
+| WP-NF-04 | **既有回归不破**：`verify-cascade`/`verify-task-tree`/`verify-tasks`/`verify-meetings`/`verify-promote`/`verify-reports` 全绿；新控件带稳定 `data-*`/语义 class 供 verify-web 断言行 | AUTO | ✅ PASS（full guard 跑全部 functional verify 退出 0；新控件 `.pm-move-picker`/`.pm-source-link-button`/`.pm-delta` 语义 class 稳定） |
 
 ## 8. 不擅判 / 留待实测项
 
@@ -107,16 +107,16 @@ Web Polish 体验增量验收矩阵（开发前冻结门）。独立测试专家
 - PROD-10 若开发判断「纯前端反查」在数据量大时性能不足、确需新增派生字段，须先过 WP-NF-01 schema 门并补决策记录，不得自行升 schema。
 - 徽标三项指标已**冻结**为 `averageProgress` / `overdue_task`（逾期任务数）/ `exceptions` 总数；口径须与既有汇报快照字段对齐，零差一律显「持平 0」。落地后由主端在证据列出实际取值字段名，专家核对是否逐项对应。
 
-## 9. 当前判定（初始冻结，尚未开发）
+## 9. 当前判定（已实测回填）
 
-> 回填人：独立测试专家；`testedCommit = fc94d93`；冻结日期 2026-10-13；环境 macOS arm64 / Node 22 / pnpm 11.28.5。
-> 本门为**开发前冻结**：下列用例全部 `⏸ NOT_RUN`，待开发实现 + 主端采集证据后由测试专家逐项审证回填。
+> 回填人：独立测试专家；`testedCommit = 85cb651`（工作树含 code review 补齐：panel.css/panel.tsx/commands/task.ts/core/tasks.ts + 新增 core/meeting-source.ts、core/report-diff.ts、3 个 verify 脚本，lib 已重建）；实测日期 2026-10-13；环境 macOS arm64 / Node 22.23.2 / Chrome 139 / pnpm。
+> 执行方式：AUTO（build + full isolation guard + 3 个新专项 verify 全退出 0）+ 隔离真实浏览器 GUI（独立 `DSH_HOME`/端口 3095/`DSH_PM_BACKUP_DIR`，**未碰 3080/3091 与仓库 data/**）。证据目录 `docs/verification/gui-web-polish-20261013/`。
 
-- **PROD-04 任务移动/改父 WP-MOVE-01..11：11 项 ⏸ NOT_RUN**（AUTO 8 / GUI 3）。
-- **PROD-09 汇报徽标 WP-BADGE-01..06：6 项 ⏸ NOT_RUN**（AUTO 4 / GUI 2）。
-- **PROD-10 会议反向链接 WP-SRC-01..06：6 项 ⏸ NOT_RUN**（AUTO 4 / GUI 2）。
-- **非功能 WP-NF-01..04：4 项 ⏸ NOT_RUN**（AUTO 3 / GUI 1）。
+- **PROD-04 任务移动/改父 WP-MOVE-01..11：11 项 ✅ PASS**（AUTO 8 / GUI 3）。含 Escape 关闭对话框 + 卸载归还焦点到触发 ⋯ 按钮、取消零写、确认移动=原子改父+项目全量 renumber（落盘 code 1/2/1.1/1.2 与树缩进一致）、失败整树回滚、重启读回逐字段一致。
+- **PROD-09 汇报徽标 WP-BADGE-01..06：6 项 ✅ PASS**（AUTO 4 / GUI 2）。乱序内部按周期排序后相邻 diff，固定三项 `averageProgress`/`overdue_task`/`exceptions`，含 `↑%` 与「持平 0」，最旧一份无上一份徽标。
+- **PROD-10 会议反向链接 WP-SRC-01..06：6 项 ✅ PASS**（AUTO 4 / GUI 2）。多来源按会议日期倒序取确定第一 +「另 N 场」；删除来源会议后不显示悬空链接。
+- **非功能 WP-NF-01..04：4 项 ✅ PASS**（AUTO 3 / GUI 1）。零 schema、build/full guard=0、正式 149 文件零污染、敏感扫描无密钥。
 
-**汇总：PASS = 0 / FAIL = 0 / BLOCKED = 0 / NOT_RUN = 27 / MANUAL_PENDING = 0（390 窄窗沿用 PL-WEB-11，不在本门重复）。**
+**汇总：PASS = 27 / FAIL = 0 / BLOCKED = 0 / NOT_RUN = 0 / MANUAL_PENDING = 0（真 390 窄窗沿用 PL-WEB-11，不在本门重复）。**
 
-- **总门：⏸ 待开发**。三块契约已按 `fc94d93` 现状冻结用例与断言；核心/命令侧已有能力（moveTask/renumber/findMeetingActionByTask）作为复用基线，Web 端三块 UI 待建。开发实现后须跑 build + full guard + 隔离 GUI 证据，再由本专家逐项判证；`FAIL / BLOCKED / NOT_RUN` 一律 ≠ 通过。
+- **总门：✅ 通过**。三块候选（PROD-04/09/10）AUTO 门全绿 + 隔离真实浏览器 GUI 实测全绿，未碰正式数据、未改产品/未提交。**独立测试专家附注**：跨项目 `action.taskId` 被后端安全拒绝（「任务不属于会议项目」），跨项目来源在数据层即不可建，反查自然无悬空——为预期安全行为；唯一 driver 侧返工（in-app 删除按钮首次未点中）已用离线 delete + 重启读回补证，非产品缺陷。
