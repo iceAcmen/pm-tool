@@ -22,6 +22,27 @@ const projectFields = {
   startDate: dateSchema,
   targetDate: dateSchema,
   tags: z.array(z.string()).optional(),
+  // PROD-21 项目级仓库：optional，缺省即空（v1 旧项目无此两键照常读取）。
+  // 写时校验宽松 URL/git 正则与 branch 白名单；全程离线、不联网探测。
+  repoUrl: z.string().trim().optional(),
+  branch: z.string().trim().optional(),
+}
+
+// 宽松 git/URL：http(s)://host/path、git://host/path、或 scp 形 git@host:org/repo.git。
+const repoUrlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*|git:\/\/[^\s/$.?#].[^\s]*|git@[A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+(?:\/[^\s]*))$/
+// branch：首字符字母/数字/点/下划线，后续可含字母数字点下划线斜杠连字符；≤64；禁空白与 git 危险符。
+const branchPattern = /^[A-Za-z0-9._][A-Za-z0-9._/-]{0,63}$/
+
+function validateRepoRelation(
+  value: { repoUrl?: string, branch?: string },
+  context: z.RefinementCtx,
+): void {
+  if (value.repoUrl && !repoUrlPattern.test(value.repoUrl)) {
+    context.addIssue({ code: 'custom', path: ['repoUrl'], message: '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式' })
+  }
+  if (value.branch && !branchPattern.test(value.branch)) {
+    context.addIssue({ code: 'custom', path: ['branch'], message: '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）' })
+  }
 }
 
 function validateDateOrder(
@@ -45,7 +66,9 @@ export const projectRecordSchema = z.strictObject({
 })
 
 /** 写入新记录时执行完整业务校验；读盘 schema 保持 v1 旧记录兼容。 */
-export const projectWriteSchema = projectRecordSchema.superRefine(validateDateOrder)
+export const projectWriteSchema = projectRecordSchema
+  .superRefine(validateDateOrder)
+  .superRefine(validateRepoRelation)
 
 /** 新增只接受业务字段；ID、时间戳由系统生成，禁止调用方覆盖。 */
 export const projectCreateSchema = z.strictObject({
@@ -53,7 +76,7 @@ export const projectCreateSchema = z.strictObject({
   description: projectFields.description.default(''),
   owner: projectFields.owner.default(''),
   status: projectStatusSchema.default('planning'),
-}).superRefine(validateDateOrder)
+}).superRefine(validateDateOrder).superRefine(validateRepoRelation)
 
 /** 更新仅接受业务字段，最终日期关系由合并后的完整记录再次校验。 */
 export const projectUpdateSchema = z.strictObject(projectFields)
@@ -73,6 +96,8 @@ export function describeProjectValidation(error: z.ZodError): string {
     startDate: '开始日期（有效 YYYY-MM-DD）',
     targetDate: '完成日期（有效 YYYY-MM-DD）',
     tags: '标签（文本数组）',
+    repoUrl: '仓库地址（http(s)://、git:// 或 git@host:org/repo.git）',
+    branch: '分支名（≤64 字符，不含空白与特殊符号）',
     id: '项目 ID（字母、数字、下划线、连字符）',
   }
   return [...new Set(error.issues.map(issue =>

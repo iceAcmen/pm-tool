@@ -11,6 +11,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import { CommandDefinitionId } from '@deepseek-ai/dsh-commands/brand'
 import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
 import { openPmDomain, type PmDomain } from './core/storage.js'
+import { formatDomainOpenError } from './core/domain-error.js'
 import { handleProjectCommand, projectHelp } from './commands/project.js'
 import { handleTaskCommand, taskHelp } from './commands/task.js'
 import { handleMilestoneCommand, milestoneHelp } from './commands/milestone.js'
@@ -22,6 +23,8 @@ import { handleDeliverableCommand, deliverableHelp } from './commands/deliverabl
 import { handleSearchCommand, searchHelp } from './commands/search.js'
 import type { LlmGateway } from './core/ai-client.js'
 import { handleStatsCommand, statsHelp } from './commands/stats.js'
+import { handleHealthCommand, healthHelp } from './commands/health.js'
+import { handleDoctorCommand, doctorHelp } from './commands/doctor.js'
 import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
 import { handleModelCommand, modelHelp } from './commands/model.js'
@@ -63,6 +66,10 @@ function renderHelp(): CommandResult {
       '',
       statsHelp,
       '',
+      healthHelp,
+      '',
+      doctorHelp,
+      '',
       dueHelp,
       '',
       backupHelp,
@@ -82,7 +89,8 @@ export async function apply(ctx: Context): Promise<void> {
     console.info('[pm-tool] 存储领域 pmtool 已打开')
   } catch (error) {
     // 存储未配置好时不应阻断命令注册；selftest 会提示具体原因。
-    console.warn('[pm-tool] 存储领域打开失败：', error)
+    // 结构化中文点名坏记录（相对路径 + 表/键/字段），绝不输出绝对路径，绝不静默 backup-skip 隔离。
+    console.warn('[pm-tool] 存储领域打开失败：', formatDomainOpenError(error))
   }
 
   ctx.commands.register({
@@ -126,6 +134,10 @@ export async function apply(ctx: Context): Promise<void> {
       if (searchMatch) return handleSearchCommand(searchMatch[1] ?? '', domain)
       const statsMatch = /^stats(?:\s+([\s\S]*))?$/i.exec(raw)
       if (statsMatch) return handleStatsCommand(statsMatch[1] ?? '', domain)
+      const healthMatch = /^health(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (healthMatch) return handleHealthCommand(healthMatch[1] ?? '', domain)
+      const doctorMatch = /^doctor(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (doctorMatch) return handleDoctorCommand(doctorMatch[1] ?? '', domain, process.env.PM_STORAGE_ROOT)
       const dueMatch = /^due(?:\s+([\s\S]*))?$/i.exec(raw)
       if (dueMatch) return handleDueCommand(dueMatch[1] ?? '', domain)
       const backupMatch = /^(backup|restore-content|restore)(?:\s+([\s\S]*))?$/i.exec(raw)

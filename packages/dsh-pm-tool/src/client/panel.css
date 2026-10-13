@@ -952,3 +952,16 @@
   .pm-people-task { flex-wrap: nowrap; overflow-x: auto; }
   .pm-people-task-title { white-space: nowrap; }
 }
+
+/* PROD-11/21/23：前置多选、健康灯、仓库行 */
+.pm-predecessor-list { display: flex; flex-direction: column; gap: 4px; max-height: 160px; overflow: auto; }
+.pm-predecessor-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.pm-muted { color: var(--pm-muted); font-size: 12px; }
+.pm-health-card { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; border-radius: 8px; margin: 10px 0; border-left: 4px solid var(--pm-muted); }
+.pm-health-card[data-lamp="green"] { border-left-color: var(--pm-success); background: var(--pm-blue-soft); }
+.pm-health-card[data-lamp="yellow"] { border-left-color: var(--pm-warning); background: var(--pm-blue-soft); }
+.pm-health-card[data-lamp="red"] { border-left-color: var(--pm-danger); background: var(--pm-blue-soft); }
+.pm-health-card small { color: var(--pm-secondary); }
+.pm-repo-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0 10px; }
+.pm-repo-row a { color: inherit; }
+.pm-predecessor-chip { margin-left: 8px; font-size: 11px; padding: 1px 6px; border-radius: 9px; background: var(--pm-blue-soft); color: var(--pm-secondary); }

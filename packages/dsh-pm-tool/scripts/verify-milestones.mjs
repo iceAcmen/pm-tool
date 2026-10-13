@@ -180,7 +180,7 @@ try {
     assert.equal(existsSync(file), true)
     assert.equal(statSync(join(root, 'pmtool', 'milestones')).mode & 0o777, 0o700)
     assert.equal(statSync(file).mode & 0o777, 0o600)
-    assert.match(readFileSync(file, 'utf8'), /\n  "version": 1,/)
+    assert.match(readFileSync(file, 'utf8'), /\n  "version": 2,/g)
 
     console.log('通过：里程碑增查改删、状态一致性、任务关联保护、时间线排序、并发编号、项目删除保护、可读 JSON 与权限。')
     await facility.closeAll()

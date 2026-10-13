@@ -165,7 +165,7 @@ async function applyBackup(domain: PmDomain, backup: PmBackup, directory?: strin
 }
 
 /** 删除前预检：逐条按 record schema 校验，并校验任务 projectId/parentId/milestoneId 关系。 */
-async function precheckBackup(backup: PmBackup): Promise<void> {
+export async function precheckBackup(backup: PmBackup): Promise<void> {
   const { projectRecordSchema } = await import('./project.js')
   const { taskRecordSchema } = await import('./task.js')
   const { milestoneRecordSchema } = await import('./milestone.js')
@@ -185,7 +185,7 @@ async function precheckBackup(backup: PmBackup): Promise<void> {
   must(backup.reports, progressReportRecordSchema, '汇报')
   must(backup.deliverables, deliverableRecordSchema, '交付物')
 
-  // 关系：任务所属项目存在、parentId/milestoneId 同项目存在
+  // 关系：任务所属项目存在、parentId/milestoneId 同项目存在、predecessorIds 存在/同项目/无环
   const pids = new Set(backup.projects.map(p => p.id))
   const mids = new Set(backup.milestones.map(m => m.id))
   const tids = new Set(backup.tasks.map(t => t.id))
@@ -193,6 +193,25 @@ async function precheckBackup(backup: PmBackup): Promise<void> {
     if (!pids.has(t.projectId)) throw new Error(`任务 ${t.id} 的 projectId ${t.projectId} 不在备份项目内`)
     if (t.parentId != null && !tids.has(t.parentId)) throw new Error(`任务 ${t.id} 的 parentId 不存在`)
     if (t.milestoneId != null && !mids.has(t.milestoneId)) throw new Error(`任务 ${t.id} 的 milestoneId 不存在`)
+    for (const pid of t.predecessorIds ?? []) {
+      if (pid === t.id) throw new Error(`任务 ${t.id} 把自己列为前置依赖`)
+      const pre = backup.tasks.find(x => x.id === pid)
+      if (!pre) throw new Error(`任务 ${t.id} 的前置依赖 ${pid} 不存在`)
+      if (pre.projectId !== t.projectId) throw new Error(`任务 ${t.id} 的前置依赖 ${pid} 不在同一项目`)
+    }
+  }
+  // 成环预检：沿 predecessorIds DFS，任一任务能回到自身即拒绝整份备份。
+  const byId = new Map(backup.tasks.map(t => [t.id, t]))
+  for (const start of backup.tasks) {
+    const seen = new Set<string>()
+    const queue: string[] = [...(start.predecessorIds ?? [])]
+    while (queue.length) {
+      const cur = queue.shift()!
+      if (cur === start.id) throw new Error(`任务 ${start.id} 的前置依赖存在循环`)
+      if (seen.has(cur)) continue
+      seen.add(cur)
+      for (const next of byId.get(cur)?.predecessorIds ?? []) queue.push(next)
+    }
   }
 }
 

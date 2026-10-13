@@ -100,10 +100,10 @@ try {
     assert.match(await run('selftest'), /存储自检通过/)
     assert.match(await run(create(fields)), /项目 ID：p-0001/)
     const saved = readProject('p-0001')
-    assert.equal(saved.version, 1)
+    assert.equal(saved.version, 2)  // v2：写入打 v2 信封
     const record = projectRecordSchema.parse(saved.record)
     assert.deepEqual(record, { ...fields, id: 'p-0001', createdAt: record.createdAt, updatedAt: record.createdAt })
-    assert.match(readFileSync(join(root, 'pmtool', 'projects', 'p-0001.json'), 'utf8'), /\n  "version": 1,/)
+    assert.match(readFileSync(join(root, 'pmtool', 'projects', 'p-0001.json'), 'utf8'), /\n  "version": 2,/g)
     console.log(await run('project get p-0001'))
     assert.match(await run('PROJECT GET p-0001'), /Ice/)
     assert.match(await run('project list'), /共 1 个/)

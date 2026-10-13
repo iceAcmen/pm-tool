@@ -178,7 +178,7 @@ try {
     const file = join(root, 'pmtool', 'deliverables', 'dlv-0001.json')
     assert.equal(statSync(join(root, 'pmtool', 'deliverables')).mode & 0o777, 0o700)
     assert.equal(statSync(file).mode & 0o777, 0o600)
-    assert.match(readFileSync(file, 'utf8'), /\n  "version": 1,/)
+    assert.match(readFileSync(file, 'utf8'), /\n  "version": 2,/g)
 
     console.log('通过：交付物 CRUD、状态筛选、版本/状态变更留痕、并发编号、失败恢复、项目删除保护、可读 JSON 与权限。')
     await facility.closeAll()

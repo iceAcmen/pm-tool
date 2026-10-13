@@ -5,6 +5,7 @@ import { buildUpdate } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
 import { diffAgainstPrevious } from '../core/report-diff.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
+import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIso } from '../core/derived.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
@@ -22,6 +23,7 @@ import FolderKanban from 'lucide-react/dist/esm/icons/folder-kanban.mjs'
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard.mjs'
 import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal.mjs'
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square.mjs'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import MilestoneIcon from 'lucide-react/dist/esm/icons/milestone.mjs'
@@ -73,6 +75,8 @@ type Project = {
   status: string
   startDate: string
   targetDate: string
+  repoUrl?: string
+  branch?: string
 }
 
 type Task = {
@@ -89,6 +93,7 @@ type Task = {
   dueDate?: string
   progress: number
   milestoneId: string | null
+  predecessorIds?: string[]
 }
 
 type Milestone = {
@@ -1471,6 +1476,7 @@ function TaskTable({
       .includes(query.trim().toLocaleLowerCase())
     return matchesText && (status === 'all' || task.status === status)
   })
+  const tasksById = new Map(visible.map(task => [task.id, task]))
   const toggleSelect = (id: string) => {
     setSelected(prev => {
       const next = new Set(prev)
@@ -1672,6 +1678,7 @@ function TaskTable({
                   key={group.key}
                   group={group}
                   milestones={milestones}
+                  tasksById={tasksById}
                   disabled={disabled}
                   onEdit={onEdit}
                   run={run}
@@ -1684,6 +1691,7 @@ function TaskTable({
                   key="tree"
                   group={{ key: 'all', label: '全部任务', rows: visible }}
                   milestones={milestones}
+                  tasksById={tasksById}
                   disabled={disabled}
                   onEdit={onEdit}
                   run={run}
@@ -1713,6 +1721,7 @@ function TaskTable({
 function TaskGroup({
   group,
   milestones,
+  tasksById,
   disabled,
   onEdit,
   run,
@@ -1726,6 +1735,7 @@ function TaskGroup({
 }: {
   group: { key: string, label: string, rows: Task[] }
   milestones: Milestone[]
+  tasksById: Map<string, Task>
   disabled: boolean
   onEdit: (task: Task) => void
   run: (line: string) => Promise<boolean>
@@ -1748,6 +1758,7 @@ function TaskGroup({
       task={task}
       depth={Math.max(0, task.code.split('.').length - 1)}
       milestones={milestones}
+      tasksById={tasksById}
       disabled={disabled}
       onEdit={onEdit}
       run={run}
@@ -1769,6 +1780,7 @@ function TaskGroup({
         collapsed={isCollapsed}
         onToggleCollapse={onToggleCollapse}
         milestones={milestones}
+        tasksById={tasksById}
         disabled={disabled}
         onEdit={onEdit}
         run={run}
@@ -1782,12 +1794,13 @@ function TaskGroup({
 }
 
 function TaskRow({
-  task, depth, milestones, disabled, onEdit, run, selected, onToggle,
+  task, depth, milestones, tasksById, disabled, onEdit, run, selected, onToggle,
   hasChildren, collapsed, onToggleCollapse, onSaved, onMove,
 }: {
   task: Task
   depth: number
   milestones: Milestone[]
+  tasksById: Map<string, Task>
   disabled: boolean
   onEdit: (task: Task) => void
   run: (line: string) => Promise<boolean>
@@ -1835,6 +1848,12 @@ function TaskRow({
             style={{ paddingLeft: `${depth * 16}px` }}
             onClick={() => onEdit(task)}
           >{task.title}</button>
+          {(() => {
+            const blocking = blockingPredecessors(task, tasksById)
+            if (!blocking.length) return null
+            return <span className="pm-predecessor-chip" data-waiting-predecessor
+              title={`等待前置：${blocking.map(p => p.title).join('、')}`}>等待前置×{blocking.length}</span>
+          })()}
         </td>
         <td>
           <select
@@ -2334,11 +2353,11 @@ function Overview({
   riskIssues: RiskIssue[]
 }) {
   const complete = tasks.filter(task => task.status === 'done').length
-  const overdue = tasks.filter(task => task.dueDate && task.dueDate < new Date().toISOString().slice(0, 10) && task.status !== 'done').length
+  const today = localTodayIso()
+  const overdue = tasks.filter(task => task.dueDate && task.dueDate < today && task.status !== 'done').length
   const active = tasks.filter(task => task.status === 'in_progress').length
   const achieved = milestones.filter(item => item.status === 'achieved').length
   const days = Math.ceil((new Date(`${project.targetDate}T00:00:00`).getTime() - Date.now()) / 86_400_000)
-  const today = new Date().toISOString().slice(0, 10)
   const kpi = computeKPI(tasks, milestones, riskIssues, today)
   const agenda = buildAgenda(tasks, milestones, today)
   const matrix = groupRiskMatrix(riskIssues)
@@ -2362,7 +2381,29 @@ function Overview({
         })}
       </div>
     </div>
-    {/* PROD-05：关键指标条 */}
+    {/* PROD-23：健康参考灯（UI 只计数，扣分公式来自 health.ts healthFromInputs，只读展示） */}
+    {(() => {
+      const health = healthFromInputs({
+        taskTotal: tasks.length,
+        overdueTasks: tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done').length,
+        taskBlocked: tasks.filter(t => t.status === 'blocked').length,
+        openHighRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'high').length,
+        openCriticalRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'critical').length,
+        milestoneOverdue: milestones.filter(m => m.status !== 'achieved' && m.targetDate < today).length,
+      })
+      if (health.score === null) return <div className="pm-health-card" data-lamp="gray"><b>健康：数据不足</b><span>尚未拆分任务，暂不评分</span></div>
+      return <div className="pm-health-card" data-lamp={health.lamp}>
+        <b>健康：{health.score} 分</b>
+        <span>{health.factors.map(f => `${f.label} ${f.count}（${f.deduction}）`).join('　') || '无扣分项'}</span>
+        <small>自动计算，仅供排期参考，不做绩效评价</small>
+      </div>
+    })()}
+    {/* PROD-21：仓库行（有地址才渲染，外链新标签打开） */}
+    {project.repoUrl && <div className="pm-repo-row" data-repo-link>
+      <GitBranch size={14}/>
+      <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">{project.repoUrl}</a>
+      {project.branch && <span className="pm-muted">@{project.branch}</span>}
+    </div>}
     <div className="pm-kpi-row">
       <span className="pm-kpi" data-kpi="total"><b>{kpi.total}</b>任务</span>
       <span className="pm-kpi" data-kpi="doneRate"><b>{kpi.doneRate}%</b>完成率</span>
@@ -2857,6 +2898,8 @@ function ProjectForm({
     name: project?.name ?? '',
     startDate: project?.startDate ?? '',
     targetDate: project?.targetDate ?? '',
+    repoUrl: project?.repoUrl ?? '',
+    branch: project?.branch ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
   const setField = (field: keyof ProjectFormValues, value: string) => {
@@ -2882,22 +2925,19 @@ function ProjectForm({
     }
     // 前端校验通过后再交服务端；服务端 run 错误（重名等）仍由全局 Notice 展示，不在这里掩盖。
     const form = new FormData(event.currentTarget)
+    const repoUrl = values.repoUrl?.trim() ?? ''
+    const branch = values.branch?.trim() ?? ''
+    const base = {
+      description: form.get('description'),
+      owner: form.get('owner'),
+      startDate: values.startDate,
+      targetDate: values.targetDate,
+      ...(repoUrl ? { repoUrl } : {}),
+      ...(branch ? { branch } : {}),
+    }
     const payload = project
-      ? {
-          name: values.name,
-          description: form.get('description'),
-          owner: form.get('owner'),
-          status: form.get('status'),
-          startDate: values.startDate,
-          targetDate: values.targetDate,
-        }
-      : {
-          name: values.name,
-          description: form.get('description'),
-          owner: form.get('owner'),
-          startDate: values.startDate,
-          targetDate: values.targetDate,
-        }
+      ? { name: values.name, status: form.get('status'), ...base }
+      : { name: values.name, ...base }
     const success = await run(project
       ? `project update ${project.id} ${JSON.stringify(payload)}`
       : `project add ${JSON.stringify(payload)}`)
@@ -2934,6 +2974,22 @@ function ProjectForm({
         aria-required="true"
         aria-invalid={errors.targetDate ? true : undefined}
         aria-describedby={errors.targetDate ? 'project-target-error' : undefined}
+      />
+    </Field>
+    <Field label="仓库地址（可选）" error={errors.repoUrl} errorId="project-repo-error">
+      <input
+        name="repoUrl" value={values.repoUrl ?? ''} placeholder="https://host/org/repo.git"
+        onChange={e => setField('repoUrl', e.currentTarget.value)}
+        aria-invalid={errors.repoUrl ? true : undefined}
+        aria-describedby={errors.repoUrl ? 'project-repo-error' : undefined}
+      />
+    </Field>
+    <Field label="分支（可选）" error={errors.branch} errorId="project-branch-error">
+      <input
+        name="branch" value={values.branch ?? ''} placeholder="main"
+        onChange={e => setField('branch', e.currentTarget.value)}
+        aria-invalid={errors.branch ? true : undefined}
+        aria-describedby={errors.branch ? 'project-branch-error' : undefined}
       />
     </Field>
     <div className="pm-drawer-actions">
@@ -2983,6 +3039,8 @@ function TaskForm({
     const milestoneId = String(form.get('milestoneId') ?? '')
     const startDate = String(form.get('startDate') ?? '')
     const dueDate = String(form.get('dueDate') ?? '')
+    // PROD-11：前置依赖整体替换（多选复选）；空数组即清空。
+    const predecessorIds = form.getAll('predecessorIds').map(String)
     const payload = {
       title: form.get('title'),
       description: form.get('description'),
@@ -2993,6 +3051,7 @@ function TaskForm({
       dueDate: dueDate || null,
       progress: Number(form.get('progress')),
       milestoneId: milestoneId || null,
+      predecessorIds,
     }
     const createPayload = {
       projectId,
@@ -3006,6 +3065,7 @@ function TaskForm({
       ...(dueDate ? { dueDate } : {}),
       progress: payload.progress,
       milestoneId: payload.milestoneId,
+      ...(predecessorIds.length ? { predecessorIds } : {}),
     }
     const success = await run(task
       ? `task update ${task.id} ${JSON.stringify(payload)}`
@@ -3046,6 +3106,20 @@ function TaskForm({
       <option value="">不关联</option>
       {milestones.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
     </select></Field>
+    <Field label="前置依赖（未完成时本任务显示「等待前置」）" wide>
+      <div className="pm-predecessor-list">
+        {tasks.filter(item => item.id !== task?.id).length === 0 && <span className="pm-muted">暂无可选前置任务</span>}
+        {tasks.filter(item => item.id !== task?.id).map(item => (
+          <label key={item.id} className="pm-predecessor-item">
+            <input
+              type="checkbox" name="predecessorIds" value={item.id}
+              defaultChecked={task?.predecessorIds?.includes(item.id) ?? false}
+            />
+            <span>{item.code} {item.title}{item.status !== 'done' ? '' : '（已完成）'}</span>
+          </label>
+        ))}
+      </div>
+    </Field>
     <div className="pm-drawer-actions">
       {task && <button
         className="pm-button pm-button-danger"

@@ -81,13 +81,17 @@ export function updateProject(
     const table = domain.table('projects')
     const current = table.get(id)
     if (!current) return undefined
-    const next = projectWriteSchema.parse({
+    const nextInput: Record<string, unknown> = {
       ...current,
       ...fields,
       id: current.id,
       createdAt: current.createdAt,
       updatedAt: new Date().toISOString(),
-    })
+    }
+    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
+    if (nextInput.repoUrl === '') delete nextInput.repoUrl
+    if (nextInput.branch === '') delete nextInput.branch
+    const next = projectWriteSchema.parse(nextInput)
     const conflicting = fields.name !== undefined && fields.name !== current.name
       ? findProjectByName(domain, next.name, id)
       : undefined

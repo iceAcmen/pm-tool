@@ -183,7 +183,7 @@ try {
     const file = join(root, 'pmtool', 'risk_issues', 'ri-0001.json')
     assert.equal(statSync(join(root, 'pmtool', 'risk_issues')).mode & 0o777, 0o700)
     assert.equal(statSync(file).mode & 0o777, 0o600)
-    assert.match(readFileSync(file, 'utf8'), /\n  "version": 1,/)
+    assert.match(readFileSync(file, 'utf8'), /\n  "version": 2,/g)
 
     console.log('通过：风险/问题 CRUD、类型字段、筛选、并发编号、失败恢复、项目删除保护、可读 JSON 与权限。')
     await facility.closeAll()

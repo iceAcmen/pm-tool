@@ -19,6 +19,7 @@ export class TaskMoveCycleError extends Error {}
 export class TaskMilestoneNotFoundError extends Error {}
 export class TaskMilestoneProjectMismatchError extends Error {}
 export class TaskReferencedByMeetingError extends Error {}
+export class TaskReferencedByPredecessorError extends Error {}
 
 function validateMilestoneRelation(domain: PmDomain, projectId: string, milestoneId: string | null): void {
   if (!milestoneId) return
@@ -26,6 +27,57 @@ function validateMilestoneRelation(domain: PmDomain, projectId: string, mileston
   if (!milestone) throw new TaskMilestoneNotFoundError(`未找到里程碑：${milestoneId}`)
   if (milestone.projectId !== projectId) {
     throw new TaskMilestoneProjectMismatchError('里程碑不属于指定项目')
+  }
+}
+
+/** PROD-11：归一化前置依赖——空数组视为「不设置」，落盘时缺键，不写空数组污染 v2 记录。 */
+function normalizePredecessorIds(ids: string[] | undefined): string[] | undefined {
+  if (!ids || ids.length === 0) return undefined
+  return [...new Set(ids)]
+}
+
+/**
+ * PROD-11：前置依赖写时校验。每个 id 必须存在、与任务同项目、不得自指；
+ * 沿「依赖于」边从待写入的前置集合 BFS，若能走回到当前任务 id 即成环，拒绝。
+ * 校验通过返回归一化后的去重 id 列表（可能为 undefined 表示无前缀）。
+ */
+function validatePredecessorRelation(
+  domain: PmDomain,
+  projectId: string,
+  taskId: string,
+  ids: string[] | undefined,
+): string[] | undefined {
+  const normalized = normalizePredecessorIds(ids)
+  if (!normalized) return undefined
+  const table = domain.table('tasks')
+  for (const pid of normalized) {
+    if (pid === taskId) throw new Error('前置依赖不能包含任务自身')
+    const pre = table.get(pid)
+    if (!pre) throw new Error(`前置依赖任务不存在：${pid}`)
+    if (pre.projectId !== projectId) throw new Error(`前置依赖任务 ${pid} 不属于当前项目`)
+  }
+  // 成环检测：从每个前置沿既有 predecessorIds BFS，能回到 taskId 即成环。
+  const seen = new Set<string>()
+  const queue = [...normalized]
+  while (queue.length) {
+    const cur = queue.shift()!
+    if (cur === taskId) throw new Error('前置依赖存在循环：任务不能间接地依赖自己')
+    if (seen.has(cur)) continue
+    seen.add(cur)
+    const rec = table.get(cur)
+    if (!rec) continue
+    for (const next of rec.predecessorIds ?? []) queue.push(next)
+  }
+  return normalized
+}
+
+/** PROD-11 删除保护：任何其他任务把 id 列为前置依赖时，拒绝删除并点名引用方。 */
+function assertNoPredecessorReferences(domain: PmDomain, id: string): void {
+  for (const [, task] of domain.table('tasks').entries()) {
+    if (task.id === id) continue
+    if (task.predecessorIds?.includes(id)) {
+      throw new TaskReferencedByPredecessorError(`任务 ${id} 仍被任务 ${task.id} 作为前置依赖，请先在 ${task.id} 解除`)
+    }
   }
 }
 
@@ -56,8 +108,10 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
     const order = maxOrder + 1
     const code = parent ? `${parent.code}.${order}` : String(order)
     const at = new Date().toISOString()
+    const predecessorIds = validatePredecessorRelation(domain, fields.projectId, id, fields.predecessorIds)
     const record = taskWriteSchema.parse({
       ...fields,
+      ...(predecessorIds ? { predecessorIds } : {}),
       id,
       code,
       order,
@@ -148,6 +202,12 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     }
     if (fields.startDate === null) delete nextInput.startDate
     if (fields.dueDate === null) delete nextInput.dueDate
+    if (fields.predecessorIds !== undefined) {
+      // 整体替换：显式传即覆盖；空数组归一为缺键（清空前置）。
+      const normalized = validatePredecessorRelation(domain, current.projectId, current.id, fields.predecessorIds)
+      if (normalized) nextInput.predecessorIds = normalized
+      else delete nextInput.predecessorIds
+    }
     const next = taskWriteSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)
@@ -163,6 +223,7 @@ export function deleteTask(domain: PmDomain, id: string): Promise<Task | undefin
     for (const [, task] of table.entries()) {
       if (task.parentId === id) throw new TaskHasChildrenError(`任务 ${id} 仍有子任务`)
     }
+    assertNoPredecessorReferences(domain, id)
     for (const [, meeting] of domain.table('meetings').entries()) {
       if (meeting.actions.some(action => action.taskId === id)) {
         throw new TaskReferencedByMeetingError(`任务 ${id} 仍被会议 ${meeting.id} 的行动项关联`)
@@ -172,6 +233,13 @@ export function deleteTask(domain: PmDomain, id: string): Promise<Task | undefin
     return structuredClone(current)
   })
 }
+
+/**
+ * PROD-11 只读派生：返回该任务尚未完成的前置依赖（status !== 'done'）。
+ * 仅用于行内「等待前置」标签；绝不回写任务 status。悬空/不存在的前置按缺失忽略（由 doctor 报告）。
+ */
+export { blockingPredecessors } from './derived.js'
+export type { PredecessorNode } from './derived.js'
 
 /** 收集某任务及其全部后代（按 id 遍历 parentId 链）；用于级联删除 dry-run 预览。 */
 export function collectTaskSubtree(domain: PmDomain, id: string): Task[] {
@@ -213,6 +281,14 @@ export function deleteTaskCascade(domain: PmDomain, id: string): Promise<string[
     const subtree = collectTaskSubtree(domain, id)
     if (!subtree.length) return []
     const subtreeIds = new Set(subtree.map(task => task.id))
+    // 级联删除保护：子树外的任务若把子树成员列为前置依赖，删除后会悬空，拒绝并点名。
+    for (const [, task] of domain.table('tasks').entries()) {
+      if (subtreeIds.has(task.id)) continue
+      const dangling = task.predecessorIds?.find(pid => subtreeIds.has(pid))
+      if (dangling) {
+        throw new TaskReferencedByPredecessorError(`任务 ${dangling} 仍被任务 ${task.id} 作为前置依赖，级联删除被阻止；请先在 ${task.id} 解除`)
+      }
+    }
     for (const [, meeting] of domain.table('meetings').entries()) {
       const referenced = meeting.actions.find(action => action.taskId && subtreeIds.has(action.taskId))
       if (referenced) {

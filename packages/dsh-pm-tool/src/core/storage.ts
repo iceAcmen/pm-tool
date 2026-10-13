@@ -24,8 +24,11 @@ export const settingRecordSchema = z.object({
 
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
-  // 只增加表，既有 checks 记录格式不变，继续读取版本 1。
-  version: 1,
+  // v0.6.0 schema v2：本版读 v1 时代记录（compatibleVersions 含 1），写入一律打 v2 信封。
+  // 新增业务字段（task.predecessorIds / project.repoUrl·branch）在各自 record schema 中声明为 optional，
+  // 即 v1 旧记录缺这些键也能被本 schema 接受；不做批量迁移重写。
+  version: 2,
+  compatibleVersions: [1],
   layout: 'per-record',
   tables: {
     checks: domainTable(checkRecordSchema),

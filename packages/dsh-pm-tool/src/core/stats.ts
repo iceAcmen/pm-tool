@@ -7,11 +7,13 @@
  */
 import type { PmDomain } from './storage.js'
 import { projectIdSchema } from './project.js'
+import { todayIso } from './reminders.js'
 
 export class StatsProjectNotFoundError extends Error {}
 
 function todayString(): string {
-  return new Date().toISOString().slice(0, 10)
+  // 与 reminders 同源本地日历日（CST），避免 UTC 偏移把今天算成昨天。
+  return todayIso()
 }
 
 const zeroImpact = () => ({ low: 0, medium: 0, high: 0, critical: 0 })

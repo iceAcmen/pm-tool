@@ -1,0 +1,83 @@
+/**
+ * 纯派生（无 zod、无领域写操作）：供服务端 health 与浏览器端面板共用，
+ * 避免面板 bundle 间接拉入 zod。仅依赖普通类型。
+ */
+
+export type HealthLamp = 'green' | 'yellow' | 'red' | 'gray'
+
+export interface HealthFactor {
+  key: string
+  label: string
+  count: number
+  deduction: number
+}
+
+export interface HealthInputs {
+  taskTotal: number
+  overdueTasks: number
+  taskBlocked: number
+  openHighRisk: number
+  openCriticalRisk: number
+  milestoneOverdue: number
+}
+
+const CAP = {
+  overdueTasks: 15,
+  blockedTasks: 12,
+  openRisk: 20,
+  overdueMilestones: 16,
+} as const
+
+function factor(raw: number, per: number, cap: number): { count: number, deduction: number } {
+  return { count: raw, deduction: -Math.min(raw * per, cap) }
+}
+
+/** 纯计分：输入已计数因子 → 灯号/分/因子行。UI 只负责计数，不复制扣分公式。 */
+export function scoreFromInputs(inputs: HealthInputs): { lamp: HealthLamp, score: number | null, factors: HealthFactor[] } {
+  if (inputs.taskTotal === 0) return { lamp: 'gray', score: null, factors: [] }
+  const factors: HealthFactor[] = []
+  let deduction = 0
+
+  const overdue = factor(inputs.overdueTasks, 3, CAP.overdueTasks)
+  if (overdue.count) { factors.push({ key: 'overdueTasks', label: '逾期未完成任务', ...overdue }); deduction += -overdue.deduction }
+
+  const blocked = factor(inputs.taskBlocked, 4, CAP.blockedTasks)
+  if (blocked.count) { factors.push({ key: 'blockedTasks', label: '受阻任务', ...blocked }); deduction += -blocked.deduction }
+
+  const riskDeduction = Math.min(inputs.openHighRisk * 6 + inputs.openCriticalRisk * 10, CAP.openRisk)
+  if (inputs.openHighRisk + inputs.openCriticalRisk > 0) {
+    factors.push({ key: 'openRisk', label: '未闭环高影响风险', count: inputs.openHighRisk + inputs.openCriticalRisk, deduction: -riskDeduction })
+    deduction += riskDeduction
+  }
+
+  const milestone = factor(inputs.milestoneOverdue, 8, CAP.overdueMilestones)
+  if (milestone.count) { factors.push({ key: 'overdueMilestones', label: '逾期里程碑', ...milestone }); deduction += -milestone.deduction }
+
+  const score = Math.max(0, 100 - deduction)
+  const lamp: HealthLamp = score >= 80 ? 'green' : score >= 60 ? 'yellow' : 'red'
+  return { lamp, score, factors }
+}
+
+/** 本地日历日 YYYY-MM-DD（无 zod、可浏览器用）：避免 UTC 偏移把今天写成昨天。 */
+export function localTodayIso(now: Date = new Date()): string {
+  const y = now.getFullYear()
+  const m = String(now.getMonth() + 1).padStart(2, '0')
+  const d = String(now.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+export interface PredecessorNode {
+  id: string
+  status: string
+  predecessorIds?: string[]
+}
+
+/** 返回该任务尚未完成的前置依赖（status !== 'done'）。只读派生。 */
+export function blockingPredecessors<T extends PredecessorNode>(task: T, byId: Map<string, T>): T[] {
+  const result: T[] = []
+  for (const pid of task.predecessorIds ?? []) {
+    const pre = byId.get(pid)
+    if (pre && pre.status !== 'done') result.push(pre)
+  }
+  return result
+}

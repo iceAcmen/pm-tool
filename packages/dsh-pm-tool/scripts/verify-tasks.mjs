@@ -236,7 +236,8 @@ try {
     assert.equal(existsSync(file), true)
     assert.equal(statSync(join(root, 'pmtool', 'tasks')).mode & 0o777, 0o700)
     assert.equal(statSync(file).mode & 0o777, 0o600)
-    assert.match(readFileSync(file, 'utf8'), /\n  "version": 1,/)
+    // v2：本进程写入的记录一律打 v2 信封（v1 兼容读在 verify-schema-v2.mjs 覆盖）。
+    assert.match(readFileSync(file, 'utf8'), /\n  "version": 2,/)
 
     console.log('通过：任务增查改删、移动/循环保护、显式重编号、并发编号、项目删除保护、可读 JSON 与权限。')
     await facility.closeAll()

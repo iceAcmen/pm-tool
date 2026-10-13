@@ -87,7 +87,8 @@ console.log('---- 文件内容（人类可读 JSON）----')
 console.log(readFileSync(file, 'utf8'))
 
 const saved = JSON.parse(readFileSync(file, 'utf8'))
-assert.equal(saved.version, 1)
+// v2：写入一律打 v2 信封。
+assert.equal(saved.version, 2)
 assert.equal(saved.record.ok, true)
 assert.equal(statSync(dir).mode & 0o777, 0o700)
 await facility.closeAll()

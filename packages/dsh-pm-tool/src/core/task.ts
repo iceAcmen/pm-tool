@@ -24,6 +24,9 @@ const taskFields = {
   dueDate: optionalDateSchema,
   progress: z.number().int().min(0).max(100),
   milestoneId: milestoneIdSchema.nullable(),
+  // PROD-11 前置依赖：optional，缺省即无前缀（v1 旧记录无此键按 [] 处理）。
+  // 写业务层负责存在/同项目/自指/DAG 成环校验；空数组在落盘前归一化为缺键。
+  predecessorIds: z.array(taskIdSchema).optional(),
 }
 
 function validateDateOrder(
@@ -58,6 +61,7 @@ export const taskCreateSchema = z.strictObject({
   dueDate: optionalDateSchema,
   progress: taskFields.progress.default(0),
   milestoneId: milestoneIdSchema.nullable().default(null),
+  predecessorIds: taskFields.predecessorIds,
 }).superRefine(validateDateOrder)
 
 /** 更新不允许直接改变归属、父任务、编号、顺序与时间戳；移动使用独立动作。 */
@@ -71,6 +75,7 @@ export const taskUpdateSchema = z.strictObject({
   dueDate: clearableDateSchema,
   progress: taskFields.progress.optional(),
   milestoneId: milestoneIdSchema.nullable().optional(),
+  predecessorIds: taskFields.predecessorIds,
 }).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Task = z.infer<typeof taskRecordSchema>
@@ -89,6 +94,7 @@ export function describeTaskValidation(error: z.ZodError): string {
     dueDate: '截止日期（有效 YYYY-MM-DD）',
     progress: '进度（0 到 100 的整数）',
     milestoneId: '里程碑 ID 或 null',
+    predecessorIds: '前置依赖任务 ID 数组（须同项目、存在、不自指、不成环）',
   }
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'

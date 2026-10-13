@@ -6,6 +6,7 @@
  * 已完成(done)/已达成(achieved)不计。跨项目分组、按日期升序。
  */
 import type { PmDomain } from './storage.js'
+import { localTodayIso } from './derived.js'
 
 export type ReminderSeverity = 'overdue' | 'due-soon'
 
@@ -29,14 +30,9 @@ function parseDate(iso: string): number {
   return Date.UTC(y, m - 1, d)
 }
 
-function todayIso(today?: string): string {
+export function todayIso(today?: string): string {
   if (today) return today
-  const now = new Date()
-  // 用本地日历日，避免 UTC 偏移把今天写成昨天。
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, '0')
-  const d = String(now.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
+  return localTodayIso()
 }
 
 export interface ReminderOptions {

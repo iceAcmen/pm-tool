@@ -14,7 +14,13 @@ export interface ProjectFormValues {
   name: string
   startDate: string
   targetDate: string
+  repoUrl?: string
+  branch?: string
 }
+
+// 与服务端 core/project.ts 保持一致的宽松正则（离线、不联网探测）。
+const repoUrlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*|git:\/\/[^\s/$.?#].[^\s]*|git@[A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+(?:\/[^\s]*))$/
+const branchPattern = /^[A-Za-z0-9._][A-Za-z0-9._/-]{0,63}$/
 
 /** 里程碑表单需要即时校验的字段。 */
 export interface MilestoneFormValues {
@@ -59,6 +65,16 @@ export function validateProjectForm(values: ProjectFormValues): FormFieldErrors 
   if (startDate && targetDate && isRealIsoDate(startDate) && isRealIsoDate(targetDate)
     && targetDate < startDate) {
     errors.targetDate = '完成日期不得早于开始日期'
+  }
+
+  // 仓库地址/分支：留空合法（可选字段），填写即须符合宽松 git/URL 格式。
+  const repoUrl = (values.repoUrl ?? '').trim()
+  if (repoUrl && !repoUrlPattern.test(repoUrl)) {
+    errors.repoUrl = '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式'
+  }
+  const branch = (values.branch ?? '').trim()
+  if (branch && !branchPattern.test(branch)) {
+    errors.branch = '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）'
   }
   return errors
 }
