@@ -11,12 +11,19 @@
  */
 import { BlockAssembler, createUserMessage } from '@deepseek-ai/dsh-llm'
 
-/** 默认路由：OpenRouter 免费自动路由（openrouter/free，见 docs/model-providers.md）。 */
-export const AI_PROVIDER = 'openrouter-free'
-export const AI_MODEL = 'openrouter/free'
+/** 默认路由（匿名 PoC 兜底）：免费公共网关插件 our-free-model 的 Kilo 免费自动路由 kilo-auto/free（与 model-route.ts 的 POC_LANE 一致，见 docs/model-providers.md）。 */
+export const AI_PROVIDER = 'our-free-model'
+export const AI_MODEL = 'kilo-auto/free'
 
 /** 免费池随机模型 function-calling 不保证，故给足 maxTokens（推理型先吃 reasoning tokens，KB-034）。 */
 export const AI_DEFAULT_MAX_TOKENS = 1200
+
+/**
+ * 硬错误码：不跨池轮换、直接抛原中文。
+ * 含 NO_ADAPTER：缺适配器意味着该 provider 插件未装载，同 provider 下换模型无意义，
+ * 故立即停止并在文案中点名实际 attempted provider（见 friendlyCode）。
+ */
+const HARD_ERROR_CODES = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM', 'NO_ADAPTER']
 
 /**
  * 命令层依赖的最小 LLM 网关（鸭子类型）：只需要 prepareCall。
@@ -38,7 +45,7 @@ export class AiDraftError extends Error {
 }
 
 /** 把上游 LlmError.code（RATE_LIMIT/QUOTA/INVALID_CREDENTIAL…）翻成面向用户的中文提示。 */
-function friendlyCode(code: string | undefined): string {
+function friendlyCode(code: string | undefined, provider?: string): string {
   switch (code) {
     case 'RATE_LIMIT':
       return '免费模型正被限流（约 20 次/分钟），请稍后重试。'
@@ -47,18 +54,20 @@ function friendlyCode(code: string | undefined): string {
       return '免费额度已用完（约 50 次/天），请明天再试或在 profile 配置其他模型。'
     case 'INVALID_CREDENTIAL':
     case 'AUTH':
-      return '未配置或未生效的 OPENROUTER_API_KEY（AI 草稿不可用，你仍可手工录入）。'
+      // 匿名 PoC 走免 Key 公共网关、prod 走官方 Key；此处不点名任何具体 KEY，避免误导为 OPENROUTER_API_KEY。
+      return '模型鉴权未通过或当前模型不可用（AI 草稿不可用，你仍可手工录入）。'
     case 'CONTEXT_WINDOW_EXCEEDED':
       return '输入过长超过模型上下文上限，请精简目标文本后重试。'
     case 'NO_ADAPTER':
-      return '宿主未装载对应模型适配器（openrouter-free），AI 草稿不可用。'
+      // 点名「本次实际尝试」的 provider；缺省才回退到匿名兜底常量，避免显式 prod 误报 our-free-model。
+      return `宿主未装载对应模型适配器（${provider ?? AI_PROVIDER}），AI 草稿不可用。`
     default:
       return 'AI 生成失败（模型未返回可用文本），你仍可手工录入或稍后重试。'
   }
 }
 
 /** 把 prepareCall / stream 抛出的错误归一为 AiDraftError（按 code/name/message 路由）。 */
-function normalize(error: unknown): AiDraftError {
+function normalize(error: unknown, provider?: string): AiDraftError {
   const record = typeof error === 'object' && error !== null ? (error as Record<string, unknown>) : {}
   const name = typeof record.name === 'string' ? record.name : ''
   const code = typeof record.code === 'string' ? record.code : undefined
@@ -74,7 +83,7 @@ function normalize(error: unknown): AiDraftError {
       '免费模型响应超时或被中断（免费池偶发），请重试一次；核心台账不受影响，你也可以手工录入。',
     )
   }
-  return new AiDraftError(code ?? 'UNKNOWN', friendlyCode(code))
+  return new AiDraftError(code ?? 'UNKNOWN', friendlyCode(code, provider))
 }
 
 export interface GenerateDraftOptions {
@@ -115,17 +124,15 @@ export async function generateDraft(llm: LlmGateway | undefined, options: Genera
     } catch (error) {
       // 硬错误不换池；其余可退避换下一池。
       const err = error instanceof AiDraftError ? error : normalize(error)
-      result = { text: '', retriable: !['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM'].includes(err.code), error: err }
+      result = { text: '', retriable: !HARD_ERROR_CODES.includes(err.code), error: err }
     }
     if (result.text) return result.text
     lastError = result.error
-    const hard = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM']
-    if (hard.includes(result.error.code) || i === chain.length - 1) break
+    if (HARD_ERROR_CODES.includes(result.error.code) || i === chain.length - 1) break
     await sleep(400)
   }
-  const hard = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM']
-  // 硬错误（限流/认证/上下文）直接抛原中文，不套通用链文案。
-  if (lastError && hard.includes(lastError.code)) throw lastError
+  // 硬错误（限流/认证/上下文/缺适配器）直接抛原中文，不套通用链文案。
+  if (lastError && HARD_ERROR_CODES.includes(lastError.code)) throw lastError
   throw new AiDraftError(
     lastError?.code ?? 'EMPTY_RESPONSE',
     `免费池多次尝试（${tried.join(' → ')}）均未返回可用正文；请稍后再试或手工录入。`,
@@ -144,7 +151,7 @@ async function attempt(
   try {
     call = await llm.prepareCall({ provider, model, maxTokens }, options.signal)
   } catch (error) {
-    throw normalize(error)
+    throw normalize(error, provider)
   }
 
   const messages = [
@@ -163,7 +170,7 @@ async function attempt(
       if ((chunk as { error?: unknown })?.error) upstreamError = (chunk as { error?: unknown }).error
     }
   } catch (error) {
-    throw normalize(error)
+    throw normalize(error, provider)
   }
 
   const text = assembler.blocks()

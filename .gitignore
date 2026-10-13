@@ -35,3 +35,9 @@ data/
 # R4 默认导出目录（可重新生成，不作为数据源）
 exports/
 backups/
+
+# 回归验证运行产物（agent 并行回归临时目录与 tar.gz 归档）
+# 见 docs/testing/test-plan.md：verify-run-*/ 为回归 agent 并行产物；
+# 决定性结论已摘要入 docs/testing 与 docs/verification，原始运行目录/归档不入库、不删除（本地留存证据）。
+verify-run-*/
+verify-run-*.tar.gz
