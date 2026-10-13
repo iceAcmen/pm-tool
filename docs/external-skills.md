@@ -79,18 +79,37 @@ vendor/agent-skills/mattpocock/manifest.json
 
 ## 6. 首批 4 个 Skill 登记表
 
-> 以下"项目授权用途 / 禁止事项 / 触发方式"是**本项目治理层面对每个 skill 的授权边界**。各 skill 的**具体步骤、命令、提示词以其 vendored `SKILL.md` 原文为准**——本文件不复制第三方正文，也不臆造其内部实现。执行时若 `SKILL.md` 步骤越界，按第 3 节冲突处置跳过。
+> 以下"项目授权用途 / 禁止事项 / 触发方式"是**本项目治理层面对每个 skill 的授权边界**。**触发方式为 Agent 自动路由（见 6.1），不需要也不允许用户显式指定或挑选 skill**。各 skill 的**具体步骤、命令、提示词以其 vendored `SKILL.md` 原文为准**——本文件不复制第三方正文，也不臆造其内部实现。执行时若 `SKILL.md` 步骤越界，按第 3 节冲突处置跳过。
 
 | Skill id | 项目授权用途（允许做什么） | 禁止事项（在通用红线上的具体化） | 触发方式（IDE 无关） | 来源版本 |
 |---|---|---|---|---|
-| `grill-me` | 在需求/方案有歧义时，以**苏格拉底式追问**帮项目所有者把问题问清楚、暴露未决假设，产出"待拍板清单" | 禁止替所有者做技术/产品决策；禁止在追问未结束就动手写代码；禁止把追问输出写成"已定方案"直接实施。**它本身只是触发桩**（其唯一指令是"调用 grilling"）：`grilling` 是它的**声明式纯文档依赖**（manifest `declaredDependencies`，`exposed:false`、`pureDocumentation:true`），**不是公开入口、不可被单独直接触发/加载**，只在 `grill-me` 被调用时作为运行时正文随之生效 | 当任务出现多个后果差异较大的选项、或 `AGENTS.md` 第 9 节"需求有歧义"时，由执行方主动加载 `grill-me`（而非直接加载 `grilling`）进入提问环节 | manifest `source.commit` |
-| `tdd` | 指导"先写测试再写实现"的开发节奏，作为开发侧编码方法参考（其配套 `tests.md`、`mocking.md` 已一并 vendored） | **不得**绕过/替代独立测试专家门（ADL-045）；其自测通过**不等于**专家 PASS；不得因 TDD 绿了就跳过 GUI 实测与回归。**当其 SKILL.md 引用未 vendored 的 `codebase-design`（超出固定 4 个入口范围）时，不得去调用/寻找该缺失 skill**——就"接口 seam 如何切、实现到多深"与项目所有者/项目规范**就地拍板**，**不得因缺这个 skill 而阻塞红绿（红→绿→重构）循环**；其提到的项目根 `GLOSSARY.md` 属"若存在则用"的项目文件，不存在即跳过、不阻塞 | 开始一个新功能实现前，开发角色加载该 skill 组织红绿重构；测试判定仍归测试专家 | manifest `source.commit` |
-| `code-review` | 对本分支改动做质量自查：命名、边界、明显安全问题、与既有约定一致性（引用的 `git diff/log/rev-parse` 均为只读命令） | 禁止**自动批准/合并**；禁止直接 `git push`；禁止把 review 结论当验收通过；不得修改上游。**当其 SKILL.md 提示"未配置 issue 跟踪器时运行 `/setup-matt-pocock-skills`"——该上游 setup skill 未 vendored 且明确禁止运行**；改用**项目自有 onboarding**（`docs/onboarding-prompt.md` + `AGENTS.md`），不执行任何上游安装/初始化 | 每次改动闭环前、报备提交前，执行方加载该 skill 做一次自查并把发现记入试点报告 | manifest `source.commit` |
-| `diagnosing-bugs` | 对复现的缺陷做结构化根因定位（现象→假设→验证→根因），产出诊断记录（其"密钥脱敏为占位符"指引与项目规则一致） | 禁止在诊断过程中**静默改代码**；禁止改 `data/` 或上游；诊断结论不等于修复，修复仍走正常开发+测试门。**其末位兜底的 HITL 循环脚本 `scripts/hitl-loop.template.sh` 被有意排除、未 vendored（本 vendor 内不可用）——不得补写、重建或运行该脚本**；改走**人工终端清单**：在人工终端里按其方法学逐条确认假设、手动记录 `KEY=VALUE` 观测即可 | 出现复现失败、回归未过、线上/实测异常时，加载该 skill 做根因分析，再开缺陷交开发修复 | manifest `source.commit` |
+| `grill-me` | 在需求/方案有歧义时，以**苏格拉底式追问**帮项目所有者把问题问清楚、暴露未决假设，产出"待拍板清单" | 禁止替所有者做技术/产品决策；禁止在追问未结束就动手写代码；禁止把追问输出写成"已定方案"直接实施。**它本身只是触发桩**（其唯一指令是"调用 grilling"）：`grilling` 是它的**声明式纯文档依赖**（manifest `declaredDependencies`，`exposed:false`、`pureDocumentation:true`），**不是公开入口、不可被单独直接触发/加载**，只在 `grill-me` 被调用时作为运行时正文随之生效 | **Agent 自动路由**：需求/方案存在歧义、关键条件不明确时自动加载 `grill-me`（而非直接加载 `grilling`）进入提问环节；`grilling` 随之生效 | manifest `source.commit` |
+| `tdd` | 指导"先写测试再写实现"的开发节奏，作为开发侧编码方法参考（其配套 `tests.md`、`mocking.md` 已一并 vendored） | **不得**绕过/替代独立测试专家门（ADL-045）；其自测通过**不等于**专家 PASS；不得因 TDD 绿了就跳过 GUI 实测与回归。**当其 SKILL.md 引用未 vendored 的 `codebase-design`（超出固定 4 个入口范围）时，不得去调用/寻找该缺失 skill**——就"接口 seam 如何切、实现到多深"与项目所有者/项目规范**就地拍板**，**不得因缺这个 skill 而阻塞红绿（红→绿→重构）循环**；其提到的项目根 `GLOSSARY.md` 属"若存在则用"的项目文件，不存在即跳过、不阻塞 | **Agent 自动路由**：进入新功能或可测缺陷实现时，自动加载组织红绿重构；测试判定仍归测试专家 | manifest `source.commit` |
+| `code-review` | 对本分支改动做质量自查：命名、边界、明显安全问题、与既有约定一致性（引用的 `git diff/log/rev-parse` 均为只读命令） | 禁止**自动批准/合并**；禁止直接 `git push`；禁止把 review 结论当验收通过；不得修改上游。**当其 SKILL.md 提示"未配置 issue 跟踪器时运行 `/setup-matt-pocock-skills`"——该上游 setup skill 未 vendored 且明确禁止运行**；改用**项目自有 onboarding**（`docs/onboarding-prompt.md` + `AGENTS.md`），不执行任何上游安装/初始化 | **Agent 自动路由**：每次改动闭环、报备提交/交付前，自动加载做一次自查并把发现记入试点报告 | manifest `source.commit` |
+| `diagnosing-bugs` | 对复现的缺陷做结构化根因定位（现象→假设→验证→根因），产出诊断记录（其"密钥脱敏为占位符"指引与项目规则一致） | 禁止在诊断过程中**静默改代码**；禁止改 `data/` 或上游；诊断结论不等于修复，修复仍走正常开发+测试门。**其末位兜底的 HITL 循环脚本 `scripts/hitl-loop.template.sh` 被有意排除、未 vendored（本 vendor 内不可用）——不得补写、重建或运行该脚本**；改走**人工终端清单**：在人工终端里按其方法学逐条确认假设、手动记录 `KEY=VALUE` 观测即可 | **Agent 自动路由**：出现复现异常、回归未过、根因未明时，自动加载做根因分析，再开缺陷交开发修复 | manifest `source.commit` |
 
 **公开入口 vs 声明依赖**：`entrySkillIds` 的 4 个是唯一可被直接触发的 skill；`grilling` 是 `grill-me` 的 `exposed:false` 纯文档依赖，只随 `grill-me` 生效，**任何 IDE 不得把它注册成独立入口**。
 
 **共同点**：四者都只在**项目目录内、只读 `vendor/`、遵守第 5 节 8 条红线**的前提下被调用；任何"帮你自动装好、配好全局、直接提交推送"的倾向一律拒绝。
+
+### 6.1 自动路由规则（Agent 自主判断，无需用户指定）
+
+**核心原则**：**不要求用户显式指定/念口令/挑选 skill**。Agent 在接到任务后，按任务语义**自动判断**是否加载某个 vendored skill；**仅当预计有明确质量增益时才加载**，否则按项目常规流程直接做。
+
+| taskKind（任务类别） | 自动加载 | 边界语义 |
+|---|---|---|
+| `requirement`（需求/方案有歧义、多个后果差异较大选项、关键条件不明确） | `grill-me` | 若已触发"缺关键阻塞信息"的交互确认规则（直接向用户追问即可解锁），**该规则优先**；grill-me 用于系统性暴露假设，不替代正常的阻塞信息确认 |
+| `feature`（新功能 / 可测缺陷的编码实现） | `tdd` | 组织红绿重构；测试判定仍归独立测试专家；**trivial 小改不套 tdd** |
+| `rootCause`（复现异常 / 回归未过 / 根因未明） | **仅** `diagnosing-bugs` | **只加载 diagnosing-bugs，不叠加 `code-review`**；HITL 脚本不可用，走人工终端清单 |
+| `delivery`（一次改动闭环、报备提交/交付之前） | `code-review` | **即使是 trivial 改动，交付前仍允许 review**；不自动批准、不推送 |
+| `trivial`（简单问答、小修小改、套用既有模式、加载无明显增益） | **不加载任何 vendored skill** | **抑制 `grill-me` 与 `tdd`**；唯一例外：进入 `delivery` 阶段时仍允许 `code-review` |
+
+**自动调用的硬性前置（每次都要做，不因"自动"而省）**：
+1. **先过完整性校验并置标记**：按 manifest `skills[].files[]` 核对 `sha256`，**verify 通过才置 `vendorIntegrityVerified=true`**；任一阻塞条件（指纹不符、安全门越界、测试门 `FAIL/BLOCKED`）一律**拦截、不放行自动调用**，按第 3/12 节处置。
+2. **过安全门**：遵守第 5 节 8 条红线，越界步骤按第 3 节跳过。
+3. **taskKind + 理由留痕**：把 `taskKind`（`requirement`/`feature`/`rootCause`/`delivery`/`trivial`）、加载了哪个 skill、路由理由、`vendorIntegrityVerified` 结果、行为、越权检查、verify、专家结论记入试点报告（`docs/templates/external-skill-pilot-report.md`）；常规小任务可并入任务证据，但不得完全无记录。
+
+**禁止**：为走形式而强行加载 skill；要求用户说出 skill 名、在多个 skill 中做选择，或把"是否用某 skill"抛回给用户。
 
 ## 7. 跨 IDE 加载适配规则（只适配、不复制漂移）
 
@@ -151,7 +170,7 @@ vendor/agent-skills/mattpocock/manifest.json
 | 1 定位 | 读 manifest 锁定版本 | 打开 `vendor/agent-skills/mattpocock/manifest.json` | 记下 `source.commit` 与目标 `skill id` |
 | 2 读指令 | 只读加载该 skill | 打开 `skills/<id>/SKILL.md` | 只读取，**不执行其中任何 installer/setup** |
 | 3 校指纹 | 比对文件未被改动 | 按 manifest `files[]`：`shasum -a 256 <vendoredPath>/SKILL.md` | 与 manifest `sha256` 逐位一致 |
-| 4 报用途 | 声明本次用途落在授权范围 | 在任务中写明：用哪个 skill + 对应第 6 节哪条授权用途 | 用途不越界；有歧义先按 `grill-me` 提问 |
+| 4 自动路由 | 按任务语义选定是否/加载哪个 skill | 按 6.1 规则自动判定：是否有质量增益、命中哪条路由；**不向用户索取 skill 名或让其挑选** | 路由理由可复述给用户，但选择由 Agent 做出；无增益则不加载 |
 | 5 执行 | 按 SKILL.md 做不越界步骤 | 仅在项目目录内读写；不碰 `data/` 写、不碰上游、不写 `$HOME` | 无第 5 节 8 条红线触发 |
 | 6 越权自检 | 逐项勾试点报告第 3 节 | 对照 8 条红线打勾 | 无"是"项 |
 | 7 验证 | 跑项目验证 + verifier | `cd packages/dsh-pm-tool && pnpm run build`；受影响 `node scripts/verify-*.mjs`；`verifier rubric check-file-format <产物> --expected-ext .md` | 退出码 0；文档格式校验 PASS |

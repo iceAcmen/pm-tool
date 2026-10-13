@@ -6,6 +6,28 @@
 
 ---
 
+## ADL-049 ｜ 2026-10-13 ｜ Vendored Skill 自动路由：由执行 Agent 按任务上下文自动选择，无需用户显式指定（长期硬规则，ADL-048 的操作细则）
+
+- **背景**：ADL-048 已把首批 4 个 vendored skill 纳入治理（试点可用、未毕业）。原先设想由用户在任务里点名用哪个 skill；项目所有者更新长期治理：**vendored skill 应由执行 Agent 根据当前任务自动判断是否加载、加载哪个，不再要求用户显式指定**。本 ADL 据此给出自动路由的映射、边界与优先级。
+- **决定（按结构化任务信号自动路由，非用户口令；实现为纯函数 `routeExternalSkill`）**：
+  1. **缺关键阻塞信息 `needsBlockingUserInput`（最高优先）**：先走内建 `interaction` 直接向用户追问解锁，`route='none'`——**全拦，不加载任何 vendored skill**（尤其不为此套 `grill-me`，也不进入交付自查/`code-review`）。
+  2. **vendor 安全门 `vendorIntegrityVerified` 必须为 `true`（返回任何 skill 前的硬前置）**：manifest schema / 锁定 commit / license / 精确 entry 白名单 / 逐文件 sha256 静态校验未过，一律 `route='none'`。本纯函数不自己校指纹，只消费执行 Agent 已完成的静态校验结果。
+  3. **根因未明 `isRootCauseUnknown`**：只路由 `diagnosing-bugs`（现象→假设→验证→根因）；**抑制 `grill-me`/`tdd`，且不追加 `code-review`**（根因未明本批不可交付/不可自评提交）；诊断中不静默改代码，修复仍走正常开发 + 独立测试门（ADL-045）。
+  4. **实质歧义 `hasMaterialAmbiguity`（非阻塞）且非 trivial**：路由 `grill-me`，先产出待拍板清单再动手；不替所有者拍板、不把追问输出当已定方案实施。
+  5. **新功能 `isNewFeature` 或可测修复 `isTestableFix` 且非 trivial**：路由 `tdd`，组织红→绿→重构；其自测绿 ≠ 独立测试专家 PASS。
+  6. **交付边界 `isDeliveryBoundary`**：**追加** `code-review`（排在最后）；**即使 `isTrivial` 也保留**（交付门不因简单免自查）；根因未明分支已在第 3 条提前返回，不会叠 review。
+  7. **简单 `isTrivial`**：抑制 `grill-me`/`tdd`（无澄清/红绿增益），但不影响第 6 条交付 `code-review`；无任何命中时 `route='none'`（避免为用而用）。
+  - **输出契约**：`entrySkillIds` 严格属于白名单（`grill-me`/`tdd`/`code-review`/`diagnosing-bugs`）、有序去重冻结；`grilling`（grill-me 的 exposed:false 纯文档依赖）永不作为 entry 返回；`interaction` 是 Agent 内建动作、不是 vendored skill。
+- **边界与优先级（自动路由不是“想装就装”）**：
+  - **高位覆盖低位**：项目规则（`AGENTS.md` §6/6A + `docs/external-skills.md` 政策 8 条红线）> `grill-me` 的追问/交互澄清 > 独立测试门（ADL-045/047）> 各 vendored skill 自带步骤。任一更高位规则与 skill 步骤冲突，立即跳过该步骤并在试点报告记录。
+  - **自动加载≠放行**：自动路由只是“决定用哪个只读参考”，不豁免 8 条红线、不替代独立测试门；不可逆动作（删除/覆盖/推送/全局配置）仍须人工确认。
+  - **加载前先验证**：自动加载任一 skill 前，须先确认 `node packages/dsh-pm-tool/scripts/verify-external-skills.mjs` 静态校验为 PASS，并按 manifest 比对目标文件 sha256 指纹；指纹不一致即停用报障。
+  - **无需用户口令**：“自动”指 Agent 无需用户显式指定 skill、也无需逐次授权码即可按上述映射只读加载 vendored `SKILL.md`；但这**不**等于允许运行 installer、写 home/全局、联网抓新版或越权执行。
+- **状态边界（重要）**：自动路由规则生效 **不改变毕业状态**——当前仍是“**试点可用，未毕业**”。`code-review` 试点已 PASS；`grill-me`/`tdd`/`diagnosing-bugs` 尚无试点报告（NOT_RUN），Agent 自动加载它们仍属试点期行为，**每次使用仍须填 `docs/templates/external-skill-pilot-report.md` 并由独立测试专家审证**，不得因“已自动路由”就视为该 skill 已毕业或已通过。
+- **理由**：让 skill 真正按上下文被复用、免去用户每次点名的成本；同时用“映射 + 优先级 + 加载前验证 + 试点留痕”把自动路由关在治理框架内，避免 Agent 借“自动”之名越权或自判通过。
+- **替代方案（已否决）**：① 每次由用户显式指定 skill（成本高、违背 skill 按上下文加载的本意）；② Agent 任意自动加载且不留痕/不校指纹（越权与漂移风险，被否）；③ 自动路由即视为全部 skill 毕业（掩盖其余 3 个尚无试点报告的事实，被否）。
+- **最终结果/状态**：2026-10-13 项目所有者批准，作为 ADL-048 的长期操作细则生效。**实现已落地并经独立复核 APPROVE**：纯函数 `packages/dsh-pm-tool/src/core/external-skill-router.ts` + 校验脚本 `scripts/verify-external-skill-router.mjs`，按上述严格语义（经一轮 REQUEST CHANGES 修订：trivial 抑制 grill/tdd 但 delivery 仍可 review、rootCauseUnknown 仅 diagnose 不叠 review、blocking 全拦、`vendorIntegrityVerified` 为硬前置）；**校验器 41 组断言全绿（覆盖 K1–K6、K3 安全门 false 拦截/true 放行、taskKind 留痕、冻结去重、确定性），K 域独立专家 = PASS**。**自动路由 ≠ 毕业**：仍「试点可用，未毕业」，其余 3 entry（grill-me/tdd/diagnosing-bugs）试点待做。落地物政策正文（`docs/external-skills.md`，由另一 Agent 维护）、vendor、验收矩阵、路由代码正文本轮不改；本批文档接线暂不提交。
+
 ## ADL-048 ｜ 2026-10-13 ｜ 选择性 vendoring 外部 Agent Skills（首批 mattpocock）：锁上游 commit、仅 4 公开 entry + 声明依赖、项目规则优先、不跑 installer、安全静态校验 + 独立试点门（长期硬规则）
 
 - **背景**：为提升开发/复盘效率，决定以**只读 vendoring** 方式引入外部社区 Agent Skill（首批 `mattpocock/skills` 的 4 个纯文档 playbook）。第三方指令可能越权写全局、联网、自动安装或替代独立测试门，故需为其立长期治理框架。外部 skills 落地物（`vendor/`、政策、验收矩阵、静态校验器）已由实施方落盘但**尚未经独立测试专家验收**；本 ADL 固化其治理口径并完成长期规范接线，不改动这些落地物正文。

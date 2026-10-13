@@ -8,6 +8,17 @@
 
 ---
 
+## [未发布] — 外部 Skill 自动路由治理：ADL-049 + AGENTS 自动选择要求（2026-10-13，平台：doubao-work）
+
+- **改动文件（仅长期规范/索引）**：
+  - `docs/decision-log.md`：置顶新增 **ADL-049**（vendored skill 由执行 Agent 按任务自动路由、无需用户点名）。
+  - `AGENTS.md`：第 6 节在 vendor 治理条下追加一条简短**自动选择**规则（映射 grill-me/tdd/diagnosing-bugs/code-review + 简单任务可不加载 + 优先级 + 加载前验证/留痕）。
+  - `docs/knowledge-base.md`（KB-038）/ `docs/progress.md` / `docs/handoff.md` / `docs/onboarding-prompt.md` 快照：同步自动路由规则与当前状态。
+- **为什么**：项目所有者更新长期治理——vendored skill 不再要求用户显式指定，由 Agent 按上下文自动判断；需把映射、边界与优先级固化为长期规范。
+- **自动路由精确语义（ADL-049，按 REQUEST CHANGES 修订后的实现 `src/core/external-skill-router.ts`）**：缺阻塞信息→`interaction` 追问、route=none（**全拦**）；`vendorIntegrityVerified` 必须 **true**（安全门硬前置，未过即 none）；根因未明→仅 `diagnosing-bugs`（**抑制 grill/tdd、不叠 code-review**）；实质歧义非 trivial→`grill-me`；新功能/可测修复非 trivial→`tdd`；交付边界→**追加 `code-review`（trivial 也保留）**；`isTrivial` 抑制 grill/tdd。优先级：项目规则 > 追问澄清 > 独立测试门 > skill 步骤；自动加载无需用户口令，但须先校 `verify-external-skills.mjs` 静态校验 PASS + sha256、逐次填试点报告。配套纯函数 + 校验脚本 `scripts/verify-external-skill-router.mjs` 由实现方落地。
+- **影响范围 / 状态**：本批仅改规范/索引文档；**不改** vendor、政策正文（`docs/external-skills.md`，另一 Agent 维护）、验收矩阵、试点报告、路由代码。**自动路由实现已独立复核 APPROVE**：`scripts/verify-external-skill-router.mjs` **41 组断言全绿**（K1–K6、K3 安全门 false 拦截/true 放行、taskKind 留痕、冻结去重、确定性），**K 域专家 = PASS**。**自动路由 ≠ 毕业**——仍「试点可用，未毕业」：`code-review` 试点 PASS，其余 3 entry（grill-me/tdd/diagnosing-bugs）试点待做。
+- **验证**：`git diff --check` 干净；`node scripts/verify-external-skills.mjs`（vendor 安全门）exit 0；`node scripts/verify-external-skill-router.mjs` **41 组断言全绿、exit 0**；路由实现结论由独立专家签发，本接线批不自判。**未提交（按要求）**。
+
 ## [未发布] — 外部（vendor）Agent Skills 长期规范接线：ADL-048 + AGENTS/索引（2026-10-13，平台：doubao-work）
 
 - **改动文件（仅规范/索引，不碰落地物正文）**：

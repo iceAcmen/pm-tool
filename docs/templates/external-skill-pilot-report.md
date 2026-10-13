@@ -18,6 +18,8 @@
 | 执行平台标识 | 见 `docs/collaboration.md` 第二节注册表（如 `doubao-work` / `trae` / `human`） |
 | 被测提交哈希 | 本次任务期间仓库 HEAD 的短 hash（`git rev-parse --short HEAD`） |
 | 任务一句话 | 本次用该 skill 想完成什么 |
+| 触发方式 / taskKind | **自动路由**（Agent 按 `docs/external-skills.md` 6.1 自主判定，非用户指定）。结构化填写：`taskKind=`（`requirement`/`feature`/`rootCause`/`delivery`/`trivial`）；命中路由规则；预计质量增益理由；`rootCause` 是否仅 diagnosing 未叠 review、`trivial` 是否正确抑制 grill/tdd |
+| vendor 安全门结果 | `vendorIntegrityVerified=`（`true`=manifest `files[]` sha256 校验通过 / `false`=不符即停用）；安全门是否过（第 5 节 8 条）；有无阻塞条件（指纹不符 / 越界 / 测试门 FAIL·BLOCKED）拦截 |
 
 ## 1. 任务与预期
 

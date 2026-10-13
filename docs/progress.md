@@ -2,14 +2,14 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-13（doubao-work 长期规范接线完成 + 独立验收已签发：外部 vendor Agent Skills 引入立为 ADL-048；**当前状态：试点可用，未毕业**——自动化验收门 PASS、code-review 试点 PASS，其余 3 entry 待试点）
+最后更新：2026-10-13（doubao-work 外部 skill **自动路由**：ADL-049 精确语义回写——trivial 抑制 grill/tdd 但 delivery 可 review、rootCauseUnknown 仅 diagnose 不叠 review、blocking 全拦、vendorIntegrityVerified 硬前置、taskKind 留痕；**路由实现独立复核 APPROVE、41 组断言全绿、K 域专家 PASS**；仍试点可用未毕业）
 
 ## 当前阶段：外部 vendor Agent Skills 引入 + 长期规范接线（2026-10-13，doubao-work）
 
 - **决策（ADL-048）**：以只读 vendoring 引入首批 `mattpocock/skills`（grill-me/tdd/code-review/diagnosing-bugs + 纯文档依赖 grilling），锁上游 commit `49dd158d1076134a641b33efb035946536778336`；项目规则优先、不跑 installer、不写 home/全局、不替代独立测试门；升级走双审、回滚只改 manifest commit。
-- **落地物（实施方已落盘、未提交，本批未改其正文）**：`vendor/agent-skills/mattpocock/`（只读正文 + manifest.json）、治理政策 `docs/external-skills.md`、独立验收门 `docs/testing/external-skills-acceptance.md`、离线静态校验器 `packages/dsh-pm-tool/scripts/verify-external-skills.mjs`、试点报告模板 `docs/templates/external-skill-pilot-report.md`。
-- **本批（接线方）做了什么**：ADL-048、AGENTS §6 一条 vendor 红线 + §5 文档地图、README 目录树入口、KB-038、`docs/testing/README.md` 索引一行、changelog/progress/handoff 同步。
-- **状态（2026-10-13 独立测试专家签发）**：**试点可用，未毕业。** 自动化验收门 = **PASS**（静态/校验域 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；**`code-review` 试点 = PASS**（报告 `docs/verification/external-skills/pilot-01-code-review.md`）；其余 3 entry（`grill-me`/`tdd`/`diagnosing-bugs`）尚未出试点报告（NOT_RUN），各补 1 份试点报告后方可毕业。绑定：HEAD=`93eb093c20648618c3e1d2914a20340d22325f86`、上游 commit=`49dd158d1076134a641b33efb035946536778336`。**下一步**：为其余 3 entry 各补 1 份试点报告以推进毕业；使用 vendor skill 仍须先读 `docs/external-skills.md` 守 8 条红线。
+- **决策（ADL-049 自动路由，实现 `src/core/external-skill-router.ts`）**：vendored skill 不再要求用户显式指定，由纯函数按结构化信号确定性路由——缺阻塞信息→`interaction` 追问 route=none（**全拦**）；`vendorIntegrityVerified` 必须 **true**（安全门硬前置）；根因未明→仅 `diagnosing-bugs`（**抑制 grill/tdd、不叠 code-review**）；实质歧义非 trivial→`grill-me`；新功能/可测修复非 trivial→`tdd`；交付边界→**追加 `code-review`（trivial 也保留）**；`isTrivial` 抑制 grill/tdd。自动加载无需用户口令，但须先校静态校验 PASS + sha256、逐次留试点报告；优先级「项目规则 > 追问澄清 > 独立测试门 > skill 步骤」。
+- **落地物**：`vendor/agent-skills/mattpocock/`（只读正文 + manifest.json）、治理政策 `docs/external-skills.md`、独立验收门 `docs/testing/external-skills-acceptance.md`、离线静态校验器 `packages/dsh-pm-tool/scripts/verify-external-skills.mjs`、试点报告模板 `docs/templates/external-skill-pilot-report.md`（本批均未改其正文）。
+- **状态（2026-10-13 独立测试专家签发）**：**试点可用，未毕业。** 自动化验收门 = **PASS**（静态/校验域 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；**`code-review` 试点 = PASS**（报告 `docs/verification/external-skills/pilot-01-code-review.md`）；其余 3 entry（`grill-me`/`tdd`/`diagnosing-bugs`）尚未出试点报告（NOT_RUN），各补 1 份试点报告后方可毕业。**自动路由实现已独立复核 APPROVE**：`verify-external-skill-router.mjs` **41 组断言全绿**（K1–K6、K3 安全门 false 拦截/true 放行、taskKind 留痕、确定性）、**K 域专家 = PASS**。绑定：上游 commit=`49dd158d1076134a641b33efb035946536778336`。**自动路由 ≠ 毕业**。**下一步**：为其余 3 entry 各补 1 份试点报告以推进毕业；使用 vendor skill 仍须先读 `docs/external-skills.md` 守 8 条红线。
 
 ## 历史阶段：第一档离线增强 R16/R17/R18 已实现（2026-10-11，doubao-work）
 
