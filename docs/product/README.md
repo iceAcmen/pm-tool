@@ -36,6 +36,7 @@
 | [07-people-load-view-design.md](07-people-load-view-design.md) | ⑤延伸 | PROD-07 升级为顶层「人员与负载」tab（v0.5.1，零 schema，**已实现·独立验收 PASS，仅余真 390px 窄屏 MANUAL_PENDING**） |
 | [08-copilot-multistep-design.md](08-copilot-multistep-design.md) | ⑤延伸 | PROD-24 副驾多步规划（PROD-20 增量，零 schema；**已实现·独立验收 PASS，49 项全绿 + 2 项 MANUAL_PENDING**：计划卡/拓扑/整批逐步/链式 baseline，执行仍 ask-apply） |
 | [09-web-polish-design.md](09-web-polish-design.md) | ⑤延伸 | v0.5.2 Web polish 三件套（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号；零 schema；**已实现·独立验收 27/27 PASS**，落地顺序 10→09→04） |
+| [10-schema-v2-design.md](10-schema-v2-design.md) | ⑤延伸 | v0.6.0 schema v2 批（PROD-11 任务 predecessorIds 依赖 / PROD-21 项目 repoUrl·branch / PROD-23 概览健康分 / 崩溃原子恢复；domain v2 兼容[1]、新字段 optional；**设计定稿·未开发待测试门**） |
 | [handoff-for-coding-agents.md](handoff-for-coding-agents.md) | — | 给 TRAE/编码 Agent 的接手说明：术语、实施顺序、别重复调研 |
 
 ## 编号约定（与仓库既有体系关系）

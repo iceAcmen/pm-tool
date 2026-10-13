@@ -79,3 +79,8 @@
 - **落地顺序（所有者拍板）：PROD-10 → PROD-09 → PROD-04**，已按序交付。
 - **零 schema 兑现**：domain 仍 v1、9 表不变。PROD-10 前端反查 `meetings.actions[].taskId`（多来源按会议列表口径确定性取首并提示「另 N 场」）；PROD-09 全量按 periodEnd/id 排序对相邻固定快照 diff 完成率/overdue_task 异常数/总异常数（首份无徽标、零值「持平0」、文字+箭头非仅色）；PROD-04 一次确认＝改父+本项目全量 renumber，后端单写队列内原子复合+失败整体回滚，取消零写。
 - **下一步主线＝schema v2**：PROD-11 任务 `predecessorIds[]` 依赖、PROD-21 repoUrl/branch、PROD-23 项目健康分 + 崩溃原子恢复。
+
+## 落地状态勘误（2026-10-13，schema v2 设计稿落档，未开发待测试门）
+- **v0.6.0 设计稿已定稿**：契约见 [`10-schema-v2-design.md`](10-schema-v2-design.md)，覆盖 PROD-11（任务 `predecessorIds[]` 前置依赖：可选/同项目/环检测/删除引用保护/「等待前置」只读标签，甘特箭头=P1）、PROD-21（**项目级** `repoUrl/branch` 可选、格式校验、概览只读链接、不联网；任务/交付物级降级 P1）、PROD-23（项目概览健康分：基于 stats 纯派生不落盘、红黄绿灯、扣分项可见、空项目灰灯「数据不足」）、崩溃原子恢复（坏记录 clean fail 中文路径诊断、**不启用 backup-and-skip**；createBackup 临时文件+fsync+rename；restore 失败内存快照回滚；backup formatVersion 保持 1 且兼容旧备份；`/pm doctor` P0 只读、悬空引用只报告、显式确认才修）。
+- **数据模型裁决**：domain version 1→2 且 **compatibleVersions 含 [1]，同一 commit 落地**；全部新字段 optional，旧 v1 记录读回不报错、零迁移重写；仍不承诺跨进程/跨记录 ACID（单条记录原子由底层保证，复合动作崩溃时可能部分完成，退路=R18 备份恢复）。
+- **状态**：未开发。按 ADL-045 测试门控，实现→独立测试专家 PASS 才算完成；本批 docs-only，未改 `src/`、未改 `docs/testing/`、未翻转任何既有 PROD 完成状态。

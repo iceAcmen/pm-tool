@@ -90,6 +90,18 @@
 - **PROD-04**：Web 树选择器排除自身/后代（后端环检测仍为硬门）；**一次确认＝改父＋本项目全量 renumber 同一用户动作**，后端单写队列内原子复合、失败整体回滚，**禁止「move 成功 renumber 失败」半状态**；取消零写；P0 不做拖拽/中间插序。
 - **完整契约/用户故事/验收条件/文件级计划**：见 [`docs/product/09-web-polish-design.md`](product/09-web-polish-design.md)；roadmap 登记见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) PROD-04/09/10 行。**下一步主线＝schema v2**：PROD-11（`predecessorIds[]` 依赖）、PROD-21（repoUrl/branch）、PROD-23（健康分 + 崩溃原子恢复）。
 
+### 变更提案（Change Proposal）：schema v2 批 PROD-11 / PROD-21 / PROD-23 + 崩溃原子恢复（v0.6.0，设计定稿·未开发待测试门）
+
+> 不新增 R 编号，复用产品档案 PROD-11 / PROD-21 / PROD-23。**状态（2026-10-13）：设计稿定稿、未开发**；按 ADL-045 测试门控，实现→独立测试专家 PASS 才算完成。完整契约见 [`docs/product/10-schema-v2-design.md`](product/10-schema-v2-design.md)。
+
+- **一句话**：v0.6.0 才动的 domain v2——任务加可选前置依赖、项目加可选仓库地址/分支、概览加确定性红黄绿灯健康分，并把备份/恢复与启动体检做成「打得开、查得清、可回滚」。
+- **数据模型影响：domain v1→v2，同 commit 兼容 [1]**。新字段全部 optional（任务 `predecessorIds[]`、项目 `repoUrl`/`branch`），旧 v1 记录读回不报错、零迁移重写；健康分纯派生不落盘。
+- **PROD-11**：可选前置依赖、同项目、环检测、删除引用保护（新错误类，仿 TaskReferencedByMeetingError）、「等待前置」只读标签（不自动改 status）；甘特依赖箭头=P1。
+- **PROD-21**：项目级 repoUrl/branch，格式校验、概览只读链接、**全程不联网验证**；任务/交付物级=P1。
+- **PROD-23**：基于既有 stats 的确定性扣分公式（逾期/受阻/高影响风险/逾期里程碑，各项封顶），概览红黄绿灯+扣分项可见；空项目灰灯「数据不足」；文案注明「仅供排期参考，不做绩效评价」。
+- **崩溃恢复裁决**：坏记录 clean fail + 中文路径诊断（**不启用 backup-and-skip 静默移走**）；createBackup 临时文件+fsync+rename；restore 失败内存快照自动回滚；backup formatVersion 保持 1 且兼容旧备份；`/pm doctor` P0 只读体检，悬空引用只报告、显式 confirm 才修。
+- **明确不做**：跨进程/跨记录 ACID、WAL、自动自愈悬空引用、联网验证仓库、甘特关键路径。
+
 ### R12 命令与格式约定（v0.9 补充）
 
 ```text
