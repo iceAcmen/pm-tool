@@ -3,6 +3,7 @@ import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { buildUpdate } from '../core/task-inline.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
+import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
 import { parseCopilotActions, validateActions } from '../core/copilot.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -206,7 +207,7 @@ type Snapshot = {
   reports: ProgressReport[]
   deliverables: Deliverable[]
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
@@ -273,7 +274,7 @@ export function PmPanel({ execute }: PmPanelApi) {
   const [view, setView] = useState<View>(() => {
     try {
       const v = localStorage.getItem('pm-view')
-      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview' || v === 'gantt') return v
+      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview' || v === 'gantt' || v === 'people') return v
     } catch { /* ignore */ }
     return 'tasks'
   })
@@ -597,6 +598,9 @@ export function PmPanel({ execute }: PmPanelApi) {
               <ViewTab active={view === 'gantt'} icon={<CalendarDays size={15}/>} onClick={() => changeView('gantt')}>
                 甘特排期
               </ViewTab>
+              <ViewTab active={view === 'people'} icon={<UserRound size={15}/>} onClick={() => changeView('people')}>
+                人员负载
+              </ViewTab>
             </nav>
             <section className="pm-view" role="tabpanel">
               {view === 'tasks' && <TaskTable
@@ -645,6 +649,11 @@ export function PmPanel({ execute }: PmPanelApi) {
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
               {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onSaved={() => void refresh()}/>}
+              {view === 'people' && <PeopleView
+                data={data}
+                onPickProject={(id) => setSelected(id)}
+                onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}
+              />}
             </section>
           </>}
 
@@ -817,6 +826,184 @@ function RangePicker({ range, setRange }: { range: number, setRange: (n: number)
       >{d} 天</button>,
     )}
   </span>
+}
+
+/** 人员与负载视图（P0 / v0.5.1）：跨项目按人聚合 open 任务，纯只读派生 snapshot。 */
+function PeopleView({ data, onPickProject, onOpenRecord }: {
+  data: Snapshot
+  onPickProject?: (id: string) => void
+  onOpenRecord?: (projectId: string, type: string, id: string) => void
+}) {
+  const today = useMemo(() => {
+    const n = new Date()
+    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
+  }, [])
+  const [search, setSearch] = useState('')
+  const [projectFilter, setProjectFilter] = useState('')
+  const [riskOnly, setRiskOnly] = useState(false)
+  const [sortMode, setSortMode] = useState<'risk' | 'open' | 'name'>('risk')
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set())
+
+  const filteredTasks = useMemo(
+    () => (projectFilter ? data.tasks.filter(t => t.projectId === projectFilter) : data.tasks),
+    [data.tasks, projectFilter],
+  )
+  const report = useMemo(
+    () => groupOpenTasksByAssignee(filteredTasks, data.projects, { today }),
+    [filteredTasks, data.projects, today],
+  )
+
+  const toggle = (key: string) => {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
+
+  // 姓名子串搜索：查询串走同一归一化口径（trim/折叠/小写）。
+  const q = normalizePerson(search)
+  let people = report.people
+  if (q) people = people.filter(p => p.display.toLowerCase().includes(q) || p.key.includes(q))
+  if (riskOnly) people = people.filter(p => p.overdue > 0 || p.blocked > 0 || p.dueSoon > 0)
+
+  // 排序：默认风险序（core 已排）；另两档客户端重排。
+  if (sortMode === 'open') {
+    people = [...people].sort((a, b) =>
+      b.openTotal - a.openTotal || b.overdue - a.overdue || b.blocked - a.blocked
+      || b.dueSoon - a.dueSoon || a.key.localeCompare(b.key))
+  } else if (sortMode === 'name') {
+    people = [...people].sort((a, b) => a.display.localeCompare(b.display, 'zh-Hans-CN'))
+  }
+
+  const totalOverdue = report.people.reduce((n, p) => n + p.overdue, 0) + (report.unassigned?.overdue ?? 0)
+  const totalUnassigned = report.unassigned?.openTotal ?? 0
+
+  // 空态 1：无任何任务。
+  if (data.tasks.length === 0) {
+    return <section className="pm-people pm-empty" aria-label="人员负载">
+      <p className="pm-cell-empty">还没有可汇总的任务。先在某个项目里拆解 WBS 并指定负责人，这里会自动按人归集。</p>
+    </section>
+  }
+  // 空态 2：有任务但全部完成。
+  if (report.people.length === 0 && !report.unassigned) {
+    return <section className="pm-people pm-empty" aria-label="人员负载">
+      <p className="pm-cell-empty">目前所有人手上都没有未完成任务。</p>
+    </section>
+  }
+
+  const renderTaskRow = (t: PersonRow['tasks'][number]) => {
+    const when = t.daysUntil === null ? '无截止'
+      : t.daysUntil < 0 ? `逾期 ${-t.daysUntil} 天`
+        : t.daysUntil === 0 ? '今天到期'
+          : `还剩 ${t.daysUntil} 天`
+    const tone = t.bucket === 'overdue' ? 'pm-task-when-overdue' : t.bucket === 'due-soon' ? 'pm-task-when-soon' : ''
+    const open = () => onOpenRecord?.(t.projectId, 'task', t.id)
+    return <li
+      key={t.id}
+      className="pm-people-task"
+      role="button"
+      tabIndex={0}
+      data-open-record
+      data-open-type="task"
+      data-open-id={t.id}
+      aria-label={`${t.projectName} ${t.title} ${when}`}
+      onClick={open}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open() }
+      }}
+    >
+      <button
+        type="button"
+        className="pm-people-project-chip"
+        data-pick-project={t.projectId}
+        aria-label={`跳到项目 ${t.projectName}`}
+        onClick={(e) => { e.stopPropagation(); onPickProject?.(t.projectId) }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >{t.projectName}</button>
+      <span className="pm-people-task-title">{t.code ? `${t.code} ` : ''}{t.title}</span>
+      <span className={`pm-people-task-when ${tone}`}>{when}</span>
+    </li>
+  }
+
+  const renderCard = (row: PersonRow, key: string, isUnassigned = false) => {
+    const open = expanded.has(key)
+    return <div key={key} className={`pm-person-card${isUnassigned ? ' pm-unassigned' : ''}`}>
+      <button
+        type="button"
+        className="pm-person-head"
+        data-person-key={isUnassigned ? 'unassigned' : row.key}
+        aria-expanded={open}
+        onClick={() => toggle(key)}
+      >
+        <span className="pm-person-name">
+          {isUnassigned ? '⚠ 未分配' : row.display}
+          {row.multiOwner && <span className="pm-person-multi" title="多负责人串（未拆分）">组</span>}
+        </span>
+        <span className="pm-person-meta">
+          {row.projectCount > 1 && <span className="pm-person-projects">跨 {row.projectCount} 个项目</span>}
+          <span>未完成 {row.openTotal}</span>
+          <span>待办 {row.todo} · 进行中 {row.inProgress} · 受阻 {row.blocked}</span>
+          {row.overdue > 0 && <span className="pm-chip pm-chip-overdue">逾期 {row.overdue}</span>}
+          {row.dueSoon > 0 && <span className="pm-chip pm-chip-soon">临期 {row.dueSoon}</span>}
+          {row.p0 > 0 && <span className="pm-chip">P0·{row.p0}</span>}
+          <span className="pm-person-next">最近截止 {row.nextDue ?? '—'}</span>
+        </span>
+      </button>
+      {open && <ul className="pm-person-tasks">{row.tasks.map(renderTaskRow)}</ul>}
+    </div>
+  }
+
+  return <section className="pm-people" aria-label="人员负载">
+    <div className="pm-people-toolbar" role="toolbar">
+      <input
+        className="pm-people-search"
+        type="search"
+        placeholder="搜索负责人…"
+        aria-label="搜索负责人"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+      />
+      <select
+        className="pm-people-project-filter"
+        aria-label="按项目过滤"
+        value={projectFilter}
+        onChange={e => setProjectFilter(e.target.value)}
+      >
+        <option value="">全部项目</option>
+        {data.projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+      </select>
+      <label className="pm-people-risk-only">
+        <input
+          type="checkbox"
+          checked={riskOnly}
+          onChange={e => setRiskOnly(e.target.checked)}
+        />只看有风险（逾期/受阻/临期）
+      </label>
+      <select
+        className="pm-people-sort"
+        aria-label="排序方式"
+        value={sortMode}
+        onChange={e => setSortMode(e.target.value as 'risk' | 'open' | 'name')}
+      >
+        <option value="risk">按风险</option>
+        <option value="open">按未完成数</option>
+        <option value="name">按姓名</option>
+      </select>
+    </div>
+
+    <div className="pm-people-summary" aria-live="polite">
+      {/* 摘要按产品设计 §6 全局口径：人数=全部有未完成的人（未分配不算人），逾期/无主全局，不随姓名搜索/只看风险变化。 */}
+      {report.people.length} 人有未完成 · {totalOverdue} 项逾期 · {totalUnassigned} 项无主
+    </div>
+
+    {report.unassigned && renderCard(report.unassigned, '', true)}
+
+    {people.length === 0
+      ? <p className="pm-cell-empty">没有匹配的负责人。可清除搜索或切回「全部项目」。</p>
+      : people.map(p => renderCard(p, p.key))}
+  </section>
 }
 
 function drawerTitle(drawer: Drawer): string {

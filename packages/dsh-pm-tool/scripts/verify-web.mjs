@@ -206,6 +206,27 @@ try {
   assert.match(bundle, /pm-export-json-btn/)        // PROD-08 收纳后导出仍在DOM                    // PROD-05 指标条                // PROD-03 行内截止   // PROD-02 定位纯函数              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab
   assert.match(css, /\.pm-batch-bar \{ animation/)  // OPT-07 淡入动画
 
+  // P0 人员与负载视图：稳定选择器 / 键盘可达 / 空态文案契约（真实 GUI 由独立专家门）。
+  assert.match(bundle, /人员负载/)                       // 顶层 tab 文案
+  assert.match(bundle, /pm-people-search/)             // 姓名搜索框
+  assert.match(bundle, /pm-people-project-filter/)      // 项目过滤
+  assert.match(bundle, /pm-people-risk-only/)          // 只看有风险
+  assert.match(bundle, /pm-people-sort/)               // 排序下拉
+  assert.match(bundle, /pm-person-head/)               // 人员卡（可聚焦按钮）
+  assert.match(bundle, /data-person-key/)              // 人员卡稳定 key（未分配=unassigned）
+  assert.match(bundle, /aria-expanded/)                // 卡展开状态
+  assert.match(bundle, /pm-people-task/)               // 任务行
+  assert.match(bundle, /role: "button"/)               // 任务行 role=button（li 键盘可达）
+  assert.match(bundle, /tabIndex: 0/)                 // 任务行 tabIndex=0
+  assert.match(bundle, /data-open-record/)             // 任务行直达（既契约，复用）
+  assert.match(bundle, /data-pick-project/)            // 项目 chip（既契约，复用）
+  assert.match(bundle, /还没有可汇总的任务/)             // 空态 1
+  assert.match(bundle, /目前所有人手上都没有未完成任务/)  // 空态 2
+  assert.match(bundle, /没有匹配的负责人/)               // 空态 3
+  assert.match(css, /\.pm-person-card/)
+  assert.match(css, /\.pm-unassigned/)
+  assert.match(css, /@media/)                          // 窄窗优雅降级
+
   console.log('通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。')
   console.log('通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。')
 } finally {
