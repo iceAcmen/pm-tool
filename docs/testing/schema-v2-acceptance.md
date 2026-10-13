@@ -95,6 +95,16 @@
 - **敏感扫描**：工作树干净、无新增 diff；证据目录 `gui-schema-v2-20261013/` 仅 `token=<REDACTED>` 占位符。
 - **v0.6 候选结论：✅ 维持总门 PASS。** 重绑定至 `a89740a`，build/full guard/关键专项全绿；G8/H5 维持 MANUAL_PENDING 不阻塞。
 
+### 1.5.6 正式运行态 R 记录（v0.6.0 升级重启后独立审证）
+
+- **绑定**：代码 HEAD=`b6e35a6`（仅矩阵文档）；产品构建对应 `a89740a`。提交链 `17ccc82→4b533ad→bd894f6→30f8990→a89740a→b6e35a6`。
+- **进程态（独立 lsof 核验）**：3080=PID **81589** LISTEN、3091=PID **81590** LISTEN；`GET /` 无 token → 两端口均 **401**；两实例日志均 `[pm-tool] 存储领域 pmtool 已打开`（各 1 次、无 error/fatal/crash）。
+- **数据完整性（独立 manifest 比对）**：before=150、after=150（data 68 + packages/backups 82）；added=0、removed=0；**唯一 changed = `data/session_projcache/sessions/session-65c44795….json`**，其 sha256 前后均 `10baaa33…2396`、size 均 4552，仅 mtimeMs 刷新（服务端重开活跃会话固有行为，非内容写改）。`packages/backups` 82 文件 hash+mtime 全零变动。
+- **v1 信封可读 & 不批量改写**：records=**26**，versionDist=`{"1":26}`——重启后全部 v1 记录成功加载，无任何记录被批量迁移/改写为 v2。
+- **审证交叉**：与 Agent workspace artifact `release-v0.6.0-upgrade-evidence.md` 逐项一致（PID/401/pmtool opened/150 全等/session cache 例外/26 v1/82 backups）。
+- **敏感扫描**：未取用一次性 token；未 commit/tag/push；未改 profile/keys/数据。
+- **R 结论：✅ 正式运行态通过，可打 v0.6.0 tag。** schema v2 验收矩阵在运行态下维持 PASS：50 用例 48 PASS + 2 MANUAL_PENDING（G8/H5 不阻塞），无 FAIL/BLOCKED/NOT_RUN。
+
 ---
 
 ## A. v1 旧 JSON 兼容读取（无新字段也能读）
