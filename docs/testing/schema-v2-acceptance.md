@@ -83,6 +83,18 @@
 - **敏感扫描**：矩阵 + 证据目录仅命中 `token=<REDACTED>` 占位符与自述行，无真实 api key/secret/token/password/cookie；正式 3080(owner)/3091 全程未触碰。
 - **最终结论：✅ 总门 PASS（自动化门 + GUI 门全绿）。** G8/H5 为不可逆人工动作，按 ADL-047 分层登记 MANUAL_PENDING，**不阻塞自动化门/GUI 门通过**；待用户本人在面板执行备份/恢复与删除确认时据实回填即可。schema v2 验收矩阵独立签发完成。
 
+### 1.5.5 v0.6.0 候选重绑定（HEAD=a89740a，工作树干净）
+
+- **重绑定提交链**：`17ccc82`（schema v2 feat）→ `4b533ad`（原子备份+回滚）→ `bd894f6`（契约完成归档）→ `30f8990`（独立验收与 GUI 证据签发）→ **`a89740a`（归档 v0.6.0 版本事实与主线完成状态）**。`package.json` version = **0.6.0**；`git status` 干净。
+- **独立复跑（v0.6 候选 HEAD）**：
+  - `pnpm run build` → 退出 0（tsdown client bundle 739.51 kB）。
+  - 关键专项 `node scripts/verify-{schema-v2,predecessors,health,doctor,gui-contract,backup}.mjs` → **全部退出 0**。
+  - `pnpm verify`（全量 guard）→ 退出 0；`[guard] after manifest 文件数 = 151`、正式 data/共享 backups hash+mtime 清单零变化。
+- **产物 hash**：`lib/client.js` SHA-256 = `2c52040d4e40f809f9b65cd1ee5b81f9ad119d684fceab04d69188549e3bba41`；默认 `packages/backups/` 跑后 hash = `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`（空目录，零污染）。
+- **50 用例终态复核**：**48 PASS + 2 MANUAL_PENDING（G8/H5）= 50**。**无 FAIL、无 BLOCKED、无 NOT_RUN。**
+- **敏感扫描**：工作树干净、无新增 diff；证据目录 `gui-schema-v2-20261013/` 仅 `token=<REDACTED>` 占位符。
+- **v0.6 候选结论：✅ 维持总门 PASS。** 重绑定至 `a89740a`，build/full guard/关键专项全绿；G8/H5 维持 MANUAL_PENDING 不阻塞。
+
 ---
 
 ## A. v1 旧 JSON 兼容读取（无新字段也能读）
