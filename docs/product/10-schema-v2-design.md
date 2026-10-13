@@ -1,13 +1,13 @@
 <!--
 产出角色：资深产品经理 / 设计裁决落档
-日期：2026-10-13
-变更摘要：v0.6.0 schema v2 批（PROD-11 任务 predecessorIds 依赖 / PROD-21 项目 repoUrl·branch / PROD-23 项目健康分 + 崩溃原子恢复）定稿为 P0 设计稿。所有者最终裁决（见 §二各节）：domain v2 + compatibleVersions[1] 同 commit；全部新字段 optional；健康分纯派生不落盘；坏记录 clean fail 中文诊断不静默隔离；备份原子写、恢复失败内存快照回滚；backup formatVersion 保持 1 且兼容旧备份。状态：未开发，按 ADL-045 测试门控待验。
+日期：2026-10-13（状态回写：当日已实现并独立验收总门 PASS）
+变更摘要：v0.6.0 schema v2 批（PROD-11 任务 predecessorIds 依赖 / PROD-21 项目 repoUrl·branch / PROD-23 项目健康分 + 崩溃原子恢复）定稿为 P0 设计稿。所有者最终裁决（见 §二各节）：domain v2 + compatibleVersions[1] 同 commit；全部新字段 optional；健康分纯派生不落盘；坏记录 clean fail 中文诊断不静默隔离；备份原子写、恢复失败内存快照回滚；backup formatVersion 保持 1 且兼容旧备份。**已实现并通过独立验收总门 PASS（50 用例 = 48 PASS + 2 MANUAL_PENDING G8/H5，绑定提交 17ccc82 + 4b533ad）。**
 -->
 
-# 10 · schema v2 批（依赖 / 仓库 / 健康分 / 崩溃恢复）设计稿 · 契约已定 · 未开发·待测试门
+# 10 · schema v2 批（依赖 / 仓库 / 健康分 / 崩溃恢复）设计稿 · 契约已定 · 已实现·独立验收总门 PASS
 
 > 本文是 v0.6.0「架构演进」批的唯一产品契约：**PROD-11** 任务 `predecessorIds[]` 前置依赖、**PROD-21** 项目 `repoUrl/branch`、**PROD-23** 项目健康分（概览红黄绿灯）、以及与之同批的**崩溃原子恢复**（备份原子写 + 恢复回滚 + `/pm doctor` 只读体检）。
-> **状态（2026-10-13）：设计已定稿、未开发。** 按 ADL-045 测试门控：实现 → 独立测试专家 PASS → 才可算完成；本文档不预设任何 testedCommit / PASS 结论。
+> **状态（2026-10-13）：已实现并通过独立验收总门 PASS。** 验收矩阵（`docs/testing/schema-v2-acceptance.md`，测试专家所有）签发：**50 用例 = 48 PASS + 2 MANUAL_PENDING（V2-G8 面板备份/恢复按钮人工不可逆确认、V2-H5 删除被引用前置/恢复备份人工确认，按 ADL-047 分层登记、不阻塞自动化门/GUI 门）**；无 FAIL / BLOCKED / NOT_RUN；绑定提交 `17ccc82`（schema v2 依赖/仓库/健康诊断）+ `4b533ad`（原子化备份并恢复失败自动回滚）。build=0、full guard=0（151 文件零污染）。
 > **三条红线不可破**：离线优先 / 单用户本地 / 所有写动作经既有 `/pm ...` 统一写通道。
 > 基线代码事实（只读核查结论，勿重复调研）：
 > - domain 定义在 `src/core/storage.ts`（`pmDomainSpec`，version 1，9 表，per-record 扁平布局）；记录 envelope `{version, record}`，单记录写入由 `dsh-storage-json` 保证（同目录临时文件 → fsync → rename 原子替换 → 目录 fsync）。
@@ -150,5 +150,6 @@
 
 ## 七、状态与门控
 
-- **当前状态（2026-10-13）：设计定稿，未开发。** 按 ADL-045：实现 → 独立测试专家 PASS → 才算完成；本文不预设 testedCommit。
+- **当前状态（2026-10-13）：已实现并通过独立验收总门 PASS——50 用例 = 48 PASS + 2 MANUAL_PENDING（V2-G8 / V2-H5 不可逆人工动作，待用户本人执行时据实回填）**（绑定提交 `17ccc82` + `4b533ad`；矩阵 `docs/testing/schema-v2-acceptance.md`，证据 `docs/verification/gui-schema-v2-20261013/`）。落地物：domain v2 + compatibleVersions[1]、任务 `predecessorIds`、项目 `repoUrl/branch`、`core/health.ts`、`core/recovery.ts`（doctor）、`backup.ts` 原子写+恢复回滚、5 个新增 verify 专项。
+- **诚实边界**：G8/H5 两项不可逆动作（面板备份/恢复确认、删除被引用前置/恢复备份）按 ADL-047 不阻塞总门，但仍须用户本人在面板执行确认后才算最终闭环。
 - 路线图登记：`docs/product/05-roadmap-and-tasks.md` v0.6.0 行与 2026-10-13 勘误；requirements 登记：`docs/requirements.md` 变更提案节。
