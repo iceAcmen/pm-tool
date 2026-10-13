@@ -8,6 +8,19 @@
 
 ---
 
+## [未发布] — 外部（vendor）Agent Skills 长期规范接线：ADL-048 + AGENTS/索引（2026-10-13，平台：doubao-work）
+
+- **改动文件（仅规范/索引，不碰落地物正文）**：
+  - `docs/decision-log.md`：置顶新增 **ADL-048**（选择性 vendoring：锁上游 commit、仅 4 公开 entry + 声明依赖、项目规则优先、不跑 installer、安全静态校验 + 独立试点门、升级双审/回滚）。
+  - `AGENTS.md`：第 6 节红线新增一条 vendor skill 治理规则（指向 `docs/external-skills.md` + `vendor/agent-skills/mattpocock/manifest.json` + `verify-external-skills.mjs`）；第 5 节文档地图补 `external-skills.md` / `docs/testing/` / `vendor/` 三行。
+  - `README.md`：目录树补 `docs/external-skills.md`、`docs/testing/`、`vendor/` 入口。
+  - `docs/knowledge-base.md`：置顶新增 **KB-038**（外部 skill 使用四步法与边界，指向政策/manifest/校验器）。
+  - `docs/testing/README.md`：文档清单索引一行 `external-skills-acceptance.md`（仅索引，不改验收矩阵正文/结论）。
+  - `docs/progress.md` / `docs/handoff.md`：补本批现状快照。
+- **为什么**：外部 skills 落地物（`vendor/agent-skills/mattpocock/`、`docs/external-skills.md`、`docs/testing/external-skills-acceptance.md`、`packages/dsh-pm-tool/scripts/verify-external-skills.mjs`、试点模板）已由实施方落盘但未提交；需把它们接入长期规范与索引，让后续平台能发现并遵守，同时不与实施方争抢这些文件。
+- **影响范围 / 状态（2026-10-13 独立测试专家签发后更新）**：纯文档接线，不改任何业务代码、vendor 正文、政策正文、验收矩阵正文、试点报告、package 校验器。**当前状态：试点可用，未毕业。** 自动化验收门 = **PASS**（静态/校验域 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；**`code-review` 试点 = PASS**；其余 3 entry（`grill-me`/`tdd`/`diagnosing-bugs`）尚未出试点报告（NOT_RUN），各补 1 份后方可毕业。绑定：HEAD=`93eb093c20648618c3e1d2914a20340d22325f86`、上游 commit=`49dd158d1076134a641b33efb035946536778336`。
+- **验证**：`git diff --check` 无空白/冲突标记；`node packages/dsh-pm-tool/scripts/verify-external-skills.mjs` 只读静态校验真实 vendor（PASS，只读、不执行 vendor 内容）；验收结论由独立测试专家按 `docs/testing/external-skills-acceptance.md` §7 逐域签发（本批接线方不自判）；未提交（按要求）。
+
 - 修复：`/pm due [天数] [YYYY-MM-DD]` 新增可选 today 参数（日期粒度与时辰无关，computeReminders 已按本地日历日零点比较），verify-reminders 固化 today 并补「下午 15:30 仍稳定」用例，消除墙钟时刻边界抖动；连跑两遍 27/27 全绿。
 
 ## [未发布] — OPT-01~12 体验优化全量落地（2026-10-11，平台：doubao-work）

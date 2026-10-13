@@ -51,11 +51,14 @@
     │   ├── progress.md              # 工作进度流水账（已完成/进行中/待办）
     │   ├── issues-and-solutions.md  # 踩坑与解决方案档案（ISS）
     │   ├── handoff.md               # 最小迁移交接清单（第0节为移交说明）
+    │   ├── external-skills.md       # ★外部（vendor）Agent Skill 治理政策：8条红线/优先级/manifest契约/升级双审·回滚/试点毕业（ADL-048）
+    │   ├── testing/                 # 独立测试专家产物：测试计划/用例矩阵/各轮报告 + 外部 skills 验收门（只读引用）
     │   ├── test-cases.md            # R1–R10 自动化矩阵与手动验收用例
     │   ├── delivery.md              # MVP 安装、启动、演示、备份和限制
     │   ├── releases/                # 版本发布说明、验收证据与已知限制
     │   └── handover-archive-doubao.md # 豆包工作阶段完整交接存档（来龙去脉）
     ├── skills/              # 沉淀为可复用 Skill 的项目知识（阶段 3 起填充）
+    ├── vendor/              # 只读 vendored 第三方 Agent Skill 正文 + manifest.json 锁定来源/文件指纹（按 docs/external-skills.md / ADL-048 使用，不改原件）
     ├── packages/
     │   └── dsh-pm-tool/     # ★自研插件包：项目、WBS、里程碑、风险问题管理 + 自检
     │       ├── src/index.ts          # Host 入口：注册 /pm、打开存储领域

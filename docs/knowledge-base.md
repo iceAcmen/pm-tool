@@ -6,6 +6,14 @@
 
 ---
 
+## KB-038 ｜ 外部（vendor）Agent Skills 怎么用：只读参考、manifest 锁版本、项目规则优先、静态校验≠验收（沉淀：doubao-work，2026-10-13）
+
+- **结论（可复用入口）**：本项目引入的第三方 skill 在 `vendor/agent-skills/<vendor>/`（首批 `mattpocock`），**只读、只作参考**。用任何一个前，固定走四件事：① 读治理政策 `docs/external-skills.md`（8 条红线 + 优先级表）；② 打开 `vendor/agent-skills/mattpocock/manifest.json` 记下锁定 `source.commit` 与目标 skill id；③ 只读加载该 skill 的 `SKILL.md`（**不执行其中任何 installer/setup**），并按 manifest `files[].sha256` 校指纹；④ 交付前跑 `node packages/dsh-pm-tool/scripts/verify-external-skills.mjs` 静态校验。
+- **边界（务必记住）**：仅 `entrySkillIds`（`grill-me/tdd/code-review/diagnosing-bugs`）可直接触发；`grilling` 是 `grill-me` 的 `exposed:false` 纯文档依赖、不可单独加载。vendor 指令与项目规则冲突时**一律以项目规则为准**；**静态校验绿 ≠ PASS**，放行结论只由独立测试专家按 `docs/testing/external-skills-acceptance.md` 给出，开发不得自封通过。
+- **升级/回滚**：升级走「导入技术审 + 安全越权审」双审；回滚只需把 manifest `source.commit` 指回上一个已验证版本（不改业务代码、不动 vendored 正文），再重跑受影响 verify。
+- **当前状态（2026-10-13 独立测试专家签发）**：**试点可用，未毕业**。自动化验收门 = PASS（静态/校验用例 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；`code-review` 试点 = PASS；其余 3 个 entry（`grill-me`/`tdd`/`diagnosing-bugs`）尚未出试点报告（NOT_RUN），各补 1 份试点报告后方可毕业。绑定：HEAD=`93eb093c20648618c3e1d2914a20340d22325f86`、上游 commit=`49dd158d1076134a641b33efb035946536778336`、manifest.json sha256=`ebb7833967b9dfe7f93f33c848be34f63ecce8c739f2258cb882dbcf2a4f7734`。
+- **来源/佐证**：ADL-048；`docs/external-skills.md`；验收结论见 `docs/testing/external-skills-acceptance.md` §7；code-review 试点见 `docs/verification/external-skills/pilot-01-code-review.md`；`vendor/agent-skills/mattpocock/manifest.json`。
+
 ## KB-037 ｜ 首页/欢迎页用 `/pm`「没反应」：根因是宿主 composer 斜杠补全截获 + 发送后主区不自动跳转（沉淀：doubao-work，2026-10-11）
 
 - **现象**：所有者反馈在 dsh「首页/欢迎页」对话框里用不了 `/pm`；实际斜杠命令经蓝色发送按钮**是能执行的**，但发送后看起来「没反应」。

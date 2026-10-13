@@ -6,6 +6,21 @@
 
 ---
 
+## ADL-048 ｜ 2026-10-13 ｜ 选择性 vendoring 外部 Agent Skills（首批 mattpocock）：锁上游 commit、仅 4 公开 entry + 声明依赖、项目规则优先、不跑 installer、安全静态校验 + 独立试点门（长期硬规则）
+
+- **背景**：为提升开发/复盘效率，决定以**只读 vendoring** 方式引入外部社区 Agent Skill（首批 `mattpocock/skills` 的 4 个纯文档 playbook）。第三方指令可能越权写全局、联网、自动安装或替代独立测试门，故需为其立长期治理框架。外部 skills 落地物（`vendor/`、政策、验收矩阵、静态校验器）已由实施方落盘但**尚未经独立测试专家验收**；本 ADL 固化其治理口径并完成长期规范接线，不改动这些落地物正文。
+- **决定（选择性 vendoring，逐条硬约束）**：
+  1. **锁定上游 commit**：每个 vendor 的权威注册表是 `vendor/agent-skills/<vendor>/manifest.json`，以其 `source.commit`（首批 `mattpocock/skills` = `49dd158d1076134a641b33efb035946536778336`）锁定版本；试点期**冻结升级**，所有平台跑同一锁定版本，禁止“悄悄换成最新”。
+  2. **只放行 4 个公开 entry + 显式声明依赖**：仅 `entrySkillIds` 的 `grill-me / tdd / code-review / diagnosing-bugs` 可被直接触发；`grilling` 是 `grill-me` 的 `exposed:false / pureDocumentation:true` 纯文档 runtime 依赖，**不是公开入口、不可被单独加载**。清单外文件即越界，由静态校验器逐文件白名单比对。
+  3. **项目规则优先**：vendor skill 的 `SKILL.md` 与 `AGENTS.md` §6/6A、`docs/collaboration.md`、`docs/external-skills.md` 冲突时**一律以项目规则为准**，立即停止该 skill、跳过冲突步骤并向所有者报备，不得为“跑完 skill”放宽红线。
+  4. **不运行 installer**：vendor 自带的 setup/installer/postinstall/首次向导**一律不自动执行**（manifest `policy.noInstallerRun=true`）；上游 `/setup-matt-pocock-skills`、`scripts/hitl-loop.template.sh` 等被有意排除、**不得补写或运行**，需要时改走项目自有 onboarding。
+  5. **安全静态校验门 + 独立试点门**：交付前必须跑只读、离线、确定性的 `packages/dsh-pm-tool/scripts/verify-external-skills.mjs`（manifest schema / commit 精确 40-hex / license=MIT / 恰好 4 entry / 白名单逐文件 sha256 / 禁脚本·二进制·shebang / 危险指令 F0/F1 分类）；但**静态校验通过 ≠ PASS**——每个 skill 先入试点（逐次填 `docs/templates/external-skill-pilot-report.md` 并归档 `docs/verification/external-skills/`），由**独立测试专家**按 `docs/testing/external-skills-acceptance.md` 逐格给结论（ADL-045/047）；**未验收前一律标“实施中/待专家”，不称 PASS**。
+- **升级（换 commit / 加 skill）双审，不可单人完成**：① 导入/技术审（拉新版、更新 manifest、重算 `files[].sha256`、核对 license、产出 diff）；② 安全/越权审（非导入方，对照 8 条红线审新版 `SKILL.md` 是否新增写全局/联网/自动安装/提权）。两审均通过并在试点报告留痕后方可更新 manifest；任一审驳回即维持旧版本。
+- **回滚**：升级后若出现越权、行为不符或破坏既有验证，**立即把 manifest 的 `source.commit` 指回上一个已验证版本**（manifest 是唯一开关，回滚不改业务代码、不动 vendored 正文），在试点报告记录触发原因，并重跑受影响的 `scripts/verify-*.mjs` 与文档格式 verifier，确认恢复到可演示状态。
+- **理由**：在借外部 playbook 提效与“仓库即唯一事实来源 / 上游只读 / 独立测试门”之间划线——vendored 内容只是只读参考、版本可锁、指纹可校、越权可回滚，且任何放行结论独立于开发方。
+- **替代方案（已否决）**：① 不引入外部 skill（效率损失）；② 运行时直接联网加载上游最新版（无锁定、不可回滚、可能热替换第三方代码，被否）；③ 把 skill 复制到项目别处按需改写（产生漂移副本、绕过 manifest 指纹，被否）；④ 开发方跑通即自封 PASS（违反 ADL-045 独立性，被否）。
+- **最终结果/状态**：2026-10-13 经项目所有者方向确立并接线为长期规则；外部 skills 落地物当前**实施中、待独立测试专家按验收矩阵逐格审证**（MANUAL_PENDING 项按 ADL-047 登记，既不算 PASS、也不阻塞自动化门）。细则见 `docs/external-skills.md`，验收门见 `docs/testing/external-skills-acceptance.md`，校验器见 `packages/dsh-pm-tool/scripts/verify-external-skills.mjs`。
+
 ## ADL-047 ｜ 2026-10-13 ｜ 自动化门与人工协作门分层：可自动化用例全绿即算通过；必须用户配合者转 MANUAL_PENDING（长期硬规则）
 
 - **背景**：ADL-045 把 GUI/样式/UX 等标为 BLOCKED 后，其中一部分是「受系统能力/认证所限、客观上必须用户本人动手」才能验的项。若一律 BLOCKED 挂起，会把可自动化的交付也一起拖住。项目所有者正式更新质量原则。

@@ -68,10 +68,10 @@
 
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
-- **快照更新时间**：2026-10-11
-- **最近更新平台**：doubao-work（A1 Web 端「AI 助手」面板 + A2 任务显式级联删除 + 首页 /pm 根因定位为宿主 composer；新增 ADL-037/038、KB-037、ISS-026、release v0.2.0 草稿）
-- **main 提交定位**：本批已提交并推送，HEAD 与 `origin/main` 一致；后续以 `git log -1 --oneline` 为准。
-- **当前阶段 / 状态**：R1–R15 完成；本批在其上交付 **A1（Web 三 AI 按钮，复用 core 草稿→confirm）** 与 **A2（`/pm task delete <id> [cascade] confirm` 两步防误删级联）**。首页 `/pm` 经上游只读核查确认注册正确、问题属宿主斜杠补全/会话跳转（ADL-038），以 Web 面板为稳定入口。
+- **快照更新时间**：2026-10-13
+- **最近更新平台**：doubao-work（外部 vendor Agent Skills 长期规范接线：新增 ADL-048、KB-038，AGENTS/README/docs·testing-README 接入口；落地物 vendor/ + 政策 + 验收矩阵 + 校验器已落盘。独立测试专家已签发：**试点可用、未毕业**）
+- **main 提交定位**：本批规范接线与落地物均**未提交**（按要求）；以 `git log -1 --oneline` 与未跟踪文件为准。
+- **当前阶段 / 状态（2026-10-13）**：R1–R15 + A1/A2 已完成；本批新增外部 vendor Agent Skills（首批 `mattpocock/skills` 只读 vendoring）。**当前状态：试点可用，未毕业。** 自动化验收门 = PASS（域 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；`code-review` 试点 = PASS；其余 3 entry（grill-me/tdd/diagnosing-bugs）尚未出试点报告（NOT_RUN），各补 1 份后方可毕业。上游 commit=`49dd158d1076134a641b33efb035946536778336`，验收绑定 HEAD=`93eb093c20648618c3e1d2914a20340d22325f86`。使用 vendor skill 前必读 `docs/external-skills.md` 守 8 条红线。
 - **验证**：`pnpm run build` + **全部 16 个 verify-*.mjs** + frozen lockfile + `git diff --check` 全绿；R13/R14/R15 已真实 openrouter/free 端到端并重启读回（临时项目已删净）。
 - **已知限制**：免费池随机模型纯文本可用、工具调用不保证、约 50 次/天、偶发超时重试即恢复；删根须叶子→根或用 cascade confirm；首页斜杠命令点发送按钮、发送后到侧栏点最新会话。
 - **本批验证（doubao-work，全部无 Key）**：Node nvm v22 / pnpm 11.28.5；`pnpm install --frozen-lockfile` 干净、`pnpm run build` 退出码 0（client bundle 153.00 kB）、**12 个** verify 全 0、`git diff --check` 干净；`DSH_HOME=~/.dsh pnpm dsh --profile pm --dump-config` 退出码 0、组合中 `providers.openrouter-free` 出现且 storage-json root / dsh-pm-tool 完好；无 Key 真实宿主（随机端口）启动成功（`[pm-tool] 存储领域 pmtool 已打开`、无 pi-ai/openrouter 报错），运行中 `plugins/??dsh-pm-tool/client.js` bundle HTTP 200（无 cookie 401）。
@@ -82,5 +82,5 @@
 - **版本控制确认规则**：通常每批完成并验证后，提交与推送分别请所有者授权。**本轮（R9 收尾起的连续开发）所有者已一次性持续授权 doubao-work：仓库内代码/文档修改、正常 commit、`git push origin main` 可全自动执行，无需逐次请示**；仍禁止 force push/改写已推送历史/提交密钥或业务数据，删除他人成果、改全局配置、发布 npm/正式版本等不可逆外部操作仍须遵守安全规则。
 - **授权状态**：本批在持续授权范围内提交推送（提交信息标 `[doubao-work]`，推送后核对 HEAD=origin/main）。
 - **所有者已定规则（ADL-012～035）**：R12 检索/统计为只读派生、Web 看板基于 snapshot（ADL-029）；Excel 导入（ADL-030）、多人实时协作（ADL-031）、R11 里程碑提醒与生成型能力（ADL-032）本期暂缓/裁剪；浏览器兼容仅 Chrome（ADL-033）；上游 dsh 新版本按 peer 锁定 + 升级冒烟（ADL-034）；**OpenRouter 免费自动路由作零成本尽力而为 LLM 通道、核心保持离线、其他官方厂商预留模板（ADL-035）**。
-- **下一步 / 遗留**：R11 里程碑提醒、多人协作、Excel 导入仍暂缓/裁剪。生成型三功能已完成并真实端到端验证；**Web 按钮为第二里程碑（v1 先斜杠命令）**。已知限制：免费池偶发超时重试即恢复（KB-036）、任务删除不级联需叶子→根逐层删（ISS-025）。
-- **最近一次交接**：doubao-work 完成 R13/R14/R15 实现与真实 openrouter/free 端到端验证（含重启读回），并把免费池偶发超时归一为中文 MODEL_TIMEOUT；新增 KB-036、ISS-025。上游/profile/真实数据零改动（临时验证项目已删净）。
+- **下一步 / 遗留**：为外部 vendor skills 的其余 3 entry（grill-me/tdd/diagnosing-bugs）各补 1 份试点报告以推进毕业（code-review 已 PASS）；R11 里程碑提醒、多人协作、Excel 导入仍暂缓/裁剪。已知限制：免费池偶发超时重试即恢复（KB-036）、任务删除不级联需叶子→根逐层删（ISS-025）。
+- **最近一次交接**：doubao-work 完成外部 vendor skills 长期规范接线（ADL-048/KB-038/索引），独立测试专家已按 `docs/testing/external-skills-acceptance.md` §7 逐域签发「试点可用、未毕业」（自动化门 PASS、code-review 试点 PASS、其余 3 entry 待试点）；本批未提交。此前一批 doubao-work 完成 R13/R14/R15 真实 openrouter/free 端到端验证并把免费池超时归一为中文 MODEL_TIMEOUT（KB-036、ISS-025）。

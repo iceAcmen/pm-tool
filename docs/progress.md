@@ -2,9 +2,16 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-11（doubao-work 第一档离线增强 R16/R17/R18 已实现并 verify 通过：临期/逾期提醒、会议行动项转任务、七实体备份/恢复；新增 ADL-039/040/041、docs/backup-sync.md）
+最后更新：2026-10-13（doubao-work 长期规范接线完成 + 独立验收已签发：外部 vendor Agent Skills 引入立为 ADL-048；**当前状态：试点可用，未毕业**——自动化验收门 PASS、code-review 试点 PASS，其余 3 entry 待试点）
 
-## 当前阶段：第一档离线增强 R16/R17/R18 已实现（2026-10-11，doubao-work）
+## 当前阶段：外部 vendor Agent Skills 引入 + 长期规范接线（2026-10-13，doubao-work）
+
+- **决策（ADL-048）**：以只读 vendoring 引入首批 `mattpocock/skills`（grill-me/tdd/code-review/diagnosing-bugs + 纯文档依赖 grilling），锁上游 commit `49dd158d1076134a641b33efb035946536778336`；项目规则优先、不跑 installer、不写 home/全局、不替代独立测试门；升级走双审、回滚只改 manifest commit。
+- **落地物（实施方已落盘、未提交，本批未改其正文）**：`vendor/agent-skills/mattpocock/`（只读正文 + manifest.json）、治理政策 `docs/external-skills.md`、独立验收门 `docs/testing/external-skills-acceptance.md`、离线静态校验器 `packages/dsh-pm-tool/scripts/verify-external-skills.mjs`、试点报告模板 `docs/templates/external-skill-pilot-report.md`。
+- **本批（接线方）做了什么**：ADL-048、AGENTS §6 一条 vendor 红线 + §5 文档地图、README 目录树入口、KB-038、`docs/testing/README.md` 索引一行、changelog/progress/handoff 同步。
+- **状态（2026-10-13 独立测试专家签发）**：**试点可用，未毕业。** 自动化验收门 = **PASS**（静态/校验域 A–H、J 全 PASS，无 FAIL/BLOCKED/F1，MANUAL_PENDING 无）；**`code-review` 试点 = PASS**（报告 `docs/verification/external-skills/pilot-01-code-review.md`）；其余 3 entry（`grill-me`/`tdd`/`diagnosing-bugs`）尚未出试点报告（NOT_RUN），各补 1 份试点报告后方可毕业。绑定：HEAD=`93eb093c20648618c3e1d2914a20340d22325f86`、上游 commit=`49dd158d1076134a641b33efb035946536778336`。**下一步**：为其余 3 entry 各补 1 份试点报告以推进毕业；使用 vendor skill 仍须先读 `docs/external-skills.md` 守 8 条红线。
+
+## 历史阶段：第一档离线增强 R16/R17/R18 已实现（2026-10-11，doubao-work）
 
 - **R16 临期/逾期提醒**：`/pm due [天数] [项目ID?]`（默认全部项目 7 天）+ Web 面板提醒条；纯读时派生、不做常驻调度（ADL-039）（commit 1b9bf67）。
 - **R17 会议行动项转任务**：`/pm meeting action promote <mtg> <ai> [confirm]`（幂等回写 action.taskId）+ Web 「转任务」按钮（ADL-040）（commit 93a8c71）。

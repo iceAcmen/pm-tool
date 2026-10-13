@@ -73,6 +73,9 @@
 | `docs/test-cases.md` | MVP 自动化覆盖矩阵与手动验收用例 | 阶段 4 执行和发布前回归 |
 | `docs/delivery.md` | 安装、启动、演示、备份、限制与排错 | 阶段 4 交付和迁移 |
 | `docs/releases/` | 各版本发布说明、验收证据和已知限制 | 创建 Git tag 时同步 |
+| `docs/external-skills.md` | **外部（vendor）Agent Skill 治理政策**：8 条红线、优先级、manifest 契约、升级双审/回滚、试点毕业 | 引入/升级/回滚 vendor skill 前必读；新增 vendor 时更新并记 ADL |
+| `docs/testing/` | **独立测试专家产物**（测试计划/矩阵/各轮报告 + 外部 skills 验收矩阵） | 只读引用；结论只能由测试专家给 |
+| `vendor/agent-skills/` | 只读 vendored 第三方 skill 正文 + `manifest.json` 锁定来源/指纹 | 只读；按 ADL-048/政策使用，不改原件 |
 | `docs/handover-archive-doubao.md` | 豆包工作阶段完整交接存档（来龙去脉） | 了解历史背景时读 |
 | `skills/` | 可复用 Skill 定义 | 沉淀可复用流程时补充 |
 
@@ -88,6 +91,7 @@
 - **`main` 保持干净、可克隆即接续**；禁止 `git push --force`、禁止改写已推送历史。
 - 删除文件、覆盖他人成果、改全局/系统配置、对外推送/发布，**必须先征得项目所有者同意**。
 - **独立测试门控（ADL-045，2026-10-12 起长期硬规则，详见下节）**：任何新增功能未经独立测试专家 PASS，不得开始下一功能或进入发布候选。
+- **外部 vendor Skill（`vendor/`）只读治理（ADL-048）**：加载/执行/升级/回滚任何 `vendor/agent-skills/` 下第三方 skill 前，必须先读 `docs/external-skills.md`（8 条红线 + 优先级），并按 `vendor/agent-skills/mattpocock/manifest.json` 锁版本、比对文件 sha256 指纹；**不跑 installer/setup、不写 home/全局、项目规则优先、不替代独立测试门**；交付前跑 `node packages/dsh-pm-tool/scripts/verify-external-skills.mjs` 静态校验。静态校验绿 ≠ PASS，放行结论只由独立测试专家给出。
 - 沟通与文档一律**简体中文 + 通用 Markdown**；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node 22 + pnpm 11.28.5）。
 
 ## 6A. 独立测试门控（ADL-045，长期硬规则）
