@@ -67,9 +67,9 @@
 - **与版本规划关系**：归 **v0.5.1 体验增量**，不并入 v0.6（v0.6 才动 domain v2）；与 v0.6 零冲突。
 - **完整契约/验收/反例/建议文件清单**：见 [`docs/product/07-people-load-view-design.md`](product/07-people-load-view-design.md)；状态见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) 2026-10-13 勘误。
 
-### 变更提案（Change Proposal）：PROD-24 副驾多步规划（未编码·设计定稿）
+### 变更提案（Change Proposal）：PROD-24 副驾多步规划（已实现·独立验收 PASS）
 
-> 不新增 R 编号，复用并升级产品档案 PROD-20（AI 项目副驾）。**状态（2026-10-13）：P0 设计定稿、尚未开发**；本提案只定义契约与验收，不动任何 living 完成状态。
+> 不新增 R 编号，复用并升级产品档案 PROD-20（AI 项目副驾）。**状态（2026-10-13）：已实现并通过独立验收**——总门 PASS：49 项 AUTO/GUI 可自动项全绿、0 FAIL/BLOCKED/NOT_RUN；2 项 MANUAL_PENDING（真实免费模型实机降级、真 390px 窄窗目视）待所有者反馈。
 
 - **一句话**：把 v0.5 副驾「扁平动作数组草稿卡」升级为**多步计划卡**（步骤/理由/依赖拓扑、勾选跳过、行内标量编辑、整批+逐步确认），执行仍复用既有 `ask-apply`。
 - **数据模型影响：无**。不写 settings、不新增计划表、不新增命令级服务端缓存；计划随模型响应返回，只活在前端内存、关面板即消散；domain 仍 v1、不改任何 schema。

@@ -8,6 +8,18 @@
 
 ---
 
+## [未发布] PROD-24 副驾多步规划 v0.6 体验增量实现状态回写（2026-10-13，平台：doubao-work）
+
+- **背景**：PROD-24（PROD-20 AI 项目副驾的多步规划增量）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `src/`、不改 `docs/testing/`、不提交（多步候选仍在工作树）。
+- **改动文件（仅文档口径）**：
+  - `docs/product/08-copilot-multistep-design.md`：状态由「设计定稿·未开发」→「已实现」；标题行、状态块、§十五由"落地计划"改为"落地对照"。
+  - `docs/product/05-roadmap-and-tasks.md`：PROD-24 行标记 ✅ 已实现·独立验收 PASS；追加 2026-10-13 验收结论与下一步主线。
+  - `docs/product/README.md`、`docs/requirements.md`（变更提案段）：索引与需求接口状态同步翻转。
+  - `docs/progress.md` / `docs/handoff.md` / `docs/onboarding-prompt.md`：主线状态与下一步统一为 **Web 体验补齐（PROD-04 任务改父 Web / PROD-09 汇报相邻对比徽标 / PROD-10 任务来源会议直达），其后才进 schema v2（PROD-11 依赖 / 甘特B / 健康分）**。
+- **验收结论（独立测试矩阵签发）**：总门 **PASS——49 项 AUTO/GUI 可自动项全绿，0 NOT_RUN / 0 FAIL / 0 BLOCKED**；自动化门 `build` 退出 0、44 个 verify 脚本全绿（含新增 `verify-copilot-plan.mjs`、`verify-copilot-plan-cancel.mjs`）、正式 `data/` 与 backups 149 个文件 hash+mtime 零污染；GUI 门在隔离实例（127.0.0.1:3093 真实 Chrome headless，未碰 3080/3091/data）逐用例过证。**2 项 MANUAL_PENDING（不阻塞）**：CMP-DEG-05（真实免费模型限流/乱码/无 Key 实机降级）、CMP-GUI-11（真 390px 窄窗目视）。
+- **契约兑现**：domain 仍 v1、零新表、不写 settings、计划只在前端内存；唯一写动作 `task.update`（patch 5 标量）；DAG 坏步局部拒（>8 步整拒）；同任务链式 baseline；整批+逐步确认；旧 `{"actions":[...]}` 输出兼容；取消/降级零写。
+- **影响范围**：仅文档；不打 tag、不提交（按要求）。
+
 ## [未发布] PROD-07 人员与负载视图 v0.5.1 实现状态回写（2026-10-13，平台：doubao-work）
 
 - **背景**：PROD-07（复用并升级为顶层「人员与负载」tab）已由实施线实现，并经独立测试矩阵验收。本批**只回写产品/living docs 状态**，不改 `src/`、不改 `docs/testing/`、不提交。

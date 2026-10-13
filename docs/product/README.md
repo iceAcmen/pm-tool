@@ -34,7 +34,7 @@
 | [05-roadmap-and-tasks.md](05-roadmap-and-tasks.md) | ⑤ | **权威 PROD 任务表**：15 项需求、迭代划分、验收标准、编码提示 |
 | [06-tradeoffs-and-risks.md](06-tradeoffs-and-risks.md) | ⑥ | 取舍记录、风险登记、明确不做什么 |
 | [07-people-load-view-design.md](07-people-load-view-design.md) | ⑤延伸 | PROD-07 升级为顶层「人员与负载」tab（v0.5.1，零 schema，**已实现·独立验收 PASS，仅余真 390px 窄屏 MANUAL_PENDING**） |
-| [08-copilot-multistep-design.md](08-copilot-multistep-design.md) | ⑤延伸 | PROD-24 副驾多步规划（PROD-20 增量，零 schema；**设计定稿·未开发**：计划卡/拓扑/整批逐步/链式 baseline，执行仍 ask-apply） |
+| [08-copilot-multistep-design.md](08-copilot-multistep-design.md) | ⑤延伸 | PROD-24 副驾多步规划（PROD-20 增量，零 schema；**已实现·独立验收 PASS，49 项全绿 + 2 项 MANUAL_PENDING**：计划卡/拓扑/整批逐步/链式 baseline，执行仍 ask-apply） |
 | [handoff-for-coding-agents.md](handoff-for-coding-agents.md) | — | 给 TRAE/编码 Agent 的接手说明：术语、实施顺序、别重复调研 |
 
 ## 编号约定（与仓库既有体系关系）

@@ -1,0 +1,201 @@
+{
+  "tool": "collect-evidence.mjs",
+  "version": "1.1.0",
+  "stage": "after",
+  "collectedAt": "2026-10-13T06:29:09.511Z",
+  "dataRoot": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/e2e-3082/data",
+  "noCopy": false,
+  "environment": {
+    "gitHead": "e03b813530e789255eee1dee72cacfa904ce5ba7",
+    "runningCommit": "UNKNOWN",
+    "gitDirtyFiles": [
+      "M docs/testing/copilot-multistep-acceptance.md",
+      " M packages/dsh-pm-tool/scripts/verify-ask-apply.mjs",
+      " M packages/dsh-pm-tool/src/client/panel.css",
+      " M packages/dsh-pm-tool/src/client/panel.tsx",
+      " M packages/dsh-pm-tool/src/commands/ask.ts",
+      " M packages/dsh-pm-tool/src/core/ask-copilot.ts",
+      " M packages/dsh-pm-tool/src/core/copilot.ts",
+      "?? docs/verification/gui-copilot-multistep-20261013/",
+      "?? packages/dsh-pm-tool/scripts/verify-copilot-plan-cancel.mjs",
+      "?? packages/dsh-pm-tool/scripts/verify-copilot-plan.mjs"
+    ],
+    "libIndexJsSha256": "64a48aecf941057f75df5e0906dba66622d42f464cd97b51261ff9a370e7b7e8",
+    "libClientJsSha256": "58f7734610122808794c32c69ea2f6d27c6388a305d8a6855b193cc43a24f894",
+    "nodeVersion": "v22.23.2"
+  },
+  "entitiesTracked": [
+    "projects",
+    "tasks",
+    "milestones",
+    "risk_issues",
+    "meetings",
+    "reports",
+    "deliverables"
+  ],
+  "files": [
+    {
+      "rel": "pmtool/deliverables/dlv-0001.json",
+      "sha256": "161e85de9d3cdaa702bee79a47b8147e20065fa5a37758cd6ab28413e6ca9eb3",
+      "size": 546,
+      "mtimeMs": 1791810396305.5134
+    },
+    {
+      "rel": "pmtool/meetings/mtg-0001.json",
+      "sha256": "17202bf54dce2f8af45afdd8b0149f2a2f4a2f591cb1f69638e804deecee8d95",
+      "size": 528,
+      "mtimeMs": 1791810396288.3054
+    },
+    {
+      "rel": "pmtool/meetings/mtg-0002.json",
+      "sha256": "fe5f1ef6bef14723fe2693dba7cb0b45e50f1dd94f45c64d4a82a4aa0efc63c5",
+      "size": 1174,
+      "mtimeMs": 1791811429456.024
+    },
+    {
+      "rel": "pmtool/meetings/mtg-0003.json",
+      "sha256": "cb0cdb1a7c30955a7624cde7cc492a14a4d7b7fa8b806ceda3f95b934ff21921",
+      "size": 1602,
+      "mtimeMs": 1791811897156.3047
+    },
+    {
+      "rel": "pmtool/milestones/m-0001.json",
+      "sha256": "c2681bdce49d34431e87e63973103630dc4308072169558ebeccb406905df0fd",
+      "size": 321,
+      "mtimeMs": 1791817863325.1992
+    },
+    {
+      "rel": "pmtool/projects/p-0001.json",
+      "sha256": "52bab4286cb579526bdcae783a8973f271d393de3937c910bbe55c343820b92d",
+      "size": 304,
+      "mtimeMs": 1791810396206.089
+    },
+    {
+      "rel": "pmtool/projects/p-0002.json",
+      "sha256": "92849ac6f52a90cd31172cc9e6aead4ed013d4f336b9c4db1fd8f3ebf46cc2f4",
+      "size": 301,
+      "mtimeMs": 1791810396215.537
+    },
+    {
+      "rel": "pmtool/reports/rpt-0001.json",
+      "sha256": "c4f31a82b14000f86643bec6edd463ad6246ed50bf7605cd39928d43c2758221",
+      "size": 1622,
+      "mtimeMs": 1791810396297.324
+    },
+    {
+      "rel": "pmtool/reports/rpt-0002.json",
+      "sha256": "3c51389ef8940f49d7b398f73884a11e0475ebc5e224451b42b857cf2500fdfd",
+      "size": 2286,
+      "mtimeMs": 1791811341231.4773
+    },
+    {
+      "rel": "pmtool/risk_issues/ri-0001.json",
+      "sha256": "dfe1f78d7392f26bf0a81467a47fca18dbac145d5db280f834e9a6dccd4265dd",
+      "size": 397,
+      "mtimeMs": 1791810396279.9583
+    },
+    {
+      "rel": "pmtool/tasks/t-0001.json",
+      "sha256": "0df11c31379dddb719b649b8c47aa06180b151bfb30acc244ca46b24a078cfeb",
+      "size": 457,
+      "mtimeMs": 1791872864940.7378
+    },
+    {
+      "rel": "pmtool/tasks/t-0002.json",
+      "sha256": "5f022a66d256806bf644f89d1b7ee464f5631a544106a84e9b9f9a896b9bb32b",
+      "size": 453,
+      "mtimeMs": 1791810396234.9377
+    },
+    {
+      "rel": "pmtool/tasks/t-0003.json",
+      "sha256": "270e1c7121faea2c11ddc9065a95ab1da1e9a85e5c560ad4f84a1e695f9853f6",
+      "size": 395,
+      "mtimeMs": 1791810396245.6843
+    },
+    {
+      "rel": "pmtool/tasks/t-0004.json",
+      "sha256": "18199c08fb7a67565a22b1bef57554da91ed33e99b52daebe0a4d82e8c150192",
+      "size": 457,
+      "mtimeMs": 1791810396251.017
+    },
+    {
+      "rel": "pmtool/tasks/t-0005.json",
+      "sha256": "1d0164272762eb0865813233958b108ce3747cd5ad9b16f0ebcdc847aa970671",
+      "size": 455,
+      "mtimeMs": 1791810396256.6013
+    },
+    {
+      "rel": "pmtool/tasks/t-0006.json",
+      "sha256": "d228ed8c4d54a282ae7a5ea26b1e6c093771a420a9b03429d6d95f6ba30ad84b",
+      "size": 472,
+      "mtimeMs": 1791810396265.6755
+    },
+    {
+      "rel": "pmtool/tasks/t-0007.json",
+      "sha256": "d231ff4b6e8d351dbd219f4b1fad0a156ffbe0ac1a3dfd63b18490de9a6b6e97",
+      "size": 453,
+      "mtimeMs": 1791810540759.835
+    },
+    {
+      "rel": "pmtool/tasks/t-0008.json",
+      "sha256": "8e8886359a7ed4797b6b2f4ec4f87cf9a53a1cb12ca270c29a737dc13777ada5",
+      "size": 467,
+      "mtimeMs": 1791810540775.3777
+    },
+    {
+      "rel": "pmtool/tasks/t-0009.json",
+      "sha256": "97a3330af318b28786648208f8aaf91e45fc00d82a08544fa9718b73ec2301bd",
+      "size": 401,
+      "mtimeMs": 1791811172724.8655
+    },
+    {
+      "rel": "pmtool/tasks/t-0010.json",
+      "sha256": "678cf907df8daedef8a7baaf6d1c425041c04bb9732038ce315f489787e4f1e3",
+      "size": 401,
+      "mtimeMs": 1791811172788.7834
+    },
+    {
+      "rel": "pmtool/tasks/t-0011.json",
+      "sha256": "ef17a06c0dfde60a6cd7597952cd236010e9c8b80ffe92eacb1cf4498726dd86",
+      "size": 401,
+      "mtimeMs": 1791811173077.0508
+    },
+    {
+      "rel": "pmtool/tasks/t-0012.json",
+      "sha256": "0c3b7c27d95b44ff7543875173d780ac8690c411e289e0f44d63a0520208cf54",
+      "size": 401,
+      "mtimeMs": 1791811173192.9985
+    },
+    {
+      "rel": "pmtool/tasks/t-0013.json",
+      "sha256": "8eab3029b676964f041c52f4c685a225fe7764b36cbfad3a0ee69b4ab03ce659",
+      "size": 401,
+      "mtimeMs": 1791811173203.1777
+    },
+    {
+      "rel": "pmtool/tasks/t-0014.json",
+      "sha256": "47df2ec8d8f22d0d0496edfee444ddf03c315fb1eca9515e4b8a7a82173f1152",
+      "size": 401,
+      "mtimeMs": 1791811173256.949
+    },
+    {
+      "rel": "pmtool/tasks/t-0015.json",
+      "sha256": "98bb9ccb03e5e4b0f0b810c0a12cfbf5a33c5857c8f64c7e756ab5267ffddf48",
+      "size": 401,
+      "mtimeMs": 1791811173303.5908
+    },
+    {
+      "rel": "pmtool/tasks/t-0016.json",
+      "sha256": "d3994593fdbd30f4645490b80ac3e0a3a17d60b5b9830ec4d060e69802fc5d64",
+      "size": 401,
+      "mtimeMs": 1791811173313.1145
+    },
+    {
+      "rel": "pmtool/tasks/t-0017.json",
+      "sha256": "0037d1716aa0bb2953ff5a3ca45c0f2281e493f63c2d5c582e9e2ac930d61102",
+      "size": 413,
+      "mtimeMs": 1791811173321.86
+    }
+  ],
+  "fileCount": 27
+}

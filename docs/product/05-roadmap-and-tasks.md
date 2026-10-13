@@ -42,7 +42,7 @@
 | PROD-21 | 颠覆 | P2 | UX-11 | 任务/交付物加可选 repoUrl/branch 字段，UI 渲染成可点链接（仓库联动A） | `core/task.ts`/`deliverable.ts`；`panel.tsx` 详情 | S-M | 低 | 与 PROD-11 同批 v2 | v0.6.0 | 任务可填仓库/分支链接并可点击打开；为空时不显示 |
 | PROD-23 | 颠覆 | P2 | Persona B | 项目健康分(0-100,可解释)+红黄绿灯+一键周报草稿 | `core/stats.ts` 派生公式；`panel.tsx` 概览灯号 | M | 低 | 无 | v0.6.0 | 健康分=确定公式可复算；逾期/高影响风险扣分可见；周报草稿复用 narrate |
 | PROD-20 | 颠覆 | P1 | UX-10 | AI 项目副驾：对话式读 snapshot→诊断→把改动做成确认草稿卡 | 新命令 `/pm ask`；`core/` 新增 ask 编排；`panel.tsx` 对话抽屉 | L | 中 | 生产车道Key | v0.7.0+ | 提问给中文结论(只读)；任何写动作渲染成草稿卡需确认才落库；无Key/失败降级 |
-| PROD-24 | 增量 | **P0** | UX-10 | **副驾多步规划**：把扁平动作数组升级为带步骤/理由/依赖的计划卡（拓扑排序、勾选跳过、行内标量编辑、整批+逐步确认）；执行仍复用 ask-apply，零 schema | `core/copilot.ts` 计划纯函数；`ask-copilot.ts`；`commands/ask.ts`；`panel.tsx` CopilotPanel | M | 中 | PROD-20 | v0.6 窗口（体验增量，不动 domain v1） | 契约与 11 条验收见 [`08-copilot-multistep-design.md`](08-copilot-multistep-design.md)：DAG 坏步拒而非整拒(>8 步整拒)、同任务链式 baseline、取消零写、唯一 task.update、计划只在前端内存 |
+| PROD-24 | 增量 | **P0** | UX-10 | **副驾多步规划**：把扁平动作数组升级为带步骤/理由/依赖的计划卡（拓扑排序、勾选跳过、行内标量编辑、整批+逐步确认）；执行仍复用 ask-apply，零 schema | `core/copilot.ts` 计划纯函数；`ask-copilot.ts`；`commands/ask.ts`；`panel.tsx` CopilotPanel | M | 中 | PROD-20 | v0.6 窗口（体验增量，不动 domain v1）**✅已实现·独立验收 PASS（49 项 AUTO/GUI 全绿 + 2 MANUAL_PENDING）** | 契约与验收见 [`08-copilot-multistep-design.md`](08-copilot-multistep-design.md)：DAG 坏步拒而非整拒(>8 步整拒)、同任务链式 baseline、取消零写、唯一 task.update、计划只在前端内存 |
 
 ---
 
@@ -72,4 +72,4 @@
 - **验收结论（2026-10-13 独立测试矩阵签发）**：**28 PASS / 0 NOT_RUN / 0 FAIL**；唯一遗留 = **1 项 MANUAL_PENDING（真实 390px 窄屏目视，须所有者本人在真浏览器确认）**。本批状态回写仅改产品/living docs，**未改 `src/`、未改 `docs/testing/`、未提交**。
 - PROD-06（assignee 输入框 datalist 补全）本期暂缓：PROD-07 靠读时归一化（trim/空白折叠/casefold）即可聚合，不依赖写入侧补全；相似名漂移软提示并入 PROD-07 P1。
 - 与 v0.6 规划零冲突：v0.6 才动 domain v2（依赖/甘特B/健康分）；本视图不新增任何落盘字段。**下一步主线 = AI 副驾多步规划。**
-- **PROD-24 副驾多步规划（2026-10-13）**：P0 设计稿已定稿并落档 [`08-copilot-multistep-design.md`](08-copilot-multistep-design.md)，**尚未开发**。裁决边界：不写 settings/不持久计划/不新增命令缓存（计划只在前端内存）；执行仍 ask-apply 传 selected ordered actions + baseline（行长 JSON 风险靠 ≤8 步预算吸收）；旧 actions 输出兼容；DAG 坏步拒而非整拒（>8 步整拒）；同任务链式 baseline；整批/逐步；取消零写；唯一 task.update。本状态回写仅改产品 docs，**未改 `src/`、未改 `docs/testing/`、未提交**。
+- **PROD-24 副驾多步规划（2026-10-13）**：**已实现并通过独立验收总门 PASS**（49 项 AUTO/GUI 可自动项全绿、0 FAIL/BLOCKED/NOT_RUN；2 项 MANUAL_PENDING＝真实模型实机降级 / 真 390px 窄窗）。设计稿见 [`08-copilot-multistep-design.md`](08-copilot-multistep-design.md)，验收矩阵 `docs/testing/copilot-multistep-acceptance.md`（测试专家所有），GUI 证据 `docs/verification/gui-copilot-multistep-20261013/`。裁决边界全部兑现：不写 settings/不持久计划/不新增命令缓存（计划只在前端内存）；执行仍 ask-apply 传 selected ordered actions + baseline；旧 actions 输出兼容；DAG 坏步拒而非整拒（>8 步整拒）；同任务链式 baseline；整批/逐步；取消零写；唯一 task.update。多步候选在工作树未提交。**下一步主线＝Web 体验补齐（PROD-04 任务改父 Web / PROD-09 汇报相邻对比徽标 / PROD-10 任务来源会议直达），其后才进 schema v2（PROD-11 依赖 / 甘特B / 健康分）。**

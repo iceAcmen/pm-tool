@@ -1,13 +1,13 @@
 <!--
 产出角色：资深产品经理 / 只读设计裁决落档
-日期：2026-10-13
-变更摘要：PROD-20（AI 项目副驾）的「多步规划」增量定稿为 P0 设计稿。仅产品文档，不改 src/、不改 docs/testing/、不动任何 living 完成状态；实现待开发。执行裁决已由所有者拍板（见下「P0 裁决边界」）。
+日期：2026-10-13（状态回写：当日已实现并独立验收 PASS）
+变更摘要：PROD-20（AI 项目副驾）的「多步规划」增量定稿为 P0 设计稿。契约与裁决由所有者拍板；同日完成实现，独立验收总门 PASS（49 项 AUTO/GUI 可自动项全绿 + 2 项 MANUAL_PENDING）。
 -->
 
-# 08 · 副驾多步规划（Copilot Multi-Step Plan）设计稿 · 契约已定 · 未开发
+# 08 · 副驾多步规划（Copilot Multi-Step Plan）设计稿 · 契约已定 · 已实现
 
 > 本文是 **PROD-20 的多步规划增量（PROD-24）**：把 v0.5 已上线的「单轮扁平动作数组」升级为**带步骤、带理由、带依赖排序、可勾选可编辑的多步计划卡**，面向 Persona A/C 一次处理「这批收尾/这次重排」这类多任务联动诉求。
-> **状态（2026-10-13）：设计定稿（评审稿），尚未开发。** 本文件只定义契约与验收，不改任何 living 完成状态；实现排在 v0.6 架构演进窗口（domain v2 之前），与人员负载视图（PROD-07）同期零冲突。
+> **状态（2026-10-13）：已实现并通过独立验收。** 验收矩阵（`docs/testing/copilot-multistep-acceptance.md`）总门 **PASS：49 项 AUTO/GUI 可自动项全部 PASS、0 NOT_RUN / 0 FAIL / 0 BLOCKED**；自动化门 `build` 退出 0、44 个 verify 脚本全绿（含新增 `verify-copilot-plan.mjs` / `verify-copilot-plan-cancel.mjs`）、正式 `data/` 与 backups 149 个文件 hash+mtime 零污染；GUI 门在隔离实例（127.0.0.1:3093 真实 Chrome headless，未碰 3080/3091/data）逐用例过证。**2 项 MANUAL_PENDING（不阻塞）**：CMP-DEG-05（真实免费模型限流/乱码/无 Key 实机降级）、CMP-GUI-11（真 390px 窄窗目视），待所有者本人反馈。
 > **三条红线不可破**：离线优先 / AI 草稿确认制 / 单用户本地——多步规划是这三条的延伸，不是松动。
 
 ## 一、需求定位与编号
@@ -192,15 +192,17 @@ interface CopilotPlan {
 - 不拖拽改序、不合并步、不让模型自己加步。
 - 不在计划卡状态做持久化写盘；关面板计划即消散。
 
-## 十五、文件级落地计划（未开发，实现时按此改）
+## 十五、文件级落地对照（已实现，2026-10-13）
+
+> 已按下列清单落地并通过独立验收（总门 PASS：49 项 AUTO/GUI 可自动项全绿 + 2 项 MANUAL_PENDING）。下表为实现对照，供后续追溯。
 
 | 文件 | 动作 | 说明 |
 |---|---|---|
-| `src/core/copilot.ts` | 新增纯函数 | `CopilotStep/CopilotPlan`、`parseCopilotPlan`（兼容旧 actions）、`validatePlan`（DAG/环/预算）；保留现有导出 |
+| `src/core/copilot.ts`（扩展） | 纯函数新增 | `parseCopilotPlan`（兼容旧 actions）、`validatePlanDAG` / `orderPlanSteps`（环/悬空/自指局部拒、>8 步整拒）；保留既有导出 |
 | `src/core/ask-copilot.ts` | 小改 | `COPILOT_SYSTEM` 升级为计划块格式；`AskResult.plan`；空计划回退诊断 |
-| `src/commands/ask.ts` | 小改 | `handleAskApplyCommand`：链式刷新 baseline、逐行带 stepId/title 结果；幂等键加 baseline；E2E fixture 缝扩成多步（含 delete 步 + 环依赖） |
-| `src/client/panel.tsx` | 小改 | `CopilotPanel` 草稿卡→计划卡：拓扑列表、checkbox、行内标量编辑、整批/逐步按钮、软风险行、拒绝红行 |
-| `scripts/verify-copilot.mjs` | 扩展断言 | 计划解析/拓扑/预算；新增 `verify-copilot-plan-cancel.mjs`（字节零变化） |
-| **不改** | — | `core/storage.ts` domain 版本、任何 schema、`docs/testing/`、上游 deepseek-harness |
+| `src/commands/ask.ts` | 小改 | `handleAskApplyCommand`：链式刷新 baseline、逐行带 stepId/title 结果；幂等键加 baseline；E2E fixture 缝扩成多步（含 task.delete 步 + 双合法步真环） |
+| `src/client/panel.tsx`、`panel.css` | 小改 | `CopilotPanel` 草稿卡→计划卡：拓扑列表、checkbox、行内标量编辑、整批/逐步按钮、软风险行、拒绝红行、stale 提示 |
+| `scripts/verify-copilot-plan.mjs`（新增）、`verify-copilot-plan-cancel.mjs`（新增）、`verify-ask-apply.mjs`（扩展） | 确定性测试 | 解析/兼容/DAG/环/预算/同目标串行；链式 baseline；cancel 真实 storage spy `table.put` 计数=0、字节零变化 |
+| **不改** | — | `core/storage.ts` domain 版本（仍 v1）、任何 schema、`docs/testing/`、上游 deepseek-harness |
 
-> 实现与验收待开发窗口开启后按本稿逐条执行；本文件状态随实现进度更新（当前：未开发）。
+> 实现未随本批提交（多步候选在工作树）；验收证据见 `docs/verification/gui-copilot-multistep-20261013/`（testedCommit=e03b813 工作树）。2 项 MANUAL_PENDING（真实模型实机降级 / 真 390px 窄窗）待所有者反馈后关闭。

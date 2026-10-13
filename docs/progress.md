@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-13（doubao-work **PROD-07 顶层「人员与负载」视图 v0.5.1 已实现并通过独立验收**：自动化+GUI 核心 **28 PASS / 0 NOT_RUN / 0 FAIL**，仅余 **1 项 MANUAL_PENDING＝真实 390px 窄屏目视**待所有者本人确认；纯前端派生、零 schema、不建人员表；下一步主线 = **AI 副驾多步规划**。先前一批：版本事实统一到 v0.5.0、外部 skill 自动路由 ADL-049 独立复核 APPROVE、41 组断言全绿、K 域专家 PASS）
+最后更新：2026-10-13（doubao-work **PROD-24 副驾多步规划已实现并通过独立验收总门**：**49 项 AUTO/GUI 可自动项全绿、0 NOT_RUN/0 FAIL/0 BLOCKED**，仅余 **2 项 MANUAL_PENDING＝真实免费模型实机降级 + 真 390px 窄屏目视**待所有者反馈；domain 仍 v1、零新表、唯一写 task.update；多步候选在工作树未提交。下一步主线 = **Web 体验补齐（PROD-04 任务改父 Web / PROD-09 汇报相邻对比徽标 / PROD-10 任务来源会议直达），其后才进 schema v2**。先前一批：PROD-07 人员负载 v0.5.1 已实现·28 PASS）
 
-## 当前阶段：PROD-07 人员与负载视图 v0.5.1 已实现·独立验收 PASS（2026-10-13，doubao-work）
+## 当前阶段：PROD-24 副驾多步规划已实现·独立验收 PASS（2026-10-13，doubao-work）
+
+- **功能**：把 PROD-20 副驾的扁平动作数组升级为多步计划卡——模型可输出 `{"plan":[…]}`（每步 stepId/title/reason/action/needs[]/riskNote?），前端按 DAG 拓扑渲染、每行 checkbox 默认全选、行内只允许改 5 标量（非法即时标红禁用确认）、3 条确定性软风险琥珀提示（不禁用）；【整批执行】一次 ask-apply，【逐步执行】前端逐步调（每次重读 domain）；拒绝红行（如 task.delete / 环依赖）不可勾选。
+- **口径与边界**：domain 仍 v1、零新表、不写 settings、计划只在前端内存（关面板即消散）；唯一写动作 `task.update`（patch：status/progress/assignee/startDate/dueDate）；DAG 环/悬空/自指**只拒该步**（其下游级联拒），整份 >8 步（或 >10 任务）**整份拒绝**；同目标任务隐式串行 + **链式 baseline**（整批内后者用前者落库后的 updatedAt，不误判冲突）；跨调用真实外部冲突仅拒相关步 + 依赖级联；幂等键扩为 `projectId+JSON(selectedOrderedActions)+JSON(baseline)`（60s）；取消/降级零写（27 个业务 JSON sha/mtime/size 全不变）；旧 `{"actions":[…]}` 输出自动包平凡计划、v0.5 链路回归不破。
+- **验收（独立测试矩阵签发，2026-10-13）**：总门 **PASS**——49 项 AUTO/GUI 可自动项全绿，0 NOT_RUN/0 FAIL/0 BLOCKED；自动化门 `build` 退出 0、44 个 verify 脚本全绿（新增 `verify-copilot-plan.mjs` / `verify-copilot-plan-cancel.mjs`，扩展 `verify-ask-apply.mjs`）、正式 `data/` 与 backups 149 文件 hash+mtime 零污染；GUI 门在隔离实例 127.0.0.1:3093 真实 Chrome headless（未碰 3080/3091/data）逐用例过证。**2 项 MANUAL_PENDING（不阻塞）**：CMP-DEG-05（真实免费模型限流/乱码/无 Key 实机）、CMP-GUI-11（真 390px 窄窗目视）。产品契约见 `docs/product/08-copilot-multistep-design.md`；验收矩阵 `docs/testing/copilot-multistep-acceptance.md`；GUI 证据 `docs/verification/gui-copilot-multistep-20261013/`。
+- **状态**：本批仅回写产品/living docs 状态，**未改 `src/`、未改 `docs/testing/`、未提交**（多步候选在工作树）。
+- **下一步（主线）**：**Web 体验补齐 = PROD-04（任务「移动到…」Web 改父）/ PROD-09（汇报表相邻完成率·逾期·异常数对比徽标）/ PROD-10（任务详情显示「来自会议」并直达）**；三者均为纯前端/小改 core、不动 schema。**其后才进 schema v2**：PROD-11（任务 predecessorIds 依赖）、甘特B 关键路径、PROD-23 健康分。
+
+## 历史阶段：PROD-07 人员与负载视图 v0.5.1 已实现·独立验收 PASS（2026-10-13，doubao-work）
 
 - **功能**：新增顶层「人员」tab，跨项目按 `task.assignee` 归一化（trim+空白折叠+casefold）聚合未完成任务；每卡出未完成/待办·进行中·受阻、逾期/临期/P0、跨项目数、最近截止；按风险排序（逾期→受阻→临期→最近截止），「未分配」桶固定置顶；点任务行复用 `openRecord` 切项目+切tab+开抽屉，全程只读派生。
 - **口径与边界**：逾期＝`status!=='done' && progress<100 && dueDate<今天`（与 stats/reminders 同口径）；**不拆多负责人字符串、不自动合并相似名、不建人员表、不动 domain/schema、不发写命令**。P1（相似名软提示/j·k 导航+记忆/涉众提示）后续做。
