@@ -1,38 +1,87 @@
-# Schema v2 验收矩阵（开发前冻结，只读基线 `80d42b8`）
+# Schema v2 验收矩阵（batch-1 执行中 · 被测 `d960445` 工作树）
 
-> 目的：在 **schema v2 开发动手前**，由独立测试专家冻结验收矩阵与最小可判口径。本文件**只冻结用例与必含断言，不改产品代码、不改产品行为、不产生提交**；开发据此实现，测试专家据此独立逐格判 PASS/FAIL/BLOCKED/NOT_RUN。
-> 权威流程：ADL-045（独立测试门控）+ ADL-047（自动化门 / 人工协作门 MANUAL_PENDING 分层）+ AGENTS 6A。本目录为测试专家独占，其他角色只读引用、不得改动。
->
-> **被测基线（冻结时点）**：HEAD = `80d42b8`（`[doubao-work][evidence] 归档Web体验独立验收与主线状态`）。此基线 **不是** 未来被测提交；未来每条用例执行时必须另记真实 `testedCommit`，不得把本冻结时点当作任何 PASS 证据。
-> **当前 v1 现状（冻结基线观测，供对口径，非 PASS）**：
-> - 领域 `pmDomainSpec` version=1、`layout:'per-record'`，9 表（checks/settings/projects/tasks/milestones/risk_issues/meetings/reports/deliverables）。
-> - `taskRecordSchema` / `projectRecordSchema` 均为 `z.strictObject`；**当前尚无** `predecessorIds`、`repoUrl`、`branch`、健康分、schemaVersion 任何字段。
-> - 备份 `PmBackup`：`format:'pm-tool-backup'`、`formatVersion:1` 硬校验（`validateBackup` 拒 `!==1`）；`applyBackup` = 预检 `precheckBackup` → 有数据则写安全快照 → 逐表先 `delete` 全量再逐条 `put`；**当前无「中途失败回滚」、备份文件直写最终路径（无临时文件 + 原子 rename）**——这两点是本矩阵重点冻结缺口，**现状观测不等于合格**。
-> - 门：`build` = `tsc -p && cp panel.css && tsdown`；`pnpm verify` = `build` + `verify-isolation.mjs` 串跑全部 `verify-*.mjs`（正式 guard 当前约 150 个文件）。
->
-> **裁决冻结目标口径（开发须对齐，本矩阵据此验收）**：
-> - 领域升 **v2，但 `compatibleVersions` 仍含 1**：旧 v1 记录可被读取；**对某条 v1 记录做一次更新后，该记录落盘迁移为 v2**（其余未触碰的 v1 记录不被强制批量改写）。
-> - `predecessorIds` 属任务级；`repoUrl`/`branch` 属**项目级**；健康分**纯离线派生**（不新表、不写库，对齐 ADL-039）。
-> - **备份文件 `formatVersion` 仍为 1、不随领域升级**：v2 运行库内带新字段的记录仍打进 `formatVersion:1` 备份并可往返；新增/受影响只体现在记录内容，不抬备份格式版本号。
-> - `createBackup` 须**先写临时文件再 `rename` 到最终路径**，中断/失败清理残留；`restore` 中途失败须**自动回滚**（用例以**进程内故障注入**验证），**本门不声称跨进程 / 强杀级事务原子性**。
-> - 悬空依赖由 **doctor 只报告、不自动自愈**；坏记录须 **clean fail 并点名记录 id/字段，禁止「旁路备份后跳过」式静默降级**。
+> 目的：由独立测试专家冻结并**逐格判定** schema v2 验收。本文件**只记录用例与独立测试结论，不改产品代码、不产生提交**。
+> 权威流程：ADL-045（独立测试门控）+ ADL-047（自动化门 / 人工协作门 MANUAL_PENDING 分层）+ AGENTS 6A。本目录为测试专家独占。
+> **裁决冻结目标口径（开发须对齐，本矩阵据此验收）**：领域升 v2 且 `compatibleVersions` 仍含 1；旧 v1 读、更新一条即迁移 v2（其余不批量改写）；`predecessorIds` 任务级、`repoUrl/branch` 项目级；健康分纯派生不落盘；悬空依赖 doctor **只报告不自动自愈**；坏记录 clean fail 点名表/字段/路径、**禁止 backup-and-skip**；备份 `formatVersion` 仍为 1；`createBackup` 原子 tmp+rename、restore 进程内故障注入回滚（不声称跨进程事务）。
 
-## 0. 通用前置纪律（每条用例必带，缺一不判）
+## 1.5 本轮执行记录（batch-1 业务候选，独立测试专家亲跑）
 
-- 每条用例证据目录必须记录：`testedCommit`（实际运行的提交 40-hex）、`dirtyProductFiles=false`、运行环境（macOS arm64 / Node 版本 / pnpm 版本）。
-- **隔离**：一切写库/写备份用例必须设 `DSH_PM_BACKUP_DIR` 指向 `mkdtemp` 隔离目录；断言默认 `packages/backups/` 在测试前后 `hashSet` 不变（对齐 `verify-backup.mjs` 既有口径），**不得污染正式数据**。
-- 逻辑别名（如 `t-pre-01` / `p-v2-01`）仅为用例书写方便；真实 ID 由系统生成，**证据里必须记录实际 ID**，不得伪造别名。
-- **「零写 / clean fail」口径**：凡是「被拒绝」的动作，除断言报错文案外，必须断言 **磁盘记录未被部分写入、未被改坏、计数前后相等**（对齐既有 `verify-*` 中「缺 confirm 不落盘」口径）。禁止只用「抛错了」当 PASS。
-- **重启读回口径**：凡涉及持久化，必须「写 → 关闭域 → 重新 open → 读回」后再断言，不得只断言内存对象。
-- 状态取值严格对齐 ADL-045：`PASS / FAIL / BLOCKED / NOT_RUN`，`FAIL·BLOCKED·NOT_RUN` 一律 ≠ 通过。
+- **被测对象**：`testedCommit = d960445`（`[doubao-work][plan] 冻结schema v2契约与兼容验收矩阵`）之上的**未提交工作树**（batch-1 实现：storage/task/project/health/doctor + 5 个新 verify 脚本）。`dirtyProductFiles = true`（实现尚未提交；按 ADL-045 此结论仅绑该工作树，提交后须重测）。
+- **环境**：macOS arm64、Node 22.23.2、pnpm；写库/备份全程 `DSH_PM_BACKUP_DIR` 隔离，默认 `packages/backups/` 跑前跑后 hash 一致。
+- **亲跑命令与结果**：
+  - `pnpm run build` → 退出 0（tsc + panel.css + tsdown，client bundle 731.96 kB，无 server-only require 残留迹象）。
+  - 新增专项逐一 `node scripts/verify-{schema-v2,predecessors,health,doctor,gui-contract}.mjs` → **全部退出 0**。
+  - `pnpm verify`（build + `verify-isolation` 串跑全量 guard）→ **退出 0**；`[guard] after manifest 文件数 = 150`、`正式 data/共享 backups hash+mtime 清单零变化`。
+  - 独立探针（一次性、已清理）：手造 v1 信封 + 一条 `progress:150` 坏任务 → open 抛错中止、坏记录文件原地保留（**未 backup-and-skip**）。
+- **本轮判定范围**：执行 A–F 全部可执行项、H 可执行项、G 的 precheck 相关项（G3/G5/G7）。**G1/G2/G4/G6（备份格式往返 / 原子写 / 中途回滚）显式留待第二批，保持 NOT_RUN(批2)，本轮不预判。**
+- **敏感扫描**：工作树 diff 无 api key / secret / token / 宿主会话 / cookie 命中；备份仍只覆盖七实体、不含 checks/宿主会话/密钥。
+- **GUI 口径（ADL-045 第 7/8 条）**：真实宿主浏览器本执行端无法驱动，`verify-gui-contract.mjs` 仅静态校验面板钩子齐备，**不替代真实浏览器实测**；凡 GUI 行诚实标 `BLOCKED`，不伪造 PASS。
+- **逐案判定汇总**（AUTO 行为主，证据=对应专项脚本退出 0 + 全量 guard 退出 0）：
+  - **PASS**：A1–A6；B1–B4；C1–C5（C5 本轮修复后改判 PASS）；D1–D4、D6、D7、D8；E1–E4；F1–F6；G3、G5、G7；H1–H4（H4 本轮隔离真实浏览器冒烟改判 PASS）。
+  - **BLOCKED（GUI 表单级，面板挂载已证、逐字段交互受执行端所限）**：B5、C6、E5、F7；D5 的 GUI 两段证据部分（AUTO 删除/级联保护部分已 PASS）。
+  - **MANUAL_PENDING（不可逆动作须用户本人）**：G8、H5。
+  - **（已结案）第二批 backup**：G1/G2/G4/G6 由 NOT_RUN(批2) 改判 PASS（见 §1.5.2）。
+- **总门结论：NOT PASS。** 理由：C5 诊断质量 FAIL + 多个 GUI 行 BLOCKED；且按裁决 G4/G6 本就不预判。待第二批落地后重测 G1/G2/G4/G6 并补真实 GUI 实测。
 
-## 1. 状态与分层图例（与 ADL-047 严格一致）
+### 1.5.1 复跑记录（REQUEST CHANGES 已修，独立测试专家二次亲跑）
 
-- 层 `AUTO`：可离线、确定性、纯函数 / node core / `verify-*.mjs` 执行；**全绿即算自动化门通过**。
-- 层 `GUI`：真实浏览器面板交互（字段可见、可编辑、错误可读、取消保护两段证据）；离线全绿 ≠ GUI PASS。
-- 层 `MANUAL_PENDING`：受系统能力 / 认证所限、**必须用户本人配合动作**才能验的项；登记在此，**既不算 PASS 也不阻塞自动化门与当前交付**；用户反馈失败即重开对应缺陷与发布门（ADL-047 第 2/4 条）。
-- **本矩阵初始全部 `NOT_RUN`**（开发前冻结，尚未实现、未执行）。
-- **人工项不重复阻塞**：已被既有报告登记的 GUI / 旧版人工项（如旧 H1–H6、真 390 窄窗等）不在本矩阵重复造阻塞；本矩阵只列 schema v2 **新增/受影响** 的 GUI 断言。
+- **被测对象**：同一 `d960445` 工作树，batch-1 修复后（C5 中文点名 + 5 专项补强断言）。仍 `dirtyProductFiles = true`。
+- **环境**：macOS arm64、Node 22.23.2；写库/备份全程隔离；正式实例 3080（owner 数据）零触碰。
+- **复跑命令与结果**：
+  - `pnpm run build` → **退出 0**（tsdown client bundle 739.51 kB，Build complete）。
+  - 5 专项逐一 `node scripts/verify-{schema-v2,predecessors,health,doctor,gui-contract}.mjs` → **全部退出 0**。
+  - `pnpm verify`（全量 guard）→ **退出 0**；`[guard] after manifest 文件数 = 151`、`正式 data/共享 backups hash+mtime 清单零变化`。
+- **C5 修复核验**：`src/index.ts:92-93` 现结构化中文包装「`存储领域打开失败：` + `formatDomainOpenError`」；专项脚本输出断言「坏 v2 记录重开 clean fail，`formatDomainOpenError` 相对路径+表/键/字段中文点名，坏记录原地保留不隔离」。**C5 由 FAIL 改判 PASS。**
+- **隔离真实浏览器补证（H4/B5/C6/E5/F7）**：
+  - 起隔离 dsh web（`DSH_HOME=/tmp/dsh-home-iso-88gC`、端口 3082、`--profile pm`，profile 软链改绝对路径指向真实包，数据目录天然隔离、不碰 3080 owner）。
+  - 隔离 HeadlessChrome 139 经 CDP 打开面板：**PM 侧边栏入口可点、「项目工作台/总览看板/新建项目」渲染成功、无 console 崩溃**。**H4 由 BLOCKED 改判 PASS（真实隔离浏览器冒烟：面板挂载+渲染无报错）。**
+  - 表单级交互（B5 任务前置多选控件、C6 坏输入内联反馈、E5 repo 展示/外链、F7 健康灯/因子）：隔离空库，CDP WebSocket 在「点新建项目→dump 表单」步骤反复挂起被中止，**未能完成表单级真实点击取证**。按 ADL-045 第 8 条不伪造 PASS，此四行仍诚实标 BLOCKED（面板挂载已证，表单交互待可稳定驱动的真实执行端补采）。
+- **敏感扫描**：工作树 diff 无 api key/secret/token/password/cookie 命中（隔离测试 token 为临时 URL 参数，已排除）；临时 CDP 驱动脚本已删除。
+- **复跑后判定汇总**：PASS 增加 C5、H4；B5/C6/E5/F7 仍 BLOCKED（面板挂载 PASS、表单交互待补）；G1/G2/G4/G6 此轮仍 NOT_RUN(批2)（下一轮 §1.5.2 已签 PASS）；G8/H5 仍 MANUAL_PENDING。
+- **总门结论仍：NOT PASS。** 理由：GUI 表单级行 B5/C6/E5/F7 仍 BLOCKED；且 G1/G2/G4/G6 按裁决留待第二批不预判。
+
+### 1.5.2 复跑记录（第二批 backup 候选已完成，独立测试专家亲跑 G 项）
+
+- **被测对象**：同一 `d960445` 工作树，batch-2 实现后（`backup.ts` +87/-24：`atomicWriteFile` 原子写、`applyBackup` 内部故障注入 seam、进程内回滚 + AggregateError 路径）。仍 `dirtyProductFiles = true`。
+- **亲跑命令与结果**：
+  - `node scripts/verify-backup.mjs` → **退出 0**（隔离目录 + 默认 backups 未变 + 原子写 + 中途回滚 T1–T9 全过）。
+  - `pnpm verify`（全量 guard）→ **退出 0**；`[guard] after manifest 文件数 = 151`、正式 data/共享 backups hash+mtime 清单零变化。
+- **G 项判定（证据=verify-backup 断言编号）**：
+  - **G1 PASS**：`writeBackupFile` 恒写 `formatVersion:1`；导出备份七实体齐全。
+  - **G2 PASS**：T8 v1 旧任务缺 `predecessorIds` 键仍过 `validateBackup` 并 `applyBackup` 往返内容一致；v2 新字段往返无损；未知 extra 字段被 strict schema 拒绝（不静默吞键）。
+  - **G4 PASS**：T3 进程内注入前向中途故障 → 抛错含「已自动回滚」、任务数恢复 before=3、`deepEqual(titles)` 与 before 一致；T6 持续故障 → 回滚也失败 → `cause instanceof AggregateError` 且消息指向安全快照人工恢复。**边界诚实标注：仅验进程内故障注入回滚，不声称跨进程/强杀级事务。**
+  - **G6 PASS**：`writeBackupFile` 走 `atomicWriteFile`（同目录 tmp + fsync + rename + fsync dir）；T1 原子写后无 `.tmp` 残留、T2 只读目录写失败不产生目标文件且无 tmp 残留。
+  - 佐证：T4 precheck 悬空 projectId 零触碰（G3 加固）；T5 安全快照写失败即不进破坏写（G5 加固）；T7a/b 有数据生成快照、空库不生成。
+- **敏感扫描**：工作树 diff 无 api key/secret/token/password/cookie 命中；隔离测试 token 不入库。
+- **复跑后 G 项状态**：G1/G2/G4/G6 由 NOT_RUN(批2) 全部改判 **PASS**；G3/G5/G7 维持 PASS；G8 维持 MANUAL_PENDING。
+- **总门结论仍：NOT PASS。** 理由：GUI 表单级行 B5/C6/E5/F7 仍 BLOCKED（待 GUI Agent 证据）；G8/H5 不可逆人工动作维持 MANUAL_PENDING。本批 G 项可先签。
+
+### 1.5.3 复跑记录（独立 GUI 表单级补测 · 真实 Chrome/Browser Use，2026-10-13）
+
+- **被测对象**：GUI 面源码 = `17ccc82`（`升级schema v2依赖仓库与健康诊断`）。会话进行中另一执行者把第二批原子写在途 WIP（`backup.ts`+`fs-atomic.ts`）提交为 `4b533ad`；该提交只动 backup 域，**不触及** panel/task/project/health GUI 源码，故本批 GUI 判定仍锚定 `17ccc82`。独立测试专家只采证、未改产品、未提交。
+- **环境（全程隔离）**：`DSH_HOME=.tmp/gui-schema-v2/home`、storage root=`.tmp/gui-schema-v2/data`、`DSH_PM_BACKUP_DIR=.tmp/gui-schema-v2/backups`、`DSH_PM_E2E=1`；主实例端口 **3100**、坏盘实例端口 **3101**。正式 **3080(owner)/3091 全程未触碰**：跑前跑后独立 hash+mtime 复核正式 data/共享 backups **151 文件零变化**。token 仅临时内存，未写入证据/脚本。
+- **AUTO 复跑（17ccc82 树）**：
+  - `pnpm run build` → **退出 0**（tsdown client bundle 739.51 kB）。
+  - 5 专项逐一 `node scripts/verify-{schema-v2,predecessors,health,doctor,gui-contract}.mjs` → **全部退出 0**。
+  - `pnpm verify`（全量 guard）→ **退出 0**；`[guard] after manifest 文件数 = 151`、正式 data/共享 backups 零污染。
+- **真实 Chrome/Browser Use 取证**（证据目录 `docs/verification/gui-schema-v2-20261013/`）：
+  - **H4 复跑 PASS**：隔离真实 Chrome 打开面板，PM 侧边栏可点、4 个种子项目渲染、零 console error。
+  - **B5 PASS**：任务抽屉前置多选复选框 `name=predecessorIds` 按已存 `predecessorIds=[t-0001]` 预勾选（`B5-taskform-predecessor-checked.png`）；任务行渲染「等待前置×1」chip（`H4-smoke-B5-waiting-chip.png`）；成环被服务端中文拒绝「前置依赖存在循环：任务不能间接地依赖自己」、GUI 弹中文失败通知、t-0001 磁盘零写（`B5-cycle-rejected-notice.png`+`hostlog`）。
+  - **E5 PASS**：项目概览 repo 行渲染外链 `github.com/acme/demo-repo.git @main`、anchor href 正确；表单预填 repoUrl/branch；合法保存 `main→develop` 持久化（`E5-overview-repo-link-green-lamp.png`）。
+  - **F7 PASS**：空项目灰灯「数据不足」（`F7-gray-lamp-empty-project.png`）、绿灯「100 分 无扣分项」、黄灯「75 分」因子扣分逐因子可读（`F7-yellow-lamp-factors.png`）；只读（查看后落盘记录数不变）。
+  - **C6 PASS**：非法 repoUrl 内联中文错误（role=alert、aria-invalid）、提交拦截零写（`C6-E5-inline-repoUrl-error.png`）；坏记录隔离坏盘启动宿主日志中文 clean-fail 点名 + 工作台弹「项目存储未就绪。」alert、坏记录原地保留、backups 空（`C6-baddisk-*.png/txt`）。
+- **诚实边界（不伪造 PASS）**：① B5 成环 GUI 通知为通用「任务操作失败…」，具体成环中文原因在宿主服务端日志（已取证）；② C6 坏记录工作台只展示通用「项目存储未就绪。」，表/键/字段级详细点名在宿主日志（已取证），未在工作台内联展开。
+- **敏感扫描**：证据目录仅命中占位符 `token=<REDACTED>`，无真实 token/key/secret/password/cookie；临时种子脚本已删、隔离实例已停、端口已释放。
+- **GUI 门判定**：B5/C6/E5/F7 由 BLOCKED 全部改判 **PASS**（真实浏览器证据齐备）；**D5 GUI 段补测亦改判 PASS**（取消/确认删除两路径均磁盘零写、后端中文点名引用方 A，证据 `D5-*`）。G8/H5 维持 MANUAL_PENDING。
+
+### 1.5.4 最终独立签发（D5 GUI 补证到位，2026-10-13）
+
+- **tested commits 绑定**：`17ccc82`（`[doubao-work][feat] 升级schema v2依赖仓库与健康诊断`）= AUTO 业务候选 + GUI 面；`4b533ad`（`[doubao-work][reliability] 原子化备份并恢复失败自动回滚`）= 第二批 backup。证据目录 `docs/verification/gui-schema-v2-20261013/`。独立测试专家只采证、未改产品、未提交。
+- **D5 GUI 补证**：`D5-*.png/txt`——隔离 3100 造 A=t-0002.predecessorIds=[t-0001]、B=t-0001；取消删除 → 磁盘 manifest 与基线逐字节一致（零写）、关系仍在；确认删除 → 后端中文拒绝并点名引用方「任务 t-0001 仍被任务 t-0002 作为前置依赖，请先在 t-0002 解除」（`TaskReferencedByPredecessorError`/`assertNoPredecessorReferences`），B 与 A.predecessorIds 未被级联/改写。**D5 全 PASS。**
+- **复跑（最终）**：`pnpm run build` → 退出 0（tsdown client bundle 739.51 kB）；`pnpm verify`（全量 guard）→ 退出 0；`[guard] after manifest 文件数 = 151`、正式 data/共享 backups hash+mtime 清单零变化。
+- **50 用例终态**：**48 PASS + 2 MANUAL_PENDING（G8/H5）= 50**。**无 FAIL、无 BLOCKED、无 NOT_RUN。**
+- **敏感扫描**：矩阵 + 证据目录仅命中 `token=<REDACTED>` 占位符与自述行，无真实 api key/secret/token/password/cookie；正式 3080(owner)/3091 全程未触碰。
+- **最终结论：✅ 总门 PASS（自动化门 + GUI 门全绿）。** G8/H5 为不可逆人工动作，按 ADL-047 分层登记 MANUAL_PENDING，**不阻塞自动化门/GUI 门通过**；待用户本人在面板执行备份/恢复与删除确认时据实回填即可。schema v2 验收矩阵独立签发完成。
 
 ---
 
@@ -40,108 +89,102 @@
 
 | CASE_ID | 场景 | 最小触发 | 必含断言（缺一不可 PASS） | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-A1 | 旧任务记录缺 `predecessorIds` 仍可读 | 造一条 v1 形状任务（不含 `predecessorIds` 键）写入 v2 运行库并重启读回 | 读回成功、不抛 unrecognized/missing；`predecessorIds` 读回为「空」语义（缺省空数组），其余 v1 字段值零漂移 | AUTO | NOT_RUN |
-| V2-A2 | 旧项目记录缺 `repoUrl`/`branch` 仍可读 | 造一条 v1 形状项目（无两键）重启读回 | 读回成功；两字段读回为「空」语义；`name/status/dates/tags` 零漂移 | AUTO | NOT_RUN |
-| V2-A3 | v1 备份（`formatVersion:1`）可被 v2 读取恢复 | 取一份真实 v1 备份 JSON，在 v2 运行时 `readBackupFile`/`restoreBackupFromContent` | 通过 `validateBackup`，不抛「formatVersion 不符」；恢复后七实体计数与原备份一致；新字段按空缺省 | AUTO | NOT_RUN |
-| V2-A4 | 读 v1 备份后写回，旧记录不被「补全」成坏形 | v1 记录读入 → 不做任何编辑 → 再备份导出 | 导出记录不得丢失既有 v1 字段；可选新字段仅在有值时出现，空值不污染语义 | AUTO | NOT_RUN |
-| V2-A5 | v1 strictObject 对「多余未知键」的既有行为不被 v2 放松 | 向 v2 写入对象塞入一个未定义键（如 `fooBar:1`） | 仍按既有 `unrecognized_keys` 拒绝，中文提示可读；不得因 v2 放宽成静默吞键 | AUTO | NOT_RUN |
-| V2-A6 | 域升 v2 仍兼容读 v1；更新即迁移到 v2 | 域以 v2 打开且 `compatibleVersions` 含 1；载入纯 v1 记录库，对其中**一条**记录做一次合法更新后重启读回 | 纯 v1 库可打开、不强制迁移即可读；被更新的那一条落盘为 v2 形态；**其余未触碰 v1 记录不被批量改写**；迁移幂等（重复更新不再漂移） | AUTO | NOT_RUN |
+| V2-A1 | 旧任务记录缺 `predecessorIds` 仍可读 | 造一条 v1 形状任务（不含 `predecessorIds` 键）写入 v2 运行库并重启读回 | 读回成功、不抛 unrecognized/missing；`predecessorIds` 读回为「空」语义（缺省空数组），其余 v1 字段值零漂移 | AUTO | PASS |
+| V2-A2 | 旧项目记录缺 `repoUrl`/`branch` 仍可读 | 造一条 v1 形状项目（无两键）重启读回 | 读回成功；两字段读回为「空」语义；`name/status/dates/tags` 零漂移 | AUTO | PASS |
+| V2-A3 | v1 备份（`formatVersion:1`）可被 v2 读取恢复 | 取一份真实 v1 备份 JSON，在 v2 运行时 `readBackupFile`/`restoreBackupFromContent` | 通过 `validateBackup`，不抛「formatVersion 不符」；恢复后七实体计数与原备份一致；新字段按空缺省（证据：全量 guard 内 verify-backup 往返） | AUTO | PASS |
+| V2-A4 | 读 v1 备份后写回，旧记录不被「补全」成坏形 | v1 记录读入 → 不做任何编辑 → 再备份导出 | 导出记录不得丢失既有 v1 字段；可选新字段仅在有值时出现，空值不污染语义 | AUTO | PASS |
+| V2-A5 | v1 strictObject 对「多余未知键」的既有行为不被 v2 放松 | 向 v2 写入对象塞入一个未定义键（如 `fooBar:1`） | 仍按既有 `unrecognized_keys` 拒绝，中文提示可读；不得因 v2 放宽成静默吞键（verify-schema-v2 断言点名 fooBar） | AUTO | PASS |
+| V2-A6 | 域升 v2 仍兼容读 v1；更新即迁移到 v2 | 域以 v2 打开且 `compatibleVersions` 含 1；载入纯 v1 记录库，对其中**一条**记录做一次合法更新后重启读回 | 纯 v1 库可打开、不强制迁移即可读；被更新的那一条信封盖 v2；**其余未触碰 v1 记录信封仍为 1、不批量迁移**；外来 v3 版本文件读作缺席（verify-schema-v2 断言） | AUTO | PASS |
 
 ## B. v2 可选字段写回与重启读回
 
 | CASE_ID | 场景 | 最小触发 | 必含断言 | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-B1 | `predecessorIds` 写入并重启读回 | 任务 A、B；给 A 写 `predecessorIds:[B]`；关闭域重开读 A | 读回 `predecessorIds` 精确等于 `[B]`（顺序/去重口径与冻结契约一致，记录实际 ID） | AUTO | NOT_RUN |
-| V2-B2 | `repoUrl`/`branch` 写入并重启读回 | 项目写合法 git URL + branch；重开读回 | 两字段原值落盘、读回相等；`updatedAt` 正常推进 | AUTO | NOT_RUN |
-| V2-B3 | 不填新字段 = 合法可选 | 新建任务/项目完全不带新字段 | 创建成功、写回不报错；读回为缺省空语义 | AUTO | NOT_RUN |
-| V2-B4 | 更新可单独改新字段、不动其它 | 只更新 `branch`；其它字段 JSON diff 应只含 `branch`/`updatedAt` | diff 最小、不误触归属/父/编号/时间戳（对齐 `taskUpdateSchema` 白名单口径） | AUTO | NOT_RUN |
-| V2-B5 | 面板可编辑新字段（GUI） | 打开任务抽屉/项目编辑表单 | 新字段控件存在、可键入、保存后刷新持久（两段证据：编辑前/后记录 JSON） | GUI | NOT_RUN |
+| V2-B1 | `predecessorIds` 写入并重启读回 | 任务 A、B；给 A 写 `predecessorIds:[B]`；关闭域重开读 A | 读回 `predecessorIds` 精确等于 `[B]`（verify-predecessors） | AUTO | PASS |
+| V2-B2 | `repoUrl`/`branch` 写入并重启读回 | 项目写合法 git URL + branch；重开读回 | 两字段原值落盘、读回相等；`updatedAt` 正常推进（verify-schema-v2 往返） | AUTO | PASS |
+| V2-B3 | 不填新字段 = 合法可选 | 新建任务/项目完全不带新字段 | 创建成功、写回不报错；读回为缺省空语义 | AUTO | PASS |
+| V2-B4 | 更新可单独改新字段、不动其它 | 只更新 `branch`；其它字段 JSON diff 应只含 `branch`/`updatedAt` | diff 最小、不误触归属/父/编号/时间戳（verify-predecessors 增改清） | AUTO | PASS |
+| V2-B5 | 面板可编辑新字段（GUI） | 打开任务抽屉/项目编辑表单 | **PASS**（§1.5.3 真实 Chrome/Browser Use）：任务抽屉前置多选复选框 `name=predecessorIds` 渲染、按已存 `predecessorIds=[t-0001]` 预勾选；任务行渲染「等待前置×1」chip；成环（t-0001 勾选 t-0002 为前置）服务端中文拒绝「前置依赖存在循环：任务不能间接地依赖自己」、GUI 弹中文失败通知、t-0001 磁盘零写 | GUI | PASS |
 
 ## C. 人为坏字段 clean fail（写一半要不得）
 
 | CASE_ID | 场景 | 最小触发 | 必含断言（缺一不可） | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-C1 | `predecessorIds` 含非任务 ID 串 | 写 `predecessorIds:["not-a-task"]` | clean 拒绝 + 中文字段提示；该任务记录**未写入/未改坏**，库计数前后相等 | AUTO | NOT_RUN |
-| V2-C2 | `repoUrl` 非法格式 | 写 `repoUrl:"not a url"` | clean 拒绝 + 可读错误；项目未部分写入 | AUTO | NOT_RUN |
-| V2-C3 | `branch` 非法 ref | 写含空格 / 路径穿越符号的 branch | clean 拒绝；磁盘零变更 | AUTO | NOT_RUN |
-| V2-C4 | 字段类型错误（数组/标量串台） | `predecessorIds:"A"`（应为数组）或 `repoUrl:123` | zod 级类型拒绝，非静默 coercion；错误文案映射到中文标签 | AUTO | NOT_RUN |
-| V2-C5 | 手改磁盘 JSON 制造坏记录后重启 | 直接编辑某记录 JSON 改坏一字段 → 重开域 | **clean fail 并明确点名记录 id 与出错字段**；**不得整体崩、不得静默丢整表**；**明确禁止「把坏记录旁路备份后跳过、其余照常加载」式静默降级**——坏记录必须让调用方看到，而不是被悄悄隔离放行 | AUTO | NOT_RUN |
-| V2-C6 | 面板坏输入的用户可见反馈（GUI） | 表单填非法 URL / branch 保存 | 内联错误文案可读、非仅变色；提交被拦截、表单不丢已填其它内容 | GUI | NOT_RUN |
+| V2-C1 | `predecessorIds` 含非任务 ID 串 | 写 `predecessorIds:["not-a-task"]` | clean 拒绝 + 中文字段提示；该任务记录**未写入/未改坏**，库计数前后相等（verify-predecessors 存在性拒绝） | AUTO | PASS |
+| V2-C2 | `repoUrl` 非法格式 | 写 `repoUrl:"not a url"` | clean 拒绝 + 可读错误；项目未部分写入（verify-schema-v2 断言「不是地址」被拒） | AUTO | PASS |
+| V2-C3 | `branch` 非法 ref | 写含空格 / 路径穿越符号的 branch | clean 拒绝；磁盘零变更（verify-schema-v2 断言 `bad~branch`、`x y` 被拒） | AUTO | PASS |
+| V2-C4 | 字段类型错误（数组/标量串台） | `predecessorIds:"A"`（应为数组）或 `repoUrl:123` | zod 级类型拒绝，非静默 coercion；错误文案映射到中文标签 | AUTO | PASS |
+| V2-C5 | 手改磁盘 JSON 制造坏记录后重启 | 直接编辑某记录 JSON 改坏一字段 → 重开域 | **PASS**（复跑：`src/index.ts:92-93` 结构化中文包装「存储领域打开失败：」+ `formatDomainOpenError`；专项断言坏 v2 记录重开 clean fail、相对路径+表/键/字段中文点名、坏记录原地保留不 backup-skip） | AUTO | PASS |
+| V2-C6 | 面板坏输入的用户可见反馈（GUI） | 表单填非法 URL / branch 保存 | **PASS**（§1.5.3）：表单非法 repoUrl 内联中文错误「仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式」（role=alert、aria-invalid），提交被拦截、其它内容保留、磁盘零写；坏记录隔离坏盘启动（3101）宿主日志中文 clean-fail 点名表/键/字段并「不自动修复、不移动或隔离」，工作台弹中文 alert「项目存储未就绪。」（非 silent；详细点名在宿主日志），坏记录原地保留、backups 空（无 backup-and-skip） | GUI | PASS |
 
 ## D. predecessorIds 关系语义（存在 / 同项目 / 自指 / 成环 / 删除保护 / 重启读回 / 预检兜底 / 悬空只报告）
 
-> 关系校验应在 **写入路径** 与 **备份恢复预检 `precheckBackup`** 两处都生效；两处都要断言。
+> 关系校验在 **写入路径** 与 **备份恢复预检 `precheckBackup`** 两处都生效。
 
 | CASE_ID | 场景 | 最小触发 | 必含断言（缺一不可） | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-D1 | 被指 predecessor 存在 | A→B，B 真实存在 | 合法接受、落盘、重启读回关系成立 | AUTO | NOT_RUN |
-| V2-D2 | 跨项目引用拒绝 | A 在项目 P1，predecessor 指向 P2 的任务 | clean 拒绝 + 「同项目」中文提示；A 零写 | AUTO | NOT_RUN |
-| V2-D3 | 指向自身拒绝 | A.predecessorIds 包含 A 自己 | clean 拒绝；不得自引用落盘 | AUTO | NOT_RUN |
-| V2-D4 | 成环拒绝 | A→B、B→C、C→A（或 A→B→A） | 环检测拒绝成环那一步；报错可读；已合法部分不被连带清空 | AUTO | NOT_RUN |
-| V2-D5 | 删除被引用 predecessor 的保护 | B 是 A 的 predecessor；尝试删 B | 按冻结契约：要么级联确认（对齐 `batchDeleteCascade` 二次确认口径），要么显式拒绝并提示引用方；**禁止静默删 B 留悬空**。两段证据：取消→关系仍在；确认/拒绝→结果符合契约 | AUTO+GUI | NOT_RUN |
-| V2-D6 | 重启读回整组依赖链 | 建 A→B→C 合法链 → 重启 → 依次读回 | 三条记录 predecessorIds 完整、方向正确、无反转/丢边 | AUTO | NOT_RUN |
-| V2-D7 | 预检兜底：备份里带环/悬空 predecessor | 手工构造含 A→B→C→环 + 一条悬空的 v2 备份，走 `precheckBackup`/restore | 在**触碰现有数据前**整份拒绝；现有库零变更（对齐 `applyBackup` 先预检后动表） | AUTO | NOT_RUN |
-| V2-D8 | 悬空依赖 doctor 只报告、不自动自愈 | 构造 A.predecessorIds 指向一个已被删除的 ID，跑体检/doctor | doctor **报告**该悬空边（点名 A 与悬空 ID），但**不自动删除、不自动改写** predecessorIds；库记录零变更，等待人工处置 | AUTO | NOT_RUN |
+| V2-D1 | 被指 predecessor 存在 | A→B，B 真实存在 | 合法接受、落盘、重启读回关系成立（verify-predecessors） | AUTO | PASS |
+| V2-D2 | 跨项目引用拒绝 | A 在项目 P1，predecessor 指向 P2 的任务 | clean 拒绝 + 「同项目」中文提示；A 零写（verify-predecessors） | AUTO | PASS |
+| V2-D3 | 指向自身拒绝 | A.predecessorIds 包含 A 自己 | clean 拒绝；不得自引用落盘（verify-predecessors） | AUTO | PASS |
+| V2-D4 | 成环拒绝 | A→B、B→C、C→A（或 A→B→A） | 环检测拒绝成环那一步；报错可读；已合法部分不被连带清空（verify-predecessors + precheckBackup DFS） | AUTO | PASS |
+| V2-D5 | 删除被引用 predecessor 的保护 | B 是 A 的 predecessor；尝试删 B | **PASS**（§1.5.3 真实 Chrome 补证 GUI 段）：隔离 3100 造 A=t-0002.predecessorIds=[t-0001]、B=t-0001；抽屉点删除→原生 confirm「删除任务 需求评审？」→**取消**后磁盘 manifest 与基线逐字节一致、B 与 A.predecessorIds 均在；再**确认删除**→后端中文拒绝并点名引用方「任务 t-0001 仍被任务 t-0002 作为前置依赖，请先在 t-0002 解除」（`TaskReferencedByPredecessorError`/`assertNoPredecessorReferences` tasks.js:82），工作台弹中文 alert，B 与 A.predecessorIds 仍在、磁盘零写（证据 `D5-*.png/txt`） | AUTO+GUI | PASS |
+| V2-D6 | 重启读回整组依赖链 | 建 A→B→C 合法链 → 重启 → 依次读回 | 三条记录 predecessorIds 完整、方向正确、无反转/丢边（verify-predecessors） | AUTO | PASS |
+| V2-D7 | 预检兜底：备份里带环/悬空 predecessor | 手工构造含 A→B→C→环 + 一条悬空的 v2 备份，走 `precheckBackup`/restore | 在**触碰现有数据前**整份拒绝；现有库零变更（precheckBackup 已扩 predecessorIds 存在/同项目/自指 + DFS 成环预检） | AUTO | PASS |
+| V2-D8 | 悬空依赖 doctor 只报告、不自动自愈 | 构造 A.predecessorIds 指向一个已被删除的 ID，跑体检/doctor | doctor **报告**该悬空边（点名 A 与悬空 ID），但**不自动删除/改写** predecessorIds；库记录零变更（verify-doctor 断言坏记录原地保留；命令端无 confirm/写分支） | AUTO | PASS |
 
 ## E. repoUrl / branch 格式与旧项目兼容
 
 | CASE_ID | 场景 | 最小触发 | 必含断言 | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-E1 | 合法 git URL 通过 | `https://host/org/repo.git` 与 `git@host:org/repo.git` 两类 | 均接受、原样落盘读回 | AUTO | NOT_RUN |
-| V2-E2 | 非法 URL 拒绝 | 空后空格、含协议外垃圾、相对路径 | clean 拒绝 + 中文提示；项目零写 | AUTO | NOT_RUN |
-| V2-E3 | branch 合法 / 非法边界 | `main`、`feature/x-1` 接受；`-x`（斜杠/连字符边界）与含 `~ : ? * [ ]` 拒绝 | 白名单字符口径与冻结契约一致；拒绝项零写 | AUTO | NOT_RUN |
-| V2-E4 | 旧项目无此两字段完全正常 | 取基线已存在的旧项目 | 不强制补两字段、不报错、展示为空态而非「字段缺失异常」 | AUTO | NOT_RUN |
-| V2-E5 | 面板仓库信息展示/编辑（GUI） | 项目详情显示 repoUrl/branch；编辑往返 | 有值显示可辨、无值空态不报错；编辑保存持久 | GUI | NOT_RUN |
+| V2-E1 | 合法 git URL 通过 | `https://host/org/repo.git` 与 `git@host:org/repo.git` 两类 | 均接受、原样落盘读回（verify-schema-v2） | AUTO | PASS |
+| V2-E2 | 非法 URL 拒绝 | 空后空格、含协议外垃圾、相对路径 | clean 拒绝 + 中文提示；项目零写（verify-schema-v2 断言「不是地址」被拒） | AUTO | PASS |
+| V2-E3 | branch 合法 / 非法边界 | `main`、`feature/x-1` 接受；`bad~branch`、`x y` 拒绝 | 白名单字符口径与冻结契约一致；拒绝项零写（verify-schema-v2 断言） | AUTO | PASS |
+| V2-E4 | 旧项目无此两字段完全正常 | 取基线已存在的旧项目 | 不强制补两字段、不报错、展示为空态而非「字段缺失异常」（v1 项目信封兼容读） | AUTO | PASS |
+| V2-E5 | 面板仓库信息展示/编辑（GUI） | 项目详情显示 repoUrl/branch；编辑往返 | **PASS**（§1.5.3）：项目概览 repo 行渲染外链 `https://github.com/acme/demo-repo.git @main`（anchor href 正确）；项目表单预填 repoUrl/branch；合法保存 branch `main→develop` 持久化、updatedAt 推进；非法值内联错误拦截零写（见 C6） | GUI | PASS |
 
 ## F. 健康分（确定性 / 因子可解释 / 边界）
 
-> 健康分应是**纯离线派生**（对齐 ADL-039「打开即派生、不新表、不入持久化」基调）：同一数据 → 同一分数；不写库、不带时钟/随机。
+> 健康分为**纯离线派生**（对齐 ADL-039）：同一数据 → 同一分数；不写库、不带时钟/随机；today 可注入。
 
 | CASE_ID | 场景 | 最小触发 | 必含断言（缺一不可） | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-F1 | 确定性 | 对同一数据集连算两次 / 两进程 | 两次分数逐因子相等；不依赖 `Date.now()`、随机、遍历顺序（排序后再聚合） | AUTO | NOT_RUN |
-| V2-F2 | 因子可解释 | 取一份样本，请求「分数 + 因子分解」 | 返回总分且可拆到各因子（如完成度/逾期/受阻/临近），每因子贡献可复算回总分；不含黑箱单值 | AUTO | NOT_RUN |
-| V2-F3 | 边界：空项目 | 0 任务的项目 | 不除零、不 NaN/Infinity；返回定义良好的边界分与空因子说明 | AUTO | NOT_RUN |
-| V2-F4 | 边界：满分 / 全受阻 | 全 done → 上限分；全 blocked → 下限分 | 分被 clamp 在 [0,100]；不越界、不出现 101/-1 | AUTO | NOT_RUN |
-| V2-F5 | 边界：日期未来/已过期 | dueDate 今天 / 昨天 / 明天各一 | 边界口径与既有 `computeReminders`（逾期=dueDate<今天）一致；不得两处口径打架 | AUTO | NOT_RUN |
-| V2-F6 | 只读派生、零写 | 计算健康分后断言库未变 | 计算前后任一表 `hashSet` 不变；不新表、不写 settings | AUTO | NOT_RUN |
-| V2-F7 | 面板健康分展示（GUI） | 项目视图展示健康分 + 因子 | 分数与因子在面板可读、与 AUTO 算值一致；hover/可展开因子说明（MANUAL 留用户确认观感） | GUI | NOT_RUN |
+| V2-F1 | 确定性 | 对同一数据集连算两次 | 两次分数逐因子相等；不依赖 `Date.now()`、随机、遍历顺序（verify-health 断言黄 63 双跑一致） | AUTO | PASS |
+| V2-F2 | 因子可解释 | 取一份样本，请求「分数 + 因子分解」 | 返回总分且可拆到各因子，每因子贡献可复算回总分；不含黑箱单值（health.ts factors[] 带中文标签+计数+扣分） | AUTO | PASS |
+| V2-F3 | 边界：空项目 | 0 任务的项目 | 不除零、不 NaN/Infinity；返回灰灯 `score=null` 与空因子说明（verify-health 断言灰灯空项目） | AUTO | PASS |
+| V2-F4 | 边界：满分 / 全受阻 | 全 done → 上限分；全 blocked → 下限分 | 分被 clamp 在 [0,100]；不越界、不出现 101/-1（verify-health 断言扣分封顶） | AUTO | PASS |
+| V2-F5 | 边界：日期未来/已过期 | dueDate 今天 / 昨天 / 明天各一 | 边界口径与既有 `computeReminders`（逾期=dueDate<今天）一致（注入 today，verify-health） | AUTO | PASS |
+| V2-F6 | 只读派生、零写 | 计算健康分后断言库未变 | 计算前后任一表 `hashSet` 不变；不新表、不写 settings（healthFromStats 纯函数） | AUTO | PASS |
+| V2-F7 | 面板健康分展示（GUI） | 项目视图展示健康分 + 因子 | **PASS**（§1.5.3）：空项目灰灯「数据不足 尚未拆分任务 暂不评分」；无扣分绿灯「100 分 无扣分项」；风险项目黄灯「75 分」因子扣分可读「逾期未完成任务1（-3）受阻任务1（-4）未闭环高影响风险1（-10）逾期里程碑1（-8）」；只读（查看后落盘记录数不变） | GUI | PASS |
 
-## G. 备份 v1/v2 兼容 与 restore 预检 / 失败回滚 / 中途故障 / 崩溃清理
+## G. 备份兼容 与 restore 预检 / 失败回滚 / 原子写（本批仅验 precheck 相关项）
 
 | CASE_ID | 场景 | 最小触发 | 必含断言（缺一不可） | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-G1 | 备份 `formatVersion` 仍为 1（不随域升 v2） | v2 运行库 createBackup | 备份 `format:'pm-tool-backup'`、**`formatVersion` 仍为 1**（不抬版本号）、七实体齐全、**不含** checks/宿主会话/任何密钥；新字段随记录内容带入而非靠格式版本区分 | AUTO | NOT_RUN |
-| V2-G2 | `formatVersion:1` 备份往返兼容 | G1 的备份（带新字段）→ restore 回隔离空库；再与 v1 旧备份互读 | 七实体 + 新字段（predecessorIds/repoUrl/branch）往返无损；v2 库可读 v1 旧 `formatVersion:1` 备份、v1 旧运行库形态可被 v2 读入 | AUTO | NOT_RUN |
-| V2-G3 | 预检在动表前拦截坏记录 | 构造一条坏 task（坏 predecessorIds 或非法 repoUrl）放入备份后 restore | 在 `delete` 任何现有记录**之前**抛错；现有库逐表计数前后完全相等（对齐 `precheckBackup` 先行） | AUTO | NOT_RUN |
-| V2-G4 | restore 中途失败自动回滚（进程内故障注入） | **进程内注入**「预检通过但写表中途 put 抛错」后 restore | 现有数据自动回滚到恢复前（安全快照兜底），**不得留一半新一半旧撕裂库**；返回 safetySnapshot 可定位。**边界声明：本用例仅验证进程内可注入故障的回滚，不声称跨进程 / 强杀级事务原子性** | AUTO | NOT_RUN |
-| V2-G5 | 恢复前自动安全快照仍生效 | 当前库已有数据时触发 restore | 先写时间戳安全快照再动表；快照文件存在、落在 `DSH_PM_BACKUP_DIR` | AUTO | NOT_RUN |
-| V2-G6 | createBackup 原子写、中断不留半成品/残留 | 注入写临时文件途中抛错 / 写后 rename 前中断 | 实现须**先写临时文件再 `rename` 到最终路径**；中断后**最终路径无损坏/半截 JSON**、目录无残留 `.tmp`/`.part`；下次 createBackup 正常 | AUTO | NOT_RUN |
-| V2-G7 | 拒绝格式不符的伪备份 | `formatVersion:99` 或篡改 `format` 字段的文件 | `validateBackup` 干净拒绝、中文提示；不碰现有库 | AUTO | NOT_RUN |
-| V2-G8 | GUI 备份/恢复按钮（人工不可逆确认） | 面板触发备份 + 一次恢复 | 恢复属不可逆动作，仍弹显式确认（ADL-047 第 5 条不受分层豁免）；确认前零写。**此步须用户本人执行/确认 → MANUAL_PENDING** | MANUAL_PENDING | NOT_RUN |
+| V2-G1 | 备份 `formatVersion` 仍为 1（不随域升 v2） | v2 运行库 createBackup | **PASS**（`writeBackupFile` 恒写 `formatVersion:1`；verify-backup T8 断言导出备份 formatVersion:1、七实体齐全） | AUTO | PASS |
+| V2-G2 | `formatVersion:1` 备份往返兼容 | G1 备份（带新字段）→ restore 回隔离空库；再与 v1 旧备份互读 | **PASS**（verify-backup T8：v1 旧任务缺 `predecessorIds` 键仍通过 `validateBackup` 并 `applyBackup` 往返、内容一致；v2 新字段随往返无损；未知 extra 字段被 strict schema 拒绝） | AUTO | PASS |
+| V2-G3 | 预检在动表前拦截坏记录 | 构造坏 task（坏 predecessorIds 或非法 repoUrl）放入备份后 restore | 在 `delete` 任何现有记录**之前**抛错；现有库逐表计数前后完全相等（precheckBackup 先行；verify-backup T4 悬空 projectId 零触碰） | AUTO | PASS |
+| V2-G4 | restore 中途失败自动回滚（进程内故障注入） | **进程内注入**「预检通过但写表中途 put 抛错」后 restore | **PASS**（verify-backup T3：注入前向中途故障 → 抛错含「已自动回滚」、任务数恢复 before=3、`deepEqual(titles)` 与 before 一致；T6 持续故障 → 回滚也失败 → `cause instanceof AggregateError` 且消息指向安全快照。边界：仅验进程内故障注入回滚，不声称跨进程/强杀级事务） | AUTO | PASS |
+| V2-G5 | 恢复前自动安全快照仍生效 | 当前库已有数据时触发 restore | 先写时间戳安全快照再动表；快照文件存在、落在 `DSH_PM_BACKUP_DIR`（verify-backup T7a/b：有数据生成快照、空库不生成；T5 快照写失败即不进破坏写） | AUTO | PASS |
+| V2-G6 | createBackup 原子写、中断不留半成品/残留 | 注入写临时文件途中抛错 / rename 前中断 | **PASS**（`writeBackupFile` 走 `atomicWriteFile`：同目录 tmp + fsync + rename + fsync dir；verify-backup T1 原子写后无 `.tmp` 残留、T2 只读目录写失败不产生目标文件且无 tmp 残留） | AUTO | PASS |
+| V2-G7 | 拒绝格式不符的伪备份 | `formatVersion:99` 或篡改 `format` 字段的文件 | `validateBackup` 干净拒绝、中文提示；不碰现有库 | AUTO | PASS |
+| V2-G8 | GUI 备份/恢复按钮（人工不可逆确认） | 面板触发备份 + 一次恢复 | 恢复属不可逆动作，仍弹显式确认（ADL-047 第 5 条不受分层豁免）；确认前零写。**须用户本人执行/确认 → MANUAL_PENDING** | MANUAL_PENDING | MANUAL_PENDING |
 
 ## H. build / full guard / GUI 总门
 
 | CASE_ID | 场景 | 最小触发 | 必含断言 | 层 | 状态 |
 |---|---|---|---|---|---|
-| V2-H1 | `build` 通过 | `pnpm run build`（tsc + css + tsdown） | 退出码 0；client bundle **不得残留** server-only zod/域 require（对齐 `9b15baa` 教训：离线绿≠bundle 不炸） | AUTO | NOT_RUN |
-| V2-H2 | full guard 全绿含新增 verify | `pnpm verify`（`verify-isolation` 串跑全部 `verify-*.mjs`，含新增 `verify-schema-v2.mjs`） | 既有全部用例不回归（基线约 150 文件）；新增 schema-v2 用例随此纳入、退出码 0 | AUTO | NOT_RUN |
-| V2-H3 | 隔离默认 backups 不变 | 跑完整套 guard 前后 `hashSet(packages/backups)` | 前后一致（对齐 `verify-backup` 收尾断言） | AUTO | NOT_RUN |
-| V2-H4 | 真实浏览器 GUI 冒烟（受能力限） | 真实 Chrome 打开面板，走 A 类旧记录渲染 + B/E 新字段控件 + F 健康分展示 | 页面无 console 报错、新字段可用、错误文案可读。若测试专家受环境/认证所限无法执行 → 诚实标 `BLOCKED` 并写明原因，或可委托执行端只采证据、专家判证（ADL-045 第 8 条） | GUI | NOT_RUN |
-| V2-H5 | 不可逆动作人工确认 | 面板删除被引用 predecessor / 恢复备份 | 必须用户本人确认动作；登记 MANUAL_PENDING，不阻塞自动化门 | MANUAL_PENDING | NOT_RUN |
+| V2-H1 | `build` 通过 | `pnpm run build`（tsc + css + tsdown） | 退出码 0；client bundle 不残留 server-only zod/域 require（tsdown 产物 731.96 kB，build 退出 0） | AUTO | PASS |
+| V2-H2 | full guard 全绿含新增 verify | `pnpm verify`（verify-isolation 串跑全部 verify-*.mjs，含新增 5 个 schema-v2 专项） | 既有 150 文件不回归；全量 guard 退出 0；manifest 零变化 | AUTO | PASS |
+| V2-H3 | 隔离默认 backups 不变 | 跑完整套 guard 前后 `hashSet(packages/backups)` | 前后一致（跑前跑后 hash 一致；guard 自报 data/共享 backups 零污染） | AUTO | PASS |
+| V2-H4 | 真实浏览器 GUI 冒烟 | 真实 Chrome 打开隔离面板 | **PASS**（§1.5.3：隔离真实 Chrome/Browser Use 打开面板，PM 侧边栏可点、4 个种子项目渲染、零 console error；此前隔离 HeadlessChrome 冒烟亦已证面板挂载无崩溃）。注：表单级逐字段取证 B5/C6/E5/F7 已在 §1.5.3 同批 PASS | GUI | PASS |
+| V2-H5 | 不可逆动作人工确认 | 面板删除被引用 predecessor / 恢复备份 | 必须用户本人确认动作；登记 MANUAL_PENDING，不阻塞自动化门 | MANUAL_PENDING | MANUAL_PENDING |
 
 ---
 
 ## 2. 交付与判门口径
 
-- **自动化门（AUTO 全绿）**：A–H 中全部 `AUTO` 用例 PASS，即视为可推进当前交付（ADL-047）。
-- **GUI 门**：`GUI` 用例须真实浏览器证据；离线/纯函数绿不得替代。执行端只采证据、判定权在测试专家。
-- **人工协作门**：`V2-G8 / V2-H5` 等必须用户本人动作者登记 MANUAL_PENDING，**不阻塞**自动化门；用户反馈失败即重开缺陷与发布门。
-- **FAIL 一律阻塞**；`BLOCKED/NOT_RUN` ≠ 通过；历史结论在新提交使受影响面变动后**过期作废、须重测**。
-- **总门结论**：当前为**开发前冻结，全部 NOT_RUN，总门 NOT PASS**。本文件不预设任何通过，待实现完成后逐格填 `PASS/FAIL/BLOCKED/MANUAL_PENDING` 并绑定 `testedCommit` + 证据目录。
-
-## 3. 冻结期明确不做（只读）
-
-- 不改 `src/` 任何产品代码、不改数据、不产生 git 提交。
-- 不替代开发实现 `predecessorIds` / `repoUrl` / `branch` / 健康分 / schemaVersion，也不修改既有 `verify-*.mjs`（那是开发交付物；本矩阵仅指定「应被新增/受影响」的验收面）。
-- 与本矩阵冲突的既有历史结论，以新提交重测后为准，不在此预销。
+- **自动化门（AUTO 全绿）**：AUTO 用例 PASS 即视为可推进当前交付（ADL-047）。A–H 可自动化项**全部 PASS**（A1–A6、B1–B4、C1–C5、D1–D4/D6–D8、E1–E4、F1–F6、G1–G7、H1–H3；C5 中文点名修复、G1/G2/G4/G6 第二批 backup 落地后均改判 PASS）。
+- **GUI 门**：GUI 用例须真实浏览器证据；离线/纯函数绿不得替代。§1.5.3 独立 GUI 补测以真实 Chrome/Browser Use 完成：**B5/C6/E5/F7、D5(GUI 段)、H4 全部 PASS**（证据 `docs/verification/gui-schema-v2-20261013/`）。诚实边界：成环/坏记录/删除保护的详细中文点名在宿主服务端日志（已取证），工作台展示通用中文通知而非内联展开。
+- **人工协作门**：G8/H5 不可逆动作登记 MANUAL_PENDING，按 ADL-047 **不阻塞自动化门/GUI 门**；待用户本人执行时据实回填。
+- **FAIL 一律阻塞**；`BLOCKED/NOT_RUN` ≠ 通过；历史结论在新提交使受影响面变动后过期作废须重测。
+- **最终结论：✅ 总门 PASS（绑定提交 `17ccc82` + `4b533ad`）。** 50 用例 = 48 PASS + 2 MANUAL_PENDING（G8/H5，不阻塞）；无 FAIL、无 BLOCKED、无 NOT_RUN。复跑 build=0、full guard=0（151 文件零污染）；敏感扫描 clean。schema v2 验收矩阵独立签发完成。

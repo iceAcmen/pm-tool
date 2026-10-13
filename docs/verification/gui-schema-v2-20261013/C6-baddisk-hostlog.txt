@@ -1,0 +1,15 @@
+# C6 坏记录 GUI 诊断（隔离坏盘启动，真实 Chrome 观察）
+时间: 2026-10-13 18:58:23 CST
+
+## 宿主启动日志（已脱敏 token）——中文 clean-fail 点名
+[pm-tool] 存储领域打开失败： 记录 pmtool/tasks/t-0001.json 不符合当前 schema。原因：字段 predecessorIds：Invalid input: expected array, received string。请人工修正后重开；本次不自动修复、不移动或隔离该记录。
+dsh web: http://127.0.0.1:3101/?token=<REDACTED>
+
+## 工作台 GUI 观察（真实 Chrome 3101）
+- workbench 出现中文 toast/alert（role=alert）：「项目存储未就绪。」
+- 工作台回退空态「暂无项目 / 建立第一个项目」；磁盘上其实有合法项目 p-0001。
+- 结论：非完全 silent——有可见中文 alert；但详细点名（表/键/字段/原因）在宿主日志，工作台只给通用「未就绪」。
+
+## 坏记录原地保留核验
+- bad/data/pmtool/tasks/t-0001.json 仍在原路径、内容仍为 predecessorIds:"t-0002"（字符串坏形），未被移动/隔离/自动改写。
+- backups 目录为空：未发生 backup-and-skip。

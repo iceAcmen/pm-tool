@@ -1,0 +1,23 @@
+# V2-D5 GUI 删除被引用 predecessor 的保护（真实 Chrome，隔离 3100）
+时间: 2026-10-13 19:06:03 CST
+
+## 关系设定
+- A = t-0002「方案设计」，predecessorIds=[t-0001]；B = t-0001「需求评审」（被 A 引用的前置）。
+- 目标：删除 B，验证删除被后端中文拒绝并点名引用方 A。
+
+## 路径一：取消删除确认（取消）
+- 抽屉内点「删除」→ 原生 confirm：「删除任务 需求评审？」→ 取消。
+- 磁盘：取消后 manifest 与删除前基线逐字节一致（零写）；B(t-0001) 在、A(t-0002).predecessorIds=[t-0001] 在。
+- 证据: D5-cancel-delete-drawer-relation-kept.png
+
+## 路径二：确认删除（confirm → 后端拒绝）
+- 再次点「删除」→ confirm「删除任务 需求评审？」→ 接受。
+- 工作台弹中文 alert（role=alert）：「任务操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。」
+- 宿主日志中文拒绝并点名引用方（脱敏）：
+[pm-tool] 任务操作失败： TaskReferencedByPredecessorError: 任务 t-0001 仍被任务 t-0002 作为前置依赖，请先在 t-0002 解除
+    at assertNoPredecessorReferences (
+- 磁盘：confirm 后 manifest 与基线逐字节一致（零写）；B(t-0001) 仍在原路径、A(t-0002).predecessorIds 仍为 [t-0001]，未被级联删除、未被改写。
+- 证据: D5-confirm-delete-rejected-toast.png
+
+## 诚实边界
+- 工作台 toast 为通用「任务操作失败…」，具体中文点名（表/键/引用方）在宿主服务端日志（已取证），未在工作台内联展开。

@@ -1,0 +1,8 @@
+# B5 成环拒绝 - 宿主服务端中文日志（已脱敏token）
+2026-10-13 18:52:54 CST
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 任务操作失败： Error: 前置依赖存在循环：任务不能间接地依赖自己
+    at validatePredecessorRelation (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/tasks.js:64:19)
+
+# 磁盘零写核验：t-0001(需求评审) 保存成环前置后
+has predecessorIds: False ; updatedAt 未变(=种子时刻 10:50:11) ; 信封 version=2
