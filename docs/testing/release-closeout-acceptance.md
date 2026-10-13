@@ -221,3 +221,37 @@
   3. 打 tag 后**复跑一次 `node scripts/verify-isolation.mjs`**，把证据从「HEAD `2682fc7` + 工作树 diff」正式重绑到发布提交哈希；
   4. `MANUAL_PENDING`（M1/A5 真 Key 对话、M2/B3 3080 已认证同源走查、H1–H6 目视）保持登记；所有者反馈任一失败即重开对应块。
 - 本专家全程**仅改本矩阵文件**，未改产品 src / 其他 docs / 服务，未提交、未 push。
+
+---
+
+## 10. 复判轮次 R4 · 发布提交重绑定（2026-10-13）
+
+> **新绑定基线（已提交、工作树干净）**：
+> - **HEAD = `dc55d3dcc72dffb7565b0539c1d525c1826a0f4b`**（`[doubao-work][release] 归档v0.5.0版本事实与发布验收`）
+> - 关键提交：`46375d2`（`[doubao-work][fix] 统一AI兜底Provider并治理验证残留`）→ `dc55d3d`（版本事实与发布验收归档，含本矩阵）
+> - 基线来源：`2682fc7` → `46375d2` → `dc55d3d`；`git status` 干净，无未提交残留。
+>
+> **本专家在提交后独立复跑（不再引用工作树 diff）**：
+
+| 复跑项 | 命令 | 结果 |
+|---|---|---|
+| provider 路由 | `node scripts/verify-model-route.mjs` | **exit 0** |
+| provider 兜底/NO_ADAPTER 专项 | `node scripts/verify-ai-client.mjs` | **exit 0**（断言串含「NO_ADAPTER 文案按实际 provider」，#7/#8 通过） |
+| 完整 verify + 零污染 guard | `node scripts/verify-isolation.mjs` | **exit 0**：after manifest = **149 个文件**，输出「正式 data/共享 backups hash+mtime 清单零变化」 |
+
+**绑定产物 sha256（HEAD `dc55d3d` 构建产物）**：
+
+| 产物 | sha256 |
+|---|---|
+| `lib/client.js` | `07c3edb2c8f4f40b54bfb7473b77e287e9323367f5177d953796a4d4b767da14` |
+| `lib/index.js` | `64a48aecf941057f75df5e0906dba66622d42f464cd97b51261ff9a370e7b7e8` |
+| `lib/core/ai-client.js` | `eef583cf9ec3db12235cad9cfb8a330f155d1f68730e6a7a3cbf0209fbaa2530` |
+
+> lib 与提交源码一致（编译产物 `AI_PROVIDER='our-free-model'`/`AI_MODEL='kilo-auto/free'`、`HARD_ERROR_CODES` 含 `NO_ADAPTER`，mtime 晚于 src）。
+
+### 10.1 R4 签发结论
+
+- **重绑定确认：v0.5.0 自动化验收门在发布提交 `dc55d3d` 上复跑 = PASS。** 41 functional verify exit 0、隔离 guard 149 文件零变化、provider 专项 exit 0、产物 sha256 已固化。无 `FAIL / BLOCKED / NOT_RUN` 阻塞项。
+- **结论：可以打 `v0.5.0` 注解 tag（属所有者动作）。** 本专家**不执行 tag、不 push、不动服务**。
+- `MANUAL_PENDING`（M1/A5 真 Key 对话、M2/B3 3080 已认证同源走查、H1–H6 目视）继续登记在案、不阻塞；所有者反馈任一失败即重开对应块。
+- 本专家本轮**仅改本矩阵文件**（追加 R4）；未改产品 src / 其他 docs / 服务，未提交、未 push。
