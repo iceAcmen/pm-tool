@@ -8,6 +8,30 @@
 
 ---
 
+## [v0.5.0] 归档摘要 + 历史版本对账说明（2026-10-13，平台：doubao-work）
+
+> 目的：发布收尾前把「版本事实」统一到 v0.5.0。本批**只新增归档摘要与对账说明，不搬运、不重排、不改写下列既有 `[未发布]` 条目的历史归属**（避免把历史提交错误归类到新版本）。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.1.0` → **`0.5.0`**（前置到当前开发线；产品 src 由另一 Agent 负责，未改）。
+  - `docs/releases/v0.4.0.md`：**新建（事后补记）**，严格按真实 tag 回填——注解 tag 对象 `ca02969` → 指向提交 `1af5490`（2026-10-12），内容取 `git log v0.3.0..v0.4.0`（PoC 跨池降级链 + OPT-01~12 + PROD-01/02/03/05/08）。
+  - `docs/releases/v0.5.0.md`：**新建（预览）**，诚实列已完成 / 预览、自动化 **41 绿** / guard **149 文件零变化**、H1–H6 与真实 Key（M1/A5）`MANUAL_PENDING`，并标注待打 tag 与发布前置条件。
+  - `README.md`：新增「版本导航」表（v0.1.0–v0.4.0 已发布 tag + v0.5.0 预览），刷新阶段导航，去除 stale 的「已发布 v0.1.0」口径。
+  - `docs/optimization-backlog.md`（roadmap）：对账确认 OPT-01~12 已随 v0.4.0 交付，移入「已消化」；待排期区清空，保留结构性长期项。
+  - `docs/progress.md` / `docs/handoff.md`：把「当前状态（v0.4.1-integration，未 tag）」「v0.4.0 tag=1af5490」等混乱口径统一到 v0.5.0 预览线，并澄清 tag 对象(`ca02969`)与剥离提交(`1af5490`)是两个 SHA。
+  - `AGENTS.md`：新增「自 v0.5.0 起版本/tag 一致」硬规则；`docs/onboarding-prompt.md`：更新文末易变快照。
+- **历史版本对账说明（tag ↔ 发布说明 ↔ package.json）**：
+  | 版本 | tag（注解）对象 → 指向提交 | 发布说明 | package.json |
+  |---|---|---|---|
+  | v0.1.0 | `ebd14a1` → `56b27c8`（2026-10-10） | `docs/releases/v0.1.0.md` ✅ | 历史为 0.1.0 |
+  | v0.2.0 | `2f0ecab` → `2c2e039`（2026-10-11） | `docs/releases/v0.2.0.md` ✅ | — |
+  | v0.3.0 | `41e515e` → `4b33b84`（2026-10-11） | `docs/releases/v0.3.0.md` ✅ | — |
+  | v0.4.0 | `ca02969` → `1af5490`（2026-10-12） | 本批补 `docs/releases/v0.4.0.md` ✅ | — |
+  | v0.5.0 | **待打 tag**（基线 `2682fc7`） | `docs/releases/v0.5.0.md`（预览） | **0.5.0（本批前置）** |
+  > 历史 tag `v0.1.0`–`v0.4.0` **一律未移动/未重打**。此前漂移根因：package.json 长期停留 `0.1.0`、漏写 v0.4.0 发布说明、handoff 把注解 tag 对象与剥离提交混为「对不上」；本批逐项对齐。
+- **影响范围 / 状态**：纯版本事实与文档口径；不打 tag、不提交（按要求）。自动化证据沿用独立测试专家冻结基线 `2682fc7`（41 绿 + guard 149），本批未改产品代码，不重跑自动化。
+- **验证**：`node -e JSON.parse(package.json)` 通过；各 Markdown 结构与 `git diff --check` 干净；用 vendored `code-review`（只读）自查改动，发现写入本 Agent 自身 artifacts，不新增试点报告（code-review 已毕业试点）。
+
 ## [未发布] — 外部 Skill 自动路由治理：ADL-049 + AGENTS 自动选择要求（2026-10-13，平台：doubao-work）
 
 - **改动文件（仅长期规范/索引）**：

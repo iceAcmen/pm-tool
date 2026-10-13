@@ -25,6 +25,7 @@
 | [`reverification-round2.md`](reverification-round2.md) | T-DEF-008/004 修复后复验清单 + 修复前基线 hash（自包含证据） |
 | [`round3-gui-execution.md`](round3-gui-execution.md) | Round3 真实 Chrome GUI 执行包（选择器/预期/证据命名，待主端执行后专家判证） |
 | [`external-skills-acceptance.md`](external-skills-acceptance.md) | **外部（vendor）Agent Skills 集成验收门**（域 A–J，ADL-048 / AGENTS 6 / `docs/external-skills.md`）；导入方实现后由独立测试专家逐格给 PASS/FAIL/MANUAL_PENDING，其他角色只读引用、不改本文件 |
+| [`release-closeout-acceptance.md`](release-closeout-acceptance.md) | **发布收尾验收冻结门**（ADL-045/047）：冻结四块验收——provider ID 统一/poc-prod 路由、3080 最新 HEAD 且零写、历史残留不误删用户文件、版本号/路线图/发布说明一致；含自动化用例、MANUAL_PENDING（旧 H1–H6 不升级为阻塞）、证据格式与 PASS 门；独立测试专家所有 |
 
 ## 判定图例（与 ADL-045 严格一致）
 

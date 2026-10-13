@@ -22,8 +22,20 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.9 | 含 ADL-028 R10 交付物台账与 ADL-029 R12 检索/看板/导入模型 |
-| 阶段 3 源码开发 | 🔄 v0.1.0 后续迭代 | R1–R12 已完成（R12 检索/看板/导入由 doubao-work 自研）；R11/生成型/多人协作/Excel 导入按决策暂缓 |
-| 阶段 4 测试交付 | ✅ MVP 已完成并发布 v0.1.0 | 测试矩阵、交付说明、完整回归与真实启动验证通过 |
+| 阶段 3 源码开发 | 🔄 迭代至 v0.5.0（收尾中） | R1–R15 + A1/A2 已完成；v0.4.0 已发布（OPT-01~12 + PROD-01/02/03/05/08）；v0.5.0 开发线含 PROD-20 副驾 / PROD-22 甘特 / 独立测试门 / 外部 Skills 接线 |
+| 阶段 4 测试交付 | 🔄 独立测试门落地、发布收尾 | 自动化 41 绿 + 隔离 guard 149 文件零变化（绑 `2682fc7`）；H1–H6 与真实 Key / 3080 走查登记 MANUAL_PENDING |
+
+### 版本导航（Git tag 与发布说明）
+
+> `packages/dsh-pm-tool/package.json` 当前前置版本 **0.5.0**（对应下方预览线，tag 待打）。历史已发布 tag 均为**注解 tag**；「tag 对象 → 指向提交」见各发布说明。
+
+| 版本 | 状态 | tag（注解）→ 指向提交 | 发布说明 |
+|---|---|---|---|
+| v0.1.0 | ✅ 已发布（2026-10-10） | `ebd14a1` → `56b27c8` | [`docs/releases/v0.1.0.md`](docs/releases/v0.1.0.md) |
+| v0.2.0 | ✅ 已发布（2026-10-11） | `2f0ecab` → `2c2e039` | [`docs/releases/v0.2.0.md`](docs/releases/v0.2.0.md) |
+| v0.3.0 | ✅ 已发布（2026-10-11） | `41e515e` → `4b33b84` | [`docs/releases/v0.3.0.md`](docs/releases/v0.3.0.md) |
+| v0.4.0 | ✅ 已发布（2026-10-12） | `ca02969` → `1af5490` | [`docs/releases/v0.4.0.md`](docs/releases/v0.4.0.md)（2026-10-13 事后补记） |
+| v0.5.0 | 🔄 预览 / 待打 tag（基线 `2682fc7`） | 待创建 | [`docs/releases/v0.5.0.md`](docs/releases/v0.5.0.md) |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
 

@@ -2,7 +2,7 @@
 
 > 本文件是「换一个人或换一个软件接续本项目所需的最小信息集」；在每个阶段收尾或项目所有者要求时刷新。接手者按本清单即可恢复环境、定位进度、知道下一步做什么。
 
-最后更新：2026-10-13（doubao-work 外部 skill **自动路由**：ADL-049 精确语义回写 + 路由实现独立复核 APPROVE、41 组断言全绿、K 域专家 PASS；仍**试点可用，未毕业**，其余 3 entry 试点待做）
+最后更新：2026-10-13（doubao-work **版本事实统一到 v0.5.0**：package.json 前置 0.5.0、补写 v0.4.0 发布说明、新增 v0.5.0 预览说明、持久交接版本口径对齐 tag 对象/剥离提交；先前一批：外部 skill **自动路由** ADL-049 精确语义回写 + 路由实现独立复核 APPROVE、41 组断言全绿、K 域专家 PASS；仍**试点可用，未毕业**，其余 3 entry 试点待做）
 
 ---
 
@@ -188,9 +188,10 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 - 公钥指纹：`SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`。
 - 换新机器时：重新生成密钥并把新公钥登记到 GitHub，再执行上面的 clone 即可。
 
-# 持久交接（TRAE 不必重梳理，v0.4.1-integration @ 9f6a6cf）
+# 持久交接（TRAE 不必重梳理，版本事实统一线 @ 2682fc7 / v0.5.0 预览）
 ## 仓库
-- 插件：packages/dsh-pm-tool；上游 deepseek-harness 只读；v0.4.0 tag=1af5490。
+- 插件：packages/dsh-pm-tool；上游 deepseek-harness 只读。
+- **版本口径（2026-10-13 统一）**：`package.json` 前置 `0.5.0`；已发布 tag `v0.1.0`–`v0.4.0`（均注解 tag），`v0.5.0` tag **待打**。v0.4.0 注解 tag 对象 `ca02969` → 指向提交 `1af5490`（tag 对象与剥离提交是两个 SHA，勿混为"对不上"）。
 ## 运行
 - 构建：`cd packages/dsh-pm-tool && pnpm run build`。
 - 全量非GUI回归：`node scripts/verify-integration.mjs`（已含 spawn 子进程 reopen 读盘）；再 `for f in scripts/verify-*.mjs; do node $f; done`。
