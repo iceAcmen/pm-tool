@@ -173,6 +173,19 @@
 | ES-J2 | 无悬挂引用 | 回滚后仓库内不再有指向被删 skill 的文档引用（除本验收矩阵与 `docs/external-skills.md` 的登记记录本身） | 回滚演练后全局 grep；残留悬挂引用即 FAIL | 待导入 |
 | ES-J3 | 回滚演练先于采纳 | 在正式采纳前，先在**隔离副本/干跑**演练一次回滚（列出将删除的清单），确认不误删产品文件 | 专家审干跑输出；演练误伤产品文件即 FAIL | 待导入 |
 
+### 域 K — 自动路由验收（Agent 自行判断加载哪个 skill，用户不再显式指定）
+
+> 触发模式从「用户点名某 skill」改为「Agent 自动判断是否/加载哪个 vendored skill」。本域为**新增验收面**，其可自动化测试与试点证据**现在定义、后续执行**；不阻塞已签发的静态/自动化门（A–J）结论。当前 code-review 试点仍 PASS；其余 3 entry 毕业门不变。
+
+| 用例 | 检查项 | 通过标准 | 方法（可自动化测试/未来试点证据） | 本轮状态 |
+|---|---|---|---|---|
+| ES-K1 | 4 类场景正确匹配 | 自动路由把场景正确映射到 entry：需求/设计反诘→`grill-me`（其正文走声明依赖 `grilling`）、写新代码→`tdd`、审查既有改动→`code-review`、排查复现 bug→`diagnosing-bugs`；错配即 FAIL | 构造路由表夹具（场景→期望 entry），断言路由结果逐格正确；未来试点记录实际触发选择 | NOT_RUN（待路由实现） |
+| ES-K2 | 简单任务不滥用 | 例行/琐碎/与四类无关的任务**不触发** vendored skill，避免「为用而用」；仅场景命中才加载 | 夹具喂入简单任务，断言路由=不加载；断言不产生无谓加载记录 | NOT_RUN |
+| ES-K3 | 自动加载前过 manifest 校验 | 加载任一 vendored skill **之前**，必须先通过 `verify-external-skills.mjs` 静态门（锁定 commit/license=MIT/精确 entry 集合/逐文件哈希白名单/无 F1）；校验不过**不得加载** | 断言「加载动作」发生在校验通过之后；构造篡改夹具确认被拦截不加载 | NOT_RUN |
+| ES-K4 | 不得要求用户口令 | 自动路由与加载决策**不向用户索取密码/口令/额外授权口令**；（注：删除/覆盖/恢复等高风险不可逆动作仍按 ADL-047 需人工确认，那是动作确认、非加载口令，二者不混淆） | 审查路由实现无 credential/password prompt；未来试点确认加载过程零口令索取 | NOT_RUN |
+| ES-K5 | interaction 与项目门优先 | 自动路由不得绕过用户当次指令（interaction）与项目独立测试门/红线；项目规则/AGENTS 优先于 skill 触发，冲突即停并报备 | 断言：用户明确指令 > skill 默认；skill 触发不替代 ADL-045 测试门 | NOT_RUN |
+| ES-K6 | 可解释触发记录 | 每次自动加载须留痕写明**触发理由**（命中哪个场景、为何选该 entry），可追溯、可复核 | 检查路由日志/试点报告含「触发理由」字段；缺记录即 FAIL | NOT_RUN |
+
 ---
 
 ## 5. 总门结论规则
@@ -218,3 +231,24 @@
 - **后续（不阻塞本门，登记跟进）**：① grill-me / tdd / diagnosing-bugs 各补 1 份试点报告后方可毕业；② 提交分组须排除工作树中 R3 遗留物（`gen-valid-backup-fixture.mjs`、`verify-run-20261012-152121*`），保持「最小回滚面」；③ 建议类（manifest.json 0600→0644、manifest 指纹第二锚、校验器 schema 死重与 entry-id 白名单）转开发排期，均非阻塞。
 - **本结论绑定上述 commit/哈希**；任何后续换 commit、加 skill 或改 vendor 文件使绑定失效，须重测后方可再引用。
 - **复跑留痕（2026-10-13，校验器收紧后）**：校验器升级为 schema3 + **精确 entry 集合**校验（新增 ENTRY_SET 负例）后，本专家独立复跑 `--selftest`=**8/8** 负例正确拒绝、`main`=真实 vendor **PASS**（同 commit `49dd158d…`、13 文件 / entry=4 / 依赖=1、无 F1）；第 7 节各域 PASS 与「试点可用，未毕业」结论**仍然适用**（收紧反而进一步坐实 B 域 entry 集合纪律，前述跟进项 ③ 中「entry-id 白名单」已由该校验器落实）。pilot-01 结论不变。
+- **新增域 K（自动路由，2026-10-13）**：触发模式改为 Agent 自动判断加载哪个 skill、用户不再显式指定。本专家在冻结用例中新增 ES-K1～K6（场景匹配/不滥用/加载前 manifest 校验/不要用户口令/interaction 与项目门优先/可解释触发记录），并定义其可自动化测试夹具与未来试点证据。**当前 K 域各格 = NOT_RUN**（路由实现尚未就绪），**不要求现在重跑 vendor 校验**；已签发的 A–J 静态/自动化门 PASS、code-review 试点 PASS、其余 3 entry 毕业门，均不受影响。待自动路由落地后按 K1–K6 执行回填。
+- **K 域回填（2026-10-13，独立测试专家执行）**：自动路由落地于 `packages/dsh-pm-tool/src/core/external-skill-router.ts` + `scripts/verify-external-skill-router.mjs`。本专家独立 Read 源码并亲跑 `pnpm run build`（exit 0）、`node scripts/verify-external-skill-router.mjs`（**31 组断言全过，exit 0**）、`node scripts/verify-external-skills.mjs`（PASS，exit 0）。逐格判定：
+  - **ES-K1 场景匹配 = PASS**：歧义→grill-me、新功能/可测修复→tdd、根因未知→diagnosing-bugs、交付边界→code-review，断言全中；组合顺序正确（歧义+新功能→[grill-me,tdd]，再追加 code-review 在末）。
+  - **ES-K2 简单不滥用 = PASS**：trivial/纯问答/全零信号均返回 `none`，不加载任何 vendored skill。
+  - **ES-K3 加载前 manifest 门 = PASS（相邻契约）**：路由白名单 `VENDORED_ENTRY_IDS` 与 `manifest.entrySkillIds` 只读逐集合相等；每 id `kind=entry`；grilling 在 manifest 为 `exposed:false` 依赖、**不作为 entry 返回**（精确白名单 4 个，grilling/interaction 均被排除）。注：路由函数本身不做指纹校验（其职责=决策+理由），真实加载仍由执行 Agent 在过 `verify-external-skills`（sha256/白名单/F1）后进行，边界与 K3 一致。
+  - **ES-K4 不要用户口令 = PASS**：路由决策对象无 credential/password/token 字段，纯函数无 IO，不向用户索取口令。
+  - **ES-K5 interaction/项目门优先 = PASS**：`needsBlockingUserInput` 最高优先→`route=none`+`interactionFirst=true`（阻塞+歧义不套 grill-me、阻塞+交付边界仍先问用户）；根因未知抑制 tdd；理由串显式声明「自测≠专家 PASS、不 push、不自动批准」，不绕过 ADL-045。
+  - **ES-K6 可解释触发记录 = PASS**：每个返回 entry 均带 `code`+中文理由；`none` 时也留痕（trivial-no-gain）。
+- **总判更新**：K 域可自动化用例**全部 PASS**，按 ADL-047 计入自动化门；总状态维持 **试点可用，未毕业**（毕业门＝其余 3 entry 各补试点报告，属长期默认、本次不阻塞）。A–J 与 code-review 试点结论不变。
+- **⚠️ K 域撤回更正（2026-10-13，独立 code review 后）**：经独立 code review 发现 3 个 blocker，上述 K 域 PASS **撤回、回退为 OPEN/FAIL 待修**（保留上方历史 PASS 记录以备追溯，不删除）。待修项：
+  - **K-B1（安全门未作 route 前置输入）**：manifest/安全校验门（`verify-external-skills`：commit/license/精确 entry 集合/sha256 白名单/无 F1）未作为「允许 route 到 skills」的**前置输入**——路由当前无条件输出 entry，缺「安全门未通过则一律 route=none」的硬闸门。
+  - **K-B2（taskKind 死字段）**：`TaskSignals.taskKind` 仅留痕、不参与路由决策，是双源隐患（口头类别与布尔信号可能打架），须删除或真正接线。
+  - **K-B3（旧 lib 同步）**：`lib/core/external-skill-router.js` 等构建产物需确认与 src 同步（避免运行期跑旧逻辑）。
+  - **组合语义存疑**：`trivial` 与 `isDeliveryBoundary` 同时为真时仍追加 code-review、以及 `rootCauseUnknown` 与其他信号的优先级语义，需补边界用例明确。
+- **更正后结论**：K 域当前 **OPEN/FAIL（待修）**，不列入自动化门通过；待开发修复并补测试后，本专家**重跑 `verify-external-skill-router.mjs` 与 `verify-external-skills.mjs` 复验**方可再判 PASS。其余 A–J 与 code-review 试点结论不受影响。
+- **✅ K 域更正关闭（2026-10-13，修复后独立复验）**：本专家 Read 修复后源码并亲跑 `pnpm run build`（exit 0）、`node scripts/verify-external-skill-router.mjs`（**41 组断言全过，exit 0**）、`node scripts/verify-external-skills.mjs`（PASS，exit 0）。三项 blocker 均闭环：
+  - **K-B1 → 已修 = PASS**：新增 Rule 0b `!vendorIntegrityVerified` 硬前置——安全门未过时**一律 route=none**（即便命中 tdd/多信号也全拦），理由为「安全门未通过」；路由函数本身不校指纹，只消费执行 Agent 在加载前独立跑 `verify-external-skills` 后传入的 `true`。
+  - **K-B2 → 已修 = PASS**：`taskKind` 改为原样回带进 `decision.taskKind`（可解释留痕检索），不再是死字段/双源隐患。
+  - **K-B3 → 已修 = PASS**：build 后 `lib/core/external-skill-router.js` 含 `vendorIntegrityVerified` 闸门，运行期产物与 src 同步。
+  - **组合语义 → 已明确 = PASS**：`isTrivial` 抑制 grill/tdd（但 deliveryBoundary 仍追加 code-review）；`rootCauseUnknown` 抑制 grill/tdd 且**不追加 code-review**（根因未明不可交付）；`needsBlockingUserInput` 全拦（含 code-review）。
+- **K 域复判：K1–K6 全部 PASS**（K3 重点：`vendorIntegrityVerified=false` 硬拦所有 skill，`true` 才放行；grilling 仍不返回、白名单精确 4）。K 域重新计入自动化门通过；总状态维持 **试点可用，未毕业**（毕业门＝其余 3 entry 各补试点报告）。A–J 与 code-review 试点结论不变。
