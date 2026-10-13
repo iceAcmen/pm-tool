@@ -67,6 +67,17 @@
 - **与版本规划关系**：归 **v0.5.1 体验增量**，不并入 v0.6（v0.6 才动 domain v2）；与 v0.6 零冲突。
 - **完整契约/验收/反例/建议文件清单**：见 [`docs/product/07-people-load-view-design.md`](product/07-people-load-view-design.md)；状态见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) 2026-10-13 勘误。
 
+### 变更提案（Change Proposal）：PROD-24 副驾多步规划（未编码·设计定稿）
+
+> 不新增 R 编号，复用并升级产品档案 PROD-20（AI 项目副驾）。**状态（2026-10-13）：P0 设计定稿、尚未开发**；本提案只定义契约与验收，不动任何 living 完成状态。
+
+- **一句话**：把 v0.5 副驾「扁平动作数组草稿卡」升级为**多步计划卡**（步骤/理由/依赖拓扑、勾选跳过、行内标量编辑、整批+逐步确认），执行仍复用既有 `ask-apply`。
+- **数据模型影响：无**。不写 settings、不新增计划表、不新增命令级服务端缓存；计划随模型响应返回，只活在前端内存、关面板即消散；domain 仍 v1、不改任何 schema。
+- **P0 裁决边界**：①执行仍 `ask-apply <项目ID> <selected ordered actions> --base <baseline>`，不新增执行命令；②命令行长 JSON 风险靠**预算护栏 ≤8 步（触及 >10 任务）整份拒绝**吸收；③旧 `{"actions":[...]}` 输出自动包成平凡计划，v0.5 E2E 不破；④DAG 依赖环/悬空/自指只拒该步（坏步拒而非整拒）；⑤同任务链式 baseline（整批内后者用前者落库后的新 updatedAt）；⑥取消草稿磁盘零变化；⑦唯一写动作 `task.update`（patch 仅 status/progress/assignee/startDate/dueDate）。
+- **P1**：计划持久化（domain v2 窗口）、「撤销上次计划」补偿命令、扩充 op（milestone/risk）、执行后自动追问/多轮重规划。
+- **验收**：见设计稿 11 条（拓扑/环、链式基线、冲突逐行拒、delete 步红行拒、行内编辑非法禁用、取消零写、乱码零落库、60s 幂等、降级、>8 整拒、旧格式兼容）。
+- **完整契约/页面草图/反例/文件级计划**：见 [`docs/product/08-copilot-multistep-design.md`](product/08-copilot-multistep-design.md)；roadmap 登记见 [`docs/product/05-roadmap-and-tasks.md`](product/05-roadmap-and-tasks.md) PROD-24 行。
+
 ### R12 命令与格式约定（v0.9 补充）
 
 ```text
