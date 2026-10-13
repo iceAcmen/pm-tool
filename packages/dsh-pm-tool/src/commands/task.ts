@@ -10,6 +10,7 @@ import {
   getTask,
   listTasks,
   moveTask,
+  moveTaskAndRenumber,
   ParentTaskNotFoundError,
   ParentTaskProjectMismatchError,
   renumberTasks,
@@ -46,6 +47,7 @@ export const taskHelp = [
   '  /pm task update t-0001 {"status":"in_progress","progress":30}',
   '  /pm task move t-0003 t-0002 confirm',
   '  /pm task move t-0003 root confirm',
+  '  /pm task move t-0003 t-0002 --renumber confirm   移动后立即重建全项目连续 WBS 编号',
   '  /pm task delete t-0003 confirm          删除无子任务的任务',
   '  /pm task delete t-0003                  含子任务时 dry-run 列出将级联删除的整棵子树（不落盘）',
   '  /pm task delete t-0003 cascade confirm  显式级联删除该任务及其全部后代（旁支不受影响）',
@@ -219,11 +221,15 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         : { kind: 'error', text: `未找到任务：${id}。` }
     }
     if (action === 'move') {
-      const moveMatch = /^(\S+)\s+(\S+)(?:\s+(confirm))?$/i.exec(argument)
-      if (!moveMatch) {
-        return { kind: 'error', text: '请使用：/pm task move <任务ID> <新父任务ID|root> confirm' }
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      if (tokens.length < 2) {
+        return { kind: 'error', text: '请使用：/pm task move <任务ID> <新父任务ID|root> [--renumber] confirm' }
       }
-      const [, id, destination, confirmation] = moveMatch
+      const id = tokens[0]
+      const destination = tokens[1]
+      const flags = tokens.slice(2).map(token => token.toLowerCase())
+      const wantRenumber = flags.includes('--renumber')
+      const confirmation = flags.includes('confirm')
       const current = getTask(domain, id)
       if (!current) return { kind: 'error', text: `未找到任务：${id}。` }
       const newParentId = destination.toLowerCase() === 'root' ? null : destination
@@ -233,16 +239,22 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
           text: [
             `即将移动任务：${current.code}｜${current.id}｜${current.title}。`,
             `新父任务：${newParentId ?? '根层级'}。当前未执行移动。`,
-            '移动后保留旧 WBS 编号；需要连续编号时再显式执行 renumber。',
-            `确认命令：/pm task move ${current.id} ${newParentId ?? 'root'} confirm`,
+            wantRenumber
+              ? '将在移动后立即按新树重建全项目连续 WBS 编号（单事务，失败整体回滚）。'
+              : '移动后保留旧 WBS 编号；需要连续编号时再显式执行 renumber。',
+            `确认命令：/pm task move ${current.id} ${newParentId ?? 'root'}${wantRenumber ? ' --renumber' : ''} confirm`,
           ].join('\n'),
         }
       }
-      const moved = await moveTask(domain, id, newParentId)
+      const moved = wantRenumber
+        ? await moveTaskAndRenumber(domain, id, newParentId)
+        : await moveTask(domain, id, newParentId)
       return moved
         ? {
             kind: 'success',
-            text: `任务已移动到${moved.parentId ? `父任务 ${moved.parentId}` : '根层级'}；原 WBS 编号 ${moved.code} 暂时保留。\n${renderTask(moved)}`,
+            text: wantRenumber
+              ? `任务已移动到${moved.parentId ? `父任务 ${moved.parentId}` : '根层级'}，并重编号为 ${moved.code}。\n${renderTask(moved)}`
+              : `任务已移动到${moved.parentId ? `父任务 ${moved.parentId}` : '根层级'}；原 WBS 编号 ${moved.code} 暂时保留。\n${renderTask(moved)}`,
           }
         : { kind: 'error', text: `未找到任务：${id}。` }
     }

@@ -268,7 +268,147 @@ export async function batchDeleteCascade(
   return deleted
 }
 
+/**
+ * 移动的领域实现（不入队）：与 moveTask 完全一致的校验与写。抽出它是为了
+ * moveTaskAndRenumber 能在「同一个写队列事务里」先 move 再 renumber——
+ * 否则在 enqueueDomainWrite 回调内再调用 moveTask/renumberTasks 会嵌套入队，
+ * 内层永远排在外层之后，形成队列死锁。
+ */
+async function applyMoveUnsafe(
+  domain: PmDomain,
+  current: Task,
+  newParentId: string | null,
+): Promise<Task> {
+  const table = domain.table('tasks')
+  const id = current.id
+  if (newParentId === id) throw new TaskMoveCycleError('任务不能移动到自身下')
+  const parent = newParentId ? table.get(newParentId) : undefined
+  if (newParentId && !parent) throw new ParentTaskNotFoundError(`未找到父任务：${newParentId}`)
+  if (parent && parent.projectId !== current.projectId) {
+    throw new ParentTaskProjectMismatchError('父任务不属于当前任务的项目')
+  }
+
+  let ancestor = parent
+  const visited = new Set<string>()
+  while (ancestor) {
+    if (ancestor.id === id) throw new TaskMoveCycleError('不能把任务移动到其子孙任务下')
+    if (visited.has(ancestor.id)) throw new TaskMoveCycleError('任务树存在循环关系，无法移动')
+    visited.add(ancestor.id)
+    ancestor = ancestor.parentId ? table.get(ancestor.parentId) : undefined
+  }
+
+  let maxOrder = 0
+  for (const [, task] of table.entries()) {
+    if (task.projectId === current.projectId
+      && task.parentId === newParentId
+      && task.id !== id
+      && task.order > maxOrder) {
+      maxOrder = task.order
+    }
+  }
+  const next = taskWriteSchema.parse({
+    ...current,
+    parentId: newParentId,
+    order: maxOrder + 1,
+    updatedAt: new Date().toISOString(),
+  })
+  await table.put(id, next)
+  return structuredClone(next)
+}
+
 export function moveTask(
+  domain: PmDomain,
+  id: string,
+  newParentId: string | null,
+): Promise<Task | undefined> {
+  taskIdSchema.parse(id)
+  if (newParentId !== null) taskIdSchema.parse(newParentId)
+  return enqueueDomainWrite(domain, async () => {
+    const current = domain.table('tasks').get(id)
+    if (!current) return undefined
+    return applyMoveUnsafe(domain, current, newParentId)
+  })
+}
+
+/**
+ * 全项目重编号的领域实现（不入队）：按当前父子关系与同级顺序重建 order/code。
+ * 假设项目存在性已在调用层校验。写失败时回滚本项目已写记录。
+ */
+async function renumberProjectUnsafe(domain: PmDomain, projectId: string): Promise<Task[]> {
+  const table = domain.table('tasks')
+  const tasks = [...table.entries()]
+    .map(([, task]) => task)
+    .filter(task => task.projectId === projectId)
+  const children = new Map<string | null, Task[]>()
+  for (const task of tasks) {
+    const siblings = children.get(task.parentId) ?? []
+    siblings.push(task)
+    children.set(task.parentId, siblings)
+  }
+  for (const siblings of children.values()) siblings.sort(compareSiblingOrder)
+
+  const planned: Task[] = []
+  const visited = new Set<string>()
+  const visit = (parentId: string | null, parentCode?: string): void => {
+    const siblings = children.get(parentId) ?? []
+    siblings.forEach((task, index) => {
+      if (visited.has(task.id)) throw new TaskMoveCycleError('任务树存在循环关系，无法重新编号')
+      visited.add(task.id)
+      const order = index + 1
+      const code = parentCode ? `${parentCode}.${order}` : String(order)
+      planned.push(taskWriteSchema.parse({
+        ...task,
+        order,
+        code,
+        updatedAt: new Date().toISOString(),
+      }))
+      visit(task.id, code)
+    })
+  }
+  visit(null)
+  if (visited.size !== tasks.length) {
+    throw new TaskMoveCycleError('任务树存在孤儿或循环关系，无法重新编号')
+  }
+  const originals = new Map(tasks.map(task => [task.id, task]))
+  const written: Task[] = []
+  try {
+    for (const task of planned) {
+      await table.put(task.id, task)
+      written.push(task)
+    }
+  } catch (error) {
+    const rollbackErrors: unknown[] = []
+    for (const task of written.reverse()) {
+      try {
+        await table.put(task.id, originals.get(task.id)!)
+      } catch (rollbackError) {
+        rollbackErrors.push(rollbackError)
+      }
+    }
+    if (rollbackErrors.length) {
+      throw new AggregateError([error, ...rollbackErrors], '任务重新编号失败，且部分记录恢复失败')
+    }
+    throw error
+  }
+  return planned.map(task => structuredClone(task))
+}
+
+export function renumberTasks(domain: PmDomain, projectId: string): Promise<Task[]> {
+  projectIdSchema.parse(projectId)
+  return enqueueDomainWrite(domain, async () => {
+    if (!domain.table('projects').get(projectId)) {
+      throw new TaskProjectNotFoundError(`未找到项目：${projectId}`)
+    }
+    return renumberProjectUnsafe(domain, projectId)
+  })
+}
+
+/**
+ * PROD-04（Web 复合原子动作）：移动父级 + 全项目重编号，单次写队列事务完成。
+ * 先快照本项目全部任务；任何一步（move 校验/写、renumber）失败即把本项目任务整体
+ * 恢复到快照，避免半套状态。返回移动后（已重编号）的任务；不存在返回 undefined。
+ */
+export function moveTaskAndRenumber(
   domain: PmDomain,
   id: string,
   newParentId: string | null,
@@ -279,103 +419,24 @@ export function moveTask(
     const table = domain.table('tasks')
     const current = table.get(id)
     if (!current) return undefined
-    if (newParentId === id) throw new TaskMoveCycleError('任务不能移动到自身下')
-    const parent = newParentId ? table.get(newParentId) : undefined
-    if (newParentId && !parent) throw new ParentTaskNotFoundError(`未找到父任务：${newParentId}`)
-    if (parent && parent.projectId !== current.projectId) {
-      throw new ParentTaskProjectMismatchError('父任务不属于当前任务的项目')
-    }
-
-    let ancestor = parent
-    const visited = new Set<string>()
-    while (ancestor) {
-      if (ancestor.id === id) throw new TaskMoveCycleError('不能把任务移动到其子孙任务下')
-      if (visited.has(ancestor.id)) throw new TaskMoveCycleError('任务树存在循环关系，无法移动')
-      visited.add(ancestor.id)
-      ancestor = ancestor.parentId ? table.get(ancestor.parentId) : undefined
-    }
-
-    let maxOrder = 0
-    for (const [, task] of table.entries()) {
-      if (task.projectId === current.projectId
-        && task.parentId === newParentId
-        && task.id !== id
-        && task.order > maxOrder) {
-        maxOrder = task.order
-      }
-    }
-    const next = taskWriteSchema.parse({
-      ...current,
-      parentId: newParentId,
-      order: maxOrder + 1,
-      updatedAt: new Date().toISOString(),
-    })
-    await table.put(id, next)
-    return structuredClone(next)
-  })
-}
-
-export function renumberTasks(domain: PmDomain, projectId: string): Promise<Task[]> {
-  projectIdSchema.parse(projectId)
-  return enqueueDomainWrite(domain, async () => {
-    if (!domain.table('projects').get(projectId)) {
-      throw new TaskProjectNotFoundError(`未找到项目：${projectId}`)
-    }
-    const table = domain.table('tasks')
-    const tasks = [...table.entries()]
-      .map(([, task]) => task)
-      .filter(task => task.projectId === projectId)
-    const children = new Map<string | null, Task[]>()
-    for (const task of tasks) {
-      const siblings = children.get(task.parentId) ?? []
-      siblings.push(task)
-      children.set(task.parentId, siblings)
-    }
-    for (const siblings of children.values()) siblings.sort(compareSiblingOrder)
-
-    const planned: Task[] = []
-    const visited = new Set<string>()
-    const visit = (parentId: string | null, parentCode?: string): void => {
-      const siblings = children.get(parentId) ?? []
-      siblings.forEach((task, index) => {
-        if (visited.has(task.id)) throw new TaskMoveCycleError('任务树存在循环关系，无法重新编号')
-        visited.add(task.id)
-        const order = index + 1
-        const code = parentCode ? `${parentCode}.${order}` : String(order)
-        planned.push(taskWriteSchema.parse({
-          ...task,
-          order,
-          code,
-          updatedAt: new Date().toISOString(),
-        }))
-        visit(task.id, code)
-      })
-    }
-    visit(null)
-    if (visited.size !== tasks.length) {
-      throw new TaskMoveCycleError('任务树存在孤儿或循环关系，无法重新编号')
-    }
-    const originals = new Map(tasks.map(task => [task.id, task]))
-    const written: Task[] = []
+    const projectId = current.projectId
+    // 快照本项目全部任务（深拷贝），失败时整体回滚。
+    const before = [...table.entries()]
+      .map(([taskId, task]) => [taskId, structuredClone(task)] as const)
+      .filter(([, task]) => task.projectId === projectId)
     try {
-      for (const task of planned) {
-        await table.put(task.id, task)
-        written.push(task)
-      }
+      await applyMoveUnsafe(domain, current, newParentId)
+      const renumbered = await renumberProjectUnsafe(domain, projectId)
+      return renumbered.find(task => task.id === id)
     } catch (error) {
-      const rollbackErrors: unknown[] = []
-      for (const task of written.reverse()) {
+      for (const [taskId, task] of before) {
         try {
-          await table.put(task.id, originals.get(task.id)!)
-        } catch (rollbackError) {
-          rollbackErrors.push(rollbackError)
+          await table.put(taskId, task)
+        } catch {
+          // 回滚尽力而为；原始错误优先抛出，由调用方看到失败。
         }
-      }
-      if (rollbackErrors.length) {
-        throw new AggregateError([error, ...rollbackErrors], '任务重新编号失败，且部分记录恢复失败')
       }
       throw error
     }
-    return planned.map(task => structuredClone(task))
   })
 }

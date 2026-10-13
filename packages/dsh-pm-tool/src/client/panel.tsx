@@ -2,6 +2,8 @@ import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { buildUpdate } from '../core/task-inline.js'
+import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
+import { diffAgainstPrevious } from '../core/report-diff.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
@@ -674,9 +676,11 @@ export function PmPanel({ execute }: PmPanelApi) {
           task={drawer.task}
           tasks={tasks}
           milestones={milestones}
+          meetings={data.meetings}
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onOpenMeeting={(meetingId, meetingProjectId) => openRecord(meetingProjectId ?? project.id, 'meeting', meetingId)}
         />}
         {drawer.kind === 'milestone' && project && <MilestoneForm
           projectId={project.id}
@@ -1358,6 +1362,67 @@ function ViewTab({
   </button>
 }
 
+/** PROD-04：移动父级弹窗。候选排除自身+全部后代防环；打开聚焦首项，Escape/遮罩关闭，卸载归还焦点到触发的 ⋯ 按钮。 */
+function MovePickerModal({ task, tasks, onChoose, onClose }: {
+  task: Task
+  tasks: Task[]
+  onChoose: (parentRef: string) => void
+  onClose: () => void
+}) {
+  const excluded = new Set<string>([task.id])
+  const byParent = new Map<string, string[]>()
+  for (const t of tasks) {
+    if (t.parentId) { const l = byParent.get(t.parentId) ?? []; l.push(t.id); byParent.set(t.parentId, l) }
+  }
+  const queue = [task.id]
+  while (queue.length) {
+    const cur = queue.shift()!
+    for (const child of byParent.get(cur) ?? []) if (!excluded.has(child)) { excluded.add(child); queue.push(child) }
+  }
+  const candidates = flattenTaskTree(tasks, new Set()).filter(row => !excluded.has(row.task.id))
+
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    // 打开即聚焦首个候选（根层级）。
+    requestAnimationFrame(() => document.querySelector<HTMLElement>('.pm-move-picker .pm-move-option')?.focus())
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') { ev.stopPropagation(); onClose() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      // 关闭归还焦点到触发的 ⋯ 按钮（打开时记录的 activeElement）。
+      opener?.focus?.()
+    }
+  }, [onClose])
+
+  return (
+    <div className="pm-modal-mask" onClick={onClose}>
+      <div
+        className="pm-move-picker"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pm-move-title"
+        onClick={event => event.stopPropagation()}
+      >
+        <header id="pm-move-title">移动「{task.title}」到…（移动后自动重排 WBS 编号）</header>
+        <div className="pm-move-list">
+          <button className="pm-move-option" onClick={() => onChoose('root')}>根层级</button>
+          {candidates.map(row => (
+            <button
+              key={row.task.id}
+              className="pm-move-option"
+              style={{ paddingLeft: `${12 + row.depth * 16}px` }}
+              onClick={() => onChoose(row.task.id)}
+            >{row.task.code} {row.task.title}</button>
+          ))}
+        </div>
+        <footer><button className="pm-button" onClick={onClose}>取消</button></footer>
+      </div>
+    </div>
+  )
+}
+
 function TaskTable({
   tasks,
   milestones,
@@ -1385,6 +1450,8 @@ function TaskTable({
   const [status, setStatus] = useState('all')
   const [grouped, setGrouped] = useState(false) // PROD-01：默认树视图，状态分组降为可选开关
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  // PROD-04：移动父级弹窗。选中后调复合命令 move --renumber confirm；关闭即取消（零写）。
+  const [movePickerFor, setMovePickerFor] = useState<Task | null>(null)
   const toggleCollapse = (id: string) => setCollapsed(prev => {
     const next = new Set(prev)
     if (next.has(id)) next.delete(id); else next.add(id)
@@ -1455,6 +1522,17 @@ function TaskTable({
     : [{ key: 'all', label: '全部任务', rows: visible }]
 
   return <>
+    {movePickerFor && (
+      <MovePickerModal
+        task={movePickerFor}
+        tasks={tasks}
+        onClose={() => setMovePickerFor(null)}
+        onChoose={async (parentRef: string) => {
+          const ok = await run(`task move ${movePickerFor.id} ${parentRef} --renumber confirm`)
+          if (ok) { setMovePickerFor(null); onSaved() }
+        }}
+      />
+    )}
     <TableToolbar
       query={query}
       setQuery={setQuery}
@@ -1600,6 +1678,7 @@ function TaskTable({
                   selected={selected}
                   onToggle={toggleSelect}
                   onSaved={onSaved}
+                  onMove={setMovePickerFor}
                 />)
               : <TaskGroup
                   key="tree"
@@ -1614,6 +1693,7 @@ function TaskTable({
                   collapsed={collapsed}
                   onToggleCollapse={toggleCollapse}
                   onSaved={onSaved}
+                  onMove={setMovePickerFor}
                 />}
           </tbody>
         </table>
@@ -1639,6 +1719,7 @@ function TaskGroup({
   selected,
   onToggle,
   onSaved,
+  onMove,
   tree,
   collapsed,
   onToggleCollapse,
@@ -1651,6 +1732,7 @@ function TaskGroup({
   selected: Set<string>
   onToggle: (id: string) => void
   onSaved: () => void
+  onMove?: (task: Task) => void
   tree?: { task: Task, depth: number, hasChildren: boolean, childIds: string[] }[]
   collapsed?: Set<string>
   onToggleCollapse?: (id: string) => void
@@ -1672,6 +1754,7 @@ function TaskGroup({
       selected={selected}
       onToggle={onToggle}
       onSaved={onSaved}
+      onMove={onMove}
     />)}
   </>
   }
@@ -1692,6 +1775,7 @@ function TaskGroup({
         selected={selected}
         onToggle={onToggle}
         onSaved={onSaved}
+        onMove={onMove}
       />
     })}
   </>
@@ -1699,7 +1783,7 @@ function TaskGroup({
 
 function TaskRow({
   task, depth, milestones, disabled, onEdit, run, selected, onToggle,
-  hasChildren, collapsed, onToggleCollapse, onSaved,
+  hasChildren, collapsed, onToggleCollapse, onSaved, onMove,
 }: {
   task: Task
   depth: number
@@ -1713,6 +1797,7 @@ function TaskRow({
   collapsed?: boolean
   onToggleCollapse?: (id: string) => void
   onSaved: () => void
+  onMove?: (task: Task) => void
 }) {
     {const milestone = milestones.find(item => item.id === task.milestoneId)
       return <tr className="pm-record-row pm-task-row" data-pm-row={task.id}>
@@ -1808,6 +1893,11 @@ function TaskRow({
           ? <span className="pm-reference">{milestone.title}</span>
           : <span className="pm-cell-empty">-</span>}</td>
         <td className="pm-col-actions">
+          {onMove && (
+            <button className="pm-row-button" aria-label={`移动 ${task.title}`} title="移动到…" onClick={() => onMove(task)}>
+              <MoreHorizontal size={14}/>
+            </button>
+          )}
           <button className="pm-row-button" aria-label={`编辑 ${task.title}`} onClick={() => onEdit(task)}>
             <Pencil size={14}/>
           </button>
@@ -2051,6 +2141,14 @@ function MeetingTable({
   </>
 }
 
+/** PROD-09：相邻周期对比徽标。null=无上一份不显示；0=持平；否则 ↑/↓ + 幅度（可带单位，如 %）。 */
+function DeltaBadge({ value, unit }: { value: number | null, unit?: string }) {
+  if (value === null) return null
+  if (value === 0) return <span className="pm-delta pm-delta--flat" title="与上一份持平">持平 0{unit ?? ''}</span>
+  const up = value > 0
+  return <span className={`pm-delta ${up ? 'pm-delta--up' : 'pm-delta--down'}`} title="与上一份相比">{up ? '↑' : '↓'}{Math.abs(value)}{unit ?? ''}</span>
+}
+
 function ProgressReportTable({
   reports,
   onCreate,
@@ -2062,6 +2160,8 @@ function ProgressReportTable({
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
+  // 在全量（已按 periodEnd 降序）reports 上配对上一份，不随筛选改变配对口径。
+  const diff = useMemo(() => diffAgainstPrevious(reports), [reports])
   const visible = reports.filter(report =>
     `${report.title} ${report.executiveSummary}`.toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase())
@@ -2088,9 +2188,13 @@ function ProgressReportTable({
             <td>{report.periodStart} 至 {report.periodEnd}</td>
             <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(report)}>{report.title}</button></td>
             <td><StatusTag kind="report" value={report.status}/></td>
-            <td><Progress value={report.snapshot.tasks.averageProgress}/></td>
+            <td><Progress value={report.snapshot.tasks.averageProgress}/> <DeltaBadge value={diff.get(report.id)?.avgProgress ?? null} unit="%"/></td>
             <td>{report.snapshot.milestones.achieved}/{report.snapshot.milestones.total}</td>
-            <td><span className="pm-exception-count" data-alert={report.snapshot.exceptions.length > 0}>{report.snapshot.exceptions.length}</span></td>
+            <td>
+              <span className="pm-exception-count" data-alert={report.snapshot.exceptions.length > 0}>{report.snapshot.exceptions.length}</span>
+              <DeltaBadge value={diff.get(report.id)?.exceptionCount ?? null}/>
+              <div className="pm-delta-overdue">逾期 {report.snapshot.exceptions.filter(item => item.kind === 'overdue_task').length}<DeltaBadge value={diff.get(report.id)?.overdueTask ?? null}/></div>
+            </td>
             <td>{report.snapshotAt.slice(0, 10)}</td>
             <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${report.title}`} onClick={() => onEdit(report)}><Pencil size={14}/></button></td>
           </tr>)}</tbody>
@@ -2853,18 +2957,25 @@ function TaskForm({
   task,
   tasks,
   milestones,
+  meetings,
   disabled,
   run,
   onSaved,
+  onOpenMeeting,
 }: {
   projectId: string
   task?: Task
   tasks: Task[]
   milestones: Milestone[]
+  meetings: Meeting[]
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onOpenMeeting: (meetingId: string, projectId?: string) => void
 }) {
+  // PROD-10：任务由会议行动项 promote/关联而来时，抽屉顶部展示只读来源链接（前端反查全量 meetings，不落库）。
+  const sources = task ? findMeetingSources(meetings, task.id) : []
+  const primary = pickPrimarySource(sources)
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
@@ -2902,6 +3013,17 @@ function TaskForm({
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+    {primary && (
+      <div className="pm-source-link" data-tip="由会议行动项转为任务，点击打开来源会议">
+        <MessageSquare size={13}/>
+        <button
+          type="button"
+          className="pm-source-link-button"
+          onClick={() => onOpenMeeting(primary.meetingId, primary.projectId)}
+        >来自会议 {primary.meetingId}「{primary.meetingTitle}」</button>
+        {sources.length > 1 && <span className="pm-source-extra">另 {sources.length - 1} 场</span>}
+      </div>
+    )}
     <Field label="任务名称" wide><input name="title" defaultValue={task?.title} required autoFocus/></Field>
     <Field label="任务说明" wide><textarea name="description" defaultValue={task?.description} rows={4}/></Field>
     {!task && <Field label="父任务"><select name="parentId" defaultValue="">

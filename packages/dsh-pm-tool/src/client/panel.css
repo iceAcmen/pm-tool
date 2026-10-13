@@ -604,6 +604,15 @@
 .pm-drawer > header h2 { margin: 2px 0 0; font-size: 18px; font-weight: 650; }
 .pm-drawer-body { min-height: 0; flex: 1; overflow: auto; padding: 22px 20px 28px; }
 .pm-drawer-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 14px; }
+.pm-source-link { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pm-secondary); }
+.pm-source-link-button { padding: 0; border: 0; background: none; color: var(--pm-blue); cursor: pointer; font-size: 12px; text-decoration: underline; }
+.pm-source-extra { font-size: 11px; opacity: 0.7; }
+.pm-modal-mask { position: fixed; inset: 0; background: var(--dsw-alias-bg-mask-1); display: grid; place-items: center; z-index: 50; }
+.pm-move-picker { background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: var(--dsw-radius-md, 8px); min-width: 320px; max-width: 90vw; max-height: 80vh; display: flex; flex-direction: column; padding: 14px; gap: 10px; }
+.pm-move-picker > header { font-weight: 650; font-size: 13px; }
+.pm-move-list { overflow: auto; display: flex; flex-direction: column; gap: 2px; }
+.pm-move-option { text-align: left; padding: 7px 10px; border: 0; background: none; border-radius: var(--dsw-radius-sm); cursor: pointer; font-size: 13px; }
+.pm-move-option:hover { background: var(--pm-hover); }
 .pm-field { display: grid; align-content: start; gap: 7px; }
 .pm-field[data-wide="true"] { grid-column: 1 / -1; }
 .pm-field > span { color: var(--pm-secondary); font-size: 12px; font-weight: 550; }
@@ -701,6 +710,11 @@
   color: var(--pm-danger);
   font-weight: 650;
 }
+.pm-delta { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 650; }
+.pm-delta--up { color: var(--pm-success); }
+.pm-delta--down { color: var(--pm-danger); }
+.pm-delta--flat { color: var(--pm-secondary); font-weight: 500; }
+.pm-delta-overdue { font-size: 11px; color: var(--pm-secondary); margin-top: 2px; }
 .pm-report-snapshot { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--pm-line); }
 .pm-report-snapshot > header { display: flex; justify-content: space-between; gap: 12px; color: var(--pm-secondary); }
 .pm-report-snapshot > header span { font-weight: 650; color: var(--pm-ink); }
