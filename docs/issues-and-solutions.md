@@ -6,6 +6,19 @@
 
 ---
 
+## ISS-027 ｜ 隔离 GUI 收尾用 `pkill -f` 模糊匹配，误杀正式 `--profile pm` 的 3080/3091（2026-10-14，doubao-work）
+
+- **现象**：为停掉隔离 GUI 验收起的临时 dsh 进程，按命令行子串做了 `pkill -f`（命中 `--profile pm` / CLI 路径），结果把**正式在跑的两个 dsh 实例一并杀掉**——`127.0.0.1:3080` 与 `127.0.0.1:3091` 同时掉线，Web 工作台打不开。
+- **根因**：正式与隔离进程**命令行几乎相同**——两者都是 `node --import tsx/esm apps/cli/src/bin.ts --profile pm --no-open --host 127.0.0.1`，仅 `--port` 不同（正式 3080/3091），且 cwd 都在上游 `~/Projects/dsh-pm/deepseek-harness`。任何按 `--profile pm`、`dsh`、CLI 路径做的模糊 `pkill -f` / `killall` 都会**无差别命中正式进程**——按"正式和隔离共有的部分"杀，必然误伤。
+- **恢复（已执行，业务零损）**：从发布 tag `v0.7.1` 建隔离 worktree（`.tmp/v0.7.1-restore`，detach 在 `02f42d1`），在该隔离树内 `install/build`，把 pm profile 的插件软链 `~/.dsh/profiles/pm/node_modules/dsh-pm-tool` 指向该隔离包，再按精确端口重启正式实例。业务数据在 `data/`（未入库、未被触碰），重启后 22 任务/里程碑/会议/汇报均完好（恢复后 Web 截图佐证）。
+- **永久红线（同步写入 `AGENTS.md` §6 与 `docs/collaboration.md` 第十节）**：
+  1. **禁止**按 `--profile` / `dsh` / CLI 路径等"正式与隔离共有子串"做 `pkill -f`、`killall`。
+  2. 隔离/临时进程**启动即记录精确 PID**；停止前固定流程：`lsof -nP -iTCP:<port> -sTCP:LISTEN` 取 PID → 核对该 PID 的 cwd/argv/端口确为目标（不是正式 3080/3091）→ `kill -TERM <单PID>` → 等待退出 → 必要时对**同一 PID** `kill -KILL`。全程只对拿到的那一个 PID 发信号。
+  3. 正式服务恢复必须**版本隔离构建**：从 git tag 建 detached worktree、在隔离树内 build 再起服；**主工作树的未提交候选（如 v0.7.2 甘特改动）不得直接承载正式服务**。
+  4. **`lib/` 不入库、bundle 哈希不可复现**：`packages/dsh-pm-tool/.gitignore` 忽略 `lib/`，bundle 不进 git；运行态插件身份绑定 profile 的**绝对软链目标**，不同 worktree 构建出的 `lib/client.js` 哈希不可复现（实测同插件两 worktree 的 sha256 不同）。故**版本身份以 git tag + `package.json` version 为准，不以 bundle 哈希为准**。
+- **避坑要点**：①"按子串杀进程"在多实例同 argv 场景是高危动作；②正式与隔离靠**端口 + 精确 PID** 区分，**不靠 cwd**（两者 cwd 相同）；③恢复用的包来自 tag 的隔离 worktree，不来自主工作树脏状态。
+- **状态**：已恢复（v0.7.1 隔离 worktree），业务零损；流程红线已入库（2026-10-14）。
+
 ## ISS-026 ｜ 首页/欢迎页用 `/pm`「没反应」：宿主斜杠补全截获 + 发送后主区不自动跳转（2026-10-11，doubao-work / 豆包工作）
 
 - **现象**：所有者在 dsh 首页对话框输入 `/pm` 类命令看似无效。

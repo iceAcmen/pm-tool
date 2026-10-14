@@ -1,6 +1,7 @@
 /**
  * PROD-22 方案A：甘特排期几何纯函数（无 React/DOM，可离线单测）。
- * 只用现有 startDate/dueDate/targetDate，不新增表、不做关键路径。
+ * 只用现有 startDate/dueDate/targetDate/progress/predecessorIds，不新增表、不做自动排程。
+ * 全部为只读派生：不写库、不调用任何写命令；依赖关系唯一真源是 predecessorIds。
  */
 
 const DAY = 86_400_000
@@ -34,6 +35,7 @@ export function daysFrom(date: string, axisStart: string): number {
 /**
  * 拖拽：把像素增量转成“整体平移 N 天”，返回新的起止日期（按天取整）。
  * pxPerDay 为每天像素宽；钳制 start<=due（保持原时长平移，不改变长度）。
+ * 返回值只含 startDate/dueDate 两键——拖拽落库白名单，不碰 progress/predecessorIds。
  */
 export function shiftDatesByDrag(
   startDate: string,
@@ -50,15 +52,175 @@ export function shiftDatesByDrag(
   return { startDate: ns, dueDate: nd }
 }
 
-/** 任务条几何：left% / width(天)，供渲染。 */
-export function barGeometry(task: GanttTask, axisStart: string, axisDays: number) {
+/** 任务条几何：leftDays/widthDays，供渲染。仅“两条都有”才出条。 */
+export function barGeometry(task: GanttTask, axisStart: string, _axisDays: number) {
   if (!task.startDate || !task.dueDate) return null
   const s = daysFrom(task.startDate, axisStart)
   const e = daysFrom(task.dueDate, axisStart)
   return { leftDays: s, widthDays: Math.max(1, e - s + 1) }
 }
 
-/** 今天在轴上的天数偏移（用于参考线）。 */
+/** 今天在轴上的天数偏移（用于参考线）。超出轴范围的绘制钳制由渲染层负责。 */
 export function todayOffset(axisStart: string, today: string): number {
   return daysFrom(today, axisStart)
+}
+
+/** 工期天数（含端点）：单日 = 1。ARIA 与 tooltip 用。 */
+export function taskDurationDays(startDate: string, dueDate: string): number {
+  return Math.max(1, Math.round((Date.parse(dueDate) - Date.parse(startDate)) / DAY) + 1)
+}
+
+/**
+ * 进度填充比例（纯渲染）：progress/100，钳制 0..1；
+ * status==='done' 或 progress>=100 视为完成态（与 stats/reminders 同边界）。
+ * 无 I/O、无写副作用。
+ */
+export function progressRatio(progress: number | undefined, status?: string): number {
+  if (status === 'done') return 1
+  const p = Number.isFinite(progress) ? (progress as number) : 0
+  return Math.min(1, Math.max(0, p / 100))
+}
+
+/** MM-DD 短日期（条内/外置标签用）。 */
+export function shortDate(iso: string): string {
+  return iso.slice(5)
+}
+
+/**
+ * 窄条标签三态决策（GI-PURE-06，确定无随机）：
+ *  - inside：条足够宽，日期文字放条内；
+ *  - outside：条窄，日期外置到条右侧行侧，不溢出画布；
+ *  - hidden：过窄，条内不硬塞，仅 tooltip/标签列可读。
+ */
+export type BarLabelPolicy = 'inside' | 'outside' | 'hidden'
+export function barLabelPolicy(widthDays: number, pxPerDay: number): BarLabelPolicy {
+  const barPx = widthDays * pxPerDay
+  if (barPx >= 88) return 'inside'   // ≈6 天@16px：放得下 "MM-DD ~ MM-DD"
+  if (barPx >= 28) return 'outside' // ≈2 天@16px：外置
+  return 'hidden'
+}
+
+/**
+ * 父任务条只读派生范围：子任务 min(start) ~ max(due)。
+ * 父条不被当作独立排期源，本函数绝不回写父任务日期；无排期子任务返回 null。
+ */
+export function parentBarRange(children: { startDate?: string, dueDate?: string }[]): { start: string, end: string } | null {
+  let min = Infinity
+  let max = -Infinity
+  for (const c of children) {
+    if (c.startDate) min = Math.min(min, Date.parse(c.startDate))
+    if (c.dueDate) max = Math.max(max, Date.parse(c.dueDate))
+  }
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return null
+  const fmt = (t: number) => new Date(t).toISOString().slice(0, 10)
+  return { start: fmt(min), end: fmt(max) }
+}
+
+/** 里程碑单点横坐标（天偏移）；无 targetDate 返回 null——不画、不出现 NaN。 */
+export function milestoneOffset(m: { targetDate?: string }, axisStart: string): number | null {
+  if (!m.targetDate) return null
+  return daysFrom(m.targetDate, axisStart)
+}
+
+// ---------- 依赖边（Finish-to-Start，只读派生） ----------
+
+export interface GanttDepTask extends GanttTask {
+  predecessorIds?: string[]
+}
+
+export interface GanttEdge {
+  fromId: string // 前置（A 条右缘出发）
+  toId: string   // 后继（B 条左缘到达）
+  x1: number; y1: number // 起点 px（相对画布原点）
+  x2: number; y2: number // 终点 px
+}
+
+export interface GanttEdgeReport {
+  edges: GanttEdge[]
+  skipped: { selfLoop: number, dangling: number, cycle: number, missingDate: number }
+  cycleTaskIds: string[]
+}
+
+/** 在 predecessorIds 图（边：前置→后继）上找成环节点集合（3 色 DFS，不递归死循环）。 */
+function findCycleTaskIds(tasks: GanttDepTask[]): Set<string> {
+  const byId = new Map(tasks.map(t => [t.id, t]))
+  const succ = new Map<string, string[]>()
+  for (const t of tasks) {
+    for (const pid of t.predecessorIds ?? []) {
+      if (pid === t.id || !byId.has(pid)) continue // 自指/悬空不入图
+      const arr = succ.get(pid) ?? []
+      arr.push(t.id)
+      succ.set(pid, arr)
+    }
+  }
+  const WHITE = 0, GRAY = 1, BLACK = 2
+  const color = new Map<string, number>(tasks.map(t => [t.id, WHITE]))
+  const cycle = new Set<string>()
+  for (const start of tasks) {
+    if (color.get(start.id) !== WHITE) continue
+    color.set(start.id, GRAY)
+    const stack: [string, number][] = [[start.id, 0]]
+    while (stack.length) {
+      const top = stack[stack.length - 1]
+      const list = succ.get(top[0]) ?? []
+      if (top[1] >= list.length) {
+        color.set(top[0], BLACK)
+        stack.pop()
+        continue
+      }
+      const next = list[top[1]]
+      top[1]++
+      const c = color.get(next) ?? WHITE
+      if (c === GRAY) {
+        // 命中回边：从 next 到栈顶的环上节点全部标记
+        for (let k = stack.length - 1; k >= 0; k--) {
+          cycle.add(stack[k][0])
+          if (stack[k][0] === next) break
+        }
+      } else if (c === WHITE) {
+        color.set(next, GRAY)
+        stack.push([next, 0])
+      }
+    }
+  }
+  return cycle
+}
+
+/**
+ * 计算 FS 依赖边像素几何（A.dueDate 条右缘 → B.startDate 条左缘）。
+ * 真源唯一：只读 predecessorIds，不读任何派生缓存字段。
+ * 诚实降级：自指 / 悬空 / 成环 / 缺日期 一律不画该边，并计入 skipped；函数不抛异常。
+ * rowIndexOf 缺省按数组下标；行高缺省 24px（与 .pm-gantt-row 一致）。
+ */
+export function dependencyEdges(
+  tasks: GanttDepTask[],
+  axisStart: string,
+  pxPerDay: number,
+  opts: { rowHeight?: number, rowIndexOf?: (id: string) => number } = {},
+): GanttEdgeReport {
+  const rowHeight = opts.rowHeight ?? 24
+  const idxOf = opts.rowIndexOf ?? ((id: string) => tasks.findIndex(t => t.id === id))
+  const byId = new Map(tasks.map(t => [t.id, t]))
+  const cycle = findCycleTaskIds(tasks)
+  const skipped = { selfLoop: 0, dangling: 0, cycle: 0, missingDate: 0 }
+  const edges: GanttEdge[] = []
+  const px = (dayOffset: number) => dayOffset * pxPerDay
+
+  for (const b of tasks) {
+    for (const pid of b.predecessorIds ?? []) {
+      if (pid === b.id) { skipped.selfLoop++; continue }
+      const a = byId.get(pid)
+      if (!a) { skipped.dangling++; continue }
+      if (cycle.has(a.id) || cycle.has(b.id)) { skipped.cycle++; continue }
+      if (!a.startDate || !a.dueDate || !b.startDate || !b.dueDate) { skipped.missingDate++; continue }
+      const x1 = px(daysFrom(a.dueDate as string, axisStart) + 1) // A 条右缘
+      const x2 = px(daysFrom(b.startDate, axisStart))           // B 条左缘
+      edges.push({
+        fromId: a.id, toId: b.id,
+        x1, y1: rowHeight * idxOf(a.id) + rowHeight / 2,
+        x2, y2: rowHeight * idxOf(b.id) + rowHeight / 2,
+      })
+    }
+  }
+  return { edges, skipped, cycleTaskIds: [...cycle] }
 }

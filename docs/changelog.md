@@ -8,6 +8,22 @@
 
 ---
 
+## [v0.7.2] 最终可发布：甘特排期视图信息增强（零 schema）（2026-10-14，平台：doubao-work）
+
+> 状态：**独立测试专家已最终签 PASS（范围内 34/35），本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.1` 不移动。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、证据、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.7.1` → **`0.7.2`**。
+  - `docs/releases/v0.7.2.md`：**新建（最终可发布）**，列甘特信息增强，验收绿数按测试专家最终签门回填。
+  - `README.md`：版本导航表 v0.7.1 改标已发布（`d5cfa5aa`→`02f42d1`）、新增 v0.7.2 可发布行；阶段导航对齐最终签 PASS。
+- **补丁范围（v0.7.1 之后）**：甘特排期视图「信息可读性」增强——①根因修复 `--pm-accent` 变量从未定义致 `color-mix` 退化为透明（条体不可见），正式定义 `--pm-accent: var(--dsw-alias-state-business-primary)`、全色值走宿主语义变量不写死 hex；②起止日期直显（`labelDates` + 窄条外置 sideLabel，不只藏 tooltip）；③0/部分/100 进度可视化（条内进度层 `progress/100` 填充，纯渲染不写库）；④`predecessorIds` 为唯一真源的只读 SVG 依赖箭头（`pointer-events:none`，自指/成环/悬空/缺日期诚实 skipped 降级，不画第二份依赖副本）；⑤父子 effectiveRange 只读派生（`min(子 start)~max(子 due)` 虚线派生条，不回写父日期）；⑥ARIA/`localTodayIso()` 本地今日线轴外钳制/里程碑缺 targetDate 返回 null 防 NaN；⑦拖拽整条平移、落库 payload 白名单仅 `startDate`/`dueDate`，不动 progress/predecessorIds/status/assignee、不自动顺延后继。
+- **范围纪律**：**零 schema**（只读 v0.7.1 既有 startDate/dueDate/progress/predecessorIds，不新增表列、不改 taskRecordSchema、不升 domain、不动 storage.ts）；**关键路径 deferred**（GI-CP-01~05 本轮未新增最长路径/高亮代码，按裁决 N/A 不计失败，成环/缺日期降级已由 GI-PURE-05 `dependencyEdges.skipped` 覆盖）。
+- **验收（测试专家最终签 PASS）**：范围内 **34/35 PASS**——AUTO 纯函数 11/11 + INT 写路径 5/5 + COLLAB 红线 4/4 + GUI 14/15；**父 effectiveRange 聚焦 GUI 复验 PASS**；真实 Chrome headless 隔离实例（独立 `DSH_HOME` + 端口 3102，正式 3080/3091 未触）；正式 `data/`/`backups`/`exports` **157 资产文件零污染**。
+- **人工项 / 降级项（均不阻塞）**：**GI-WEB-14 真 390px 窄窗 = MANUAL_PENDING**（实测视口 768px，沿用 PL-WEB-11 留所有者本人目视）；GI-CP-01~05 关键路径 = ➖ deferred；**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING**（PoC `our-free-model`/`kilo-auto/free` 免费免 Key）。
+- **client bundle 哈希**：`dcf44a4a9b73b3142fdaa294eee629ae13fcaaba0e4d2e124c59bc59caf0d4ac`（`shasum -a 256 packages/dsh-pm-tool/lib/client.js` 实测；bundle 含 `pm-gantt-bar` 串证明生效包=本次构建）。
+- **影响范围 / 状态**：纯版本事实与文档口径；注解 tag 将在最终提交时创建。
+- **验证**：`node -e "JSON.parse(require('./packages/dsh-pm-tool/package.json'))"` 通过；`git diff --check` 干净；格式校验通过。
+
 ## [v0.7.1] 最终可发布：稳定性补丁 S1/S2/S3 + 协作演进契约（2026-10-14，平台：doubao-work）
 
 > 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.0` 不移动。

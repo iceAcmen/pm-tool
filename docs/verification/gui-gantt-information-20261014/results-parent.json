@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "k": "parent.label==derived",
+      "ok": true,
+      "d": "label=\"10-21 ~ 10-22\" (期望含 10-21~10-22)"
+    },
+    {
+      "k": "parent.aria==derived",
+      "ok": true,
+      "d": "aria=\"任务 父阶段P：2026-10-21 ~ 2026-10-22，工期 2 天，进度 10%。按回车打开详情。\""
+    },
+    {
+      "k": "parent.sideLabel==derived",
+      "ok": true,
+      "d": "side=\"10-21 ~ 10-22 · 10%\""
+    },
+    {
+      "k": "parent.barDerivedClass",
+      "ok": true,
+      "d": "--parent=true"
+    },
+    {
+      "k": "parent.diskNotWritten",
+      "ok": true,
+      "d": "磁盘父日期=2026-10-20~2026-10-24（应仍为自身排期）"
+    },
+    {
+      "k": "parent.notDraggable.noWrite",
+      "ok": true,
+      "d": "拖后磁盘: 2026-10-20~2026-10-24 prog=10"
+    },
+    {
+      "k": "child.untouched",
+      "ok": true,
+      "d": "子=2026-10-21~2026-10-22"
+    },
+    {
+      "k": "regress.0.visible",
+      "ok": true,
+      "d": "f0=0 w0=64"
+    },
+    {
+      "k": "regress.50",
+      "ok": true,
+      "d": "31/64"
+    },
+    {
+      "k": "regress.100done",
+      "ok": true,
+      "d": "done=true 62/64"
+    },
+    {
+      "k": "regress.arrow",
+      "ok": true,
+      "d": "arrows=1 title=\"前置 前置A → 后继B\""
+    },
+    {
+      "k": "regress.noNaN",
+      "ok": true,
+      "d": "NaN absent"
+    },
+    {
+      "k": "console.clean",
+      "ok": true,
+      "d": "errs=0"
+    }
+  ],
+  "errs": []
+}

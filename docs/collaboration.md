@@ -170,3 +170,31 @@
 - **反馈即重开**：用户在 MANUAL_PENDING 项反馈失败 → 重新打开对应缺陷与发布门。
 - **高风险/不可逆仍须人工确认**：删除、覆盖、恢复等不可逆动作不受分层影响。
 - **边界**：这**不是把所有 BLOCKED 自动豁免**。仅「确实必须用户本人配合」者转 MANUAL_PENDING；其余 BLOCKED（本方可补的自动化缺口、可自动截图核对的样式/UX）仍按 9.3 正常阻塞/补测。
+
+## 十、进程隔离、正式服务恢复与 profile 版本归属（ISS-027，2026-10-14 起长期硬规则）
+
+> 背景：2026-10-14 隔离 GUI 收尾时按 `--profile pm` 子串 `pkill -f`，误杀正式 3080/3091；从 `v0.7.1` 隔离 worktree 恢复、业务零损。本节是该事故沉淀的长期红线，根 `AGENTS.md` §6 是简明版；冲突时以更严格者为准。
+
+### 10.1 为什么不能模糊杀进程
+- 正式与隔离 dsh 实例命令行几乎一致：均为 `node --import tsx/esm apps/cli/src/bin.ts --profile pm --no-open --host 127.0.0.1`，仅 `--port` 不同；cwd 都在上游 `~/Projects/dsh-pm/deepseek-harness`。
+- 因此 `pkill -f --profile pm`、`pkill -f dsh`、`killall node` 等按共有子串的杀法，**必然同时命中正式实例**。正式实例当前端口：`3080`、`3091`。
+
+### 10.2 停任何 dsh 进程的固定流程（强制）
+1. 启动隔离/临时进程时，**当场记录其精确 PID**（`lsof -nP -iTCP:<port> -sTCP:LISTEN` 或启动日志）。
+2. 停止前先定位：`lsof -nP -iTCP:<临时端口> -sTCP:LISTEN` 拿到 PID。
+3. **核对身份**：`ps -o pid,command -p <pid>` 与 `lsof -a -p <pid> -d cwd -Fn`，确认端口/argv/cwd 正是目标临时进程，**不是正式 3080/3091**。
+4. 只对这一个 PID：`kill -TERM <pid>`，等待退出（`lsof -iTCP:<端口>` 应无 LISTEN）。
+5. 仍未退出才对**同一 PID** `kill -KILL <pid>`；**绝不**换成 `pkill`/`killall` 兜底。
+
+### 10.3 pm profile 软链版本归属与恢复/发布切换清单
+- **归属机制**：`~/.dsh/profiles/pm/node_modules/dsh-pm-tool` 是一条**绝对软链**，它指向的 worktree 包就是"正式当前跑的版本"。切换版本 = 改这条软链 + 目标 worktree 已构建 + 重启对应端口进程。
+- **`lib/` 不入库、哈希不可复现**：`packages/dsh-pm-tool/.gitignore` 忽略 `lib/`，bundle 不进 git；不同 worktree/构建产出的 `lib/client.js` 哈希不可复现（实测同插件两 worktree 的 sha256 不同）。**版本身份只认 git tag + `package.json` 的 version**，不认 bundle 文件哈希；跨机/干净 checkout 验证必须从源码重新 build。
+- **恢复 / 切换步骤（按序）**：
+  1. 选定版本 tag（如 `v0.7.1`），确认 `packages/dsh-pm-tool/package.json` 的 version 与 tag 一致。
+  2. 建隔离 worktree：`git worktree add .tmp/<版本>-restore <tag>`（detach，**不动主工作树**；主工作树未提交候选不承载正式服务）。
+  3. 在该隔离树内构建：`cd .tmp/<版本>-restore/packages/dsh-pm-tool && pnpm install && pnpm run build`。
+  4. 软链指向该隔离包：`ln -sfn "$PWD/.tmp/<版本>-restore/packages/dsh-pm-tool" ~/.dsh/profiles/pm/node_modules/dsh-pm-tool`。
+  5. 按 10.2 定位并 TERM 旧正式 PID（3080/3091），确认端口释放。
+  6. 从上游目录以精确端口起新实例（在 `~/Projects/dsh-pm/deepseek-harness`）：`pnpm dsh --profile pm --no-open --host 127.0.0.1 --port 3080`（3091 同理；`--profile` 后不再加 `web` 动词，见 ISS-007）。
+  7. 验证：`lsof` 确认新 PID 听对应端口、带 token 的 `http://127.0.0.1:3080` 返回 200、打开工作台核对任务/里程碑/数据完好。
+  8. 记录新 PID 与版本归属；正式稳定后再清理临时隔离 worktree。

@@ -2,9 +2,17 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-13（doubao-work **Web polish 三件套 PROD-04/09/10 已实现并通过独立验收总门**：**27/27 PASS、0 FAIL/BLOCKED/NOT_RUN/MANUAL_PENDING**，testedCommit 85cb651；零 schema、domain 仍 v1。下一步主线 = **schema v2（PROD-11 predecessorIds + PROD-21 repoUrl + PROD-23 健康分/原子恢复）**。先前一批：PROD-24 副驾多步规划 49 PASS）
+最后更新：2026-10-14（doubao-work **甘特排期视图信息增强 v0.7.2 已实现并通过独立测试专家最终签**：范围内 **34/35 PASS**〔纯函数 11/11 + 写路径 5/5 + 协作红线 4/4 + GUI 14/15〕+ 父 effectiveRange 聚焦 GUI 复验 **PASS**，真 390 窄窗 GI-WEB-14 = MANUAL_PENDING、关键路径 GI-CP-01~05 = deferred 均不阻塞；**零 schema**、domain 仍 v1；真实 Chrome 隔离端口 3102、正式 157 资产零污染、client `dcf44a4a…`。当前 HEAD `02f42d1`(v0.7.1)，甘特候选在未提交工作树，待用户授权最终提交打 tag。先前一批：v0.7.1 稳定性补丁 S1/S2/S3 28/28 PASS）
 
-## 当前阶段：Web polish 三件套 PROD-10→09→04 已实现·独立验收 27/27 PASS（2026-10-13，doubao-work）
+## 当前阶段：甘特排期视图信息增强 v0.7.2·独立测试专家最终签 34/35 PASS（2026-10-14，doubao-work）
+
+- **功能**：在 v0.7.1=`02f42d1` 基线上对甘特「信息可读性」做增强——**根因修复 `--pm-accent` 从未定义致甘特条 `color-mix` 退化为透明**（正式定义 `--pm-accent: var(--dsw-alias-state-business-primary)`，全色值走宿主语义变量不写死 hex）；起止日期直显（`labelDates` MM-DD~MM-DD + 窄条外置 sideLabel，不只藏 tooltip）；0/部分/100 进度条内实心层按 `progress/100` 填充（done/≥100=完成态，纯渲染不写库）；`predecessorIds` 为唯一真源的只读 SVG 依赖箭头（`pointer-events:none`，自指/成环/悬空/缺日期诚实 skipped 降级）；父子 effectiveRange 只读派生（`min(子 start)~max(子 due)` 虚线派生条，不回写父日期）；ARIA + `localTodayIso()` 本地今日线轴外钳制 + 里程碑缺 targetDate 返回 null 防 NaN；拖拽整条平移、落库 payload 白名单仅 `startDate`/`dueDate`，不动 progress/predecessorIds/status/assignee、不自动顺延后继。
+- **口径与边界**：**零 schema**（只读 v0.7.1 既有 startDate/dueDate/progress/predecessorIds，不新增表列、不改 taskRecordSchema、不升 domain、不动 storage.ts）；**关键路径 deferred**（GI-CP-01~05 未新增最长路径/高亮代码，按裁决 N/A 不计失败，成环/缺日期降级由 GI-PURE-05 `dependencyEdges.skipped` 覆盖）；不做自动排程/自动改期/自动补日期/自动顺延，doctor 仍只读不自愈。
+- **验收（独立测试专家最终签，2026-10-14，含真实浏览器）**：范围内 **34/35 PASS**——AUTO 纯函数 11/11、INT 写路径 5/5、COLLAB 红线 4/4、GUI 14/15；**父 effectiveRange 聚焦 GUI 复验 PASS**（父派生范围 `min(子 start)~max(子 due)` 虚线条、不回写父日期、无排期子→不画父条，浏览器聚焦复验通过）；**🟡 GI-WEB-14 真 390 窄窗 MANUAL_PENDING**（实测视口 768px，沿用 PL-WEB-11 留所有者本人目视，不阻塞）；GI-CP-01~05 全部 ➖ N/A deferred。`pnpm build`=0、`verify-gantt.mjs`/`verify-gui-contract.mjs`/`verify-isolation.mjs`=PASS；真实 Chrome headless 隔离实例（独立 `DSH_HOME` + 端口 3102，正式 3080/3091 未触）证据 `docs/verification/gui-gantt-information-20261014/`；正式 `data/`/`backups`/`exports` **157 资产文件零污染**（before=after）。被测基线 = `02f42d1` 之上未提交工作树；client bundle 完整哈希 `dcf44a4a…`（`shasum -a 256 packages/dsh-pm-tool/lib/client.js` 实测）。验收矩阵 `docs/testing/gantt-information-acceptance.md`。
+- **状态**：本批仅回写版本/living docs 口径（package.json 0.7.2 + releases/README/changelog/progress/handoff/onboarding），**未改产品 src、未改测试专家 docs、未改证据、未提交**。
+- **下一步**：聚焦父日期 GUI 复验（父 effectiveRange 拖拽边界）**已 PASS**；待用户授权执行最终 commit/tag/push（注解 tag `v0.7.2` 指向最终 release commit）；关键路径高亮、真 390 窄窗目视、M-01 prod 真实 Key 为后续/人工项。
+
+## 历史阶段：Web polish 三件套 PROD-10→09→04 已实现·独立验收 27/27 PASS（2026-10-13，doubao-work）
 
 - **功能**：v0.5.2 Web 侧三缺口一次补齐——PROD-10 任务抽屉顶部只读显示「来自会议 mtg-xxxx · 会议标题」并一键直达该会议（前端反查 `meetings.actions[].taskId`）；PROD-09 进度汇报表每行与时间相邻上一份固定快照 diff 三指标并出「↑5% / ↓1 / 持平0」文字箭头徽标；PROD-04 任务行「⋯ 移动到…」树选择器改父，一次确认＝原子改父+项目全量 renumber。
 - **口径与边界**：**零 schema**（domain 仍 v1、9 表）。PROD-10 多来源按会议日期倒序→id 倒序确定性取第一条、附「另 N 场」提示，来源会议删除则安全隐藏；PROD-09 在全量 periodEnd/id 排序列表上求相邻（不受搜索/状态筛选影响），三指标＝averageProgress / overdue_task 异常数 / exceptions 总数，首份无徽标、零差显「持平0」、文字+箭头非仅靠色；PROD-04 选择器排除自身+后代（后端环检测仍为硬门），后端单写队列内原子复合、失败整树回滚、取消零写，P0 不做拖拽/中间插序。
