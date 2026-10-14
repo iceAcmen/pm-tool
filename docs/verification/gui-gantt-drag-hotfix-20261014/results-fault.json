@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "k": "fault.inlineError",
+      "ok": true,
+      "detail": "inlineStatus=\"更新失败，请重试\""
+    },
+    {
+      "k": "fault.globalError.notSwallowed",
+      "ok": true,
+      "detail": "noticeError=1 texts=[\"任务操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。\"]"
+    },
+    {
+      "k": "fault.serverZeroWrite",
+      "ok": true,
+      "detail": "磁盘 B=2026-10-21~2026-10-24 updAt 2026-10-14T13:49:42.820Z->2026-10-14T13:49:42.820Z"
+    },
+    {
+      "k": "fault.barReverted.noGhost",
+      "ok": true,
+      "detail": "geom before=576px/64px after=576px/64px"
+    }
+  ],
+  "consoleErrors": []
+}

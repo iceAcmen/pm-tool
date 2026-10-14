@@ -8,6 +8,25 @@
 
 ---
 
+## [v0.7.3] 最终可发布：甘特拖拽手感与成功提示热修（零 schema）（2026-10-14，平台：doubao-work）
+
+> 状态：**v0.7.2 拖拽热修代码审查 APPROVE；真实 Chrome 隔离实例 22 项全绿；回归新增 7 项（GI-WRITE-06/07+GI-WEB-16~20）独立测试专家最终签 7/7 PASS，本补丁可发布**。暂不 commit/tag/push，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.2` 不移动。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、证据、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.7.2` → **`0.7.3`**。
+  - `docs/releases/v0.7.3.md`：**新建（最终可发布）**，列甘特拖拽手感/成功提示热修，验收按真实 Chrome 采证口径回填。
+  - `README.md`：版本导航表 v0.7.2 改标已发布（`5d1c8591`→`310c768`）、新增 v0.7.3 可发布行；阶段导航对齐热修 APPROVE。
+- **补丁范围（v0.7.2 `310c768` 之后）**：用户实测反馈拖拽成功后弹出**全字段深色大卡 Notice**（13 行 dump 盖住甘特工作台）。热修——①根因修复 `.pm-gantt` 无 `flex-wrap` 时 hint(`flex-basis:100%`) 与 labels/scroll 挤同一 flex 行竞争，致 `scroll` 被 shrink 到宽 0（画布消失）；改 `flex-wrap:wrap`，hint 独占下一行，首行恒 labels(230px)+scroll(flex:1,min-width:0)。②拖拽走 `run(...,{quiet:true})`、单 refresh：松手即落盘+就地重渲染、日期即时更新无需 F5，移除 `onSaved()` 二次刷新。③quiet 成功不弹全字段大 Notice，改条下 inline `role=status`/`aria-live=polite`「已更新：起 ~ 止」约 3s 自清除。④`saving` inflight 锁：保存中禁连拖、`finally` 解锁，防并发覆盖/ghost。⑤失败回落：条体从未本地改动、未 refresh 自然回落拖前坐标无残影，内联「更新失败，请重试」6s；quiet 不吞错（run catch 仍 `setMessage`，全局错误红框 Notice 保留）。⑥unmount `clearTimeout` 清状态定时器；payload 白名单仍仅 `startDate`/`dueDate`。
+- **范围纪律**：**零 schema**（只读既有 startDate/dueDate/progress/predecessorIds，不新增表列、不改 taskRecordSchema、不升 domain、不动 storage.ts）；不自动顺延后继。
+- **验收（真实 Chrome 隔离实例，执行端采证）**：真实 Chrome v139 headless（puppeteer-core，无 API key），独立 `DSH_HOME`+独立 storage root+独立备份目录+空闲端口 **3120**；**22 项全绿**（拖前 clientWidth>0 / 拖后 DOM 在 / 即时更新无需 F5 / 无全字段 Notice / inline role=status / ~3s 自消 / 连拖只一次写 / <4px 点开抽屉零写 / 横滚不误触 / 父派生条不可拖 / 故障内联错误 / 故障全局错误不被 quiet 吞 / 故障条回落无 ghost / 故障服务端零写 / 重载读回 / 重启读回白名单 / console·pageerror=0）；静态契约 `verify-gantt-drag.mjs` 退出 0（A flex-wrap / B quiet 单次 refresh / C catch 不吞错 / D saving 锁+unmount timer / E aria-live / F payload 两键）。证据 `docs/verification/gui-gantt-drag-hotfix-20261014/`。
+- **回归新增 7 项（独立测试专家最终签 7/7 PASS）**：GI-WRITE-06/07 + GI-WEB-16~20；证据 `docs/verification/gui-gantt-drag-hotfix-20261014/`，判定权已由测试专家回填为 7/7 PASS。
+- **ISS-027 精确 PID 流程（继续遵守）**：隔离监听 PID=86864 / `--port 3120` / `--no-open`；仅对 86864 `kill -TERM` 一次、验 EXITED、3120=DOWN；正式 3080=PID 69064 / 3091=PID 69065 启动前后均 LISTEN、PID 未变。
+- **零污染**：正式 `data/`/`backups`/`exports` **156 资产文件本轮零变化**（before=after，changed/added/removed=0）。
+- **client 完整哈希（已实测锁定）**：`shasum -a 256 packages/dsh-pm-tool/lib/client.js` = `68238d1a37c4eccfe16ff1699b91310e304d47eddc01466ac19b5193892131d8`（332139 B / 332.14 kB），bundle 含 `pm-gantt-bar`、宿主合并 bundle HTTP 200（证明生效包=本次构建）。
+- **人工项 / 降级项（均不阻塞）**：GI-WEB-14 真 390 窄窗仍 MANUAL_PENDING；GI-CP-01~05 关键路径仍 deferred；M-01 prod 真实 Key 仍 MANUAL_PENDING（PoC 免费车道免 Key）。
+- **影响范围 / 状态**：纯版本事实与文档口径；注解 tag 将在最终提交时创建。
+- **验证**：`node -e "JSON.parse(require('./packages/dsh-pm-tool/package.json'))"` 通过；`git diff --check` 干净；未改产品 src / testing 矩阵 / 证据、未 commit。
+
 ## [v0.7.2] 最终可发布：甘特排期视图信息增强（零 schema）（2026-10-14，平台：doubao-work）
 
 > 状态：**独立测试专家已最终签 PASS（范围内 34/35），本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.1` 不移动。

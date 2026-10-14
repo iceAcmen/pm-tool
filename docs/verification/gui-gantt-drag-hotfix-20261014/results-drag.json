@@ -1,0 +1,132 @@
+{
+  "builtClientSha256": "68238d1a37c4eccfe16ff1699b91310e304d47eddc01466ac19b5193892131d8",
+  "servedBundles": [
+    {
+      "u": "http://127.0.0.1:3120/plugins/??dsh-our-free-model/client.js,@deepseek-ai/dsh-typert-registry/client.js,@deepseek-ai/dsh-api-session-controller/client.js,@deepseek-ai/dsh-client-connection/client.js,@deepseek-ai/dsh-session-log-export/client.js,@deepseek-ai/dsh-api-workspace-controller/client.js,@deepseek-ai/dsh-client-ui-deliverables/client.js,dsh-pm-tool/client.js,@deepseek-ai/dsh-client-ui-directory-picker-native/client.js&rev=37aba3245a94",
+      "status": 200,
+      "bytes": 1210939,
+      "sha": "98dcbd6e37ba5bed69b641c8ca1cae563ca3f60dc84868ec88a62139390f6d6d",
+      "hasGantt": true
+    },
+    {
+      "u": "http://127.0.0.1:3120/plugins/??dsh-our-free-model/client.js,@deepseek-ai/dsh-typert-registry/client.js,@deepseek-ai/dsh-api-session-controller/client.js,@deepseek-ai/dsh-client-connection/client.js,@deepseek-ai/dsh-session-log-export/client.js,@deepseek-ai/dsh-api-workspace-controller/client.js,@deepseek-ai/dsh-client-ui-deliverables/client.js,dsh-pm-tool/client.js,@deepseek-ai/dsh-client-ui-directory-picker-native/client.js&rev=37aba3245a94",
+      "status": 200,
+      "bytes": 1210939,
+      "sha": "98dcbd6e37ba5bed69b641c8ca1cae563ca3f60dc84868ec88a62139390f6d6d",
+      "hasGantt": true
+    }
+  ],
+  "results": [
+    {
+      "k": "drag.before.scrollClientW>0",
+      "ok": true,
+      "detail": "clientW=768 scrollW=992 bars=9 svg=1 arrows=1"
+    },
+    {
+      "k": "drag.before.artifacts",
+      "ok": true,
+      "detail": "bars=9 ids=t-0001,t-0002,t-0003,t-0004,t-0005,t-0006,t-0007,t-0008,t-0010 svg=1 path=1 arrow=1"
+    },
+    {
+      "k": "drag.after.scrollClientW>0",
+      "ok": true,
+      "detail": "clientW=768"
+    },
+    {
+      "k": "drag.after.canvasBarsArrows.remain",
+      "ok": true,
+      "detail": "bars=9 svg=1 path=1 arrow=1"
+    },
+    {
+      "k": "drag.dates.instant.noRefresh",
+      "ok": true,
+      "detail": "B 2026-10-15~2026-10-18 -> 2026-10-18~2026-10-21 (无reload)"
+    },
+    {
+      "k": "success.NO.fullfield.darkNotice",
+      "ok": true,
+      "detail": "pm-notice count=0 texts=[]"
+    },
+    {
+      "k": "success.inline.roleStatus.updated",
+      "ok": true,
+      "detail": "inlineStatus=\"已更新：2026-10-18 ~ 2026-10-21\""
+    },
+    {
+      "k": "success.whitelistOnlyStartDue",
+      "ok": true,
+      "detail": "progress 40->40 pred [\"t-0004\"]->[\"t-0004\"] assignee 钱->钱"
+    },
+    {
+      "k": "success.inlineStatus.autoHide.3s",
+      "ok": true,
+      "detail": "after ~3.5s inlineStatus=\"null\" notice=0"
+    },
+    {
+      "k": "success.still.no.darkNotice",
+      "ok": true,
+      "detail": "noticeCount=0"
+    },
+    {
+      "k": "rapid.doubleDrag.singleWrite.noGhost",
+      "ok": true,
+      "detail": "due 2026-10-21->2026-10-24 shiftDays≈3 (锁生效应≈3而非6); taskFiles=10 (基线10)"
+    },
+    {
+      "k": "tinyClick.opensDrawer",
+      "ok": true,
+      "detail": "dialog=true"
+    },
+    {
+      "k": "tinyClick.zeroWrite",
+      "ok": true,
+      "detail": "t-0004 updAt 2026-10-14T11:33:57.763Z->2026-10-14T11:33:57.763Z dates 2026-10-12~2026-10-13"
+    },
+    {
+      "k": "hscroll.thenDrag.misfireFree",
+      "ok": true,
+      "detail": "t-0002 2026-10-05~2026-10-08 -> 2026-10-08~2026-10-11 bars=9 inline=\"已更新：2026-10-08 ~ 2026-10-11\""
+    },
+    {
+      "k": "parent.derived.notDraggable",
+      "ok": true,
+      "detail": "父 2026-10-20~2026-10-24->2026-10-20~2026-10-24; 子 2026-10-21~2026-10-22->2026-10-21~2026-10-22"
+    },
+    {
+      "k": "fault.inlineError",
+      "ok": false,
+      "detail": "inlineStatus=\"null\""
+    },
+    {
+      "k": "fault.globalError.notSwallowed",
+      "ok": false,
+      "detail": "noticeError=0 texts=[]"
+    },
+    {
+      "k": "fault.serverZeroWrite",
+      "ok": true,
+      "detail": "磁盘 B 2026-10-21~2026-10-24 updAt 2026-10-14T13:49:42.820Z->2026-10-14T13:49:42.820Z"
+    },
+    {
+      "k": "fault.barReverted.noGhost",
+      "ok": true,
+      "detail": "geom before={\"left\":\"576px\",\"width\":\"64px\"} after={\"left\":\"576px\",\"width\":\"64px\"}"
+    },
+    {
+      "k": "readback.afterReload.persisted",
+      "ok": true,
+      "detail": "磁盘B=2026-10-21~2026-10-24 prog=40 pred=[\"t-0004\"]; 画布bars=9 clientW=768 NaN=false"
+    },
+    {
+      "k": "readback.whitelist.fields",
+      "ok": true,
+      "detail": "重启读回: progress=40(应40) pred=[\"t-0004\"](应[t-0004]) 仅start/due被拖拽改变"
+    },
+    {
+      "k": "console.clean",
+      "ok": true,
+      "detail": "errors=0 "
+    }
+  ],
+  "consoleErrors": []
+}

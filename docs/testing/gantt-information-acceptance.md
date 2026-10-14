@@ -14,6 +14,10 @@
 >
 > **无日期里程碑（诚实降级，非缺陷）**：`milestoneCreateSchema.targetDate` 在持久层**必填**。手写 `targetDate:null` 的恶意记录 m-0002 触发宿主就绪守卫**整体拒绝打开**（"记录不符合当前 schema…请人工修正后重开；本次不自动修复、不移动或隔离该记录"，见 `NODATE-milestone-hostlog.txt`）。即坏记录表现为**存储未就绪（诚实、不自动修复、不 NaN）**，而非画一条错条；纯函数层 `milestoneOffset` 对缺失 targetDate 返回 null 不画/不 NaN（GI-PURE-11）。**不把不合法记录要求成"正常打开"**。
 
+> **v0.7.2 拖拽手感与成功提示回归冻结（2026-10-14，独立测试专家，缺陷冻结最小回归）**：用户在 v0.7.2（`310c768`）实测反馈——拖拽成功后弹出**全字段深色大卡 Notice**（任务ID/WBS/项目/父任务/标题/说明/负责人/状态/优先级/起止/进度/里程碑 13 行 dump），盖住甘特工作台，与截图 `ClipboardTemp/f97c15cd….png` 一致。本门在 §5/§6 **追加 7 行最小回归**（GI-WRITE-06/07、GI-WEB-16~20）。
+>
+> **实现后 AUTO/静态/集成/GUI 全量回填（2026-10-14，热修证据 `verification/gui-gantt-drag-hotfix-20261014/`）**：`pnpm build`=0（client.js sha `68238d1a…`，独立复核一致）；`verify-gantt-drag.mjs`/`verify-gantt.mjs`/`verify-gui-contract.mjs`/`verify-isolation.mjs` 全绿；隔离 tmp root 集成探针白名单/零写/重启读回通过；**真 Chrome headless（v139）隔离实例 DSH_HOME+端口 3120/PID 86864，正式 3080=69064/3091=69065 全程 LISTEN PID 未变，收尾仅 kill -TERM 86864**：拖后 DOM 在/日期即时更新无 reload、成功无全字段大卡（`.pm-notice`=0）+ 内联 `role=status`『已更新：起 ~ 止』~3.5s 自隐、连拖两次仅一次写、<4px 点击开抽屉零写、横滚后拖不误触、父派生条拖不动、故障注入内联错误+全局红 toast 不吞+条体回落无 ghost+服务端零写、reload 读回 progress=40/pred=[t-0004] 未动、console/pageerror=0。**正式 data/backups/exports 本批 156 文件 before==after 零污染**（与上轮 157 差 1 系期间正式备份自然轮换，非本次写）。首轮故障 2 项 XX 定位为抽屉遮挡鼠标时序（非产品缺陷），关抽屉重跑四项全绿。**据此 v0.7.2 回归 7 项全部 ✅ PASS（GI-WRITE-06/07 + GI-WEB-16~20）**。
+
 ## 0. 冻结口径（以此为准）
 
 1. **零 schema 优先**：任务 `startDate / dueDate / progress / predecessorIds` 在 v0.7.1 已存在（`core/task.ts` strictObject）；本增强**只读这些既有字段**，**不新增表/列、不改 `taskRecordSchema`、不升 domain 版本、不动 `core/storage.ts`**。任何"为了甘特好看而加字段"的提案一律 FAIL。
@@ -90,6 +94,8 @@
 | GI-WRITE-03 | 拖到 start>due 的非法方向（极小 delta/钳制边界） | 落库结果仍满足 start≤due；不写入非法区间；钳制边界与 `shiftDatesByDrag` 一致 | INT | ✅ PASS（集成实测 domain 回读 start<=due 恒成立；纯函数钳制 verify-gantt 覆盖） |
 | GI-WRITE-04 | 未排期任务在甘特上**不**可拖（无条） | 未排期行无拖拽 handle、不下发写命令；仅可点开抽屉补日期 | INT+GUI | ✅ PASS（GUI：t-0009 仅橙「未排期」徽标、无条体、不可拖；代码层父条/未排期分支不绑 `onPointerDownBar`） |
 | GI-WRITE-05 | 依赖悬空（predecessorIds 指向已删任务）时渲染甘特 | 渲染不崩；doctor 仍报告 `dangling-predecessor`；甘特**不**因为渲染而补写/清理 predecessorIds | INT | ✅ PASS（`dependencyEdges` 对悬空边只 `skipped.dangling++` 不写；core 零 run/execute；doctor 既有契约在隔离 guard 全绿） |
+| GI-WRITE-06 | **故障注入**：隔离实例拖拽任务后，使服务端 `task update` 返回 ok=false（校验失败/冲突/不可写） | 条体**回落到拖前坐标**（无 stuck ghost/残影）；出现错误提示（内联『更新失败，请重试』或错误态 Notice，**不得假装成功**）；server 端该任务 start/due/progress/predecessorIds/assignee 拖前后**逐字节一致**（零写） | INT+GUI | ✅ PASS（隔离 root 注入非法日期 kind=error 零写；GUI 真 Chrome 经只读缝 chmod 555/444 注入写失败：内联『更新失败，请重试』+ 全局红 toast 不被 quiet 吞 + t-0005 geom 576px/64px 前后一致无 ghost + 磁盘 updAt/dates 未变；证据 `verification/gui-gantt-drag-hotfix-20261014/`） |
+| GI-WRITE-07 | v0.7.2 基线拖拽右移 2 天，落库后退出进程、`--reopen` 重启再读该任务 | 抓 payload 仍**仅 `startDate`/`dueDate` 两键**（白名单回归，不动 progress/predecessorIds/status/assignee）；重启读出 dates=拖拽后新值、其余字段未动；**不**把后续依赖任务"自动顺延" | INT | ✅ PASS（隔离 tmp root 实测：拖拽 payload 仅 start/due；回读 progress=40、predecessorIds=[t-0001]、assignee 逐字节未动；`--reopen` 新进程读盘一致；GUI reload 后磁盘 t-0005=10-21~10-24、progress=40、pred=[t-0004] 未动，仅 start/due 变） |
 
 ## 6. Web 视图层冻结用例（GUI）
 
@@ -112,6 +118,11 @@
 | GI-WEB-13 | 宿主切浅主题 / 深主题 | 甘特所有元素（条/轴/今日线/依赖线/里程碑/未排期徽标）在两主题下均可读、对比足够；**无硬编码 hex 导致的深底浅字糊一团** | GUI | ✅ PASS（浅 10-gantt-light / 深 16·17 bodyBg=rgb(21,21,23) 均可读；色值全 `--dsw-alias-*`，CSS 块无 hex） |
 | GI-WEB-14 | 窄窗（真 viewport ~390px） | 甘特不横向破版：标签列可压缩/省略，画布横滚；tick 不重叠（沿用 v0.6.0 反馈的 `sampleGanttTicks` 策略）；无文字裁切关键信息丢失 | GUI | 🟡 MANUAL_PENDING（实测视口 768px，未驱动真 390 窄窗；沿用 PL-WEB-11 口径留人工窄窗确认，不阻塞自动化） |
 | GI-WEB-15 | 全程查网络面板 + storage sha | 视图浏览/tooltip/拖拽预览**零写**；仅松手落库那一条写命令且 payload 白名单（§GI-WRITE-01）；隔离 storage 其余业务 JSON sha 不变 | GUI | ✅ PASS（正式 data/backups/exports 157 文件 before=after，changed/added/removed=0；console/pageerror=0） |
+| GI-WEB-16 | 隔离实例拖拽任务条右移，松手后**不刷新页面**直接观察甘特 | 甘特画布 DOM **仍在**（无白屏/整树重挂载闪烁/路线跳变）；被拖条与左标签列起止日期**立即**=拖拽后新值；**无需 F5/切 tab 即生效**（`refresh()` 后就地更新，不跳回首条/不滚顶） | GUI | ✅ PASS（真 Chrome 隔离 3120：t-0005 条 geom 480px/64px→528px/64px，dates 10-15~10-18→10-18~10-21 无 reload；bars=9/svg=1/path=1/arrow=1 均在，clientW=768，noNaN=true；dom-before/dom-after-success.json + 11 截图） |
+| GI-WEB-17 | 同 GI-WEB-16 拖拽成功后观察确认提示 | **不**出现覆盖甘特工作台的全局全字段深色大卡（任务ID/WBS/项目/父任务/标题/说明/负责人/状态/优先级…多行 dump 的 `.pm-notice`）；确认走条下/状态行**轻量内联文案**（『已更新：起 ~ 止』）；确认后**无需关闭任何卡片**即可继续横滚/再拖/切 tab，甘特始终可交互 | GUI | ✅ PASS（拖后 `.pm-notice` count=0、texts=[]；内联 `role=status`=『已更新：2026-10-18 ~ 2026-10-21』；~3.5s 后内联自动清空仍无 Notice；11-after-success-drag.png 对比附件旧版全屏大卡已消除） |
+| GI-WEB-18 | 故障注入拖拽失败（ok=false）后观察条体与提示 | 条体**回到拖前位置**（不卡在 ghost 预览位、无残影）；可见错误提示『更新失败，请重试』类内联/错误态文案；**不静默成功、不落库**（server 端该任务日期未变） | GUI | ✅ PASS（只读缝 chmod 555/444 注入写失败：内联『更新失败，请重试』+ 全局红 toast『任务操作失败…』不被 quiet 吞；t-0005 geom 576px/64px 前后一致无 ghost；磁盘 updAt/dates 未变；dom-fault.json + 15-fault-injection.png） |
+| GI-WEB-19 | 连续动作序列：①同一条快速连续拖两次；②拖落定后紧接一次 <4px 纯点击；③在画布区触控板/滚轮横滚 | ①两次拖拽各自落定、无重叠 ghost、无 `barRef` 错位产生的越界/重复写命令；②纯点击正确**打开任务抽屉**且**不二次落库**（`draggedRef` 拖后正确复位）；③横滚**不**触发任何拖拽预览/写命令 | GUI | ✅ PASS（①连拖两次仅落≈1 步 due 10-21→10-24 shift≈3 非 6，taskFiles 恒 10；②<4px 点击 dialog 打开且 t-0004 updAt/dates 未变；③scrollLeft=220 后拖 t-0002 正常 10-05~10-08→10-08~10-11 bars=9；results-drag.json） |
+| GI-WEB-20 | 拖父任务派生条（`.pm-gantt-bar--parent`）+ 全程正式数据零写巡检 | 父条 pointerdown **不下发写命令、拖不动**（零写，与 `if(!range.derived)` 分支一致）；隔离实例独立 `DSH_HOME`+独立端口，正式 3080/3091 未触；正式 data/backups/exports 文件 sha256/mtime 前后**零变化** | GUI+INT | ✅ PASS（拖父 t-0006 后父 10-20~10-24 不变、子 t-0007 不被牵连；隔离 3120/PID 86864 收尾 EXITED，正式 3080=69064/3091=69065 PID 未变；正式 data/backups/exports 本批 **156 文件 before==after** changed/added/removed=0；独立 `lsof`+`find` 复核一致） |
 
 ## 7. 多人协作红线门（未来向，AUTO + GUI）
 
@@ -130,10 +141,12 @@
 - **真窄窗 390px**：GI-WEB-14 实测视口 768px，未驱动真 390 窄窗，按 MANUAL_PENDING 留人工（与 people-load PL-WEB-11 同处理），不阻塞自动化。
 - **屏幕阅读器实测**：GI-WEB-08 以 aria-label/SVG `<title>` 静态+DOM 实测覆盖；真实读屏器朗读若需复验留人工，不冒充 PASS。
 - **拖拽手感（像素级）**：只验收"不误触/可预览/落库白名单/不破坏依赖与进度"，不验收具体动画曲线；视觉美化类不列入阻塞。
+- **v0.7.2 拖拽成功提示形态（2026-10-14 冻结）**：用户实测反馈全字段深色大卡盖住工作台。新增 GI-WRITE-06/07、GI-WEB-16~20 共 7 项**最小回归，全部 NOT_RUN**；只冻结口径，**测试专家不改产品代码、不提交**，待隔离真实浏览器实测后判 PASS/FAIL。失败形态以服务端 ok=false 故障注入为准，不要求真实并发冲突（多人协作期另议）。
 
 ## 9. 计数与门控（最终范围内结论）
 
-- **范围内总计 35 项**（剔除 deferred 关键路径 5 项后）：AUTO 纯函数 11 + INT 写路径 5 + GUI 15 + 协作红线 4。
-- **范围内 PASS = 34/35**；MANUAL_PENDING = 1（GI-WEB-14 真 390 窄窗，不阻塞，待用户人工反馈闭环）；**FAIL / BLOCKED = 0**。
+- **上轮范围内总计 35 项**（剔除 deferred 关键路径 5 项后）：AUTO 纯函数 11 + INT 写路径 5 + GUI 15 + 协作红线 4。
+- **上轮范围内 PASS = 34/35**；MANUAL_PENDING = 1（GI-WEB-14 真 390 窄窗，不阻塞，待用户人工反馈闭环）；**FAIL / BLOCKED = 0**。
 - **Deferred = 5**：GI-CP-01~05 关键路径高亮，本轮不做、不计失败、不计入当前范围。
-- 门控结论：**范围内 PASS（34/35，1 项 MANUAL_PENDING 不阻塞）**；零 schema、零正式数据污染（157 文件）、零 console/pageerror。正式发版前需用户人工确认 GI-WEB-14 窄窗观感。
+- **v0.7.2 缺陷冻结最小回归（7 项）最终结论：全部 ✅ PASS**：GI-WRITE-06（故障注入回落+零写）、GI-WRITE-07（白名单+重启读回）、GI-WEB-16（DOM 在/日期即时更新无需刷新）、GI-WEB-17（成功 Notice 不替换工作台）、GI-WEB-18（失败回落原图并提示）、GI-WEB-19（快速连拖/拖后点击/横滚）、GI-WEB-20（父条不可拖+正式数据隔离）。证据 `verification/gui-gantt-drag-hotfix-20261014/`；正式 156 文件 before==after 零污染。**不计入上轮 34/35**，但本批 7/7 PASS。
+- 门控结论：**上轮范围内 PASS（34/35，1 项 MANUAL_PENDING 不阻塞）+ v0.7.2 拖拽热修回归 7/7 PASS**；零 schema、零正式数据污染（本批 156 文件）、零 console/pageerror。正式发版前需用户人工确认 GI-WEB-14 窄窗观感；**v0.7.2 拖拽手感缺陷已闭环**。

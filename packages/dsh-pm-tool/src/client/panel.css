@@ -900,7 +900,10 @@
 .pm-menu-divider { height: 1px; background: var(--pm-line); margin: 2px 0; }
 .pm-menu-note { font-size: 10px; line-height: 1.4; color: var(--pm-muted); margin: 2px 4px; padding: 0; }
 
-.pm-gantt { display: flex; align-items: flex-start; padding: 8px 0; border: 1px solid var(--pm-line); border-radius: 8px; background: var(--pm-surface); }
+/* flex-wrap:wrap 是 GI-WEB-16 首行宽度契约根因修复：无 wrap 时 hint(flex-basis:100%) 与
+   labels/scroll 挤在同一 flex 行竞争，scroll 被 shrink 到 0（画布宽消失）。wrap 后 hint 独占
+   下一行，首行恒为 labels(固定 230px)+scroll(flex:1,min-width:0)，hint 出现/消失不改变首行宽度。 */
+.pm-gantt { display: flex; flex-wrap: wrap; align-items: flex-start; padding: 8px 0; border: 1px solid var(--pm-line); border-radius: 8px; background: var(--pm-surface); }
 .pm-gantt-labels { flex: 0 0 230px; width: 230px; border-right: 1px solid var(--pm-line); padding-right: 10px; }
 .pm-gantt-label { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; font-size: 11px; white-space: nowrap; overflow: hidden; }
 .pm-gantt-label--head { font-size: 10px; color: var(--pm-muted); border-bottom: 1px solid var(--pm-line-soft); }

@@ -361,12 +361,14 @@ export function PmPanel({ execute }: PmPanelApi) {
     }
   }, [topMenuOpen])
 
-  const run = async (line: string) => {
+  // quiet：专用执行（甘特拖拽等就地反馈场景）。成功只 refresh 一次、不弹全字段大 Notice；
+  // 但 catch 仍 setMessage——quiet 绝不吞掉错误提示。非 quiet 行为与原先完全一致。
+  const run = async (line: string, options?: { quiet?: boolean }): Promise<boolean> => {
     setBusy(true)
     try {
       const response = await execute(line)
       await refresh()
-      setMessage(response)
+      if (!options?.quiet) setMessage(response)
       return true
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error))
@@ -713,7 +715,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
-              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onSaved={() => void refresh()} onEdit={task => setDrawer({ kind: 'task', task })}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })}/>}
               {view === 'people' && <PeopleView
                 data={data}
                 onPickProject={(id) => setSelected(id)}
@@ -2763,19 +2765,35 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
 
 /** PROD-22 方案A：甘特排期（左标签列 + 时间轴条；点击打开抽屉，拖拽平移改期）。
  *  只读派生：依赖线/父条范围/进度填充全部由既有字段渲染，绝不回写；拖拽落库白名单仅 start/due。 */
-function GanttView({ tasks, milestones, run, onSaved, onEdit }: {
+function GanttView({ tasks, milestones, run, onEdit }: {
   tasks: Task[]
   milestones: Milestone[]
-  run: (line: string) => Promise<boolean>
-  onSaved: () => void
+  run: (line: string, options?: { quiet?: boolean }) => Promise<boolean>
   onEdit?: (task: Task) => void
 }) {
   const axis = dateRange([...tasks, ...milestones])
   const today = localTodayIso() // 本地日期，避免 UTC 偏移把今天画到昨天
-  const [dragOver, setDragOver] = useState('')
+  // 轻量 aria-live 状态行（GI-WEB-17）：成功『已更新：起 ~ 止』数秒自清除；失败『更新失败，请重试』。
+  const [statusMsg, setStatusMsg] = useState('')
+  // inflight（GI-WRITE-06/GI-WEB-19）：保存中同任务/甘特拖拽禁用，防并发连拖覆盖；结束后解锁。
+  const [saving, setSaving] = useState(false)
   const [preview, setPreview] = useState<{ id: string, shiftDays: number } | null>(null)
   const barRef = useRef<{ id: string, startX: number } | null>(null)
   const draggedRef = useRef(false)
+  const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // unmount 清定时器：快速连续拖/切视图不得有陈旧定时器回写旧状态。
+  useEffect(() => () => {
+    if (statusTimer.current) clearTimeout(statusTimer.current)
+  }, [])
+  const showStatus = (text: string, ttlMs = 3000) => {
+    setStatusMsg(text)
+    if (statusTimer.current) clearTimeout(statusTimer.current)
+    statusTimer.current = setTimeout(() => {
+      setStatusMsg('')
+      statusTimer.current = null
+    }, ttlMs)
+  }
 
   if (!axis) return <p className="pm-cell-empty pm-gantt">暂无带起止日期的任务/里程碑，无法绘制时间轴。</p>
   const axisDays = Math.max(1, daysFrom(axis.end, axis.start) + 1)
@@ -2796,6 +2814,7 @@ function GanttView({ tasks, milestones, run, onSaved, onEdit }: {
   const edges = dependencyEdges(tasks.map(t => ({ ...t })), axis.start, PX)
 
   const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
+    if (saving) return // 保存中禁拖：防并发连拖同一任务覆盖（GI-WEB-19）
     draggedRef.current = false
     barRef.current = { id: task.id, startX: e.clientX }
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
@@ -2809,17 +2828,28 @@ function GanttView({ tasks, milestones, run, onSaved, onEdit }: {
   const onPointerUpBar = async (e: React.PointerEvent, task: Task) => {
     const startX = barRef.current?.startX
     barRef.current = null
-    setPreview(null)
+    setPreview(null) // 立即清 ghost 预览：失败时条体保持原坐标，无残影（GI-WEB-18）
     if (startX === undefined || !task.startDate || !task.dueDate) return
     const deltaPx = e.clientX - startX
     if (Math.abs(deltaPx) < 4) return
     draggedRef.current = true
     // 白名单 payload：只含 startDate/dueDate，不碰 progress/predecessorIds/status
     const next = shiftDatesByDrag(task.startDate, task.dueDate, deltaPx, PX)
-    setDragOver(`${task.title} → ${next.startDate} ~ ${next.dueDate}`)
-    const ok = await run(`task update ${task.id} ${JSON.stringify(next)}`)
-    setDragOver(ok ? `已更新：${next.startDate} ~ ${next.dueDate}` : '更新失败，请重试')
-    if (ok) onSaved()
+    setSaving(true)
+    let ok = false
+    try {
+      // quiet 成功：不弹全字段大 Notice；run 内已 refresh 一次（GI-WEB-16 就地更新），
+      // 不再 onSaved() 二次刷新；失败时全局错误 Notice 由 run 的 catch 保留，不吞错。
+      ok = await run(`task update ${task.id} ${JSON.stringify(next)}`, { quiet: true })
+    } finally {
+      setSaving(false) // 无论成败都解锁，finally 防漏
+    }
+    if (ok) {
+      showStatus(`已更新：${next.startDate} ~ ${next.dueDate}`)
+    } else {
+      // 内联错误态：条体从未本地改动，快照未 refresh 自然回落拖前坐标
+      showStatus('更新失败，请重试', 6000)
+    }
   }
   const openBar = (task: Task) => {
     // 拖拽改期后不触发打开抽屉，避免误开。
@@ -2957,7 +2987,7 @@ function GanttView({ tasks, milestones, run, onSaved, onEdit }: {
         )}
       </div>
     </div>
-    {dragOver && <p className="pm-gantt-hint">{dragOver}</p>}
+    {statusMsg && <p className="pm-gantt-hint" role="status" aria-live="polite">{statusMsg}</p>}
   </div>
 }
 
