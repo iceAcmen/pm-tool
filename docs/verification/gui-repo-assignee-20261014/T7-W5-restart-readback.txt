@@ -1,0 +1,15 @@
+T7-W5 重启读回（隔离 3096，重启宿主后）
+client lib/client.js sha256 = e75ee229a067b64f8c8d546410ec50ba19f723acfca405ceeb1111a62135cfbd
+
+T3 (项目A) 详情链接行：
+  label = https://github.com/org/r.git@main
+  anchor href = https://github.com/org/r.git
+  target = _blank
+  rel = noopener noreferrer
+重启前后值一致，未变。
+
+T8-W6 重启后 t1.json assignee 读回：
+  t1.assignee = 新人王五
+重启后执行人 datalist 候选 = ['Alice','Bob','新人王五','张三,李四','张三']
+  - Alice 仅 1 条（alice/ALICE/'  alice  ' 已 casefold+trim 归一）
+  - 新人王五（自由输入）已入候选列表

@@ -18,9 +18,52 @@ export interface ProjectFormValues {
   branch?: string
 }
 
-// 与服务端 core/project.ts 保持一致的宽松正则（离线、不联网探测）。
+// 与服务端 core/project.ts / core/repo.ts 保持一致的宽松正则（离线、不联网探测）。
+// project / task / deliverable 三级共用下方 repoFieldErrors，禁止各抄一份文案/正则，避免前后端漂移。
 const repoUrlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*|git:\/\/[^\s/$.?#].[^\s]*|git@[A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+(?:\/[^\s]*))$/
 const branchPattern = /^[A-Za-z0-9._][A-Za-z0-9._/-]{0,63}$/
+
+/**
+ * 共享「仓库地址 / 分支名」一对可选字段的内联校验（T7 扩到 task / deliverable 两级）。
+ * 留空合法（可选字段）；任一填写即按宽松 git/URL 白名单校验。中文文案与服务端
+ * core/repo.ts validateRepoRelation 逐字一致，三级复用、不得改写。
+ * 通过返回 `{}`。键固定为 'repoUrl' / 'branch'，便于 <input name> 与 aria-describedby 关联。
+ */
+export function repoFieldErrors(repoUrl: string | undefined, branch: string | undefined): FormFieldErrors {
+  const errors: FormFieldErrors = {}
+  const url = (repoUrl ?? '').trim()
+  if (url && !repoUrlPattern.test(url)) {
+    errors.repoUrl = '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式'
+  }
+  const br = (branch ?? '').trim()
+  if (br && !branchPattern.test(br)) {
+    errors.branch = '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）'
+  }
+  return errors
+}
+
+/**
+ * T7/S3：拼装「更新」时的 repoUrl/branch 落盘字段。
+ * **始终带上 trim 后的值（可为空串 ''）**——core `...current, ...fields` 合并后由
+ * `omitEmptyRepoKeys` 把空串删键；若这里 omit（undefined），core 会回退成 current 旧值，
+ * 导致「表单清空却没删掉旧仓库」。填写时原值往返，清空时显式传空串。
+ */
+export function repoFieldsForUpdate(repoUrl: string | undefined, branch: string | undefined): { repoUrl: string, branch: string } {
+  return { repoUrl: (repoUrl ?? '').trim(), branch: (branch ?? '').trim() }
+}
+
+/**
+ * 拼装「创建」时的 repoUrl/branch 落盘字段：空（trim 后）即省略该键，不写空串。
+ * 创建无旧值需要回退，省略即可；与项目创建既有口径一致。
+ */
+export function repoFieldsForCreate(repoUrl: string | undefined, branch: string | undefined): { repoUrl?: string, branch?: string } {
+  const url = (repoUrl ?? '').trim()
+  const br = (branch ?? '').trim()
+  return {
+    ...(url ? { repoUrl: url } : {}),
+    ...(br ? { branch: br } : {}),
+  }
+}
 
 /** 里程碑表单需要即时校验的字段。 */
 export interface MilestoneFormValues {
@@ -67,15 +110,8 @@ export function validateProjectForm(values: ProjectFormValues): FormFieldErrors 
     errors.targetDate = '完成日期不得早于开始日期'
   }
 
-  // 仓库地址/分支：留空合法（可选字段），填写即须符合宽松 git/URL 格式。
-  const repoUrl = (values.repoUrl ?? '').trim()
-  if (repoUrl && !repoUrlPattern.test(repoUrl)) {
-    errors.repoUrl = '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式'
-  }
-  const branch = (values.branch ?? '').trim()
-  if (branch && !branchPattern.test(branch)) {
-    errors.branch = '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）'
-  }
+  // 仓库地址/分支：留空合法（可选字段），填写即须符合宽松 git/URL 格式（三级共享口径）。
+  Object.assign(errors, repoFieldErrors(values.repoUrl, values.branch))
   return errors
 }
 

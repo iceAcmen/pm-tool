@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { projectIdSchema } from './project.js'
 import { milestoneIdSchema } from './milestone.js'
 import { TASK_STATUSES, taskStatusLabels } from './status.js'
+import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRelation } from './repo.js'
 
 export const taskIdSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/, '任务 ID 只能包含字母、数字、下划线和连字符')
 export const taskStatusSchema = z.enum(TASK_STATUSES)
@@ -27,6 +28,10 @@ const taskFields = {
   // PROD-11 前置依赖：optional，缺省即无前缀（v1 旧记录无此键按 [] 处理）。
   // 写业务层负责存在/同项目/自指/DAG 成环校验；空数组在落盘前归一化为缺键。
   predecessorIds: z.array(taskIdSchema).optional(),
+  // v0.7 PROD-21 扩展：任务级仓库链接，optional 缺省即空（旧记录无此两键照常读取）。
+  // 校验口径与 project / deliverable 共享（core/repo.ts），全程离线不联网探测。
+  repoUrl: repoUrlFieldSchema,
+  branch: branchFieldSchema,
 }
 
 function validateDateOrder(
@@ -47,7 +52,9 @@ export const taskRecordSchema = z.strictObject({
   updatedAt: z.iso.datetime(),
 })
 
-export const taskWriteSchema = taskRecordSchema.superRefine(validateDateOrder)
+export const taskWriteSchema = taskRecordSchema
+  .superRefine(validateDateOrder)
+  .superRefine(validateRepoRelation)
 
 export const taskCreateSchema = z.strictObject({
   projectId: taskFields.projectId,
@@ -62,7 +69,9 @@ export const taskCreateSchema = z.strictObject({
   progress: taskFields.progress.default(0),
   milestoneId: milestoneIdSchema.nullable().default(null),
   predecessorIds: taskFields.predecessorIds,
-}).superRefine(validateDateOrder)
+  repoUrl: taskFields.repoUrl,
+  branch: taskFields.branch,
+}).superRefine(validateDateOrder).superRefine(validateRepoRelation)
 
 /** 更新不允许直接改变归属、父任务、编号、顺序与时间戳；移动使用独立动作。 */
 export const taskUpdateSchema = z.strictObject({
@@ -76,7 +85,10 @@ export const taskUpdateSchema = z.strictObject({
   progress: taskFields.progress.optional(),
   milestoneId: milestoneIdSchema.nullable().optional(),
   predecessorIds: taskFields.predecessorIds,
-}).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
+  repoUrl: taskFields.repoUrl,
+  branch: taskFields.branch,
+}).superRefine(validateRepoRelation)
+  .refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 export type Task = z.infer<typeof taskRecordSchema>
 export type TaskUpdate = z.infer<typeof taskUpdateSchema>
@@ -95,6 +107,7 @@ export function describeTaskValidation(error: z.ZodError): string {
     progress: '进度（0 到 100 的整数）',
     milestoneId: '里程碑 ID 或 null',
     predecessorIds: '前置依赖任务 ID 数组（须同项目、存在、不自指、不成环）',
+    ...repoFieldLabels,
   }
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'

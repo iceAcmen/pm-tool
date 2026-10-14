@@ -64,6 +64,7 @@ export const taskHelp = [
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
   'milestoneId 必须指向同项目已存在里程碑；ID、WBS 编号、同级顺序和时间戳由系统生成。',
+  'repoUrl/branch 可选（http(s)://、git:// 或 git@host:org/repo.git；branch ≤64 字符），传空串即清除；全程离线不探测。',
 ].join('\n')
 
 function renderTask(task: Task): string {
@@ -81,6 +82,7 @@ function renderTask(task: Task): string {
     `截止日期：${task.dueDate ?? '未填写'}`,
     `进度：${task.progress}%`,
     `里程碑：${task.milestoneId ?? '无'}`,
+    `仓库：${task.repoUrl ? `${task.repoUrl}${task.branch ? `@${task.branch}` : ''}` : '未填写'}`,
     `创建时间：${task.createdAt}`,
     `更新时间：${task.updatedAt}`,
   ].join('\n')

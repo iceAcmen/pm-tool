@@ -7,6 +7,7 @@ import {
   type Project,
   type ProjectUpdate,
 } from './project.js'
+import { omitEmptyRepoKeys } from './repo.js'
 import type { PmDomain } from './storage.js'
 
 // 跨记录校验与写盘须共享队列，避免并发新增/改名绕过同名检查。
@@ -88,9 +89,8 @@ export function updateProject(
       createdAt: current.createdAt,
       updatedAt: new Date().toISOString(),
     }
-    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
-    if (nextInput.repoUrl === '') delete nextInput.repoUrl
-    if (nextInput.branch === '') delete nextInput.branch
+    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录（与 task / deliverable 共享口径）。
+    omitEmptyRepoKeys(nextInput)
     const next = projectWriteSchema.parse(nextInput)
     const conflicting = fields.name !== undefined && fields.name !== current.name
       ? findProjectByName(domain, next.name, id)

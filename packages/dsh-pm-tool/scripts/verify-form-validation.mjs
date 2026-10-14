@@ -17,6 +17,9 @@ import {
   isRealIsoDate,
   validateProjectForm,
   validateMilestoneForm,
+  repoFieldErrors,
+  repoFieldsForUpdate,
+  repoFieldsForCreate,
   firstInvalidField,
 } from '../lib/client/form-validation.js'
 
@@ -69,6 +72,45 @@ assert.deepEqual(goodMilestone, {}, '合法里程碑应无错误')
 
 const badMilestoneDate = validateMilestoneForm({ title: 'Alpha', targetDate: '2026-13-01' })
 assert.equal(badMilestoneDate.targetDate, '日期须为有效的 YYYY-MM-DD')
+
+// ---- T7：三级共享 repoFieldErrors（project/task/deliverable 同一口径，不漂移）----
+// 留空合法：可选字段，空/纯空白都不报错。
+assert.deepEqual(repoFieldErrors('', ''), {}, '空仓库地址/分支应通过（可选）')
+assert.deepEqual(repoFieldErrors(undefined, undefined), {}, 'undefined 应等同空')
+assert.deepEqual(repoFieldErrors('   ', '  '), {}, '纯空白应通过（交落盘时删键）')
+
+// 合法三形都通过。
+for (const url of ['https://github.com/org/repo.git', 'git://gitlab.com/org/repo', 'git@github.com:org/repo.git']) {
+  assert.deepEqual(repoFieldErrors(url, 'main'), {}, `合法仓库地址应通过：${url}`)
+}
+// 非法 repoUrl 中文文案（与服务端 core/repo.ts 逐字一致）。
+assert.equal(repoFieldErrors('not a url', 'main').repoUrl, '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式')
+assert.equal(repoFieldErrors('中文仓库', 'main').repoUrl, '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式')
+// 非法 branch：空白、危险符。
+assert.equal(repoFieldErrors('', 'bad~branch').branch, '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）')
+assert.equal(repoFieldErrors('', 'x y').branch, '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）')
+assert.deepEqual(repoFieldErrors('', 'feature/x-1'), {}, '合法分支 feature/x-1 应通过')
+// 两个字段独立报错、互不牵连。
+const bothBad = repoFieldErrors('nope', 'x y')
+assert.equal(bothBad.repoUrl, '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式')
+assert.equal(bothBad.branch, '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）')
+// project 表单仍复用同一共享函数（不漂移）：带非法仓库的项目表单仍报同一中文文案。
+const projBadRepo = validateProjectForm({ name: '官网', startDate: '2026-10-01', targetDate: '2026-12-31', repoUrl: 'not a url' })
+assert.equal(projBadRepo.repoUrl, '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式')
+
+// ---- S3：项目级 repo 清空契约（update 显式传 trim 空串让 core 删键；create 省略空）----
+// update：无论是否填写都带 repoUrl/branch（trim 后值）。清空时是空串 '' —— core 据 omitEmptyRepoKeys
+// 删键；**绝不 omit**，否则 core `...current, ...fields` 会回退成旧值（这正是要修的 bug）。
+assert.deepEqual(repoFieldsForUpdate('', ''), { repoUrl: '', branch: '' }, 'update 清空必须显式带空串（core 再删键）')
+assert.deepEqual(repoFieldsForUpdate(undefined, undefined), { repoUrl: '', branch: '' }, 'undefined 归一为空串')
+assert.deepEqual(repoFieldsForUpdate('  https://github.com/org/r.git  ', '  main '), {
+  repoUrl: 'https://github.com/org/r.git', branch: 'main',
+}, 'update 填值 trim 后原值往返')
+assert.deepEqual(repoFieldsForUpdate('https://x.git', ''), { repoUrl: 'https://x.git', branch: '' }, '清 branch 不影响 repoUrl')
+// create：空即省略键（不写空串），与既有项目创建口径一致。
+assert.deepEqual(repoFieldsForCreate('', ''), {}, 'create 空仓库应省略两键')
+assert.deepEqual(repoFieldsForCreate(undefined, '  '), {}, 'create 纯空白也省略')
+assert.deepEqual(repoFieldsForCreate('https://x.git', 'main'), { repoUrl: 'https://x.git', branch: 'main' }, 'create 填值带上')
 
 console.log('通过：isRealIsoDate 接受真实日历日、拒绝 2/30 与越界/未补零。')
 console.log('通过：项目表单缺值逐字段报错、target<start 定位 targetDate、纠正后错误清空。')

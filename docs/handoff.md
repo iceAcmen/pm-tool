@@ -191,10 +191,10 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 - 公钥指纹：`SHA256:ajsc0fagRHsCMz1C0aEUUKYmny4EC9TeY6PwKTHY3pk`。
 - 换新机器时：重新生成密钥并把新公钥登记到 GitHub，再执行上面的 clone 即可。
 
-# 持久交接（TRAE 不必重梳理，版本事实统一线 @ 4a8ff63；v0.6.1 最终可发布，tag 将在最终提交创建）
+# 持久交接（TRAE 不必重梳理，版本事实统一线 @ 37cbcca；v0.7.0 最终可发布，tag 将在最终提交创建）
 ## 仓库
 - 插件：packages/dsh-pm-tool；上游 deepseek-harness 只读。
-- **版本口径（2026-10-14 v0.6.1 最终可发布）**：`package.json` = `0.6.1`；已发布 tag `v0.1.0`–`v0.6.0`（均注解 tag）。**v0.6.0 已发布**：tag 对象 `32659c40` → 提交 `23873fcb`（2026-10-13 19:38:02）。**v0.6.1 独立测试专家已最终签 PASS、可发布**：UX 14/14 PASS、53 verify scripts 全绿、157 资产 guard 零变化、client bundle `d43353ea`；注解 tag 将在最终提交时创建（最终 release commit SHA 待定）。v0.5.0 tag 对象 `c8d3da52` → 提交 `81c5a112`；tag 对象与剥离提交是两个 SHA，勿混为"对不上"。
+- **版本口径（2026-10-14 v0.7.0 最终可发布）**：`package.json` = `0.7.0`；已发布 tag `v0.1.0`–`v0.6.1`（均注解 tag）。**v0.6.1 已发布**：tag 对象 `94657fe2` → 提交 `38f3512d`。**v0.7.0 独立测试专家已最终签 PASS、可发布**：T7/T8 30/30 PASS、client bundle 完整哈希 `e75ee229…`、全量 verify 全绿、guard 零污染；注解 tag 将在最终提交时创建（当前 HEAD `37cbcca`，最终 release commit SHA 待定）。v0.5.0 tag 对象 `c8d3da52` → 提交 `81c5a112`；tag 对象与剥离提交是两个 SHA，勿混为"对不上"。
 ## 运行
 - 构建：`cd packages/dsh-pm-tool && pnpm run build`。
 - 全量非GUI回归：`node scripts/verify-integration.mjs`（已含 spawn 子进程 reopen 读盘）；再 `for f in scripts/verify-*.mjs; do node $f; done`。
@@ -203,5 +203,5 @@ pnpm dsh --profile pm --no-open     # 终端打印带 token 的 http://127.0.0.1
 - ask-apply 去重为内存 60s，重启不持久；写库走 updateTask 领域校验；--base 必带且格式校验。
 - backup 默认目录 = 仓库 `packages/backups/`（源码 `BUILTIN_DEFAULT = '../../../backups/'`，相对 `packages/dsh-pm-tool/lib/core/backup.js` 解析即 `packages/backups/`；**不是** `packages/dsh-pm-tool/backups/`、也不是仓库根 `backups/`）。取值优先级：**显式 directory 参数 > 环境变量 `DSH_PM_BACKUP_DIR` > builtin**；测试用注入 directory 隔离。v0.6.1 起恢复队列化、失败自动回滚。
 ## 未覆盖
-- **v0.6.1 已最终签 PASS、待最终提交打 tag**：UX 反馈回归 14/14 PASS、后端 53 verify scripts 全绿、157 资产 guard 零变化、client bundle `d43353ea`。用户已授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，等用户最终通知执行最终提交并打注解 tag。
-- 已确认：深色错误对比度用户目视已通过。**PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key**，本轮 UX 验证已走通；**仅生产（prod）真实 Key 缺配（M-01），MANUAL_PENDING，不阻塞 v0.6.1 发布**。G8/H5 不可逆人工动作仍 MANUAL_PENDING。
+- **v0.7.0 已最终签 PASS、待最终提交打 tag**：T7/T8 30/30 PASS、client bundle `e75ee229…`、全量 verify 全绿、guard 零污染。用户已授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，等用户最终通知执行最终提交并打注解 tag。
+- 已确认：深色错误对比度用户目视已通过。**PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key**；**仅生产（prod）真实 Key 缺配（M-01），MANUAL_PENDING，不阻塞 v0.7.0 发布**。G8/H5 不可逆人工动作仍 MANUAL_PENDING。

@@ -1,5 +1,6 @@
 /** 项目字段与运行时校验；字段来源：requirements v0.4 §4.1。 */
 import { z } from 'zod'
+import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRelation } from './repo.js'
 
 export const projectIdSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/, '项目 ID 只能包含字母、数字、下划线和连字符')
 export const projectStatusSchema = z.enum(['planning', 'active', 'paused', 'done', 'archived'])
@@ -24,25 +25,9 @@ const projectFields = {
   tags: z.array(z.string()).optional(),
   // PROD-21 项目级仓库：optional，缺省即空（v1 旧项目无此两键照常读取）。
   // 写时校验宽松 URL/git 正则与 branch 白名单；全程离线、不联网探测。
-  repoUrl: z.string().trim().optional(),
-  branch: z.string().trim().optional(),
-}
-
-// 宽松 git/URL：http(s)://host/path、git://host/path、或 scp 形 git@host:org/repo.git。
-const repoUrlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*|git:\/\/[^\s/$.?#].[^\s]*|git@[A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+(?:\/[^\s]*))$/
-// branch：首字符字母/数字/点/下划线，后续可含字母数字点下划线斜杠连字符；≤64；禁空白与 git 危险符。
-const branchPattern = /^[A-Za-z0-9._][A-Za-z0-9._/-]{0,63}$/
-
-function validateRepoRelation(
-  value: { repoUrl?: string, branch?: string },
-  context: z.RefinementCtx,
-): void {
-  if (value.repoUrl && !repoUrlPattern.test(value.repoUrl)) {
-    context.addIssue({ code: 'custom', path: ['repoUrl'], message: '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式' })
-  }
-  if (value.branch && !branchPattern.test(value.branch)) {
-    context.addIssue({ code: 'custom', path: ['branch'], message: '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）' })
-  }
+  // 口径与 task / deliverable 共享：见 core/repo.ts，禁止各抄一份正则。
+  repoUrl: repoUrlFieldSchema,
+  branch: branchFieldSchema,
 }
 
 function validateDateOrder(
@@ -96,8 +81,7 @@ export function describeProjectValidation(error: z.ZodError): string {
     startDate: '开始日期（有效 YYYY-MM-DD）',
     targetDate: '完成日期（有效 YYYY-MM-DD）',
     tags: '标签（文本数组）',
-    repoUrl: '仓库地址（http(s)://、git:// 或 git@host:org/repo.git）',
-    branch: '分支名（≤64 字符，不含空白与特殊符号）',
+    ...repoFieldLabels,
     id: '项目 ID（字母、数字、下划线、连字符）',
   }
   return [...new Set(error.issues.map(issue =>

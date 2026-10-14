@@ -8,6 +8,20 @@
 
 ---
 
+## [v0.7.0] 最终可发布：仓库链接（T7）+ 跨项目负责人补全（T8）（2026-10-14，平台：doubao-work）
+
+> 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.6.1` 不移动。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.6.1` → **`0.7.0`**。
+  - `docs/releases/v0.7.0.md`：**新建（最终可发布）**，列 T7 仓库链接 + T8 人员补全，验收绿数按测试专家最终签门回填。
+  - `README.md`：版本导航表 v0.6.1 改标已发布（`94657fe2`→`38f3512d`）、新增 v0.7.0 可发布行；阶段导航对齐最终签 PASS。
+- **功能范围（v0.6.1 之后）**：T7——task/deliverable 可选 repoUrl/branch 共享验证、表单可编辑/只读链接、ProjectForm repo 清空；T8——跨项目负责人候选 datalist 五来源归一去重/自由输入/零持久化；另含表单 key 加固。
+- **验收（测试专家最终签 PASS）**：T7/T8 **30/30 全 PASS**（T7=18、T8=12）；client bundle 完整哈希 `e75ee229a067b64f8c8d546410ec50ba19f723acfca405ceeb1111a62135cfbd`；全量 verify scripts 全绿、隔离 guard 零污染。
+- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞发布）**；PoC `our-free-model`/`kilo-auto/free` 免费免 Key。G8/H5 不可逆动作维持 MANUAL_PENDING。
+- **影响范围 / 状态**：纯版本事实与文档口径；注解 tag 将在最终提交时创建。
+- **验证**：`node -e JSON.parse(package.json)` 通过；`git diff --check` 干净；verifier `check-file-format` 通过。
+
 ## [v0.6.1] 最终可发布：v0.6.0 UX 反馈补丁 + 后端数据安全（2026-10-14，平台：doubao-work）
 
 > 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户已授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.6.0` 不移动。

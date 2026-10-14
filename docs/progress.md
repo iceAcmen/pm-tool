@@ -155,9 +155,9 @@
 - 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。
 
-## 当前状态（v0.6.1 最终可发布 · tag 将在最终提交创建；v0.6.0 已发布）
-- **版本事实已前置到 v0.6.1（2026-10-14）**：`packages/dsh-pm-tool/package.json` = `0.6.1`。**v0.6.0 已正式发布**：注解 tag 对象 `32659c40` → 提交 `23873fcb`（2026-10-13 19:38:02）。v0.6.1 = v0.6.0 UX 反馈补丁 + 后端数据安全，**独立测试专家已最终签 PASS、可发布**；注解 tag 将在最终提交时创建（最终 release commit SHA 待最终提交后确定）。历史 tag `v0.1.0`–`v0.6.0` 均未移动。
-- **v0.6.1 补丁范围（v0.6.0 之后）**：UX 反馈 R1–R8——备份确认/路径恢复、长 Notice 可滚动、键盘 j/k/Space/门控、390 顶栏、移动/promote 入口、甘特 tick/unplanned/可点、副驾 loading/poc-prod lane、前置依赖紧凑树；后端数据安全——恢复队列化、批删全预检、exports guard、模型状态往返。详见 `docs/releases/v0.6.1.md`。
-- **验收（测试专家最终签 PASS）**：UX 反馈回归 **14/14 全 PASS**；后端安全 **53 个 verify scripts 全绿**；隔离 guard **157 个资产文件零变化**；client bundle 哈希 `d43353ea`。（v0.6.0 schema-v2 门：52 绿 + guard 151 零变化，绑 `17ccc82`+`4b533ad`。）
-- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.6.1 发布）**；PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key、本轮 UX 验证已走通。深色错误对比度用户目视已通过；G8/H5 不可逆动作仍 MANUAL_PENDING。
+## 当前状态（v0.7.0 最终可发布 · tag 将在最终提交创建；v0.6.1 已发布）
+- **版本事实已前置到 v0.7.0（2026-10-14）**：`packages/dsh-pm-tool/package.json` = `0.7.0`。**v0.6.1 已正式发布**：注解 tag 对象 `94657fe2` → 提交 `38f3512d`。v0.7.0 = 仓库链接（T7）+ 跨项目负责人补全（T8），**独立测试专家已最终签 PASS、可发布**；注解 tag 将在最终提交时创建（当前 HEAD `37cbcca`，最终 release commit SHA 待最终提交后确定）。历史 tag `v0.1.0`–`v0.6.1` 均未移动。
+- **v0.7.0 范围（v0.6.1 之后）**：T7——task/deliverable 可选 repoUrl/branch 共享验证、表单可编辑/只读链接、ProjectForm repo 清空；T8——跨项目负责人候选 datalist 五来源归一去重/自由输入/零持久化；另含表单 key 加固。详见 `docs/releases/v0.7.0.md`。
+- **验收（测试专家最终签 PASS）**：T7/T8 **30/30 全 PASS**（T7=18、T8=12）；client bundle 完整哈希 `e75ee229a067b64f8c8d546410ec50ba19f723acfca405ceeb1111a62135cfbd`；全量 verify scripts 全绿、隔离 guard 零污染。
+- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.7.0 发布）**；PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key。G8/H5 不可逆动作仍 MANUAL_PENDING。
 - **发布动作**：用户已授权最终发布/提交/正常 push/正式升级；本批**暂不 commit/tag/push**，待用户最终通知执行最终提交并打注解 tag。

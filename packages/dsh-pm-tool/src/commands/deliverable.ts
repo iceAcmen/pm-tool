@@ -27,6 +27,7 @@ export const deliverableHelp = [
   '状态支持 planned（计划中）/ in_progress（制作中）/ submitted（已提交）/ accepted（已验收）。',
   '版本或状态变化会自动追加一条变更留痕；删除不带 confirm 只显示提示。',
   '项目归属、ID、变更历史和时间戳创建后不可直接修改。',
+  'repoUrl/branch 可选（http(s)://、git:// 或 git@host:org/repo.git；branch ≤64 字符），传空串即清除；只改这两项不追加留痕，全程离线不探测。',
 ].join('\n')
 
 function renderDeliverable(record: Deliverable): string {
@@ -40,6 +41,7 @@ function renderDeliverable(record: Deliverable): string {
     `计划交付日期：${record.dueDate ?? '未填写'}`,
     `位置：${record.location || '未填写'}`,
     `说明：${record.description || '未填写'}`,
+    `仓库：${record.repoUrl ? `${record.repoUrl}${record.branch ? `@${record.branch}` : ''}` : '未填写'}`,
     `创建时间：${record.createdAt}`,
     `更新时间：${record.updatedAt}`,
   ]

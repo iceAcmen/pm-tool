@@ -7,6 +7,7 @@ import { diffAgainstPrevious } from '../core/report-diff.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
 import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIso } from '../core/derived.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
+import { listAssigneeCandidates } from '../core/people-candidates.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
@@ -46,7 +47,7 @@ import {
   type FocusDoc, type OpenerSpec,
 } from '../core/drawer-focus.js'
 import {
-  validateProjectForm, validateMilestoneForm, firstInvalidField,
+  validateProjectForm, validateMilestoneForm, repoFieldErrors, repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
   type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
 } from './form-validation.js'
 import styles from './panel.css?raw'
@@ -96,6 +97,8 @@ type Task = {
   progress: number
   milestoneId: string | null
   predecessorIds?: string[]
+  repoUrl?: string
+  branch?: string
 }
 
 type Milestone = {
@@ -205,6 +208,8 @@ type Deliverable = {
   history: DeliverableChange[]
   createdAt: string
   updatedAt: string
+  repoUrl?: string
+  branch?: string
 }
 
 type Snapshot = {
@@ -391,6 +396,15 @@ export function PmPanel({ execute }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
   [data.deliverables, selected])
+  // T8：assignee 候选只从**当前全量 snapshot** 跨项目派生（project.owner→task.assignee→
+  // riskIssue.owner→deliverable.owner→meeting.participants），纯内存、零写盘；刷新即重算。
+  const assigneeCandidates = useMemo(() => listAssigneeCandidates({
+    projects: data.projects,
+    tasks: data.tasks,
+    riskIssues: data.riskIssues,
+    deliverables: data.deliverables,
+    meetings: data.meetings,
+  }), [data])
 
   return <>
     <style>{styles}</style>
@@ -717,11 +731,13 @@ export function PmPanel({ execute }: PmPanelApi) {
           onSaved={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'task' && project && <TaskForm
+          key={drawer.task ? `task-${drawer.task.id}` : 'task-new'}
           projectId={project.id}
           task={drawer.task}
           tasks={tasks}
           milestones={milestones}
           meetings={data.meetings}
+          assigneeCandidates={assigneeCandidates}
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
@@ -758,6 +774,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           onSaved={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'deliverable' && project && <DeliverableForm
+          key={drawer.deliverable ? `deliverable-${drawer.deliverable.id}` : 'deliverable-new'}
           projectId={project.id}
           deliverable={drawer.deliverable}
           disabled={busy}
@@ -3094,19 +3111,19 @@ function ProjectForm({
     }
     // 前端校验通过后再交服务端；服务端 run 错误（重名等）仍由全局 Notice 展示，不在这里掩盖。
     const form = new FormData(event.currentTarget)
-    const repoUrl = values.repoUrl?.trim() ?? ''
-    const branch = values.branch?.trim() ?? ''
     const base = {
       description: form.get('description'),
       owner: form.get('owner'),
       startDate: values.startDate,
       targetDate: values.targetDate,
-      ...(repoUrl ? { repoUrl } : {}),
-      ...(branch ? { branch } : {}),
     }
+    // S3：update 显式带 trim 空串（core omitEmptyRepoKeys 删键 → 清空生效）；create 省略空。
+    const repoFields = project
+      ? repoFieldsForUpdate(values.repoUrl, values.branch)
+      : repoFieldsForCreate(values.repoUrl, values.branch)
     const payload = project
-      ? { name: values.name, status: form.get('status'), ...base }
-      : { name: values.name, ...base }
+      ? { name: values.name, status: form.get('status'), ...base, ...repoFields }
+      : { name: values.name, ...base, ...repoFields }
     const success = await run(project
       ? `project update ${project.id} ${JSON.stringify(payload)}`
       : `project add ${JSON.stringify(payload)}`)
@@ -3183,6 +3200,7 @@ function TaskForm({
   tasks,
   milestones,
   meetings,
+  assigneeCandidates,
   disabled,
   run,
   onSaved,
@@ -3193,6 +3211,8 @@ function TaskForm({
   tasks: Task[]
   milestones: Milestone[]
   meetings: Meeting[]
+  /** T8：执行人候选（跨项目全量派生，仅建议；不限制/不改写输入值）。 */
+  assigneeCandidates: string[]
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
@@ -3201,13 +3221,38 @@ function TaskForm({
   // PROD-10：任务由会议行动项 promote/关联而来时，抽屉顶部展示只读来源链接（前端反查全量 meetings，不落库）。
   const sources = task ? findMeetingSources(meetings, task.id) : []
   const primary = pickPrimarySource(sources)
+  // T7：可选 repoUrl/branch 受控（复用三级共享 form-validation 中文校验），编辑预填；
+  // 清空传空串，由 core omitEmptyRepoKeys 落盘删键（不写空串）。
+  const [repoValues, setRepoValues] = useState({ repoUrl: task?.repoUrl ?? '', branch: task?.branch ?? '' })
+  const [repoErrors, setRepoErrors] = useState<FormFieldErrors>({})
+  const setRepoField = (field: 'repoUrl' | 'branch', value: string) => {
+    setRepoValues(prev => {
+      const next = { ...prev, [field]: value }
+      setRepoErrors(repoFieldErrors(next.repoUrl, next.branch))
+      return next
+    })
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截、磁盘零写。
+    const nextRepoErrors = repoFieldErrors(repoValues.repoUrl, repoValues.branch)
+    setRepoErrors(nextRepoErrors)
+    if (Object.keys(nextRepoErrors).length > 0) {
+      const first = firstInvalidField(['repoUrl', 'branch'], nextRepoErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
     const form = new FormData(event.currentTarget)
     const parentId = String(form.get('parentId') ?? '')
     const milestoneId = String(form.get('milestoneId') ?? '')
     const startDate = String(form.get('startDate') ?? '')
     const dueDate = String(form.get('dueDate') ?? '')
+    // T7：trim 后空串照传，core 落盘时删键；非空传原值。局部更新不误触其它字段。
+    const repoUrl = repoValues.repoUrl.trim()
+    const branch = repoValues.branch.trim()
     // PROD-11：前置依赖整体替换（多选复选）；空数组即清空。
     const predecessorIds = form.getAll('predecessorIds').map(String)
     const payload = {
@@ -3221,6 +3266,8 @@ function TaskForm({
       progress: Number(form.get('progress')),
       milestoneId: milestoneId || null,
       predecessorIds,
+      repoUrl,
+      branch,
     }
     const createPayload = {
       projectId,
@@ -3235,6 +3282,8 @@ function TaskForm({
       progress: payload.progress,
       milestoneId: payload.milestoneId,
       ...(predecessorIds.length ? { predecessorIds } : {}),
+      ...(repoUrl ? { repoUrl } : {}),
+      ...(branch ? { branch } : {}),
     }
     const success = await run(task
       ? `task update ${task.id} ${JSON.stringify(payload)}`
@@ -3253,6 +3302,12 @@ function TaskForm({
         {sources.length > 1 && <span className="pm-source-extra">另 {sources.length - 1} 场</span>}
       </div>
     )}
+    {/* T7：当前已落盘仓库只读链接行（有地址才渲染，外链新标签安全打开；空不渲染空 anchor）。 */}
+    {task?.repoUrl && <div className="pm-repo-row" data-repo-link>
+      <GitBranch size={14}/>
+      <a href={task.repoUrl} target="_blank" rel="noopener noreferrer">{task.repoUrl}</a>
+      {task.branch && <span className="pm-muted">@{task.branch}</span>}
+    </div>}
     <Field label="任务名称" wide><input name="title" defaultValue={task?.title} required autoFocus/></Field>
     <Field label="任务说明" wide><textarea name="description" defaultValue={task?.description} rows={4}/></Field>
     {!task && <Field label="父任务"><select name="parentId" defaultValue="">
@@ -3267,7 +3322,13 @@ function TaskForm({
       <option value="P1">P1 - 一般</option>
       <option value="P2">P2 - 较低</option>
     </select></Field>
-    <Field label="执行人"><input name="assignee" defaultValue={task?.assignee}/></Field>
+    <Field label="执行人">
+      <input name="assignee" defaultValue={task?.assignee} list="pm-assignee-list" autoComplete="off"/>
+      {/* T8：候选只作下拉建议（不改写/不预填/不限制已有或新输的值），自由输入新人名照存。 */}
+      <datalist id="pm-assignee-list">
+        {assigneeCandidates.map(candidate => <option key={candidate} value={candidate}/>)}
+      </datalist>
+    </Field>
     <Field label="开始日期"><input name="startDate" type="date" defaultValue={task?.startDate}/></Field>
     <Field label="截止日期"><input name="dueDate" type="date" defaultValue={task?.dueDate}/></Field>
     <Field label="完成进度"><input name="progress" type="number" min="0" max="100" defaultValue={task?.progress ?? 0}/></Field>
@@ -3295,6 +3356,23 @@ function TaskForm({
           ))}
         </div>
       })()}
+    </Field>
+    {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
+    <Field label="仓库地址（可选）" wide error={repoErrors.repoUrl} errorId="task-repo-error">
+      <input
+        name="repoUrl" data-repo-field="repoUrl" value={repoValues.repoUrl} placeholder="https://host/org/repo.git"
+        onChange={e => setRepoField('repoUrl', e.currentTarget.value)}
+        aria-invalid={repoErrors.repoUrl ? true : undefined}
+        aria-describedby={repoErrors.repoUrl ? 'task-repo-error' : undefined}
+      />
+    </Field>
+    <Field label="分支（可选）" error={repoErrors.branch} errorId="task-branch-error">
+      <input
+        name="branch" data-repo-field="branch" value={repoValues.branch} placeholder="main"
+        onChange={e => setRepoField('branch', e.currentTarget.value)}
+        aria-invalid={repoErrors.branch ? true : undefined}
+        aria-describedby={repoErrors.branch ? 'task-branch-error' : undefined}
+      />
     </Field>
     <div className="pm-drawer-actions">
       {task && <button
@@ -3824,11 +3902,34 @@ function DeliverableForm({
   run: (line: string) => Promise<boolean>
   onSaved: () => void
 }) {
+  // T7：可选 repoUrl/branch 受控（三级共享中文校验），编辑预填；清空传空串由 core 删键。
+  const [repoValues, setRepoValues] = useState({ repoUrl: deliverable?.repoUrl ?? '', branch: deliverable?.branch ?? '' })
+  const [repoErrors, setRepoErrors] = useState<FormFieldErrors>({})
+  const setRepoField = (field: 'repoUrl' | 'branch', value: string) => {
+    setRepoValues(prev => {
+      const next = { ...prev, [field]: value }
+      setRepoErrors(repoFieldErrors(next.repoUrl, next.branch))
+      return next
+    })
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截。
+    const nextRepoErrors = repoFieldErrors(repoValues.repoUrl, repoValues.branch)
+    setRepoErrors(nextRepoErrors)
+    if (Object.keys(nextRepoErrors).length > 0) {
+      const first = firstInvalidField(['repoUrl', 'branch'], nextRepoErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
     const form = new FormData(event.currentTarget)
     const dueDate = String(form.get('dueDate') ?? '')
     const changeNote = String(form.get('changeNote') ?? '').trim()
+    const repoUrl = repoValues.repoUrl.trim()
+    const branch = repoValues.branch.trim()
     const common = {
       name: form.get('name'),
       version: String(form.get('version') ?? '').trim(),
@@ -3838,6 +3939,9 @@ function DeliverableForm({
       description: form.get('description'),
       dueDate: dueDate || null,
       ...(changeNote ? { changeNote } : {}),
+      // update 用 `fields.repoUrl ?? current`：清空必须显式传 ''（core 再删键），omit 会回退成旧值。
+      repoUrl,
+      branch,
     }
     const success = await run(deliverable
       ? `deliverable update ${deliverable.id} ${JSON.stringify(common)}`
@@ -3855,6 +3959,23 @@ function DeliverableForm({
       <Field label="计划交付日期" wide><input name="dueDate" type="date" defaultValue={deliverable?.dueDate ?? ''}/></Field>
       <Field label="位置（路径 / 链接 / 存放说明）" wide><input name="location" defaultValue={deliverable?.location} placeholder="exports/交付物.md 或 https://..."/></Field>
       <Field label="说明" wide><textarea name="description" rows={4} defaultValue={deliverable?.description}/></Field>
+      {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
+      <Field label="仓库地址（可选）" wide error={repoErrors.repoUrl} errorId="deliverable-repo-error">
+        <input
+          name="repoUrl" data-repo-field="repoUrl" value={repoValues.repoUrl} placeholder="https://host/org/repo.git"
+          onChange={e => setRepoField('repoUrl', e.currentTarget.value)}
+          aria-invalid={repoErrors.repoUrl ? true : undefined}
+          aria-describedby={repoErrors.repoUrl ? 'deliverable-repo-error' : undefined}
+        />
+      </Field>
+      <Field label="分支（可选）" error={repoErrors.branch} errorId="deliverable-branch-error">
+        <input
+          name="branch" data-repo-field="branch" value={repoValues.branch} placeholder="main"
+          onChange={e => setRepoField('branch', e.currentTarget.value)}
+          aria-invalid={repoErrors.branch ? true : undefined}
+          aria-describedby={repoErrors.branch ? 'deliverable-branch-error' : undefined}
+        />
+      </Field>
       {deliverable && <Field label="本次变更说明（版本/状态变化时留痕）" wide>
         <input name="changeNote" placeholder="如：提交评审、验收通过"/>
       </Field>}
@@ -3874,6 +3995,12 @@ function DeliverableForm({
         </button>
       </div>
     </form>
+    {/* T7：当前已落盘仓库只读链接行（有地址才渲染；空不渲染空 anchor）。 */}
+    {deliverable?.repoUrl && <div className="pm-repo-row" data-repo-link>
+      <GitBranch size={14}/>
+      <a href={deliverable.repoUrl} target="_blank" rel="noopener noreferrer">{deliverable.repoUrl}</a>
+      {deliverable.branch && <span className="pm-muted">@{deliverable.branch}</span>}
+    </div>}
     {deliverable && <section className="pm-deliverable-history">
       <h3>版本 / 状态变更留痕（{deliverable.history.length}）</h3>
       {deliverable.history.length

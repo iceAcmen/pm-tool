@@ -10,6 +10,7 @@ import {
   type DeliverableStatus,
 } from './deliverable.js'
 import { projectIdSchema } from './project.js'
+import { omitEmptyRepoKeys } from './repo.js'
 import { enqueueDomainWrite } from './projects.js'
 import type { PmDomain } from './storage.js'
 
@@ -37,7 +38,7 @@ export function addDeliverable(domain: PmDomain, input: unknown): Promise<Delive
       by: fields.operator,
       note: fields.changeNote || '创建交付物',
     }]
-    const record = deliverableRecordSchema.parse({
+    const recordInput: Record<string, unknown> = {
       projectId: fields.projectId,
       name: fields.name,
       version: fields.version,
@@ -46,11 +47,16 @@ export function addDeliverable(domain: PmDomain, input: unknown): Promise<Delive
       location: fields.location,
       description: fields.description,
       dueDate: fields.dueDate,
+      repoUrl: fields.repoUrl,
+      branch: fields.branch,
       history,
       id,
       createdAt: at,
       updatedAt: at,
-    })
+    }
+    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
+    omitEmptyRepoKeys(recordInput)
+    const record = deliverableRecordSchema.parse(recordInput)
     await table.put(id, record)
     return structuredClone(record)
   })
@@ -106,7 +112,7 @@ export function updateDeliverable(
         })
       }
     }
-    const next = deliverableRecordSchema.parse({
+    const nextInput: Record<string, unknown> = {
       ...current,
       name: fields.name ?? current.name,
       version: fields.version ?? current.version,
@@ -115,12 +121,18 @@ export function updateDeliverable(
       location: fields.location ?? current.location,
       description: fields.description ?? current.description,
       dueDate: fields.dueDate ?? current.dueDate,
+      // 仓库链接可独立更新；仅改这两键不追加 history[]（留痕只跟 status/version）。
+      repoUrl: fields.repoUrl ?? current.repoUrl,
+      branch: fields.branch ?? current.branch,
       history,
       id: current.id,
       projectId: current.projectId,
       createdAt: current.createdAt,
       updatedAt: at,
-    })
+    }
+    // 空仓库地址/分支归一为缺键（显式传空白即清空），不留空字符串。
+    omitEmptyRepoKeys(nextInput)
+    const next = deliverableRecordSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)
   })

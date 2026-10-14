@@ -69,10 +69,10 @@
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
 - **快照更新时间**：2026-10-14
-- **最近更新平台**：doubao-work（**v0.6.1 最终可发布：测试专家签 PASS——UX 14/14、53 verify scripts 全绿、157 资产 guard 零变化、client d43353ea；待用户最终通知执行最终提交打 tag**）
-- **main 提交定位**：HEAD=`4a8ff63`（2026-10-13 23:11:09）+ 工作树 UX 补丁；v0.6.1 文档**暂不 commit/tag/push**（按要求，等用户最终通知）。
-- **版本口径（2026-10-14 v0.6.1 最终可发布）**：已发布注解 tag `v0.1.0`–`v0.6.0`。**v0.6.0 已正式发布**：tag 对象 `32659c40` → 提交 `23873fcb`（2026-10-13 19:38:02）；`package.json` = **`0.6.1`**。**v0.6.1 测试专家已最终签 PASS、可发布**，注解 tag 将在最终提交时创建。v0.6.0 schema-v2 门：52 绿 + guard 151 零变化；v0.6.1 补丁：UX 14/14 PASS、53 verify scripts 全绿、guard 157 资产零变化、client bundle `d43353ea`。
-- **当前阶段 / 状态（2026-10-14）**：**v0.6.1 = v0.6.0 UX 反馈补丁 + 后端数据安全**——备份确认/路径恢复(R1)、长 Notice 可滚动(R2)、键盘 j/k/Space/门控(R3)、390 顶栏(R4)、移动/promote 入口(R5)、甘特 tick/unplanned/可点(R6)、副驾 loading/poc-prod lane(R7)、前置依赖紧凑树(R8)；后端：恢复队列化、批删全预检、exports guard、模型状态往返。**UX 14/14 全 PASS**。深色错误对比度用户目视已通过；**PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key、本轮 UX 验证已走通；仅生产（prod）真实 Key 缺配（M-01），MANUAL_PENDING，不阻塞 v0.6.1 发布**。外部 skills：试点可用未毕业（`code-review` 试点 PASS；其余 3 entry 待补）。使用 vendor skill 前必读 `docs/external-skills.md` 守 8 条红线。
+- **最近更新平台**：doubao-work（**v0.7.0 最终可发布：测试专家签 PASS——T7/T8 30/30、client e75ee229…、全量 verify 全绿 + guard 零污染；待用户最终通知执行最终提交打 tag**）
+- **main 提交定位**：HEAD=`37cbcca`（2026-10-14 12:30:20，[test] 冻结 v0.7.0 仓库链接与人员补全验收）；v0.7.0 文档**暂不 commit/tag/push**（按要求，等用户最终通知）。
+- **版本口径（2026-10-14 v0.7.0 最终可发布）**：已发布注解 tag `v0.1.0`–`v0.6.1`。**v0.6.1 已正式发布**：tag 对象 `94657fe2` → 提交 `38f3512d`；`package.json` = **`0.7.0`**。**v0.7.0 测试专家已最终签 PASS、可发布**，注解 tag 将在最终提交时创建。v0.6.1：UX 14/14 PASS、53 verify、guard 157 零变化、client `d43353ea`；v0.7.0：T7/T8 30/30 PASS、client `e75ee229…`、全量 verify 全绿 + guard 零污染。
+- **当前阶段 / 状态（2026-10-14）**：**v0.7.0 = 仓库链接（T7）+ 跨项目负责人补全（T8）**——task/deliverable 可选 repoUrl/branch 共享验证、表单可编辑/只读链接、ProjectForm repo 清空；跨项目负责人候选 datalist 五来源归一去重/自由输入/零持久化；另含表单 key 加固。**T7/T8 30/30 全 PASS**。深色错误对比度用户目视已通过；**PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key；仅生产（prod）真实 Key 缺配（M-01），MANUAL_PENDING，不阻塞 v0.7.0 发布**。外部 skills：试点可用未毕业（`code-review` 试点 PASS；其余 3 entry 待补）。使用 vendor skill 前必读 `docs/external-skills.md` 守 8 条红线。
 - **备份目录口径（2026-10-14 更正）**：默认 builtin = 仓库 `packages/backups/`（`BUILTIN_DEFAULT='../../../backups/'` 相对 `packages/dsh-pm-tool/lib/core/backup.js`），**非** `packages/dsh-pm-tool/backups/`、**非**仓库根 `backups/`；优先级 **显式 directory 参数 > `DSH_PM_BACKUP_DIR` > builtin**。
 - **验证**：本批仅改版本文档口径，未改产品代码/测试专家 docs；等用户最终通知后执行最终 commit/tag/push。
 - **已知限制**：免费池随机模型纯文本可用、工具调用不保证、约 50 次/天、偶发超时重试即恢复；删根须叶子→根或用 cascade confirm；首页斜杠命令点发送按钮、发送后到侧栏点最新会话。

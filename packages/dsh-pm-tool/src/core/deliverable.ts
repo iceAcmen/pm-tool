@@ -1,6 +1,7 @@
 /** 交付物台账字段及运行时校验；字段来源：requirements R10。 */
 import { z } from 'zod'
 import { projectIdSchema } from './project.js'
+import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRelation } from './repo.js'
 
 export const deliverableIdSchema = z.string().regex(
   /^dlv-\d+$/,
@@ -36,6 +37,10 @@ const deliverableFields = {
   location: z.string(),
   description: z.string(),
   dueDate: dateSchema.nullable(),
+  // v0.7 PROD-21 扩展：交付物级仓库链接，optional 缺省即空（旧记录无此两键照常读取）。
+  // 校验口径与 project / task 共享（core/repo.ts）；只改这两键不追加变更留痕。
+  repoUrl: repoUrlFieldSchema,
+  branch: branchFieldSchema,
 }
 
 export const deliverableRecordSchema = z.strictObject({
@@ -57,9 +62,11 @@ export const deliverableCreateSchema = z.strictObject({
   location: z.string().default(''),
   description: z.string().default(''),
   dueDate: dateSchema.nullable().default(null),
+  repoUrl: deliverableFields.repoUrl,
+  branch: deliverableFields.branch,
   operator: z.string().default(''),
   changeNote: z.string().default(''),
-})
+}).superRefine(validateRepoRelation)
 
 export const deliverableUpdateSchema = z.strictObject({
   name: deliverableFields.name.optional(),
@@ -69,9 +76,11 @@ export const deliverableUpdateSchema = z.strictObject({
   location: z.string().optional(),
   description: z.string().optional(),
   dueDate: dateSchema.nullable().optional(),
+  repoUrl: deliverableFields.repoUrl,
+  branch: deliverableFields.branch,
   operator: z.string().optional(),
   changeNote: z.string().optional(),
-}).refine(value => {
+}).superRefine(validateRepoRelation).refine(value => {
   // operator / changeNote 只是留痕参数，单独出现不构成业务更新。
   return Object.keys(value).some(key => !['operator', 'changeNote'].includes(key))
 }, '至少提供一个要更新的业务字段')
@@ -90,6 +99,7 @@ export function describeDeliverableValidation(error: z.ZodError): string {
     location: '位置（文件路径、链接或文字描述）',
     description: '说明（文本）',
     dueDate: '计划交付日期（有效 YYYY-MM-DD 或 null）',
+    ...repoFieldLabels,
   }
   return [...new Set(error.issues.map(issue =>
     issue.code === 'unrecognized_keys'

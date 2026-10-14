@@ -90,8 +90,11 @@ export function normalizePerson(raw: unknown): string {
   return String(raw).trim().replace(/\s+/g, ' ').toLowerCase()
 }
 
-/** 展示用原始写法：trim + 折叠内部空白（保留大小写）。 */
-function displayForm(raw: unknown): string {
+/**
+ * 展示用原始写法：trim + 折叠内部空白（保留大小写）。
+ * 导出供 T8 `people-candidates.ts` 复用，避免另写第二套空白归一（分组逻辑本体不动）。
+ */
+export function displayForm(raw: unknown): string {
   if (raw === null || raw === undefined) return ''
   return String(raw).trim().replace(/\s+/g, ' ')
 }

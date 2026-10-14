@@ -1,5 +1,6 @@
 /** WBS 任务增查逻辑：父子关系、同级顺序和编号统一在领域写队列中生成。 */
 import { projectIdSchema } from './project.js'
+import { omitEmptyRepoKeys } from './repo.js'
 import { enqueueDomainWrite } from './projects.js'
 import {
   taskCreateSchema,
@@ -109,7 +110,7 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
     const code = parent ? `${parent.code}.${order}` : String(order)
     const at = new Date().toISOString()
     const predecessorIds = validatePredecessorRelation(domain, fields.projectId, id, fields.predecessorIds)
-    const record = taskWriteSchema.parse({
+    const recordInput: Record<string, unknown> = {
       ...fields,
       ...(predecessorIds ? { predecessorIds } : {}),
       id,
@@ -117,7 +118,10 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
       order,
       createdAt: at,
       updatedAt: at,
-    })
+    }
+    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
+    omitEmptyRepoKeys(recordInput)
+    const record = taskWriteSchema.parse(recordInput)
     await table.put(id, record)
     return structuredClone(record)
   })
@@ -208,6 +212,8 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
       if (normalized) nextInput.predecessorIds = normalized
       else delete nextInput.predecessorIds
     }
+    // 空仓库地址/分支归一为缺键（显式传空白即清空），不留空字符串。
+    omitEmptyRepoKeys(nextInput)
     const next = taskWriteSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)

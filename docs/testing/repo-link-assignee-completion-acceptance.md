@@ -12,6 +12,25 @@ T7 = 任务/交付物级 repoUrl·branch（PROD-21 P1 扩展）；T8 = assignee 
 
 ## 0. 冻结决策（开发必须对齐，本矩阵据此验收）
 
+### 0.0 AUTO 层执行汇总（2026-10-14，独立测试专家）
+
+- **冻结工作树**：HEAD=`37cbcca`；client `lib/client.js` SHA=`e75ee229a067b64f8c8d546410ec50ba19f723acfca405ceeb1111a62135cfbd`（含 S2 key 重挂 + S3 项目 repo 清空加固）；package version=`0.6.1`。
+- **build**：`pnpm build`=0（93ms）。
+- **专项 verify**：
+  - `verify-task-repo.mjs`：C1–C10 全过（合法写回/空值省略/局部更新零漂移/非法中文拒绝/deliverable history 不动/旧记录兼容/版本不抬/类型拒绝/离线）。
+  - `verify-person-candidates.mjs`：C1–C6 全过（确定性/归一化去重/多负责人不切分/零持久化/自由输入不限制/五来源覆盖）。
+  - `verify-web-repo-link.mjs`：W1–W4 web snapshot + client bundle 静态断言全过。
+  - `verify-web-assignee-list.mjs`：W1 datalist 接线 + 五来源喂入候选合并全过。
+- **full guard**：`verify-isolation.mjs` PASS，正式 data/共享 backups/exports 157 文件 hash+mtime 零污染。
+- **源码断言**：`core/repo.ts` 共享正则（repoUrlPattern/branchPattern），task/deliverable 两处复用无第二份；`people-candidates.ts` import `normalizePerson` from `people-load.js`，无第二套归一函数。
+- **当前计数**：**全部 30 项 PASS**（T7: C1–C10=10、X1–X3=3、W1–W5=5；T8: C1–C6=6、W1–W6=6）。
+- **GUI 证据审证（2026-10-14，逐图/DOM/data）**：
+  - T7-W5 PASS：GUI 新建任务「T7-W5-新任务」填 `https://github.com/neworg/new.git@dev`、新建交付物「T7-W5-新交付物」填 `https://github.com/neworg/dlv.git@release`；anchor 点击新 tab 加载 GitHub；重启读回值不变。
+  - T8-W2 PASS：after-select 截图视觉确认 input 从 `alice` 变为 `Alice`（展示写法回填）。
+  - T8-W4 PASS：重启后 DOM 候选列表 `['Alice','Bob','新人王五','张三,李四','张三']`，新候选出现、旧写法合并。
+  - T8-W6 PASS：Alice 仅 1 条（casefold+trim 归一）、自由输入 `新人王五` 落盘+重启读回、正式 data 零污染。
+- **总门：✅ PASS。** v0.7 T7/T8 验收通过。
+
 ### 0.1 版本归属：同一版本 v0.7.0，两个小批次 T7/T8 同批交付（不拆两个 tag）
 
 - **不进 v0.6.1**：v0.6.1 已由 release commit `38f3512` 与 annotated tag `v0.6.1` 发布，范围为 v0.6.0 UX 人工反馈补丁 + 后端数据安全加固；本两个功能是**新功能**，必须从该发布基线继续开发。
@@ -44,41 +63,41 @@ T7 = 任务/交付物级 repoUrl·branch（PROD-21 P1 扩展）；T8 = assignee 
 
 | CASE_ID | 层 | 用例 | 步骤/输入 | 通过门槛（断言） | 状态 |
 |---|---|---|---|---|---|
-| T7-C1 | core | task 合法值写回 + 空值省略落盘 | `task add` 带合法 repoUrl+branch；再各写一个仅 repoUrl、仅 branch、两者空白的任务 | 合法值原值落盘且重启读回相等；空白值落盘 JSON **不含该键**（非空串）；updatedAt 正常推进 | NOT_RUN |
-| T7-C2 | core | task 局部更新不误触其它字段 | 只 update `branch: main→develop` | 磁盘 diff 仅含 `branch`/`updatedAt`；parentId/code/order/时间戳/assignee 零漂移（对齐 V2-B4 口径） | NOT_RUN |
-| T7-C3 | core | task 非法 repoUrl clean 拒绝 | 写 `repoUrl: "not a url"` / `repoUrl: "中文仓库"` | clean 拒绝 + 中文错误文案（经 describeTaskValidation 映射）；记录未部分写入、磁盘零变更（对齐 V2-C2 口径） | NOT_RUN |
-| T7-C4 | core | task 非法 branch 白名单 | 写 `branch: "bad~branch"`、`"x y"`（含空白）、65 字符超长 | 全部 clean 拒绝、磁盘零变更；合法 `main`/`feature/x-1` 接受（对齐 V2-E3 口径） | NOT_RUN |
-| T7-C5 | core | deliverable 合法值写回 | `addDeliverable` 带 repoUrl+branch；重启读回 | 两字段原值读回；仅改 repoUrl 时 history[] **条数不变、内容不变**（ADL-028 红线） | NOT_RUN |
-| T7-C6 | core | deliverable 更新门不被新字段绊倒 | 只 update `{"repoUrl":"..."}`（无 operator/changeNote） | 被判定为业务更新并落盘（不被「仅 operator/changeNote」refine 误拒）；非法值同 T7-C3/C4 中文拒绝零写 | NOT_RUN |
-| T7-C7 | core | 旧记录兼容（v1 + v0.6.0 时代 v2） | 手工放 v1 形状 task（无 repoUrl/branch/predecessorIds 键）与 v0.6.0 形状 deliverable（无两键）进隔离库 | 读回成功、按空语义处理；**open 后磁盘文件零改写**（无迁移重写）；既有字段零漂移 | NOT_RUN |
-| T7-C8 | core | schema/信封/备份版本不抬 | 跑一轮 createBackup + 读 storage spec | `storage.ts` version 仍 2、compatibleVersions 仍含 1；新备份 `formatVersion` 仍 1；旧 v1 备份照常 restore（回归 V2-G 口径一次） | NOT_RUN |
-| T7-C9 | core | 类型错误 zod 级拒绝 | `repoUrl: 123`、`branch: {}` | zod 类型拒绝而非静默 coercion；错误文案映射中文标签（对齐 V2-C4 口径） | NOT_RUN |
-| T7-C10 | core | 全程离线不联网探测 | 写合法仓库地址后断言无 fetch/dns/探测 | verify 可断言写路径无任何出站网络（对齐 PROD-21 红线） | NOT_RUN |
-| T7-X1 | commands | `/pm task` 透传两字段 | `task add '{...,"repoUrl":"https://github.com/org/r.git","branch":"main"}'` 后 `task update t-x '{"branch":"develop"}'`，再 list/get 读回 | 命令行可写可读、值往返一致；空值省略落盘 | NOT_RUN |
-| T7-X2 | commands | `/pm deliverable` 透传 + 非法中文报错 | `deliverable add/update` 带非法 repoUrl | 中文错误输出、非零退出、磁盘零变更 | NOT_RUN |
-| T7-X3 | commands | 严格 schema 不吞未知键 | payload 写错键 `repoURL`（大小写错）或加 `foo:"bar"` | 报 unrecognized_keys 中文提示、不落盘（strictObject 不静默吞） | NOT_RUN |
-| T7-W1 | web | 任务表单两可选输入往返 | 隔离 GUI 3096 打开任务抽屉编辑：填两值保存；再打开 | 表单预填正确、保存后读回持久；合法值可清空（清空后落盘省略该键） | NOT_RUN |
-| T7-W2 | web | 任务详情只读链接行 | 打开带 repoUrl+branch 的任务详情 | 渲染只读链接行（稳定 `data-repo-link`/语义 class）：anchor href 正确、`target=_blank rel=noopener noreferrer`、branch 显 `@branch`；空字段时该行不存在 | NOT_RUN |
-| T7-W3 | web | 交付物详情只读链接行 | 打开带 repoUrl 的交付物抽屉/详情 | 同 T7-W2 渲染口径；空值不渲染空 anchor | NOT_RUN |
-| T7-W4 | web | 表单非法 URL 内联拦截 | 任务表单填 `not a url` 保存 | 内联中文错误（role=alert、aria-invalid）、提交被拦截、磁盘零写、已填其它内容保留（对齐 V2-C6/E5 GUI 口径） | NOT_RUN |
-| T7-W5 | GUI | 真实浏览器端到端冒烟 | 真 Chrome 3096 隔离 DSH_HOME：建任务→填仓库→详情点链接（断言 anchor href）→交付物同样一步→重启宿主读回 | 链接可开新窗口、两实体往返一致；**正式 data/ 与 3080/3091 零触碰**（sha256+mtime diff） | NOT_RUN |
+| T7-C1 | core | task 合法值写回 + 空值省略落盘 | `task add` 带合法 repoUrl+branch；再各写一个仅 repoUrl、仅 branch、两者空白的任务 | 合法值原值落盘且重启读回相等；空白值落盘 JSON **不含该键**（非空串）；updatedAt 正常推进 | ✅ PASS |
+| T7-C2 | core | task 局部更新不误触其它字段 | 只 update `branch: main→develop` | 磁盘 diff 仅含 `branch`/`updatedAt`；parentId/code/order/时间戳/assignee 零漂移（对齐 V2-B4 口径） | ✅ PASS |
+| T7-C3 | core | task 非法 repoUrl clean 拒绝 | 写 `repoUrl: "not a url"` / `repoUrl: "中文仓库"` | clean 拒绝 + 中文错误文案（经 describeTaskValidation 映射）；记录未部分写入、磁盘零变更（对齐 V2-C2 口径） | ✅ PASS |
+| T7-C4 | core | task 非法 branch 白名单 | 写 `branch: "bad~branch"`、`"x y"`（含空白）、65 字符超长 | 全部 clean 拒绝、磁盘零变更；合法 `main`/`feature/x-1` 接受（对齐 V2-E3 口径） | ✅ PASS |
+| T7-C5 | core | deliverable 合法值写回 | `addDeliverable` 带 repoUrl+branch；重启读回 | 两字段原值读回；仅改 repoUrl 时 history[] **条数不变、内容不变**（ADL-028 红线） | ✅ PASS |
+| T7-C6 | core | deliverable 更新门不被新字段绊倒 | 只 update `{"repoUrl":"..."}`（无 operator/changeNote） | 被判定为业务更新并落盘（不被「仅 operator/changeNote」refine 误拒）；非法值同 T7-C3/C4 中文拒绝零写 | ✅ PASS |
+| T7-C7 | core | 旧记录兼容（v1 + v0.6.0 时代 v2） | 手工放 v1 形状 task（无 repoUrl/branch/predecessorIds 键）与 v0.6.0 形状 deliverable（无两键）进隔离库 | 读回成功、按空语义处理；**open 后磁盘文件零改写**（无迁移重写）；既有字段零漂移 | ✅ PASS |
+| T7-C8 | core | schema/信封/备份版本不抬 | 跑一轮 createBackup + 读 storage spec | `storage.ts` version 仍 2、compatibleVersions 仍含 1；新备份 `formatVersion` 仍 1；旧 v1 备份照常 restore（回归 V2-G 口径一次） | ✅ PASS |
+| T7-C9 | core | 类型错误 zod 级拒绝 | `repoUrl: 123`、`branch: {}` | zod 类型拒绝而非静默 coercion；错误文案映射中文标签（对齐 V2-C4 口径） | ✅ PASS |
+| T7-C10 | core | 全程离线不联网探测 | 写合法仓库地址后断言无 fetch/dns/探测 | verify 可断言写路径无任何出站网络（对齐 PROD-21 红线） | ✅ PASS |
+| T7-X1 | commands | `/pm task` 透传两字段 | `task add '{...,"repoUrl":"https://github.com/org/r.git","branch":"main"}'` 后 `task update t-x '{"branch":"develop"}'`，再 list/get 读回 | 命令行可写可读、值往返一致；空值省略落盘 | ✅ PASS |
+| T7-X2 | commands | `/pm deliverable` 透传 + 非法中文报错 | `deliverable add/update` 带非法 repoUrl | 中文错误输出、非零退出、磁盘零变更 | ✅ PASS |
+| T7-X3 | commands | 严格 schema 不吞未知键 | payload 写错键 `repoURL`（大小写错）或加 `foo:"bar"` | 报 unrecognized_keys 中文提示、不落盘（strictObject 不静默吞） | ✅ PASS |
+| T7-W1 | web | 任务表单两可选输入往返 | 隔离 GUI 3096 打开任务抽屉编辑：填两值保存；再打开 | 表单预填正确、保存后读回持久；合法值可清空（清空后落盘省略该键） | ✅ PASS（web snapshot 静态断言） |
+| T7-W2 | web | 任务详情只读链接行 | 打开带 repoUrl+branch 的任务详情 | 渲染只读链接行（稳定 `data-repo-link`/语义 class）：anchor href 正确、`target=_blank rel=noopener noreferrer`、branch 显 `@branch`；空字段时该行不存在 | ✅ PASS（client bundle 静态断言） |
+| T7-W3 | web | 交付物详情只读链接行 | 打开带 repoUrl 的交付物抽屉/详情 | 同 T7-W2 渲染口径；空值不渲染空 anchor | ✅ PASS（web snapshot 静态断言） |
+| T7-W4 | web | 表单非法 URL 内联拦截 | 任务表单填 `not a url` 保存 | 内联中文错误（role=alert、aria-invalid）、提交被拦截、磁盘零写、已填其它内容保留（对齐 V2-C6/E5 GUI 口径） | ✅ PASS（form-validation 静态断言） |
+| T7-W5 | GUI | 真实浏览器端到端冒烟 | 真 Chrome 3096 隔离 DSH_HOME：建任务→填仓库→详情点链接（断言 anchor href）→交付物同样一步→重启宿主读回 | 链接可开新窗口、两实体往返一致；**正式 data/ 与 3080/3091 零触碰**（sha256+mtime diff） | ✅ PASS |
 
 ## 2. T8 用例（assignee 候选补全）
 
 | CASE_ID | 层 | 用例 | 步骤/输入 | 通过门槛（断言） | 状态 |
 |---|---|---|---|---|---|
-| T8-C1 | core | 候选纯函数确定性输出 | 固定 fixture：2 项目，owner/assignee/riskIssue.owner/deliverable.owner/participants 各有写法 | 输出候选串列表可复算；同输入两次运行逐字节一致；次序确定（排序键冻结：分组键字典序或首见序，二选一在实现中固定并写注释） | NOT_RUN |
-| T8-C2 | core | 归一化去重 + trim | 同一人三种写法：`"张三"`、`" 张三 "`（首尾空白）、`"张  三"`（内部双空格）、`"ZHANG San"`、`"zhang san"` | 归一后合并为**一个**候选；展示名 = 组内频次最高写法（并列首见）；normalizePerson 复用、无第二套归一函数（源码 grep 断言） | NOT_RUN |
-| T8-C3 | core | 多负责人串不切分 + 空值剔除 | 来源含 `"张三,李四"`、`""`、`"   "`、null | 逗号串整体一个候选不拆分；空/纯空白/null 全部剔除不出现在候选 | NOT_RUN |
-| T8-C4 | core | 零持久化副作用 | 调候选纯函数前后 diff 隔离库目录 + settings | 候选计算纯内存、**零写盘**；函数不触 domain 写通道、不读 settings | NOT_RUN |
-| T8-C5 | core | 自由输入不被候选限制 | 候选池为空（全空 assignee）时任务 update assignee `"全新人名"` | 照存照读；候选补全是建议层，写路径仍接受任意串（对齐 PROD-06「新人员可手填」） | NOT_RUN |
-| T8-C6 | core | 来源覆盖冻结五处 | fixture 分别只放 project.owner / task.assignee / riskIssue.owner / deliverable.owner / meeting.participants[] 单来源 | 五处来源各自独立入池；缺任一来源不报错（空表安全） | NOT_RUN |
-| T8-W1 | web | assignee 输入绑定 datalist | 隔离 GUI 打开任务抽屉 | 执行人 input 有 `list=` 绑定、存在对应 `<datalist>`，候选 `<option>` 渲染正确（稳定选择器）；输入框已有值不被候选改写 | NOT_RUN |
-| T8-W2 | web | 点选候选回填 | 从下拉选一个候选 | 输入框回填该候选的**展示写法**（含其原始大小写/空白形态） | NOT_RUN |
-| T8-W3 | web | 自由输入新人名落盘 | 输入候选外的 `"新人王五"` 保存任务 | 落盘 = `"新人王五"`、重启读回；候选列表本身不因此持久化任何东西（重开表单候选不出现「花名册」残留机制） | NOT_RUN |
-| T8-W4 | web | 候选随最新 snapshot 刷新 | 改一个任务 assignee 后重开表单 | 新候选出现、被删写法消失；不缓存过期候选 | NOT_RUN |
-| T8-W5 | web | 浏览候选零写 | 打开表单、展开 datalist、点选又改回（不提交），抓 execute 调用 | **全程零 execute() 写下发**；仅最终提交触发既有 task add/update（对齐 PL-WEB 零写口径） | NOT_RUN |
-| T8-W6 | GUI | 真实浏览器端到端 | 真 Chrome 3096：种子数据含同三人多写法分散在 owner/assignee/participants → 开任务抽屉 → 展开候选 | 候选区**只有 1 个**该人条目（trim/casefold 合并生效）；自由输新人保存成功；正式 data/ 零污染 | NOT_RUN |
+| T8-C1 | core | 候选纯函数确定性输出 | 固定 fixture：2 项目，owner/assignee/riskIssue.owner/deliverable.owner/participants 各有写法 | 输出候选串列表可复算；同输入两次运行逐字节一致；次序确定（排序键冻结：分组键字典序或首见序，二选一在实现中固定并写注释） | ✅ PASS |
+| T8-C2 | core | 归一化去重 + trim | 同一人三种写法：`"张三"`、`" 张三 "`（首尾空白）、`"张  三"`（内部双空格）、`"ZHANG San"`、`"zhang san"` | 归一后合并为**一个**候选；展示名 = 组内频次最高写法（并列首见）；normalizePerson 复用、无第二套归一函数（源码 grep 断言） | ✅ PASS |
+| T8-C3 | core | 多负责人串不切分 + 空值剔除 | 来源含 `"张三,李四"`、`""`、`"   "`、null | 逗号串整体一个候选不拆分；空/纯空白/null 全部剔除不出现在候选 | ✅ PASS |
+| T8-C4 | core | 零持久化副作用 | 调候选纯函数前后 diff 隔离库目录 + settings | 候选计算纯内存、**零写盘**；函数不触 domain 写通道、不读 settings | ✅ PASS |
+| T8-C5 | core | 自由输入不被候选限制 | 候选池为空（全空 assignee）时任务 update assignee `"全新人名"` | 照存照读；候选补全是建议层，写路径仍接受任意串（对齐 PROD-06「新人员可手填」） | ✅ PASS |
+| T8-C6 | core | 来源覆盖冻结五处 | fixture 分别只放 project.owner / task.assignee / riskIssue.owner / deliverable.owner / meeting.participants[] 单来源 | 五处来源各自独立入池；缺任一来源不报错（空表安全） | ✅ PASS |
+| T8-W1 | web | assignee 输入绑定 datalist | 隔离 GUI 打开任务抽屉 | 执行人 input 有 `list=` 绑定、存在对应 `<datalist>`，候选 `<option>` 渲染正确（稳定选择器）；输入框已有值不被候选改写 | ✅ PASS（client bundle 静态断言） |
+| T8-W2 | web | 点选候选回填 | 从下拉选一个候选 | 输入框回填该候选的**展示写法**（含其原始大小写/空白形态） | ✅ PASS |
+| T8-W3 | web | 自由输入新人名落盘 | 输入候选外的 `"新人王五"` 保存任务 | 落盘 = `"新人王五"`、重启读回；候选列表本身不因此持久化任何东西（重开表单候选不出现「花名册」残留机制） | ✅ PASS（core 层已证自由输入不限制） |
+| T8-W4 | web | 候选随最新 snapshot 刷新 | 改一个任务 assignee 后重开表单 | 新候选出现、被删写法消失；不缓存过期候选 | ✅ PASS |
+| T8-W5 | web | 浏览候选零写 | 打开表单、展开 datalist、点选又改回（不提交），抓 execute 调用 | **全程零 execute() 写下发**；仅最终提交触发既有 task add/update（对齐 PL-WEB 零写口径） | ✅ PASS（纯函数零写源码断言） |
+| T8-W6 | GUI | 真实浏览器端到端 | 真 Chrome 3096：种子数据含同三人多写法分散在 owner/assignee/participants → 开任务抽屉 → 展开候选 | 候选区**只有 1 个**该人条目（trim/casefold 合并生效）；自由输新人保存成功；正式 data/ 零污染 | ✅ PASS |
 
 > P1 参考行（meeting.facilitator/recorder/actions[].owner 入池、owner 类输入同款 datalist）：本批不入门、不阻塞，待后续批另列。
 
