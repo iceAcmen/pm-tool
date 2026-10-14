@@ -105,6 +105,9 @@ try {
     assert.deepEqual(record, { ...fields, id: 'p-0001', createdAt: record.createdAt, updatedAt: record.createdAt })
     assert.match(readFileSync(join(root, 'pmtool', 'projects', 'p-0001.json'), 'utf8'), /\n  "version": 2,/g)
     console.log(await run('project get p-0001'))
+    // S3-A2：help 必须提及项目级 repoUrl/branch 可选；未配置仓库的项目渲染显「仓库：未填写」。
+    assert.match(await run('project'), /repoUrl\/branch/, 'S3-A2：projectHelp 应列出 repoUrl/branch 可选说明')
+    assert.match(await run('project get p-0001'), /仓库：未填写/, 'S3-A2：未配置仓库的项目渲染应显「仓库：未填写」')
     assert.match(await run('PROJECT GET p-0001'), /Ice/)
     assert.match(await run('project list'), /共 1 个/)
 

@@ -438,6 +438,20 @@ export function moveTask(
 }
 
 /**
+ * S1 复合写失败的聚合错误口径（与 core/backup.ts 的 `AggregateError([applyError, rollbackError])` 同构）：
+ * 原始业务错误排在前、其后依次为各条回滚错误；回滚全部成功则原样抛出原始错误，绝不吞回滚错。
+ * 若原始错误本身已是 AggregateError（内层 renumber 回滚失败又被外层回滚接力），拍平后追加，
+ * 保持 errors[0] = 最原始业务错误。未来协作仅在此扩展错误类型/可选 context，不触碰 schema/rev/actor。
+ */
+function failWithRollbackErrors(original: unknown, rollbackErrors: unknown[], message: string): never {
+  if (rollbackErrors.length === 0) {
+    throw original instanceof Error ? original : new Error(String(original))
+  }
+  const causes = original instanceof AggregateError ? [...original.errors] : [original]
+  throw new AggregateError([...causes, ...rollbackErrors], message)
+}
+
+/**
  * 全项目重编号的领域实现（不入队）：按当前父子关系与同级顺序重建 order/code。
  * 假设项目存在性已在调用层校验。写失败时回滚本项目已写记录。
  */
@@ -492,10 +506,7 @@ async function renumberProjectUnsafe(domain: PmDomain, projectId: string): Promi
         rollbackErrors.push(rollbackError)
       }
     }
-    if (rollbackErrors.length) {
-      throw new AggregateError([error, ...rollbackErrors], '任务重新编号失败，且部分记录恢复失败')
-    }
-    throw error
+    failWithRollbackErrors(error, rollbackErrors, '任务重新编号失败，且部分记录恢复失败')
   }
   return planned.map(task => structuredClone(task))
 }
@@ -536,14 +547,18 @@ export function moveTaskAndRenumber(
       const renumbered = await renumberProjectUnsafe(domain, projectId)
       return renumbered.find(task => task.id === id)
     } catch (error) {
+      // S1：外层 before 快照回滚不再空 catch{} 吞错。任一回滚 put 失败即把原始业务错 + 各回滚错
+      // 聚合抛出（与 renumberProjectUnsafe/backup.ts 同构），调用方可辨识「回滚不完整」；
+      // 回滚全部成功则原样抛原始错误。全程仍在同一 enqueueDomainWrite 临界区内。
+      const rollbackErrors: unknown[] = []
       for (const [taskId, task] of before) {
         try {
           await table.put(taskId, task)
-        } catch {
-          // 回滚尽力而为；原始错误优先抛出，由调用方看到失败。
+        } catch (rollbackError) {
+          rollbackErrors.push(rollbackError)
         }
       }
-      throw error
+      failWithRollbackErrors(error, rollbackErrors, '移动并重新编号失败，且部分任务记录恢复失败')
     }
   })
 }

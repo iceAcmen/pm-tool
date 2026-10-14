@@ -242,6 +242,7 @@ try {
   const oldDomain = await openPmDomain(ctxOld)
   const oldTask = getTask(oldDomain, 't-0001')
   const oldDeliverable = getDeliverable(oldDomain, 'dlv-0001')
+  const oldProject = oldDomain.table('projects').get('p-0001')
   assert.ok(oldTask, 'C7：v1 形状 task（无 repoUrl/branch/predecessorIds）应读回成功')
   assert.equal(oldTask.repoUrl, undefined, 'C7：旧 task 缺两键按空语义处理')
   assert.equal(oldTask.branch, undefined, 'C7：旧 task 缺两键按空语义处理')
@@ -249,6 +250,9 @@ try {
   assert.equal(oldDeliverable.repoUrl, undefined, 'C7：旧 deliverable 缺两键按空语义处理')
   assert.equal(oldDeliverable.branch, undefined, 'C7：旧 deliverable 缺两键按空语义处理')
   assert.equal(oldDeliverable.history.length, 1, 'C7：旧 deliverable 既有 history 条数零漂移')
+  assert.ok(oldProject, 'S3-A5：v1 形状项目（无 repoUrl/branch）应读回成功')
+  assert.equal(oldProject.repoUrl, undefined, 'S3-A5：旧项目缺 repoUrl 按空语义处理')
+  assert.equal(oldProject.branch, undefined, 'S3-A5：旧项目缺 branch 按空语义处理')
   // open 后未触碰记录磁盘零改写（信封不批量迁移）。
   assert.equal(taskBytes(oldRoot, 't-0001'), beforeTaskBytes, 'C7：open 后 v1 task 文件零改写')
   assert.equal(deliverableBytes(oldRoot, 'dlv-0001'), beforeDeliverableBytes, 'C7：open 后旧 deliverable 文件零改写')
@@ -272,6 +276,35 @@ try {
   const run = (rawInput) => cmd.handler({ rawInput, attachments: [] })
 
   await run('project add {"name":"命令库","startDate":"2026-10-01","targetDate":"2026-12-31"}')
+
+  // S3-A2/A4：项目级 repoUrl/branch CLI 渲染与空值清除（与 task/deliverable 同形「仓库：url@branch」）。
+  const pRepoAdd = await run('project add {"name":"仓库项目","startDate":"2026-10-01","targetDate":"2026-12-31","repoUrl":"https://github.com/org/proj.git","branch":"main"}')
+  assert.equal(pRepoAdd.kind, 'success', `S3-A2：项目带合法 repo 应新增：${pRepoAdd.text}`)
+  assert.match(pRepoAdd.text, /仓库：https:\/\/github\.com\/org\/proj\.git@main/, 'S3-A2：项目 add 回显应渲染 仓库：url@branch')
+  assert.match((await run('project')).text, /repoUrl\/branch/, 'S3-A2：projectHelp 应提及 repoUrl/branch 可选')
+  const projId = /项目 ID：(p-\d+)/.exec(pRepoAdd.text)[1]
+  assert.match((await run(`project get ${projId}`)).text, /仓库：https:\/\/github\.com\/org\/proj\.git@main/, 'S3-A2：project get 同形渲染')
+  // S3-A4：project update 传空串 → 落盘删键（非空串），磁盘 diff 仅 repoUrl/branch/updatedAt，其它字段零漂移。
+  const projRecBefore = readRecordFile(cmdRoot, 'projects', projId)
+  const pUpd = await run(`project update ${projId} {"branch":""}`)
+  assert.equal(pUpd.kind, 'success', `S3-A4：项目 update branch 空串应成功：${pUpd.text}`)
+  assert.match(pUpd.text, /仓库：https:\/\/github\.com\/org\/proj\.git/, 'S3-A4：清空 branch 后渲染应含 url')
+  assert.doesNotMatch(pUpd.text, /仓库：https:\/\/github\.com\/org\/proj\.git@/, 'S3-A4：清空 branch 后不得再拼 @branch')
+  const projRecAfter = readRecordFile(cmdRoot, 'projects', projId)
+  assert.ok(!('branch' in projRecAfter), 'S3-A4：branch 空串应从记录删键（非空串）')
+  const projAllKeys = [...new Set([...Object.keys(projRecBefore), ...Object.keys(projRecAfter)])]
+  const projChanged = projAllKeys.filter(k => JSON.stringify(projRecBefore[k]) !== JSON.stringify(projRecAfter[k]))
+  assert.deepEqual(projChanged.sort(), ['branch', 'updatedAt'], `S3-A4：项目 update 空 branch 磁盘 diff 仅 branch/updatedAt，实际：${projChanged}`)
+  const pClear = await run(`project update ${projId} {"repoUrl":""}`)
+  assert.equal(pClear.kind, 'success', `S3-A4：项目 update repoUrl 空串应成功：${pClear.text}`)
+  assert.ok(!('repoUrl' in readRecordFile(cmdRoot, 'projects', projId)), 'S3-A4：repoUrl 空串也应删键')
+  assert.match((await run(`project get ${projId}`)).text, /仓库：未填写/, 'S3-A4：两键清空后项目渲染显「未填写」')
+  // 非法 repoUrl/branch 经 describeProjectValidation 中文拒绝、磁盘零变更。
+  const projBadBefore = readRecordFile(cmdRoot, 'projects', projId)
+  const pBad = await run('project add {"name":"坏仓库","startDate":"2026-10-01","targetDate":"2026-12-31","repoUrl":"not a url"}')
+  assert.equal(pBad.kind, 'error', 'S3-A3：项目非法 repoUrl 必须 clean 拒绝')
+  assert.match(pBad.text, /仓库地址/, `S3-A3：错误应为共享中文文案：${pBad.text}`)
+  assert.deepEqual(readRecordFile(cmdRoot, 'projects', projId), projBadBefore, 'S3-A3：非法值拒绝后原项目磁盘零变更')
 
   // X1：task add 透传两字段；update 改 branch；list/get 读回值往返一致。
   const addR = await run('task add {"projectId":"p-0001","title":"仓库任务","repoUrl":"https://github.com/org/r.git","branch":"main"}')
@@ -308,6 +341,22 @@ try {
     assert.match(r.text, /包含不支持的字段/, `X3：未知键应报中文 unrecognized_keys：${r.text}`)
     assert.equal(taskBytes(cmdRoot, 't-0001'), before, `X3：未知键 ${badPayload} 不落盘（磁盘零变更）`)
   }
+
+  // S3：三级命令（project/task/deliverable）同一 fixture 渲染「仓库：」行逐字同形。
+  const shared = { repoUrl: 'https://github.com/org/shared.git', branch: 'release/1.0' }
+  const tShared = await run(`task update t-0001 ${JSON.stringify(shared)}`)
+  const pShared = await run(`project add ${JSON.stringify({ name: '共享fixture项目', startDate: '2026-10-01', targetDate: '2026-12-31', ...shared })}`)
+  const dShared = await run(`deliverable add ${JSON.stringify({ projectId: 'p-0001', name: '共享fixture交付', ...shared })}`)
+  for (const [label, r] of [['task', tShared], ['project', pShared], ['deliverable', dShared]]) {
+    assert.equal(r.kind, 'success', `S3：${label} 带共享 fixture 应成功：${r.text}`)
+    assert.match(r.text, /仓库：https:\/\/github\.com\/org\/shared\.git@release\/1\.0/, `S3：${label} 渲染仓库行必须与其它两级同形`)
+  }
+  // 空仓库三级都显「未填写」。
+  const tBlankShared = await run('task update t-0001 {"repoUrl":"","branch":""}')
+  assert.match(tBlankShared.text, /仓库：未填写/, 'S3：task 空仓库显「未填写」')
+  const pBlankShared = await run(`project update ${/项目 ID：(p-\d+)/.exec(pShared.text)[1]} {"repoUrl":"","branch":""}`)
+  assert.match(pBlankShared.text, /仓库：未填写/, 'S3：project 空仓库显「未填写」')
+
   await fC.closeAll()
   console.log('通过：X1 命令透传往返+空值省略 / X2 deliverable 非法中文零写 / X3 strict 拒绝未知键。')
   console.log(`T7 命令层通过。临时数据保留于：${cmdRoot}`)

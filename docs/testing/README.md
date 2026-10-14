@@ -33,6 +33,7 @@
 | [`copilot-multistep-acceptance.md`](copilot-multistep-acceptance.md) | **副驾多步规划验收矩阵（开发前冻结，PROD-24，P0 基线 `3b20850`）**（契约 `product/08-copilot-multistep-design.md` + P0 裁决）：旧 `actions` 兼容平凡计划 / 新 `steps{stepId,title,reason,action,needs}` 契约 / DAG 环·缺依赖·自指坏步局部拒+级联（不拖全部）/ >8 步或 >10 任务整拒 / 同目标隐式串行+链式 baseline 防误冲突 / 真实外部冲突仅拒相关步+依赖级联 / task.update 五标量白名单 / 整批·逐步·勾选·标量编辑·取消零写 / 幂等键含 baseline / 部分成功不自动补偿 / 无 Key·限流·乱码·超长降级零写 / GUI 计划卡·拒绝红行·3条软风险·确认按钮·结果逐步 / 计划不持久化(不写settings不新表) / 正式数据零污染；51 项初始全 NOT_RUN（AUTO 37 / GUI 11 / AUTO+GUI 1 / MANUAL_PENDING 2），AUTO/GUI/MANUAL_PENDING 分层，旧 H1–H6 不阻塞；独立测试专家所有 |
 
 | [`repo-link-assignee-completion-acceptance.md`](repo-link-assignee-completion-acceptance.md) | **v0.7.0 仓库链接+人员补全验收矩阵（全部 PASS，冻结 client `e75ee229…`）**：T7 = task/deliverable 可选 `repoUrl`/`branch`；T8 = assignee 候选补全；**30/30 全 PASS**；build=0、专项 verify 全绿、full guard 157 文件零污染；独立测试专家所有 |
+| [`stability-batch-acceptance.md`](stability-batch-acceptance.md) | **稳定性地基批次验收矩阵（全部 28/28 PASS，冻结 client `dd66be29…`）**：S1 = AggregateError 复合失败聚合；S2 = ask-apply 幂等键短 TTL 持久化 settings 跨进程去重；S3 = 项目级 repo CLI/client 与 core/repo.ts 真源一致；build=0、专项 verify 全绿、full guard 157 文件零污染；独立测试专家所有 |
 
 ## 判定图例（与 ADL-045 严格一致）
 

@@ -16,6 +16,7 @@ import {
   updateProject,
 } from '../core/projects.js'
 import { describeProjectValidation, projectStatusLabels, type Project } from '../core/project.js'
+import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const projectHelp = [
@@ -26,10 +27,11 @@ export const projectHelp = [
   '  /pm project get p-0001',
   '  /pm project update p-0001 {"status":"active","targetDate":"2026-11-15"}',
   '  /pm project delete p-0001 confirm',
-  'add 支持 description、owner、status、tags；默认描述和负责人为空、状态为 planning。',
+  'add 支持 description、owner、status、tags、repoUrl、branch；默认描述和负责人为空、状态为 planning。',
   '新增同名项目默认阻止，末尾加 confirm 才放行；更新改为同名时规则相同。',
   '删除不带 confirm 只显示确认提示，不会删除。',
   '日期格式 YYYY-MM-DD，完成日期不得早于开始日期；ID 和时间戳由系统维护。',
+  repoFieldHelpPhrase,
 ].join('\n')
 
 function renderProject(project: Project): string {
@@ -42,6 +44,7 @@ function renderProject(project: Project): string {
     `开始日期：${project.startDate}`,
     `完成日期：${project.targetDate}`,
     `标签：${project.tags?.join('、') || '无'}`,
+    `仓库：${formatRepoRef(project) || '未填写'}`,
     `创建时间：${project.createdAt}`,
     `更新时间：${project.updatedAt}`,
   ].join('\n')

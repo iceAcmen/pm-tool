@@ -8,6 +8,20 @@
 
 ---
 
+## [v0.7.1] 最终可发布：稳定性补丁 S1/S2/S3 + 协作演进契约（2026-10-14，平台：doubao-work）
+
+> 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.0` 不移动。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.7.0` → **`0.7.1`**。
+  - `docs/releases/v0.7.1.md`：**新建（最终可发布）**，列 S1/S2/S3 稳定性补丁 + 协作演进契约，验收绿数按测试专家最终签门回填。
+  - `README.md`：版本导航表 v0.7.0 改标已发布（`b6ba06ac`→`217d8ae`）、新增 v0.7.1 可发布行；阶段导航对齐最终签 PASS。
+- **补丁范围（v0.7.0 之后）**：S1——move+renumber 回滚 AggregateError 及用户安全摘要；S2——ask-apply settings 60s 顺序重放幂等 + 真实新进程测试（非跨进程互斥）；S3——repo-format browser-safe 唯一真源 + 三级 CLI；协作演进契约 `docs/product/11-collaboration-ready-architecture.md`（当前不实现账号权限实时）。
+- **验收（测试专家最终签 PASS）**：S1/S2/S3 **28/28 全 PASS**；**59 个 verify scripts 全绿**；隔离 guard **157 个资产文件零变化**；client bundle 完整哈希 `dd66be290d2d1568742821b10713243f0790edf78fdc8c43ce703de3550f1397`。
+- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞发布）**；PoC `our-free-model`/`kilo-auto/free` 免费免 Key。G8/H5 不可逆动作维持 MANUAL_PENDING。
+- **影响范围 / 状态**：纯版本事实与文档口径；注解 tag 将在最终提交时创建。
+- **验证**：`node -e JSON.parse(package.json)` 通过；`git diff --check` 干净；verifier `check-file-format` 通过。
+
 ## [v0.7.0] 最终可发布：仓库链接（T7）+ 跨项目负责人补全（T8）（2026-10-14，平台：doubao-work）
 
 > 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.6.1` 不移动。

@@ -89,15 +89,23 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
 // 杜绝双写；完成后写 TTL，失败清理 in-flight。不新增表、不把任何 token 当授权。
 import { validateActions, type CopilotAction } from '../core/copilot.js'
 import { updateTask } from '../core/tasks.js'
+import {
+  createSettingsIdempotencyRegistry,
+  hashScopeKey,
+  askApplyScope,
+  IDEMPOTENCY_TTL_MS,
+  IDEMPOTENCY_ACTOR_SEGMENT_DEFAULT,
+} from '../core/idempotency.js'
 
-const recentDrafts = new Map<string, number>() // key -> 过期时间戳（已成功执行）
-const inFlight = new Map<string, Promise<AskApplyResult>>() // key -> 正在执行的结果（并发去重）
-const DRAFT_TTL_MS = 60_000
+// 并发去重仍是纯内存（不落盘）：同一进程内 await 前原子占用，并发方共享同一结果，杜绝双写。
+// 键用 keyHash（与持久化注册表一致），这里不存动作正文。
+const inFlight = new Map<string, Promise<AskApplyResult>>()
 
-// 幂等键 = projectId + JSON(selectedOrderedActions) + JSON(baseline)：
-// 同一勾选集合 60s 内重复确认才拦截；不同 baseline（重新生成计划）/ 不同子集（逐步模式）互不误拦。
-function draftKey(projectId: string, actions: CopilotAction[], baseline: Record<string, string>): string {
-  return `${projectId}:${JSON.stringify(actions)}:${JSON.stringify(baseline)}`
+// 幂等键分片 = projectId + actorSegment + JSON(actions) + JSON(baseline)，再取 SHA-256：
+// 同一勾选集合 60s 内重复确认才拦截；不同 baseline（重新生成计划）/ 不同子集（逐步模式）/
+// 不同 project / 不同 actor 互不误拦。落盘只存 hash 与最小标记，不存动作正文。
+function applyKeyHash(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, actorSegment: string): string {
+  return hashScopeKey([projectId, actorSegment, JSON.stringify(actions), JSON.stringify(baseline)])
 }
 
 export interface AskApplyResult {
@@ -107,10 +115,6 @@ export interface AskApplyResult {
 }
 
 async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
-  // 清理过期 TTL
-  const now = Date.now()
-  for (const [k, exp] of recentDrafts) if (exp <= now) recentDrafts.delete(k)
-
   // 从 domain 重读当前项目全部任务，后端校验归属/字段/日期
   const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string, updatedAt?: string })
   const liveIds = new Set(tasks.filter(t => t.projectId === projectId).map(t => t.id))
@@ -188,24 +192,41 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
     }
   }
 
-  const key = draftKey(projectId, actions, baseline)
-  const now = Date.now()
-  const seenAt = recentDrafts.get(key)
-  if (seenAt && seenAt > now) {
-    return { kind: 'success', text: '该计划已确认过，为避免重复写库未再次执行（幂等拦截）。' }
+  // actorSegment 预留：当前无账号体系，统一 local-anonymous；未来不同 actor 不互去重。
+  const actorSegment = IDEMPOTENCY_ACTOR_SEGMENT_DEFAULT
+  const keyHash = applyKeyHash(projectId, actions, baseline, actorSegment)
+  const registry = createSettingsIdempotencyRegistry(domain)
+
+  // 持久化幂等（60s 短 TTL）：成功标记落盘后的「顺序重放」（重启 / 新进程重开同一数据 root，
+  // 按时间先后再次确认同一计划）直接返回「已执行」，避免因 updatedAt 已被本次确认推进、
+  // 再比旧基线而误报「他人已改」冲突。注意：本标记只覆盖顺序重放，不提供跨进程并发互斥——
+  // 跨进程同时双写仍由 updateTask 写队列 / 基线比较兜底，不在本幂等语义内。
+  if (registry.check(keyHash)) {
+    return { kind: 'success', text: '该计划已执行过（幂等拦截），为避免重复写库未再次执行。' }
   }
-  // 并发去重：in-flight 中同一草稿直接共享结果，杜绝 await 前检查通过后双写。
-  const flying = inFlight.get(key)
+  // 并发去重（纯内存）：in-flight 中同一草稿直接共享结果，杜绝 await 前检查通过后双写。
+  const flying = inFlight.get(keyHash)
   if (flying) return flying
 
   const promise = applyCore(projectId, actions, baseline, domain)
-  inFlight.set(key, promise)
+  inFlight.set(keyHash, promise)
   try {
     const res = await promise
-    if ((res.appliedCount ?? 0) > 0) recentDrafts.set(key, Date.now() + DRAFT_TTL_MS)
+    // 只有真正落库成功（appliedCount>0）才登记幂等标记；失败/全拒绝不登记。
+    if ((res.appliedCount ?? 0) > 0) {
+      try {
+        await registry.record({
+          keyHash,
+          scope: askApplyScope(projectId, actorSegment),
+          expiresAt: Date.now() + IDEMPOTENCY_TTL_MS,
+        })
+      } catch {
+        // 幂等登记失败不影响已落库业务结果（最坏 60s 内可能重写一次，由 baseline/串行写兜底）。
+      }
+    }
     return res
   } finally {
-    inFlight.delete(key)
+    inFlight.delete(keyHash)
   }
 }
 

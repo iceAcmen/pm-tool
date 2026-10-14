@@ -22,12 +22,12 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.9 | 含 ADL-028 R10 交付物台账与 ADL-029 R12 检索/看板/导入模型 |
-| 阶段 3 源码开发 | ✅ v0.7.0 可发布（待最终提交打 tag） | R1–R15 + A1/A2 已完成；v0.6.1 已发布（UX 反馈 14/14 + 后端数据安全）；v0.7.0 = 仓库链接 repoUrl/branch（T7）+ 跨项目负责人补全（T8） |
-| 阶段 4 测试交付 | ✅ v0.7.0 最终签 PASS | v0.6.1 已发布（14/14 PASS、53 verify、157 资产 guard 零变化、client `d43353ea`）；v0.7.0 T7/T8 **30/30 PASS**、client bundle `e75ee229…`、全量 verify 全绿 + guard 零污染；M-01 prod 真实 Key 维持 MANUAL_PENDING（不阻塞） |
+| 阶段 3 源码开发 | ✅ v0.7.1 可发布（待最终提交打 tag） | R1–R15 + A1/A2 已完成；v0.7.0 已发布（仓库链接 T7 + 跨项目负责人补全 T8）；v0.7.1 = 稳定性补丁 S1/S2/S3 + 协作演进契约（docs/product/11） |
+| 阶段 4 测试交付 | ✅ v0.7.1 最终签 PASS | v0.7.0 已发布（T7/T8 30/30、client `e75ee229…`）；v0.7.1 S1/S2/S3 **28/28 PASS**、**59 verify scripts 全绿**、guard **157 资产零变化**、client `dd66be29…`；M-01 prod 真实 Key 维持 MANUAL_PENDING（不阻塞） |
 
 ### 版本导航（Git tag 与发布说明）
 
-> `packages/dsh-pm-tool/package.json` 当前版本 **0.7.0**（最终可发布；注解 tag 将在最终提交时创建）。历史已发布 tag 均为**注解 tag**；「tag 对象 → 指向提交」见各发布说明。
+> `packages/dsh-pm-tool/package.json` 当前版本 **0.7.1**（最终可发布；注解 tag 将在最终提交时创建）。历史已发布 tag 均为**注解 tag**；「tag 对象 → 指向提交」见各发布说明。
 
 | 版本 | 状态 | tag（注解）→ 指向提交 | 发布说明 |
 |---|---|---|---|
@@ -38,7 +38,8 @@
 | v0.5.0 | ✅ 已发布（2026-10-13） | `c8d3da52` → `81c5a11` | [`docs/releases/v0.5.0.md`](docs/releases/v0.5.0.md) |
 | v0.6.0 | ✅ 已发布（2026-10-13） | `32659c40` → `23873fcb` | [`docs/releases/v0.6.0.md`](docs/releases/v0.6.0.md) |
 | v0.6.1 | ✅ 已发布（2026-10-14） | `94657fe2` → `38f3512d` | [`docs/releases/v0.6.1.md`](docs/releases/v0.6.1.md) |
-| v0.7.0 | ✅ 可发布（最终签 PASS，tag 将在最终提交创建） | 将在最终提交创建 | [`docs/releases/v0.7.0.md`](docs/releases/v0.7.0.md) |
+| v0.7.0 | ✅ 已发布（2026-10-14） | `b6ba06ac` → `217d8ae` | [`docs/releases/v0.7.0.md`](docs/releases/v0.7.0.md) |
+| v0.7.1 | ✅ 可发布（最终签 PASS，tag 将在最终提交创建） | 将在最终提交创建 | [`docs/releases/v0.7.1.md`](docs/releases/v0.7.1.md) |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
 

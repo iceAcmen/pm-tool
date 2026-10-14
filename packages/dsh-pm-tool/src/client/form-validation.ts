@@ -1,13 +1,15 @@
 /**
  * R3-UX-001：项目 / 里程碑表单的「受控内联校验」纯函数。
  *
- * 设计约束（见 ADL-046）：
+ * 设计约束（见 ADL-046 / S3）：
  * - 本模块**不依赖 React / DOM**，可在 Node 下直接 import 做行为测试；
  *   panel.tsx 在浏览器表单里调用它，scripts/verify-form-validation.mjs 在 Node 里断言它。
- * - 文案与服务端 zod（core/project.ts、core/milestone.ts）保持一致，避免前后端两套提示。
+ * - repoUrl/branch 的正则与中文文案**唯一真源在 core/repo-format.js**（零依赖纯模块）；
+ *   本文件只做委托，禁止再抄第二份正则/文案（S3-A1 静态断言守此红线）。
  * - 只负责「必填 / 真实日历日期 / 起止先后」三类可在前端即时定位的错误；
  *   重名、删除保护、服务端 run 失败等仍由命令层返回，经全局 Notice 展示，不在此掩盖。
  */
+import { repoFieldErrorsPure } from '../core/repo-format.js'
 
 /** 项目表单需要即时校验的字段。 */
 export interface ProjectFormValues {
@@ -18,28 +20,14 @@ export interface ProjectFormValues {
   branch?: string
 }
 
-// 与服务端 core/project.ts / core/repo.ts 保持一致的宽松正则（离线、不联网探测）。
-// project / task / deliverable 三级共用下方 repoFieldErrors，禁止各抄一份文案/正则，避免前后端漂移。
-const repoUrlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*|git:\/\/[^\s/$.?#].[^\s]*|git@[A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+(?:\/[^\s]*))$/
-const branchPattern = /^[A-Za-z0-9._][A-Za-z0-9._/-]{0,63}$/
-
 /**
  * 共享「仓库地址 / 分支名」一对可选字段的内联校验（T7 扩到 task / deliverable 两级）。
  * 留空合法（可选字段）；任一填写即按宽松 git/URL 白名单校验。中文文案与服务端
- * core/repo.ts validateRepoRelation 逐字一致，三级复用、不得改写。
+ * core/repo.ts validateRepoRelation 逐字一致（同一真源 core/repo-format.js），三级复用。
  * 通过返回 `{}`。键固定为 'repoUrl' / 'branch'，便于 <input name> 与 aria-describedby 关联。
  */
 export function repoFieldErrors(repoUrl: string | undefined, branch: string | undefined): FormFieldErrors {
-  const errors: FormFieldErrors = {}
-  const url = (repoUrl ?? '').trim()
-  if (url && !repoUrlPattern.test(url)) {
-    errors.repoUrl = '仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式'
-  }
-  const br = (branch ?? '').trim()
-  if (br && !branchPattern.test(br)) {
-    errors.branch = '分支名需 ≤64 字符、不含空白与特殊符号（如 main、feature/x-1）'
-  }
-  return errors
+  return repoFieldErrorsPure(repoUrl, branch)
 }
 
 /**

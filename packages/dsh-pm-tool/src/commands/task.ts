@@ -37,6 +37,7 @@ import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
+import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const taskHelp = [
@@ -64,7 +65,7 @@ export const taskHelp = [
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
   'milestoneId 必须指向同项目已存在里程碑；ID、WBS 编号、同级顺序和时间戳由系统生成。',
-  'repoUrl/branch 可选（http(s)://、git:// 或 git@host:org/repo.git；branch ≤64 字符），传空串即清除；全程离线不探测。',
+  repoFieldHelpPhrase,
 ].join('\n')
 
 function renderTask(task: Task): string {
@@ -82,7 +83,7 @@ function renderTask(task: Task): string {
     `截止日期：${task.dueDate ?? '未填写'}`,
     `进度：${task.progress}%`,
     `里程碑：${task.milestoneId ?? '无'}`,
-    `仓库：${task.repoUrl ? `${task.repoUrl}${task.branch ? `@${task.branch}` : ''}` : '未填写'}`,
+    `仓库：${formatRepoRef(task) || '未填写'}`,
     `创建时间：${task.createdAt}`,
     `更新时间：${task.updatedAt}`,
   ].join('\n')
@@ -109,6 +110,70 @@ function parseJson(argument: string): unknown | undefined {
   } catch {
     return undefined
   }
+}
+
+/**
+ * S1-G2：move+renumber 复合写失败时，core 层会把「原始业务错误 + 各条回滚错误」聚合为
+ * AggregateError 抛出（见 core/tasks.ts failWithRollbackErrors）。命令层此前一律落到
+ * 「任务操作失败」通用文案，用户看不到到底是哪一步失败、回滚是否完整。
+ *
+ * 这里把 AggregateError 拍平成安全中文摘要：
+ *  - 顶层沿用 AggregateError.message（core 已写「移动并重新编号失败，且部分任务记录恢复失败」等语义）；
+ *  - errors[0] 视为最原始业务错误，其后依次为回滚错误；嵌套 AggregateError 与 error.cause 递归拍平；
+ *  - 按 message 去重、每条只取首行并截断长度、最多列前 N 条回滚错，避免堆栈/敏感对象泄漏；
+ *  - 非 AggregateError 返回 undefined，交由调用方走既有领域错误/通用文案分支，已知领域错误不回归。
+ *
+ * context 预留未来多人协作扩展（actor 等敏感字段绝不进入摘要）。
+ */
+interface CommandErrorContext {
+  /** 预留：调用方操作标识，当前不改变文案，仅为后续扩展留位。 */
+  readonly operation?: string
+}
+
+const MAX_ERROR_LINE_LENGTH = 120
+const MAX_ROLLBACK_LINES = 3
+
+function sanitizeErrorLine(input: unknown): string {
+  const firstLine = String(input).split(/\r?\n/, 1)[0] ?? ''
+  const trimmed = firstLine.trim()
+  if (!trimmed) return ''
+  return trimmed.length > MAX_ERROR_LINE_LENGTH ? `${trimmed.slice(0, MAX_ERROR_LINE_LENGTH)}…` : trimmed
+}
+
+function collectAggregateMessages(error: AggregateError, into: string[], seen: Set<string>): void {
+  const push = (value: unknown): void => {
+    if (value instanceof AggregateError) {
+      for (const inner of value.errors) push(inner)
+      if (value.cause) push(value.cause)
+      return
+    }
+    const line = sanitizeErrorLine(value instanceof Error ? value.message : value)
+    if (line && !seen.has(line)) {
+      seen.add(line)
+      into.push(line)
+    }
+  }
+  for (const inner of error.errors) push(inner)
+  if (error.cause) push(error.cause)
+}
+
+function formatAggregateCommandError(error: AggregateError, _context?: CommandErrorContext): string | undefined {
+  const messages: string[] = []
+  const seen = new Set<string>()
+  collectAggregateMessages(error, messages, seen)
+  if (messages.length === 0) return undefined
+  const [original, ...rollbacks] = messages
+  const lines: string[] = [sanitizeErrorLine(error.message)]
+  lines.push(`原始错误：${original}`)
+  if (rollbacks.length > 0) {
+    const shown = rollbacks.slice(0, MAX_ROLLBACK_LINES)
+    lines.push(`恢复失败（${rollbacks.length} 项）：`)
+    for (const r of shown) lines.push(`  - ${r}`)
+    if (rollbacks.length > shown.length) {
+      lines.push(`  …另有 ${rollbacks.length - shown.length} 项已省略`)
+    }
+  }
+  return lines.join('\n')
 }
 
 export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm?: LlmGateway): Promise<CommandResult> {
@@ -553,6 +618,12 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
     }
     if (error instanceof AiDraftError) {
       return { kind: 'error', text: `AI 拆解暂不可用：${error.message}你仍可用 /pm task add 手工录入。` }
+    }
+    if (error instanceof AggregateError) {
+      // S1-G2：复合写失败 + 回滚不完整 → 结构化中文摘要（原始错误 + 各回滚错误），
+      // 而不是泛化的「任务操作失败」。格式化失败时回退到通用文案，绝不向用户抛堆栈。
+      const formatted = formatAggregateCommandError(error)
+      if (formatted) return { kind: 'error', text: formatted }
     }
     console.error('[pm-tool] 任务操作失败：', error)
     return { kind: 'error', text: '任务操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。' }
