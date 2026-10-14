@@ -12,7 +12,7 @@ import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { apply } from '../lib/index.js'
-import { createBackup, readBackupFile, restoreBackup, defaultBackupDirectory, applyBackup, collectBackup, validateBackup } from '../lib/core/backup.js'
+import { createBackup, readBackupFile, restoreBackup, defaultBackupDirectory, applyBackup, collectBackup, validateBackup, resolveBackupDirectory } from '../lib/core/backup.js'
 
 delete process.env.DEEPSEEK_API_KEY
 const ROOT_BASE = mkdtempSync(join(tmpdir(), 'pm-tool-space-'))
@@ -188,7 +188,87 @@ assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backu
   try { await applyBackup(domain, withExtra, backupDir) } catch (e) { t8err = e }
   assert.ok(t8err, 'T8 未知新字段应被 strict schema 拒绝（不得静默写入）')
 
-console.log('verify-backup 全部通过（隔离目录+默认backups未变+原子写+中途回滚T1-T9）。')
+  // T9：备份目录优先级——显式 directory 参数 > DSH_PM_BACKUP_DIR env > 内置 packages/backups（纯函数直测）。
+  // 上一段 T-DEF-010 已 delete env，此处从干净 env 态起测。
+  delete process.env.DSH_PM_BACKUP_DIR
+  const builtinDir = resolveBackupDirectory()
+  assert.ok(builtinDir.replace(/\/+$/, '').endsWith('/packages/backups'), `无 env 无 override 应回退内置 packages/backups（实得 ${builtinDir}）`)
+  process.env.DSH_PM_BACKUP_DIR = join(ROOT_BASE, 'env wins')
+  assert.equal(resolveBackupDirectory(), process.env.DSH_PM_BACKUP_DIR, 'env 设置时默认目录取 env')
+  const explicitDir = join(ROOT_BASE, 'explicit wins')
+  assert.equal(resolveBackupDirectory(explicitDir), explicitDir, '显式 directory 参数必须优先于 env')
+  process.env.DSH_PM_BACKUP_DIR = '   '  // 纯空白视为未设置
+  assert.ok(resolveBackupDirectory().replace(/\/+$/, '').endsWith('/packages/backups'), '空白 env 应回退内置默认目录')
+  delete process.env.DSH_PM_BACKUP_DIR
+
+  // ============ 第三批：恢复临界区并入全局单写者队列（并发安全）============
+  // before 预置为 3 个任务；targetBackup 仍只含 1 个任务「任务一」。
+  await run('task add {"projectId":"p-0001","title":"队列任务二"}')
+  await run('task add {"projectId":"p-0001","title":"队列任务三"}')
+  assert.equal(tasksOf().length, 3, 'T10 预置 before=3')
+
+  // T10：恢复进行中触发普通写——必须排队等待临界区释放，且恢复完成后不得被 replaceAll 抹掉。
+  let t10settledMid = false
+  let t10queued = null
+  let t10gateFired = false
+  const t10hook = {
+    async onWrite() {
+      if (t10gateFired) return
+      t10gateFired = true
+      // 恢复第 1 次持久化写（projects 删 p-0001）时触发普通写
+      t10queued = run('task add {"projectId":"p-0001","title":"并发任务-X"}')
+        .then(() => { t10settledMid = true })
+      await new Promise(r => setTimeout(r, 50))
+      // 临界区仍持有全局写队列：普通写此刻必须尚未执行（否则即与恢复交错）
+      assert.equal(t10settledMid, false, 'T10 恢复进行中触发的普通写必须排队，不得与恢复临界区交错执行')
+    },
+  }
+  await applyBackup(domain, targetBackup, backupDir, t10hook)
+  await t10queued
+  assert.deepEqual(
+    new Set(tasksOf().map(t => t.title)),
+    new Set(['任务一', '并发任务-X']),
+    'T10 最终 = 备份 1 + 排队写 1；排队的普通写不得被恢复 replaceAll 抹掉',
+  )
+
+  // 收敛回 before=3（任务一+队列任务二+队列任务三），再测故障回滚路径
+  await restoreBackup(domain, b.path, backupDir)
+  await run('task add {"projectId":"p-0001","title":"队列任务二"}')
+  await run('task add {"projectId":"p-0001","title":"队列任务三"}')
+  assert.equal(tasksOf().length, 3, 'T11 预置 before=3')
+
+  // T11：故障 hook 下回滚语义——恢复中途失败自动回滚到 before，排队的普通写随后落库且不被回滚抹掉。
+  let t11settledMid = false
+  let t11queued = null
+  let t11writes = 0
+  let t11fired = false
+  const t11hook = {
+    async onWrite() {
+      t11writes++
+      if (!t11fired) {
+        t11fired = true
+        t11queued = run('task add {"projectId":"p-0001","title":"并发任务-Y"}')
+          .then(() => { t11settledMid = true })
+        await new Promise(r => setTimeout(r, 50))
+        assert.equal(t11settledMid, false, 'T11 恢复进行中触发的普通写同样必须排队')
+        return
+      }
+      // 第 3 次写（tasks 第一次 delete）注入失败 → 走自动回滚；回滚阶段的写不再注入。
+      if (t11writes === 3) throw new Error('T11 injected mid-apply failure')
+    },
+  }
+  let t11err = null
+  try { await applyBackup(domain, targetBackup, backupDir, t11hook) } catch (e) { t11err = e }
+  assert.ok(t11err, 'T11 注入失败应抛错')
+  assert.match(String(t11err.message), /已自动回滚/, 'T11 中途失败应自动回滚')
+  await t11queued
+  assert.deepEqual(
+    new Set(tasksOf().map(t => t.title)),
+    new Set(['任务一', '并发任务-Y', '队列任务二', '队列任务三']),
+    'T11 回滚恢复 before=3，排队的普通写随后落库且不被回滚 replaceAll 抹掉',
+  )
+
+console.log('verify-backup 全部通过（隔离目录+默认backups未变+原子写+中途回滚T1-T9+恢复入队并发安全T10-T11）。')
 } finally {
   await facility.closeAll()
 }

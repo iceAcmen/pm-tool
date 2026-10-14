@@ -7,6 +7,7 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { writeExportFile } from './export.js'
 import { atomicWriteFile } from './fs-atomic.js'
+import { enqueueDomainWrite } from './projects.js'
 import type { Milestone } from './milestone.js'
 import type { Project } from './project.js'
 import type { PmDomain } from './storage.js'
@@ -159,7 +160,7 @@ export interface BackupWriteHooks {
   onWrite?: (table: string, op: 'put' | 'delete', id: string) => void
 }
 
-/** 单域写链下逐表替换：先删当前全部 key，再 put 目标行。每步后触发 hooks.onWrite。 */
+/** 单域写链下逐表替换：先删当前全部 key，再 put 目标行。每步后触发并等待 hooks.onWrite。 */
 async function replaceAll(
   domain: PmDomain,
   data: Record<string, { id: string }[]>,
@@ -169,11 +170,11 @@ async function replaceAll(
     const table = domain.table(name as never) as unknown as AnyTable
     for (const [id] of [...table.entries()]) {
       await table.delete(id)
-      hooks?.onWrite?.(name, 'delete', id)
+      await hooks?.onWrite?.(name, 'delete', id)
     }
     for (const row of data[name]) {
       await table.put(row.id, row)
-      hooks?.onWrite?.(name, 'put', row.id)
+      await hooks?.onWrite?.(name, 'put', row.id)
     }
   }
 }
@@ -188,43 +189,50 @@ export async function applyBackup(
   hooks?: BackupWriteHooks,
 ): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   // 1) 删除前先对全部七类实体做完整 schema + 关系预检；任何一条不合法直接抛错，不触碰现有数据。
+  //    预检只读备份内容、不碰 domain，放全局写队列外，避免大备份校验期间占住写队列。
   await precheckBackup(backup)
 
-  // 2) 预取 before 内存快照（entries 同步快照 + structuredClone，单 tick 一致）。
-  //    它既是安全快照的落盘内容，也是中途失败后自动回滚的唯一来源——不回读磁盘，保证回滚源与落盘字节同源、确定性。
-  const before = collectBackup(domain)
-  const hasData = Object.values(rowsOf(before)).some(rows => rows.length > 0)
-  let safetySnapshot: string | undefined
-  if (hasData) {
-    // 安全快照先原子落盘；这一步失败即抛错，绝不进入破坏性写。
-    safetySnapshot = (await writeBackupFile(before, directory)).path
-  }
-
-  // 3) 破坏性替换。单域写链「先落盘再改内存」：第 K 步失败时，已 await 的写均已持久化且在内存，
-  //    后续表仍是旧态——因此 catch 里用 before 确定性重放回滚。
-  try {
-    await replaceAll(domain, rowsOf(backup), hooks)
-  } catch (applyError) {
-    let rollbackError: unknown
-    try {
-      await replaceAll(domain, rowsOf(before), hooks)
-    } catch (e) {
-      rollbackError = e
+  // 2) 其余步骤整体进入全局单写者队列临界区：before 内存快照、安全快照落盘、replaceAll 破坏性替换、
+  //    失败回滚必须与普通写严格互斥——否则恢复期间并发的普通写会被 replaceAll/回滚的整表清空抹掉。
+  //    临界区内只做 collectBackup/replaceAll 这类表级直写，绝不再次调用 enqueueDomainWrite
+  //    （嵌套入队会等待外层尾 promise，形成队列死锁）。
+  return enqueueDomainWrite(domain, async () => {
+    // 3) 预取 before 内存快照（entries 同步快照 + structuredClone，单 tick 一致）。
+    //    它既是安全快照的落盘内容，也是中途失败后自动回滚的唯一来源——不回读磁盘，保证回滚源与落盘字节同源、确定性。
+    const before = collectBackup(domain)
+    const hasData = Object.values(rowsOf(before)).some(rows => rows.length > 0)
+    let safetySnapshot: string | undefined
+    if (hasData) {
+      // 安全快照先原子落盘；这一步失败即抛错，绝不进入破坏性写。
+      safetySnapshot = (await writeBackupFile(before, directory)).path
     }
-    if (rollbackError == null) {
+
+    // 4) 破坏性替换。单域写链「先落盘再改内存」：第 K 步失败时，已 await 的写均已持久化且在内存，
+    //    后续表仍是旧态——因此 catch 里用 before 确定性重放回滚。
+    try {
+      await replaceAll(domain, rowsOf(backup), hooks)
+    } catch (applyError) {
+      let rollbackError: unknown
+      try {
+        await replaceAll(domain, rowsOf(before), hooks)
+      } catch (e) {
+        rollbackError = e
+      }
+      if (rollbackError == null) {
+        throw new Error(
+          `恢复中途失败，但已自动回滚到恢复前状态；安全快照：${safetySnapshot ?? '（当前库为空，未生成快照）'}。` +
+          `原始错误：${errMsg(applyError)}`,
+          { cause: applyError },
+        )
+      }
+      // 恢复失败 + 回滚也失败：合并为单一错误，明确指向安全快照人工恢复。
       throw new Error(
-        `恢复中途失败，但已自动回滚到恢复前状态；安全快照：${safetySnapshot ?? '（当前库为空，未生成快照）'}。` +
-        `原始错误：${errMsg(applyError)}`,
-        { cause: applyError },
+        `恢复失败且自动回滚失败；请勿继续操作，请用安全快照手动恢复：${safetySnapshot ?? '（无）'}。`,
+        { cause: new AggregateError([applyError, rollbackError], 'apply 与 rollback 均失败') },
       )
     }
-    // 恢复失败 + 回滚也失败：合并为单一错误，明确指向安全快照人工恢复。
-    throw new Error(
-      `恢复失败且自动回滚失败；请勿继续操作，请用安全快照手动恢复：${safetySnapshot ?? '（无）'}。`,
-      { cause: new AggregateError([applyError, rollbackError], 'apply 与 rollback 均失败') },
-    )
-  }
-  return { safetySnapshot, backup }
+    return { safetySnapshot, backup }
+  })
 }
 
 /** 删除前预检：逐条按 record schema 校验，并校验任务 projectId/parentId/milestoneId 关系。 */

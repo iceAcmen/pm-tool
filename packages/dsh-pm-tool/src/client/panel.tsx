@@ -9,7 +9,9 @@ import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIs
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom } from '../core/gantt.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
+import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
 import Database from 'lucide-react/dist/esm/icons/database.mjs'
 import ArrowDownWideNarrow from 'lucide-react/dist/esm/icons/arrow-down-wide-narrow.mjs'
@@ -336,6 +338,20 @@ export function PmPanel({ execute }: PmPanelApi) {
 
   useEffect(() => { void refresh() }, [])
 
+  // 「更多」菜单：Escape 关闭并把焦点还给触发按钮。
+  useEffect(() => {
+    if (!topMenuOpen) return
+    const opener = document.activeElement as HTMLElement | null
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopPropagation(); setTopMenuOpen(false) }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      opener?.focus?.()
+    }
+  }, [topMenuOpen])
+
   const run = async (line: string) => {
     setBusy(true)
     try {
@@ -427,7 +443,7 @@ export function PmPanel({ execute }: PmPanelApi) {
         </div>
         <div className="pm-top-actions">
           <button
-            className="pm-button"
+            className="pm-button pm-top-secondary"
             aria-pressed={dashOpen}
             title="跨项目总览看板与全局搜索"
             onClick={() => setDashOpen(value => !value)}
@@ -438,7 +454,7 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Plus size={15}/>新建项目
           </button>
           <button
-            className="pm-button"
+            className="pm-button pm-top-secondary"
             disabled={!project || dashOpen}
             title="AI 拆解 WBS / 生成汇报叙述 / 归纳会议纪要（结果为草稿，需确认才入库）"
             onClick={() => setDrawer({ kind: 'ai' })}
@@ -446,7 +462,7 @@ export function PmPanel({ execute }: PmPanelApi) {
             <Sparkles size={15}/>AI 助手
           </button>
           <button
-            className="pm-button pm-copilot-open"
+            className="pm-button pm-top-secondary pm-copilot-open"
             disabled={!project || dashOpen}
             title="提问式副驾：只读诊断 + 操作草稿卡（确认才落库）"
             onClick={() => setDrawer({ kind: 'copilot' })}
@@ -465,10 +481,32 @@ export function PmPanel({ execute }: PmPanelApi) {
           {topMenuOpen && (
             <div className="pm-top-menu" onMouseLeave={() => setTopMenuOpen(false)}>
           <button
+            className="pm-button pm-menu-item"
+            onClick={() => { setTopMenuOpen(false); setDashOpen(true) }}
+          >
+            <LayoutDashboard size={15}/>总览看板
+          </button>
+          <button
+            className="pm-button pm-menu-item"
+            disabled={!project}
+            onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'ai' }) }}
+          >
+            <Sparkles size={15}/>AI 助手
+          </button>
+          <button
+            className="pm-button pm-menu-item"
+            disabled={!project}
+            onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'copilot' }) }}
+          >
+            <MessageSquare size={15}/>AI 副驾
+          </button>
+          <div className="pm-menu-divider"/>
+          <button
             className="pm-button pm-backup-btn"
             disabled={busy}
-            title="一键备份 pmtool 七类实体到仓库 backups/（恢复请用 /pm restore <文件> confirm）"
+            title="一键备份 pmtool 七类实体到内置 packages/backups/（恢复请用 /pm restore <文件> confirm）"
             onClick={async () => {
+              if (!window.confirm('将把当前七类实体备份到内置 packages/backups/（带时间戳 JSON，成功后显示完整路径）。开始？')) return
               const text = await execute('backup')
               setMessage(`备份完成：${text}`)
               void refresh()
@@ -476,8 +514,8 @@ export function PmPanel({ execute }: PmPanelApi) {
           >
             <Database size={15}/>备份
           </button>
-          <label className="pm-button pm-restore-btn" title="选择本地备份 JSON 恢复（先演练，确认后才替换）">
-            <Package size={15}/>从备份恢复
+          <label className="pm-button pm-restore-btn" title="按备份成功提示的完整路径选取本地 pm-tool 备份 JSON；选文件后先预览，确认才替换当前七类实体">
+            <Package size={15}/>选择备份文件恢复
             <input
               type="file"
               accept=".json,application/json"
@@ -503,6 +541,7 @@ export function PmPanel({ execute }: PmPanelApi) {
               }}
             />
           </label>
+          <p className="pm-menu-note">备份默认存于内置 packages/backups/（隔离实例可能不同）；以备份成功提示的完整路径为准。恢复请选 pm-tool 备份 JSON，先预览、确认后才替换七类实体。</p>
           <button
             className="pm-button pm-export-md-btn"
             disabled={busy || !project}
@@ -625,6 +664,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 run={run}
                 execute={execute}
                 projectId={project.id}
+                overlayOpen={drawer != null || dashOpen || restorePreview != null}
               />}
               {view === 'milestones' && <MilestoneTable
                 milestones={milestones}
@@ -655,7 +695,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
-              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onSaved={() => void refresh()}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onSaved={() => void refresh()} onEdit={task => setDrawer({ kind: 'task', task })}/>}
               {view === 'people' && <PeopleView
                 data={data}
                 onPickProject={(id) => setSelected(id)}
@@ -1288,9 +1328,20 @@ function downloadText(filename: string, text: string, mime: string) {  try {
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
-  return <div className="pm-notice" role="status">
-    <Check size={15}/>
-    <span>{message.split('\n')[0]}</span>
+  const lines = formatNoticeLines(message)
+  const isError = /失败|错误|拒绝|不可用|无法处理/i.test(message)
+  const path = extractBackupPath(message)
+  return <div className={`pm-notice${isError ? ' pm-notice--error' : ''}`} role="status">
+    {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
+    <div className="pm-notice-lines">
+      {lines.map((line, i) => <div key={i}>{line}</div>)}
+    </div>
+    {path && (
+      <button
+        className="pm-button pm-notice-copy"
+        onClick={() => { void navigator.clipboard?.writeText(path).catch(() => {}) }}
+      >复制路径</button>
+    )}
     <button className="pm-plain-icon" aria-label="关闭通知" onClick={onClose}><X size={14}/></button>
   </div>
 }
@@ -1439,6 +1490,7 @@ function TaskTable({
   run,
   execute,
   projectId,
+  overlayOpen,
 }: {
   tasks: Task[]
   milestones: Milestone[]
@@ -1450,6 +1502,7 @@ function TaskTable({
   run: (line: string) => Promise<boolean>
   execute: (line: string) => Promise<string>
   projectId: string
+  overlayOpen?: boolean
 }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
@@ -1486,31 +1539,60 @@ function TaskTable({
   }
   const batchIds = [...selected].join(',')
   // OPT-09：纯键盘导航（j/k 移动、空格勾选、Del 走批量删除确认）。
-  const [activeIdx, setActiveIdx] = useState(0)
+  const [activeId, setActiveId] = useState<string | null>(null)
   // OPT-12：导入预览（dry-run 文本 + 确认落盘命令）。
   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
+  // 真实渲染行序列：与下方 TaskGroup 渲染严格同序同集合。
+  //  - 分组模式：按状态分组顺序，组内保留 sorted 顺序；
+  //  - 树模式：flattenTaskTree（折叠后代被剔除、按 WBS 展开顺序）。
+  const treeRows = flattenTaskTree(visible, collapsed)
+  const renderedIds = grouped
+    ? Object.keys(taskStatus).flatMap(v => visible.filter(t => t.status === v).map(t => t.id))
+    : treeRows.map(r => r.task.id)
+  // 当前生效高亮行：只在「真实渲染 ids」里取，否则回退首行；空则 null。
+  const effectiveActiveId = activeId && renderedIds.includes(activeId) ? activeId : (renderedIds[0] ?? null)
+  // 鼠标 pointer / 焦点落到任意行 → 同步高亮（点击行内 button/select/input 不劫持）。
+  const focusRow = (id: string) => { if (renderedIds.includes(id)) setActiveId(id) }
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      const tag = (document.activeElement?.tagName || '').toUpperCase()
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      if (!shouldHandleGlobalKbd({
+        key: ev.key,
+        targetTag: (ev.target as HTMLElement | null)?.tagName,
+        targetEditable: (ev.target as HTMLElement | null)?.getAttribute?.('contenteditable') != null,
+        ctrl: ev.ctrlKey, meta: ev.metaKey, alt: ev.altKey,
+        overlayOpen: overlayOpen || movePickerFor != null || importPreview != null,
+      })) return
       const action = panelKeyboard(fromKeyboardEvent(ev))
       if (!action) return
       ev.preventDefault()
       if (action.type === 'move') {
-        setActiveIdx(i => Math.max(0, Math.min(visible.length - 1, i + action.delta)))
+        const nextId = nextRowId(renderedIds, effectiveActiveId, action.delta)
+        if (nextId) setActiveId(nextId)
       } else if (action.type === 'toggleActive') {
-        const row = visible[activeIdx]
+        const row = tasksById.get(effectiveActiveId ?? '')
         if (row) toggleSelect(row.id)
       } else if (action.type === 'deleteSelected') {
         confirmBatchDelete()
       } else if (action.type === 'openActive') {
-        const row = visible[activeIdx]
+        const row = tasksById.get(effectiveActiveId ?? '')
         if (row) { setRowOpener(row.id); onEdit?.(row) }
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   })
+  // 高亮 active 行：加类 + aria + 滚动入视（行 DOM 用 data-pm-row 锚定）。
+  useEffect(() => {
+    document.querySelectorAll('.pm-row-active').forEach(n => {
+      n.classList.remove('pm-row-active')
+      n.removeAttribute('aria-current')
+    })
+    if (!effectiveActiveId) return
+    const el = document.querySelector(`[data-pm-row="${CSS.escape(effectiveActiveId)}"]`)
+    el?.classList.add('pm-row-active')
+    el?.setAttribute('aria-current', 'true')
+    el?.scrollIntoView({ block: 'nearest' })
+  }, [effectiveActiveId])
   const confirmBatchDelete = () => {
     if (!selected.size) return
     void run(`task batch delete ${batchIds}`).then(() => {
@@ -1686,6 +1768,7 @@ function TaskTable({
                   onToggle={toggleSelect}
                   onSaved={onSaved}
                   onMove={setMovePickerFor}
+                  onRowActivate={focusRow}
                 />)
               : <TaskGroup
                   key="tree"
@@ -1697,11 +1780,12 @@ function TaskTable({
                   run={run}
                   selected={selected}
                   onToggle={toggleSelect}
-                  tree={flattenTaskTree(visible, collapsed)}
+                  tree={treeRows}
                   collapsed={collapsed}
                   onToggleCollapse={toggleCollapse}
                   onSaved={onSaved}
                   onMove={setMovePickerFor}
+                  onRowActivate={focusRow}
                 />}
           </tbody>
         </table>
@@ -1732,6 +1816,7 @@ function TaskGroup({
   tree,
   collapsed,
   onToggleCollapse,
+  onRowActivate,
 }: {
   group: { key: string, label: string, rows: Task[] }
   milestones: Milestone[]
@@ -1743,6 +1828,7 @@ function TaskGroup({
   onToggle: (id: string) => void
   onSaved: () => void
   onMove?: (task: Task) => void
+  onRowActivate: (id: string) => void
   tree?: { task: Task, depth: number, hasChildren: boolean, childIds: string[] }[]
   collapsed?: Set<string>
   onToggleCollapse?: (id: string) => void
@@ -1766,6 +1852,7 @@ function TaskGroup({
       onToggle={onToggle}
       onSaved={onSaved}
       onMove={onMove}
+      onRowActivate={onRowActivate}
     />)}
   </>
   }
@@ -1788,6 +1875,7 @@ function TaskGroup({
         onToggle={onToggle}
         onSaved={onSaved}
         onMove={onMove}
+        onRowActivate={onRowActivate}
       />
     })}
   </>
@@ -1795,7 +1883,7 @@ function TaskGroup({
 
 function TaskRow({
   task, depth, milestones, tasksById, disabled, onEdit, run, selected, onToggle,
-  hasChildren, collapsed, onToggleCollapse, onSaved, onMove,
+  hasChildren, collapsed, onToggleCollapse, onSaved, onMove, onRowActivate,
 }: {
   task: Task
   depth: number
@@ -1811,9 +1899,15 @@ function TaskRow({
   onToggleCollapse?: (id: string) => void
   onSaved: () => void
   onMove?: (task: Task) => void
+  onRowActivate: (id: string) => void
 }) {
     {const milestone = milestones.find(item => item.id === task.milestoneId)
-      return <tr className="pm-record-row pm-task-row" data-pm-row={task.id}>
+      // 行 pointer/focus 同步键盘高亮；点到 button/select/input/a/textarea 时不劫持原生行为。
+      const isInteractive = (el: EventTarget | null) =>
+        el instanceof HTMLElement && !!el.closest('button,select,input,a,textarea,[contenteditable="true"]')
+      return <tr className="pm-record-row pm-task-row" data-pm-row={task.id}
+        onPointerDown={e => { if (!isInteractive(e.target)) onRowActivate(task.id) }}
+        onFocus={e => { if (!isInteractive(e.target)) onRowActivate(task.id) }}>
         <td className="pm-col-check">
           <input
             type="checkbox"
@@ -1913,11 +2007,11 @@ function TaskRow({
           : <span className="pm-cell-empty">-</span>}</td>
         <td className="pm-col-actions">
           {onMove && (
-            <button className="pm-row-button" aria-label={`移动 ${task.title}`} title="移动到…" onClick={() => onMove(task)}>
-              <MoreHorizontal size={14}/>
+            <button className="pm-row-button pm-row-move" aria-label={`移动 ${task.title}`} title="移动到…" onClick={() => onMove(task)}>
+              移动
             </button>
           )}
-          <button className="pm-row-button" aria-label={`编辑 ${task.title}`} onClick={() => onEdit(task)}>
+          <button className="pm-row-button" aria-label={`编辑 ${task.title}`} title="编辑" onClick={() => onEdit(task)}>
             <Pencil size={14}/>
           </button>
         </td>
@@ -2474,13 +2568,38 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
   const [rejected, setRejected] = useState<{ stepId?: string, reason: string }[]>([])
   const [openedAt, setOpenedAt] = useState<Record<string, string> | null>(null)
   const [busy, setBusy] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [lane, setLane] = useState<'poc' | 'prod'>('poc')
+
+  // 打开时读取当前模型车道（model status），用于车道选择器回显。
+  useEffect(() => {
+    let alive = true
+    void execute('model status').then(text => {
+      if (!alive) return
+      const cur = parseActiveModelLane(text)
+      if (cur) setLane(cur)
+    }).catch(() => {})
+    return () => { alive = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId])
+
+  const switchLane = async (next: 'poc' | 'prod') => {
+    setLane(next)
+    try { await execute(`model mode ${next}`) } catch { /* 状态条由下次 status 反映 */ }
+  }
 
   const send = async () => {
-    const q = input.trim(); if (!q || disabled) return
-    setInput(''); setMsgs(m => [...m, { role: 'me', text: q }])
+    const q = input.trim(); if (!q || disabled || sending) return
+    setInput('')
+    const placeholderText = '思考中…'
+    setMsgs(m => [...m, { role: 'me', text: q }, { role: 'sys', text: placeholderText }])
+    setSending(true)
+    // 只在末尾确为「思考中…」气泡时移除它一次；validatePlan 抛错时不误删已渲染的 diagnosis。
+    const removePlaceholder = () => setMsgs(m => (m.length && m[m.length - 1].text === placeholderText ? m.slice(0, -1) : m))
     try {
       const isFixture = q === 'fixture' // 仅精确触发测试缝；普通用户 fixture 开头的原问题原样走真实 ask
       const text = await execute(`ask ${projectId} ${isFixture ? 'fixture' : ''} ${isFixture ? '' : JSON.stringify(q)}`.trim())
+      removePlaceholder()
       const { diagnosis, rawSteps } = parseCopilotPlan(text)
       setMsgs(m => [...m, { role: 'ai', text: diagnosis }])
       const v = validatePlan(rawSteps, { taskIds })
@@ -2491,7 +2610,10 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
       } else {
         setMsgs(m => [...m, { role: 'sys', text: '模型未给出可执行步骤。' }])
       }
-    } catch (e) { setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }]) }
+    } catch (e) {
+      removePlaceholder()
+      setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }])
+    } finally { setSending(false) }
   }
 
   // 行内标量编辑：仅允许白名单字段；改完即时重跑 validateActions，非法行标红。
@@ -2543,7 +2665,7 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
 
   const editablePatch = (s: PlanStepView) => (s.action.patch ?? {}) as Record<string, unknown>
   return <div className="pm-copilot">
-    <div className="pm-copilot-messages">
+    <div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy={sending}>
       {msgs.map((m, i) => <div key={i} className={`pm-copilot-msg pm-copilot-${m.role}`}>{m.text}</div>)}
     </div>
     {steps.length > 0 || rejected.length > 0 ? (
@@ -2593,29 +2715,51 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
       </div>
     ) : null}
     <div className="pm-copilot-inputrow">
+      <select
+        className="pm-copilot-lane pm-model-lane"
+        aria-label="模型车道"
+        title="切换模型车道（PoC 公共网关 / 生产自有 Key）"
+        value={lane}
+        disabled={sending}
+        onChange={e => void switchLane(e.currentTarget.value as 'poc' | 'prod')}
+      >
+        <option className="pm-lane-poc" value="poc">PoC 车道</option>
+        <option className="pm-lane-prod" value="prod">生产车道</option>
+      </select>
+      <span className="pm-lane-warning" hidden={false} data-lane={lane}>
+        {lane === 'prod' ? '生产车道需已配置自有 API Key' : 'PoC 为公共网关，仅概念验证'}
+      </span>
       <input className="pm-copilot-input" value={input} placeholder="例如：下周会不会延期？"
+        disabled={sending}
         onChange={e => setInput(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') void send() }}/>
-      <button className="pm-button pm-copilot-send" disabled={disabled || !input.trim()} onClick={() => void send()}>发送</button>
+      <button className="pm-button pm-copilot-send" disabled={disabled || !input.trim() || sending} onClick={() => void send()}>
+        {sending ? '思考中…' : '发送'}
+      </button>
     </div>
   </div>
 }
 
-/** PROD-22 方案A：甘特排期（只读条 + 拖拽平移改期）。 */
-function GanttView({ tasks, milestones, run, onSaved }: {
+/** PROD-22 方案A：甘特排期（左标签列 + 时间轴条；点击打开抽屉，拖拽平移改期）。 */
+function GanttView({ tasks, milestones, run, onSaved, onEdit }: {
   tasks: Task[]
   milestones: Milestone[]
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onEdit?: (task: Task) => void
 }) {
   const axis = dateRange([...tasks, ...milestones])
   const today = new Date().toISOString().slice(0, 10)
   if (!axis) return <p className="pm-cell-empty pm-gantt">暂无带起止日期的任务/里程碑，无法绘制时间轴。</p>
   const axisDays = Math.max(1, daysFrom(axis.end, axis.start) + 1)
   const PX = 16 // 每天像素
+  const ticks = sampleGanttTicks(axis.start, axis.end, PX)
+  const todayOff = todayOffset(axis.start, today)
   const [dragOver, setDragOver] = useState('')
   const barRef = useRef<{ id: string, startX: number } | null>(null)
+  const draggedRef = useRef(false)
   const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
+    draggedRef.current = false
     barRef.current = { id: task.id, startX: e.clientX }
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
   }
@@ -2625,50 +2769,75 @@ function GanttView({ tasks, milestones, run, onSaved }: {
     if (startX === undefined || !task.startDate || !task.dueDate) return
     const deltaPx = e.clientX - startX
     if (Math.abs(deltaPx) < 4) return
+    draggedRef.current = true
     const next = shiftDatesByDrag(task.startDate, task.dueDate, deltaPx, PX)
     setDragOver(`${task.title} → ${next.startDate} ~ ${next.dueDate}`)
     const ok = await run(`task update ${task.id} ${JSON.stringify(next)}`)
     setDragOver(ok ? `已更新：${next.startDate} ~ ${next.dueDate}` : '更新失败，请重试')
     if (ok) onSaved()
   }
+  const clickBar = (task: Task) => {
+    // 拖拽改期后不触发打开抽屉，避免误开。
+    if (draggedRef.current) { draggedRef.current = false; return }
+    onEdit?.(task)
+  }
   return <div className="pm-gantt">
-    <div className="pm-gantt-axis" style={{ width: `${axisDays * PX}px` }}>
-      {Array.from({ length: axisDays }, (_, i) => {
-        const d = new Date(Date.parse(axis.start) + i * 86_400_000).toISOString().slice(0, 10)
-        return <span key={d} className="pm-gantt-tick" style={{ left: `${i * PX}px` }}>{d.slice(5)}</span>
-      })}
-      {(() => { const off = todayOffset(axis.start, today); return off >= 0 && off <= axisDays
-        ? <div className="pm-gantt-today" style={{ left: `${off * PX + PX / 2}px` }}/> : null })()}
-    </div>
-    <div className="pm-gantt-rows">
-      {tasks.filter(t => t.startDate && t.dueDate).map(t => {
-        const g = barGeometry(t, axis.start, axisDays)
-        if (!g) return null
-        const done = t.status === 'done'
-        return <div key={t.id} className="pm-gantt-row">
-          <div
-            className={`pm-gantt-bar ${done ? 'pm-gantt-bar-done' : ''}`}
-            data-task-id={t.id}
-            data-start={t.startDate}
-            data-end={t.dueDate}
-            style={{ left: `${g.leftDays * PX}px`, width: `${g.widthDays * PX}px` }}
-            title={`${t.title}（${t.startDate} ~ ${t.dueDate}）拖动平移改期`}
-            onPointerDown={(e) => onPointerDownBar(e, t)}
-            onPointerUp={(e) => onPointerUpBar(e, t)}
-          >{t.title}</div>
+    <div className="pm-gantt-labels">
+      <div className="pm-gantt-label pm-gantt-label--head">任务 / 里程碑</div>
+      {tasks.map(t => (
+        <div key={t.id} className="pm-gantt-label">
+          <span className="pm-gantt-label-code">{t.code}</span>
+          <span className="pm-gantt-label-title">{t.title}</span>
+          <span className="pm-gantt-label-meta">{t.assignee || '—'} · {t.progress ?? 0}%</span>
+          {!(t.startDate && t.dueDate) && <span className="pm-gantt-unscheduled">未排期</span>}
         </div>
-      })}
-      {milestones.filter(m => m.targetDate).map(m => {
-        const off = daysFrom(m.targetDate!, axis.start)
-        const done = m.status === 'achieved'
-        return <div key={m.id} className="pm-gantt-row">
-          <div className={`pm-gantt-milestone ${done ? 'pm-gantt-milestone-done' : ''}`}
-            data-milestone-id={m.id} title={`里程碑 ${m.title}（${m.targetDate}）`}
-            style={{ left: `${off * PX + PX / 2}px` }}/>
-        </div>
-      })}
+      ))}
+      {milestones.map(m => (
+        <div key={`m-${m.id}`} className="pm-gantt-label pm-gantt-label--ms">◆ {m.title}</div>
+      ))}
     </div>
-    <p className="pm-gantt-hint">{dragOver || '拖动任务条可整体平移起止日期（按天吸附）。'}</p>
+    <div className="pm-gantt-scroll">
+      <div className="pm-gantt-canvas" style={{ width: `${axisDays * PX}px` }}>
+        <div className="pm-gantt-axis">
+          {ticks.map(tk => (
+            <span key={tk.date} className="pm-gantt-tick" style={{ left: `${tk.leftDays * PX}px` }}>{tk.label}</span>
+          ))}
+          {todayOff >= 0 && todayOff <= axisDays
+            ? <div className="pm-gantt-today" style={{ left: `${todayOff * PX + PX / 2}px` }}/> : null}
+        </div>
+        <div className="pm-gantt-rows">
+          {tasks.map(t => {
+            if (!t.startDate || !t.dueDate) return (
+              <div key={t.id} className="pm-gantt-row pm-gantt-row--unscheduled"
+                title="未排期任务，点击打开设置起止日期" onClick={() => onEdit?.(t)}>
+              </div>
+            )
+            const g = barGeometry(t, axis.start, axisDays)
+            if (!g) return <div key={t.id} className="pm-gantt-row"/>
+            const done = t.status === 'done'
+            return <div key={t.id} className="pm-gantt-row">
+              <div
+                className={`pm-gantt-bar ${done ? 'pm-gantt-bar-done' : ''}`}
+                data-task-id={t.id}
+                style={{ left: `${g.leftDays * PX}px`, width: `${g.widthDays * PX}px` }}
+                title={`${t.title}（${t.startDate} ~ ${t.dueDate}）· 点击打开，拖动平移改期`}
+                onClick={() => clickBar(t)}
+                onPointerDown={(e) => onPointerDownBar(e, t)}
+                onPointerUp={(e) => onPointerUpBar(e, t)}
+              >{t.title}</div>
+            </div>
+          })}
+          {milestones.map(m => {
+            const off = daysFrom(m.targetDate!, axis.start)
+            return <div key={`m-${m.id}`} className="pm-gantt-row">
+              <div className={`pm-gantt-milestone ${m.status === 'achieved' ? 'pm-gantt-milestone-done' : ''}`}
+                data-milestone-id={m.id} style={{ left: `${off * PX + PX / 2}px` }}/>
+            </div>
+          })}
+        </div>
+      </div>
+    </div>
+    {dragOver && <p className="pm-gantt-hint">{dragOver}</p>}
   </div>
 }
 
@@ -3106,19 +3275,26 @@ function TaskForm({
       <option value="">不关联</option>
       {milestones.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
     </select></Field>
-    <Field label="前置依赖（未完成时本任务显示「等待前置」）" wide>
-      <div className="pm-predecessor-list">
-        {tasks.filter(item => item.id !== task?.id).length === 0 && <span className="pm-muted">暂无可选前置任务</span>}
-        {tasks.filter(item => item.id !== task?.id).map(item => (
-          <label key={item.id} className="pm-predecessor-item">
-            <input
-              type="checkbox" name="predecessorIds" value={item.id}
-              defaultChecked={task?.predecessorIds?.includes(item.id) ?? false}
-            />
-            <span>{item.code} {item.title}{item.status !== 'done' ? '' : '（已完成）'}</span>
-          </label>
-        ))}
-      </div>
+    <Field label="前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）" wide>
+      {(() => {
+        // DAG 前置依赖与 WBS 父子是两套关系：WBS 后代也可作合法前置。
+        // 前端只排除「自身」；成环检测由服务端 validatePredecessors 负责，不静默丢弃任何现有关系。
+        const selfId = task?.id
+        const rows = flattenTaskTree(tasks, new Set()).filter(r => r.task.id !== selfId)
+        if (!rows.length) return <span className="pm-muted">暂无可选前置任务</span>
+        return <div className="pm-predecessor-list">
+          {rows.map(row => (
+            <label key={row.task.id} className="pm-predecessor-item" style={{ paddingLeft: `${6 + row.depth * 14}px` }}>
+              <input
+                type="checkbox" name="predecessorIds" value={row.task.id}
+                defaultChecked={task?.predecessorIds?.includes(row.task.id) ?? false}
+              />
+              <span className="pm-predecessor-code">{row.task.code}</span>
+              <span>{row.task.title}{row.task.status === 'done' ? '（已完成）' : ''}</span>
+            </label>
+          ))}
+        </div>
+      })()}
     </Field>
     <div className="pm-drawer-actions">
       {task && <button
@@ -3499,20 +3675,23 @@ function MeetingActions({
       <button className="pm-row-button" disabled={disabled} aria-label={`保存 ${action.title}`}><Check size={14}/></button>
       {action.taskId
         ? <span className="pm-action-promoted" data-meeting={meeting.id} data-action={action.id} title="该行动项已转为任务">已转 {action.taskId}</span>
-        : <button
-            className="pm-action-promote pm-row-button"
-            type="button"
-            data-meeting={meeting.id}
-            data-action={action.id}
-            disabled={disabled}
-            title="把行动项转为项目任务"
-            aria-label={`转任务 ${action.title}`}
-            onClick={() => {
-              if (window.confirm(`把行动项「${action.title}」转为项目任务？（负责人/截止日一并带入）`)) {
-                void run(`meeting action promote ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
-              }
-            }}
-          ><ListTree size={14}/></button>}
+        : !meeting?.id
+          // 未保存的会议没有 meeting.id，promote 会失败：明确提示，不给出可点入口。
+          ? <span className="pm-action-pending" title="请先点「保存会议」落库（获得会议 ID），行动项即可转为任务">保存会议后可转任务</span>
+          : <button
+              className="pm-action-promote pm-row-button"
+              type="button"
+              data-meeting={meeting.id}
+              data-action={action.id}
+              disabled={disabled}
+              title="把行动项转为项目任务（已转后此处显示「已转」，重复点击不会再建任务）"
+              aria-label={`转任务 ${action.title}`}
+              onClick={() => {
+                if (window.confirm(`把行动项「${action.title}」转为项目任务？（负责人/截止日一并带入）`)) {
+                  void run(`meeting action promote ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
+                }
+              }}
+            >转任务</button>}
       <button
         className="pm-row-button"
         type="button"

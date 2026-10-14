@@ -332,16 +332,41 @@ export function planBatchDelete(
   return { selected: ids.length, totalWithDescendants: seen.size, subtreeIds: [...seen] }
 }
 
-export async function batchDeleteCascade(
+/**
+ * 批量级联删除：单写队列事务内完成「全量计划 → 全量引用预检 → 整批删除」。
+ * 任一保护命中即整批拒绝（零写），避免半提交——可删的 A 已落盘删除、被引用的 B 却残留。
+ * 计划内任务之间的相互前置引用随整批删除一并消失，不视为悬空；仅计划外引用才阻止。
+ * 与单删/单级联一致地检查「计划外任务把计划内 id 列为前置」与「计划外会议行动项关联计划内任务」。
+ */
+export function batchDeleteCascade(
   domain: PmDomain,
   ids: string[],
 ): Promise<number> {
-  let deleted = 0
-  for (const id of ids) {
-    const removed = await deleteTaskCascade(domain, id)
-    deleted += removed.length
-  }
-  return deleted
+  return enqueueDomainWrite(domain, async () => {
+    const plannedIds = new Set<string>()
+    for (const id of ids) {
+      for (const task of collectTaskSubtree(domain, id)) plannedIds.add(task.id)
+    }
+    if (!plannedIds.size) return 0
+    // 全量前置引用预检：计划外任务不得把计划内 id 列为前置依赖，拒绝并点名双方。
+    for (const [, task] of domain.table('tasks').entries()) {
+      if (plannedIds.has(task.id)) continue
+      const dangling = task.predecessorIds?.find(pid => plannedIds.has(pid))
+      if (dangling) {
+        throw new TaskReferencedByPredecessorError(`任务 ${dangling} 仍被任务 ${task.id} 作为前置依赖，批量删除被阻止；请先在 ${task.id} 解除`)
+      }
+    }
+    // 全量会议引用预检：计划外会议行动项不得关联计划内任务，拒绝并点名双方。
+    for (const [, meeting] of domain.table('meetings').entries()) {
+      const referenced = meeting.actions.find(action => action.taskId && plannedIds.has(action.taskId))
+      if (referenced) {
+        throw new TaskReferencedByMeetingError(`任务 ${referenced.taskId} 仍被会议 ${meeting.id} 的行动项关联，批量删除被阻止`)
+      }
+    }
+    const table = domain.table('tasks')
+    for (const id of plannedIds) await table.delete(id)
+    return plannedIds.size
+  })
 }
 
 /**

@@ -8,6 +8,29 @@
 
 ---
 
+## [v0.6.1] 最终可发布：v0.6.0 UX 反馈补丁 + 后端数据安全（2026-10-14，平台：doubao-work）
+
+> 状态：**独立测试专家已最终签 PASS，本版本可发布**。用户已授权最终发布/提交/正常 push/正式升级，但**暂不 commit/tag/push**，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.6.0` 不移动。
+
+- **改动文件（版本事实/文档口径，不改产品 src、测试专家 docs、vendor、scripts、服务）**：
+  - `packages/dsh-pm-tool/package.json`：`version` `0.6.0` → **`0.6.1`**。
+  - `docs/releases/v0.6.1.md`：**新建（最终可发布）**，列 UX 反馈补丁 R1–R8 + 后端数据安全，验收绿数已按测试专家最终签门回填。
+  - `README.md`：版本导航表 v0.6.0 改标已发布（`32659c40`→`23873fcb`）、v0.6.1 改标可发布；阶段导航对齐最终签 PASS。
+- **补丁范围（v0.6.0 之后）**：UX 反馈——备份确认/路径恢复(R1)、长 Notice 可滚动(R2)、键盘 j/k/Space/门控(R3)、390 顶栏(R4)、移动/promote 入口(R5)、甘特 tick/unplanned/可点(R6)、副驾 loading/poc-prod lane(R7)、前置依赖紧凑树(R8)；后端数据安全——恢复队列化、批删全预检、exports guard、模型状态往返。
+- **验收（测试专家最终签 PASS）**：UX 反馈回归 **14/14 全 PASS**；后端安全 **53 个 verify scripts 全绿**；隔离 guard **157 个资产文件零变化**；client bundle 哈希 `d43353ea`。
+- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞发布）**；PoC `our-free-model`/`kilo-auto/free` 免费免 Key，本轮 UX 验证已走通。G8/H5 不可逆动作维持 MANUAL_PENDING。
+- **影响范围 / 状态**：纯版本事实与文档口径；注解 tag 将在最终提交时创建。
+- **验证**：`node -e JSON.parse(package.json)` 通过；`git diff --check` 干净；verifier `check-file-format` 通过。
+
+## [文档纠错] v0.6.0 备份路径更正 + UX 人工反馈回归在修（2026-10-14，平台：doubao-work）
+
+> 目的：仅修正我负责版本文档的两处当下口径错误；不提前发布、不打 tag、不提交。历史条目不搬运、不改写。
+
+- **改动文件（仅我负责的 living docs）**：`docs/handoff.md` / `docs/progress.md` / `docs/onboarding-prompt.md`。
+- **① 默认备份目录更正**：实测源码 `BUILTIN_DEFAULT = '../../../backups/'`（相对 `packages/dsh-pm-tool/lib/core/backup.js`）解析即仓库 **`packages/backups/`**；此前 handoff 写成 `packages/dsh-pm-tool/backups/` 系笔误。取值优先级：**显式 directory 参数 > `DSH_PM_BACKUP_DIR` > builtin**。
+- **② UX 状态更正（不再声称全部交付）**：HEAD 已到 `4a8ff63`（冻结 v0.6 人工反馈回归矩阵）；**v0.6.0 已正式发布**（注解 tag 对象 `32659c40` → 提交 `23873fcb`，2026-10-13 19:38:02），当前 `4a8ff63` 在该 tag 之后、属**尚未发布的 UX 补丁线**。用户反馈的 **14 项真实 GUI 体验缺陷（R1-01…R8-01）初始全 FAIL，UX 补丁在修、真实 GUI 未全部通过**（3098 实测 R5-01 通过、R3-01 真实按键不触发未过、R5-02 promote 未达落盘，余多 NOT_RUN/部分通过）。深色错误对比度用户目视**已通过**；**模型车道口径更正：PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key，不存在"免费车道真实 Key"，PoC 真实请求待本轮 UX 验证；仅生产（prod）真实 Key 缺配，保持 MANUAL_PENDING**。
+- **影响范围**：纯文档口径；等最终 GUI 测试结果后再继续版本同步。
+
 ## [v0.6.0] 归档摘要 + 版本对账（2026-10-13，平台：doubao-work）
 
 > 目的：主线 schema v2 完成、总门 PASS 后，把版本事实统一到 v0.6.0。本批**只新增归档摘要与对账，不搬运/重排既有条目历史**。

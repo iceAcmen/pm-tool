@@ -1,0 +1,25 @@
+# R3 真实键盘导航 — 环境实测证据（3098，2026-10-14）
+
+## 被测客户端 hash（bundle 与冻结口径一致）
+  bundle lib/client.js: 9ea93fbca3987f4667ff2551f3b0ae4b52e8bd84383a6dc2fcea157fb9fc8b76  ← 与冻结口径完全一致
+  冻结口径: 9ea93fbca3987f4667ff2551f3b0ae4b52e8bd84383a6dc2fcea157fb9fc8b76（HEAD 4a8ff63+工作树）✅
+  分包 chunk（lib/client/ 目录下，独立文件，不应与 bundle 比对）：
+    panel.js: e5bdbb315fed291e32bc3cd191e4b82e2d29767ea96e0275f12ae010a0d5f531
+    index.js: fd3ba46d9fc262d30912268847e95c05e53aae0ec7c84e6e5a043fa577a5a140
+    panel-kbd.js: 0bcf50372cdd7260b46c98fd624c942f03744ec12486826dabb2f1fce005f002
+    panel.css: eece2a1aeff1304c60db464ec0b3dc8ec46ec3e33541d092cfc873d800dab8a3
+    form-validation.js: 3d5de78e385e938a605e5af774ce46c5af74d7fed47557c5767976eaac1720d5
+  更正：先前误把 lib/client/panel.js（分包 chunk）当作 bundle 与冻结值比对，错误得出"hash 不匹配/疑似他人重 build"。
+  实测 bundle lib/client.js === 冻结值，未发生重 build，被测产物即冻结版本。
+
+## 键盘交付探针（关键环境事实）
+- 在 top document（无 iframe，.pm-shell/.pm-record-row 均在 top doc）window 挂 keydown 探针 window.__k。
+- 真实坐标 click_xy(650,300) 中性区 → document.activeElement=BODY。
+- 随后 bu.press_key('j') / bu.press_key('k') / bu.press_key(' ') / bu.hotkey('j')：探针捕获 = []（零 keydown 到达 renderer window）。
+- 结论：本 Browser Use 栈的 press_key/hotkey 不向该页面 renderer 派发 keydown；无法以原生按键实测 R3-01/02 真实行移动。按纪律 JS dispatch 仅诊断、不算通过，故 R3 真实键盘项不签 PASS。
+
+## 可静态/DOM 观察的事实（不替代真实键盘）
+- 纯函数 nextRowId(visibleIds,currentId,delta)：currentId=null→base=0→j 取第二行、k 钳首行（ui-feedback.js:42-49）。
+- 门控 shouldHandleGlobalKbd：焦点在 INPUT/TEXTAREA/SELECT/BUTTON/A 或浮层打开时让位（ui-feedback.js:71）——即真实鼠标点行后焦点落在 BUTTON，全局 j/k 会被让位（这本身可能是用户『j/k 无反应』的产品侧原因，待真实键盘环境复验）。
+- 行高亮：tr.pm-row-active（+aria-current）；初始列表渲染时 activeId=首行 t-0001。
+- 抽屉 input 聚焦时按 k（探针前观察）active 行未移动 → 门控在代码层生效。

@@ -161,6 +161,14 @@ try {
   assert.match(bundle, /pm-lane-warning/)
   assert.match(bundle, /model mode /)
   assert.match(css, /\.pm-model-lane/)
+  // B2：Gantt 左列与 axis 同高表头 spacer（24px）。
+  assert.match(bundle, /pm-gantt-label--head/)
+  assert.match(css, /\.pm-gantt-label--head/)
+  // S1：更多菜单恢复说明行。
+  assert.match(bundle, /pm-menu-note/)
+  // Copilot 消息区 aria-live + aria-busy（发送中 true、结束/失败 finally 复位 false）。
+  assert.match(bundle, /aria-live"?:\s*"?polite/)
+  assert.match(bundle, /aria-busy"?:\s*sending/)
 
   // OPT 优化清单契约（稳定选择器）。
   assert.match(bundle, /pm-export-md-btn/)          // OPT-04 Markdown Blob 下载

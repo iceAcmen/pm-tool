@@ -8,7 +8,7 @@ import { createBackup, readBackupFile, restoreBackup, restoreBackupFromContent, 
 
 export const backupHelp = [
   '备份/恢复命令（离线，仅 pmtool 七类实体，不含宿主会话与密钥）：',
-  '  /pm backup                 备份到仓库 backups/（带时间戳），输出路径与各类计数',
+  '  /pm backup                 备份到内置 packages/backups/（带时间戳；可用 DSH_PM_BACKUP_DIR 覆盖），输出完整路径与各类计数',
   '  /pm backup ~/pm-backups     备份到指定目录',
   '  /pm restore backups/pmtool-backup-xxx.json       演练（只读校验，不落盘）',
   '  /pm restore backups/pmtool-backup-xxx.json confirm  真正恢复（恢复前自动先存一份安全快照）',

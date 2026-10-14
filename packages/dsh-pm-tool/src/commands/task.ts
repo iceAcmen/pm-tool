@@ -20,6 +20,7 @@ import {
   TaskMilestoneProjectMismatchError,
   TaskProjectNotFoundError,
   TaskReferencedByMeetingError,
+  TaskReferencedByPredecessorError,
   updateTask,
   batchUpdateTasks,
   planBatchDelete,
@@ -543,6 +544,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       || error instanceof TaskMilestoneNotFoundError
       || error instanceof TaskMilestoneProjectMismatchError
       || error instanceof TaskReferencedByMeetingError
+      || error instanceof TaskReferencedByPredecessorError
       || error instanceof TaskImportNoProjectError
       || error instanceof TaskImportEmptyError) {
       return { kind: 'error', text: error.message }

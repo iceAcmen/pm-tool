@@ -67,6 +67,21 @@ try {
 
   const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--reopen', root], { stdio: 'inherit' })
   assert.equal(child.status, 0)
+
+  // --- 半提交回归：批量[可删A, 被会议引用B]，任一保护命中则整批零写（A 不得先删）---
+  await run('task add {"projectId":"p-0001","title":"可删A"}') // t-0004
+  await run('task add {"projectId":"p-0001","title":"被会议引用B"}') // t-0005
+  await run('meeting add {"projectId":"p-0001","title":"引用B周会","meetingDate":"2026-10-10"}')
+  await run('meeting action add mtg-0001 {"title":"跟进B","owner":"Ice","taskId":"t-0005"}')
+
+  const blocked = await run('task batch delete t-0004,t-0005 confirm')
+  assert.equal(blocked.kind, 'error', `应被引用保护阻止：${blocked.text}`)
+  assert.match(blocked.text, /t-0005/, '错误应点名被保护任务 B')
+  assert.match(blocked.text, /mtg-0001/, '错误应点名引用方会议')
+  assert.ok(domain.table('tasks').get('t-0004'), '可删 A 不得在半提交中先被删除')
+  assert.ok(domain.table('tasks').get('t-0005'), '被引用 B 必须保留')
+  console.log('通过：批量删除任一引用命中时整批零写，A/B 均保留。')
+
   console.log('verify-batch 全部通过。')
 } finally {
   await facility.closeAll()

@@ -155,9 +155,9 @@
 - 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。
 
-## 当前状态（v0.6.0 预览 · 待打 tag；主线完成进入维护，基线 4b533ad）
-- **版本事实已统一到 v0.6.0（2026-10-13 doubao-work 本批）**：`packages/dsh-pm-tool/package.json` 前置 `0.6.0`；`docs/releases/v0.5.0.md` 对应已发布 tag（注解对象 `c8d3da52`→提交 `81c5a112`）；新增 `docs/releases/v0.6.0.md`（预览）；README 版本导航、changelog、handoff/onboarding 口径同步。历史 tag `v0.1.0`–`v0.5.0` 均未移动。
-- 已落地未发版（v0.5.0 tag 之后）：schema v2 数据契约升级（`d960445` 冻结契约 + `17ccc82` 依赖仓库/健康诊断）、跨项目人员负载视图（`bec5ae0`）、AI 副驾多步规划与确认执行（`c2b8268`）、Web 体验补齐（任务移动 + 汇报/会议，`8cdf04b`）、备份原子化并恢复失败自动回滚（`4b533ad`）。
-- 自动化验收（独立测试专家冻结于 `17ccc82`+`4b533ad`）：functional verify **52 个全绿**（53 个 verify-*.mjs 减外层 guard）；隔离 guard `verify-isolation.mjs` 对正式资产（`data/` + 共享 `backups/`）前后 sha256+mtime diff，**151 文件零变化**。schema-v2 验收矩阵 50 用例终态 = 48 PASS + 2 MANUAL_PENDING。
-- MANUAL_PENDING（ADL-047，不阻塞自动化门/GUI 门、不记 PASS）：G8（GUI 备份/恢复不可逆人工确认）、H5（不可逆动作人工确认：删除被引用 predecessor / 恢复备份）。待用户本人执行时据实回填。
-- 主线完成进入维护 / P1 backlog：后续以维护与 P1 backlog 项为主，不再开新主线功能。
+## 当前状态（v0.6.1 最终可发布 · tag 将在最终提交创建；v0.6.0 已发布）
+- **版本事实已前置到 v0.6.1（2026-10-14）**：`packages/dsh-pm-tool/package.json` = `0.6.1`。**v0.6.0 已正式发布**：注解 tag 对象 `32659c40` → 提交 `23873fcb`（2026-10-13 19:38:02）。v0.6.1 = v0.6.0 UX 反馈补丁 + 后端数据安全，**独立测试专家已最终签 PASS、可发布**；注解 tag 将在最终提交时创建（最终 release commit SHA 待最终提交后确定）。历史 tag `v0.1.0`–`v0.6.0` 均未移动。
+- **v0.6.1 补丁范围（v0.6.0 之后）**：UX 反馈 R1–R8——备份确认/路径恢复、长 Notice 可滚动、键盘 j/k/Space/门控、390 顶栏、移动/promote 入口、甘特 tick/unplanned/可点、副驾 loading/poc-prod lane、前置依赖紧凑树；后端数据安全——恢复队列化、批删全预检、exports guard、模型状态往返。详见 `docs/releases/v0.6.1.md`。
+- **验收（测试专家最终签 PASS）**：UX 反馈回归 **14/14 全 PASS**；后端安全 **53 个 verify scripts 全绿**；隔离 guard **157 个资产文件零变化**；client bundle 哈希 `d43353ea`。（v0.6.0 schema-v2 门：52 绿 + guard 151 零变化，绑 `17ccc82`+`4b533ad`。）
+- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.6.1 发布）**；PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key、本轮 UX 验证已走通。深色错误对比度用户目视已通过；G8/H5 不可逆动作仍 MANUAL_PENDING。
+- **发布动作**：用户已授权最终发布/提交/正常 push/正式升级；本批**暂不 commit/tag/push**，待用户最终通知执行最终提交并打注解 tag。

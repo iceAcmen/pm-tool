@@ -144,3 +144,44 @@ try {
   await fB.closeAll()
   console.log('通过：predecessorIds 误写为字符串被重开拒绝，坏记录原地零写不 skip。')
 }
+
+// 命令级 + DAG/WBS 独立关系：
+//  1) WBS 后代（子任务）作为父任务的前置是合法 DAG 依赖——前端不得当环排除，后端不静默丢弃。
+//  2) 删「被前置引用」的任务时，命令 handler 必须返回点名引用方的详细 error（kind:'error'），
+//     不得被通用「任务操作失败」吞掉，且全程零写。
+{
+  const rootC = mkdtempSync(join(tmpdir(), 'pm-tool-cmdpred-'))
+  const ctxC = new Context()
+  await ctxC.plugin(Storage)
+  ctxC.storage.backend.register('json', new JsonStorageBackend(rootC))
+  const fC = new DomainFacility(ctxC, { backend: 'json', routes: {} })
+  ctxC.provide('storageDomain', fC)
+  let cmd
+  ctxC.provide('commands', { register(def) { cmd = def; return () => {} } })
+  await (await import('../lib/index.js')).apply(ctxC)
+  const domC = fC.get('pmtool')
+  const runC = async (rawInput) => {
+    const r = await cmd.handler({ rawInput, attachments: [] })
+    return r
+  }
+  await runC('project add {"name":"C","startDate":"2026-10-01","targetDate":"2026-12-31"}')
+  await runC('task add {"projectId":"p-0001","title":"父P"}')          // t-0001
+  await runC('task add {"projectId":"p-0001","title":"子C","parentId":"t-0001"}') // t-0002
+  // 合法 DAG：父 P 依赖子 C（WBS 后代）。
+  const upd = await runC('task update t-0001 {"predecessorIds":["t-0002"]}')
+  assert.equal(upd.kind, 'success', `合法 WBS 后代前置应写入成功：${upd.text}`)
+  const re = (await import('../lib/core/tasks.js')).getTask(domC, 't-0001')
+  assert.deepEqual(re.predecessorIds, ['t-0002'], 'WBS 后代作为前置应原样保留，不得静默丢弃')
+
+  // 命令拒删：删被前置引用的子 C → 应 error 且点名父 P，不是通用失败。
+  const tasksDir = join(rootC, 'pmtool', 'tasks')
+  const beforeC = readFileSync(join(tasksDir, 't-0002.json')).toString()
+  const del = await runC('task delete t-0002 confirm')
+  assert.equal(del.kind, 'error', '删被前置引用的任务应返回 error，而非成功')
+  assert.ok(/t-0001|父P|前置依赖|解除/.test(del.text), `错误文本应点名引用方并给出解除指引：${del.text}`)
+  assert.ok(!/任务操作失败/.test(del.text), '不得被通用错误吞掉点名指引')
+  const afterC = readFileSync(join(tasksDir, 't-0002.json')).toString()
+  assert.equal(afterC, beforeC, '拒删必须零写：被引用任务文件内容不变')
+  await fC.closeAll()
+  console.log('通过：WBS 后代合法 DAG 前置往返保留；命令级拒删点名引用方、零写且不吞指引。')
+}
