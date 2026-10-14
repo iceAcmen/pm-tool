@@ -26,6 +26,12 @@ async function fsyncDirectory(dir: string): Promise<void> {
 export interface AtomicWriteOptions {
   /** 文件 mode，默认 0o600（与备份/密钥类产物一致）。 */
   mode?: number
+  /**
+   * 仅测试可注入：覆盖临时文件名生成，返回落在 dir 内的文件名（本函数仍 join(dir, name)）。
+   * 生产调用一律不传——默认 `.{base}.{uuid}.tmp`，uuid 随机使跨进程碰撞概率可忽略。
+   * 用途：契约测试可预测 tmp 路径以预置同名 tmp，验证 `open(tmp,'wx')` 的排他创建语义。
+   */
+  tmpNameFactory?: (dir: string, base: string) => string
 }
 
 /**
@@ -41,7 +47,12 @@ export async function atomicWriteFile(
 ): Promise<void> {
   const dir = dirname(target)
   // 临时文件必须与目标同目录：rename 在同文件系统内才是 POSIX 原子替换。
-  const tmp = join(dir, `.${basename(target)}.${randomUUID()}.tmp`)
+  // tmpNameFactory 仅测试注入；生产默认 randomUUID，行为不变。
+  const base = basename(target)
+  const tmpName = options.tmpNameFactory
+    ? options.tmpNameFactory(dir, base)
+    : `.${base}.${randomUUID()}.tmp`
+  const tmp = join(dir, tmpName)
   let renamed = false
   try {
     // 'wx'：临时文件已存在即失败，避免误覆盖别人的临时产物。

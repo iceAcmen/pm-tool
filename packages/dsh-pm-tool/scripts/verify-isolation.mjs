@@ -8,23 +8,29 @@
  *     - 仓库 packages/backup/            （兼容历史目录；缺失视为空）
  *     - 仓库 exports/                    （defaultExportDirectory() 默认输出根，报告导出落点）
  *
- * 做法（不复制正式内容、不依赖各脚本自觉）：
+ * 做法（不复制正式内容、不依赖各脚本自觉；S4-A3 起改为「全部跑完 + 聚合报告」）：
  *   1) 运行前对上述正式 root 逐文件算 sha256 + mtimeMs，得到 before manifest；
  *   2) 逐个 spawn `node <target>`，子进程 env 被显式 scrub：
  *        - 删除 PM_DATA_ROOT / DSH_PM_BACKUP_DIR（防止误指到正式目录）
  *        - 其余继承 PATH/HOME 等系统环境，脚本默认落系统 os.tmpdir() 一次性目录；
- *   3) 任一子进程非零退出 -> 立即报告并以非零退出（不继续跑后面的）；
- *   4) 全部跑完后再算一次 after manifest，与 before 做集合 diff：
- *        - 新增 / 删除 / hash 变 / mtime 变 任一出现 -> 退出 1 并打印 diff；
- *        - 完全一致 -> 打印「正式清单零变化」并退出 0。
+ *   3) **任一子进程失败也立即记录、但不中止后续目标**——所有目标跑完后聚合汇总；
+ *      每条目标收集：exit status / signal / spawn 异常 / 耗时(ms)；
+ *      超时（默认 10min/个，PM_TOOL_ISOLATION_TARGET_TIMEOUT_MS 可调）与 spawn 异常同样计失败；
+ *   4) 无论中间是否失败，after manifest 都**无条件**再算一次，与 before 做集合 diff：
+ *        - 新增 / 删除 / hash 变 / mtime 变 任一出现 → 资产污染单独计失败；
+ *   5) 末尾打印「脚本：共 N，通过 P，失败 F」+ 失败清单 + 资产污染清单；
+ *      只要有任一脚本失败 *或* 任一资产污染，进程退出 1；全绿时退出 0 并保留
+ *      既有 PASS 行（输出兼容）。
  *
  * 用法：
  *   node scripts/verify-isolation.mjs                          # 默认跑全部 verify-*.mjs
  *   node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs
  *   PM_TOOL_ISOLATION_KEEP=1                                   # 保留子进程产出的临时目录（调试用）
+ *   PM_TOOL_ISOLATION_TARGET_TIMEOUT_MS=120000                 # 单目标超时（默认 600000）
  *
- * 导出：walk / buildManifest / diff / WATCH 被本模块导出，供纯 fixture 测试
- *   scripts/test-isolation-guard.mjs 复用同一套 hash+mtime 语义，避免另写一份不一致的判定。
+ * 导出：walk / buildManifest / diff / WATCH / runOne / runGuard 被本模块导出，
+ *   供纯 fixture 测试 scripts/test-isolation-guard.mjs 与
+ *   scripts/test-verify-runner-aggregate.mjs 复用同一套判定，避免另写一份不一致的逻辑。
  *
  * 边界诚实声明：本 guard 只守护仓库内正式 data/backups/exports；它不启动 dsh、不加载
  * 宿主 profile，因此不会写 ~/.dsh。若未来某个 verify 脚本开始隐式读宿主 profile，需在本
@@ -32,14 +38,18 @@
  */
 
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { dirname, join, relative } from 'node:path'
-import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { dirname, join, isAbsolute } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const PKG = join(here, '..')                 // packages/dsh-pm-tool
 const REPO = join(PKG, '..', '..')          // pm-tool 仓库根
+
+// 单目标默认超时：10 分钟。个别 GUI/e2e 脚本可能较慢，给足预算；
+// 但卡死/死循环必须被这顶帽子兜住并记为失败，不再无限挂起。
+const DEFAULT_TIMEOUT_MS = Number(process.env.PM_TOOL_ISOLATION_TARGET_TIMEOUT_MS) || 10 * 60 * 1000
 
 // --- 正式受守护资产清单（只增不改；缺目录视为空，不算污染）---
 // 注意1：产品 BUILTIN_DEFAULT = new URL('../../../backups/', lib/core/backup.js)
@@ -131,6 +141,90 @@ function pickTargets() {
   return targets
 }
 
+// 目标路径解析：argv 给相对路径就相对包根解析；给绝对路径（测试/调试用）原样采用。
+function resolveTarget(t) {
+  return isAbsolute(t) ? t : join(here, '..', t)
+}
+
+// 把单条失败原因翻成一行人类可读串。
+// 分类顺序（S4 审查补丁，重要）：
+//   spawnSync 超时在本 Node 上同时给 error.code='ETIMEDOUT'、error.killed=undefined、signal='SIGTERM'，
+//   因此必须先认 ETIMEDOUT / killed 这个「超时」元数据，再退到其它 spawn 异常，最后才是裸 signal。
+//   否则超时会被 signal 分支抢标成「被信号终止」，或被 error 分支误标「spawn 异常」。
+export function describeFailure(r) {
+  const ms = `${(r.durationMs || 0).toFixed(0)}ms`
+  const timedOut = r.error && (r.error.code === 'ETIMEDOUT' || r.error.killed === true)
+  if (timedOut) {
+    const cap = r.timeoutMs ? `上限 ${r.timeoutMs}ms，实际 ${ms}` : `实际 ${ms}`
+    return `超时（${cap}）`
+  }
+  if (r.error) return `spawn 异常（${r.error.code || r.error.message}，${ms}）`
+  if (r.signal) return `被信号终止（signal=${r.signal}，${ms}）`
+  return `退出码=${r.status}（${ms}）`
+}
+
+// --- 跑单个子目标，收集 exit/signal/异常/耗时；任何坏结果都不抛、只记在记录里 ---
+export function runOne(abs, { cwd, env, timeoutMs }) {
+  const started = process.hrtime.bigint()
+  let r
+  try {
+    r = spawnSync(process.execPath, [abs], {
+      cwd, env, encoding: 'utf8',
+      timeout: timeoutMs,
+      maxBuffer: 16 * 1024 * 1024,
+    })
+  } catch (e) {
+    // spawn 本身抛错（极罕见，如 execPath 不存在）——按「进程异常=失败」兜住。
+    r = { status: null, signal: null, error: e, stdout: '', stderr: '' }
+  }
+  const durationMs = Number(process.hrtime.bigint() - started) / 1e6
+  const rec = {
+    abs,
+    status: r.status == null ? null : r.status,
+    signal: r.signal || null,
+    error: r.error || null,
+    stdout: r.stdout || '',
+    stderr: r.stderr || '',
+    durationMs,
+    timeoutMs,
+  }
+  rec.ok = rec.status === 0 && rec.signal == null && !rec.error
+  return rec
+}
+
+/**
+ * 可注入的子 runner：跑完全部 targets，**不因首个失败而中断**，最后与 after manifest 一起返回。
+ * 不做任何 process.exit、不直接写终端（日志交给 onStart/onResult 钩子），方便测试注入假 root/假脚本。
+ *
+ * @param {object}   opts
+ * @param {string[]} opts.targets   脚本路径（相对包根或绝对均可）
+ * @param {string[]} [opts.roots]  受守护 root 集合，默认正式 WATCH
+ * @param {string}   [opts.cwd]    子进程 cwd，默认包根
+ * @param {number}   [opts.timeoutMs] 单目标超时，默认 DEFAULT_TIMEOUT_MS
+ * @param {object}   [opts.env]    子进程 env，默认 scrubbedEnv()
+ * @param {(t:string,abs:string)=>void} [opts.onStart]
+ * @param {(rec:object)=>void}          [opts.onResult]
+ */
+export function runGuard({
+  targets, roots = WATCH, cwd = PKG,
+  timeoutMs = DEFAULT_TIMEOUT_MS, env = scrubbedEnv(),
+  onStart = () => {}, onResult = () => {},
+}) {
+  const before = buildManifest(roots)
+  const results = []
+  for (const t of targets) {
+    const abs = resolveTarget(t)
+    onStart(t, abs)
+    const rec = runOne(abs, { cwd, env, timeoutMs })
+    rec.name = t
+    onResult(rec)
+    results.push(rec)   // 关键：失败也 push 后继续循环，绝不 break
+  }
+  const after = buildManifest(roots)   // 无条件再算一次（即使全部目标都失败）
+  const changes = diff(before, after)
+  return { results, changes, beforeSize: before.size, afterSize: after.size }
+}
+
 async function main() {
   const targets = pickTargets()
   const os = await import('node:os')
@@ -140,41 +234,40 @@ async function main() {
   console.log('[guard] 待跑脚本数 = ' + targets.length)
   console.log('[guard] 系统临时目录 os.tmpdir() = ' + os.tmpdir())
 
-  const before = manifest()
-  console.log('[guard] before manifest 文件数 = ' + before.size)
+  const { results, changes, beforeSize, afterSize } = runGuard({
+    targets,
+    roots: WATCH,
+    cwd: PKG,
+    timeoutMs: DEFAULT_TIMEOUT_MS,
+    env: scrubbedEnv(),
+    onStart: (t) => console.log('\n[guard] >> ' + t),
+    onResult: (rec) => {
+      if (rec.stdout) process.stdout.write(rec.stdout)
+      if (rec.stderr) process.stderr.write(rec.stderr)
+      console.log(`[guard]   ${rec.ok ? 'ok  ' : 'FAIL'} ${rec.name} (${describeFailure(rec)})`)
+    },
+  })
 
-  const failures = []
-  for (const t of targets) {
-    const abs = join(here, '..', t)
-    console.log('\n[guard] >> ' + t)
-    const r = spawnSync(process.execPath, [abs], {
-      cwd: PKG,
-      env: scrubbedEnv(),
-      encoding: 'utf8',
-    })
-    if (r.stdout) process.stdout.write(r.stdout)
-    if (r.stderr) process.stderr.write(r.stderr)
-    if (r.status !== 0) {
-      failures.push(t + ' 退出码=' + r.status)
-      console.error('[guard] !! ' + t + ' 非零退出，立即中止后续脚本')
-      break
-    }
-  }
+  console.log('\n[guard] after manifest 文件数 = ' + afterSize)
 
-  const after = manifest()
-  console.log('\n[guard] after manifest 文件数 = ' + after.size)
-  const changes = diff(before, after)
+  const failed = results.filter(r => !r.ok)
+  const passed = results.length - failed.length
+  console.log('[guard] ========== 汇总 ==========')
+  console.log(`[guard] 脚本：共 ${results.length}，通过 ${passed}，失败 ${failed.length}`)
+  console.log(`[guard] 资产：before=${beforeSize} after=${afterSize}，污染 ${changes.length}`)
 
-  if (failures.length) {
-    console.error('\n[guard] FAIL：子进程非零退出：\n  ' + failures.join('\n  '))
-    process.exit(1)
+  if (failed.length) {
+    console.error('[guard] 失败清单：')
+    for (const r of failed) console.error('  - ' + r.name + '  ' + describeFailure(r))
   }
   if (changes.length) {
-    console.error('\n[guard] FAIL：正式资产在 verify 运行前后发生变化（hash/mtime/增删）：')
+    console.error('[guard] FAIL：正式资产在 verify 运行前后发生变化（hash/mtime/增删）：')
     for (const c of changes) console.error('  ' + c)
+  }
+  if (failed.length || changes.length) {
     process.exit(1)
   }
-  console.log('\n[guard] PASS：正式 data/共享 backups/exports hash+mtime 清单零变化，共 ' + after.size + ' 个文件未被污染。')
+  console.log('\n[guard] PASS：正式 data/共享 backups/exports hash+mtime 清单零变化，共 ' + afterSize + ' 个文件未被污染。')
 }
 
 // 仅当本文件被 `node scripts/verify-isolation.mjs` 直接执行时才跑 guard；

@@ -34,8 +34,14 @@ import { handleAskApplyCommand } from './commands/ask.js'
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
 
-/** 依赖的宿主服务：commands=离线斜杠命令；storageDomain=类型化文件存储；llm=一次性文本生成（可选能力，失败优雅降级）。 */
-export const inject = ['commands', 'storageDomain', 'llm'] as const
+/**
+ * 依赖的宿主服务（Cordis 4.0.5-alpha.1 真实语义）：
+ *   inject 里的每个名字都是「必需依赖」——任一缺失 fiber 即停在 INACTIVE、apply 不执行。
+ *   本版本没有可选后缀语法，故 llm 不列入 inject：缺 llm 的 profile 仍激活本插件，
+ *   运行期用 ctx.reflect.get('llm', false) 安全读取（缺失返回 undefined），
+ *   命令层 generateDraft 据此抛中文 NO_LLM 降级。
+ */
+export const inject = ['commands', 'storageDomain'] as const
 
 /** `/pm` 帮助文本。 */
 function renderHelp(): CommandResult {
@@ -81,6 +87,11 @@ function renderHelp(): CommandResult {
 
 /** 插件入口：注册命令并尝试打开存储领域。 */
 export async function apply(ctx: Context): Promise<void> {
+  // llm 为可选能力：不列入 inject（见 inject 注释）。懒读取——命令被调用时才取，
+  // 缺 provider 的 profile 返回 undefined，命令层 generateDraft 抛中文 NO_LLM 降级。
+  const optionalLlm = (): LlmGateway | undefined =>
+    (ctx.reflect.get('llm', false) ?? undefined) as LlmGateway | undefined
+
   let domain: PmDomain | undefined
   try {
     const opened = await openPmDomain(ctx)
@@ -119,15 +130,15 @@ export async function apply(ctx: Context): Promise<void> {
       const projectMatch = /^project(?:\s+([\s\S]*))?$/i.exec(raw)
       if (projectMatch) return handleProjectCommand(projectMatch[1] ?? '', domain)
       const taskMatch = /^task(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
+      if (taskMatch) return handleTaskCommand(taskMatch[1] ?? '', domain, optionalLlm())
       const milestoneMatch = /^milestone(?:\s+([\s\S]*))?$/i.exec(raw)
       if (milestoneMatch) return handleMilestoneCommand(milestoneMatch[1] ?? '', domain)
       const riskIssueMatch = /^risk-issue(?:\s+([\s\S]*))?$/i.exec(raw)
       if (riskIssueMatch) return handleRiskIssueCommand(riskIssueMatch[1] ?? '', domain)
       const meetingMatch = /^meeting(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
+      if (meetingMatch) return handleMeetingCommand(meetingMatch[1] ?? '', domain, optionalLlm())
       const reportMatch = /^report(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (reportMatch) return handleProgressReportCommand(reportMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
+      if (reportMatch) return handleProgressReportCommand(reportMatch[1] ?? '', domain, optionalLlm())
       const deliverableMatch = /^deliverable(?:\s+([\s\S]*))?$/i.exec(raw)
       if (deliverableMatch) return handleDeliverableCommand(deliverableMatch[1] ?? '', domain)
       const searchMatch = /^search(?:\s+([\s\S]*))?$/i.exec(raw)
@@ -153,7 +164,7 @@ export async function apply(ctx: Context): Promise<void> {
       const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)
-      if (askMatch) return handleAskCommand(askMatch[1] ?? '', domain, ctx.llm as unknown as LlmGateway)
+      if (askMatch) return handleAskCommand(askMatch[1] ?? '', domain, optionalLlm())
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

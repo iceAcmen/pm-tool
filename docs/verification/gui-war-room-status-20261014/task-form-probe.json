@@ -1,0 +1,210 @@
+{
+  "inputs": [
+    {
+      "tag": "INPUT",
+      "name": "",
+      "type": "text",
+      "ph": "搜索会话名称"
+    },
+    {
+      "tag": "SELECT",
+      "name": "",
+      "type": "select-one",
+      "ph": "切换项目",
+      "options": [
+        {
+          "v": "p-0001",
+          "t": "热修验证项目"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "name": "",
+      "type": "select-one",
+      "ph": "筛选任务状态",
+      "options": [
+        {
+          "v": "all",
+          "t": "全部状态"
+        },
+        {
+          "v": "todo",
+          "t": "未开始"
+        },
+        {
+          "v": "in_progress",
+          "t": "进行中"
+        },
+        {
+          "v": "blocked",
+          "t": "受阻"
+        },
+        {
+          "v": "done",
+          "t": "已完成"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "name": "",
+      "type": "select-one",
+      "ph": "任务排序",
+      "options": [
+        {
+          "v": "code",
+          "t": "按 WBS 编号"
+        },
+        {
+          "v": "dueDate",
+          "t": "按截止日期"
+        },
+        {
+          "v": "priority",
+          "t": "按优先级"
+        },
+        {
+          "v": "progress",
+          "t": "按进度"
+        }
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "name": "",
+      "type": "text",
+      "ph": "搜索记录"
+    },
+    {
+      "tag": "INPUT",
+      "name": "title",
+      "type": "text",
+      "ph": ""
+    },
+    {
+      "tag": "TEXTAREA",
+      "name": "description",
+      "type": "textarea",
+      "ph": ""
+    },
+    {
+      "tag": "SELECT",
+      "name": "parentId",
+      "type": "select-one",
+      "ph": "",
+      "options": [
+        {
+          "v": "",
+          "t": "根任务"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "name": "status",
+      "type": "select-one",
+      "ph": "",
+      "options": [
+        {
+          "v": "todo",
+          "t": "未开始"
+        },
+        {
+          "v": "in_progress",
+          "t": "进行中"
+        },
+        {
+          "v": "blocked",
+          "t": "受阻"
+        },
+        {
+          "v": "done",
+          "t": "已完成"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "name": "priority",
+      "type": "select-one",
+      "ph": "",
+      "options": [
+        {
+          "v": "P0",
+          "t": "P0 - 高优"
+        },
+        {
+          "v": "P1",
+          "t": "P1 - 一般"
+        },
+        {
+          "v": "P2",
+          "t": "P2 - 较低"
+        }
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "name": "assignee",
+      "type": "text",
+      "ph": ""
+    },
+    {
+      "tag": "INPUT",
+      "name": "startDate",
+      "type": "date",
+      "ph": ""
+    },
+    {
+      "tag": "INPUT",
+      "name": "dueDate",
+      "type": "date",
+      "ph": ""
+    },
+    {
+      "tag": "INPUT",
+      "name": "progress",
+      "type": "number",
+      "ph": ""
+    },
+    {
+      "tag": "SELECT",
+      "name": "milestoneId",
+      "type": "select-one",
+      "ph": "",
+      "options": [
+        {
+          "v": "",
+          "t": "不关联"
+        }
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "name": "repoUrl",
+      "type": "text",
+      "ph": "https://host/org/repo.git"
+    },
+    {
+      "tag": "INPUT",
+      "name": "branch",
+      "type": "text",
+      "ph": "main"
+    }
+  ],
+  "btns": [
+    "风险与问题0",
+    "会议纪要0",
+    "进度汇报0",
+    "交付物0",
+    "项目概览",
+    "甘特排期",
+    "人员负载",
+    "添加记录",
+    "按状态分组",
+    "用 AI 一键生成 WBS",
+    "添加记录",
+    "添加任务"
+  ]
+}

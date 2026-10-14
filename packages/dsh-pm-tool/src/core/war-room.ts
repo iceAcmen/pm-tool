@@ -3,6 +3,8 @@
  * 数据全部来自现有 snapshot 现算，不新增表。
  */
 
+import { isDoneStatus, isInProgressStatus } from './status.js'
+
 export interface WarTask {
   id: string
   projectId: string
@@ -29,6 +31,10 @@ export interface WarRisk {
 const daysFrom = (date: string | undefined, today: string) =>
   date ? Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000) : null
 
+/** 任务 done 口径（保持历史不变）：status==='done' 或 progress>=100。抽成闭包在 KPI/议程间复用，避免口径复制。 */
+const isTaskDone = (t: Pick<WarTask, 'status' | 'progress'>): boolean =>
+  isDoneStatus(t.status) || (t.progress ?? 0) >= 100
+
 /** 关键指标：任务总数/完成率/进行中/逾期任务/近期里程碑/未闭环风险。 */
 export function computeKPI(
   tasks: WarTask[],
@@ -38,9 +44,9 @@ export function computeKPI(
   rangeDays = 7,
 ) {
   const total = tasks.length
-  const done = tasks.filter(t => t.status === 'done' || (t.progress ?? 0) >= 100).length
-  const inProgress = tasks.filter(t => t.status === 'doing').length
-  const overdueTasks = tasks.filter(t => t.status !== 'done' && (t.progress ?? 0) < 100
+  const done = tasks.filter(isTaskDone).length
+  const inProgress = tasks.filter(t => isInProgressStatus(t.status)).length
+  const overdueTasks = tasks.filter(t => !isTaskDone(t)
     && t.dueDate && (daysFrom(t.dueDate, today) ?? 1) < 0).length
   const upcomingMilestones = milestones.filter(m => m.status !== 'achieved'
     && (daysFrom(m.targetDate, today) ?? Infinity) >= 0
@@ -74,7 +80,7 @@ export function buildAgenda(
 ): AgendaItem[] {
   const out: AgendaItem[] = []
   for (const t of tasks) {
-    if (t.status === 'done' || (t.progress ?? 0) >= 100 || !t.dueDate) continue
+    if (isTaskDone(t) || !t.dueDate) continue
     const d = daysFrom(t.dueDate, today)
     if (d === null) continue
     if (d < 0 || d <= rangeDays) {

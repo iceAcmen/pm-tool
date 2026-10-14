@@ -1,0 +1,597 @@
+[guard] 受守护正式资产：
+  - /Users/bytedance/Projects/dsh-pm/pm-tool/data
+  - /Users/bytedance/Projects/dsh-pm/pm-tool/packages/backups
+  - /Users/bytedance/Projects/dsh-pm/pm-tool/packages/backup  (缺失，视为空)
+  - /Users/bytedance/Projects/dsh-pm/pm-tool/exports
+[guard] 待跑脚本数 = 62
+[guard] 系统临时目录 os.tmpdir() = /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T
+
+[guard] >> scripts/verify-ai-client.mjs
+verify-ai-client: PASS (降级链换模 / 全失败中文 / 限流不换池 / 兜底默认 our-free-model·kilo-auto-free / 鉴权文案不指 OPENROUTER / 显式 prod 透传 / NO_ADAPTER 文案按实际 provider)
+[guard]   ok   scripts/verify-ai-client.mjs (退出码=0（1286ms）)
+
+[guard] >> scripts/verify-ask-apply.mjs
+verify-ask-apply OK（后端归属/冲突/幂等/部分成功/会议字段/链式baseline/级联/逐步两连/S2跨进程幂等持久化）
+[guard]   ok   scripts/verify-ask-apply.mjs (退出码=0（247ms）)
+
+[guard] >> scripts/verify-ask-idempotency-integration.mjs
+[s2i] 隔离数据 root = /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-s2i-lkENKP
+[s2i] 首次确认输出：已应用 1 条（t-0001）
+[s2i] 新进程重放输出：该计划已执行过（幂等拦截），为避免重复写库未再次执行。
+verify-ask-idempotency-integration OK（真实磁盘重启/新进程重放返回已执行，业务记录不二次更新，settings 仅存最小标记）
+[guard]   ok   scripts/verify-ask-idempotency-integration.mjs (退出码=0（377ms）)
+
+[guard] >> scripts/verify-backup.mjs
+[pm-tool] 存储领域 pmtool 已打开
+verify-backup 全部通过（隔离目录+默认backups未变+原子写+中途回滚T1-T9+恢复入队并发安全T10-T11）。
+[guard]   ok   scripts/verify-backup.mjs (退出码=0（1010ms）)
+
+[guard] >> scripts/verify-batch.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：批量删除重启读回，旁支保留。
+通过：批量删除任一引用命中时整批零写，A/B 均保留。
+verify-batch 全部通过。
+[guard]   ok   scripts/verify-batch.mjs (退出码=0（398ms）)
+
+[guard] >> scripts/verify-cascade.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：重启读回，级联删除的子树已消失、旁支完好。
+verify-cascade 全部通过。
+[guard]   ok   scripts/verify-cascade.mjs (退出码=0（386ms）)
+
+[guard] >> scripts/verify-client-bundle.mjs
+PASS verify-client-bundle: factory 激活, apply 注册 main/sidebar, 仅 react 外部依赖
+[guard]   ok   scripts/verify-client-bundle.mjs (退出码=0（69ms）)
+
+[guard] >> scripts/verify-command.mjs
+[verify-command] 数据根（隔离）= /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-verify-cmd-rsmN14
+[verify-command] PM_DATA_ROOT 环境变量 = (未设置，使用一次性临时目录)
+[pm-tool] 存储领域 pmtool 已打开
+已注册命令： pm — 项目管理工作台：项目、WBS、里程碑、风险问题、会议纪要、进度汇报、交付物台账、关键字检索、统计看板、任务表导入、导出与存储自检
+
+===== /pm ping =====
+[success] pong：项目管理工作台插件已加载。这是离线命令，当前未使用任何模型或 API Key。
+
+===== /pm selftest =====
+[success]
+存储自检通过：已写入并读回一条记录。
+内容：{
+  "ok": true,
+  "at": "2026-10-14T14:50:58.229Z",
+  "note": "dsh-pm-tool 第 0 步打通验证"
+}
+该记录以可读 JSON 落在 storage-json 的 root 目录下：pmtool/checks/selftest.json。
+
+落盘文件存在 = true
+落盘文件路径 = /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-verify-cmd-rsmN14/pmtool/checks/selftest.json
+目录权限位 = 0700
+---- 文件内容（人类可读 JSON）----
+{
+  "version": 2,
+  "record": {
+    "ok": true,
+    "at": "2026-10-14T14:50:58.229Z",
+    "note": "dsh-pm-tool 第 0 步打通验证"
+  }
+}
+
+[guard]   ok   scripts/verify-command.mjs (退出码=0（144ms）)
+
+[guard] >> scripts/verify-copilot-cancel.mjs
+[pm-tool] 存储领域 pmtool 已打开
+PASS verify-copilot-cancel: 取消/草稿产出不写库, 仅确认才 ask-apply
+[guard]   ok   scripts/verify-copilot-cancel.mjs (退出码=0（155ms）)
+
+[guard] >> scripts/verify-copilot-plan-cancel.mjs
+[pm-tool] 存储领域 pmtool 已打开
+PASS verify-copilot-plan-cancel: 多步计划出草稿/取消零写库, 仅确认才 ask-apply
+[guard]   ok   scripts/verify-copilot-plan-cancel.mjs (退出码=0（150ms）)
+
+[guard] >> scripts/verify-copilot-plan.mjs
+verify-copilot-plan OK（解析/兼容/DAG/环/悬空/预算/同目标串行/白名单/逐步剥needs）
+[guard]   ok   scripts/verify-copilot-plan.mjs (退出码=0（49ms）)
+
+[guard] >> scripts/verify-copilot.mjs
+verify-copilot OK (legacy)
+verify-copilot OK（含第1步加固）
+[guard]   ok   scripts/verify-copilot.mjs (退出码=0（71ms）)
+
+[guard] >> scripts/verify-csv.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：CSV 导入重启读回，父子树与字段正确。
+verify-csv 全部通过。
+[guard]   ok   scripts/verify-csv.mjs (退出码=0（725ms）)
+
+[guard] >> scripts/verify-deliverables.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：交付物 CRUD、状态筛选、版本/状态变更留痕、并发编号、失败恢复、项目删除保护、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回交付物台账与变更留痕，筛选正确且新增编号继续递增。
+全部交付物台账校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-deliverables-MKFDoH
+[pm-tool] 交付物操作失败： Error: 验证用交付物写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-deliverables.mjs:117:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/deliverables.js:50:21
+[guard]   ok   scripts/verify-deliverables.mjs (退出码=0（427ms）)
+
+[guard] >> scripts/verify-doctor.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：悬空 parent/milestone/predecessor、stray .tmp 被报告；坏记录原地保留；命令级 root 报告 .tmp。
+doctor 校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-doctor-LlRSmE
+[guard]   ok   scripts/verify-doctor.mjs (退出码=0（155ms）)
+
+[guard] >> scripts/verify-drawer-focus.mjs
+通过：R3-OBS-002 焦点归还四条路径——pointer(activeElement=body)、keyboard 行入口、opener 已销毁 fallback(不落全局 primary/提醒)、输入守卫。
+[guard]   ok   scripts/verify-drawer-focus.mjs (退出码=0（49ms）)
+
+[guard] >> scripts/verify-export.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：Markdown 与整库 JSON 内容/排序、默认路径、0700/0600、覆盖保护、confirm 覆盖与失败清理。
+全部导出校验通过。临时导出目录：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool export output-fEENxH
+[pm-tool] 导出失败： Error: EEXIST: file already exists, mkdir '/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool export output-fEENxH/not-a-directory'
+    at async mkdir (node:internal/fs/promises:858:10)
+    at async writeExportFile (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/export.js:30:5)
+    at async exportProjectMarkdown (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/export.js:59:5)
+    at async handleExportCommand (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/commands/export.js:52:15)
+    at async run (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-export.mjs:36:18)
+    at async file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-export.mjs:156:3 {
+  errno: -17,
+  code: 'EEXIST',
+  syscall: 'mkdir',
+  path: '/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool export output-fEENxH/not-a-directory'
+}
+[guard]   ok   scripts/verify-export.mjs (退出码=0（231ms）)
+
+[guard] >> scripts/verify-external-skill-router.mjs
+【0】精确白名单
+  ✓ 白名单恰好 4 个且顺序固定
+  ✓ 白名单不含 grilling / interaction
+  ✓ isVendoredEntryId 类型守卫边界
+【1】manifest shape（缺字段 clean fail）与白名单一致性
+  ✓ manifest.json 可读
+  ✓ shape 校验对畸形对象 clean fail（抛错而非静默）
+  ✓ manifest.entrySkillIds 与路由白名单逐集合相等
+  ✓ 每个白名单 id 在 manifest 中 kind=entry
+  ✓ grilling 是 exposed:false 依赖，不是公开入口
+【2】K3 — vendor 安全门：false 拦截 / true 放行
+  ✓ 安全门 false：即便命中 tdd 也不返回任何 skill，理由=安全门未通过
+  ✓ 安全门 false：命中多信号（歧义+交付）仍全拦
+  ✓ 安全门 true：命中 tdd 正常放行
+【3】K1 — 四类场景正确匹配
+  ✓ 需求歧义 → grill-me
+  ✓ 新功能实现 → tdd
+  ✓ 可测修复实现 → tdd
+  ✓ 根因未知 → diagnosing-bugs
+  ✓ 交付边界 → code-review
+【4】K2 — 简单任务不加载
+  ✓ trivial 文档改写 → none
+  ✓ 纯问答 → none
+【5】信号语义：trivial 抑制 grill/tdd；rootCause 不交付；blocking 全拦
+  ✓ trivial + 歧义：抑制 grill → none
+  ✓ trivial + 新功能：抑制 tdd → none
+  ✓ trivial + 交付边界：grill/tdd 抑制，仍追加 code-review
+  ✓ rootCause + 交付边界：仅 diagnosing-bugs，**不追加** code-review（根因未明不可交付）
+  ✓ rootCause + 歧义：先定位，不先 grill
+  ✓ rootCause + 新功能：根因优先，抑制 tdd
+  ✓ blocking + 歧义：先走 interaction，不套 grill
+  ✓ blocking + 交付边界：全拦（连 code-review 也不追加）
+【6】组合：多信号顺序/追加
+  ✓ 歧义 + 新功能 → [grill-me, tdd]
+  ✓ 新功能 + 交付 → [tdd, code-review]（追加在末位）
+  ✓ 歧义 + 新功能 + 交付 → [grill-me, tdd, code-review]
+  ✓ testableFix + 交付 → [tdd, code-review]
+【7】testableFix 冲突
+  ✓ testableFix + rootCause：根因未明先诊断，不红绿 → [diagnosing-bugs]
+  ✓ testableFix + trivial：tdd 被抑制 → none
+  ✓ testableFix + trivial + 交付：tdd 抑制，仍 code-review → [code-review]
+【8】K6 — 理由留痕 / 阻塞理由唯一 / taskKind 回带
+  ✓ 每个返回 entry 都有对应理由
+  ✓ tdd 理由声明自测≠专家 PASS；code-review 理由声明不 push
+  ✓ 阻塞路径（blocking / 安全门未过）理由恰为单条
+  ✓ taskKind 原样回带进 decision
+【9】K4 — 无口令/凭据字段
+  ✓ 决策对象不含敏感字段；entry 全部落在白名单内
+【10】不可变冻结去重 / 确定性
+  ✓ 返回数组已冻结（push 被拒）
+  ✓ entrySkillIds 无重复
+  ✓ 同输入两次调用深度相等（确定性）
+
+verify-external-skill-router 通过：共 41 组断言，覆盖 K1–K6、K3 安全门 false拦截/true放行、组合/冲突、testableFix 冲突、阻塞理由唯一、taskKind 留痕、冻结去重、确定性；manifest 严格 shape（缺字段 clean fail）且白名单与 entrySkillIds 只读比对一致。
+[guard]   ok   scripts/verify-external-skill-router.mjs (退出码=0（54ms）)
+
+[guard] >> scripts/verify-external-skills.mjs
+[verify-external-skills] vendor 根 = /Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock
+[verify-external-skills] 只读/离线/确定性；不执行 vendored 内容、不联网、不改写任何文件
+  [REF-EXTERNAL] skills/code-review/SKILL.md: 引用 "CODING_STANDARDS.md" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明
+  [REF-EXTERNAL] skills/code-review/SKILL.md: 引用 "CONTRIBUTING.md" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明
+  [REF-EXTERNAL] skills/diagnosing-bugs/SKILL.md: 引用 "GLOSSARY.md" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明
+  [REF-EXTERNAL] skills/diagnosing-bugs/SKILL.md: 引用 "scripts/hitl-loop.template.sh" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明
+  [REF-EXTERNAL] skills/tdd/SKILL.md: 引用 "GLOSSARY.md" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明
+
+[verify-external-skills] PASS
+  source commit = 49dd158d1076134a641b33efb035946536778336
+  vendored 文件数 = 13；entry skills = 4；声明依赖 = 1
+  所有文件 sha256/bytes 与 manifest 逐位一致；无越界文件/脚本/symlink；无 F1 危险指令。
+[guard]   ok   scripts/verify-external-skills.mjs (退出码=0（63ms）)
+
+[guard] >> scripts/verify-form-validation.mjs
+通过：isRealIsoDate 接受真实日历日、拒绝 2/30 与越界/未补零。
+通过：项目表单缺值逐字段报错、target<start 定位 targetDate、纠正后错误清空。
+通过：里程碑表单 title/targetDate 必填校验。
+边界提示：ARIA 接线、内联渲染与焦点定位需真实浏览器 GUI 验收（见 ADL-046）。
+[guard]   ok   scripts/verify-form-validation.mjs (退出码=0（61ms）)
+
+[guard] >> scripts/verify-fs-atomic.mjs
+[case A/B/C/F] 成功原子替换 + tmp 同目录唯一后缀 + 调用顺序 + mode
+  ok  - writeFile 时刻目录里恰好出现 1 个临时文件（实见 1 个）
+  ok  - 临时文件为隐藏文件（. 开头）：.data.json.90e4e8e0-abe1-4af3-a39c-859ea357a404.tmp
+  ok  - 临时文件以 .tmp 结尾：.data.json.90e4e8e0-abe1-4af3-a39c-859ea357a404.tmp
+  ok  - 临时文件与目标同目录（同盘 rename 才原子）
+  ok  - POSIX 调用顺序 = writeFile→文件fsync→目录fsync（实见 writeFile→file-sync→dir-sync）
+  ok  - 文件 fsync 时刻：tmp 仍在盘上、目标仍是旧内容（rename 尚未发生）
+  ok  - 目录 fsync 时刻：tmp 已消失、目标已是新内容（rename 已落定）
+  ok  - 成功后目标内容已替换为 NEW-V2
+  ok  - 成功后目录无任何残留 .tmp
+  ok  - 产物对 group/other 无任何权限位（mode=600）
+  ok  - 两次写的临时文件 uuid 唯一（.data.json.90e4e8e0-abe1-4af3-a39c-859ea357a404.tmp ≠ .data.json.1aff0f9e-daf2-4425-a2a9-bd0708538ec4.tmp）
+  ok  - 第二次成功后仍无残留 .tmp
+[case D1] write 阶段失败：目标内容 + mtime 纹丝不动，tmp 被清理
+  ok  - write 失败后目标内容仍为 OLD-V1
+  ok  - write 失败后目标 mtime 不变
+  ok  - write 失败后临时文件已清理、无残留
+[case D2] 文件 fsync 阶段失败：目标内容 + mtime 纹丝不动，tmp 被清理
+  ok  - 文件 fsync 失败后目标内容仍为 OLD-V1
+  ok  - 文件 fsync 失败后目标 mtime 不变
+  ok  - 失败点确在文件 fsync（尚未到 rename/目录fsync）
+  ok  - 文件 fsync 失败后临时文件已清理、无残留
+[case D3] rename 阶段失败（目标是非空目录）：目标目录内容完好，tmp 被清理
+  ok  - rename 失败后目标目录内既有文件原样保留（未被覆盖/清空）
+  ok  - rename 失败后临时文件已清理、无残留
+[case E] rename 成功后目录 fsync 失败：错误如实向上抛，最终文件已是完整新内容
+  ok  - 目录 fsync 失败后目标文件已是完整新内容（rename 已落定，文件数据完整）
+  ok  - 失败点确在目录 fsync（rename 已完成：writeFile→文件fsync→目录fsync）
+  ok  - 目录 fsync 失败后无残留 tmp（rename 后 tmp 本就不存在）
+[case A1-02] open(tmp,"wx") 排他创建：同名 tmp 预置 → EEXIST、目标不变、按上游契约清理
+  ok  - open(tmp,'wx') 在同名 tmp 已存在时抛 EEXIST（排他创建生效，实见 code=EEXIST）
+  ok  - EEXIST 发生在 open 阶段：writeFile/sync 探针均未触发（未对预置 tmp 做任何写入）
+  ok  - wx 拒绝后目标内容仍为 OLD-V1（未被覆盖）
+  ok  - wx 拒绝后目标 mtime 不变
+  ok  - EEXIST 后该 tmp 路径按上游契约被清理（rm force），目录无残留
+  ok  - 目录最终只剩目标文件（无预置 tmp、无新 tmp 残留）
+
+[upstream 对照] 本包 atomicWriteFile 与上游 writeAtomic 契约一致：
+  - 同目录隐藏 .tmp（uuid 唯一）→ wx 0o600 → writeFile utf8 → 文件 fsync → close → rename → 目录 fsync
+  - rename 前失败只清 tmp、绝不碰目标；rename 后目录 fsync 失败如实抛错且文件完整
+  - A1-02：wx 排他创建真实闭环——同名 tmp 预置时 open 抛 EEXIST、目标字节/mtime 不动，该 tmp 路径按上游契约清理
+  - 有意差异：tmp 名内嵌 basename（排障）、mode 可覆盖（默认 0o600）、renamed 标志清理（语义等价）
+
+[fs-atomic] fixture 已清理：PASS（fs-atomic 发布协议契约全部成立）
+[guard]   ok   scripts/verify-fs-atomic.mjs (退出码=0（91ms）)
+
+[guard] >> scripts/verify-gantt-drag.mjs
+verify-gantt-drag OK：CSS 首行宽度契约 / quiet 成功 / 失败可见 / 单 refresh / inflight 禁拖 / timer 清理 / aria-live / 白名单齐备。
+[guard]   ok   scripts/verify-gantt-drag.mjs (退出码=0（53ms）)
+
+[guard] >> scripts/verify-gantt.mjs
+verify-gantt OK
+[guard]   ok   scripts/verify-gantt.mjs (退出码=0（49ms）)
+
+[guard] >> scripts/verify-gui-contract.mjs
+通过：面板前置多选、repo/branch 表单、Overview 健康灯与 repo 链接、/pm doctor 与 /pm health 静态钩子齐备；甘特可聚焦/直显/进度层/依赖箭头/本地今日线/零写契约齐备。
+[guard]   ok   scripts/verify-gui-contract.mjs (退出码=0（52ms）)
+
+[guard] >> scripts/verify-health.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：灰灯空项目、扣分封顶、黄灯 63、确定性、全完成绿灯、本地 todayIso、逾期边界、全受阻 clamp、零写。
+健康分校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-health-N8X1sW
+[guard]   ok   scripts/verify-health.mjs (退出码=0（365ms）)
+
+[guard] >> scripts/verify-import-content.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：OPT-12 内容导入重启读回，父子树与字段正确。
+verify-import-content 全部通过。
+[guard]   ok   scripts/verify-import-content.mjs (退出码=0（640ms）)
+
+[guard] >> scripts/verify-importmd.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：importmd 重启读回，编辑后清单父子/勾选正确。
+verify-importmd 全部通过。
+[guard]   ok   scripts/verify-importmd.mjs (退出码=0（320ms）)
+
+[guard] >> scripts/verify-integration.mjs
+[pm-tool] 存储领域 pmtool 已打开
+verify-integration reopen OK（子进程读盘：assignee=ice, progress=40）
+verify-integration 全部真覆盖通过（并发1写/dry-run/恢复回滚+快照/坏备份/reopen）
+[guard]   ok   scripts/verify-integration.mjs (退出码=0（399ms）)
+
+[guard] >> scripts/verify-keyboard.mjs
+通过：OPT-09 键盘 reducer 移动/勾选/删除/打开与输入框守卫用例。
+[guard]   ok   scripts/verify-keyboard.mjs (退出码=0（46ms）)
+
+[guard] >> scripts/verify-llm-optional.mjs
+[verify-llm-optional] 数据根（隔离）= /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-llm-opt-h8DLUt（无 llm）
+[pm-tool] 存储领域 pmtool 已打开
+[契约A] 缺 llm：插件已加载；project/task/milestone 可用；ask 降级 = 副驾暂不可用：当前宿主未装载 LLM 服务，AI 草稿不可用；你仍可手工录入。
+[verify-llm-optional] 数据根（隔离）= /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-llm-opt-jEz0UQ（带 fake llm）
+[pm-tool] 存储领域 pmtool 已打开
+[契约B] 有 fake llm：ask 真实走 generateDraft；prepareCall 首调 = {"provider":"our-free-model","model":"kilo-auto/free","maxTokens":4000}
+verify-llm-optional: PASS（缺 llm 仍加载核心台账+ask 中文 NO_LLM 降级 / 有 fake llm ask 真实走 generateDraft 不回归）
+[guard]   ok   scripts/verify-llm-optional.mjs (退出码=0（161ms）)
+
+[guard] >> scripts/verify-meeting-ai.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：summarize 预览不落盘，confirm 建 draft 会议并挂行动项。
+[pm-tool] 存储领域 pmtool 已打开
+通过：模型返回非 JSON 时优雅降级，未建会议。
+R15 verify-meeting-ai 全部通过。
+[guard]   ok   scripts/verify-meeting-ai.mjs (退出码=0（178ms）)
+
+[guard] >> scripts/verify-meeting-source.mjs
+verify-meeting-source OK
+[guard]   ok   scripts/verify-meeting-source.mjs (退出码=0（59ms）)
+
+[guard] >> scripts/verify-meetings.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：会议/行动项 CRUD、关联保护、排序、并发、失败恢复、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回会议与行动项，编号继续递增。
+全部会议纪要校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-meetings-GUFTJj
+[pm-tool] 会议纪要操作失败： Error: 验证用会议写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-meetings.mjs:112:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/meetings.js:66:21
+[guard]   ok   scripts/verify-meetings.mjs (退出码=0（498ms）)
+
+[guard] >> scripts/verify-milestones.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：里程碑增查改删、状态一致性、任务关联保护、时间线排序、并发编号、项目删除保护、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回里程碑时间线，新增编号继续递增。
+全部里程碑校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-milestones-qmCqme
+[pm-tool] 里程碑操作失败： Error: 验证用里程碑写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-milestones.mjs:118:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/milestones.js:25:21
+[guard]   ok   scripts/verify-milestones.mjs (退出码=0（434ms）)
+
+[guard] >> scripts/verify-model-route.mjs
+[pm-tool] 存储领域 pmtool 已打开
+verify-model-route 通过：poc/prod 路由、无 Key 友好提示、模式持久化、非法模式、真实输出↔parser 往返。
+[guard]   ok   scripts/verify-model-route.mjs (退出码=0（168ms）)
+
+[guard] >> scripts/verify-people-load.mjs
+verify-people-load OK
+[guard]   ok   scripts/verify-people-load.mjs (退出码=0（60ms）)
+
+[guard] >> scripts/verify-person-candidates.mjs
+[pm-tool] 存储领域 pmtool 已打开
+verify-person-candidates OK
+[guard]   ok   scripts/verify-person-candidates.mjs (退出码=0（179ms）)
+
+[guard] >> scripts/verify-predecessors.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：前置增改清、存在/跨项目/自指/成环拒绝、删除与级联外部引用保护、读取零写、precheck 悬空/环拒绝、重开精确读回。
+前置依赖校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-predecessors-Cukrx3
+通过：predecessorIds 误写为字符串被重开拒绝，坏记录原地零写不 skip。
+[pm-tool] 存储领域 pmtool 已打开
+通过：WBS 后代合法 DAG 前置往返保留；命令级拒删点名引用方、零写且不吞指引。
+[guard]   ok   scripts/verify-predecessors.mjs (退出码=0（267ms）)
+
+[guard] >> scripts/verify-projects.mjs
+[pm-tool] 存储领域 pmtool 已打开
+项目 ID：p-0001
+名称：PM Alpha 上线计划
+目标描述：保留大小写、空格和 "引号"
+第二行
+负责人：Ice
+状态：进行中
+开始日期：2026-10-10
+完成日期：2026-10-31
+标签：MVP、客户 A
+仓库：未填写
+创建时间：2026-10-14T14:51:04.621Z
+更新时间：2026-10-14T14:51:04.621Z
+通过：项目增删改查、日期与同名校验、confirm 防误操作、并发写入、失败恢复、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回更新与删除结果，新增编号继续递增。
+全部项目校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-projects-E53zrc
+[pm-tool] 项目操作失败： Error: 验证用写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-projects.mjs:191:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/projects.js:48:21
+[guard]   ok   scripts/verify-projects.mjs (退出码=0（461ms）)
+
+[guard] >> scripts/verify-promote.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：重启读回，任务已创建且行动项回写关联。
+verify-promote 全部通过。
+[guard]   ok   scripts/verify-promote.mjs (退出码=0（321ms）)
+
+[guard] >> scripts/verify-r12.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：检索跨类命中、--type 过滤、空关键字与非法类型负例。
+通过：统计全量/单项目口径、完成率、逾期与未关闭风险按严重度聚合。
+通过：导入 dry-run 不写盘、confirm 落盘、缩进→WBS、[x] 已完成，及空清单/坏项目/坏路径负例。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回导入任务树，父子关系、WBS 编号与 [x] 已完成状态正确。
+全部 R12 校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-r12-kmd89Q
+[guard]   ok   scripts/verify-r12.mjs (退出码=0（372ms）)
+
+[guard] >> scripts/verify-record-location.mjs
+verify-record-location OK
+[guard]   ok   scripts/verify-record-location.mjs (退出码=0（51ms）)
+
+[guard] >> scripts/verify-reminders.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回，提醒派生与持久化一致。
+verify-reminders 全部通过。
+[guard]   ok   scripts/verify-reminders.mjs (退出码=0（360ms）)
+
+[guard] >> scripts/verify-repo-format.mjs
+通过：S3 repo-format 纯模块三端同 fixture 同判同文案；client 编译产物零 zod 依赖。
+[guard]   ok   scripts/verify-repo-format.mjs (退出码=0（92ms）)
+
+[guard] >> scripts/verify-report-ai.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：narrate 预览不落盘，confirm 生成带 AI 叙述的确定性快照。
+[pm-tool] 存储领域 pmtool 已打开
+通过：模型额度耗尽时优雅降级，未生成快照。
+R14 verify-report-ai 全部通过。
+[guard]   ok   scripts/verify-report-ai.mjs (退出码=0（210ms）)
+
+[guard] >> scripts/verify-report-diff.mjs
+verify-report-diff OK
+[guard]   ok   scripts/verify-report-diff.mjs (退出码=0（60ms）)
+
+[guard] >> scripts/verify-reports.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：固定快照、异常汇总、人工字段更新、Markdown、并发、失败恢复、删除保护与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回固定快照，筛选及编号续增正确。
+全部进度汇报校验通过。临时数据：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-reports-1HnFlF
+[pm-tool] 进度汇报操作失败： Error: 验证用汇报写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-reports.mjs:129:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/progress-reports.js:133:21
+[guard]   ok   scripts/verify-reports.mjs (退出码=0（469ms）)
+
+[guard] >> scripts/verify-risk-issues.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：风险/问题 CRUD、类型字段、筛选、并发编号、失败恢复、项目删除保护、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回风险与问题，筛选正确且新增编号继续递增。
+全部风险与问题校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-risk-issues-9uD2Xk
+[pm-tool] 风险/问题操作失败： Error: 验证用风险问题写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-risk-issues.mjs:123:37)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/risk-issues.js:30:21
+[guard]   ok   scripts/verify-risk-issues.mjs (退出码=0（409ms）)
+
+[guard] >> scripts/verify-schema-v2.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：v1 信封读、写盖 v2、未触仍 v1、外来版本缺席、strict 拒绝未知键。
+schema v2 校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-schema-v2-Hh63zh
+通过：坏 v2 记录重开 clean fail，formatDomainOpenError 相对路径+表/键/字段中文点名，坏记录原地保留不隔离。
+[guard]   ok   scripts/verify-schema-v2.mjs (退出码=0（174ms）)
+
+[guard] >> scripts/verify-storage.mjs
+[verify-storage] 数据根（隔离）= /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-verify-storage-Rgrodv
+[verify-storage] PM_DATA_ROOT 环境变量 = (未设置，使用一次性临时目录)
+已手动注册 json 存储后端（裸上下文不触发 effect，按官方测试惯用法手动挂载）
+数据根目录 root = /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-verify-storage-Rgrodv
+读回记录 get("selftest") = {"ok":true,"at":"2026-10-14T14:51:07.549Z","note":"dsh-pm-tool 第 0 步打通验证"}
+落盘文件存在 = true
+落盘文件路径 = /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-verify-storage-Rgrodv/pmtool/checks/selftest.json
+目录权限位 = 0700
+---- 文件内容（人类可读 JSON）----
+{
+  "version": 2,
+  "record": {
+    "ok": true,
+    "at": "2026-10-14T14:51:07.549Z",
+    "note": "dsh-pm-tool 第 0 步打通验证"
+  }
+}
+
+[guard]   ok   scripts/verify-storage.mjs (退出码=0（121ms）)
+
+[guard] >> scripts/verify-task-inline.mjs
+verify-task-inline OK
+[guard]   ok   scripts/verify-task-inline.mjs (退出码=0（46ms）)
+
+[guard] >> scripts/verify-task-move-renumber.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：S1 复合失败+回滚失败 AggregateError 聚合原始错与回滚错，不吞错。
+通过：S1-A2 内层 AggregateError 拍平后再聚合外层回滚错，errors 顺序与身份可定位。
+通过：S1-G2 命令层 AggregateError → 多行安全中文摘要，无堆栈/类名/对象泄漏。
+通过：PROD-04 复合 move+renumber 原子性、循环保护、旧 move 兼容与失败回滚。
+[pm-tool] 存储领域 pmtool 已打开
+通过：新进程重开 domain，读回 parent/order/code 与落盘一致。
+[pm-tool] 任务操作失败： Error: 验证用复合写入失败
+    at table.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-task-move-renumber.mjs:94:31)
+    at renumberProjectUnsafe (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/tasks.js:495:25)
+    at async file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/tasks.js:543:32
+[guard]   ok   scripts/verify-task-move-renumber.mjs (退出码=0（602ms）)
+
+[guard] >> scripts/verify-task-repo.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：C1 合法写回+空值省略 / C2 局部更新零漂移 / C3-C4 非法拒绝中文零写 / C5-C6 deliverable history 不动 / C8 版本不抬+v1备份往返 / C9 类型拒绝 / C10 离线。
+T7 后端主流程通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-task-repo-gRxH5G
+通过：C7 v1 task / v0.6.0 deliverable 读回按空语义处理，open 后磁盘零改写。
+[pm-tool] 存储领域 pmtool 已打开
+通过：X1 命令透传往返+空值省略 / X2 deliverable 非法中文零写 / X3 strict 拒绝未知键。
+T7 命令层通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-task-repo-cmd-QNH1ky
+通过：task/deliverable 源文件复用 core/repo.ts，无第二份正则。
+[guard]   ok   scripts/verify-task-repo.mjs (退出码=0（417ms）)
+
+[guard] >> scripts/verify-task-tree.mjs
+verify-task-tree OK
+[guard]   ok   scripts/verify-task-tree.mjs (退出码=0（58ms）)
+
+[guard] >> scripts/verify-tasks.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：任务增查改删、移动/循环保护、显式重编号、并发编号、项目删除保护、可读 JSON 与权限。
+[pm-tool] 存储领域 pmtool 已打开
+通过：全新进程读回更新、移动、重新编号与删除结果，并继续同级编号。
+全部任务校验通过。临时数据保留于：/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-tool-tasks-8DrPJu
+[pm-tool] 任务操作失败： Error: 验证用任务写入失败
+    at taskTable.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-tasks.mjs:118:41)
+    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/tasks.js:128:21
+[pm-tool] 任务操作失败： Error: 验证用重新编号写入失败
+    at taskTable.put (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-tasks.mjs:195:39)
+    at renumberProjectUnsafe (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/lib/core/tasks.js:495:25)
+[guard]   ok   scripts/verify-tasks.mjs (退出码=0（553ms）)
+
+[guard] >> scripts/verify-ui-feedback.mjs
+verify-ui-feedback OK
+[guard]   ok   scripts/verify-ui-feedback.mjs (退出码=0（63ms）)
+
+[guard] >> scripts/verify-war-room.mjs
+verify-war-room OK
+[guard]   ok   scripts/verify-war-room.mjs (退出码=0（49ms）)
+
+[guard] >> scripts/verify-wbs.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：AI 草稿 dry-run 预览不落盘，confirm 按草稿落盘为 WBS 任务树。
+[pm-tool] 存储领域 pmtool 已打开
+通过：模型限流时优雅降级为中文提示，台账未被写入。
+[pm-tool] 存储领域 pmtool 已打开
+通过：空正文时优雅降级，台账未被写入。
+[pm-tool] 存储领域 pmtool 已打开
+通过：stream 超时/中断归一为中文 MODEL_TIMEOUT，台账未被写入。
+R13 verify-wbs 全部通过。
+[guard]   ok   scripts/verify-wbs.mjs (退出码=0（1425ms）)
+
+[guard] >> scripts/verify-web-assignee-list.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：真实全量 snapshot 五来源喂入 listAssigneeCandidates，Alice/alice 大小写合并为一个、按首见序输出。
+通过：client bundle 含稳定 datalist 接线（pm-assignee-list 绑定 + 本体）。
+[guard]   ok   scripts/verify-web-assignee-list.mjs (退出码=0（197ms）)
+
+[guard] >> scripts/verify-web-repo-link.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：task/deliverable 合法 repoUrl·branch 经 web snapshot 原值带出，局部更新不误触、清空省略键。
+通过：deliverable 只改 repoUrl 不追加 history；非法 repoUrl 命令层中文拒绝。
+通过：client bundle 含 pm-repo-row 只读链接行锚点契约（data-repo-link / target=_blank / noopener noreferrer）。
+[guard]   ok   scripts/verify-web-repo-link.mjs (退出码=0（222ms）)
+
+[guard] >> scripts/verify-web.mjs
+[pm-tool] 存储领域 pmtool 已打开
+通过：Web 快照包含项目、任务、里程碑、风险问题、会议纪要、进度汇报和交付物，且无需 API Key。
+通过：dsh.client manifest、工作台结构、内嵌样式与动态 client bundle 契约正确。
+[guard]   ok   scripts/verify-web.mjs (退出码=0（221ms）)
+
+[guard] >> scripts/verify-xlsx.mjs
+[pm-tool] 存储领域 pmtool 已打开
+[pm-tool] 存储领域 pmtool 已打开
+通过：XLSX 导入重启读回，父子树与字段正确。
+verify-xlsx 全部通过。
+[guard]   ok   scripts/verify-xlsx.mjs (退出码=0（796ms）)
+
+[guard] after manifest 文件数 = 160
+[guard] ========== 汇总 ==========
+[guard] 脚本：共 62，通过 62，失败 0
+[guard] 资产：before=160 after=160，污染 0
+
+[guard] PASS：正式 data/共享 backups/exports hash+mtime 清单零变化，共 160 个文件未被污染。

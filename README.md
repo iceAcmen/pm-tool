@@ -22,12 +22,12 @@
 |---|---|---|
 | 阶段 1 环境搭建 | ✅ 已完成（已推送 GitHub） | 工具链/克隆/构建/运行验证均通过；main 已推送至 git@github.com:iceAcmen/pm-tool.git |
 | 阶段 2 需求分析 | ✅ 已完成，开发依据 v0.9 | 含 ADL-028 R10 交付物台账与 ADL-029 R12 检索/看板/导入模型 |
-| 阶段 3 源码开发 | ✅ v0.7.3 可发布（待最终提交打 tag） | R1–R15 + A1/A2 已完成；v0.7.2 已发布（甘特信息增强：起止直显 / 进度 / 依赖箭头 / 父子派生 / 零 schema）；v0.7.3 = 甘特拖拽手感与成功提示热修（flex-wrap 根因 / quiet 单 refresh / aria-live 轻提示 / saving 锁 / 失败回落，零 schema） |
-| 阶段 4 测试交付 | ✅ v0.7.3 热修 APPROVE、Chrome 22 项全绿 + 回归 7/7 PASS | v0.7.2 已发布（范围内 34/35 PASS、guard 157 资产零污染、client `dcf44a4a…`）；v0.7.3 拖拽热修真实 Chrome 隔离端口 3120 **22 项全绿**、静态契约 verify-gantt-drag 退出 0、guard **156 资产零变化**；回归新增 7 项（GI-WRITE-06/07+GI-WEB-16~20）独立测试专家最终签 **7/7 PASS**、client `68238d1a…`；真 390 窄窗 GI-WEB-14、GI-CP 关键路径 deferred（均不阻塞） |
+| 阶段 3 源码开发 | ✅ v0.7.4 可发布（待最终提交打 tag） | R1–R15 + A1/A2 已完成；v0.7.3 已发布（甘特拖拽热修）；v0.7.4 = 稳定性地基 S4（fs-atomic 契约/tmpNameFactory 测试缝、LLM optional 真实 Context、runner 聚合+timeout 分类+资产 manifest）+ war-room doing→in_progress KPI 热修（零 schema） |
+| 阶段 4 测试交付 | ✅ v0.7.4 S4 19/19 PASS + war-room 真实 Chrome PASS | v0.7.3 已发布（拖拽热修 22 项全绿、guard 156 资产零污染、client `68238d1a…`）；v0.7.4 S4 独立测试专家实测 **19/19 PASS**、全量 guard **62/62** 全绿、权威资产 **160 零污染**；war-room 真实 Chrome 隔离端口 3122 逐项 PASS、正式 **159 资产零污染**（160/159 = 跨轮 session/cache 自然轮转、各轮 before==after，如实分开）；client sha256 已锁定 `9d0b118c…`（332510 B）；真 390 窄窗 GI-WEB-14、GI-CP 关键路径、v0.8 客观进度 deferred（均不阻塞） |
 
 ### 版本导航（Git tag 与发布说明）
 
-> `packages/dsh-pm-tool/package.json` 当前版本 **0.7.3**（最终可发布；注解 tag 将在最终提交时创建）。历史已发布 tag 均为**注解 tag**；「tag 对象 → 指向提交」见各发布说明。
+> `packages/dsh-pm-tool/package.json` 当前版本 **0.7.4**（最终可发布；注解 tag 将在最终提交时创建）。历史已发布 tag 均为**注解 tag**；「tag 对象 → 指向提交」见各发布说明。
 
 | 版本 | 状态 | tag（注解）→ 指向提交 | 发布说明 |
 |---|---|---|---|
@@ -41,7 +41,8 @@
 | v0.7.0 | ✅ 已发布（2026-10-14） | `b6ba06ac` → `217d8ae` | [`docs/releases/v0.7.0.md`](docs/releases/v0.7.0.md) |
 | v0.7.1 | ✅ 已发布（2026-10-14） | `d5cfa5aa` → `02f42d1` | [`docs/releases/v0.7.1.md`](docs/releases/v0.7.1.md) |
 | v0.7.2 | ✅ 已发布（2026-10-14） | `5d1c8591` → `310c768` | [`docs/releases/v0.7.2.md`](docs/releases/v0.7.2.md) |
-| v0.7.3 | ✅ 可发布（热修 APPROVE / Chrome 22 项全绿 + 回归 7/7 PASS，tag 将在最终提交创建） | 将在最终提交创建 | [`docs/releases/v0.7.3.md`](docs/releases/v0.7.3.md) |
+| v0.7.3 | ✅ 已发布（2026-10-14） | 注解 tag `v0.7.3` → `eb41b30` | [`docs/releases/v0.7.3.md`](docs/releases/v0.7.3.md) |
+| v0.7.4 | ✅ 可发布（S4 19/19 PASS / guard 62 全绿 + war-room 真实 Chrome PASS，tag 将在最终提交创建） | 将在最终提交创建 | [`docs/releases/v0.7.4.md`](docs/releases/v0.7.4.md) |
 
 实时流水见 [`docs/progress.md`](docs/progress.md)。
 

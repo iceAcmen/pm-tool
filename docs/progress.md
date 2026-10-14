@@ -2,9 +2,25 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-14（doubao-work **甘特拖拽手感与成功提示热修 v0.7.3 代码审查 APPROVE、真实 Chrome 隔离端口 3120 22 项全绿 + 回归新增 7 项独立测试专家最终签 7/7 PASS**：根因修复 `.pm-gantt` 无 flex-wrap 致 scroll 宽 0；拖拽 quiet 单 refresh 即时更新无需 F5、成功改 inline aria-live 轻提示（~3s 自消）、saving 锁防连拖、失败回落无 ghost 且不吞错；**零 schema**、domain 仍 v1；正式 156 资产本轮零变化、client `68238d1a…`（`68238d1a37c4eccfe16ff1699b91310e304d47eddc01466ac19b5193892131d8`）已实测锁定。当前 HEAD `310c768`(v0.7.2 已发布，tag `5d1c8591`)，热修候选在未提交工作树，待用户授权最终提交打 tag。先前一批：v0.7.2 甘特信息增强 34/35 PASS）
+最后更新：2026-10-14（doubao-work **稳定性地基 S4 批次 19/19 PASS（独立测试专家实测）+ war-room「进行中」KPI 热修真实 Chrome 隔离端口 3122 PASS**：A1 fs-atomic 钉死 rename 前失败只清 tmp 不碰目标、tmpNameFactory 仅测试缝生产默认不变；A2 llm 不 inject、懒读 `ctx.reflect.get('llm',false)` 真实 Context，缺 provider 中文 NO_LLM 降级核心离线；A3 verify runner 跑完全部 62 专项并聚合失败、timeout 单独分类、正式资产 before/after manifest 零污染；war-room `doing`→`in_progress` KPI 热修（修复前进行中恒 0）。**零 schema**、domain 仍 v1；S4 本轮 guard **160** 资产零污染、war-room 真实 Chrome **159** 资产零污染（跨轮 session/cache 自然轮转、各轮 before==after，如实分开）；client sha256 已实测锁定 `9d0b118c…`（332510 B）。当前 HEAD `eb41b30`(v0.7.3 已发布，tag `v0.7.3`)，S4+war-room 候选在未提交工作树，待用户授权最终提交打 tag。先前一批：v0.7.3 甘特拖拽热修 22 项全绿+回归 7/7 PASS）
 
-## 当前阶段：甘特拖拽手感与成功提示热修 v0.7.3·代码审查 APPROVE / Chrome 22 项全绿 + 回归 7/7 PASS（2026-10-14，doubao-work）
+## 当前阶段：稳定性地基 S4 + war-room KPI 热修 v0.7.4·19/19 PASS + 真实 Chrome PASS（2026-10-14，doubao-work）
+
+- **背景**：v0.7.3（`eb41b30`）之后的稳定性补丁——不含新业务功能，只做地基加固与一处真实 KPI bug 热修。**全程零 schema**（domain 仍 v1、表集合未变，`taskStatusSchema=z.enum([todo,in_progress,blocked,done])` 拒收 `doing`）。
+- **A1 fs-atomic 契约（`src/core/fs-atomic.ts`）**：`atomicWriteFile` 发布协议「同目录 tmp `.{basename}.{uuid}.tmp` → `open(tmp,'wx',0o600)` 排他 → write → fsync → close → `rename` POSIX 原子覆盖 → fsyncDirectory」；rename 前 open/write/sync/close/rename 任一失败，`finally` 仅在 rename 未发生时 `rm(tmp,{force:true})`，**目标文件逐字节不变、tmp 不残留**；rename 后目标即新内容、tmp 已消失。新增可选 `options.tmpNameFactory` **仅测试注入**（制造确定性 tmp 名/真实 EEXIST），生产不传时仍默认 `randomUUID`、对外行为完全不变。专项 `verify-fs-atomic.mjs` 退出 0（含 wx EEXIST 排他闭环 A1-02）。
+- **A2 LLM optional 真实 Context（`src/index.ts` + `ai-client`）**：llm **不再列入 inject**（缺 llm 的 profile 仍激活插件），运行期 `ctx.reflect.get('llm',false)` 懒读真实 Context、命令被调时才取并透传 task/meeting/report 三条 AI 命令；缺 provider 时 `generateDraft` 抛中文 `NO_LLM` 降级、核心 domain 与全部非 AI 命令离线可用、业务零写；硬错误码不跨池轮换、英文/stack 不外泄；有 fake llm 走 generateDraft+兜底路由。专项 `verify-llm-optional.mjs` 退出 0。
+- **A3 verify runner 聚合 + timeout 分类 + 资产 manifest（`scripts/verify-isolation.mjs`）**：主循环改为任一子进程失败也记录但**不 break**，全部 62 个 `verify-*.mjs` 跑完后聚合「共 N/通过 P/失败 F」；超时（默认 10min/个，`PM_TOOL_ISOLATION_TARGET_TIMEOUT_MS` 可调）经 `describeFailure` 对 `ETIMEDOUT`/`killed` **单独分类为「超时（上限…实际…）」**、不误落 spawn 异常；子进程 env scrub 剔除 `PM_DATA_ROOT`/`DSH_PM_BACKUP_DIR`（只打变量名不打值）；正式数据/备份/导出 root（守护清单见 `verify-isolation.mjs` 的 `WATCH`）跑前跑后各算一次 sha256+mtime manifest 做集合 diff，任一新增/删除/变 hash/变 mtime 即单独计污染失败；退出码无歧义（任一脚本失败或污染→exit 1，全绿 diff 空→exit 0）。`walk/buildManifest/diff/WATCH/runOne/runGuard` 导出供 `test-isolation-guard.mjs`/`test-verify-runner-aggregate.mjs` 复用同一套判定。
+- **war-room「进行中」KPI 热修**：根因 `computeKPI` 误判 `status==='doing'`（真枚举 `in_progress`）致「进行中」KPI 恒为 0。`status.ts` 新增纯谓词 `isDoneStatus`/`isInProgressStatus`（`TASK_STATUSES` 未变）；`war-room.ts` 的 inProgress 改用 `isInProgressStatus(t.status)`（修复点），done/overdue 抽闭包 `isTaskDone=isDoneStatus(s)||progress>=100`、KPI 与 buildAgenda 复用、语义不变；`verify-war-room.mjs` 补真枚举五态回归守卫。
+- **口径与边界**：**零 schema**（不新增表列、不升 domain、不改落盘布局）；不自动排程/改期/顺延，doctor 仍只读不自愈。**v0.8「客观进度」（checklist/progress-derivation/汇报 calcVersion）矩阵已冻结但未实现（NOT_RUN/deferred）**，本批只携带其前置 war-room 热修，不声称已交付。
+- **验收（S4 独立测试专家实测）**：总门 **✅ 19/19 PASS**；`pnpm build`=0；全量 guard **62/62** 专项全绿；权威资产 **before=160/after=160、污染 0**、退出码 0。矩阵 `docs/testing/stability-s4-acceptance.md`，证据 `docs/verification/stability-s4-20261014/full-guard.txt`。
+- **验收（war-room 真实 Chrome 隔离实例）**：真实 Chrome v139 headless（puppeteer-core，无 Key）独立 `DSH_HOME`+独立 storage root+独立备份目录+端口 **3122**；面板表单构造 p-0001+5 任务，KPI 实测 总数5/完成率40%/**进行中=1（blocked 不计；修复前渲染 0）**/逾期1/状态分布2·1·1·1/议程仅一条逾期/磁盘 5 条全真枚举/console·pageerror=0；`verify-war-room.mjs`、`verify-web.mjs` 退出 0。证据 `docs/verification/gui-war-room-status-20261014/`。
+- **计数差异（如实分开，非矛盾）**：S4 guard = **160**、war-room 轮 = **159**——两轮计数差异为**跨轮 session / 缓存文件自然轮转**所致；每轮内部均严格 before=after、污染 0，属各自独立零污染结论，非正式资产漂移。
+- **ISS-027 精确 PID 流程（继续遵守）**：隔离 PID 8436（首轮 patch root 误指上一轮 scratch）→修正重启 PID **9859**，均 `--port 3122`/`--no-open`；仅对 8436/9859 分别 `kill -TERM` 一次验 EXITED、3122=DOWN；正式 3080=PID 93536/3091=PID 93537 启动前后均 LISTEN、PID 未变。首轮 5 条误写仅落 `.tmp` 隔离 scratch、已清，正式 `data/` 未受影响。
+- **零污染 / client hash（已实测锁定）**：S4 **160**、war-room **159** 资产均 before=after、changed/added/removed=0；`shasum -a 256 packages/dsh-pm-tool/lib/client.js` = `9d0b118c6f469856c5c7caee52175a88b0a2082fc4333daf2b2a45bc2302aa8b`（**332510 B / 332.51 kB**，最终 build 已稳定、实测锁定）。
+- **状态**：本批仅回写版本/living docs 口径（package.json 0.7.4 + releases/README/changelog/progress/handoff/onboarding），**未改产品 src、未改测试专家 docs、未改证据、未提交**。
+- **下一步**：待用户授权执行最终 commit/注解 tag `v0.7.4`/push（client sha256 已实测锁定 `9d0b118c…`）；v0.8 客观进度实现、GI-WEB-14 真 390 窄窗目视、GI-CP 关键路径、M-01 prod 真实 Key 仍为后续/人工项。
+
+## 历史阶段：甘特拖拽手感与成功提示热修 v0.7.3·代码审查 APPROVE / Chrome 22 项全绿 + 回归 7/7 PASS（2026-10-14，doubao-work）
 
 - **背景**：用户在 v0.7.2（`310c768`）实测反馈——拖拽成功后弹出**全字段深色大卡 Notice**（任务ID/WBS/项目/父任务/标题/说明/负责人/状态/优先级/起止/进度/里程碑 13 行 dump），盖住甘特工作台（与 `ClipboardTemp/f97c15cd….png` 一致）。
 - **功能（热修）**：①根因修复 `.pm-gantt` 无 `flex-wrap` 时，hint(`flex-basis:100%`) 与 labels(230px)/scroll(flex:1) 挤同一 flex 行竞争，致 `scroll` 被 shrink 到宽 0（画布消失）；加 `flex-wrap:wrap`，hint 独占下一行，首行宽度不随 hint 出现/消失变化。②拖拽走 `run(...,{quiet:true})`、单 refresh：松手即落盘+就地重渲染，日期即时更新无需 F5，移除 `onSaved()` 二次刷新。③quiet 成功不弹全字段大 Notice，改条下 inline `role=status`/`aria-live=polite`「已更新：起 ~ 止」约 3s 自清除。④`saving` inflight 锁：保存中禁连拖、`finally` 解锁，防并发覆盖/ghost。⑤失败回落：条体从未本地改动、未 refresh 自然回落拖前坐标无残影，内联「更新失败，请重试」6s；quiet 不吞错（run catch 仍 `setMessage`，全局错误红框 Notice 保留）。⑥unmount `clearTimeout` 清状态定时器；payload 白名单仍仅 `startDate`/`dueDate`。
@@ -175,9 +191,9 @@
 - 剩余需求仍暂缓/裁剪：R11 里程碑提醒、多人实时协作（ADL-031）、Excel 导入（ADL-030）。
 - 上游 dsh 升级前按 `docs/test-cases.md` 执行完整兼容性回归。
 
-## 当前状态（v0.7.1 最终可发布 · tag 将在最终提交创建；v0.7.0 已发布）
-- **版本事实已前置到 v0.7.1（2026-10-14）**：`packages/dsh-pm-tool/package.json` = `0.7.1`。**v0.7.0 已正式发布**：注解 tag 对象 `b6ba06ac` → 提交 `217d8ae`。v0.7.1 = 稳定性补丁 S1/S2/S3 + 协作演进契约，**独立测试专家已最终签 PASS、可发布**；注解 tag 将在最终提交时创建（当前 HEAD `217d8ae`，最终 release commit SHA 待最终提交后确定）。历史 tag `v0.1.0`–`v0.7.0` 均未移动。
-- **v0.7.1 范围（v0.7.0 之后）**：S1——move+renumber 回滚 AggregateError 及用户安全摘要；S2——ask-apply settings 60s 顺序重放幂等 + 真实新进程测试（非跨进程互斥）；S3——repo-format browser-safe 唯一真源 + 三级 CLI；协作演进契约 `docs/product/11-collaboration-ready-architecture.md`（当前不实现账号权限实时）。详见 `docs/releases/v0.7.1.md`。
-- **验收（测试专家最终签 PASS）**：S1/S2/S3 **28/28 全 PASS**；**59 个 verify scripts 全绿**；隔离 guard **157 个资产文件零变化**；client bundle 完整哈希 `dd66be290d2d1568742821b10713243f0790edf78fdc8c43ce703de3550f1397`。
-- **人工项**：**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.7.1 发布）**；PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key。G8/H5 不可逆动作仍 MANUAL_PENDING。
-- **发布动作**：用户已授权最终发布/提交/正常 push/正式升级；本批**暂不 commit/tag/push**，待用户最终通知执行最终提交并打注解 tag。
+## 当前状态（v0.7.4 最终可发布 · tag 将在最终提交创建；v0.7.3 已发布）
+- **版本事实已前置到 v0.7.4（2026-10-14）**：`packages/dsh-pm-tool/package.json` = `0.7.4`。**v0.7.3 已正式发布**：注解 tag `v0.7.3` → 提交 `eb41b30`（甘特拖拽显示热修）。v0.7.4 = 稳定性地基 S4（fs-atomic 契约/tmpNameFactory 测试缝、LLM optional 真实 Context、runner 聚合+timeout 分类+资产 manifest）+ war-room「进行中」KPI 热修，**独立测试专家实测 S4 19/19 PASS、真实 Chrome 隔离端口 3122 PASS，可发布**；注解 tag 将在最终提交时创建（被测基线 = `eb41b30` 之上未提交工作树，最终 release commit SHA 待最终提交后确定）。历史 tag `v0.1.0`–`v0.7.3` 均未移动。
+- **v0.7.4 范围（v0.7.3 `eb41b30` 之后，零 schema）**：A1 fs-atomic 钉死 rename 前失败只清 tmp 不碰目标、`wx` EEXIST 排他、tmpNameFactory 仅测试缝生产默认不变；A2 llm 不 inject、懒读 `ctx.reflect.get('llm',false)` 真实 Context、缺 provider 中文 NO_LLM 降级核心离线；A3 runner 跑完全部 62 专项并聚合失败（不 break）、timeout 单独分类、正式资产 before/after sha256+mtime manifest 零污染；war-room `doing`→`in_progress` KPI 热修（修复前进行中恒 0）。详见 `docs/releases/v0.7.4.md`。
+- **验收（独立测试专家实测 + 真实 Chrome）**：S4 **19/19 PASS**、全量 guard **62/62** 全绿、权威资产本轮 **before=160/after=160 零污染**；war-room 真实 Chrome **3122** 逐项 PASS、正式 **before=159/after=159 零污染**（160 vs 159 = 跨轮 session/cache 自然轮转、各轮 before==after，如实分开）。client sha256 已实测锁定 `9d0b118c6f469856c5c7caee52175a88b0a2082fc4333daf2b2a45bc2302aa8b`（332510 B）。
+- **人工项**：**v0.8 客观进度（checklist/progress-derivation/汇报 calcVersion）= NOT_RUN/deferred**（矩阵已冻结未实现）；**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.7.4 发布）**，PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key；GI-WEB-14 真 390 窄窗、GI-CP 关键路径仍 deferred/MANUAL_PENDING；G8/H5 不可逆动作仍 MANUAL_PENDING。
+- **发布动作**：本批**暂不 commit/tag/push**，待用户最终通知执行最终提交、打注解 tag（client sha256 已实测锁定）。
