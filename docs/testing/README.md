@@ -32,6 +32,8 @@
 | [`schema-v2-acceptance.md`](schema-v2-acceptance.md) | **Schema v2 验收矩阵（开发前冻结，只读基线 `80d42b8`）**（ADL-045/047，独立测试专家前置冻结、不改代码/提交）：**域升 v2 且 compatibleVersions 仍含 1、旧 v1 读、更新一条即迁移到 v2（其余不批量改写）**；v2 可选字段写回·重启读回；人为坏字段 clean fail 点名 id/字段、**禁止旁路备份后跳过**、零写；predecessorIds 存在·同项目·自指·成环·删除保护·重启读回·预检兜底，**悬空依赖 doctor 只报告不自动自愈**；**项目级** repoUrl/branch 格式与旧项目兼容；健康分纯离线派生·确定性·因子可解释·空/满分/全受阻/日期边界·只读零写；**备份 formatVersion 仍为 1 不抬版本、v1/v2 往返兼容**；createBackup 原子 tmp+rename/残留清理；restore 预检先于动表、**中途失败进程内故障注入自动回滚（不声称跨进程事务）**、拒伪格式；build 无残留 server require / full guard 约 150 文件不回归·隔离 backups 不变 / 真浏览器 GUI 冒烟 + 不可逆动作人工确认；**50 项初始全 NOT_RUN**（AUTO / GUI / AUTO+GUI / MANUAL_PENDING 分层），人工项不重复阻塞既有 H1–H6；独立测试专家所有 |
 | [`copilot-multistep-acceptance.md`](copilot-multistep-acceptance.md) | **副驾多步规划验收矩阵（开发前冻结，PROD-24，P0 基线 `3b20850`）**（契约 `product/08-copilot-multistep-design.md` + P0 裁决）：旧 `actions` 兼容平凡计划 / 新 `steps{stepId,title,reason,action,needs}` 契约 / DAG 环·缺依赖·自指坏步局部拒+级联（不拖全部）/ >8 步或 >10 任务整拒 / 同目标隐式串行+链式 baseline 防误冲突 / 真实外部冲突仅拒相关步+依赖级联 / task.update 五标量白名单 / 整批·逐步·勾选·标量编辑·取消零写 / 幂等键含 baseline / 部分成功不自动补偿 / 无 Key·限流·乱码·超长降级零写 / GUI 计划卡·拒绝红行·3条软风险·确认按钮·结果逐步 / 计划不持久化(不写settings不新表) / 正式数据零污染；51 项初始全 NOT_RUN（AUTO 37 / GUI 11 / AUTO+GUI 1 / MANUAL_PENDING 2），AUTO/GUI/MANUAL_PENDING 分层，旧 H1–H6 不阻塞；独立测试专家所有 |
 
+| [`repo-link-assignee-completion-acceptance.md`](repo-link-assignee-completion-acceptance.md) | **v0.7.0 下一批两低风险功能验收矩阵（开发前冻结，基线 `38f3512`）**：T7 = task/deliverable 可选 `repoUrl`/`branch`；T8 = assignee 候选补全；core/commands/verify 两线可并行，**唯一串行闸门 = `src/client/panel.tsx` 接线**；共 30 项（T7=18 / T8=12）初始全 NOT_RUN；独立测试专家所有 |
+
 ## 判定图例（与 ADL-045 严格一致）
 
 - **PASS**：被测行为经真实执行/代码证据验证满足验收；**离线纯函数/HTTP200 不算网页实测 PASS**。
