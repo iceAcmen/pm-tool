@@ -13,6 +13,7 @@
  */
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
+import { deriveProgressMap } from './progress-derivation.js'
 import type { PmDomain } from './storage.js'
 
 export type DoctorKind =
@@ -24,6 +25,7 @@ export type DoctorKind =
   | 'predecessor-cycle'
   | 'dangling-project'
   | 'stray-tmp'
+  | 'done-incomplete-checklist'
 
 export interface DoctorFinding {
   severity: 'error' | 'warning'
@@ -103,6 +105,19 @@ export function runDoctor(domain: PmDomain): DoctorFinding[] {
     if ((task.predecessorIds ?? []).length && hasCycle(task.id)) {
       findings.push({ severity: 'error', kind: 'predecessor-cycle', table: 'tasks', id: task.id, field: 'predecessorIds',
         message: `任务 ${task.id} 的前置依赖存在循环` })
+    }
+  }
+
+  // v0.8 客观进度只读体检：done 但清单未全勾。
+  // 只报告——不补勾、不改 status、不写库、不迁移；空清单（无客观信号）不报告。
+  const progressMap = deriveProgressMap(tasks)
+  for (const task of tasks) {
+    if (task.status !== 'done') continue
+    const prog = progressMap.get(task.id)
+    if (!prog || !prog.checklist) continue
+    if (prog.checklist.checked < prog.checklist.total) {
+      findings.push({ severity: 'warning', kind: 'done-incomplete-checklist', table: 'tasks', id: task.id, field: 'checklist',
+        message: `任务 ${task.id} 已标记完成，但清单仅勾选 ${prog.checklist.checked}/${prog.checklist.total}，请确认验收` })
     }
   }
 

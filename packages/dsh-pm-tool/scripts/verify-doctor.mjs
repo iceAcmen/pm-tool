@@ -35,6 +35,34 @@ writeFileSync(join(root, 'pmtool', 'tasks', 't-0001.json'), JSON.stringify({
 // 残留 .tmp 临时文件（崩溃尾巴）。
 writeFileSync(join(root, 'pmtool', 'tasks', '.abc-123.tmp'), 'partial')
 
+// v0.8 客观进度只读体检：done 但清单未全勾（t-0002 应报告；t-0003 全勾不应报告）。
+writeFileSync(join(root, 'pmtool', 'tasks', 't-0002.json'), JSON.stringify({
+  version: 2,
+  record: {
+    id: 't-0002', projectId: 'p-0001', title: '完成但清单未勾完',
+    description: '', assignee: '', status: 'done', priority: 'P1', progress: 100,
+    parentId: null, milestoneId: null,
+    checklist: [
+      { id: 'c-1', text: '第一项', done: true },
+      { id: 'c-2', text: '第二项', done: false },
+    ],
+    code: '2', order: 2, createdAt: now, updatedAt: now,
+  },
+}, null, 2))
+writeFileSync(join(root, 'pmtool', 'tasks', 't-0003.json'), JSON.stringify({
+  version: 2,
+  record: {
+    id: 't-0003', projectId: 'p-0001', title: '完成且清单全勾',
+    description: '', assignee: '', status: 'done', priority: 'P1', progress: 100,
+    parentId: null, milestoneId: null,
+    checklist: [
+      { id: 'c-3', text: '第一项', done: true },
+      { id: 'c-4', text: '第二项', done: true },
+    ],
+    code: '3', order: 3, createdAt: now, updatedAt: now,
+  },
+}, null, 2))
+
 const ctx = new Context()
 await ctx.plugin(Storage)
 ctx.storage.backend.register('json', new JsonStorageBackend(root))
@@ -53,13 +81,29 @@ try {
   assert.ok(kinds.includes('dangling-milestone'), '应报告悬空里程碑')
   assert.ok(kinds.includes('dangling-predecessor'), '应报告悬空前置依赖')
 
+  // v0.8：done 但清单未全勾 → warning 体检；全勾的 t-0003 不得报告。
+  const incomplete = findings.filter(f => f.kind === 'done-incomplete-checklist')
+  assert.equal(incomplete.length, 1, '应恰好报告 1 条 done 但清单未全勾')
+  assert.equal(incomplete[0].id, 't-0002')
+  assert.equal(incomplete[0].severity, 'warning')
+  assert.equal(incomplete[0].field, 'checklist')
+  assert.match(incomplete[0].message, /1\/2/)
+  assert.ok(!findings.some(f => f.id === 't-0003'), '清单全勾的 done 任务不得报告')
+  // 确定性排序：同类 finding 按 id 排序（t-0002 若有同类只此一条，此处验证整体排序幂等）
+  assert.deepEqual(findings, [...findings].sort((a, b) =>
+    a.kind.localeCompare(b.kind) || a.table.localeCompare(b.table) || a.id.localeCompare(b.id) || a.field.localeCompare(b.field)),
+    'findings 必须确定性排序')
+
   const stray = await strayTmpFiles(root)
   assert.equal(stray.length, 1, '应发现 1 个残留 .tmp')
   assert.ok(stray[0].endsWith('.tmp'))
 
-  // 只读：跑 doctor 后表数量不变、记录未被改写/移动。
+  // 只读：跑 doctor 后表数量不变、记录未被改写/移动、未自动补勾/改 status。
   assert.equal(domain.table('tasks').size, taskCountBefore)
   assert.ok(domain.table('tasks').get('t-0001'), '坏记录必须保留原地，不得被移动或删除')
+  const t2 = domain.table('tasks').get('t-0002')
+  assert.equal(t2.status, 'done', 'doctor 不得改 status')
+  assert.equal(t2.checklist.filter(item => item.done).length, 1, 'doctor 不得自动补勾清单')
 
   const text = renderDoctor(findings, stray)
   assert.match(text, /仅报告|未自动|不/i)

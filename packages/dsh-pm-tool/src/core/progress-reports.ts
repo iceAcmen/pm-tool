@@ -11,6 +11,7 @@ import {
 } from './progress-report.js'
 import { projectIdSchema } from './project.js'
 import { enqueueDomainWrite } from './projects.js'
+import { deriveProjectProgress, deriveProgressMap } from './progress-derivation.js'
 import type { PmDomain } from './storage.js'
 
 export class ProgressReportProjectNotFoundError extends Error {}
@@ -37,6 +38,8 @@ function collectSnapshot(
     .filter(item => item.projectId === projectId)
   const today = snapshotAt.slice(0, 10)
   const exceptions: ProgressSnapshot['exceptions'] = []
+  // 先按 projectId 过滤（上方已做）再派生真源——绝不跨项目汇总。
+  const progressMap = deriveProgressMap(tasks)
 
   for (const task of tasks) {
     if (task.status === 'blocked') {
@@ -46,9 +49,14 @@ function collectSnapshot(
       })
     }
     if (task.status !== 'done' && task.dueDate && task.dueDate < today) {
+      // 逾期文案诚实化：有客观清单信号报客观进度；否则旁注原手填值并标明未入客观口径。
+      const prog = progressMap.get(task.id)
       exceptions.push({
         kind: 'overdue_task', severity: 'critical', id: task.id, title: task.title,
-        detail: `任务已逾期，当前进度 ${task.progress}%`, owner: task.assignee, dueDate: task.dueDate,
+        detail: prog && prog.value !== null
+          ? `任务已逾期，客观进度 ${prog.value}%`
+          : `任务已逾期，原手填进度 ${task.progress}%（未入客观口径）`,
+        owner: task.assignee, dueDate: task.dueDate,
       })
     }
   }
@@ -92,6 +100,9 @@ function collectSnapshot(
     .filter(item => inRange(item.targetDate, start, end)
       || Boolean(item.achievedDate && inRange(item.achievedDate, start, end)))
     .map(item => ({ id: item.id, title: item.title, targetDate: item.targetDate, status: item.status }))
+  // v0.8：项目平均进度只认真源——有非空 checklist 的后代叶子等权平均（真源内部只 round 一次）。
+  // 父/中间节点手填 progress 一律不入分母；项目无覆盖叶子 → null（证据不足，不是 0）。
+  const projectProgress = deriveProjectProgress(tasks, projectId)
   return {
     project: { name: project.name, owner: project.owner, status: project.status, targetDate: project.targetDate },
     tasks: {
@@ -100,9 +111,8 @@ function collectSnapshot(
       inProgress: tasks.filter(item => item.status === 'in_progress').length,
       blocked: tasks.filter(item => item.status === 'blocked').length,
       done: tasks.filter(item => item.status === 'done').length,
-      averageProgress: tasks.length
-        ? Math.round(tasks.reduce((sum, item) => sum + item.progress, 0) / tasks.length)
-        : 0,
+      averageProgress: projectProgress.value,
+      calcVersion: 1,
     },
     milestones: {
       total: milestones.length,

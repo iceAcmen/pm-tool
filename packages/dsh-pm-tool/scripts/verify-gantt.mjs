@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import {
   dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
-  progressRatio, barLabelPolicy, shortDate, dependencyEdges,
+  progressRatio, progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
 } from '../lib/core/gantt.js'
 
@@ -45,13 +45,27 @@ assert.ok(clamp.startDate <= clamp.dueDate)
 
 // ---------- 本轮增强（GI-PURE-03/04/05/06/07 + 里程碑无 NaN） ----------
 
-// GI-PURE-03：进度比例 = progress/100；done 与 100 等价完成态
+// GI-PURE-03：legacy 口径 progressRatio（v0.8 起 @deprecated 冻结，阶段三删除前行为不变）
 assert.equal(progressRatio(0, 'todo'), 0)
 assert.equal(progressRatio(50, 'todo'), 0.5)
 assert.equal(progressRatio(100, 'todo'), 1)
 assert.equal(progressRatio(30, 'done'), 1)
 assert.equal(progressRatio(undefined, 'todo'), 0)
 assert.equal(progressRatio(150, 'todo'), 1) // 超界钳制
+
+// v0.8 progressFill：只认真源 TaskProgress.value；null（无填充）与 0（0% 填充）严格区分
+const tp = (value) => ({
+  value, source: value === null ? 'none' : 'checklist', checklist: null,
+  coverage: { coveredLeaves: 0, totalLeaves: 0 }, pendingAcceptance: false,
+  pendingAcceptanceCount: 0, legacyProgress: null, warnings: [],
+})
+assert.equal(progressFill(tp(0)), 0)        // 0 → 0 填充，显示 0%
+assert.equal(progressFill(tp(50)), 0.5)
+assert.equal(progressFill(tp(100)), 1)      // 全勾=100%
+assert.equal(progressFill(tp(150)), 1)      // 超界钳制
+assert.equal(progressFill(tp(null)), null)  // null → 无填充（不画实心、不显示百分比）
+// 关键红线：done 但无清单信号（value=null）→ 仍无填充，绝不伪造 100%
+assert.equal(progressFill(tp(null)), null)
 
 // GI-PURE-06：窄条三态决策（PX=16）——条内 / 条右侧外置 / 仅 tooltip
 assert.equal(barLabelPolicy(1, 16), 'hidden')   // 单日 16px：不硬塞

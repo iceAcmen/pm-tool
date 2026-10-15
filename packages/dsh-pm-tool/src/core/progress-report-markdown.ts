@@ -30,7 +30,7 @@ export function renderProgressReportMarkdown(report: ProgressReport): string {
     '| 指标 | 内容 |',
     '| --- | --- |',
     `| 项目状态 | ${snapshot.project.status} |`,
-    `| 任务 | ${snapshot.tasks.done}/${snapshot.tasks.total} 已完成，平均进度 ${snapshot.tasks.averageProgress}% |`,
+    `| 任务 | ${snapshot.tasks.done}/${snapshot.tasks.total} 已完成，平均进度 ${snapshot.tasks.averageProgress === null ? '证据不足' : `${snapshot.tasks.averageProgress}%`} |`,
     `| 受阻任务 | ${snapshot.tasks.blocked} |`,
     `| 里程碑 | ${snapshot.milestones.achieved}/${snapshot.milestones.total} 已达成，${snapshot.milestones.atRisk} 有风险，${snapshot.milestones.missed} 已错过 |`,
     `| 周期内会议 | ${snapshot.meetings.inPeriod} 场，${snapshot.meetings.decisions} 项决议 |`,

@@ -2,12 +2,13 @@ import assert from 'node:assert'
 import { diffAgainstPrevious } from '../lib/core/report-diff.js'
 
 // 构造一份最小快照（只填 diff 关心的标量）。
-function rpt(id, periodEnd, { avgProgress, overdue, exceptions }) {
+// v0.8：tasks 带 calcVersion；旧记录缺省=0，新快照=1；averageProgress 可 null。
+function rpt(id, periodEnd, { avgProgress, calcVersion = 1, overdue, exceptions }) {
   return {
     id,
     periodEnd,
     snapshot: {
-      tasks: { averageProgress: avgProgress },
+      tasks: { averageProgress: avgProgress, calcVersion },
       exceptions: [
         ...Array.from({ length: overdue }, () => ({ kind: 'overdue_task' })),
         ...Array.from({ length: exceptions - overdue }, () => ({ kind: 'blocked_task' })),
@@ -56,5 +57,29 @@ const tie = diffAgainstPrevious([
 assert.deepEqual(tie.get('r10'), { avgProgress: 10, overdueTask: 0, exceptionCount: 1 })
 // r2 是其中更旧者，无更前一份 → 全部 null（验证 id 决序确实让 r10 居首）
 assert.deepEqual(tie.get('r2'), { avgProgress: null, overdueTask: null, exceptionCount: null })
+
+// ---- v0.8 客观进度：异版本 / 一侧 null → avgProgress delta=null（不渲染徽标） ----
+// (a) calcVersion 1 vs 0（新快照 vs 旧库快照）：口径不同，硬减即回归
+const crossVer = diffAgainstPrevious([
+  rpt('nv', '2026-10-30', { avgProgress: 60, calcVersion: 1, overdue: 1, exceptions: 1 }),
+  rpt('ov', '2026-10-20', { avgProgress: 40, calcVersion: 0, overdue: 1, exceptions: 1 }),
+])
+assert.equal(crossVer.get('nv').avgProgress, null)
+assert.equal(crossVer.get('nv').overdueTask, 0) // 非 avg 项口径不变
+assert.equal(crossVer.get('nv').exceptionCount, 0)
+
+// (b) 同版本但一侧 averageProgress=null（无清单覆盖叶子）→ 不拿 null 硬减
+const oneNull = diffAgainstPrevious([
+  rpt('nu', '2026-10-30', { avgProgress: null, calcVersion: 1, overdue: 0, exceptions: 0 }),
+  rpt('nv2', '2026-10-20', { avgProgress: 30, calcVersion: 1, overdue: 0, exceptions: 0 }),
+])
+assert.equal(oneNull.get('nu').avgProgress, null)
+
+// (c) 两侧均 null、同版本 → 仍 null（无可比证据）
+const bothNull = diffAgainstPrevious([
+  rpt('n3', '2026-10-30', { avgProgress: null, calcVersion: 1, overdue: 0, exceptions: 0 }),
+  rpt('n4', '2026-10-20', { avgProgress: null, calcVersion: 1, overdue: 0, exceptions: 0 }),
+])
+assert.equal(bothNull.get('n3').avgProgress, null)
 
 console.log('verify-report-diff OK')

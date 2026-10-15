@@ -32,7 +32,12 @@ export const progressSnapshotSchema = z.strictObject({
     inProgress: z.number().int().nonnegative(),
     blocked: z.number().int().nonnegative(),
     done: z.number().int().nonnegative(),
-    averageProgress: z.number().int().min(0).max(100),
+    // v0.8：客观进度口径放宽为可空——无清单覆盖叶子时为 null（证据不足，不是 0）。
+    averageProgress: z.number().int().min(0).max(100).nullable(),
+    // v0.8：快照算法版本。用 optional（不用 default）——旧库快照缺该键时「缺键进、缺键出」，
+    // 用户 update 旧汇报 parse 后回写不得注入/回填 calcVersion（OP-SRC-04 历史快照不回填重算）；
+    // 新生成快照显式写 1。消费侧经 snapshotCalcVersion() 归一为 number（缺省按 0）。
+    calcVersion: z.number().int().nonnegative().optional(),
   }),
   milestones: z.strictObject({
     total: z.number().int().nonnegative(),
@@ -118,4 +123,12 @@ export function describeProgressReportValidation(error: z.ZodError): string {
     return '包含不支持的字段；项目、周期、快照、来源、ID 和时间戳由生成操作或系统维护'
   }
   return [...new Set(error.issues.map(issue => issue.message))].join('；')
+}
+
+/**
+ * 只读归一：快照的 calcVersion 可能缺键（v0.7.x 及更早的历史快照）。
+ * 比较/展示时一律经此归一——缺省按 0（旧口径），绝不因此改写快照本身。
+ */
+export function snapshotCalcVersion(snapshot: ProgressSnapshot): number {
+  return snapshot.tasks.calcVersion ?? 0
 }

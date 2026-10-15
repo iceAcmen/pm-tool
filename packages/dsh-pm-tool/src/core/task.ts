@@ -13,6 +13,25 @@ export const taskPrioritySchema = z.enum(['P0', 'P1', 'P2'])
 
 const optionalDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).optional()
 const clearableDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).nullable().optional()
+
+/**
+ * v0.8 客观进度 v1 清单项：恰好 {id, text, done} 三键。
+ * 冻结口径（docs/testing/objective-progress-acceptance.md §0.1/§13）：
+ * 不加 doneAt / weight / title / progressMode；id 为稳定 UUID（同任务内唯一）；text 非空 trim。
+ */
+export const CHECKLIST_MAX_ITEMS = 50
+export const checklistItemSchema = z.strictObject({
+  id: z.string().min(1).max(64),
+  text: z.string().trim().min(1, '清单项文本不能为空'),
+  done: z.boolean(),
+})
+export type ChecklistItem = z.infer<typeof checklistItemSchema>
+export const taskChecklistSchema = z.array(checklistItemSchema)
+  .max(CHECKLIST_MAX_ITEMS, `单个任务的清单最多 ${CHECKLIST_MAX_ITEMS} 项`)
+  .refine(
+    items => new Set(items.map(item => item.id)).size === items.length,
+    '清单内 itemId 必须唯一',
+  )
 const taskFields = {
   projectId: projectIdSchema,
   parentId: taskIdSchema.nullable(),
@@ -32,6 +51,10 @@ const taskFields = {
   // 校验口径与 project / deliverable 共享（core/repo.ts），全程离线不联网探测。
   repoUrl: repoUrlFieldSchema,
   branch: branchFieldSchema,
+  // v0.8 客观进度：任务唯一新增字段 = 可选 checklist。
+  // 旧 v1/v2 记录无此键照常读取；写业务层负责「内部节点与非空清单互斥」与单项增量修改。
+  // 不进 taskCreateSchema / taskUpdateSchema：建任务默认不带清单，普通 update 也不能整段替换数组。
+  checklist: taskChecklistSchema.optional(),
 }
 
 function validateDateOrder(

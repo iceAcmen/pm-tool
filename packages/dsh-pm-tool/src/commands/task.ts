@@ -33,6 +33,17 @@ import {
   TaskImportNoProjectError,
 } from '../core/task-import.js'
 import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, readXlsxGridFromBuffer, parseCsv as parseCsvLocal } from '../core/csv-import.js'
+import {
+  addTaskChecklistItem,
+  ChecklistHasChildrenError,
+  ChecklistItemNotFoundError,
+  ChecklistParentHasChecklistError,
+  ChecklistFullError,
+  removeTaskChecklistItem,
+  renameTaskChecklistItem,
+  setTaskChecklistItemDone,
+  TaskChecklistTaskNotFoundError,
+} from '../core/task-checklist.js'
 import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
@@ -54,6 +65,11 @@ export const taskHelp = [
   '  /pm task delete t-0003                  含子任务时 dry-run 列出将级联删除的整棵子树（不落盘）',
   '  /pm task delete t-0003 cascade confirm  显式级联删除该任务及其全部后代（旁支不受影响）',
   '  /pm task renumber p-0001 confirm',
+  '  /pm task checklist add t-0001 写立项书      给叶子任务追加一项客观清单（内部节点不可挂清单）',
+  '  /pm task checklist toggle t-0001 <itemId> true   把该项设为明确目标态 true/false（重复执行幂等，不反向翻转）',
+  '  /pm task checklist rename t-0001 <itemId> 新文本',
+  '  /pm task checklist remove t-0001 <itemId>',
+  '  清单是客观进度的唯一信号源；有清单的叶子不能收子任务（请先清空清单再调整父子）。',
   '  /pm task import p-0001 任务表.md          解析并预览将创建的任务（不落盘）',
   '  /pm task import p-0001 任务表.md confirm  按 GitHub 缩进勾选清单（- [ ] / - [x]）导入为 WBS 任务',
   '  /pm task import p-0001 任务表.csv confirm  按约定表头(层级/标题/负责人/优先级/开始/截止/进度)导入任务树',
@@ -86,7 +102,19 @@ function renderTask(task: Task): string {
     `仓库：${formatRepoRef(task) || '未填写'}`,
     `创建时间：${task.createdAt}`,
     `更新时间：${task.updatedAt}`,
+    ...renderChecklistLines(task),
   ].join('\n')
+}
+
+/** 清单只读渲染：itemId 是后续 toggle/rename/remove 必须回传的稳定 id。 */
+function renderChecklistLines(task: Task): string[] {
+  const items = task.checklist ?? []
+  if (!items.length) return []
+  const doneCount = items.filter(item => item.done).length
+  return [
+    `清单项：${items.length} 项（已勾 ${doneCount}）`,
+    ...items.map(item => `  ${item.done ? '[x]' : '[ ]'} ${item.id} ${item.text}`),
+  ]
 }
 
 function taskDepth(task: Task, tasksById: Map<string, Task>): number {
@@ -182,7 +210,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'import-content', 'batch', 'wbs'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'import-content', 'batch', 'wbs', 'checklist'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -576,6 +604,70 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         ].join('\n'),
       }
     }
+    if (action === 'checklist') {
+      // /pm task checklist <add|toggle|rename|remove> <taskId> [itemId] [true|false|新文本]
+      const tokens = argument.split(/\s+/).filter(Boolean)
+      const sub = (tokens[0] ?? '').toLowerCase()
+      const taskId = tokens[1]
+      if (!taskId) {
+        return { kind: 'error', text: '请使用：/pm task checklist <add|toggle|rename|remove> <任务ID> ...' }
+      }
+      if (sub === 'add') {
+        const text = tokens.slice(2).join(' ').trim()
+        const task = await addTaskChecklistItem(domain, taskId, text)
+        const items = task.checklist ?? []
+        return {
+          kind: 'success',
+          text: [
+            `清单已追加 1 项。任务 ${task.id} 现有清单 ${items.length} 项（已勾 ${items.filter(i => i.done).length}）：`,
+            ...renderChecklistLines(task),
+          ].join('\n'),
+        }
+      }
+      if (sub === 'toggle') {
+        const itemId = tokens[2]
+        const target = tokens[3]?.toLowerCase()
+        if (!itemId || (target !== 'true' && target !== 'false')) {
+          return { kind: 'error', text: '请使用：/pm task checklist toggle <任务ID> <itemId> <true|false>' }
+        }
+        const task = await setTaskChecklistItemDone(domain, taskId, itemId, target === 'true')
+        const items = task.checklist ?? []
+        return {
+          kind: 'success',
+          text: [
+            `清单项状态已设为 ${target === 'true' ? '已勾选' : '未勾选'}。任务 ${task.id} 现有清单 ${items.length} 项（已勾 ${items.filter(i => i.done).length}）：`,
+            ...renderChecklistLines(task),
+          ].join('\n'),
+        }
+      }
+      if (sub === 'rename') {
+        const itemId = tokens[2]
+        const text = tokens.slice(3).join(' ').trim()
+        if (!itemId) {
+          return { kind: 'error', text: '请使用：/pm task checklist rename <任务ID> <itemId> <新文本>' }
+        }
+        const task = await renameTaskChecklistItem(domain, taskId, itemId, text)
+        return {
+          kind: 'success',
+          text: [`清单项文本已更新。任务 ${task.id} 现有清单：`, ...renderChecklistLines(task)].join('\n'),
+        }
+      }
+      if (sub === 'remove') {
+        const itemId = tokens[2]
+        if (!itemId) {
+          return { kind: 'error', text: '请使用：/pm task checklist remove <任务ID> <itemId>' }
+        }
+        const task = await removeTaskChecklistItem(domain, taskId, itemId)
+        return {
+          kind: 'success',
+          text: [
+            `清单项已删除。任务 ${task.id} 剩余清单 ${(task.checklist ?? []).length} 项：`,
+            ...renderChecklistLines(task),
+          ].join('\n'),
+        }
+      }
+      return { kind: 'error', text: '请使用：/pm task checklist <add|toggle|rename|remove> <任务ID> ...' }
+    }
     const renumberMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!renumberMatch) {
       return { kind: 'error', text: '请使用：/pm task renumber <项目ID> confirm' }
@@ -613,7 +705,12 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       || error instanceof TaskReferencedByMeetingError
       || error instanceof TaskReferencedByPredecessorError
       || error instanceof TaskImportNoProjectError
-      || error instanceof TaskImportEmptyError) {
+      || error instanceof TaskImportEmptyError
+      || error instanceof TaskChecklistTaskNotFoundError
+      || error instanceof ChecklistItemNotFoundError
+      || error instanceof ChecklistHasChildrenError
+      || error instanceof ChecklistParentHasChecklistError
+      || error instanceof ChecklistFullError) {
       return { kind: 'error', text: error.message }
     }
     if (error instanceof AiDraftError) {

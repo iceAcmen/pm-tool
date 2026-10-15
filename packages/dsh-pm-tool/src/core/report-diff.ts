@@ -8,13 +8,18 @@
  *   - exceptionCount 异常总数变化
  * 最旧一行（历史首份）没有更前一份 → 三项均为 null（前端据此不渲染徽标）。
  * delta = 当前 - 上一份；0 表示持平，前端显示「持平 0」。
+ *
+ * v0.8 客观进度口径：snapshot.tasks.averageProgress 可空（null=无清单覆盖/证据不足），
+ * 且快照带 calcVersion。相邻两份 calcVersion 不同（如旧库 v0 与新 v1）、或任一侧
+ * averageProgress===null → avgProgress delta=null（前端不渲染差值徽标，不拿不同口径硬减）；
+ * 仅同版本且两侧均非 null 时才相减。overdueTask/exceptionCount 口径不变。
  */
 
 export interface ReportDiffRow {
   id: string
   periodEnd: string
   snapshot: {
-    tasks: { averageProgress: number }
+    tasks: { averageProgress: number | null, calcVersion?: number }
     exceptions: { kind: string }[]
   }
 }
@@ -29,6 +34,17 @@ function countOverdue(row: ReportDiffRow): number {
   return row.snapshot.exceptions.filter(item => item.kind === 'overdue_task').length
 }
 
+/** 两份相邻快照是否可比：同 calcVersion（缺键按 0 归一）且两侧 averageProgress 均非 null。 */
+function avgComparable(current: ReportDiffRow, previous: ReportDiffRow): boolean {
+  const cur = current.snapshot.tasks
+  const prev = previous.snapshot.tasks
+  const curVersion = cur.calcVersion ?? 0
+  const prevVersion = prev.calcVersion ?? 0
+  return curVersion === prevVersion
+    && cur.averageProgress !== null
+    && prev.averageProgress !== null
+}
+
 /** 返回 reportId → 与「上一份（更旧）」的差值映射；与输入顺序无关。 */
 export function diffAgainstPrevious(rows: ReportDiffRow[]): Map<string, ReportDelta> {
   const sorted = [...rows].sort((a, b) =>
@@ -41,7 +57,10 @@ export function diffAgainstPrevious(rows: ReportDiffRow[]): Map<string, ReportDe
       return
     }
     result.set(current.id, {
-      avgProgress: current.snapshot.tasks.averageProgress - previous.snapshot.tasks.averageProgress,
+      avgProgress: avgComparable(current, previous)
+        ? (current.snapshot.tasks.averageProgress as number)
+          - (previous.snapshot.tasks.averageProgress as number)
+        : null,
       overdueTask: countOverdue(current) - countOverdue(previous),
       exceptionCount: current.snapshot.exceptions.length - previous.snapshot.exceptions.length,
     })

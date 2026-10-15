@@ -173,7 +173,7 @@ type ProgressReport = {
   blockers: string[]
   snapshotAt: string
   snapshot: {
-    tasks: { total: number, done: number, blocked: number, averageProgress: number }
+    tasks: { total: number, done: number, blocked: number, averageProgress: number | null, calcVersion?: number }
     milestones: { total: number, achieved: number, atRisk: number, missed: number }
     meetings: { inPeriod: number, decisions: number }
     periodMilestones: { id: string, title: string, targetDate: string, status: string }[]
@@ -2447,7 +2447,9 @@ function PriorityTag({ value }: { value: string }) {
   return <span className="pm-priority-tag" data-value={value}><i/>{value}</span>
 }
 
-function Progress({ value }: { value: number }) {
+function Progress({ value }: { value: number | null }) {
+  // v0.8：averageProgress=null = 无清单覆盖（证据不足），不渲染假百分比条。
+  if (value === null) return <span className="pm-progress-cell pm-progress-cell--muted">证据不足</span>
   return <span className="pm-progress-cell">
     <span><i style={{ width: `${value}%` }}/></span>
     <b>{value}%</b>
@@ -4006,7 +4008,7 @@ function ProgressReportForm({
     {report && <section className="pm-report-snapshot">
       <header><span>固定快照</span><time>{report.snapshotAt}</time></header>
       <dl>
-        <div><dt>任务进度</dt><dd>{report.snapshot.tasks.averageProgress}%（{report.snapshot.tasks.done}/{report.snapshot.tasks.total} 完成）</dd></div>
+        <div><dt>任务进度</dt><dd>{report.snapshot.tasks.averageProgress === null ? '证据不足' : `${report.snapshot.tasks.averageProgress}%`}（{report.snapshot.tasks.done}/{report.snapshot.tasks.total} 完成）</dd></div>
         <div><dt>受阻任务</dt><dd>{report.snapshot.tasks.blocked}</dd></div>
         <div><dt>里程碑</dt><dd>{report.snapshot.milestones.achieved}/{report.snapshot.milestones.total} 达成</dd></div>
         <div><dt>周期会议</dt><dd>{report.snapshot.meetings.inPeriod} 场 / {report.snapshot.meetings.decisions} 项决议</dd></div>

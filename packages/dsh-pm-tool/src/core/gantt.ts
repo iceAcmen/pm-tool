@@ -3,6 +3,7 @@
  * 只用现有 startDate/dueDate/targetDate/progress/predecessorIds，不新增表、不做自动排程。
  * 全部为只读派生：不写库、不调用任何写命令；依赖关系唯一真源是 predecessorIds。
  */
+import type { TaskProgress } from './progress-derivation.js'
 
 const DAY = 86_400_000
 
@@ -71,14 +72,27 @@ export function taskDurationDays(startDate: string, dueDate: string): number {
 }
 
 /**
- * 进度填充比例（纯渲染）：progress/100，钳制 0..1；
- * status==='done' 或 progress>=100 视为完成态（与 stats/reminders 同边界）。
- * 无 I/O、无写副作用。
+ * @deprecated v0.8 客观进度上线后，此函数用 legacy progress/status 伪造完成度，
+ * 与客观口径冲突（status==='done' 无清单信号也返回 1）。阶段二冻结原实现一行不动、
+ * 禁止新增调用点；阶段三 UI 切换到 progressFill 后删除本函数。
  */
 export function progressRatio(progress: number | undefined, status?: string): number {
   if (status === 'done') return 1
   const p = Number.isFinite(progress) ? (progress as number) : 0
   return Math.min(1, Math.max(0, p / 100))
+}
+
+/**
+ * v0.8 客观进度填充比例（纯渲染，无 I/O、无写副作用）。
+ * 入参为真源 progress-derivation 的 TaskProgress：
+ *  - value===null → 返回 null（无填充：不画实心条、不显示百分比；
+ *    与 value===0 返回 0 严格区分——0 是「0% 填充」，null 是「证据不足/无填充」）；
+ *  - value 有值时 value/100，钳制 0..1。
+ * 函数签名不接收 status：status==='done' 但无清单信号绝不伪造 100% 完成。
+ */
+export function progressFill(p: TaskProgress): number | null {
+  if (p.value === null) return null
+  return Math.min(1, Math.max(0, p.value / 100))
 }
 
 /** MM-DD 短日期（条内/外置标签用）。 */

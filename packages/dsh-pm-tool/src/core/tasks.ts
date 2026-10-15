@@ -10,6 +10,7 @@ import {
   type Task,
   type TaskUpdate,
 } from './task.js'
+import { assertParentHasNoChecklist } from './task-checklist.js'
 import type { PmDomain } from './storage.js'
 
 export class TaskProjectNotFoundError extends Error {}
@@ -94,6 +95,8 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
     if (parent && parent.projectId !== fields.projectId) {
       throw new ParentTaskProjectMismatchError('父任务不属于指定项目')
     }
+    // v0.8 父子互斥：已有非空清单的叶子不能收子任务（拒绝，不删除清单）。
+    assertParentHasNoChecklist(parent)
     validateMilestoneRelation(domain, fields.projectId, fields.milestoneId)
 
     let maxId = 0n
@@ -394,6 +397,8 @@ async function applyMoveUnsafe(
   if (parent && parent.projectId !== current.projectId) {
     throw new ParentTaskProjectMismatchError('父任务不属于当前任务的项目')
   }
+  // v0.8 父子互斥：新父已有非空清单则拒绝（拒绝而非删除清单）；root/undefined 放行。
+  assertParentHasNoChecklist(parent)
 
   let ancestor = parent
   const visited = new Set<string>()

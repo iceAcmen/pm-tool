@@ -38,6 +38,7 @@
 | [09-web-polish-design.md](09-web-polish-design.md) | ⑤延伸 | v0.5.2 Web polish 三件套（PROD-10 任务来源会议直达 / PROD-09 汇报相邻对比徽标 / PROD-04 Web 改父+原子重编号；零 schema；**已实现·独立验收 27/27 PASS**，落地顺序 10→09→04） |
 | [10-schema-v2-design.md](10-schema-v2-design.md) | ⑤延伸 | v0.6.0 schema v2 批（PROD-11 任务 predecessorIds 依赖 / PROD-21 项目 repoUrl·branch / PROD-23 概览健康分 / 崩溃原子恢复；domain v2 兼容[1]、新字段 optional；**已实现·独立验收总门 PASS（48/50，G8/H5 人工待验，绑定 17ccc82+4b533ad）**） |
 | [11-collaboration-ready-architecture.md](11-collaboration-ready-architecture.md) | ⑥延伸 | v0.7.0 后「协作就绪」最小架构契约（单用户优先、多人可演进）：actor/tenant/project scope、乐观并发 rev、幂等键命名与 TTL、审计事件、冲突拒绝不合并、纯派生视图、远程 KvUnit 适配层。协作阶段代号 **C1/C2/C3**（刻意区别于稳定性批用例编号 S1/S2/S3）；成功幂等标记按稳定性 S2 短 TTL 落本地 settings（非台账/非授权、in-flight 仍内存）。附 10 条开发验收红线。**docs-only 契约稿，未改代码** |
+| [12-objective-progress.md](12-objective-progress.md) | ⑤延伸 | v0.8 客观进度产品决策：进度只从任务 checklist 客观派生（checked/total，全勾=100、全勾未 done 仅挂「待验收」标签、无清单=证据不足 null）；父=有清单后代叶子等权均值，覆盖不足只称「已覆盖任务清单完成度」；legacy 手填（含 0）仅旁注、不进客观汇总、用户仍可编辑；快照 calcVersion 旧=0/新=1 异口径不比差。**验收以 docs/testing/objective-progress-acceptance.md 冻结矩阵为准（开发前冻结）** |
 | [handoff-for-coding-agents.md](handoff-for-coding-agents.md) | — | 给 TRAE/编码 Agent 的接手说明：术语、实施顺序、别重复调研 |
 
 ## 编号约定（与仓库既有体系关系）

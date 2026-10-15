@@ -43,7 +43,7 @@ function render(report: ProgressReport): string {
     `周期：${report.periodStart} 至 ${report.periodEnd}`,
     `状态：${progressReportStatusLabels[report.status]}`,
     `快照时间：${report.snapshotAt}`,
-    `任务：${report.snapshot.tasks.done}/${report.snapshot.tasks.total} 完成，平均进度 ${report.snapshot.tasks.averageProgress}%`,
+    `任务：${report.snapshot.tasks.done}/${report.snapshot.tasks.total} 完成，平均进度 ${report.snapshot.tasks.averageProgress === null ? '证据不足' : `${report.snapshot.tasks.averageProgress}%`}`,
     `里程碑：${report.snapshot.milestones.achieved}/${report.snapshot.milestones.total} 达成`,
     `周期会议：${report.snapshot.meetings.inPeriod} 场`,
     `异常项：${report.snapshot.exceptions.length}`,
