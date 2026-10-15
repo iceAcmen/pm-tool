@@ -1305,3 +1305,32 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-ms-desc { margin-top: 2px; font-size: 11.5px; color: var(--pm-muted); }
 .pm-ms-new { margin-top: 12px; width: 100%; border: 1px dashed var(--pm-line-strong); border-radius: 10px; background: transparent; color: var(--pm-secondary); padding: 10px; font-size: 12px; cursor: pointer; }
 .pm-ms-new:hover { border-color: var(--pm-accent); color: var(--pm-accent); }
+
+/* ===== 风险与问题视图 ===== */
+.pm-ri-page { padding: 4px 2px 16px; }
+.pm-ri-page .pm-page-title { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+.pm-ri-page .pm-sub { margin-top: 4px; font-size: 12.5px; color: var(--pm-secondary); }
+.pm-ri-tabs { display: inline-flex; gap: 4px; margin: 14px 0 0; padding: 3px; border: 1px solid var(--pm-line); border-radius: 9px; background: var(--pm-surface); }
+.pm-ri-tabs button { border: 0; background: transparent; color: var(--pm-secondary); font-size: 12px; padding: 5px 12px; border-radius: 7px; cursor: pointer; }
+.pm-ri-tabs button.on { background: var(--pm-accent); color: rgb(255,255,255); font-weight: 600; }
+.pm-ri-cols { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; margin-top: 12px; align-items: start; }
+@media (max-width: 900px) { .pm-ri-cols { grid-template-columns: 1fr; } }
+.pm-ri-matrix.card, .pm-ri-list.card { border: 1px solid var(--pm-line); border-radius: 10px; background: var(--pm-surface); padding: 12px 14px; }
+.pm-ri-cardhead { font-size: 12px; font-weight: 600; color: var(--pm-secondary); margin-bottom: 10px; }
+.pm-mtx { display: grid; grid-template-columns: 28px repeat(3, 1fr); gap: 5px; }
+.pm-mtx-corner { }
+.pm-mtx-colh { text-align: center; font-size: 10.5px; color: var(--pm-secondary); padding-bottom: 2px; }
+.pm-mtx-rowh { display: flex; align-items: center; justify-content: center; font-size: 10.5px; color: var(--pm-secondary); }
+.pm-mtx-cell { height: 56px; border-radius: 7px; border: 1px solid var(--pm-line); padding: 4px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px; }
+.pm-mtx-dot { border: 0; border-radius: 6px; background: var(--pm-danger); color: rgb(255,255,255); font-size: 10px; font-weight: 700; padding: 2px 6px; cursor: pointer; }
+.pm-ri-list { display: flex; flex-direction: column; gap: 8px; }
+.pm-ri-item { text-align: left; border: 1px solid var(--pm-line); border-radius: 9px; background: transparent; padding: 9px 11px; cursor: pointer; display: block; }
+.pm-ri-item:hover { border-color: var(--pm-accent); }
+.pm-ri-line1 { display: flex; align-items: center; gap: 7px; }
+.pm-ri-id { font-size: 10.5px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; }
+.pm-ri-title { font-size: 13px; font-weight: 600; color: var(--pm-ink); }
+.pm-ri-qual { font-size: 10.5px; color: var(--pm-secondary); }
+.pm-ri-desc { margin-top: 4px; font-size: 11.5px; color: var(--pm-muted); }
+.pm-ri-plan { margin-top: 2px; font-size: 11.5px; color: var(--pm-secondary); }
+.pm-ri-line3 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.pm-ri-due { font-size: 11px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; }

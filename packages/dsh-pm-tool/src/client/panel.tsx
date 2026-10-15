@@ -640,7 +640,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : view === 'gantt' || view === 'milestones'
+              : view === 'gantt' || view === 'milestones' || view === 'risk-issues'
                 ? null
                 : <>
                   <ProjectBar
@@ -2311,89 +2311,91 @@ function RiskIssueTable({
   onCreate: () => void
   onEdit: (record: RiskIssue) => void
 }) {
-  const [query, setQuery] = useState('')
-  const [type, setType] = useState('all')
-  const [status, setStatus] = useState('all')
-  const visible = records.filter(record => {
-    const text = `${record.title} ${record.owner} ${record.description} ${record.responsePlan} ${record.solution}`
-      .toLocaleLowerCase()
-    return text.includes(query.trim().toLocaleLowerCase())
-      && (type === 'all' || record.type === type)
-      && (status === 'all' || record.status === status)
-  })
-  return <>
-    <TableToolbar query={query} setQuery={setQuery} primaryLabel="添加记录" onCreate={onCreate}>
-      <label className="pm-toolbar-select">
-        <ShieldAlert size={14}/>
-        <select value={type} onChange={event => setType(event.currentTarget.value)} aria-label="筛选记录类型">
-          <option value="all">全部类型</option>
-          <option value="risk">风险</option>
-          <option value="issue">问题</option>
-        </select>
-      </label>
-      <label className="pm-toolbar-select">
-        <Filter size={14}/>
-        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选风险问题状态">
-          <option value="all">全部状态</option>
-          {Object.entries(riskIssueStatus).map(([value, label]) =>
-            <option key={value} value={value}>{label}</option>,
-          )}
-        </select>
-      </label>
-    </TableToolbar>
-    <div className="pm-table-frame">
-      <div className="pm-table-scroll">
-        <table className="pm-data-table pm-risk-table">
-          <thead>
-            <tr>
-              <th>类型</th>
-              <th className="pm-col-title">标题</th>
-              <th>状态</th>
-              <th>概率</th>
-              <th>影响</th>
-              <th>负责人</th>
-              <th>截止日期</th>
-              <th>应对 / 解决方案</th>
-              <th className="pm-col-actions"/>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map(record => <tr className="pm-record-row" key={record.id}>
-              <td><span className="pm-type-tag" data-value={record.type}>{riskIssueType[record.type]}</span></td>
-              <td className="pm-col-title">
-                <button className="pm-title-cell" onClick={() => onEdit(record)}>{record.title}</button>
-              </td>
-              <td><StatusTag kind="risk-issue" value={record.status}/></td>
-              <td>{record.probability
-                ? <span className="pm-cell-value">{probabilityLabels[record.probability]}</span>
-                : <span className="pm-cell-empty">-</span>}</td>
-              <td><span className="pm-impact-tag" data-value={record.impact}>{impactLabels[record.impact]}</span></td>
-              <td>{record.owner
-                ? <span className="pm-person"><span>{record.owner.slice(0, 1)}</span>{record.owner}</span>
-                : <span className="pm-cell-empty">未指定</span>}</td>
-              <td>{record.dueDate || <span className="pm-cell-empty">-</span>}</td>
-              <td className="pm-description-cell">
-                {record.type === 'risk'
-                  ? record.responsePlan || <span className="pm-cell-empty">暂无应对措施</span>
-                  : record.solution || <span className="pm-cell-empty">暂无解决方案</span>}
-              </td>
-              <td className="pm-col-actions">
-                <button
-                  className="pm-row-button"
-                  disabled={disabled}
-                  aria-label={`编辑 ${record.title}`}
-                  onClick={() => onEdit(record)}
-                ><Pencil size={14}/></button>
-              </td>
-            </tr>)}
-          </tbody>
-        </table>
-      </div>
-      {!visible.length && <TableEmpty text={records.length ? '没有符合筛选条件的风险或问题' : '暂无风险或问题记录'}/>}
-      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>添加记录</button>
+  const [tab, setTab] = useState<'risk' | 'issue'>('risk')
+  const today = localTodayIso()
+  const risks = records.filter(r => r.type === 'risk')
+  const issues = records.filter(r => r.type === 'issue')
+  const openRisk = risks.filter(r => r.status === 'open').length
+  const hot = risks.filter(r => r.probability === 'high' && (r.impact === 'high' || r.impact === 'critical')).length
+  const openIssue = issues.filter(r => r.status === 'open' || r.status === 'monitoring').length
+  const overdue = records.filter(r => r.dueDate && r.dueDate < today && r.status !== 'closed').length
+  const visible = records.filter(r => r.type === tab)
+  const projId = records[0]?.projectId || '—'
+  const impactCol = (im?: string | null) => im === 'critical' ? 'high' : im === 'high' ? 'high' : im === 'medium' ? 'medium' : 'low'
+  const probRow = (pr?: string | null) => pr === 'high' ? 'high' : pr === 'medium' ? 'medium' : 'low'
+  // 矩阵热力底（按概率行 × 影响列）
+  const matrixBg: Record<string, Record<string, string>> = {
+    high:   { low: 'color-mix(in srgb, var(--pm-warning) 14%, transparent)', medium: 'color-mix(in srgb, var(--pm-danger) 20%, transparent)', high: 'color-mix(in srgb, var(--pm-danger) 45%, transparent)' },
+    medium: { low: 'color-mix(in srgb, var(--pm-warning) 10%, transparent)', medium: 'color-mix(in srgb, var(--pm-warning) 18%, transparent)', high: 'color-mix(in srgb, var(--pm-danger) 26%, transparent)' },
+    low:    { low: 'color-mix(in srgb, var(--pm-success) 10%, transparent)', medium: 'color-mix(in srgb, var(--pm-warning) 12%, transparent)', high: 'color-mix(in srgb, var(--pm-warning) 20%, transparent)' },
+  }
+  const cellOf = (pr: string, im: string) => risks.filter(r => probRow(r.probability) === pr && impactCol(r.impact) === im)
+
+  return <div className="pm-ri-page">
+    <h1 className="pm-page-title">风险与问题</h1>
+    <div className="pm-sub">{projId} · 开放风险 {openRisk} · 监控中问题 {openIssue}</div>
+
+    <div className="pm-ri-tabs" role="tablist" aria-label="筛选记录类型">
+      <button className={tab === 'risk' ? 'on' : ''} onClick={() => setTab('risk')}>风险 {risks.length}</button>
+      <button className={tab === 'issue' ? 'on' : ''} onClick={() => setTab('issue')}>问题 {issues.length}</button>
     </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
-  </>
+
+    <div className="pm-ms-cards">
+      <div className="pm-stat-card"><strong>{openRisk}</strong><span>开放风险 · type=risk/open</span></div>
+      <div className="pm-stat-card"><strong>{hot}</strong><span>高优先 · 高概率·高影响</span></div>
+      <div className="pm-stat-card"><strong>{openIssue}</strong><span>开放问题 · 待处理/监控中</span></div>
+      <div className="pm-stat-card"><strong>{overdue}</strong><span>逾期应对 · {overdue ? '有逾期' : '无逾期'}</span></div>
+    </div>
+
+    <div className="pm-ri-cols">
+      <div className="pm-ri-matrix card">
+        <div className="pm-ri-cardhead">风险矩阵 · 概率 × 影响</div>
+        <div className="pm-mtx">
+          <div className="pm-mtx-corner"/>
+          <div className="pm-mtx-colh">低</div><div className="pm-mtx-colh">中</div><div className="pm-mtx-colh">高</div>
+          {(['high', 'medium', 'low'] as const).map(pr =>
+            <>
+              <div key={pr + '-h'} className="pm-mtx-rowh">{pr === 'high' ? '高' : pr === 'medium' ? '中' : '低'}</div>
+              {(['low', 'medium', 'high'] as const).map(im => {
+                const cell = cellOf(pr, im)
+                return <div key={pr + im} className="pm-mtx-cell" style={{ background: matrixBg[pr][im] }}>
+                  {cell.map(r => <button key={r.id} className="pm-mtx-dot" title={`${r.id} ${r.title}`} onClick={() => onEdit(r)}>{r.id.replace(/^ri-/, '')}</button>)}
+                </div>
+              })}
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="pm-ri-list card">
+        <div className="pm-ri-cardhead">{tab === 'risk' ? '风险' : '问题'}清单 · {visible.length}</div>
+        {!visible.length && <div className="pm-table-frame"><TableEmpty text={`暂无${tab === 'risk' ? '风险' : '问题'}`}/></div>}
+        {visible.map(r => (
+          <button key={r.id} className="pm-ri-item" onClick={() => onEdit(r)}>
+            <div className="pm-ri-line1">
+              <span className="pm-ri-id">{r.id}</span>
+              <span className="pm-type-tag" data-value={r.type}>{riskIssueType[r.type]}</span>
+              <span className="pm-ri-title">{r.title}</span>
+              <span className="pm-ms-sp"/>
+              {r.type === 'risk'
+                ? <span className="pm-ri-qual">{probabilityLabels[r.probability ?? ''] || '—'}·{impactLabels[r.impact]}</span>
+                : <span className="pm-ri-qual">影响{impactLabels[r.impact]}</span>}
+            </div>
+            <div className="pm-ri-desc">{r.description || '暂无说明'}</div>
+            <div className="pm-ri-plan">{r.type === 'risk' ? `应对：${r.responsePlan || '暂无'}` : `方案：${r.solution || '暂无'}`}</div>
+            <div className="pm-ri-line3">
+              <span className="pm-person"><span>{(r.owner || '未').slice(0, 1)}</span>{r.owner || '未指定'}</span>
+              <span className="pm-ri-due">截止 {r.dueDate || '—'}</span>
+              <span className="pm-ms-sp"/>
+              <StatusTag kind="risk-issue" value={r.status}/>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <button className="pm-ms-new" onClick={onCreate}><Plus size={14}/> 新建风险/问题</button>
+  </div>
 }
 
 function MeetingTable({
