@@ -8,7 +8,8 @@ import type { Snapshot, Task } from '../panel.js'
 import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap } from '../../core/progress-derivation.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
-import type { DashboardLayout, WidgetDescriptor, WidgetInstance } from './types.js'
+import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
+import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
 
 function todayIso(): string {
   const n = new Date()
@@ -359,11 +360,208 @@ const weeklyPlan: WidgetDescriptor = {
   },
 }
 
+/* ---------- 8. recordList 通用记录列表（数据源由 config.entity 决定） ---------- */
+const recordList: WidgetDescriptor<WidgetConfig> = {
+  type: 'recordList',
+  name: '记录列表',
+  category: 'list',
+  addable: true,
+  defaultW: 4, defaultH: 5, minW: 3, minH: 3,
+  requiredSources: ['tasks'],
+  defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], sort: { field: 'date', dir: 'asc' }, numberFormat: 'int' },
+  render({ data, config, actions }) {
+    const entity = (config.entity ?? 'tasks') as WidgetEntity
+    const rows = selectEntity(data, entity)
+    // raw 记录用于按字段名过滤（与 rows 同序）。
+    const rawKey: WidgetEntity = entity
+    const rawList: Array<Record<string, unknown>> = rawListFor(data, rawKey)
+    const filtered = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters)
+    const sorted = applySort(filtered, config.sort)
+    const title = config.title ?? ENTITY_LABEL[entity]
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">{title}<span className="pm-bento-m">{sorted.length} 条</span></div>
+      <div className="pm-rec-list">
+        {sorted.slice(0, 8).map(r => (
+          <button key={r.id} type="button" className="pm-rec" data-open-record data-open-type={r.recordType} data-open-id={r.id}
+            onClick={() => actions.openRecord(r.projectId, r.recordType, r.id)}>
+            <span className="pm-rec-title">{r.title}</span>
+            {r.status && <span className="pm-bento-pill">{r.status}</span>}
+            <span className="pm-bento-m">{r.date?.slice(5) ?? '—'}</span>
+          </button>
+        ))}
+        {sorted.length === 0 && <div className="pm-bento-faint">暂无符合条件的记录。</div>}
+      </div>
+    </div>
+  },
+}
+
+const ENTITY_LABEL: Record<WidgetEntity, string> = {
+  projects: '项目', tasks: '任务', milestones: '里程碑', riskIssues: '风险/问题',
+  deliverables: '交付物', meetings: '会议', reports: '汇报',
+}
+
+function rawListFor(data: Snapshot, entity: WidgetEntity): Array<Record<string, unknown>> {
+  switch (entity) {
+    case 'tasks': return data.tasks as unknown as Array<Record<string, unknown>>
+    case 'milestones': return data.milestones as unknown as Array<Record<string, unknown>>
+    case 'riskIssues': return data.riskIssues as unknown as Array<Record<string, unknown>>
+    case 'deliverables': return data.deliverables as unknown as Array<Record<string, unknown>>
+    case 'meetings': return data.meetings as unknown as Array<Record<string, unknown>>
+    case 'reports': return data.reports as unknown as Array<Record<string, unknown>>
+    case 'projects': return data.projects as unknown as Array<Record<string, unknown>>
+  }
+}
+
+/* ---------- 9. overdueSoon 逾期/临期 ---------- */
+const overdueSoon: WidgetDescriptor<WidgetConfig> = {
+  type: 'overdueSoon',
+  name: '逾期 / 临期',
+  category: 'overview',
+  addable: true,
+  defaultW: 4, defaultH: 5, minW: 3, minH: 3,
+  requiredSources: ['tasks'],
+  defaultConfig: { projectScope: 'all' },
+  render({ data, actions }) {
+    const today = todayIso()
+    const rows = data.tasks
+      .filter(t => t.status !== 'done' && t.dueDate)
+      .map(t => ({
+        t, tone: t.dueDate! < today ? TONE.overdue : t.dueDate! <= addDays(today, 7) ? TONE.due : null,
+      }))
+      .filter(r => r.tone)
+      .sort((a, b) => (a.t.dueDate! < b.t.dueDate! ? -1 : 1))
+      .slice(0, 8)
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">逾期 / 临期<span className="pm-bento-m">{rows.length} 项</span></div>
+      <div className="pm-attn-list">
+        {rows.map(({ t, tone }) => (
+          <button key={t.id} type="button" className="pm-attn" data-open-record data-open-type="task" data-open-id={t.id}
+            onClick={() => actions.openRecord(t.projectId, 'task', t.id)}>
+            <i style={{ background: tone ?? TONE.due }}/>
+            <span><b>{t.code}</b> · {t.title}</span>
+            <span className="pm-bento-faint">{t.assignee || '未分配'}</span>
+            <span className="pm-attn-arr">{t.dueDate!.slice(5)} ›</span>
+          </button>
+        ))}
+        {rows.length === 0 && <div className="pm-bento-faint">没有逾期或临期任务。</div>}
+      </div>
+    </div>
+  },
+}
+
+/* ---------- 10. kpiMetric 单指标计数 ---------- */
+const kpiMetric: WidgetDescriptor<WidgetConfig> = {
+  type: 'kpiMetric',
+  name: 'KPI 指标',
+  category: 'kpi',
+  addable: true,
+  defaultW: 3, defaultH: 2, minW: 2, minH: 2,
+  requiredSources: ['tasks'],
+  defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [] },
+  render({ data, config }) {
+    const entity = (config.entity ?? 'tasks') as WidgetEntity
+    const rows = selectEntity(data, entity)
+    const rawList = rawListFor(data, entity)
+    const count = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters).length
+    const pct = config.numberFormat === 'pct'
+      ? `${Math.round(count / Math.max(1, rows.length) * 100)}%`
+      : String(count)
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">{config.title ?? ENTITY_LABEL[entity]}</div>
+      <div className="pm-kpi-big">{pct}</div>
+      {config.subtitle && <div className="pm-bento-foot">{config.subtitle}</div>}
+    </div>
+  },
+}
+
+/* ---------- 11. statusRing 任务状态环 ---------- */
+const statusRing: WidgetDescriptor<WidgetConfig> = {
+  type: 'statusRing',
+  name: '任务状态环',
+  category: 'overview',
+  addable: true,
+  defaultW: 4, defaultH: 3, minW: 3, minH: 3,
+  requiredSources: ['tasks'],
+  defaultConfig: {},
+  render({ data }) {
+    const order: Array<[string, number, string]> = [
+      ['完成', data.tasks.filter(t => t.status === 'done').length, TONE.done],
+      ['进行', data.tasks.filter(t => t.status === 'in_progress').length, TONE.progress],
+      ['阻塞', data.tasks.filter(t => t.status === 'blocked').length, TONE.blocked],
+      ['待办', data.tasks.filter(t => t.status === 'todo').length, TONE.todo],
+    ]
+    const total = Math.max(1, order.reduce((s, [, n]) => s + n, 0))
+    let acc = 0
+    const R = 46, C = 2 * Math.PI * R
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">任务状态环</div>
+      <div className="pm-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 120 120" aria-hidden>
+          <circle cx="60" cy="60" r={R} fill="none" stroke="var(--pm-line)" strokeWidth="11"/>
+          {order.map(([label, n, color]) => {
+            if (!n) return null
+            const frac = n / total
+            const el = <circle key={label} cx="60" cy="60" r={R} fill="none" stroke={color} strokeWidth="11"
+              strokeDasharray={`${frac * C} ${C}`} strokeDashoffset={-acc * C} transform="rotate(-90 60 60)"/>
+            acc += frac
+            return el
+          })}
+        </svg>
+        <div className="pm-ring-legend">
+          {order.map(([label, n, color]) => <div key={label} className="pm-ring-leg"><i style={{ background: color }}/>{label} <b>{n}</b></div>)}
+        </div>
+      </div>
+    </div>
+  },
+}
+
+/* ---------- 12. textNote 文本/备注 ---------- */
+const textNote: WidgetDescriptor<WidgetConfig> = {
+  type: 'textNote',
+  name: '文本 / 备注',
+  category: 'text',
+  addable: true,
+  defaultW: 4, defaultH: 2, minW: 2, minH: 1,
+  requiredSources: [],
+  defaultConfig: { title: '备注', body: '' },
+  render({ config }) {
+    return <div className="pm-bento-card">
+      {config.title && <div className="pm-bento-label">{config.title}</div>}
+      <div className="pm-note-body">{config.body || '（空备注，在右侧配置面板编辑正文）'}</div>
+    </div>
+  },
+}
+
+/* ---------- 13. divider 分隔线 ---------- */
+const divider: WidgetDescriptor = {
+  type: 'divider',
+  name: '分隔线',
+  category: 'text',
+  addable: true,
+  defaultW: 12, defaultH: 1, minW: 4, minH: 1,
+  requiredSources: [],
+  defaultConfig: {},
+  render() {
+    return <div className="pm-divider"><span/></div>
+  },
+}
+
 /* ---------- Registry + 内置默认布局（坐标严格按方案 §4.2.1） ---------- */
 export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
-  [completionHero, milestoneDeliverable, projectScale, objectiveProgress, peopleLoad, riskMatrix, weeklyPlan]
+  [completionHero, milestoneDeliverable, projectScale, objectiveProgress, peopleLoad, riskMatrix, weeklyPlan,
+    recordList, overdueSoon, kpiMetric, statusRing, textNote, divider]
     .map(d => [d.type, d]),
 )
+
+/** 卡片库抽屉分组顺序。 */
+export const DRAWER_GROUPS: Array<{ key: 'overview' | 'list' | 'kpi' | 'progress' | 'text'; label: string }> = [
+  { key: 'overview', label: '概览' },
+  { key: 'list', label: '列表' },
+  { key: 'kpi', label: '指标' },
+  { key: 'text', label: '内容' },
+]
+
+export { FIELD_WHITELIST }
 
 export const DEFAULT_LAYOUT: DashboardLayout = {
   version: 1,

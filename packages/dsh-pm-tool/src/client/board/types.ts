@@ -1,5 +1,5 @@
 /**
- * 可配置仪表盘框架类型（阶段①：只读喂数 + 布局编辑；不做筛选/排序 DSL、不做公式）。
+ * 可配置仪表盘框架类型（阶段②：卡片库抽屉 + 配置面板 + 筛选/排序 DSL；不含公式）。
  * 设计见 docs/可配置仪表盘技术方案.md §4。
  */
 import type { ReactNode } from 'react'
@@ -25,13 +25,49 @@ export interface LayoutItem {
   static?: boolean
 }
 
-export type WidgetScope = 'global' | 'user'
+export type WidgetScope = 'global' | 'project' | 'user'
+
+/** 可作为卡片数据源的实体。 */
+export type WidgetEntity =
+  | 'projects' | 'tasks' | 'milestones' | 'riskIssues' | 'deliverables' | 'meetings' | 'reports'
+
+/** 筛选算子（白名单，不暴露任意表达式）。 */
+export type FilterOp = 'eq' | 'ne' | 'in' | 'gte' | 'lte' | 'contains' | 'isEmpty'
+
+export interface FilterRule {
+  field: string
+  op: FilterOp
+  value: string
+}
+
+export interface SortRule {
+  field: string
+  dir: 'asc' | 'desc'
+}
+
+/** 通用卡片配置（ zod 驱动校验在配置面板侧做；这里是运行时结构）。 */
+export interface WidgetConfig {
+  title?: string
+  subtitle?: string
+  /** 数据源实体（列表/指标类卡片）。 */
+  entity?: WidgetEntity
+  /** 项目范围：'all' 或具体 projectId。 */
+  projectScope?: 'all' | string
+  filters?: FilterRule[]
+  sort?: SortRule | null
+  /** 显示元素开关（按卡片自定义 key）。 */
+  show?: Record<string, boolean>
+  numberFormat?: 'pct' | 'int'
+  /** textNote 正文。 */
+  body?: string
+  [key: string]: unknown
+}
 
 /** 一个卡片实例（布局 JSON 里的一项）。 */
 export interface WidgetInstance {
   i: string
   type: string
-  config: Record<string, unknown>
+  config: WidgetConfig
   layout: LayoutItem
 }
 
@@ -46,22 +82,28 @@ export interface WidgetActions {
   pickProject: (id: string) => void
 }
 
-export interface WidgetContext<TConfig = Record<string, unknown>> {
+export interface WidgetContext<TConfig = WidgetConfig> {
   data: Snapshot
   config: TConfig
   actions: WidgetActions
   isEditing: boolean
 }
 
-export interface WidgetDescriptor<TConfig = Record<string, unknown>> {
+export type WidgetCategory = 'overview' | 'list' | 'kpi' | 'progress' | 'text'
+
+export interface WidgetDescriptor<TConfig = WidgetConfig> {
   type: string
   name: string
-  category: 'overview' | 'list' | 'kpi' | 'progress' | 'text'
+  category: WidgetCategory
+  /** 是否可被从卡片库添加到画布（内置 7 卡也可移除/再添加）。 */
+  addable?: boolean
+  /** 公式卡属阶段③，置灰不可加。 */
+  disabled?: boolean
   defaultW: number
   defaultH: number
   minW: number
   minH: number
-  requiredSources: Array<'projects' | 'tasks' | 'milestones' | 'riskIssues' | 'deliverables' | 'meetings' | 'reports'>
+  requiredSources: Array<WidgetEntity>
   defaultConfig: TConfig
   render: (ctx: WidgetContext<TConfig>) => ReactNode
 }

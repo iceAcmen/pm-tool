@@ -1,23 +1,23 @@
 /**
- * 看板布局持久化（阶段①）。
+ * 看板布局持久化（阶段②）。
  *
- * 客户端只能经 execute('/pm …') 与后端通信；现有视图偏好（pm-view / pm-selected-project）
- * 均走 localStorage。按「既有最小一致」原则，看板布局（user 作用域）同样落 localStorage，
- * 不新增 core 命令/存储类型，保持隔离契约。接口按 §4.6 设计，未来切到 dsh-storage 记录时
- * 只需替换本文件内部实现。
- *
- * - global 作用域 = 代码内置默认布局（见 widgets.tsx）；
- * - user 作用域 = localStorage 覆盖；未配置/损坏/旧版本一律回退内置默认。
+ * 客户端只能经 execute('/pm …') 与后端通信，无 storage client 直连（已核实 panel.tsx 全部数据
+ * 来自 `execute('web snapshot')`，现有视图偏好 pm-view/pm-selected-project 均落 localStorage）。
+ * 故本期仍落 localStorage，但补齐三作用域与三层回退：
+ *   global = 代码内置默认（DEFAULT_LAYOUT）；
+ *   project = 团队模板覆盖（key project）；
+ *   user   = 个人覆盖（key user）；优先级 user > project > global。
+ * 未来切到 dsh-storage JSON 记录时只需替换本文件内部读写。
  */
-import type { DashboardLayout } from './types.js'
+import type { DashboardLayout, WidgetScope } from './types.js'
 
-const KEY = 'pm-dashboard-layout:user'
+const KEYS: Record<Exclude<WidgetScope, 'global'>, string> = {
+  user: 'pm-dashboard-layout:user',
+  project: 'pm-dashboard-layout:project',
+}
 export const LAYOUT_VERSION = 1
 
-/** 迁移链：v1 → v1 恒等。未来 v2 起在此追加 (layout) => next。 */
-const MIGRATIONS: Array<{ from: number, to: number, apply: (l: DashboardLayout) => DashboardLayout }> = [
-  // { from: 1, to: 2, apply: (l) => ({ ...l, version: 2 }) },
-]
+const MIGRATIONS: Array<{ from: number, to: number, apply: (l: DashboardLayout) => DashboardLayout }> = []
 
 function migrate(raw: unknown): DashboardLayout | null {
   if (typeof raw !== 'object' || raw === null) return null
@@ -29,25 +29,29 @@ function migrate(raw: unknown): DashboardLayout | null {
   return layout
 }
 
-export function loadUserLayout(fallback: DashboardLayout): DashboardLayout {
+function readScope(scope: Exclude<WidgetScope, 'global'>): DashboardLayout | null {
   try {
-    const text = localStorage.getItem(KEY)
-    if (!text) return fallback
-    const parsed = migrate(JSON.parse(text))
-    return parsed ?? fallback
+    const text = localStorage.getItem(KEYS[scope])
+    if (!text) return null
+    return migrate(JSON.parse(text))
   } catch {
-    return fallback
+    return null
   }
 }
 
-export function saveUserLayout(layout: DashboardLayout): void {
-  try {
-    localStorage.setItem(KEY, JSON.stringify({ ...layout, scope: 'user' as const }))
-  } catch { /* 存储不可用时静默：浏览态仍用当前内存布局 */ }
+/** 三层回退：user > project > global(fallback)。 */
+export function resolveLayout(fallback: DashboardLayout): DashboardLayout {
+  return readScope('user') ?? readScope('project') ?? fallback
 }
 
-export function resetUserLayout(): void {
+export function saveLayout(scope: WidgetScope, layout: DashboardLayout): void {
+  if (scope === 'global') return // global = 内置默认，不写
   try {
-    localStorage.removeItem(KEY)
-  } catch { /* ignore */ }
+    localStorage.setItem(KEYS[scope], JSON.stringify({ ...layout, scope }))
+  } catch { /* 静默 */ }
+}
+
+export function resetScope(scope: WidgetScope): void {
+  if (scope === 'global') return
+  try { localStorage.removeItem(KEYS[scope]) } catch { /* ignore */ }
 }
