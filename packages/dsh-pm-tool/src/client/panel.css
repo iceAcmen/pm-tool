@@ -1006,8 +1006,8 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-gantt-links { position: absolute; left: 0; pointer-events: none; z-index: 0; }
 .pm-gantt-link-path { stroke: var(--pm-muted); stroke-width: 1; fill: none; opacity: .8; }
 .pm-gantt-link-arrow { fill: var(--pm-muted); opacity: .8; }
-.pm-gantt-milestone { position: absolute; top: 7px; width: 10px; height: 10px; transform: rotate(45deg); background: var(--pm-warning, orange); }
-.pm-gantt-milestone-done { opacity: .4; }
+.pm-gantt-milestone { position: absolute; top: 7px; width: 10px; height: 10px; transform: rotate(45deg); background: var(--pm-secondary); }
+.pm-gantt-milestone-done { background: var(--pm-success); }
 .pm-gantt-hint { font-size: 11px; opacity: .7; margin: 6px 10px 0; flex-basis: 100%; }
 
 .pm-copilot { display: flex; flex-direction: column; gap: 8px; }
