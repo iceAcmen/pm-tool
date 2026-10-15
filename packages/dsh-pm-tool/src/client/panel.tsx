@@ -1325,7 +1325,7 @@ function PeopleView({ project, tasks, riskIssues, onOpenRecord, onGotoView }: {
     <div className="pm-ms-cards">
       <div className="pm-stat-card"><strong>{stats.length}</strong><span>{executorCount} 执行人 + PM</span></div>
       <div className="pm-stat-card"><strong>{inProgCount}</strong><span>进行中任务 · 分布于 {inProgPeople} 人</span></div>
-      <div className="pm-stat-card"><strong>{doneCount}</strong><span>完成 · {donePeople.length > 1 ? donePeople.map(d => d.name).slice(0, 2).join(' · ') + ' 等' : donePeople[0]?.name || '—'}</span></div>
+      <div className="pm-stat-card"><strong>{doneCount}</strong><span>完成 · {donePeople.length > 2 ? donePeople.map(d => d.name).slice(0, 2).join(' · ') + ' 等' : donePeople.map(d => d.name).join(' · ') || '—'}</span></div>
       <div className="pm-stat-card"><strong>{alerts.length}</strong><span>{alerts.length ? alerts.map(a => `${a.who}·${a.kind} ${a.id}`).join('；') : '无告警'}</span></div>
     </div>
 
