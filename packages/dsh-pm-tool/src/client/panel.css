@@ -1276,3 +1276,32 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-gantt-bar--overdue .pm-gantt-bar-progress { background: var(--pm-danger) !important; }
 .pm-gantt-bar--blocked { border-color: var(--pm-warning) !important; }
 .pm-gantt-milestone-risk { background: var(--pm-warning); }
+
+/* ===== 里程碑视图：标题区 + 统计卡 + 垂直时间线 ===== */
+.pm-ms-page { padding: 4px 2px 16px; }
+.pm-ms-page .pm-page-title { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+.pm-ms-page .pm-sub { margin-top: 4px; font-size: 12.5px; color: var(--pm-secondary); }
+.pm-ms-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
+.pm-stat-card { border: 1px solid var(--pm-line); border-radius: 10px; background: var(--pm-surface); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.pm-stat-card strong { font-size: 22px; font-weight: 700; }
+.pm-stat-card span { font-size: 11px; color: var(--pm-secondary); }
+.pm-ms-ringcard { flex-direction: row; align-items: center; gap: 12px; }
+.pm-ms-ringmeta { display: flex; flex-direction: column; gap: 2px; }
+.pm-ms-timeline { border: 1px solid var(--pm-line); border-radius: 10px; background: var(--pm-surface); padding: 14px 16px; }
+.pm-ms-node { display: flex; gap: 12px; position: relative; padding-bottom: 16px; }
+.pm-ms-node:last-child { padding-bottom: 4px; }
+.pm-ms-dot { width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto; margin-top: 3px; border: 2px solid var(--pm-secondary); background: transparent; position: relative; z-index: 1; }
+.pm-ms-node:not(:last-child) .pm-ms-dot::after { content: ''; position: absolute; top: 14px; left: 50%; width: 1px; height: 24px; background: var(--pm-line-strong); }
+.pm-ms-dot-ok { background: var(--pm-success); border-color: var(--pm-success); }
+.pm-ms-dot-warn { background: var(--pm-warning); border-color: var(--pm-warning); }
+.pm-ms-dot-err { background: var(--pm-danger); border-color: var(--pm-danger); }
+.pm-ms-dot-idle { background: transparent; }
+.pm-ms-body { flex: 1; min-width: 0; }
+.pm-ms-line1 { display: flex; align-items: center; gap: 8px; }
+.pm-ms-title { background: none; border: 0; color: var(--pm-ink); font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; }
+.pm-ms-title:hover { color: var(--pm-accent); }
+.pm-ms-sp { flex: 1; }
+.pm-ms-meta { margin-top: 3px; font-size: 11px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; }
+.pm-ms-desc { margin-top: 2px; font-size: 11.5px; color: var(--pm-muted); }
+.pm-ms-new { margin-top: 12px; width: 100%; border: 1px dashed var(--pm-line-strong); border-radius: 10px; background: transparent; color: var(--pm-secondary); padding: 10px; font-size: 12px; cursor: pointer; }
+.pm-ms-new:hover { border-color: var(--pm-accent); color: var(--pm-accent); }

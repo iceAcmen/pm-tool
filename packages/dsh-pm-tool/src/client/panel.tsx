@@ -640,7 +640,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : view === 'gantt'
+              : view === 'gantt' || view === 'milestones'
                 ? null
                 : <>
                   <ProjectBar
@@ -702,12 +702,16 @@ export function PmPanel({ execute }: PmPanelApi) {
                 projectId={project.id}
                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
               />}
-              {view === 'milestones' && <MilestoneTable
+              {view === 'milestones' && <MilestoneView
                 milestones={milestones}
+                tasks={tasks}
                 disabled={busy}
                 onCreate={() => setDrawer({ kind: 'milestone' })}
                 onEdit={milestone => setDrawer({ kind: 'milestone', milestone })}
                 run={run}
+                onSaved={refresh}
+                onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
+                onGotoView={changeView}
               />}
               {view === 'risk-issues' && <RiskIssueTable
                 records={riskIssues}
@@ -2221,68 +2225,79 @@ function TaskRow({
     }
 }
 
-function MilestoneTable({
+function MilestoneView({
   milestones,
+  tasks,
   disabled,
   onCreate,
   onEdit,
   run,
+  onSaved,
+  onOpenTask,
+  onGotoView,
 }: {
   milestones: Milestone[]
+  tasks: Task[]
   disabled: boolean
   onCreate: () => void
   onEdit: (milestone: Milestone) => void
   run: (line: string) => Promise<boolean>
+  onSaved: () => void
+  onOpenTask: (task: Task) => void
+  onGotoView: (v: View) => void
 }) {
-  const [query, setQuery] = useState('')
-  const visible = milestones.filter(item =>
-    item.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
-  )
-  return <>
-    <TableToolbar query={query} setQuery={setQuery} primaryLabel="添加里程碑" onCreate={onCreate}/>
-    <div className="pm-table-frame">
-      <div className="pm-table-scroll">
-        <table className="pm-data-table pm-milestone-table">
-          <thead>
-            <tr>
-              <th className="pm-col-check"><span className="pm-checkbox"/></th>
-              <th className="pm-col-title">里程碑名称</th>
-              <th>状态</th>
-              <th>目标日期</th>
-              <th>实际达成日期</th>
-              <th>说明 / 达成标准</th>
-              <th className="pm-col-actions"/>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map(item => <tr className="pm-record-row" key={item.id}>
-              <td className="pm-col-check">
-                <button
-                  className="pm-check-button"
-                  data-checked={item.status === 'achieved'}
-                  disabled={disabled || item.status === 'achieved'}
-                  aria-label={`标记 ${item.title} 达成`}
-                  onClick={() => void run(`milestone update ${item.id} ${JSON.stringify({
-                    status: 'achieved',
-                    achievedDate: new Date().toISOString().slice(0, 10),
-                  })}`)}
-                ><Check size={13}/></button>
-              </td>
-              <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(item)}>{item.title}</button></td>
-              <td><StatusTag kind="milestone" value={item.status}/></td>
-              <td>{item.targetDate}</td>
-              <td>{item.achievedDate || <span className="pm-cell-empty">-</span>}</td>
-              <td className="pm-description-cell">{item.description || <span className="pm-cell-empty">暂无说明</span>}</td>
-              <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${item.title}`} onClick={() => onEdit(item)}><Pencil size={14}/></button></td>
-            </tr>)}
-          </tbody>
-        </table>
+  const done = milestones.filter(m => m.status === 'achieved')
+  const risk = milestones.filter(m => m.status === 'at_risk')
+  const pct = milestones.length ? Math.round(done.length / milestones.length * 100) : 0
+  const R = 26, C = 2 * Math.PI * R
+  const sorted = [...milestones].sort((a, b) => (a.targetDate || '').localeCompare(b.targetDate || ''))
+  const sub = (arr: Milestone[], single: string, multi: string) =>
+    arr.length === 0 ? '—' : arr.length === 1 ? arr[0].title : `${arr.length} ${multi}`
+  const nodeCls = (s: string) => s === 'achieved' ? 'ok' : s === 'at_risk' ? 'warn' : s === 'missed' ? 'err' : 'idle'
+  return <div className="pm-ms-page">
+    <h1 className="pm-page-title">里程碑</h1>
+    <div className="pm-sub">{milestones.length} 个里程碑 · 已达成 {done.length} · 有风险 {risk.length}</div>
+    <ReminderCapsule tasks={tasks} milestones={milestones} disabled={disabled} run={run} onSaved={onSaved} onOpenTask={onOpenTask} onGotoView={onGotoView}/>
+
+    <div className="pm-ms-cards">
+      <div className="pm-stat-card pm-ms-ringcard">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r={R} fill="none" stroke="var(--pm-line)" strokeWidth="6"/>
+          <circle cx="32" cy="32" r={R} fill="none" stroke="var(--pm-accent)" strokeWidth="6"
+            strokeDasharray={`${(pct / 100) * C} ${C}`} strokeLinecap="round" transform="rotate(-90 32 32)"/>
+          <text x="32" y="36" textAnchor="middle" fontSize="13" fontWeight="700" fill="var(--pm-ink)">{pct}%</text>
+        </svg>
+        <div className="pm-ms-ringmeta"><strong>{done.length}/{milestones.length}</strong><span>已达成</span></div>
       </div>
-      {!visible.length && <TableEmpty text={milestones.length ? '没有匹配的里程碑' : '暂无里程碑记录'}/>}
-      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>添加记录</button>
+      <div className="pm-stat-card"><strong>{milestones.length}</strong><span>总数 · 本项目</span></div>
+      <div className="pm-stat-card"><strong>{done.length}</strong><span>{sub(done, '', '个已达成')}</span></div>
+      <div className="pm-stat-card"><strong>{risk.length}</strong><span>{sub(risk, '', '个有风险')}</span></div>
     </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
-  </>
+
+    {!milestones.length
+      ? <div className="pm-table-frame"><TableEmpty text="暂无里程碑，点击新建"/></div>
+      : <div className="pm-ms-timeline">
+          {sorted.map(m => (
+            <div className="pm-ms-node" key={m.id}>
+              <div className={`pm-ms-dot pm-ms-dot-${nodeCls(m.status)}`}/>
+              <div className="pm-ms-body">
+                <div className="pm-ms-line1">
+                  <button className="pm-ms-title" onClick={() => onEdit(m)}>{m.title}</button>
+                  <StatusTag kind="milestone" value={m.status}/>
+                  <span className="pm-ms-sp"/>
+                  {m.status !== 'achieved' && <button className="pm-row-button" title="标记达成" disabled={disabled}
+                    onClick={() => void run(`milestone update ${m.id} ${JSON.stringify({ status: 'achieved', achievedDate: new Date().toISOString().slice(0, 10) })}`).then(ok => ok && onSaved())}>
+                    <Check size={13}/></button>}
+                  <button className="pm-row-button" title="编辑" onClick={() => onEdit(m)}><Pencil size={13}/></button>
+                </div>
+                <div className="pm-ms-meta">目标 {m.targetDate || '—'} · 达成 {m.achievedDate || '—'}</div>
+                <div className="pm-ms-desc">{m.description || '暂无说明'}</div>
+              </div>
+            </div>
+          ))}
+        </div>}
+    <button className="pm-ms-new" onClick={onCreate}><Plus size={14}/> 新建里程碑</button>
+  </div>
 }
 
 function RiskIssueTable({
