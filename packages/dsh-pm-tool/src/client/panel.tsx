@@ -2460,6 +2460,51 @@ function TableEmpty({ text, action }: { text: string, action?: React.ReactNode }
   return <div className="pm-table-empty"><ListTree size={24}/><span>{text}</span>{action}</div>
 }
 
+/** 完成率环：pct 0-100，内联 SVG，无图表库。 */
+function CompletionRing({ pct, done, total }: { pct: number, done: number, total: number }) {
+  const r = 52
+  const circ = 2 * Math.PI * r
+  return <div className="pm-ring">
+    <svg width="124" height="124" viewBox="0 0 124 124" role="img" aria-label={`完成率 ${Math.round(pct)}%`}>
+      <circle cx="62" cy="62" r={r} fill="none" stroke="var(--pm-line)" strokeWidth="10"/>
+      <circle cx="62" cy="62" r={r} fill="none" stroke="var(--pm-accent)" strokeWidth="10"
+        strokeLinecap="round" strokeDasharray={`${(circ * pct) / 100} ${circ}`} transform="rotate(-90 62 62)"/>
+    </svg>
+    <div className="pm-ring-meta"><b>{Math.round(pct)}%</b><span>{done} / {total} 已完成</span></div>
+  </div>
+}
+
+/** 计划 vs 实际趋势（内联 SVG）：计划=按 dueDate 累计（虚线），实际=当前已完成数（accent 点，无完成日期字段故为单点）。 */
+function PlanVsActual({ tasks, project, today }: { tasks: Task[], project: Project, today: string }) {
+  const w = 460, h = 150, padL = 26, padR = 12, padT = 14, padB = 22
+  const t0 = project.startDate ? new Date(`${project.startDate}T00:00:00`).getTime() : Date.now() - 30 * 864e5
+  const t1 = project.targetDate ? new Date(`${project.targetDate}T00:00:00`).getTime() : Date.now() + 30 * 864e5
+  const span = Math.max(t1 - t0, 1)
+  const total = tasks.length || 1
+  const x = (ms: number) => padL + (ms - t0) / span * (w - padL - padR)
+  const y = (n: number) => padT + (1 - n / total) * (h - padT - padB)
+  // 计划累计：每个 dueDate 处计数
+  const due = tasks.map(t => t.dueDate).filter(Boolean).sort() as string[]
+  const planPts: string[] = [`${x(t0)},${y(0)}`]
+  due.forEach((d, i) => {
+    const ms = new Date(`${d}T00:00:00`).getTime()
+    planPts.push(`${x(ms)},${y(i + 1)}`)
+  })
+  planPts.push(`${x(t1)},${y(due.length)}`)
+  const done = tasks.filter(t => t.status === 'done').length
+  const todayMs = Math.min(Math.max(new Date(`${today}T00:00:00`).getTime(), t0), t1)
+  return <svg className="pm-trend" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" role="img" aria-label="计划 vs 实际趋势">
+    <line x1={padL} y1={y(total)} x2={w - padR} y2={y(total)} stroke="var(--pm-line)" strokeWidth="1"/>
+    <line x1={padL} y1={y(total / 2)} x2={w - padR} y2={y(total / 2)} stroke="var(--pm-line)" strokeWidth="1"/>
+    <line x1={x(todayMs)} y1={padT} x2={x(todayMs)} y2={h - padB} stroke="var(--pm-accent)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6"/>
+    <polyline points={planPts.join(' ')} fill="none" stroke="var(--pm-secondary)" strokeWidth="1.6" strokeDasharray="5 4"/>
+    <line x1={x(t0)} y1={y(done)} x2={x(todayMs)} y2={y(done)} stroke="var(--pm-accent)" strokeWidth="2"/>
+    <circle cx={x(todayMs)} cy={y(done)} r="3.5" fill="var(--pm-accent)"/>
+    <text x={padL} y={h - 7} fontSize="10" fill="var(--pm-muted)">{project.startDate?.slice(5) ?? ''}</text>
+    <text x={w - padR} y={h - 7} fontSize="10" fill="var(--pm-muted)" textAnchor="end">{project.targetDate?.slice(5) ?? ''}</text>
+  </svg>
+}
+
 function Overview({
   project,
   tasks,
@@ -2486,6 +2531,18 @@ function Overview({
       <Summary label="已完成" value={complete} note={`${tasks.length ? Math.round(complete / tasks.length * 100) : 0}% 完成率`}/>
       <Summary label="已延期" value={overdue} note={overdue ? '需要优先处理' : '当前无延期'} tone={overdue ? 'danger' : undefined}/>
       <Summary label="里程碑" value={`${achieved}/${milestones.length}`} note={`${Math.max(days, 0)} 天后到期`}/>
+    </div>
+    <div className="pm-dash-row">
+      <div className="pm-ring-card">
+        <div className="pm-card-title">加权完成率</div>
+        <CompletionRing pct={kpi.doneRate} done={complete} total={tasks.length}/>
+      </div>
+      <div className="pm-trend-card">
+        <div className="pm-card-title">计划 vs 实际
+          <span className="pm-trend-legend"><i className="pm-ln-plan"/>计划累计<i className="pm-ln-act"/>实际</span>
+        </div>
+        <PlanVsActual tasks={tasks} project={project} today={today}/>
+      </div>
     </div>
     <div className="pm-overview-section">
       <h2>任务状态分布</h2>
