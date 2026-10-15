@@ -1382,10 +1382,10 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 }
 .pm-rgl .react-grid-item > .react-resizable-handle-se { bottom: 0; right: 0; cursor: se-resize; }
 /* 编辑态：卡片虚线外框 + 手柄可见（浏览态隐藏手柄避免误触） */
-.pm-rgl-editing .react-grid-item { outline: 1px dashed var(--pm-line); outline-offset: 2px; }
+.pm-rgl-editing .react-grid-item { outline: 1px dashed var(--pm-accent); outline-offset: 2px; }
 .pm-rgl-editing .react-grid-item > .react-resizable-handle { display: block; }
 .pm-rgl .react-grid-item > .react-resizable-handle { display: none; }
-.pm-rgl-editing .react-grid-item > .react-resizable-handle::after { border-right: 2px solid var(--pm-accent); border-bottom: 2px solid var(--pm-accent); width: 8px; height: 8px; }
+.pm-rgl-editing .react-grid-item > .react-resizable-handle::after { right: 2px; bottom: 2px; width: 10px; height: 10px; border: 0; border-radius: 3px; background: var(--pm-accent); opacity: .9; box-shadow: 0 0 0 2px var(--pm-surface); }
 
 /* ===== 可配置仪表盘 Bento 卡片（电影感深色 Bento；浅/深皆用语义 token，无 hex） ===== */
 .pm-shell {
@@ -1402,6 +1402,8 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-bento-stats b { color: var(--pm-ink); font-weight: 600; margin-left: 2px; }
 .pm-bento-tools { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; flex: 0 0 auto; }
 .pm-bento-tools button { white-space: nowrap; flex: 0 0 auto; }
+.pm-bento-toolbtn { padding: 4px 10px; font-size: 12px; line-height: 1.4; border: 1px solid var(--pm-line); border-radius: 6px; background: var(--pm-surface); color: var(--pm-secondary); cursor: pointer; white-space: nowrap; }
+.pm-bento-toolbtn:hover { background: var(--pm-hover); color: var(--pm-ink); }
 .pm-bento-tools .pm-button-primary { padding: 5px 12px; font-size: 12px; }
 .pm-bento-tools .pm-plain-icon { padding: 5px 10px; font-size: 12px; }
 .pm-rgl-item-wrap > .pm-bento-card { height: 100%; box-sizing: border-box; }
@@ -1419,7 +1421,8 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-bento-pill-overdue { background: rgba(229, 72, 77, 0.14); color: var(--pm-st-overdue); }
 .pm-bento-pill-st-active { background: rgba(91, 141, 239, 0.14); color: var(--pm-st-progress); }
 .pm-bento-pill-st-done, .pm-bento-pill-st-archived { background: rgba(53, 194, 138, 0.14); color: var(--pm-st-done); }
-.pm-bento-pill-st-planning, .pm-bento-pill-st-paused { background: rgba(138, 143, 152, 0.16); color: var(--pm-st-todo); }
+.pm-bento-pill-st-planning { background: rgba(138, 143, 152, 0.16); color: var(--pm-st-todo); }
+.pm-bento-pill-st-paused { background: rgba(232, 185, 63, 0.16); color: var(--pm-st-due); }
 
 /* 主卡 */
 .pm-hero-main { display: flex; gap: 16px; align-items: center; }
@@ -1444,11 +1447,11 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 /* 项目明细（复用 .pm-board-project） */
 .pm-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .pm-board-projects { display: flex; flex-direction: column; gap: 6px; overflow: auto; flex: 1; }
-.pm-board-project { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: none; border: 1px solid var(--pm-line); border-radius: 10px; padding: 4px 10px; cursor: pointer; text-align: left; font-size: 11px; }
-.pm-board-project .pm-bento-right { flex: 0 0 auto; font-size: 10px; }
+.pm-board-project { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; background: none; border: 1px solid var(--pm-line); border-radius: 10px; padding: 4px 10px; cursor: pointer; text-align: left; font-size: 11px; }
 .pm-board-project:hover { background: var(--pm-hover); }
-.pm-board-project-name { color: var(--pm-ink); display: flex; align-items: center; gap: 6px; min-width: 0; }
-.pm-board-project-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-board-project > .pm-bento-right { flex: 0 0 auto; font-size: 10px; color: var(--pm-muted); white-space: nowrap; }
+.pm-board-project-name { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; color: var(--pm-ink); overflow: hidden; }
+.pm-board-project-text { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-board-project-name .pm-bento-pill { flex: 0 0 auto; }
 
 /* 客观进度 */

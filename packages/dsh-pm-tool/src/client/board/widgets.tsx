@@ -169,7 +169,7 @@ const projectScale: WidgetDescriptor = {
           const risks = data.riskIssues.filter(r => r.projectId === p.id && r.status !== 'closed').length
           return <button key={p.id} type="button" className="pm-board-project" data-pick-project={p.id}
             onClick={() => actions.pickProject(p.id)}>
-            <span className="pm-board-project-name">{p.name}
+            <span className="pm-board-project-name"><span className="pm-board-project-text">{p.name}</span>
               <span className={`pm-bento-pill pm-bento-pill-st-${p.status}`}>{projectStatusLabel(p.status)}</span>
             </span>
             <span className="pm-bento-m pm-bento-right">任务 {tasks.length} · 里程 {ms.length} · 风险 {risks}</span>

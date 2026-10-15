@@ -50,11 +50,11 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
       <div className="pm-bento-tools">
         {editing
           ? <>
-              <button type="button" className="pm-plain-icon" onClick={resetDefault}>恢复默认</button>
-              <button type="button" className="pm-plain-icon" onClick={cancelEdit}>取消</button>
+              <button type="button" className="pm-bento-toolbtn" onClick={resetDefault}>恢复默认</button>
+              <button type="button" className="pm-bento-toolbtn" onClick={cancelEdit}>取消</button>
               <button type="button" className="pm-button-primary" onClick={saveEdit}>保存布局</button>
             </>
-          : <button type="button" className="pm-plain-icon" onClick={startEdit}>布局编辑</button>}
+          : <button type="button" className="pm-bento-toolbtn" onClick={startEdit}>布局编辑</button>}
       </div>
     </div>
     <div className={`pm-bento-grid ${editing ? 'pm-rgl-editing' : ''}`}>
