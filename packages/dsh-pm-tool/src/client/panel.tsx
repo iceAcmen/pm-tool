@@ -1905,8 +1905,6 @@ function TaskTable({
       </div>
     )}
 
-    <p className="pm-kbd-help" title="j/k 移动行 · 空格勾选 · Enter 打开 · Del 批量删除">⌨ j/k 移动 · 空格勾选 · Enter 打开 · Del 批量删除</p>
-
     <div className="pm-table-frame">
       <div className="pm-table-scroll">
         <table className="pm-data-table pm-task-table">
@@ -1968,8 +1966,16 @@ function TaskTable({
         </button>}
       />}
       <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>添加记录</button>
+      <div className="pm-table-statusbar pm-kbd-help" title="j/k 移动行 · 空格勾选 · Enter 打开 · Del 批量删除">
+        <span className="pm-status-kbd">
+          <kbd className="pm-key">J</kbd><kbd className="pm-key">K</kbd><span className="pm-key-desc">移动</span>
+          <span className="pm-key-dot">·</span><kbd className="pm-key">Space</kbd><span className="pm-key-desc">勾选</span>
+          <span className="pm-key-dot">·</span><kbd className="pm-key">Enter</kbd><span className="pm-key-desc">打开</span>
+          <span className="pm-key-dot">·</span><kbd className="pm-key">Del</kbd><span className="pm-key-desc">批量删除</span>
+        </span>
+        <span className="pm-status-count">{visible.length} 条记录</span>
+      </div>
     </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
   </>
 }
 
