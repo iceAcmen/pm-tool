@@ -10,9 +10,10 @@ import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../co
 import { listAssigneeCandidates } from '../core/people-candidates.js'
 import {
   dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
-  progressRatio, barLabelPolicy, shortDate, dependencyEdges,
+  progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
 } from '../core/gantt.js'
+import { deriveProgressMap, checklistFraction } from '../core/progress-derivation.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -101,6 +102,7 @@ type Task = {
   progress: number
   milestoneId: string | null
   predecessorIds?: string[]
+  checklist?: { id: string, text: string, done: boolean }[] | null
   repoUrl?: string
   branch?: string
 }
@@ -727,7 +729,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
-              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })}/>}
               {view === 'people' && <PeopleView
                 data={data}
                 onPickProject={(id) => setSelected(id)}
@@ -3062,10 +3064,13 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
 
 /** PROD-22 方案A：甘特排期（左标签列 + 时间轴条；点击打开抽屉，拖拽平移改期）。
  *  只读派生：依赖线/父条范围/进度填充全部由既有字段渲染，绝不回写；拖拽落库白名单仅 start/due。 */
-function GanttView({ tasks, milestones, run, onEdit }: {
+const GANTT_AV = ['#5e6ad2', '#0d9488', '#d97706', '#64748b', '#db2777', '#2563eb']
+const ganttAvColor = (name?: string) => { let h = 0; for (const c of name || '') h = (h * 31 + (c.codePointAt(0) ?? 0)) >>> 0; return GANTT_AV[h % GANTT_AV.length] }
+function GanttView({ tasks, milestones, run, onCreate, onEdit }: {
   tasks: Task[]
   milestones: Milestone[]
   run: (line: string, options?: { quiet?: boolean }) => Promise<boolean>
+  onCreate?: () => void
   onEdit?: (task: Task) => void
 }) {
   const axis = dateRange([...tasks, ...milestones])
@@ -3075,6 +3080,9 @@ function GanttView({ tasks, milestones, run, onEdit }: {
   // inflight（GI-WRITE-06/GI-WEB-19）：保存中同任务/甘特拖拽禁用，防并发连拖覆盖；结束后解锁。
   const [saving, setSaving] = useState(false)
   const [preview, setPreview] = useState<{ id: string, shiftDays: number } | null>(null)
+  const [gran, setGran] = useState<'day' | 'week' | 'month'>('day')
+  const [showDeps, setShowDeps] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<{ id: string, startX: number } | null>(null)
   const draggedRef = useRef(false)
   const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -3093,10 +3101,33 @@ function GanttView({ tasks, milestones, run, onEdit }: {
   }
 
   if (!axis) return <p className="pm-cell-empty pm-gantt">暂无带起止日期的任务/里程碑，无法绘制时间轴。</p>
+  const PX = gran === 'day' ? 16 : gran === 'week' ? 11 : 7 // 每天像素（粒度切换）
   const axisDays = Math.max(1, daysFrom(axis.end, axis.start) + 1)
-  const PX = 16 // 每天像素
   const ticks = sampleGanttTicks(axis.start, axis.end, PX)
   const todayOff = todayOffset(axis.start, today)
+  const progressMap = deriveProgressMap(tasks)
+
+  // ---- 月份带：按 axis 内月份切分 ----
+  const monthBands: { label: string, leftDays: number, widthDays: number }[] = []
+  {
+    const startT = Date.parse(axis.start)
+    let cur = new Date(startT)
+    while (Date.parse(`${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, '0')}-01`) <= Date.parse(axis.end)) {
+      const mStart = new Date(cur.getFullYear(), cur.getMonth(), 1)
+      const mEnd = new Date(cur.getFullYear(), cur.getMonth() + 1, 0)
+      const s = daysFrom(mStart.toISOString().slice(0, 10), axis.start)
+      const e = daysFrom(mEnd.toISOString().slice(0, 10), axis.start)
+      monthBands.push({ label: `${cur.getMonth() + 1}月`, leftDays: s, widthDays: Math.max(1, e - s + 1) })
+      cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
+    }
+  }
+
+  // ---- 周末背景：按 axis 内每日星期推 ----
+  const weekends: { leftDays: number }[] = []
+  for (let d = 0; d < axisDays; d++) {
+    const dow = new Date(Date.parse(axis.start) + d * 86400000).getDay()
+    if (dow === 0 || dow === 6) weekends.push({ leftDays: d })
+  }
 
   // ---- 只读派生结构（不写库） ----
   const byId = new Map(tasks.map(t => [t.id, t]))
@@ -3135,8 +3166,6 @@ function GanttView({ tasks, milestones, run, onEdit }: {
     setSaving(true)
     let ok = false
     try {
-      // quiet 成功：不弹全字段大 Notice；run 内已 refresh 一次（GI-WEB-16 就地更新），
-      // 不再 onSaved() 二次刷新；失败时全局错误 Notice 由 run 的 catch 保留，不吞错。
       ok = await run(`task update ${task.id} ${JSON.stringify(next)}`, { quiet: true })
     } finally {
       setSaving(false) // 无论成败都解锁，finally 防漏
@@ -3144,7 +3173,6 @@ function GanttView({ tasks, milestones, run, onEdit }: {
     if (ok) {
       showStatus(`已更新：${next.startDate} ~ ${next.dueDate}`)
     } else {
-      // 内联错误态：条体从未本地改动，快照未 refresh 自然回落拖前坐标
       showStatus('更新失败，请重试', 6000)
     }
   }
@@ -3160,11 +3188,12 @@ function GanttView({ tasks, milestones, run, onEdit }: {
       onEdit?.(task)
     }
   }
+  const locateToday = () => {
+    const el = scrollRef.current
+    if (!el) return
+    el.scrollTo({ left: Math.max(0, todayOff * PX - el.clientWidth / 2), behavior: 'smooth' })
+  }
 
-  /**
-   * effective range（只读派生，绝不回写库）：父任务优先取子任务 min(start)~max(due)；
-   * 否则用自身排期；都没有返回 null（未排期）。左标签/画布条/ARIA/tooltip 全部以此为准。
-   */
   const effectiveRange = (t: Task): { start: string, end: string, derived: boolean } | null => {
     const kids = childrenOf.get(t.id)
     const derived = kids && kids.length > 0 ? parentBarRange(kids) : null
@@ -3174,117 +3203,166 @@ function GanttView({ tasks, milestones, run, onEdit }: {
   }
 
   const renderBar = (t: Task, range: { start: string, end: string, derived: boolean }) => {
-    const done = t.status === 'done' || (t.progress ?? 0) >= 100
-    const ratio = progressRatio(t.progress, t.status)
+    const done = t.status === 'done'
+    // v0.8 客观进度：null=证据不足（不画实心、显 —），0=0% 填充
+    const fill = range.derived ? null : progressFill(progressMap.get(t.id) ?? { value: null, source: 'none', checklist: null, coverage: { coveredLeaves: 0, totalLeaves: 0 }, pendingAcceptance: false, pendingAcceptanceCount: 0, legacyProgress: null, warnings: [] })
+    const pct = fill === null ? '—' : `${Math.round(fill * 100)}%`
     const leftDays = daysFrom(range.start, axis.start)
     const widthDays = taskDurationDays(range.start, range.end)
     const policy = barLabelPolicy(widthDays, PX)
+    const overdue = !done && !range.derived && t.dueDate && t.dueDate < today
+    const blocked = !done && t.status === 'blocked'
     const preNames = (t.predecessorIds ?? [])
       .map(pid => byId.get(pid)?.title).filter(Boolean).join('、')
-    const aria = `任务 ${t.title}：${range.start} ~ ${range.end}，工期 ${widthDays} 天，进度 ${Math.round(ratio * 100)}%${preNames ? `，前置：${preNames}` : ''}。按回车打开详情。`
+    const aria = `任务 ${t.title}：${range.start} ~ ${range.end}，工期 ${widthDays} 天，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}。按回车打开详情。`
     const ghost = preview && preview.id === t.id
       ? shiftDatesByDrag(range.start, range.end, preview.shiftDays * PX, PX)
       : null
+    const cls = [
+      'pm-gantt-bar',
+      done ? 'pm-gantt-bar-done' : '',
+      range.derived ? 'pm-gantt-bar--parent' : '',
+      overdue ? 'pm-gantt-bar--overdue' : '',
+      blocked ? 'pm-gantt-bar--blocked' : '',
+    ].filter(Boolean).join(' ')
     return <div
-      className={`pm-gantt-bar ${done ? 'pm-gantt-bar-done' : ''} ${range.derived ? 'pm-gantt-bar--parent' : ''}`}
+      className={cls}
       data-task-id={t.id}
       tabIndex={0}
       role="button"
       aria-label={aria}
       style={{ left: `${leftDays * PX}px`, width: `${widthDays * PX}px` }}
-      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${Math.round(ratio * 100)}%${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}`}
+      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}`}
       onClick={() => openBar(t)}
       onKeyDown={(e) => onKeyDownBar(e, t)}
       onPointerDown={(e) => { if (!range.derived) onPointerDownBar(e, t) }}
       onPointerMove={(e) => { if (!range.derived) onPointerMoveBar(e) }}
       onPointerUp={(e) => { if (!range.derived) void onPointerUpBar(e, t) }}
     >
-      <div className="pm-gantt-bar-progress" style={{ width: `${Math.round(ratio * 100)}%` }}/>
+      {fill !== null && !range.derived && <div className="pm-gantt-bar-progress" style={{ width: `${Math.round(fill * 100)}%` }} />}
       {(policy === 'inside') && <>
         <span className="pm-gantt-bar-dates">{shortDate(range.start)} ~ {shortDate(range.end)}</span>
-        <span className="pm-gantt-bar-pct">{Math.round(ratio * 100)}%</span>
+        <span className="pm-gantt-bar-pct">{pct}</span>
       </>}
       {ghost && <span className="pm-gantt-ghost">{ghost.startDate} ~ {ghost.dueDate}</span>}
       {policy === 'outside' && (
-        // side 标签是条的绝对定位子元素：left 相对条右缘（widthDays*PX + 4px），不是画布坐标
         <span className="pm-gantt-bar-side" style={{ left: `${widthDays * PX + 4}px` }}>
-          {shortDate(range.start)} ~ {shortDate(range.end)} · {Math.round(ratio * 100)}%
+          {shortDate(range.start)} ~ {shortDate(range.end)} · {pct}
         </span>
       )}
     </div>
   }
 
-  return <div className="pm-gantt">
-    <div className="pm-gantt-labels">
-      <div className="pm-gantt-label pm-gantt-label--head">任务 / 里程碑</div>
-      {tasks.map(t => {
-        const depth = (t.code || '1').split('.').length - 1
-        const er = effectiveRange(t) // 父任务取子 min~max 派生，与画布/ARIA 同口径
-        return (
-          <div key={t.id} className="pm-gantt-label" style={{ paddingLeft: `${10 + depth * 12}px` }}>
-            <span className="pm-gantt-label-code">{t.code}</span>
-            <span className="pm-gantt-label-title">{t.title}</span>
-            <span className="pm-gantt-label-meta">{t.assignee || '—'} · {t.progress ?? 0}%</span>
-            {er && <span className="pm-gantt-label-dates">{shortDate(er.start)} ~ {shortDate(er.end)}</span>}
-            {!er && <span className="pm-gantt-unscheduled">未排期</span>}
-          </div>
-        )
-      })}
-      {milestones.map(m => (
-        <div key={`m-${m.id}`} className="pm-gantt-label pm-gantt-label--ms">◆ {m.title}</div>
-      ))}
-    </div>
-    <div className="pm-gantt-scroll">
-      <div className="pm-gantt-canvas" style={{ width: `${axisDays * PX}px` }}>
-        <div className="pm-gantt-axis">
-          {ticks.map(tk => (
-            <span key={tk.date} className="pm-gantt-tick" style={{ left: `${tk.leftDays * PX}px` }}>{tk.label}</span>
-          ))}
-          {todayOff >= 0 && todayOff <= axisDays
-            ? <div className="pm-gantt-today" style={{ left: `${todayOff * PX + PX / 2}px` }}/> : null}
-        </div>
-        <div className="pm-gantt-rows">
-          {tasks.map(t => {
-            // 父条只读派生（子 min~max），不写父任务日期、不可拖；子任务与自身排期分支不变
-            const range = effectiveRange(t)
-            if (!range) return (
-              <div key={t.id} className="pm-gantt-row pm-gantt-row--unscheduled"
-                title="未排期任务，点击打开设置起止日期" onClick={() => onEdit?.(t)}>
-              </div>
-            )
-            return <div key={t.id} className="pm-gantt-row">
-              {renderBar(t, range)}
-            </div>
-          })}
-          {milestones.map(m => {
-            const off = milestoneOffset(m, axis.start) // 无日期 → null，不画、不 NaN
-            if (off === null) return <div key={`m-${m.id}`} className="pm-gantt-row"/>
-            return <div key={`m-${m.id}`} className="pm-gantt-row">
-              <div className={`pm-gantt-milestone ${m.status === 'achieved' ? 'pm-gantt-milestone-done' : ''}`}
-                data-milestone-id={m.id} style={{ left: `${off * PX + PX / 2}px` }}/>
-            </div>
-          })}
-        </div>
-        {/* FS 依赖线层：随画布横滚；边坐标在落库保存+刷新后重算（预览期不联动）；只读不写 */}
-        {edges.edges.length > 0 && (
-          <svg className="pm-gantt-links" width={axisDays * PX} height={(tasks.length + milestones.length) * 24}
-            style={{ top: '24px' }} aria-label="任务间前置依赖连线">
-            {edges.edges.map((e, i) => {
-              const midX = (e.x1 + e.x2) / 2
-              const from = byId.get(e.fromId)?.title ?? e.fromId
-              const to = byId.get(e.toId)?.title ?? e.toId
-              // 终点恒为箭头基座 x2-7：x1>x2（反向/重叠）时路径不悬空、不穿过箭头尖
-              return <g key={`${e.fromId}-${e.toId}-${i}`}>
-                <title>{`前置 ${from} → ${to}`}</title>
-                <path d={`M ${e.x1} ${e.y1} H ${midX} V ${e.y2} H ${e.x2 - 7}`} className="pm-gantt-link-path"/>
-                <polygon points={`${e.x2},${e.y2} ${e.x2 - 7},${e.y2 - 4} ${e.x2 - 7},${e.y2 + 4}`} className="pm-gantt-link-arrow"/>
-              </g>
-            })}
-          </svg>
-        )}
+  const rowH = 24
+  const totalRows = tasks.length + milestones.length + 1
+  const msPill = (s: string) => s === 'achieved'
+    ? <span className="pm-ms-pill pm-ms-pill-ok">已达成</span>
+    : s === 'at_risk' ? <span className="pm-ms-pill pm-ms-pill-warn">有风险</span>
+      : <span className="pm-ms-pill pm-ms-pill-idle">计划中</span>
+
+  return <div className="pm-gantt-page">
+    <h1 className="pm-page-title">甘特图</h1>
+    <div className="pm-sub">{axis.start} → {axis.end} · {tasks.length} 任务 · {milestones.length} 里程碑</div>
+    <div className="pm-gantt-toolbar">
+      <div className="pm-seg">
+        {(['day', 'week', 'month'] as const).map(g => (
+          <button key={g} className={gran === g ? 'on' : ''} onClick={() => setGran(g)}>{g === 'day' ? '日' : g === 'week' ? '周' : '月'}</button>
+        ))}
       </div>
+      <button className="pm-chip">负责人：全部 ▾</button>
+      <button className="pm-chip">分组：无 ▾</button>
+      <label className="pm-switch"><input type="checkbox" checked={showDeps} onChange={e => setShowDeps(e.target.checked)} /><span>显示依赖</span></label>
+      <div className="pm-toolbar-sp"></div>
+      <button className="pm-chip" onClick={locateToday}>◉ 定位到今天</button>
+      {onCreate && <button className="pm-chip pm-chip-primary" onClick={onCreate}>＋ 新建任务</button>}
     </div>
-    {statusMsg && <p className="pm-gantt-hint" role="status" aria-live="polite">{statusMsg}</p>}
+
+    <div className="pm-gantt">
+      <div className="pm-gantt-labels">
+        <div className="pm-gantt-label pm-gantt-label--head">任务 / WBS</div>
+        {tasks.map(t => {
+          const depth = (t.code || '1').split('.').length - 1
+          const er = effectiveRange(t)
+          const tprog = progressMap.get(t.id)
+          const frac = checklistFraction(tprog ?? { value: null, source: 'none', checklist: null, coverage: { coveredLeaves: 0, totalLeaves: 0 }, pendingAcceptance: false, pendingAcceptanceCount: 0, legacyProgress: null, warnings: [] })
+          const done = t.status === 'done'
+          return (
+            <div key={t.id} className={`pm-gantt-label ${done ? 'pm-gantt-label-done' : ''}`} style={{ paddingLeft: `${8 + depth * 12}px` }}>
+              <span className={`pm-row-cb ${done ? 'done' : ''}`}>{done ? '✓' : ''}</span>
+              <span className="pm-gantt-label-code">{t.code}</span>
+              <span className="pm-gantt-label-title">{t.title}</span>
+              {frac && <span className="pm-gantt-label-frac">{frac}</span>}
+              <span className="pm-gantt-label-av" style={{ background: ganttAvColor(t.assignee) }}>{(t.assignee || '?').slice(0, 1)}</span>
+              {!er && <span className="pm-gantt-unscheduled">未排期</span>}
+            </div>
+          )
+        })}
+        <div className="pm-gantt-label pm-gantt-mband">里程碑</div>
+        {milestones.map(m => (
+          <div key={`m-${m.id}`} className="pm-gantt-label pm-gantt-label--ms">
+            <span className={m.status === 'achieved' ? 'pm-ms-ok' : m.status === 'at_risk' ? 'pm-ms-warn' : ''}>◆</span>
+            <span className="pm-gantt-label-code">{m.id.replace('m-', 'm-')}</span>
+            <span className="pm-gantt-label-title">{m.title}</span>
+            {msPill(m.status)}
+          </div>
+        ))}
+      </div>
+      <div className="pm-gantt-scroll" ref={scrollRef}>
+        <div className="pm-gantt-canvas" style={{ width: `${axisDays * PX}px` }}>
+          {/* 周末背景 */}
+          {weekends.map((w, i) => <div key={i} className="pm-gantt-weekend" style={{ left: `${w.leftDays * PX}px`, width: `${PX}px` }} />)}
+          <div className="pm-gantt-axis">
+            {monthBands.map((mb, i) => <span key={i} className="pm-gantt-month" style={{ left: `${mb.leftDays * PX + 2}px` }}>{mb.label}</span>)}
+            {ticks.map(tk => (
+              <span key={tk.date} className="pm-gantt-tick" style={{ left: `${tk.leftDays * PX}px` }}>{tk.label}</span>
+            ))}
+          </div>
+          {todayOff >= 0 && todayOff <= axisDays
+            ? <>
+              <div className="pm-gantt-today" style={{ left: `${todayOff * PX + PX / 2}px` }} />
+              <span className="pm-gantt-today-tag" style={{ left: `${todayOff * PX + PX / 2 + 4}px` }}>今日</span>
+            </> : null}
+          <div className="pm-gantt-rows">
+            {tasks.map(t => {
+              const range = effectiveRange(t)
+              if (!range) return (
+                <div key={t.id} className="pm-gantt-row pm-gantt-row--unscheduled"
+                  title="未排期任务，点击打开设置起止日期" onClick={() => onEdit?.(t)}
+                  style={{ height: `${rowH}px` }} />
+              )
+              return <div key={t.id} className="pm-gantt-row" style={{ height: `${rowH}px` }}>
+                {renderBar(t, range)}
+              </div>
+            })}
+            <div className="pm-gantt-row" style={{ height: `${rowH}px` }} />
+            {milestones.map(m => {
+              const off = milestoneOffset(m, axis.start)
+              if (off === null) return <div key={`m-${m.id}`} className="pm-gantt-row" style={{ height: `${rowH}px` }} />
+              return <div key={`m-${m.id}`} className="pm-gantt-row" style={{ height: `${rowH}px` }}>
+                <div className={`pm-gantt-milestone ${m.status === 'achieved' ? 'pm-gantt-milestone-done' : m.status === 'at_risk' ? 'pm-gantt-milestone-risk' : ''}`}
+                  data-milestone-id={m.id} style={{ left: `${off * PX + PX / 2}px` }} />
+              </div>
+            })}
+          </div>
+          {showDeps && edges.edges.length > 0 && (
+            <svg className="pm-gantt-links" width={axisDays * PX} height={totalRows * rowH}
+              style={{ top: '24px' }} aria-label="任务间前置依赖连线">
+              {edges.edges.map((e, i) => {
+                const midX = (e.x1 + e.x2) / 2
+                const from = byId.get(e.fromId)?.title ?? e.fromId
+                const to = byId.get(e.toId)?.title ?? e.toId
+                return <g key={`${e.fromId}-${e.toId}-${i}`}>
+                  <title>{`前置 ${from} → ${to}`}</title>
+                  <path d={`M ${e.x1} ${e.y1} H ${midX} V ${e.y2} H ${e.x2 - 7}`} className="pm-gantt-link-path"/>
+                  <polygon points={`${e.x2},${e.y2} ${e.x2 - 7},${e.y2 - 4} ${e.x2 - 7},${e.y2 + 4}`} className="pm-gantt-link-arrow"/>
+                </g>
+              })}
+            </svg>
+          )}
+        </div>
+      </div>
+      {statusMsg && <p className="pm-gantt-hint" role="status" aria-live="polite">{statusMsg}</p>}
+    </div>
   </div>
 }
 
