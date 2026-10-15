@@ -556,6 +556,7 @@ export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
 /** 卡片库抽屉分组顺序。 */
 export const DRAWER_GROUPS: Array<{ key: 'overview' | 'list' | 'kpi' | 'progress' | 'text'; label: string }> = [
   { key: 'overview', label: '概览' },
+  { key: 'progress', label: '进度' },
   { key: 'list', label: '列表' },
   { key: 'kpi', label: '指标' },
   { key: 'text', label: '内容' },
