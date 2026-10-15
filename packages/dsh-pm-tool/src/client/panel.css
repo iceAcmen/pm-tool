@@ -1189,3 +1189,7 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-task-table .pm-row-due::-webkit-calendar-picker-indicator { display: none; }
 .pm-task-table .pm-prog-cell { gap: 6px; }
 .pm-task-table .pm-prog-track { flex-basis: 34px; }
+
+/* 进度数字固定宽、条吃剩余（避免数字被挤成 15px） */
+.pm-task-table .pm-row-progress { flex: 0 0 38px; width: 38px; min-width: 38px; text-align: right; }
+.pm-task-table .pm-prog-track { flex: 1 1 auto; min-width: 18px; }
