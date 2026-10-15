@@ -4,6 +4,7 @@
  * 数据口径全部复用 src/core 纯函数与现有 Snapshot，不杜撰、不画历史趋势。
  */
 import React from 'react'
+import { z } from 'zod'
 import type { Snapshot, Task } from '../panel.js'
 import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap } from '../../core/progress-derivation.js'
@@ -24,6 +25,29 @@ const TONE = {
   todo: 'var(--pm-st-todo)',
   due: 'var(--pm-st-due)',
 } as const
+
+/* ---------- zod 配置 schema（保存闸门；字段与配置面板实际写入一致） ---------- */
+const entityEnum = z.enum(['tasks','milestones','riskIssues','deliverables','meetings','reports','projects'])
+const filterShape = z.object({
+  field: z.string(),
+  op: z.enum(['eq','ne','in','gte','lte','contains','isEmpty']),
+  value: z.string(),
+})
+const recordListSchema = z.object({
+  entity: entityEnum,
+  projectScope: z.string(),
+  filters: z.array(filterShape),
+  sort: z.object({ field: z.string(), dir: z.enum(['asc','desc']) }),
+  numberFormat: z.enum(['int','pct']),
+}).loose()
+const overdueSoonSchema = z.object({ projectScope: z.string() }).loose()
+const kpiSchema = z.object({
+  entity: entityEnum,
+  projectScope: z.string(),
+  filters: z.array(filterShape),
+  numberFormat: z.enum(['int','pct']).optional(),
+}).loose()
+const noteSchema = z.object({ title: z.string(), body: z.string() }).loose()
 
 /* ---------- 1. completionHero 完成率主卡（左列高卡） ---------- */
 const completionHero: WidgetDescriptor = {
@@ -369,6 +393,7 @@ const recordList: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 5, minW: 3, minH: 3,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], sort: { field: 'date', dir: 'asc' }, numberFormat: 'int' },
+  configSchema: recordListSchema,
   render({ data, config, actions }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
@@ -421,6 +446,7 @@ const overdueSoon: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 5, minW: 3, minH: 3,
   requiredSources: ['tasks'],
   defaultConfig: { projectScope: 'all' },
+  configSchema: overdueSoonSchema,
   render({ data, actions }) {
     const today = todayIso()
     const rows = data.tasks
@@ -458,6 +484,7 @@ const kpiMetric: WidgetDescriptor<WidgetConfig> = {
   defaultW: 3, defaultH: 2, minW: 2, minH: 2,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [] },
+  configSchema: kpiSchema,
   render({ data, config }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
@@ -524,6 +551,7 @@ const textNote: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 2, minW: 2, minH: 1,
   requiredSources: [],
   defaultConfig: { title: '备注', body: '' },
+  configSchema: noteSchema,
   render({ config }) {
     return <div className="pm-bento-card">
       {config.title && <div className="pm-bento-label">{config.title}</div>}
