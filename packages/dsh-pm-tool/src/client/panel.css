@@ -1364,3 +1364,31 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-ppl-name { width: 130px; flex: 0 0 auto; font-size: 12px; }
 .pm-ppl-row .pm-ppl-bar { margin-top: 0; }
 .pm-ppl-footnote { margin-top: 12px; font-size: 11px; color: var(--pm-muted); }
+
+/* ===== 可配置仪表盘：RGL 栅格样式（来源 react-grid-layout/css/styles.css，类名统一 .pm-rgl 作用域化）=====
+   不引入 hex：占位高亮用 --pm-accent，resize 手柄用 --pm-muted。 */
+.pm-rgl { position: relative; transition: height 200ms ease; }
+.pm-rgl-item { transition: all 200ms ease; transition-property: left, top, width, height; }
+.pm-rgl-item img { pointer-events: none; user-select: none; }
+.pm-rgl-item.pm-rgl-css-transforms { transition-property: transform, width, height; }
+.pm-rgl-item.pm-rgl-resizing { transition: none; z-index: 1; will-change: width, height; }
+.pm-rgl-item.pm-rgl-dragging { transition: none; z-index: 3; will-change: transform; }
+.pm-rgl-item.pm-rgl-dropping { visibility: hidden; }
+.pm-rgl-item.pm-rgl-placeholder {
+  background: var(--pm-accent); opacity: 0.18; transition-duration: 100ms;
+  z-index: 2; user-select: none; border-radius: 14px;
+}
+.pm-rgl-item.pm-rgl-placeholder.placeholder-resizing { transition: none; }
+.pm-rgl-item > .pm-rgl-handle { position: absolute; width: 20px; height: 20px; }
+.pm-rgl-item > .pm-rgl-handle::after {
+  content: ""; position: absolute; right: 3px; bottom: 3px; width: 5px; height: 5px;
+  border-right: 2px solid var(--pm-muted); border-bottom: 2px solid var(--pm-muted);
+}
+.pm-rgl-handle-hide > .pm-rgl-handle { display: none; }
+.pm-rgl-item > .pm-rgl-handle.pm-rgl-handle-se { bottom: 0; right: 0; cursor: se-resize; }
+.pm-rgl-item > .pm-rgl-handle.pm-rgl-handle-sw { bottom: 0; left: 0; cursor: sw-resize; transform: rotate(90deg); }
+.pm-rgl-item > .pm-rgl-handle.pm-rgl-handale-nw,
+.pm-rgl-item > .pm-rgl-handle.pm-rgl-handle-nw { top: 0; left: 0; cursor: nw-resize; transform: rotate(180deg); }
+.pm-rgl-item > .pm-rgl-handle.pm-rgl-handle-ne { top: 0; right: 0; cursor: ne-resize; transform: rotate(270deg); }
+/* 编辑态：卡片显示拖拽手柄提示边框 */
+.pm-rgl-editing .pm-rgl-item { outline: 1px dashed var(--pm-line); }
