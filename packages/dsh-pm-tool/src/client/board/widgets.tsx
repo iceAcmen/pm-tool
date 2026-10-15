@@ -48,20 +48,24 @@ const completionHero: WidgetDescriptor = {
       ['待办', todo, TONE.todo],
       ['阻塞', blocked, TONE.blocked],
     ]
-    // 需要关注：逾期 > 阻塞 > 7 天内临期，最多 4 条。
-    const overdue = data.tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+    // 需要关注：逾期(按日期升序) > 阻塞 > 临期(7 天内，按日期升序)，最多 4 条。
+    const overdue = data.tasks
+      .filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+      .sort((a, b) => (a.dueDate! < b.dueDate! ? -1 : 1))
     const blockedTasks = data.tasks.filter(t => t.status === 'blocked')
-    const dueSoon = data.tasks.filter(t =>
-      t.status !== 'done' && t.dueDate && t.dueDate >= today && t.dueDate <= addDays(today, 7))
+    const dueSoon = data.tasks
+      .filter(t => t.status !== 'done' && t.dueDate && t.dueDate >= today && t.dueDate <= addDays(today, 7))
+      .sort((a, b) => (a.dueDate! < b.dueDate! ? -1 : 1))
     const attn = [
       ...overdue.map(t => ({ t, tone: TONE.overdue, why: '逾期未完成' })),
       ...blockedTasks.map(t => ({ t, tone: TONE.blocked, why: '外部依赖阻塞' })),
       ...dueSoon.map(t => ({ t, tone: TONE.due, why: t.title })),
     ].slice(0, 4)
     const unassigned = data.tasks.filter(t => t.status !== 'done' && !t.assignee).length
+    const od = overdue[0]
     return <div className="pm-bento-card">
       <div className="pm-bento-label">任务完成率
-        {overdue.length > 0 && <span className="pm-bento-pill pm-bento-pill-overdue">{overdue.length} 项逾期</span>}
+        {od && <span className="pm-bento-pill pm-bento-pill-overdue">逾期 {od.code} · 应 {od.dueDate!.slice(5)}</span>}
       </div>
       <div className="pm-hero-main">
         <svg width="116" height="116" viewBox="0 0 140 140" aria-hidden>
@@ -147,14 +151,17 @@ function SegRow({ label, segs, total }: { label: string, segs: Array<[number, st
 /* ---------- 3. projectScale 项目状态·规模（逐项目明细） ---------- */
 const projectScale: WidgetDescriptor = {
   type: 'projectScale',
-  name: '逐项目明细 · 项目规模',
+  name: '项目状态 · 规模',
   category: 'list',
   defaultW: 4, defaultH: 4, minW: 3, minH: 2,
   requiredSources: ['projects', 'tasks', 'milestones', 'riskIssues'],
   defaultConfig: {},
   render({ data, actions }) {
     return <div className="pm-bento-card">
-      <div className="pm-bento-label">逐项目明细 · 项目状态<span className="pm-bento-m">{data.projects.length} 个项目</span></div>
+      <div className="pm-bento-label">项目状态 · 规模
+        <span className="pm-sr-only">逐项目明细</span>
+        <span className="pm-bento-m">{data.projects.length} 个项目</span>
+      </div>
       <div className="pm-board-projects">
         {data.projects.map(p => {
           const tasks = data.tasks.filter(t => t.projectId === p.id)
@@ -165,7 +172,7 @@ const projectScale: WidgetDescriptor = {
             <span className="pm-board-project-name">{p.name}
               <span className={`pm-bento-pill pm-bento-pill-st-${p.status}`}>{projectStatusLabel(p.status)}</span>
             </span>
-            <span className="pm-bento-m pm-bento-right">任务 {tasks.length}<br/>里程 {ms.length} · 风险 {risks}</span>
+            <span className="pm-bento-m pm-bento-right">任务 {tasks.length} · 里程 {ms.length} · 风险 {risks}</span>
           </button>
         })}
         {data.projects.length === 0 && <div className="pm-bento-faint">暂无项目数据。</div>}
@@ -191,6 +198,8 @@ const objectiveProgress: WidgetDescriptor = {
     const rows = data.tasks
       .filter(t => t.checklist && t.checklist.length > 0 && t.status !== 'done')
       .slice(0, 5)
+    const doneChecklist = data.tasks.filter(t => t.checklist && t.checklist.length > 0 && t.status === 'done').length
+    const noChecklist = data.tasks.filter(t => !t.checklist || t.checklist.length === 0).length
     return <div className="pm-bento-card">
       <div className="pm-bento-label">客观进度 · 清单<span className="pm-bento-m">清单派生</span></div>
       <div className="pm-obj-list">
@@ -206,7 +215,7 @@ const objectiveProgress: WidgetDescriptor = {
         })}
         {rows.length === 0 && <div className="pm-bento-faint">暂无带清单的进行中任务。</div>}
       </div>
-      <div className="pm-bento-foot">进度只认 checklist / rollup，无清单不估算。</div>
+      <div className="pm-bento-foot">已完成 {doneChecklist} 项均 100%；其余 {noChecklist} 项无清单，不估算。</div>
     </div>
   },
 }
@@ -220,30 +229,44 @@ const peopleLoad: WidgetDescriptor = {
   requiredSources: ['tasks', 'projects'],
   defaultConfig: {},
   render({ data }) {
-    const today = todayIso()
-    const report = groupOpenTasksByAssignee(data.tasks, data.projects, { today })
-    const people = report.people.slice(0, 6)
-    const max = Math.max(1, ...people.map(p => p.openTotal))
+    // 总览成员负载卡：按「全部任务（含已完成）」4 状态分段，与终稿一致。
+    // 注意：PeopleView / verify-people-load 的 open-only 口径在 panel.tsx 保持不动。
+    const rows = new Map<string, { display: string, done: number, progress: number, blocked: number, todo: number }>()
+    for (const t of data.tasks) {
+      const key = (t.assignee || '').trim()
+      if (!key) continue
+      let r = rows.get(key)
+      if (!r) { r = { display: key, done: 0, progress: 0, blocked: 0, todo: 0 }; rows.set(key, r) }
+      if (t.status === 'done') r.done++
+      else if (t.status === 'in_progress') r.progress++
+      else if (t.status === 'blocked') r.blocked++
+      else r.todo++
+    }
+    const people = [...rows.values()].sort((a, b) => (b.done + b.progress + b.blocked + b.todo) - (a.done + a.progress + a.blocked + a.todo)).slice(0, 6)
+    const max = Math.max(1, ...people.map(p => p.done + p.progress + p.blocked + p.todo))
     return <div className="pm-bento-card">
       <div className="pm-bento-label">成员负载<span className="pm-bento-m">同刻度 MAX {max}</span></div>
       <div className="pm-ppl-grid">
         {people.map(p => {
           const segs: Array<[number, string]> = [
-            [p.inProgress, TONE.progress],
+            [p.done, TONE.done],
+            [p.progress, TONE.progress],
             [p.blocked, TONE.blocked],
             [p.todo, TONE.todo],
           ]
-          return <button key={p.key} type="button" className="pm-barrow" data-person-key={p.key}>
+          const total = p.done + p.progress + p.blocked + p.todo
+          return <div key={p.display} className="pm-barrow" data-person-key={p.display}>
             <span className="pm-ppl-name">{p.display}</span>
             <div className="pm-stacked">
               {segs.map(([n, c], i) => n > 0 && <i key={i} style={{ width: `${n / max * 100}%`, background: c }}/>)}
             </div>
-            <span className="pm-bento-m">{p.openTotal}</span>
-          </button>
+            <span className="pm-bento-m">{total}</span>
+          </div>
         })}
-        {people.length === 0 && <div className="pm-bento-faint">目前所有人手上都没有未完成任务。</div>}
+        {people.length === 0 && <div className="pm-bento-faint">目前所有人都没有任务。</div>}
       </div>
       <div className="pm-bento-legend">
+        <span><i style={{ background: TONE.done }}/>完成</span>
         <span><i style={{ background: TONE.progress }}/>进行</span>
         <span><i style={{ background: TONE.blocked }}/>阻塞</span>
         <span><i style={{ background: TONE.todo }}/>待办</span>
@@ -299,23 +322,27 @@ const weeklyPlan: WidgetDescriptor = {
   name: '未来按周计划',
   category: 'progress',
   defaultW: 8, defaultH: 4, minW: 4, minH: 3,
-  requiredSources: ['tasks', 'milestones'],
+  requiredSources: ['tasks', 'milestones', 'deliverables'],
   defaultConfig: {},
   render({ data }) {
     const today = todayIso()
-    // 未来 7 周，按 dueDate 落入周桶计数 open 任务
+    // 未来 7 周：每柱 = 未来任务(dueDate) + 里程碑(targetDate) + 交付物(dueDate) 总数。
     const buckets: number[] = new Array(7).fill(0)
-    data.tasks.filter(t => t.status !== 'done' && t.dueDate && t.dueDate >= today).forEach(t => {
-      const days = Math.round((Date.parse(t.dueDate!) - Date.parse(today)) / 86400000)
+    const addDate = (iso: string) => {
+      const days = Math.round((Date.parse(iso) - Date.parse(today)) / 86400000)
       const w = Math.floor(days / 7)
       if (w >= 0 && w < 7) buckets[w]++
-    })
+    }
+    data.tasks.forEach(t => { if (t.status !== 'done' && t.dueDate && t.dueDate >= today) addDate(t.dueDate) })
+    data.milestones.forEach(m => { if (m.targetDate && m.targetDate >= today) addDate(m.targetDate) })
+    data.deliverables.forEach(d => { if (d.dueDate && d.dueDate >= today) addDate(d.dueDate) })
     const overdue = data.tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+    const od = overdue[0]
     const max = Math.max(1, ...buckets)
     const W = 720, H = 150, base = 120, bw = 30
     return <div className="pm-bento-card">
       <div className="pm-bento-label">未来按周计划
-        {overdue.length > 0 && <span className="pm-bento-pill pm-bento-pill-overdue">逾期 {overdue.length} 项</span>}
+        {od && <span className="pm-bento-pill pm-bento-pill-overdue">逾期 {od.code} · 应 {od.dueDate!.slice(5)}</span>}
       </div>
       <svg width="100%" height="150" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="未来按周任务数">
         {buckets.map((n, i) => {
