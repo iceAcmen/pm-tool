@@ -8,7 +8,15 @@ import { readFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
 import module from 'node:module'
 const real = module.createRequire(import.meta.url)
-const provide = { react: real('react'), 'react/jsx-runtime': real('react/jsx-runtime') }
+// react-dom / react-dom/client 由 dsh 宿主 PLATFORM_MODULES 提供（react-grid-layout→react-draggable 顶层 require）；
+// 本包不直接依赖 react-dom，故用最小 stub 镜像宿主冻结表（apply 仅注册 slot，不触发拖拽/findDOMNode），
+// 避免把宿主提供的模块误判为 bundle 内泄漏。
+const provide = {
+  react: real('react'),
+  'react/jsx-runtime': real('react/jsx-runtime'),
+  'react-dom': { findDOMNode: () => null, default: { findDOMNode: () => null } },
+  'react-dom/client': {},
+}
 const src = readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8')
 let captured = null
 const win = { __ModuleLoader__: { load: ({ factory }) => { captured = factory } } }

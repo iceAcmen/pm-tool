@@ -55,6 +55,7 @@ import {
   validateProjectForm, validateMilestoneForm, repoFieldErrors, repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
   type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
 } from './form-validation.js'
+import { BoardBento } from './board/BoardBento.js'
 import styles from './panel.css?raw'
 
 /** R3-OBS-002：把焦点归还解析接到真实 document（测试时由伪 DOM 注入，不在此硬编码）。 */
@@ -75,7 +76,7 @@ function recordDrawerOpener(e: { target: EventTarget | null }) {
   setPointerOpener(el as HTMLElement | null)
 }
 
-type Project = {
+export type Project = {
   id: string
   name: string
   description: string
@@ -87,7 +88,7 @@ type Project = {
   branch?: string
 }
 
-type Task = {
+export type Task = {
   id: string
   projectId: string
   parentId: string | null
@@ -107,7 +108,7 @@ type Task = {
   branch?: string
 }
 
-type Milestone = {
+export type Milestone = {
   id: string
   projectId: string
   title: string
@@ -117,7 +118,7 @@ type Milestone = {
   achievedDate: string | null
 }
 
-type RiskIssue = {
+export type RiskIssue = {
   id: string
   projectId: string
   type: 'risk' | 'issue'
@@ -201,7 +202,7 @@ type DeliverableChange = {
   note: string
 }
 
-type Deliverable = {
+export type Deliverable = {
   id: string
   projectId: string
   name: string
@@ -218,7 +219,7 @@ type Deliverable = {
   branch?: string
 }
 
-type Snapshot = {
+export type Snapshot = {
   projects: Project[]
   tasks: Task[]
   milestones: Milestone[]
@@ -1072,7 +1073,7 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
 }
 
 /** 人员与负载视图（P0 / v0.5.1）：跨项目按人聚合 open 任务，纯只读派生 snapshot。 */
-function CrossProjectPeople({ data, onPickProject, onOpenRecord }: {
+export function CrossProjectPeople({ data, onPickProject, onOpenRecord }: {
   data: Snapshot
   onPickProject?: (id: string) => void
   onOpenRecord?: (projectId: string, type: string, id: string) => void
@@ -3672,41 +3673,7 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
             })}
           </div>
         : <div className="pm-table-empty"><Search size={24}/><span>未找到匹配「{query.trim()}」的记录</span></div>)
-      : <>
-          <div className="pm-summary-grid">
-            <Summary label="项目总数" value={data.projects.length} note={`${activeProjects} 个进行中`}/>
-            <Summary label="任务完成率" value={`${completionRate}%`} note={`${doneTasks}/${totalTasks} 已完成`}/>
-            <Summary label="逾期项" value={overdueTasks} note={overdueTasks ? '需要优先处理' : '当前无逾期任务'} tone={overdueTasks ? 'danger' : undefined}/>
-            <Summary label="未关闭风险/问题" value={openRisks} note={`里程碑已达成 ${achieved}/${data.milestones.length}`}/>
-          </div>
-          <div className="pm-board-section">
-            <h2>逐项目明细</h2>
-            {data.projects.length
-              ? <div className="pm-board-projects">
-                  {data.projects.map(project => {
-                    const tasks = data.tasks.filter(task => task.projectId === project.id)
-                    const done = tasks.filter(task => task.status === 'done').length
-                    const overdue = tasks.filter(task =>
-                      task.dueDate && task.dueDate < today && task.status !== 'done').length
-                    const milestones = data.milestones.filter(item => item.projectId === project.id)
-                    const achievedCount = milestones.filter(item => item.status === 'achieved').length
-                    const risks = data.riskIssues.filter(item =>
-                      item.projectId === project.id && item.status !== 'closed').length
-                    const deliverables = data.deliverables.filter(item => item.projectId === project.id)
-                    return <button key={project.id} type="button" className="pm-board-project" onClick={() => onPickProject(project.id)}>
-                      <span className="pm-board-project-name">{project.name}<StatusTag kind="project" value={project.status}/></span>
-                      <span>任务 {done}/{tasks.length}</span>
-                      <span>里程碑 {achievedCount}/{milestones.length}</span>
-                      <span>未关闭风险 {risks}</span>
-                      <span>交付物 {deliverables.length}</span>
-                      {overdue > 0 && <span className="pm-board-overdue">⚠ 逾期 {overdue}</span>}
-                    </button>
-                  })}
-                </div>
-              : <p className="pm-board-note">暂无项目数据，先新建一个项目。</p>}
-          </div>
-          <BoardPeopleSection data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
-        </>}
+      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject }} />}
   </div>
 }
 

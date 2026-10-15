@@ -1392,3 +1392,82 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-rgl-item > .pm-rgl-handle.pm-rgl-handle-ne { top: 0; right: 0; cursor: ne-resize; transform: rotate(270deg); }
 /* 编辑态：卡片显示拖拽手柄提示边框 */
 .pm-rgl-editing .pm-rgl-item { outline: 1px dashed var(--pm-line); }
+
+/* ===== 可配置仪表盘 Bento 卡片（电影感深色 Bento；浅/深皆用语义 token，无 hex） ===== */
+.pm-shell {
+  --pm-st-done: rgb(53, 194, 138);
+  --pm-st-progress: rgb(91, 141, 239);
+  --pm-st-blocked: rgb(240, 135, 75);
+  --pm-st-overdue: rgb(229, 72, 77);
+  --pm-st-todo: rgb(138, 143, 152);
+  --pm-st-due: rgb(232, 185, 63);
+}
+.pm-bento { display: block; }
+.pm-bento-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.pm-bento-stats { display: flex; gap: 18px; font-size: 12px; color: var(--pm-secondary); }
+.pm-bento-stats b { color: var(--pm-ink); font-weight: 600; margin-left: 2px; }
+.pm-bento-tools { display: flex; gap: 8px; align-items: center; }
+.pm-bento-tools .pm-button-primary { padding: 5px 12px; font-size: 12px; }
+.pm-bento-tools .pm-plain-icon { padding: 5px 10px; font-size: 12px; }
+.pm-rgl-item-wrap > .pm-bento-card { height: 100%; box-sizing: border-box; }
+.pm-bento-card {
+  background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 14px;
+  padding: 14px 16px; display: flex; flex-direction: column; overflow: hidden;
+}
+.pm-bento-label { font-size: 12px; color: var(--pm-secondary); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.pm-bento-label:first-child { color: var(--pm-ink); font-weight: 600; }
+.pm-bento-m { font-size: 11px; color: var(--pm-muted); }
+.pm-bento-right { text-align: right; line-height: 1.5; }
+.pm-bento-faint { font-size: 11px; color: var(--pm-muted); }
+.pm-bento-foot { margin-top: auto; padding-top: 8px; font-size: 10px; color: var(--pm-muted); }
+.pm-bento-pill { font-size: 10px; padding: 1px 7px; border-radius: 999px; font-weight: 500; }
+.pm-bento-pill-overdue { background: rgba(229, 72, 77, 0.14); color: var(--pm-st-overdue); }
+.pm-bento-pill-st-active { background: rgba(91, 141, 239, 0.14); color: var(--pm-st-progress); }
+.pm-bento-pill-st-done, .pm-bento-pill-st-archived { background: rgba(53, 194, 138, 0.14); color: var(--pm-st-done); }
+.pm-bento-pill-st-planning, .pm-bento-pill-st-paused { background: rgba(138, 143, 152, 0.16); color: var(--pm-st-todo); }
+
+/* 主卡 */
+.pm-hero-main { display: flex; gap: 16px; align-items: center; }
+.pm-hero-bars { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.pm-hero-barrow { display: grid; grid-template-columns: 36px 1fr 16px; align-items: center; gap: 8px; font-size: 11px; color: var(--pm-secondary); }
+.pm-pbar { height: 6px; border-radius: 3px; background: var(--pm-line); overflow: hidden; }
+.pm-pbar > i { display: block; height: 100%; border-radius: 3px; }
+.pm-attn-list { display: flex; flex-direction: column; gap: 6px; overflow: auto; }
+.pm-attn { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; border-bottom: 1px solid var(--pm-line); padding: 6px 0; cursor: pointer; text-align: left; font-size: 11px; color: var(--pm-secondary); }
+.pm-attn:hover { background: var(--pm-hover); }
+.pm-attn > i { width: 8px; height: 8px; border-radius: 2px; flex: 0 0 auto; }
+.pm-attn > span:nth-child(2) { flex: 1; }
+.pm-attn b { color: var(--pm-ink); }
+.pm-attn-arr { color: var(--pm-muted); }
+
+/* 里程碑/交付物分段 */
+.pm-seg-two { display: flex; flex-direction: column; gap: 12px; justify-content: center; flex: 1; }
+.pm-segrow { display: grid; grid-template-columns: 64px 1fr 24px; align-items: center; gap: 10px; font-size: 12px; }
+.pm-seg { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--pm-line); }
+.pm-seg > i { display: block; height: 100%; }
+
+/* 项目明细（复用 .pm-board-project） */
+.pm-board-projects { display: flex; flex-direction: column; gap: 6px; overflow: auto; }
+.pm-board-project { display: flex; justify-content: space-between; align-items: center; background: none; border: 1px solid var(--pm-line); border-radius: 10px; padding: 8px 10px; cursor: pointer; text-align: left; font-size: 12px; }
+.pm-board-project:hover { background: var(--pm-hover); }
+.pm-board-project-name { color: var(--pm-ink); display: flex; align-items: center; gap: 6px; }
+
+/* 客观进度 */
+.pm-obj-list { display: flex; flex-direction: column; gap: 10px; overflow: auto; }
+.pm-obj-row { display: flex; flex-direction: column; gap: 4px; }
+.pm-obj-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--pm-secondary); }
+
+/* 成员负载 */
+.pm-ppl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; flex: 1; align-content: center; }
+.pm-barrow { display: grid; grid-template-columns: 90px 1fr 20px; align-items: center; gap: 8px; font-size: 11px; }
+.pm-ppl-name { color: var(--pm-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-stacked { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--pm-line); }
+.pm-stacked > i { display: block; height: 100%; }
+.pm-bento-legend { display: flex; gap: 14px; font-size: 10px; color: var(--pm-muted); margin-top: 10px; }
+.pm-bento-legend i { display: inline-block; width: 10px; height: 8px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+
+/* 风险矩阵 */
+.pm-matrix { display: grid; grid-template-columns: 28px repeat(3, 1fr); gap: 4px; flex: 1; align-content: center; }
+.pm-ax { font-size: 10px; color: var(--pm-muted); display: flex; align-items: center; justify-content: center; }
+.pm-mcell { border-radius: 6px; min-height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--pm-line); }
+.pm-mdot { font-size: 9px; padding: 1px 5px; border-radius: 999px; background: var(--pm-surface); color: var(--pm-ink); border: 1px solid var(--pm-line); cursor: pointer; }
