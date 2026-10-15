@@ -1159,3 +1159,33 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-risk-lvl[data-lvl="warn"] { background: color-mix(in srgb, var(--pm-warning) 14%, transparent); color: var(--pm-warning); }
 .pm-risk-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--pm-ink); }
 .pm-risk-plan { color: var(--pm-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== 行首勾选 + 表格宽度精修 ===== */
+.pm-task-table { min-width: 0; }
+.pm-task-table .pm-col-check { width: 40px; padding: 0 4px; }
+.pm-task-table .pm-col-code { width: 44px; }
+.pm-task-table .pm-col-title { width: auto; }
+.pm-task-table th:nth-child(4), .pm-task-table td:nth-child(4) { width: 92px; }
+.pm-task-table th:nth-child(5), .pm-task-table td:nth-child(5) { width: 72px; }
+.pm-task-table th:nth-child(6), .pm-task-table td:nth-child(6) { width: 84px; }
+.pm-task-table th:nth-child(7), .pm-task-table td:nth-child(7) { width: 76px; }
+.pm-task-table th:nth-child(8), .pm-task-table td:nth-child(8) { width: 118px; }
+.pm-task-table th:nth-child(9), .pm-task-table td:nth-child(9) { width: 126px; }
+.pm-task-table th:nth-child(10), .pm-task-table td:nth-child(10) { width: 52px; }
+.pm-task-table th:nth-child(11), .pm-task-table td:nth-child(11) { width: 60px; }
+.pm-task-table td:nth-child(8), .pm-task-table td:nth-child(9) { padding: 6px 6px; }
+.pm-task-table .pm-row-due { min-width: 0; padding: 2px 4px; }
+
+/* 行首：完成圆钮常驻，多选框 hover/选中才出现 */
+.pm-row-select { width: 0; margin: 0; padding: 0; opacity: 0; pointer-events: none; }
+.pm-record-row:hover .pm-row-select, .pm-row-select:checked { width: 13px; opacity: 1; pointer-events: auto; margin-right: 4px; }
+.pm-check-button { border-color: var(--pm-line-strong); background: var(--pm-surface); }
+.pm-record-row:hover .pm-check-button { border-color: var(--pm-muted); }
+
+/* 单元格控件不撑宽 */
+.pm-task-table .pm-row-status, .pm-task-table .pm-row-progress, .pm-task-table .pm-row-due,
+.pm-task-table .pm-priority-tag { width: 100%; min-width: 0; box-sizing: border-box; }
+.pm-task-table .pm-row-due { min-width: 0; }
+.pm-task-table .pm-row-due::-webkit-calendar-picker-indicator { display: none; }
+.pm-task-table .pm-prog-cell { gap: 6px; }
+.pm-task-table .pm-prog-track { flex-basis: 34px; }

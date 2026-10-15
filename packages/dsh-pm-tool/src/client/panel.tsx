@@ -1761,7 +1761,7 @@ function TaskTable({
 
     <div className="pm-table-frame">
       <div className="pm-table-scroll">
-        <table className="pm-data-table">
+        <table className="pm-data-table pm-task-table">
           <thead>
             <tr>
               <th className="pm-col-check"><span className="pm-checkbox"/></th>
