@@ -1976,6 +1976,7 @@ function TaskRow({
           <select
             className="pm-row-status"
             data-task-id={task.id}
+            data-status={task.status}
             value={task.status}
             aria-label={`${task.title} 状态`}
             disabled={disabled}
@@ -1985,8 +1986,9 @@ function TaskRow({
             }}
           >
             <option value="todo">待办</option>
-            <option value="doing">进行中</option>
-            <option value="done">完成</option>
+            <option value="in_progress">进行中</option>
+            <option value="blocked">受阻</option>
+            <option value="done">已完成</option>
           </select>
         </td>
         <td><PriorityTag value={task.priority}/></td>
@@ -1994,20 +1996,25 @@ function TaskRow({
           ? <span className="pm-person"><span>{task.assignee.slice(0, 1)}</span>{task.assignee}</span>
           : <span className="pm-cell-empty">未指定</span>}</td>
         <td>
-          <input
-            type="number"
-            className="pm-row-progress"
-            data-task-id={task.id}
-            value={task.progress ?? 0}
-            min={0} max={100} step={10}
-            aria-label={`${task.title} 进度`}
-            disabled={disabled}
-            onChange={(e) => {
-              const upd = buildUpdate({ progress: e.currentTarget.value })
-              if (!Object.keys(upd).length) return
-              void run(`task update ${task.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
-            }}
-          />
+          <div className="pm-prog-cell">
+            <span className="pm-prog-track" title={`进度 ${task.progress ?? 0}%`}>
+              <i data-done={task.status === 'done'} style={{ width: `${task.progress ?? 0}%` }}/>
+            </span>
+            <input
+              type="number"
+              className="pm-row-progress"
+              data-task-id={task.id}
+              value={task.progress ?? 0}
+              min={0} max={100} step={10}
+              aria-label={`${task.title} 进度`}
+              disabled={disabled}
+              onChange={(e) => {
+                const upd = buildUpdate({ progress: e.currentTarget.value })
+                if (!Object.keys(upd).length) return
+                void run(`task update ${task.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+              }}
+            />
+          </div>
         </td>
         <td>{task.startDate || <span className="pm-cell-empty">-</span>}</td>
         <td>
@@ -2525,16 +2532,39 @@ function Overview({
   const kpi = computeKPI(tasks, milestones, riskIssues, today)
   const agenda = buildAgenda(tasks, milestones, today)
   const matrix = groupRiskMatrix(riskIssues)
+  const openRisks = riskIssues.filter(x => x.status !== 'closed')
   return <div className="pm-overview pm-war-room">
-    <div className="pm-summary-grid">
-      <Summary label="总任务数" value={tasks.length} note={`${active} 项进行中`}/>
-      <Summary label="已完成" value={complete} note={`${tasks.length ? Math.round(complete / tasks.length * 100) : 0}% 完成率`}/>
-      <Summary label="已延期" value={overdue} note={overdue ? '需要优先处理' : '当前无延期'} tone={overdue ? 'danger' : undefined}/>
-      <Summary label="里程碑" value={`${achieved}/${milestones.length}`} note={`${Math.max(days, 0)} 天后到期`}/>
+    {/* 顶部 5 卡 KPI（合并旧 summary-grid + kpi-row；保留 pm-kpi 锚点） */}
+    <div className="pm-kpi-grid">
+      <div className="pm-kpi pm-kpi-card" data-kpi="total">
+        <span className="pm-kpi-label">总任务</span>
+        <b className="pm-kpi-num">{kpi.total}</b>
+        <span className="pm-kpi-note">{active} 项进行中</span>
+      </div>
+      <div className="pm-kpi pm-kpi-card" data-kpi="inProgress">
+        <span className="pm-kpi-label">进行中</span>
+        <b className="pm-kpi-num">{kpi.inProgress}</b>
+        <span className="pm-kpi-note">{Math.round(kpi.inProgress / Math.max(1, kpi.total) * 100)}% 占比</span>
+      </div>
+      <div className="pm-kpi pm-kpi-card" data-kpi="doneRate">
+        <span className="pm-kpi-label">已完成</span>
+        <b className="pm-kpi-num">{complete}</b>
+        <span className="pm-kpi-note">{kpi.doneRate}% 完成率</span>
+      </div>
+      <div className="pm-kpi pm-kpi-card" data-kpi="overdue" data-tone="danger">
+        <span className="pm-kpi-label">逾期</span>
+        <b className="pm-kpi-num">{kpi.overdueTasks}</b>
+        <span className="pm-kpi-note">{kpi.overdueTasks ? '需要优先处理' : '当前无逾期'}</span>
+      </div>
+      <div className="pm-kpi pm-kpi-card" data-kpi="openRisk">
+        <span className="pm-kpi-label">开放风险</span>
+        <b className="pm-kpi-num">{kpi.openRisks}</b>
+        <span className="pm-kpi-note">{openRisks.filter(x => x.impact === 'high' || x.impact === 'critical').length} 项高优先</span>
+      </div>
     </div>
     <div className="pm-dash-row">
       <div className="pm-ring-card">
-        <div className="pm-card-title">加权完成率</div>
+        <div className="pm-card-title">完成率</div>
         <CompletionRing pct={kpi.doneRate} done={complete} total={tasks.length}/>
       </div>
       <div className="pm-trend-card">
@@ -2546,6 +2576,19 @@ function Overview({
     </div>
     <div className="pm-overview-section">
       <h2>任务状态分布</h2>
+      <div className="pm-status-stack">
+        {(['in_progress', 'done', 'todo', 'blocked'] as const).map(s => {
+          const count = tasks.filter(t => t.status === s).length
+          if (!count) return null
+          return <i key={s} data-status={s} style={{ flexGrow: count }} title={`${taskStatus[s]} ${count}`}/>
+        })}
+      </div>
+      <div className="pm-status-legend">
+        {(['in_progress', 'done', 'todo', 'blocked'] as const).map(s => {
+          const count = tasks.filter(t => t.status === s).length
+          return <span key={s}><i data-status={s}/>{taskStatus[s]} {count}（{Math.round(count / Math.max(1, tasks.length) * 100)}%）</span>
+        })}
+      </div>
       <div className="pm-status-distribution">
         {Object.keys(taskStatus).map(value => {
           const count = tasks.filter(task => task.status === value).length
@@ -2557,6 +2600,55 @@ function Overview({
         })}
       </div>
     </div>
+    {/* 阶段进度（按 WBS 顶层分组平均进度，只读派生） */}
+    <div className="pm-overview-section">
+      <h2>阶段进度</h2>
+      {(() => {
+        const roots = tasks.filter(t => (t.code?.match(/^\d+$/)?.length ?? 0) > 0)
+        const rows = roots.map(r => {
+          const kids = tasks.filter(t => t.code?.startsWith(r.code + '.'))
+          const group = kids.length ? kids : [r]
+          const avg = Math.round(group.reduce((a, t) => a + (t.progress ?? 0), 0) / group.length)
+          return { name: r.title, pct: r.status === 'done' ? 100 : avg }
+        })
+        rows.unshift({ name: '项目整体', pct: kpi.doneRate })
+        return rows.map(r => <div className="pm-phase-row" key={r.name}>
+          <span className="pm-phase-name">{r.name}</span>
+          <span className="pm-phase-track"><i style={{ width: `${r.pct}%` }}/></span>
+          <b className="pm-phase-pct tnum">{r.pct}%</b>
+        </div>)
+      })()}
+    </div>
+    {/* 里程碑时间轴 */}
+    <div className="pm-overview-section">
+      <h2>里程碑</h2>
+      <div className="pm-mile-track">
+        {milestones.map(m => <div className="pm-mile-node" key={m.id}>
+          <i data-status={m.status}/>
+          <div><b>{m.title}</b>
+            <span>{m.targetDate}{m.status === 'achieved' && m.achievedDate ? ` · 达成 ${m.achievedDate}` : ''}</span>
+            <span className="pm-mile-pill" data-status={m.status}>{m.status === 'achieved' ? '已达成' : m.status === 'at_risk' ? '有风险' : '计划中'}</span>
+          </div>
+        </div>)}
+      </div>
+    </div>
+    {/* 开放风险清单 */}
+    {openRisks.length > 0 && <div className="pm-overview-section">
+      <h2>开放风险与问题</h2>
+      <div className="pm-risk-rows">
+        {openRisks.map(r => {
+          const lvl = (r.impact === 'high' || r.impact === 'critical') ? 'error' : r.impact === 'medium' ? 'warn' : 'ok'
+          return <div className="pm-risk-row" key={r.id}>
+            <span className="pm-risk-lvl" data-lvl={lvl}>{r.type === 'issue' ? '问题' : '风险'}·{r.impact}</span>
+            <b className="pm-risk-title">{r.title}</b>
+            <span className="pm-muted">{r.owner}</span>
+            <span className="pm-muted tnum">{r.dueDate ?? '—'}</span>
+            <span className="pm-risk-plan">{r.responsePlan || '—'}</span>
+            <span className="pm-mile-pill" data-status={r.status === 'monitoring' ? 'monitoring' : 'open'}>{r.status === 'monitoring' ? '监控中' : '开放'}</span>
+          </div>
+        })}
+      </div>
+    </div>}
     {/* PROD-23：健康参考灯（UI 只计数，扣分公式来自 health.ts healthFromInputs，只读展示） */}
     {(() => {
       const health = healthFromInputs({
@@ -2580,14 +2672,6 @@ function Overview({
       <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">{project.repoUrl}</a>
       {project.branch && <span className="pm-muted">@{project.branch}</span>}
     </div>}
-    <div className="pm-kpi-row">
-      <span className="pm-kpi" data-kpi="total"><b>{kpi.total}</b>任务</span>
-      <span className="pm-kpi" data-kpi="doneRate"><b>{kpi.doneRate}%</b>完成率</span>
-      <span className="pm-kpi" data-kpi="inProgress"><b>{kpi.inProgress}</b>进行中</span>
-      <span className="pm-kpi" data-kpi="overdue" data-tone="danger"><b>{kpi.overdueTasks}</b>逾期</span>
-      <span className="pm-kpi" data-kpi="upcoming"><b>{kpi.upcomingMilestones}</b>近期里程碑</span>
-      <span className="pm-kpi" data-kpi="openRisk"><b>{kpi.openRisks}</b>未闭环风险</span>
-    </div>
     {/* PROD-05：近期议程时间线 */}
     <div className="pm-overview-section pm-agenda">
       <h2>接下来的日程</h2>
