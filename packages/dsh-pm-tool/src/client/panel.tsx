@@ -640,7 +640,9 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : <>
+              : view === 'gantt'
+                ? null
+                : <>
                   <ProjectBar
                     project={project}
                     tasks={tasks}
@@ -729,7 +731,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
-              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
               {view === 'people' && <PeopleView
                 data={data}
                 onPickProject={(id) => setSelected(id)}
@@ -916,7 +918,7 @@ function RangePicker({ range, setRange }: { range: number, setRange: (n: number)
 type ReminderItem = { kind: 'task' | 'milestone', id: string, title: string, owner?: string, date: string, d: number }
 
 /** 任务页顶部（方案 C）：大标题 + 统计副标题 + 胶囊提醒条，点开为时间线浮层（盖在表格上方）。 */
-function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, onGotoView }: {
+function ReminderCapsule({ tasks, milestones, disabled, run, onSaved, onOpenTask, onGotoView }: {
   tasks: Task[]
   milestones: Milestone[]
   disabled: boolean
@@ -933,11 +935,6 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
     const t = Date.parse(iso); if (Number.isNaN(t)) return iso
     return new Date(t + n * 86_400_000).toISOString().slice(0, 10)
   }
-
-  const total = tasks.length
-  const inProg = tasks.filter(t => t.status === 'in_progress').length
-  const doneN = tasks.filter(t => t.status === 'done').length
-  const blocked = tasks.filter(t => t.status === 'blocked').length
 
   const items = useMemo<ReminderItem[]>(() => {
     const out: ReminderItem[] = []
@@ -972,11 +969,7 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
         ? <span className="pm-pop-pill pm-pop-pill-warn">{it.d} 天后</span>
         : <span className="pm-pop-pill pm-pop-pill-idle">{it.d} 天后</span>
 
-  return <div className="pm-tasks-head">
-    <div className="pm-tasks-title-row">
-      <h1>任务</h1>
-    </div>
-    <div className="pm-tasks-sub">{total} 个任务 · 进行中 {inProg} · 已完成 {doneN} · 阻塞 {blocked}</div>
+  return (
     <div className="pm-capsule-wrap">
       <button
         type="button"
@@ -1046,6 +1039,29 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
         </div>
       </>}
     </div>
+  )
+}
+
+function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, onGotoView }: {
+  tasks: Task[]
+  milestones: Milestone[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+  onOpenTask: (task: Task) => void
+  onGotoView: (v: View) => void
+}) {
+  const total = tasks.length
+  const inProg = tasks.filter(t => t.status === 'in_progress').length
+  const doneN = tasks.filter(t => t.status === 'done').length
+  const blocked = tasks.filter(t => t.status === 'blocked').length
+
+  return <div className="pm-tasks-head">
+    <div className="pm-tasks-title-row">
+      <h1>任务</h1>
+    </div>
+    <div className="pm-tasks-sub">{total} 个任务 · 进行中 {inProg} · 已完成 {doneN} · 阻塞 {blocked}</div>
+    <ReminderCapsule tasks={tasks} milestones={milestones} disabled={disabled} run={run} onSaved={onSaved} onOpenTask={onOpenTask} onGotoView={onGotoView}/>
   </div>
 }
 
@@ -3066,11 +3082,13 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
  *  只读派生：依赖线/父条范围/进度填充全部由既有字段渲染，绝不回写；拖拽落库白名单仅 start/due。 */
 const GANTT_AV = ['#5e6ad2', '#0d9488', '#d97706', '#64748b', '#db2777', '#2563eb']
 const ganttAvColor = (name?: string) => { let h = 0; for (const c of name || '') h = (h * 31 + (c.codePointAt(0) ?? 0)) >>> 0; return GANTT_AV[h % GANTT_AV.length] }
-function GanttView({ tasks, milestones, run, onCreate, onEdit }: {
+function GanttView({ tasks, milestones, run, onCreate, disabled, onGotoView, onEdit }: {
   tasks: Task[]
   milestones: Milestone[]
   run: (line: string, options?: { quiet?: boolean }) => Promise<boolean>
   onCreate?: () => void
+  disabled?: boolean
+  onGotoView?: (v: View) => void
   onEdit?: (task: Task) => void
 }) {
   const axis = dateRange([...tasks, ...milestones])
@@ -3263,6 +3281,7 @@ function GanttView({ tasks, milestones, run, onCreate, onEdit }: {
   return <div className="pm-gantt-page">
     <h1 className="pm-page-title">甘特图</h1>
     <div className="pm-sub">{axis.start} → {axis.end} · {tasks.length} 任务 · {milestones.length} 里程碑</div>
+    <ReminderCapsule tasks={tasks} milestones={milestones} disabled={!!disabled} run={run} onSaved={() => {}} onOpenTask={(t) => onEdit?.(t)} onGotoView={(v) => onGotoView?.(v)}/>
     <div className="pm-gantt-toolbar">
       <div className="pm-seg">
         {(['day', 'week', 'month'] as const).map(g => (
