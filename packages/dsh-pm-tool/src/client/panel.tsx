@@ -1247,6 +1247,18 @@ function PeopleView({ data, onPickProject, onOpenRecord }: {
   </section>
 }
 
+/** 总览看板内的跨项目人员负载区块（复用 PeopleView 全部工具栏/卡片/空态）。 */
+function BoardPeopleSection({ data, onPickProject, onOpenRecord }: {
+  data: Snapshot
+  onPickProject: (id: string) => void
+  onOpenRecord: (projectId: string, type: string, id: string) => void
+}) {
+  return <div className="pm-board-section">
+    <h2>人员负载（跨项目）</h2>
+    <PeopleView data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
+  </div>
+}
+
 function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'project-create') return '新建项目'
   if (drawer.kind === 'project-edit') return '编辑项目'
@@ -3554,6 +3566,7 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
                 </div>
               : <p className="pm-board-note">暂无项目数据，先新建一个项目。</p>}
           </div>
+          <BoardPeopleSection data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
         </>}
   </div>
 }
