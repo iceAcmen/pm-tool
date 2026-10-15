@@ -43,6 +43,7 @@ const config: UserConfig = {
     /^loose-envify(?:\/|$)/,
     /^js-tokens(?:\/|$)/,
     /^object-assign(?:\/|$)/,
+    /^zod(?:\/|$)/,
   ],
   // dnd-kit 式 CJS 分支所需：与宿主 clientConfig 对齐，避免运行时取错 dev/prod 构建。
   define: {

@@ -3,6 +3,7 @@
  * 设计见 docs/可配置仪表盘技术方案.md §4。
  */
 import type { ReactNode } from 'react'
+import type { ZodType } from 'zod'
 import type { Snapshot } from '../panel.js'
 
 /** 栅格规格：12 列，行高 36px，边距 [12,12]。 */
@@ -105,5 +106,7 @@ export interface WidgetDescriptor<TConfig = WidgetConfig> {
   minH: number
   requiredSources: Array<WidgetEntity>
   defaultConfig: TConfig
+  /** 保存闸门：configSchema.parse(cfg)，失败不写入并提示。 */
+  configSchema?: ZodType<unknown>
   render: (ctx: WidgetContext<TConfig>) => ReactNode
 }

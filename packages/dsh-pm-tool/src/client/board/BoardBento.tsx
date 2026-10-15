@@ -37,11 +37,23 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
 
   const startEdit = () => { setDraft(structuredClone(layout)); setEditing(true); setSelectedId(null) }
   const saveEdit = () => {
-    if (draft) {
-      const final = { ...draft, scope, version: 1 }
-      saveLayout(scope, final)
-      setLayout(final)
+    if (!draft) return
+    // zod 保存闸门：任一卡片 configSchema.parse 失败则定位字段、提示且不写入。
+    const bad: string[] = []
+    for (const w of draft.widgets) {
+      const desc = WIDGET_REGISTRY.get(w.type)
+      const s = desc?.configSchema
+      if (!s) continue
+      const r = s.safeParse(w.config)
+      if (!r.success) bad.push(`${desc?.name ?? w.type}: ${r.error.issues.map(i => i.path.join('.') || '(root)').join(',')}`)
     }
+    if (bad.length) {
+      window.alert(`配置校验未通过，未保存：\n${bad.join('\n')}`)
+      return
+    }
+    const final = { ...draft, scope, version: 1 }
+    saveLayout(scope, final)
+    setLayout(final)
     setDraft(null); setEditing(false); setSelectedId(null); setDrawerOpen(false)
   }
   const cancelEdit = () => { setDraft(structuredClone(resolveLayout(DEFAULT_LAYOUT))); setLayout(resolveLayout(DEFAULT_LAYOUT)); setDraft(null); setEditing(false); setSelectedId(null) }
@@ -111,7 +123,13 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
 
     <div className={`pm-bento-body ${editing ? 'pm-bento-editing' : ''}`}>
       {editing && drawerOpen && <CardDrawer live={live} query={query} setQuery={setQuery} onAdd={addWidget}/>}
-      <div className={`pm-bento-grid ${editing ? 'pm-rgl-editing' : ''}`}>
+      <div className={`pm-bento-grid ${editing ? 'pm-rgl-editing' : ''}`}
+        onDragOver={editing ? (e) => e.preventDefault() : undefined}
+        onDrop={editing ? (e) => {
+          e.preventDefault()
+          const t = e.dataTransfer.getData('widget-type')
+          if (t) addWidget(t)
+        } : undefined}>
         <GridLayout
           className="pm-rgl"
           layout={rglLayout}
@@ -174,6 +192,8 @@ function CardDrawer({ live, query, setQuery, onAdd }: {
           return <button key={d.type} type="button"
             className={`pm-drawer-item ${has ? 'added' : ''}`}
             disabled={has || d.disabled}
+            draggable={!has && !d.disabled}
+            onDragStart={(e) => e.dataTransfer.setData('widget-type', d.type)}
             onClick={() => onAdd(d.type)}>
             <i className="pm-drawer-ic"/>
             <span>{d.name}</span>
