@@ -1193,3 +1193,46 @@ body[data-ds-dark-theme] .pm-shell {
 /* 进度数字固定宽、条吃剩余（避免数字被挤成 15px） */
 .pm-task-table .pm-row-progress { flex: 0 0 38px; width: 38px; min-width: 38px; text-align: right; }
 .pm-task-table .pm-prog-track { flex: 1 1 auto; min-width: 18px; }
+
+/* ===== 任务页顶部：方案 C（大标题 + 统计副标题 + 胶囊提醒条 + 时间线浮层） ===== */
+.pm-tasks-head { position: relative; padding: 18px 22px 0; }
+.pm-tasks-title-row h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--pm-ink); }
+.pm-tasks-sub { margin-top: 4px; font-size: 12.5px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; }
+.pm-capsule-wrap { position: relative; margin-top: 12px; width: fit-content; }
+.pm-capsule { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--pm-line); border-radius: 999px; background: var(--pm-surface); color: var(--pm-secondary); font-size: 12px; cursor: pointer; }
+.pm-capsule:hover { border-color: var(--pm-line-strong); }
+.pm-capsule[data-open="true"] { border-color: var(--pm-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pm-accent) 18%, transparent); }
+.pm-capsule b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.pm-capsule-err { color: var(--pm-danger); }
+.pm-capsule-warn { color: var(--pm-warning); }
+.pm-capsule-chev { transition: transform .12s; }
+.pm-capsule[data-open="true"] .pm-capsule-chev { transform: rotate(180deg); }
+
+.pm-pop-scrim { position: fixed; inset: 0; z-index: 40; background: transparent; }
+.pm-pop { position: absolute; top: calc(100% + 6px); left: 0; width: 460px; max-width: calc(100vw - 44px); z-index: 41; background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18); overflow: hidden; text-align: left; }
+body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rgba(255, 255, 255, 0.10); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5); }
+.pm-pop-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--pm-line); }
+.pm-pop-title { font-size: 13px; font-weight: 600; color: var(--pm-ink); }
+.pm-pop-seg { margin-left: auto; display: inline-flex; gap: 2px; padding: 2px; border-radius: 6px; background: var(--pm-line-soft); }
+.pm-pop-seg button { border: 0; background: transparent; color: var(--pm-secondary); font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer; }
+.pm-pop-seg button.on { background: var(--pm-surface); color: var(--pm-ink); }
+.pm-pop-x { border: 0; background: transparent; color: var(--pm-secondary); cursor: pointer; padding: 2px; }
+.pm-pop-body { padding: 6px 0; max-height: 360px; overflow-y: auto; }
+.pm-pop-empty { margin: 0; padding: 12px; font-size: 12px; color: var(--pm-secondary); }
+.pm-pop-date { display: flex; gap: 10px; padding: 2px 12px; }
+.pm-pop-datelabel { flex: 0 0 74px; font-size: 11px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; padding-top: 5px; }
+.pm-pop-dots { flex: 1; min-width: 0; }
+.pm-pop-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 12.5px; }
+.pm-pop-type { width: 13px; height: 13px; flex: 0 0 13px; border: 1.5px solid var(--pm-secondary); border-radius: 3px; }
+.pm-pop-type-mile { background: transparent; color: var(--pm-warning); }
+.pm-pop-name { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0; text-align: left; color: var(--pm-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.pm-pop-name:hover { color: var(--pm-accent); }
+.pm-pop-av { width: 18px; height: 18px; flex: 0 0 18px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; color: rgb(255, 255, 255); background: var(--pm-accent); }
+.pm-pop-pill { flex: 0 0 auto; font-size: 10.5px; padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.pm-pop-pill-err { background: color-mix(in srgb, var(--pm-danger) 14%, transparent); color: var(--pm-danger); }
+.pm-pop-pill-warn { background: color-mix(in srgb, var(--pm-warning) 14%, transparent); color: var(--pm-warning); }
+.pm-pop-pill-idle { background: var(--pm-line-soft); color: var(--pm-secondary); }
+.pm-pop-acts { display: inline-flex; gap: 2px; opacity: 0; transition: opacity .12s; }
+.pm-pop-row:hover .pm-pop-acts { opacity: 1; }
+.pm-pop-acts button { width: 22px; height: 22px; display: grid; place-items: center; border: 0; border-radius: 5px; background: transparent; color: var(--pm-secondary); cursor: pointer; font-size: 10px; }
+.pm-pop-acts button:hover { background: var(--pm-line-soft); color: var(--pm-ink); }

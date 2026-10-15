@@ -628,43 +628,55 @@ export function PmPanel({ execute }: PmPanelApi) {
         : !project
           ? <EmptyWorkspace onCreate={() => setDrawer({ kind: 'project-create' })}/>
           : <>
-            <ProjectBar
-              project={project}
-              tasks={tasks}
-              milestones={milestones}
-              riskIssues={riskIssues}
-              meetings={meetings}
-              reports={reports}
-              deliverables={deliverables}
-              onEdit={() => setDrawer({ kind: 'project-edit', project })}
-            />
-            <ReminderStrip data={data} onPickProject={(id) => setSelected(id)} onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}/>
+            {view === 'tasks'
+              ? <TasksHeader
+                  tasks={tasks}
+                  milestones={milestones}
+                  disabled={busy}
+                  run={run}
+                  onSaved={refresh}
+                  onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
+                  onGotoView={changeView}
+                />
+              : <>
+                  <ProjectBar
+                    project={project}
+                    tasks={tasks}
+                    milestones={milestones}
+                    riskIssues={riskIssues}
+                    meetings={meetings}
+                    reports={reports}
+                    deliverables={deliverables}
+                    onEdit={() => setDrawer({ kind: 'project-edit', project })}
+                  />
+                  <ReminderStrip data={data} onPickProject={(id) => setSelected(id)} onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}/>
+                </>}
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
-              <ViewTab active={view === 'tasks'} icon={<ListTree size={15}/>} count={tasks.length} onClick={() => changeView('tasks')}>
+              <ViewTab active={view === 'tasks'} count={tasks.length} onClick={() => changeView('tasks')}>
                 全部任务
               </ViewTab>
-              <ViewTab active={view === 'milestones'} icon={<MilestoneIcon size={15}/>} count={milestones.length} onClick={() => changeView('milestones')}>
+              <ViewTab active={view === 'milestones'} count={milestones.length} onClick={() => changeView('milestones')}>
                 里程碑
               </ViewTab>
-              <ViewTab active={view === 'risk-issues'} icon={<ShieldAlert size={15}/>} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
+              <ViewTab active={view === 'risk-issues'} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
                 风险与问题
               </ViewTab>
-              <ViewTab active={view === 'meetings'} icon={<NotebookTabs size={15}/>} count={meetings.length} onClick={() => changeView('meetings')}>
+              <ViewTab active={view === 'meetings'} count={meetings.length} onClick={() => changeView('meetings')}>
                 会议纪要
               </ViewTab>
-              <ViewTab active={view === 'reports'} icon={<FileText size={15}/>} count={reports.length} onClick={() => changeView('reports')}>
+              <ViewTab active={view === 'reports'} count={reports.length} onClick={() => changeView('reports')}>
                 进度汇报
               </ViewTab>
-              <ViewTab active={view === 'deliverables'} icon={<Package size={15}/>} count={deliverables.length} onClick={() => changeView('deliverables')}>
+              <ViewTab active={view === 'deliverables'} count={deliverables.length} onClick={() => changeView('deliverables')}>
                 交付物
               </ViewTab>
-              <ViewTab active={view === 'overview'} icon={<LayoutDashboard size={15}/>} onClick={() => changeView('overview')}>
+              <ViewTab active={view === 'overview'} onClick={() => changeView('overview')}>
                 项目概览
               </ViewTab>
-              <ViewTab active={view === 'gantt'} icon={<CalendarDays size={15}/>} onClick={() => changeView('gantt')}>
+              <ViewTab active={view === 'gantt'} onClick={() => changeView('gantt')}>
                 甘特排期
               </ViewTab>
-              <ViewTab active={view === 'people'} icon={<UserRound size={15}/>} onClick={() => changeView('people')}>
+              <ViewTab active={view === 'people'} onClick={() => changeView('people')}>
                 人员负载
               </ViewTab>
             </nav>
@@ -897,6 +909,142 @@ function RangePicker({ range, setRange }: { range: number, setRange: (n: number)
       >{d} 天</button>,
     )}
   </span>
+}
+
+type ReminderItem = { kind: 'task' | 'milestone', id: string, title: string, owner?: string, date: string, d: number }
+
+/** 任务页顶部（方案 C）：大标题 + 统计副标题 + 胶囊提醒条，点开为时间线浮层（盖在表格上方）。 */
+function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, onGotoView }: {
+  tasks: Task[]
+  milestones: Milestone[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+  onOpenTask: (task: Task) => void
+  onGotoView: (v: View) => void
+}) {
+  const today = useMemo(() => localTodayIso(), [])
+  const [open, setOpen] = useState(false)
+  const [range, setRange] = useState(30)
+  const days = (date: string) => Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000)
+  const addDays = (iso: string, n: number) => {
+    const t = Date.parse(iso); if (Number.isNaN(t)) return iso
+    return new Date(t + n * 86_400_000).toISOString().slice(0, 10)
+  }
+
+  const total = tasks.length
+  const inProg = tasks.filter(t => t.status === 'in_progress').length
+  const doneN = tasks.filter(t => t.status === 'done').length
+  const blocked = tasks.filter(t => t.status === 'blocked').length
+
+  const items = useMemo<ReminderItem[]>(() => {
+    const out: ReminderItem[] = []
+    for (const t of tasks) {
+      if (t.status === 'done' || (t.progress ?? 0) >= 100 || !t.dueDate) continue
+      const d = days(t.dueDate)
+      if (d <= range) out.push({ kind: 'task', id: t.id, title: t.title, owner: t.assignee, date: t.dueDate, d })
+    }
+    for (const m of milestones) {
+      if (m.status === 'achieved') continue
+      const d = days(m.targetDate)
+      if (d <= range) out.push({ kind: 'milestone', id: m.id, title: m.title, owner: undefined, date: m.targetDate, d })
+    }
+    out.sort((a, b) => a.d - b.d)
+    return out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks, milestones, range, today])
+
+  const overdue = items.filter(i => i.d < 0).length
+  const soon = items.filter(i => i.d >= 0).length
+  const groups = useMemo(() => {
+    const g = new Map<string, ReminderItem[]>()
+    for (const it of items) { const arr = g.get(it.date) ?? []; arr.push(it); g.set(it.date, arr) }
+    return [...g.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+  }, [items])
+
+  const pill = (it: ReminderItem) => it.d < 0
+    ? <span className="pm-pop-pill pm-pop-pill-err">逾期 {-it.d} 天</span>
+    : it.d === 0
+      ? <span className="pm-pop-pill pm-pop-pill-warn">今天</span>
+      : it.d <= 7
+        ? <span className="pm-pop-pill pm-pop-pill-warn">{it.d} 天后</span>
+        : <span className="pm-pop-pill pm-pop-pill-idle">{it.d} 天后</span>
+
+  return <div className="pm-tasks-head">
+    <div className="pm-tasks-title-row">
+      <h1>任务</h1>
+    </div>
+    <div className="pm-tasks-sub">{total} 个任务 · 进行中 {inProg} · 已完成 {doneN} · 阻塞 {blocked}</div>
+    <div className="pm-capsule-wrap">
+      <button
+        type="button"
+        className="pm-capsule"
+        data-open={open}
+        aria-expanded={open}
+        onClick={() => setOpen(o => !o)}
+      >
+        <AlertTriangle size={13}/>
+        <span>逾期 <b className="pm-capsule-err">{overdue}</b> · 临期 <b className="pm-capsule-warn">{soon}</b></span>
+        <ChevronDown size={13} className="pm-capsule-chev"/>
+      </button>
+      {open && <>
+        <div className="pm-pop-scrim" onClick={() => setOpen(false)}/>
+        <div className="pm-pop" role="dialog" aria-label="提醒">
+          <div className="pm-pop-head">
+            <span className="pm-pop-title">提醒</span>
+            <span className="pm-pop-seg">
+              {[3, 7, 14, 30].map(d =>
+                <button key={d} type="button" aria-pressed={range === d}
+                  className={range === d ? 'on' : ''} onClick={() => setRange(d)}>{d} 天</button>,
+              )}
+            </span>
+            <button type="button" className="pm-pop-x" aria-label="关闭提醒" onClick={() => setOpen(false)}><X size={14}/></button>
+          </div>
+          <div className="pm-pop-body">
+            {!items.length && <p className="pm-pop-empty">未来 {range} 天内没有临期或逾期事项。</p>}
+            {groups.map(([date, list]) =>
+              <div className="pm-pop-date" key={date}>
+                <span className="pm-pop-datelabel">{date === today ? `今天 ${date}` : date}</span>
+                <div className="pm-pop-dots">
+                  {list.map(it =>
+                    <div className="pm-pop-row" key={it.kind + it.id}>
+                      {it.kind === 'milestone'
+                        ? <MilestoneIcon size={13} className="pm-pop-type pm-pop-type-mile"/>
+                        : <span className="pm-pop-type pm-pop-type-task"/>}
+                      <button type="button" className="pm-pop-name"
+                        onClick={() => (it.kind === 'task'
+                          ? onOpenTask(tasks.find(t => t.id === it.id)!)
+                          : onGotoView('milestones'))}>
+                        {it.title}
+                      </button>
+                      {it.owner && <span className="pm-pop-av">{it.owner.slice(0, 1)}</span>}
+                      {pill(it)}
+                      {it.kind === 'task' && (
+                        <span className="pm-pop-acts">
+                          <button type="button" title="标记完成" disabled={disabled}
+                            onClick={() => void run(`task update ${it.id} ${JSON.stringify({ status: 'done', progress: 100 })}`).then(ok => ok && onSaved())}>
+                            <Check size={12}/>
+                          </button>
+                          <button type="button" title="推迟 +1 天" disabled={disabled}
+                            onClick={() => { const t = tasks.find(x => x.id === it.id); if (!t?.dueDate) return; void run(`task update ${it.id} ${JSON.stringify({ dueDate: addDays(t.dueDate, 1) })}`).then(ok => ok && onSaved()) }}>
+                            +1
+                          </button>
+                          <button type="button" title="推迟 +1 周" disabled={disabled}
+                            onClick={() => { const t = tasks.find(x => x.id === it.id); if (!t?.dueDate) return; void run(`task update ${it.id} ${JSON.stringify({ dueDate: addDays(t.dueDate, 7) })}`).then(ok => ok && onSaved()) }}>
+                            +7
+                          </button>
+                        </span>
+                      )}
+                    </div>,
+                  )}
+                </div>
+              </div>,
+            )}
+          </div>
+        </div>
+      </>}
+    </div>
+  </div>
 }
 
 /** 人员与负载视图（P0 / v0.5.1）：跨项目按人聚合 open 任务，纯只读派生 snapshot。 */
@@ -1431,7 +1579,7 @@ function ViewTab({
   onClick,
 }: {
   active: boolean
-  icon: ReactNode
+  icon?: ReactNode
   count?: number
   children: ReactNode
   onClick: () => void
