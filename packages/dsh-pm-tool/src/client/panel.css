@@ -1291,7 +1291,7 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-ms-node { display: flex; gap: 12px; position: relative; padding-bottom: 16px; }
 .pm-ms-node:last-child { padding-bottom: 4px; }
 .pm-ms-dot { width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto; margin-top: 3px; border: 2px solid var(--pm-secondary); background: transparent; position: relative; z-index: 1; }
-.pm-ms-node:not(:last-child) .pm-ms-dot::after { content: ''; position: absolute; top: 14px; left: 50%; width: 1px; height: 24px; background: var(--pm-line-strong); }
+.pm-ms-node:not(:last-child) .pm-ms-dot::after { content: ''; position: absolute; top: 7px; left: 50%; width: 1px; height: 33px; transform: translateX(-.5px); background: var(--pm-line); }
 .pm-ms-dot-ok { background: var(--pm-success); border-color: var(--pm-success); }
 .pm-ms-dot-warn { background: var(--pm-warning); border-color: var(--pm-warning); }
 .pm-ms-dot-err { background: var(--pm-danger); border-color: var(--pm-danger); }
