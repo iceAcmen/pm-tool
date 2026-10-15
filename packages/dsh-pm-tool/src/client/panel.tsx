@@ -2341,7 +2341,7 @@ function RiskIssueTable({
     </div>
 
     <div className="pm-ms-cards">
-      <div className="pm-stat-card"><strong>{openRisk}</strong><span>开放风险 · type=risk/open</span></div>
+      <div className="pm-stat-card"><strong>{openRisk}</strong><span>开放风险 · 待处理</span></div>
       <div className="pm-stat-card"><strong>{hot}</strong><span>高优先 · 高概率·高影响</span></div>
       <div className="pm-stat-card"><strong>{openIssue}</strong><span>开放问题 · 待处理/监控中</span></div>
       <div className="pm-stat-card"><strong>{overdue}</strong><span>逾期应对 · {overdue ? '有逾期' : '无逾期'}</span></div>
@@ -2359,7 +2359,7 @@ function RiskIssueTable({
               {(['low', 'medium', 'high'] as const).map(im => {
                 const cell = cellOf(pr, im)
                 return <div key={pr + im} className="pm-mtx-cell" style={{ background: matrixBg[pr][im] }}>
-                  {cell.map(r => <button key={r.id} className="pm-mtx-dot" title={`${r.id} ${r.title}`} onClick={() => onEdit(r)}>{r.id.replace(/^ri-/, '')}</button>)}
+                  {cell.map(r => <button key={r.id} className="pm-mtx-dot" title={`${r.id} ${r.title}`} onClick={() => onEdit(r)}>{r.id}</button>)}
                 </div>
               })}
             </>

@@ -1322,7 +1322,7 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-mtx-colh { text-align: center; font-size: 10.5px; color: var(--pm-secondary); padding-bottom: 2px; }
 .pm-mtx-rowh { display: flex; align-items: center; justify-content: center; font-size: 10.5px; color: var(--pm-secondary); }
 .pm-mtx-cell { height: 56px; border-radius: 7px; border: 1px solid var(--pm-line); padding: 4px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px; }
-.pm-mtx-dot { border: 0; border-radius: 6px; background: var(--pm-danger); color: rgb(255,255,255); font-size: 10px; font-weight: 700; padding: 2px 6px; cursor: pointer; }
+.pm-mtx-dot { border: 0; border-radius: 6px; background: var(--pm-danger); color: rgb(255,255,255); font-size: 9px; font-weight: 700; padding: 2px 5px; cursor: pointer; white-space: nowrap; line-height: 1.2; }
 .pm-ri-list { display: flex; flex-direction: column; gap: 8px; }
 .pm-ri-item { text-align: left; border: 1px solid var(--pm-line); border-radius: 9px; background: transparent; padding: 9px 11px; cursor: pointer; display: block; }
 .pm-ri-item:hover { border-color: var(--pm-accent); }
