@@ -640,7 +640,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : view === 'gantt' || view === 'milestones' || view === 'risk-issues'
+              : view === 'gantt' || view === 'milestones' || view === 'risk-issues' || view === 'people'
                 ? null
                 : <>
                   <ProjectBar
@@ -737,9 +737,11 @@ export function PmPanel({ execute }: PmPanelApi) {
               {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
               {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
               {view === 'people' && <PeopleView
-                data={data}
-                onPickProject={(id) => setSelected(id)}
+                project={project}
+                tasks={tasks}
+                riskIssues={riskIssues}
                 onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}
+                onGotoView={changeView}
               />}
             </section>
           </>}
@@ -1070,7 +1072,7 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
 }
 
 /** 人员与负载视图（P0 / v0.5.1）：跨项目按人聚合 open 任务，纯只读派生 snapshot。 */
-function PeopleView({ data, onPickProject, onOpenRecord }: {
+function CrossProjectPeople({ data, onPickProject, onOpenRecord }: {
   data: Snapshot
   onPickProject?: (id: string) => void
   onOpenRecord?: (projectId: string, type: string, id: string) => void
@@ -1247,7 +1249,144 @@ function PeopleView({ data, onPickProject, onOpenRecord }: {
   </section>
 }
 
-/** 总览看板内的跨项目人员负载区块（复用 PeopleView 全部工具栏/卡片/空态）。 */
+const CAPACITY = 5 // 规划假设：每人同时进行任务上限，可在此调整
+
+/** 单项目成员视图：按真实任务状态聚合（含 done），不硬凑设计稿数字。 */
+function PeopleView({ project, tasks, riskIssues, onOpenRecord, onGotoView }: {
+  project: Project
+  tasks: Task[]
+  riskIssues: RiskIssue[]
+  onOpenRecord: (projectId: string, type: string, id: string) => void
+  onGotoView: (v: View) => void
+}) {
+  const today = useMemo(() => {
+    const n = new Date()
+    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
+  }, [])
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
+
+  // 成员集合：项目负责人 + 任务 assignee + 风险 owner（归一化 key 去重）
+  const members = useMemo(() => {
+    const map = new Map<string, { key: string; name: string; isOwner: boolean }>()
+    const ownerKey = normalizePerson(project.owner)
+    if (!map.has(ownerKey)) map.set(ownerKey, { key: ownerKey, name: project.owner, isOwner: true })
+    for (const t of tasks) {
+      if (!t.assignee) continue
+      const k = normalizePerson(t.assignee)
+      if (!map.has(k)) map.set(k, { key: k, name: t.assignee, isOwner: false })
+    }
+    for (const r of riskIssues) {
+      if (!r.owner) continue
+      const k = normalizePerson(r.owner)
+      if (!map.has(k)) map.set(k, { key: k, name: r.owner, isOwner: false })
+    }
+    return [...map.values()]
+  }, [project.owner, tasks, riskIssues])
+
+  const stats = useMemo(() => members.map(m => {
+    const mine = tasks.filter(t => t.assignee && normalizePerson(t.assignee) === m.key)
+    const done = mine.filter(t => t.status === 'done').length
+    const inProgress = mine.filter(t => t.status === 'in_progress').length
+    const blocked = mine.filter(t => t.status === 'blocked').length
+    const todo = mine.filter(t => t.status === 'todo').length
+    const overdue = mine.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+    return { ...m, total: mine.length, done, inProgress, blocked, todo, overdue, tasks: mine }
+  }), [members, tasks, today])
+
+  const inProgCount = stats.reduce((n, s) => n + s.inProgress, 0)
+  const doneCount = stats.reduce((n, s) => n + s.done, 0)
+  const inProgPeople = stats.filter(s => s.inProgress > 0).length
+  const donePeople = stats.filter(s => s.done > 0)
+  const alerts = stats.flatMap(s => [
+    ...s.overdue.map(t => ({ who: s.name, kind: '逾期', id: t.id })),
+    ...s.tasks.filter(t => t.status === 'blocked').map(t => ({ who: s.name, kind: '阻塞', id: t.id })),
+  ])
+  const executorCount = stats.filter(s => !s.isOwner).length
+  const maxTotal = Math.max(1, ...stats.map(s => s.total))
+
+  if (!stats.length) {
+    return <div className="pm-ppl-page"><div className="pm-table-frame"><TableEmpty text="暂无成员数据，先拆解 WBS 并指定负责人"/></div></div>
+  }
+
+  const loadPct = (s: typeof stats[number]) => Math.min(100, Math.round((s.inProgress + s.blocked) / CAPACITY * 100))
+  const badge = (s: typeof stats[number]) => {
+    if (s.overdue.length) return { cls: 'pm-ppl-badge-err', text: `逾期 ${s.overdue.length}` }
+    if (s.blocked) return { cls: 'pm-ppl-badge-warn', text: `阻塞 ${s.blocked}` }
+    if (s.total === 0) return { cls: 'pm-ppl-badge-idle', text: 'PM 统筹' }
+    if (s.inProgress + s.blocked === 0) return { cls: 'pm-ppl-badge-idle', text: '未开始' }
+    return { cls: 'pm-ppl-badge-info', text: `负载 ${loadPct(s)}%` }
+  }
+  const toggle = (k: string) => setExpanded(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n })
+
+  return <div className="pm-ppl-page">
+    <h1 className="pm-page-title">成员</h1>
+    <div className="pm-sub">{project.id} · {stats.length} 人 · 进行中任务 {inProgCount} · 已完成 {doneCount}</div>
+
+    <div className="pm-ms-cards">
+      <div className="pm-stat-card"><strong>{stats.length}</strong><span>{executorCount} 执行人 + PM</span></div>
+      <div className="pm-stat-card"><strong>{inProgCount}</strong><span>进行中任务 · 分布于 {inProgPeople} 人</span></div>
+      <div className="pm-stat-card"><strong>{doneCount}</strong><span>完成 · {donePeople.length > 1 ? donePeople.map(d => d.name).slice(0, 2).join(' · ') + ' 等' : donePeople[0]?.name || '—'}</span></div>
+      <div className="pm-stat-card"><strong>{alerts.length}</strong><span>{alerts.length ? alerts.map(a => `${a.who}·${a.kind} ${a.id}`).join('；') : '无告警'}</span></div>
+    </div>
+
+    <div className="pm-ppl-grid">
+      {stats.map(s => {
+        const b = badge(s)
+        const open = expanded.has(s.key)
+        return <div className="pm-ppl-card" key={s.key}>
+          <button className="pm-ppl-cardhead" onClick={() => toggle(s.key)}>
+            <span className="pm-person"><span>{s.name.slice(0, 1)}</span>{s.name}</span>
+            <span className="pm-ppl-role">{s.isOwner ? '项目负责人' : '团队成员'}</span>
+            <span className={`pm-chip ${b.cls}`}>{b.text}</span>
+          </button>
+          <div className="pm-ppl-count">任务 {s.total} · 进行 {s.inProgress} · 完成 {s.done}{s.blocked ? ` · 阻塞 ${s.blocked}` : ''}{s.todo ? ` · 待办 ${s.todo}` : ''}</div>
+          <div className="pm-ppl-bar">
+            {s.total > 0 && <>
+              <span className="pm-ppl-seg done" style={{ flexGrow: s.done }} title={`已完成 ${s.done}`}/>
+              <span className="pm-ppl-seg prog" style={{ flexGrow: s.inProgress }} title={`进行中 ${s.inProgress}`}/>
+              <span className="pm-ppl-seg blocked" style={{ flexGrow: s.blocked }} title={`阻塞 ${s.blocked}`}/>
+              <span className="pm-ppl-seg todo" style={{ flexGrow: s.todo }} title={`待办 ${s.todo}`}/>
+            </>}
+          </div>
+          {s.isOwner && <div className="pm-ppl-note">统筹 · 风险 owner · 不派任务</div>}
+          {open && s.tasks.length > 0 && <ul className="pm-ppl-tasks">
+            {s.tasks.map(t => <li key={t.id}>
+              <button onClick={() => onOpenRecord(project.id, 'task', t.id)}>
+                <span className="pm-ri-id">{t.code} {t.title}</span>
+                <StatusTag kind="task" value={t.status}/>
+                <span className="pm-ri-due">截止 {t.dueDate || '—'}</span>
+              </button>
+            </li>)}
+          </ul>}
+        </div>
+      })}
+    </div>
+
+    <div className="pm-ppl-dist card">
+      <div className="pm-ri-cardhead">成员负载分布 · 按状态</div>
+      <div className="pm-ppl-legend">
+        <span><i className="pm-ppl-seg done"/>已完成</span>
+        <span><i className="pm-ppl-seg prog"/>进行中</span>
+        <span><i className="pm-ppl-seg blocked"/>阻塞</span>
+        <span><i className="pm-ppl-seg todo"/>待办</span>
+      </div>
+      {stats.map(s => {
+        const w = s.total / maxTotal * 100
+        return <div className="pm-ppl-row" key={s.key}>
+          <span className="pm-ppl-name">{s.name}{s.overdue.length ? ` · 逾期${s.overdue.length}` : ''}{s.blocked ? ` · 阻塞${s.blocked}` : ''}</span>
+          <div className="pm-ppl-bar" style={{ width: `${Math.max(4, w)}%` }}>
+            <span className="pm-ppl-seg done" style={{ flexGrow: s.done }}/>
+            <span className="pm-ppl-seg prog" style={{ flexGrow: s.inProgress }}/>
+            <span className="pm-ppl-seg blocked" style={{ flexGrow: s.blocked }}/>
+            <span className="pm-ppl-seg todo" style={{ flexGrow: s.todo }}/>
+          </div>
+          <span className="pm-ri-id">{s.total}</span>
+        </div>
+      })}
+    </div>
+    <p className="pm-ppl-footnote">注：角色/权限为未来多人协作预留，落地以真实成员模型为准。</p>
+  </div>
+}
 function BoardPeopleSection({ data, onPickProject, onOpenRecord }: {
   data: Snapshot
   onPickProject: (id: string) => void
@@ -1255,7 +1394,7 @@ function BoardPeopleSection({ data, onPickProject, onOpenRecord }: {
 }) {
   return <div className="pm-board-section">
     <h2>人员负载（跨项目）</h2>
-    <PeopleView data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
+    <CrossProjectPeople data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
   </div>
 }
 
