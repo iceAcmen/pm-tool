@@ -57,14 +57,13 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
           : <button type="button" className="pm-plain-icon" onClick={startEdit}>布局编辑</button>}
       </div>
     </div>
-    <div className={`pm-rgl pm-rgl-editing-${editing ? 'on' : 'off'}`}>
+    <div className={`pm-bento-grid ${editing ? 'pm-rgl-editing' : ''}`}>
       <GridLayout
         className="pm-rgl"
         layout={rglLayout}
         cols={GRID.cols}
         rowHeight={GRID.rowHeight}
         margin={GRID.margin}
-        width={1200}
         isDraggable={editing}
         isResizable={editing}
         compactType="vertical"
