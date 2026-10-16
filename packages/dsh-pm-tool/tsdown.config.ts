@@ -44,6 +44,7 @@ const config: UserConfig = {
     /^js-tokens(?:\/|$)/,
     /^object-assign(?:\/|$)/,
     /^zod(?:\/|$)/,
+    /^expr-eval(?:\/|$)/,
   ],
   // dnd-kit 式 CJS 分支所需：与宿主 clientConfig 对齐，避免运行时取错 dev/prod 构建。
   define: {
