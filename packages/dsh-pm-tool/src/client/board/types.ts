@@ -85,11 +85,21 @@ export interface WidgetActions {
   pickProject: (id: string) => void
 }
 
+/** 联动筛选维度。 */
+export type LinkageDim = 'assignee' | 'status' | 'priority' | 'project'
+
+/** 跨卡片联动筛选：dim -> 当前选中值（单值；再点同值取消）。 */
+export type LinkageState = Partial<Record<LinkageDim, string>>
+
 export interface WidgetContext<TConfig = WidgetConfig> {
   data: Snapshot
   config: TConfig
   actions: WidgetActions
   isEditing: boolean
+  /** 当前联动筛选（浏览态由 BoardBento 注入；编辑态为 undefined）。 */
+  linkage?: LinkageState
+  /** 点击卡内可联动元素时回调（dim/value；value 为空表示清除该维）。 */
+  onLink?: (dim: LinkageDim, value: string) => void
   /** 公式求值器：浏览态由主包惰性注入（expr-eval 在异步块）；未就绪时为 undefined。 */
   evaluateFormula?: (expr: string, ctx: import('./formula.js').FormulaContext) => import('./formula.js').FormulaResult
 }

@@ -7,7 +7,7 @@
  */
 import React, { useEffect, useMemo, useState } from 'react'
 import type { Snapshot } from '../panel.js'
-import { GRID, type DashboardLayout, type FilterRule, type WidgetActions, type WidgetEntity, type WidgetScope } from './types.js'
+import { GRID, type DashboardLayout, type FilterRule, type LinkageDim, type LinkageState, type WidgetActions, type WidgetEntity, type WidgetScope } from './types.js'
 import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
 import { resolveDashboard, parseLayout } from './persist.js'
@@ -33,6 +33,17 @@ export function BoardBento({ data, actions, persistence }: {
   const [editorError, setEditorError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
+  /** P2-① 跨卡片联动筛选（临时态，不写盘）。 */
+  const [linkage, setLinkage] = useState<LinkageState>({})
+  const onLink = (dim: LinkageDim, value: string) => {
+    setLinkage(prev => {
+      const next = { ...prev }
+      // 再点同值取消该维；否则设为新值。
+      if (next[dim] === value) delete next[dim]
+      else next[dim] = value
+      return next
+    })
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editor, setEditor] = useState<{ BoardEditor: (props: BoardEditorProps) => React.ReactNode } | null>(null)
 
@@ -76,7 +87,7 @@ export function BoardBento({ data, actions, persistence }: {
   const renderCard = (w: DashboardLayout['widgets'][number], isEditing: boolean) => {
     const desc = WIDGET_REGISTRY.get(w.type)
     if (!desc) return <div key={w.layout.i}/>
-    return desc.render({ data, config: w.config, actions, isEditing, evaluateFormula })
+    return desc.render({ data, config: w.config, actions, isEditing, evaluateFormula, linkage: isEditing ? undefined : linkage, onLink: isEditing ? undefined : onLink })
   }
 
   return <div className="pm-bento">
@@ -95,6 +106,19 @@ export function BoardBento({ data, actions, persistence }: {
       </div>
     </div>
 
+    {!editing && Object.keys(linkage).length > 0 && (
+      <div className="pm-linkbar">
+        <span className="pm-linkbar-label">联动筛选</span>
+        {(Object.entries(linkage) as [LinkageDim, string][]).map(([dim, value]) => (
+          <span key={dim} className="pm-linkchip">
+            {({ assignee: '执行人', status: '状态', priority: '优先级', project: '项目' } as Record<string,string>)[dim]}：{value}
+            <button type="button" className="pm-linkchip-x" aria-label="清除"
+              onClick={() => setLinkage(prev => { const n = { ...prev }; delete n[dim]; return n })}>×</button>
+          </span>
+        ))}
+        <button type="button" className="pm-linkbar-clear" onClick={() => setLinkage({})}>全部清除</button>
+      </div>
+    )}
     {(banner || editorError) && (
       <div className="pm-bento-validation" role="alert">
         <span>{editorError ?? banner}</span>

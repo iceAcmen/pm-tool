@@ -3,14 +3,45 @@
  * 自包含：RGL + WidthProvider、卡片库抽屉、右侧配置面板、zod 保存闸门、导入/导出/重置。
  * 不反向 import 主包：卡片渲染、字段白名单、目录、试算全部经 props 注入（避免共享块/同步兄弟 require）。
  */
-import React, { useMemo, useRef, useState } from 'react'
-import RGL, { WidthProvider, type Layout } from 'react-grid-layout'
+import React, { useEffect, useMemo, useRef, useState, type ComponentType } from 'react'
+import RGL, { type Layout } from 'react-grid-layout'
 import { z } from 'zod'
 import type { Snapshot } from '../panel.js'
 import type { DashboardLayout, FilterRule, WidgetActions, WidgetInstance, WidgetScope } from './types.js'
 import type { WidgetCatalogEntry } from './widgets.js'
 
-const GridLayout = WidthProvider(RGL)
+/**
+ * 自适应宽度 RGL：替代 RGL 1.4.4 的 WidthProvider（只在 window resize 时测量，
+ * flex 布局初次挂载 clientWidth=0 会被固定成 0；卡片库/配置面板开关是 flex 变化不触发 window resize）。
+ * 这里用 ResizeObserver 监听容器 clientWidth 即时把 width 传给 RGL，rAF 先测一次，window resize 兜底。
+ */
+function ResizeWidthRGL(props: React.ComponentProps<typeof RGL>) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(0)
+  useEffect(() => {
+    let raf = 0
+    const measure = () => {
+      const w = wrapRef.current?.clientWidth ?? 0
+      if (w > 0) setWidth(w)
+    }
+    raf = requestAnimationFrame(measure)
+    let ro: ResizeObserver | null = null
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(measure)
+      if (wrapRef.current) ro.observe(wrapRef.current)
+    }
+    window.addEventListener('resize', measure)
+    return () => {
+      cancelAnimationFrame(raf)
+      ro?.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+  return <div ref={wrapRef} style={{ width: '100%' }}>
+    {width > 0 && <RGL {...props} width={width} />}
+  </div>
+}
+const GridLayout: ComponentType<React.ComponentProps<typeof RGL>> = ResizeWidthRGL
 
 let idSeq = 100
 function nextId(): string { return `w-user-${++idSeq}` }
@@ -215,55 +246,57 @@ export function BoardEditor(props: BoardEditorProps) {
       <button type="button" className="pm-button-primary" onClick={() => void saveEdit()}>保存</button>
     </div>
 
-    {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget}/>}
-    <div className="pm-bento-grid pm-rgl-editing">
-      <GridLayout
-        className="pm-rgl"
-        layout={rglLayout}
-        cols={grid.cols}
-        rowHeight={grid.rowHeight}
-        margin={grid.margin}
-        isDraggable
-        isResizable
-        isDroppable
-        onDrop={(_droppedLayout: Layout[], layoutItem: Layout | undefined, e: React.DragEvent) => {
-          const type = e?.dataTransfer?.getData?.('widget-type')
-          if (!type) return
-          // RGL 正常会给出 layoutItem.x/y（按落点像素换算）；异常时从栅格容器坐标兜底换算。
-          let x = layoutItem?.x
-          let y = layoutItem?.y
-          if (x === undefined || y === undefined) {
-            const gridEl = e.currentTarget as HTMLElement
-            const rect = gridEl.getBoundingClientRect()
-            const colW = (rect.width - grid.margin[0]) / grid.cols
-            x = Math.max(0, Math.floor((e.clientX - rect.left) / (colW + grid.margin[0])))
-            y = Math.max(0, Math.floor((e.clientY - rect.top) / (grid.rowHeight + grid.margin[1])))
-          }
-          addWidgetAt(type, x, y)
-        }}
-        compactType="vertical"
-        onLayoutChange={(next: Layout[]) => {
-          setDraft(d => ({
-            ...d,
-            widgets: d.widgets.map(w => {
-              const l = next.find(n => n.i === w.layout.i)
-              return l ? { ...w, layout: { ...w.layout, x: l.x, y: l.y, w: l.w, h: l.h } } : w
-            }),
-          }))
-        }}
-      >
-        {live.widgets.map(w => {
-          const sel = selectedId === w.layout.i
-          return <div key={w.layout.i}
-            className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`}
-            onClick={(e) => { e.stopPropagation(); setSelectedId(w.layout.i) }}>
-            <button type="button" className="pm-rgl-x" title="移除卡片" onClick={(e) => { e.stopPropagation(); removeWidget(w.layout.i) }}>×</button>
-            {renderCard(w, true)}
-          </div>
-        })}
-      </GridLayout>
+    <div className="pm-bento-stage">
+      {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget}/>}
+      <div className="pm-bento-grid pm-rgl-editing">
+        <GridLayout
+          className="pm-rgl"
+          layout={rglLayout}
+          cols={grid.cols}
+          rowHeight={grid.rowHeight}
+          margin={grid.margin}
+          isDraggable
+          isResizable
+          isDroppable
+          onDrop={(_droppedLayout: Layout[], layoutItem: Layout | undefined, e: React.DragEvent) => {
+            const type = e?.dataTransfer?.getData?.('widget-type')
+            if (!type) return
+            // RGL 正常会给出 layoutItem.x/y（按落点像素换算）；异常时从栅格容器坐标兜底换算。
+            let x = layoutItem?.x
+            let y = layoutItem?.y
+            if (x === undefined || y === undefined) {
+              const gridEl = e.currentTarget as HTMLElement
+              const rect = gridEl.getBoundingClientRect()
+              const colW = (rect.width - grid.margin[0]) / grid.cols
+              x = Math.max(0, Math.floor((e.clientX - rect.left) / (colW + grid.margin[0])))
+              y = Math.max(0, Math.floor((e.clientY - rect.top) / (grid.rowHeight + grid.margin[1])))
+            }
+            addWidgetAt(type, x, y)
+          }}
+          compactType="vertical"
+          onLayoutChange={(next: Layout[]) => {
+            setDraft(d => ({
+              ...d,
+              widgets: d.widgets.map(w => {
+                const l = next.find(n => n.i === w.layout.i)
+                return l ? { ...w, layout: { ...w.layout, x: l.x, y: l.y, w: l.w, h: l.h } } : w
+              }),
+            }))
+          }}
+        >
+          {live.widgets.map(w => {
+            const sel = selectedId === w.layout.i
+            return <div key={w.layout.i}
+              className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`}
+              onClick={(e) => { e.stopPropagation(); setSelectedId(w.layout.i) }}>
+              <button type="button" className="pm-rgl-x" title="移除卡片" onClick={(e) => { e.stopPropagation(); removeWidget(w.layout.i) }}>×</button>
+              {renderCard(w, true)}
+            </div>
+          })}
+        </GridLayout>
+      </div>
+      {selected && <ConfigPanel inst={selected} data={data} fieldWhitelist={fieldWhitelist} onTrial={onTrial} onPatch={(p) => updateConfig(selected.layout.i, p)} onClose={() => setSelectedId(null)}/>}
     </div>
-    {selected && <ConfigPanel inst={selected} data={data} fieldWhitelist={fieldWhitelist} onTrial={onTrial} onPatch={(p) => updateConfig(selected.layout.i, p)} onClose={() => setSelectedId(null)}/>}
   </div>
 }
 
@@ -396,13 +429,21 @@ function ConfigPanel({ inst, data, fieldWhitelist, onPatch, onClose, onTrial }: 
     </div>}
 
     {tab === 'show' && <div className="pm-cfg-fld">
-      {[['pill', '状态标签'], ['date', '日期'], ['owner', '负责人']].map(([k, label]) => {
+      {[['pill', '状态标签'], ['date', '日期'], ['owner', '负责人'], ['legend', '图例'], ['progress', '进度条']].map(([k, label]) => {
         const on = cfg.show?.[k] !== false
         return <div key={k} className="pm-cfg-chk">
           <span>{label}</span>
           <button type="button" className={`pm-cfg-sw ${on ? '' : 'off'}`} onClick={() => onPatch({ show: { ...cfg.show, [k]: !on } })}/>
         </div>
       })}
+      <label>排版密度</label>
+      <select className="pm-cfg-sel" value={(cfg.density as string) ?? 'comfortable'} onChange={e => onPatch({ density: e.target.value })}>
+        <option value="comfortable">舒适</option>
+        <option value="compact">紧凑</option>
+      </select>
+      <label>最多显示条数</label>
+      <input className="pm-cfg-sel" type="number" min={1} max={50} value={(cfg.maxItems as number) ?? 8}
+        onChange={e => onPatch({ maxItems: Math.max(1, Math.min(50, Number(e.target.value) || 8)) })}/>
       <label>数字格式</label>
       <select className="pm-cfg-sel" value={cfg.numberFormat ?? 'int'} onChange={e => onPatch({ numberFormat: e.target.value as 'int' | 'pct' })}>
         <option value="int">整数</option>

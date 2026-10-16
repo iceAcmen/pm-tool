@@ -121,6 +121,24 @@ try {
   assert.equal(emptyOut.empty, true)
   assert.equal(emptyOut.reason, '统计窗口内尚无完成记录')
 
+  // ── 4b. completionTrend 渲染层 projectScope 过滤（与 widgets.tsx 一致） ──
+  const allTasks = [
+    { projectId: 'p-A', completedDate: '2026-09-08' },
+    { projectId: 'p-A', completedDate: '2026-09-09' },
+    { projectId: 'p-B', completedDate: '2026-09-07' },
+  ]
+  const scoped = (scope) => scope && scope !== 'all' ? allTasks.filter(t => t.projectId === scope) : allTasks
+  // 空项目 → empty
+  const hEmpty = buildCompletionHistory(scoped('p-NOPE'), { today: '2026-09-14' })
+  assert.equal(hEmpty.empty, true, 'scope 限定到无任务项目应 empty')
+  // p-A → 只含该项目累计 2
+  const hA = buildCompletionHistory(scoped('p-A'), { today: '2026-09-14' })
+  assert.equal(hA.empty, false)
+  assert.equal(hA.weeks[hA.weeks.length - 1].cumulative, 2, 'p-A 累计应为 2')
+  // all → 3
+  const hAll = buildCompletionHistory(scoped('all'), { today: '2026-09-14' })
+  assert.equal(hAll.weeks[hAll.weeks.length - 1].cumulative, 3, 'all 累计应为 3')
+
   // ── 5. backfill-completed：旧 done 任务回填 ──────────────────────────────
   // 构造“遗留” done 任务（直接写表绕过自动流转，模拟 v1/v2 历史数据无 completedDate）
   const legacyWithDue = structuredClone(getTask(domain, 't-0002'))

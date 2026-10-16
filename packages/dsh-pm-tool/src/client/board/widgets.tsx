@@ -8,6 +8,7 @@ import type { Snapshot, Task } from '../panel.js'
 import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap } from '../../core/progress-derivation.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
+import { buildCompletionHistory } from '../../core/completion-history.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
 
@@ -25,30 +26,69 @@ const TONE = {
   due: 'var(--pm-st-due)',
 } as const
 
-/** 安全 markdown 子集：先转义 HTML 防 XSS，再做极轻量行内/块级转换。 */
+/** 安全 markdown：先全量 HTML 转义，再做块级/行内转换；链接仅允许 http/https。 */
 function renderMarkdown(src: string): string {
   const esc = src.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
   const lines = esc.split(/\r?\n/)
   const out: string[] = []
-  let inList = false
-  for (const line of lines) {
-    if (/^\s*[-*]\s+/.test(line)) {
-      if (!inList) { out.push('<ul>'); inList = true }
-      out.push('<li>' + inline(line.replace(/^\s*[-*]\s+/, '')) + '</li>')
+  let listType: 'ul' | 'ol' | null = null
+  const closeList = () => { if (listType) { out.push(listType === 'ul' ? '</ul>' : '</ol>'); listType = null } }
+  for (const raw of lines) {
+    const line = raw
+    // 分隔线
+    if (/^\s*(-\s*){3,}$/.test(line) || /^\s*(\*\s*){3,}$/.test(line)) { closeList(); out.push('<hr/>'); continue }
+    // 标题
+    if (/^#{1,3}\s+/.test(line)) { closeList(); out.push('<div class="pm-md-h">' + inline(line.replace(/^#{1,3}\s+/, '')) + '</div>'); continue }
+    // 引用
+    if (/^\s*&gt;\s?/.test(line)) { closeList(); out.push('<blockquote class="pm-md-q">' + inline(line.replace(/^\s*&gt;\s?/, '')) + '</blockquote>'); continue }
+    // 任务清单 - [ ] / - [x]
+    const task = line.match(/^\s*[-*]\s+\[( |x|X)\]\s+(.*)$/)
+    if (task) {
+      if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul' }
+      const checked = task[1].toLowerCase() === 'x'
+      out.push(`<li class="pm-md-task"><input type="checkbox" disabled ${checked ? 'checked' : ''}/> ` + inline(task[2]) + '</li>')
       continue
     }
-    if (inList) { out.push('</ul>'); inList = false }
-    if (/^#{1,3}\s+/.test(line)) out.push('<div class="pm-md-h">' + inline(line.replace(/^#{1,3}\s+/, '')) + '</div>')
-    else if (line.trim() === '') out.push('')
+    // 无序列表（含嵌套缩进）
+    const ul = line.match(/^(\s*)[-*]\s+(.*)$/)
+    if (ul) {
+      if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul' }
+      out.push('<li>' + inline(ul[2]) + '</li>')
+      continue
+    }
+    // 有序列表
+    const ol = line.match(/^\s*\d+\.\s+(.*)$/)
+    if (ol) {
+      if (listType !== 'ol') { closeList(); out.push('<ol>'); listType = 'ol' }
+      out.push('<li>' + inline(ol[1]) + '</li>')
+      continue
+    }
+    // 代码块 ```
+    if (/^\s*```/.test(line)) { closeList(); out.push('<pre class="pm-md-pre"><code>' + line.replace(/^\s*```\w*/, '') + '</code></pre>'); continue }
+    // 表格（首行 | a | b |，次行 |---|---|）
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      closeList()
+      const cells = line.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim())
+      if (cells.every(c => /^:?-{2,}:?$/.test(c))) continue // 分隔行
+      out.push('<div class="pm-md-table"><div class="pm-md-tr">' + cells.map(c => `<span>${inline(c)}</span>`).join('') + '</div></div>')
+      continue
+    }
+    closeList()
+    if (line.trim() === '') out.push('')
     else out.push('<p>' + inline(line) + '</p>')
   }
-  if (inList) out.push('</ul>')
+  closeList()
   return out.join('\n')
   function inline(s: string): string {
     return s
+      .replace(/~~([^~]+)~~/g, '<del>$1</del>')
       .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/(^|[^*])\*([^*]+)\*/g, '$1<i>$2</i>')
       .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (_m, text, url) => {
+        const safe = /^https?:\/\//i.test(url) ? url : '#'
+        return `<a href="${safe}" target="_blank" rel="noreferrer">${text}</a>`
+      })
   }
 }
 
@@ -60,7 +100,7 @@ const completionHero: WidgetDescriptor = {
   defaultW: 4, defaultH: 10, minW: 3, minH: 6,
   requiredSources: ['projects', 'tasks'],
   defaultConfig: {},
-  render({ data, actions }) {
+  render({ data, actions, onLink, linkage }) {
     const today = todayIso()
     const total = data.tasks.length
     const done = data.tasks.filter(t => t.status === 'done').length
@@ -70,11 +110,11 @@ const completionHero: WidgetDescriptor = {
     const rate = total ? Math.round(done / total * 100) : 0
     const circ = 2 * Math.PI * 56
     const offset = circ * (1 - rate / 100)
-    const buckets: Array<[string, number, string]> = [
-      ['进行', inProgress, TONE.progress],
-      ['完成', done, TONE.done],
-      ['待办', todo, TONE.todo],
-      ['阻塞', blocked, TONE.blocked],
+    const buckets: Array<[string, number, string, string]> = [
+      ['进行', inProgress, TONE.progress, 'in_progress'],
+      ['完成', done, TONE.done, 'done'],
+      ['待办', todo, TONE.todo, 'todo'],
+      ['阻塞', blocked, TONE.blocked, 'blocked'],
     ]
     // 需要关注：逾期(按日期升序) > 阻塞 > 临期(7 天内，按日期升序)，最多 4 条。
     const overdue = data.tasks
@@ -104,13 +144,16 @@ const completionHero: WidgetDescriptor = {
           <text x="70" y="86" textAnchor="middle" fontSize="10" fill="var(--pm-muted)">{done} / {total}</text>
         </svg>
         <div className="pm-hero-bars">
-          {buckets.map(([label, n, color]) => (
-            <div key={label} className="pm-hero-barrow">
+          {buckets.map(([label, n, color, st]) => {
+            const active = linkage?.status === st
+            return <div key={label}
+              className={`pm-hero-barrow ${onLink ? 'pm-linkable' : ''} ${active ? 'pm-link-on' : ''}`}
+              onClick={() => onLink && onLink('status', st)}>
               <span>{label}</span>
               <div className="pm-pbar"><i style={{ width: `${total ? n / total * 100 : 0}%`, background: color }}/></div>
               <span className="pm-bento-m">{n}</span>
             </div>
-          ))}
+          })}
         </div>
       </div>
       <div className="pm-bento-label" style={{ marginTop: 18, color: 'var(--pm-ink)' }}>需要关注 · {attn.length}</div>
@@ -256,8 +299,8 @@ const peopleLoad: WidgetDescriptor = {
   defaultW: 8, defaultH: 3, minW: 4, minH: 2,
   requiredSources: ['tasks', 'projects'],
   defaultConfig: {},
-  render({ data }) {
-    // 总览成员负载卡：按「全部任务（含已完成）」4 状态分段，与终稿一致。
+  render({ data, onLink, linkage }) {
+    // 总览成员负载卡：按「全部任务（含已完成）」4 状态分段。
     // 注意：PeopleView / verify-people-load 的 open-only 口径在 panel.tsx 保持不动。
     const rows = new Map<string, { display: string, done: number, progress: number, blocked: number, todo: number }>()
     for (const t of data.tasks) {
@@ -283,7 +326,11 @@ const peopleLoad: WidgetDescriptor = {
             [p.todo, TONE.todo],
           ]
           const total = p.done + p.progress + p.blocked + p.todo
-          return <div key={p.display} className="pm-barrow" data-person-key={p.display}>
+          const active = linkage?.assignee === p.display
+          return <div key={p.display}
+            className={`pm-barrow ${onLink ? 'pm-linkable' : ''} ${active ? 'pm-link-on' : ''}`}
+            data-person-key={p.display}
+            onClick={() => onLink && onLink('assignee', p.display)}>
             <span className="pm-ppl-name">{p.display}</span>
             <div className="pm-stacked">
               {segs.map(([n, c], i) => n > 0 && <i key={i} style={{ width: `${n / max * 100}%`, background: c }}/>)}
@@ -396,24 +443,38 @@ const recordList: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 5, minW: 3, minH: 3,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], sort: { field: 'date', dir: 'asc' }, numberFormat: 'int' },
-  render({ data, config, actions }) {
+  render({ data, config, actions, linkage }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
     // raw 记录用于按字段名过滤（与 rows 同序）。
     const rawKey: WidgetEntity = entity
     const rawList: Array<Record<string, unknown>> = rawListFor(data, rawKey)
     const filtered = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters)
-    const sorted = applySort(filtered, config.sort)
+    // P2-① 联动叠加：按 dim 在 raw 记录上过滤，与卡片自身 config 筛选取交集。
+    const linkageIds = linkage ? new Set(
+      rawList
+        .filter(r =>
+          (!linkage.assignee || String(r.assignee ?? '') === linkage.assignee) &&
+          (!linkage.status || String(r.status ?? '') === linkage.status) &&
+          (!linkage.project || String(r.projectId ?? '') === linkage.project))
+        .map(r => String(r.id)),
+    ) : null
+    const linked = linkageIds ? filtered.filter(r => linkageIds.has(r.id)) : filtered
+    const sorted = applySort(linked, config.sort)
     const title = config.title ?? ENTITY_LABEL[entity]
-    return <div className="pm-bento-card">
+    const showPill = config.show?.pill !== false
+    const showDate = config.show?.date !== false
+    const maxItems = typeof config.maxItems === 'number' ? config.maxItems : 8
+    const compact = config.density === 'compact'
+    return <div className={`pm-bento-card ${compact ? 'pm-bento-compact' : ''}`}>
       <div className="pm-bento-label">{title}<span className="pm-bento-m">{sorted.length} 条</span></div>
       <div className="pm-rec-list">
-        {sorted.slice(0, 8).map(r => (
+        {sorted.slice(0, maxItems).map(r => (
           <button key={r.id} type="button" className="pm-rec" data-open-record data-open-type={r.recordType} data-open-id={r.id}
             onClick={() => actions.openRecord(r.projectId, r.recordType, r.id)}>
             <span className="pm-rec-title">{r.title}</span>
-            {r.status && <span className="pm-bento-pill">{r.status}</span>}
-            <span className="pm-bento-m">{r.date?.slice(5) ?? '—'}</span>
+            {showPill && r.status && <span className="pm-bento-pill">{r.status}</span>}
+            {showDate && <span className="pm-bento-m">{r.date?.slice(5) ?? '—'}</span>}
           </button>
         ))}
         {sorted.length === 0 && <div className="pm-bento-faint">暂无符合条件的记录。</div>}
@@ -607,6 +668,52 @@ const statusRing: WidgetDescriptor<WidgetConfig> = {
   },
 }
 
+/* ---------- 13. completionTrend 完成历史趋势（纯真实 completedDate，诚实空态） ---------- */
+const completionTrend: WidgetDescriptor<WidgetConfig> = {
+  type: 'completionTrend',
+  name: '完成历史趋势',
+  category: 'progress',
+  addable: true,
+  defaultW: 6, defaultH: 4, minW: 4, minH: 3,
+  requiredSources: ['tasks'],
+  defaultConfig: { title: '完成历史趋势' },
+  render({ data, config }) {
+    // P2 修复：按卡片 projectScope 过滤任务后再统计，否则空项目仍显示全量趋势。
+    const scopedTasks = config.projectScope && config.projectScope !== 'all'
+      ? (data.tasks || []).filter(t => t.projectId === config.projectScope)
+      : (data.tasks || [])
+    const hist = buildCompletionHistory(scopedTasks as unknown as Array<{ completedDate?: string | null }>, { weeks: 8 })
+    const title = config.title ?? '完成历史趋势'
+    // SVG 几何。
+    const W = 320, H = 120, padL = 24, padR = 12, padT = 12, padB = 20
+    const iw = W - padL - padR, ih = H - padT - padB
+    const n = hist.weeks.length
+    const maxCompleted = Math.max(1, ...hist.weeks.map(w => w.completed))
+    const maxCum = Math.max(1, ...hist.weeks.map(w => w.cumulative))
+    const bw = iw / n * 0.5
+    const bx = (i: number) => padL + (iw / n) * i + (iw / n - bw) / 2
+    const barH = (c: number) => c / maxCompleted * ih
+    const cx = (i: number) => padL + (iw / n) * i + iw / n / 2
+    const cy = (cum: number) => padT + ih - (cum / maxCum) * ih
+    const linePts = hist.weeks.map((w, i) => `${cx(i)},${cy(w.cumulative)}`).join(' ')
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">{title}<span className="pm-bento-m">近 {n} 周</span></div>
+      {hist.empty
+        ? <div className="pm-trend-empty">{hist.reason ?? '尚无真实完成日期数据'}</div>
+        : <svg viewBox={`0 0 ${W} ${H}`} className="pm-trend-svg" role="img" aria-label="每周完成数与累计完成">
+            {hist.weeks.map((w, i) => (
+              <rect key={w.weekStart} x={bx(i)} y={padT + ih - barH(w.completed)} width={bw} height={barH(w.completed)}
+                fill={TONE.done} rx={2}>
+                <title>{`${w.weekStart} 完成 ${w.completed}`}</title>
+              </rect>
+            ))}
+            <polyline points={linePts} fill="none" stroke={TONE.progress} strokeWidth={1.8} strokeLinejoin="round" strokeLinecap="round"/>
+            {hist.weeks.map((w, i) => <circle key={'p' + w.weekStart} cx={cx(i)} cy={cy(w.cumulative)} r={2.4} fill={TONE.progress}/>)}
+          </svg>}
+    </div>
+  },
+}
+
 /* ---------- 12. textNote 文本/备注 ---------- */
 const textNote: WidgetDescriptor<WidgetConfig> = {
   type: 'textNote',
@@ -644,7 +751,7 @@ const divider: WidgetDescriptor = {
 /* ---------- Registry + 内置默认布局（坐标严格按方案 §4.2.1） ---------- */
 export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
   [completionHero, milestoneDeliverable, projectScale, objectiveProgress, peopleLoad, riskMatrix, weeklyPlan,
-    recordList, overdueSoon, kpiMetric, formulaCard, statusRing, textNote, divider]
+    recordList, overdueSoon, kpiMetric, formulaCard, statusRing, completionTrend, textNote, divider]
     .map(d => [d.type, d]),
 )
 
