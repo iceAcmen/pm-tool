@@ -6,7 +6,7 @@
  * 已完成(done)/已达成(achieved)不计。跨项目分组、按日期升序。
  */
 import type { PmDomain } from './storage.js'
-import { localTodayIso } from './derived.js'
+import { localTodayIso, isTaskOverdue } from './derived.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 
 export type ReminderSeverity = 'overdue' | 'due-soon'
@@ -58,7 +58,8 @@ export function computeReminders(domain: PmDomain, options: ReminderOptions = {}
     if (task.status === 'done' || (task.progress ?? 0) >= 100) continue
     if (!task.dueDate) continue
     const daysUntil = Math.round((parseDate(task.dueDate) - todayMs) / 86_400_000)
-    if (daysUntil < 0) {
+    // 逾期判定统一走 derived.isTaskOverdue（上方已先剔除 done / progress>=100 / 无日期）。
+    if (isTaskOverdue(task, today)) {
       items.push({
         kind: 'task', severity: 'overdue', projectId: task.projectId,
         projectName: projects.get(task.projectId) ?? task.projectId,

@@ -8,7 +8,7 @@
 import type { PmDomain } from './storage.js'
 import { projectIdSchema } from './project.js'
 import { todayIso } from './reminders.js'
-import { isMilestoneMissed } from './derived.js'
+import { isMilestoneMissed, isTaskOverdue } from './derived.js'
 
 export class StatsProjectNotFoundError extends Error {}
 
@@ -90,8 +90,8 @@ function statsForProject(
   const taskInProgress = tasks.filter(task => task.status === 'in_progress').length
   const taskBlocked = tasks.filter(task => task.status === 'blocked').length
   const taskTodo = tasks.filter(task => task.status === 'todo').length
-  const overdueTasks = tasks.filter(task =>
-    task.dueDate && task.dueDate < today && task.status !== 'done').length
+  // 逾期口径统一走 derived.isTaskOverdue（未完成 且 progress<100 且 dueDate<today）。
+  const overdueTasks = tasks.filter(task => isTaskOverdue(task, today)).length
   const openRisks = risks.filter(record => record.status !== 'closed')
   const openRiskByImpact = zeroImpact()
   for (const record of openRisks) openRiskByImpact[record.impact] += 1

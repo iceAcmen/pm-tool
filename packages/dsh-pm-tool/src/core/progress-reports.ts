@@ -12,6 +12,7 @@ import {
 import { projectIdSchema } from './project.js'
 import { enqueueDomainWrite } from './projects.js'
 import { deriveProjectProgress, deriveProgressMap } from './progress-derivation.js'
+import { isTaskOverdue } from './derived.js'
 import type { PmDomain } from './storage.js'
 
 export class ProgressReportProjectNotFoundError extends Error {}
@@ -48,7 +49,8 @@ function collectSnapshot(
         detail: '任务当前处于受阻状态', owner: task.assignee, dueDate: task.dueDate ?? null,
       })
     }
-    if (task.status !== 'done' && task.dueDate && task.dueDate < today) {
+    // 逾期口径统一走 derived.isTaskOverdue（未完成 且 progress<100 且 dueDate<today）。
+    if (isTaskOverdue(task, today)) {
       // 逾期文案诚实化：有客观清单信号报客观进度；否则旁注原手填值并标明未入客观口径。
       const prog = progressMap.get(task.id)
       exceptions.push({
@@ -56,7 +58,7 @@ function collectSnapshot(
         detail: prog && prog.value !== null
           ? `任务已逾期，客观进度 ${prog.value}%`
           : `任务已逾期，原手填进度 ${task.progress}%（未入客观口径）`,
-        owner: task.assignee, dueDate: task.dueDate,
+        owner: task.assignee, dueDate: task.dueDate ?? null,
       })
     }
   }

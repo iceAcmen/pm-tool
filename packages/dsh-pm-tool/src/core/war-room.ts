@@ -5,6 +5,7 @@
 
 import { isDoneStatus, isInProgressStatus } from './status.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
+import { isTaskOverdue } from './derived.js'
 
 export interface WarTask {
   id: string
@@ -49,8 +50,8 @@ export function computeKPI(
   const total = tasks.length
   const done = tasks.filter(isTaskDone).length
   const inProgress = tasks.filter(t => isInProgressStatus(t.status)).length
-  const overdueTasks = tasks.filter(t => !isTaskDone(t)
-    && t.dueDate && (daysFrom(t.dueDate, today) ?? 1) < 0).length
+  // 逾期口径统一走 derived.isTaskOverdue（与 !isTaskDone && dueDate<today 等价）。
+  const overdueTasks = tasks.filter(t => isTaskOverdue(t, today)).length
   const upcomingMilestones = milestones.filter(m => m.status !== 'achieved'
     && (daysFrom(m.targetDate, today) ?? Infinity) >= 0
     && (daysFrom(m.targetDate, today) ?? Infinity) <= windowDays).length
@@ -88,8 +89,9 @@ export function buildAgenda(
     if (isTaskDone(t) || !t.dueDate) continue
     const d = daysFrom(t.dueDate, today)
     if (d === null) continue
-    if (d < 0 || d <= windowDays) {
-      out.push({ kind: 'task', id: t.id, projectId: t.projectId, label: `任务到期 ${t.dueDate}`, days: d, overdue: d < 0 })
+    const overdue = isTaskOverdue(t, today)
+    if (overdue || d <= windowDays) {
+      out.push({ kind: 'task', id: t.id, projectId: t.projectId, label: `任务到期 ${t.dueDate}`, days: d, overdue })
     }
   }
   for (const m of milestones) {

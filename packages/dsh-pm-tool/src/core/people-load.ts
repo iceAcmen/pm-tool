@@ -10,6 +10,7 @@
  * 口径冻结见 docs/product/07-people-load-view-design.md 与 people-load-acceptance.md。
  */
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
+import { isTaskOverdue, localTodayIso } from './derived.js'
 
 export interface PeopleTaskInput {
   id: string
@@ -106,14 +107,6 @@ function isOpen(task: PeopleTaskInput): boolean {
   return task.status !== 'done' && (task.progress ?? 0) < 100
 }
 
-function todayLocal(): string {
-  const now = new Date()
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, '0')
-  const d = String(now.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
-
 /** 两个 YYYY-MM-DD 日历日相差天数（a - b）。 */
 function daysBetween(a: string, b: string): number {
   const [ay, am, ad] = a.split('-').map(Number)
@@ -174,7 +167,9 @@ function accumulate(accums: Map<string, Accum>, key: string, task: PeopleTaskInp
   if (task.priority === 'P0') row.p0 += 1
 
   const daysUntil = task.dueDate ? daysBetween(task.dueDate, today) : null
-  if (daysUntil !== null && daysUntil < 0) row.overdue += 1
+  // 逾期判定统一走 derived.isTaskOverdue（入参已先经 isOpen 过滤，二者此处等价）。
+  const overdue = isTaskOverdue(task, today)
+  if (overdue) row.overdue += 1
   else if (daysUntil !== null && daysUntil <= withinDays) row.dueSoon += 1
 
   // 最近未来截止（含今天）。
@@ -193,7 +188,7 @@ function accumulate(accums: Map<string, Accum>, key: string, task: PeopleTaskInp
     progress: task.progress ?? 0,
     dueDate: task.dueDate,
     daysUntil,
-    bucket: bucketOf(daysUntil, withinDays),
+    bucket: overdue ? 'overdue' : bucketOf(daysUntil, withinDays),
   })
 }
 
@@ -241,7 +236,7 @@ export function groupOpenTasksByAssignee(
   projects: PeopleProjectInput[],
   options: PeopleLoadOptions = {},
 ): PeopleLoadReport {
-  const today = options.today ?? todayLocal()
+  const today = options.today ?? localTodayIso()
   const withinDays = options.withinDays ?? options.settings?.reminderWithinDays ?? DEFAULT_PROJECT_SETTINGS.reminderWithinDays
   const projectNameById = new Map(projects.map(p => [p.id, p.name]))
 

@@ -7,6 +7,7 @@
  */
 import { generateDraft, type LlmGateway } from './ai-client.js'
 import { collectProjectReport, ReportProjectNotFoundError } from './report.js'
+import { isTaskOverdue } from './derived.js'
 import type { ModelRoute } from './model-route.js'
 import type { PmDomain } from './storage.js'
 
@@ -33,7 +34,8 @@ export function buildBrief(domain: PmDomain, projectId: string): Record<string, 
   const { project, tasks, milestones } = collectProjectReport(domain, projectId)
   const today = new Date().toISOString().slice(0, 10)
   const count = (status: string) => tasks.filter(t => t.status === status).length
-  const overdue = tasks.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today)
+  // 逾期口径统一走 derived.isTaskOverdue（today 沿用本函数既有 UTC 日切片，仅换谓词不动时钟源）。
+  const overdue = tasks.filter(t => isTaskOverdue(t, today))
   const upcomingMilestones = milestones.filter(m => m.status !== 'achieved' && m.targetDate >= today)
   return {
     项目: project.name,

@@ -180,7 +180,8 @@ function compute(tasks: readonly ProgressTaskInput[]): Computed {
       let checked = 0
       for (const item of raw) if (item && item.done === true) checked++
       const hasObjective = total > 0
-      const value = hasObjective ? Math.round((checked / total) * 100) : null
+      // 对外百分比一律 clamp（清单比率天然 0..100，此处为防御性收口脏值）。
+      const value = hasObjective ? clampProgress(Math.round((checked / total) * 100)) : null
       const source: ProgressSource = hasObjective ? 'checklist' : 'none'
       const pending = hasObjective && checked === total && task.status !== 'done'
       if (task.status === 'done' && hasObjective && checked < total) {
@@ -221,7 +222,7 @@ function compute(tasks: readonly ProgressTaskInput[]): Computed {
   }
 
   const finishInternal = (id: string, agg: LeafAgg): void => {
-    const value = agg.covered > 0 ? Math.round((agg.sum / agg.covered) * 100) : null
+    const value = agg.covered > 0 ? clampProgress(Math.round((agg.sum / agg.covered) * 100)) : null
     results.set(id, {
       value,
       source: agg.covered > 0 ? 'rollup' : 'none',
@@ -326,7 +327,7 @@ export function deriveProjectProgress(
   const agg = c.projectAgg.get(projectId) ?? emptyAgg()
   return {
     projectId,
-    value: agg.covered > 0 ? Math.round((agg.sum / agg.covered) * 100) : null,
+    value: agg.covered > 0 ? clampProgress(Math.round((agg.sum / agg.covered) * 100)) : null,
     coverage: { coveredLeaves: agg.covered, totalLeaves: agg.total },
     pendingAcceptanceCount: agg.pending,
     warnings: [...(c.projectWarn.get(projectId) ?? [])],
@@ -347,14 +348,33 @@ export function progressHeadline(p: TaskProgress): string {
   return '整体完成率'
 }
 
-/** 百分比文案：value=null → 「证据不足」，否则「n%」。与状态独立。 */
+/** 百分比文案：value=null → 「证据不足」，否则「n%」（对外值先 clamp，不出现越界百分比）。与状态独立。 */
 export function formatProgressValue(p: TaskProgress): string {
-  return p.value === null ? '证据不足' : `${p.value}%`
+  return p.value === null ? '证据不足' : `${clampProgress(p.value)}%`
 }
 
 /** 叶子清单独立分数文案（如 3/5）；父节点/无清单返回 null。 */
 export function checklistFraction(p: TaskProgress): string | null {
   return p.checklist ? `${p.checklist.checked}/${p.checklist.total}` : null
+}
+
+/**
+ * 展示用进度：clamp 到 0..100（非有限数 NaN/±Infinity/null/undefined → 0）。
+ * 只用于对外展示，绝不回写、不改写原始存储值；手工手填/旧记录脏值（如 123）
+ * 经此统一落到边界，避免出现越界百分比 chip。
+ */
+export function clampProgress(p: number | null | undefined): number {
+  if (typeof p !== 'number' || !Number.isFinite(p)) return 0
+  return Math.min(100, Math.max(0, p))
+}
+
+/**
+ * 原始值是否越界（给了数值但非有限数 或 <0 或 >100）：供 UI 决定是否内联提示/纠正，
+ * 纯检测、不自动改写。null / undefined = 未设定，不算越界，返回 false。
+ */
+export function isProgressOutOfRange(p: number | null | undefined): boolean {
+  if (typeof p !== 'number') return false
+  return !Number.isFinite(p) || p < 0 || p > 100
 }
 
 // ---------- #23 客观/人工双轨解析（纯函数、无 I/O、无回写） ----------
@@ -386,10 +406,13 @@ export function resolveTaskProgressMeta(
   derived: TaskProgress | undefined,
 ): TaskProgressMeta {
   const objective = derived?.value ?? null
+  // manual 保留原始值（供 isProgressOutOfRange 检测脏值、UI 内联提示/纠正），
+  // 不在这里改写原始设定；仅 display 对外展示值做 clamp。
   const manual = typeof task.manualProgress === 'number' && Number.isFinite(task.manualProgress)
     ? task.manualProgress
     : null
-  const display = manual ?? objective
+  const rawDisplay = manual ?? objective
+  const display = rawDisplay === null ? null : clampProgress(rawDisplay)
   const mode: TaskProgressMeta['mode'] = manual !== null
     ? 'manual'
     : objective !== null

@@ -83,6 +83,24 @@ export function isMilestoneMissed(
   return !!m.targetDate && m.targetDate < today
 }
 
+/**
+ * 任务是否「已逾期」——唯一纯谓词，stats / people-load / reminders / war-room 同源复用，
+ * 对齐现网 tasks.tsx isLate（P1 口径唯一，消除各模块各自算逾期）。
+ *
+ * 冻结语义：`status !== 'done'` 且 `(progress ?? 0) < 100` 且有 dueDate 且
+ * dueDate 早于本地日历日 `today`（注入，避免 UTC 偏移）。
+ * 已完成 / 进度已达 100 / 无截止日 / 今天到期 / 未来到期均不逾期。
+ */
+export function isTaskOverdue(
+  task: { status?: string, progress?: number | null, dueDate?: string | null },
+  today: string,
+): boolean {
+  return task.status !== 'done'
+    && (task.progress ?? 0) < 100
+    && !!task.dueDate
+    && task.dueDate < today
+}
+
 export interface PredecessorNode {
   id: string
   status: string
