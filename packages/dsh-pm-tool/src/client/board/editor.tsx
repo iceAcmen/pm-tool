@@ -162,6 +162,23 @@ export function BoardEditor(props: BoardEditorProps) {
     setSelectedId(i)
   }
 
+  /** P1-①：卡片库拖拽落到 RGL 栅格——按松手像素换算的 x/y 落位（非追加末尾）。 */
+  const addWidgetAt = (type: string, x: number, y: number) => {
+    const desc = catalog.find(c => c.type === type)
+    if (!desc || desc.disabled) return
+    // 单实例卡：已存在则不重复加
+    if (draft.widgets.some(w => w.type === type)) return
+    const i = nextId()
+    // 约束到栅格内
+    const cx = Math.max(0, Math.min(x, grid.cols - desc.defaultW))
+    const cy = Math.max(0, y)
+    setDraft({ ...draft, widgets: [...draft.widgets, {
+      i, type, config: structuredClone(desc.defaultConfig),
+      layout: { i, x: cx, y: cy, w: desc.defaultW, h: desc.defaultH, minW: desc.minW, minH: desc.minH },
+    }] })
+    setSelectedId(i)
+  }
+
   const removeWidget = (i: string) => {
     setDraft({ ...draft, widgets: draft.widgets.filter(w => w.layout.i !== i) })
     if (selectedId === i) setSelectedId(null)
@@ -208,6 +225,22 @@ export function BoardEditor(props: BoardEditorProps) {
         margin={grid.margin}
         isDraggable
         isResizable
+        isDroppable
+        onDrop={(_droppedLayout: Layout[], layoutItem: Layout | undefined, e: React.DragEvent) => {
+          const type = e?.dataTransfer?.getData?.('widget-type')
+          if (!type) return
+          // RGL 正常会给出 layoutItem.x/y（按落点像素换算）；异常时从栅格容器坐标兜底换算。
+          let x = layoutItem?.x
+          let y = layoutItem?.y
+          if (x === undefined || y === undefined) {
+            const gridEl = e.currentTarget as HTMLElement
+            const rect = gridEl.getBoundingClientRect()
+            const colW = (rect.width - grid.margin[0]) / grid.cols
+            x = Math.max(0, Math.floor((e.clientX - rect.left) / (colW + grid.margin[0])))
+            y = Math.max(0, Math.floor((e.clientY - rect.top) / (grid.rowHeight + grid.margin[1])))
+          }
+          addWidgetAt(type, x, y)
+        }}
         compactType="vertical"
         onLayoutChange={(next: Layout[]) => {
           setDraft(d => ({
@@ -308,7 +341,16 @@ function ConfigPanel({ inst, data, fieldWhitelist, onPatch, onClose, onTrial }: 
     {tab === 'data' && <>
       {hasEntity && <div className="pm-cfg-fld">
         <label>数据源 · 实体</label>
-        <select className="pm-cfg-sel" value={cfg.entity ?? 'tasks'} onChange={e => onPatch({ entity: e.target.value as never })}>
+        <select className="pm-cfg-sel" value={cfg.entity ?? 'tasks'}
+          onChange={e => {
+            // P1-②：切实体后筛选字段/操作符/值整体重置为新实体口径，旧实体条件不得残留。
+            const next = e.target.value as never
+            onPatch({
+              entity: next,
+              filters: [],
+              sort: { field: 'date', dir: 'asc' as const },
+            })
+          }}>
           {(['tasks', 'milestones', 'riskIssues', 'deliverables', 'meetings', 'reports', 'projects'] as const).map(en =>
             <option key={en} value={en}>{({ tasks: '任务', milestones: '里程碑', riskIssues: '风险/问题', deliverables: '交付物', meetings: '会议', reports: '汇报', projects: '项目' } as Record<string,string>)[en]}</option>)}
         </select>

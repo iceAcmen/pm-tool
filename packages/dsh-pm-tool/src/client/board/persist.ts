@@ -10,8 +10,36 @@ import type { DashboardLayout, WidgetInstance, WidgetScope } from './types.js'
 
 export const LAYOUT_VERSION = 1
 
-/** 版本迁移链：v1 -> v2 ...（P1 补全；保留 v1）。 */
-const MIGRATIONS: Array<{ from: number, to: number, apply: (l: DashboardLayout) => DashboardLayout }> = []
+export interface Migration {
+  from: number
+  to: number
+  apply: (l: DashboardLayout) => DashboardLayout
+}
+
+/**
+ * 版本迁移链（有序）。当前无真实 v2 结构变更，故 LAYOUT_VERSION 维持 1；
+ * 但 parseLayout 一律走 stepMigrations 逐级步进，后续插入 v2/v3 只需在此追加一条。
+ */
+const MIGRATIONS: Migration[] = []
+
+/**
+ * 从 layout.version 逐级迁移到 LAYOUT_VERSION。
+ * 每步纯函数、按 from->to 严格步进；若链不连续（缺某一级）抛错，避免跳级静默丢字段。
+ * 导出供 verify 单测（可注入合成链验证“必须逐级经过”）。
+ */
+export function stepMigrations(layout: DashboardLayout, chain: Migration[], target: number): DashboardLayout {
+  let cur = layout
+  let guard = 0
+  while (cur.version < target) {
+    const next = chain.find(m => m.from === cur.version)
+    if (!next) throw new Error(`迁移链缺失：version=${cur.version} -> ${cur.version + 1}`)
+    if (next.to !== next.from + 1) throw new Error(`迁移必须逐级：${next.from}->${next.to} 不合法`)
+    cur = next.apply(cur)
+    if (cur.version !== next.to) throw new Error(`迁移未正确推进版本：${next.from}->${next.to} 实际 ${cur.version}`)
+    if (++guard > 100) throw new Error('迁移链死循环')
+  }
+  return cur
+}
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v)
@@ -61,9 +89,8 @@ export function parseLayout(raw: unknown): DashboardLayout | null {
     updatedBy: typeof raw.updatedBy === 'string' ? raw.updatedBy : undefined,
     revision: asNum(raw.revision) ?? undefined,
   }
-  for (const step of MIGRATIONS) {
-    if (layout.version === step.from) layout = step.apply(layout)
-  }
+  // 逐级迁移到最新（v1 老配置照样升到最新；链不连续则抛错）。
+  layout = stepMigrations(layout, MIGRATIONS, LAYOUT_VERSION)
   return layout
 }
 

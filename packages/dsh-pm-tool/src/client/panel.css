@@ -607,13 +607,20 @@ body[data-ds-dark-theme] .pm-shell {
 }
 .pm-board-project:hover { border-color: var(--dsw-alias-border-l3); background: var(--pm-hover); }
 .pm-board-project-name {
-  display: inline-flex;
-  min-width: 100%;
+  display: flex;
+  min-width: 0;
   align-items: center;
   gap: 8px;
   margin-bottom: 4px;
   color: var(--pm-ink);
   font-weight: 600;
+}
+/* P1-④：窄卡项目名单行省略，hover title 显示全名，不撑破布局。 */
+.pm-board-project-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .pm-board-overdue { color: var(--pm-danger); font-weight: 600; }
 .pm-board-hit-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
@@ -1388,7 +1395,10 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-rgl-editing .react-grid-item > .react-resizable-handle::after { right: 2px; bottom: 2px; width: 10px; height: 10px; border: 0; border-radius: 3px; background: var(--pm-accent); opacity: .9; box-shadow: 0 0 0 2px var(--pm-surface); }
 
 /* ===== 阶段②：三段式编辑布局（抽屉 / 画布 / 配置面板） ===== */
-.pm-bento-body { display: flex; gap: 0; align-items: flex-start; }
+.pm-bento-body { display: flex; flex-wrap: wrap; gap: 0; align-items: flex-start; }
+/* P1 修复：工具条独占一行（flex-basis:100% 强制换行），抽屉|栅格|配置面板才在第二行，
+   否则 flex-row 把工具条与栅格挤在同一行，RGL 容器宽≈0、栅格塌缩。 */
+.pm-bento-body .pm-bento-tools { flex-basis: 100%; margin-bottom: 12px; }
 .pm-bento-body .pm-bento-grid { flex: 1 1 auto; min-width: 0; }
 /* P0 浏览态：不挂 RGL，纯 CSS grid 按 layout 的 x/y/w/h 放置卡片（列数/行高/间距与 GRID 对齐）。 */
 .pm-bento-grid-static { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: 36px; gap: 12px; align-content: start; }

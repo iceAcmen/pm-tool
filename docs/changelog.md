@@ -8,6 +8,25 @@
 
 ---
 
+## 看板 P1：拖拽像素落列 / 筛选二次级联 / 迁移链补全 / 窄卡省略（2026-10-16，平台：doubao-work）
+
+> 状态：**确定性验收 + 真实 dsh 宿主验证均通过，已核验**。`pnpm build`=0；全量 guard 68/68、0 污染；各块外部 require 仅 react/react-dom/jsx-runtime。
+
+- **P1-① 卡片库拖入按像素落列（非追加末尾）**
+  - 编辑器（`src/client/board/editor.tsx`）`GridLayout` 启用 `isDroppable` + `onDrop(layout, layoutItem, e)`：从 `e.dataTransfer.getData('widget-type')` 取新卡类型，按 RGL 由松手像素换算的 `layoutItem.x/y` 落位（addWidgetAt），约束在栅格内；点「＋」按钮仍追加末尾作为兜底；拖入即选中。
+  - 真实浏览器原生拖拽（dragstart→dragover→drop）验证：把「任务状态环」拖到栅格中部松手，新卡落在中部而非末尾；RGL 碰撞正常。onDrop 增加防御：RGL 异常给 undefined layoutItem 时按事件 clientX/Y 相对栅格换算坐标，避免 crash。
+  - **修复阻断性布局缺陷**：卡片库面板原是 in-flow flex 兄弟，打开时把 RGL 栅格挤压到约 7px、colWidth 算错、卡片全部推出视口右侧。`panel.css` 改为 `.pm-bento-body { flex-wrap:wrap }` 且工具条 `.pm-bento-tools` 独占一行（flex-basis:100%），卡片库为左侧窄抽屉、栅格在右侧保持真实宽度；宽度恢复后 RGL 重新正确布局，关抽屉后栅格回满宽。
+- **P1-② 切换实体后筛选字段二次级联**
+  - 配置面板切换数据源实体时，`onPatch({ entity, filters: [], sort:{field:'date',dir:'asc'} })`：字段下拉选项换为新实体字段，已选筛选字段/操作符/值整体清空（旧实体筛选不残留）；「字段→操作符」按数值/文本/日期/枚举联动；保存 zod 闸门不把旧实体筛选存进去。
+- **P1-③ 版本迁移链补全（v2+，保留 v1 迁移）**
+  - `persist.ts` 将单步迁移升级为按版本有序迁移链：`MIGRATIONS` 为 `{from,to,apply}[]`，`stepMigrations` 从旧 version 逐级 1→2→…→LAYOUT_VERSION，强制每步 `to===from+1`、缺级/跳步抛错；保留 v1 迁移（v1 老配置照样升到最新）。当前 LAYOUT_VERSION 仍为 1（无真实 v2 结构变更），后续插入 v2 只需追加一条。
+  - 新增 `scripts/verify-migration.mjs`：v1 老配置解析保留、跳级/过低版本拒绝、合成链 v1→v2→v3 逐级经过且字段规整保留、链不连续/跳步抛错。
+- **P1-④ 窄卡项目名省略的优雅处理**
+  - 卡片项目名统一 `flex` + `min-width:0` + `.pm-board-project-text` 单行 ellipsis，并 `title={项目全名}` hover 显示；窄卡（1~2 列）项目名不溢出、不撑破布局（截图见「浏览器功能验…」「手动验收…」）。
+- **验证**
+  - `pnpm build`=0；`node scripts/verify-isolation.mjs` 68/68 通过、0 污染（before/after=160/160）；新增 verify-migration；块结构仍为 client.js（gzip≈202KB）+ client.editor.js（≈76KB）+ client.formula-expr.js（≈11.6KB），编辑器块自包含。
+  - 深色+浅色截图：p1-drop-dark（像素落点）、p1-grid-restored（栅格塌缩修复）、p1-config-dark（窄卡省略）、p1-edit-light / p1-cards-light，见 `docs/verification/p1-*.png`。
+
 ## 看板 P0：编辑态异步拆分 + 布局持久化迁移 dsh-storage（含提前落地的 P2 后端地基 completedDate）（2026-10-16，平台：doubao-work）
 
 > 状态：**确定性验收 + 真实 dsh 宿主验证均通过，已核验**。`pnpm build`=0；全量 guard 67/67、0 污染；各块外部 require 仅 react 系。浏览态首屏 gzip 由 288.77KB 降到约 **202KB（净回收约 86.6KB / -30%，超出“约41KB”预期）**；看板布局不再用 localStorage，改经 dsh-storage（settings 表）跨设备持久化。

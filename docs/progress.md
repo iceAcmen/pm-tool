@@ -2,9 +2,18 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-16（doubao-work **看板 P0：编辑态异步拆分 + 布局持久化迁移 dsh-storage，已核验**：浏览态首屏 gzip 由 288.77KB 降到约 202KB（-30%）；编辑器块 client.editor.js（75.75KB）与公式块 client.formula-expr.js（11.58KB）按需 require.async 加载，浏览态不加载 RGL/zod/expr；新增后端命令 dashboard put/reset 与 snapshot.dashboards，布局经 dsh-storage 跨设备持久化；并提前落地 P2 后端地基 Task.completedDate 自动采集 + buildCompletionHistory 纯函数（只画真实数据、空态显空）。build=0、全量 guard 67/67、0 污染；真实 dsh 宿主验证编辑器块 200、持久化刷新后仍在、恢复默认生效。证据 docs/verification/p0-bento-perf-20261016/。上一发布基线 HEAD `eb41b30`/v0.7.3）
+最后更新：2026-10-16（doubao-work **看板 P1：拖拽像素落列 / 筛选二次级联 / 迁移链补全 / 窄卡省略，已核验**：卡片库拖入按松手像素落列（非末尾），真实浏览器原生拖拽落点中部；修复卡片库打开时栅格被挤压塌缩（工具条独占一行、左侧抽屉、右侧栅格）；切换实体后筛选字段/操作符/值整体重置；persist 迁移升级为按版本有序链（保留 v1，新增 verify-migration）；窄卡项目名单行省略 + title 全名。build=0、全量 guard 68/68、0 污染；外部 require 仅 react 系。证据 docs/verification/p1-*.png。P0 此前已完成并推送）
 
-## 当前阶段：看板 P0 编辑态异步拆分 + 持久化迁移 dsh-storage·已核验（2026-10-16，doubao-work）
+## 当前阶段：看板 P1 拖拽落列/筛选级联/迁移链/窄卡省略·已核验（2026-10-16，doubao-work）
+
+- **P1-① 拖拽像素落列**：编辑器 RGL 启用 isDroppable + onDrop，按松手像素换算的 layoutItem.x/y 落位（点 ＋ 仍追加末尾兜底）；真实浏览器拖拽「任务状态环」落栅格中部、非末尾；onDrop 增加坐标兜底防御。修复阻断缺陷：卡片库原 in-flow 挤压栅格到 7px，改为工具条独占一行、卡片库为左侧窄抽屉、栅格在右侧保持真实宽度并正确重算 colWidth。
+- **P1-② 切实体二次级联**：切换数据源实体后，字段选项更新、已选筛选字段/操作符/值整体清空，不残留旧实体筛选；字段→操作符按类型联动。
+- **P1-③ 迁移链补全**：persist 迁移改为有序 MIGRATIONS + stepMigrations 逐级 1→…→LAYOUT_VERSION（缺级/跳步抛错，保留 v1）；新增 verify-migration（v1 保留、跳级拒绝、合成链 v1→v2→v3 逐级经过）。
+- **P1-④ 窄卡省略**：项目名 flex+min-width:0+单行 ellipsis+title 全名，窄卡不溢出不撑破。
+- **验收**：pnpm build=0；verify-isolation 68/68、0 污染（before/after=160/160）；块结构 client.js（gzip≈202KB）+ client.editor.js（≈76KB）+ client.formula-expr.js（≈11.6KB），编辑器块自包含；深+浅截图见 docs/verification/p1-*.png。
+- **下一步**：看板 P2（跨卡片联动过滤、卡片自定义元素增强、completedDate 历史趋势真实数据 UI、markdown 富文本增强）→ 9 页面重设计（先出深+浅设计稿待确认）。
+
+## 历史阶段：看板 P0 编辑态异步拆分 + 持久化迁移 dsh-storage·已核验（2026-10-16，doubao-work）
 
 - **成果**：看板浏览态首屏 gzip 由 288.77KB 降到约 **202KB（净回收约 86.6KB / -30%，超出约41KB预期）**；看板布局由 localStorage 改为经 dsh-storage（pmtool 领域 settings 表）跨设备持久化。
 - **编辑态异步拆分**：浏览态用纯 CSS 静态栅格渲染、不再静态加载 RGL/zod/expr；编辑器（RGL+卡片库+配置面板+zod 闸门）拆为 `lib/client.editor.js`（gzip≈75.75KB）、公式 expr-eval 拆为 `lib/client.formula-expr.js`（gzip≈11.58KB），均在需要时经 `require.async` 加载；`tsdown.config.ts` 复刻宿主分块机制（client.[name].js + chunk banner + 动态 import 改写）并做运行时 helper 内联与死引用清理，保证异步块自包含。
