@@ -1,236 +1,213 @@
 # 个人开发者付费方案 personal-billing-plan.md
 
-> **本文件记录什么 / 给谁用 / 怎么用**：当所有者（史冰冰）**离开字节、不再有豆包工作企业版内部套餐**，需要以**个人开发者身份**同时做两件事——① 用 AI 写代码（维护 pm-tool 及其他个人项目）；② 让 pm-tool 这套自建应用继续跑 AI 功能（智能 WBS / 副驾 / 会议纪要 / 周报等）。本文件给出**最省钱且合规**的付费组合、申请入口、三个 Key 分别填在哪、dsh 配置片段、防封号红线与离职切换清单，照着抄即可。
+> **本文件记录什么 / 给谁用 / 怎么用**：当所有者（史冰冰）**离开字节、不再有豆包工作企业版内部套餐**，以**个人开发者身份**做两件事——① 用 AI 写代码（维护 pm-tool 及其他个人项目）；② 让 pm-tool 这套运行在 dsh（DeepSeek Harness）里的应用继续跑 AI 功能（智能 WBS / 副驾 / 会议纪要 / 周报等）。本文件给出**最省钱且合规**的组合、申请入口、Key 填在哪、dsh 接入步骤、防封号红线与离职切换清单。
 >
-> 与本文配套的技术文档：`docs/model-providers.md`（讲 dsh 如何配置 provider 的机制细节）。本文只管「**个人买什么、多少钱、怎么配、别踩什么坑**」。
+> 与本文配套的技术文档：`docs/model-providers.md`（dsh 配置 provider 的机制细节）。一键脚本：`packages/dsh-pm-tool/scripts/setup-keys.mjs`。
 >
-> 价格与条款更新时间：**2026-10-17**（来自方舟 / DeepSeek 官方文档）；订阅价格、模型 ID、活动政策可能调整，下单前以官方页面为准。
+> 价格与条款更新时间：**2026-10-17**（来自方舟官方文档）；订阅价格、模型 ID、活动政策可能调整，下单前以官方页面为准。
 
 ---
 
 ## 0. 一句话结论
 
-**没有「一份便宜订阅同时全包」的方案**——Coding Plan 官方明确禁止把额度导出给自建应用。所以必须分三条通道，个人月成本约 **¥43**：
+**pm-tool 就活在 dsh 里，而方舟官方明确支持 DeepSeek Harness 接入 Coding Plan。** 所以个人单机场景下，一个 Coding Plan 就能同时覆盖"日常开发 + pm-tool 的 AI"，无需为 pm-tool 单独买标准 API：
 
 | 通道 | 服务 | 解决什么 | 计费 | 月成本 |
 |---|---|---|---|---:|
-| ① 日常开发 | **方舟 Coding Plan（Lite）** | 在 Claude Code 等编程工具里写代码 | 订阅包月 | **¥40** |
-| ② pm-tool 的 AI | **方舟标准 API（DeepSeek）** | 自建应用里的 AI 生成 | 按 token 后付费 | **约 ¥3** |
-| ③ 敏感数据兜底 | **本地 Ollama** | 涉密/隐私内容、断网、省钱 | 免费（本地算力） | **¥0** |
-| | | | **合计** | **约 ¥43/月** |
+| ① dsh 开发 + pm-tool | **方舟 Coding Plan（Lite）** | dsh / Claude Code 写代码；pm-tool 在 dsh 内的 AI | 订阅包月 | **¥40** |
+| ② 敏感数据兜底 | **本地 Ollama** | 涉密/隐私内容、断网、额度耗尽 | 免费（本地算力） | **¥0** |
+| ③ 标准 API（可选） | **方舟按量后付费** | 仅在独立部署 / 团队协作 / 额度兜底时才需要 | 按 token | 非固定 |
+| | | | **个人单机月固定** | **¥40** |
 
-> 首月更便宜：方舟 Coding Plan 新用户首月 **¥9.9**（首两月活动，见第 6 节）。
-
----
-
-## 1. 为什么不能只用一个 Coding Plan（核心决策点）
-
-这是整个方案的关键，方舟官方条款写得非常明确：
-
-- **"套餐额度仅在 AI 编程工具中生效，不可用于 API 调用。"**
-- **"在非 AI 编程工具中使用方舟 Coding Plan 对应的 Base URL 和 API Key，有可能被识别为滥用/违规，导致订阅停用或账号封禁。"**
-
-两条通道的边界：
-
-| 你的行为 | 属于哪类 | 能不能用 Coding Plan |
-|---|---|---|
-| 在 Claude Code / Cursor / Cline 里写代码 | AI 编程工具内调用 | ✅ 可以 |
-| pm-tool 里点「生成 WBS / 副驾 / 纪要」 | 第三方自建应用的 API 调用 | ❌ 不可以，踩红线 |
-
-pm-tool 是 dsh（DeepSeek Harness）里的**自建应用**，它的 AI 调用正好属于「API 调用 / 非 AI 编程工具」。把 Coding Plan 的 Key 配进 pm-tool = 官方定义的滥用，可能直接**停用订阅甚至封号**。
-
-所以结论是：**日常开发用订阅（便宜），自建应用按量（用量极小，几乎不花钱），两条通道的 Key 不能混用。**
+> 首月更便宜：Coding Plan 新用户首月 **¥9.9**（见第 6 节）。
 
 ---
 
-## 2. 通道一：方舟 Coding Plan（日常开发，¥40/月）
+## 1. 关键前提：方舟官方支持 DeepSeek Harness 接入 Coding Plan
 
-### 2.1 是什么
+这是整个方案成立的基础，方舟官方有明确依据：
 
-火山引擎（火山方舟）对外公开售卖的编码订阅，一个套餐聚合多家主流模型，可在编程工具里自由切换：
+- 方舟控制台「订阅 → Coding Plan」的「多生态兼容，无缝融入您的工具」里，**DeepSeek Harness 与 Claude Code、Codex、OpenCode、OpenClaw、Hermes Agent 等并列**（dsh 归类为 Agent）；
+- 方舟有专门文档 **《DeepSeek Harness 接入 Coding Plan 个人版》**，并提供官方 `ark-plan-api` 插件自动配置；
+- 支持模型：Doubao Seed 系列、DeepSeek V4.1-Flash/V4-Pro、GLM-5.3、Kimi K3、MiniMax-M3 等（见第 2 节）。
 
-- **模型**：Doubao Seed 系列（含 Seed-Evolving / 2.1 / 2.0）、GLM 系列、DeepSeek 系列（V4-Pro / V4-Flash / V4.1-Flash）、Kimi 系列、MiniMax 系列等，还含 Embedding 向量化模型。
-- **编程工具**：Claude Code、Cursor、Cline、Roo Code、Kilo Code、OpenCode、TraeCode、Codex CLI 等。
-- **特点**：套餐额度在所有支持的工具间共享；高峰期多租户隔离、平稳降速。
-- **离职后可用性**：这是**对外公开商品**，个人手机号注册、个人微信/支付宝即可购买，**不依赖字节员工身份**。
+### 1.1 红线的真实边界：是否"经由官方支持的工具"
 
-### 2.2 套餐与价格
+FAQ 原文有两句：①「套餐额度仅在支持的 Coding 工具中生效，不能用于 API 调用」；②「在非 AI 工具中使用对应的 Base URL 和 API Key，有可能被识别为滥用/违规，会导致订阅停用或账号封禁」。
+
+这里的"API 调用 / 非 AI 工具"是**特定含义**——指**绕过官方支持的工具、把 Coding Plan 当成通用后端来编程调用**，而不是指"底层走 HTTP"。官方支持的工具（含 dsh）底层也是 HTTP，但属于"在支持的工具内使用"，合规。
+
+| 你的调用方式 | 判定 |
+|---|---|
+| 在 Claude Code / Cursor / Cline / Codex 等官方支持的编程工具里 | ✅ 合规 |
+| 在 **DeepSeek Harness（dsh）** 里（含 dsh 主对话与 dsh 内的插件） | ✅ 合规 |
+| **pm-tool（dsh 内插件）** 复用 dsh 的 Coding Plan provider，请求由 dsh 发出 | ✅ 合规 |
+| 自己写的独立脚本 / 独立服务，拿 key 直接调 /api/coding | ❌ 违规 |
+| 把 key 配进官方未支持的第三方 SaaS / 应用 | ❌ 违规 |
+| pm-tool 将来**脱离 dsh 独立部署**、自己持 key 调用 | ❌ 违规（需走标准 API） |
+
+### 1.2 pm-tool 走套餐合规的两个前提
+
+1. 用**官方支持的方式**让 dsh 接入 Coding Plan（第 2 节三种方式任选）；
+2. **pm-tool 保持在 dsh 内运行**（当前架构即如此）。一旦脱离 dsh 独立部署，就必须改用标准 API（第 4 节）。
+
+> 说明：条款没有逐字写"dsh 内第三方插件"这一情形。"pm-tool 走 dsh 套餐"是基于「dsh 被官方支持 + pm-tool 在 dsh 内、请求由 dsh 发出」的合理推断；满足上述两个前提即落在官方支持范围内。
+
+---
+
+## 2. 通道一：方舟 Coding Plan（dsh 开发 + pm-tool，¥40/月）
+
+### 2.1 套餐与价格
 
 | 套餐 | 适用 | 月价 | 新用户首月 | 用量（以 Doubao Seed Lite、Claude Code 普通模式估算） |
 |---|---|---:|---:|---|
-| **Lite** | 中等强度，适合大多数人 | **¥40** | **¥9.9** | 每 5 小时约 1,200 次请求；每周约 9,000；每订阅月约 18,000 |
-| Pro | 复杂/高强度项目 | ¥200 | ¥49.9 | Lite 的 5 倍（每 5 小时约 6,000，每月约 90,000） |
+| **Lite** | 中等强度，适合大多数人 | **¥40** | **¥9.9** | 每 5 小时约 1,200 次；每周约 9,000；每订阅月约 18,000 |
+| Pro | 复杂/高强度、Agent Team 并发 | ¥200 | ¥49.9 | Lite 的 5 倍（每订阅月约 90,000） |
 
-- 额度按 **5 小时窗口 / 周 / 月** 三层限流，**耗尽后不扣账户余额**，等下一周期自动恢复（5 小时窗口按首次请求滚动；每周一 00:00 重置；每月 1 日 00:00 重置）。
-- 个人开发者 **Lite 足够**；Pro 适合开 Agent Team 多任务并发的重度场景。
+- 额度按 **5 小时窗口 / 周 / 月** 三层限流；耗尽后**不扣余额**，等周期自动恢复（5 小时窗口按首次请求滚动，每周一/每月 1 日 00:00 重置）。
+- 个人开发者 **Lite 足够**，pm-tool 的用量与开发共享同一额度，但 pm-tool 用量很小，基本无感。
+- 这是**对外公开商品**，个人手机号注册、个人微信/支付宝即可购买，**不依赖字节员工身份**。
 
-### 2.3 申请与配置（Claude Code 为例）
+### 2.2 核心参数
 
-1. **注册**：打开火山方舟（console.volcengine.com/ark）→ 个人手机号注册 → 完成**个人实名认证**（个人主体即可）。
-2. **购买**：进入「Coding Plan 活动页 / 开通管理」→ 订阅 **Lite（首月 9.9）**。购买即开通，**无需**单独创建模型/推理接入点。
-3. **在 Claude Code 接入**（Coding Plan 专用 Base URL，注意和标准 API 地址不同）：
-   - Anthropic 协议（Claude Code 用）：`https://ark.cn-beijing.volces.com/api/coding`
-   - OpenAI 协议（Cursor / Cline / OpenCode 用）：`https://ark.cn-beijing.volces.com/api/coding/v3`
-   - 环境变量（写进你自己的 `~/.zshrc`，仓库外）：
-     ```sh
-     export ANTHROPIC_BASE_URL='https://ark.cn-beijing.volces.com/api/coding'
-     export ANTHROPIC_AUTH_TOKEN='<方舟 Coding Plan 的 API Key>'
-     export ANTHROPIC_MODEL='doubao-seed-evolving'   # 或 deepseek-v4.1-flash 等，可在工具里切换
-     ```
-   - ⚠️ 不要用 `https://ark.cn-beijing.volces.com/api/v3`（那是标准 API 地址，不会消耗套餐额度，会产生额外按量费用）。
-4. 模型选择建议：日常用 **doubao-seed-2.1-lite / deepseek-v4.1-flash**（快、省额度）；重难点问题再切 **glm-5.3 / deepseek-v4-pro / kimi-k3**（抵扣系数高、额度消耗快）。
+- **Base URL**（Coding Plan 专用，注意和标准 API 不同）：
+  - 兼容 Anthropic 协议（Claude Code）：`https://ark.cn-beijing.volces.com/api/coding`
+  - 兼容 OpenAI 协议（dsh / Cursor / Cline / Codex）：`https://ark.cn-beijing.volces.com/api/coding/v3`
+  - ⚠️ **不要用 `https://ark.cn-beijing.volces.com/api/v3`**：那是标准 API，不消耗套餐额度，会额外计费。
+- **Model Name**（全小写，或复制开通管理页模型名）：`doubao-seed-evolving`、`doubao-seed-2.1-pro`、`doubao-seed-2.1-lite`、`doubao-seed-2.0-mini`、`deepseek-v4.1-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`glm-5.3`（glm-latest）、`glm-5.3-flash`、`kimi-k2.7-code`、`kimi-k2.8-preview`、`kimi-k3`、`minimax-m3`。
+- Model Name 不支持填 `Auto`；如需 Auto，用 `ark-code-latest` 在控制台切换（3–5 分钟生效）。
 
----
+### 2.3 让 dsh 接入 Coding Plan（三种方式，任选其一）
 
-## 3. 通道二：方舟标准 API（pm-tool 自建应用，约 ¥3/月）
-
-### 3.1 为什么选它
-
-pm-tool 是自建应用，必须走**标准 API 按量付费**。选择方舟标准 API 而非 DeepSeek 官方的理由：
-
-- **价格与 DeepSeek 官方完全一致**（分毫不差，见 3.2），没有加价；
-- **同一个火山账号**：Coding Plan、标准 API、发票、用量全在一起，不用再单独注册 DeepSeek、单独充值，最省心。
-- DeepSeek 官方的优势仅在「新版本首发、并发配额更高（Flash 官方 2500）」，个人 pm-tool 用量下无感。
-
-### 3.2 价格表（方舟标准 API = DeepSeek 官方，元/百万 token）
-
-峰谷计费：高峰 = 北京时间周一至周五（不含法定节假日）9:00–12:00、14:00–18:00；空闲 = 其余时段（含周末/法定节假日全天），空闲价为高峰一半。
-
-| 模型 | 输入·缓存命中（空/高） | 输入·缓存未命中（空/高） | 输出（空/高） |
-|---|---|---|---|
-| **DeepSeek-V4.1-Flash**（推荐） | 0.02 / 0.04 | **1 / 2** | **4 / 8** |
-| DeepSeek-V4-Pro | 0.15 / 0.30 | 4.5 / 9 | 13.5 / 27 |
-
-> 上下文 1M、输出最大 384K；默认开思考、可手动关闭。模型支持自动前缀缓存（命中后输入极便宜）。
-
-### 3.3 开通与接入
-
-1. 同一个火山账号，在方舟控制台开通**在线推理（标准 API）后付费**，创建 API Key（环境变量名 `ARK_API_KEY`）。
-2. 标准 API 端点（OpenAI 兼容）：
-   - Base URL：`https://ark.cn-beijing.volces.com/api/v3`
-   - 鉴权：`Authorization: Bearer $ARK_API_KEY`
-   - **支持 Model ID 直调**（无需创建推理接入点），`model` 字段填模型 ID，如 `deepseek-v4-1-flash`（以控制台「模型列表」实际 Model ID 为准）。
-3. 直连自检 curl：
-   ```sh
-   curl -X POST https://ark.cn-beijing.volces.com/api/v3/chat/completions \
-     -H "Authorization: Bearer $ARK_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"model":"deepseek-v4-1-flash","messages":[{"role":"user","content":"用一句话回答：你好"}]}'
-   ```
-
-### 3.4 dsh 里的 provider 配置
-
-在 `~/.dsh/profiles/pm/cordis.patch.yml` 给 `llm-pi-ai` 追加 provider（**只写环境变量名，不写明文 Key**）。机制细节见 `docs/model-providers.md`：
-
-```yaml
-- id: llm-pi-ai
-  name: '@deepseek-ai/dsh-llm-pi-ai'
-  config:
-    providers:
-      ark-standard:
-        displayName: 方舟标准 API
-        apiKeyEnv: ARK_API_KEY
-        api: openai-completions
-        baseURL: https://ark.cn-beijing.volces.com/api/v3
-        models:
-          - id: deepseek-v4-1-flash
-            name: DeepSeek V4.1 Flash
-            contextWindow: 1024000
-          - id: deepseek-v4-pro
-            name: DeepSeek V4 Pro
-            contextWindow: 1024000
+**方式 1：ArkCLI Helper 自动化助手（官方推荐）**
+```sh
+npm install -g @volcengine/ark-cli@latest
+arkcli --version
+arkcli auth login            # 选择项目（可默认全部资源）→ 消费模式选 coding-plan
+arkcli helper                # Plan profile 选 coding-plan_cn-beijing_personal → 选默认 model → AI Agent 选 DeepSeek Harness
 ```
 
-### 3.5 成本为什么只要 ¥3
+**方式 2：dsh Web UI 手动配置**
+1. `npx @deepseek-ai/dsh web`，打开 `http://127.0.0.1:3080/`；
+2. 左下角「设置 → 模型」，在 DeepSeek 卡片选「自定义设置」：
+   - API 密钥：填 Coding Plan 的 API Key；
+   - API 地址：`https://ark.cn-beijing.volces.com/api/coding/v3`；
+   - 添加模型（如 `deepseek-v4.1-flash`），保存。
+3. 或「添加自定义提供方」：协议与地址对应为 `openai-completions`/`openai-responses` → `/api/coding/v3`，`anthropic-messages` → `/api/coding`。
+4. 回到对话页，输入框右下角模型下拉选 **Ark Coding Plan** 下的模型即可。
 
-pm-tool 的 AI 是**非实时、一次性文本生成**，且大量复用系统提示/模板（自动命中前缀缓存）。按一组保守假设估算：
+**方式 3：ark-plan-api 官方插件（自动配置）**
+在 dsh 对话框直接发送：
+```
+帮我安装下面的插件：curl -fsSL -o dsh-ark-plugin-install.sh "https://lf3-static.bytednsdoc.com/obj/eden-cn/ylwslo-yrh/ljhwZthlaukjlkulzlp/ark-cli-outer-resource/dsh-ark-plugin-install.sh" && bash dsh-ark-plugin-install.sh --plugin-name ark-plan-api
+```
+插件装好后，「设置 → 模型」自动添加 Agent Plan / Coding Plan / 后付费 provider，只需填 API Key。
 
-- 每月约 150 次生成，每次输入约 12k（其中 80% 缓存命中）、输出约 2k，按高峰价保守算：
-  - 输入未命中 2.4k × 2 元/百万 ≈ 0.0048 元；输入命中 9.6k × 0.04 ≈ 0.0004 元；输出 2k × 8 元/百万 ≈ 0.016 元
-  - 每次约 **0.021 元**，150 次 ≈ **¥3.2/月**
-- 若大量在空闲时段（周末/晚上）使用，成本再减半，约 ¥1.5–2/月。
-- 以上为**假设口径估算**，实际以方舟账单为准；即便用量翻倍也在 ¥10 以内。
+> 也可以直接运行一键脚本完成 provider 配置：`node packages/dsh-pm-tool/scripts/setup-keys.mjs`（见第 5 节）。
+
+### 2.4 模型选择建议
+
+日常用 `doubao-seed-2.1-lite` / `deepseek-v4.1-flash`（快、省额度）；重难点再切 `glm-5.3` / `deepseek-v4-pro` / `kimi-k3`（抵扣系数高、额度消耗快）。
 
 ---
 
-## 4. 通道三：本地 Ollama（敏感数据兜底，免费）
+## 3. 通道二：本地 Ollama（敏感数据兜底，免费）
 
-涉密项目台账、客户信息、隐私内容，或想彻底免费、断网可用时，用本地模型。你有 M 系列 Mac，可本地跑。
+涉密台账、客户信息、隐私内容，或断网、套餐额度耗尽时使用。M 系列 Mac 可本地跑。
 
-1. 安装：`brew install ollama`（或官网下载），启动后 `ollama pull qwen3:8b`（中文/通用均衡；轻量可选 `qwen3:4b`，代码可选 `qwen2.5-coder:7b`）。
-2. dsh provider 配置（本地无密码，但 pi-ai 要求**给一个占位 Key**）：
+1. 安装：`brew install ollama`，启动后 `ollama pull qwen3:8b`（轻量 `qwen3:4b`；代码 `qwen2.5-coder:7b`）。
+2. dsh provider（本地无密码，但 pi-ai 要求**占位 Key**，值任意，如 `ollama`）：
    ```yaml
        ollama-local:
          displayName: 本地 Ollama
-         apiKeyEnv: OLLAMA_API_KEY          # 值给任意占位串，如 export OLLAMA_API_KEY='ollama'
+         apiKeyEnv: OLLAMA_API_KEY
          api: openai-completions
          baseURL: http://127.0.0.1:11434/v1
          models:
            - id: qwen3:8b
-             name: Qwen3 8B 本地
+             name: Qwen3 本地
              contextWindow: 32768
    ```
-3. 定位：**兜底而非主力**——本地小模型能力不及云端大模型，复杂结构化生成可能失败，失败时优雅降级，核心台账永远离线不受影响。
+3. 定位：**兜底而非主力**——本地小模型能力不及云端，复杂生成可能失败，失败时优雅降级，核心台账永远离线。
 
 ---
 
-## 5. 三个 Key 分别填在哪（速查表）
+## 4. 通道三：方舟标准 API（可选，按量）
 
-> **最快方式：一键脚本。** 运行 `node packages/dsh-pm-tool/scripts/setup-keys.mjs`（交互模式），脚本引导你粘贴 Key、选择存储位置、自动备份并幂等写入下方全部配置；想先空跑预览加 `--dry-run`，自动化用 `--non-interactive`（Key 从环境变量读）。脚本强制把真实 Key 写在仓库外、`cordis.patch.yml` 只写环境变量名。下方表格供手动配置或理解脚本行为。
+### 4.1 什么时候才需要
 
-| Key | 通道 | 用在哪 | 怎么填 |
+- pm-tool **脱离 dsh 独立部署**（独立进程自己持 key）——此时走 Coding Plan 才属违规，必须用标准 API；
+- **团队协作**（FAQ 明确：团队协作请用按量 API；Coding Plan 面向个人）；
+- Coding Plan 额度耗尽时的**付费兜底**；
+- 个人单机在 dsh 内使用时**不需要**，充值少量备用即可。
+
+### 4.2 价格（方舟标准 API = DeepSeek 官方，元/百万 token）
+
+高峰 = 北京时间周一至周五（不含法定节假日）9:00–12:00、14:00–18:00；空闲 = 其余（含周末/节假日全天），空闲为高峰一半。
+
+| 模型 | 输入·缓存命中（空/高） | 输入·缓存未命中（空/高） | 输出（空/高） |
 |---|---|---|---|
-| **方舟 Coding Plan Key** | ① 日常开发 | Claude Code / Cursor 等 | `ANTHROPIC_BASE_URL=.../api/coding`、`ANTHROPIC_AUTH_TOKEN=Key`（写 `~/.zshrc`） |
-| **`ARK_API_KEY`（标准 API）** | ② pm-tool | dsh provider `ark-standard` | dsh Web「设置→模型」录入 credentials，或 `export ARK_API_KEY=...`；provider 指向 `/api/v3` |
-| **`OLLAMA_API_KEY`（占位）** | ③ 本地兜底 | dsh provider `ollama-local` | `export OLLAMA_API_KEY='ollama'`，值任意 |
+| DeepSeek-V4.1-Flash | 0.02 / 0.04 | 1 / 2 | 4 / 8 |
+| DeepSeek-V4-Pro | 0.15 / 0.30 | 4.5 / 9 | 13.5 / 27 |
 
-> Key 录入方式（二选一）：① 环境变量（dsh 不自动读 `.env`，需写 `~/.zshrc` 并在启动 dsh 前生效）；② 更推荐在 dsh Web「设置 → 模型」直接录入 **credentials service**，此后任何终端启动都能取到，与启动终端无关。
-
----
-
-## 6. 首月选型实测（花 ¥9.9 横向选模型）
-
-新用户首月 9.9，建议先做一次低成本横向选型，再决定长期主力：
-
-1. 订阅 Lite 首月，在 Claude Code 里用同一组真实任务（写功能、改 bug、读长代码库）分别测：**doubao-seed-evolving、deepseek-v4.1-flash、glm-5.3、kimi-k3、minimax-m3**。
-2. 对比：代码正确率、长上下文跟随、速度、额度消耗（抵扣系数）。
-3. 确定 1 个日常主力 + 1 个攻坚备用；之后按需在工具里切换。
-4. 注意：**一个实名认证主体只能享受一次首购优惠**（该主体下任一账号用过即失效）。
+- 接入：Base URL `https://ark.cn-beijing.volces.com/api/v3`，环境变量 `ARK_API_KEY`，Model ID 直调（如 `deepseek-v4-1-flash`），无需创建接入点。
+- 「低优」通道别用于实时交互（可能排队）；别配错「AI 数据湖」（输入 12/输出 24，另一产品）。
 
 ---
 
-## 7. 红线与防封号清单（务必遵守）
+## 5. Key 填在哪（速查表）与一键脚本
 
-- [ ] **绝不把 Coding Plan 的 Key 配进 pm-tool / 任何自建应用或第三方 API** —— 官方定义为滥用，会停用/封号。
-- [ ] **不碰官方 Claude（Anthropic）**：官方条款不覆盖中国大陆，2026 年封号大幅加码（网页 / Claude Code / 官方 API / 云厂商转售全渠道均有风险，账号与订阅都可能无预警封禁，申诉成功率极低）。要用 Claude 体验就用「Claude Code 客户端的壳 + 方舟国产模型的芯」。
-- [ ] **真实 Key 绝不入库**：不写进 git、不写进 `cordis.patch.yml` 明文（只用 `apiKeyEnv` 引用环境变量名）、不贴进对话/文档；`.gitignore` 已覆盖密钥。
-- [ ] **标准 API「低优（低优先级）」通道别用于实时交互**：价格约为常规一半，但可能排队/延迟，适合离线批处理；pm-tool 交互走常规。
-- [ ] **用最新模型**：pm-tool 选 `deepseek-v4-1-flash`（输入 2/输出 8），别用方舟上旧的 `deepseek-v4-flash`（输入 3/输出 9）。
-- [ ] **别配错产品**：方舟「AI 数据湖 / LakeAIService」（DeepSeek 输入 12 / 输出 24）是另一个产品，不是标准推理 API，不要把它当标准 API 接入。
-- [ ] 升级上游 dsh 后，按 `docs/model-providers.md` 第 3 节复查 provider 配置与字段是否漂移。
+> **最快方式：一键脚本。** 运行 `node packages/dsh-pm-tool/scripts/setup-keys.mjs`（交互模式），引导你粘贴 Key、选择存储位置、自动备份并幂等写入；先空跑预览加 `--dry-run`，自动化用 `--non-interactive`（Key 从环境变量读）。脚本强制把真实 Key 写在仓库外、`cordis.patch.yml` 只写环境变量名。
+
+| Key | 用途 | 用在哪 | 怎么填 |
+|---|---|---|---|
+| **`CODING_PLAN_API_KEY`** | 主：dsh 内开发 + pm-tool | dsh provider `ark-plan`（/api/coding/v3） | dsh Web「设置→模型」录入，或 `export CODING_PLAN_API_KEY=...` |
+| **`OLLAMA_API_KEY`（占位）** | 本地兜底 | dsh provider `ollama-local` | `export OLLAMA_API_KEY='ollama'`，值任意 |
+| **`ARK_API_KEY`（可选）** | 标准 API：独立部署/团队/兜底 | dsh provider `ark-standard`（/api/v3） | 仅在需要时录入 |
+| Claude Code 专用（可选） | 用 Claude Code 而非 dsh | `ANTHROPIC_BASE_URL=/api/coding`、`ANTHROPIC_AUTH_TOKEN=Key` | 写 `~/.zshrc` |
+
+> Key 录入二选一：① 环境变量（写 `~/.zshrc`，并在启动 dsh 前生效）；② 推荐 dsh Web「设置→模型」录入 **credentials service**，此后任何终端启动都能取到。
 
 ---
 
-## 8. 离职切换清单（照此执行）
+## 6. 首月选型实测（¥9.9）
 
-**离职前（企业版还能用时，提前办好）：**
-- [ ] 注册**个人火山引擎账号**（个人手机号 + 个人微信/支付宝，与工作账号完全隔离）
-- [ ] 完成个人实名认证
-- [ ] 花 ¥9.9 订阅 Coding Plan Lite，完成首月选型（第 6 节）
-- [ ] 开通标准 API 后付费，创建 `ARK_API_KEY`
+1. 订阅 Lite 首月，在 dsh 用同一组真实任务（写功能、改 bug、读长库）分别测：`doubao-seed-evolving`、`deepseek-v4.1-flash`、`glm-5.3`、`kimi-k3`、`minimax-m3`。
+2. 对比代码正确率、长上下文跟随、速度、额度消耗，确定 1 个日常主力 + 1 个攻坚备用。
+3. **一个实名认证主体只能享受一次首购优惠**（该主体下任一账号用过即失效）。
+
+---
+
+## 7. 红线与防封号清单
+
+- [ ] 让 dsh 接 Coding Plan 必须走**官方支持方式**（ark-plan-api 插件 / ArkCLI Helper / Web UI 手动填 `/api/coding/v3`）。
+- [ ] **不要把 Coding Plan key 拿到 dsh 之外**，配进独立脚本/独立服务/未支持的第三方应用——属滥用，会停用/封号。
+- [ ] pm-tool 若**脱离 dsh 独立部署**，改用标准 API（`/api/v3`），不要继续用 Coding Plan key。
+- [ ] Base URL 不要填 `/api/v3` 走套餐（会额外计费）；Coding Plan 用 `/api/coding` 或 `/api/coding/v3`。
+- [ ] **团队协作**用标准 API，不要多人共用一个 Coding Plan。
+- [ ] **不碰官方 Claude（Anthropic）**：官方条款不覆盖中国大陆，2026 年封号大幅加码（网页 / Claude Code / API / 转售全渠道均有风险）。要用 Claude 体验就用"Claude Code 壳 + 方舟国产模型芯"。
+- [ ] **真实 Key 绝不入库**：不写 git、不写进 `cordis.patch.yml` 明文（只用 `apiKeyEnv` 引用名）；脚本会强制校验写入路径在仓库外。
+- [ ] 用最新模型：选 `deepseek-v4.1-flash`（输入 2/输出 8），别用旧 `deepseek-v4-flash`（输入 3/输出 9）。
+
+---
+
+## 8. 离职切换清单
+
+**离职前（企业版还能用时）：**
+- [ ] 注册**个人火山引擎账号**（个人手机号 + 个人微信/支付宝，与工作账号隔离），完成个人实名认证
+- [ ] ¥9.9 订阅 Coding Plan Lite，完成首月选型（第 6 节）
+- [ ] 用官方方式（或一键脚本）让 dsh 接入 Coding Plan，确认 pm-tool 走套餐可跑通
 - [ ] 装好本地 Ollama 并 pull 模型
-- [ ] 在 dsh 个人 profile 配好 `ark-standard` + `ollama-local`（第 3、4 节），验证三路均可跑通
+- [ ] （可选）开通标准 API 后付费、充值少量备用，记录独立部署/团队场景
 
 **离职当天 / 之后：**
-- [ ] 确认 dsh / Claude Code 里所有 Key 均来自**个人账号**，移除任何工作账号凭据
-- [ ] 日常开发走 Coding Plan，pm-tool 走标准 API，敏感内容走 Ollama
-- [ ] 关闭工作账号相关的自动续费 / 授权
-- [ ] 每月初看一眼方舟账单与用量，按需调整（用量极小一般无需改）
+- [ ] 确认 dsh / Claude Code 里所有 Key 均来自**个人账号**，移除工作账号凭据
+- [ ] 日常 dsh 开发 + pm-tool 走 Coding Plan；敏感内容走 Ollama
+- [ ] 关闭工作账号相关自动续费/授权
 
 **月度运维（约 1 分钟）：**
-- [ ] 检查 Coding Plan 是否到期、是否需续费（建议开自动续费）
-- [ ] 看标准 API 实际花费，确认没有异常用量
-- [ ] 确认 Ollama 服务可用（`ollama list`）
+- [ ] 看 Coding Plan 是否到期（建议自动续费）、用量是否触顶
+- [ ] 确认 Ollama 可用（`ollama list`）；标准 API 仅在有使用时看账单
 
 ---
 
@@ -239,9 +216,9 @@ pm-tool 的 AI 是**非实时、一次性文本生成**，且大量复用系统�
 | 用途 | 链接 |
 |---|---|
 | 火山方舟控制台 | https://console.volcengine.com/ark |
-| 方舟 Coding Plan 套餐概览 | https://docs.volcengine.com/docs/ark/coding-plan-personal-plan-overview |
-| 方舟 Coding Plan 常见问题 | https://ark.volcengine.com/region:cn-beijing/docs/coding-plan-personal-faq |
-| 方舟标准 API 快速入门 | https://docs.volcengine.com/docs/ark/quick-start |
+| Coding Plan 套餐概览 | https://ark.volcengine.com/region:cn-beijing/docs/coding-plan-personal-plan-overview |
+| **DeepSeek Harness 接入 Coding Plan** | https://docs.volcengine.com/docs/ark/coding-plan-personal-ai-deepseek-harness |
+| Coding Plan 常见问题 | https://ark.volcengine.com/region:cn-beijing/docs/coding-plan-personal-faq |
 | 方舟模型价格（含 DeepSeek） | https://docs.volcengine.com/docs/ark/model-pricing |
-| DeepSeek 官方定价 | https://api-docs.deepseek.com/zh-cn/quick_start/pricing |
+| 方舟 Agent Plan | https://www.volcengine.com/activity/agentplan |
 | 配套技术文档 | 本仓库 `docs/model-providers.md` |
