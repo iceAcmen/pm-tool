@@ -21,10 +21,13 @@
 .pm-mt-root .mt-head .mt-sub b { color: var(--ink-2); font-weight: 600; }
 .pm-mt-root .mt-btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto;
-  font-size: var(--t-13); font-weight: 600; color: rgb(255, 255, 255);
-  background: var(--c-prog); border: 0; border-radius: var(--r-sm);
+  font-size: var(--t-13); font-weight: 600; color: var(--pm-on-primary); white-space: nowrap;
+  background: var(--dsw-alias-button-primary-fill); border: 0; border-radius: var(--r-sm);
   padding: 9px var(--sp-4); cursor: pointer;
+  transition: background .15s var(--ease);
 }
+.pm-mt-root .mt-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-mt-root .mt-btn-primary:disabled { opacity: .55; cursor: default; }
 
 /* ---------- 小统计行 ---------- */
 .pm-mt-root .mt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
@@ -116,6 +119,8 @@
   border-radius: var(--r-lg); box-shadow: var(--shadow-2);
   padding: var(--sp-5) var(--sp-6);
 }
+/* 过滤无匹配：右侧空态卡片，不残留上一条详情（P0-3 / S2-4） */
+.pm-mt-root .mt-detail-empty { display: flex; min-height: 240px; }
 .pm-mt-root .mt-detail-head { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
 .pm-mt-root .mt-detail-head h2 { margin: 0; font-size: var(--t-18); font-weight: 700; letter-spacing: var(--ls-tight); color: var(--ink); }
 .pm-mt-root .mt-ico-btn {

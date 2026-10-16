@@ -24,10 +24,12 @@
 .pm-dv-root .dv-sub b { color: var(--ink-2); font-weight: 600; }
 
 .pm-dv-root .dv-btn-primary {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--c-prog); color: var(--on-primary); border: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  background: var(--dsw-alias-button-primary-fill); color: var(--pm-on-primary); border: 0; cursor: pointer;
   font-size: var(--t-12); font-weight: 600; padding: 8px 14px; border-radius: var(--r-sm);
+  transition: background .15s var(--ease);
 }
+.pm-dv-root .dv-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
 
 /* ---------- 总览带 ---------- */
 .pm-dv-root .dv-ovband { padding: var(--sp-3) var(--sp-4); }
@@ -176,7 +178,7 @@
 .pm-dv-root .dv-ow { display: inline-flex; align-items: center; gap: 5px; }
 .pm-dv-root .dv-av2 {
   width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
-  font-size: var(--t-10); font-weight: 700; color: var(--on-primary); background: var(--c-prog);
+  font-size: var(--t-10); font-weight: 700; color: var(--pm-on-primary); background: var(--c-prog);
 }
 .pm-dv-root .dv-ms { color: var(--faint); }
 .pm-dv-root .dv-due { font-variant-numeric: tabular-nums; }

@@ -33,7 +33,7 @@
   --pm-blue-soft: var(--dsw-alias-state-business-tertiary, rgb(228, 237, 253));
   --pm-ink: var(--dsw-alias-label-primary, rgb(28, 28, 30));
   --pm-secondary: var(--dsw-alias-label-secondary, rgb(97, 102, 107));
-  --pm-muted: var(--dsw-alias-label-tertiary, rgb(129, 133, 140));
+  --pm-muted: var(--dsw-alias-label-tertiary, rgb(105, 110, 116));
   --pm-line: var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.1));
   --pm-line-soft: var(--dsw-alias-border-l1, rgba(0, 0, 0, 0.04));
   --pm-canvas: var(--dsw-alias-bg-base, rgb(255, 255, 255));
@@ -56,8 +56,11 @@
   --line-3: var(--dsw-alias-border-l4, rgba(0, 0, 0, 0.16));
   --ink: var(--dsw-alias-label-primary, rgb(28, 28, 30));
   --ink-2: var(--dsw-alias-label-secondary, rgb(97, 102, 107));
-  --muted: var(--dsw-alias-label-tertiary, rgb(129, 133, 140));
-  --faint: var(--dsw-alias-label-caption, rgb(173, 178, 184));
+  --muted: var(--dsw-alias-label-tertiary, rgb(105, 110, 116));
+  --faint: var(--dsw-alias-label-caption, rgb(113, 118, 124));
+  /* P0-5：主按钮文字 / 链接别名（替换未定义的 --on-primary / --c-link），浅深跟随宿主。 */
+  --pm-on-primary: var(--dsw-alias-label-primary-foreground, rgb(255, 255, 255));
+  --pm-link: var(--dsw-alias-state-business-primary, rgb(45, 99, 214));
   --c-done: var(--dsw-alias-state-success-primary, rgb(34, 197, 94));
   --c-done-d: var(--dsw-alias-state-success-secondary, rgb(78, 209, 126));
   --c-prog: var(--dsw-alias-state-business-primary, rgb(65, 118, 230));
@@ -115,12 +118,22 @@ body[data-ds-dark-theme] .pm-shell {
   --field-bg: var(--dsw-alias-bg-module-platform, rgba(255, 255, 255, 0.06));
   --field-bg-focus: var(--dsw-alias-interactive-bg-active, rgba(122, 170, 255, 0.18));
 }
+/* P0-5 / S2-3：浅色强制 AA 中性灰，不被宿主偏浅的 tertiary/caption 别名拉低对比度；
+   深色仍走宿主别名（暗色下别名自动提亮），不在此覆盖。 */
+body:not([data-ds-dark-theme]) .pm-shell {
+  --muted: rgb(105, 110, 116);   /* #696e74，白底 ≥4.5:1 */
+  --faint: rgb(113, 118, 124);   /* #71767c，次要/装饰文字 */
+  --pm-muted: rgb(105, 110, 116);
+}
 
 .pm-shell *, .pm-shell *::before, .pm-shell *::after { box-sizing: border-box; }
 .pm-shell button, .pm-shell input, .pm-shell select, .pm-shell textarea {
   font: inherit;
   letter-spacing: 0;
 }
+/* 附带小修 / S3-1：按钮文字默认不折行（窄窗图标+短词，不在字间断行）；
+   需要换行的窄窗顶栏按钮在 @container 540 处显式恢复 normal。 */
+.pm-shell button { white-space: nowrap; }
 .pm-shell button:focus-visible, .pm-shell input:focus-visible,
 .pm-shell select:focus-visible, .pm-shell textarea:focus-visible {
   outline: 2px solid var(--dsw-alias-state-business-primary);
@@ -222,6 +235,13 @@ body[data-ds-dark-theme] .pm-project-menu {
 .pm-project-menu-item.is-selected { color: var(--pm-accent); font-weight: 650; }
 .pm-project-menu-item.is-selected svg { color: var(--pm-accent); }
 .pm-project-menu-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* P0-9 / S3-5：同名项目消歧副标（id · 开始日期 · 负责人） */
+.pm-project-menu-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.pm-project-menu-meta {
+  font-size: 11px; font-weight: 500; color: var(--pm-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pm-project-menu-item.is-selected .pm-project-menu-meta { color: var(--pm-muted); }
 .pm-top-actions { display: flex; align-items: center; gap: 8px; }
 
 .pm-button, .pm-icon-button, .pm-tool-button {
@@ -919,7 +939,12 @@ body[data-ds-dark-theme] .pm-project-menu {
 @container (max-width: 760px) {
   .pm-topbar { padding-right: 14px; padding-left: 14px; }
   .pm-table-toolbar { padding-right: 14px; padding-left: 14px; }
-  .pm-view-tabs { padding: 0 8px; overflow-x: auto; }
+  .pm-view-tabs {
+    padding: 0 8px; overflow-x: auto;
+    /* S2-5：两端渐隐遮罩提示可横向滑动（仅窄于 760 的可滚动档生效） */
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+  }
   .pm-table-search { width: 150px; }
   .pm-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

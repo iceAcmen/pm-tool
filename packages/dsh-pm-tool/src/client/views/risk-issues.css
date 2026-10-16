@@ -21,11 +21,13 @@
 .pm-ri-root .ri-head .ri-sub { margin: 4px 0 0; font-size: var(--t-12); color: var(--muted); }
 .pm-ri-root .ri-head .ri-sub b { color: var(--ink-2); font-weight: 600; }
 .pm-ri-root .ri-btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto;
-  font-size: var(--t-13); font-weight: 600; color: rgb(255, 255, 255);
-  background: var(--c-prog); border: 0; border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto; white-space: nowrap;
+  font-size: var(--t-13); font-weight: 600; color: var(--pm-on-primary);
+  background: var(--dsw-alias-button-primary-fill); border: 0; border-radius: var(--r-sm);
   padding: 9px var(--sp-4); cursor: pointer;
+  transition: background .15s var(--ease);
 }
+.pm-ri-root .ri-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
 .pm-ri-root .ri-btn-primary:disabled { opacity: .55; cursor: default; }
 
 /* ---------- segmented 风险/问题 ---------- */

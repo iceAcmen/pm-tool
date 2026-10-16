@@ -25,7 +25,10 @@
 .pm-gantt-root .pm-gantt-spacer { flex: 1; }
 
 .pm-gantt-root .pm-seg {
+  /* P0-4 / S2-1：重置 panel.css 通用进度条 .pm-seg{height:10px;overflow:hidden} 的碰撞，
+     日/周/月三字完整可见、不被垂直裁切。 */
   display: inline-flex; padding: 3px; gap: 2px;
+  height: auto; overflow: visible;
   background: var(--field-bg); border: 1px solid var(--line); border-radius: 999px;
 }
 .pm-gantt-root .pm-seg button {
@@ -45,8 +48,10 @@
 }
 .pm-gantt-root .pm-chip:hover { background: var(--surface-3); color: var(--ink); }
 .pm-gantt-root .pm-chip-primary {
-  background: var(--c-prog); border-color: transparent; color: var(--dsw-alias-label-primary-foreground);
+  background: var(--dsw-alias-button-primary-fill); border-color: transparent; color: var(--pm-on-primary);
+  white-space: nowrap;
 }
+.pm-gantt-root .pm-chip-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); color: var(--pm-on-primary); }
 
 /* ---------------- 甘特卡片（与 tasks 页 pt-card 同基准：margin sp-4/sp-6，surface 卡片） ---------------- */
 .pm-gantt-root .pm-gantt {
@@ -156,6 +161,21 @@
 .pm-gantt-root .pm-gantt-bar.is-overdue { border-color: color-mix(in srgb, var(--c-late) 55%, transparent); }
 .pm-gantt-root .pm-gantt-bar.is-blocked { border-color: color-mix(in srgb, var(--c-block) 55%, transparent); }
 .pm-gantt-root .pm-gantt-bar:focus-visible { outline: 2px solid var(--c-prog); outline-offset: 1px; }
+
+/* P0-8 / S3-7：任务条 hover 提亮一档（同色底 14%→22%、边 45%→70%），浅深一致；
+   overdue/blocked 语义边不被 hover 覆盖；键盘 focus 环保留。 */
+.pm-gantt-root .pm-gantt-bar.st-done:hover:not(.is-overdue):not(.is-blocked) {
+  background: color-mix(in srgb, var(--c-done) 22%, transparent);
+  border-color: color-mix(in srgb, var(--c-done) 70%, transparent);
+}
+.pm-gantt-root .pm-gantt-bar.st-prog:hover:not(.is-overdue):not(.is-blocked) {
+  background: color-mix(in srgb, var(--c-prog) 22%, transparent);
+  border-color: color-mix(in srgb, var(--c-prog) 70%, transparent);
+}
+.pm-gantt-root .pm-gantt-bar.st-todo:hover {
+  background: color-mix(in srgb, var(--c-todo) 22%, transparent);
+  border-color: color-mix(in srgb, var(--c-todo) 60%, transparent);
+}
 
 /* 进度双层填充：track 在上，实心层按状态平涂（无渐变） */
 .pm-gantt-root .pm-gantt-bar-progress {

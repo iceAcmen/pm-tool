@@ -91,13 +91,13 @@
   font-size: var(--t-12); cursor: pointer; max-width: 132px;
 }
 .pm-tasks-root .pt-primary {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: var(--c-prog); color: var(--dsw-alias-label-primary-foreground); border: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  background: var(--dsw-alias-button-primary-fill); color: var(--pm-on-primary); border: 0; cursor: pointer;
   font-size: var(--t-13); font-weight: 650; padding: 9px 16px;
-  border-radius: var(--r); box-shadow: var(--shadow-glow-prog);
-  transition: filter .18s var(--ease);
+  border-radius: var(--r);
+  transition: background .18s var(--ease);
 }
-.pm-tasks-root .pt-primary:hover { filter: brightness(1.08); }
+.pm-tasks-root .pt-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
 .pm-tasks-root .pt-primary:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ---------------- 表格卡片 ---------------- */
@@ -354,8 +354,9 @@
   padding: 1px 5px; margin: 0 2px; color: var(--muted);
 }
 
-/* ===== #25 窄窗（≤560px / 390 档）：页头搜索通栏、工具条换行、卡片侧距收敛；
-   任务表格本身在 .pt-scroll 内部横向滚动，外壳不溢出。配色只走 dsh/pm token。 */
+/* ===== P0-1 / S1 窄窗（≤560px / 390 档）：弃用 9 列固定 grid，每条任务一张卡片。
+   第一行：勾选 + 标题(完整不截断) + 状态；第二行：编号 · 负责人 · 优先级；
+   第三行：截止日期 / 进度。分组（阶段父行）保留为可折叠标题条。配色只走 token。 */
 @media (max-width: 560px) {
   .pm-tasks-root .pt-head { padding: var(--sp-4) var(--sp-3) 0; }
   .pm-tasks-root .pt-row1 { flex-direction: column; align-items: stretch; gap: var(--sp-3); }
@@ -367,6 +368,70 @@
   .pm-tasks-root .pt-card { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
   .pm-tasks-root .pt-batch { margin: 0 var(--sp-2); }
   .pm-tasks-root .pt-import { margin: var(--sp-2) var(--sp-2) 0; }
-  /* 表格天然宽：内部 .pt-scroll 横向滚动，不撑破外壳 */
-  .pm-tasks-root .pt-scroll { overflow-x: auto; }
+
+  /* 表头隐藏；卡片纵向堆叠，不再横向滚动 */
+  .pm-tasks-root .pt-thead { display: none; }
+  .pm-tasks-root .pt-scroll { overflow-x: hidden; }
+
+  /* ---- 叶子任务卡片 ---- */
+  .pm-tasks-root .pt-row {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    gap: 6px 10px;
+    height: auto; align-items: center;
+    margin: 8px 4px; padding: 12px;
+    border: 1px solid var(--line); border-radius: var(--r);
+    background: var(--surface);
+  }
+  .pm-tasks-root.pt-dense .pt-row { margin: 6px 4px; padding: 10px 12px; }
+  .pm-tasks-root .pt-row.pt-active {
+    background: var(--surface-3);
+    box-shadow: inset 2px 0 0 var(--c-prog);
+  }
+  /* 行1：勾选 | 标题+状态 | 编辑 */
+  .pm-tasks-root .pt-sel { grid-row: 1; grid-column: 1; }
+  .pm-tasks-root .pt-task { grid-row: 1; grid-column: 2; flex-wrap: wrap; min-width: 0; }
+  .pm-tasks-root .pt-acts { grid-row: 1; grid-column: 3; }
+  /* 行2：编号 · 负责人 · 优先级 */
+  .pm-tasks-root .pt-code { grid-row: 2; grid-column: 1; }
+  .pm-tasks-root .pt-assignee { grid-row: 2; grid-column: 2; min-width: 0; }
+  .pm-tasks-root .pt-pri-cell { grid-row: 2; grid-column: 3; justify-self: end; }
+  /* 行3：截止日期 / 进度 */
+  .pm-tasks-root .pt-due { grid-row: 3; grid-column: 1 / span 2; }
+  .pm-tasks-root .pt-prog { grid-row: 3; grid-column: 3; }
+  /* 移动手柄窄窗隐藏（桌面可用），不占卡片空间 */
+  .pm-tasks-root .pt-gutter { display: none; }
+
+  /* 勾选框窄窗常显（无 hover 也可见） */
+  .pm-tasks-root .pt-sel input { opacity: 1; }
+
+  /* 标题完整可读、自然换行，不截断不叠印 */
+  .pm-tasks-root .pt-name {
+    white-space: normal; overflow: visible; text-overflow: clip;
+    flex: 1 1 auto; min-width: 0; line-height: 1.35;
+  }
+  .pm-tasks-root .pt-status { flex: 0 0 auto; }
+  .pm-tasks-root .pt-task { row-gap: 4px; }
+  .pm-tasks-root .pt-wait { flex-basis: 100%; }
+
+  /* 截止日期输入收窄，进度条让位 */
+  .pm-tasks-root .pt-due input[type="date"] { width: auto; max-width: 100%; }
+  .pm-tasks-root .pt-prog { gap: 8px; justify-self: end; }
+  .pm-tasks-root .pt-bar { min-width: 60px; }
+
+  /* ---- 阶段父行 / 状态分组头：可折叠标题条 ---- */
+  .pm-tasks-root .pt-group {
+    display: flex; align-items: center; gap: 8px;
+    height: auto; margin: 8px 4px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: var(--r);
+    background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  }
+  .pm-tasks-root .pt-group .pt-gutter { display: flex; }
+  .pm-tasks-root .pt-group .pt-gname { flex: 1 1 auto; min-width: 0; }
+  .pm-tasks-root .pt-group .pt-assignee,
+  .pm-tasks-root .pt-group .pt-due,
+  .pm-tasks-root .pt-group .pt-prog,
+  .pm-tasks-root .pt-group .pt-acts,
+  .pm-tasks-root .pt-group > .pt-cell:not(.pt-gutter):not(.pt-gname) { display: none; }
 }

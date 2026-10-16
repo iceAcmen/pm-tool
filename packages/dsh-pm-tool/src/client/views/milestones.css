@@ -38,15 +38,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--c-prog);
-  color: var(--on-primary);
+  white-space: nowrap;
+  background: var(--dsw-alias-button-primary-fill);
+  color: var(--pm-on-primary);
   border: 0;
   cursor: pointer;
   font-size: var(--t-12);
   font-weight: 600;
   padding: 8px 14px;
   border-radius: var(--r-sm);
+  transition: background .15s var(--ease);
 }
+.pm-ms-root .ms-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
 
 /* ---------- 紧凑达成率总览带 ---------- */
 .pm-ms-root .ms-ovband { padding: var(--sp-3) var(--sp-4); }
@@ -112,13 +115,13 @@
   color: var(--faint);
 }
 .pm-ms-root .ms-node[data-status='achieved'] .ms-mk {
-  border-color: var(--c-done); background: var(--c-done); color: var(--on-primary);
+  border-color: var(--c-done); background: var(--c-done); color: var(--pm-on-primary);
 }
 .pm-ms-root .ms-node[data-status='at_risk'] .ms-mk {
-  border-color: var(--c-block); background: var(--c-block); color: var(--on-primary);
+  border-color: var(--c-block); background: var(--c-block); color: var(--pm-on-primary);
 }
 .pm-ms-root .ms-node[data-status='missed'] .ms-mk {
-  border-color: var(--c-late); background: var(--c-late); color: var(--on-primary);
+  border-color: var(--c-late); background: var(--c-late); color: var(--pm-on-primary);
 }
 
 /* ---------- 节点卡片 ---------- */
@@ -186,7 +189,7 @@
 }
 .pm-ms-root .ms-av2 {
   width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center;
-  font-size: var(--t-10); font-weight: 700; color: var(--on-primary); background: var(--c-prog);
+  font-size: var(--t-10); font-weight: 700; color: var(--pm-on-primary); background: var(--c-prog);
 }
 
 .pm-ms-root .ms-deliv { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }

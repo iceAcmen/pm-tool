@@ -296,7 +296,11 @@
   cursor: pointer;
   text-decoration: none;
 }
-.pm-ov-root .ov-btn.primary { background: var(--c-prog); border-color: transparent; color: rgb(255, 255, 255); }
+.pm-ov-root .ov-btn.primary {
+  background: var(--dsw-alias-button-primary-fill); border-color: transparent; color: var(--pm-on-primary);
+  white-space: nowrap;
+}
+.pm-ov-root .ov-btn.primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
 .pm-ov-root .ov-btn.ghost { background: transparent; }
 .pm-ov-root .ov-repo-note { margin-top: var(--sp-3); font-size: var(--t-11); color: var(--faint); display: flex; align-items: center; gap: 6px; }
 .pm-ov-root .ov-repo-empty { padding: var(--sp-3) 4px; text-align: center; font-size: var(--t-12); color: var(--faint); margin: 0; }
@@ -341,4 +345,6 @@
   .pm-ov-root .ov-info-grid { gap: var(--sp-2); }
   .pm-ov-root .ov-info-cell { padding: 0 var(--sp-2); }
   .pm-ov-root .ov-row-stats { gap: var(--sp-2); }
+  /* S3-1：日期/长值窄窗允许换行，不裸截断（悬停仍有 title 全名） */
+  .pm-ov-root .ov-info-val { white-space: normal; overflow: visible; text-overflow: clip; }
 }
