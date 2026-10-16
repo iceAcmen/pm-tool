@@ -1,195 +1,187 @@
 /**
- * 一次性文本生成客户端（R13/R14/R15 共用）。
- *
- * 设计原则（ADL-036）：LLM 只做一次性文本生成、不挂 tools/function calling；
- * 每次 generateDraft 只发一次模型请求；失败按 error.code 归一为中文提示，
- * 便于命令层优雅降级到手工/确定性路径。核心台账不依赖本模块。
- *
- * 调用范本来自上游内置「会话起名」：packages/session/session-title-llm/src/index.ts
- * （ctx.llm.prepareCall({provider,model,maxTokens}, signal) → call.stream(options)，
- * 用 BlockAssembler 把原始 chunk 流拼成文本块）。
+ * 统一 AI 草稿客户端：
+ *   - 给宿主 dsh-llm 适配器的「provider/model 候选链」按顺序尝试，首个成功即返回。
+ *   - 透传 reasoningEffort（思考档位）：仅副驾开 high，其余 off（DeepSeek 默认 high，
+ *     非思考场景必须显式 off 才不产生 reasoning tokens）。
+ *   - Prompt Caching 由适配器/上游自动完成：保持 system 与「稳定前缀」字节稳定，
+ *     副驾把项目快照放在 user 最前（见 ask-copilot），多轮追问命中 cacheReadTokens。
+ *   - 任何失败均归一为中文 AiDraftError（绝不泄露原始英文堆栈/明文 Key），
+ *     命令层据此降级到中文提示或手工流程。
  */
-import { BlockAssembler, createUserMessage } from '@deepseek-ai/dsh-llm'
+import {
+  BlockAssembler,
+  ReasoningEffortId,
+  createUserMessage,
+} from '@deepseek-ai/dsh-llm'
+import type { ModelCandidate, ReasoningLevel } from './model-route.js'
 
-/** 默认路由（匿名 PoC 兜底）：免费公共网关插件 our-free-model 的 Kilo 免费自动路由 kilo-auto/free（与 model-route.ts 的 POC_LANE 一致，见 docs/model-providers.md）。 */
-export const AI_PROVIDER = 'our-free-model'
-export const AI_MODEL = 'kilo-auto/free'
-
-/** 免费池随机模型 function-calling 不保证，故给足 maxTokens（推理型先吃 reasoning tokens，KB-034）。 */
-export const AI_DEFAULT_MAX_TOKENS = 1200
-
-/**
- * 硬错误码：不跨池轮换、直接抛原中文。
- * 含 NO_ADAPTER：缺适配器意味着该 provider 插件未装载，同 provider 下换模型无意义，
- * 故立即停止并在文案中点名实际 attempted provider（见 friendlyCode）。
- */
-const HARD_ERROR_CODES = ['RATE_LIMIT', 'QUOTA', 'ACCOUNT_QUOTA', 'INVALID_CREDENTIAL', 'AUTH', 'CONTEXT_WINDOW_EXCEEDED', 'MODEL_TIMEOUT', 'NO_LLM', 'NO_ADAPTER']
-
-/**
- * 命令层依赖的最小 LLM 网关（鸭子类型）：只需要 prepareCall。
- * 真实实现为宿主提供的 ctx.llm；测试里用 mock 返回 { config, stream }。
- */
 export interface LlmGateway {
-  prepareCall(
-    config: { provider: string, model: string, maxTokens?: number },
-    signal?: AbortSignal,
-  ): Promise<{ config: unknown, stream(options: unknown): AsyncIterable<unknown> }>
-}
-
-/** AI 草稿不可用（未装载 LLM / 无 key / 限流 / 失败），命令层据此降级。 */
-export class AiDraftError extends Error {
-  constructor(public readonly code: string, message: string) {
-    super(message)
-    this.name = 'AiDraftError'
-  }
-}
-
-/** 把上游 LlmError.code（RATE_LIMIT/QUOTA/INVALID_CREDENTIAL…）翻成面向用户的中文提示。 */
-function friendlyCode(code: string | undefined, provider?: string): string {
-  switch (code) {
-    case 'RATE_LIMIT':
-      return '免费模型正被限流（约 20 次/分钟），请稍后重试。'
-    case 'QUOTA':
-    case 'ACCOUNT_QUOTA':
-      return '免费额度已用完（约 50 次/天），请明天再试或在 profile 配置其他模型。'
-    case 'INVALID_CREDENTIAL':
-    case 'AUTH':
-      // 匿名 PoC 走免 Key 公共网关、prod 走官方 Key；此处不点名任何具体 KEY，避免误导为 OPENROUTER_API_KEY。
-      return '模型鉴权未通过或当前模型不可用（AI 草稿不可用，你仍可手工录入）。'
-    case 'CONTEXT_WINDOW_EXCEEDED':
-      return '输入过长超过模型上下文上限，请精简目标文本后重试。'
-    case 'NO_ADAPTER':
-      // 点名「本次实际尝试」的 provider；缺省才回退到匿名兜底常量，避免显式 prod 误报 our-free-model。
-      return `宿主未装载对应模型适配器（${provider ?? AI_PROVIDER}），AI 草稿不可用。`
-    default:
-      return 'AI 生成失败（模型未返回可用文本），你仍可手工录入或稍后重试。'
-  }
-}
-
-/** 把 prepareCall / stream 抛出的错误归一为 AiDraftError（按 code/name/message 路由）。 */
-function normalize(error: unknown, provider?: string): AiDraftError {
-  const record = typeof error === 'object' && error !== null ? (error as Record<string, unknown>) : {}
-  const name = typeof record.name === 'string' ? record.name : ''
-  const code = typeof record.code === 'string' ? record.code : undefined
-  const message = typeof record.message === 'string' ? record.message : ''
-
-  // 超时/中断（免费池随机模型偶发延迟或 dsh 步骤超时）：不再让英文 abort 文案直抛到界面。
-  const looksTimeout = name === 'AbortError'
-    || code === 'ABORTED' || code === 'TIMEOUT' || code === 'ETIMEDOUT'
-    || /abort|timeout|timed out/i.test(message)
-  if (looksTimeout) {
-    return new AiDraftError(
-      'MODEL_TIMEOUT',
-      '免费模型响应超时或被中断（免费池偶发），请重试一次；核心台账不受影响，你也可以手工录入。',
-    )
-  }
-  return new AiDraftError(code ?? 'UNKNOWN', friendlyCode(code, provider))
+  prepareCall(request: {
+    provider: string
+    model: string
+    maxTokens?: number
+  }, signal?: AbortSignal): Promise<{
+    config: unknown
+    stream(options: Record<string, unknown> & { signal?: AbortSignal }): AsyncIterable<unknown>
+  }>
 }
 
 export interface GenerateDraftOptions {
   system: string
   user: string
   maxTokens?: number
+  /** 显式 primary provider（简化调用）；完整链走 models。 */
   provider?: string
   model?: string
-  /** 有序候选模型链（PoC 免费池跨池降级用）；缺省单模型。失败时依次换下一个。 */
-  models?: string[]
-  signal?: AbortSignal
+  /** primary 思考档位（默认 off；副驾显式 high）。 */
+  reasoningEffort?: ReasoningLevel
+  /** 完整候选链（含 primary）；元素可为 model id（沿用 provider）或 ModelCandidate。 */
+  models?: Array<string | ModelCandidate>
 }
 
-const sleep = (ms: number) => new Promise<void>(resolve => { setTimeout(resolve, ms) })
-
-/**
- * 发起一次纯文本生成，返回模型输出的拼接正文（已 trim）。
- * PoC 免费池（kilo/openrouter 两池各自约 80% 成功）偶发「思考耗尽正文为空 / finish=error」，
- * 故沿候选模型链依次换不同池重试（最多链长次、短退避），仍全失败才抛中文错误（ADL-044）。
- * @throws {AiDraftError} 未装载 LLM、无 key、限流、或链上全部失败时抛出。
- */
-export async function generateDraft(llm: LlmGateway | undefined, options: GenerateDraftOptions): Promise<string> {
-  if (!llm) {
-    throw new AiDraftError('NO_LLM', '当前宿主未装载 LLM 服务，AI 草稿不可用；你仍可手工录入。')
+export class AiDraftError extends Error {
+  code: string
+  constructor(code: string, message: string) {
+    super(message)
+    this.name = 'AiDraftError'
+    this.code = code
   }
-  const chain = (options.models && options.models.length > 0)
-    ? options.models
-    : [options.model ?? AI_MODEL]
+}
 
-  const tried: string[] = []
-  let lastError: AiDraftError | null = null
-  for (let i = 0; i < chain.length; i += 1) {
-    const model = chain[i]
-    tried.push(model)
-    let result: { text: string, retriable: boolean, error: AiDraftError }
-    try {
-      result = await attempt(llm, { ...options, model })
-    } catch (error) {
-      // 硬错误不换池；其余可退避换下一池。
-      const err = error instanceof AiDraftError ? error : normalize(error)
-      result = { text: '', retriable: !HARD_ERROR_CODES.includes(err.code), error: err }
+// 匿名 PoC 兜底：未显式指定 provider/model 时用的默认链。
+const DEFAULT_PROVIDER = 'our-free-model'
+const DEFAULT_MODELS = ['kilo-auto/free']
+
+/** 把候选参数归一为去重后的 ModelCandidate 列表。 */
+function buildCandidates(options: GenerateDraftOptions): ModelCandidate[] {
+  const candidates: ModelCandidate[] = []
+  const seen = new Set<string>()
+  const push = (candidate: ModelCandidate): void => {
+    const key = `${candidate.provider}::${candidate.model}`
+    if (seen.has(key)) return
+    seen.add(key)
+    candidates.push(candidate)
+  }
+
+  if (options.provider && options.model) {
+    push({ provider: options.provider, model: options.model, reasoningEffort: options.reasoningEffort ?? 'off' })
+  }
+  const chainProvider = options.provider ?? DEFAULT_PROVIDER
+  for (const entry of options.models ?? []) {
+    if (typeof entry === 'string') {
+      push({ provider: chainProvider, model: entry, reasoningEffort: options.reasoningEffort ?? 'off' })
+    } else {
+      push({ ...entry, reasoningEffort: entry.reasoningEffort ?? 'off' })
     }
-    if (result.text) return result.text
-    lastError = result.error
-    if (HARD_ERROR_CODES.includes(result.error.code) || i === chain.length - 1) break
-    await sleep(400)
   }
-  // 硬错误（限流/认证/上下文/缺适配器）直接抛原中文，不套通用链文案。
-  if (lastError && HARD_ERROR_CODES.includes(lastError.code)) throw lastError
-  throw new AiDraftError(
-    lastError?.code ?? 'EMPTY_RESPONSE',
-    `免费池多次尝试（${tried.join(' → ')}）均未返回可用正文；请稍后再试或手工录入。`,
-  )
+  if (candidates.length === 0) {
+    for (const model of DEFAULT_MODELS) push({ provider: DEFAULT_PROVIDER, model, reasoningEffort: 'off' })
+  }
+  return candidates
 }
 
+/** 单次候选尝试：组装流式响应，正文为空时抛 EMPTY 以便换模型。 */
 async function attempt(
   llm: LlmGateway,
+  candidate: ModelCandidate,
   options: GenerateDraftOptions,
-): Promise<{ text: string, retriable: boolean, error: AiDraftError }> {
-  const provider = options.provider ?? AI_PROVIDER
-  const model = options.model ?? AI_MODEL
-  const maxTokens = options.maxTokens ?? AI_DEFAULT_MAX_TOKENS
-
-  let call: { config: unknown, stream(options: unknown): AsyncIterable<unknown> }
-  try {
-    call = await llm.prepareCall({ provider, model, maxTokens }, options.signal)
-  } catch (error) {
-    throw normalize(error, provider)
-  }
-
+  signal: AbortSignal,
+): Promise<string> {
+  const call = await llm.prepareCall({
+    provider: candidate.provider,
+    model: candidate.model,
+    maxTokens: options.maxTokens,
+  }, signal)
   const messages = [
     createUserMessage({
       content: [{ type: 'text', text: options.user }],
       source: { kind: 'user' },
     }),
   ]
-
-  const config = call.config as Record<string, unknown>
-  const assembler = new BlockAssembler()
-  let upstreamError: unknown
-  try {
-    for await (const chunk of call.stream({ ...config, system: options.system, messages, signal: options.signal })) {
-      assembler.push(chunk as Parameters<typeof assembler.push>[0])
-      if ((chunk as { error?: unknown })?.error) upstreamError = (chunk as { error?: unknown }).error
-    }
-  } catch (error) {
-    throw normalize(error, provider)
+  // 始终显式传 reasoningEffort：DeepSeek 默认 high，非思考场景必须显式 off；
+  // pi-ai 适配器会把 off 安全转为 undefined（不发送），不会报错。
+  const streamOptions = {
+    ...(call.config as Record<string, unknown>),
+    system: options.system,
+    messages,
+    maxTokens: options.maxTokens,
+    reasoningEffort: ReasoningEffortId(candidate.reasoningEffort),
+    signal,
   }
-
+  const assembler = new BlockAssembler()
+  for await (const chunk of call.stream(streamOptions)) {
+    assembler.push(chunk as Parameters<typeof assembler.push>[0])
+  }
   const text = assembler.blocks()
     .filter(block => block.type === 'text')
     .map(block => (block as { text: string }).text)
     .join('')
     .trim()
+  if (!text) {
+    throw new AiDraftError('EMPTY', `模型 ${candidate.model} 未返回正文。`)
+  }
+  return text
+}
 
-  if (text) return { text, retriable: false, error: new AiDraftError('EMPTY', '') }
+/**
+ * 不可重试错误码：命中后立即抛出，不在候选链上换池重试。
+ * 限流/容量类换池会放大限流；鉴权/无适配器换池也无意义，且调用方依赖其 code。
+ */
+const NON_RETRYABLE = new Set([
+  'RATE_LIMIT', 'QUOTA_EXCEEDED', 'CONTEXT_OVERFLOW',
+  'INVALID_CREDENTIAL', 'NO_ADAPTER',
+])
 
-  const kind = assembler.finish?.kind
-  const retriable = kind === 'max-tokens' || !!upstreamError
-  const error = new AiDraftError(
-    kind === 'max-tokens' ? 'MAX_TOKENS' : 'EMPTY_RESPONSE',
-    kind === 'max-tokens'
-      ? '模型在输出结束前达到 max_tokens（推理占满），正文为空。'
-      : upstreamError
-        ? '免费池上游返回异常（随机模型不稳）。'
-        : '模型未返回可用正文。',
+/** 把上游英文错误归一为中文 AiDraftError（不泄露原始英文堆栈）。 */
+function normalizeError(error: unknown, attempted: string): AiDraftError {
+  if (error instanceof AiDraftError) return error
+  // 超时/中断：上游 AbortError/TimeoutError 或自带 timeout signal 触发，归一为中文超时。
+  const name = (error as { name?: string })?.name
+  const message = String((error as { message?: string })?.message ?? '')
+  if (name === 'AbortError' || name === 'TimeoutError' || /aborted|timeout/i.test(message)) {
+    return new AiDraftError('MODEL_TIMEOUT', '模型超时或被中断，请重试一次。')
+  }
+  const raw = (error as { code?: string })?.code
+  const code = String(raw ?? 'AI_DRAFT_FAILED')
+  if (code === 'RATE_LIMIT') {
+    return new AiDraftError('RATE_LIMIT', '模型服务限流，请稍后再试。')
+  }
+  if (code === 'CONTEXT_OVERFLOW') {
+    return new AiDraftError('CONTEXT_OVERFLOW', '输入内容过长，请精简后重试。')
+  }
+  if (code === 'INVALID_CREDENTIAL') {
+    return new AiDraftError('INVALID_CREDENTIAL', `模型 ${attempted} 凭据无效或已失效，请检查 API Key。`)
+  }
+  if (code === 'NO_ADAPTER') {
+    return new AiDraftError('NO_ADAPTER', `当前模型通道 ${attempted} 未配置或缺少适配器。`)
+  }
+  return new AiDraftError(code, `模型 ${attempted} 生成失败，请稍后重试。`)
+}
+
+/**
+ * 按候选链顺序尝试，首个成功即返回正文。
+ * @throws {AiDraftError} 全部候选失败、或命中限流硬错误时抛出。
+ */
+export async function generateDraft(
+  llm: LlmGateway | undefined,
+  options: GenerateDraftOptions,
+): Promise<string> {
+  if (!llm) {
+    throw new AiDraftError('NO_LLM', 'AI 草稿不可用：当前未装载 LLM 模型服务。')
+  }
+  const candidates = buildCandidates(options)
+  const failures: string[] = []
+  for (const candidate of candidates) {
+    try {
+      return await attempt(llm, candidate, options, AbortSignal.timeout(120000))
+    } catch (error) {
+      const normalized = normalizeError(error, `${candidate.provider}/${candidate.model}`)
+      failures.push(normalized.message)
+      if (NON_RETRYABLE.has(normalized.code)) throw normalized
+    }
+  }
+  throw new AiDraftError(
+    'AI_DRAFT_FAILED',
+    `免费池多次尝试均失败：${failures.join('；')}。请稍后重试或切回 PoC：/pm model mode poc。`,
   )
-  return { text: '', retriable, error }
 }

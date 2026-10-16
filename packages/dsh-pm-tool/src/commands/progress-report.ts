@@ -72,7 +72,7 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       const brief = buildBrief(domain, projectId) // 确定性采集（含项目存在校验）
       let narrative: string
       try {
-        const route = resolveModelRoute(getModelMode(domain))
+        const route = resolveModelRoute(getModelMode(domain), 'narrative')
         if (confirmation) {
           narrative = recallNarrative(projectId) ?? await generateNarrative(llm, brief, route)
         } else {

@@ -63,7 +63,7 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
     deliverables: deliverables.map((d: any) => ({ id: d.id, title: d.title, status: d.status, dueDate: d.dueDate })),
   })
 
-  const route = resolveModelRoute(getModelMode(domain))
+  const route = resolveModelRoute(getModelMode(domain), 'copilot')
   const call = generateDraft(llm, {
     system: COPILOT_SYSTEM,
     user: `【项目数据】\n${ctxText}\n\n【用户问题】${question}`,

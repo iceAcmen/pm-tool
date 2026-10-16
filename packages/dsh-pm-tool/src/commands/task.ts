@@ -571,7 +571,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       }
       let markdown: string
       try {
-        const route = resolveModelRoute(getModelMode(domain))
+        const route = resolveModelRoute(getModelMode(domain), 'wbs')
         if (confirmation) {
           markdown = recallDraft(projectId, goal) ?? await generateWbsMarkdown(llm, goal, route)
         } else {

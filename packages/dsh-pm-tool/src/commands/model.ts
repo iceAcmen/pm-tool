@@ -22,9 +22,13 @@ export async function handleModelCommand(argument: string, domain: PmDomain | un
     const current = getModelMode(domain)
     const lanes = describeLanes(current)
     const lines = [`当前车道：${current === 'poc' ? 'PoC 验证（免费网关）' : '生产开发（官方 API）'}`]
+    // 每个车道只在其第一行打 ▶（其余同车道行不重复）。
+    let markedMode: string | null = null
     for (const lane of lanes) {
-      const mark = lane.mode === current ? '▶ ' : '  '
-      lines.push(`${mark}[${lane.mode}] ${lane.provider}/${lane.model} ${lane.ready ? '就绪' : '未就绪'} — ${lane.note}`)
+      const showMark = lane.mode === current && markedMode !== lane.mode
+      if (showMark) markedMode = lane.mode
+      const mark = showMark ? '▶ ' : '  '
+      lines.push(`${mark}[${lane.mode}] ${lane.role} ${lane.provider}/${lane.model} ${lane.ready ? '就绪' : '未就绪'} — ${lane.note}`)
     }
     return { kind: 'success', text: lines.join('\n') }
   }

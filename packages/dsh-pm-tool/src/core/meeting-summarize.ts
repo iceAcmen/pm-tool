@@ -7,6 +7,7 @@
  * ③ 失败/字段缺失时降级（不崩、可退回手工 meeting add）。行动项逐条复用 addMeetingAction。
  */
 import { generateDraft, AiDraftError, type LlmGateway } from './ai-client.js'
+import type { ModelRoute } from './model-route.js'
 
 const SUMMARIZE_SYSTEM_PROMPT = [
   '你是会议秘书，把用户给的原始速记/录音转写归纳为结构化会议纪要。',
@@ -79,14 +80,12 @@ export function parseSummarizedDraft(raw: string): SummarizedMeeting {
 export async function summarizeTranscript(
   llm: LlmGateway | undefined,
   transcript: string,
-  route?: { provider: string, model: string, models?: string[] },
+  route?: ModelRoute,
 ): Promise<string> {
   return generateDraft(llm, {
     system: SUMMARIZE_SYSTEM_PROMPT,
     user: `请归纳以下会议原始速记：\n${transcript}`,
     maxTokens: 6000,
-    provider: route?.provider,
-    model: route?.model,
     models: route?.models,
   })
 }

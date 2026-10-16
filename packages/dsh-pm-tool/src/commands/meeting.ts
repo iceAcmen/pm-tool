@@ -100,7 +100,7 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
 
       let draft
       try {
-        const route = resolveModelRoute(getModelMode(domain))
+        const route = resolveModelRoute(getModelMode(domain), 'meeting')
         if (confirmation) {
           draft = recallSummary(key) ?? parseSummarizedDraft(await summarizeTranscript(llm, transcript, route))
         } else {

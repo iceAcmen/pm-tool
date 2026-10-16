@@ -49,17 +49,33 @@ try {
   assert.match(PROD_KEY_MISSING_TEXT, /DEEPSEEK_API_KEY|KIMI_API_KEY/)
   assert.doesNotMatch(PROD_KEY_MISSING_TEXT, /sk-[A-Za-z0-9]{6}/)
 
-  // 有 DeepSeek Key：优先 DeepSeek；无则 Kimi。
+  // 有 DeepSeek Key：副驾优先 DeepSeek flash（思考 high）；无则 Kimi。
   process.env.DEEPSEEK_API_KEY = 'fake'
-  assert.equal(resolveModelRoute('prod').provider, 'deepseek-official')
+  const copilot = resolveModelRoute('prod', 'copilot')
+  assert.equal(copilot.provider, 'deepseek-official')
+  assert.equal(copilot.model, 'deepseek-flash')
+  assert.equal(copilot.reasoningEffort, 'high', '副驾默认开思考')
+  // WBS 用同一 flash 但非思考。
+  const wbs = resolveModelRoute('prod', 'wbs')
+  assert.equal(wbs.model, 'deepseek-flash')
+  assert.equal(wbs.reasoningEffort, 'off', 'WBS 非思考')
   delete process.env.DEEPSEEK_API_KEY
   process.env.KIMI_API_KEY = 'fake'
-  assert.equal(resolveModelRoute('prod').provider, 'kimi-official')
+  assert.equal(resolveModelRoute('prod', 'copilot').provider, 'kimi-official')
   delete process.env.KIMI_API_KEY
 
-  // describeLanes 不回显 Key 明文。
+  // 有阿里百炼 Key：叙述/标题走 qwen-turbo（降本），纪要走 qwen3-coder-flash。
+  process.env.DASHSCOPE_API_KEY = 'fake'
+  const narrative = resolveModelRoute('prod', 'narrative')
+  assert.equal(narrative.provider, 'aliyun-official')
+  assert.equal(narrative.model, 'qwen-turbo')
+  const meeting = resolveModelRoute('prod', 'meeting')
+  assert.equal(meeting.model, 'qwen3-coder-flash')
+  delete process.env.DASHSCOPE_API_KEY
+
+  // describeLanes 不回显 Key 明文：poc + 主力/降本/升级 共 4 条。
   const lanes = describeLanes('poc')
-  assert.equal(lanes.length, 3)
+  assert.equal(lanes.length, 4)
 
   // 命令：模式默认 poc；切 prod 无 Key 返回友好提示；持久化读回。
   await setModelMode(domain, 'prod')

@@ -106,11 +106,43 @@ function recordingGateway(behaviorByModel) {
 
 // 6) 显式 prod provider/model 必须原样透传，兜底常量不得污染（回归保护）。
 {
-  const g = recordingGateway({ 'deepseek-chat': { chunks: ['hi'], finish: true } })
-  const out = await generateDraft(g, { system: 's', user: 'u', provider: 'deepseek-official', model: 'deepseek-chat' })
+  const g = recordingGateway({ 'deepseek-flash': { chunks: ['hi'], finish: true } })
+  const out = await generateDraft(g, { system: 's', user: 'u', provider: 'deepseek-official', model: 'deepseek-flash' })
   assert.equal(out, 'hi')
   assert.equal(g.calls[0].provider, 'deepseek-official')
-  assert.equal(g.calls[0].model, 'deepseek-chat')
+  assert.equal(g.calls[0].model, 'deepseek-flash')
+}
+
+// 6b) reasoningEffort 透传：副驾 high、非思考 off；stream 收到的档位须正确。
+{
+  const streamRecords = []
+  function recordingStreamGateway(chunks) {
+    return {
+      async prepareCall() {
+        return {
+          config: {},
+          async *stream(options) {
+            streamRecords.push(options.reasoningEffort)
+            for (const t of chunks) yield chunkText(t)
+          },
+        }
+      },
+    }
+  }
+  // 候选带 high（副驾）。
+  const g1 = recordingStreamGateway(['ok'])
+  await generateDraft(g1, {
+    system: 's', user: 'u',
+    models: [{ provider: 'deepseek-official', model: 'deepseek-flash', reasoningEffort: 'high' }],
+  })
+  assert.equal(streamRecords[0], 'high', '副驾候选须传 reasoningEffort=high')
+  // 候选带 off（WBS）。
+  const g2 = recordingStreamGateway(['ok'])
+  await generateDraft(g2, {
+    system: 's', user: 'u',
+    models: [{ provider: 'deepseek-official', model: 'deepseek-flash', reasoningEffort: 'off' }],
+  })
+  assert.equal(streamRecords[1], 'off', '非思考候选须传 reasoningEffort=off')
 }
 
 // 7) 显式 prod provider 缺适配器：NO_ADAPTER 文案必须点名实际 attempted provider，不得误报 our-free-model。

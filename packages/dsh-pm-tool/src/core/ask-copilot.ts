@@ -5,6 +5,7 @@
  */
 import { generateDraft, type LlmGateway } from './ai-client.js'
 import { parseCopilotActions, validateActions, type CopilotAction } from './copilot.js'
+import type { ModelRoute } from './model-route.js'
 import type { Meeting, MeetingAction } from './meeting.js'
 
 /** 对外暴露的统一 SYSTEM（ask.ts 复用同一处，避免状态枚举等口径漂移）。 */
@@ -67,18 +68,17 @@ export function localToday(d = new Date()): string {
 
 export async function askCopilot(
   llm: LlmGateway | undefined,
-  route: { provider: string, model: string, models?: string[] },
+  route: ModelRoute,
   ctxText: string,
   question: string,
   taskIds: string[],
 ): Promise<AskResult> {
+  // user 结构：项目快照（稳定前缀，多轮追问命中缓存）在前，用户问题（变化）在最后。
   const raw = await generateDraft(llm, {
     system: COPILOT_SYSTEM,
     user: `【项目数据】\n${ctxText}\n\n【用户问题】${question}`,
     maxTokens: 4000,
-    provider: route.provider,
-    model: route.model,
-    models: route.models ? [...route.models] : undefined,
+    models: route.models,
   })
   const v = validateActions(parseCopilotActions(raw), { taskIds })
   // 诊断 = 去掉 json 块后的正文
