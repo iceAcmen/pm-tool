@@ -8,9 +8,17 @@
 
 ---
 
+## 修复：真实网络 smoke 移出确定性隔离门；#25 并入 main（2026-10-17，平台：doubao-work）
+
+- **改了哪些文件**：`packages/dsh-pm-tool/scripts/verify-isolation.mjs`（默认自动发现清单剔除 `verify-real-model.mjs`，仅影响默认扫描，显式 argv 仍可纳入）、`docs/changelog.md`（本条）。
+- **做了什么 / 为什么**：c78e6a4（三档模型路由）新增的 `scripts/verify-real-model.mjs` 是**非 mock 的真实出网 smoke**（真实调用外部免费网关、依赖模型当次输出）。实测同机连跑 3 次为 通过/失败/通过，失败点不固定（偶发过度思考、不吐约定 JSON 计划或 WBS 勾选清单），属外部免费模型非确定性。它被自动纳入「离线、确定性」的 `verify-isolation` 后，会让隔离门无规律变红，违背隔离门零出网/可复现的定位。故将其移出默认扫描；离线确定性逻辑仍由 `verify-model-route.mjs`、`verify-ai-client.mjs` 覆盖（两者均通过）。
+- **影响范围 / 如何手动跑**：`verify-real-model.mjs` 不删除、断言不改，发布前可手动 `node scripts/verify-real-model.mjs`，或经显式参数 `node scripts/verify-isolation.mjs scripts/verify-real-model.mjs` 纳入；后续 #24 若要把它纳入 CI，应单独成「真实网络/允许重试」的非阻塞 job，不进确定性门。
+- **#25 集成**：分支 `p0/narrow-390`（#25）已 rebase 到 `c78e6a4` 之上（无冲突）并快进并入 main，合并提交 `cf09581`；主树标准路径 `pnpm build`=0，`verify-isolation` 确定性门 **71/71 全绿、资产污染 0**（before=after=165）。
+- **验证**：主树重跑 `verify-isolation.mjs` 共 71 脚本、通过 71、失败 0、污染 0；`verify-real-model.mjs` 连跑 3 次 P/F/P 证实非确定性；显式 argv 仍能单独运行该 smoke。
+
 ## #25 真 390px 窄窗响应式正式修复（GI-WEB-14 / PROD-07 遗留，原 MANUAL_PENDING）（2026-10-17，平台：doubao-work）
 
-> 状态：**隔离 worktree 内完成，真实 Chrome 390px 浅/深实测 20/20 无外壳溢出，已核验**。`pnpm build`=0；`verify-isolation.mjs` **71 脚本 / 70 通过 / 1 失败**（唯一失败 `verify-export.mjs` 为硬编码路径须以 `/pm-tool/exports/` 结尾、worktree 在 `.tmp/p0-narrow390` 下不匹配的已知环境假象，非回归），资产污染 **0**。本项**只做 CSS/视图响应式，零新增依赖、零 schema、零业务逻辑改动**；分支 `p0/narrow-390`，**不 merge、不 push、不改 package.json version、不打 tag**。
+> 状态：**隔离 worktree 内完成，真实 Chrome 390px 浅/深实测 20/20 无外壳溢出，已核验**。`pnpm build`=0；`verify-isolation.mjs` **71 脚本 / 70 通过 / 1 失败**（唯一失败 `verify-export.mjs` 为硬编码路径须以 `/pm-tool/exports/` 结尾、worktree 在 `.tmp/p0-narrow390` 下不匹配的已知环境假象，非回归），资产污染 **0**。本项**只做 CSS/视图响应式，零新增依赖、零 schema、零业务逻辑改动**；分支 `p0/narrow-390`（开发阶段在隔离 worktree、不 merge 不 push；**已在 2026-10-17 rebase 到 `c78e6a4` 之上并入 main，见上一条**），不改 package.json version、不打 tag。
 
 - **范围**：面板骨架（顶栏/抽屉/弹窗/表单/按钮组）+ 全部 9 视图（全部任务、里程碑、风险与问题、会议纪要、交付物、进度汇报、甘特排期、项目概览、人员负载）在 390px 视口无重叠/无裁切/无横向外壳溢出；≥1024 桌面布局不变（窄屏规则全部隔离在 `@media (max-width:560px)` 内，不命中桌面）。
 - **改了哪些文件**

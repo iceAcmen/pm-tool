@@ -135,6 +135,12 @@ function pickTargets() {
     const all = readdirSync(here).filter(f => f.startsWith('verify-') && f.endsWith('.mjs'))
     // 跳过 guard 自身，避免递归
     .filter(f => f !== 'verify-isolation.mjs')
+    // 真实网络 smoke（非 mock：真实出网 + 外部免费网关 + 依赖模型当次输出，天然非确定性，
+    // 实测 POC 链路偶发不吐约定 JSON/清单）不纳入「离线、确定性」隔离门，否则门会无规律变红。
+    // 离线确定性逻辑已由 verify-model-route.mjs / verify-ai-client.mjs 覆盖。
+    // 该 smoke 仍可手动运行：node scripts/verify-real-model.mjs，
+    // 或经显式 argv 纳入：node scripts/verify-isolation.mjs scripts/verify-real-model.mjs。
+    .filter(f => f !== 'verify-real-model.mjs')
     .sort()
     targets = all.map(f => join('scripts', f))
   }
