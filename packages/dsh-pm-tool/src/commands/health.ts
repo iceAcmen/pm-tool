@@ -1,6 +1,7 @@
 /** /pm health：项目健康分离线命令（纯派生、只读、不写盘）。 */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import { computeProjectHealth } from '../core/health.js'
+import { readProjectSettings } from './settings.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const healthHelp = [
@@ -21,7 +22,7 @@ export async function handleHealthCommand(rawInput: string, domain?: PmDomain): 
   if (!input) return { kind: 'error', text: '请指定项目：/pm health p-0001。' }
 
   try {
-    const health = computeProjectHealth(domain, input)
+    const health = computeProjectHealth(domain, input, undefined, readProjectSettings(domain))
     const lines: string[] = [`项目健康：${health.projectId}`]
     if (health.score === null) {
       lines.push(`${LAMP_LABEL[health.lamp]} · 数据不足（尚未拆分任务，暂不评分）`)

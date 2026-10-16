@@ -84,4 +84,31 @@ assert.match(ganttView, /pm-gantt-legend/, '甘特应渲染关键路径图例说
 assert.match(ganttView, /循环不可计算|成环/, '成环降级应有「循环不可计算」诚实提示')
 assert.match(ganttView, /缺日期/, '缺日期降级应有诚实提示（不自动补日期）')
 
+// ---------- #21 口径配置化静态契约 ----------
+const settingsCore = readFileSync(join(dir, 'src/core/settings.ts'), 'utf8')
+const overviewView2 = overviewView
+const peopleView = readFileSync(join(dir, 'src/client/views/people.tsx'), 'utf8')
+assert.match(index, /settings:\s*readProjectSettings\(domain\)/, 'web snapshot 应透传归一化 settings')
+assert.match(panel, /kind: 'settings'/, 'panel 应注册口径设置 drawer')
+assert.match(panel, /function SettingsPanel/, 'panel 应定义 SettingsPanel 组件')
+assert.match(panel, /settings put /, 'SettingsPanel 应经 settings put 保存口径')
+assert.match(panel, /settings reset/, 'SettingsPanel 应提供 settings reset 恢复默认')
+assert.match(panel, /口径设置/, '应有「口径设置」入口文案')
+assert.match(overviewView2, /settings\?: ProjectSettings/, 'Overview 应接收 settings prop')
+assert.match(peopleView, /settings\?: ProjectSettings/, 'PeopleView 应接收 settings prop')
+// 口径 core 零写：不得含 run/execute/fs 写命令
+assert.doesNotMatch(settingsCore, /\brun\s*\(/, 'core/settings.ts 纯模型不得含 run(')
+assert.doesNotMatch(settingsCore, /\bexecute\s*\(/, 'core/settings.ts 纯模型不得含 execute(')
+assert.doesNotMatch(settingsCore, /writeFile|node:fs/, 'core/settings.ts 纯模型不得含 fs 写')
+// 设置面板样式只走宿主 token 别名（--pm-* 由 panel.css 从 --dsw-* 重映射），不写死 hex
+const settingsStart = panelCss.indexOf('.pm-settings-root')
+assert.ok(settingsStart >= 0, 'panel.css 应定义 .pm-settings-root')
+const settingsCss = panelCss.slice(settingsStart, settingsStart + 1600)
+assert.ok(settingsCss.includes('var(--pm-'), '设置面板 CSS 应使用 --pm-* 宿主别名 token')
+assert.doesNotMatch(settingsCss, /#[0-9a-fA-F]{3,6}\b/, '设置面板 CSS 不得硬编码 hex')
+// 默认值常量必须来自配置化前硬编码（健康分 3/4/6/10/8、封顶 15/12/20/16、灯线 80/60、窗口 7、过载 5）
+for (const [k, v] of [['healthOverduePer', 3], ['healthBlockedPer', 4], ['healthHighRiskPer', 6], ['healthCriticalRiskPer', 10], ['healthOverdueMilestonePer', 8], ['healthCapOverdueTasks', 15], ['healthCapBlockedTasks', 12], ['healthCapOpenRisk', 20], ['healthCapOverdueMilestones', 16], ['healthGreenAt', 80], ['healthYellowAt', 60], ['reminderWithinDays', 7], ['loadOverloadThreshold', 5]]) {
+  assert.match(settingsCore, new RegExp(`${k}:\\s*${v}\\b`), `默认值 ${k}=${v} 应锁定在 settings.ts`)
+}
+
 console.log('通过：表单前置多选/repo/branch、任务页等待前置、概览健康环与 repo 链接、/pm doctor 与 /pm health 静态钩子齐备；甘特可聚焦/直显/进度层/依赖箭头/本地今日线/零写契约齐备。')

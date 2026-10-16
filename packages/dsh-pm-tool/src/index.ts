@@ -29,6 +29,7 @@ import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
 import { handleModelCommand, modelHelp } from './commands/model.js'
 import { dashboardHelp, handleDashboardCommand, readDashboard } from './commands/dashboard.js'
+import { settingsHelp, handleSettingsCommand, readProjectSettings } from './commands/settings.js'
 import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
 
@@ -84,6 +85,8 @@ function renderHelp(): CommandResult {
       exportHelp,
       '',
       dashboardHelp,
+      '',
+      settingsHelp,
     ].join('\n'),
   }
 }
@@ -131,6 +134,8 @@ export async function apply(ctx: Context): Promise<void> {
               user: readDashboard(domain, 'user'),
               project: readDashboard(domain, 'project'),
             },
+            // #21 口径设置：归一化后的生效口径（缺省=默认），供 Web 设置 UI 与派生视图直接消费。
+            settings: readProjectSettings(domain),
           }),
         }
       }
@@ -170,6 +175,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (modelMatch) return handleModelCommand(modelMatch[1] ?? '', domain)
       const dashboardMatch = /^dashboard(?:\s+([\s\S]*))?$/i.exec(raw)
       if (dashboardMatch) return handleDashboardCommand(dashboardMatch[1] ?? '', domain)
+      const settingsMatch = /^settings(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (settingsMatch) return handleSettingsCommand(settingsMatch[1] ?? '', domain)
       const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)

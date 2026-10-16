@@ -9,6 +9,10 @@ import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIs
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { listAssigneeCandidates } from '../core/people-candidates.js'
 import {
+  DEFAULT_PROJECT_SETTINGS, SETTING_FIELDS, normalizeProjectSettings, sameSettings,
+  type ProjectSettings, type SettingFieldMeta,
+} from '../core/settings.js'
+import {
   dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
   progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
@@ -54,6 +58,7 @@ import ClipboardList from 'lucide-react/dist/esm/icons/clipboard-list.mjs'
 import Eye from 'lucide-react/dist/esm/icons/eye.mjs'
 import Code2 from 'lucide-react/dist/esm/icons/code-2.mjs'
 import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
+import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal.mjs'
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.mjs'
 import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
@@ -248,6 +253,8 @@ export type Snapshot = {
   deliverables: Deliverable[]
   /** 看板布局（dsh-storage 透明存取）：user > project；读不到为 null。 */
   dashboards?: { user: unknown, project: unknown }
+  /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
+  settings?: unknown
 }
 type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people'
 type Drawer =
@@ -261,6 +268,7 @@ type Drawer =
   | { kind: 'deliverable', deliverable?: Deliverable }
   | { kind: 'ai' }
   | { kind: 'copilot' }
+  | { kind: 'settings' }
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
@@ -617,6 +625,12 @@ export function PmPanel({ execute }: PmPanelApi) {
     meetings: data.meetings,
   }), [data])
 
+  // #21 口径设置：服务端已归一化；前端再防御性归一化一次，缺失/异常回落默认（默认等价）。
+  const settings = useMemo<ProjectSettings>(
+    () => normalizeProjectSettings(data.settings).settings,
+    [data.settings],
+  )
+
   return <>
     <style>{styles}</style>
     <main
@@ -714,6 +728,13 @@ export function PmPanel({ execute }: PmPanelApi) {
             onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'copilot' }) }}
           >
             <MessageSquare size={15}/>AI 副驾
+          </button>
+          <button
+            className="pm-button pm-menu-item"
+            disabled={!project}
+            onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'settings' }) }}
+          >
+            <SlidersHorizontal size={15}/>口径设置
           </button>
           <div className="pm-menu-divider"/>
           <button
@@ -916,12 +937,13 @@ export function PmPanel({ execute }: PmPanelApi) {
                 onCreate={() => setDrawer({ kind: 'deliverable' })}
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
-              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues} meetingsCount={meetings.length} reportsCount={reports.length} deliverablesCount={deliverables.length} onEditProject={() => setDrawer({ kind: 'project-edit', project })}/>}
+              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues} meetingsCount={meetings.length} reportsCount={reports.length} deliverablesCount={deliverables.length} settings={settings} onEditProject={() => setDrawer({ kind: 'project-edit', project })}/>}
               {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
               {view === 'people' && <PeopleView
                 project={project}
                 tasks={tasks}
                 riskIssues={riskIssues}
+                settings={settings}
                 onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}
                 onGotoView={changeView}
               />}
@@ -1005,9 +1027,147 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           onSaved={() => void refresh()}
         />}
+        {drawer.kind === 'settings' && <SettingsPanel
+          settings={settings}
+          execute={execute}
+          disabled={busy}
+          onSaved={() => void refresh()}
+          notify={setMessage}
+        />}
       </DrawerPanel>}
     </main>
   </>
+}
+
+/**
+ * #21 口径设置抽屉：健康分权重/封顶/灯号线、临期窗口、过载阈值。
+ * 纯前端表单 + `settings put/reset` 落盘；取值校验与后端 normalize 同一份 SETTING_FIELDS 区间。
+ * 配色只走 panel.css 重映射的宿主 token，深浅色跟随 body[data-ds-dark-theme]。
+ */
+function SettingsPanel({ settings, execute, disabled, onSaved, notify }: {
+  settings: ProjectSettings
+  execute: (line: string) => Promise<string>
+  disabled: boolean
+  onSaved: () => void
+  notify: (msg: string) => void
+}) {
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(SETTING_FIELDS.map(f => [f.key, String(settings[f.key])])),
+  )
+  const [errors, setErrors] = useState<Partial<Record<string, string>>>({})
+  const [busy, setBusy] = useState(false)
+
+  const isDefault = sameSettings(settings, DEFAULT_PROJECT_SETTINGS)
+  const groups: Array<SettingFieldMeta['group']> = ['健康分', '临期窗口', '人员负载']
+
+  const validateField = (f: SettingFieldMeta, raw: string): string | null => {
+    const n = Number(raw)
+    if (raw.trim() === '' || !Number.isInteger(n) || Number.isNaN(n)) return `须为 ${f.min}~${f.max} 的整数`
+    if (n < f.min || n > f.max) return `须为 ${f.min}~${f.max}（当前 ${n}）`
+    return null
+  }
+
+  const validateAll = (): boolean => {
+    const next: Partial<Record<string, string>> = {}
+    for (const f of SETTING_FIELDS) {
+      const err = validateField(f, values[f.key] ?? '')
+      if (err) next[f.key] = err
+    }
+    // 交叉约束：绿灯线 ≥ 黄灯线。
+    const green = Number(values.healthGreenAt)
+    const yellow = Number(values.healthYellowAt)
+    if (!Number.isNaN(green) && !Number.isNaN(yellow) && green < yellow) {
+      next.healthGreenAt = '绿灯线不得低于黄灯线'
+    }
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  const collect = (): Partial<ProjectSettings> => {
+    const out: Partial<ProjectSettings> = {}
+    for (const f of SETTING_FIELDS) {
+      out[f.key] = Number(values[f.key])
+    }
+    return out
+  }
+
+  const save = async () => {
+    if (busy) return
+    if (!validateAll()) { notify('口径未通过校验，请修正标红字段后再保存。'); return }
+    setBusy(true)
+    try {
+      const payload = JSON.stringify(collect())
+      const resp = await execute(`settings put ${payload}`)
+      if (/失败|错误|未通过|非法|需为|不得低于/.test(resp)) { notify(resp); return }
+      notify('已保存口径设置。')
+      onSaved()
+    } catch (e) {
+      notify(`保存失败：${e instanceof Error ? e.message : String(e)}`)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const resetAll = async () => {
+    if (busy) return
+    setBusy(true)
+    try {
+      const resp = await execute('settings reset')
+      if (/失败|错误/.test(resp)) { notify(resp); return }
+      notify('已恢复全部默认口径。')
+      onSaved()
+    } catch (e) {
+      notify(`恢复默认失败：${e instanceof Error ? e.message : String(e)}`)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="pm-settings-root">
+      <p className="pm-settings-note">
+        {isDefault ? '当前为默认口径（与配置化前逐值一致）。' : '当前为自定义口径；改动即时作用于健康分、临期提醒、人员负载与作战室。'}
+      </p>
+      {groups.map(group => (
+        <section className="pm-settings-group" key={group}>
+          <h3 className="pm-settings-group-title">{group}</h3>
+          <div className="pm-settings-grid">
+            {SETTING_FIELDS.filter(f => f.group === group).map(f => {
+              const err = errors[f.key]
+              const def = DEFAULT_PROJECT_SETTINGS[f.key]
+              const v = values[f.key]
+              const changed = Number(v) !== def
+              return (
+                <label className="pm-field" key={f.key} data-wide={f.group === '健康分'} data-invalid={!!err}>
+                  <span>{f.label}{changed ? <em className="pm-settings-custom">（默认 {def}{f.unit}）</em> : null}</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={f.min}
+                    max={f.max}
+                    step={f.step}
+                    value={v}
+                    aria-label={f.label}
+                    onChange={(e) => setValues(prev => ({ ...prev, [f.key]: e.target.value }))}
+                  />
+                  <small className="pm-settings-hint">{f.hint}（{f.min}~{f.max}{f.unit}）</small>
+                  {err && <span className="pm-field-error">{err}</span>}
+                </label>
+              )
+            })}
+          </div>
+        </section>
+      ))}
+      <div className="pm-drawer-actions">
+        <button type="button" className="pm-button pm-button-danger" disabled={disabled || busy} onClick={() => void resetAll()}>
+          <RotateCcw size={14}/>恢复默认
+        </button>
+        <button type="button" className="pm-button pm-top-secondary" disabled={disabled || busy} onClick={() => void save()}>
+          保存口径
+        </button>
+      </div>
+    </div>
+  )
 }
 
 type ReminderItem = { kind: 'task' | 'milestone', id: string, title: string, owner?: string, date: string, d: number }
@@ -1359,6 +1519,7 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
   if (drawer.kind === 'ai') return 'AI 助手'
   if (drawer.kind === 'copilot') return 'AI 项目副驾'
+  if (drawer.kind === 'settings') return '口径设置'
   return drawer.deliverable ? '编辑交付物' : '新增交付物'
 }
 

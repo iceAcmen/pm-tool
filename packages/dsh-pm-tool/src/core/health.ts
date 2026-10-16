@@ -10,6 +10,7 @@ import {
   type HealthFactor,
   type HealthInputs,
 } from './derived.js'
+import type { ProjectSettings } from './settings.js'
 
 export type { HealthLamp, HealthFactor, HealthInputs }
 export { scoreFromInputs }
@@ -26,7 +27,7 @@ export interface ProjectHealth {
 
 export const HEALTH_NOTE = '健康参考分（自动计算，仅供排期参考，不做绩效评价）'
 
-export function healthFromStats(ps: ProjectStats): ProjectHealth {
+export function healthFromStats(ps: ProjectStats, settings?: ProjectSettings): ProjectHealth {
   const { lamp, score, factors } = scoreFromInputs({
     taskTotal: ps.taskTotal,
     overdueTasks: ps.overdueTasks,
@@ -34,20 +35,21 @@ export function healthFromStats(ps: ProjectStats): ProjectHealth {
     openHighRisk: ps.openRiskByImpact.high,
     openCriticalRisk: ps.openRiskByImpact.critical,
     milestoneOverdue: ps.milestoneOverdue,
-  })
+  }, settings)
   return { projectId: ps.projectId, lamp, score, factors, note: HEALTH_NOTE }
 }
 
-/** 聚合某项目健康分；today 注入保证确定性。 */
+/** 聚合某项目健康分；today 注入保证确定性；settings 可注入口径，缺省回落默认。 */
 export function computeProjectHealth(
   domain: PmDomain,
   projectId: string,
   today?: string,
+  settings?: ProjectSettings,
 ): ProjectHealth {
   const stats = collectStats(domain, projectId, today)
   const ps = stats.projects.find(item => item.projectId === projectId)
   if (!ps) {
     return { projectId, lamp: 'gray', score: null, factors: [], note: HEALTH_NOTE }
   }
-  return healthFromStats(ps)
+  return healthFromStats(ps, settings)
 }

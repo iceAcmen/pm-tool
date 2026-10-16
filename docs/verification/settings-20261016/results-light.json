@@ -1,0 +1,41 @@
+{
+  "mode": "light",
+  "results": [
+    {
+      "k": "overview.beforeLamp",
+      "ok": true,
+      "detail": "lamp=yellow"
+    },
+    {
+      "k": "settings.menuOpened",
+      "ok": true,
+      "detail": "点击「口径设置」菜单项"
+    },
+    {
+      "k": "settings.drawerPresent",
+      "ok": true,
+      "detail": "fields=13 groups=健康分/临期窗口/人员负载 note=当前为默认口径（与配置化前逐值一致）。"
+    },
+    {
+      "k": "settings.saveClicked",
+      "ok": true,
+      "detail": "点击保存口径"
+    },
+    {
+      "k": "settings.saveResponse",
+      "ok": true,
+      "detail": "msg=已保存口径设置。"
+    },
+    {
+      "k": "overview.afterLamp.green",
+      "ok": true,
+      "detail": "before=yellow after=green (绿灯线降到 60，69 分应转绿)"
+    },
+    {
+      "k": "console.clean",
+      "ok": true,
+      "detail": "errors=0 "
+    }
+  ],
+  "consoleErrors": []
+}

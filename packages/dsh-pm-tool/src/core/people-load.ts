@@ -9,6 +9,7 @@
  *
  * 口径冻结见 docs/product/07-people-load-view-design.md 与 people-load-acceptance.md。
  */
+import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 
 export interface PeopleTaskInput {
   id: string
@@ -75,6 +76,8 @@ export interface PeopleLoadReport {
 export interface PeopleLoadOptions {
   today?: string
   withinDays?: number
+  /** #21 可注入口径（临期窗口）；显式 withinDays 优先于设置。 */
+  settings?: ProjectSettings
 }
 
 /** 多负责人分隔符集合（仅用于打标，不切分）。 */
@@ -239,7 +242,7 @@ export function groupOpenTasksByAssignee(
   options: PeopleLoadOptions = {},
 ): PeopleLoadReport {
   const today = options.today ?? todayLocal()
-  const withinDays = options.withinDays ?? 7
+  const withinDays = options.withinDays ?? options.settings?.reminderWithinDays ?? DEFAULT_PROJECT_SETTINGS.reminderWithinDays
   const projectNameById = new Map(projects.map(p => [p.id, p.name]))
 
   const accums = new Map<string, Accum>()

@@ -101,6 +101,21 @@ try {
   assert.equal(hb2.score, 88, 'blocked 帽 12：即使 10 个受阻也只扣 12，得分 88')
   assert.equal(hashBefore, hashAfter, 'computeProjectHealth 不得写盘')
 
+  // #21：可注入自定义口径——逾期不扣分 + 绿灯线降到 70，同一项目由默认 63/yellow 变为 78/green。
+  const { DEFAULT_PROJECT_SETTINGS } = await import('../lib/core/settings.js')
+  const custom = {
+    ...DEFAULT_PROJECT_SETTINGS,
+    healthOverduePer: 0,
+    healthCapOverdueTasks: 0,
+    healthGreenAt: 70,
+  }
+  const hCustom = computeProjectHealth(domain, p.id, TODAY, custom)
+  assert.equal(hCustom.score, 78, `自定义口径下应为 78（去掉逾期扣分 15），实得 ${hCustom.score}`)
+  assert.equal(hCustom.lamp, 'green', '绿灯线降到 70 后 78 应为 green')
+  // 显式传默认值 == 缺省（默认等价）。
+  const hDefaultExplicit = computeProjectHealth(domain, p.id, TODAY, DEFAULT_PROJECT_SETTINGS)
+  assert.deepEqual(hDefaultExplicit, h1)
+
   console.log('通过：灰灯空项目、扣分封顶、黄灯 63、确定性、全完成绿灯、本地 todayIso、逾期边界、全受阻 clamp、零写。')
   await facility.closeAll()
   console.log(`健康分校验通过。临时数据保留于：${root}`)

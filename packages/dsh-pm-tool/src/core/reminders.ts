@@ -7,6 +7,7 @@
  */
 import type { PmDomain } from './storage.js'
 import { localTodayIso } from './derived.js'
+import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 
 export type ReminderSeverity = 'overdue' | 'due-soon'
 
@@ -39,12 +40,14 @@ export interface ReminderOptions {
   today?: string
   withinDays?: number
   projectId?: string
+  /** #21 可注入口径；缺省回落默认（临期窗口 7 天）。显式 withinDays 优先于设置。 */
+  settings?: ProjectSettings
 }
 
 /** 计算临期/逾期提醒列表（不含已完成/已达成）。 */
 export function computeReminders(domain: PmDomain, options: ReminderOptions = {}): ReminderItem[] {
   const today = todayIso(options.today)
-  const withinDays = options.withinDays ?? 7
+  const withinDays = options.withinDays ?? options.settings?.reminderWithinDays ?? DEFAULT_PROJECT_SETTINGS.reminderWithinDays
   const todayMs = parseDate(today)
   const projects = new Map([...domain.table('projects').entries()].map(([, p]) => [p.id, p.name as string]))
 

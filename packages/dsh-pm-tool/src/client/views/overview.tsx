@@ -22,6 +22,7 @@ import {
   type HealthLamp,
 } from '../../core/derived.js'
 import { computeKPI, buildAgenda } from '../../core/war-room.js'
+import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import type { Project, Task, Milestone, RiskIssue } from './types.js'
 
 const PROJECT_STATUS_LABEL: Record<string, string> = {
@@ -112,15 +113,18 @@ export function Overview(props: {
   meetingsCount?: number
   reportsCount?: number
   deliverablesCount?: number
+  /** #21 口径设置（缺省=默认）；健康分/KPI/日程窗口随其变化。 */
+  settings?: ProjectSettings
   /** 编辑项目元信息（面板层 ProjectBar 在概览页被省略，编辑入口并入 HERO）。 */
   onEditProject?: () => void
 }) {
   const { project, tasks, milestones, riskIssues } = props
+  const settings = props.settings ?? DEFAULT_PROJECT_SETTINGS
   const today = localTodayIso()
   const [copied, setCopied] = useState(false)
 
   // ---- 纯函数口径（与 panel.tsx Overview 一致） ----
-  const kpi = computeKPI(tasks, milestones, riskIssues, today)
+  const kpi = computeKPI(tasks, milestones, riskIssues, today, undefined, settings)
   const health = healthFromInputs({
     taskTotal: tasks.length,
     overdueTasks: tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done').length,
@@ -128,7 +132,7 @@ export function Overview(props: {
     openHighRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'high').length,
     openCriticalRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'critical').length,
     milestoneOverdue: milestones.filter(m => m.status !== 'achieved' && m.targetDate < today).length,
-  })
+  }, settings)
 
   // ---- 派生计数（展示层聚合，不改变扣分/统计口径） ----
   const done = tasks.filter(isTaskDone).length
@@ -170,7 +174,7 @@ export function Overview(props: {
   // 接下来的日程：buildAgenda 负责筛选/排序口径，这里只补标题与子文案
   const taskById = new Map(tasks.map(t => [t.id, t]))
   const mileById = new Map(milestones.map(m => [m.id, m]))
-  const agendaRows: AgendaRow[] = buildAgenda(tasks, milestones, today).slice(0, 4).map(item => {
+  const agendaRows: AgendaRow[] = buildAgenda(tasks, milestones, today, undefined, settings).slice(0, 4).map(item => {
     if (item.kind === 'task') {
       const t = taskById.get(item.id)
       const ds = splitDate(t?.dueDate)
@@ -219,7 +223,7 @@ export function Overview(props: {
     if (remRows.length >= 4) break
     if (m.status === 'achieved') continue
     const d = daysFromToday(m.targetDate, today)
-    if (d === null || d < 0 || d > 7) continue
+    if (d === null || d < 0 || d > settings.reminderWithinDays) continue
     remRows.push({
       key: `mile-${m.id}`,
       tone: 'prog',

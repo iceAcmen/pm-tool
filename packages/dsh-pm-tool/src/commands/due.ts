@@ -4,6 +4,7 @@
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import type { PmDomain } from '../core/storage.js'
 import { computeReminders, renderReminders } from '../core/reminders.js'
+import { readProjectSettings } from './settings.js'
 
 export const dueHelp = [
   '提醒命令（离线派生，打开即算、无后台调度）：',
@@ -16,15 +17,17 @@ export const dueHelp = [
 export function handleDueCommand(argument: string, domain: PmDomain | undefined): CommandResult {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
   const tokens = argument.trim().split(/\s+/).filter(Boolean)
-  let withinDays = 7
+  let explicitDays: number | undefined
   let projectId: string | undefined
   let today: string | undefined
   for (const token of tokens) {
-    if (/^\d+$/.test(token)) withinDays = Number(token)
+    if (/^\d+$/.test(token)) explicitDays = Number(token)
     else if (/^\d{4}-\d{2}-\d{2}$/.test(token)) today = token  // 可选：固化“今天”，便于测试
     else projectId = token
   }
-  if (withinDays < 1 || withinDays > 365) {
+  // 显式天数优先；未传则回落 #21 设置的临期窗口（默认 7 天）。
+  const withinDays = explicitDays ?? readProjectSettings(domain).reminderWithinDays
+  if (explicitDays !== undefined && (explicitDays < 1 || explicitDays > 365)) {
     return { kind: 'error', text: '天数需为 1~365 的整数。' }
   }
   const items = computeReminders(domain, { withinDays, projectId, today })

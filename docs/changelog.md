@@ -8,6 +8,27 @@
 
 ---
 
+## #21 口径配置化：项目级设置（健康分权重/封顶/灯号线、临期窗口、过载阈值）（2026-10-16，平台：doubao-work）
+
+> 状态：**默认等价锁定 + 覆盖/非法/重启读回 + 隔离真实 Chrome 浅/深实测，已核验**。`pnpm build`=0；全量 guard **71/71、失败 0、资产污染 0**（before/after=162/162）；只新增设置、不改业务实体字段语义、不引入 vitest、不新增外部依赖（纯 TS）。
+
+- **口径清单（原值 → 设置键，现值即默认值，逐项可追溯到原硬编码）**
+  - 健康分（`core/derived.ts scoreFromInputs`）：每逾期任务扣分 `healthOverduePer=3`、每受阻任务 `healthBlockedPer=4`、每高影响风险 `healthHighRiskPer=6`、每严重风险 `healthCriticalRiskPer=10`、每逾期里程碑 `healthOverdueMilestonePer=8`；封顶 `healthCapOverdueTasks=15`/`healthCapBlockedTasks=12`/`healthCapOpenRisk=20`/`healthCapOverdueMilestones=16`；灯号线 `healthGreenAt=80`/`healthYellowAt=60`。
+  - 临期窗口 `reminderWithinDays=7`（`reminders.computeReminders`/`people-load.groupOpenTasksByAssignee`/`war-room.computeKPI·buildAgenda`/概览里程碑临近共用）。
+  - 人员负载过载阈值 `loadOverloadThreshold=5`（原 client `people.tsx` 硬编码 `OVERLOAD_THRESHOLD=5`，移入设置）。
+  - 说明：`core/stats.ts` 的逾期判定为严格 `dueDate < today`（今天/明天不逾期），**本就无数字阈值**，故不杜撰宽限/阈值键；逾期计数口径不变。
+- **core 纯函数可注入 settings、缺省回落默认（默认等价）**
+  - 新增 `core/settings.ts`：`DEFAULT_PROJECT_SETTINGS`（与硬编码逐值相等）、`SETTING_FIELDS`（分组/区间/步长/单位元数据，UI 与命令共用同一份，避免两处口径漂移）、`normalizeProjectSettings(raw)`（整数+区间校验、未知键忽略、灯号倒挂 green<yellow 两者回落默认并给中文原因，纯函数不抛）、`sameSettings`。
+  - `scoreFromInputs(inputs, settings?)`、`healthFromStats/collectStats→computeProjectHealth(...,settings?)`、`computeReminders(domain,{...,settings?})`、`groupOpenTasksByAssignee(tasks,projects,{...,settings?})`、`computeKPI/buildAgenda(...,settings?)` 均接受可选 settings；**不传时与配置化前逐值一致**；命令行显式参数（如 `/pm due 14`）优先于设置。确定性：today 可注入、无随机、无墙钟、零写。
+- **持久化 + 命令 + snapshot 透传**
+  - 新增 `commands/settings.ts`：`/pm settings`（查看生效口径/是否自定义）、`/pm settings put <json>`（局部合并到既有原始记录、整份校验、非法整份拒绝不落盘）、`/pm settings reset`（清除自定义全回落默认）；经既有 `settings` 表透明存取、原子写沿用领域表，人类可读 JSON 落盘、重启读回。`index.ts` `web snapshot` 增 `settings: readProjectSettings(domain)` 透传归一化生效口径；`/pm health`、`/pm due` 读持久化口径传入纯函数。
+- **设置 UI（项目设置抽屉）**
+  - 顶部「更多」菜单新增「口径设置」入口；`SettingsPanel` 按分组渲染 13 个数值字段，内联区间/整数校验、交叉约束（绿灯线≥黄灯线）提示，「保存口径」写库、「恢复默认」走 `settings reset`；空态/非法输入诚实显示。配色全走 `--pm-*`（由 `--dsw-*` 重映射）别名 token，**零硬编码 hex**，跟随 `body[data-ds-dark-theme]`，浅/深两态清晰。
+- **验证**
+  - 新增 `scripts/verify-settings.mjs`：默认等价（缺省=显式默认、健康分 69/yellow 基线锁定）、覆盖生效（零扣分 100/green、灯号线、临期窗口、作战室窗口）、非法值校验（越界/非整数/灯号倒挂回落默认+中文原因、未知键忽略、非对象不抛）、命令持久化局部合并保留/非法整份拒绝/reset 回落默认/snapshot 透传/全新进程 `--reopen` 读回、UI 契约、core 零写静态 grep。`verify-health.mjs` 补自定义口径覆盖断言（63/yellow → 78/green）；`verify-gui-contract.mjs` 补 #21 静态钩子（snapshot 透传、SettingsPanel、菜单、视图 props、默认值锁定、零写、设置 CSS 无 hex）。
+  - 隔离真实 Chrome headless（独立 DSH_HOME + 独立存储/备份 + 端口 **3141**，正式 3080=PID 66364 全程未变、3091/3141 无残留，ISS-027 单 PID TERM）：浅趟默认抽屉截图 → 改 `healthGreenAt=60` 保存 → 概览灯号黄→绿（派生随口径变化）；深趟原生 dark 抽屉截图。证据 `docs/verification/settings-20261016/`。
+- **边界**：本项只做「可读口径可调+持久化+设置 UI」；不做副驾写操作扩展（#22）、客观进度（#23）、vitest/E2E/CI（#24）、390 窄窗（#25）；不配置生产 Key。
+
 ## GI-CP 关键路径只读高亮（CPM，零 schema/零写派生）（2026-10-16，平台：doubao-work）
 
 > 状态：**确定性纯函数 + 真实 dsh 宿主 Chrome 隔离实例均通过，已核验**。`pnpm build`=0；全量 guard **70/70、失败 0、资产污染 0**（before/after=162/162）；不新增 zod schema、不改 storage.ts、不回写派生字段、不引入 vitest。

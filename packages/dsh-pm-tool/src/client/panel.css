@@ -797,6 +797,23 @@ body[data-ds-dark-theme] .pm-project-menu {
   border-top: 1px solid var(--pm-line-soft);
 }
 
+/* #21 口径设置抽屉：配色全部走宿主主题别名，深浅色跟随 body[data-ds-dark-theme]。 */
+.pm-settings-root { display: flex; flex-direction: column; gap: 14px; }
+.pm-settings-note { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--pm-secondary); }
+.pm-settings-group { display: flex; flex-direction: column; gap: 10px; }
+.pm-settings-group-title {
+  margin: 0; font-size: 13px; font-weight: 650; color: var(--pm-ink);
+  padding-bottom: 6px; border-bottom: 1px solid var(--pm-line);
+}
+.pm-settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+.pm-settings-grid .pm-field[data-wide="true"] { grid-column: 1 / -1; }
+.pm-settings-custom { font-style: normal; font-weight: 500; color: var(--pm-secondary); }
+.pm-settings-hint { display: block; font-size: 11.5px; color: var(--pm-secondary); line-height: 1.35; }
+.pm-settings-root .pm-button-danger { margin-right: auto; }
+@media (max-width: 560px) {
+  .pm-settings-grid { grid-template-columns: 1fr; }
+}
+
 .pm-meeting-actions {
   margin-top: 24px;
   padding-top: 20px;

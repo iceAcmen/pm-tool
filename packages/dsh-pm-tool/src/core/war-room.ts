@@ -4,6 +4,7 @@
  */
 
 import { isDoneStatus, isInProgressStatus } from './status.js'
+import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 
 export interface WarTask {
   id: string
@@ -35,14 +36,16 @@ const daysFrom = (date: string | undefined, today: string) =>
 const isTaskDone = (t: Pick<WarTask, 'status' | 'progress'>): boolean =>
   isDoneStatus(t.status) || (t.progress ?? 0) >= 100
 
-/** 关键指标：任务总数/完成率/进行中/逾期任务/近期里程碑/未闭环风险。 */
+/** 关键指标：任务总数/完成率/进行中/逾期任务/近期里程碑/未闭环风险。rangeDays 缺省回落设置/默认 7。 */
 export function computeKPI(
   tasks: WarTask[],
   milestones: WarMilestone[],
   riskIssues: WarRisk[],
   today: string,
-  rangeDays = 7,
+  rangeDays?: number,
+  settings?: ProjectSettings,
 ) {
+  const windowDays = rangeDays ?? settings?.reminderWithinDays ?? DEFAULT_PROJECT_SETTINGS.reminderWithinDays
   const total = tasks.length
   const done = tasks.filter(isTaskDone).length
   const inProgress = tasks.filter(t => isInProgressStatus(t.status)).length
@@ -50,7 +53,7 @@ export function computeKPI(
     && t.dueDate && (daysFrom(t.dueDate, today) ?? 1) < 0).length
   const upcomingMilestones = milestones.filter(m => m.status !== 'achieved'
     && (daysFrom(m.targetDate, today) ?? Infinity) >= 0
-    && (daysFrom(m.targetDate, today) ?? Infinity) <= rangeDays).length
+    && (daysFrom(m.targetDate, today) ?? Infinity) <= windowDays).length
   const openRisks = riskIssues.filter(r => r.status !== 'closed').length
   return {
     total,
@@ -71,19 +74,21 @@ export interface AgendaItem {
   overdue: boolean
 }
 
-/** 近期议程：未完成的逾期/临期任务 + 未达成里程碑，按日期升序。 */
+/** 近期议程：未完成的逾期/临期任务 + 未达成里程碑，按日期升序。rangeDays 缺省回落设置/默认 7。 */
 export function buildAgenda(
   tasks: WarTask[],
   milestones: WarMilestone[],
   today: string,
-  rangeDays = 7,
+  rangeDays?: number,
+  settings?: ProjectSettings,
 ): AgendaItem[] {
+  const windowDays = rangeDays ?? settings?.reminderWithinDays ?? DEFAULT_PROJECT_SETTINGS.reminderWithinDays
   const out: AgendaItem[] = []
   for (const t of tasks) {
     if (isTaskDone(t) || !t.dueDate) continue
     const d = daysFrom(t.dueDate, today)
     if (d === null) continue
-    if (d < 0 || d <= rangeDays) {
+    if (d < 0 || d <= windowDays) {
       out.push({ kind: 'task', id: t.id, projectId: t.projectId, label: `任务到期 ${t.dueDate}`, days: d, overdue: d < 0 })
     }
   }
@@ -91,7 +96,7 @@ export function buildAgenda(
     if (m.status === 'achieved' || !m.targetDate) continue
     const d = daysFrom(m.targetDate, today)
     if (d === null) continue
-    if (d < 0 || d <= rangeDays) {
+    if (d < 0 || d <= windowDays) {
       out.push({ kind: 'milestone', id: m.id, projectId: m.projectId, label: `里程碑 ${m.targetDate}`, days: d, overdue: d < 0 })
     }
   }

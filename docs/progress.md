@@ -2,7 +2,16 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-16（doubao-work **GI-CP 关键路径只读高亮（CPM）**：core 纯函数 criticalPath 算 ES/EF/LS/LF/slack、slack=0 即关键路径；成环/缺日期/多分量/自指悬空诚实降级不打断不补日期；甘特关键条+关键边只读高亮、图例、循环/缺日期徽标，配色走 dsw token 浅深两态；零 schema/零写派生。build=0、全量 guard 70/70、0 污染；隔离 3131 真实 Chrome 浅/深/拖链尾实测，证据 docs/verification/gui-critical-path-20261016/）
+最后更新：2026-10-16（doubao-work **#21 口径配置化**：健康分权重/封顶/灯号线、临期窗口、过载阈值做成项目级设置，默认值=原硬编码现值、可注入缺省回落默认、局部合并持久化+重启读回、设置抽屉校验/恢复默认，dsw token 浅深两态。build=0、全量 guard 71/71、失败 0、0 污染；隔离 3141 真实 Chrome 浅/深实测，证据 docs/verification/settings-20261016/）
+
+## 当前阶段：#21 口径配置化·已核验（2026-10-16，doubao-work）
+
+- **口径清单（原值→设置键，现值即默认）**：健康分每逾期任务 3/每受阻 4/每高风险 6/每严重风险 10/每逾期里程碑 8；封顶 15/12/20/16；灯线绿 80/黄 60；临期窗口 7；过载阈值 5。`core/stats.ts` 逾期为严格 `dueDate<today`、本无数字阈值，不杜撰宽限键。
+- **core 可注入、缺省回落**：新增 `core/settings.ts`（默认值锁定、`SETTING_FIELDS` 元数据、`normalizeProjectSettings` 整数/区间/灯号倒挂校验、`sameSettings`）；`scoreFromInputs/computeProjectHealth/computeReminders/groupOpenTasksByAssignee/computeKPI/buildAgenda` 接受可选 settings，不传=默认（默认等价），命令行显式参数优先；纯函数/确定性/零写。
+- **持久化/命令/UI**：`commands/settings.ts`（`/pm settings` 查看 / `put <json>` 局部合并+整份校验 / `reset` 回落默认），settings 表透明存取+原子写；`web snapshot` 透传 `settings`；顶部「更多」→「口径设置」抽屉，13 字段分组、整数/区间/绿灯≥黄灯内联校验、保存/恢复默认；配色 `--pm-*`（`--dsw-*` 重映射）零 hex，跟随 `body[data-ds-dark-theme]`。
+- **验收**：`pnpm build`=0；`verify-isolation.mjs` **71/71 通过、失败 0、污染 0**（before/after=162/162）；新增 `verify-settings.mjs`（默认等价/覆盖/非法/局部合并/reset/全新进程 --reopen 读回/UI 契约/零写 grep），`verify-health.mjs` 补自定义覆盖，`verify-gui-contract.mjs` 补 #21 静态钩子。隔离 Chrome 3141 浅趟默认抽屉→改绿灯线 80→60 保存→概览灯号黄→绿；深趟原生 dark 抽屉。证据 `docs/verification/settings-20261016/`（10-light / 11-after-change / 12-dark）。
+- **边界**：不做 #22 副驾写扩展、#23 客观进度、#24 vitest/E2E/CI、#25 390 窄窗；不配生产 Key。
+- **下一步**：看板 P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 页面重设计；GI-WEB-14 真 390 窄窗目视、prod 真实 Key 仍 MANUAL_PENDING。
 
 ## 当前阶段：GI-CP 关键路径只读高亮 CPM·已核验（2026-10-16，doubao-work）
 

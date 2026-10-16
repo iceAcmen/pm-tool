@@ -18,6 +18,7 @@ import css from './people.css?raw'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../../core/people-load.js'
 import { dateRange, daysFrom, taskDurationDays } from '../../core/gantt.js'
 import { localTodayIso } from '../../core/derived.js'
+import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import type { Project, Task, RiskIssue, View } from './types.js'
 
 /** 角色映射仅用于展示（真实成员模型未接入）；未命中显示「团队成员」。 */
@@ -29,9 +30,6 @@ const ROLES: Record<string, string> = {
   '王磊': '后端开发',
   '陈静': '测试工程师',
 }
-
-/** 过载阈值：open 任务数达到该值即视为过载（与分布点图阈值线一致）。 */
-const OVERLOAD_THRESHOLD = 5
 
 interface Seg { late: number, soon: number, prog: number, todo: number }
 
@@ -61,17 +59,22 @@ export function PeopleView(props: {
   project: Project
   tasks: Task[]
   riskIssues: RiskIssue[]
+  /** #21 口径设置（缺省=默认）：临期窗口 + 过载阈值。 */
+  settings?: ProjectSettings
   onOpenRecord: (projectId: string, type: string, id: string) => void
   onGotoView: (v: View) => void
 }) {
   const { project, tasks, onOpenRecord } = props
+  const settings = props.settings ?? DEFAULT_PROJECT_SETTINGS
+  /** 过载阈值：open 任务数达到该值即视为过载（与分布点图阈值线一致），来自 #21 设置。 */
+  const overloadThreshold = settings.loadOverloadThreshold
   const today = localTodayIso()
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set())
 
   // ---- core 口径：负载报告（未分配置顶 people-load 已固定 people 序） ----
   const report = useMemo(
-    () => groupOpenTasksByAssignee(tasks, [{ id: project.id, name: project.name }]),
-    [tasks, project.id, project.name],
+    () => groupOpenTasksByAssignee(tasks, [{ id: project.id, name: project.name }], { settings }),
+    [tasks, project.id, project.name, settings],
   )
 
   // ---- 排期泳道：open 任务按归一 assignee 分组（与 core 同一归一函数） ----
@@ -137,7 +140,7 @@ export function PeopleView(props: {
   const openSum = peopleValues.reduce((a, v) => a + v, 0) + unassignedValue
 
   // X 轴上限自适应：阈值、所有已分配人员 open、未分配桶 open 取最大值，向上取整到 2 的倍数再 +2 留余量，至少 8。
-  const rawMax = Math.max(OVERLOAD_THRESHOLD, ...peopleValues, unassignedValue, 1)
+  const rawMax = Math.max(overloadThreshold, ...peopleValues, unassignedValue, 1)
   const maxX = Math.max(8, (Math.ceil((rawMax + 2) / 2) * 2))
 
   // 刻度按 maxX 自适应：0,2,4,…,maxX。
@@ -324,7 +327,7 @@ export function PeopleView(props: {
           <div className="pp-dist-body">
             <div className="pp-dplot">
               <div className="pp-dline pp-dmed" style={{ left: `${(median / maxX) * 100}%` }}><span>中位 {median}</span></div>
-              <div className="pp-dline pp-dthr" style={{ left: `${(OVERLOAD_THRESHOLD / maxX) * 100}%` }}><span>过载阈值 {OVERLOAD_THRESHOLD}</span></div>
+              <div className="pp-dline pp-dthr" style={{ left: `${(overloadThreshold / maxX) * 100}%` }}><span>过载阈值 {overloadThreshold}</span></div>
               <div className="pp-daxis" />
               {ticks.map(v => (
                 <span
@@ -340,7 +343,7 @@ export function PeopleView(props: {
                 return (
                   <span
                     key={v.key}
-                    className={`pp-dot${flip ? ' flip' : ''}${v.isUnassigned ? ' is-un' : v.value >= OVERLOAD_THRESHOLD ? ' is-late' : v.value >= 3 ? ' is-prog' : ' is-todo'}`}
+                    className={`pp-dot${flip ? ' flip' : ''}${v.isUnassigned ? ' is-un' : v.value >= overloadThreshold ? ' is-late' : v.value >= 3 ? ' is-prog' : ' is-todo'}`}
                     style={{ left: `${xPct}%`, top: `${v.top}px` }}
                   >{v.name} {v.value}</span>
                 )
@@ -349,7 +352,7 @@ export function PeopleView(props: {
             <div className="pp-dstats">
               <span>中位 <b>{median}</b></span>
               <span>均值 <b>{avg.toFixed(1)}</b></span>
-              <span>阈值 <b>{OVERLOAD_THRESHOLD}</b></span>
+              <span>阈值 <b>{overloadThreshold}</b></span>
               <span>open 合计 <b>{openSum}</b></span>
             </div>
           </div>
