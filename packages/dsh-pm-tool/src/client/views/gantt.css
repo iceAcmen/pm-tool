@@ -1,22 +1,27 @@
-/* ============================================================
-   甘特重设计 v2（配色方案 B）：自包含样式。
-   - 所有选择器 scope 在 .pm-gantt-root 下，不污染 panel.css 旧 .pm-gantt 实现；
-   - 色值只走 panel.css 已定义 v2 语义变量（--c-*/--glow-*/--shadow-*/--r-*/--sp-*/--t-*），
-     无 hex；反白文字沿用 panel.css 既有 rgb(255,255,255) 字面量用法。
-   ============================================================ */
+/* ============================================================================
+   甘特视图（重设计 v2）· 全部选择器 scope 在 .pm-gantt-root 下
+   颜色/阴影/圆角/间距/字号只用 panel.css 已定义 v2 变量（dsh 宿主 token 别名，深浅自动跟随），
+   不自造色值：无 glow 投影、无渐变、无自拟字体栈/inset，深浅由 dsw token 决定。
+   页边距 / 工具栏 / 卡片 padding 与 tasks.css 基准对齐。
+   ============================================================================ */
 
 .pm-gantt-root {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  height: 100%;
+  min-height: 0;
   color: var(--ink);
-  font-size: var(--t-12);
+  font-family: var(--pm-font-sans);
+  font-size: var(--t-14);
 }
 
-/* ---------- 工具栏 ---------- */
-.pm-gantt-root .pm-gantt-toolbar { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
-.pm-gantt-root .pm-gantt-title { font-size: var(--t-22); font-weight: 700; letter-spacing: var(--ls-tight2); margin: 0; }
-.pm-gantt-root .pm-gantt-sub { font-size: var(--t-12); color: var(--muted); }
+/* ---------------- 页头/工具栏（与 tasks 页 pt-head 同基准：sp-5 sp-6 0） ---------------- */
+.pm-gantt-root .pm-gantt-toolbar {
+  display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+  padding: var(--sp-5) var(--sp-6) 0;
+}
+.pm-gantt-root .pm-gantt-title { font-size: var(--t-26); font-weight: 750; letter-spacing: var(--ls-tight2); line-height: 1.1; }
+.pm-gantt-root .pm-gantt-sub { font-size: var(--t-13); color: var(--muted); }
 .pm-gantt-root .pm-gantt-spacer { flex: 1; }
 
 .pm-gantt-root .pm-seg {
@@ -35,20 +40,21 @@
 .pm-gantt-root .pm-chip {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: var(--t-12); font-weight: 600; line-height: 1;
-  padding: 7px 13px; border-radius: var(--r-sm);
-  border: 1px solid var(--line); background: var(--field-bg); color: var(--ink-2); cursor: pointer;
+  padding: 7px 12px; border-radius: var(--r);
+  border: 1px solid var(--line); background: transparent; color: var(--ink-2); cursor: pointer;
 }
+.pm-gantt-root .pm-chip:hover { background: var(--surface-3); color: var(--ink); }
 .pm-gantt-root .pm-chip-primary {
   background: var(--c-prog); border-color: transparent; color: rgb(255, 255, 255);
-  box-shadow: var(--shadow-glow-prog);
 }
 
-/* ---------- 外壳：左标签列 + 右时间画布 ---------- */
+/* ---------------- 甘特卡片（与 tasks 页 pt-card 同基准：margin sp-4/sp-6，surface 卡片） ---------------- */
 .pm-gantt-root .pm-gantt {
   display: flex; flex-wrap: nowrap;
+  margin: var(--sp-4) var(--sp-6) var(--sp-6);
+  flex: 1; min-height: 0;
   border: 1px solid var(--line); border-radius: var(--r-lg);
-  background: var(--surface); background-image: var(--surface-g);
-  box-shadow: var(--shadow-2); overflow: hidden;
+  background: var(--surface); box-shadow: var(--shadow-2); overflow: hidden;
 }
 .pm-gantt-root .pm-gantt-labels {
   width: 220px; flex: 0 0 auto;
@@ -65,7 +71,7 @@
   padding: 0 var(--sp-3); border-bottom: 1px solid var(--line);
   font-size: var(--t-12); white-space: nowrap;
 }
-.pm-gantt-root .pm-gantt-label-row.is-parent { font-weight: 700; color: var(--ink); background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.pm-gantt-root .pm-gantt-label-row.is-parent { font-weight: 700; color: var(--ink); }
 .pm-gantt-root .pm-gantt-label-row.is-done { color: var(--c-done); }
 .pm-gantt-root .pm-gantt-label-code { font-size: var(--t-11); color: var(--faint); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
 .pm-gantt-root .pm-gantt-label-title { overflow: hidden; text-overflow: ellipsis; }
@@ -86,8 +92,8 @@
 .pm-gantt-root .pm-ms-pill-warn { color: var(--c-block); background: color-mix(in srgb, var(--c-block) 14%, transparent); }
 .pm-gantt-root .pm-ms-pill-idle { color: var(--muted); background: color-mix(in srgb, var(--ink) 6%, transparent); }
 
-/* ---------- 右：横滚区 + 画布 ---------- */
-.pm-gantt-root .pm-gantt-scroll { flex: 1 1 auto; min-width: 0; overflow-x: auto; overflow-y: hidden; }
+/* ---------------- 右：横滚区 + 画布 ---------------- */
+.pm-gantt-root .pm-gantt-scroll { flex: 1 1 auto; min-width: 0; overflow: auto; }
 .pm-gantt-root .pm-gantt-canvas { position: relative; }
 
 .pm-gantt-root .pm-gantt-axis { position: relative; height: 42px; border-bottom: 1px solid var(--line); background: var(--surface); }
@@ -104,11 +110,11 @@
 .pm-gantt-root .pm-gantt-plot { position: relative; }
 .pm-gantt-root .pm-gantt-weekend { position: absolute; top: 0; bottom: 0; background: color-mix(in srgb, var(--ink) 2.5%, transparent); pointer-events: none; }
 .pm-gantt-root .pm-gantt-rows { position: relative; }
-.pm-gantt-root .pm-gantt-row { position: relative; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+.pm-gantt-root .pm-gantt-row { position: relative; border-bottom: 1px solid var(--line); }
 .pm-gantt-root .pm-gantt-row--unscheduled { cursor: pointer; }
-.pm-gantt-root .pm-gantt-row--unscheduled:hover { background: color-mix(in srgb, var(--c-prog) 8%, transparent); }
+.pm-gantt-root .pm-gantt-row--unscheduled:hover { background: var(--surface-2); }
 
-/* 今日线 */
+/* 今日线（dsh 下干净细红线 + 小标签） */
 .pm-gantt-root .pm-gantt-today { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--c-late); opacity: .85; z-index: 6; pointer-events: none; }
 .pm-gantt-root .pm-gantt-today-tag {
   position: absolute; top: 4px; font-size: var(--t-10); font-weight: 700;
@@ -116,7 +122,7 @@
   padding: 2px 6px; border-radius: var(--r-xs); z-index: 6; pointer-events: none;
 }
 
-/* ---------- 任务条（配色方案 B） ---------- */
+/* ---------------- 任务条（done 绿 / prog 蓝 / todo 灰；blocked/late 仅克制描边） ---------------- */
 .pm-gantt-root .pm-gantt-bar {
   position: absolute; height: 16px; box-sizing: border-box;
   border-radius: 999px; border: 1px solid;
@@ -125,50 +131,49 @@
   display: flex; align-items: center;
 }
 .pm-gantt-root .pm-gantt-bar:active { cursor: grabbing; }
-/* 已完成：绿（克制：条体低饱和半透明，实心进度层用主绿） */
+/* 已完成：绿（克制：条体淡色 track，实心进度层用主绿） */
 .pm-gantt-root .pm-gantt-bar.st-done {
-  background: color-mix(in srgb, var(--c-done) 22%, transparent);
-  border-color: color-mix(in srgb, var(--c-done) 55%, transparent);
-  box-shadow: var(--shadow-glow-done);
+  background: color-mix(in srgb, var(--c-done) 14%, transparent);
+  border-color: color-mix(in srgb, var(--c-done) 45%, transparent);
 }
-/* 进行中：蓝（柔和外发光） */
+/* 进行中：蓝 */
 .pm-gantt-root .pm-gantt-bar.st-prog {
-  background: color-mix(in srgb, var(--c-prog) 22%, transparent);
-  border-color: color-mix(in srgb, var(--c-prog) 55%, transparent);
-  box-shadow: var(--shadow-glow-prog);
+  background: color-mix(in srgb, var(--c-prog) 14%, transparent);
+  border-color: color-mix(in srgb, var(--c-prog) 45%, transparent);
 }
 /* 待办：灰描边/灰底 */
 .pm-gantt-root .pm-gantt-bar.st-todo {
-  background: color-mix(in srgb, var(--c-todo) 22%, transparent);
+  background: color-mix(in srgb, var(--c-todo) 16%, transparent);
   border-color: color-mix(in srgb, var(--c-todo) 40%, transparent);
 }
 /* 父条：细条范围带，不拖拽 */
 .pm-gantt-root .pm-gantt-bar--parent {
-  height: 10px; top: 9px; cursor: pointer; box-shadow: none;
-  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  height: 10px; top: 9px; cursor: pointer;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
   border: 1px solid var(--line-2);
 }
-.pm-gantt-root .pm-gantt-bar.is-overdue { border-color: color-mix(in srgb, var(--c-late) 60%, transparent); }
-.pm-gantt-root .pm-gantt-bar.is-blocked { border-color: color-mix(in srgb, var(--c-block) 60%, transparent); }
+/* blocked / late：仅克制描边，不换底色 */
+.pm-gantt-root .pm-gantt-bar.is-overdue { border-color: color-mix(in srgb, var(--c-late) 55%, transparent); }
+.pm-gantt-root .pm-gantt-bar.is-blocked { border-color: color-mix(in srgb, var(--c-block) 55%, transparent); }
 .pm-gantt-root .pm-gantt-bar:focus-visible { outline: 2px solid var(--c-prog); outline-offset: 1px; }
 
-/* 进度双层填充：track 在上，实心层按状态着色 */
+/* 进度双层填充：track 在上，实心层按状态平涂（无渐变） */
 .pm-gantt-root .pm-gantt-bar-progress {
   position: absolute; left: 0; top: 0; bottom: 0;
   border-radius: 999px; z-index: 0;
-  background: linear-gradient(180deg, var(--c-todo), var(--c-todo-d));
+  background: var(--c-todo-d);
 }
-.pm-gantt-root .pm-gantt-bar.st-done .pm-gantt-bar-progress { background: linear-gradient(180deg, var(--c-done), var(--c-done-d)); }
-.pm-gantt-root .pm-gantt-bar.st-prog .pm-gantt-bar-progress { background: linear-gradient(180deg, var(--c-prog), var(--c-prog-d)); }
+.pm-gantt-root .pm-gantt-bar.st-done .pm-gantt-bar-progress { background: var(--c-done); }
+.pm-gantt-root .pm-gantt-bar.st-prog .pm-gantt-bar-progress { background: var(--c-prog); }
 
 .pm-gantt-root .pm-gantt-bar-dates,
 .pm-gantt-root .pm-gantt-bar-pct {
-  position: relative; z-index: 1; font-size: var(--t-10); font-weight: 700; line-height: 1;
-  white-space: nowrap; color: rgb(255, 255, 255); mix-blend-mode: overlay;
+  position: relative; z-index: 1; font-size: var(--t-10); font-weight: 600; line-height: 1;
+  white-space: nowrap; color: var(--ink-2);
 }
 .pm-gantt-root .pm-gantt-bar-pct { margin-left: 6px; }
 .pm-gantt-root .pm-gantt-bar.st-todo .pm-gantt-bar-dates,
-.pm-gantt-root .pm-gantt-bar.st-todo .pm-gantt-bar-pct { mix-blend-mode: normal; color: var(--muted); }
+.pm-gantt-root .pm-gantt-bar.st-todo .pm-gantt-bar-pct { color: var(--muted); }
 .pm-gantt-root .pm-gantt-bar-side {
   position: absolute; top: 0; font-size: var(--t-10); line-height: 16px;
   color: var(--muted); white-space: nowrap; max-width: 140px;
@@ -180,7 +185,7 @@
   border-radius: var(--r-xs); padding: 0 6px; white-space: nowrap; z-index: 2;
 }
 
-/* ---------- 里程碑菱形 ---------- */
+/* ---------------- 里程碑菱形 ---------------- */
 .pm-gantt-root .pm-gantt-milestone {
   position: absolute; top: 9px; width: 10px; height: 10px;
   transform: translateX(-50%) rotate(45deg); background: var(--c-prog);
@@ -188,13 +193,13 @@
 .pm-gantt-root .pm-gantt-milestone-done { background: var(--c-done); }
 .pm-gantt-root .pm-gantt-milestone-risk { background: var(--c-late); }
 
-/* ---------- 依赖连线层（不拦截指针；箭头统一 marker） ---------- */
+/* ---------------- 依赖连线层（不拦截指针；箭头统一 marker） ---------------- */
 .pm-gantt-root .pm-gantt-links { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 5; }
 .pm-gantt-root .pm-gantt-link-path {
-  fill: none; stroke: color-mix(in srgb, var(--muted) 82%, var(--ink));
-  stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round;
+  fill: none; stroke: var(--muted);
+  stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round;
 }
-.pm-gantt-root .pm-gantt-link-arrow { fill: color-mix(in srgb, var(--muted) 82%, var(--ink)); }
+.pm-gantt-root .pm-gantt-link-arrow { fill: var(--muted); }
 
-/* ---------- 状态行 ---------- */
-.pm-gantt-root .pm-gantt-hint { margin: 0; font-size: var(--t-11); color: var(--muted); }
+/* ---------------- 状态行 ---------------- */
+.pm-gantt-root .pm-gantt-hint { margin: 0 var(--sp-6) var(--sp-4); font-size: var(--t-12); color: var(--muted); }

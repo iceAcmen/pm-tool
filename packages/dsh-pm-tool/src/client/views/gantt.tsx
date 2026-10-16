@@ -186,7 +186,7 @@ export function GanttView(props: {
     for (const e of edges.edges) {
       const n = outCount.get(e.fromId) ?? 0
       outCount.set(e.fromId, n + 1)
-      const r = routeEdge({ ...e, bRight: geomOf.get(e.toId)?.rightX }, { lane: n })
+      const r = routeEdge({ ...e, bRight: geomOf.get(e.toId)?.rightX }, { lane: n, pxPerDay: PX })
       edgeRoutes.push({
         key: `${e.fromId}-${e.toId}-${n}`,
         d: r.d,

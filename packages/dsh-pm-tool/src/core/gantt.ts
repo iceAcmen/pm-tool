@@ -241,19 +241,25 @@ export function dependencyEdges(
 
 // ---------- 依赖边路由（FS 连线形状：紧贴 L / 正常 L / 重叠绕行） ----------
 
-export type EdgeRouteKind = 'tight' | 'normal' | 'overlap'
+export type EdgeRouteKind = 'tight' | 'normal' | 'overlap' | 'overlap-tight'
 
 export interface EdgeRouteOpts {
-  /** 紧贴判定阈值（px）：0 <= x2-x1 < tightPx 时按紧贴 FS 渲染。默认 8。 */
+  /** 最后水平箭头段（channel→x2）最小长度（px）：保证通道不压 marker 三角。默认 8。 */
+  arrowClear?: number
+  /** A 右缘到垂直通道的最小水平探出（px）。默认 6。 */
+  stubA?: number
+  /** 紧贴判定阈值（px）：旧 0 <= x2-x1 < tightPx 时按紧贴 FS 渲染。默认 8。 */
   tightPx?: number
   /** 重叠绕行：安全走廊离 max(x1, bRight) 的水平余量。默认 12。 */
   detourGap?: number
   /** 错峰步距：lane>0 时走廊/通道整体右移 lane*laneStep px。默认 14。 */
   laneStep?: number
-  /** 圆角半径（px）。默认 7。 */
+  /** 圆角半径（px）。默认 6。 */
   cornerR?: number
   /** 错峰通道编号：0=直连，1,2… 逐级右移（多条边共享起止行时避免叠线）。默认 0。 */
   lane?: number
+  /** 每天像素（粒度：日16/周11/月7）：重叠 ≤ 2 天判为「轻度重叠/衔接」走小凹形。默认 16。 */
+  pxPerDay?: number
 }
 
 export interface EdgeRoute {
@@ -273,41 +279,50 @@ const r1 = (n: number) => Math.round(n * 10) / 10
  * 把一条 FS 依赖边（A 条右缘 → B 条左缘）路由成圆角折线路径。
  * 纯函数：无 DOM、无随机、无写副作用；同输入必同输出。
  *
- * 三类（由 x2-x1 确定性判定）：
- *  - tight 紧贴 FS（0 <= x2-x1 < tightPx，A 结束次日即 B 开始）：
- *    短而顺的 L 形，垂直通道取间隙 (x1, x2) 的中点——必落在两条之间的空隙里，
- *    不穿 A、不压 B；
- *  - normal 正常 FS（x2-x1 >= tightPx）：标准 L 形，自 A 右缘探出短 stub 后垂直下行；
- *  - overlap 重叠（x2 < x1，前置结束晚于后置开始）：连线**绕行**到
- *    max(x1, bRight)+detourGap 的右侧安全走廊，圆角 U 形折返，
- *    不穿过任何任务条；箭头落在 B 条右缘、方向朝左指向后置。
+ * 坐标事实：x1=A 右缘、x2=B 左缘（gap=x2-x1）。marker 三角向左占约 x2-5~x2+1，
+ * 故垂直通道 ch 必须 ≤ x2-6，且最后水平段（ch→x2）长度 ≥ arrowClear，箭头才不与竖线重叠。
  *
- * lane>0 时通道整体右移 lane*laneStep，供多条同起止边错峰不叠线。
- * bRight 缺省按 x2+16 近似（调用方已知 B 条宽时务必传入精确右缘）。
+ * x2≥x1（FS 非重叠）按 gap 分三种：
+ *  - normal（gap ≥ stubA+arrowClear，间隙够）：自 A 右缘探出 stubA 后垂直下行的标准 L，
+ *    箭头段 ≥ arrowClear；
+ *  - tight（arrowClear ≤ gap < stubA+arrowClear）：A 右缘直接垂直、无 A stub，
+ *    再水平到 B 左缘，箭头段 = gap ≥ arrowClear；
+ *  - tight（gap < arrowClear，含 gap=0 紧贴）：用「小凹形」在行间把通道让到 B 左缘左侧
+ *    （ch=x2-arrowClear）——先垂直深入行间离开 A 条，在行间空隙水平让到 ch 再下行，
+ *    水平向左段绝不落在 y1 行（不穿 A 条）；
+ *  - overlap（gap < -2*pxPerDay，前置结束晚于后置开始 2 天以上）：绕行到 max(x1,bRight)+detourGap 的
+ *    右侧安全走廊，圆角 U 形折返，箭头落 B 右缘、朝左指向后置；
+ *  - overlap-tight（-2*pxPerDay ≤ gap < 0，A.due=B.start 当天衔接、重叠 1~2 天）：
+ *    与 gap=0 紧贴同一条「小凹形」路径，行间空隙水平让位，箭头朝右落 B 左缘。
+ *
+ * lane>0 仅在 normal 间隙仍能容纳时把通道右移 lane*laneStep，否则回退 lane=0。
  */
 export function routeEdge(
   edge: { x1: number, y1: number, x2: number, y2: number, bRight?: number },
   opts: EdgeRouteOpts = {},
 ): EdgeRoute {
-  const tightPx = opts.tightPx ?? 8
+  const arrowClear = opts.arrowClear ?? 8
+  const stubA = opts.stubA ?? 6
   const detourGap = opts.detourGap ?? 12
   const laneStep = opts.laneStep ?? 14
-  const cornerR = opts.cornerR ?? 7
+  const cornerR = opts.cornerR ?? 6
   const lane = opts.lane ?? 0
+  const pxPerDay = opts.pxPerDay ?? 16
   const { x1, y1, x2, y2 } = edge
   const bRight = edge.bRight ?? x2 + 16
   const dy = y2 - y1
+  const ady = Math.abs(dy)
   const sy = dy === 0 ? 1 : Math.sign(dy)
+  const gap = x2 - x1
 
-  const kind: EdgeRouteKind = x2 >= x1 + tightPx ? 'normal' : x2 >= x1 ? 'tight' : 'overlap'
-
-  if (kind === 'overlap') {
-    // 右侧安全走廊：严格在 A 右缘与 B 右缘之外，水平段贴两端条缘出发，不穿条。
+  // ---- 严重重叠（gap < -2*pxPerDay：前置结束晚于后置开始 2 天以上）：
+  // 右侧安全走廊，圆角 U 形，箭头落 B 右缘朝左 ----
+  if (gap < -2 * pxPerDay) {
     const ch = Math.max(x1, bRight) + detourGap + lane * laneStep
     const rr = Math.min(cornerR, detourGap)
     const endX = bRight
     if (dy === 0) {
-      return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(ch)} V ${r1(y1)} H ${r1(endX)}`, kind, channelX: ch, endX, endY: y2 }
+      return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(ch)} V ${r1(y1)} H ${r1(endX)}`, kind: 'overlap', channelX: ch, endX, endY: y2 }
     }
     const d = [
       `M ${r1(x1)} ${r1(y1)}`,
@@ -317,28 +332,60 @@ export function routeEdge(
       `Q ${r1(ch)} ${r1(y2)} ${r1(ch - rr)} ${r1(y2)}`,
       `H ${r1(endX)}`,
     ].join(' ')
-    return { d, kind, channelX: ch, endX, endY: y2 }
+    return { d, kind: 'overlap', channelX: ch, endX, endY: y2 }
   }
 
-  // tight / normal：垂直通道必须落在间隙 (x1, x2) 内——既不压 A（A 止于 x1），也不压 B（B 起于 x2）。
-  const gap = x2 - x1
-  const stub = kind === 'tight'
-    ? Math.max(3, gap / 2)                          // 紧贴：通道居间隙中点
-    : Math.max(14, gap / 2) + lane * laneStep        // 正常：自 A 右缘探出短 stub
-  // 钳制：lane 错峰不得把通道推出间隙落到 B 条上；圆角半径同时受两侧间隙约束，绝不越界穿条。
-  const ch = Math.min(x1 + stub, x2 - 2)
-  const rr = Math.min(cornerR, ch - x1, x2 - ch, Math.abs(dy) / 2 || 999)
-  const endX = x2
+  // ---- 同条（dy=0）：直接水平 ----
   if (dy === 0) {
-    return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(endX)}`, kind, channelX: ch, endX, endY: y2 }
+    return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(x2)}`, kind: gap >= stubA + arrowClear ? 'normal' : 'tight', channelX: x1, endX: x2, endY: y2 }
   }
+
+  // ---- 情况1：normal（gap ≥ stubA+arrowClear）标准 L ----
+  if (gap >= stubA + arrowClear) {
+    let ch = x1 + stubA + lane * laneStep
+    if (x2 - ch < arrowClear) ch = x1 + stubA // lane 错峰放不下 → 回退 lane=0
+    const rr = Math.min(cornerR, ch - x1, x2 - ch, ady / 2)
+    const d = [
+      `M ${r1(x1)} ${r1(y1)}`,
+      `H ${r1(ch - rr)}`,
+      `Q ${r1(ch)} ${r1(y1)} ${r1(ch)} ${r1(y1 + sy * rr)}`,
+      `V ${r1(y2 - sy * rr)}`,
+      `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
+      `H ${r1(x2)}`,
+    ].join(' ')
+    return { d, kind: 'normal', channelX: ch, endX: x2, endY: y2 }
+  }
+
+  // ---- 情况2：arrowClear ≤ gap < stubA+arrowClear，A 右缘直接垂直 ----
+  if (gap >= arrowClear) {
+    const ch = x1
+    const rr = Math.min(cornerR, gap, ady / 2)
+    const d = [
+      `M ${r1(x1)} ${r1(y1)}`,
+      `V ${r1(y2 - sy * rr)}`,
+      `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
+      `H ${r1(x2)}`,
+    ].join(' ')
+    return { d, kind: 'tight', channelX: ch, endX: x2, endY: y2 }
+  }
+
+  // ---- 情况3：gap < arrowClear（含 gap=0 紧贴；及 gap∈[-2pxPerDay,0) 的轻度重叠/衔接）
+  // 「小凹形」让通道到 B 左缘左侧：先垂直深入行间离开 A 条，在行间空隙水平让到 ch 再下行，
+  // 水平左移段绝不落在 y1 行（不穿 A 条）。
+  // gap≥0 → kind='tight'（紧贴）；gap<0（重叠 1~2 天，A.due=B.start 当天衔接）→ kind='overlap-tight'，
+  // 视觉与紧贴一致（行间小凹形、箭头朝右落 B 左缘），绝不走严重重叠的大 U。
+  const ch = x2 - arrowClear
+  const t1 = Math.min(8, ady * 0.35, Math.max(0, ady - 8))
+  const rr = Math.min(4, t1 / 2, ady / 2)
   const d = [
     `M ${r1(x1)} ${r1(y1)}`,
-    `H ${r1(ch - rr)}`,
-    `Q ${r1(ch)} ${r1(y1)} ${r1(ch)} ${r1(y1 + sy * rr)}`,
+    `V ${r1(y1 + sy * (t1 - rr))}`,
+    `Q ${r1(x1)} ${r1(y1 + sy * t1)} ${r1(x1 - rr)} ${r1(y1 + sy * t1)}`,
+    `H ${r1(ch)}`,
+    `Q ${r1(ch)} ${r1(y1 + sy * t1)} ${r1(ch)} ${r1(y1 + sy * (t1 + rr))}`,
     `V ${r1(y2 - sy * rr)}`,
     `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
-    `H ${r1(endX)}`,
+    `H ${r1(x2)}`,
   ].join(' ')
-  return { d, kind, channelX: ch, endX, endY: y2 }
+  return { d, kind: gap < 0 ? 'overlap-tight' : 'tight', channelX: ch, endX: x2, endY: y2 }
 }
