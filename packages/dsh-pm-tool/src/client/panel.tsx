@@ -653,21 +653,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : view === 'gantt' || view === 'milestones' || view === 'risk-issues' || view === 'people' || view === 'overview'
-                ? null
-                : <>
-                  <ProjectBar
-                    project={project}
-                    tasks={tasks}
-                    milestones={milestones}
-                    riskIssues={riskIssues}
-                    meetings={meetings}
-                    reports={reports}
-                    deliverables={deliverables}
-                    onEdit={() => setDrawer({ kind: 'project-edit', project })}
-                  />
-                  <ReminderStrip data={data} onPickProject={(id) => setSelected(id)} onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}/>
-                </>}
+              : null}
             <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
               <ViewTab active={view === 'tasks'} count={tasks.length} onClick={() => changeView('tasks')}>
                 全部任务
@@ -841,99 +827,6 @@ export function PmPanel({ execute }: PmPanelApi) {
       </DrawerPanel>}
     </main>
   </>
-}
-
-/** R16/OPT-01/02 提醒：客户端基于 snapshot 派生临期/逾期（纯展示，不入库、不调模型）。 */
-function ReminderStrip({ data, onPickProject, onOpenRecord }: {
-  data: Snapshot
-  onPickProject?: (id: string) => void
-  onOpenRecord?: (projectId: string, type: string, id: string) => void
-}) {
-  const today = useMemo(() => {
-    const n = new Date()
-    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
-  }, [])
-  const [range, setRange] = useState(7)
-  const items = useMemo(() => {
-    const projName = new Map(data.projects.map(p => [p.id, p.name]))
-    const days = (date: string) => Math.round((Date.parse(date) - Date.parse(today)) / 86_400_000)
-    const out: { severity: 'overdue' | 'soon', type: string, projectId: string, refId: string, label: string }[] = []
-    for (const t of data.tasks) {
-      if (t.status === 'done' || t.progress >= 100 || !t.dueDate) continue
-      const d = days(t.dueDate)
-      if (d < 0) out.push({ severity: 'overdue', type: 'task', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（逾期 ${-d} 天）` })
-      else if (d <= range) out.push({ severity: 'soon', type: 'task', projectId: t.projectId, refId: t.id, label: `任务 ${t.title}（还有 ${d} 天）` })
-    }
-    for (const m of data.milestones) {
-      if (m.status === 'achieved') continue
-      const d = days(m.targetDate)
-      if (d < 0) out.push({ severity: 'overdue', type: 'milestone', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（逾期 ${-d} 天）` })
-      else if (d <= range) out.push({ severity: 'soon', type: 'milestone', projectId: m.projectId, refId: m.id, label: `里程碑 ${m.title}（还有 ${d} 天）` })
-    }
-    out.sort((a, b) => (a.severity === 'overdue' ? -1 : 1) - (b.severity === 'overdue' ? -1 : 1))
-    // 按项目分组。
-    const groups = new Map<string, typeof out>()
-    for (const it of out) {
-      const g = groups.get(it.projectId) ?? []
-      g.push(it); groups.set(it.projectId, g)
-    }
-    return { groups, projName }
-  }, [data, today, range])
-
-  const total = Array.from(items.groups.values()).reduce((n, g) => n + g.length, 0)
-  if (!total) {
-    return <section className="pm-reminders pm-reminders-empty" aria-label="临期与逾期提醒">
-      <div className="pm-reminders-head">
-        <span className="pm-reminders-title"><Bell size={14}/>提醒</span>
-        <RangePicker range={range} setRange={setRange}/>
-      </div>
-      <p className="pm-reminders-none">未来 {range} 天内没有临期或逾期事项。</p>
-    </section>
-  }
-  const overdue = Array.from(items.groups.values()).flat().filter(i => i.severity === 'overdue').length
-  return <section className="pm-reminders" aria-label="临期与逾期提醒">
-    <div className="pm-reminders-head">
-      <span className="pm-reminders-title"><Bell size={14}/>提醒</span>
-      <RangePicker range={range} setRange={setRange}/>
-      {overdue > 0 && <span className="pm-reminders-count pm-reminders-overdue">逾期 {overdue}</span>}
-      {total - overdue > 0 && <span className="pm-reminders-count pm-reminders-soon">临期 {total - overdue}</span>}
-    </div>
-    {Array.from(items.groups.entries()).map(([pid, list]) =>
-      <div key={pid} className="pm-reminder-group" data-pid={pid}>
-        <button
-          type="button"
-          className="pm-reminder-project"
-          data-pick-project={pid}
-          onClick={() => onPickProject?.(pid)}
-          title={`切换到项目 ${items.projName.get(pid) ?? pid}`}
-        >{items.projName.get(pid) ?? pid}</button>
-        <ul>{list.map((it, idx) =>
-          <li
-            key={`${it.refId}-${idx}`}
-            className={it.severity === 'overdue' ? 'pm-reminders-row pm-reminders-row-overdue' : 'pm-reminders-row pm-reminders-row-soon'}
-            data-open-record
-            data-open-type={it.type}
-            data-open-id={it.refId}
-            onClick={() => onOpenRecord?.(it.projectId, it.type, it.refId) ?? onPickProject?.(it.projectId)}
-          >{it.label}</li>,
-        )}</ul>
-      </div>,
-    )}
-  </section>
-}
-
-function RangePicker({ range, setRange }: { range: number, setRange: (n: number) => void }) {
-  return <span className="pm-reminder-ranges" role="group" aria-label="提醒范围">
-    {[3, 7, 14, 30].map(d =>
-      <button
-        key={d}
-        type="button"
-        className={`pm-reminder-range${range === d ? ' pm-button-primary' : ''}`}
-        aria-pressed={range === d}
-        onClick={() => setRange(d)}
-      >{d} 天</button>,
-    )}
-  </span>
 }
 
 type ReminderItem = { kind: 'task' | 'milestone', id: string, title: string, owner?: string, date: string, d: number }
@@ -1577,48 +1470,6 @@ function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () =>
       {onAI && <button className="pm-button pm-button-primary pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
     </div>
   </div>
-}
-
-function ProjectBar({
-  project,
-  tasks,
-  milestones,
-  riskIssues,
-  meetings,
-  reports,
-  deliverables,
-  onEdit,
-}: {
-  project: Project
-  tasks: Task[]
-  milestones: Milestone[]
-  riskIssues: RiskIssue[]
-  meetings: Meeting[]
-  reports: ProgressReport[]
-  deliverables: Deliverable[]
-  onEdit: () => void
-}) {
-  const completed = tasks.filter(task => task.status === 'done').length
-  return <section className="pm-project-bar">
-    <div className="pm-project-title">
-      <h1>{project.name}</h1>
-      <StatusTag kind="project" value={project.status}/>
-      <button className="pm-plain-icon" title="编辑项目" aria-label="编辑项目" onClick={onEdit}>
-        <Pencil size={14}/>
-      </button>
-    </div>
-    <p>{project.description || '暂无项目描述'}</p>
-    <div className="pm-project-facts">
-      <span><UserRound size={14}/>{project.owner || '未指定负责人'}</span>
-      <span><CalendarDays size={14}/>{project.startDate} 至 {project.targetDate}</span>
-      <span><ListTree size={14}/>{completed}/{tasks.length} 任务完成</span>
-      <span><MilestoneIcon size={14}/>{milestones.length} 个里程碑</span>
-      <span><ShieldAlert size={14}/>{riskIssues.filter(item => item.status !== 'closed').length} 项待处理风险/问题</span>
-      <span><NotebookTabs size={14}/>{meetings.length} 份会议纪要</span>
-      <span><FileText size={14}/>{reports.length} 份进度汇报</span>
-      <span><Package size={14}/>{deliverables.length} 项交付物</span>
-    </div>
-  </section>
 }
 
 function ViewTab({

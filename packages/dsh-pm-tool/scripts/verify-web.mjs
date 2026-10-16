@@ -128,17 +128,17 @@ try {
   assert.match(css, /\.pm-board-projects/)
   assert.match(css, /\.pm-ai-actions/)
   assert.match(css, /\.pm-ai-preview/)
-  // R16：临期/逾期提醒条（客户端派生）。
-  assert.match(bundle, /pm-reminders/)
+  // R16：临期/逾期提醒（客户端派生，任务页胶囊 + 展开浮层）。
+  assert.match(bundle, /pm-capsule/)
   assert.match(bundle, /天内没有临期或逾期事项/)  // OPT-02 提醒空态
-  assert.match(bundle, /临期与逾期提醒/)
+  assert.match(bundle, /pm-pop/)
   assert.match(bundle, /meeting action promote /)
   assert.match(bundle, /已转 /)
   // R18：面板一键备份入口。
   assert.match(bundle, /execute\("backup"\)/)
   assert.match(bundle, /备份完成/)
-  assert.match(css, /\.pm-reminders-overdue/)
-  assert.match(css, /\.pm-reminders-row-soon/)
+  assert.match(css, /\.pm-capsule-err/)
+  assert.match(css, /\.pm-capsule-warn/)
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
 
   // 可达性修复 + 第二档控件稳定选择器契约。
@@ -179,12 +179,12 @@ try {
   assert.match(bundle, /pm-ai-raw/)                 // OPT-08 narrate/summarize 可编辑
   assert.match(bundle, /report narrateuse /)        // OPT-08 按编辑文本落盘
   assert.match(bundle, /pm-batch-bar/)             // OPT-05 批量工具条
-  assert.match(bundle, /pm-reminders/)             // OPT-01/02 提醒区
+  assert.match(bundle, /pm-capsule/)             // OPT-01/02 提醒区（胶囊+浮层）
   assert.match(bundle, /pm-restore-btn/)           // OPT-06 网页选备份恢复
   assert.match(bundle, /restore-content/)          // OPT-06 按内容恢复入口
   assert.match(bundle, /pm-batch-assignee/)         // OPT-05 批量负责人
   assert.match(bundle, /pm-batch-due/)             // OPT-05 批量截止
-  assert.match(bundle, /pm-reminder-range/)        // OPT-02 3/7/14/30 天切换
+  assert.match(bundle, /pm-pop-seg/)        // OPT-02 3/7/14/30 天切换
   assert.match(bundle, /data-pick-project/)        // OPT-01 提醒切项目
   assert.match(bundle, /pm-selected-project/)      // OPT-03 记住上次项目
   assert.match(bundle, /pm-empty-ai-cta/)          // OPT-11 空状态 AI CTA（任务表空态）

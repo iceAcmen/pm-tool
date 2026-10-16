@@ -255,29 +255,6 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-lane-warning { font-size: 11px; color: var(--pm-muted); }
 .pm-action-pending { font-size: 11px; color: var(--pm-warning); white-space: nowrap; }
 
-.pm-project-bar { padding: 17px 22px 15px; border-bottom: 1px solid var(--pm-line-soft); }
-.pm-project-title { display: flex; align-items: center; gap: 9px; }
-.pm-project-title h1 {
-  min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  font-size: 20px;
-  font-weight: 650;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.pm-project-bar > p {
-  max-width: 780px;
-  margin: 5px 0 10px;
-  overflow: hidden;
-  color: var(--pm-secondary);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.pm-project-facts { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--pm-secondary); font-size: 12px; }
-.pm-project-facts span { display: inline-flex; align-items: center; gap: 5px; }
-
 .pm-view-tabs {
   display: flex;
   align-items: flex-end;
@@ -882,9 +859,8 @@ body[data-ds-dark-theme] .pm-shell {
 
 @container (max-width: 760px) {
   .pm-topbar { padding-right: 14px; padding-left: 14px; }
-  .pm-project-bar, .pm-table-toolbar { padding-right: 14px; padding-left: 14px; }
+  .pm-table-toolbar { padding-right: 14px; padding-left: 14px; }
   .pm-view-tabs { padding: 0 8px; overflow-x: auto; }
-  .pm-project-facts span:nth-child(4) { display: none; }
   .pm-table-search { width: 150px; }
   .pm-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -896,9 +872,6 @@ body[data-ds-dark-theme] .pm-shell {
   .pm-top-actions { flex-wrap: wrap; }
   .pm-top-actions .pm-button { width: auto; min-width: 0; min-height: 32px; padding: 5px 9px; overflow: visible; white-space: normal; line-height: 1.2; }
   .pm-top-actions .pm-button svg { flex: 0 0 auto; color: currentColor; }
-  .pm-project-bar > p { white-space: normal; }
-  .pm-project-facts { gap: 6px 14px; }
-  .pm-project-facts span:nth-child(3), .pm-project-facts span:nth-child(4) { display: none; }
   .pm-table-toolbar { flex-wrap: wrap; }
   .pm-table-search { width: 100%; order: 5; }
   .pm-summary-grid { grid-template-columns: 1fr; }
@@ -931,16 +904,6 @@ body[data-ds-dark-theme] .pm-shell {
 }
 .pm-ai-note { margin: 0; font-size: 11px; color: var(--pm-muted); }
 
-/* R16 临期/逾期提醒条 */
-.pm-reminders { margin: 8px 0 4px; padding: 8px 10px; border: 1px solid var(--pm-line-soft); border-radius: 8px; }
-.pm-reminders-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.pm-reminders-title { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--pm-ink); }
-.pm-reminders-count { font-size: 11px; padding: 1px 6px; border-radius: 999px; }
-.pm-reminders-overdue { background: var(--dsw-alias-interactive-bg-hover-danger); color: var(--dsw-alias-state-danger); }
-.pm-reminders-soon { background: var(--dsw-alias-interactive-bg-active); color: var(--pm-ink); }
-.pm-reminders ul { margin: 0; padding-left: 16px; font-size: 12px; line-height: 1.6; }
-.pm-reminders-row-overdue { color: var(--dsw-alias-state-danger); }
-.pm-reminders-row-soon { color: var(--pm-secondary); }
 .pm-action-promoted { font-size: 11px; color: var(--pm-secondary); white-space: nowrap; }
 .pm-ai-templates { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
 .pm-chip { font-size: 11px; padding: 3px 9px; border: 1px solid var(--pm-line-soft); border-radius: 999px; background: transparent; color: var(--pm-secondary); cursor: pointer; }
@@ -960,12 +923,6 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-lane-note { padding: 4px 8px; font-size: 12px; opacity: .8; }
 
 /* === OPT 优化清单 === */
-.pm-reminder-ranges { display: inline-flex; gap: 4px; margin-left: 8px; }
-.pm-reminder-range { font-size: 12px; padding: 2px 8px; border: 1px solid var(--pm-border); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
-.pm-reminder-group { margin: 4px 0; }
-.pm-reminder-project { background: none; border: none; color: var(--pm-accent); cursor: pointer; font-weight: 600; padding: 0; font-size: 13px; }
-.pm-reminders-row { cursor: pointer; padding: 2px 4px; border-radius: 4px; }
-.pm-reminders-row:hover { background: var(--pm-hover); }
 .pm-batch-field-wrap { display: inline-flex; gap: 4px; align-items: center; }
 .pm-batch-input { font-size: 12px; padding: 3px 6px; border: 1px solid var(--pm-border); border-radius: 6px; background: transparent; color: inherit; width: 90px; }
 .pm-restore-btn { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
