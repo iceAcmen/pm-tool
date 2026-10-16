@@ -76,6 +76,9 @@ export interface DashboardLayout {
   version: number
   scope: WidgetScope
   widgets: WidgetInstance[]
+  updatedAt?: string
+  updatedBy?: string
+  revision?: number
 }
 
 export interface WidgetActions {

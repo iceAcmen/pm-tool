@@ -47,7 +47,15 @@ export function resolveLayout(fallback: DashboardLayout): DashboardLayout {
 export function saveLayout(scope: WidgetScope, layout: DashboardLayout): void {
   if (scope === 'global') return // global = 内置默认，不写
   try {
-    localStorage.setItem(KEYS[scope], JSON.stringify({ ...layout, scope }))
+    const prev = readScope(scope)
+    const next: DashboardLayout = {
+      ...layout,
+      scope,
+      revision: (prev?.revision ?? 0) + 1,
+      updatedAt: new Date().toISOString(),
+      updatedBy: prev?.updatedBy ?? '',
+    }
+    localStorage.setItem(KEYS[scope], JSON.stringify(next))
   } catch { /* 静默 */ }
 }
 

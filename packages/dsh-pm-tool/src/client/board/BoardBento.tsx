@@ -2,13 +2,15 @@
  * 可配置看板渲染：浏览态静态栅格，编辑态 RGL 拖拽/resize + 卡片库抽屉 + 右侧配置面板。
  * 三作用域 global/project/user；持久化走 persist.ts（localStorage，三层回退）。
  */
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import RGL, { WidthProvider, type Layout } from 'react-grid-layout'
 import type { Snapshot } from '../panel.js'
-import { GRID, type DashboardLayout, type WidgetActions, type WidgetConfig, type WidgetInstance, type WidgetScope, type FilterOp } from './types.js'
-import { WIDGET_REGISTRY, DRAWER_GROUPS, DEFAULT_LAYOUT, FIELD_WHITELIST } from './widgets.js'
+import { GRID, type DashboardLayout, type WidgetActions, type WidgetConfig, type WidgetEntity, type WidgetInstance, type WidgetScope, type FilterOp } from './types.js'
+import { WIDGET_REGISTRY, DRAWER_GROUPS, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
 import { resolveLayout, saveLayout, resetScope } from './persist.js'
+import { selectEntity, applyFilter } from './query.js'
+import { evaluateFormula } from './formula.js'
 
 const GridLayout = WidthProvider(RGL)
 
@@ -60,6 +62,36 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
   }
   const cancelEdit = () => { setDraft(structuredClone(resolveLayout(DEFAULT_LAYOUT))); setLayout(resolveLayout(DEFAULT_LAYOUT)); setValidationError(null); setDraft(null); setEditing(false); setSelectedId(null) }
   const resetDefault = () => { resetScope(scope); setDraft(structuredClone(DEFAULT_LAYOUT)) }
+  const fileRef = useRef<HTMLInputElement>(null)
+  const exportLayout = () => {
+    if (!draft) return
+    const blob = new Blob([JSON.stringify({ ...draft, scope }, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `dashboard-${scope}.json`; a.click()
+    URL.revokeObjectURL(url)
+  }
+  const importLayout = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result))
+        if (typeof parsed !== 'object' || parsed === null || typeof parsed.version !== 'number' || !Array.isArray(parsed.widgets)) {
+          setValidationError('导入失败：布局 JSON 结构不合法')
+          return
+        }
+        // 最小迁移骨架：版本不符即拒绝
+        if (parsed.version > 1) { setValidationError('导入失败：布局版本过新'); return }
+        setDraft(parsed as DashboardLayout)
+      } catch {
+        setValidationError('导入失败：JSON 解析错误')
+      }
+    }
+    reader.readAsText(f)
+    e.target.value = ''
+  }
 
   const addWidget = (type: string) => {
     if (!draft) return
@@ -115,6 +147,9 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
                 <option value="global">内置默认</option>
               </select>
               <button type="button" className="pm-bento-toolbtn" onClick={() => setDrawerOpen(o => !o)}>＋ 卡片库</button>
+              <button type="button" className="pm-bento-toolbtn" onClick={exportLayout}>导出</button>
+              <button type="button" className="pm-bento-toolbtn" onClick={() => fileRef.current?.click()}>导入</button>
+              <input ref={fileRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={importLayout}/>
               <button type="button" className="pm-bento-toolbtn" onClick={resetDefault}>恢复默认</button>
               <button type="button" className="pm-bento-toolbtn" onClick={cancelEdit}>取消</button>
               <button type="button" className="pm-button-primary" onClick={saveEdit}>保存</button>
@@ -221,17 +256,37 @@ function ConfigPanel({ inst, data, onPatch, onClose }: {
 }) {
   const desc = WIDGET_REGISTRY.get(inst.type)!
   const cfg = inst.config
-  const [tab, setTab] = useState<'data' | 'filter' | 'sort' | 'show' | 'look'>('data')
+  const [tab, setTab] = useState<'data' | 'filter' | 'sort' | 'formula' | 'show' | 'look'>('data')
   const hasEntity = desc.requiredSources.length > 0 && desc.type !== 'divider'
+  const isFormula = desc.type === 'formulaCard' || desc.type === 'kpiMetric'
   const whitelist = hasEntity ? FIELD_WHITELIST[cfg.entity ?? 'tasks'] ?? [] : []
+  const tabs = (['data', 'filter', 'sort', ...(isFormula ? ['formula' as const] : []), 'show', 'look'] as const)
+  const [trial, setTrial] = useState<string>('')
+  const doTrial = () => {
+    const entity = (cfg.entity ?? 'tasks') as WidgetEntity
+    const rows = selectEntity(data, entity)
+    const rawList = rawListFor(data, entity)
+    const filtered = applyFilter(data, entity, rows, rawList, cfg.projectScope ?? 'all', cfg.filters)
+    const r = evaluateFormula(String(cfg.formula ?? ''), { rows: filtered as unknown as Record<string, unknown>[], today: todayIso() })
+    setTrial(r.ok ? `= ${String(r.value)}` : `✗ ${r.error.message}`)
+  }
   return <aside className="pm-cfg">
     <h3>配置 · {desc.name}<button type="button" className="pm-cfg-x" onClick={onClose}>×</button></h3>
     <div className="pm-cfg-tabs">
-      {(['data', 'filter', 'sort', 'show', 'look'] as const).map(t =>
+      {tabs.map(t =>
         <span key={t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
-          {{ data: '数据源', filter: '筛选', sort: '排序', show: '显示元素', look: '外观' }[t]}
+          {{ data: '数据源', filter: '筛选', sort: '排序', formula: '公式', show: '显示元素', look: '外观' }[t]}
         </span>)}
     </div>
+
+    {tab === 'formula' && isFormula && <div className="pm-cfg-fld">
+      <label>公式（≤200 字，rows=筛选后行）</label>
+      <textarea className="pm-cfg-sel" rows={3} maxLength={200} value={String(cfg.formula ?? '')}
+        onChange={e => onPatch({ formula: e.target.value })}/>
+      <div className="pm-cfg-help">变量：rows、today；函数：count/sum/avg/rowMin/rowMax/countIf/pct</div>
+      <button type="button" className="pm-cfg-add" onClick={doTrial}>试算</button>
+      {trial && <div className="pm-cfg-trial">{trial}</div>}
+    </div>}
 
     {tab === 'data' && <>
       {hasEntity && <div className="pm-cfg-fld">

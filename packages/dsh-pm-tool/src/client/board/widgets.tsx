@@ -11,8 +11,9 @@ import { deriveProgressMap } from '../../core/progress-derivation.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
+import { evaluateFormula } from './formula.js'
 
-function todayIso(): string {
+export function todayIso(): string {
   const n = new Date()
   return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
 }
@@ -46,8 +47,47 @@ const kpiSchema = z.object({
   projectScope: z.string(),
   filters: z.array(filterShape),
   numberFormat: z.enum(['int','pct']).optional(),
+  formula: z.string().max(200).optional(),
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
 }).loose()
 const noteSchema = z.object({ title: z.string(), body: z.string() }).loose()
+const formulaCardSchema = z.object({
+  entity: entityEnum,
+  projectScope: z.string(),
+  filters: z.array(filterShape),
+  formula: z.string().max(200, '公式不超过 200 字'),
+  numberFormat: z.enum(['int','pct']).optional(),
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+}).loose()
+
+/** 安全 markdown 子集：先转义 HTML 防 XSS，再做极轻量行内/块级转换。 */
+function renderMarkdown(src: string): string {
+  const esc = src.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  const lines = esc.split(/\r?\n/)
+  const out: string[] = []
+  let inList = false
+  for (const line of lines) {
+    if (/^\s*[-*]\s+/.test(line)) {
+      if (!inList) { out.push('<ul>'); inList = true }
+      out.push('<li>' + inline(line.replace(/^\s*[-*]\s+/, '')) + '</li>')
+      continue
+    }
+    if (inList) { out.push('</ul>'); inList = false }
+    if (/^#{1,3}\s+/.test(line)) out.push('<div class="pm-md-h">' + inline(line.replace(/^#{1,3}\s+/, '')) + '</div>')
+    else if (line.trim() === '') out.push('')
+    else out.push('<p>' + inline(line) + '</p>')
+  }
+  if (inList) out.push('</ul>')
+  return out.join('\n')
+  function inline(s: string): string {
+    return s
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+  }
+}
 
 /* ---------- 1. completionHero 完成率主卡（左列高卡） ---------- */
 const completionHero: WidgetDescriptor = {
@@ -425,7 +465,7 @@ const ENTITY_LABEL: Record<WidgetEntity, string> = {
   deliverables: '交付物', meetings: '会议', reports: '汇报',
 }
 
-function rawListFor(data: Snapshot, entity: WidgetEntity): Array<Record<string, unknown>> {
+export function rawListFor(data: Snapshot, entity: WidgetEntity): Array<Record<string, unknown>> {
   switch (entity) {
     case 'tasks': return data.tasks as unknown as Array<Record<string, unknown>>
     case 'milestones': return data.milestones as unknown as Array<Record<string, unknown>>
@@ -489,13 +529,67 @@ const kpiMetric: WidgetDescriptor<WidgetConfig> = {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
     const rawList = rawListFor(data, entity)
-    const count = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters).length
-    const pct = config.numberFormat === 'pct'
-      ? `${Math.round(count / Math.max(1, rows.length) * 100)}%`
-      : String(count)
+    const filtered = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters)
+    let display: string
+    if (typeof config.formula === 'string' && config.formula.trim()) {
+      const r = evaluateFormula(config.formula, { rows: filtered as unknown as Record<string, unknown>[], today: todayIso() })
+      if (!r.ok) {
+        return <div className="pm-bento-card">
+          <div className="pm-bento-label">{config.title ?? ENTITY_LABEL[entity]}</div>
+          <div className="pm-kpi-big pm-kpi-err">公式错误</div>
+          <div className="pm-bento-foot">{r.error.message}</div>
+        </div>
+      }
+      display = config.numberFormat === 'pct' && typeof r.value === 'number' ? `${r.value}%` : String(r.value)
+    } else {
+      const count = filtered.length
+      display = config.numberFormat === 'pct'
+        ? `${Math.round(count / Math.max(1, rows.length) * 100)}%`
+        : String(count)
+    }
     return <div className="pm-bento-card">
       <div className="pm-bento-label">{config.title ?? ENTITY_LABEL[entity]}</div>
-      <div className="pm-kpi-big">{pct}</div>
+      <div className="pm-kpi-big">{display}</div>
+      {config.subtitle && <div className="pm-bento-foot">{config.subtitle}</div>}
+    </div>
+  },
+}
+
+/* ---------- 10b. formulaCard 公式卡（以公式为核心） ---------- */
+const formulaCard: WidgetDescriptor<WidgetConfig> = {
+  type: 'formulaCard',
+  name: '公式指标',
+  category: 'kpi',
+  addable: true,
+  defaultW: 3, defaultH: 2, minW: 2, minH: 2,
+  requiredSources: ['tasks'],
+  defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], formula: '', numberFormat: 'int', title: '公式指标' },
+  configSchema: formulaCardSchema,
+  render({ data, config }) {
+    const entity = (config.entity ?? 'tasks') as WidgetEntity
+    const rows = selectEntity(data, entity)
+    const rawList = rawListFor(data, entity)
+    const filtered = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters)
+    const f = typeof config.formula === 'string' ? config.formula : ''
+    if (!f.trim()) {
+      return <div className="pm-bento-card">
+        <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
+        <div className="pm-kpi-big">—</div>
+        <div className="pm-bento-foot">在右侧「公式」tab 填写公式</div>
+      </div>
+    }
+    const r = evaluateFormula(f, { rows: filtered as unknown as Record<string, unknown>[], today: todayIso() })
+    if (!r.ok) {
+      return <div className="pm-bento-card">
+        <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
+        <div className="pm-kpi-big pm-kpi-err">公式错误</div>
+        <div className="pm-bento-foot">{r.error.message}</div>
+      </div>
+    }
+    const display = config.numberFormat === 'pct' && typeof r.value === 'number' ? `${r.value}%` : String(r.value)
+    return <div className="pm-bento-card">
+      <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
+      <div className="pm-kpi-big">{display}</div>
       {config.subtitle && <div className="pm-bento-foot">{config.subtitle}</div>}
     </div>
   },
@@ -553,9 +647,12 @@ const textNote: WidgetDescriptor<WidgetConfig> = {
   defaultConfig: { title: '备注', body: '' },
   configSchema: noteSchema,
   render({ config }) {
+    const body = typeof config.body === 'string' ? config.body : ''
     return <div className="pm-bento-card">
       {config.title && <div className="pm-bento-label">{config.title}</div>}
-      <div className="pm-note-body">{config.body || '（空备注，在右侧配置面板编辑正文）'}</div>
+      {body
+        ? <div className="pm-note-body pm-md" dangerouslySetInnerHTML={{ __html: renderMarkdown(body) }} />
+        : <div className="pm-note-body">（空备注，在右侧配置面板编辑正文）</div>}
     </div>
   },
 }
@@ -577,7 +674,7 @@ const divider: WidgetDescriptor = {
 /* ---------- Registry + 内置默认布局（坐标严格按方案 §4.2.1） ---------- */
 export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
   [completionHero, milestoneDeliverable, projectScale, objectiveProgress, peopleLoad, riskMatrix, weeklyPlan,
-    recordList, overdueSoon, kpiMetric, statusRing, textNote, divider]
+    recordList, overdueSoon, kpiMetric, formulaCard, statusRing, textNote, divider]
     .map(d => [d.type, d]),
 )
 
