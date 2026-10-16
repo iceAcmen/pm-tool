@@ -205,6 +205,40 @@
   border-radius: var(--r-xs); padding: 0 6px; white-space: nowrap; z-index: 2;
 }
 
+/* ---------------- P1-3：左右 resize 手柄（6px 热区，2px grip 仅 hover/focus 显现） ---------------- */
+/* 常态条体干净：grip 圆点 opacity 0；仅条体 hover 或键盘 focus-visible 时淡入。
+   热区本身常驻可命中（col-resize 光标提示），不依赖视觉先现。 */
+.pm-gantt-root .pm-gantt-handle {
+  position: absolute; top: 0; bottom: 0; width: 6px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: col-resize; z-index: 3;
+}
+.pm-gantt-root .pm-gantt-handle--left { left: 0; }
+.pm-gantt-root .pm-gantt-handle--right { right: 0; }
+.pm-gantt-root .pm-gantt-handle::after {
+  content: ''; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--ink-2); opacity: 0; transition: opacity 120ms ease;
+}
+.pm-gantt-root .pm-gantt-bar:hover .pm-gantt-handle::after,
+.pm-gantt-root .pm-gantt-bar:focus-visible .pm-gantt-handle::after { opacity: .85; }
+
+/* ---------------- P1-3：键盘微调提示条（常驻，token 深浅跟随） ---------------- */
+.pm-gantt-root .pm-gantt-kbdbar {
+  display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
+  margin: var(--sp-3) var(--sp-6) 0; padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  background: var(--surface); font-size: var(--t-12); color: var(--ink-2);
+}
+.pm-gantt-root .pm-gantt-kbdbar-title { font-weight: 700; color: var(--ink); }
+.pm-gantt-root .pm-gantt-kbd { display: inline-flex; align-items: center; gap: 5px; }
+.pm-gantt-root .pm-gantt-kbd kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; padding: 2px 6px; font-family: inherit; font-size: var(--t-11); font-weight: 600;
+  color: var(--ink); background: var(--surface-2);
+  border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: var(--r-xs);
+}
+.pm-gantt-root .pm-gantt-kbdbar-note { margin-left: auto; font-size: var(--t-11); color: var(--muted); max-width: 420px; }
+
 /* ---------------- 里程碑菱形 ---------------- */
 .pm-gantt-root .pm-gantt-milestone {
   position: absolute; top: 9px; width: 10px; height: 10px;
@@ -284,4 +318,6 @@
   .pm-gantt-root .pm-gantt-toolbar { padding: var(--sp-4) var(--sp-3) 0; row-gap: var(--sp-2); }
   .pm-gantt-root .pm-gantt { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
   .pm-gantt-root .pm-gantt-labels { width: 150px; }
+  .pm-gantt-root .pm-gantt-kbdbar { margin: var(--sp-3) var(--sp-2) 0; gap: var(--sp-2); }
+  .pm-gantt-root .pm-gantt-kbdbar-note { margin-left: 0; max-width: none; }
 }

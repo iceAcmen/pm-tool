@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Task, Milestone, Run, View } from './types.js'
 import css from './gantt.css?raw'
-import { localTodayIso } from '../../core/derived.js'
+import { localTodayIso, isTaskOverdue } from '../../core/derived.js'
 import {
   dateRange, todayOffset, daysFrom, shiftDatesByDrag, progressFill,
   barLabelPolicy, shortDate, dependencyEdges, parentBarRange, milestoneOffset,
@@ -20,6 +20,15 @@ import { sampleGanttTicks } from '../../core/ui-feedback.js'
 
 const ROW_H = 28
 const BAR_H = 16
+const DAY_MS = 86400000
+/** 6px 左右 resize 热区（与 CSS .pm-gantt-handle 宽度一致）；命中即调工期，否则中部为移动。 */
+const HANDLE_PX = 6
+
+/** 本地日历日平移 n 天（UTC 午夜对齐，避免时区把日期拨回昨天）。 */
+const addDays = (iso: string, n: number) =>
+  new Date(Date.parse(iso) + n * DAY_MS).toISOString().slice(0, 10)
+
+type DragMode = 'move' | 'start' | 'end'
 
 /** 空清单信号占位（与 core 口径一致：value=null=证据不足，不画实心、不显百分比）。 */
 const emptyProgress: TaskProgress = {
@@ -45,12 +54,20 @@ export function GanttView(props: {
   const [statusMsg, setStatusMsg] = useState('')
   // inflight：保存中同任务/甘特拖拽禁用，防并发连拖覆盖；结束后解锁。
   const [saving, setSaving] = useState(false)
-  const [preview, setPreview] = useState<{ id: string, shiftDays: number } | null>(null)
+  // 拖拽预览：move=整体平移天数；start/end=调工期后的候选起止（ghost 标签展示）。
+  const [preview, setPreview] = useState<{
+    id: string, mode: DragMode, shiftDays?: number, startDate?: string, dueDate?: string
+  } | null>(null)
   const [gran, setGran] = useState<'day' | 'week' | 'month'>('day')
   const [showDeps, setShowDeps] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const barRef = useRef<{ id: string, startX: number } | null>(null)
+  // 进行中的指针手势：mode 由按下位置决定（左 6px=调开始 / 右 6px=调截止 / 中部=移动）。
+  const dragRef = useRef<{
+    id: string, mode: DragMode, startX: number, origStart: string, origDue: string, cancelled: boolean
+  } | null>(null)
+  // 真实拖拽 / 手柄手势后抑制 click 误开抽屉。
   const draggedRef = useRef(false)
+  const handleGestureRef = useRef(false)
   const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // unmount 清定时器：快速连续拖/切视图不得有陈旧定时器回写旧状态。
@@ -114,51 +131,129 @@ export function GanttView(props: {
     cpm.edges.filter(e => e.onCriticalPath).map(e => `${e.fromId}->${e.toId}`),
   )
 
-  const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
-    if (saving || disabled) return // 保存中/禁用态禁拖：防并发连拖同一任务覆盖
-    draggedRef.current = false
-    barRef.current = { id: task.id, startX: e.clientX }
-    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-  }
-  const onPointerMoveBar = (e: React.PointerEvent) => {
-    const cur = barRef.current
-    if (!cur) return
-    const shiftDays = Math.round((e.clientX - cur.startX) / PX)
-    setPreview(Math.abs(e.clientX - cur.startX) < 4 ? null : { id: cur.id, shiftDays })
-  }
-  const onPointerUpBar = async (e: React.PointerEvent, task: Task) => {
-    const startX = barRef.current?.startX
-    barRef.current = null
-    setPreview(null) // 立即清 ghost 预览：失败时条体保持原坐标，无残影
-    if (startX === undefined || !task.startDate || !task.dueDate) return
-    const deltaPx = e.clientX - startX
-    if (Math.abs(deltaPx) < 4) return
-    draggedRef.current = true
-    // 白名单 payload：只含 startDate/dueDate，不碰 progress/predecessorIds/status
-    const next = shiftDatesByDrag(task.startDate, task.dueDate, deltaPx, PX)
+  // 统一落库通道：拖拽移动 / 左右 resize / 键盘微调全部走既有 `task update` 命令，
+  // 白名单 payload 仅 startDate / dueDate，绝不触碰 progress/predecessorIds/status；
+  // run 成功后 panel 自动 refresh（web snapshot 回读磁盘），构成持久化闭环。
+  const commitDates = async (id: string, payload: { startDate?: string, dueDate?: string }, okText: string) => {
     setSaving(true)
     let ok = false
     try {
-      ok = await run(`task update ${task.id} ${JSON.stringify(next)}`, { quiet: true })
+      ok = await run(`task update ${id} ${JSON.stringify(payload)}`, { quiet: true })
     } finally {
       setSaving(false) // 无论成败都解锁，finally 防漏
     }
-    if (ok) {
-      showStatus(`已更新：${next.startDate} ~ ${next.dueDate}`)
+    if (ok) showStatus(okText)
+    else showStatus('更新失败，请重试', 6000)
+  }
+
+  const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
+    if (saving || disabled) return // 保存中/禁用态禁拖：防并发连拖同一任务覆盖
+    if (!task.startDate || !task.dueDate) return
+    draggedRef.current = false
+    // 模式判定：命中左/右手柄（data-rs）优先；否则按按下点距边缘 6px 热区兜底。
+    const handle = (e.target as HTMLElement).closest?.('[data-rs]') as HTMLElement | null
+    let mode: DragMode = 'move'
+    if (handle?.dataset.rs === 'left') mode = 'start'
+    else if (handle?.dataset.rs === 'right') mode = 'end'
+    else {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+      const off = e.clientX - rect.left
+      if (off <= HANDLE_PX) mode = 'start'
+      else if (off >= rect.width - HANDLE_PX) mode = 'end'
+    }
+    handleGestureRef.current = mode !== 'move'
+    dragRef.current = {
+      id: task.id, mode, startX: e.clientX,
+      origStart: task.startDate, origDue: task.dueDate, cancelled: false,
+    }
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    ;(e.currentTarget as HTMLElement).focus() // 让 Esc 取消能落到条体
+  }
+  const onPointerMoveBar = (e: React.PointerEvent) => {
+    const cur = dragRef.current
+    if (!cur) return
+    const moved = Math.abs(e.clientX - cur.startX) >= 4
+    if (cur.mode === 'move') {
+      const shiftDays = Math.round((e.clientX - cur.startX) / PX)
+      setPreview(moved ? { id: cur.id, mode: 'move', shiftDays } : null)
+      return
+    }
+    if (!moved) { setPreview(null); return }
+    const deltaDays = Math.round((e.clientX - cur.startX) / PX)
+    if (cur.mode === 'start') {
+      let ns = addDays(cur.origStart, deltaDays)
+      if (ns > cur.origDue) ns = cur.origDue // 钳制：开始不得晚于截止
+      setPreview({ id: cur.id, mode: 'start', startDate: ns, dueDate: cur.origDue })
     } else {
-      showStatus('更新失败，请重试', 6000)
+      let nd = addDays(cur.origDue, deltaDays)
+      if (nd < cur.origStart) nd = cur.origStart // 钳制：截止不得早于开始
+      setPreview({ id: cur.id, mode: 'end', startDate: cur.origStart, dueDate: nd })
     }
   }
+  const onPointerUpBar = async (e: React.PointerEvent) => {
+    const cur = dragRef.current
+    dragRef.current = null
+    setPreview(null) // 立即清 ghost 预览：失败时条体保持原坐标，无残影
+    if (!cur || cur.cancelled) return
+    const deltaPx = e.clientX - cur.startX
+    if (Math.abs(deltaPx) < 4) return // 轻点 = 点击，交给 click 开抽屉（手柄轻点已在 handleGestureRef 抑制）
+    draggedRef.current = true
+    if (cur.mode === 'move') {
+      // 整体平移：startDate/dueDate 同向平移相同天数。
+      const next = shiftDatesByDrag(cur.origStart, cur.origDue, deltaPx, PX)
+      await commitDates(cur.id, next, `已更新：${next.startDate} ~ ${next.dueDate}`)
+    } else if (cur.mode === 'start') {
+      // 左缘 resize：只改 startDate，dueDate 不动。
+      let ns = addDays(cur.origStart, Math.round(deltaPx / PX))
+      if (ns > cur.origDue) ns = cur.origDue
+      await commitDates(cur.id, { startDate: ns }, `开始日期调整为 ${ns}`)
+    } else {
+      // 右缘 resize：只改 dueDate，startDate 不动。
+      let nd = addDays(cur.origDue, Math.round(deltaPx / PX))
+      if (nd < cur.origStart) nd = cur.origStart
+      await commitDates(cur.id, { dueDate: nd }, `截止日期调整为 ${nd}`)
+    }
+  }
+  const onPointerCancelBar = () => {
+    dragRef.current = null
+    setPreview(null)
+  }
   const openBar = (task: Task) => {
-    // 拖拽改期后不触发打开抽屉，避免误开。
+    // 拖拽改期 / 手柄轻点后不触发打开抽屉，避免误开。
     if (draggedRef.current) { draggedRef.current = false; return }
+    if (handleGestureRef.current) { handleGestureRef.current = false; return }
     onEdit(task)
   }
-  const onKeyDownBar = (e: React.KeyboardEvent, task: Task) => {
+  const onKeyDownBar = async (e: React.KeyboardEvent, task: Task) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       draggedRef.current = false
       onEdit(task)
+      return
+    }
+    // Esc：取消进行中的指针拖拽（不落库）。
+    if (e.key === 'Escape') {
+      if (dragRef.current) dragRef.current.cancelled = true
+      setPreview(null)
+      e.preventDefault()
+      return
+    }
+    // 方向键微调仅作用于实条子条；父条范围带是只读派生（即便记录上有私有日期也不改写）。
+    const rng = effectiveRange(task)
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && rng && !rng.derived
+      && task.startDate && task.dueDate && !saving && !disabled) {
+      e.preventDefault()
+      const dir = e.key === 'ArrowRight' ? 1 : -1
+      if (e.shiftKey) {
+        // Shift+←/→：调整 1 天工期（右缘延长/缩短），只改 dueDate。
+        let nd = addDays(task.dueDate, dir)
+        if (nd < task.startDate) nd = task.startDate
+        await commitDates(task.id, { dueDate: nd }, `截止日期调整为 ${nd}`)
+      } else {
+        // ←/→：整体移动 1 天，startDate/dueDate 同向平移。
+        const payload = { startDate: addDays(task.startDate, dir), dueDate: addDays(task.dueDate, dir) }
+        await commitDates(task.id, payload, `已更新：${payload.startDate} ~ ${payload.dueDate}`)
+      }
     }
   }
   const locateToday = () => {
@@ -214,14 +309,22 @@ export function GanttView(props: {
     const leftDays = daysFrom(range.start, axis.start)
     const widthDays = taskDurationDays(range.start, range.end)
     const policy = barLabelPolicy(widthDays, PX)
-    const overdue = !done && !range.derived && t.dueDate && t.dueDate < today
+    // P1-3：逾期统一走 core/derived 的 isTaskOverdue 谓词（status!==done 且 progress<100
+    // 且 dueDate<today）；保留 !range.derived 前提——父条范围带是只读派生，不参与逾期判定。
+    const overdue = !range.derived && isTaskOverdue(t, today)
     const blocked = !done && t.status === 'blocked'
     const isCritical = !range.derived && criticalIds.has(t.id)
+    const statusText = done ? '已完成'
+      : t.status === 'in_progress' ? '进行中'
+        : t.status === 'blocked' ? '阻塞' : '待办'
     const preNames = (t.predecessorIds ?? [])
       .map(pid => byId.get(pid)?.title).filter(Boolean).join('、')
-    const aria = `任务 ${t.title}：${range.start} ~ ${range.end}，工期 ${widthDays} 天，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。按回车打开详情。`
+    const aria = `任务 ${t.title}，${range.start} ~ ${range.end}，${widthDays} 天，${statusText}，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。回车打开详情；←/→ 移动 1 天，Shift+←/→ 调整工期。`
+    // ghost 预览：move=整体平移；start/end=resize 候选起止（仅标签预览，条体待回读刷新归位）。
     const ghost = preview && preview.id === t.id
-      ? shiftDatesByDrag(range.start, range.end, preview.shiftDays * PX, PX)
+      ? preview.mode === 'move'
+        ? shiftDatesByDrag(range.start, range.end, (preview.shiftDays ?? 0) * PX, PX)
+        : { startDate: preview.startDate ?? range.start, dueDate: preview.dueDate ?? range.end }
       : null
     const stCls = range.derived ? 'st-parent' : done ? 'st-done' : t.status === 'in_progress' ? 'st-prog' : 'st-todo'
     const cls = [
@@ -244,8 +347,13 @@ export function GanttView(props: {
       onKeyDown={(e) => onKeyDownBar(e, t)}
       onPointerDown={(e) => { if (!range.derived) onPointerDownBar(e, t) }}
       onPointerMove={(e) => { if (!range.derived) onPointerMoveBar(e) }}
-      onPointerUp={(e) => { if (!range.derived) void onPointerUpBar(e, t) }}
+      onPointerUp={(e) => { if (!range.derived) void onPointerUpBar(e) }}
+      onPointerCancel={() => { if (!range.derived) onPointerCancelBar() }}
     >
+      {!range.derived && <>
+        <span className="pm-gantt-handle pm-gantt-handle--left" data-rs="left" aria-hidden="true" />
+        <span className="pm-gantt-handle pm-gantt-handle--right" data-rs="right" aria-hidden="true" />
+      </>}
       {fill !== null && !range.derived && <div className="pm-gantt-bar-progress" style={{ width: `${Math.round(fill * 100)}%` }} />}
       {(policy === 'inside') && <>
         <span className="pm-gantt-bar-dates">{shortDate(range.start)} ~ {shortDate(range.end)}</span>
@@ -398,6 +506,17 @@ export function GanttView(props: {
         </div>
       </div>
     </div>
+
+    {/* P1-3 键盘微调提示条（常驻，仅用 dsw/pm token，深浅跟随） */}
+    <div className="pm-gantt-kbdbar" aria-label="甘特键盘快捷键">
+      <span className="pm-gantt-kbdbar-title">键盘微调</span>
+      <span className="pm-gantt-kbd"><kbd>←</kbd><kbd>→</kbd><span>移动 1 天</span></span>
+      <span className="pm-gantt-kbd"><kbd>Shift</kbd><kbd>←</kbd><kbd>→</kbd><span>调整 1 天工期</span></span>
+      <span className="pm-gantt-kbd"><kbd>Enter</kbd><span>打开抽屉改期</span></span>
+      <span className="pm-gantt-kbd"><kbd>Esc</kbd><span>取消拖拽</span></span>
+      <span className="pm-gantt-kbdbar-note">边缘手柄拖拽调工期，条体拖拽改期；落库仅写 startDate / dueDate。</span>
+    </div>
+
     {statusMsg && <p className="pm-gantt-hint" role="status" aria-live="polite">{statusMsg}</p>}
   </div>
 }
