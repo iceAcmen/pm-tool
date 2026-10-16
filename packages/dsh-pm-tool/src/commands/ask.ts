@@ -147,6 +147,93 @@ export interface AskApplyResult {
   kind: 'success' | 'error'
   text: string
   appliedCount?: number
+  /** 落库成功后用于一键撤销的句柄（10 分钟内有效，进程内；dsh 重启后失效）。 */
+  undoId?: string
+}
+
+/** 一条可撤销改动：update 记原始记录，create 标记为新建（撤销时删除）。 */
+interface UndoChange {
+  table: string
+  id: string
+  kind: 'update' | 'create'
+  original?: unknown
+}
+
+/** 一次 ask-apply 的撤销快照。 */
+interface UndoRecord {
+  changes: UndoChange[]
+  createdAt: number
+  used: boolean
+}
+
+/** 撤销窗口：AI 落库后通常立即反悔，给 10 分钟。 */
+const UNDO_TTL_MS = 10 * 60 * 1000
+const undoStore = new Map<string, UndoRecord>()
+
+/** 生成撤销句柄并清理过期项。 */
+function stashUndo(changes: UndoChange[]): string {
+  const now = Date.now()
+  for (const [id, rec] of undoStore) {
+    if (now - rec.createdAt > UNDO_TTL_MS) undoStore.delete(id)
+  }
+  const undoId = `undo-${now.toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+  undoStore.set(undoId, { changes, createdAt: now, used: false })
+  return undoId
+}
+
+/** 列出最近仍可撤销的句柄（按时间倒序），供前端在落库后查询。 */
+function listRecentUndo(limit = 3): { id: string, at: number }[] {
+  const now = Date.now()
+  for (const [id, rec] of undoStore) {
+    if (now - rec.createdAt > UNDO_TTL_MS) undoStore.delete(id)
+  }
+  return Array.from(undoStore.entries())
+    .filter(([, rec]) => !rec.used)
+    .sort((a, b) => b[1].createdAt - a[1].createdAt)
+    .slice(0, limit)
+    .map(([id, rec]) => ({ id, at: rec.createdAt }))
+}
+
+/**
+ * 撤销一次 ask-apply：update 恢复原始记录、create 删除新建记录。
+ * 回滚顺序与落库相反（先撤销后落库的），撤销一次后句柄失效。
+ * 参数为 "list" 时返回最近可撤销句柄（JSON text，供前端解析，不直接展示）。
+ */
+export async function handleAskUndoCommand(argument: string, domain: PmDomain | undefined): Promise<{ kind: 'success' | 'error', text: string }> {
+  if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+  const undoId = argument.trim()
+  if (undoId === 'list' || undoId === '') {
+    return { kind: 'success', text: JSON.stringify({ undoIds: listRecentUndo() }) }
+  }
+  const record = undoStore.get(undoId)
+  if (!record) return { kind: 'error', text: '撤销句柄不存在或已过期（重启 dsh 后无法撤销，可用 /pm restore 恢复备份）。' }
+  if (record.used) return { kind: 'error', text: '该批改动已撤销过，不能重复撤销。' }
+  const reverted: string[] = []
+  const failed: string[] = []
+  const changes = [...record.changes].reverse()
+  for (const change of changes) {
+    const table = domain.table(change.table as never) as unknown as {
+      put(key: string, value: unknown): Promise<unknown>
+      delete(key: string): Promise<unknown>
+      get(key: string): unknown
+    }
+    try {
+      if (change.kind === 'create') {
+        // 仅当记录仍存在时删除，避免删掉用户在落库后又手工建立的同名记录。
+        if (table.get(change.id)) await table.delete(change.id)
+      } else {
+        // 恢复原始快照（含原 updatedAt），让基线回到落库前。
+        await table.put(change.id, change.original)
+      }
+      reverted.push(`${change.table}/${change.id}`)
+    } catch (e) {
+      failed.push(`${change.table}/${change.id}：${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+  record.used = true
+  const text = `已撤销 ${reverted.length} 项${reverted.length ? `（${reverted.join('；')}）` : ''}`
+    + (failed.length ? `；${failed.length} 项撤销失败（${failed.join('；')}）` : '')
+  return failed.length ? { kind: 'error', text } : { kind: 'success', text }
 }
 
 async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
@@ -182,9 +269,10 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   const applied: string[] = []
   const blocked: string[] = []
   const appliedStepIds = new Set<string>()
+  const undoChanges: UndoChange[] = []
 
   // 按 op 分发到各实体既有 repo（零 schema 改动）；create 注入 projectId，update 走基线冲突比较。
-  const dispatch = async (a: CopilotAction): Promise<{ ok: boolean, nextUpdatedAt?: string }> => {
+  const dispatch = async (a: CopilotAction): Promise<{ ok: boolean, nextUpdatedAt?: string, undo?: UndoChange }> => {
     const patch = (a.patch ?? {}) as Record<string, unknown>
     switch (a.op) {
       case 'task.update': {
@@ -192,58 +280,64 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        // 落库前抓原始记录快照（供撤销恢复）。
+        const original = structuredClone(rec)
         const next = await updateTask(domain, a.id!, patch)
         // 同步本地快照 updatedAt，供同目标后续步冲突比较（与链式 baseline 一致）。
         if (next?.updatedAt) rec.updatedAt = next.updatedAt
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'tasks', id: a.id!, kind: 'update', original } }
       }
       case 'milestone.create': {
         const next = await addMilestone(domain, { projectId, ...patch })
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'milestones', id: next.id, kind: 'create' } }
       }
       case 'milestone.update': {
         const rec = [...domain.table('milestones').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('里程碑不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const original = structuredClone(rec)
         const next = await updateMilestone(domain, a.id!, patch)
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'milestones', id: a.id!, kind: 'update', original } }
       }
       case 'risk.create': {
         const next = await addRiskIssue(domain, { projectId, ...patch })
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'risk_issues', id: next.id, kind: 'create' } }
       }
       case 'risk.update': {
         const rec = [...domain.table('risk_issues').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('风险/问题不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const original = structuredClone(rec)
         const next = await updateRiskIssue(domain, a.id!, patch)
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'risk_issues', id: a.id!, kind: 'update', original } }
       }
       case 'deliverable.create': {
         const next = await addDeliverable(domain, { projectId, ...patch })
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'deliverables', id: next.id, kind: 'create' } }
       }
       case 'deliverable.update': {
         const rec = [...domain.table('deliverables').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('交付物不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const original = structuredClone(rec)
         const next = await updateDeliverable(domain, a.id!, patch)
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'deliverables', id: a.id!, kind: 'update', original } }
       }
       case 'meeting.create': {
         const next = await addMeeting(domain, { projectId, ...patch })
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'meetings', id: next.id, kind: 'create' } }
       }
       case 'meeting.update': {
         const rec = [...domain.table('meetings').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('会议不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const original = structuredClone(rec)
         const next = await updateMeeting(domain, a.id!, patch)
-        return { ok: true, nextUpdatedAt: next?.updatedAt }
+        return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'meetings', id: a.id!, kind: 'update', original } }
       }
       default:
         throw new DispatchSkip(`不允许的操作 ${a.op}`)
@@ -258,6 +352,7 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
       const res = await dispatch(a)
       // 链式 baseline：同目标后续步用本次落库后的新 updatedAt 比较，不被误判「他人已改」；仅本次调用内存，不持久。
       if (res.nextUpdatedAt && a.id) baseline[a.id] = res.nextUpdatedAt
+      if (res.undo) undoChanges.push(res.undo)
       if (typeof a.stepId === 'string') appliedStepIds.add(a.stepId)
       applied.push(label(a))
     } catch (e) {
@@ -268,7 +363,9 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   const text = `已应用 ${applied.length} ${unit}${applied.length ? `（${applied.join('；')}）` : ''}`
     + (blocked.length ? `；未执行 ${blocked.length} ${unit}（${blocked.join('；')}）` : '')
     + (extra.length ? `；拒绝 ${extra.length} ${unit}（${extra.join('；')}）` : '')
-  return { kind: 'success', text, appliedCount: applied.length }
+  // 有真正落库的改动才生成撤销句柄（前端随后通过 ask-undo list 查询，因 dsh 命令结果只透传 kind/text）。
+  const undoId = undoChanges.length ? stashUndo(undoChanges) : undefined
+  return { kind: 'success', text, appliedCount: applied.length, undoId }
 }
 
 /** 分发内的「跳过/拒绝」信号（非异常），与真正写库失败区分。 */

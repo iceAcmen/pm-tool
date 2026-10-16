@@ -17,20 +17,22 @@ export function apply(ctx: Context): void {
     slots: { inject(name: string, callback: () => unknown): void, register(options: object, component: unknown): unknown }
     remote: { commands: { execute(sessionId: unknown, line: string, attachments: unknown[]): Promise<any> } }
   }
-  const execute: PmPanelApi['execute'] = async (line) => {
+  const executeRaw: PmPanelApi['executeRaw'] = async (line) => {
     let sessionId = client.sessions.list.getSnapshot().ids[0]
     if (!sessionId) sessionId = await client.sessions.create()
     const result = await client.remote.commands.execute(sessionId, `/pm ${line}`, [])
     if (!result.ok) throw new Error(result.error.message)
-    const command = result.value?.result
+    // dsh 的 CommandResult 契约只透传 kind/text（sourceEventSeq 可选），不携带自定义字段。
+    const command = result.value?.result as { kind: string, text?: string }
     if (!command) throw new Error('pm 命令没有返回结果')
     if (command.kind === 'error') throw new Error(command.text)
-    return command.text ?? ''
+    return { kind: command.kind, text: command.text ?? '' }
   }
+  const execute: PmPanelApi['execute'] = async (line) => (await executeRaw(line)).text ?? ''
   client.slots.inject('main', () => client.slots.register({
     name: 'main',
     key: PANEL_ID,
-    inject: (): PmPanelApi => ({ execute }),
+    inject: (): PmPanelApi => ({ execute, executeRaw }),
   }, PmPanel))
   client.slots.inject('sidebar.panellist', () => client.slots.register({
     name: 'sidebar.panellist',

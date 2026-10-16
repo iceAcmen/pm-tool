@@ -43,22 +43,17 @@ export interface ModelRoute extends ModelCandidate {
   role: string
 }
 
-// ---- Provider / 模型 id ----
+// ---- Provider / 模型 id（方舟 Coding Plan 套餐内，provider=ark-plan；dsh 配置已声明这些模型）----
 const POC_PROVIDER = 'our-free-model'
 const POC_MODEL = 'kilo-auto/free'
-const DS_PROVIDER = 'deepseek-official' // base 内置，anthropic-messages 协议
-const DS_FLASH = 'deepseek-flash' // = DeepSeek-V4.1-Flash，1M 上下文
-const DS_PRO = 'deepseek-v4-pro' // = DeepSeek-V4-Pro
-const KIMI_PROVIDER = 'kimi-official' // pi-ai 配置，openai 兼容
-const KIMI_MODEL = 'kimi-k2-0905-preview'
-const ALIYUN_PROVIDER = 'aliyun-official' // pi-ai 配置，openai 兼容
-const QWEN_TURBO = 'qwen-turbo'
-const QWEN_CODER_FLASH = 'qwen3-coder-flash'
+const ARK_PROVIDER = 'ark-plan' // dsh 配置：baseURL=方舟 coding/v3，apiKeyEnv=CODING_PLAN_API_KEY
+const ARK_FLASH = 'deepseek-v4-1-flash-260910' // 主力：DeepSeek V4.1 Flash，1M 上下文
+const ARK_PRO = 'deepseek-v4-pro-ga-260813' // 升级：DeepSeek V4 Pro
+const ARK_LITE = 'doubao-seed-2-1-lite-260915' // 降本：Doubao Seed 2.1 Lite（非思考、快）
+const ARK_GLM = 'glm-5-3-flash-260828' // 兜底：GLM 5.3 Flash（JSON 强）
 
 // ---- Key 检测（只读取环境变量，不回显明文）----
-function hasDeepSeek(): boolean { return !!process.env.DEEPSEEK_API_KEY }
-function hasKimi(): boolean { return !!process.env.KIMI_API_KEY || !!process.env.MOONSHOT_API_KEY }
-function hasDashscope(): boolean { return !!process.env.DASHSCOPE_API_KEY || !!process.env.ALIBABA_CLOUD_API_KEY }
+function hasCodingPlan(): boolean { return !!process.env.CODING_PLAN_API_KEY }
 
 // ---- PoC 车道：免费网关候选链（仅概念验证；补齐 effort off）----
 const POC_CANDIDATE_MODELS: ModelCandidate[] = [
@@ -73,43 +68,40 @@ const POC_CANDIDATE_MODELS: ModelCandidate[] = [
  * 未检测到任何 Key 时返回空数组，由 resolveModelRoute 抛 PROD_KEY_MISSING。
  */
 function buildProdCandidates(kind: AiTaskKind): ModelCandidate[] {
-  const ds = hasDeepSeek()
-  const kimi = hasKimi()
-  const qwen = hasDashscope()
   const chain: ModelCandidate[] = []
-
+  // 候选直接走 ark-plan，不在插件侧用 process.env 预检测：dsh 凭据不会注入到插件进程的
+  // process.env，而是由 dsh 在发起请求时从 credentials 服务按 apiKeyEnv 解析。
+  // 真未配置时 dsh 抛 MISSING_CREDENTIAL（经 ai-client 归一化为中文配置指引），不会静默回退。
   switch (kind) {
     case 'copilot':
-      // 副驾：默认 Flash 思考；复杂问题升级 Pro；Kimi 兜底。
-      if (ds) {
-        chain.push({ provider: DS_PROVIDER, model: DS_FLASH, reasoningEffort: 'high', label: '主力·思考' })
-        chain.push({ provider: DS_PROVIDER, model: DS_PRO, reasoningEffort: 'high', label: '升级·复杂' })
-      }
-      if (kimi) chain.push({ provider: KIMI_PROVIDER, model: KIMI_MODEL, reasoningEffort: 'off', label: '兜底' })
+      // 副驾：Flash 思考（high）；复杂问题升级 Pro；GLM 非思考兜底。
+      chain.push({ provider: ARK_PROVIDER, model: ARK_FLASH, reasoningEffort: 'high', label: '主力·思考' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_PRO, reasoningEffort: 'high', label: '升级·复杂' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_GLM, reasoningEffort: 'off', label: '兜底' })
       break
     case 'wbs':
-      // WBS：Flash 非思考（格式遵循）；阿里 coder-flash、Kimi 兜底。
-      if (ds) chain.push({ provider: DS_PROVIDER, model: DS_FLASH, reasoningEffort: 'off', label: '主力' })
-      if (qwen) chain.push({ provider: ALIYUN_PROVIDER, model: QWEN_CODER_FLASH, reasoningEffort: 'off', label: '降本' })
-      if (kimi) chain.push({ provider: KIMI_PROVIDER, model: KIMI_MODEL, reasoningEffort: 'off', label: '兜底' })
+      // WBS：Flash 非思考（格式遵循）；GLM、Doubao 兜底。
+      chain.push({ provider: ARK_PROVIDER, model: ARK_FLASH, reasoningEffort: 'off', label: '主力' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_GLM, reasoningEffort: 'off', label: '兜底' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_LITE, reasoningEffort: 'off', label: '降本' })
       break
     case 'meeting':
-      // 纪要：优先阿里 coder-flash（JSON 强）；Flash 非思考；Kimi 兜底。
-      if (qwen) chain.push({ provider: ALIYUN_PROVIDER, model: QWEN_CODER_FLASH, reasoningEffort: 'off', label: 'JSON 强' })
-      if (ds) chain.push({ provider: DS_PROVIDER, model: DS_FLASH, reasoningEffort: 'off', label: '主力' })
-      if (kimi) chain.push({ provider: KIMI_PROVIDER, model: KIMI_MODEL, reasoningEffort: 'off', label: '兜底' })
+      // 纪要：GLM（JSON 强）；Flash 非思考；Doubao 兜底。
+      chain.push({ provider: ARK_PROVIDER, model: ARK_GLM, reasoningEffort: 'off', label: 'JSON 强' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_FLASH, reasoningEffort: 'off', label: '主力' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_LITE, reasoningEffort: 'off', label: '兜底' })
       break
     case 'narrative':
-      // 叙述：qwen-turbo 最便宜；Flash；Kimi 兜底。
-      if (qwen) chain.push({ provider: ALIYUN_PROVIDER, model: QWEN_TURBO, reasoningEffort: 'off', label: '降本' })
-      if (ds) chain.push({ provider: DS_PROVIDER, model: DS_FLASH, reasoningEffort: 'off', label: '主力' })
-      if (kimi) chain.push({ provider: KIMI_PROVIDER, model: KIMI_MODEL, reasoningEffort: 'off', label: '兜底' })
+      // 叙述：Doubao Lite 非思考、快；Flash；GLM 兜底。
+      chain.push({ provider: ARK_PROVIDER, model: ARK_LITE, reasoningEffort: 'off', label: '降本' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_FLASH, reasoningEffort: 'off', label: '主力' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_GLM, reasoningEffort: 'off', label: '兜底' })
       break
     case 'title':
-      // 标题/分类/补全：qwen-turbo；Flash；Kimi 兜底。
-      if (qwen) chain.push({ provider: ALIYUN_PROVIDER, model: QWEN_TURBO, reasoningEffort: 'off', label: '降本' })
-      if (ds) chain.push({ provider: DS_PROVIDER, model: DS_FLASH, reasoningEffort: 'off', label: '主力' })
-      if (kimi) chain.push({ provider: KIMI_PROVIDER, model: KIMI_MODEL, reasoningEffort: 'off', label: '兜底' })
+      // 标题/分类：Doubao Lite；GLM；Flash 兜底。
+      chain.push({ provider: ARK_PROVIDER, model: ARK_LITE, reasoningEffort: 'off', label: '降本' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_GLM, reasoningEffort: 'off', label: '兜底' })
+      chain.push({ provider: ARK_PROVIDER, model: ARK_FLASH, reasoningEffort: 'off', label: '主力' })
       break
   }
   return chain
@@ -163,24 +155,23 @@ export interface LaneInfo {
 
 /** 列出车道/档位概览（model status 用，不回显 Key 明文）。 */
 export function describeLanes(_current: ModelMode): LaneInfo[] {
-  const ds = hasDeepSeek()
-  const qwen = hasDashscope()
+  const plan = hasCodingPlan()
   return [
     {
       mode: 'poc', provider: POC_PROVIDER, model: POC_MODEL, role: '免费验证', ready: true,
       note: '免费公共网关，仅概念验证',
     },
     {
-      mode: 'prod', provider: DS_PROVIDER, model: DS_FLASH, role: '主力', ready: ds,
-      note: '副驾思考 / WBS / 纪要',
+      mode: 'prod', provider: ARK_PROVIDER, model: ARK_FLASH, role: '主力', ready: plan,
+      note: '副驾思考 / WBS（DeepSeek V4.1 Flash）',
     },
     {
-      mode: 'prod', provider: ALIYUN_PROVIDER, model: QWEN_TURBO, role: '降本', ready: qwen,
-      note: '叙述 / 标题 / 杂活',
+      mode: 'prod', provider: ARK_PROVIDER, model: ARK_LITE, role: '降本', ready: plan,
+      note: '叙述 / 标题 / 杂活（Doubao Lite）',
     },
     {
-      mode: 'prod', provider: DS_PROVIDER, model: DS_PRO, role: '升级', ready: ds,
-      note: '副驾复杂问题',
+      mode: 'prod', provider: ARK_PROVIDER, model: ARK_PRO, role: '升级', ready: plan,
+      note: '副驾复杂问题（DeepSeek V4 Pro）',
     },
   ]
 }
@@ -189,22 +180,22 @@ export function describeLanes(_current: ModelMode): LaneInfo[] {
  * 无生产 Key 的统一中文提示（错误文本须含 PROD_KEY_MISSING，且不回显 Key 明文）。
  */
 export const PROD_KEY_MISSING_TEXT = [
-  'PROD_KEY_MISSING：未检测到生产模型 API Key，本工具不会静默回退到免费公共网关。',
-  '请配置（任选其一，Key 由启动 dsh 的进程环境提供，不入库）：',
-  '  DeepSeek（主力，覆盖全部场景）：export DEEPSEEK_API_KEY=...  申请：https://platform.deepseek.com',
-  '  阿里百炼（降本，qwen-turbo/coder-flash）：export DASHSCOPE_API_KEY=...  申请：https://bailian.console.aliyun.com',
-  '  Kimi（兜底）：export KIMI_API_KEY=...  申请：https://platform.kimi.com',
+  'PROD_KEY_MISSING：未检测到方舟 Coding Plan 套餐 Key（CODING_PLAN_API_KEY），本工具不会静默回退到免费公共网关。',
+  '请配置（Key 由启动 dsh 的进程环境提供，不入库）：',
+  '  export CODING_PLAN_API_KEY=ark-xxxx   （方舟 Coding Plan 订阅，Lite ¥40/月，覆盖 DeepSeek/Doubao/GLM 等模型）',
+  '  订阅与接入：https://docs.volcengine.com/docs/ark/coding-plan-personal-ai-deepseek-harness',
   '或切回 PoC 验证车道（仅概念验证，勿用于生产）：/pm model mode poc',
 ].join('\n')
 
 // ---- 车道持久化（mode 存进 pmtool 的 settings 表，不入库、不随仓库提交）----
 const SETTINGS_KEY = 'aiModelMode'
 
-/** 读取持久化模式（缺省 poc）。 */
+/** 读取持久化模式：未显式设置时，检测到 Coding Plan Key 即默认 prod，否则 poc。 */
 export function getModelMode(domain: PmDomain | undefined): ModelMode {
   if (!domain) return 'poc'
   const row = domain.table('settings').get(SETTINGS_KEY) as { value?: string } | undefined
-  return row?.value === 'prod' ? 'prod' : 'poc'
+  if (!row) return hasCodingPlan() ? 'prod' : 'poc'
+  return row.value === 'poc' ? 'poc' : 'prod'
 }
 
 /** 持久化模式。 */

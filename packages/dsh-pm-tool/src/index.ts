@@ -32,6 +32,7 @@ import { dashboardHelp, handleDashboardCommand, readDashboard } from './commands
 import { settingsHelp, handleSettingsCommand, readProjectSettings } from './commands/settings.js'
 import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
+import { handleAskUndoCommand } from './commands/ask.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -179,6 +180,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (settingsMatch) return handleSettingsCommand(settingsMatch[1] ?? '', domain)
       const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
+      const askUndoMatch = /^ask-undo(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (askUndoMatch) return await handleAskUndoCommand(askUndoMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askMatch) return handleAskCommand(askMatch[1] ?? '', domain, optionalLlm())
       const sub = raw.toLowerCase()

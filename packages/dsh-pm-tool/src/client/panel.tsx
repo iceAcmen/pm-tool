@@ -281,6 +281,8 @@ type Drawer =
 
 export interface PmPanelApi {
   execute(line: string): Promise<string>
+  /** 执行命令并返回 dsh 规范化结果（仅 kind/text；撤销句柄需另调 ask-undo list 查询）。 */
+  executeRaw(line: string): Promise<{ kind: string, text: string }>
 }
 
 const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
@@ -594,7 +596,7 @@ function WbsTreeView({ markdown }: { markdown: string }) {
   </div>
 }
 
-export function PmPanel({ execute }: PmPanelApi) {
+export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [restorePreview, setRestorePreview] = useState<{ fileName: string, content: string, text: string } | null>(null)
   const [data, setData] = useState<Snapshot>(empty)
   const [selected, setSelectedRaw] = useState<string>(() => {
@@ -1177,6 +1179,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           meetings={meetings}
           baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
           execute={execute}
+          executeRaw={executeRaw}
           disabled={busy}
           onSaved={() => void refresh()}
         />}
@@ -2118,7 +2121,7 @@ function copilotEntityOf(op: string): string | null {
   return m ? m[1] : null
 }
 
-function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, disabled, onSaved }: {
+function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, executeRaw, disabled, onSaved }: {
   projectId: string
   tasks: Task[]
   milestones: { id: string, title: string, targetDate?: string, status?: string }[]
@@ -2127,6 +2130,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   meetings: { id: string, title: string, meetingDate?: string, status?: string }[]
   baselineMap: Record<string, string>
   execute: (line: string) => Promise<string>
+  executeRaw: (line: string) => Promise<{ kind: string, text: string }>
   disabled: boolean
   onSaved: () => void
 }) {
@@ -2147,6 +2151,21 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   const [busy, setBusy] = useState(false)
   const [sending, setSending] = useState(false)
   const [lane, setLane] = useState<'poc' | 'prod'>('poc')
+  // 最近落库的撤销句柄（10 分钟内有效）；最多保留 3 条，新的在前。
+  const [undoIds, setUndoIds] = useState<{ id: string, label: string, at: number }[]>([])
+
+  /** 执行撤销：发 ask-undo，成功后移除该句柄。 */
+  const runUndo = async (undoId: string) => {
+    setBusy(true)
+    try {
+      const res = await execute(`ask-undo ${undoId}`)
+      setMsgs(m => [...m, { role: 'sys', text: res }])
+      setUndoIds(prev => prev.filter(u => u.id !== undoId))
+      onSaved()
+    } catch (e) {
+      setMsgs(m => [...m, { role: 'ai', text: `撤销失败：${e instanceof Error ? e.message : String(e)}` }])
+    } finally { setBusy(false) }
+  }
 
   // 打开时读取当前模型车道（model status），用于车道选择器回显。
   useEffect(() => {
@@ -2241,20 +2260,36 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
     try {
       let base = { ...baselineMap }
       const ordered = buildActions()
+      const newUndo: { id: string, label: string, at: number }[] = []
+      const rememberUndo = (undoId: string | undefined, label: string): void => {
+        if (undoId) newUndo.push({ id: undoId, label, at: Date.now() })
+      }
+      // dsh 命令结果只透传 kind/text；落库后查询最近撤销句柄，取第一条（即本次落库产生的）。
+      const fetchLatestUndoId = async (): Promise<string | undefined> => {
+        const r = await executeRaw('ask-undo list')
+        try {
+          const parsed = JSON.parse(r.text) as { undoIds?: { id: string }[] }
+          return parsed.undoIds?.[0]?.id
+        } catch { return undefined }
+      }
       if (mode === 'batch') {
-        const res = await execute(`ask-apply ${projectId} ${JSON.stringify(ordered)} --base ${JSON.stringify(base)}`)
-        setMsgs(m => [...m, { role: 'sys', text: res }])
+        const res = await executeRaw(`ask-apply ${projectId} ${JSON.stringify(ordered)} --base ${JSON.stringify(base)}`)
+        setMsgs(m => [...m, { role: 'sys', text: res.text }])
+        rememberUndo(await fetchLatestUndoId(), `整批 ${ordered.length} 步`)
       } else {
         for (const s of checked) {
           // 逐步模式：单步发送时剥掉 needs（避免服务端误判前置未执行而级联跳过）。
           const one = forStepwiseApply(s)
-          const res = await execute(`ask-apply ${projectId} ${JSON.stringify([one])} --base ${JSON.stringify(base)}`)
-          setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：${res}` }])
+          const res = await executeRaw(`ask-apply ${projectId} ${JSON.stringify([one])} --base ${JSON.stringify(base)}`)
+          setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：${res.text}` }])
+          rememberUndo(await fetchLatestUndoId(), s.stepId || '单步')
           // 逐步模式每步后重读 domain 刷新链式 baseline（每次 ask-apply 后端也重读）。
           const snap = JSON.parse(await execute('web snapshot')) as { tasks: (Task & { updatedAt?: string })[] }
           base = Object.fromEntries((snap.tasks ?? []).filter(t => t.projectId === projectId).map(t => [t.id, t.updatedAt ?? '']))
         }
       }
+      // 新撤销句柄置顶，最多保留 3 条。
+      if (newUndo.length) setUndoIds(prev => [...[...newUndo].reverse(), ...prev].slice(0, 3))
       clearPlan(); onSaved()
     } catch (e) {
       setMsgs(m => [...m, { role: 'ai', text: `执行失败：${e instanceof Error ? e.message : String(e)}` }])
@@ -2284,6 +2319,17 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
         </div>
       })}
     </div>
+
+    {/* 撤销条：最近落库 10 分钟内可一键回滚 */}
+    {undoIds.length > 0 && (
+      <div className="pm-copilot-undo">
+        {undoIds.map(u => (
+          <button key={u.id} type="button" className="pm-copilot-undo-btn" disabled={busy} onClick={() => void runUndo(u.id)}>
+            <RotateCcw size={12}/> 撤销{u.label ? ` · ${u.label}` : ''}
+          </button>
+        ))}
+      </div>
+    )}
 
     {/* 快捷提问 */}
     {showQuick && (

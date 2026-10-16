@@ -10,7 +10,6 @@
  */
 import {
   BlockAssembler,
-  ReasoningEffortId,
   createUserMessage,
 } from '@deepseek-ai/dsh-llm'
 import type { ModelCandidate, ReasoningLevel } from './model-route.js'
@@ -20,6 +19,7 @@ export interface LlmGateway {
     provider: string
     model: string
     maxTokens?: number
+    reasoningEffort?: ModelCandidate['reasoningEffort']
   }, signal?: AbortSignal): Promise<{
     config: unknown
     stream(options: Record<string, unknown> & { signal?: AbortSignal }): AsyncIterable<unknown>
@@ -87,10 +87,14 @@ async function attempt(
   options: GenerateDraftOptions,
   signal: AbortSignal,
 ): Promise<string> {
+  // prepareCall 时即传入完整 controls（maxTokens/reasoningEffort）。dsh 的 prepared call
+  // 在 stream 时会校验这些字段与准备结果完全一致（callConfigEquals），故必须在 prepare 阶段
+  // 给齐，不能在 stream 阶段再覆盖（否则抛 INVALID_PREPARED_CALL）。
   const call = await llm.prepareCall({
     provider: candidate.provider,
     model: candidate.model,
     maxTokens: options.maxTokens,
+    reasoningEffort: candidate.reasoningEffort,
   }, signal)
   const messages = [
     createUserMessage({
@@ -98,14 +102,12 @@ async function attempt(
       source: { kind: 'user' },
     }),
   ]
-  // 始终显式传 reasoningEffort：DeepSeek 默认 high，非思考场景必须显式 off；
-  // pi-ai 适配器会把 off 安全转为 undefined（不发送），不会报错。
+  // compared 字段直接沿用 call.config（与 prepared 完全一致）；只追加 system/messages/signal
+  // （不属于 callConfigEquals 比较范围）。
   const streamOptions = {
     ...(call.config as Record<string, unknown>),
     system: options.system,
     messages,
-    maxTokens: options.maxTokens,
-    reasoningEffort: ReasoningEffortId(candidate.reasoningEffort),
     signal,
   }
   const assembler = new BlockAssembler()
@@ -129,7 +131,7 @@ async function attempt(
  */
 const NON_RETRYABLE = new Set([
   'RATE_LIMIT', 'QUOTA_EXCEEDED', 'CONTEXT_OVERFLOW',
-  'INVALID_CREDENTIAL', 'NO_ADAPTER',
+  'INVALID_CREDENTIAL', 'NO_ADAPTER', 'MISSING_CREDENTIAL',
 ])
 
 /** 把上游英文错误归一为中文 AiDraftError（不泄露原始英文堆栈）。 */
@@ -154,6 +156,13 @@ function normalizeError(error: unknown, attempted: string): AiDraftError {
   }
   if (code === 'NO_ADAPTER') {
     return new AiDraftError('NO_ADAPTER', `当前模型通道 ${attempted} 未配置或缺少适配器。`)
+  }
+  if (code === 'MISSING_CREDENTIAL') {
+    return new AiDraftError(
+      'MISSING_CREDENTIAL',
+      '生产模型凭据缺失（CODING_PLAN_API_KEY）：请在「设置 → 模型」录入方舟 Coding Plan Key，'
+      + '或用 /pm model mode poc 切回验证车道。',
+    )
   }
   return new AiDraftError(code, `模型 ${attempted} 生成失败，请稍后重试。`)
 }
