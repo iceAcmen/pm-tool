@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P1-7 副驾内嵌建议层</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff; --hover:rgba(0,0,0,.04);
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.12); --line-3:rgba(255,255,255,.04);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --btn-bg:#f0f2f5; --btn-ink:#16181c; --hover:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+body{display:flex;min-height:100vh}
+.rail{width:208px;flex:none;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.rail-logo{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;font-weight:700;font-size:15px}
+.rail-logo .whale{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rail-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-size:13.5px}
+.rail-btn.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.rail-sec{margin-top:14px;padding:4px 10px 6px;font-size:11px;color:var(--faint)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--line)}
+.proj{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.proj .ico{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.proj .t1{font-size:10px;color:var(--faint);font-weight:600}
+.proj .t2{font-size:13.5px;font-weight:650}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.tbtn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tabs{display:flex;gap:22px;padding:0 24px;height:44px;align-items:center;border-bottom:1px solid var(--line)}
+.tab{font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;height:100%;border-bottom:2px solid transparent}
+.tab.active{color:var(--ink);font-weight:650;border-bottom-color:var(--ink)}
+.badge{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:1px 7px}
+.content{padding:24px;max-width:1180px;width:100%}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+.toolbar{margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search{height:38px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);display:flex;align-items:center;gap:8px;padding:0 14px;color:var(--muted);font-size:13px;width:230px}
+.fchip{font-size:13px;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.fchip.on{background:var(--surface-3);color:var(--ink);font-weight:600;border-color:transparent}
+.spacer{flex:1}
+.primary{padding:8px 16px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:13.5px;font-weight:600;border:none;white-space:nowrap}
+/* split */
+.split{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-top:18px;align-items:start}
+/* task list */
+.list{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.lhead{display:grid;grid-template-columns:24px 46px 1fr 74px 60px 78px 84px;gap:10px;padding:10px 16px;font-size:11px;font-weight:600;color:var(--faint);border-bottom:1px solid var(--line)}
+.lrow{display:grid;grid-template-columns:24px 46px 1fr 74px 60px 78px 84px;gap:10px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line-3);font-size:13.5px}
+.lrow:hover{background:var(--hover)}
+.cb{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line-2)}
+.code{font-size:12px;color:var(--muted);font-weight:600}
+.ttl{display:flex;align-items:center;gap:8px;font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.st{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;justify-self:start;width:fit-content}
+.st.prog{background:color-mix(in srgb,var(--c-prog) 12%,transparent);color:var(--c-prog)}
+.st.done{background:color-mix(in srgb,var(--c-done) 12%,transparent);color:var(--c-done)}
+.st.block{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.st.todo{background:var(--surface-3);color:var(--muted)}
+.pri{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;justify-self:start;width:fit-content}
+.pri.p0{background:color-mix(in srgb,var(--c-late) 12%,transparent);color:var(--c-late)}
+.pri.p1{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.pri.p2{background:var(--surface-3);color:var(--muted)}
+.owner{font-size:13px;color:var(--ink-2)}
+.due{font-size:12.5px;color:var(--ink-2)}
+.prog{display:flex;align-items:center;gap:8px}
+.prog .track{flex:1;height:6px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.prog .track i{display:block;height:100%;border-radius:99px}
+.prog .pct{font-size:12px;font-weight:600;width:36px;text-align:right}
+/* inline read-only suggestion bubble */
+.bubble{margin:0 16px 12px;padding:11px 13px;border-left:3px solid var(--c-prog);background:color-mix(in srgb,var(--c-prog) 5%,transparent);border-radius:0 10px 10px 0;display:flex;gap:10px;align-items:flex-start}
+.bubble .spark{flex:none;font-size:14px;color:var(--c-prog)}
+.bubble .bt{font-size:12.5px;color:var(--ink-2)}
+.bubble .bt b{color:var(--ink)}
+.bubble .tag{display:inline-block;font-size:10.5px;font-weight:650;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:1px 7px;margin-right:6px}
+.bubble .x{margin-left:auto;flex:none;color:var(--muted);cursor:pointer;font-size:14px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.bubble .x:hover{background:var(--hover)}
+/* right rail */
+.railcard{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px}
+.railcard h3{font-size:16px;font-weight:650;display:flex;align-items:center;gap:8px}
+.railcard .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.mode{display:flex;background:var(--surface-2);border-radius:8px;padding:3px;margin-top:12px}
+.mode button{flex:1;border:none;background:transparent;padding:7px 0;border-radius:6px;font-size:12.5px;color:var(--ink-2)}
+.mode button.on{background:var(--surface-3);color:var(--ink);font-weight:600}
+/* draft card */
+.draft{margin-top:14px;border:1px dashed var(--c-prog);border-radius:12px;padding:14px;background:color-mix(in srgb,var(--c-prog) 4%,transparent)}
+.dhead{display:flex;align-items:center;gap:8px}
+.dhead .aimark{font-size:12px;font-weight:700;color:var(--c-prog);display:flex;align-items:center;gap:5px}
+.dhead .meta{margin-left:auto;font-size:11px;color:var(--muted)}
+.dstep{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 11px;border:1px solid var(--line-3);border-radius:10px;background:var(--surface)}
+.dstep .cb{margin-top:2px;background:var(--c-prog);border-color:var(--c-prog);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px}
+.dstep .dt{flex:1;font-size:13px;font-weight:500}
+.ent{font-size:10.5px;font-weight:650;padding:2px 7px;border-radius:4px;margin-left:6px}
+.ent.create{color:var(--c-done);border:1px solid color-mix(in srgb,var(--c-done) 40%,transparent)}
+.ent.update{color:var(--c-prog);border:1px solid color-mix(in srgb,var(--c-prog) 40%,transparent)}
+.risk{font-size:11.5px;color:var(--c-block);margin-top:5px}
+.dactions{display:flex;gap:8px;margin-top:14px;align-items:center}
+.ghost{padding:8px 14px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px;white-space:nowrap}
+.discard{margin-left:auto;background:none;border:none;color:var(--c-late);font-size:12.5px;cursor:pointer;white-space:nowrap}
+/* confirmed + undo */
+.confirmed{margin-top:14px;padding:12px 13px;border:1px solid var(--line-3);border-radius:10px;background:var(--surface-2)}
+.confirmed .ct{font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:center}
+.confirmed .undo{margin-left:auto;color:var(--c-prog);font-size:12px;font-weight:600;white-space:nowrap}
+.note{margin-top:14px;font-size:11.5px;color:var(--muted);line-height:1.6}
+.callout{margin-top:18px;border:1px solid color-mix(in srgb,var(--c-prog) 30%,transparent);background:color-mix(in srgb,var(--c-prog) 6%,transparent);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink-2);display:flex;gap:12px}
+.callout .tag{flex:none;font-size:11px;font-weight:650;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:2px 8px;height:fit-content}
+.callout b{color:var(--ink)}
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="rail-logo"><span class="whale">🐳</span> DSH 本地构建</div>
+  <div class="rail-btn">💬 新会话</div>
+  <div class="rail-btn">✦ 插件</div>
+  <div class="rail-btn">◷ 自动化任务</div>
+  <div class="rail-btn active">▤ 项目管理</div>
+  <div class="rail-sec">工作区</div>
+  <div class="rail-btn">📁 默认工作区</div>
+  <div class="rail-btn">📂 新会话</div>
+  <div class="rail-btn">📁 未分组</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="proj"><span class="ico">🗂</span><span><span class="t1">项目工作台</span><br><span class="t2">客户订单中心 V2 重构 ▾</span></span></div>
+    <div class="top-actions"><button class="tbtn">▦ 总览看板</button><button class="tbtn">＋ 新建项目</button><button class="tbtn">✧ AI 助手</button><button class="tbtn" style="border-color:var(--c-prog);color:var(--c-prog)">✧ AI 副驾 · 内嵌</button><button class="tbtn">··· 更多</button></div>
+  </div>
+  <nav class="tabs">
+    <span class="tab active">全部任务 <span class="badge">34</span></span>
+    <span class="tab">里程碑 <span class="badge">5</span></span>
+    <span class="tab">风险与问题 <span class="badge">3</span></span>
+    <span class="tab">会议纪要 <span class="badge">6</span></span>
+    <span class="tab">进度汇报 <span class="badge">4</span></span>
+    <span class="tab">交付物 <span class="badge">6</span></span>
+    <span class="tab">项目概览</span>
+    <span class="tab">甘特排期</span>
+    <span class="tab">人员负载</span>
+  </nav>
+  <div class="content">
+    <div class="page-title">任务</div>
+    <div class="page-sub">P1-7：副驾从独立右抽屉改为内嵌建议层 —— 只读诊断以气泡附着记录旁（可关闭、不改数据）；写操作仍走草稿卡（AI 生成·待确认 → 确认 → 可撤销）。</div>
+
+    <div class="toolbar">
+      <div class="search">⌕ 搜索任务名称 / 编号…</div>
+      <span class="fchip on">全部 34</span><span class="fchip">进行中 3</span><span class="fchip">已完成 21</span><span class="fchip">已逾期 1</span>
+      <span class="spacer"></span>
+      <button class="primary">＋ 新建任务</button>
+    </div>
+
+    <div class="split">
+      <!-- 左：任务列表 + 附着建议气泡 -->
+      <div class="list">
+        <div class="lhead"><span></span><span>编号</span><span>任务</span><span>状态</span><span>优先级</span><span>负责人</span><span>截止 / 进度</span></div>
+
+        <div class="lrow"><span class="cb"></span><span class="code">1.1</span><span class="ttl"><span class="dot" style="background:var(--c-done)"></span>调研竞品下单流程</span><span class="st done">已完成</span><span class="pri p1">P1</span><span class="owner">王磊</span><span class="prog"><span class="track"><i style="width:100%;background:var(--c-done)"></i></span><span class="pct">100%</span></span></div>
+
+        <div class="lrow" style="background:color-mix(in srgb,var(--c-block) 5%,transparent)">
+          <span class="cb"></span><span class="code">3.2</span><span class="ttl"><span class="dot" style="background:var(--c-block)"></span>订单列表接口联调</span><span class="st block">阻塞</span><span class="pri p0">P0</span><span class="owner">陈昊</span><span class="prog"><span class="track"><i style="width:35%;background:var(--c-block)"></i></span><span class="pct">35%</span></span>
+        </div>
+        <div class="bubble">
+          <span class="spark">✧</span>
+          <div class="bt"><span class="tag">AI 只读诊断 · 不落库</span><b>3.2 已阻塞 2 天</b>：前置 2.3 制作 UI 设计稿未完成，分页口径待产品确认；建议先与王磊对齐分页参数，不要直接改期。<span class="x" title="关闭">✕</span></div>
+        </div>
+
+        <div class="lrow"><span class="cb"></span><span class="code">3.3</span><span class="ttl"><span class="dot" style="background:var(--c-todo)"></span>实现支付状态机</span><span class="st todo">待办</span><span class="pri p0">P0</span><span class="owner">陈昊</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+
+        <div class="lrow"><span class="cb"></span><span class="code">2.2</span><span class="ttl"><span class="dot" style="background:var(--c-prog)"></span>确认视觉设计风格</span><span class="st prog">进行中</span><span class="pri p2">P2</span><span class="owner">周航</span><span class="prog"><span class="track"><i style="width:40%;background:var(--c-prog)"></i></span><span class="pct">40%</span></span></div>
+
+        <div class="lrow"><span class="cb"></span><span class="code">4.3</span><span class="ttl"><span class="dot" style="background:var(--c-prog)"></span>修复已发现缺陷</span><span class="st prog">进行中</span><span class="pri p1">P1</span><span class="owner">陈昊</span><span class="prog"><span class="track"><i style="width:20%;background:var(--c-prog)"></i></span><span class="pct">20%</span></span></div>
+        <div class="bubble">
+          <span class="spark">✧</span>
+          <div class="bt"><span class="tag">AI 只读诊断 · 不落库</span><b>陈昊 open 5 项已达过载阈值</b>：建议把 5.1 部署生产服务器改派给负载空闲的赵倩，是否调整由你决定。<span class="x" title="关闭">✕</span></div>
+        </div>
+
+        <div class="lrow" style="border-bottom:none"><span class="cb"></span><span class="code">5.1</span><span class="ttl"><span class="dot" style="background:var(--c-todo)"></span>部署生产服务器</span><span class="st todo">待办</span><span class="pri p1">P1</span><span class="owner">陈昊</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+      </div>
+
+      <!-- 右：草稿卡（写操作） -->
+      <div>
+        <div class="railcard">
+          <h3>✧ AI 副驾 · 建议层</h3>
+          <div class="sub">附着当前上下文，不另起独立房间</div>
+          <div class="mode"><button class="on">只读诊断</button><button>草稿待确认</button></div>
+
+          <div class="draft">
+            <div class="dhead"><span class="aimark">✧ AI 生成 · 待确认</span><span class="meta">2 步 · 1 新建 / 1 更新</span></div>
+            <div class="dstep">
+              <span class="cb">✓</span>
+              <div><div class="dt">新建任务「5.4 编写上线回滚预案」<span class="ent create">新建</span></div><div class="risk">⚠ 需陈昊确认发布窗口后再落库</div></div>
+            </div>
+            <div class="dstep">
+              <span class="cb">✓</span>
+              <div><div class="dt">更新 5.1 部署生产服务器负责人 → 赵倩<span class="ent update">更新</span></div></div>
+            </div>
+            <div class="dactions">
+              <button class="primary">整批执行（2）</button>
+              <button class="ghost">逐步执行</button>
+              <button class="discard">放弃</button>
+            </div>
+          </div>
+
+          <div class="confirmed">
+            <div class="ct"><span class="dot" style="background:var(--c-done)"></span>已创建「5.4 回滚预案」并落库<span class="undo">撤销</span></div>
+          </div>
+
+          <div class="note">只读诊断仅展示、不修改台账，关闭后不再提示；写操作一律「草稿 → 显式确认 → 可撤销」，失败可改手工；人工已落库内容不带 AI 标记。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">决策点</span>
+      <div>建议层与现有视图<b>共存</b>：诊断气泡贴在对应记录旁、<b>不覆盖数据</b>、可逐条关闭；只有写操作进入草稿卡，保留「AI 生成·待确认」标记、勾选、整批 / 逐步确认与<b>撤销</b>，未确认不落库（P7）。</div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P1-3 甘特 resize 手柄 + 键盘微调</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff; --hover:rgba(0,0,0,.04);
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.12); --line-3:rgba(255,255,255,.04);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --btn-bg:#f0f2f5; --btn-ink:#16181c; --hover:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+body{display:flex;min-height:100vh}
+.rail{width:208px;flex:none;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.rail-logo{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;font-weight:700;font-size:15px}
+.rail-logo .whale{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rail-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-size:13.5px}
+.rail-btn.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.rail-sec{margin-top:14px;padding:4px 10px 6px;font-size:11px;color:var(--faint)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--line)}
+.proj{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.proj .ico{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.proj .t1{font-size:10px;color:var(--faint);font-weight:600}
+.proj .t2{font-size:13.5px;font-weight:650}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.tbtn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tabs{display:flex;gap:22px;padding:0 24px;height:44px;align-items:center;border-bottom:1px solid var(--line);overflow:hidden}
+.tab{font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;height:100%;border-bottom:2px solid transparent;white-space:nowrap}
+.tab.active{color:var(--ink);font-weight:650;border-bottom-color:var(--ink)}
+.badge{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:1px 7px}
+.content{padding:24px;max-width:1180px;width:100%}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px}
+.page-title .range{font-size:13px;font-weight:400;color:var(--muted)}
+.page-sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+/* toolbar */
+.toolbar{margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.seg{display:flex;background:var(--surface-2);border-radius:8px;padding:3px}
+.seg button{border:none;background:transparent;padding:6px 16px;border-radius:6px;font-size:13px;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.seg button.on{background:var(--surface-3);color:var(--ink);font-weight:600}
+.toggle{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-2);padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.toggle .box{width:16px;height:16px;border-radius:4px;background:var(--c-prog);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px}
+.chip-skip{font-size:12px;font-weight:600;color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent);border-radius:4px;padding:4px 10px}
+.spacer{flex:1}
+.primary{padding:8px 16px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:13.5px;font-weight:600;border:none;white-space:nowrap}
+.ghost{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap}
+/* chart */
+.chart{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.ghead{display:flex;border-bottom:1px solid var(--line)}
+.glabel-head{width:300px;flex:none;padding:12px 16px;font-size:12px;font-weight:600;color:var(--faint);border-right:1px solid var(--line)}
+.gaxis{flex:1;display:flex;position:relative;height:42px}
+.gaxis span{flex:1;font-size:11px;color:var(--muted);padding:12px 0 0 8px;border-left:1px solid var(--line-3)}
+.gbody{display:flex;position:relative}
+.glabels{width:300px;flex:none;border-right:1px solid var(--line)}
+.gtimeline{flex:1;position:relative}
+.row{height:46px;display:flex;align-items:center;border-bottom:1px solid var(--line-3);position:relative}
+.glabels .row{padding:0 16px;font-size:13px;gap:8px}
+.glabels .row.parent{color:var(--muted);font-weight:600;font-size:13.5px;background:var(--surface-2)}
+.glabels .row .code{font-size:12px;color:var(--faint);width:34px;flex:none}
+.glabels .row .sub{font-size:11px;color:var(--faint);margin-left:auto}
+.trow{height:46px;border-bottom:1px solid var(--line-3);position:relative}
+.trow .vlines{position:absolute;inset:0;display:flex}
+.trow .vlines i{flex:1;border-left:1px solid var(--line-3)}
+.today{position:absolute;top:0;bottom:0;width:1px;background:var(--c-late);left:43.2%;z-index:3}
+.today span{position:absolute;top:6px;left:6px;font-size:10px;font-weight:700;color:#fff;background:var(--c-late);border-radius:4px;padding:1px 6px;white-space:nowrap}
+/* bars */
+.bar{position:absolute;top:14px;height:18px;border-radius:99px;display:flex;align-items:center;font-size:11px;color:#fff;padding:0 8px;white-space:nowrap;z-index:2}
+.bar.done{background:color-mix(in srgb,var(--c-done) 22%,transparent);border:1px solid color-mix(in srgb,var(--c-done) 45%,transparent);color:var(--c-done)}
+.bar.prog{background:color-mix(in srgb,var(--c-prog) 18%,transparent);border:1px solid color-mix(in srgb,var(--c-prog) 45%,transparent);color:var(--c-prog)}
+.bar.todo{background:color-mix(in srgb,var(--c-todo) 30%,transparent);border:1px solid color-mix(in srgb,var(--c-todo) 50%,transparent);color:var(--muted)}
+.bar.blocked{background:color-mix(in srgb,var(--c-block) 14%,transparent);border:1.5px solid color-mix(in srgb,var(--c-block) 55%,transparent);color:var(--c-block)}
+.bar.parentband{background:var(--surface-3);border:none;height:8px;top:19px;border-radius:99px}
+.dt{position:absolute;top:18px;font-size:11px;color:var(--muted);white-space:nowrap}
+/* hover / focus bar */
+.bar.hot{background:color-mix(in srgb,var(--c-prog) 26%,transparent);border:1.5px solid color-mix(in srgb,var(--c-prog) 70%,transparent);outline:2px solid var(--c-prog);outline-offset:2px;transform:translateY(-1px);z-index:4;color:var(--c-prog);font-weight:600}
+.handle{position:absolute;top:-3px;bottom:-3px;width:6px;display:flex;align-items:center;justify-content:center;cursor:col-resize;z-index:5}
+.handle.left{left:0}.handle.right{right:0}
+.handle i{width:2px;height:12px;border-radius:2px;background:var(--ink-2)}
+.hottip{position:absolute;bottom:34px;background:var(--ink);color:var(--bg);font-size:11.5px;border-radius:8px;padding:8px 10px;white-space:nowrap;z-index:6;left:35%}
+.hottip b{font-weight:700}
+.hottip::after{content:"";position:absolute;bottom:-5px;left:26px;border:5px solid transparent;border-top-color:var(--ink)}
+.legend-note{position:absolute;right:12px;top:12px;font-size:11px;color:var(--muted)}
+/* keyboard strip */
+.kbdbar{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.kbdbar .kt{font-size:13px;font-weight:650}
+.kbd{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
+key{display:inline-block;min-width:26px;text-align:center;padding:3px 7px;border:1px solid var(--line-2);border-bottom-width:2px;border-radius:6px;background:var(--surface-2);font-family:inherit;font-size:12px;font-weight:600;color:var(--ink)}
+.kbdbar .note{margin-left:auto;font-size:11.5px;color:var(--muted);max-width:380px}
+/* dep states panel */
+.deps{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.depcard{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px}
+.depcard h4{font-size:14px;font-weight:650}
+.depcard .dsub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.depcard svg{margin-top:12px;width:100%;height:56px}
+.callout{margin-top:16px;border:1px solid color-mix(in srgb,var(--c-prog) 30%,transparent);background:color-mix(in srgb,var(--c-prog) 6%,transparent);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink-2);display:flex;gap:12px}
+.callout .tag{flex:none;font-size:11px;font-weight:650;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:2px 8px;height:fit-content}
+.callout b{color:var(--ink)}
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="rail-logo"><span class="whale">🐳</span> DSH 本地构建</div>
+  <div class="rail-btn">💬 新会话</div>
+  <div class="rail-btn">✦ 插件</div>
+  <div class="rail-btn">◷ 自动化任务</div>
+  <div class="rail-btn active">▤ 项目管理</div>
+  <div class="rail-sec">工作区</div>
+  <div class="rail-btn">📁 默认工作区</div>
+  <div class="rail-btn">📂 新会话</div>
+  <div class="rail-btn">📁 未分组</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="proj"><span class="ico">🗂</span><span><span class="t1">项目工作台</span><br><span class="t2">客户订单中心 V2 重构 ▾</span></span></div>
+    <div class="top-actions">
+      <button class="tbtn">▦ 总览看板</button>
+      <button class="tbtn">＋ 新建项目</button>
+      <button class="tbtn">✧ AI 助手</button>
+      <button class="tbtn">💬 AI 副驾</button>
+      <button class="tbtn">··· 更多</button>
+    </div>
+  </div>
+  <nav class="tabs">
+    <span class="tab">全部任务 <span class="badge">34</span></span>
+    <span class="tab">里程碑 <span class="badge">5</span></span>
+    <span class="tab">风险与问题 <span class="badge">3</span></span>
+    <span class="tab">会议纪要 <span class="badge">6</span></span>
+    <span class="tab">进度汇报 <span class="badge">4</span></span>
+    <span class="tab">交付物 <span class="badge">6</span></span>
+    <span class="tab">项目概览</span>
+    <span class="tab active">甘特排期</span>
+    <span class="tab">人员负载</span>
+  </nav>
+  <div class="content">
+    <div class="page-title">甘特图 <span class="range">2026-10-01 → 2026-11-07 · 8 任务 · 2 里程碑</span></div>
+    <div class="page-sub">P1-3（Opp 1 / S3-7 后半）：任务条左右 6px resize 手柄（hover / focus 显现）、hover 高亮、方向键微调；依赖三态路由与关键路径只读派生保持不动。</div>
+
+    <div class="toolbar">
+      <div class="seg"><button>日</button><button class="on">周</button><button>月</button></div>
+      <div class="toggle"><span class="box">✓</span>依赖线</div>
+      <div class="toggle"><span class="box">✓</span>关键路径 <span style="color:var(--muted)">5</span></div>
+      <span class="chip-skip">缺日期段已跳过 · 关键路径只读派生</span>
+      <span class="spacer"></span>
+      <button class="ghost">◎ 定位到今天</button>
+      <button class="primary">＋ 新建任务</button>
+    </div>
+
+    <div class="chart">
+      <div class="ghead">
+        <div class="glabel-head">任务 / WBS</div>
+        <div class="gaxis">
+          <span>10-01</span><span>10-05</span><span>10-08</span><span>10-12</span><span>10-15</span><span>10-19</span><span>10-22</span><span>10-26</span><span>10-29</span><span>11-02</span><span>11-07</span>
+        </div>
+      </div>
+      <div class="gbody">
+        <div class="glabels">
+          <div class="row parent"><span class="code">1</span>需求分析阶段</div>
+          <div class="row"><span class="code">1.1</span>调研竞品下单流程</div>
+          <div class="row"><span class="code">1.2</span>输出需求规格说明书</div>
+          <div class="row"><span class="code">1.3</span>访谈核心商户</div>
+          <div class="row parent"><span class="code">2</span>设计阶段</div>
+          <div class="row"><span class="code">2.2</span>确认视觉设计风格 <span class="sub">hover / focus</span></div>
+          <div class="row parent"><span class="code">3</span>开发阶段</div>
+          <div class="row"><span class="code">3.2</span>订单列表接口联调</div>
+          <div class="row"><span class="code">3.3</span>实现支付状态机 <span class="sub">未排期</span></div>
+        </div>
+        <div class="gtimeline">
+          <div class="today"><span>今天 10-17</span></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar parentband" style="left:0;width:62%"></div></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar done" style="left:0;width:13.5%">已完成</div><span class="dt" style="left:14.5%">10-01 → 10-06</span></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar done" style="left:16.2%;width:16.2%">已完成</div><span class="dt" style="left:33.5%">10-07 → 10-13</span></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar done" style="left:27%;width:11%">已完成</div><span class="dt" style="left:39%">10-11 → 10-15</span></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar parentband" style="left:30%;width:30%"></div></div>
+          <div class="trow">
+            <div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="hottip"><b>2.2 确认视觉设计风格</b> · 10-14 → 10-22 · 8 天 · 40%　边缘拖拽调工期 / 条体拖拽改期</div>
+            <div class="bar hot" style="left:35%;width:21.6%">
+              <span class="handle left"><i></i></span>2.2 · 进行中 40%<span class="handle right"><i></i></span>
+            </div>
+          </div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar parentband" style="left:37%;width:36%"></div></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar blocked" style="left:37.8%;width:24.3%">3.2 · 阻塞 P0 · 35%</div></div>
+          <div class="trow"><div class="vlines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div style="position:absolute;left:37.8%;top:14px;font-size:12px;color:var(--faint)">待办 · 未排期，缺日期诚实跳过关键路径</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kbdbar">
+      <span class="kt">键盘微调</span>
+      <span class="kbd"><key>←</key><key>→</key>移动 1 天</span>
+      <span class="kbd"><key>Shift</key>+<key>←</key><key>→</key>调整 1 天工期</span>
+      <span class="kbd"><key>Enter</key>打开抽屉改期</span>
+      <span class="kbd"><key>Esc</key>取消拖拽</span>
+      <span class="note">条体 aria-label 携带「任务 X，开始 ~ 结束，N 天」；拖拽落库白名单仅 startDate / dueDate；键盘可完成移动 / 微调 / 打开，不依赖鼠标。</span>
+    </div>
+
+    <div class="deps">
+      <div class="depcard">
+        <h4>tight · 凹形衔接</h4><div class="dsub">前后任务首尾相接，依赖箭头凹形下行（保持现网）</div>
+        <svg viewBox="0 0 200 56"><rect x="10" y="10" width="60" height="14" rx="7" fill="color-mix(in srgb,var(--c-done) 25%,transparent)" stroke="var(--c-done)"/><rect x="95" y="32" width="60" height="14" rx="7" fill="color-mix(in srgb,var(--c-prog) 25%,transparent)" stroke="var(--c-prog)"/><path d="M70 17 H82 V39 H95" fill="none" stroke="var(--muted)" stroke-width="1.5"/><path d="M90 36 L95 39 L90 42" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>
+      </div>
+      <div class="depcard">
+        <h4>overlap · U 折返</h4><div class="dsub">并行重叠时箭头 U 形折返，不穿条（保持现网）</div>
+        <svg viewBox="0 0 200 56"><rect x="10" y="10" width="70" height="14" rx="7" fill="color-mix(in srgb,var(--c-done) 25%,transparent)" stroke="var(--c-done)"/><rect x="55" y="32" width="70" height="14" rx="7" fill="color-mix(in srgb,var(--c-prog) 25%,transparent)" stroke="var(--c-prog)"/><path d="M80 17 H118 V39 H125" fill="none" stroke="var(--muted)" stroke-width="1.5"/><path d="M120 36 L125 39 L120 42" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>
+      </div>
+      <div class="depcard">
+        <h4>gap0 · 小肘连接</h4><div class="dsub">零间隔依赖走小肘，关系无歧义（保持现网）</div>
+        <svg viewBox="0 0 200 56"><rect x="10" y="10" width="60" height="14" rx="7" fill="color-mix(in srgb,var(--c-done) 25%,transparent)" stroke="var(--c-done)"/><rect x="78" y="32" width="60" height="14" rx="7" fill="color-mix(in srgb,var(--c-prog) 25%,transparent)" stroke="var(--c-prog)"/><path d="M70 17 H74 V39 H78" fill="none" stroke="var(--muted)" stroke-width="1.5"/><path d="M74 36 L78 39 L74 42" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">决策点</span>
+      <div>手柄仅在 <b>hover / 键盘 focus</b> 显现（6px 热区，2px grip 点），常态保持条体干净；hover 高亮 = 同色底 14%→26%、边框提至 70%、轻微抬升，focus 环沿用 2px <b>--c-prog</b>；<b>依赖三态路由、关键路径只读派生、缺日期诚实跳过一律不改</b>。</div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

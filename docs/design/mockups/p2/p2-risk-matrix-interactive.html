@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-3 可交互风险矩阵</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --primary-fill:#f0f2f5; --primary-on:#101113;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:900px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.hostrail{width:180px;height:100%;float:left;background:#f0f1f3;color:#1c1c1e;padding:16px 12px;border-right:1px solid var(--line)}
+body[data-ds-dark-theme] .hostrail{background:#0b0c0e;color:#e8eaed;border-right-color:rgba(255,255,255,.08)}
+.host-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:4px 8px 14px}
+.host-brand .mark{width:22px;height:22px;border-radius:6px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+body[data-ds-dark-theme] .host-brand .mark{background:#e8eaed;color:#101113}
+.host-item{padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink-2);margin-top:2px}
+.host-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.app{margin-left:180px;height:100%;display:flex;flex-direction:column}
+.topbar{height:56px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px}
+.switcher{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px;font-weight:600}
+.switcher .sub{font-weight:400;color:var(--muted);font-size:12px}
+.topbar .spacer{flex:1}
+.tb-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.tb-icon{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.bodyrow{flex:1;display:flex;min-height:0}
+.appnav{width:218px;flex:none;border-right:1px solid var(--line);padding:14px 10px;overflow:hidden}
+.nav-group{font-size:10px;font-weight:650;letter-spacing:.09em;color:var(--faint);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2)}
+.nav-item .ico{width:18px;text-align:center;color:var(--muted)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:4px;padding:1px 7px}
+.nav-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.main{flex:1;padding:16px 24px;overflow:hidden}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:center;gap:14px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+.toolbar{display:flex;align-items:center;gap:10px;margin-top:12px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:none;background:transparent;height:28px;padding:0 14px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:default}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.chip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:4px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
+.layout{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-top:14px;height:calc(100% - 96px);align-items:stretch}
+.col-stack{display:flex;flex-direction:column;gap:14px;min-height:0}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px;display:flex;flex-direction:column;min-height:0}
+.card h3{font-size:16px;font-weight:650;margin-bottom:4px}
+.card .card-sub{font-size:11px;color:var(--faint);font-weight:500}
+/* matrix: 4-col grid = 影响标签列 + 3 概率列 */
+.matrix{flex:1;min-height:0;display:grid;grid-template-columns:56px repeat(3,1fr);grid-template-rows:28px repeat(3,minmax(0,1fr));gap:8px;padding-top:8px}
+.col-head{font-size:12px;color:var(--muted);text-align:center;align-self:center}
+.col-head b{color:var(--ink-2);font-weight:600}
+.row-head{font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.row-head b{color:var(--ink-2);font-weight:600}
+.col-heads{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-left:62px;font-size:12px;color:var(--muted);text-align:center}
+.col-heads b{color:var(--ink-2);font-weight:600}
+.cell{border-radius:10px;border:1px solid var(--line);padding:10px;display:flex;flex-direction:column;justify-content:center;gap:2px;position:relative;cursor:default;min-height:0}
+.cell .n{font-size:22px;font-weight:700}
+.cell .lab{font-size:11px;color:var(--muted)}
+.cell.hot{background:color-mix(in srgb,var(--c-late) 14%,transparent);border-color:color-mix(in srgb,var(--c-late) 35%,transparent)}
+.cell.hot .n{color:var(--c-late)}
+.cell.warm{background:color-mix(in srgb,var(--c-block) 13%,transparent);border-color:color-mix(in srgb,var(--c-block) 30%,transparent)}
+.cell.warm .n{color:var(--c-block)}
+.cell.mid{background:color-mix(in srgb,var(--c-prog) 9%,transparent);border-color:color-mix(in srgb,var(--c-prog) 22%,transparent)}
+.cell.mid .n{color:var(--c-prog)}
+.cell.empty{background:var(--surface-2)}
+.cell.empty .n{color:var(--faint);font-weight:600;font-size:14px}
+.cell.sel{outline:2px solid var(--c-prog);outline-offset:2px}
+.cell .sel-tag{position:absolute;top:6px;right:8px;font-size:10px;font-weight:700;color:var(--c-prog)}
+.legend{display:flex;gap:16px;margin-top:12px;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg-dot{width:10px;height:10px;border-radius:3px}
+/* drill panel */
+.drill-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line-3)}
+.drill-head h3{font-size:16px;font-weight:650}
+.drill-count{font-size:12px;font-weight:600;color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent);border-radius:4px;padding:1px 8px}
+.risk-row{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:10px}
+.risk-top{display:flex;align-items:center;gap:10px}
+.risk-id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);flex:none}
+.risk-title{font-size:14px;font-weight:650;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.risk-status{margin-left:auto;flex:none}
+.chip.late{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.chip.prog{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.chip.block{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.risk-meta{font-size:12px;color:var(--muted);margin-top:6px;display:flex;gap:18px;flex-wrap:wrap}
+.risk-next{margin-top:8px;font-size:12.5px;color:var(--ink-2);padding:8px 10px;background:var(--surface-2);border-radius:8px}
+.risk-next b{color:var(--ink)}
+/* empty honest state inset */
+.empty-card{flex:none;border:1px dashed var(--line-2);border-radius:12px;padding:12px 16px;background:var(--surface)}
+.empty-card h4{font-size:13.5px;font-weight:650;margin-bottom:2px}
+.empty-card p{font-size:12px;color:var(--muted)}
+.mini-matrix{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-top:8px;max-width:420px}
+.mini-matrix div{height:26px;border-radius:6px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--faint)}
+.foot-note{margin-top:12px;font-size:11px;color:var(--faint);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="hostrail">
+  <div class="host-brand"><span class="mark">DS</span> DSH 本地构建</div>
+  <div class="host-item">新会话</div>
+  <div class="host-item">插件</div>
+  <div class="host-item">自动化任务</div>
+  <div class="host-item active">项目管理</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="switcher">客户门户重构 <span class="sub">· PM-2026-014 ▾</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn">⌕ 搜索风险 / 问题</button>
+    <button class="tb-btn primary">＋ 登记风险 / 问题</button>
+    <div class="tb-icon">⋯</div>
+    <div class="tb-icon">⟳</div>
+  </div>
+  <div class="bodyrow">
+    <nav class="appnav">
+      <div class="nav-item"><span class="ico">◉</span>指挥台</div>
+      <div class="nav-group">计划与排期</div>
+      <div class="nav-item"><span class="ico">☰</span>全部任务<span class="cnt">18</span></div>
+      <div class="nav-item"><span class="ico">▤</span>甘特排期</div>
+      <div class="nav-item"><span class="ico">◆</span>里程碑<span class="cnt">2</span></div>
+      <div class="nav-item active"><span class="ico">⚠</span>风险与问题<span class="cnt">6</span></div>
+      <div class="nav-item"><span class="ico">◔</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item"><span class="ico">✎</span>会议纪要</div>
+      <div class="nav-item"><span class="ico">▣</span>进度汇报</div>
+      <div class="nav-item"><span class="ico">▤</span>交付物</div>
+    </nav>
+    <main class="main">
+      <div class="eyebrow">P2-3 · 可交互风险矩阵｜决策点：风险从静态图到行动——点击格子下钻该「影响 × 概率」区间清单；位置（右上优先）+ 色 + 数字三重编码，不单靠红绿；空区间诚实标注「暂无」而非 0</div>
+      <div class="page-head">
+        <div class="page-title">风险与问题</div>
+        <div class="page-sub">登记项目推进中的风险与已暴露问题，跟踪应对闭环</div>
+        <div class="head-right">口径：影响 / 概率为登记人初评，健康分同源 core/derived.ts · 快照 2026-10-17 09:30</div>
+      </div>
+      <div class="toolbar">
+        <div class="seg"><button class="on">风险 · 6</button><button>问题 · 3</button></div>
+        <span class="chip">全部状态 ▾</span>
+        <span class="chip">影响等级 ▾</span>
+        <span class="chip">负责人 ▾</span>
+      </div>
+
+      <div class="layout">
+        <div class="col-stack">
+          <div class="card" style="flex:1">
+            <h3>风险矩阵<span class="card-sub">横轴 概率 →　纵轴 影响 ↓　·　点击格子下钻该区间</span></h3>
+            <div class="matrix">
+              <div></div>
+              <div class="col-head"><b>概率 低</b></div>
+              <div class="col-head"><b>概率 中</b></div>
+              <div class="col-head"><b>概率 高</b></div>
+              <div class="row-head"><b>影响 高</b></div>
+              <div class="cell mid"><span class="n">1</span><span class="lab">办公网络偶发抖动 · 备应急预案</span></div>
+              <div class="cell warm"><span class="n">1</span><span class="lab">供应商接口延期无备选</span></div>
+              <div class="cell hot sel"><span class="sel-tag">选中</span><span class="n">2</span><span class="lab">需立即处置</span></div>
+              <div class="row-head"><b>影响 中</b></div>
+              <div class="cell empty"><span class="n">暂无</span></div>
+              <div class="cell mid"><span class="n">1</span><span class="lab">设计稿与前端实现偏差</span></div>
+              <div class="cell warm"><span class="n">1</span><span class="lab">验收标准未书面确认</span></div>
+              <div class="row-head"><b>影响 低</b></div>
+              <div class="cell empty"><span class="n">暂无</span></div>
+              <div class="cell empty"><span class="n">暂无</span></div>
+              <div class="cell empty"><span class="n">暂无</span></div>
+            </div>
+            <div class="legend">
+              <span><span class="lg-dot" style="background:var(--c-late)"></span>红 = 高优先（高影响 × 高概率）</span>
+              <span><span class="lg-dot" style="background:var(--c-block)"></span>琥珀 = 需计划应对</span>
+              <span><span class="lg-dot" style="background:var(--c-prog)"></span>蓝 = 观察中</span>
+              <span><span class="lg-dot" style="background:var(--surface-3)"></span>灰 = 该区间暂无登记</span>
+              <span>位置本身编码：越靠右上越先处置，不单靠颜色</span>
+            </div>
+          </div>
+
+          <div class="empty-card">
+            <h4>空矩阵诚实态 · 筛选「仅看已闭环」</h4>
+            <p>当前筛选下 9 个区间均无已闭环风险；朗读「暂无已闭环风险」，不伪装成 0 统计；空态只保留一个去重 CTA。</p>
+            <div class="mini-matrix"><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="drill-head"><h3>下钻 · 高影响 × 高概率</h3><span class="drill-count">2 项</span><span class="card-sub" style="margin-left:auto">点击其他格子切换区间</span></div>
+          <div class="risk-row">
+            <div class="risk-top"><span class="risk-id">R-012</span><span class="risk-title">第三方登录 SDK 月度配额不足，扩容未报价</span><span class="risk-status chip late">未闭环 · 高</span></div>
+            <div class="risk-meta"><span>负责人：赵启</span><span>登记：2026-10-08</span><span>复评：每两周</span></div>
+            <div class="risk-next"><b>下一步：</b>10-20 前确认供应商升级报价，同步备选自研短信验证码方案，避免大促登录阻断。</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-top"><span class="risk-id">R-014</span><span class="risk-title">数据迁移窗口与双十一大促峰值冲突</span><span class="risk-status chip prog">进行中 · 应对中</span></div>
+            <div class="risk-meta"><span>负责人：孙一</span><span>登记：2026-10-12</span><span>关联：里程碑「灰度发布」</span></div>
+            <div class="risk-next"><b>下一步：</b>10-19 前给出错峰迁移方案（凌晨窗口 + 双写回滚预案），提交评审会确认。</div>
+          </div>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--line-3)">
+            <div style="display:flex;gap:20px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap">
+              <span>本区间未闭环 <b style="color:var(--c-late)">2</b></span>
+              <span>应对中 <b style="color:var(--c-prog)">1</b></span>
+              <span>全项目已闭环 <b style="color:var(--c-done)">4</b></span>
+              <span style="margin-left:auto;color:var(--muted)">建议处置时限：3 个工作日内</span>
+            </div>
+            <div class="foot-note" style="margin-top:8px">口径：影响 / 概率为登记人初评并每两周复评；矩阵只读派生，修改回到风险抽屉；本页不发明新指标。</div>
+          </div>
+        </div>
+      </div>
+      <div class="foot-note">说明：矩阵为只读派生视图，不改变台账；影响 / 概率修改回到风险抽屉；颜色不单独承担状态，每项均带等级文字 chip。</div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

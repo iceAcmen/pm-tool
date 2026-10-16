@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P1-5 抽屉分区表单 + 受控内联校验</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff; --hover:rgba(0,0,0,.04);
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.12); --line-3:rgba(255,255,255,.04);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --btn-bg:#f0f2f5; --btn-ink:#16181c; --hover:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;height:100%}
+body{display:flex;overflow:hidden}
+.rail{width:208px;flex:none;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.rail-logo{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;font-weight:700;font-size:15px}
+.rail-logo .whale{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rail-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-size:13.5px}
+.rail-btn.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.rail-sec{margin-top:14px;padding:4px 10px 6px;font-size:11px;color:var(--faint)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;position:relative}
+.topbar{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--line)}
+.proj{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.proj .ico{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.proj .t1{font-size:10px;color:var(--faint);font-weight:600}
+.proj .t2{font-size:13.5px;font-weight:650}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.tbtn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap}
+.tabs{display:flex;gap:22px;padding:0 24px;height:44px;align-items:center;border-bottom:1px solid var(--line)}
+.tab{font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;height:100%;border-bottom:2px solid transparent}
+.tab.active{color:var(--ink);font-weight:650;border-bottom-color:var(--ink)}
+.badge{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:1px 7px}
+/* dimmed background list */
+.bgview{flex:1;padding:24px;filter:brightness(.96)}
+.bgview h1{font-size:22px;font-weight:750}
+.bgview .sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+.bgtable{margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bgrow{display:grid;grid-template-columns:60px 1fr 100px 90px 110px;padding:12px 16px;border-bottom:1px solid var(--line-3);font-size:13px;color:var(--ink-2)}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.38);z-index:5}
+/* drawer */
+.drawer{position:absolute;top:0;right:0;bottom:0;width:460px;background:var(--surface);border-left:1px solid var(--line);z-index:10;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(0,0,0,.08)}
+.dhead{padding:14px 20px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}
+.dhead .eyebrow{font-size:10px;font-weight:650;color:var(--faint);letter-spacing:.06em}
+.dhead h2{font-size:18px;font-weight:700;margin-top:2px}
+.dhead .x{margin-left:auto;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.dbody{flex:1;overflow-y:auto;padding:6px 20px 8px}
+.sec{margin-top:10px}
+.sec-h{font-size:13px;font-weight:650;color:var(--ink-2);padding-bottom:6px;border-bottom:1px solid var(--line-3);display:flex;align-items:center;gap:8px}
+.sec-h .n{font-size:10px;font-weight:700;color:var(--faint)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px 14px;margin-top:9px}
+.field{display:flex;flex-direction:column;gap:3px}
+.field.full{grid-column:1/-1}
+label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+label .req{color:var(--c-late);margin-left:2px}
+.input{height:34px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);padding:0 12px;display:flex;align-items:center;font-size:13.5px;color:var(--ink)}
+.input.placeholder{color:var(--faint)}
+.input.err{border-color:var(--c-late);border-width:1.5px;background:var(--surface)}
+.input.err-focus{outline:2px solid var(--c-late);outline-offset:1px}
+.errmsg{font-size:12px;color:var(--c-late);display:flex;align-items:center;gap:6px}
+.focus-chip{font-size:10.5px;font-weight:650;color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent);border-radius:4px;padding:1px 7px;margin-left:6px}
+.help{font-size:11.5px;color:var(--muted)}
+/* progress */
+.prow{display:flex;align-items:center;gap:12px;margin-top:9px}
+.prow .track{flex:1;height:8px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.prow .track i{display:block;height:100%;background:var(--c-prog);border-radius:99px}
+.prow .pct{font-size:14px;font-weight:700;width:48px;text-align:right}
+/* predecessor tree */
+.tree{margin-top:9px;border:1px solid var(--line);border-radius:8px;padding:7px 12px;display:flex;flex-direction:column;gap:5px;max-height:104px;overflow:hidden}
+.tnode{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-2);padding:2px 0}
+.tnode.checked{color:var(--ink);font-weight:500}
+.tnode .cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line-2);flex:none;display:flex;align-items:center;justify-content:center;font-size:11px}
+.tnode.checked .cb{background:var(--c-prog);border-color:var(--c-prog);color:#fff}
+.tnode .indent{width:18px;flex:none;color:var(--faint)}
+.tag{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:4px;margin-left:auto}
+.tag.done{background:color-mix(in srgb,var(--c-done) 12%,transparent);color:var(--c-done)}
+.tag.todo{background:var(--surface-3);color:var(--muted)}
+/* bottom action bar */
+.dfoot{border-top:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:10px;background:var(--surface)}
+.danger{margin-right:auto;padding:8px 14px;border:1px solid transparent;background:transparent;color:var(--c-late);font-size:13.5px;font-weight:600;border-radius:8px;white-space:nowrap}
+.ghost{padding:8px 16px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap}
+.primary{padding:8px 18px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:13.5px;font-weight:600;border:none;white-space:nowrap}
+.note{padding:8px 20px 0;font-size:11.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="rail-logo"><span class="whale">🐳</span> DSH 本地构建</div>
+  <div class="rail-btn">💬 新会话</div>
+  <div class="rail-btn">✦ 插件</div>
+  <div class="rail-btn">◷ 自动化任务</div>
+  <div class="rail-btn active">▤ 项目管理</div>
+  <div class="rail-sec">工作区</div>
+  <div class="rail-btn">📁 默认工作区</div>
+  <div class="rail-btn">📂 新会话</div>
+  <div class="rail-btn">📁 未分组</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="proj"><span class="ico">🗂</span><span><span class="t1">项目工作台</span><br><span class="t2">客户订单中心 V2 重构 ▾</span></span></div>
+    <div class="top-actions"><button class="tbtn">▦ 总览看板</button><button class="tbtn">＋ 新建项目</button><button class="tbtn">✧ AI 助手</button><button class="tbtn">💬 AI 副驾</button><button class="tbtn">··· 更多</button></div>
+  </div>
+  <nav class="tabs">
+    <span class="tab active">全部任务 <span class="badge">34</span></span>
+    <span class="tab">里程碑 <span class="badge">5</span></span>
+    <span class="tab">风险与问题 <span class="badge">3</span></span>
+    <span class="tab">会议纪要 <span class="badge">6</span></span>
+    <span class="tab">进度汇报 <span class="badge">4</span></span>
+    <span class="tab">交付物 <span class="badge">6</span></span>
+    <span class="tab">项目概览</span>
+    <span class="tab">甘特排期</span>
+    <span class="tab">人员负载</span>
+  </nav>
+  <div class="bgview">
+    <h1>任务</h1>
+    <div class="sub">34 项任务 · 进行中 3 · 已完成 21 · 阻塞 1（抽屉打开，背景列表保持原位）</div>
+    <div class="bgtable">
+      <div class="bgrow"><span>编号</span><span>任务</span><span>负责人</span><span>优先级</span><span>截止日期</span></div>
+      <div class="bgrow"><span>3.2</span><span>订单列表接口联调</span><span>陈昊</span><span>P0</span><span>10-20</span></div>
+      <div class="bgrow"><span>3.3</span><span>实现支付状态机</span><span>陈昊</span><span>P0</span><span>11-05</span></div>
+      <div class="bgrow"><span>4.3</span><span>修复已发现缺陷</span><span>陈昊</span><span>P1</span><span>10-28</span></div>
+    </div>
+  </div>
+  <div class="scrim"></div>
+
+  <!-- ======= 抽屉 ======= -->
+  <aside class="drawer">
+    <div class="dhead">
+      <div><div class="eyebrow">项目记录 · 编辑态</div><h2>编辑任务 · t-3.2</h2></div>
+      <button class="x">✕</button>
+    </div>
+    <div class="dbody">
+      <!-- 分区 1 基础信息 -->
+      <div class="sec">
+        <div class="sec-h"><span class="n">01</span>基础信息</div>
+        <div class="grid2">
+          <div class="field full">
+            <label>标题<span class="req">*</span><span class="focus-chip">首错聚焦</span></label>
+            <div class="input err err-focus placeholder">请输入任务标题</div>
+            <div class="errmsg">⚠ 标题为必填项，请输入任务标题</div>
+          </div>
+          <div class="field">
+            <label>状态</label>
+            <div class="input">阻塞 ▾</div>
+          </div>
+          <div class="field">
+            <label>优先级</label>
+            <div class="input">P0 · 紧急 ▾</div>
+          </div>
+          <div class="field full">
+            <label>负责人</label>
+            <div class="input">陈昊 · 后端工程师</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分区 2 排期与进度 -->
+      <div class="sec">
+        <div class="sec-h"><span class="n">02</span>排期与进度</div>
+        <div class="grid2">
+          <div class="field"><label>开始日期</label><div class="input">2026-10-15</div></div>
+          <div class="field"><label>截止日期</label><div class="input">2026-10-20</div></div>
+          <div class="field"><label>完成日期（可选）</label><div class="input placeholder">未完成，留空</div></div>
+          <div class="field"><label>实际工时（小时，可选）</label><div class="input">如 3.5（实际投入，非估算）</div></div>
+        </div>
+        <div class="prow"><span style="font-size:12.5px;color:var(--ink-2)">客观进度（清单完成度）</span><div class="track"><i style="width:35%"></i></div><span class="pct">35%</span></div>
+      </div>
+
+      <!-- 分区 3 关联与仓库 -->
+      <div class="sec">
+        <div class="sec-h"><span class="n">03</span>关联与仓库</div>
+        <div class="grid2">
+          <div class="field full">
+            <label>仓库地址（可选）</label>
+            <div class="input err">not a url!!</div>
+            <div class="errmsg">⚠ 仓库地址需为 http(s)://、git:// 或 git@host:org/repo.git 形式</div>
+          </div>
+          <div class="field"><label>分支（可选）</label><div class="input">main</div></div>
+          <div class="field"><label>关联里程碑</label><div class="input">m-003 提测 ▾</div></div>
+        </div>
+        <div class="field full" style="margin-top:12px">
+          <label>前置依赖（未完成时本任务显示「等待前置」）</label>
+          <div class="tree">
+            <div class="tnode"><span class="indent"></span><span class="cb"></span>2 设计阶段<span class="tag todo">父阶段 · 不可选</span></div>
+            <div class="tnode checked"><span class="indent">└</span><span class="cb">✓</span>2.2 确认视觉设计风格<span class="tag done">已完成</span></div>
+            <div class="tnode"><span class="indent">└</span><span class="cb"></span>2.3 制作 UI 设计稿<span class="tag todo">待办</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dfoot">
+      <button class="danger">删除</button>
+      <button class="ghost">取消</button>
+      <button class="primary">保存</button>
+    </div>
+  </aside>
+</main>
+</body>
+</html>

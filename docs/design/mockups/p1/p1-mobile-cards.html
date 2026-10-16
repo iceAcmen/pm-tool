@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P1-4 全视图移动卡片模式</title>
+<style>
+:root{
+  --bg:#f5f6f7; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+.phone{max-width:390px;margin:0 auto;background:var(--bg);min-height:100vh}
+/* app bar */
+.appbar{padding:14px 12px 10px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.appbar .ico{width:38px;height:38px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.appbar .t1{font-size:10px;color:var(--faint);font-weight:600}
+.appbar .t2{font-size:15px;font-weight:650}
+.appbar .acts{margin-left:auto;display:flex;gap:8px}
+.abtn{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-2)}
+/* section band between screens */
+.band{padding:14px 12px 6px;display:flex;align-items:baseline;gap:8px}
+.band .n{font-size:10px;font-weight:650;letter-spacing:.08em;color:var(--faint)}
+.band h2{font-size:15px;font-weight:700}
+.band .hint{font-size:11px;color:var(--muted);margin-left:auto}
+/* screen padding */
+.screen{padding:12px}
+.screen-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.screen-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.head-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
+.primary{padding:9px 16px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:13.5px;font-weight:600;border:none;white-space:nowrap}
+/* stats 2col */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .k{font-size:11px;color:var(--muted)}
+.stat .v{font-size:22px;font-weight:700;margin-top:2px}
+.stat .v small{font-size:12px;font-weight:500;color:var(--muted)}
+.stat .d{font-size:11px;color:var(--muted);margin-top:2px}
+.rate{margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.rate .k{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.rate .track{margin-top:8px;height:8px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.rate .track i{display:block;height:100%;background:var(--c-done);border-radius:99px}
+/* milestone timeline */
+.tl{margin-top:16px;position:relative;padding-left:18px}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:var(--line)}
+.mcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.mcard::before{content:"";position:absolute;left:-16px;top:18px;width:11px;height:11px;border-radius:50%;background:var(--surface);border:2px solid var(--c-done)}
+.mcard.risk::before{border-color:var(--c-block)}
+.mcard.miss::before{border-color:var(--c-late)}
+.mcard.plan::before{border-color:var(--c-todo)}
+.mrow1{display:flex;align-items:center;gap:8px}
+.mcode{font-size:11px;color:var(--muted);font-weight:600}
+.mtitle{font-size:14.5px;font-weight:650;flex:1}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.chip.done{background:color-mix(in srgb,var(--c-done) 12%,transparent);color:var(--c-done)}
+.chip.miss{background:color-mix(in srgb,var(--c-late) 12%,transparent);color:var(--c-late)}
+.chip.risk{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.chip.plan{background:var(--surface-3);color:var(--muted)}
+.mrow2{display:flex;gap:14px;margin-top:8px;font-size:12.5px;color:var(--ink-2)}
+.mrow2 .own{color:var(--muted)}
+.mrow3{margin-top:6px;font-size:12px;color:var(--muted)}
+.mrow3 b{color:var(--c-late);font-weight:600}
+/* gantt mobile */
+.gbar-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-3)}
+.glabel{width:132px;flex:none}
+.glabel .code{font-size:11px;color:var(--muted);font-weight:600}
+.glabel .nm{font-size:13px;font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ghint{margin-top:8px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.gtrack-wrap{flex:1;overflow:hidden;padding:4px 0;position:relative}
+.gtrack{width:100%;position:relative;height:20px}
+.gbar{position:absolute;top:1px;height:18px;border-radius:99px;display:flex;align-items:center;padding:0 8px;font-size:10.5px;white-space:nowrap}
+.gbar.done{background:color-mix(in srgb,var(--c-done) 22%,transparent);border:1px solid color-mix(in srgb,var(--c-done) 45%,transparent);color:var(--c-done)}
+.gbar.prog{background:color-mix(in srgb,var(--c-prog) 22%,transparent);border:1px solid color-mix(in srgb,var(--c-prog) 60%,transparent);color:var(--c-prog)}
+.gbar.blocked{background:color-mix(in srgb,var(--c-block) 14%,transparent);border:1.5px solid color-mix(in srgb,var(--c-block) 55%,transparent);color:var(--c-block)}
+.seg{display:flex;background:var(--surface-2);border-radius:8px;padding:3px;margin-top:12px}
+.seg button{flex:1;border:none;background:transparent;padding:7px 0;border-radius:6px;font-size:13px;color:var(--ink-2)}
+.seg button.on{background:var(--surface-3);color:var(--ink);font-weight:600}
+/* meetings */
+.search{margin-top:12px;height:42px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);display:flex;align-items:center;padding:0 14px;color:var(--muted);font-size:13px;gap:8px}
+.filters{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.fchip{font-size:13px;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.fchip.on{background:var(--surface-3);color:var(--ink);font-weight:600;border-color:transparent}
+.mcard2{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:10px}
+.mcard2.sel{border-color:var(--c-prog);box-shadow:0 0 0 1px var(--c-prog)}
+.m2row1{display:flex;align-items:center;gap:8px}
+.m2date{font-size:14px;font-weight:700}
+.m2title{font-size:14.5px;font-weight:650;margin-top:2px}
+.m2meta{font-size:12px;color:var(--muted);margin-top:6px;display:flex;gap:16px}
+/* detail */
+.detail{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.detail h3{font-size:15px;font-weight:650;display:flex;align-items:center;gap:8px}
+.metagrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:12px}
+.metagrid .k{font-size:11px;color:var(--muted)}
+.metagrid .v{font-size:13px;font-weight:500;margin-top:1px}
+.act{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line-3)}
+.act:first-of-type{margin-top:10px;border-top:none}
+.cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-2);flex:none;margin-top:1px}
+.act .at{flex:1;font-size:13.5px;font-weight:500}
+.act .ameta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+.act .ameta .late{color:var(--c-late);font-weight:600}
+.contract{margin:16px 12px 24px;background:color-mix(in srgb,var(--c-prog) 6%,transparent);border:1px solid color-mix(in srgb,var(--c-prog) 25%,transparent);border-radius:12px;padding:13px 14px;font-size:12px;color:var(--ink-2)}
+.contract b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="appbar">
+    <span class="ico">🗂</span>
+    <div><div class="t1">项目工作台</div><div class="t2">客户订单中心 V2 重构 ▾</div></div>
+    <div class="acts"><span class="abtn">＋</span><span class="abtn">···</span><span class="abtn">⟳</span></div>
+  </div>
+
+  <!-- ============ 视图 1/3 里程碑 ============ -->
+  <div class="band"><span class="n">P1-4 · 视图 1/3</span><h2>里程碑</h2><span class="hint">纵向时间轴保留 · 统计 2 列</span></div>
+  <div class="screen">
+    <div class="screen-title">里程碑</div>
+    <div class="screen-sub">共 5 个仪式节点 · 从需求冻结到全量上线</div>
+    <div class="head-row"><span></span><button class="primary">＋ 新增里程碑</button></div>
+    <div class="stats">
+      <div class="stat"><div class="k">总数</div><div class="v">5<small> 个节点</small></div><div class="d">需求 → 上线全旅程</div></div>
+      <div class="stat"><div class="k">已达成</div><div class="v" style="color:var(--c-done)">2<small> /5</small></div><div class="d">需求冻结 · 原型评审</div></div>
+      <div class="stat"><div class="k">有风险</div><div class="v" style="color:var(--c-block)">1<small> 项</small></div><div class="d">提测依赖联调完成</div></div>
+      <div class="stat"><div class="k">已延期</div><div class="v" style="color:var(--c-late)">1<small> 项</small></div><div class="d">与卡片同一 isMissed 口径</div></div>
+    </div>
+    <div class="rate"><div class="k"><span>达成率</span><span>40%（2/5）</span></div><div class="track"><i style="width:40%"></i></div></div>
+
+    <div class="tl">
+      <div class="mcard">
+        <div class="mrow1"><span class="mcode">m-001</span><span class="mtitle">需求冻结</span><span class="chip done">已达成</span></div>
+        <div class="mrow2"><span>目标 09-15</span><span class="own">负责 王磊</span></div>
+        <div class="mrow3">实际完成 09-14 · 提前 1 天</div>
+      </div>
+      <div class="mcard miss">
+        <div class="mrow1"><span class="mcode">m-002</span><span class="mtitle">设计评审通过</span><span class="chip miss">已延期</span></div>
+        <div class="mrow2"><span>目标 10-08</span><span class="own">负责 周航</span></div>
+        <div class="mrow3"><b>已过 9 天</b> · 待二次评审</div>
+      </div>
+      <div class="mcard risk">
+        <div class="mrow1"><span class="mcode">m-003</span><span class="mtitle">提测</span><span class="chip risk">有风险</span></div>
+        <div class="mrow2"><span>目标 11-10</span><span class="own">负责 赵倩</span></div>
+        <div class="mrow3">距今 24 天 · 依赖 3.2 联调完成</div>
+      </div>
+      <div class="mcard plan">
+        <div class="mrow1"><span class="mcode">m-004</span><span class="mtitle">灰度发布</span><span class="chip plan">计划中</span></div>
+        <div class="mrow2"><span>目标 12-05</span><span class="own">负责 陈昊</span></div>
+        <div class="mrow3">距今 49 天</div>
+      </div>
+      <div class="mcard plan">
+        <div class="mrow1"><span class="mcode">m-005</span><span class="mtitle">全量上线</span><span class="chip plan">计划中</span></div>
+        <div class="mrow2"><span>目标 12-25</span><span class="own">负责 王磊</span></div>
+        <div class="mrow3">旅程终点 · 全部里程碑完成</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 视图 2/3 甘特 ============ -->
+  <div class="band"><span class="n">P1-4 · 视图 2/3</span><h2>甘特排期</h2><span class="hint">身份列固定 · 时间轴横滑</span></div>
+  <div class="screen">
+    <div class="screen-title">甘特图</div>
+    <div class="screen-sub">2026-10-01 → 2026-11-07 · 8 任务 · 2 里程碑</div>
+    <div class="seg"><button>日</button><button class="on">周</button><button>月</button></div>
+
+    <div style="margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 12px">
+      <div class="gbar-row">
+        <div class="glabel"><div class="code">1.2</div><div class="nm">输出需求规格说明书</div></div>
+        <div class="gtrack-wrap"><div class="gtrack"><div class="gbar done" style="left:2%;width:42%">已完成</div></div></div>
+      </div>
+      <div class="gbar-row">
+        <div class="glabel"><div class="code">2.2</div><div class="nm">确认视觉设计风格</div></div>
+        <div class="gtrack-wrap"><div class="gtrack"><div class="gbar prog" style="left:34%;width:30%">进行中 40%</div></div></div>
+      </div>
+      <div class="gbar-row">
+        <div class="glabel"><div class="code">3.2</div><div class="nm">订单列表接口联调</div></div>
+        <div class="gtrack-wrap"><div class="gtrack"><div class="gbar blocked" style="left:38%;width:34%">阻塞 P0</div></div></div>
+      </div>
+      <div class="gbar-row" style="border-bottom:none">
+        <div class="glabel"><div class="code">3.3</div><div class="nm">实现支付状态机</div></div>
+        <div class="gtrack-wrap"><div class="gtrack"><div style="font-size:11.5px;color:var(--faint);position:absolute;left:38%;top:2px">未排期 · 诚实跳过</div></div></div>
+      </div>
+      <div class="ghint"><span>编号 + 标题两行固定，不进横滑</span><span>时间轴可横滑 ››</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 视图 3/3 会议纪要 ============ -->
+  <div class="band"><span class="n">P1-4 · 视图 3/3</span><h2>会议纪要</h2><span class="hint">列表 → 点选下钻 · 行动项换行行</span></div>
+  <div class="screen">
+    <div class="screen-title">会议纪要</div>
+    <div class="screen-sub">6 场 · 已定稿 4 · 草稿 2 · 逾期行动 2</div>
+    <div class="stats">
+      <div class="stat"><div class="k">会议总数</div><div class="v">6<small> 场</small></div><div class="d">2026-09-01 ~ 10-16</div></div>
+      <div class="stat"><div class="k">累计决议</div><div class="v">12<small> 条</small></div><div class="d">来自已定稿会议</div></div>
+      <div class="stat"><div class="k">行动项</div><div class="v">9<small> 项</small></div><div class="d">含决议跟踪与待办闭环</div></div>
+      <div class="stat"><div class="k">逾期行动</div><div class="v" style="color:var(--c-late)">2<small> 项</small></div><div class="d">需立即跟进</div></div>
+    </div>
+
+    <div class="search">⌕ 搜索记录</div>
+    <div class="filters">
+      <span class="fchip on">全部 6</span><span class="fchip">已定稿 4</span><span class="fchip">草稿 2</span>
+    </div>
+
+    <div class="mcard2 sel">
+      <div class="m2row1"><span class="m2date">10-12 周一</span><span class="chip done" style="margin-left:auto">● 已定稿</span></div>
+      <div class="m2title">周例会 · 迭代 12 复盘</div>
+      <div class="m2meta"><span>决议 3</span><span>行动 3</span><span>主持人 王磊</span></div>
+    </div>
+    <div class="mcard2">
+      <div class="m2row1"><span class="m2date">10-16 周五</span><span class="chip plan" style="margin-left:auto">● 草稿</span></div>
+      <div class="m2title">技术方案评审 · 支付状态机</div>
+      <div class="m2meta"><span>决议 2</span><span>行动 3</span><span>主持人 陈昊</span></div>
+    </div>
+
+    <!-- 下钻详情：行动项卡片行 -->
+    <div class="detail">
+      <h3>周例会 · 迭代 12 复盘 <span class="chip done">已定稿</span></h3>
+      <div class="metagrid">
+        <div><div class="k">日期</div><div class="v">2026-10-12</div></div>
+        <div><div class="k">时长</div><div class="v">60 分钟</div></div>
+        <div><div class="k">地点</div><div class="v">3F 会议室 B</div></div>
+        <div><div class="k">主持人</div><div class="v">王磊</div></div>
+      </div>
+      <div class="act">
+        <span class="cb"></span>
+        <div><div class="at">3.2 联调阻塞需产品确认分页口径</div><div class="ameta"><span>负责 王磊</span><span>到期 10-15</span><span class="late">已逾期 2 天</span></div></div>
+      </div>
+      <div class="act">
+        <span class="cb"></span>
+        <div><div class="at">补充订单列表空状态设计稿</div><div class="ameta"><span>负责 周航</span><span>到期 10-21</span><span>进行中</span></div></div>
+      </div>
+      <div class="act">
+        <span class="cb" style="background:var(--c-done);border-color:var(--c-done);color:#fff;display:flex;align-items:center;justify-content:center">✓</span>
+        <div><div class="at" style="color:var(--muted);text-decoration:line-through">输出迭代 12 复盘纪要并定稿</div><div class="ameta"><span>负责 李薇</span><span>已完成 10-13</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contract">
+    <b>统一卡片契约（§6.1，三行节奏）：</b>第 1 行 勾选 + 完整标题 + 状态文字 chip；第 2 行 编号 · 负责人 · 优先级；第 3 行 日期 / 进度（按需）。表格列全部映射为卡片字段，不删信息；废弃 9 列横滑，标题不再可能塌缩为 0。
+  </div>
+</div>
+</body>
+</html>

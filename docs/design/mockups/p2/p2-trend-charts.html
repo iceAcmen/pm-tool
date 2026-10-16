@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-4 趋势分析与高级图表</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --primary-fill:#f0f2f5; --primary-on:#101113;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:900px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.hostrail{width:180px;height:100%;float:left;background:#f0f1f3;color:#1c1c1e;padding:16px 12px;border-right:1px solid var(--line)}
+body[data-ds-dark-theme] .hostrail{background:#0b0c0e;color:#e8eaed;border-right-color:rgba(255,255,255,.08)}
+.host-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:4px 8px 14px}
+.host-brand .mark{width:22px;height:22px;border-radius:6px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+body[data-ds-dark-theme] .host-brand .mark{background:#e8eaed;color:#101113}
+.host-item{padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink-2);margin-top:2px}
+.host-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.app{margin-left:180px;height:100%;display:flex;flex-direction:column}
+.topbar{height:56px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px}
+.switcher{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px;font-weight:600}
+.switcher .sub{font-weight:400;color:var(--muted);font-size:12px}
+.topbar .spacer{flex:1}
+.tb-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.tb-icon{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.bodyrow{flex:1;display:flex;min-height:0}
+.appnav{width:218px;flex:none;border-right:1px solid var(--line);padding:14px 10px;overflow:hidden}
+.nav-group{font-size:10px;font-weight:650;letter-spacing:.09em;color:var(--faint);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2)}
+.nav-item .ico{width:18px;text-align:center;color:var(--muted)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:4px;padding:1px 7px}
+.nav-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.main{flex:1;padding:16px 24px;overflow:hidden}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:center;gap:14px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+.toolbar{display:flex;align-items:center;gap:10px;margin-top:10px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:none;background:transparent;height:28px;padding:0 14px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.chip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:4px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:12px}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.card h3{font-size:16px;font-weight:650}
+.card .card-sub{font-size:11px;color:var(--faint);font-weight:500}
+.chart-wrap{flex:1;min-height:0;margin-top:8px}
+svg{width:100%;height:100%;display:block}
+.legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted);margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg-line{width:18px;height:0;border-top:2.5px solid}
+/* compare bars */
+.cmp-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line-3)}
+.cmp-row:first-of-type{border-top:none}
+.cmp-name{width:120px;font-size:13px;font-weight:600;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmp-track{flex:1;height:14px;background:var(--surface-2);border-radius:99px;position:relative}
+.cmp-fill{display:block;height:100%;border-radius:99px;background:var(--c-prog)}
+.cmp-val{width:52px;text-align:right;font-weight:700;font-size:13px}
+/* metric note list */
+.note-row{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line-3);font-size:12.5px;color:var(--ink-2)}
+.note-row:first-of-type{border-top:none}
+.note-row b{color:var(--ink)}
+.note-row .src{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);flex:none}
+.gap-note{margin-top:10px;padding:10px 12px;border:1px dashed var(--line-2);border-radius:8px;font-size:12px;color:var(--muted);background:var(--surface-2)}
+.gap-note b{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="hostrail">
+  <div class="host-brand"><span class="mark">DS</span> DSH 本地构建</div>
+  <div class="host-item">新会话</div>
+  <div class="host-item">插件</div>
+  <div class="host-item">自动化任务</div>
+  <div class="host-item active">项目管理</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="switcher">电商 App 4.0 改版 <span class="sub">· PM-2026-008 ▾</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn">⌕ 搜索</button>
+    <button class="tb-btn primary">＋ 新建项目</button>
+    <div class="tb-icon">⋯</div>
+    <div class="tb-icon">⟳</div>
+  </div>
+  <div class="bodyrow">
+    <nav class="appnav">
+      <div class="nav-item active"><span class="ico">◉</span>指挥台<span class="cnt">5</span></div>
+      <div class="nav-group">计划与排期</div>
+      <div class="nav-item"><span class="ico">☰</span>全部任务<span class="cnt">22</span></div>
+      <div class="nav-item"><span class="ico">▤</span>甘特排期</div>
+      <div class="nav-item"><span class="ico">◆</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item"><span class="ico">⚠</span>风险与问题<span class="cnt">2</span></div>
+      <div class="nav-item"><span class="ico">◔</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item"><span class="ico">✎</span>会议纪要</div>
+      <div class="nav-item"><span class="ico">▣</span>进度汇报</div>
+      <div class="nav-item"><span class="ico">▤</span>交付物</div>
+    </nav>
+    <main class="main">
+      <div class="eyebrow">P2-4 · 趋势分析与高级图表｜决策点：识别完成 / 燃尽的走势与落后点；直接标签不依赖 hover；缺周快照断点诚实处理、不插值；不发明未确认指标（双轨进度待产品拍板前不展示）</div>
+      <div class="page-head">
+        <div class="page-title">趋势分析</div>
+        <div class="page-sub">周快照口径 · 数据来自本地台账，历史不改写</div>
+        <div class="head-right">快照 2026-10-17 09:30 · 口径同源 progress-derivation.ts / collectStats</div>
+      </div>
+      <div class="toolbar">
+        <div class="seg"><button class="on">完成率趋势</button><button>迭代燃尽</button><button>跨项目对比</button></div>
+        <span class="chip">近 13 周 ▾</span>
+        <span class="chip">粒度：周 ▾</span>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>任务完成率历史趋势<span class="card-sub">周快照 · 完成率 = 已完成 / 全部任务</span></h3>
+          <div class="chart-wrap"><svg id="chartA" viewBox="0 0 640 260" preserveAspectRatio="none"></svg></div>
+          <div class="legend">
+            <span><span class="lg-line" style="border-color:var(--c-prog)"></span>实际完成率</span>
+            <span><span class="lg-line" style="border-color:var(--faint);border-top-style:dashed"></span>缺周断点（无快照，不插值）</span>
+            <span style="margin-left:auto">端点直接标值，不依赖 hover</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>跨项目完成率对比<span class="card-sub">同一周快照 · 直接标签</span></h3>
+          <div style="margin-top:8px;flex:1;display:flex;flex-direction:column;justify-content:center">
+            <div class="cmp-row"><span class="cmp-name">内部工具链升级</span><span class="cmp-track"><span class="cmp-fill" style="width:72%;background:var(--c-done)"></span></span><span class="cmp-val">72%</span></div>
+            <div class="cmp-row"><span class="cmp-name">数据看板二期</span><span class="cmp-track"><span class="cmp-fill" style="width:66%"></span></span><span class="cmp-val">66%</span></div>
+            <div class="cmp-row"><span class="cmp-name">电商 App 4.0</span><span class="cmp-track"><span class="cmp-fill" style="width:58%"></span></span><span class="cmp-val">58%</span></div>
+            <div class="cmp-row"><span class="cmp-name">客户门户重构</span><span class="cmp-track"><span class="cmp-fill" style="width:41%;background:var(--c-block)"></span></span><span class="cmp-val" style="color:var(--c-block)">41%</span></div>
+          </div>
+          <div class="legend"><span>绿 = ≥70% 健康段 · 琥珀 = &lt;50% 关注段 · 蓝 = 常规</span></div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:14px">
+        <div class="card">
+          <h3>本迭代燃尽趋势（W1–W8）<span class="card-sub">剩余 open · 当前 W8 剩 7，落后理想 4 项（红圈）· 理想线仅参考</span></h3>
+          <div class="chart-wrap"><svg id="chartB" viewBox="0 0 640 240" preserveAspectRatio="none"></svg></div>
+          <div class="legend">
+            <span><span class="lg-line" style="border-color:var(--c-prog)"></span>实际剩余</span>
+            <span><span class="lg-line" style="border-color:var(--faint);border-top-style:dashed"></span>理想燃尽</span>
+            <span><span class="lg-line" style="border-color:var(--c-late)"></span>当前落后 4 项</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>口径与数据来源<span class="card-sub">不发明未确认指标</span></h3>
+          <div style="flex:1;margin-top:6px">
+            <div class="note-row"><span><b>完成率</b> = done / 全部任务，周快照落盘，历史不改写</span><span class="src">progress-derivation.ts</span></div>
+            <div class="note-row"><span><b>剩余 open</b> = 未完成任务计数，四桶互斥汇总</span><span class="src">collectStats / people-load</span></div>
+            <div class="note-row"><span><b>理想线</b> = 按迭代工期线性分摊，非承诺值</span><span class="src">前端派生</span></div>
+            <div class="note-row"><span><b>双轨进度</b>（manual / derived）待产品拍板，本页不展示</span><span class="src">待验证 #6</span></div>
+          </div>
+          <div class="gap-note"><b>缺失诚实处理：</b>W32、W36 无周快照 → 折线断点连接并标注「该周无快照」，不插值、不补零；「无快照」≠「0%」。</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// 使用 CSS 变量而非解析后的色值，深浅主题切换自动生效
+function build(svgId, labels, series, opts){
+  const svg = document.getElementById(svgId)
+  const W=640, H=opts.h, x0=46, x1=W-20, yTop=18, yBot=H-34
+  const n=labels.length
+  const xs=i=>x0+(x1-x0)*i/(n-1)
+  const ys=v=>yBot-(yBot-yTop)*v/opts.max
+  let html=''
+  for(let g=0;g<=4;g++){
+    const v=opts.max*g/4, y=ys(v)
+    html+=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" style="stroke:var(--line-3)" stroke-width="1"/>`
+    html+=`<text x="${x0-8}" y="${y+4}" text-anchor="end" font-size="10" style="fill:var(--faint)">${v}${opts.unit||''}</text>`
+  }
+  labels.forEach((l,i)=>{ if(i%2===0||i===n-1) html+=`<text x="${xs(i)}" y="${H-12}" text-anchor="middle" font-size="10" style="fill:var(--faint)">${l}</text>` })
+  series.forEach(s=>{
+    let seg=[]
+    const flush=()=>{ if(seg.length>=2){ html+=`<polyline points="${seg.map(p=>xs(p[0])+','+ys(p[1])).join(' ')}" fill="none" style="stroke:${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="6 5"':''}/>` } seg=[] }
+    s.data.forEach((v,i)=>{
+      if(v==null){ flush()
+        html+=`<circle cx="${xs(i)}" cy="${(yTop+yBot)/2}" r="2.5" fill="none" style="stroke:var(--faint)" stroke-dasharray="2 2"/>`
+        html+=`<text x="${xs(i)}" y="${(yTop+yBot)/2-8}" text-anchor="middle" font-size="9.5" style="fill:var(--faint)">无快照</text>`
+        return }
+      seg.push([i,v])
+    })
+    flush()
+    s.data.forEach((v,i)=>{ if(v==null)return
+      html+=`<circle cx="${xs(i)}" cy="${ys(v)}" r="3.5" style="fill:${s.color};stroke:var(--surface)" stroke-width="1.5"/>`
+      if(s.labelEvery && i%s.labelEvery===0) html+=`<text x="${xs(i)}" y="${ys(v)-8}" text-anchor="middle" font-size="10.5" font-weight="700" style="fill:var(--ink)">${v}${opts.unit||''}</text>`
+    })
+  })
+  svg.innerHTML=html
+}
+build('chartA',
+ ['W27','W28','W29','W30','W31','W32','W33','W34','W35','W36','W37','W38','W39'],
+ [{color:'var(--c-prog)',data:[12,18,24,31,38,null,44,49,52,null,55,57,58],labelEvery:2}],
+ {h:260,max:100,unit:'%'})
+const ideal=[24,21,17,14,11,9,5,2]
+build('chartB',
+ ['W1','W2','W3','W4','W5','W6','W7','W8'],
+ [{color:'var(--faint)',dash:true,data:ideal,labelEvery:0},
+  {color:'var(--c-prog)',data:[24,21,19,16,null,12,9,7],labelEvery:0}],
+ {h:240,max:24,unit:''})
+const b=document.getElementById('chartB')
+const bx0=46,bx1=620,byTop=18,byBot=206
+const bxs=i=>bx0+(bx1-bx0)*i/7
+const bys=v=>byBot-(byBot-byTop)*v/24
+b.innerHTML+=`<text x="${bxs(0)}" y="${bys(24)-9}" text-anchor="middle" font-size="10.5" font-weight="700" style="fill:var(--ink)">24</text>`
+b.innerHTML+=`<circle cx="${bxs(7)}" cy="${bys(7)}" r="5" fill="none" style="stroke:var(--c-late)" stroke-width="2"/>`
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-1 指挥驾驶舱 · IA</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --primary-fill:#f0f2f5; --primary-on:#101113;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:900px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+/* ---- host rail (fixed chrome, not part of PM IA) ---- */
+.hostrail{width:180px;height:100%;float:left;background:#f0f1f3;color:#1c1c1e;padding:16px 12px;border-right:1px solid var(--line)}
+body[data-ds-dark-theme] .hostrail{background:#0b0c0e;color:#e8eaed;border-right-color:rgba(255,255,255,.08)}
+.host-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:4px 8px 14px}
+.host-brand .mark{width:22px;height:22px;border-radius:6px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+body[data-ds-dark-theme] .host-brand .mark{background:#e8eaed;color:#101113}
+.host-item{padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink-2);margin-top:2px}
+.host-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+/* ---- app shell ---- */
+.app{margin-left:180px;height:100%;display:flex;flex-direction:column}
+.topbar{height:56px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px}
+.switcher{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px;font-weight:600;cursor:default}
+.switcher .sub{font-weight:400;color:var(--muted);font-size:12px}
+.topbar .spacer{flex:1}
+.tb-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.tb-icon{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.bodyrow{flex:1;display:flex;min-height:0}
+/* ---- left grouped nav (P2 IA) ---- */
+.appnav{width:218px;flex:none;border-right:1px solid var(--line);padding:14px 10px;overflow:hidden}
+.nav-group{font-size:10px;font-weight:650;letter-spacing:.09em;color:var(--faint);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2);cursor:default}
+.nav-item .ico{width:18px;text-align:center;color:var(--muted)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:4px;padding:1px 7px}
+.nav-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.nav-item.active .cnt{color:var(--ink)}
+/* ---- main ---- */
+.main{flex:1;padding:14px 24px 8px;overflow:hidden}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:baseline;gap:14px;margin-bottom:2px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+/* attention queue */
+.attn{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.attn-head{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--line-3)}
+.attn-head h2{font-size:16px;font-weight:650}
+.attn-head .n{font-size:12px;font-weight:600;color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent);border-radius:4px;padding:1px 8px}
+.attn-head .legend{margin-left:auto;font-size:11px;color:var(--faint)}
+.attn-row{display:flex;align-items:center;gap:12px;padding:7px 16px;border-top:1px solid var(--line-3)}
+.attn-row:first-of-type{border-top:none}
+.type-tag{flex:none;width:86px;font-size:12px;font-weight:600;border-radius:4px;padding:3px 8px;text-align:center}
+.t-late{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.t-risk{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.t-load{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.t-ms{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.attn-title{font-size:13.5px;font-weight:600;min-width:0}
+.attn-meta{font-size:12px;color:var(--muted);white-space:nowrap}
+.attn-owner{width:64px;font-size:12px;color:var(--ink-2)}
+.chip{flex:none;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:600}
+.chip.late{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.chip.block{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.chip.prog{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.chip.gray{color:var(--muted);background:var(--surface-2)}
+.attn-action{margin-left:auto;flex:none;font-size:12px;color:var(--c-prog);font-weight:600;white-space:nowrap}
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:10px}
+.kpi{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 16px}
+.kpi .k-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+.kpi .k-val{font-size:22px;font-weight:700;margin-top:2px}
+.kpi .k-note{font-size:11px;color:var(--faint);margin-top:2px}
+.kpi.alert .k-val{color:var(--c-late)}
+/* bottom two columns */
+.bottom{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:8px}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:12px 16px}
+.card h3{font-size:16px;font-weight:650;margin-bottom:6px}
+.card .card-sub{font-size:11px;color:var(--faint);float:right;font-weight:500}
+.proj-row{display:flex;align-items:center;gap:12px;padding:6px 0;border-top:1px solid var(--line-3)}
+.proj-row:first-of-type{border-top:none}
+.lamp{width:10px;height:10px;border-radius:50%;flex:none}
+.lamp.g{background:var(--c-done)} .lamp.y{background:var(--c-block)} .lamp.r{background:var(--c-late)}
+.proj-name{font-size:13.5px;font-weight:600;width:190px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.verdict{font-size:12px;font-weight:600;width:56px}
+.verdict.g{color:var(--c-done)} .verdict.y{color:var(--c-block)} .verdict.r{color:var(--c-late)}
+.proj-score{font-size:18px;font-weight:700;width:44px;text-align:right}
+.proj-extra{font-size:12px;color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-bar{height:6px;border-radius:99px;background:var(--surface-2);width:86px;overflow:hidden;flex:none}
+.mini-bar i{display:block;height:100%;border-radius:99px;background:var(--c-done)}
+.ms-row{padding:6px 0;border-top:1px solid var(--line-3);font-size:13px}
+.ms-row:first-of-type{border-top:none}
+.ms-top{display:flex;align-items:center;gap:8px}
+.ms-name{font-weight:600}
+.ms-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.load-row{display:flex;align-items:center;gap:10px;padding:4px 0;border-top:1px solid var(--line-3);font-size:13px}
+.load-row:first-of-type{border-top:none}
+.avatar{width:26px;height:26px;border-radius:50%;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none}
+.load-name{width:56px}
+.load-bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;display:flex}
+.load-bar i{display:block;height:100%}
+.load-num{width:44px;text-align:right;font-weight:700;font-size:13px}
+</style>
+</head>
+<body>
+<div class="hostrail">
+  <div class="host-brand"><span class="mark">DS</span> DSH 本地构建</div>
+  <div class="host-item">新会话</div>
+  <div class="host-item">插件</div>
+  <div class="host-item">自动化任务</div>
+  <div class="host-item active">项目管理</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="switcher">◫ 全部项目 <span class="sub">· 4 个项目 ▾</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn">⌕ 跨项目搜索</button>
+    <button class="tb-btn primary">＋ 新建项目</button>
+    <button class="tb-btn">✦ AI 建议</button>
+    <div class="tb-icon">⋯</div>
+    <div class="tb-icon">⟳</div>
+  </div>
+  <div class="bodyrow">
+    <nav class="appnav">
+      <div class="nav-item active"><span class="ico">◉</span>指挥台<span class="cnt">5</span></div>
+      <div class="nav-group">计划与排期</div>
+      <div class="nav-item"><span class="ico">☰</span>全部任务<span class="cnt">22</span></div>
+      <div class="nav-item"><span class="ico">▤</span>甘特排期</div>
+      <div class="nav-item"><span class="ico">◆</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item"><span class="ico">⚠</span>风险与问题<span class="cnt">2</span></div>
+      <div class="nav-item"><span class="ico">◔</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item"><span class="ico">✎</span>会议纪要<span class="cnt">3</span></div>
+      <div class="nav-item"><span class="ico">▣</span>进度汇报<span class="cnt">2</span></div>
+      <div class="nav-item"><span class="ico">▤</span>交付物<span class="cnt">0</span></div>
+    </nav>
+    <main class="main">
+      <div class="eyebrow">P2-1 · 指挥驾驶舱 IA｜决策点：总览看板升级为默认落点；9 个平铺标签 → L0 指挥台 +「计划排期 / 协作记录」两组左导航；异常优先排序（逾期 / 高风险 / 过载 / 临期置顶）</div>
+      <div class="page-head">
+        <div class="page-title">指挥台</div>
+        <div class="page-sub">先看哪里需要干预，再进入具体项目</div>
+        <div class="head-right">快照 2026-10-17 09:30 · 数据来自本地台账，口径同源 core/derived.ts</div>
+      </div>
+
+      <section class="attn">
+        <div class="attn-head"><h2>需要关注</h2><span class="n">5 项待处理</span><span class="legend">按严重度排序：逾期 ＞ 高风险 ＞ 过载 ＞ 临期；点击行进入对应记录</span></div>
+        <div class="attn-row">
+          <span class="type-tag t-late">逾期任务</span>
+          <span class="attn-title">「支付对账联调」已逾期 2 天，等待财务侧接口人确认</span>
+          <span class="attn-meta">电商 App 4.0 改版</span>
+          <span class="attn-owner">林晚</span>
+          <span class="chip block">阻塞</span>
+          <span class="attn-action">今日站会对齐 →</span>
+        </div>
+        <div class="attn-row">
+          <span class="type-tag t-risk">高风险</span>
+          <span class="attn-title">第三方登录 SDK 月度配额不足，扩容未报价</span>
+          <span class="attn-meta">客户门户重构</span>
+          <span class="attn-owner">赵启</span>
+          <span class="chip late">未闭环 · 高</span>
+          <span class="attn-action">本周确认报价 →</span>
+        </div>
+        <div class="attn-row">
+          <span class="type-tag t-load">人员过载</span>
+          <span class="attn-title">陈默 open 7 项（阈值 5），排期窗口内无缓冲</span>
+          <span class="attn-meta">数据看板二期</span>
+          <span class="attn-owner">陈默</span>
+          <span class="chip late">过载</span>
+          <span class="attn-action">拆分 2 项委派 →</span>
+        </div>
+        <div class="attn-row">
+          <span class="type-tag t-ms">临期里程碑</span>
+          <span class="attn-title">「灰度发布」目标 10-20，剩 3 天，完成率 62%</span>
+          <span class="attn-meta">电商 App 4.0 改版</span>
+          <span class="attn-owner">林晚</span>
+          <span class="chip block">临期</span>
+          <span class="attn-action">核查未闭环缺陷 →</span>
+        </div>
+        <div class="attn-row">
+          <span class="type-tag t-late">逾期行动项</span>
+          <span class="attn-title">「输出 UAT 验收清单」逾期 1 天，来源 10-15 评审会</span>
+          <span class="attn-meta">客户门户重构</span>
+          <span class="attn-owner">孙一</span>
+          <span class="chip prog">进行中</span>
+          <span class="attn-action">提醒负责人 →</span>
+        </div>
+      </section>
+
+      <section class="kpis">
+        <div class="kpi"><div class="k-label">项目总数</div><div class="k-val">4</div><div class="k-note">4 进行中 · 0 已归档</div></div>
+        <div class="kpi"><div class="k-label">任务完成率</div><div class="k-val">58%</div><div class="k-note">61 / 105 已完成（progress-derivation）</div></div>
+        <div class="kpi alert"><div class="k-label">逾期任务</div><div class="k-val">3</div><div class="k-note">较上周 +1，口径 isTaskOverdue</div></div>
+        <div class="kpi alert"><div class="k-label">未闭环高风险</div><div class="k-val">2</div><div class="k-note">高影响 × 高概率 1 项</div></div>
+        <div class="kpi"><div class="k-label">7 天内临期里程碑</div><div class="k-val">1</div><div class="k-note">灰度发布 · 10-20</div></div>
+      </section>
+
+      <section class="bottom">
+        <div class="card">
+          <h3>项目健康<span class="card-sub">点击项目进入 L1 概览，保留全局过滤</span></h3>
+          <div class="proj-row"><span class="lamp r"></span><span class="proj-name">客户门户重构</span><span class="verdict r">风险</span><span class="proj-score">58</span><span class="proj-extra">高风险 1 · 逾期行动项 1 · 完成率 41%</span><span class="mini-bar"><i style="width:41%"></i></span></div>
+          <div class="proj-row"><span class="lamp y"></span><span class="proj-name">电商 App 4.0 改版</span><span class="verdict y">关注</span><span class="proj-score">71</span><span class="proj-extra">逾期 1 · 高风险 1 · 完成率 58%</span><span class="mini-bar"><i style="width:58%"></i></span></div>
+          <div class="proj-row"><span class="lamp g"></span><span class="proj-name">数据看板二期</span><span class="verdict g">健康</span><span class="proj-score">84</span><span class="proj-extra">过载 1 人 · 完成率 66%</span><span class="mini-bar"><i style="width:66%"></i></span></div>
+          <div class="proj-row"><span class="lamp g"></span><span class="proj-name">内部工具链升级</span><span class="verdict g">健康</span><span class="proj-score">90</span><span class="proj-extra">无逾期 · 完成率 72%</span><span class="mini-bar"><i style="width:72%"></i></span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+          <div class="card">
+            <h3>临期里程碑<span class="card-sub">7 天窗口</span></h3>
+            <div class="ms-row"><div class="ms-top"><span class="ms-name">灰度发布</span><span class="chip block">临期 · 剩 3 天</span></div><div class="ms-meta">电商 App 4.0 · 10-20 · 完成率 62% · 负责人 林晚</div></div>
+            <div class="ms-row"><div class="ms-top"><span class="ms-name">UAT 验收</span><span class="chip gray">计划中 · 剩 7 天</span></div><div class="ms-meta">客户门户重构 · 10-24 · 完成率 41% · 负责人 赵启</div></div>
+          </div>
+          <div class="card" style="flex:1">
+            <h3>成员负载<span class="card-sub">open 任务数 · 阈值 5</span></h3>
+            <div class="load-row"><span class="avatar">陈</span><span class="load-name">陈默</span><span class="load-bar"><i style="width:18%;background:var(--c-late)"></i><i style="width:10%;background:var(--c-block)"></i><i style="width:45%;background:var(--c-prog)"></i><i style="width:27%;background:var(--c-todo)"></i></span><span class="load-num" style="color:var(--c-late)">7</span></div>
+            <div class="load-row"><span class="avatar">林</span><span class="load-name">林晚</span><span class="load-bar"><i style="width:12%;background:var(--c-late)"></i><i style="width:13%;background:var(--c-block)"></i><i style="width:40%;background:var(--c-prog)"></i><i style="width:35%;background:var(--c-todo)"></i></span><span class="load-num">4</span></div>
+            <div class="load-row"><span class="avatar">赵</span><span class="load-name">赵启</span><span class="load-bar"><i style="width:15%;background:var(--c-block)"></i><i style="width:40%;background:var(--c-prog)"></i><i style="width:45%;background:var(--c-todo)"></i></span><span class="load-num">3</span></div>
+            <div class="load-row"><span class="avatar">孙</span><span class="load-name">孙一</span><span class="load-bar"><i style="width:35%;background:var(--c-prog)"></i><i style="width:65%;background:var(--c-todo)"></i></span><span class="load-num">3</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

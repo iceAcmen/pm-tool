@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P1-8 窄窗视图标签下拉折叠</title>
+<style>
+:root{
+  --bg:#f5f6f7; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+.phone{max-width:390px;margin:0 auto;min-height:100vh}
+.appbar{padding:14px 12px 10px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.appbar .ico{width:38px;height:38px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.appbar .t1{font-size:10px;color:var(--faint);font-weight:600}
+.appbar .t2{font-size:15px;font-weight:650}
+.appbar .acts{margin-left:auto;display:flex;gap:8px}
+.abtn{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-2)}
+.band{padding:16px 12px 6px;display:flex;align-items:baseline;gap:8px}
+.band .n{font-size:10px;font-weight:650;letter-spacing:.08em;color:var(--faint)}
+.band h2{font-size:15px;font-weight:700}
+.band .hint{font-size:11px;color:var(--muted);margin-left:auto}
+.screen{padding:12px}
+/* selector (dropdown trigger) */
+.sel-label{font-size:11px;font-weight:600;color:var(--faint);margin:4px 2px 6px}
+.selector{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);font-size:15px;font-weight:650}
+.selector.open{border-color:var(--c-prog);box-shadow:0 0 0 1px var(--c-prog)}
+.selector .sic{font-size:16px}
+.selector .cnt{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:2px 8px;font-weight:600}
+.selector .chev{margin-left:auto;color:var(--muted);font-size:14px}
+/* page content behind */
+.ptitle{font-size:22px;font-weight:750;margin-top:16px}
+.psub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
+.tcard .cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-2);flex:none;margin-top:1px}
+.tcard .tt{flex:1}
+.tcard .t1{font-size:14.5px;font-weight:600}
+.tcard .m2{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:600;padding:2px 9px;border-radius:4px;white-space:nowrap}
+.chip.prog{background:color-mix(in srgb,var(--c-prog) 12%,transparent);color:var(--c-prog)}
+.chip.block{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.chip.todo{background:var(--surface-3);color:var(--muted)}
+.dimmed{opacity:.55;pointer-events:none}
+/* open listbox */
+.listbox{margin-top:8px;background:var(--surface);border:1px solid var(--line-2);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.14);overflow:hidden}
+.opt{display:flex;align-items:center;gap:10px;padding:13px 14px;font-size:14.5px;border-bottom:1px solid var(--line-3)}
+.opt:last-child{border-bottom:none}
+.opt .check{width:18px;color:var(--c-prog);font-weight:700;visibility:hidden}
+.opt.sel{background:color-mix(in srgb,var(--c-prog) 7%,transparent);color:var(--c-prog);font-weight:650}
+.opt.sel .check{visibility:visible}
+.opt .oname{flex:1}
+.opt .bc{font-size:11.5px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:2px 9px}
+.opt.sel .bc{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent)}
+.note{margin:16px 12px 24px;background:color-mix(in srgb,var(--c-prog) 6%,transparent);border:1px solid color-mix(in srgb,var(--c-prog) 25%,transparent);border-radius:12px;padding:13px 14px;font-size:12px;color:var(--ink-2);line-height:1.6}
+.note b{color:var(--ink)}
+.divider{height:10px;background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ======== 闭合态 ======== -->
+  <div class="appbar">
+    <span class="ico">🗂</span>
+    <div><div class="t1">项目工作台</div><div class="t2">客户订单中心 V2 重构 ▾</div></div>
+    <div class="acts"><span class="abtn">＋</span><span class="abtn">···</span><span class="abtn">⟳</span></div>
+  </div>
+  <div class="band"><span class="n">P1-8 · 状态 A</span><h2>闭合态</h2><span class="hint">当前视图名 + ChevronDown</span></div>
+  <div class="screen">
+    <div class="sel-label">视图</div>
+    <div class="selector"><span class="sic">▦</span>全部任务 <span class="cnt">34</span><span class="chev">▾</span></div>
+
+    <div class="ptitle">任务</div>
+    <div class="psub">34 项任务 · 进行中 3 · 已完成 21 · 阻塞 1</div>
+
+    <div class="tcard"><span class="cb"></span><div class="tt"><div class="t1">3.2 订单列表接口联调 <span class="chip block">阻塞</span></div><div class="m2"><span>t-3.2 · 陈昊</span><span>P0</span><span>截止 10-20 · 35%</span></div></div></div>
+    <div class="tcard"><span class="cb"></span><div class="tt"><div class="t1">2.2 确认视觉设计风格 <span class="chip prog">进行中</span></div><div class="m2"><span>t-2.2 · 周航</span><span>P2</span><span>截止 10-22 · 40%</span></div></div></div>
+    <div class="tcard"><span class="cb"></span><div class="tt"><div class="t1">3.3 实现支付状态机 <span class="chip todo">待办</span></div><div class="m2"><span>t-3.3 · 陈昊</span><span>P0</span><span>截止 11-05 · 0%</span></div></div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======== 展开态 ======== -->
+  <div class="appbar">
+    <span class="ico">🗂</span>
+    <div><div class="t1">项目工作台</div><div class="t2">客户订单中心 V2 重构 ▾</div></div>
+    <div class="acts"><span class="abtn">＋</span><span class="abtn">···</span><span class="abtn">⟳</span></div>
+  </div>
+  <div class="band"><span class="n">P1-8 · 状态 B</span><h2>展开态</h2><span class="hint">9 视图 + 计数徽标</span></div>
+  <div class="screen">
+    <div class="sel-label">视图</div>
+    <div class="selector open"><span class="sic">▦</span>全部任务 <span class="cnt">34</span><span class="chev">▴</span></div>
+
+    <div class="listbox" role="listbox" aria-label="切换视图">
+      <div class="opt sel" role="option" aria-selected="true"><span class="check">✓</span><span class="oname">全部任务</span><span class="bc">34</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">里程碑</span><span class="bc">5</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">风险与问题</span><span class="bc">3</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">会议纪要</span><span class="bc">6</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">进度汇报</span><span class="bc">4</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">交付物</span><span class="bc">6</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">项目概览</span><span class="bc">—</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">甘特排期</span><span class="bc">—</span></div>
+      <div class="opt" role="option"><span class="check">✓</span><span class="oname">人员负载</span><span class="bc">—</span></div>
+    </div>
+
+    <div class="dimmed">
+      <div class="ptitle" style="font-size:18px;margin-top:14px">任务</div>
+      <div class="tcard"><span class="cb"></span><div class="tt"><div class="t1">3.2 订单列表接口联调 <span class="chip block">阻塞</span></div><div class="m2"><span>t-3.2 · 陈昊</span><span>P0</span><span>截止 10-20 · 35%</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>规则：</b>≤560（含 390）9 个平铺标签折叠为下拉选择器，释放横向空间；当前视图名 + 计数徽标常驻触发器，展开列全部 9 视图与计数，选中项 ✓ 高亮；≥561 仍保持平铺下划线选中态。计数徽标用 <code>--surface-2</code> 底 + muted 字，选中态不反白成实心。
+  </div>
+</div>
+</body>
+</html>

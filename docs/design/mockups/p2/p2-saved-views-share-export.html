@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-5 保存视图 / 分享 / 导出</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;padding:0}
+.hostrail{width:180px;height:100vh;position:fixed;top:0;left:0;background:#f0f1f3;color:#1c1c1e;padding:16px 12px;border-right:1px solid var(--line)}
+.host-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:4px 8px 14px}
+.host-brand .mark{width:22px;height:22px;border-radius:6px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.host-item{padding:8px 10px;border-radius:8px;font-size:13px;color:#61666b;margin-top:2px}
+.host-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.app{margin-left:180px;min-height:100vh}
+.topbar{height:56px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--surface)}
+.switcher{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-weight:600}
+.switcher .sub{font-weight:400;color:var(--muted);font-size:12px}
+.topbar .spacer{flex:1}
+.tb-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.tb-icon{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.bodyrow{display:flex;min-height:100vh}
+.appnav{width:218px;flex:none;border-right:1px solid var(--line);padding:14px 10px}
+.nav-group{font-size:10px;font-weight:650;letter-spacing:.09em;color:var(--faint);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2)}
+.nav-item .ico{width:18px;text-align:center;color:var(--muted)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:4px;padding:1px 7px}
+.nav-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.main{flex:1;padding:16px 24px 32px;min-width:0}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:center;gap:14px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+/* toolbar */
+.toolbar{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.saved-chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:8px;border:1px solid color-mix(in srgb,var(--c-prog) 30%,transparent);background:color-mix(in srgb,var(--c-prog) 8%,transparent);font-size:13px;font-weight:600;color:var(--c-prog)}
+.saved-chip .edit{font-weight:400;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:600;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
+/* table */
+.table{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.trow{display:grid;grid-template-columns:32px 64px 1fr 80px 70px 96px 96px 80px;gap:10px;align-items:center;padding:11px 16px;border-top:1px solid var(--line-3);font-size:13px}
+.trow.head{font-size:11px;font-weight:650;color:var(--muted);background:var(--surface-2);border-top:none}
+.trow .id{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--faint)}
+.trow .title{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:600;width:fit-content;white-space:nowrap}
+.tag.late{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.tag.block{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.tag.prog{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.tag.todo{color:var(--muted);background:var(--surface-2)}
+.pri{font-size:12px;font-weight:600}
+.pri.p0{color:var(--c-late)} .pri.p1{color:var(--c-block)}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink-2)}
+/* panels section */
+.sec-title{font-size:16px;font-weight:650;margin:28px 0 4px}
+.sec-sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+.panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start}
+.panel{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);box-shadow:0 12px 32px rgba(0,0,0,.10);overflow:hidden}
+.panel-head{padding:14px 16px 10px;display:flex;align-items:center;gap:8px}
+.panel-head h4{font-size:15px;font-weight:650}
+.panel-head .x{margin-left:auto;color:var(--faint)}
+.panel-body{padding:4px 16px 14px}
+.field{margin-top:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.input{height:38px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);padding:0 12px;display:flex;align-items:center;font-size:13.5px}
+.cond-list{display:flex;flex-wrap:wrap;gap:6px}
+.cond{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:4px;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface-2)}
+.cond .rm{color:var(--faint)}
+.radio-row{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13px;color:var(--ink-2)}
+.radio-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line-2);display:flex;align-items:center;justify-content:center;flex:none}
+.radio-dot.on{border-color:var(--c-prog)}
+.radio-dot.on::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--c-prog)}
+.toggle{margin-left:auto;width:36px;height:20px;border-radius:99px;background:var(--c-prog);position:relative;flex:none}
+.toggle::after{content:'';position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.link-box{display:flex;gap:8px;align-items:center}
+.link-box .input{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink-2)}
+.preview{margin-top:12px;border:1px solid var(--line-3);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--ink-2);background:var(--surface-2)}
+.preview b{color:var(--ink)}
+.opt-row{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;margin-top:8px;cursor:default}
+.opt-row .ic{width:32px;height:32px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.opt-row .t{font-size:13.5px;font-weight:600}
+.opt-row .d{font-size:11.5px;color:var(--muted)}
+.opt-row .r{margin-left:auto;color:var(--faint)}
+.panel-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 16px;border-top:1px solid var(--line-3)}
+.btn{height:36px;padding:0 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.note{font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.6}
+</style>
+</head>
+<body class="fullpage">
+<div class="hostrail">
+  <div class="host-brand"><span class="mark">DS</span> DSH 本地构建</div>
+  <div class="host-item">新会话</div>
+  <div class="host-item">插件</div>
+  <div class="host-item">自动化任务</div>
+  <div class="host-item active">项目管理</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="switcher">电商 App 4.0 改版 <span class="sub">· PM-2026-008 ▾</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn">⌕ 搜索任务</button>
+    <button class="tb-btn primary">＋ 新建任务</button>
+    <div class="tb-icon">⋯</div>
+  </div>
+  <div class="bodyrow">
+    <nav class="appnav">
+      <div class="nav-item"><span class="ico">◉</span>指挥台</div>
+      <div class="nav-group">计划与排期</div>
+      <div class="nav-item active"><span class="ico">☰</span>全部任务<span class="cnt">22</span></div>
+      <div class="nav-item"><span class="ico">▤</span>甘特排期</div>
+      <div class="nav-item"><span class="ico">◆</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item"><span class="ico">⚠</span>风险与问题<span class="cnt">2</span></div>
+      <div class="nav-item"><span class="ico">◔</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item"><span class="ico">✎</span>会议纪要</div>
+      <div class="nav-item"><span class="ico">▣</span>进度汇报</div>
+      <div class="nav-item"><span class="ico">▤</span>交付物</div>
+    </nav>
+    <main class="main">
+      <div class="eyebrow">P2-5 · 保存视图 / 分享 / 导出｜决策点：过滤条件 + 粒度 + 密度可持久化为命名视图；快照只读分享；导出 Markdown / CSV / Excel 按当前口径；下方为三个弹层的静态并列形态，实际点击按钮后浮层出现</div>
+      <div class="page-head">
+        <div class="page-title">全部任务</div>
+        <div class="page-sub">执行队列 · 当前视图已保存</div>
+        <div class="head-right">快照 2026-10-17 09:30 · 口径同源 progress-derivation.ts</div>
+      </div>
+
+      <div class="toolbar">
+        <span class="saved-chip">✓ 逾期优先 <span class="edit">· 已保存 · 点击切换 / 编辑</span></span>
+        <button class="tb-btn">⬇ 保存视图</button>
+        <button class="tb-btn">↗ 分享快照</button>
+        <button class="tb-btn">⇓ 导出</button>
+        <span class="chip">状态：逾期 / 临期 ▾</span>
+        <span class="chip">优先级：P0 / P1 ▾</span>
+        <span class="chip">密度：紧凑</span>
+      </div>
+
+      <div class="table">
+        <div class="trow head"><span></span><span>编号</span><span>任务标题</span><span>负责人</span><span>优先级</span><span>状态</span><span>到期</span><span>进度</span></div>
+        <div class="trow"><span>☐</span><span class="id">T-112</span><span class="title">支付对账联调（等待财务侧接口人）</span><span>林晚</span><span class="pri p0">P0</span><span class="tag late">已逾期 · 2 天</span><span class="mono">10-15</span><span class="mono">40%</span></div>
+        <div class="trow"><span>☐</span><span class="id">T-108</span><span class="title">输出 UAT 验收清单（来源 10-15 评审会）</span><span>孙一</span><span class="pri p1">P1</span><span class="tag late">已逾期 · 1 天</span><span class="mono">10-16</span><span class="mono">20%</span></div>
+        <div class="trow"><span>☐</span><span class="id">T-097</span><span class="title">灰度阻断缺陷修复（3 项未闭环）</span><span>林晚</span><span class="pri p1">P1</span><span class="tag block">临期 · 3 天</span><span class="mono">10-20</span><span class="mono">65%</span></div>
+        <div class="trow"><span>☐</span><span class="id">T-090</span><span class="title">登录 SDK 配额扩容报价确认</span><span>赵启</span><span class="pri p0">P0</span><span class="tag block">临期 · 5 天 · 待办</span><span class="mono">10-22</span><span class="mono">0%</span></div>
+        <div class="trow"><span>☐</span><span class="id">T-086</span><span class="title">迁移回滚预案双写脚本评审</span><span>孙一</span><span class="pri p1">P1</span><span class="tag prog">进行中</span><span class="mono">10-24</span><span class="mono">50%</span></div>
+      </div>
+
+      <div class="sec-title">弹层形态（静态并列）</div>
+      <div class="sec-sub">主入口在工具条：保存视图 / 分享快照 / 导出；弹层不改变底层列表状态，关闭后返回原位。</div>
+
+      <div class="panels">
+        <!-- Panel A: save view -->
+        <div class="panel">
+          <div class="panel-head"><h4>保存视图</h4><span class="x">✕</span></div>
+          <div class="panel-body">
+            <div class="field"><label>视图名称</label><div class="input">逾期优先 · 电商 App 4.0</div></div>
+            <div class="field"><label>持久化的过滤条件</label>
+              <div class="cond-list">
+                <span class="cond">状态 = 逾期 / 临期 <span class="rm">✕</span></span>
+                <span class="cond">优先级 = P0 / P1 <span class="rm">✕</span></span>
+                <span class="cond">分组 = 按阶段 <span class="rm">✕</span></span>
+                <span class="cond">排序 = 逾期天数 ↓ <span class="rm">✕</span></span>
+                <span class="cond">密度 = 紧凑 <span class="rm">✕</span></span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="radio-row"><span class="radio-dot on"></span>仅我自己可见</div>
+              <div class="radio-row"><span class="radio-dot"></span>项目成员可用（列出到视图选择器）</div>
+            </div>
+            <div class="field"><div class="radio-row" style="align-items:center">设为该项目默认起始视图<span class="toggle"></span></div></div>
+          </div>
+          <div class="panel-foot"><button class="btn">取消</button><button class="btn primary">保存视图</button></div>
+        </div>
+
+        <!-- Panel B: share snapshot -->
+        <div class="panel">
+          <div class="panel-head"><h4>分享只读快照</h4><span class="x">✕</span></div>
+          <div class="panel-body">
+            <div class="field"><label>分享链接</label>
+              <div class="link-box"><div class="input">https://pm.local/s/vw-8f3k2q</div><button class="btn" style="height:38px">复制</button></div>
+            </div>
+            <div class="field">
+              <div class="radio-row"><span class="radio-dot on"></span>知道链接可查看 · 7 天有效</div>
+              <div class="radio-row"><span class="radio-dot"></span>仅项目成员（需登录）</div>
+            </div>
+            <div class="preview">
+              <b>快照预览：</b>2026-10-17 09:30 生成 · 条件「逾期 / 临期 · P0/P1」· 含 4 条任务 · 只读，不可编辑、不实时同步台账。
+            </div>
+            <div class="note">快照冻结生成时刻的数据；后续台账变化不回写链接内容。</div>
+          </div>
+          <div class="panel-foot"><button class="btn">取消</button><button class="btn primary">复制链接</button></div>
+        </div>
+
+        <!-- Panel C: export -->
+        <div class="panel">
+          <div class="panel-head"><h4>导出当前视图</h4><span class="x">✕</span></div>
+          <div class="panel-body">
+            <div class="opt-row"><span class="ic">MD</span><span><span class="t">Markdown 周报</span><br><span class="d">结论 / 行动项 / 风险，适合贴进汇报</span></span><span class="r">▸</span></div>
+            <div class="opt-row"><span class="ic">CSV</span><span><span class="t">CSV 表格</span><br><span class="d">UTF-8，Excel 可直接打开</span></span><span class="r">▸</span></div>
+            <div class="opt-row"><span class="ic">XLS</span><span><span class="t">Excel .xlsx</span><br><span class="d">含分组层级与进度列</span></span><span class="r">▸</span></div>
+            <div class="note">按当前过滤条件与可见列导出；文件头写入快照时间戳；不含已删除记录与隐藏列。</div>
+          </div>
+          <div class="panel-foot"><button class="btn">取消</button><button class="btn primary">导出</button></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

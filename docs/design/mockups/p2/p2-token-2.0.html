@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-2 Token 2.0 单层语义规范</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:900px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;padding:20px 24px}
+body.fullpage{height:auto;overflow:visible;min-height:900px}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:baseline;gap:14px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+.grid{display:grid;gap:12px;margin-top:14px}
+.g4{grid-template-columns:1.2fr 1.3fr .9fr 1.1fr}
+.g3{grid-template-columns:1.4fr 1fr 1.2fr}
+.g2{grid-template-columns:1.2fr 1fr}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px}
+.card h3{font-size:16px;font-weight:650;margin-bottom:10px}
+.card .card-sub{font-size:11px;color:var(--faint);float:right;font-weight:500}
+/* surface swatches */
+.sw-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12.5px}
+.sw{width:44px;height:26px;border-radius:6px;border:1px solid var(--line);flex:none}
+.sw-name{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink-2);width:118px}
+.sw-val{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--muted)}
+.sw-note{margin-left:auto;font-size:11px;color:var(--faint)}
+/* type scale */
+.type-row{display:flex;align-items:baseline;gap:12px;padding:3px 0}
+.type-sample{flex:1}
+.type-meta{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);width:150px;text-align:right}
+/* lines */
+.line-sample{height:1px;margin:9px 0}
+/* color chips */
+.color-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12.5px}
+.dot{width:14px;height:14px;border-radius:4px;flex:none;border:1px solid var(--line)}
+.chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:600}
+.chip.prog{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.chip.done{color:var(--c-done);background:color-mix(in srgb,var(--c-done) 12%,transparent)}
+.chip.block{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.chip.late{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.chip.todo{color:var(--muted);background:var(--surface-2)}
+/* primary */
+.prim-demo{display:flex;gap:10px;align-items:center;margin:6px 0}
+.btn-primary{height:34px;padding:0 16px;border-radius:8px;background:var(--primary-fill);color:var(--primary-on);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn-primary.dark{background:#f0f2f5;color:#101113}
+.rule{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--line-3)}
+/* shadow */
+.sh-demo{display:flex;gap:14px;margin:6px 0}
+.sh-box{width:72px;height:44px;border-radius:8px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--faint)}
+.sh-box.s1{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.sh-box.s2{box-shadow:0 4px 12px rgba(0,0,0,.10)}
+.sh-box.s3{box-shadow:0 12px 32px rgba(0,0,0,.18)}
+/* motion */
+.motion-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12.5px}
+.m-chip{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--surface-2);border-radius:4px;padding:2px 8px;color:var(--ink-2)}
+/* spacing */
+.sp-row{display:flex;align-items:center;gap:10px;padding:3px 0;font-size:12px}
+.sp-bar{height:10px;background:var(--c-prog);border-radius:2px;opacity:.7}
+.rad-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+.rad-box{width:34px;height:34px;border:1px solid var(--line);background:var(--surface-2)}
+/* mapping table */
+.mig{margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:11px;font-weight:650;color:var(--muted);padding:7px 10px;border-bottom:1px solid var(--line-2);letter-spacing:.04em}
+td{padding:6px 10px;border-bottom:1px solid var(--line-3);color:var(--ink-2)}
+td.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+td.new{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink);font-weight:600}
+.phase{display:inline-flex;padding:1px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.p1{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+.p2{color:var(--c-block);background:color-mix(in srgb,var(--c-block) 12%,transparent)}
+.p3{color:var(--muted);background:var(--surface-2)}
+/* deprecation strip */
+.phases{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+.phase-card{border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.phase-card h4{font-size:13.5px;font-weight:650;margin-bottom:4px}
+.phase-card p{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body class="fullpage">
+<div class="eyebrow">P2-2 · Token 2.0 单层语义规范｜决策点：把现网 --pm-*（panel.css :root）与 dsh-flat（.pm-shell）两层收敛为一套单层语义 token；本页同时给出「旧 → 新」迁移映射与分阶段废弃顺序，不要求一次性切换</div>
+<div class="page-head">
+  <div class="page-title">Token 2.0 · 单层语义规范总览</div>
+  <div class="page-sub">表面 / 文字 / 描边 / 主操作 / 语义色 / 图表序列 / 阴影 / 动效 / 字阶 / 间距</div>
+  <div class="head-right">浅色 fallback 预览 · 深色值同表登记 · 无渐变 / 无玻璃 / 无暖黄</div>
+</div>
+
+<div class="grid g4">
+  <div class="card">
+    <h3>表面 Surface<span class="card-sub">三级 + 悬浮</span></h3>
+    <div class="sw-row"><span class="sw" style="background:#fff"></span><span class="sw-name">--tk-bg</span><span class="sw-val">#ffffff</span><span class="sw-note">画布最底层</span></div>
+    <div class="sw-row"><span class="sw" style="background:#fff"></span><span class="sw-name">--tk-surface</span><span class="sw-val">#ffffff</span><span class="sw-note">卡片 / 弹层 / 输入</span></div>
+    <div class="sw-row"><span class="sw" style="background:#f5f6f7"></span><span class="sw-name">--tk-surface-2</span><span class="sw-val">#f5f6f7</span><span class="sw-note">凹陷 / 字段 / track</span></div>
+    <div class="sw-row"><span class="sw" style="background:#edeef2"></span><span class="sw-name">--tk-surface-3</span><span class="sw-val">#edeef2</span><span class="sw-note">选中 / 按压</span></div>
+    <div class="sw-row"><span class="sw" style="background:rgba(0,0,0,.04)"></span><span class="sw-name">--tk-hover</span><span class="sw-val">rgba(0,0,0,.04)</span><span class="sw-note">行 hover，不叠 surface-3</span></div>
+  </div>
+  <div class="card">
+    <h3>文字 Ink<span class="card-sub">浅色 ≥4.5:1（AA）</span></h3>
+    <div class="type-row"><span class="type-sample" style="font-size:14px;color:var(--ink)">主文字 标题 / 正文 / 数据</span><span class="type-meta">--tk-ink · #1c1c1e</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:14px;color:var(--ink-2)">次文字 正文补充、列值</span><span class="type-meta">--tk-ink-2 · #61666b · 5.80:1</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:13px;color:var(--muted)">弱化文字 12–13px 辅助信息（改值）</span><span class="type-meta">--tk-muted · #696e74 · 5.14:1</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:11px;color:var(--faint)">最弱说明 eyebrow / 统计标签（改值，仅白底）</span><span class="type-meta">--tk-faint · #71767c · 4.58:1</span></div>
+  </div>
+  <div class="card">
+    <h3>描边 Line</h3>
+    <div class="line-sample" style="background:rgba(0,0,0,.10)"></div>
+    <div class="sw-row"><span class="sw-name">--tk-border</span><span class="sw-val">rgba(0,0,0,.10)</span></div>
+    <div class="line-sample" style="background:rgba(0,0,0,.12)"></div>
+    <div class="sw-row"><span class="sw-name">--tk-border-2</span><span class="sw-val">rgba(0,0,0,.12)</span></div>
+    <div class="line-sample" style="background:rgba(0,0,0,.04)"></div>
+    <div class="sw-row"><span class="sw-name">--tk-border-soft</span><span class="sw-val">rgba(0,0,0,.04)</span></div>
+    <div class="rule">边框与阴影不同时上：平卡片只用描边，弹层才加阴影。</div>
+  </div>
+  <div class="card">
+    <h3>主操作 Primary<span class="card-sub">全产品唯一</span></h3>
+    <div class="prim-demo"><span class="btn-primary">＋ 新建任务</span><span class="btn-primary dark">深色态反白</span></div>
+    <div class="sw-row"><span class="sw-name">--tk-button-primary</span><span class="sw-val">浅 #0f1115 / 深 #f0f2f5</span></div>
+    <div class="sw-row"><span class="sw-name">--tk-on-primary</span><span class="sw-val">浅 #fff / 深 #101113（新增）</span></div>
+    <div class="rule">蓝色不再做 CTA；primary 为中性黑白，每视图唯一主按钮。</div>
+  </div>
+</div>
+
+<div class="grid g3" style="margin-top:12px">
+  <div class="card">
+    <h3>语义色<span class="card-sub">色只报状态，文字下结论 · chip 永远带字</span></h3>
+    <div class="color-row"><span class="dot" style="background:#4176e6"></span><span class="chip prog">进行中 / 链接 / 选中</span><span class="sw-val" style="margin-left:auto">--tk-color-prog #4176e6</span></div>
+    <div class="color-row"><span class="dot" style="background:#22c55e"></span><span class="chip done">已完成</span><span class="sw-val" style="margin-left:auto">--tk-color-done #22c55e</span></div>
+    <div class="color-row"><span class="dot" style="background:#f59e0b"></span><span class="chip block">阻塞 / 临期 / P1</span><span class="sw-val" style="margin-left:auto">--tk-color-block #f59e0b</span></div>
+    <div class="color-row"><span class="dot" style="background:#ef4444"></span><span class="chip late">逾期 / 危险 / P0</span><span class="sw-val" style="margin-left:auto">--tk-color-late #ef4444</span></div>
+    <div class="color-row"><span class="dot" style="background:#d4d4d4"></span><span class="chip todo">待办（中性）</span><span class="sw-val" style="margin-left:auto">--tk-color-todo #d4d4d4</span></div>
+  </div>
+  <div class="card">
+    <h3>图表序列<span class="card-sub">序列即状态，不另起分类色</span></h3>
+    <div class="color-row"><span class="dot" style="background:#4176e6"></span><span>S1 进行（=prog）</span><span class="sw-val" style="margin-left:auto">#4176e6</span></div>
+    <div class="color-row"><span class="dot" style="background:#22c55e"></span><span>S2 完成（=done）</span><span class="sw-val" style="margin-left:auto">#22c55e</span></div>
+    <div class="color-row"><span class="dot" style="background:#6b7280"></span><span>S3 中性对比序列</span><span class="sw-val" style="margin-left:auto">#6b7280</span></div>
+    <div class="color-row"><span class="dot" style="background:#8b5cf6"></span><span>S4 预留 · 多项目并列（本期不启用）</span><span class="sw-val" style="margin-left:auto">#8b5cf6</span></div>
+    <div class="rule">图表不依赖 hover 传值；红绿不同时承担唯一区分。</div>
+  </div>
+  <div class="card">
+    <h3>阴影 / 动效</h3>
+    <div class="sh-demo">
+      <div class="sh-box s1">shadow-1<br>卡片默认</div>
+      <div class="sh-box s2">shadow-2<br>悬浮 / 弹层</div>
+      <div class="sh-box s3">shadow-3<br>抽屉 / 模态</div>
+    </div>
+    <div class="motion-row"><span class="m-chip">--tk-ease cubic-bezier(.22,.61,.36,1)</span></div>
+    <div class="motion-row"><span class="m-chip">120ms</span><span class="m-chip">140ms</span><span class="m-chip">160ms</span><span style="font-size:12px;color:var(--muted)">仅 hover / 展开 / 选中，尊重 reduced-motion</span></div>
+  </div>
+</div>
+
+<div class="grid g2" style="margin-top:12px">
+  <div class="card">
+    <h3>字阶 Type Scale<span class="card-sub">相邻角色字号 / 字重可区分，数字一律 tnum</span></h3>
+    <div class="type-row"><span class="type-sample" style="font-size:22px;font-weight:750;letter-spacing:-.02em">页面标题 22 / 750</span><span class="type-meta">--tk-text-display</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:16px;font-weight:650">区块标题 16 / 650</span><span class="type-meta">--tk-text-heading</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:14px">正文 14 / 400 · lh 1.45</span><span class="type-meta">--tk-text-body</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:12px;font-weight:600">标签 / chip 12 / 600</span><span class="type-meta">--tk-text-label</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:11px;font-weight:500;color:var(--muted)">元信息 11 / 500（用 muted，不用 faint）</span><span class="type-meta">--tk-text-meta</span></div>
+    <div class="type-row"><span class="type-sample" style="font-size:18px;font-weight:700">数据 18 / 700 · tnum 右对齐</span><span class="type-meta">--tk-text-data</span></div>
+  </div>
+  <div class="card">
+    <h3>间距 / 圆角<span class="card-sub">4px 基模</span></h3>
+    <div class="sp-row"><span class="sp-bar" style="width:4px"></span><span>4</span><span class="sp-bar" style="width:8px"></span><span>8</span><span class="sp-bar" style="width:12px"></span><span>12</span><span class="sp-bar" style="width:16px"></span><span>16</span><span class="sp-bar" style="width:20px"></span><span>20</span><span class="sp-bar" style="width:24px"></span><span>24</span><span class="sp-bar" style="width:32px"></span><span>32</span></div>
+    <div class="sp-row" style="margin-top:6px;color:var(--muted)">页面 24 · 卡片 16 · 紧凑列表 12 · 窄窗 12</div>
+    <div class="rad-row">
+      <div class="rad-box" style="border-radius:4px"></div><span style="font-size:11px;color:var(--muted)">r-xs 4 chip</span>
+      <div class="rad-box" style="border-radius:8px"></div><span style="font-size:11px;color:var(--muted)">r-sm 8 按钮 / 输入</span>
+      <div class="rad-box" style="border-radius:12px"></div><span style="font-size:11px;color:var(--muted)">r 12 卡片</span>
+      <div class="rad-box" style="border-radius:16px"></div><span style="font-size:11px;color:var(--muted)">r-lg 16 主卡片</span>
+    </div>
+  </div>
+</div>
+
+<div class="card mig">
+  <h3>迁移映射表 · 旧两层 → 新单层<span class="card-sub">旧 token 先保留 alias，随组件迁移逐个摘除</span></h3>
+  <table>
+    <thead><tr><th>现网旧 token（两层）</th><th>Token 2.0 新名</th><th>浅色值</th><th>深色 fallback</th><th>废弃阶段</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">--pm-canvas / --bg</td><td class="new">--tk-bg</td><td class="mono">#ffffff</td><td class="mono">宿主深色底</td><td><span class="phase p2">Phase 2</span></td><td>沿用值，仅改名</td></tr>
+      <tr><td class="mono">--pm-surface / --surface</td><td class="new">--tk-surface</td><td class="mono">#ffffff</td><td class="mono">宿主 layer-1</td><td><span class="phase p2">Phase 2</span></td><td>卡片 / 弹层底</td></tr>
+      <tr><td class="mono">--bg-elev / --field-bg / --surface-2</td><td class="new">--tk-surface-2</td><td class="mono">#f5f6f7</td><td class="mono">rgba(255,255,255,.06)</td><td><span class="phase p2">Phase 2</span></td><td>三处旧名归一</td></tr>
+      <tr><td class="mono">--pm-muted（旧 #81858c）</td><td class="new">--tk-muted</td><td class="mono">#696e74（改值）</td><td class="mono">#9b9ea3</td><td><span class="phase p1">Phase 1</span></td><td>修 AA 对比，立即改 fallback</td></tr>
+      <tr><td class="mono">--faint（旧 #adb2b8）</td><td class="new">--tk-faint</td><td class="mono">#71767c（改值）</td><td class="mono">#8c8f94</td><td><span class="phase p1">Phase 1</span></td><td>仅白底；落 surface-2 改用 muted</td></tr>
+      <tr><td class="mono">--dsw-alias-button-primary-fill</td><td class="new">--tk-button-primary</td><td class="mono">#0f1115</td><td class="mono">#f0f2f5</td><td><span class="phase p1">Phase 1</span></td><td>8 处蓝 CTA 迁入，统一主操作</td></tr>
+      <tr><td class="mono">--on-primary（未定义）</td><td class="new">--tk-on-primary</td><td class="mono">#ffffff</td><td class="mono">#101113</td><td><span class="phase p1">Phase 1</span></td><td>新增别名，修 deliverables / milestones</td></tr>
+      <tr><td class="mono">--c-link（未定义）</td><td class="new">--tk-link</td><td class="mono">prog 同色相加深</td><td class="mono">宿主</td><td><span class="phase p1">Phase 1</span></td><td>新增，链接带下划线偏移 2px</td></tr>
+      <tr><td class="mono">--c-prog / --c-done / --c-block / --c-late / --c-todo</td><td class="new">--tk-color-*</td><td class="mono">沿用现值</td><td class="mono">沿用现值</td><td><span class="phase p2">Phase 2</span></td><td>语义保留，禁止做 CTA 填充</td></tr>
+      <tr><td class="mono">--pm-line / --line / --line-2 / --line-3</td><td class="new">--tk-border / -2 / -soft</td><td class="mono">rgba(0,0,0,.10/.12/.04)</td><td class="mono">宿主 border-l1/l2/l3</td><td><span class="phase p3">Phase 3</span></td><td>旧层删除时统一摘除</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="phases">
+  <div class="phase-card"><h4><span class="phase p1">Phase 1 · 立即止血</span></h4><p>主按钮统一中性 primary；muted / faint 改值达 AA；补 --tk-on-primary / --tk-link 缺失别名。旧层保留 alias，不删。</p></div>
+  <div class="phase-card"><h4><span class="phase p2">Phase 2 · 逐视图迁移</span></h4><p>按视图（tasks → gantt → milestones …）把消费方切到 --tk-*，新旧双跑对照截图，一视图一切换，不做大爆炸重构。</p></div>
+  <div class="phase-card"><h4><span class="phase p3">Phase 3 · 旧层下线</span></h4><p>全部消费方迁移完成后，删除 panel.css :root 的 --pm-* 旧层与 dsh-flat 别名，只留单层语义 token。</p></div>
+</div>
+</body>
+</html>

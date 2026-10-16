@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2-6 AI 溯源与治理</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --primary-fill:#0f1115; --primary-on:#fff;
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --primary-fill:#f0f2f5; --primary-on:#101113;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:900px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.hostrail{width:180px;height:100%;float:left;background:#f0f1f3;color:#1c1c1e;padding:16px 12px;border-right:1px solid var(--line)}
+body[data-ds-dark-theme] .hostrail{background:#0b0c0e;color:#e8eaed;border-right-color:rgba(255,255,255,.08)}
+.host-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:4px 8px 14px}
+.host-brand .mark{width:22px;height:22px;border-radius:6px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+body[data-ds-dark-theme] .host-brand .mark{background:#e8eaed;color:#101113}
+.host-item{padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink-2);margin-top:2px}
+.host-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.app{margin-left:180px;height:100%;display:flex;flex-direction:column}
+.topbar{height:56px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px}
+.switcher{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px;font-weight:600}
+.switcher .sub{font-weight:400;color:var(--muted);font-size:12px}
+.topbar .spacer{flex:1}
+.tb-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb-btn.primary{background:var(--primary-fill);color:var(--primary-on);border-color:transparent}
+.tb-icon{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.bodyrow{flex:1;display:flex;min-height:0}
+.appnav{width:218px;flex:none;border-right:1px solid var(--line);padding:14px 10px;overflow:hidden}
+.nav-group{font-size:10px;font-weight:650;letter-spacing:.09em;color:var(--faint);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2)}
+.nav-item .ico{width:18px;text-align:center;color:var(--muted)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:4px;padding:1px 7px}
+.nav-item.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.main{flex:1;padding:14px 24px 10px;overflow:hidden}
+.eyebrow{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.page-head{display:flex;align-items:center;gap:14px}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted)}
+.head-right{margin-left:auto;font-size:11px;color:var(--faint)}
+/* three provenance states */
+.states{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+.state{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.state.ai{border-left:3px dashed var(--c-prog)}
+.state .badge{flex:none;width:38px;height:38px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:17px}
+.state h4{font-size:13.5px;font-weight:650}
+.state p{font-size:12px;color:var(--muted);margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:4px;font-size:11.5px;font-weight:600;margin-top:6px}
+.pill.ai{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.pill.human{color:var(--muted);background:var(--surface-2)}
+.pill.verified{color:var(--c-done);background:color-mix(in srgb,var(--c-done) 12%,transparent)}
+/* middle row */
+.mid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;margin-top:12px;height:396px}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.card h3{font-size:16px;font-weight:650}
+.card .card-sub{font-size:11px;color:var(--faint);font-weight:500}
+/* timeline */
+.tl{margin-top:10px;flex:1;position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:1px;background:var(--line-2)}
+.tl-node{position:relative;padding:0 0 18px 8px}
+.tl-node:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-22px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--surface);border:2px solid var(--c-prog)}
+.tl-node.done .tl-dot{border-color:var(--c-done);background:var(--c-done)}
+.tl-node.undo .tl-dot{border-color:var(--c-late)}
+.tl-time{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--faint)}
+.tl-title{font-size:13.5px;font-weight:650;margin-top:1px}
+.tl-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.tl-chip{display:inline-flex;margin-top:5px;height:22px;padding:0 8px;border-radius:4px;font-size:11.5px;font-weight:600;align-items:center}
+.tl-chip.ai{color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 10%,transparent)}
+.tl-chip.ok{color:var(--c-done);background:color-mix(in srgb,var(--c-done) 12%,transparent)}
+.tl-chip.undo{color:var(--c-late);background:color-mix(in srgb,var(--c-late) 10%,transparent)}
+/* provenance panel */
+.prov-row{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line-3);font-size:12.5px;color:var(--ink-2)}
+.prov-row:first-of-type{border-top:none}
+.prov-row .k{width:88px;flex:none;color:var(--muted)}
+.prov-row .v{flex:1}
+.prov-row .v b{color:var(--ink)}
+.ref{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--surface-2);border-radius:8px;margin-top:6px;font-size:12.5px}
+.ref .rid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint)}
+.ref .rt{color:var(--ink-2)}
+.ref .go{margin-left:auto;color:var(--c-prog);font-weight:600;font-size:12px}
+/* governance bottom */
+.gov{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;margin-top:12px;height:212px}
+.gov-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line-3);font-size:12.5px}
+.gov-row:first-of-type{border-top:none}
+.gov-row .gid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);flex:none;width:58px}
+.gov-row .gt{flex:1;color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--faint)}
+.gov-row .why{font-size:11.5px;color:var(--muted);flex:none;width:220px}
+.gov-row .act{flex:none;font-size:12px;font-weight:600;color:var(--c-prog)}
+.reject-row{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line-3);font-size:12.5px;color:var(--ink-2)}
+.reject-row:first-of-type{border-top:none}
+.reject-row .rid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);flex:none;width:58px}
+.reject-row .rwhy{flex:1}
+.reject-row .rby{flex:none;font-size:11.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="hostrail">
+  <div class="host-brand"><span class="mark">DS</span> DSH 本地构建</div>
+  <div class="host-item">新会话</div>
+  <div class="host-item">插件</div>
+  <div class="host-item">自动化任务</div>
+  <div class="host-item active">项目管理</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="switcher">客户门户重构 <span class="sub">· PM-2026-014 ▾</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn">⌕ 搜索</button>
+    <button class="tb-btn primary">＋ 新建任务</button>
+    <div class="tb-icon">⋯</div>
+    <div class="tb-icon">⟳</div>
+  </div>
+  <div class="bodyrow">
+    <nav class="appnav">
+      <div class="nav-item"><span class="ico">◉</span>指挥台</div>
+      <div class="nav-group">计划与排期</div>
+      <div class="nav-item active"><span class="ico">☰</span>全部任务<span class="cnt">18</span></div>
+      <div class="nav-item"><span class="ico">▤</span>甘特排期</div>
+      <div class="nav-item"><span class="ico">◆</span>里程碑<span class="cnt">2</span></div>
+      <div class="nav-item"><span class="ico">⚠</span>风险与问题<span class="cnt">6</span></div>
+      <div class="nav-item"><span class="ico">◔</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item"><span class="ico">✎</span>会议纪要</div>
+      <div class="nav-item"><span class="ico">▣</span>进度汇报</div>
+      <div class="nav-item"><span class="ico">▤</span>交付物</div>
+    </nav>
+    <main class="main">
+      <div class="eyebrow">P2-6 · AI 溯源与治理｜决策点：AI 内容三态可区分（AI 待确认 / 人工 / 已验证）；草稿→确认→撤销全链路留痕；失效行置灰注明原因；拒绝列表保留审计、不入库；每条 AI 产出可回溯依据记录</div>
+      <div class="page-head">
+        <div class="page-title">AI 内容溯源与治理</div>
+        <div class="page-sub">写操作一律草稿 → 显式确认 → 可撤销，未确认不落库</div>
+        <div class="head-right">会话审计保留 90 天 · 快照可恢复</div>
+      </div>
+
+      <div class="states">
+        <div class="state ai">
+          <div class="badge">✦</div>
+          <div><h4>AI 生成 · 待确认</h4><p>虚线左边框区分人工内容；可编辑，确认前不写入台账</p><span class="pill ai">✦ AI 生成 · 待确认</span></div>
+        </div>
+        <div class="state">
+          <div class="badge">✎</div>
+          <div><h4>人工编写</h4><p>用户直接录入的内容，无 AI 标记，正常入库</p><span class="pill human">人工 · 无标记</span></div>
+        </div>
+        <div class="state">
+          <div class="badge">✓</div>
+          <div><h4>已验证（人工复核）</h4><p>人工确认 / 复核后落库，带验证标记，不再显示「待确认」</p><span class="pill verified">✓ 已验证 · 赵启 10:08</span></div>
+        </div>
+      </div>
+
+      <div class="mid">
+        <div class="card">
+          <h3>全链路时间线 · 里程碑描述「灰度发布」<span class="card-sub">草稿 → 确认 → 撤销，每步留快照</span></h3>
+          <div class="tl">
+            <div class="tl-node">
+              <span class="tl-dot"></span>
+              <div class="tl-time">10:02 · 会话 ai-session-7f2c</div>
+              <div class="tl-title">AI 生成草稿（依据 2 条任务 + 1 场会议）</div>
+              <div class="tl-meta">内容：「10-20 灰度发布，覆盖登录与迁移两条链路，回滚预案已就绪」· 可编辑</div>
+              <span class="tl-chip ai">✦ AI 生成 · 待确认 · 未入库</span>
+            </div>
+            <div class="tl-node done">
+              <span class="tl-dot"></span>
+              <div class="tl-time">10:08 · 确认人 赵启</div>
+              <div class="tl-title">人工确认，写入里程碑 M-03 描述</div>
+              <div class="tl-meta">保存前自动快照 snapshot-0417；确认后状态转为「已验证」</div>
+              <span class="tl-chip ok">✓ 已验证 · 已入库</span>
+            </div>
+            <div class="tl-node undo">
+              <span class="tl-dot"></span>
+              <div class="tl-time">10:15 · 操作人 孙一</div>
+              <div class="tl-title">撤销：恢复到确认前快照 snapshot-0416</div>
+              <div class="tl-meta">原因：与 10-15 评审会结论不一致；台账恢复原样，操作留痕不删除</div>
+              <span class="tl-chip undo">↩ 已撤销 · 快照已恢复</span>
+            </div>
+          </div>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--line-3);font-size:12px;color:var(--muted);line-height:1.6">
+            规则：确认前可任意编辑、不入库；撤销后草稿保留 7 天可再次恢复；本审计日志只读、不可删除。
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>来源回溯面板<span class="card-sub">查看这条 AI 内容依据了什么</span></h3>
+          <div style="flex:1;margin-top:8px">
+            <div class="prov-row"><span class="k">对象</span><span class="v">里程碑 <b>M-03「灰度发布」</b>描述草稿</span></div>
+            <div class="prov-row"><span class="k">生成时间</span><span class="v">2026-10-17 10:02 · 会话 <b>ai-session-7f2c</b></span></div>
+            <div class="prov-row"><span class="k">确认人</span><span class="v">赵启 10:08 确认（10:15 由孙一撤销）</span></div>
+            <div class="prov-row"><span class="k">依据记录</span><span class="v">AI 仅引用以下本地记录，不编造外部事实：</span></div>
+            <div class="ref"><span class="rid">T-090</span><span class="rt">登录 SDK 配额扩容报价确认</span><span class="go">查看原文 →</span></div>
+            <div class="ref"><span class="rid">T-097</span><span class="rt">灰度阻断缺陷修复（3 项未闭环）</span><span class="go">查看原文 →</span></div>
+            <div class="ref"><span class="rid">M-22</span><span class="rt">10-15 评审会纪要 · 行动项 2 条</span><span class="go">查看原文 →</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gov">
+        <div class="card">
+          <h3>失效行治理 · 置灰但保留<span class="card-sub">依据失效的 AI 建议不删除，注明原因</span></h3>
+          <div class="gov-row"><span class="gid">AI-31</span><span class="gt">自动调整里程碑 M-03 日期至 10-22</span><span class="why">原因：前置任务 T-071 已删除，建议依据失效</span><span class="act">删除 / 保留备查</span></div>
+          <div class="gov-row"><span class="gid">AI-34</span><span class="gt">生成本周周报初稿</span><span class="why">原因：来源项目「旧版试点」已归档，无数据可引</span><span class="act">删除 / 保留备查</span></div>
+          <div class="gov-row"><span class="gid">AI-36</span><span class="gt">把 T-108 进度更新为 100%</span><span class="why">原因：字段与负责人确认结果冲突，未执行</span><span class="act">删除 / 保留备查</span></div>
+        </div>
+        <div class="card">
+          <h3>拒绝列表 · 审计保留<span class="card-sub">被拒绝的建议不入库，可复查</span></h3>
+          <div class="reject-row"><span class="rid">RJ-07</span><span class="rwhy">「把 T-108 标记为完成」——验收清单未实际产出</span><span class="rby">赵启 · 10:05 拒绝</span></div>
+          <div class="reject-row"><span class="rid">RJ-08</span><span class="rwhy">「合并 R-012 与 R-014」——两风险应对人不同，不宜合并</span><span class="rby">孙一 · 10:11 拒绝</span></div>
+          <div class="reject-row"><span class="rid">RJ-09</span><span class="rwhy">「删除临期里程碑提醒」——与团队规则冲突</span><span class="rby">赵启 · 10:14 拒绝</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

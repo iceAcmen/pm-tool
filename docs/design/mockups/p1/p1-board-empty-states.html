@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P1-1 看板空卡紧凑重设计</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff; --hover:rgba(0,0,0,.04);
+}
+body[data-ds-dark-theme]{
+  --bg:#101113; --surface:#16181c; --surface-2:rgba(255,255,255,.06); --surface-3:#262a30;
+  --ink:#e8eaed; --ink-2:#b3b8c0; --muted:#9b9ea3; --faint:#8c8f94;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.12); --line-3:rgba(255,255,255,.04);
+  --c-prog:#4868b2; --c-done:#4ed17e; --c-block:#dd8629; --c-late:#f25a5a; --c-todo:#7f8287;
+  --btn-bg:#f0f2f5; --btn-ink:#16181c; --hover:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+body{display:flex;min-height:100vh}
+/* ---------- host rail ---------- */
+.rail{width:208px;flex:none;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.rail-logo{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;font-weight:700;font-size:15px}
+.rail-logo .whale{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rail-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-size:13.5px;border:1px solid transparent}
+.rail-btn.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.rail-sec{margin-top:14px;padding:4px 10px 6px;font-size:11px;color:var(--faint);letter-spacing:.04em;display:flex;justify-content:space-between}
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--line)}
+.proj{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.proj .ico{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.proj .t1{font-size:10px;color:var(--faint);font-weight:600}
+.proj .t2{font-size:13.5px;font-weight:650}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.tbtn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tbtn.primary{background:var(--btn-bg);color:var(--btn-ink);border-color:transparent;font-weight:600}
+.content{padding:24px;max-width:1180px;width:100%}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+/* search + strip */
+.search{margin-top:18px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--muted);font-size:13.5px;max-width:560px}
+.strip{margin-top:14px;display:flex;gap:28px;font-size:13px;color:var(--ink-2)}
+.strip b{color:var(--ink);font-weight:700;margin-right:4px}
+.strip .num{font-size:16px;font-weight:700;color:var(--ink)}
+/* ---------- bento ---------- */
+.grid{margin-top:18px;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;align-items:start}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px;align-items:start}
+.eyebrow{font-size:10px;font-weight:650;color:var(--faint);letter-spacing:.06em}
+.card h3{font-size:16px;font-weight:650;margin-top:4px}
+.span4{grid-column:span 4}.span5{grid-column:span 5}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
+/* ring */
+.ring-wrap{display:flex;gap:20px;align-items:center;margin-top:12px}
+.ring{width:104px;height:104px;position:relative;flex:none;display:flex;align-items:center;justify-content:center}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring .hole{width:76px;height:76px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.ring .pct{font-size:22px;font-weight:700}
+.ring .sub{font-size:11px;color:var(--muted)}
+.legend{flex:1;display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.legend .row{display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:2px;flex:none}
+.legend .bar{flex:1;height:6px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.legend .bar i{display:block;height:100%;border-radius:99px}
+.legend .v{margin-left:auto;font-weight:600;color:var(--ink);min-width:18px;text-align:right}
+/* progress rows */
+.prow{margin-top:14px}
+.prow .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.prow .track{height:8px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.prow .track i{display:block;height:100%;border-radius:99px}
+/* project chips */
+.pchip{display:flex;align-items:center;gap:10px;border:1px solid var(--line-3);border-radius:8px;padding:10px 12px;margin-top:10px}
+.pchip .nm{font-weight:600;font-size:13.5px}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px}
+.tag.prog{background:color-mix(in srgb,var(--c-prog) 12%,transparent);color:var(--c-prog)}
+.tag.done{background:color-mix(in srgb,var(--c-done) 12%,transparent);color:var(--c-done)}
+.meta{font-size:11.5px;color:var(--muted)}
+/* people load */
+.pload{display:flex;align-items:center;gap:12px;margin-top:10px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+.pload .nm{width:44px;font-size:13px;color:var(--ink-2)}
+.pload .track{flex:1;height:8px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.pload .track i{height:100%;display:block;border-radius:99px}
+.pload .v{width:20px;text-align:right;font-weight:700}
+/* ---- annotation badge on card ---- */
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:650;color:var(--c-prog);border:1px solid color-mix(in srgb,var(--c-prog) 35%,transparent);border-radius:4px;padding:2px 8px;margin-left:8px;vertical-align:2px}
+/* ---- mode 1 compact empty ---- */
+.empty-compact{display:flex;align-items:center;gap:12px;padding:14px 12px;margin-top:12px;border:1px dashed var(--line-2);border-radius:10px}
+.empty-compact .eico{width:34px;height:34px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);flex:none}
+.empty-compact .et{font-size:13.5px;font-weight:600}
+.empty-compact .es{font-size:12px;color:var(--muted);margin-top:2px}
+.empty-compact .cta{margin-left:auto;flex:none;padding:7px 14px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:12.5px;font-weight:600;white-space:nowrap}
+/* ---- mode 2 collapsed one-liner ---- */
+.collapse-row{margin-top:12px;display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13px}
+.collapse-row .chev{color:var(--muted)}
+.collapse-row .add{margin-left:auto;color:var(--c-prog);font-weight:600;font-size:12.5px;white-space:nowrap}
+/* section divider */
+.sec-label{margin:32px 0 12px;display:flex;align-items:baseline;gap:12px}
+.sec-label .no{font-size:10px;font-weight:650;letter-spacing:.08em;color:var(--faint)}
+.sec-label h2{font-size:16px;font-weight:650}
+.sec-label .hint{font-size:12px;color:var(--muted)}
+/* before comparison */
+.before{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface)}
+.before-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.old-card{border:1px solid var(--line-3);border-radius:10px;padding:14px;min-height:150px;position:relative;background:var(--surface)}
+.old-card .phantom{height:96px;border:1px dashed var(--line-2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:12px}
+.old-card.zero{min-height:190px}
+.old-card.zero .phantom{height:150px}
+.issue-note{position:absolute;right:10px;bottom:10px;font-size:11px;color:var(--c-late);font-weight:600}
+.matrix{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.matrix div{height:34px;border-radius:6px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--faint)}
+.weekrow{display:flex;gap:6px;margin-top:14px;justify-content:space-between;font-size:11px;color:var(--faint)}
+.weekrow span{flex:1;text-align:center}
+.legend-strip{display:flex;gap:18px;margin-top:12px;font-size:11.5px;color:var(--muted)}
+/* 模式③ 补位示意 */
+.reclaim{display:grid;grid-template-columns:1fr 40px 1fr;gap:12px;align-items:center}
+.reclaim-arrow{text-align:center;font-size:22px;color:var(--muted)}
+.rc-cap{font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:8px}
+.mini-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
+.m{border-radius:8px;padding:10px 12px;font-size:12px;color:var(--ink-2);min-height:44px;display:flex;align-items:center}
+.m.filled{background:var(--surface-2);border:1px solid var(--line)}
+.m.void{border:1px dashed var(--line-2);color:var(--faint)}
+.m.stretch{border-color:color-mix(in srgb,var(--c-prog) 40%,transparent);color:var(--c-prog);font-weight:600}
+.m.compact{min-height:34px;border:1px dashed var(--line-2);color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="rail-logo"><span class="whale">🐳</span> DSH 本地构建</div>
+  <div class="rail-btn">💬 新会话</div>
+  <div class="rail-btn">✦ 插件</div>
+  <div class="rail-btn">◷ 自动化任务</div>
+  <div class="rail-btn active">▤ 项目管理</div>
+  <div class="rail-sec"><span>工作区</span><span>⌕ ⇪</span></div>
+  <div class="rail-btn">📁 默认工作区</div>
+  <div class="rail-btn">📂 新会话</div>
+  <div class="rail-btn">📁 未分组</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="proj"><span class="ico">🗂</span><span><span class="t1">项目工作台</span><br><span class="t2">客户订单中心 V2 重构 ▾</span></span></div>
+    <div class="top-actions">
+      <button class="tbtn">▦ 总览看板</button>
+      <button class="tbtn">＋ 新建项目</button>
+      <button class="tbtn">✧ AI 助手</button>
+      <button class="tbtn">💬 AI 副驾</button>
+      <button class="tbtn">··· 更多</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="page-title">总览看板</div>
+    <div class="page-sub">P1-1（S3-6）：空 widget 紧凑重设计 —— 紧凑空态 / 可折叠一行 / 栅格补位三种模式，消除「风险矩阵 · 未来按周计划」左下空场；数据来自最新快照。</div>
+
+    <div class="search">⌕ 跨项目搜索：任务 / 里程碑 / 风险 / 会议 / 汇报 / 交付物</div>
+    <div class="strip">
+      <span>项目总数 <span class="num">4</span>（进行中 <b>2</b>）</span>
+      <span>任务完成率 <span class="num">62%</span></span>
+      <span>未关闭风险 <span class="num">3</span></span>
+    </div>
+
+    <!-- ============ 改造后 bento ============ -->
+    <div class="grid">
+      <div class="card span4">
+        <div class="eyebrow">OBJECTIVE</div><h3>任务完成率</h3>
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="44" fill="none" stroke="var(--surface-3)" stroke-width="9"/><circle cx="52" cy="52" r="44" fill="none" stroke="var(--c-done)" stroke-width="9" stroke-linecap="round" stroke-dasharray="171.5 276.5"/></svg>
+            <div class="hole"><div class="pct">62%</div><div class="sub">21 / 34</div></div>
+          </div>
+          <div class="legend">
+            <div class="row"><span class="dot" style="background:var(--c-prog)"></span>进行<div class="bar"><i style="width:9%;background:var(--c-prog)"></i></div><span class="v">3</span></div>
+            <div class="row"><span class="dot" style="background:var(--c-done)"></span>完成<div class="bar"><i style="width:62%;background:var(--c-done)"></i></div><span class="v">21</span></div>
+            <div class="row"><span class="dot" style="background:var(--c-todo)"></span>待办<div class="bar"><i style="width:26%;background:var(--c-todo)"></i></div><span class="v">9</span></div>
+            <div class="row"><span class="dot" style="background:var(--c-block)"></span>阻塞<div class="bar"><i style="width:3%;background:var(--c-block)"></i></div><span class="v">1</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span8">
+        <div class="eyebrow">DELIVERY</div><h3>里程碑 · 交付物</h3>
+        <div class="prow"><div class="lab"><span>里程碑</span><span>3 / 5 达成</span></div><div class="track"><i style="width:60%;background:var(--c-done)"></i></div></div>
+        <div class="prow"><div class="lab"><span>交付物</span><span>4 / 6 验收</span></div><div class="track"><i style="width:66%;background:var(--c-prog)"></i></div></div>
+      </div>
+
+      <div class="card span5">
+        <div class="eyebrow">PORTFOLIO</div><h3>项目状态 · 规模 <span class="meta" style="float:right;font-weight:400">4 个项目</span></h3>
+        <div class="pchip"><span class="nm">客户订单中心 V2 重构</span><span class="tag prog">进行中</span><span class="meta" style="margin-left:auto">任务 18 · 里程碑 5 · 风险 2</span></div>
+        <div class="pchip"><span class="nm">商户结算对账改造</span><span class="tag prog">进行中</span><span class="meta" style="margin-left:auto">任务 11 · 里程碑 3 · 风险 1</span></div>
+        <div class="pchip"><span class="nm">客服工单系统 2.0</span><span class="tag done">已完成</span><span class="meta" style="margin-left:auto">任务 24 · 里程碑 6 · 风险 0</span></div>
+      </div>
+
+      <div class="card span7">
+        <div class="eyebrow">LOAD</div><h3>成员负载 <span class="meta" style="float:right;font-weight:400">同阈值 MAX 5</span></h3>
+        <div class="pload"><span class="avatar">李</span><span class="nm">李薇</span><div class="track"><i style="width:80%;background:var(--c-prog)"></i></div><span class="v">4</span></div>
+        <div class="pload"><span class="avatar">陈</span><span class="nm">陈昊</span><div class="track"><i style="width:100%;background:var(--c-block)"></i></div><span class="v">5</span></div>
+        <div class="pload"><span class="avatar">赵</span><span class="nm">赵倩</span><div class="track"><i style="width:40%;background:var(--c-prog)"></i></div><span class="v">2</span></div>
+        <div class="legend-strip"><span><span class="dot" style="background:var(--c-done)"></span> 完成</span><span><span class="dot" style="background:var(--c-prog)"></span> 进行</span><span><span class="dot" style="background:var(--c-block)"></span> 阻塞</span><span><span class="dot" style="background:var(--c-todo)"></span> 待办</span></div>
+      </div>
+
+      <!-- 模式① 紧凑空态：风险矩阵 -->
+      <div class="card span4">
+        <div class="eyebrow">RISK MATRIX <span class="mode">模式① 紧凑空态</span></div><h3>风险矩阵</h3>
+        <div class="empty-compact">
+          <span class="eico">🛡</span>
+          <div><div class="et">暂无登记的风险与问题</div><div class="es">本项目尚无开放风险，登记后按影响 × 概率落位</div></div>
+          <button class="cta">登记风险</button>
+        </div>
+      </div>
+
+      <!-- 模式② 可折叠一行：未来按周计划 -->
+      <div class="card span8">
+        <div class="eyebrow">WEEKLY PLAN <span class="mode">模式② 可折叠一行</span></div><h3>未来按周计划</h3>
+        <div class="collapse-row">
+          <span class="chev">▸</span> 暂无未来按周计划，待排期后按周聚合展示
+          <span class="add">＋ 添加周计划</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 改造前对照 + 模式③ 补位 ============ -->
+    <div class="sec-label"><span class="no">BEFORE / MODE ③</span><h2>改造前：空卡按占位尺寸拉伸留下空场；模式③ 栅格补位：邻卡延展消弭空场</h2><span class="hint">左侧为旧版局部（仅作问题对照），右侧为补位后栅格示意</span></div>
+    <div class="before">
+      <div class="before-grid">
+        <div class="old-card">
+          <div class="eyebrow">RISK MATRIX（旧 · 占位）</div><div class="matrix">
+            <div>低</div><div>中</div><div>高</div><div>高</div><div></div><div></div><div>低</div><div></div><div></div>
+          </div>
+          <div class="phantom" style="margin-top:10px">3×3 空格子 + 大片空白，无说明无入口</div>
+          <span class="issue-note">✕ 空荡占位，不回答任何决策</span>
+        </div>
+        <div class="old-card zero">
+          <div class="eyebrow">WEEKLY PLAN（旧 · 占位）</div>
+          <div class="weekrow"><span>W1<br>0</span><span>W2<br>0</span><span>W3<br>0</span><span>W4<br>0</span><span>W5<br>0</span><span>W6<br>0</span><span>W7<br>0</span></div>
+          <div class="phantom" style="margin-top:10px">七周全零，卡片仍被栅格拉到等高</div>
+          <span class="issue-note">✕ 零值伪装成 0 项，撑高空场</span>
+        </div>
+      </div>
+
+      <!-- 模式③ 栅格补位示意 -->
+      <div style="margin-top:20px">
+        <div class="eyebrow" style="margin-bottom:10px">MODE ③ · GRID RECLAIM（示意）<span class="mode">模式③ 栅格补位</span></div>
+        <div class="reclaim">
+          <div class="reclaim-col">
+            <div class="rc-cap">改造前：空 widget 占格，右侧留缝</div>
+            <div class="mini-grid">
+              <div class="m filled" style="grid-column:span4">完成率环 · 62%</div>
+              <div class="m filled" style="grid-column:span5">项目状态 · 规模</div>
+              <div class="m void" style="grid-column:span3">空 3 格</div>
+              <div class="m filled" style="grid-column:span7">成员负载</div>
+              <div class="m void" style="grid-column:span5">风险矩阵空卡占位</div>
+            </div>
+          </div>
+          <div class="reclaim-arrow">→</div>
+          <div class="reclaim-col">
+            <div class="rc-cap">补位后：空卡紧凑化，邻卡延展填满</div>
+            <div class="mini-grid">
+              <div class="m filled" style="grid-column:span4">完成率环 · 62%</div>
+              <div class="m filled stretch" style="grid-column:span8">项目状态 · 规模（延展 4→8 格）</div>
+              <div class="m filled stretch" style="grid-column:span12">成员负载（延展满行）</div>
+              <div class="m compact" style="grid-column:span12">风险矩阵 · 紧凑空态一行（同模式①）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

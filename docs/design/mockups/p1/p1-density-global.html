@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P1-6 密度模式全局化</title>
+<style>
+:root{
+  --bg:#fff; --surface:#fff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.12); --line-3:rgba(0,0,0,.04);
+  --c-prog:#4176e6; --c-done:#22c55e; --c-block:#f59e0b; --c-late:#ef4444; --c-todo:#d4d4d4;
+  --btn-bg:#0f1115; --btn-ink:#fff; --hover:rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums;}
+body{display:flex;min-height:100vh}
+.rail{width:208px;flex:none;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.rail-logo{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;font-weight:700;font-size:15px}
+.rail-logo .whale{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rail-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-size:13.5px}
+.rail-btn.active{background:var(--surface-3);color:var(--ink);font-weight:600}
+.rail-sec{margin-top:14px;padding:4px 10px 6px;font-size:11px;color:var(--faint)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--line)}
+.proj{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--line);border-radius:8px}
+.proj .ico{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.proj .t1{font-size:10px;color:var(--faint);font-weight:600}
+.proj .t2{font-size:13.5px;font-weight:650}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.tbtn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px;white-space:nowrap}
+.tabs{display:flex;gap:22px;padding:0 24px;height:44px;align-items:center;border-bottom:1px solid var(--line)}
+.tab{font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;height:100%;border-bottom:2px solid transparent}
+.tab.active{color:var(--ink);font-weight:650;border-bottom-color:var(--ink)}
+.badge{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:99px;padding:1px 7px}
+.content{padding:24px;max-width:1180px;width:100%}
+.page-title{font-size:22px;font-weight:750;letter-spacing:-.02em}
+.page-sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+/* toolbar */
+.toolbar{margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search{height:38px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);display:flex;align-items:center;gap:8px;padding:0 14px;color:var(--muted);font-size:13px;width:240px}
+.fchip{font-size:13px;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.fchip.on{background:var(--surface-3);color:var(--ink);font-weight:600;border-color:transparent}
+.spacer{flex:1}
+/* global density control */
+.glob-density{display:flex;align-items:center;gap:10px;border:1px solid color-mix(in srgb,var(--c-prog) 30%,transparent);border-radius:10px;padding:6px 10px;background:color-mix(in srgb,var(--c-prog) 5%,transparent)}
+.glob-density .glabel{font-size:12.5px;font-weight:650;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.seg{display:flex;background:var(--surface-2);border-radius:8px;padding:3px}
+.seg button{border:none;background:transparent;padding:6px 14px;border-radius:6px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.seg button.on{background:var(--surface-3);color:var(--ink);font-weight:600}
+.gchip{font-size:11px;font-weight:600;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:2px 8px}
+.primary{padding:8px 16px;border-radius:8px;background:var(--btn-bg);color:var(--btn-ink);font-size:13.5px;font-weight:600;border:none;white-space:nowrap}
+/* compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.cmp-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.cmp-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:10px}
+.cmp-head h3{font-size:16px;font-weight:650}
+.cmp-head .spec{font-size:12px;color:var(--muted)}
+.cmp-head .on{margin-left:auto;font-size:11px;font-weight:650;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:2px 8px}
+/* table */
+.thead{display:grid;grid-template-columns:20px 42px 1fr 58px 64px 42px 60px 76px;gap:8px;padding:10px 16px;font-size:11px;font-weight:600;color:var(--faint);border-bottom:1px solid var(--line)}
+/* comfortable rows */
+.row-comfort{display:grid;grid-template-columns:20px 42px 1fr 58px 64px 42px 60px 76px;gap:8px;align-items:center;padding:15px 16px;border-bottom:1px solid var(--line-3);font-size:13.5px;min-height:48px}
+/* compact rows */
+.row-compact{display:grid;grid-template-columns:20px 42px 1fr 58px 64px 42px 60px 76px;gap:8px;align-items:center;padding:7px 16px;border-bottom:1px solid var(--line-3);font-size:12.5px;min-height:34px}
+.cb{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line-2)}
+.code{font-size:12px;color:var(--muted);font-weight:600}
+.ttl{font-weight:500;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.owner{font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.owner .av{width:22px;height:22px;border-radius:50%;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.row-compact .owner{font-size:12px;color:var(--muted)}
+.pri{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;justify-self:start;width:fit-content}
+.pri.p0{background:color-mix(in srgb,var(--c-late) 12%,transparent);color:var(--c-late)}
+.pri.p1{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.pri.p2{background:var(--surface-3);color:var(--muted)}
+.due{font-size:12.5px;color:var(--ink-2)}
+.row-compact .due{font-size:12px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:8px}
+.prog .track{flex:1;height:6px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.row-compact .prog .track{height:4px}
+.prog .track i{display:block;height:100%;border-radius:99px}
+.prog .pct{font-size:12px;font-weight:600;width:36px;text-align:right}
+.st{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;justify-self:start;width:fit-content}
+.st.prog{background:color-mix(in srgb,var(--c-prog) 12%,transparent);color:var(--c-prog)}
+.st.done{background:color-mix(in srgb,var(--c-done) 12%,transparent);color:var(--c-done)}
+.st.block{background:color-mix(in srgb,var(--c-block) 12%,transparent);color:var(--c-block)}
+.st.todo{background:var(--surface-3);color:var(--muted)}
+/* measure annotations */
+.measure{display:flex;gap:16px;padding:12px 16px;border-top:1px solid var(--line-3);font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.measure b{color:var(--ink);font-weight:700}
+.callout{margin-top:18px;border:1px solid color-mix(in srgb,var(--c-prog) 30%,transparent);background:color-mix(in srgb,var(--c-prog) 6%,transparent);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink-2);display:flex;gap:12px}
+.callout .tag{flex:none;font-size:11px;font-weight:650;color:var(--c-prog);background:color-mix(in srgb,var(--c-prog) 12%,transparent);border-radius:4px;padding:2px 8px;height:fit-content}
+.callout b{color:var(--ink)}
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="rail-logo"><span class="whale">🐳</span> DSH 本地构建</div>
+  <div class="rail-btn">💬 新会话</div>
+  <div class="rail-btn">✦ 插件</div>
+  <div class="rail-btn">◷ 自动化任务</div>
+  <div class="rail-btn active">▤ 项目管理</div>
+  <div class="rail-sec">工作区</div>
+  <div class="rail-btn">📁 默认工作区</div>
+  <div class="rail-btn">📂 新会话</div>
+  <div class="rail-btn">📁 未分组</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="proj"><span class="ico">🗂</span><span><span class="t1">项目工作台</span><br><span class="t2">客户订单中心 V2 重构 ▾</span></span></div>
+    <div class="top-actions"><button class="tbtn">▦ 总览看板</button><button class="tbtn">＋ 新建项目</button><button class="tbtn">✧ AI 助手</button><button class="tbtn">💬 AI 副驾</button><button class="tbtn">··· 更多</button></div>
+  </div>
+  <nav class="tabs">
+    <span class="tab active">全部任务 <span class="badge">34</span></span>
+    <span class="tab">里程碑 <span class="badge">5</span></span>
+    <span class="tab">风险与问题 <span class="badge">3</span></span>
+    <span class="tab">会议纪要 <span class="badge">6</span></span>
+    <span class="tab">进度汇报 <span class="badge">4</span></span>
+    <span class="tab">交付物 <span class="badge">6</span></span>
+    <span class="tab">项目概览</span>
+    <span class="tab">甘特排期</span>
+    <span class="tab">人员负载</span>
+  </nav>
+  <div class="content">
+    <div class="page-title">任务</div>
+    <div class="page-sub">P1-6：密度模式（舒适 / 紧凑）从任务表本地开关提升为<b>全局偏好</b>，同一组数据并列对比两档差异。</div>
+
+    <div class="toolbar">
+      <div class="search">⌕ 搜索任务名称 / 编号…</div>
+      <span class="fchip on">全部 34</span><span class="fchip">进行中 3</span><span class="fchip">已完成 21</span><span class="fchip">已逾期 1</span>
+      <span class="spacer"></span>
+      <div class="glob-density">
+        <span class="glabel">🌐 密度（全局偏好）</span>
+        <div class="seg"><button class="on">舒适</button><button>紧凑</button></div>
+        <span class="gchip">全部视图生效 · 持久保存</span>
+      </div>
+      <button class="primary">＋ 新建任务</button>
+    </div>
+
+    <div class="compare">
+      <!-- 舒适 -->
+      <div class="cmp-card">
+        <div class="cmp-head"><h3>舒适</h3><span class="spec">默认档 · 行高 48px · 单元格 padding 16</span><span class="on">当前选中</span></div>
+        <div class="thead"><span></span><span>编号</span><span>任务</span><span>状态</span><span>负责人</span><span>优先级</span><span>截止</span><span>进度</span></div>
+        <div class="row-comfort"><span class="cb"></span><span class="code">1.1</span><span class="ttl"><span class="dot" style="background:var(--c-done)"></span>调研竞品下单流程</span><span class="st done">已完成</span><span class="owner"><span class="av">王</span>王磊</span><span class="pri p1">P1</span><span class="due">10-13</span><span class="prog"><span class="track"><i style="width:100%;background:var(--c-done)"></i></span><span class="pct">100%</span></span></div>
+        <div class="row-comfort"><span class="cb"></span><span class="code">3.2</span><span class="ttl"><span class="dot" style="background:var(--c-block)"></span>订单列表接口联调</span><span class="st block">阻塞</span><span class="owner"><span class="av">陈</span>陈昊</span><span class="pri p0">P0</span><span class="due">10-20</span><span class="prog"><span class="track"><i style="width:35%;background:var(--c-block)"></i></span><span class="pct">35%</span></span></div>
+        <div class="row-comfort"><span class="cb"></span><span class="code">3.3</span><span class="ttl"><span class="dot" style="background:var(--c-todo)"></span>实现支付状态机</span><span class="st todo">待办</span><span class="owner"><span class="av">陈</span>陈昊</span><span class="pri p0">P0</span><span class="due">11-05</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+        <div class="row-comfort"><span class="cb"></span><span class="code">2.2</span><span class="ttl"><span class="dot" style="background:var(--c-prog)"></span>确认视觉设计风格</span><span class="st prog">进行中</span><span class="owner"><span class="av">周</span>周航</span><span class="pri p2">P2</span><span class="due">10-22</span><span class="prog"><span class="track"><i style="width:40%;background:var(--c-prog)"></i></span><span class="pct">40%</span></span></div>
+        <div class="row-comfort"><span class="cb"></span><span class="code">4.3</span><span class="ttl"><span class="dot" style="background:var(--c-prog)"></span>修复已发现缺陷</span><span class="st prog">进行中</span><span class="owner"><span class="av">陈</span>陈昊</span><span class="pri p1">P1</span><span class="due">10-28</span><span class="prog"><span class="track"><i style="width:20%;background:var(--c-prog)"></i></span><span class="pct">20%</span></span></div>
+        <div class="row-comfort" style="border-bottom:none"><span class="cb"></span><span class="code">5.1</span><span class="ttl"><span class="dot" style="background:var(--c-todo)"></span>部署生产服务器</span><span class="st todo">待办</span><span class="owner"><span class="av">陈</span>陈昊</span><span class="pri p1">P1</span><span class="due">12-10</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+        <div class="measure"><span>行高 <b>48px</b></span><span>单元格 padding <b>16px</b></span><span>标题 <b>14px</b> · 负责人带头像独立成列</span><span>进度条 <b>6px</b></span></div>
+      </div>
+
+      <!-- 紧凑 -->
+      <div class="cmp-card">
+        <div class="cmp-head"><h3>紧凑</h3><span class="spec">专家档 · 行高 34px · 单元格 padding 10</span></div>
+        <div class="thead"><span></span><span>编号</span><span>任务</span><span>状态</span><span>负责人</span><span>优先级</span><span>截止</span><span>进度</span></div>
+        <div class="row-compact"><span class="cb"></span><span class="code">1.1</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-done)"></span>调研竞品下单流程</span><span class="st done">完成</span><span class="owner">王磊</span><span class="pri p1">P1</span><span class="due">10-13</span><span class="prog"><span class="track"><i style="width:100%;background:var(--c-done)"></i></span><span class="pct">100%</span></span></div>
+        <div class="row-compact"><span class="cb"></span><span class="code">3.2</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-block)"></span>订单列表接口联调</span><span class="st block">阻塞</span><span class="owner">陈昊</span><span class="pri p0">P0</span><span class="due">10-20</span><span class="prog"><span class="track"><i style="width:35%;background:var(--c-block)"></i></span><span class="pct">35%</span></span></div>
+        <div class="row-compact"><span class="cb"></span><span class="code">3.3</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-todo)"></span>实现支付状态机</span><span class="st todo">待办</span><span class="owner">陈昊</span><span class="pri p0">P0</span><span class="due">11-05</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+        <div class="row-compact"><span class="cb"></span><span class="code">2.2</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-prog)"></span>确认视觉设计风格</span><span class="st prog">进行中</span><span class="owner">周航</span><span class="pri p2">P2</span><span class="due">10-22</span><span class="prog"><span class="track"><i style="width:40%;background:var(--c-prog)"></i></span><span class="pct">40%</span></span></div>
+        <div class="row-compact"><span class="cb"></span><span class="code">4.3</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-prog)"></span>修复已发现缺陷</span><span class="st prog">进行中</span><span class="owner">陈昊</span><span class="pri p1">P1</span><span class="due">10-28</span><span class="prog"><span class="track"><i style="width:20%;background:var(--c-prog)"></i></span><span class="pct">20%</span></span></div>
+        <div class="row-compact" style="border-bottom:none"><span class="cb"></span><span class="code">5.1</span><span class="ttl" style="font-size:13px"><span class="dot" style="background:var(--c-todo)"></span>部署生产服务器</span><span class="st todo">待办</span><span class="owner">陈昊</span><span class="pri p1">P1</span><span class="due">12-10</span><span class="prog"><span class="track"><i style="width:0"></i></span><span class="pct">0%</span></span></div>
+        <div class="measure"><span>行高 <b>34px</b></span><span>单元格 padding <b>10px</b></span><span>状态并入标题行 · 负责人去头像</span><span>进度条 <b>4px</b></span></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">决策点</span>
+      <div>密度只调整<b>行高与单元格 padding、辅助信息展开度</b>，<b>不改列结构、不删字段、不改数据口径</b>；偏好存入用户全局设置，任务 / 甘特 / 人员 / 汇报等所有视图同步生效并持久化，替换现网任务表本地 dense 开关。</div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
