@@ -145,38 +145,36 @@ const statusOrder = ['todo', 'doing', 'done']
 const groupedIds = statusOrder.flatMap(s => sortedVisible.filter(t => t.status === s).map(t => t.id))
 assert.deepEqual(groupedIds, ['c', 'a', 'b'], '分组渲染序列按状态 key 与组内排序顺序排列')
 
-// ---- renderedIds 与 DOM 序同源契约（panel.tsx 源码级，R3-02 防回归）----
-// 纯函数测试只能证「折叠剔除后代」，无法证「组件把哪一行画进 DOM」。
-// 这里钉住：键盘导航的 renderedIds 必须与 TaskGroup 实际渲染行序列同源同序，
-// 防止将来把树模式 DOM 改回渲染 visible（折叠失效）或两边各算一套。
-const panelSrc = readFileSync(join(here, '..', 'src', 'client', 'panel.tsx'), 'utf8')
-assert.match(panelSrc, /const treeRows = flattenTaskTree\(visible, collapsed\)/)
+// ---- renderedIds 与 DOM 序同源契约（源码级，R3-02 防回归）----
+// v2 落地后 TaskTable 迁至 src/client/views/tasks.tsx；以下断言钉住该文件。
+const tasksSrc = readFileSync(join(here, '..', 'src', 'client', 'views', 'tasks.tsx'), 'utf8')
+assert.match(tasksSrc, /const treeRows = useMemo\(\(\) => flattenVisible\(visible, collapsed\), \[visible, collapsed\]\)/)
 assert.match(
-  panelSrc,
-  /const renderedIds = grouped\s*\?\s*Object\.keys\(taskStatus\)\.flatMap\(v => visible\.filter\(t => t\.status === v\)\.map\(t => t\.id\)\)\s*:\s*treeRows\.map\(r => r\.task\.id\)/,
+  tasksSrc,
+  /const renderedIds = useMemo\(\s*\(\) => grouped\s*\?\s*statusGroups\.flatMap\(g => g\.rows\.map\(t => t\.id\)\)\s*:\s*treeRows\.map\(r => r\.task\.id\)/,
   'renderedIds 树分支必须 == flattenVisible(visible, collapsed) 的行序列',
 )
 assert.match(
-  panelSrc,
-  /const groups = grouped\s*\?\s*Object\.keys\(taskStatus\)\.map\(value =>/,
+  tasksSrc,
+  /const statusGroups = useMemo\(\(\) =>\s*Object\.keys\(taskStatus\)\.map\(value =>/,
   'DOM 分组键序必须与 renderedIds 同源（同一个 Object.keys(taskStatus)）',
 )
-assert.match(panelSrc, /tree=\{treeRows\}/, '树模式 DOM 行序列必须就是 treeRows（折叠剔除与渲染同序）')
-assert.match(panelSrc, /data-pm-row=\{task\.id\}/, 'DOM 行锚点必须渲染真实任务 id')
+assert.match(tasksSrc, /treeRows\.map\(row => row\.depth === 0 \? groupRow\(row\) : leafRow\(row\)\)/, '树模式 DOM 行序列必须就是 treeRows（折叠剔除与渲染同序）')
+assert.match(tasksSrc, /data-pm-row=\{t\.id\}/, 'DOM 行锚点必须渲染真实任务 id')
 assert.match(
-  panelSrc,
+  tasksSrc,
   /const effectiveActiveId = activeId && renderedIds\.includes\(activeId\) \? activeId : \(renderedIds\[0\] \?\? null\)/,
   '高亮行只能取真实渲染序列内的 id，否则回退首行',
 )
 assert.match(
-  panelSrc,
+  tasksSrc,
   /const nextId = nextRowId\(renderedIds, effectiveActiveId, action\.delta\)/,
   'j/k 必须在真实渲染序列上移动',
 )
 
 // ---- 真实 taskStatus 键序驱动分组序列（钉住 R8/R3 的真实状态枚举，不允许再凭印象写顺序）----
-const tsMatch = /const taskStatus: Record<string, string> = \{([^}]*)\}/.exec(panelSrc)
-assert.ok(tsMatch, 'panel.tsx 应含 taskStatus 字面量')
+const tsMatch = /const taskStatus: Record<string, string> = \{([^}]*)\}/.exec(tasksSrc)
+assert.ok(tsMatch, 'tasks.tsx 应含 taskStatus 字面量')
 const realStatusOrder = [...tsMatch[1].matchAll(/^\s*(\w+):/gm)].map(m => m[1])
 assert.deepEqual(realStatusOrder, ['todo', 'in_progress', 'blocked', 'done'], '真实 taskStatus 键序即为分组渲染序')
 const realGrouped = [
@@ -190,7 +188,8 @@ const realSeq = realStatusOrder.flatMap(s => realSorted.filter(t => t.status ===
 assert.deepEqual(realSeq, ['b', 'd', 'c', 'a'], '分组序=真实状态键序（todo→in_progress→blocked→done），组内=WBS code 数字序')
 
 // ---- Copilot aria-live/aria-busy 状态机契约（R7-01 无障碍强化）----
-// bundle 正则只能证属性「存在」；这里钉住状态机：发送中 true、结束/失败 finally 必复位 false。
+// CopilotPanel 仍在 panel.tsx；bundle 正则只能证属性「存在」，这里钉住状态机：发送中 true、结束/失败 finally 必复位 false。
+const panelSrc = readFileSync(join(here, '..', 'src', 'client', 'panel.tsx'), 'utf8')
 assert.match(
   panelSrc,
   /<div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy=\{sending\}>/,

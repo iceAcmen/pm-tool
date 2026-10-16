@@ -120,6 +120,7 @@ try {
   assert.doesNotMatch(bundle, /`\/pm meeting summarize/, 'AI 助手命令不得带 /pm 前缀')
   assert.doesNotMatch(bundle, /require\("lucide-react/)
   const css = readFileSync(join(here, '..', 'src', 'client', 'panel.css'), 'utf8')
+  const ganttCss = readFileSync(join(here, '..', 'src', 'client', 'views', 'gantt.css'), 'utf8')
   assert.match(css, /--dsw-alias-bg-layer-2/)
   assert.match(css, /--dsw-font-family/)
   assert.match(css, /\.pm-action-editor[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/)
@@ -161,9 +162,9 @@ try {
   assert.match(bundle, /pm-lane-warning/)
   assert.match(bundle, /model mode /)
   assert.match(css, /\.pm-model-lane/)
-  // B2：Gantt 左列与 axis 同高表头 spacer（24px）。
-  assert.match(bundle, /pm-gantt-label--head/)
-  assert.match(css, /\.pm-gantt-label--head/)
+  // B2：Gantt 左列与 axis 同高的表头角块（v2 命名 pm-gantt-corner）。
+  assert.match(bundle, /pm-gantt-corner/)
+  assert.match(ganttCss, /\.pm-gantt-corner/)
   // S1：更多菜单恢复说明行。
   assert.match(bundle, /pm-menu-note/)
   // Copilot 消息区 aria-live + aria-busy（发送中 true、结束/失败 finally 复位 false）。
@@ -204,11 +205,10 @@ try {
   assert.match(bundle, /pm-row-status/)             // PROD-03 行内状态
   assert.match(bundle, /pm-row-progress/)           // PROD-03 行内进度
   assert.match(bundle, /pm-row-due/)
-  assert.match(bundle, /pm-war-room/)               // PROD-05 作战室
-  assert.match(bundle, /pm-agenda/)                 // PROD-05 近期议程
-  assert.match(bundle, /pm-risk-matrix/)            // PROD-05 风险矩阵
-  assert.match(bundle, /pm-kpi/)
-  assert.match(bundle, /pm-top-more/)              // PROD-08 顶栏更多
+  assert.match(bundle, /ov-attn-/)                // PROD-05 作战室（v2：需要关注卡）
+  assert.match(bundle, /ov-cal/)                  // PROD-05 近期议程（v2：接下来的日程）
+  assert.match(bundle, /ov-attn-num/)             // PROD-05 风险矩阵（v2：需要关注计数）
+  assert.match(bundle, /ov-stat/)                 // PROD-05 指标条（v2：KPI 统计卡）  assert.match(bundle, /pm-top-more/)              // PROD-08 顶栏更多
   assert.match(bundle, /pm-top-menu/)               // PROD-08 更多菜单
   assert.match(bundle, /pm-backup-btn/)             // PROD-08 收纳后备份仍在DOM
   assert.match(bundle, /pm-export-json-btn/)        // PROD-08 收纳后导出仍在DOM                    // PROD-05 指标条                // PROD-03 行内截止   // PROD-02 定位纯函数              // PROD-01 任务树行                   // PROD-08 记住上次视图 tab

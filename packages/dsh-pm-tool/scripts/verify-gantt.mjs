@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import {
   dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
   progressRatio, progressFill, barLabelPolicy, shortDate, dependencyEdges,
-  parentBarRange, milestoneOffset, taskDurationDays,
+  parentBarRange, milestoneOffset, taskDurationDays, routeEdge,
 } from '../lib/core/gantt.js'
 
 // ---------- 既有口径（v0.7.1 回归） ----------
@@ -145,5 +145,67 @@ assert.equal(repRev.edges[0].x2, 48) // x1 > x2：反向不丢边，终点由渲
 assert.deepEqual(dependencyEdges([], '2026-09-28', 16), {
   edges: [], skipped: { selfLoop: 0, dangling: 0, cycle: 0, missingDate: 0 }, cycleTaskIds: [],
 })
+
+// ---------- routeEdge：FS 依赖连线路由（紧贴 / 正常 / 重叠 三类，确定性纯函数） ----------
+
+// 1) 紧贴型 FS（A 结束次日即 B 开始，gap=4 < tightPx=8）：短 L 形，
+//    垂直通道必须落在间隙 (x1, x2) 内——不压 A（止于 x1）、不穿 B（起于 x2）。
+const tight = routeEdge({ x1: 100, y1: 12, x2: 104, y2: 36, bRight: 154 })
+assert.equal(tight.kind, 'tight')
+assert.ok(100 < tight.channelX && tight.channelX < 104, `紧贴通道应在间隙内：${tight.channelX}`)
+assert.equal(tight.endX, 104) // 箭头落 B 左缘
+assert.equal(tight.endY, 36)
+assert.ok(tight.d.startsWith('M 100 12'), '路径应自 A 右缘出发')
+assert.ok(tight.d.endsWith('H 104'), '路径应止于 B 左缘')
+assert.ok(tight.d.includes('Q 102 12 102 14'), '紧贴应圆角折角（间隙内安全通道，钳制不越界）')
+
+// 2) 正常 FS（gap=64 >= tightPx）：标准 L 形，通道自 A 右缘探出短 stub。
+const norm = routeEdge({ x1: 96, y1: 12, x2: 160, y2: 36, bRight: 200 })
+assert.equal(norm.kind, 'normal')
+assert.ok(96 < norm.channelX && norm.channelX < 160, `正常通道应在间隙内：${norm.channelX}`)
+assert.equal(norm.endX, 160)
+assert.ok(norm.d.includes('V 29'), '正常 L 应含垂直段（y 自 12 下行到 36，圆角半径 7）')
+
+// 上行边（B 在 A 上方）：垂直段方向随符号，关键节点顺序不变。
+const up = routeEdge({ x1: 96, y1: 36, x2: 160, y2: 12, bRight: 200 })
+assert.equal(up.kind, 'normal')
+assert.ok(up.d.includes('Q 128 36 128 29'), '上行边圆角应朝上方（sy=-1）')
+
+// 3) 重叠型（x2 < x1，前置结束晚于后置开始）：绕行到右侧安全走廊，不穿条。
+//    A 右缘 176（行0 y=12），B 左缘 48 / 右缘 96（行1 y=36）。
+const ov = routeEdge({ x1: 176, y1: 12, x2: 48, y2: 36, bRight: 96 })
+assert.equal(ov.kind, 'overlap')
+assert.ok(ov.channelX > 176 && ov.channelX > 96,
+  `重叠走廊必须在两端条缘之外（右绕）：${ov.channelX}`)
+assert.equal(ov.endX, 96) // 箭头落 B 条右缘、方向朝左指向后置
+assert.equal(ov.endY, 36)
+assert.ok(ov.d.startsWith('M 176 12'), '路径仍自 A 右缘出发')
+assert.ok(ov.d.endsWith('H 96'), '路径折返后止于 B 右缘（朝左进入后置）')
+assert.ok(ov.d.includes('V 29'), 'U 形走廊应含垂直段')
+
+// 不穿条硬断言：重叠走廊 x 严格大于两端条缘，整条垂直段不会与任一任务条相交。
+assert.ok(ov.channelX > Math.max(176, 96), '走廊必须在 max(x1,bRight) 之外')
+
+// 4) 多线错峰：lane 越大走廊越右移，同输入同 lane 结果一致；宽间隙下通道不被钳死。
+const wide = { x1: 0, y1: 0, x2: 200, y2: 24 }
+const l0 = routeEdge(wide, { lane: 0 })
+const l1 = routeEdge(wide, { lane: 1 })
+const l2 = routeEdge(wide, { lane: 2 })
+assert.ok(l0.channelX < l1.channelX && l1.channelX < l2.channelX,
+  `错峰通道应随 lane 右移：${l0.channelX}/${l1.channelX}/${l2.channelX}`)
+assert.ok(l2.channelX < 200, '错峰通道不得推出间隙压到 B 条上')
+// 重叠边错峰同理
+const ovLane = routeEdge({ x1: 176, y1: 12, x2: 48, y2: 36, bRight: 96 }, { lane: 2 })
+assert.ok(ovLane.channelX > ov.channelX, '重叠走廊错峰应更靠右')
+
+// 5) 确定性：同输入两次调用 path d 逐字符一致（无随机/无时间依赖）。
+assert.deepEqual(routeEdge({ x1: 176, y1: 12, x2: 48, y2: 36, bRight: 96 }), ov)
+assert.equal(routeEdge({ x1: 96, y1: 12, x2: 112, y2: 36 }).d,
+             routeEdge({ x1: 96, y1: 12, x2: 112, y2: 36 }).d)
+
+// 6) bRight 缺省回退不抛异常（调用方不传时按 x2+16 近似）。
+const fb = routeEdge({ x1: 176, y1: 12, x2: 48, y2: 36 })
+assert.equal(fb.kind, 'overlap')
+assert.ok(Number.isFinite(fb.channelX) && Number.isFinite(fb.endX))
 
 console.log('verify-gantt OK')

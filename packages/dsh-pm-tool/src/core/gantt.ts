@@ -238,3 +238,107 @@ export function dependencyEdges(
   }
   return { edges, skipped, cycleTaskIds: [...cycle] }
 }
+
+// ---------- 依赖边路由（FS 连线形状：紧贴 L / 正常 L / 重叠绕行） ----------
+
+export type EdgeRouteKind = 'tight' | 'normal' | 'overlap'
+
+export interface EdgeRouteOpts {
+  /** 紧贴判定阈值（px）：0 <= x2-x1 < tightPx 时按紧贴 FS 渲染。默认 8。 */
+  tightPx?: number
+  /** 重叠绕行：安全走廊离 max(x1, bRight) 的水平余量。默认 12。 */
+  detourGap?: number
+  /** 错峰步距：lane>0 时走廊/通道整体右移 lane*laneStep px。默认 14。 */
+  laneStep?: number
+  /** 圆角半径（px）。默认 7。 */
+  cornerR?: number
+  /** 错峰通道编号：0=直连，1,2… 逐级右移（多条边共享起止行时避免叠线）。默认 0。 */
+  lane?: number
+}
+
+export interface EdgeRoute {
+  /** SVG path d（绝对坐标，画布原点）。 */
+  d: string
+  kind: EdgeRouteKind
+  /** 垂直通道所在 x（单测/巡检用：紧贴/正常时必落在 (x1, x2) 间隙内；重叠时必在走廊上）。 */
+  channelX: number
+  /** 箭头尖落点（B 条边缘：紧贴/正常=左缘 x2，重叠=右缘 bRight）。 */
+  endX: number
+  endY: number
+}
+
+const r1 = (n: number) => Math.round(n * 10) / 10
+
+/**
+ * 把一条 FS 依赖边（A 条右缘 → B 条左缘）路由成圆角折线路径。
+ * 纯函数：无 DOM、无随机、无写副作用；同输入必同输出。
+ *
+ * 三类（由 x2-x1 确定性判定）：
+ *  - tight 紧贴 FS（0 <= x2-x1 < tightPx，A 结束次日即 B 开始）：
+ *    短而顺的 L 形，垂直通道取间隙 (x1, x2) 的中点——必落在两条之间的空隙里，
+ *    不穿 A、不压 B；
+ *  - normal 正常 FS（x2-x1 >= tightPx）：标准 L 形，自 A 右缘探出短 stub 后垂直下行；
+ *  - overlap 重叠（x2 < x1，前置结束晚于后置开始）：连线**绕行**到
+ *    max(x1, bRight)+detourGap 的右侧安全走廊，圆角 U 形折返，
+ *    不穿过任何任务条；箭头落在 B 条右缘、方向朝左指向后置。
+ *
+ * lane>0 时通道整体右移 lane*laneStep，供多条同起止边错峰不叠线。
+ * bRight 缺省按 x2+16 近似（调用方已知 B 条宽时务必传入精确右缘）。
+ */
+export function routeEdge(
+  edge: { x1: number, y1: number, x2: number, y2: number, bRight?: number },
+  opts: EdgeRouteOpts = {},
+): EdgeRoute {
+  const tightPx = opts.tightPx ?? 8
+  const detourGap = opts.detourGap ?? 12
+  const laneStep = opts.laneStep ?? 14
+  const cornerR = opts.cornerR ?? 7
+  const lane = opts.lane ?? 0
+  const { x1, y1, x2, y2 } = edge
+  const bRight = edge.bRight ?? x2 + 16
+  const dy = y2 - y1
+  const sy = dy === 0 ? 1 : Math.sign(dy)
+
+  const kind: EdgeRouteKind = x2 >= x1 + tightPx ? 'normal' : x2 >= x1 ? 'tight' : 'overlap'
+
+  if (kind === 'overlap') {
+    // 右侧安全走廊：严格在 A 右缘与 B 右缘之外，水平段贴两端条缘出发，不穿条。
+    const ch = Math.max(x1, bRight) + detourGap + lane * laneStep
+    const rr = Math.min(cornerR, detourGap)
+    const endX = bRight
+    if (dy === 0) {
+      return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(ch)} V ${r1(y1)} H ${r1(endX)}`, kind, channelX: ch, endX, endY: y2 }
+    }
+    const d = [
+      `M ${r1(x1)} ${r1(y1)}`,
+      `H ${r1(ch - rr)}`,
+      `Q ${r1(ch)} ${r1(y1)} ${r1(ch)} ${r1(y1 + sy * rr)}`,
+      `V ${r1(y2 - sy * rr)}`,
+      `Q ${r1(ch)} ${r1(y2)} ${r1(ch - rr)} ${r1(y2)}`,
+      `H ${r1(endX)}`,
+    ].join(' ')
+    return { d, kind, channelX: ch, endX, endY: y2 }
+  }
+
+  // tight / normal：垂直通道必须落在间隙 (x1, x2) 内——既不压 A（A 止于 x1），也不压 B（B 起于 x2）。
+  const gap = x2 - x1
+  const stub = kind === 'tight'
+    ? Math.max(3, gap / 2)                          // 紧贴：通道居间隙中点
+    : Math.max(14, gap / 2) + lane * laneStep        // 正常：自 A 右缘探出短 stub
+  // 钳制：lane 错峰不得把通道推出间隙落到 B 条上；圆角半径同时受两侧间隙约束，绝不越界穿条。
+  const ch = Math.min(x1 + stub, x2 - 2)
+  const rr = Math.min(cornerR, ch - x1, x2 - ch, Math.abs(dy) / 2 || 999)
+  const endX = x2
+  if (dy === 0) {
+    return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(endX)}`, kind, channelX: ch, endX, endY: y2 }
+  }
+  const d = [
+    `M ${r1(x1)} ${r1(y1)}`,
+    `H ${r1(ch - rr)}`,
+    `Q ${r1(ch)} ${r1(y1)} ${r1(ch)} ${r1(y1 + sy * rr)}`,
+    `V ${r1(y2 - sy * rr)}`,
+    `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
+    `H ${r1(endX)}`,
+  ].join(' ')
+  return { d, kind, channelX: ch, endX, endY: y2 }
+}

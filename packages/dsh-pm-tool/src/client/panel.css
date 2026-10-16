@@ -41,6 +41,52 @@
   --pm-danger: rgb(220, 38, 38);
   --pm-success: rgb(22, 163, 74);
   --pm-warning: rgb(217, 119, 6);
+
+  /* ===== 重设计 v2 设计语言（深色电影感 Bento / 浅色暖纸白）；rgb/rgba 表达，沿用无 hex 契约 ===== */
+  --bg: rgb(244, 242, 236);
+  --bg-grad:
+    radial-gradient(1100px 600px at 80% -12%, rgba(91, 141, 239, 0.06), transparent 60%),
+    radial-gradient(800px 500px at 5% 0%, rgba(53, 194, 138, 0.06), transparent 55%),
+    rgb(244, 242, 236);
+  --bg-elev: rgb(239, 236, 229);
+  --surface: rgb(253, 252, 248);
+  --surface-2: rgb(247, 244, 237);
+  --surface-3: rgb(239, 236, 226);
+  --surface-g: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 40%);
+  --line: rgba(28, 26, 20, 0.08);
+  --line-2: rgba(28, 26, 20, 0.12);
+  --line-3: rgba(28, 26, 20, 0.18);
+  --ink: rgb(36, 38, 44);
+  --ink-2: rgb(66, 69, 77);
+  --muted: rgb(110, 114, 123);
+  --faint: rgb(154, 160, 168);
+  --c-done: rgb(47, 174, 124);   --c-done-d: rgb(42, 157, 110);
+  --c-prog: rgb(63, 115, 216);   --c-prog-d: rgb(61, 111, 214);
+  --c-block: rgb(220, 116, 60);  --c-block-d: rgb(207, 107, 48);
+  --c-late: rgb(214, 64, 70);    --c-late-d: rgb(197, 59, 64);
+  --c-todo: rgb(124, 130, 140);  --c-todo-d: rgb(110, 116, 126);
+  --glow-done: radial-gradient(closest-side, rgba(53, 194, 138, 0.16), transparent 72%);
+  --glow-prog: radial-gradient(closest-side, rgba(91, 141, 239, 0.16), transparent 72%);
+  --glow-block: radial-gradient(closest-side, rgba(240, 135, 75, 0.14), transparent 72%);
+  --glow-late: radial-gradient(closest-side, rgba(229, 72, 77, 0.16), transparent 72%);
+  --glow-soft: radial-gradient(600px 300px at 50% -20%, rgba(91, 141, 239, 0.08), transparent 70%);
+  --shadow-1: 0 1px 2px rgba(70, 58, 38, 0.06);
+  --shadow-2: 0 1px 2px rgba(70, 58, 38, 0.05), 0 8px 22px rgba(70, 58, 38, 0.08);
+  --shadow-3: 0 2px 6px rgba(70, 58, 38, 0.06), 0 20px 50px rgba(70, 58, 38, 0.12);
+  --shadow-glow-done: 0 8px 26px rgba(47, 174, 124, 0.14);
+  --shadow-glow-prog: 0 8px 26px rgba(63, 115, 216, 0.16);
+  --shadow-glow-late: 0 8px 26px rgba(214, 64, 70, 0.15);
+  --field-bg: rgba(28, 26, 20, 0.04);
+  --field-bg-focus: rgba(91, 141, 239, 0.1);
+  /* 尺寸 / 排版基线（两主题一致；深色只覆盖颜色） */
+  --r-xs: 6px; --r-sm: 9px; --r: 12px; --r-lg: 16px; --r-xl: 20px; --r-2xl: 24px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-9: 40px; --sp-10: 48px; --sp-12: 64px;
+  --t-10: 10px; --t-11: 11px; --t-12: 12px; --t-13: 13px; --t-14: 14px;
+  --t-16: 16px; --t-18: 18px; --t-22: 22px; --t-26: 26px; --t-32: 30px; --t-40: 38px;
+  --ls-tight: -0.015em; --ls-tight2: -0.025em; --ls-cap: 0.09em;
+  --z-sticky: 20; --z-pop: 40; --z-modal: 60;
+  --ease: cubic-bezier(.22, .61, .36, 1);
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
@@ -71,6 +117,43 @@ body[data-ds-dark-theme] .pm-shell {
   --pm-danger: rgb(239, 68, 68);
   --pm-success: rgb(34, 197, 94);
   --pm-warning: rgb(245, 158, 11);
+
+  /* ===== 重设计 v2 · 深色覆盖（近黑冷灰 / 环境光晕 / 多层柔影 / 克制边框） ===== */
+  --bg: rgb(8, 9, 12);
+  --bg-grad:
+    radial-gradient(1200px 700px at 78% -10%, rgba(91, 141, 239, 0.07), transparent 60%),
+    radial-gradient(900px 600px at 8% 0%, rgba(53, 194, 138, 0.05), transparent 55%),
+    rgb(8, 9, 12);
+  --bg-elev: rgb(13, 15, 20);
+  --surface: rgb(18, 21, 27);
+  --surface-2: rgb(23, 26, 34);
+  --surface-3: rgb(29, 33, 43);
+  --surface-g: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 42%);
+  --line: rgba(255, 255, 255, 0.06);
+  --line-2: rgba(255, 255, 255, 0.10);
+  --line-3: rgba(255, 255, 255, 0.16);
+  --ink: rgb(233, 236, 241);
+  --ink-2: rgb(185, 191, 201);
+  --muted: rgb(139, 145, 157);
+  --faint: rgb(96, 102, 114);
+  --c-done: rgb(53, 194, 138);  --c-done-d: rgb(42, 157, 110);
+  --c-prog: rgb(91, 141, 239);  --c-prog-d: rgb(61, 111, 214);
+  --c-block: rgb(240, 135, 75); --c-block-d: rgb(207, 107, 48);
+  --c-late: rgb(229, 72, 77);   --c-late-d: rgb(197, 59, 64);
+  --c-todo: rgb(138, 143, 152); --c-todo-d: rgb(110, 116, 126);
+  --glow-done: radial-gradient(closest-side, rgba(53, 194, 138, 0.22), transparent 72%);
+  --glow-prog: radial-gradient(closest-side, rgba(91, 141, 239, 0.24), transparent 72%);
+  --glow-block: radial-gradient(closest-side, rgba(240, 135, 75, 0.20), transparent 72%);
+  --glow-late: radial-gradient(closest-side, rgba(229, 72, 77, 0.22), transparent 72%);
+  --glow-soft: radial-gradient(600px 300px at 50% -20%, rgba(140, 170, 255, 0.10), transparent 70%);
+  --shadow-1: 0 1px 1px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.40), 0 6px 18px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  --shadow-3: 0 2px 6px rgba(0, 0, 0, 0.40), 0 18px 48px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  --shadow-glow-done: 0 8px 30px rgba(53, 194, 138, 0.14);
+  --shadow-glow-prog: 0 8px 30px rgba(91, 141, 239, 0.16);
+  --shadow-glow-late: 0 8px 30px rgba(229, 72, 77, 0.16);
+  --field-bg: rgba(255, 255, 255, 0.04);
+  --field-bg-focus: rgba(91, 141, 239, 0.1);
 }
 
 .pm-shell *, .pm-shell *::before, .pm-shell *::after { box-sizing: border-box; }
@@ -654,7 +737,8 @@ body[data-ds-dark-theme] .pm-shell {
 }
 .pm-drawer {
   position: relative;
-  width: min(520px, 92vw);
+  /* 横切重设计：右抽屉加宽到约 560px（内容区配合 28px 内边距，两列栅格不再拥挤、下拉文字不截断）。 */
+  width: min(560px, 94vw);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -669,13 +753,13 @@ body[data-ds-dark-theme] .pm-shell {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 20px;
+  padding: 12px 28px;
   border-bottom: 1px solid var(--pm-line);
 }
 .pm-drawer > header span { color: var(--pm-muted); font-size: 10px; }
 .pm-drawer > header h2 { margin: 2px 0 0; font-size: 18px; font-weight: 650; }
-.pm-drawer-body { min-height: 0; flex: 1; overflow: auto; padding: 22px 20px 28px; }
-.pm-drawer-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 14px; }
+.pm-drawer-body { min-height: 0; flex: 1; overflow: auto; padding: 24px 28px 28px; }
+.pm-drawer-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; align-items: start; }
 .pm-source-link { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pm-secondary); }
 .pm-source-link-button { padding: 0; border: 0; background: none; color: var(--pm-blue); cursor: pointer; font-size: 12px; text-decoration: underline; }
 .pm-source-extra { font-size: 11px; opacity: 0.7; }
@@ -701,6 +785,8 @@ body[data-ds-dark-theme] .pm-shell {
 }
 .pm-field input:hover, .pm-field select:hover, .pm-field textarea:hover { border-color: var(--dsw-alias-border-l4); }
 .pm-field input:focus, .pm-field select:focus, .pm-field textarea:focus { border-color: var(--pm-blue); }
+/* 横切重设计：跨整行的进度数字框只占自然宽度，不被两列栅格拉成超宽长条。 */
+.pm-field input[name="progress"] { max-width: 220px; }
 
 /* R3-UX-001：必填标识 + 受控内联错误（替代原生转瞬气泡）。配色全部走宿主主题 token，不写死 hex。 */
 .pm-field-required { color: var(--pm-danger); font-weight: 600; }
@@ -980,42 +1066,6 @@ body[data-ds-dark-theme] .pm-shell {
 /* flex-wrap:wrap 是 GI-WEB-16 首行宽度契约根因修复：无 wrap 时 hint(flex-basis:100%) 与
    labels/scroll 挤在同一 flex 行竞争，scroll 被 shrink 到 0（画布宽消失）。wrap 后 hint 独占
    下一行，首行恒为 labels(固定 230px)+scroll(flex:1,min-width:0)，hint 出现/消失不改变首行宽度。 */
-.pm-gantt { display: flex; flex-wrap: wrap; align-items: flex-start; padding: 8px 0; border: 1px solid var(--pm-line); border-radius: 8px; background: var(--pm-surface); }
-.pm-gantt-labels { flex: 0 0 230px; width: 230px; border-right: 1px solid var(--pm-line); padding-right: 10px; }
-.pm-gantt-label { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; font-size: 11px; white-space: nowrap; overflow: hidden; }
-.pm-gantt-label--head { font-size: 10px; color: var(--pm-muted); border-bottom: 1px solid var(--pm-line-soft); }
-.pm-gantt-label-code { color: var(--pm-muted); flex: 0 0 auto; }
-.pm-gantt-label-title { flex: 1; overflow: hidden; text-overflow: ellipsis; }
-.pm-gantt-label-meta { color: var(--pm-muted); flex: 0 0 auto; font-size: 10px; }
-.pm-gantt-label-dates { color: var(--pm-muted); flex: 0 0 auto; font-size: 9px; }
-.pm-gantt-label--ms { color: var(--pm-secondary); }
-.pm-gantt-unscheduled { flex: 0 0 auto; font-size: 10px; color: var(--pm-warning, orange); border: 1px solid var(--pm-line); border-radius: 9px; padding: 0 6px; }
-.pm-gantt-scroll { flex: 1; min-width: 0; overflow-x: auto; }
-.pm-gantt-canvas { position: relative; }
-.pm-gantt-axis { position: relative; height: 24px; border-bottom: 1px solid var(--pm-line-soft); }
-.pm-gantt-rows { position: relative; }
-.pm-gantt-tick { position: absolute; top: 0; font-size: 9px; opacity: .6; white-space: nowrap; }
-.pm-gantt-today { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--pm-danger); z-index: 2; }
-.pm-gantt-row { height: 24px; position: relative; }
-.pm-gantt-row--unscheduled { cursor: pointer; }
-/* 任务条：底色轨道层 + 进度实心层双层填充；所有色值走宿主语义变量，不写死 hex */
-.pm-gantt-bar { position: absolute; top: 3px; height: 18px; box-sizing: border-box; border-radius: 4px; background: color-mix(in srgb, var(--pm-accent) 35%, transparent); border: 1px solid color-mix(in srgb, var(--pm-accent) 55%, transparent); font-size: 10px; padding: 0 4px; white-space: nowrap; overflow: visible; cursor: grab; user-select: none; touch-action: none; z-index: 1; }
-.pm-gantt-bar--parent { background: transparent; border: 1px dashed var(--pm-accent); cursor: pointer; }
-.pm-gantt-bar-progress { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: color-mix(in srgb, var(--pm-accent) 72%, transparent); }
-.pm-gantt-bar-dates, .pm-gantt-bar-pct { position: relative; z-index: 1; font-size: 9px; line-height: 18px; color: var(--pm-ink); }
-.pm-gantt-bar-pct { margin-left: 6px; }
-.pm-gantt-bar-side { position: absolute; top: 3px; font-size: 9px; line-height: 18px; color: var(--pm-secondary); white-space: nowrap; max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
-.pm-gantt-bar:hover { filter: brightness(1.05); }
-.pm-gantt-bar:focus-visible { outline: 2px solid var(--pm-accent); outline-offset: 1px; }
-.pm-gantt-bar-done { opacity: .5; }
-.pm-gantt-ghost { position: absolute; top: 22px; font-size: 9px; color: var(--pm-ink); background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 4px; padding: 0 4px; white-space: nowrap; z-index: 2; }
-/* FS 依赖线层：跟随画布横滚与拖拽重算；不拦截指针 */
-.pm-gantt-links { position: absolute; left: 0; pointer-events: none; z-index: 0; }
-.pm-gantt-link-path { stroke: var(--pm-muted); stroke-width: 1; fill: none; opacity: .8; }
-.pm-gantt-link-arrow { fill: var(--pm-muted); opacity: .8; }
-.pm-gantt-milestone { position: absolute; top: 7px; width: 10px; height: 10px; transform: rotate(45deg); background: var(--pm-secondary); }
-.pm-gantt-milestone-done { background: var(--pm-success); }
-.pm-gantt-hint { font-size: 11px; opacity: .7; margin: 6px 10px 0; flex-basis: 100%; }
 
 .pm-copilot { display: flex; flex-direction: column; gap: 8px; }
 .pm-copilot-messages { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
@@ -1082,13 +1132,14 @@ body[data-ds-dark-theme] .pm-shell {
 
 /* PROD-11/21/23：前置多选、健康灯、仓库行 */
 .pm-predecessor-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow: auto; padding: 2px 0; }
-.pm-predecessor-item { display: flex; flex-direction: row; align-items: center; gap: 6px; font-size: 12px; min-height: 22px; line-height: 1.3; }
+.pm-predecessor-item { display: flex; flex-direction: row; align-items: baseline; gap: 6px; font-size: 12px; min-height: 22px; line-height: 1.35; }
 .pm-predecessor-item input[type="checkbox"] {
   width: 15px; height: 15px; min-width: 15px; min-height: 15px; flex: 0 0 auto;
   padding: 0; margin: 0; border: 0; border-radius: 0;
   accent-color: var(--pm-blue);
 }
-.pm-predecessor-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 横切重设计：前置清单任务名完整换行展示，不再省略号截断（抽屉已加宽到整行宽）。 */
+.pm-predecessor-item span { overflow-wrap: anywhere; }
 .pm-predecessor-code { color: var(--pm-muted); flex: 0 0 auto; font-size: 11px; }
 .pm-muted { color: var(--pm-muted); font-size: 12px; }
 .pm-health-card { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; border-radius: 8px; margin: 10px 0; border-left: 4px solid var(--pm-muted); }
@@ -1096,7 +1147,7 @@ body[data-ds-dark-theme] .pm-shell {
 .pm-health-card[data-lamp="yellow"] { border-left-color: var(--pm-warning); background: var(--pm-blue-soft); }
 .pm-health-card[data-lamp="red"] { border-left-color: var(--pm-danger); background: var(--pm-blue-soft); }
 .pm-health-card small { color: var(--pm-secondary); }
-.pm-repo-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0 10px; }
+.pm-repo-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0 10px; }
 .pm-repo-row a { color: inherit; }
 .pm-predecessor-chip { margin-left: 8px; font-size: 11px; padding: 1px 6px; border-radius: 9px; background: var(--pm-blue-soft); color: var(--pm-secondary); }
 
@@ -1253,10 +1304,6 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-status-count { color: var(--pm-secondary); font-size: 11.5px; font-variant-numeric: tabular-nums; }
 
 /* ===== 甘特重设计：页头/工具栏/周末带/状态条 ===== */
-.pm-gantt-page { padding: 4px 2px 16px; }
-.pm-gantt-page .pm-page-title { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
-.pm-gantt-page .pm-sub { margin-top: 4px; font-size: 12.5px; color: var(--pm-secondary); }
-.pm-gantt-toolbar { display: flex; align-items: center; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
 .pm-toolbar-sp { flex: 1; }
 .pm-seg { display: inline-flex; border: 1px solid var(--pm-line); border-radius: 8px; overflow: hidden; background: var(--pm-surface); }
 .pm-seg button { padding: 5px 12px; border: 0; background: transparent; color: var(--pm-secondary); font-size: 12px; cursor: pointer; }
@@ -1265,24 +1312,8 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-chip-primary { background: var(--pm-accent); color: rgb(255,255,255); border-color: transparent; }
 .pm-switch { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pm-secondary); }
 .pm-switch input { accent-color: var(--pm-accent); }
-.pm-gantt-weekend { position: absolute; top: 0; bottom: 0; background: rgba(127,127,127,.08); z-index: 0; }
-.pm-gantt-month { position: absolute; top: 3px; font-size: 10px; font-weight: 600; color: var(--pm-secondary); }
-.pm-gantt-today-tag { position: absolute; top: 2px; font-size: 9px; color: var(--pm-accent); background: color-mix(in srgb, var(--pm-accent) 18%, transparent); padding: 0 5px; border-radius: 6px; z-index: 3; }
 .pm-row-cb { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border: 1.5px solid var(--pm-line-strong); border-radius: 50%; font-size: 9px; color: rgb(255,255,255); flex: 0 0 auto; }
 .pm-row-cb.done { background: var(--pm-success); border-color: var(--pm-success); }
-.pm-gantt-label-done .pm-gantt-label-title { color: var(--pm-secondary); text-decoration: line-through; }
-.pm-gantt-label-frac { color: var(--pm-muted); font-size: 10px; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
-.pm-gantt-label-av { width: 16px; height: 16px; border-radius: 50%; color: rgb(255,255,255); font-size: 9px; display: inline-grid; place-items: center; flex: 0 0 auto; }
-.pm-gantt-mband { color: var(--pm-muted); font-size: 10px; text-transform: uppercase; border-top: 1px solid var(--pm-line-soft); margin-top: 4px; }
-.pm-ms-pill { font-size: 9px; padding: 1px 7px; border-radius: 999px; flex: 0 0 auto; }
-.pm-ms-pill-ok { background: color-mix(in srgb, var(--pm-success) 16%, transparent); color: var(--pm-success); }
-.pm-ms-pill-warn { background: color-mix(in srgb, var(--pm-warning) 18%, transparent); color: var(--pm-warning); }
-.pm-ms-pill-idle { background: rgba(127,127,127,.15); color: var(--pm-secondary); }
-.pm-ms-ok { color: var(--pm-success); } .pm-ms-warn { color: var(--pm-warning); }
-.pm-gantt-bar--overdue { border-color: var(--pm-danger) !important; background: color-mix(in srgb, var(--pm-danger) 22%, transparent) !important; }
-.pm-gantt-bar--overdue .pm-gantt-bar-progress { background: var(--pm-danger) !important; }
-.pm-gantt-bar--blocked { border-color: var(--pm-warning) !important; }
-.pm-gantt-milestone-risk { background: var(--pm-warning); }
 
 /* ===== 里程碑视图：标题区 + 统计卡 + 垂直时间线 ===== */
 .pm-ms-page { padding: 4px 2px 16px; }

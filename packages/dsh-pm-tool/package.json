@@ -24,7 +24,7 @@
     "locale/*.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && tsdown --config tsdown.config.ts",
+    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && tsdown --config tsdown.config.ts",
     "verify": "pnpm run build && node scripts/verify-isolation.mjs",
     "verify:isolation-only": "pnpm run build && node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs"
   },

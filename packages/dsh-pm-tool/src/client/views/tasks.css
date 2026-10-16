@@ -1,0 +1,348 @@
+/* ============================================================================
+   任务页（重设计 v2）· 全部选择器 scope 在 .pm-tasks-root 下
+   颜色/阴影/圆角/间距/字号只用 panel.css 已定义的 v2 变量，不自造色值。
+   ============================================================================ */
+
+.pm-tasks-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  color: var(--ink);
+  font-family: var(--pm-font-sans);
+  font-size: var(--t-14);
+}
+
+/* ---------------- 页头 ---------------- */
+.pm-tasks-root .pt-head { padding: var(--sp-5) var(--sp-6) 0; }
+.pm-tasks-root .pt-row1 {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--sp-4);
+}
+.pm-tasks-root .pt-title h1 {
+  margin: 0; font-size: var(--t-26); font-weight: 750;
+  letter-spacing: var(--ls-tight2); line-height: 1.1;
+}
+.pm-tasks-root .pt-sub {
+  margin-top: 6px; font-size: var(--t-13); color: var(--muted);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.pm-tasks-root .pt-sub b { color: var(--ink-2); font-weight: 600; }
+
+.pm-tasks-root .pt-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: 999px; padding: 8px 14px; width: 280px; color: var(--muted);
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+}
+.pm-tasks-root .pt-search:focus-within { border-color: var(--c-prog); background: var(--field-bg-focus); }
+.pm-tasks-root .pt-search input {
+  background: none; border: 0; outline: 0; color: var(--ink);
+  font: inherit; font-size: var(--t-13); width: 100%;
+}
+.pm-tasks-root .pt-search input::placeholder { color: var(--faint); }
+
+.pm-tasks-root .pt-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3); margin-top: var(--sp-4); flex-wrap: wrap;
+}
+.pm-tasks-root .pt-chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.pm-tasks-root .pt-chip {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  padding: 6px 12px; border-radius: 999px; font-size: var(--t-12); font-weight: 600;
+  color: var(--muted); border: 1px solid var(--line); background: transparent;
+  transition: all .18s var(--ease);
+}
+.pm-tasks-root .pt-chip:hover { color: var(--ink-2); border-color: var(--line-2); }
+.pm-tasks-root .pt-chip.active {
+  color: var(--ink); background: var(--surface-3);
+  border-color: var(--line-3); box-shadow: var(--shadow-1);
+}
+.pm-tasks-root .pt-chip .n {
+  font-size: var(--t-10); font-weight: 700; color: var(--faint);
+  background: var(--field-bg); padding: 1px 6px; border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.pm-tasks-root .pt-chip.active .n { color: var(--c-prog); }
+
+.pm-tasks-root .pt-tools { display: flex; align-items: center; gap: var(--sp-3); }
+.pm-tasks-root .pt-density {
+  display: inline-flex; border: 1px solid var(--line);
+  border-radius: 999px; padding: 2px; background: var(--field-bg);
+}
+.pm-tasks-root .pt-density button {
+  border: 0; background: transparent; color: var(--muted); font: inherit;
+  font-size: var(--t-11); font-weight: 600; padding: 4px 10px;
+  border-radius: 999px; cursor: pointer;
+}
+.pm-tasks-root .pt-density button.active {
+  color: var(--ink); background: var(--surface-3); box-shadow: var(--shadow-1);
+}
+.pm-tasks-root .pt-ghost {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  background: transparent; border: 1px solid var(--line-2); color: var(--ink-2);
+  font: inherit; font-size: var(--t-12); font-weight: 600;
+  padding: 7px 12px; border-radius: var(--r);
+  transition: all .15s var(--ease);
+}
+.pm-tasks-root .pt-ghost:hover { background: var(--surface-3); color: var(--ink); }
+.pm-tasks-root .pt-sort-wrap select {
+  border: 0; background: transparent; color: inherit; font: inherit;
+  font-size: var(--t-12); cursor: pointer; max-width: 132px;
+}
+.pm-tasks-root .pt-primary {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--c-prog); color: #fff; border: 0; cursor: pointer;
+  font-size: var(--t-13); font-weight: 650; padding: 9px 16px;
+  border-radius: var(--r); box-shadow: var(--shadow-glow-prog);
+  transition: filter .18s var(--ease);
+}
+.pm-tasks-root .pt-primary:hover { filter: brightness(1.08); }
+.pm-tasks-root .pt-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ---------------- 表格卡片 ---------------- */
+.pm-tasks-root .pt-card {
+  margin: var(--sp-4) var(--sp-6) var(--sp-6);
+  flex: 1; min-height: 0; display: flex; flex-direction: column;
+  background: var(--surface); background-image: var(--surface-g);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2); overflow: hidden;
+}
+.pm-tasks-root .pt-scroll { flex: 1; min-height: 0; overflow: auto; }
+
+.pm-tasks-root .pt-grid {
+  display: grid;
+  grid-template-columns: 22px 28px 62px minmax(0, 1fr) 128px 64px 108px 148px 72px;
+  align-items: center;
+}
+
+/* 列头吸顶 · 毛玻璃 */
+.pm-tasks-root .pt-thead {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid var(--line-2);
+}
+.pm-tasks-root .pt-th {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint);
+  padding: 0 var(--sp-3); height: 40px; display: flex; align-items: center;
+}
+.pm-tasks-root .pt-th.right { justify-content: flex-end; }
+
+/* ---------------- 叶子行 ---------------- */
+.pm-tasks-root .pt-row {
+  height: 56px; border-bottom: 1px solid var(--line);
+  padding: 0 var(--sp-2);
+  transition: background .15s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease);
+}
+.pm-tasks-root .pt-row:hover { background: var(--surface-2); }
+.pm-tasks-root .pt-row.pt-active {
+  background: var(--surface-3);
+  box-shadow: inset 2px 0 0 var(--c-prog);
+}
+.pm-tasks-root .pt-cell { padding: 0 var(--sp-2); min-width: 0; display: flex; align-items: center; }
+
+/* 紧凑密度 */
+.pm-tasks-root.pt-dense .pt-row { height: 42px; }
+
+/* 选择框：常态透明占位，hover 淡入（不占额外布局、不与 grip 重叠） */
+.pm-tasks-root .pt-sel { display: flex; align-items: center; justify-content: center; }
+.pm-tasks-root .pt-sel input {
+  width: 14px; height: 14px; margin: 0; cursor: pointer; accent-color: var(--c-prog);
+  opacity: 0; transition: opacity .15s var(--ease);
+}
+.pm-tasks-root .pt-row:hover .pt-sel input,
+.pm-tasks-root .pt-sel input:checked { opacity: 1; }
+
+/* 移动手柄：仅 hover 淡入，位于左侧 gutter */
+.pm-tasks-root .pt-gutter { display: flex; align-items: center; justify-content: center; }
+.pm-tasks-root .pt-grip {
+  width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  color: var(--faint); opacity: 0; cursor: grab; border: 0; background: transparent;
+  transition: opacity .15s var(--ease), background .15s var(--ease), color .15s var(--ease);
+}
+.pm-tasks-root .pt-row:hover .pt-grip {
+  opacity: 1; color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 12%, var(--surface-3));
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+.pm-tasks-root .pt-code {
+  font-family: var(--pm-font-mono); font-size: var(--t-11); color: var(--faint);
+  white-space: nowrap;
+}
+
+/* 任务名 + 状态点 */
+.pm-tasks-root .pt-task { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.pm-tasks-root .pt-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; cursor: pointer; border: 0; padding: 0; }
+.pm-tasks-root .pt-dot.done { background: var(--c-done); box-shadow: 0 0 8px color-mix(in srgb, var(--c-done) 60%, transparent); }
+.pm-tasks-root .pt-dot.prog { background: var(--c-prog); box-shadow: 0 0 8px color-mix(in srgb, var(--c-prog) 60%, transparent); }
+.pm-tasks-root .pt-dot.blocked { background: var(--c-block); }
+.pm-tasks-root .pt-dot.todo { background: var(--c-todo); }
+.pm-tasks-root .pt-name {
+  font-size: var(--t-14); font-weight: 550; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; text-align: left;
+}
+.pm-tasks-root .pt-name:hover { color: var(--c-prog); }
+.pm-tasks-root .pt-name[data-done="true"] { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line-3); }
+
+/* 行内状态 select（紧凑、融合） */
+.pm-tasks-root .pt-status {
+  border: 0; background: transparent; color: var(--muted);
+  font: inherit; font-size: var(--t-11); cursor: pointer;
+  border-radius: var(--r-xs); padding: 2px 4px; max-width: 96px;
+}
+.pm-tasks-root .pt-status:hover { background: var(--field-bg); color: var(--ink-2); }
+.pm-tasks-root .pt-wait {
+  font-size: var(--t-10); color: var(--c-block); background: color-mix(in srgb, var(--c-block) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-block) 30%, transparent);
+  padding: 1px 6px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
+}
+
+/* 负责人首字头像 */
+.pm-tasks-root .pt-assignee { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pm-tasks-root .pt-av {
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  font-size: var(--t-10); font-weight: 700; flex: 0 0 auto;
+  background: color-mix(in srgb, var(--c-prog) 18%, transparent); color: var(--c-prog);
+}
+.pm-tasks-root .pt-av.alt { background: color-mix(in srgb, var(--c-done) 18%, transparent); color: var(--c-done); }
+.pm-tasks-root .pt-av.ghost { background: var(--field-bg); color: var(--faint); border: 1px dashed var(--line-2); }
+.pm-tasks-root .pt-aname { font-size: var(--t-12); color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-tasks-root .pt-aname.none { color: var(--faint); }
+
+/* 优先级 */
+.pm-tasks-root .pt-pri {
+  font-size: var(--t-10); font-weight: 700; padding: 2px 7px; border-radius: var(--r-xs);
+  border: 1px solid color-mix(in srgb, var(--c-block) 35%, transparent);
+  color: var(--c-block); background: color-mix(in srgb, var(--c-block) 10%, transparent);
+  letter-spacing: .02em; white-space: nowrap;
+}
+.pm-tasks-root .pt-pri.p0 { color: var(--c-late); border-color: color-mix(in srgb, var(--c-late) 35%, transparent); background: color-mix(in srgb, var(--c-late) 10%, transparent); }
+
+/* 截止日期（行内 date input 融合） */
+.pm-tasks-root .pt-due { font-size: var(--t-12); color: var(--ink-2); white-space: nowrap; }
+.pm-tasks-root .pt-due input[type="date"] {
+  border: 0; background: transparent; color: inherit; font: inherit;
+  font-size: var(--t-12); color: var(--ink-2); width: 118px; cursor: pointer;
+  border-radius: var(--r-xs); padding: 2px 4px;
+}
+.pm-tasks-root .pt-due input[type="date"]:hover { background: var(--field-bg); }
+.pm-tasks-root .pt-due.late { color: var(--c-late); font-weight: 600; }
+.pm-tasks-root .pt-due.late input[type="date"] { color: var(--c-late); }
+.pm-tasks-root .pt-due.done { color: var(--muted); }
+
+/* 进度条 + 行内百分比 */
+.pm-tasks-root .pt-prog { display: flex; align-items: center; gap: 10px; }
+.pm-tasks-root .pt-bar { flex: 1; height: 4px; border-radius: 999px; background: var(--field-bg); overflow: hidden; }
+.pm-tasks-root .pt-bar > i { display: block; height: 100%; border-radius: 999px; background: var(--c-done); transition: width .2s var(--ease); }
+.pm-tasks-root .pt-pct {
+  font-size: var(--t-11); color: var(--muted); font-variant-numeric: tabular-nums;
+  width: 44px; border: 0; background: transparent; text-align: right; cursor: text;
+  border-radius: var(--r-xs); padding: 1px 2px;
+}
+.pm-tasks-root .pt-pct:hover { background: var(--field-bg); color: var(--ink-2); }
+.pm-tasks-root .pt-pct:focus { outline: 1px solid var(--c-prog); background: var(--surface); }
+
+/* 操作区：编辑常显 */
+.pm-tasks-root .pt-acts { display: flex; align-items: center; justify-content: flex-end; gap: 2px; padding-right: var(--sp-2); }
+.pm-tasks-root .pt-iconbtn {
+  width: 28px; height: 28px; border-radius: var(--r-xs); border: 0; cursor: pointer;
+  display: grid; place-items: center; color: var(--faint); background: transparent;
+  transition: all .15s var(--ease);
+}
+.pm-tasks-root .pt-iconbtn:hover { color: var(--ink); background: var(--surface-3); }
+
+/* ---------------- 阶段分组行（父任务横跨整行） ---------------- */
+.pm-tasks-root .pt-group {
+  height: 42px; border-bottom: 1px solid var(--line-2);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  padding: 0 var(--sp-2);
+}
+.pm-tasks-root.pt-dense .pt-group { height: 38px; }
+.pm-tasks-root .pt-tri { color: var(--muted); transition: transform .18s var(--ease); }
+.pm-tasks-root .pt-group.open .pt-tri { transform: rotate(90deg); }
+.pm-tasks-root .pt-gname {
+  display: flex; align-items: center; gap: 10px; min-width: 0;
+  font-size: var(--t-13); font-weight: 700; color: var(--ink);
+}
+.pm-tasks-root .pt-gcount {
+  font-size: var(--t-11); font-weight: 600; color: var(--muted);
+  background: var(--field-bg); border: 1px solid var(--line);
+  padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+}
+.pm-tasks-root .pt-gcount.all { color: var(--c-done); border-color: color-mix(in srgb, var(--c-done) 30%, transparent); }
+.pm-tasks-root .pt-gcount.none { color: var(--faint); }
+.pm-tasks-root .pt-group .pt-cell .pt-gstage-meta { font-size: var(--t-12); color: var(--muted); }
+
+/* ---------------- 空态 ---------------- */
+.pm-tasks-root .pt-empty {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sp-3); padding: var(--sp-10); color: var(--muted); text-align: center;
+}
+.pm-tasks-root .pt-empty svg { color: var(--faint); }
+.pm-tasks-root .pt-empty .pt-empty-cta { margin-top: var(--sp-2); }
+
+/* ---------------- 批量操作条 ---------------- */
+.pm-tasks-root .pt-batch {
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+  margin: 0 var(--sp-6); padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line-2); border-radius: var(--r);
+  background: var(--surface-3); box-shadow: var(--shadow-1);
+}
+.pm-tasks-root .pt-batch .pt-bcount { font-size: var(--t-12); font-weight: 600; color: var(--ink-2); }
+.pm-tasks-root .pt-batch button,
+.pm-tasks-root .pt-batch select,
+.pm-tasks-root .pt-batch input {
+  font: inherit; font-size: var(--t-12);
+  border: 1px solid var(--line); border-radius: var(--r-xs);
+  background: var(--surface); color: var(--ink-2); padding: 4px 8px; cursor: pointer;
+}
+.pm-tasks-root .pt-batch button:hover { background: var(--surface-2); color: var(--ink); }
+.pm-tasks-root .pt-batch .pt-danger { color: var(--c-late); }
+.pm-tasks-root .pt-batch input { cursor: text; }
+
+/* ---------------- 导入预览 ---------------- */
+.pm-tasks-root .pt-import {
+  margin: var(--sp-2) var(--sp-6) 0; padding: var(--sp-3);
+  border: 1px solid var(--line-2); border-radius: var(--r); background: var(--surface-2);
+}
+.pm-tasks-root .pt-import pre {
+  margin: 0 0 var(--sp-2); white-space: pre-wrap; font-family: var(--pm-font-mono);
+  font-size: var(--t-11); color: var(--ink-2); max-height: 200px; overflow: auto;
+}
+
+/* ---------------- 移动弹窗（复用 panel 的 pm-modal-mask / pm-move-picker 视觉） ---------------- */
+.pm-tasks-root .pt-move-mask {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: color-mix(in srgb, var(--bg) 45%, transparent);
+  display: grid; place-items: center;
+}
+.pm-tasks-root .pt-move {
+  width: min(420px, 92vw); max-height: 80vh; overflow: auto;
+  background: var(--surface); background-image: var(--surface-g);
+  border: 1px solid var(--line-2); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3); padding: var(--sp-4);
+}
+.pm-tasks-root .pt-move header { font-size: var(--t-14); font-weight: 700; margin-bottom: var(--sp-3); color: var(--ink); }
+.pm-tasks-root .pt-move button.pt-move-opt {
+  display: block; width: 100%; text-align: left; background: transparent;
+  border: 0; border-radius: var(--r-xs); color: var(--ink-2);
+  font: inherit; font-size: var(--t-13); padding: 8px 10px; cursor: pointer;
+}
+.pm-tasks-root .pt-move button.pt-move-opt:hover { background: var(--surface-3); color: var(--ink); }
+
+/* 状态栏（键盘提示 + 计数） */
+.pm-tasks-root .pt-statusbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-2) var(--sp-4); border-top: 1px solid var(--line);
+  font-size: var(--t-11); color: var(--faint);
+}
+.pm-tasks-root .pt-statusbar kbd {
+  font-family: var(--pm-font-mono); font-size: var(--t-10);
+  border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 4px;
+  padding: 1px 5px; margin: 0 2px; color: var(--muted);
+}
