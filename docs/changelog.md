@@ -8,7 +8,22 @@
 
 ---
 
-## #22 AI 副驾写操作扩展：里程碑/风险/交付物/会议 create+update，HITL 确认草稿卡（2026-10-17，平台：doubao-work）
+## #23 客观进度补全：doneAt/effort/evidence + 人工设定双轨（2026-10-17，平台：doubao-work）
+
+> 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）。加法式 schema（仅新增可选字段），客观派生纯函数逻辑零改动；零新增外部依赖。
+
+- **改了哪些文件**
+  - `packages/dsh-pm-tool/src/core/task.ts`：`taskFields`/`taskCreateSchema`/`taskUpdateSchema` 加法式新增可选 `effortHours`（number ≥0，实际投入工时、非估算）、`evidenceUrl`（trim 字符串 ≤2048，客观佐证链接）、`manualProgress`（int 0..100，可传 `null` 清除）、`manualProgressNote`（string ≤500，人工设定来源/口径备注）；`describeTaskValidation` 补中文标签。
+  - `packages/dsh-pm-tool/src/core/progress-derivation.ts`：新增纯函数 `resolveTaskProgressMeta(task, derived)` 与类型 `TaskProgressMeta/TaskProgressMetaInput`，返回 `objective`（清单派生值）/`manual`（人工值）/`display`（`manual ?? objective`）/`mode`（`manual`/`objective`/`none`）/`manualNote`；纯函数、无 I/O、不读墙钟、不修改入参，客观派生（`deriveProgressMap`）零改动。
+  - `packages/dsh-pm-tool/src/core/tasks.ts`：`updateTask` 在 `manualProgress===null`（显式清除人工）时一并 `delete manualProgressNote`，避免旧口径备注残留。
+  - `packages/dsh-pm-tool/src/client/panel.tsx`：本地 `Task` 类型补可选新字段（含既有 `completedDate`）；`TaskForm` 增加 effort/evidence/manual/manualNote 受控状态与 payload（manual 空串→`null` 清除，否则 clamp 0..100）；新增只读客观块（清单完成度 fraction + 客观值/「证据不足」+ 完成日期只读行）与可编辑项，人工设定附橙色「人工设定 n%」徽标 + 清除按钮；引入 `resolveTaskProgressMeta`。
+  - `packages/dsh-pm-tool/src/client/panel.css`：追加 `.pm-meta-block/.pm-meta-objective/.pm-meta-label/.pm-meta-value/.pm-meta-row/.pm-manual-row/.pm-manual-badge/.pm-manual-clear`，颜色全部消费 `--pm-*`（底层 `--dsw-*` token），零硬编码 hex，跟随 `body[data-ds-dark-theme]`。
+  - 新增 `packages/dsh-pm-tool/scripts/verify-task-meta.mjs`（离线确定性表驱动）。
+- **做了什么 / 为什么**：补 v0.7.4 deferred 的客观进度四件事——doneAt（完成日期，沿用既有 `completedDate`：done 自动记当天、显式值采纳、revert 清除，本项只在 UI 展示）、effort 实际工时、evidence 证据链接、人工 override（显式「人工设定」标记，与清单客观派生并存、互不污染，清除后回落客观）。无信号（无清单/无证据）显「证据不足」，绝不伪造精确百分比。
+- **影响范围 / 如何手动跑**：`node scripts/verify-task-meta.mjs`；全量 `node scripts/verify-isolation.mjs`。新字段可选缺省，旧记录无这些键照常 parse、无需迁移；不改既有字段语义。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` 共 73 脚本、通过 73、失败 0、污染 0；隔离真实 Chrome headless（独立 DSH_HOME/存储/备份/端口 **3162**，正式 3080=PID 66364 全程未变、3091 未监听，ISS-027 单 PID TERM）：浅/深两趟，人工态（证据不足+工时 3.5+证据链接+人工 30% 徽标）与客观态（清单 2/4=50%、无徽标）逐项断言全 OK、0 console error。证据 `docs/verification/progress-meta-20261017/`。
+
+
 
 > 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **72 脚本 / 72 通过 / 失败 0 / 污染 0**（before=after=165）。零存储 schema 改动、零新增外部依赖；模型路由层（c78e6a4 三档路由）只读不改、不绕过、不回退。
 

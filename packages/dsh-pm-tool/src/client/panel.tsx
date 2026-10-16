@@ -17,7 +17,7 @@ import {
   progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
 } from '../core/gantt.js'
-import { deriveProgressMap, checklistFraction } from '../core/progress-derivation.js'
+import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta } from '../core/progress-derivation.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -130,6 +130,11 @@ export type Task = {
   checklist?: { id: string, text: string, done: boolean }[] | null
   repoUrl?: string
   branch?: string
+  completedDate?: string
+  effortHours?: number
+  evidenceUrl?: string
+  manualProgress?: number | null
+  manualProgressNote?: string
 }
 
 export type Milestone = {
@@ -2577,6 +2582,13 @@ function TaskForm({
   onSaved: () => void
   onOpenMeeting: (meetingId: string, projectId?: string) => void
 }) {
+  // #23：客观进度真源（清单 checked/total）；人工设定与之并存且明确区分，客观值不被人工污染。
+  const objectiveMap = useMemo(() => deriveProgressMap(tasks), [tasks])
+  const derivedObjective = task ? objectiveMap.get(task.id) : undefined
+  const meta = resolveTaskProgressMeta(
+    { manualProgress: task?.manualProgress, manualProgressNote: task?.manualProgressNote },
+    derivedObjective,
+  )
   // PROD-10：任务由会议行动项 promote/关联而来时，抽屉顶部展示只读来源链接（前端反查全量 meetings，不落库）。
   const sources = task ? findMeetingSources(meetings, task.id) : []
   const primary = pickPrimarySource(sources)
@@ -2595,6 +2607,11 @@ function TaskForm({
   // 搜索词仅过滤视图，被过滤掉的已选项仍在集合中、照常随表单提交。
   const [predQuery, setPredQuery] = useState('')
   const [checkedIds, setCheckedIds] = useState<ReadonlySet<string>>(() => new Set(task?.predecessorIds ?? []))
+  // #23 客观/人工双轨：实际工时、证据链接、人工设定进度（可清除回落客观）与备注。
+  const [effortHours, setEffortHours] = useState<string>(task?.effortHours != null ? String(task.effortHours) : '')
+  const [evidenceUrl, setEvidenceUrl] = useState<string>(task?.evidenceUrl ?? '')
+  const [manualProgress, setManualProgress] = useState<string>(task?.manualProgress != null ? String(task.manualProgress) : '')
+  const [manualNote, setManualNote] = useState<string>(task?.manualProgressNote ?? '')
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截、磁盘零写。
@@ -2631,6 +2648,11 @@ function TaskForm({
       predecessorIds,
       repoUrl,
       branch,
+      // #23：# 仅在填了值时传；manualProgress 空串 → null（清除人工设定，回落客观）。
+      ...(effortHours.trim() !== '' && Number.isFinite(Number(effortHours)) ? { effortHours: Number(effortHours) } : {}),
+      ...(evidenceUrl.trim() !== '' ? { evidenceUrl: evidenceUrl.trim() } : {}),
+      manualProgress: manualProgress.trim() === '' ? null : Math.max(0, Math.min(100, Math.round(Number(manualProgress)))),
+      ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
     }
     const createPayload = {
       projectId,
@@ -2647,6 +2669,10 @@ function TaskForm({
       ...(predecessorIds.length ? { predecessorIds } : {}),
       ...(repoUrl ? { repoUrl } : {}),
       ...(branch ? { branch } : {}),
+      ...(effortHours.trim() !== '' && Number.isFinite(Number(effortHours)) ? { effortHours: Number(effortHours) } : {}),
+      ...(evidenceUrl.trim() !== '' ? { evidenceUrl: evidenceUrl.trim() } : {}),
+      ...(manualProgress.trim() !== '' ? { manualProgress: Math.max(0, Math.min(100, Math.round(Number(manualProgress)))) } : {}),
+      ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
     }
     const success = await run(task
       ? `task update ${task.id} ${JSON.stringify(payload)}`
@@ -2779,6 +2805,54 @@ function TaskForm({
         </div>
       })()}
     </Field>
+    {/* #23 客观/人工双轨：客观进度只读展示（清单完成度/证据不足），完成日期只读；
+        实际工时、证据链接、人工设定进度（可清除回落客观）与备注为可编辑项。 */}
+    <div className="pm-meta-block">
+      <div className="pm-meta-objective" data-mode={meta.mode}>
+        <span className="pm-meta-label">客观进度（清单完成度）</span>
+        <span className="pm-meta-value">
+          {derivedObjective?.value != null ? `${derivedObjective.value}%` : '证据不足'}
+          {derivedObjective?.checklist && <span className="pm-muted">（{checklistFraction(derivedObjective)}）</span>}
+        </span>
+      </div>
+      {task?.completedDate && (
+        <div className="pm-meta-row"><span className="pm-meta-label">完成日期</span><span>{task.completedDate}</span></div>
+      )}
+      <Field label="实际工时（小时，可选）">
+        <input
+          type="number" min="0" step="0.5" inputMode="decimal"
+          value={effortHours} onChange={e => setEffortHours(e.currentTarget.value)}
+          placeholder="如 3.5（实际投入，非估算）"
+        />
+      </Field>
+      <Field label="证据链接（可选）">
+        <input
+          type="text" value={evidenceUrl} onChange={e => setEvidenceUrl(e.currentTarget.value)}
+          placeholder="https://… 完成/进度的客观佐证链接"
+        />
+      </Field>
+      <Field label="人工设定进度（0-100，可选）">
+        <div className="pm-manual-row">
+          <input
+            type="number" min="0" max="100" inputMode="numeric"
+            value={manualProgress} onChange={e => setManualProgress(e.currentTarget.value)}
+            placeholder="留空即回落客观进度"
+          />
+          {meta.mode === 'manual' && <span className="pm-manual-badge">人工设定 {meta.manual}%</span>}
+          {meta.mode === 'manual' && (
+            <button
+              type="button" className="pm-manual-clear"
+              onClick={() => { setManualProgress(''); setManualNote('') }}
+            >清除人工设定</button>          )}
+        </div>
+      </Field>
+      <Field label="人工设定备注（来源/口径，可选）">
+        <textarea
+          rows={2} value={manualNote} onChange={e => setManualNote(e.currentTarget.value)}
+          placeholder="记录为何人工设定，便于追溯口径"
+        />
+      </Field>
+    </div>
     <div className="pm-drawer-actions">
       {task && <button
         className="pm-button pm-button-danger"

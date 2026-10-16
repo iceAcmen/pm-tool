@@ -61,6 +61,14 @@ const taskFields = {
   // 旧 v1/v2 记录无此键照常读取；写业务层负责「内部节点与非空清单互斥」与单项增量修改。
   // 不进 taskCreateSchema / taskUpdateSchema：建任务默认不带清单，普通 update 也不能整段替换数组。
   checklist: taskChecklistSchema.optional(),
+  // #23 客观进度补全（加法式、可选、向后兼容；旧记录无这些键照常读取，无需迁移）：
+  // 实际投入工时（非估算，小时，≥0，可缺省）；客观佐证链接（可缺省）。
+  effortHours: z.number().min(0, '实际工时不得为负数').optional(),
+  evidenceUrl: z.string().trim().max(2048, '证据链接过长').optional(),
+  // 人工设定进度（0..100 整数，可显式传 null 清除）：与清单客观派生并存且明确区分，
+  // 绝不覆盖/污染客观值；manualProgressNote 保留人工设定的来源/口径备注。
+  manualProgress: z.number().int().min(0).max(100).nullable().optional(),
+  manualProgressNote: z.string().max(500).optional(),
 }
 
 function validateDateOrder(
@@ -100,6 +108,10 @@ export const taskCreateSchema = z.strictObject({
   predecessorIds: taskFields.predecessorIds,
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
+  effortHours: taskFields.effortHours,
+  evidenceUrl: taskFields.evidenceUrl,
+  manualProgress: taskFields.manualProgress,
+  manualProgressNote: taskFields.manualProgressNote,
 }).superRefine(validateDateOrder).superRefine(validateRepoRelation)
 
 /** 更新不允许直接改变归属、父任务、编号、顺序与时间戳；移动使用独立动作。 */
@@ -117,6 +129,10 @@ export const taskUpdateSchema = z.strictObject({
   predecessorIds: taskFields.predecessorIds,
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
+  effortHours: taskFields.effortHours,
+  evidenceUrl: taskFields.evidenceUrl,
+  manualProgress: taskFields.manualProgress,
+  manualProgressNote: taskFields.manualProgressNote,
 }).superRefine(validateRepoRelation)
   .refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
@@ -138,6 +154,10 @@ export function describeTaskValidation(error: z.ZodError): string {
     progress: '进度（0 到 100 的整数）',
     milestoneId: '里程碑 ID 或 null',
     predecessorIds: '前置依赖任务 ID 数组（须同项目、存在、不自指、不成环）',
+    effortHours: '实际投入工时（小时，≥0，可缺省）',
+    evidenceUrl: '客观佐证链接（可缺省）',
+    manualProgress: '人工设定进度（0 到 100 整数，传 null 清除）',
+    manualProgressNote: '人工设定来源/口径备注（可缺省）',
     ...repoFieldLabels,
   }
   return [...new Set(error.issues.map(issue =>

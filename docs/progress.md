@@ -2,9 +2,22 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-17（doubao-work **#22 AI 副驾写操作扩展**：副驾写从仅 task.update 扩到里程碑/风险/交付物/会议四类 create+update，HITL 确认草稿卡、确认才落库、取消零写，复用 ask-apply 守卫、零 schema、乐观锁冲突跳过、幂等。build=0、guard 72 脚本/72 通过/0 失败/0 污染；隔离 3161 真实 Chrome 浅/深两趟 8 步草稿/整批应用/取消零写全 OK，证据 `docs/verification/copilot-writes-20261017/`）
+最后更新：2026-10-17（doubao-work **#23 客观进度补全**：doneAt/completedDate 展示、effortHours 实际工时、evidenceUrl 证据链接、manualProgress 人工设定双轨；客观以清单 checked/total 派生、无信号显「证据不足」不伪造，人工显式标记且不污染客观；加法式可选字段、旧数据安全读入。build=0、guard 73 脚本/73 通过/0 失败/0 污染；隔离 3162 真实 Chrome 浅/深两趟人工态+客观态全 OK，证据 `docs/verification/progress-meta-20261017/`）
 
-## 当前阶段：#22 AI 副驾写操作扩展·已核验（2026-10-17，doubao-work）
+## 当前阶段：#23 客观进度补全·已核验（2026-10-17，doubao-work）
+
+- **目标**：补 v0.7.4 deferred 的客观进度四件事——doneAt 完成日期、effort 实际工时、evidence 证据链接、人工 override（显式「人工设定」标记，与客观派生区分、保留来源口径）；客观进度以清单 checked/total 派生，无信号显「证据不足」不伪造百分比；派生纯函数只读无 I/O；新字段加法式、可选、向后兼容、旧数据安全读入、无需迁移。
+- **实现**：
+  - `core/task.ts`：加法式新增可选 `effortHours`(≥0 数)、`evidenceUrl`(≤2048 trim)、`manualProgress`(0..100 int，null 清除)、`manualProgressNote`(≤500)；create/update schema 与校验标签同步。
+  - `core/progress-derivation.ts`：纯函数 `resolveTaskProgressMeta(task, derived)` 返回 objective/manual/display/mode/manualNote；`deriveProgressMap` 客观派生零改动。
+  - `core/tasks.ts`：`manualProgress===null` 时连带清除 `manualProgressNote`。
+  - `client/panel.tsx`：TaskForm 只读客观块（清单 fraction + 客观值/证据不足 + 完成日期）+ 工时/证据/人工设定输入与橙色「人工设定 n%」徽标/清除按钮/备注；本地 Task 类型补可选字段。
+  - `client/panel.css`：`.pm-meta-*`/`.pm-manual-*` 样式，消费 `--pm-*`（`--dsw-*`）零 hex，跟随 `body[data-ds-dark-theme]`。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）；新增 `verify-task-meta.mjs`（effort/evidence 读写缺省、人工显式标记不污染客观、清除回落、旧记录无新字段安全 parse、done↔completedDate 关系，离线确定性）。隔离真实 Chrome headless（独立 DSH_HOME/存储/备份/端口 **3162**，正式 3080=PID 66364 未变、3091 未监听，ISS-027 单 PID TERM）：浅/深两趟人工态（证据不足+3.5h+证据链接+人工 30% 徽标）与客观态（2/4=50%、无徽标）逐项 OK、0 console error。证据 `docs/verification/progress-meta-20261017/`。
+- **边界**：仅加法式可选字段、不改既有字段语义、不破坏性迁移；客观派生逻辑零改动；零新增外部依赖；不做 #24 vitest/E2E/CI。
+- **下一步**：看板 P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 视图重设计；prod 真实 Key 仍 MANUAL_PENDING。
+
+## 历史阶段：#22 AI 副驾写操作扩展·已核验（2026-10-17，doubao-work）
 
 - **目标**：副驾 explorePlan/apply 从仅 `task.update` 扩到里程碑、风险、交付物、会议四类实体，每类支持「创建 + 更新」；保持 HITL（确认草稿卡，确认才落库、取消零写），复用既有 ask-apply 后端守卫，零存储 schema 改动，乐观锁冲突跳过、重复 apply 幂等。
 - **实现**：

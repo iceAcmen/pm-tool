@@ -356,3 +356,50 @@ export function formatProgressValue(p: TaskProgress): string {
 export function checklistFraction(p: TaskProgress): string | null {
   return p.checklist ? `${p.checklist.checked}/${p.checklist.total}` : null
 }
+
+// ---------- #23 客观/人工双轨解析（纯函数、无 I/O、无回写） ----------
+
+/** 任务上的人工设定元数据（结构鸭子类型；真实 Task 是其超集）。 */
+export interface TaskProgressMetaInput {
+  manualProgress?: number | null
+  manualProgressNote?: string
+}
+
+/**
+ * 客观派生（清单 checked/total）与人工设定并存、明确区分：
+ *  - objective：清单客观派生值（来自 deriveProgressMap），绝不被 manual 污染；
+ *  - manual：人工显式设定值（0..100），可缺省；
+ *  - display：展示值 = manual ?? objective（无两者 → null）；
+ *  - mode：'manual'（人工设定，带徽标）/ 'objective'（客观清单）/ 'none'（证据不足）。
+ * 纯函数：不修改入参、不读墙钟、不写库、无 I/O。
+ */
+export interface TaskProgressMeta {
+  objective: number | null
+  manual: number | null
+  display: number | null
+  mode: 'objective' | 'manual' | 'none'
+  manualNote?: string
+}
+
+export function resolveTaskProgressMeta(
+  task: TaskProgressMetaInput,
+  derived: TaskProgress | undefined,
+): TaskProgressMeta {
+  const objective = derived?.value ?? null
+  const manual = typeof task.manualProgress === 'number' && Number.isFinite(task.manualProgress)
+    ? task.manualProgress
+    : null
+  const display = manual ?? objective
+  const mode: TaskProgressMeta['mode'] = manual !== null
+    ? 'manual'
+    : objective !== null
+      ? 'objective'
+      : 'none'
+  return {
+    objective,
+    manual,
+    display,
+    mode,
+    manualNote: task.manualProgressNote || undefined,
+  }
+}

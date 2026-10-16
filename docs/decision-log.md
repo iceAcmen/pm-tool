@@ -523,3 +523,16 @@
 - **理由**：在不触碰模型路由与存储 schema 的前提下，把副驾写面扩到四类实体；HITL 草稿卡保留人在回路，避免模型直接落库误写；复用既有 repo/command 保证校验与原子写一致，避免双轨写路径漂移。
 - **替代方案（已否决）**：① 副驾直接调各实体命令绕过 ask-apply 守卫——绕过白名单校验、无 HITL，否；② 为四类实体新增独立写 API/存储字段——违背零 schema、引入迁移，否；③ 模型未给可解析动作时编造写操作——违反诚实原则，否。
 - **最终结果**：`pnpm build`=0；verify-isolation **72 脚本 / 72 通过 / 失败 0 / 污染 0**；新增 `verify-copilot-writes.mjs`（四类 create/update 解析、确认落库、取消零写、冲突跳过、幂等、非法/未知忽略、跨项目拒绝）；隔离 3161 真实 Chrome 浅/深两趟 8 步草稿/整批应用/取消零写全 OK，证据 `docs/verification/copilot-writes-20261017/`。
+
+## ADL-055 ｜ 2026-10-17 ｜ #23 客观进度补全：清单客观派生与人工设定双轨并存、加法式可选字段、无信号显证据不足
+
+- **背景**：设计契约 `docs/product/12-objective-progress.md` 把 doneAt 完成日期、effort 实际工时、evidence 证据链接、人工 override 列入 v0.7.4 deferred；旧实现只有 legacy `progress` 旁注与清单派生，人工值会与客观值混淆，且无信号时容易被填成 0% 这种假精确。
+- **决定**：
+  1. **双轨并存、互不污染**：`resolveTaskProgressMeta(task, derived)`（纯函数、无 I/O、不读墙钟）分别返回 `objective`（清单 checked/total 派生，来自零改动的 `deriveProgressMap`）与 `manual`（人工 0..100）；`display = manual ?? objective`，`mode` 标 `manual/objective/none`；人工设定绝不改写 objective，清除（`manualProgress=null`）后自动回落客观。
+  2. **无信号不伪造**：无清单/无证据时 objective=null，UI 显「证据不足」而非 0%；status=done 但无清单的叶子也不伪造 100%。
+  3. **doneAt 复用既有 completedDate**：不新建完成日期字段；done 自动记当天、显式值采纳、revert 清除（既有口径与 verify-completed-date.mjs 已覆盖），本项只在任务表单只读展示。
+  4. **加法式可选 schema**：仅新增可选 `effortHours/evidenceUrl/manualProgress/manualProgressNote`，缺省安全、旧记录无这些键照常 parse、无需迁移、不改既有字段语义；这与 #22「零 schema」不同——本项就是按契约补 deferred 字段。
+  5. **人工设定显式标记**：表单内橙色「人工设定 n%」徽标 + 清除按钮 + 来源/口径备注 textarea，与客观只读块分区，避免人工值被误读为客观派生。
+- **理由**：客观与人工是两种口径，必须分开存、分开显，否则看板会把人工拍板当成清单完成度；可选加法式保证老数据零迁移零报错；纯函数 meta 解析可离线表驱动锁定，避免墙钟/随机引入非确定性。
+- **替代方案（已否决）**：① 用人工值直接覆盖 objective 单轨——人工污染客观派生、无法追溯，否；② 无信号默认 0%——伪造精确值、违反诚实原则，否；③ 新建独立 doneAt 字段——与既有 completedDate 重复、引入双完成日期，否；④ 为新字段做破坏性迁移——老数据风险大、无必要，否。
+- **最终结果**：`pnpm build`=0；verify-isolation **73 脚本 / 73 通过 / 失败 0 / 污染 0**；新增 `verify-task-meta.mjs`（effort/evidence 读写缺省、人工标记不污染客观、清除回落、旧记录安全 parse、done↔completedDate）；隔离 3162 真实 Chrome 浅/深两趟人工态（证据不足+3.5h+证据链接+人工 30% 徽标）与客观态（2/4=50%、无徽标）全 OK，证据 `docs/verification/progress-meta-20261017/`。

@@ -1852,3 +1852,57 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
   .pm-ppl-name { width: auto; flex: 0 1 auto; }
 }
 
+
+/* #23 客观/人工双轨：任务表单内的客观进度只读块 + 人工设定控件。
+   颜色全部消费 dsw/pm token，零硬编码 hex，跟随 body[data-ds-dark-theme]。 */
+.pm-meta-block {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--pm-line-soft);
+  border-radius: 10px;
+  background: var(--pm-blue-soft);
+}
+.pm-meta-objective {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 2px 4px;
+}
+.pm-meta-objective[data-mode='none'] .pm-meta-value { color: var(--pm-muted); font-weight: 500; }
+.pm-meta-label { font-size: 12px; color: var(--pm-secondary); }
+.pm-meta-value { font-size: 14px; font-weight: 600; color: var(--pm-ink); }
+.pm-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--pm-ink);
+  padding: 2px;
+}
+.pm-manual-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pm-manual-row input { flex: 1 1 120px; min-width: 120px; }
+.pm-manual-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--pm-warning);
+  color: var(--pm-canvas);
+  white-space: nowrap;
+}
+.pm-manual-clear {
+  padding: 4px 10px;
+  border: 1px solid var(--pm-line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--pm-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pm-manual-clear:hover { background: var(--pm-hover); color: var(--pm-ink); }

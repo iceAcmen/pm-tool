@@ -239,6 +239,8 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     }
     // 空仓库地址/分支归一为缺键（显式传空白即清空），不留空字符串。
     omitEmptyRepoKeys(nextInput)
+    // #23：显式清除人工设定（manualProgress=null）时，一并清掉人工备注，避免残留旧口径。
+    if (fields.manualProgress === null) delete nextInput.manualProgressNote
     const next = taskWriteSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)
