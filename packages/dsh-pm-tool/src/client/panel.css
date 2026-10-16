@@ -1448,6 +1448,8 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
   --pm-st-due: rgb(232, 185, 63);
 }
 .pm-bento { display: block; }
+.pm-bento-validation { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--pm-st-overdue); background: color-mix(in srgb, var(--pm-st-overdue) 12%, transparent); color: var(--pm-st-overdue); font-size: 12px; white-space: pre-line; }
+.pm-bento-validation-x { background: none; border: none; color: inherit; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; }
 .pm-bento-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
 .pm-bento-stats { display: flex; gap: 18px; font-size: 12px; color: var(--pm-secondary); }
 .pm-bento-stats b { color: var(--pm-ink); font-weight: 600; margin-left: 2px; }

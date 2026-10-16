@@ -24,6 +24,7 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [draft, setDraft] = useState<DashboardLayout | null>(null)
   const [query, setQuery] = useState('')
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   const live = draft ?? layout
 
@@ -35,7 +36,7 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
     [live, editing],
   )
 
-  const startEdit = () => { setDraft(structuredClone(layout)); setEditing(true); setSelectedId(null) }
+  const startEdit = () => { setDraft(structuredClone(layout)); setEditing(true); setSelectedId(null); setValidationError(null) }
   const saveEdit = () => {
     if (!draft) return
     // zod 保存闸门：任一卡片 configSchema.parse 失败则定位字段、提示且不写入。
@@ -48,15 +49,16 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
       if (!r.success) bad.push(`${desc?.name ?? w.type}: ${r.error.issues.map(i => i.path.join('.') || '(root)').join(',')}`)
     }
     if (bad.length) {
-      window.alert(`配置校验未通过，未保存：\n${bad.join('\n')}`)
+      setValidationError(`配置校验未通过，未保存：\n${bad.join('；')}`)
       return
     }
     const final = { ...draft, scope, version: 1 }
     saveLayout(scope, final)
     setLayout(final)
+    setValidationError(null)
     setDraft(null); setEditing(false); setSelectedId(null); setDrawerOpen(false)
   }
-  const cancelEdit = () => { setDraft(structuredClone(resolveLayout(DEFAULT_LAYOUT))); setLayout(resolveLayout(DEFAULT_LAYOUT)); setDraft(null); setEditing(false); setSelectedId(null) }
+  const cancelEdit = () => { setDraft(structuredClone(resolveLayout(DEFAULT_LAYOUT))); setLayout(resolveLayout(DEFAULT_LAYOUT)); setValidationError(null); setDraft(null); setEditing(false); setSelectedId(null) }
   const resetDefault = () => { resetScope(scope); setDraft(structuredClone(DEFAULT_LAYOUT)) }
 
   const addWidget = (type: string) => {
@@ -120,6 +122,13 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
           : <button type="button" className="pm-bento-toolbtn" onClick={startEdit}>布局编辑</button>}
       </div>
     </div>
+
+    {validationError && (
+      <div className="pm-bento-validation" role="alert">
+        <span>{validationError}</span>
+        <button type="button" className="pm-bento-validation-x" onClick={() => setValidationError(null)} aria-label="关闭">×</button>
+      </div>
+    )}
 
     <div className={`pm-bento-body ${editing ? 'pm-bento-editing' : ''}`}>
       {editing && drawerOpen && <CardDrawer live={live} query={query} setQuery={setQuery} onAdd={addWidget}/>}
