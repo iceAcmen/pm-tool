@@ -1,0 +1,61 @@
+# #24 确定性 CI：build / 隔离门 / vitest 单测+覆盖率为必经；E2E 独立 job。
+# 真实出网 smoke（verify-real-model.mjs）不进任何必经 job。
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core:
+    name: build + verify-isolation + unit tests (coverage)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/dsh-pm-tool
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.28.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: packages/dsh-pm-tool/pnpm-lock.yaml
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Build (tsc + css + tsdown)
+        run: pnpm run build
+      - name: Isolation gate (存储/隔离/集成，确定性)
+        run: node scripts/verify-isolation.mjs
+      - name: Unit tests + v8 coverage gate
+        run: pnpm run test:coverage
+
+  e2e:
+    name: deterministic e2e (real host + headless chromium; skips without harness)
+    runs-on: ubuntu-latest
+    # 宿主 deepseek-harness 不在本仓库；e2e.mjs 在缺 harness/Chrome 时以 0 退出（SKIP）。
+    # 本机具备完整条件时真实跑通，CI 环境保持非阻断、不出网、不调模型。
+    defaults:
+      run:
+        working-directory: packages/dsh-pm-tool
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.28.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: packages/dsh-pm-tool/pnpm-lock.yaml
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Headless chromium (for e2e when harness present)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq chromium-browser || true
+      - name: Deterministic e2e (SKIP exit 0 without local harness)
+        run: pnpm run e2e

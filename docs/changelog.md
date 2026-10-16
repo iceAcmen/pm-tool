@@ -8,7 +8,27 @@
 
 ---
 
-## #23 客观进度补全：doneAt/effort/evidence + 人工设定双轨（2026-10-17，平台：doubao-work）
+## #24 测试框架 + CI：vitest 离线单测 + v8 覆盖率门 + 确定性 E2E + GitHub Actions（2026-10-17，平台：doubao-work）
+
+> 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）；vitest **4 文件 / 29 用例全过**，v8 子集覆盖率门绿。只加 devDependencies，不改 package.json version（仍 0.7.4）、不打 tag；`verify-real-model.mjs` 真实出网 smoke 不进任何必经 job。
+
+- **改了哪些文件**
+  - 新增 `packages/dsh-pm-tool/vitest.config.ts`：environment=node，`include: src/**/*.test.ts`；v8 coverage `include` 收窄到本批针对的 4 个纯模块（settings/copilot/progress-derivation/gantt），阈值取子集真实实跑（lines 45.02 / branches 86.25 / functions 42.37）略降留余量：lines 40 / branches 80 / functions 35 / statements 40。
+  - 新增 4 个离线确定性单测（与源码同级、`*.test.ts`，被 tsconfig exclude 不进 lib，不会被 verify-isolation 的 `scripts/verify-*.mjs` 发现规则误抓）：
+    - `src/core/gantt.criticalPath.test.ts`（8）：线性链 A→B→C 全 slack0 关键 + 关键边、确定性逐字段一致、成环 X↔Y 不崩溃/inCycle/不高亮/不打断、缺日期 missingDate 不补不顺延、悬空计数、多连通分量各自关键、空输入。
+    - `src/core/settings.test.ts`（6）：13 项默认值锁原硬编码现值、非对象全默认、合法覆盖、非法回落记 invalid、绿灯<黄灯倒挂回落、sameSettings。
+    - `src/core/progress-meta.test.ts`（5）：objective/manual 双轨、manual 不污染 objective、无信号 none 不伪造、清除回落、仅人工。
+    - `src/core/copilot-validate.test.ts`（10）：task.update 合法/不存在/空 patch/非法 status/未知字段/progress 越界/start>due；milestone create 必填+achieved 交叉/update 存在；risk/issue 交叉约束（risk 必 probability 禁 solution、issue probability=null 禁 responsePlan）；deliverable/meeting 必填与时长区间；未知 op 拒。
+  - `packages/dsh-pm-tool/tsconfig.json`：`exclude: ["src/**/*.test.ts","src/**/*.test.tsx"]`（测试不进 tsc 产物 lib，避免单测文件被打进交付 bundle）。
+  - `packages/dsh-pm-tool/package.json`：devDependencies 新增 `vitest@2.1.9`、`@vitest/coverage-v8@2.1.9`、`puppeteer-core@23.11.1`（仅 dev，不进运行时依赖）；scripts 新增 `test`=`vitest run`、`test:coverage`=`vitest run --coverage`、`e2e`=`node scripts/e2e.mjs`。
+  - 新增 `packages/dsh-pm-tool/scripts/e2e.mjs`：自建隔离 DSH_HOME / 临时存储 / 临时备份 / 非生产端口，`DSH_PM_E2E=1` 确定性缝（不调模型、不出网），puppeteer-core 驱动真实 Chrome headless 断言项目名/种子任务渲染/0 console error；缺 harness 目录/Chrome/已注册 profile 时打印 SKIP 并以 0 退出（非阻断，便于无宿主的 CI 不硬失败）；ISS-027 单 PID TERM 停服、临时目录清理，正式 3080/3091 不触碰。
+  - 新增 `.github/workflows/ci.yml`：push/PR 触发；`core` job（Node 22 + pnpm 11.28.5，`pnpm install --frozen-lockfile` → `pnpm run build` → `node scripts/verify-isolation.mjs` → `pnpm run test:coverage`）；`e2e` 独立 job（装 headless chromium，缺本地 harness 时 SKIP exit 0）；真实出网 smoke 不在必经 job。
+  - `.gitignore`：补 `coverage/`（v8 报告产物不入库）。
+- **做了什么 / 为什么**：在不推翻、不破坏现有 verify-isolation（继续承担存储/隔离/集成门）的前提下引入正式单测层——vitest 只覆盖 core 纯函数、离线零网络；v8 覆盖率门槛针对本批模块按真实实跑值设定，不造假大面积 exclude、不设必挂高门槛；把已有确定性 E2E 固化为可重复 `pnpm e2e`；GitHub Actions 把 build/隔离门/单测覆盖率串成必经，E2E 独立 job。
+- **影响范围 / 如何手动跑**：`pnpm run test`（单测）、`pnpm run test:coverage`（覆盖率门）、`pnpm run e2e`（真实宿主可跑，否则 SKIP exit 0）、`node scripts/verify-isolation.mjs`（既有确定性门，73/73 不变）。未改任何业务 src 逻辑、未改存储 schema、未动模型路由层。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` 73/73、污染 0；vitest 29/29、子集 All files lines 45.02 / branches 86.25 / functions 42.37 / statements 45.02 过门槛；`pnpm e2e` 本机可重复 PASS（项目/任务渲染、0 console error，端口 3171 用完即 DOWN，正式 3080=PID 66364 未变、3091 未监听）。本机无 `gh` 登录，未在 GitHub 端观测到 Actions 实跑（CI 流程已配置、本地等价命令全绿）。
+
+
 
 > 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）。加法式 schema（仅新增可选字段），客观派生纯函数逻辑零改动；零新增外部依赖。
 

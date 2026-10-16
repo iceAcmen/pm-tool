@@ -536,3 +536,16 @@
 - **理由**：客观与人工是两种口径，必须分开存、分开显，否则看板会把人工拍板当成清单完成度；可选加法式保证老数据零迁移零报错；纯函数 meta 解析可离线表驱动锁定，避免墙钟/随机引入非确定性。
 - **替代方案（已否决）**：① 用人工值直接覆盖 objective 单轨——人工污染客观派生、无法追溯，否；② 无信号默认 0%——伪造精确值、违反诚实原则，否；③ 新建独立 doneAt 字段——与既有 completedDate 重复、引入双完成日期，否；④ 为新字段做破坏性迁移——老数据风险大、无必要，否。
 - **最终结果**：`pnpm build`=0；verify-isolation **73 脚本 / 73 通过 / 失败 0 / 污染 0**；新增 `verify-task-meta.mjs`（effort/evidence 读写缺省、人工标记不污染客观、清除回落、旧记录安全 parse、done↔completedDate）；隔离 3162 真实 Chrome 浅/深两趟人工态（证据不足+3.5h+证据链接+人工 30% 徽标）与客观态（2/4=50%、无徽标）全 OK，证据 `docs/verification/progress-meta-20261017/`。
+
+## ADL-056 ｜ 2026-10-17 ｜ #24 测试框架 + CI：vitest 纯函数单测层与 verify-isolation 互补、v8 门槛按本批子集真实值设定、确定性 E2E 独立 job、real-model smoke 不进必经
+
+- **背景**：仓库此前只有表驱动离线 `verify-*.mjs` 集成/隔离门，没有正式单测框架，也没有 CI；本批要在「不推翻 verify-isolation」的前提下引入 vitest + v8 覆盖率门 + 可重复 E2E + GitHub Actions，且不得把真实出网/真实模型依赖塞进必经门。
+- **决定**：
+  1. **两层互补、不替代**：verify-isolation 继续承担存储/隔离/集成/资产零污染门（73 脚本不变）；vitest 定位为 core 纯函数单元层，`*.test.ts` 与源码同级、被 tsconfig exclude 不进 lib、不被 verify 发现规则误抓。
+  2. **覆盖率门槛收窄到本批针对模块**：全量 src/core 行覆盖仅 8.93%（大量未测粘合层），无法设全局门槛；故 v8 `include` 只收 settings/copilot/progress-derivation/gantt 四个本批模块，阈值取子集真实实跑（lines 45.02/branches 86.25/functions 42.37）略降为 lines40/branches80/functions35/statements40，留合理余量且实测绿；不造假大面积 exclude、不设必挂高门槛。
+  3. **E2E 确定化、非阻断**：`scripts/e2e.mjs` 自建隔离 DSH_HOME/临时存储/备份/非生产端口，`DSH_PM_E2E=1` 确定性缝（不调模型、不出网），puppeteer-core 真实 Chrome 断言渲染+console 干净；缺 harness/Chrome/profile 时 SKIP exit 0，使无宿主的 CI 不硬失败。
+  4. **CI 分 job**：`core` job 必经 install→build→verify-isolation→vitest coverage；`e2e` 独立 job（装 headless chromium，缺 harness SKIP）；`verify-real-model.mjs` 真实出网 smoke 不进任何必经 job。
+  5. **只加 devDependencies**：vitest/@vitest/coverage-v8/puppeteer-core 均 devDep，不改 package.json version（仍 0.7.4）、不打 tag、不新增运行时业务依赖。
+- **理由**：单测层与集成门职责分离，避免用单测覆盖存储 I/O、也避免集成门摊薄纯逻辑回归；覆盖率门槛必须诚实可达成，否则要么造假要么必挂；E2E 依赖仓库外的只读宿主 deepseek-harness，CI 无法自洽，故设计为缺件 SKIP 而非硬失败；真实模型 smoke 受网络/配额影响，不能阻断主干。
+- **替代方案（已否决）**：① 把现有 verify-*.mjs 简单复制成 vitest——重复造门、职责不清，否；② 对全量 src/core 设高覆盖率门槛——大量粘合层未测必挂，靠大面积 exclude 凑绿属造假，否；③ E2E 在 CI 强制真实出网/真实模型——不稳定、阻断主干，否；④ 把 verify-real-model.mjs 加回确定性门——违反离线确定性要求，否。
+- **最终结果**：`pnpm build`=0；verify-isolation **73 脚本 / 73 通过 / 失败 0 / 污染 0**；vitest 4 文件 29 用例全过、子集覆盖率过门槛；`pnpm e2e` 本机可重复 PASS（3171 用完即 DOWN，正式 3080=66364 未变）；`.github/workflows/ci.yml` 已配置。本机无 gh 登录，未在 GitHub 端观测 Actions 实跑，如实记录。

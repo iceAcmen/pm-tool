@@ -2,9 +2,22 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-17（doubao-work **#23 客观进度补全**：doneAt/completedDate 展示、effortHours 实际工时、evidenceUrl 证据链接、manualProgress 人工设定双轨；客观以清单 checked/total 派生、无信号显「证据不足」不伪造，人工显式标记且不污染客观；加法式可选字段、旧数据安全读入。build=0、guard 73 脚本/73 通过/0 失败/0 污染；隔离 3162 真实 Chrome 浅/深两趟人工态+客观态全 OK，证据 `docs/verification/progress-meta-20261017/`）
+最后更新：2026-10-17（doubao-work **#24 测试框架 + CI**：vitest 离线确定性纯函数单测 4 文件 29 用例（criticalPath/settings/resolveTaskProgressMeta/validateActions），v8 子集覆盖率门（lines40/branches80/functions35），确定性 E2E 固化为 `pnpm e2e`（隔离 DSH_HOME/非生产端口/DSH_PM_E2E=1 不出网），`.github/workflows/ci.yml` 分 core/e2e 两 job；只加 devDeps、版本仍 0.7.4。build=0、guard 73/73/0 失败/0 污染、vitest 29/29、e2e 本机可重复 PASS）
 
-## 当前阶段：#23 客观进度补全·已核验（2026-10-17，doubao-work）
+## 当前阶段：#24 测试框架 + CI·已核验（2026-10-17，doubao-work）
+
+- **目标**：不推翻 verify-isolation，引入正式测试体系——① vitest 离线确定性纯函数单测（criticalPath / settings 默认归一化校验 / resolveTaskProgressMeta 客观人工双轨 / validateActions 四实体白名单交叉约束）；② v8 覆盖率门（阈值按本批子集真实实跑略降留余量）；③ 确定性 E2E 固化为可重复 `pnpm e2e`（隔离 DSH_HOME/独立存储备份/非生产端口，DSH_PM_E2E=1 不调模型不出网）；④ GitHub Actions（build/verify-isolation/vitest+coverage 必经，e2e 独立 job，real-model smoke 不进必经）。
+- **实现**：
+  - `vitest.config.ts`：node 环境，`include src/**/*.test.ts`，v8 `include` 收窄 settings/copilot/progress-derivation/gantt 四模块，阈值 lines40/branches80/functions35/statements40（实跑 45.02/86.25/42.37/45.02 留余量）。
+  - 4 个 `src/core/*.test.ts`：gantt.criticalPath(8)/settings(6)/progress-meta(5)/copilot-validate(10)，共 29 用例，纯离线零网络。
+  - `tsconfig.json` exclude 测试文件（不进 lib bundle）；`package.json` devDeps 加 vitest/@vitest/coverage-v8/puppeteer-core，scripts 加 test/test:coverage/e2e。
+  - `scripts/e2e.mjs`：自启隔离宿主/临时 DSH_HOME/非生产端口/puppeteer-core 真实 Chrome 断言渲染+console 干净，缺 harness/Chrome 时 SKIP exit 0，ISS-027 单 PID TERM。
+  - `.github/workflows/ci.yml`：core job（Node22+pnpm，install→build→verify-isolation→test:coverage），e2e 独立 job（headless chromium，缺 harness SKIP）。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）；vitest **29/29**，子集 All files lines 45.02/branches 86.25/functions 42.37 过门槛；`pnpm e2e` 本机可重复 PASS（端口 3171 用完即 DOWN，正式 3080=PID 66364 未变、3091 未监听）。本机无 gh 登录，未观测 GitHub Actions 实跑。
+- **边界**：未改任何业务 src 逻辑/存储 schema/模型路由；只加 devDeps；版本仍 0.7.4、不打 tag；real-model smoke 不进必经；覆盖率门槛仅针对本批模块（其余 core 由集成门覆盖）。
+- **下一步**：看板 P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 视图重设计；prod 真实 Key 仍 MANUAL_PENDING；CI 端 e2e 因缺宿主为 SKIP、GitHub 实跑待有 gh 环境复核。
+
+## 历史阶段：#23 客观进度补全·已核验（2026-10-17，doubao-work）
 
 - **目标**：补 v0.7.4 deferred 的客观进度四件事——doneAt 完成日期、effort 实际工时、evidence 证据链接、人工 override（显式「人工设定」标记，与客观派生区分、保留来源口径）；客观进度以清单 checked/total 派生，无信号显「证据不足」不伪造百分比；派生纯函数只读无 I/O；新字段加法式、可选、向后兼容、旧数据安全读入、无需迁移。
 - **实现**：

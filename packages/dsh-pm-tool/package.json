@@ -25,6 +25,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && tsdown --config tsdown.config.ts",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "e2e": "node scripts/e2e.mjs",
     "verify": "pnpm run build && node scripts/verify-isolation.mjs",
     "verify:isolation-only": "pnpm run build && node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs"
   },
@@ -71,8 +74,11 @@
     "@deepseek-ai/dsh-storage-json": "0.2.1-alpha.2",
     "@types/node": "^22.10.0",
     "@types/react": "18.3.20",
+    "@vitest/coverage-v8": "^2.1.9",
+    "puppeteer-core": "^23.11.1",
     "react": "18.3.1",
     "tsdown": "0.15.10",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "vitest": "^2.1.9"
   }
 }
