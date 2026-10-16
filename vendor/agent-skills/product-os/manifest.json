@@ -1,0 +1,1227 @@
+{
+  "schemaVersion": 3,
+  "purpose": "Self-contained vendoring of Product OS (BuildBetter), an MIT-licensed evidence-first operating system for product work: 45 focused SKILL.md playbooks spanning discovery, strategy, delivery, operate and AI-product, plus six skillsets grouping them. Pure documentation; no upstream scripts/installers run; copied byte-for-byte.",
+  "source": {
+    "repo": "https://github.com/buildbetter-app/product-os",
+    "branch": "main",
+    "commit": "d0ad2dfb6700c75aa960c950f3e698fb0feca32a",
+    "authorName": "Spencer Shulem",
+    "commitDate": "2026-09-01 22:01:56 -0700",
+    "commitSubject": "Merge pull request #1 from buildbetter-app/codex/add-product-os-wave-two",
+    "fetchedAtUtc": "2026-10-16T15:15:42Z",
+    "fetchedAtLocal": "2026-10-16 23:15:42 CST (+0800)",
+    "fetchMethod": "public read-only shallow git clone (--depth 1) to .tmp/upstream-skills/<repo>; HEAD resolved via git log. No write/push to upstream."
+  },
+  "entrySkillIds": [
+    "align-product-stakeholders",
+    "analyze-competitors",
+    "analyze-product-experiment",
+    "analyze-retention-and-adoption",
+    "build-product-business-case",
+    "cluster-feedback-into-jobs",
+    "define-ideal-customer-profile",
+    "define-jobs-to-be-done",
+    "define-product-metrics",
+    "define-product-positioning",
+    "define-product-vision",
+    "design-ai-product-evaluation",
+    "design-go-to-market-motion",
+    "design-growth-loop",
+    "design-human-ai-workflow",
+    "design-pricing-packaging",
+    "design-product-experiment",
+    "design-product-onboarding",
+    "evaluate-product-market-fit",
+    "govern-ai-product-risk",
+    "manage-product-portfolio",
+    "manage-product-sunset",
+    "map-customer-journey",
+    "map-product-opportunities",
+    "plan-ai-model-rollout",
+    "plan-customer-interviews",
+    "plan-outcome-roadmap",
+    "plan-product-discovery",
+    "plan-product-instrumentation",
+    "plan-product-launch",
+    "prioritize-product-opportunities",
+    "review-product-plan",
+    "run-product-premortem",
+    "run-product-review",
+    "scope-product-release",
+    "segment-product-market",
+    "set-product-goals",
+    "shape-product-strategy",
+    "size-market-opportunity",
+    "size-product-bet",
+    "synthesize-customer-research",
+    "validate-product-problem",
+    "verify-product-outcomes",
+    "write-product-decision",
+    "write-product-requirements"
+  ],
+  "declaredDependencies": [],
+  "license": {
+    "spdx": "MIT",
+    "copyright": "Copyright (c) 2026 BuildBetter",
+    "file": "LICENSE",
+    "verified": "Root LICENSE read and confirmed MIT; included verbatim."
+  },
+  "policy": {
+    "projectRulesPrecedence": true,
+    "noInstallerRun": true,
+    "noHomeOrGlobalWrites": true
+  },
+  "projectRulesPriority": {
+    "statement": "Project AGENTS.md and its ADL decision-log entries are authoritative and override any vendored upstream skill guidance whenever they conflict.",
+    "upstreamSkillsDoNotGrant": [
+      "modifying the upstream deepseek-harness source (~/Projects/dsh-pm/deepseek-harness/)",
+      "writing DEEPSEEK_API_KEY or any credential into the repo",
+      "git push --force or rewriting already-pushed history",
+      "modifying user-home, global, IDE, or shell config",
+      "running upstream installers / one-click setup",
+      "skipping the project independent-test gating or its GUI-evidence requirement",
+      "writing files via --persist (or equivalent) without explicit user authorization"
+    ],
+    "conflictResolution": "Where a vendored playbook suggests behavior the project forbids (offline-first, keys-not-in-repo, no-force-push, data/ stays out of git), the project rules win and the playbook is reference only."
+  },
+  "skills": [
+    {
+      "id": "align-product-stakeholders",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "align-product-stakeholders",
+      "upstreamPath": "skills/align-product-stakeholders",
+      "vendoredPath": "skills/align-product-stakeholders",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Map stakeholders, incentives, decision rights, conflicts, evidence needs, and communication paths for a product decision or initiative. Use when preparing alignment, resolving cross-functional disagreement, planning an executive review, cla",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/align-product-stakeholders/SKILL.md",
+          "sha256": "95e6acb0643baddc02a99657d8e11e58a5482bc6f22dc261c48f05550aa99672",
+          "bytes": 2474
+        },
+        {
+          "path": "skills/align-product-stakeholders/agents/openai.yaml",
+          "sha256": "a2c5c7ca0f49ee105a833f72f21ba9b90b07c24d6142d1208c91e0dd2b0f6ce8",
+          "bytes": 242
+        }
+      ]
+    },
+    {
+      "id": "analyze-competitors",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "analyze-competitors",
+      "upstreamPath": "skills/analyze-competitors",
+      "vendoredPath": "skills/analyze-competitors",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Analyze direct competitors, indirect alternatives, non-consumption, and customer switching criteria using current evidence. Use when researching a market, preparing positioning, evaluating strategic threats, creating a battlecard, or avoidi",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/analyze-competitors/SKILL.md",
+          "sha256": "7d3a0a0bdc80e6542aa0c460ac70a486d68475e7ef4eccfdc3a0085b27de8225",
+          "bytes": 2358
+        },
+        {
+          "path": "skills/analyze-competitors/agents/openai.yaml",
+          "sha256": "a2b9572c1a276671a90674a29d797197e8e0b9b7926c1d353064d0b6738cdc88",
+          "bytes": 233
+        }
+      ]
+    },
+    {
+      "id": "analyze-product-experiment",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "analyze-product-experiment",
+      "upstreamPath": "skills/analyze-product-experiment",
+      "vendoredPath": "skills/analyze-product-experiment",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Analyze product experiment results for validity, effect size, uncertainty, guardrails, heterogeneous effects, and the decision they support. Use when reading an A/B test, prototype study, smoke test, or other completed experiment and decidi",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/analyze-product-experiment/SKILL.md",
+          "sha256": "b018c7dca8ed6525f6534e3243df984a3fae3190f4bb9f7c03142400a0f33e96",
+          "bytes": 2754
+        },
+        {
+          "path": "skills/analyze-product-experiment/agents/openai.yaml",
+          "sha256": "16ada76b90dce7ae4407953a56c74c2da869f8b029136ddf7b1da8171c1fe863",
+          "bytes": 243
+        }
+      ]
+    },
+    {
+      "id": "analyze-retention-and-adoption",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "analyze-retention-and-adoption",
+      "upstreamPath": "skills/analyze-retention-and-adoption",
+      "vendoredPath": "skills/analyze-retention-and-adoption",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Diagnose product activation, cohort retention, engagement, feature adoption, churn, and value realization using behavioral and qualitative evidence. Use when investigating weak adoption, comparing cohorts or segments, evaluating product hea",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/analyze-retention-and-adoption/SKILL.md",
+          "sha256": "ac1ea11f6e357414689b509367d6b0d17de95a9371a65bea7fd9c33d2735a527",
+          "bytes": 2773
+        },
+        {
+          "path": "skills/analyze-retention-and-adoption/agents/openai.yaml",
+          "sha256": "f18ff64e148a034e6a9a8e6fb5d33da156c6b770193291d1b95651027bc9e8c2",
+          "bytes": 241
+        }
+      ]
+    },
+    {
+      "id": "build-product-business-case",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "build-product-business-case",
+      "upstreamPath": "skills/build-product-business-case",
+      "vendoredPath": "skills/build-product-business-case",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Build an evidence-backed product investment case with baseline, counterfactual, value drivers, costs, scenarios, uncertainty, risks, option value, and decision criteria. Use when requesting funding, comparing major bets, evaluating build-ve",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/build-product-business-case/SKILL.md",
+          "sha256": "313fba2db52b71b436ba3cfee74d1d1b77ed4e50d7983b11bf9c876ee54493b2",
+          "bytes": 2831
+        },
+        {
+          "path": "skills/build-product-business-case/agents/openai.yaml",
+          "sha256": "6d36b5e3f481c2f0b1660ea135204ac86966f4e78c227b8f5c2ad08900b1d750",
+          "bytes": 231
+        }
+      ]
+    },
+    {
+      "id": "cluster-feedback-into-jobs",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "cluster-feedback-into-jobs",
+      "upstreamPath": "skills/cluster-feedback-into-jobs",
+      "vendoredPath": "skills/cluster-feedback-into-jobs",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Reframe a body of feature requests, complaints, call snippets, tickets, and survey responses into customer jobs with a traceable clustering receipt. Use when a feedback backlog is noisy, duplicated, solution-led, or too fragmented to suppor",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/cluster-feedback-into-jobs/SKILL.md",
+          "sha256": "fc76b6231d75d5ef593aecf3521356db560ba338c86841b7e6cd5b297c678261",
+          "bytes": 2426
+        },
+        {
+          "path": "skills/cluster-feedback-into-jobs/agents/openai.yaml",
+          "sha256": "f6d3952717f047585c339bb21e6407a96bf19b875c66a5f4aa51e47b43a8cbf0",
+          "bytes": 238
+        }
+      ]
+    },
+    {
+      "id": "define-ideal-customer-profile",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "define-ideal-customer-profile",
+      "upstreamPath": "skills/define-ideal-customer-profile",
+      "vendoredPath": "skills/define-ideal-customer-profile",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Define an evidence-backed ideal customer profile using shared needs, value realization, urgency, fit, economics, adoption conditions, and disqualifiers. Use when choosing a beachhead segment, revising ICP, focusing go-to-market, or separati",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/define-ideal-customer-profile/SKILL.md",
+          "sha256": "df09faac4c08d2361fe946bace0e69cb24351b666270af9e3e65918f15b3231c",
+          "bytes": 2284
+        },
+        {
+          "path": "skills/define-ideal-customer-profile/agents/openai.yaml",
+          "sha256": "7e8ea3ee78a0ab04d5f2f0877c1b2b340f47c2e2cfb526a6b25d074e43906564",
+          "bytes": 249
+        }
+      ]
+    },
+    {
+      "id": "define-jobs-to-be-done",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "define-jobs-to-be-done",
+      "upstreamPath": "skills/define-jobs-to-be-done",
+      "vendoredPath": "skills/define-jobs-to-be-done",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Define a durable job to be done from customer evidence, including situation, motivation, outcome, alternatives, forces, success evidence, and boundaries. Use when reframing a feature request, writing a job story, clarifying the customer out",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/define-jobs-to-be-done/SKILL.md",
+          "sha256": "1fb0626fc62c051bdab3a222cb4b6a8312c02e7bb8bbf7121aa804a268e03992",
+          "bytes": 2345
+        },
+        {
+          "path": "skills/define-jobs-to-be-done/agents/openai.yaml",
+          "sha256": "5bd972b961d107d9cce74d8e5662094e0d97589b92e03b7b7ae402ca0d320339",
+          "bytes": 243
+        }
+      ]
+    },
+    {
+      "id": "define-product-metrics",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "define-product-metrics",
+      "upstreamPath": "skills/define-product-metrics",
+      "vendoredPath": "skills/define-product-metrics",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Define a product metric system connecting customer value, a North Star or outcome measure, controllable inputs, guardrails, business effects, and decision rules. Use when choosing KPIs, designing a dashboard, writing success metrics, auditi",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/define-product-metrics/SKILL.md",
+          "sha256": "54a1fb0a3ebd4282a378cfb378fdd6ac8f60c835f03d775923663a8f6e6fd24e",
+          "bytes": 2511
+        },
+        {
+          "path": "skills/define-product-metrics/agents/openai.yaml",
+          "sha256": "453b3e03f549c82e21442ece73095c2adb9dfde79ba91631b96182ed8c819b5d",
+          "bytes": 238
+        }
+      ]
+    },
+    {
+      "id": "define-product-positioning",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "define-product-positioning",
+      "upstreamPath": "skills/define-product-positioning",
+      "vendoredPath": "skills/define-product-positioning",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Define evidence-backed product positioning from competitive alternatives, differentiated capabilities, customer value, best-fit segment, category context, and proof. Use when positioning a product, writing a positioning brief, preparing mes",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/define-product-positioning/SKILL.md",
+          "sha256": "542b0cc9bdf105f0006b2c2f5ad1adcd01fe0a409dbc93f552674f5e5d7cda6c",
+          "bytes": 2397
+        },
+        {
+          "path": "skills/define-product-positioning/agents/openai.yaml",
+          "sha256": "9581161a1f880da66b139eccf930d52631e1fb2ccaf70f8290c49d645a7555dc",
+          "bytes": 246
+        }
+      ]
+    },
+    {
+      "id": "define-product-vision",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "define-product-vision",
+      "upstreamPath": "skills/define-product-vision",
+      "vendoredPath": "skills/define-product-vision",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Define a durable, directional product vision describing the future customer reality, target beneficiary, distinctive change, principles, and boundaries. Use when creating or revising a product vision, aligning a team on long-term direction,",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/define-product-vision/SKILL.md",
+          "sha256": "e7270abf9ef100434800ff8a9369071bbd8b5fa830b74268ba00db671922f6c5",
+          "bytes": 2322
+        },
+        {
+          "path": "skills/define-product-vision/agents/openai.yaml",
+          "sha256": "97b1767162a17fcc185459077acded136a12925972383e6e50c113b74d4cb75b",
+          "bytes": 242
+        }
+      ]
+    },
+    {
+      "id": "design-ai-product-evaluation",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-ai-product-evaluation",
+      "upstreamPath": "skills/design-ai-product-evaluation",
+      "vendoredPath": "skills/design-ai-product-evaluation",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design an empirical evaluation system for an AI product using representative tasks, quality dimensions, human and automated judgments, slices, thresholds, regressions, and online outcomes. Use when defining AI quality, replacing vibe checks",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-ai-product-evaluation/SKILL.md",
+          "sha256": "a8fcd43c4f80fbe0ed15d2d3433842f1741b94c94cbfecbfdb22daa776627018",
+          "bytes": 2893
+        },
+        {
+          "path": "skills/design-ai-product-evaluation/agents/openai.yaml",
+          "sha256": "11ccf52d6be63d4e50047cf62b987e5330c9335aba69c945fc60a5882ddfc82c",
+          "bytes": 239
+        }
+      ]
+    },
+    {
+      "id": "design-go-to-market-motion",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-go-to-market-motion",
+      "upstreamPath": "skills/design-go-to-market-motion",
+      "vendoredPath": "skills/design-go-to-market-motion",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design a repeatable go-to-market motion connecting a beachhead segment, value proof, acquisition, evaluation, purchase, onboarding, expansion, and ownership. Use when choosing PLG, sales-led, partner, community, or hybrid distribution, or w",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-go-to-market-motion/SKILL.md",
+          "sha256": "6b52f810ef55476881ba47486e26ee3550f6771ad3d536d4b50ec6b1cd7ab225",
+          "bytes": 2806
+        },
+        {
+          "path": "skills/design-go-to-market-motion/agents/openai.yaml",
+          "sha256": "fec84b7c583c4a24d9bad5f46c8cfdc44d57b4107a88a21317c550ce83684328",
+          "bytes": 242
+        }
+      ]
+    },
+    {
+      "id": "design-growth-loop",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-growth-loop",
+      "upstreamPath": "skills/design-growth-loop",
+      "vendoredPath": "skills/design-growth-loop",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design and evaluate a product-native growth loop with a value-producing action, transmission mechanism, recipient conversion, re-entry, coefficient, cycle time, quality guardrails, and experiment plan. Use when planning referrals, collabora",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-growth-loop/SKILL.md",
+          "sha256": "f0c968b70b7c9b00ec0bd9c5aeed6368a85241b71b45681522916fc3896d0dd1",
+          "bytes": 2524
+        },
+        {
+          "path": "skills/design-growth-loop/agents/openai.yaml",
+          "sha256": "07cce41b3168661eaa6a79a519d6ca3e5dc29226b14ad9609e2b3fcc3a7aaea7",
+          "bytes": 234
+        }
+      ]
+    },
+    {
+      "id": "design-human-ai-workflow",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-human-ai-workflow",
+      "upstreamPath": "skills/design-human-ai-workflow",
+      "vendoredPath": "skills/design-human-ai-workflow",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design a reliable human-AI workflow with explicit roles, autonomy, context, review, control, recovery, feedback, and accountability. Use when adding copilots, agents, recommendations, generation, or automation to a real workflow and decidin",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-human-ai-workflow/SKILL.md",
+          "sha256": "94dac4e46c63f7a0315b528404ef9b24923d4bb89b1e361e5ed6105def2bb512",
+          "bytes": 2911
+        },
+        {
+          "path": "skills/design-human-ai-workflow/agents/openai.yaml",
+          "sha256": "d25d59b26a2d8f591247389ce2f8f6443dc3b33e9a11ce9d07b98ee29bb9dda3",
+          "bytes": 244
+        }
+      ]
+    },
+    {
+      "id": "design-pricing-packaging",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-pricing-packaging",
+      "upstreamPath": "skills/design-pricing-packaging",
+      "vendoredPath": "skills/design-pricing-packaging",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design pricing and packaging from customer value, segments, usage, willingness to pay, cost, competitive alternatives, and operational constraints. Use when creating or revising plans, choosing a value metric, testing packaging, evaluating ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-pricing-packaging/SKILL.md",
+          "sha256": "502e43a9ea79fda9c20fcb8eb04484707a59fe95f17686613f345ec1d6143e12",
+          "bytes": 2728
+        },
+        {
+          "path": "skills/design-pricing-packaging/agents/openai.yaml",
+          "sha256": "d84bd6cb8393aa8d8f0d5aebdc1a160e582cd566740f4ec0609b0ea3924bea7f",
+          "bytes": 246
+        }
+      ]
+    },
+    {
+      "id": "design-product-experiment",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-product-experiment",
+      "upstreamPath": "skills/design-product-experiment",
+      "vendoredPath": "skills/design-product-experiment",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design a product experiment that tests a decision-critical hypothesis with a valid comparison, primary metric, guardrails, stopping rule, analysis plan, and follow-up decision. Use when validating a solution, planning an A/B test, testing a",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-product-experiment/SKILL.md",
+          "sha256": "847a2d046cbcfa96e1d0bb15d2be00c28ed20694d306be81c824da769deb6943",
+          "bytes": 2637
+        },
+        {
+          "path": "skills/design-product-experiment/agents/openai.yaml",
+          "sha256": "e2a7a949512578ed1b66890f5e981a226599bd9c2436f61ffcb373334741e30e",
+          "bytes": 245
+        }
+      ]
+    },
+    {
+      "id": "design-product-onboarding",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-product-onboarding",
+      "upstreamPath": "skills/design-product-onboarding",
+      "vendoredPath": "skills/design-product-onboarding",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design an evidence-backed onboarding path from entry to first and repeated value, including segmentation, progressive setup, guidance, recovery, measurement, and experiments. Use when creating or repairing signup, activation, empty states, ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-product-onboarding/SKILL.md",
+          "sha256": "78804fcfeb37cf485e0c4891c801ec59b5add0971cf5d72fa426deec1e38c732",
+          "bytes": 2734
+        },
+        {
+          "path": "skills/design-product-onboarding/agents/openai.yaml",
+          "sha256": "5a603782bda66f147cfb8b5a3ec8cc0439b2bbc2d34668dae81aaa46884af3e7",
+          "bytes": 236
+        }
+      ]
+    },
+    {
+      "id": "evaluate-product-market-fit",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "evaluate-product-market-fit",
+      "upstreamPath": "skills/evaluate-product-market-fit",
+      "vendoredPath": "skills/evaluate-product-market-fit",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Evaluate product-market fit using converging retention, behavior, customer pull, switching, economics, growth, and qualitative evidence by segment. Use when assessing fit, diagnosing whether growth is premature, choosing a segment, reviewin",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/evaluate-product-market-fit/SKILL.md",
+          "sha256": "10b7660ed142d448ce4cb530855c1f351bfcf569560c38c9db90f65af4e79ba6",
+          "bytes": 2484
+        },
+        {
+          "path": "skills/evaluate-product-market-fit/agents/openai.yaml",
+          "sha256": "a9acdb21dad148888cde8529a358a8469fc1df4c0fb04bf29e693dc338f95f35",
+          "bytes": 243
+        }
+      ]
+    },
+    {
+      "id": "govern-ai-product-risk",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "govern-ai-product-risk",
+      "upstreamPath": "skills/govern-ai-product-risk",
+      "vendoredPath": "skills/govern-ai-product-risk",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Govern AI product risks through use-case boundaries, harm analysis, controls, accountability, testing, monitoring, incident response, and review triggers. Use when an AI capability affects customers, sensitive data, consequential decisions,",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/govern-ai-product-risk/SKILL.md",
+          "sha256": "308329485ef7e19c1b63a89cbaedb8f515687d5a320bff2f635a703ac6ea4f3c",
+          "bytes": 2799
+        },
+        {
+          "path": "skills/govern-ai-product-risk/agents/openai.yaml",
+          "sha256": "9a3ff7096f717688b6e01b464531aee85ed76263cff118bc170ce1c0dbd54a14",
+          "bytes": 238
+        }
+      ]
+    },
+    {
+      "id": "manage-product-portfolio",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "manage-product-portfolio",
+      "upstreamPath": "skills/manage-product-portfolio",
+      "vendoredPath": "skills/manage-product-portfolio",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Allocate product investment across outcomes, horizons, lifecycle stages, strategic bets, discovery, maintenance, and obligations as a coherent portfolio. Use when balancing multiple products or initiatives, reviewing capacity allocation, re",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/manage-product-portfolio/SKILL.md",
+          "sha256": "8faa821f413bcb4e365c403e5d65051ef8614dcd3228c06c844810433e6ce336",
+          "bytes": 2953
+        },
+        {
+          "path": "skills/manage-product-portfolio/agents/openai.yaml",
+          "sha256": "968e6600468550f50090f5c31edf5b11108ea4c104efdfe47015313a92277f78",
+          "bytes": 245
+        }
+      ]
+    },
+    {
+      "id": "manage-product-sunset",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "manage-product-sunset",
+      "upstreamPath": "skills/manage-product-sunset",
+      "vendoredPath": "skills/manage-product-sunset",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Plan and govern a safe product, feature, integration, API, or plan sunset with evidence, affected-user analysis, alternatives, communication, migration, support, access, data, billing, and rollback. Use when deprecating or retiring a produc",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/manage-product-sunset/SKILL.md",
+          "sha256": "ed4d9889989eba0decda256674963b1b971226ee62255478f37268b15fd62eb7",
+          "bytes": 2640
+        },
+        {
+          "path": "skills/manage-product-sunset/agents/openai.yaml",
+          "sha256": "8918dbcadf47f1dbf41d9b317e1c96f90b39688311beb47a44c12277a5ed072b",
+          "bytes": 240
+        }
+      ]
+    },
+    {
+      "id": "map-customer-journey",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "map-customer-journey",
+      "upstreamPath": "skills/map-customer-journey",
+      "vendoredPath": "skills/map-customer-journey",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Map an evidence-backed customer journey across stages, actors, jobs, touchpoints, emotions, friction, handoffs, and measures. Use when diagnosing an end-to-end experience, finding service gaps, aligning teams around a journey, or comparing ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/map-customer-journey/SKILL.md",
+          "sha256": "24a7924bd1fed4fa8b90e0a4d27c1d46ba7d3f1347688d5390d735ed0f3b176f",
+          "bytes": 2377
+        },
+        {
+          "path": "skills/map-customer-journey/agents/openai.yaml",
+          "sha256": "a097796caa73d8d50918f8faa4e397d1be3c4c3917050cbcfe1063eacac6a57c",
+          "bytes": 234
+        }
+      ]
+    },
+    {
+      "id": "map-product-opportunities",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "map-product-opportunities",
+      "upstreamPath": "skills/map-product-opportunities",
+      "vendoredPath": "skills/map-product-opportunities",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Build an evidence-backed opportunity map connecting a desired outcome to customer problems, possible solutions, assumptions, and tests. Use when creating an opportunity solution tree, organizing discovery, comparing solution paths, or preve",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/map-product-opportunities/SKILL.md",
+          "sha256": "e178e588b2ace84eadd275257babca1e576f91ded47584bff07e20f95ec2ad5a",
+          "bytes": 2335
+        },
+        {
+          "path": "skills/map-product-opportunities/agents/openai.yaml",
+          "sha256": "d083b7b90186d5c8ff9916e46aeeb8875a51ad38d96e12f369af47b52740840d",
+          "bytes": 245
+        }
+      ]
+    },
+    {
+      "id": "plan-ai-model-rollout",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-ai-model-rollout",
+      "upstreamPath": "skills/plan-ai-model-rollout",
+      "vendoredPath": "skills/plan-ai-model-rollout",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Plan a staged, observable, and reversible rollout for a new AI model, prompt, retrieval configuration, agent policy, or provider. Use when changing AI behavior in production, migrating models, enabling new autonomy, or deciding how offline ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-ai-model-rollout/SKILL.md",
+          "sha256": "c286ca0094ce70a5360af291fe59ef3f39cc8b21485a568c43ea6ff2d7853941",
+          "bytes": 2859
+        },
+        {
+          "path": "skills/plan-ai-model-rollout/agents/openai.yaml",
+          "sha256": "8bd334c7a2f000d1b258f20a3cf9befcda4134467caa81127cb19d2daa487bda",
+          "bytes": 230
+        }
+      ]
+    },
+    {
+      "id": "plan-customer-interviews",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-customer-interviews",
+      "upstreamPath": "skills/plan-customer-interviews",
+      "vendoredPath": "skills/plan-customer-interviews",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Prepare unbiased customer interviews that investigate past behavior, struggling moments, alternatives, and decision context. Use when writing an interview guide, recruiting participants, planning discovery calls, or checking whether questio",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-customer-interviews/SKILL.md",
+          "sha256": "154c98fdb6508771695d444ae5f5b615e1ac75cd10e9deb533ef5a3d48c83bad",
+          "bytes": 2474
+        },
+        {
+          "path": "skills/plan-customer-interviews/agents/openai.yaml",
+          "sha256": "0d31713c30484b0fb10e6e7abf0a909e152556423bc9573714795f0e44410541",
+          "bytes": 237
+        }
+      ]
+    },
+    {
+      "id": "plan-outcome-roadmap",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-outcome-roadmap",
+      "upstreamPath": "skills/plan-outcome-roadmap",
+      "vendoredPath": "skills/plan-outcome-roadmap",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Build an outcome-oriented roadmap that connects strategy, customer problems, bets, learning, dependencies, and evidence without presenting distant feature promises as certainty. Use when creating a roadmap, sequencing initiatives, translati",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-outcome-roadmap/SKILL.md",
+          "sha256": "8f0e1193d66d688760d37897fa4a8d3e560a6401222607e4ad92ac84d3b44dd9",
+          "bytes": 2406
+        },
+        {
+          "path": "skills/plan-outcome-roadmap/agents/openai.yaml",
+          "sha256": "a73e27c42df9c69b075be4921b1099ef42b1becaa98c01444268da0b1ed38d19",
+          "bytes": 230
+        }
+      ]
+    },
+    {
+      "id": "plan-product-discovery",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-product-discovery",
+      "upstreamPath": "skills/plan-product-discovery",
+      "vendoredPath": "skills/plan-product-discovery",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Build an evidence-driven continuous discovery cadence with clear learning goals, participants, methods, decision points, and evidence hygiene. Use when starting discovery, planning a research cycle, replacing an idea backlog with learning w",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-product-discovery/SKILL.md",
+          "sha256": "660d523a3520144574dc8de29d1dd3646424ac7e8ea00f5bf2434112eee53254",
+          "bytes": 2705
+        },
+        {
+          "path": "skills/plan-product-discovery/agents/openai.yaml",
+          "sha256": "5ac73a408bb952b3ac6922908281411e1a95a4fa0b5d6282190155fc14500f26",
+          "bytes": 239
+        }
+      ]
+    },
+    {
+      "id": "plan-product-instrumentation",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-product-instrumentation",
+      "upstreamPath": "skills/plan-product-instrumentation",
+      "vendoredPath": "skills/plan-product-instrumentation",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Create a product analytics tracking plan with decision questions, event semantics, identity, properties, privacy, ownership, quality checks, and release validation. Use when instrumenting a feature, operationalizing product metrics, repairi",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-product-instrumentation/SKILL.md",
+          "sha256": "a257988d00ea73672e0c5ca445cba06bf5a6b5967d0bce473c932fbaa7d5326d",
+          "bytes": 2742
+        },
+        {
+          "path": "skills/plan-product-instrumentation/agents/openai.yaml",
+          "sha256": "b46213a8f37f8f20a2ba5e0ab8529371229ee46f727c11b8aad050da7a09c7be",
+          "bytes": 243
+        }
+      ]
+    },
+    {
+      "id": "plan-product-launch",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "plan-product-launch",
+      "upstreamPath": "skills/plan-product-launch",
+      "vendoredPath": "skills/plan-product-launch",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Plan a product launch across customer readiness, product quality, support, operations, go-to-market, measurement, rollout, rollback, and post-launch learning. Use when preparing a release, choosing a launch tier, coordinating functions, or ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/plan-product-launch/SKILL.md",
+          "sha256": "cd477d61f94b9804dab9848a270bfea7eec506f2c1c39a8c1feb618d5d563131",
+          "bytes": 2746
+        },
+        {
+          "path": "skills/plan-product-launch/agents/openai.yaml",
+          "sha256": "470cb82eeb219f2b575bc34ef3025a9cf2a50610efd3bdabdc5ab1ecb0fe1af8",
+          "bytes": 231
+        }
+      ]
+    },
+    {
+      "id": "prioritize-product-opportunities",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "prioritize-product-opportunities",
+      "upstreamPath": "skills/prioritize-product-opportunities",
+      "vendoredPath": "skills/prioritize-product-opportunities",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Prioritize product opportunities using strategy, customer impact, evidence strength, urgency, risk, effort, dependencies, and learning value without hiding judgment behind a score. Use when ordering a roadmap, triaging opportunities, compar",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/prioritize-product-opportunities/SKILL.md",
+          "sha256": "d242488df708a6b0d1d4c31635fbdfa451b43253b092c2bfe07eb50ff3fe4fb6",
+          "bytes": 2462
+        },
+        {
+          "path": "skills/prioritize-product-opportunities/agents/openai.yaml",
+          "sha256": "f8de9fdba9b534f5ba3018a6e5396ac1c7cf0e20fe6c95672605810d4c0a69d8",
+          "bytes": 259
+        }
+      ]
+    },
+    {
+      "id": "review-product-plan",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "review-product-plan",
+      "upstreamPath": "skills/review-product-plan",
+      "vendoredPath": "skills/review-product-plan",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Review a product strategy, requirements document, roadmap, launch plan, or bet using an independent evidence-first rubric for clarity, grounding, coherence, risk, and verifiability. Use when red-teaming a plan, conducting a fresh-process re",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/review-product-plan/SKILL.md",
+          "sha256": "8f2c1ce5eac55adfca7bfc3f186dc847e5e69a7353c7cbaf6a8795cff1899b86",
+          "bytes": 2465
+        },
+        {
+          "path": "skills/review-product-plan/agents/openai.yaml",
+          "sha256": "37e284706025eb295c30d839055b364f2f47b4949678d09ee2d28e56b89980ae",
+          "bytes": 228
+        }
+      ]
+    },
+    {
+      "id": "run-product-premortem",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "run-product-premortem",
+      "upstreamPath": "skills/run-product-premortem",
+      "vendoredPath": "skills/run-product-premortem",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Run a structured premortem on a product bet, requirements document, rollout, migration, or launch and convert plausible failure modes into mitigations, owners, triggers, and contingency plans. Use when stress-testing a plan, preparing a lau",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/run-product-premortem/SKILL.md",
+          "sha256": "9f033409410163020e037ecc1f707185406cddf239874ab2bed6953c2fdb1701",
+          "bytes": 2348
+        },
+        {
+          "path": "skills/run-product-premortem/agents/openai.yaml",
+          "sha256": "6c3d561200bd180f7ecdeeaff97aab667272259904c006afbeb9002b943d6a6c",
+          "bytes": 236
+        }
+      ]
+    },
+    {
+      "id": "run-product-review",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "run-product-review",
+      "upstreamPath": "skills/run-product-review",
+      "vendoredPath": "skills/run-product-review",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Run a recurring product operating review focused on outcomes, customer evidence, metric movement, delivery reality, risks, decisions, and learning. Use when preparing a weekly or monthly product review, replacing status theater, reviewing a",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/run-product-review/SKILL.md",
+          "sha256": "2087d694e16b8ba32ce86fad7054dc218c8973945bfd9a712a35836e7df9e2e6",
+          "bytes": 2412
+        },
+        {
+          "path": "skills/run-product-review/agents/openai.yaml",
+          "sha256": "7b7e72cd679f9fda2dc6a475c4c1d43c856364da10404f1da6d97262bd4ec3df",
+          "bytes": 236
+        }
+      ]
+    },
+    {
+      "id": "scope-product-release",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "scope-product-release",
+      "upstreamPath": "skills/scope-product-release",
+      "vendoredPath": "skills/scope-product-release",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Reduce a product release to the smallest coherent outcome while preserving trust, usability, measurement, and operational safety. Use when defining an MVP, cutting scope, responding to a deadline, splitting a feature, or deciding what can m",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/scope-product-release/SKILL.md",
+          "sha256": "bf201cb519cb5a4ec5d58fcf3868f7166d1781f5941511022edff2d4b78113b9",
+          "bytes": 2447
+        },
+        {
+          "path": "skills/scope-product-release/agents/openai.yaml",
+          "sha256": "1ea376443867c7e3b4be6110825fb8bb9dfd60afc6f0d9b5b13a9f143698a278",
+          "bytes": 240
+        }
+      ]
+    },
+    {
+      "id": "segment-product-market",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "segment-product-market",
+      "upstreamPath": "skills/segment-product-market",
+      "vendoredPath": "skills/segment-product-market",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Segment a product market using evidence about jobs, situations, behavior, needs, adoption constraints, economics, and value potential. Use when mapping heterogeneous demand, comparing customer groups, choosing a beachhead, or establishing t",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/segment-product-market/SKILL.md",
+          "sha256": "5b1bb148428c44333dcc12a53c5882a877854b4a817fa1cfe714744e89cdcacb",
+          "bytes": 2717
+        },
+        {
+          "path": "skills/segment-product-market/agents/openai.yaml",
+          "sha256": "15255eef182f0414662269051b282bf45fcb76eaf912e1288167745cf515e7b8",
+          "bytes": 227
+        }
+      ]
+    },
+    {
+      "id": "set-product-goals",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "set-product-goals",
+      "upstreamPath": "skills/set-product-goals",
+      "vendoredPath": "skills/set-product-goals",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Translate product strategy into a small system of outcome goals, measurable results, guardrails, ownership, and review rules. Use when setting quarterly goals or OKRs, aligning teams on outcomes, replacing output targets, or checking whethe",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/set-product-goals/SKILL.md",
+          "sha256": "e72a17a0d35081a73b87939131feb77a35c0f55340d63c5873023751d605162a",
+          "bytes": 2468
+        },
+        {
+          "path": "skills/set-product-goals/agents/openai.yaml",
+          "sha256": "8ed1986370c35a2e663022508ac42b6f46b937f3ee97563f1e9781f3d45cd814",
+          "bytes": 222
+        }
+      ]
+    },
+    {
+      "id": "shape-product-strategy",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "shape-product-strategy",
+      "upstreamPath": "skills/shape-product-strategy",
+      "vendoredPath": "skills/shape-product-strategy",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Shape an evidence-backed product strategy with a diagnosis, guiding policy, coherent choices, resource allocation, explicit deferrals, risks, and measures. Use when writing strategy, deciding where to compete, allocating product investment,",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/shape-product-strategy/SKILL.md",
+          "sha256": "0088db260314a245300fcc2bb7b5550d96092c50126507816835afcb3c0c194c",
+          "bytes": 2560
+        },
+        {
+          "path": "skills/shape-product-strategy/agents/openai.yaml",
+          "sha256": "b3f749d613274977d91ea0f939565092b20587fae5976ea5ede1f714f3462e74",
+          "bytes": 235
+        }
+      ]
+    },
+    {
+      "id": "size-market-opportunity",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "size-market-opportunity",
+      "upstreamPath": "skills/size-market-opportunity",
+      "vendoredPath": "skills/size-market-opportunity",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Estimate market opportunity with transparent top-down and bottom-up models, ranges, assumptions, sensitivity, and evidence quality. Use when calculating TAM, SAM, SOM, sizing a segment, evaluating a new market, or challenging a market-size ",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/size-market-opportunity/SKILL.md",
+          "sha256": "0ed40bb296b65bb0458fe8a1075a6719e0900e7fe1e2b70bbd2ab657d7ee03de",
+          "bytes": 2229
+        },
+        {
+          "path": "skills/size-market-opportunity/agents/openai.yaml",
+          "sha256": "9dcf7d9eb065b3f4069ee1258f44db4c4522ca48450ec2b685c0cd7ae4b699db",
+          "bytes": 246
+        }
+      ]
+    },
+    {
+      "id": "size-product-bet",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "size-product-bet",
+      "upstreamPath": "skills/size-product-bet",
+      "vendoredPath": "skills/size-product-bet",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Set the appetite, boundaries, assumptions, option value, and kill criteria for a product bet before detailed solutioning. Use when shaping an initiative, choosing between quick exploration and major investment, sizing a pitch, or preventing",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/size-product-bet/SKILL.md",
+          "sha256": "67e384e8f8b23ee44d792ca477fd049b67f3eb830c721f139fa6be6d79cbc1a3",
+          "bytes": 2328
+        },
+        {
+          "path": "skills/size-product-bet/agents/openai.yaml",
+          "sha256": "1b8918251722109bb35f45be45d3aa738a1c90566694c851f50a9167ca9d15c4",
+          "bytes": 223
+        }
+      ]
+    },
+    {
+      "id": "synthesize-customer-research",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "synthesize-customer-research",
+      "upstreamPath": "skills/synthesize-customer-research",
+      "vendoredPath": "skills/synthesize-customer-research",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Turn interviews, calls, surveys, observations, support records, and notes into traceable findings and decision implications. Use when summarizing research, comparing participants, finding themes, producing an insight brief, or separating ev",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/synthesize-customer-research/SKILL.md",
+          "sha256": "22366962cd81202226074351b112cbc632ff4ee7c301c1481ddb7559b46aeea4",
+          "bytes": 2458
+        },
+        {
+          "path": "skills/synthesize-customer-research/agents/openai.yaml",
+          "sha256": "9ac68ad20a6444f7155159335ab8ffb0e28b13034a9e109c8aad6a37027661c2",
+          "bytes": 250
+        }
+      ]
+    },
+    {
+      "id": "validate-product-problem",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "validate-product-problem",
+      "upstreamPath": "skills/validate-product-problem",
+      "vendoredPath": "skills/validate-product-problem",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Assess whether a product problem is important, frequent, underserved, strategically relevant, and supported by sufficient evidence to justify the next investment. Use when validating an idea, reviewing a problem statement, making a go or no",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/validate-product-problem/SKILL.md",
+          "sha256": "aa4dab2d5cd5017cdfd0d9dea0209ef6421c42ccf2fef1aba9dd667817b24b0f",
+          "bytes": 2434
+        },
+        {
+          "path": "skills/validate-product-problem/agents/openai.yaml",
+          "sha256": "59c6e6c35f3dd14e0a44918df817bb96d47e40e75a10294dbaa2613749ea6ee9",
+          "bytes": 247
+        }
+      ]
+    },
+    {
+      "id": "verify-product-outcomes",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "verify-product-outcomes",
+      "upstreamPath": "skills/verify-product-outcomes",
+      "vendoredPath": "skills/verify-product-outcomes",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Compare implemented and observed product behavior against intended customer outcomes, requirements, quality constraints, and release evidence. Use when implementation or deployment is complete, during UAT, while reviewing intended versus im",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/verify-product-outcomes/SKILL.md",
+          "sha256": "74cfed34cecdd02c3e0c962fd484271eb4131d5c2ec5c8e5ed8a8847aa0b96ef",
+          "bytes": 2556
+        },
+        {
+          "path": "skills/verify-product-outcomes/agents/openai.yaml",
+          "sha256": "76e5107175f8deff5c12470241306d56d5730ac2c8475c512228d2f785807e11",
+          "bytes": 246
+        }
+      ]
+    },
+    {
+      "id": "write-product-decision",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "write-product-decision",
+      "upstreamPath": "skills/write-product-decision",
+      "vendoredPath": "skills/write-product-decision",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Write a durable product decision record capturing context, decision, evidence, options, tradeoffs, dissent, owner, consequences, follow-up, and reconsideration triggers. Use when a meaningful product choice is made, a ratified plan changes,",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/write-product-decision/SKILL.md",
+          "sha256": "d4fc45df50c237f3c28fafc8d8f9d9f89392071dd7056a165c70bee21fadd1d8",
+          "bytes": 2392
+        },
+        {
+          "path": "skills/write-product-decision/agents/openai.yaml",
+          "sha256": "f1eafcf8dc810604638ab4ffc6362ebe8223bc4055b89261513553babf68dd43",
+          "bytes": 245
+        }
+      ]
+    },
+    {
+      "id": "write-product-requirements",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "write-product-requirements",
+      "upstreamPath": "skills/write-product-requirements",
+      "vendoredPath": "skills/write-product-requirements",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Write evidence-linked product requirements that define the problem, target users, outcomes, scope, behavior, quality constraints, success evidence, non-goals, risks, and open decisions without over-specifying implementation. Use when drafti",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/write-product-requirements/SKILL.md",
+          "sha256": "7a917795558a590cedd346021f0a1ad45bb2b642b7e570fad03d9f24182c7a59",
+          "bytes": 2550
+        },
+        {
+          "path": "skills/write-product-requirements/agents/openai.yaml",
+          "sha256": "1b8794e8a70c0e59339f4654628ec349320b7d8f56732f9be33394c3bc46f9f3",
+          "bytes": 247
+        }
+      ]
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "LICENSE",
+      "sha256": "951396ba14eab52c4b8fe55061ef1578f9cfce78d85857057f669bad623fbe4c",
+      "bytes": 1074
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "sha256": "98b7187276bcbf1e9809fe02e3fca8f234389fb889640dce0764f4d431762980",
+      "bytes": 5308
+    },
+    {
+      "path": "skillsets/ai-product.json",
+      "sha256": "3a35b94f20083954a9e45f6cd4ab24d238bd999aca4b16919c1c9cf689a7e673",
+      "bytes": 352
+    },
+    {
+      "path": "skillsets/complete.json",
+      "sha256": "16a7a2695502e765c891b9e094da39b9b13a685c0bef4b77de8dcc7d5a5f37b1",
+      "bytes": 329
+    },
+    {
+      "path": "skillsets/delivery.json",
+      "sha256": "d386f01cc6d9cc68ce040e03b6fa95340dba299bdfd9d7b4f4552bdeb8e3182c",
+      "bytes": 587
+    },
+    {
+      "path": "skillsets/discovery.json",
+      "sha256": "0e88f97ccf71e0566b49d74b5a77997b15b40b288703e8c26261f50d2b7f88d7",
+      "bytes": 535
+    },
+    {
+      "path": "skillsets/operate.json",
+      "sha256": "fdf22534bbb40cd4baaf7fbf8857e78b070cc4196f92ffc12a37f9cfa8cab4f2",
+      "bytes": 586
+    },
+    {
+      "path": "skillsets/strategy.json",
+      "sha256": "aeea069ceb420ea21e2c5f0df2cade9c69aedb8e428eb04cc9f09b1c2a21d312",
+      "bytes": 622
+    }
+  ],
+  "excludedArtifacts": [
+    "dist/ (build output) and scripts/ (build/tooling scripts).",
+    "docs/ and README.md (non-runtime).",
+    "All git metadata."
+  ],
+  "negativeAudit": {
+    "checked": "Regex-scanned all vendored files for: git force push, privilege escalation, destructive recursive deletes, chmod/chown, service managers, /Users/ absolute paths, $HOME/home writes, network egress, and real API-key/secret/token/password literals.",
+    "result": "Scanned all 45 SKILL.md files and openai.yaml interface metadata. Pure methodology/guidance (JTBD, RICE, opportunity trees, PRD, metrics, go-to-market, AI governance). No commands that write files, no network calls, no credential/secret literals, no force-push or home/global writes."
+  },
+  "integrity": {
+    "byteIdentity": "Every vendored file verified diff -rq identical to upstream at the recorded commit (empty diff); see excludedArtifacts for intentionally omitted paths.",
+    "hashSelfCheck": "SHA256 values recomputed locally after copy; on-disk recompute matches this manifest with zero mismatches, zero extra files, zero missing files.",
+    "vendoredFileCount": 98,
+    "entrySkillCount": 45,
+    "dependencySkillCount": 0
+  }
+}

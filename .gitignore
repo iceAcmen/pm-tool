@@ -34,6 +34,9 @@ Thumbs.db
 # PM 业务数据目录（项目/任务/里程碑的 JSON 与渲染的 Markdown）
 # 阶段 2 决策（ADL-009）：真实业务数据暂不纳入 git；目录由存储后端在首次写入时自动创建
 data/
+# 例外：vendor 第三方 skill 自带的知识库 data 目录属于 skill 内容（非运行时数据），需逐字节入库
+!vendor/agent-skills/**/data/
+!vendor/agent-skills/**/data/**
 
 # R4 默认导出目录（可重新生成，不作为数据源）
 exports/

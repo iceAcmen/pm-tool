@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 3,
+  "purpose": "Self-contained vendoring of the ux-ui-skills pack (aditya-ariosity): seven skills covering UX/UI audits, dashboard redesign, product design, AI-product design, design-system review, dev handoff and case-study writing. Includes references, SVG icons, data contracts and the read-only Python search/eval tools. Third-party text copied byte-for-byte; no upstream installers run.",
+  "source": {
+    "repo": "https://github.com/aditya-ariosity/ux-ui-skills",
+    "branch": "main",
+    "commit": "74308ad0beac6d880d87aaf5660b5eaf3bd8afdd",
+    "authorName": "Aditya Sharma",
+    "commitDate": "2026-09-10 09:46:55 +0300",
+    "commitSubject": "Merge pull request #2 from aditya-ariosity/tessl-skill-updates-2026-09-10",
+    "fetchedAtUtc": "2026-10-16T15:15:42Z",
+    "fetchedAtLocal": "2026-10-16 23:15:42 CST (+0800)",
+    "fetchMethod": "public read-only shallow git clone (--depth 1) to .tmp/upstream-skills/<repo>; HEAD resolved via git log. No write/push to upstream."
+  },
+  "entrySkillIds": [
+    "ai-product-design",
+    "case-study-writer",
+    "dashboard-redesign",
+    "design-system-review",
+    "handoff-to-dev",
+    "product-design",
+    "ux-ui-audit"
+  ],
+  "declaredDependencies": [],
+  "license": {
+    "spdx": "MIT",
+    "copyright": "Copyright (c) 2026 Aditya Sharma",
+    "file": "LICENSE",
+    "verified": "Root LICENSE read and confirmed MIT; included verbatim."
+  },
+  "policy": {
+    "projectRulesPrecedence": true,
+    "noInstallerRun": true,
+    "noHomeOrGlobalWrites": true
+  },
+  "projectRulesPriority": {
+    "statement": "Project AGENTS.md and its ADL decision-log entries are authoritative and override any vendored upstream skill guidance whenever they conflict.",
+    "upstreamSkillsDoNotGrant": [
+      "modifying the upstream deepseek-harness source (~/Projects/dsh-pm/deepseek-harness/)",
+      "writing DEEPSEEK_API_KEY or any credential into the repo",
+      "git push --force or rewriting already-pushed history",
+      "modifying user-home, global, IDE, or shell config",
+      "running upstream installers / one-click setup",
+      "skipping the project independent-test gating or its GUI-evidence requirement",
+      "writing files via --persist (or equivalent) without explicit user authorization"
+    ],
+    "conflictResolution": "Where a vendored playbook suggests behavior the project forbids (offline-first, keys-not-in-repo, no-force-push, data/ stays out of git), the project rules win and the playbook is reference only."
+  },
+  "skills": [
+    {
+      "id": "ai-product-design",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "ai-product-design",
+      "upstreamPath": "ai-product-design",
+      "vendoredPath": "skills/ai-product-design",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Design, specify, map, evaluate, or improve an AI assistant, LLM feature, copilot, chatbot, agent, recommendation, generation, or automation workflow. Define capability boundaries, user control, recovery, trust, evidence, uncertainty, permis",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/ai-product-design/SKILL.md",
+          "sha256": "4db0caf47ef7041370df9b940f43ea60b6376d6356d453243dca9e36b932a112",
+          "bytes": 8054
+        },
+        {
+          "path": "skills/ai-product-design/references/capability-risk-and-trust.md",
+          "sha256": "803363e718e16587f2b7c36be757f24cae548f6aed9350ad7f230a101cf800df",
+          "bytes": 5761
+        },
+        {
+          "path": "skills/ai-product-design/references/evaluation-and-states.md",
+          "sha256": "a682a5be1af11a90f3c27bbb7aaa59fc3bb9a30384ad923aff010ced62118d72",
+          "bytes": 6897
+        },
+        {
+          "path": "skills/ai-product-design/references/interaction-and-agent-patterns.md",
+          "sha256": "1d9c43b1ba40d6675f3c1907563166e07a21d729695c82e3fd289443eafc8c6a",
+          "bytes": 6905
+        },
+        {
+          "path": "skills/ai-product-design/references/worked-example.md",
+          "sha256": "425e08ea9d1613a2a25c9b708304b6c3934613dcd325528b9d1ec61fa37053a5",
+          "bytes": 5007
+        },
+        {
+          "path": "skills/ai-product-design/agents/openai.yaml",
+          "sha256": "dc0eb8a26985c26a68183033fd02c3396e7315dfcebbe9ae2f3478732c70fc5b",
+          "bytes": 392
+        },
+        {
+          "path": "skills/ai-product-design/assets/icon.svg",
+          "sha256": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+          "bytes": 420
+        }
+      ]
+    },
+    {
+      "id": "case-study-writer",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "case-study-writer",
+      "upstreamPath": "case-study-writer",
+      "vendoredPath": "skills/case-study-writer",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Write, restructure, edit, or strengthen UX/UI portfolio case studies, portfolio pieces, project stories, and interview narratives from supplied product-design evidence. Extract proof, clarify individual and team ownership, connect decisions",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/case-study-writer/SKILL.md",
+          "sha256": "a015f4e0183d0a737644551f08e60e0438e1cdd981deb336c5e9c2e28b123d23",
+          "bytes": 6911
+        },
+        {
+          "path": "skills/case-study-writer/references/evidence-and-claims.md",
+          "sha256": "4baacccceefa2cb390aa3583152bde4774c48bb2b5275e409fc938f43f9083e1",
+          "bytes": 6171
+        },
+        {
+          "path": "skills/case-study-writer/references/story-architecture.md",
+          "sha256": "a64660715a928c708fd03eef8457a6f58f3e2d0779e8113894af4849b75c2375",
+          "bytes": 6922
+        },
+        {
+          "path": "skills/case-study-writer/references/worked-example.md",
+          "sha256": "9f1aac1bbba6a8769158b1ce580270d671a8d8519ef0839ba639a703b4ed6e9f",
+          "bytes": 5395
+        },
+        {
+          "path": "skills/case-study-writer/agents/openai.yaml",
+          "sha256": "e55f306d2cb6d2c2f9df003022d61a724e4ad317199c9a0cb57f1bde17a79808",
+          "bytes": 396
+        },
+        {
+          "path": "skills/case-study-writer/assets/icon.svg",
+          "sha256": "49315dda7125ec5fc77ef5f2b96126d8b2121c6e72944b4702972e90f321d3ee",
+          "bytes": 1210
+        }
+      ]
+    },
+    {
+      "id": "dashboard-redesign",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "dashboard-redesign",
+      "upstreamPath": "dashboard-redesign",
+      "vendoredPath": "skills/dashboard-redesign",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Redesign a dashboard, KPI view, operational console, or analytical workspace around real decisions and data meaning. Trigger on \"redesign this dashboard\", \"redesign this report\", \"clean up this analytics view\", \"improve these KPIs\", or \"fix",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/dashboard-redesign/SKILL.md",
+          "sha256": "dcac4dd8b90372ea2fce2779f377065761be6b3fd04a5a02d7316037b6073fe8",
+          "bytes": 7388
+        },
+        {
+          "path": "skills/dashboard-redesign/references/dashboard-models.md",
+          "sha256": "17335859192cdf9f0673e08bd5d18442e44260c03765a05f80a4b6f9c220bf15",
+          "bytes": 6541
+        },
+        {
+          "path": "skills/dashboard-redesign/references/interaction-accessibility-qa.md",
+          "sha256": "6e8492bf27637b5454c965d4caf3d1a3cd5349e0a4b898733184bf7e89880bfa",
+          "bytes": 5929
+        },
+        {
+          "path": "skills/dashboard-redesign/references/visualization-and-metrics.md",
+          "sha256": "2ef2cc849ced9f180e9be7dc4dc54f6de5da081c4e02a1a5e53ea6aad8cef6d6",
+          "bytes": 6959
+        },
+        {
+          "path": "skills/dashboard-redesign/references/worked-example.md",
+          "sha256": "b5453ecf7107d95d85ec30fe13d1215f8b74814a6ff0f2b380e968fa4ed471d1",
+          "bytes": 4889
+        },
+        {
+          "path": "skills/dashboard-redesign/agents/openai.yaml",
+          "sha256": "823aca8e32dfcaf588e4430b93e3d0976005fcd8d4ac697343dde16b03f16818",
+          "bytes": 405
+        },
+        {
+          "path": "skills/dashboard-redesign/assets/icon.svg",
+          "sha256": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+          "bytes": 420
+        }
+      ]
+    },
+    {
+      "id": "design-system-review",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "design-system-review",
+      "upstreamPath": "design-system-review",
+      "vendoredPath": "skills/design-system-review",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Audit, diagnose, score, and recommend fixes for a design system, design tokens, token architecture, component library, Figma library, Storybook, or design-ops model. Evaluate product-wide consistency, accessibility, adoption, and governance",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/design-system-review/SKILL.md",
+          "sha256": "a0600bf2c45397e1be919825aed475bddf8e63a57ac8622f1a4bd170f935218b",
+          "bytes": 6168
+        },
+        {
+          "path": "skills/design-system-review/references/component-contract.md",
+          "sha256": "d8ee08e37bec882a94f6f5c1b0b5adb1a428622e957a77df6764232a1d1e1926",
+          "bytes": 5641
+        },
+        {
+          "path": "skills/design-system-review/references/governance-and-adoption.md",
+          "sha256": "afc8fe25bd7e2c32336e6b124df03753dff53c53f043b0ddc369482e6f045ddf",
+          "bytes": 5511
+        },
+        {
+          "path": "skills/design-system-review/references/tokens-and-theming.md",
+          "sha256": "260190ab5360a4847c5926651bec260946a2e96f59d700e08a70ed339c9f239f",
+          "bytes": 5699
+        },
+        {
+          "path": "skills/design-system-review/references/worked-example.md",
+          "sha256": "9f25d633d664d9b49896281d414ad9a55f2ee7b5e26bafeb73e63c7cbc5d4a41",
+          "bytes": 4227
+        },
+        {
+          "path": "skills/design-system-review/agents/openai.yaml",
+          "sha256": "0691050e6f49e7320d49402367dfd0373fd6b1d2d99f65c143e1a1308bb0f399",
+          "bytes": 394
+        },
+        {
+          "path": "skills/design-system-review/assets/icon.svg",
+          "sha256": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+          "bytes": 420
+        }
+      ]
+    },
+    {
+      "id": "handoff-to-dev",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "handoff-to-dev",
+      "upstreamPath": "handoff-to-dev",
+      "vendoredPath": "skills/handoff-to-dev",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Specify, map, document, validate, and package an approved UX/UI design or prototype into build-ready behavior, component, responsive, state, accessibility, analytics, QA, and acceptance contracts. Trigger on \"prepare developer handoff\", \"ha",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/handoff-to-dev/SKILL.md",
+          "sha256": "025eb79777fe5f62980ebb8b4f0f8463a04cf9a67db4c9290a65932d07f0e93f",
+          "bytes": 6421
+        },
+        {
+          "path": "skills/handoff-to-dev/references/accessibility-qa-and-acceptance.md",
+          "sha256": "59d22a4f4c478a06be06a4c3ee86c7c068f16b8866dd309988379310bf6e8225",
+          "bytes": 5426
+        },
+        {
+          "path": "skills/handoff-to-dev/references/implementation-contract.md",
+          "sha256": "4768caa2ff30c02e5d6a3521586744c6c702430f1c6ee7f718d22814a4f31400",
+          "bytes": 5788
+        },
+        {
+          "path": "skills/handoff-to-dev/references/state-and-responsive-matrix.md",
+          "sha256": "5f9c1f04d66aaebb1efb4f83a89392c030024b9835ce2d3d113ce057ca8afe9c",
+          "bytes": 6147
+        },
+        {
+          "path": "skills/handoff-to-dev/references/worked-example.md",
+          "sha256": "cf2ca918cf5f0dcfb1f2a36f11a611c9f34b5a194335531e6396f303885b356d",
+          "bytes": 5440
+        },
+        {
+          "path": "skills/handoff-to-dev/agents/openai.yaml",
+          "sha256": "1b8f0698d51d55a01c161eefa37db4e415a8ca1f5c214b0a7fa39dcdc981a066",
+          "bytes": 399
+        },
+        {
+          "path": "skills/handoff-to-dev/assets/icon.svg",
+          "sha256": "8936b24f674a1250d999e2c2b5901374fb4240426f32bd1ae340c352a90d617d",
+          "bytes": 1738
+        }
+      ]
+    },
+    {
+      "id": "product-design",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "product-design",
+      "upstreamPath": "product-design",
+      "vendoredPath": "skills/product-design",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Experimental end-to-end product-design orchestrator that frames project context, retrieves research, models experience flows, defines visual direction, creates artifacts, and validates rendered outcomes. Use only when explicitly asked for \"",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/product-design/SKILL.md",
+          "sha256": "eb8803537da7218eefef14f89a90f53767ea4d1452b3673c16456cb30eee6652",
+          "bytes": 7729
+        },
+        {
+          "path": "skills/product-design/references/design-reasoning.md",
+          "sha256": "cca412bba70f1b18b15ee5029f49265f7fd60d602ef8e8adbe7b5d6ecd87f54b",
+          "bytes": 2538
+        },
+        {
+          "path": "skills/product-design/references/evaluation.md",
+          "sha256": "45b7e92a8fc2ac8480ffa12dd34030a25469a627d734ec8deee401df5982a2a1",
+          "bytes": 1965
+        },
+        {
+          "path": "skills/product-design/references/knowledge-governance.md",
+          "sha256": "00fae8e43802eb9279093c34b2abe7b1b9285266c3dd73368544f531cad15731",
+          "bytes": 2644
+        },
+        {
+          "path": "skills/product-design/references/project-context.md",
+          "sha256": "9cf15c3fa8d71dfc7d5d777f9b5bc447187ba9fe63d9eba07a6490c75840b7e7",
+          "bytes": 3182
+        },
+        {
+          "path": "skills/product-design/references/research-workflow.md",
+          "sha256": "c06f9d0cd42388ef0e17aab9a749d52ecc1992b8a9451b140355d6aa8c4a1420",
+          "bytes": 2654
+        },
+        {
+          "path": "skills/product-design/references/visual-direction.md",
+          "sha256": "bc21ccf48b5d381f0f8f1bca4faa3c38d58d64da7d902f12dce5869edd4fc4cf",
+          "bytes": 2323
+        },
+        {
+          "path": "skills/product-design/tests/test_search.py",
+          "sha256": "c807341dac9c4ab25e9895dd4ffded3e820ca4748ef2b270a3c225ddfd9010dc",
+          "bytes": 4514
+        },
+        {
+          "path": "skills/product-design/tests/fixtures/benchmark-cases.json",
+          "sha256": "54f0ff85d6db15d6e7ae97e6f9895a9d4ae493b45094555332f8a9c79c24b803",
+          "bytes": 4684
+        },
+        {
+          "path": "skills/product-design/agents/openai.yaml",
+          "sha256": "0a9c4305feb5f75ee4f2e9b54ab622a11e559a8747293804524731c105a3321a",
+          "bytes": 313
+        },
+        {
+          "path": "skills/product-design/scripts/context_validation.py",
+          "sha256": "4c6bcc5c84cace8e42adaf02f16bf0413624282598f1f59f037cf9a4ba402a42",
+          "bytes": 2734
+        },
+        {
+          "path": "skills/product-design/scripts/evaluate.py",
+          "sha256": "27ac99e985e516a794d8ceb8e01c13232e3a821efeb78ff505291ebd777aea3c",
+          "bytes": 5233
+        },
+        {
+          "path": "skills/product-design/scripts/search.py",
+          "sha256": "126c56069e52202da040c949f6f864ca2adf9cec1a640d07d5a8b80fc2f9154f",
+          "bytes": 8969
+        },
+        {
+          "path": "skills/product-design/scripts/validate_context.py",
+          "sha256": "8f96516de4547d5ae24da65a007f38ac3899619340e8b08c0aeae754b3eb42f9",
+          "bytes": 548
+        },
+        {
+          "path": "skills/product-design/scripts/validate_data.py",
+          "sha256": "6d7b199bbf6a2e34a7394c941b072c887f248a2ef03f1e83ce61b2965fcd2fc7",
+          "bytes": 3895
+        },
+        {
+          "path": "skills/product-design/data/knowledge.jsonl",
+          "sha256": "ed001b0a7371703d92dcbbcf63e0a24d26b89a0a8541e73da0772b803134b69a",
+          "bytes": 17042
+        },
+        {
+          "path": "skills/product-design/data/knowledge.schema.json",
+          "sha256": "ee5f9790f310ea566186da34f78a2e3e8d2c597d5d52670f01cf05fb0c86e3bc",
+          "bytes": 2262
+        },
+        {
+          "path": "skills/product-design/data/project-context.example.json",
+          "sha256": "b5378660663c4dfb4c35a1d70ba3917c094f8b0d940a3ac1f280f2d906ee67a1",
+          "bytes": 2608
+        },
+        {
+          "path": "skills/product-design/data/project-context.schema.json",
+          "sha256": "15e99eeb1819435672b672a59c5d8400292228fc6f0f4cc2ece374e4ccd8a826",
+          "bytes": 2371
+        }
+      ]
+    },
+    {
+      "id": "ux-ui-audit",
+      "kind": "entry",
+      "reviewStatus": "reviewed",
+      "name": "ux-ui-audit",
+      "upstreamPath": "ux-ui-audit",
+      "vendoredPath": "skills/ux-ui-audit",
+      "riskNotes": [],
+      "externalProjectReferences": [],
+      "note": "Audit or critique an existing digital product artifact or flow and return evidence-backed, severity-calibrated findings. Trigger on \"audit this\", \"critique this screen\", \"review this flow\", \"usability review\", \"heuristic evaluation\", or \"fi",
+      "reviewNotes": "Clean. Pure documentation (+ read-only local tooling for some). No network/credential/write-outside-cwd; see negativeAudit.",
+      "files": [
+        {
+          "path": "skills/ux-ui-audit/SKILL.md",
+          "sha256": "233a44c4febc084a959a117c3137c0ad51bbfe98bfdaef77f05e76854dc9f7f8",
+          "bytes": 15845
+        },
+        {
+          "path": "skills/ux-ui-audit/references/accessibility-and-standards.md",
+          "sha256": "2ac83ca80f3a62b3c064d129555df6bc18c828f643aeacb8a8a4855b2bc91736",
+          "bytes": 7511
+        },
+        {
+          "path": "skills/ux-ui-audit/references/ai-experience.md",
+          "sha256": "a2ab8e134bde39e9ac1f95982023055cc000e6bb20a9f2cf452b717819b6b63f",
+          "bytes": 5950
+        },
+        {
+          "path": "skills/ux-ui-audit/references/evidence-and-severity.md",
+          "sha256": "98ae996fbd64d3d3bec592a3b6339856671deb70f2807099d75e592d0b80348f",
+          "bytes": 5230
+        },
+        {
+          "path": "skills/ux-ui-audit/references/product-and-interface-criteria.md",
+          "sha256": "43e0aef242b769f78a779914aaf8e82aa5c57f1b66b5b49099c28bada404564b",
+          "bytes": 10463
+        },
+        {
+          "path": "skills/ux-ui-audit/references/research-and-frameworks.md",
+          "sha256": "7fba3ef3a5a783fac3716dd66a9c0c4520f992bc15c858234c787715a65b1ca3",
+          "bytes": 6207
+        },
+        {
+          "path": "skills/ux-ui-audit/references/usability-testing.md",
+          "sha256": "f57dea20f9e776b6b505f22fbe64d32e651bba9f34d502c165cc501cd23a941f",
+          "bytes": 3359
+        },
+        {
+          "path": "skills/ux-ui-audit/references/visual-craft.md",
+          "sha256": "7f69224d4ce8ca66f75cbb385c21983bdf57ea0b307dbc858f35e79aadb48843",
+          "bytes": 6816
+        },
+        {
+          "path": "skills/ux-ui-audit/references/worked-example.md",
+          "sha256": "ffe640da8879e4c8c726f8b71aabbfcedb9df5829ff7a9a4932e0a7fd181c6a1",
+          "bytes": 5622
+        },
+        {
+          "path": "skills/ux-ui-audit/agents/openai.yaml",
+          "sha256": "b7a76dd0cb4694ca8eba72b243955b39428ea14ee1de290a3c603f2d2247ad48",
+          "bytes": 378
+        },
+        {
+          "path": "skills/ux-ui-audit/assets/icon.svg",
+          "sha256": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+          "bytes": 420
+        }
+      ]
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "LICENSE",
+      "sha256": "ad282e1dd0c5765bec411f87a12b758c6d93b26ef898190a7a45ac7526517b47",
+      "bytes": 1070
+    }
+  ],
+  "excludedArtifacts": [
+    "README.md, CHANGELOG.md, VERSION (non-runtime).",
+    "No upstream installer/setup invoked (git clone is the documented distribution method)."
+  ],
+  "negativeAudit": {
+    "checked": "Regex-scanned all vendored files for: git force push, privilege escalation, destructive recursive deletes, chmod/chown, service managers, /Users/ absolute paths, $HOME/home writes, network egress, and real API-key/secret/token/password literals.",
+    "result": "Scanned SKILL.md, references, data, SVG assets and all Python scripts. The scripts are read-only search/evaluation/validation tools with no network, no credential, no home/global writes, no force-push. The only subprocess usage is in tests/test_search.py, which invokes the skill's own search.py inside a temp directory to assert cwd-independence; no external process/network. All non-text assets are SVG (icons) — no fonts/images/binaries."
+  },
+  "integrity": {
+    "byteIdentity": "Every vendored file verified diff -rq identical to upstream at the recorded commit (empty diff); see excludedArtifacts for intentionally omitted paths.",
+    "hashSelfCheck": "SHA256 values recomputed locally after copy; on-disk recompute matches this manifest with zero mismatches, zero extra files, zero missing files.",
+    "vendoredFileCount": 65,
+    "entrySkillCount": 7,
+    "dependencySkillCount": 0
+  }
+}
