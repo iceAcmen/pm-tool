@@ -5,7 +5,7 @@ import { buildUpdate } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
 import { diffAgainstPrevious } from '../core/report-diff.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
-import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIso } from '../core/derived.js'
+import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIso, isTaskOverdue } from '../core/derived.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { listAssigneeCandidates } from '../core/people-candidates.js'
 import {
@@ -17,7 +17,7 @@ import {
   progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
 } from '../core/gantt.js'
-import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta } from '../core/progress-derivation.js'
+import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -67,8 +67,12 @@ import {
   type FocusDoc, type OpenerSpec,
 } from '../core/drawer-focus.js'
 import {
-  validateProjectForm, validateMilestoneForm, repoFieldErrors, repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
+  validateProjectForm, validateMilestoneForm, validateTaskForm, validateRiskIssueForm,
+  validateMeetingForm, validateReportForm, validateDeliverableForm,
+  repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
   type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
+  type TaskFormValues, type RiskIssueFormValues, type MeetingFormValues,
+  type ReportFormValues, type DeliverableFormValues,
 } from './form-validation.js'
 import { BoardBento } from './board/BoardBento.js'
 import { TaskTable } from './views/tasks.js'
@@ -405,6 +409,94 @@ function ProjectSwitcher({ projects, currentId, onPick }: {
 }
 
 /**
+ * P1-8：≤560 窄窗视图切换下拉（替代平铺 tab 条）。
+ * 触发器显示当前视图名 + 计数徽标 + ChevronDown；展开 listbox 列全部视图与计数，
+ * ↑↓ 移动、Enter 确认、Esc / 点击外部关闭；选中项打勾高亮，背景 dimmed。
+ * ≥561 不渲染（外层按 narrow 条件切换为平铺下划线 tab）。
+ */
+function ViewSwitcher({ current, items, onPick }: {
+  current: View
+  items: { key: View, label: string, count?: number }[]
+  onPick: (v: View) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const currentIndex = Math.max(0, items.findIndex(item => item.key === current))
+  const currentItem = items[currentIndex]
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(event.target as Node)) setOpen(false)
+    }
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.stopPropagation(); setOpen(false) } }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const choose = (index: number) => {
+    const item = items[index]
+    if (item) { onPick(item.key); setOpen(false) }
+  }
+
+  return (
+    <div className="pm-view-switcher" ref={wrapRef}>
+      {open && <button className="pm-view-scrim" aria-hidden="true" tabIndex={-1} onClick={() => setOpen(false)}/>}
+      <button
+        type="button"
+        className={'pm-view-switcher-btn' + (open ? ' is-open' : '')}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => { setOpen(v => !v); setActiveIndex(currentIndex) }}
+        onKeyDown={event => {
+          if (event.key === 'ArrowDown') {
+            event.preventDefault()
+            if (!open) { setOpen(true); setActiveIndex(currentIndex) }
+            else setActiveIndex(i => (i + 1) % items.length)
+          } else if (event.key === 'ArrowUp') {
+            event.preventDefault()
+            if (!open) { setOpen(true); setActiveIndex(currentIndex) }
+            else setActiveIndex(i => (i <= 0 ? items.length - 1 : i - 1))
+          } else if (event.key === 'Enter' && activeIndex >= 0) {
+            event.preventDefault()
+            choose(activeIndex)
+          }
+        }}>
+        <span className="pm-view-switcher-name">{currentItem?.label ?? '选择视图'}</span>
+        {currentItem && currentItem.count !== undefined && <span className="pm-view-switcher-count">{currentItem.count}</span>}
+        <ChevronDown size={15} className={open ? 'pm-caret-open' : undefined}/>
+      </button>
+      {open && (
+        <div className="pm-view-menu" role="listbox" aria-label="切换视图">
+          {items.map((item, i) => {
+            const selected = item.key === current
+            return <button
+              key={item.key}
+              type="button"
+              role="option"
+              aria-selected={selected}
+              className={'pm-view-menu-item' + (selected ? ' is-selected' : '') + (i === activeIndex ? ' is-active' : '')}
+              onMouseEnter={() => setActiveIndex(i)}
+              onClick={() => choose(i)}>
+              <span className="pm-view-menu-check">{selected && <Check size={15}/>}</span>
+              <span className="pm-view-menu-name">{item.label}</span>
+              {item.count !== undefined
+                ? <span className="pm-view-menu-count">{item.count}</span>
+                : <span className="pm-view-menu-count pm-view-menu-count--none">—</span>}
+            </button>
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
  * 模型车道切换（AI 助手 / 副驾共用）：PoC 免费网关 vs 生产自有 Key。
  * 视觉为胶囊式 segmented，跟随深浅主题；compact 用于窄栏。
  */
@@ -523,6 +615,24 @@ export function PmPanel({ execute }: PmPanelApi) {
     setView(v)
     try { localStorage.setItem('pm-view', v) } catch { /* ignore */ }
   }
+  // P1-6：密度全局偏好（comfortable | compact），localStorage 持久、根容器 data-density 下发给各视图。
+  const [density, setDensityRaw] = useState<'comfortable' | 'compact'>(() => {
+    try { return localStorage.getItem('pm-density') === 'compact' ? 'compact' : 'comfortable' } catch { return 'comfortable' }
+  })
+  const setDensity = (next: 'comfortable' | 'compact') => {
+    setDensityRaw(next)
+    try { localStorage.setItem('pm-density', next) } catch { /* ignore */ }
+  }
+  // P1-8：≤560 视图标签折叠为下拉（与各视图 390 档同一媒体断点）。
+  const [narrow, setNarrow] = useState<boolean>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 560px)').matches)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 560px)')
+    const onChange = () => setNarrow(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
   // PROD-02：记录直达——切项目 -> 切视图 tab -> 打开对应抽屉；找不到则安全回退。
   const openRecord = (projectId: string, type: string, id: string) => {
     setSelected(projectId)
@@ -645,6 +755,7 @@ export function PmPanel({ execute }: PmPanelApi) {
     <style>{styles}</style>
     <main
       className="pm-shell"
+      data-density={density}
       onPointerDownCapture={recordDrawerOpener}
       onClickCapture={recordDrawerOpener}
     >
@@ -866,35 +977,53 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onGotoView={changeView}
                 />
               : null}
-            <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
-              <ViewTab active={view === 'tasks'} count={tasks.length} onClick={() => changeView('tasks')}>
-                全部任务
-              </ViewTab>
-              <ViewTab active={view === 'milestones'} count={milestones.length} onClick={() => changeView('milestones')}>
-                里程碑
-              </ViewTab>
-              <ViewTab active={view === 'risk-issues'} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
-                风险与问题
-              </ViewTab>
-              <ViewTab active={view === 'meetings'} count={meetings.length} onClick={() => changeView('meetings')}>
-                会议纪要
-              </ViewTab>
-              <ViewTab active={view === 'reports'} count={reports.length} onClick={() => changeView('reports')}>
-                进度汇报
-              </ViewTab>
-              <ViewTab active={view === 'deliverables'} count={deliverables.length} onClick={() => changeView('deliverables')}>
-                交付物
-              </ViewTab>
-              <ViewTab active={view === 'overview'} onClick={() => changeView('overview')}>
-                项目概览
-              </ViewTab>
-              <ViewTab active={view === 'gantt'} onClick={() => changeView('gantt')}>
-                甘特排期
-              </ViewTab>
-              <ViewTab active={view === 'people'} onClick={() => changeView('people')}>
-                人员负载
-              </ViewTab>
-            </nav>
+            {narrow ? (
+              <ViewSwitcher
+                current={view}
+                items={[
+                  { key: 'tasks', label: '全部任务', count: tasks.length },
+                  { key: 'milestones', label: '里程碑', count: milestones.length },
+                  { key: 'risk-issues', label: '风险与问题', count: riskIssues.length },
+                  { key: 'meetings', label: '会议纪要', count: meetings.length },
+                  { key: 'reports', label: '进度汇报', count: reports.length },
+                  { key: 'deliverables', label: '交付物', count: deliverables.length },
+                  { key: 'overview', label: '项目概览' },
+                  { key: 'gantt', label: '甘特排期' },
+                  { key: 'people', label: '人员负载' },
+                ]}
+                onPick={changeView}
+              />
+            ) : (
+              <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
+                <ViewTab active={view === 'tasks'} count={tasks.length} onClick={() => changeView('tasks')}>
+                  全部任务
+                </ViewTab>
+                <ViewTab active={view === 'milestones'} count={milestones.length} onClick={() => changeView('milestones')}>
+                  里程碑
+                </ViewTab>
+                <ViewTab active={view === 'risk-issues'} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
+                  风险与问题
+                </ViewTab>
+                <ViewTab active={view === 'meetings'} count={meetings.length} onClick={() => changeView('meetings')}>
+                  会议纪要
+                </ViewTab>
+                <ViewTab active={view === 'reports'} count={reports.length} onClick={() => changeView('reports')}>
+                  进度汇报
+                </ViewTab>
+                <ViewTab active={view === 'deliverables'} count={deliverables.length} onClick={() => changeView('deliverables')}>
+                  交付物
+                </ViewTab>
+                <ViewTab active={view === 'overview'} onClick={() => changeView('overview')}>
+                  项目概览
+                </ViewTab>
+                <ViewTab active={view === 'gantt'} onClick={() => changeView('gantt')}>
+                  甘特排期
+                </ViewTab>
+                <ViewTab active={view === 'people'} onClick={() => changeView('people')}>
+                  人员负载
+                </ViewTab>
+              </nav>
+            )}
             <section className="pm-view" role="tabpanel">
               {view === 'tasks' && <TaskTable
                 tasks={tasks}
@@ -911,6 +1040,8 @@ export function PmPanel({ execute }: PmPanelApi) {
                 run={run}
                 execute={execute}
                 projectId={project.id}
+                density={density}
+                onDensityChange={setDensity}
                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
               />}
               {view === 'milestones' && <MilestoneView
@@ -965,12 +1096,14 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'project-edit' && <ProjectForm
           project={drawer.project}
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'task' && project && <TaskForm
           key={drawer.task ? `task-${drawer.task.id}` : 'task-new'}
@@ -983,6 +1116,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
           onOpenMeeting={(meetingId, meetingProjectId) => openRecord(meetingProjectId ?? project.id, 'meeting', meetingId)}
         />}
         {drawer.kind === 'milestone' && project && <MilestoneForm
@@ -991,6 +1125,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'risk-issue' && project && <RiskIssueForm
           projectId={project.id}
@@ -998,6 +1133,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'meeting' && project && <MeetingForm
           projectId={project.id}
@@ -1007,6 +1143,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'report' && project && <ProgressReportForm
           projectId={project.id}
@@ -1014,6 +1151,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'deliverable' && project && <DeliverableForm
           key={drawer.deliverable ? `deliverable-${drawer.deliverable.id}` : 'deliverable-new'}
@@ -1022,6 +1160,7 @@ export function PmPanel({ execute }: PmPanelApi) {
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
         />}
         {drawer.kind === 'ai' && project && <AiAssistant
           projectId={project.id}
@@ -2442,16 +2581,30 @@ function Field({ label, children, wide, required, error, errorId }: {
   </label>
 }
 
+/** P1-5：抽屉分区（01 基础信息 / 02 排期与进度 / 03 关联与仓库）。
+ *  组标题 = eyebrow 序号 + 650 标题 + 弱分隔线；组内自带两列栅格，≤560 塌一列。 */
+function FormSection({ index, title, children }: { index: string, title: string, children: ReactNode }) {
+  return <section className="pm-form-section">
+    <div className="pm-form-section-h">
+      <span className="pm-form-section-n" aria-hidden="true">{index}</span>
+      <span className="pm-form-section-title">{title}</span>
+    </div>
+    <div className="pm-form-section-grid">{children}</div>
+  </section>
+}
+
 function ProjectForm({
   project,
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   project?: Project
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
   // R3-UX-001：name/startDate/targetDate 受控，校验错误内联常驻（替代原生转瞬气泡）。
   const [values, setValues] = useState<ProjectFormValues>({
@@ -2504,57 +2657,63 @@ function ProjectForm({
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
-    <Field label="项目名称" wide required error={errors.name} errorId="project-name-error">
-      <input
-        name="name" value={values.name} autoFocus
-        onChange={e => setField('name', e.currentTarget.value)}
-        aria-required="true"
-        aria-invalid={errors.name ? true : undefined}
-        aria-describedby={errors.name ? 'project-name-error' : undefined}
-      />
-    </Field>
-    <Field label="项目描述" wide><textarea name="description" defaultValue={project?.description} rows={4}/></Field>
-    <Field label="负责人"><input name="owner" defaultValue={project?.owner}/></Field>
-    {project && <Field label="项目状态"><select name="status" defaultValue={project.status}>
-      {Object.entries(projectStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>}
-    <Field label="开始日期" required error={errors.startDate} errorId="project-start-error">
-      <input
-        name="startDate" type="date" value={values.startDate}
-        onChange={e => setField('startDate', e.currentTarget.value)}
-        aria-required="true"
-        aria-invalid={errors.startDate ? true : undefined}
-        aria-describedby={errors.startDate ? 'project-start-error' : undefined}
-      />
-    </Field>
-    <Field label="目标日期" required error={errors.targetDate} errorId="project-target-error">
-      <input
-        name="targetDate" type="date" value={values.targetDate}
-        onChange={e => setField('targetDate', e.currentTarget.value)}
-        aria-required="true"
-        aria-invalid={errors.targetDate ? true : undefined}
-        aria-describedby={errors.targetDate ? 'project-target-error' : undefined}
-      />
-    </Field>
-    <Field label="仓库地址（可选）" error={errors.repoUrl} errorId="project-repo-error">
-      <input
-        name="repoUrl" value={values.repoUrl ?? ''} placeholder="https://host/org/repo.git"
-        onChange={e => setField('repoUrl', e.currentTarget.value)}
-        aria-invalid={errors.repoUrl ? true : undefined}
-        aria-describedby={errors.repoUrl ? 'project-repo-error' : undefined}
-      />
-    </Field>
-    <Field label="分支（可选）" error={errors.branch} errorId="project-branch-error">
-      <input
-        name="branch" value={values.branch ?? ''} placeholder="main"
-        onChange={e => setField('branch', e.currentTarget.value)}
-        aria-invalid={errors.branch ? true : undefined}
-        aria-describedby={errors.branch ? 'project-branch-error' : undefined}
-      />
-    </Field>
+    <FormSection index="01" title="基础信息">
+      <Field label="项目名称" wide required error={errors.name} errorId="project-name-error">
+        <input
+          name="name" value={values.name} autoFocus
+          onChange={e => setField('name', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.name ? true : undefined}
+          aria-describedby={errors.name ? 'project-name-error' : undefined}
+        />
+      </Field>
+      <Field label="项目描述" wide><textarea name="description" defaultValue={project?.description} rows={4}/></Field>
+      <Field label="负责人"><input name="owner" defaultValue={project?.owner}/></Field>
+      {project && <Field label="项目状态"><select name="status" defaultValue={project.status}>
+        {Object.entries(projectStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>}
+    </FormSection>
+    <FormSection index="02" title="排期与进度">
+      <Field label="开始日期" required error={errors.startDate} errorId="project-start-error">
+        <input
+          name="startDate" type="date" value={values.startDate}
+          onChange={e => setField('startDate', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.startDate ? true : undefined}
+          aria-describedby={errors.startDate ? 'project-start-error' : undefined}
+        />
+      </Field>
+      <Field label="目标日期" required error={errors.targetDate} errorId="project-target-error">
+        <input
+          name="targetDate" type="date" value={values.targetDate}
+          onChange={e => setField('targetDate', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.targetDate ? true : undefined}
+          aria-describedby={errors.targetDate ? 'project-target-error' : undefined}
+        />
+      </Field>
+    </FormSection>
+    <FormSection index="03" title="关联与仓库">
+      <Field label="仓库地址（可选）" error={errors.repoUrl} errorId="project-repo-error">
+        <input
+          name="repoUrl" value={values.repoUrl ?? ''} placeholder="https://host/org/repo.git"
+          onChange={e => setField('repoUrl', e.currentTarget.value)}
+          aria-invalid={errors.repoUrl ? true : undefined}
+          aria-describedby={errors.repoUrl ? 'project-repo-error' : undefined}
+        />
+      </Field>
+      <Field label="分支（可选）" error={errors.branch} errorId="project-branch-error">
+        <input
+          name="branch" value={values.branch ?? ''} placeholder="main"
+          onChange={e => setField('branch', e.currentTarget.value)}
+          aria-invalid={errors.branch ? true : undefined}
+          aria-describedby={errors.branch ? 'project-branch-error' : undefined}
+        />
+      </Field>
+    </FormSection>
     <div className="pm-drawer-actions">
       {project && <button
-        className="pm-button pm-button-danger"
+        className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
         onClick={() => {
@@ -2563,6 +2722,7 @@ function ProjectForm({
           }
         }}
       ><Trash2 size={15}/>删除</button>}
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled}>{project ? '保存更改' : '创建项目'}</button>
     </div>
   </form>
@@ -2578,6 +2738,7 @@ function TaskForm({
   disabled,
   run,
   onSaved,
+  onCancel,
   onOpenMeeting,
 }: {
   projectId: string
@@ -2590,6 +2751,7 @@ function TaskForm({
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
   onOpenMeeting: (meetingId: string, projectId?: string) => void
 }) {
   // #23：客观进度真源（清单 checked/total）；人工设定与之并存且明确区分，客观值不被人工污染。
@@ -2604,15 +2766,16 @@ function TaskForm({
   const primary = pickPrimarySource(sources)
   // T7：可选 repoUrl/branch 受控（复用三级共享 form-validation 中文校验），编辑预填；
   // 清空传空串，由 core omitEmptyRepoKeys 落盘删键（不写空串）。
+  // P1-5：repo 错误并入统一 errors（validateTaskForm），不再独立 repoErrors。
   const [repoValues, setRepoValues] = useState({ repoUrl: task?.repoUrl ?? '', branch: task?.branch ?? '' })
-  const [repoErrors, setRepoErrors] = useState<FormFieldErrors>({})
-  const setRepoField = (field: 'repoUrl' | 'branch', value: string) => {
-    setRepoValues(prev => {
-      const next = { ...prev, [field]: value }
-      setRepoErrors(repoFieldErrors(next.repoUrl, next.branch))
-      return next
-    })
-  }
+  // P1-5：title/startDate/dueDate/progress 受控，统一走 validateTaskForm 内联校验。
+  const [values, setValues] = useState<TaskFormValues>({
+    title: task?.title ?? '',
+    startDate: task?.startDate ?? '',
+    dueDate: task?.dueDate ?? '',
+    progress: task?.progress != null ? String(task.progress) : '0',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
   // PROD-11 前置依赖选择器：受控已选集合（初始 = 已落盘 predecessorIds）；
   // 搜索词仅过滤视图，被过滤掉的已选项仍在集合中、照常随表单提交。
   const [predQuery, setPredQuery] = useState('')
@@ -2622,13 +2785,46 @@ function TaskForm({
   const [evidenceUrl, setEvidenceUrl] = useState<string>(task?.evidenceUrl ?? '')
   const [manualProgress, setManualProgress] = useState<string>(task?.manualProgress != null ? String(task.manualProgress) : '')
   const [manualNote, setManualNote] = useState<string>(task?.manualProgressNote ?? '')
+  const collectTaskValues = (patch: Partial<TaskFormValues> = {}): TaskFormValues => ({
+    ...values, ...patch,
+    effortHours, evidenceUrl, manualProgress,
+    repoUrl: repoValues.repoUrl, branch: repoValues.branch,
+  })
+  const setField = (field: keyof TaskFormValues, value: string) => {
+    const next = { ...values, [field]: value }
+    setValues(next)
+    setErrors(validateTaskForm(collectTaskValues({ [field]: value })))
+  }
+  const setRepoField = (field: 'repoUrl' | 'branch', value: string) => {
+    const nextRepo = { ...repoValues, [field]: value }
+    setRepoValues(nextRepo)
+    setErrors(validateTaskForm({
+      ...values, effortHours, evidenceUrl, manualProgress,
+      repoUrl: nextRepo.repoUrl, branch: nextRepo.branch,
+    }))
+  }
+  const setEffort = (v: string) => {
+    setEffortHours(v)
+    setErrors(validateTaskForm(collectTaskValues({ effortHours: v })))
+  }
+  const setEvidence = (v: string) => {
+    setEvidenceUrl(v)
+    setErrors(validateTaskForm(collectTaskValues({ evidenceUrl: v })))
+  }
+  const setManual = (v: string) => {
+    setManualProgress(v)
+    setErrors(validateTaskForm(collectTaskValues({ manualProgress: v })))
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截、磁盘零写。
-    const nextRepoErrors = repoFieldErrors(repoValues.repoUrl, repoValues.branch)
-    setRepoErrors(nextRepoErrors)
-    if (Object.keys(nextRepoErrors).length > 0) {
-      const first = firstInvalidField(['repoUrl', 'branch'], nextRepoErrors)
+    // P1-5：统一受控内联校验，首错聚焦；拦截即零写盘。
+    const nextErrors = validateTaskForm(collectTaskValues())
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(
+        ['title', 'startDate', 'dueDate', 'progress', 'effortHours', 'evidenceUrl', 'manualProgress', 'repoUrl', 'branch'],
+        nextErrors,
+      )
       if (first) {
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
@@ -2638,22 +2834,24 @@ function TaskForm({
     const form = new FormData(event.currentTarget)
     const parentId = String(form.get('parentId') ?? '')
     const milestoneId = String(form.get('milestoneId') ?? '')
-    const startDate = String(form.get('startDate') ?? '')
-    const dueDate = String(form.get('dueDate') ?? '')
+    const startDate = (values.startDate ?? '').trim()
+    const dueDate = (values.dueDate ?? '').trim()
     // T7：trim 后空串照传，core 落盘时删键；非空传原值。局部更新不误触其它字段。
     const repoUrl = repoValues.repoUrl.trim()
     const branch = repoValues.branch.trim()
     // PROD-11：前置依赖整体替换（多选复选）；空数组即清空。
     const predecessorIds = form.getAll('predecessorIds').map(String)
+    const progressRaw = values.progress ?? '0'
+    const progressNum = progressRaw.trim() === '' ? 0 : Math.max(0, Math.min(100, Math.round(Number(progressRaw))))
     const payload = {
-      title: form.get('title'),
+      title: values.title.trim(),
       description: form.get('description'),
       assignee: form.get('assignee'),
       status: form.get('status'),
       priority: form.get('priority'),
       startDate: startDate || null,
       dueDate: dueDate || null,
-      progress: Number(form.get('progress')),
+      progress: progressNum,
       milestoneId: milestoneId || null,
       predecessorIds,
       repoUrl,
@@ -2689,7 +2887,7 @@ function TaskForm({
       : `task add ${JSON.stringify(createPayload)}`)
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
     {primary && (
       <div className="pm-source-link" data-tip="由会议行动项转为任务，点击打开来源会议">
         <MessageSquare size={13}/>
@@ -2707,51 +2905,139 @@ function TaskForm({
       <a href={task.repoUrl} target="_blank" rel="noopener noreferrer">{task.repoUrl}</a>
       {task.branch && <span className="pm-muted">@{task.branch}</span>}
     </div>}
-    <Field label="任务名称" wide><input name="title" defaultValue={task?.title} required autoFocus/></Field>
-    <Field label="任务说明" wide><textarea name="description" defaultValue={task?.description} rows={4}/></Field>
-    {/* 横切重设计：两列栅格——状态|优先级、执行人|截止日期各一列；进度跨整行。 */}
-    <Field label="状态"><select name="status" defaultValue={task?.status ?? 'todo'}>
-      {Object.entries(taskStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>
-    <Field label="优先级"><select name="priority" defaultValue={task?.priority ?? 'P1'}>
-      <option value="P0">P0 - 高优</option>
-      <option value="P1">P1 - 一般</option>
-      <option value="P2">P2 - 较低</option>
-    </select></Field>
-    <Field label="执行人">
-      <input name="assignee" defaultValue={task?.assignee} list="pm-assignee-list" autoComplete="off"/>
-      {/* T8：候选只作下拉建议（不改写/不预填/不限制已有或新输的值），自由输入新人名照存。 */}
-      <datalist id="pm-assignee-list">
-        {assigneeCandidates.map(candidate => <option key={candidate} value={candidate}/>)}
-      </datalist>
-    </Field>
-    <Field label="截止日期"><input name="dueDate" type="date" defaultValue={task?.dueDate}/></Field>
-    <Field label="完成进度" wide><input name="progress" type="number" min="0" max="100" defaultValue={task?.progress ?? 0}/></Field>
-    {/* 父任务下拉含「编号 + 长标题」，跨整行才不截断；仅新建时可选。 */}
-    {!task && <Field label="父任务" wide><select name="parentId" defaultValue="">
-      <option value="">根任务</option>
-      {tasks.map(item => <option key={item.id} value={item.id}>{item.code} {item.title}</option>)}
-    </select></Field>}
-    <Field label="开始日期"><input name="startDate" type="date" defaultValue={task?.startDate}/></Field>
-    <Field label="关联里程碑"><select name="milestoneId" defaultValue={task?.milestoneId ?? ''}>
-      <option value="">不关联</option>
-      {milestones.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
-    </select></Field>
+    <FormSection index="01" title="基础信息">
+      <Field label="任务名称" wide required error={errors.title} errorId="task-title-error">
+        <input
+          name="title" value={values.title} autoFocus
+          onChange={e => setField('title', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? 'task-title-error' : undefined}
+        />
+      </Field>
+      <Field label="任务说明" wide><textarea name="description" defaultValue={task?.description} rows={4}/></Field>
+      <Field label="状态"><select name="status" defaultValue={task?.status ?? 'todo'}>
+        {Object.entries(taskStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      <Field label="优先级"><select name="priority" defaultValue={task?.priority ?? 'P1'}>
+        <option value="P0">P0 - 高优</option>
+        <option value="P1">P1 - 一般</option>
+        <option value="P2">P2 - 较低</option>
+      </select></Field>
+      <Field label="执行人">
+        <input name="assignee" defaultValue={task?.assignee} list="pm-assignee-list" autoComplete="off"/>
+        {/* T8：候选只作下拉建议（不改写/不预填/不限制已有或新输的值），自由输入新人名照存。 */}
+        <datalist id="pm-assignee-list">
+          {assigneeCandidates.map(candidate => <option key={candidate} value={candidate}/>)}
+        </datalist>
+      </Field>
+      {/* 父任务下拉含「编号 + 长标题」，跨整行才不截断；仅新建时可选。 */}
+      {!task && <Field label="父任务" wide><select name="parentId" defaultValue="">
+        <option value="">根任务</option>
+        {tasks.map(item => <option key={item.id} value={item.id}>{item.code} {item.title}</option>)}
+      </select></Field>}
+    </FormSection>
+    <FormSection index="02" title="排期与进度">
+      <Field label="开始日期" error={errors.startDate} errorId="task-start-error">
+        <input
+          name="startDate" type="date" value={values.startDate}
+          onChange={e => setField('startDate', e.currentTarget.value)}
+          aria-invalid={errors.startDate ? true : undefined}
+          aria-describedby={errors.startDate ? 'task-start-error' : undefined}
+        />
+      </Field>
+      <Field label="截止日期" error={errors.dueDate} errorId="task-due-error">
+        <input
+          name="dueDate" type="date" value={values.dueDate}
+          onChange={e => setField('dueDate', e.currentTarget.value)}
+          aria-invalid={errors.dueDate ? true : undefined}
+          aria-describedby={errors.dueDate ? 'task-due-error' : undefined}
+        />
+      </Field>
+      <Field label="完成进度" wide error={errors.progress} errorId="task-progress-error">
+        <input
+          name="progress" type="number" min="0" max="100" value={values.progress}
+          onChange={e => setField('progress', e.currentTarget.value)}
+          aria-invalid={errors.progress ? true : undefined}
+          aria-describedby={errors.progress ? 'task-progress-error' : undefined}
+        />
+      </Field>
+      {/* #23 客观/人工双轨：客观进度只读展示（清单完成度/证据不足），完成日期只读；
+          实际工时、证据链接、人工设定进度（可清除回落客观）与备注为可编辑项。 */}
+      <div className="pm-meta-block">
+        <div className="pm-meta-objective" data-mode={meta.mode}>
+          <span className="pm-meta-label">客观进度（清单完成度）</span>
+          <span className="pm-meta-value">
+            {derivedObjective?.value != null ? `${derivedObjective.value}%` : '证据不足'}
+            {derivedObjective?.checklist && <span className="pm-muted">（{checklistFraction(derivedObjective)}）</span>}
+          </span>
+        </div>
+        {task?.completedDate && (
+          <div className="pm-meta-row"><span className="pm-meta-label">完成日期</span><span>{task.completedDate}</span></div>
+        )}
+        <Field label="实际工时（小时，可选）" error={errors.effortHours} errorId="task-effort-error">
+          <input
+            type="number" min="0" step="0.5" inputMode="decimal"
+            value={effortHours} onChange={e => setEffort(e.currentTarget.value)}
+            placeholder="如 3.5（实际投入，非估算）"
+            aria-invalid={errors.effortHours ? true : undefined}
+            aria-describedby={errors.effortHours ? 'task-effort-error' : undefined}
+          />
+        </Field>
+        <Field label="证据链接（可选）" error={errors.evidenceUrl} errorId="task-evidence-error">
+          <input
+            type="text" value={evidenceUrl} onChange={e => setEvidence(e.currentTarget.value)}
+            placeholder="https://… 完成/进度的客观佐证链接"
+            aria-invalid={errors.evidenceUrl ? true : undefined}
+            aria-describedby={errors.evidenceUrl ? 'task-evidence-error' : undefined}
+          />
+        </Field>
+        <Field label="人工设定进度（0-100，可选）" error={errors.manualProgress} errorId="task-manual-error">
+          <div className="pm-manual-row">
+            <input
+              type="number" min="0" max="100" inputMode="numeric"
+              value={manualProgress} onChange={e => setManual(e.currentTarget.value)}
+              placeholder="留空即回落客观进度"
+              aria-invalid={errors.manualProgress ? true : undefined}
+              aria-describedby={errors.manualProgress ? 'task-manual-error' : undefined}
+            />
+            {meta.mode === 'manual' && <span className="pm-manual-badge">人工设定 {meta.manual}%</span>}
+            {meta.mode === 'manual' && (
+              <button
+                type="button" className="pm-manual-clear"
+                onClick={() => { setManual(''); setManualNote('') }}
+              >清除人工设定</button>
+            )}
+          </div>
+        </Field>
+        <Field label="人工设定备注（来源/口径，可选）">
+          <textarea
+            rows={2} value={manualNote} onChange={e => setManualNote(e.currentTarget.value)}
+            placeholder="记录为何人工设定，便于追溯口径"
+          />
+        </Field>
+      </div>
+    </FormSection>
+    <FormSection index="03" title="关联与仓库">
+      <Field label="关联里程碑"><select name="milestoneId" defaultValue={task?.milestoneId ?? ''}>
+        <option value="">不关联</option>
+        {milestones.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
+      </select></Field>
     {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
-    <Field label="仓库地址（可选）" error={repoErrors.repoUrl} errorId="task-repo-error">
+    <Field label="仓库地址（可选）" error={errors.repoUrl} errorId="task-repo-error">
       <input
         name="repoUrl" data-repo-field="repoUrl" value={repoValues.repoUrl} placeholder="https://host/org/repo.git"
         onChange={e => setRepoField('repoUrl', e.currentTarget.value)}
-        aria-invalid={repoErrors.repoUrl ? true : undefined}
-        aria-describedby={repoErrors.repoUrl ? 'task-repo-error' : undefined}
+        aria-invalid={errors.repoUrl ? true : undefined}
+        aria-describedby={errors.repoUrl ? 'task-repo-error' : undefined}
       />
     </Field>
-    <Field label="分支（可选）" error={repoErrors.branch} errorId="task-branch-error">
+    <Field label="分支（可选）" error={errors.branch} errorId="task-branch-error">
       <input
         name="branch" data-repo-field="branch" value={repoValues.branch} placeholder="main"
         onChange={e => setRepoField('branch', e.currentTarget.value)}
-        aria-invalid={repoErrors.branch ? true : undefined}
-        aria-describedby={repoErrors.branch ? 'task-branch-error' : undefined}
+        aria-invalid={errors.branch ? true : undefined}
+        aria-describedby={errors.branch ? 'task-branch-error' : undefined}
       />
     </Field>
     <Field label="前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）" wide>
@@ -2815,57 +3101,10 @@ function TaskForm({
         </div>
       })()}
     </Field>
-    {/* #23 客观/人工双轨：客观进度只读展示（清单完成度/证据不足），完成日期只读；
-        实际工时、证据链接、人工设定进度（可清除回落客观）与备注为可编辑项。 */}
-    <div className="pm-meta-block">
-      <div className="pm-meta-objective" data-mode={meta.mode}>
-        <span className="pm-meta-label">客观进度（清单完成度）</span>
-        <span className="pm-meta-value">
-          {derivedObjective?.value != null ? `${derivedObjective.value}%` : '证据不足'}
-          {derivedObjective?.checklist && <span className="pm-muted">（{checklistFraction(derivedObjective)}）</span>}
-        </span>
-      </div>
-      {task?.completedDate && (
-        <div className="pm-meta-row"><span className="pm-meta-label">完成日期</span><span>{task.completedDate}</span></div>
-      )}
-      <Field label="实际工时（小时，可选）">
-        <input
-          type="number" min="0" step="0.5" inputMode="decimal"
-          value={effortHours} onChange={e => setEffortHours(e.currentTarget.value)}
-          placeholder="如 3.5（实际投入，非估算）"
-        />
-      </Field>
-      <Field label="证据链接（可选）">
-        <input
-          type="text" value={evidenceUrl} onChange={e => setEvidenceUrl(e.currentTarget.value)}
-          placeholder="https://… 完成/进度的客观佐证链接"
-        />
-      </Field>
-      <Field label="人工设定进度（0-100，可选）">
-        <div className="pm-manual-row">
-          <input
-            type="number" min="0" max="100" inputMode="numeric"
-            value={manualProgress} onChange={e => setManualProgress(e.currentTarget.value)}
-            placeholder="留空即回落客观进度"
-          />
-          {meta.mode === 'manual' && <span className="pm-manual-badge">人工设定 {meta.manual}%</span>}
-          {meta.mode === 'manual' && (
-            <button
-              type="button" className="pm-manual-clear"
-              onClick={() => { setManualProgress(''); setManualNote('') }}
-            >清除人工设定</button>          )}
-        </div>
-      </Field>
-      <Field label="人工设定备注（来源/口径，可选）">
-        <textarea
-          rows={2} value={manualNote} onChange={e => setManualNote(e.currentTarget.value)}
-          placeholder="记录为何人工设定，便于追溯口径"
-        />
-      </Field>
-    </div>
+    </FormSection>
     <div className="pm-drawer-actions">
       {task && <button
-        className="pm-button pm-button-danger"
+        className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
         onClick={() => {
@@ -2896,6 +3135,7 @@ function TaskForm({
           }
         }}
       ><Trash2 size={15}/>删除</button>}
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled}>{task ? '保存更改' : '添加任务'}</button>
     </div>
   </form>
@@ -2907,12 +3147,14 @@ function MilestoneForm({
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   projectId: string
   milestone?: Milestone
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
   // R3-UX-001：title/targetDate 受控，必填错误内联常驻。
   const [values, setValues] = useState<MilestoneFormValues>({
@@ -2954,32 +3196,36 @@ function MilestoneForm({
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
-    <Field label="里程碑名称" wide required error={errors.title} errorId="milestone-title-error">
-      <input
-        name="title" value={values.title} autoFocus
-        onChange={e => setField('title', e.currentTarget.value)}
-        aria-required="true"
-        aria-invalid={errors.title ? true : undefined}
-        aria-describedby={errors.title ? 'milestone-title-error' : undefined}
-      />
-    </Field>
-    <Field label="说明 / 达成标准" wide><textarea name="description" defaultValue={milestone?.description} rows={5}/></Field>
-    <Field label="状态"><select name="status" defaultValue={milestone?.status ?? 'planned'}>
-      {Object.entries(milestoneStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>
-    <Field label="目标日期" required error={errors.targetDate} errorId="milestone-target-error">
-      <input
-        name="targetDate" type="date" value={values.targetDate}
-        onChange={e => setField('targetDate', e.currentTarget.value)}
-        aria-required="true"
-        aria-invalid={errors.targetDate ? true : undefined}
-        aria-describedby={errors.targetDate ? 'milestone-target-error' : undefined}
-      />
-    </Field>
-    <Field label="实际达成日期" wide><input name="achievedDate" type="date" defaultValue={milestone?.achievedDate ?? ''}/></Field>
+    <FormSection index="01" title="基础信息">
+      <Field label="里程碑名称" wide required error={errors.title} errorId="milestone-title-error">
+        <input
+          name="title" value={values.title} autoFocus
+          onChange={e => setField('title', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? 'milestone-title-error' : undefined}
+        />
+      </Field>
+      <Field label="说明 / 达成标准" wide><textarea name="description" defaultValue={milestone?.description} rows={5}/></Field>
+      <Field label="状态"><select name="status" defaultValue={milestone?.status ?? 'planned'}>
+        {Object.entries(milestoneStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+    </FormSection>
+    <FormSection index="02" title="排期与进度">
+      <Field label="目标日期" required error={errors.targetDate} errorId="milestone-target-error">
+        <input
+          name="targetDate" type="date" value={values.targetDate}
+          onChange={e => setField('targetDate', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.targetDate ? true : undefined}
+          aria-describedby={errors.targetDate ? 'milestone-target-error' : undefined}
+        />
+      </Field>
+      <Field label="实际达成日期" wide><input name="achievedDate" type="date" defaultValue={milestone?.achievedDate ?? ''}/></Field>
+    </FormSection>
     <div className="pm-drawer-actions">
       {milestone && <button
-        className="pm-button pm-button-danger"
+        className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
         onClick={() => {
@@ -2988,6 +3234,7 @@ function MilestoneForm({
           }
         }}
       ><Trash2 size={15}/>删除</button>}
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled}>{milestone ? '保存更改' : '添加里程碑'}</button>
     </div>
   </form>
@@ -2999,20 +3246,43 @@ function RiskIssueForm({
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   projectId: string
   record?: RiskIssue
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
   const [type, setType] = useState<'risk' | 'issue'>(record?.type ?? 'risk')
+  // P1-5：title/dueDate 受控，统一走 validateRiskIssueForm 内联校验。
+  const [values, setValues] = useState<RiskIssueFormValues>({
+    title: record?.title ?? '',
+    dueDate: record?.dueDate ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof RiskIssueFormValues, value: string) => {
+    const next = { ...values, [field]: value }
+    setValues(next)
+    setErrors(validateRiskIssueForm(next))
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const nextErrors = validateRiskIssueForm(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['title', 'dueDate'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
     const form = new FormData(event.currentTarget)
-    const dueDate = String(form.get('dueDate') ?? '')
+    const dueDate = (values.dueDate ?? '').trim()
     const common = {
-      title: form.get('title'),
+      title: values.title.trim(),
       description: form.get('description'),
       owner: form.get('owner'),
       dueDate: dueDate || null,
@@ -3027,37 +3297,56 @@ function RiskIssueForm({
       : `risk-issue add ${JSON.stringify({ projectId, type, ...common })}`)
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-    <Field label="记录类型" wide>
-      <select
-        name="type"
-        value={type}
-        disabled={Boolean(record)}
-        onChange={event => setType(event.currentTarget.value as 'risk' | 'issue')}
-      >
-        <option value="risk">风险</option>
-        <option value="issue">问题</option>
-      </select>
-    </Field>
-    <Field label="标题" wide><input name="title" defaultValue={record?.title} required autoFocus/></Field>
-    <Field label="说明" wide><textarea name="description" defaultValue={record?.description} rows={4}/></Field>
-    <Field label="状态"><select name="status" defaultValue={record?.status ?? 'open'}>
-      {Object.entries(riskIssueStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>
-    <Field label="影响程度"><select name="impact" defaultValue={record?.impact ?? 'medium'}>
-      {Object.entries(impactLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>
-    {type === 'risk' && <Field label="发生概率"><select name="probability" defaultValue={record?.probability ?? 'medium'}>
-      {Object.entries(probabilityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>}
-    <Field label="负责人"><input name="owner" defaultValue={record?.owner}/></Field>
-    <Field label="截止日期" wide><input name="dueDate" type="date" defaultValue={record?.dueDate ?? ''}/></Field>
-    {type === 'risk'
-      ? <Field label="应对措施" wide><textarea name="responsePlan" defaultValue={record?.responsePlan} rows={5}/></Field>
-      : <Field label="解决方案" wide><textarea name="solution" defaultValue={record?.solution} rows={5}/></Field>}
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+    <FormSection index="01" title="基础信息">
+      <Field label="记录类型" wide>
+        <select
+          name="type"
+          value={type}
+          disabled={Boolean(record)}
+          onChange={event => setType(event.currentTarget.value as 'risk' | 'issue')}
+        >
+          <option value="risk">风险</option>
+          <option value="issue">问题</option>
+        </select>
+      </Field>
+      <Field label="标题" wide required error={errors.title} errorId="risk-title-error">
+        <input
+          name="title" value={values.title} autoFocus
+          onChange={e => setField('title', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? 'risk-title-error' : undefined}
+        />
+      </Field>
+      <Field label="说明" wide><textarea name="description" defaultValue={record?.description} rows={4}/></Field>
+      <Field label="状态"><select name="status" defaultValue={record?.status ?? 'open'}>
+        {Object.entries(riskIssueStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      <Field label="影响程度"><select name="impact" defaultValue={record?.impact ?? 'medium'}>
+        {Object.entries(impactLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>
+      {type === 'risk' && <Field label="发生概率"><select name="probability" defaultValue={record?.probability ?? 'medium'}>
+        {Object.entries(probabilityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+      </select></Field>}
+      <Field label="负责人"><input name="owner" defaultValue={record?.owner}/></Field>
+      {type === 'risk'
+        ? <Field label="应对措施" wide><textarea name="responsePlan" defaultValue={record?.responsePlan} rows={5}/></Field>
+        : <Field label="解决方案" wide><textarea name="solution" defaultValue={record?.solution} rows={5}/></Field>}
+    </FormSection>
+    <FormSection index="02" title="排期与进度">
+      <Field label="截止日期" wide error={errors.dueDate} errorId="risk-due-error">
+        <input
+          name="dueDate" type="date" value={values.dueDate}
+          onChange={e => setField('dueDate', e.currentTarget.value)}
+          aria-invalid={errors.dueDate ? true : undefined}
+          aria-describedby={errors.dueDate ? 'risk-due-error' : undefined}
+        />
+      </Field>
+    </FormSection>
     <div className="pm-drawer-actions">
       {record && <button
-        className="pm-button pm-button-danger"
+        className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
         onClick={() => {
@@ -3066,6 +3355,7 @@ function RiskIssueForm({
           }
         }}
       ><Trash2 size={15}/>删除</button>}
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled}>
         {record ? '保存更改' : '添加记录'}
       </button>
@@ -3085,6 +3375,7 @@ function MeetingForm({
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   projectId: string
   meeting?: Meeting
@@ -3093,18 +3384,40 @@ function MeetingForm({
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
   const actionsRef = useRef<HTMLElement>(null)
+  // P1-5：title/meetingDate/durationMinutes 受控，统一走 validateMeetingForm 内联校验。
+  const [values, setValues] = useState<MeetingFormValues>({
+    title: meeting?.title ?? '',
+    meetingDate: meeting?.meetingDate ?? '',
+    durationMinutes: meeting?.durationMinutes != null ? String(meeting.durationMinutes) : '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof MeetingFormValues, value: string) => {
+    const next = { ...values, [field]: value }
+    setValues(next)
+    setErrors(validateMeetingForm(next))
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const nextErrors = validateMeetingForm(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['title', 'meetingDate', 'durationMinutes'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      return
+    }
     const form = new FormData(event.currentTarget)
     const startTime = String(form.get('startTime') ?? '')
-    const duration = String(form.get('durationMinutes') ?? '')
     const payload = {
-      title: form.get('title'),
-      meetingDate: form.get('meetingDate'),
+      title: values.title.trim(),
+      meetingDate: values.meetingDate,
       startTime: startTime || null,
-      durationMinutes: duration ? Number(duration) : null,
+      durationMinutes: (values.durationMinutes ?? '').trim() ? Number(values.durationMinutes) : null,
       location: form.get('location'),
       facilitator: form.get('facilitator'),
       recorder: form.get('recorder'),
@@ -3134,25 +3447,52 @@ function MeetingForm({
     onSaved()
   }
   return <>
-    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-      <Field label="会议标题" wide><input name="title" defaultValue={meeting?.title} required autoFocus/></Field>
-      <Field label="会议日期"><input name="meetingDate" type="date" required defaultValue={meeting?.meetingDate}/></Field>
-      <Field label="开始时间"><input name="startTime" type="time" defaultValue={meeting?.startTime ?? ''}/></Field>
-      <Field label="时长（分钟）"><input name="durationMinutes" type="number" min="1" max="1440" defaultValue={meeting?.durationMinutes ?? ''}/></Field>
-      <Field label="状态"><select name="status" defaultValue={meeting?.status ?? 'draft'}>
-        {Object.entries(meetingStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-      </select></Field>
-      <Field label="地点 / 链接" wide><input name="location" defaultValue={meeting?.location}/></Field>
-      <Field label="主持人"><input name="facilitator" defaultValue={meeting?.facilitator}/></Field>
-      <Field label="记录人"><input name="recorder" defaultValue={meeting?.recorder}/></Field>
-      <Field label="参会人（每行一人）" wide><textarea name="participants" rows={3} defaultValue={meeting?.participants.join('\n')}/></Field>
-      <Field label="会议摘要" wide><textarea name="summary" rows={4} defaultValue={meeting?.summary}/></Field>
-      <Field label="议题（每行一项）" wide><textarea name="topics" rows={4} defaultValue={meeting?.topics.join('\n')}/></Field>
-      <Field label="决议（每行一项）" wide><textarea name="decisions" rows={4} defaultValue={meeting?.decisions.join('\n')}/></Field>
-      <Field label="备注 / 手工编辑" wide><textarea name="notes" rows={4} defaultValue={meeting?.notes ?? ''}/></Field>
+    <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+      <FormSection index="01" title="基础信息">
+        <Field label="会议标题" wide required error={errors.title} errorId="meeting-title-error">
+          <input
+            name="title" value={values.title} autoFocus
+            onChange={e => setField('title', e.currentTarget.value)}
+            aria-required="true"
+            aria-invalid={errors.title ? true : undefined}
+            aria-describedby={errors.title ? 'meeting-title-error' : undefined}
+          />
+        </Field>
+        <Field label="状态"><select name="status" defaultValue={meeting?.status ?? 'draft'}>
+          {Object.entries(meetingStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select></Field>
+        <Field label="主持人"><input name="facilitator" defaultValue={meeting?.facilitator}/></Field>
+        <Field label="记录人"><input name="recorder" defaultValue={meeting?.recorder}/></Field>
+        <Field label="地点 / 链接" wide><input name="location" defaultValue={meeting?.location}/></Field>
+        <Field label="参会人（每行一人）" wide><textarea name="participants" rows={3} defaultValue={meeting?.participants.join('\n')}/></Field>
+        <Field label="会议摘要" wide><textarea name="summary" rows={4} defaultValue={meeting?.summary}/></Field>
+        <Field label="议题（每行一项）" wide><textarea name="topics" rows={4} defaultValue={meeting?.topics.join('\n')}/></Field>
+        <Field label="决议（每行一项）" wide><textarea name="decisions" rows={4} defaultValue={meeting?.decisions.join('\n')}/></Field>
+        <Field label="备注 / 手工编辑" wide><textarea name="notes" rows={4} defaultValue={meeting?.notes ?? ''}/></Field>
+      </FormSection>
+      <FormSection index="02" title="排期与进度">
+        <Field label="会议日期" required error={errors.meetingDate} errorId="meeting-date-error">
+          <input
+            name="meetingDate" type="date" value={values.meetingDate}
+            onChange={e => setField('meetingDate', e.currentTarget.value)}
+            aria-required="true"
+            aria-invalid={errors.meetingDate ? true : undefined}
+            aria-describedby={errors.meetingDate ? 'meeting-date-error' : undefined}
+          />
+        </Field>
+        <Field label="开始时间"><input name="startTime" type="time" defaultValue={meeting?.startTime ?? ''}/></Field>
+        <Field label="时长（分钟）" error={errors.durationMinutes} errorId="meeting-duration-error">
+          <input
+            name="durationMinutes" type="number" min="1" max="1440" inputMode="numeric" value={values.durationMinutes}
+            onChange={e => setField('durationMinutes', e.currentTarget.value)}
+            aria-invalid={errors.durationMinutes ? true : undefined}
+            aria-describedby={errors.durationMinutes ? 'meeting-duration-error' : undefined}
+          />
+        </Field>
+      </FormSection>
       <div className="pm-drawer-actions">
         {meeting && <button
-          className="pm-button pm-button-danger"
+          className="pm-button pm-button-danger pm-actions-left"
           type="button"
           disabled={disabled}
           onClick={() => {
@@ -3161,6 +3501,7 @@ function MeetingForm({
             }
           }}
         ><Trash2 size={15}/>删除会议</button>}
+        <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
         <button className="pm-button pm-button-primary" disabled={disabled}>{meeting ? '保存会议' : '创建会议'}</button>
       </div>
     </form>
@@ -3210,6 +3551,8 @@ function MeetingActions({
   const saveAction = async (event: FormEvent<HTMLFormElement>, action?: MeetingAction) => {
     event.preventDefault()
     const payload = meetingActionPayload(new FormData(event.currentTarget))
+    // P1-5：移除原生 required 气泡；标题为空则不落盘（诚实拦截）。
+    if (!String(payload.title).trim()) return
     const success = await run(action
       ? `meeting action update ${meeting.id} ${action.id} ${JSON.stringify(payload)}`
       : `meeting action add ${meeting.id} ${JSON.stringify(payload)}`)
@@ -3225,7 +3568,7 @@ function MeetingActions({
       onSubmit={event => void saveAction(event, action)}
     >
       <strong>{action.id}</strong>
-      <input name="title" aria-label={`${action.id} 标题`} defaultValue={action.title} required/>
+      <input name="title" aria-label={`${action.id} 标题`} defaultValue={action.title}/>
       <input name="owner" aria-label={`${action.id} 负责人`} placeholder="负责人" defaultValue={action.owner}/>
       <input name="dueDate" aria-label={`${action.id} 截止日期`} type="date" defaultValue={action.dueDate ?? ''}/>
       <select name="status" aria-label={`${action.id} 状态`} defaultValue={action.status}>
@@ -3273,7 +3616,7 @@ function MeetingActions({
     </form>)}
     <form className="pm-action-editor pm-action-create" data-action-form onSubmit={event => void saveAction(event)}>
       <strong>新增</strong>
-      <input name="title" aria-label="新行动项标题" placeholder="行动项标题" required/>
+      <input name="title" aria-label="新行动项标题" placeholder="行动项标题"/>
       <input name="owner" aria-label="新行动项负责人" placeholder="负责人"/>
       <input name="dueDate" aria-label="新行动项截止日期" type="date"/>
       <select name="status" aria-label="新行动项状态" defaultValue="todo">
@@ -3296,15 +3639,40 @@ function ProgressReportForm({
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   projectId: string
   report?: ProgressReport
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
+  // P1-5：仅创建态校验周期起止（编辑态周期固定禁用，不走此校验）。
+  const [values, setValues] = useState<ReportFormValues>({
+    periodStart: report?.periodStart ?? '',
+    periodEnd: report?.periodEnd ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof ReportFormValues, value: string) => {
+    const next = { ...values, [field]: value }
+    setValues(next)
+    setErrors(validateReportForm(next))
+  }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!report) {
+      const nextErrors = validateReportForm(values)
+      setErrors(nextErrors)
+      if (Object.keys(nextErrors).length > 0) {
+        const first = firstInvalidField(['periodStart', 'periodEnd'], nextErrors)
+        if (first) {
+          const el = event.currentTarget.elements.namedItem(first)
+          if (el instanceof HTMLElement) el.focus()
+        }
+        return
+      }
+    }
     const form = new FormData(event.currentTarget)
     const title = String(form.get('title') ?? '').trim()
     const payload = {
@@ -3317,31 +3685,47 @@ function ProgressReportForm({
     }
     const success = await run(report
       ? `report update ${report.id} ${JSON.stringify(payload)}`
-      : `report generate ${projectId} ${form.get('periodStart')} ${form.get('periodEnd')} ${JSON.stringify(payload)}`)
+      : `report generate ${projectId} ${values.periodStart} ${values.periodEnd} ${JSON.stringify(payload)}`)
     if (success) onSaved()
   }
   return <>
-    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-      <Field label="汇报标题" wide>
-        <input name="title" defaultValue={report?.title} placeholder="留空时按项目和周期自动生成" autoFocus/>
-      </Field>
-      <Field label="周期开始">
-        <input name="periodStart" type="date" required={!report} disabled={Boolean(report)} defaultValue={report?.periodStart}/>
-      </Field>
-      <Field label="周期结束">
-        <input name="periodEnd" type="date" required={!report} disabled={Boolean(report)} defaultValue={report?.periodEnd}/>
-      </Field>
-      <Field label="状态" wide><select name="status" defaultValue={report?.status ?? 'draft'}>
-        {Object.entries(progressReportStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-      </select></Field>
-      <Field label="管理摘要" wide><textarea name="executiveSummary" rows={4} defaultValue={report?.executiveSummary}/></Field>
-      <Field label="已完成事项（每行一项）" wide><textarea name="completedWork" rows={4} defaultValue={report?.completedWork.join('\n')}/></Field>
-      <Field label="下期计划（每行一项）" wide><textarea name="nextPlans" rows={4} defaultValue={report?.nextPlans.join('\n')}/></Field>
-      <Field label="阻塞说明（每行一项）" wide><textarea name="blockers" rows={3} defaultValue={report?.blockers.join('\n')}/></Field>
+    <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+      <FormSection index="01" title="基础信息">
+        <Field label="汇报标题" wide>
+          <input name="title" defaultValue={report?.title} placeholder="留空时按项目和周期自动生成" autoFocus/>
+        </Field>
+        <Field label="状态" wide><select name="status" defaultValue={report?.status ?? 'draft'}>
+          {Object.entries(progressReportStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select></Field>
+        <Field label="管理摘要" wide><textarea name="executiveSummary" rows={4} defaultValue={report?.executiveSummary}/></Field>
+        <Field label="已完成事项（每行一项）" wide><textarea name="completedWork" rows={4} defaultValue={report?.completedWork.join('\n')}/></Field>
+        <Field label="下期计划（每行一项）" wide><textarea name="nextPlans" rows={4} defaultValue={report?.nextPlans.join('\n')}/></Field>
+        <Field label="阻塞说明（每行一项）" wide><textarea name="blockers" rows={3} defaultValue={report?.blockers.join('\n')}/></Field>
+      </FormSection>
+      <FormSection index="02" title="排期与进度">
+        <Field label="周期开始" required={!report} error={errors.periodStart} errorId="report-start-error">
+          <input
+            name="periodStart" type="date" disabled={Boolean(report)} value={values.periodStart}
+            onChange={e => setField('periodStart', e.currentTarget.value)}
+            aria-required={report ? undefined : true}
+            aria-invalid={errors.periodStart ? true : undefined}
+            aria-describedby={errors.periodStart ? 'report-start-error' : undefined}
+          />
+        </Field>
+        <Field label="周期结束" required={!report} error={errors.periodEnd} errorId="report-end-error">
+          <input
+            name="periodEnd" type="date" disabled={Boolean(report)} value={values.periodEnd}
+            onChange={e => setField('periodEnd', e.currentTarget.value)}
+            aria-required={report ? undefined : true}
+            aria-invalid={errors.periodEnd ? true : undefined}
+            aria-describedby={errors.periodEnd ? 'report-end-error' : undefined}
+          />
+        </Field>
+      </FormSection>
       <div className="pm-drawer-actions">
         {report && <>
           <button
-            className="pm-button pm-button-danger"
+            className="pm-button pm-button-danger pm-actions-left"
             type="button"
             disabled={disabled}
             onClick={() => {
@@ -3354,6 +3738,7 @@ function ProgressReportForm({
             <FileText size={15}/>导出 Markdown
           </button>
         </>}
+        <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
         <button className="pm-button pm-button-primary" disabled={disabled}>
           {report ? '保存汇报' : '生成固定快照'}
         </button>
@@ -3384,30 +3769,40 @@ function DeliverableForm({
   disabled,
   run,
   onSaved,
+  onCancel,
 }: {
   projectId: string
   deliverable?: Deliverable
   disabled: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
+  onCancel: () => void
 }) {
   // T7：可选 repoUrl/branch 受控（三级共享中文校验），编辑预填；清空传空串由 core 删键。
+  // P1-5：repo 错误并入统一 errors（validateDeliverableForm）。
   const [repoValues, setRepoValues] = useState({ repoUrl: deliverable?.repoUrl ?? '', branch: deliverable?.branch ?? '' })
-  const [repoErrors, setRepoErrors] = useState<FormFieldErrors>({})
+  const [values, setValues] = useState<DeliverableFormValues>({
+    name: deliverable?.name ?? '',
+    dueDate: deliverable?.dueDate ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const setField = (field: keyof DeliverableFormValues, value: string) => {
+    const next = { ...values, [field]: value }
+    setValues(next)
+    setErrors(validateDeliverableForm({ ...next, repoUrl: repoValues.repoUrl, branch: repoValues.branch }))
+  }
   const setRepoField = (field: 'repoUrl' | 'branch', value: string) => {
-    setRepoValues(prev => {
-      const next = { ...prev, [field]: value }
-      setRepoErrors(repoFieldErrors(next.repoUrl, next.branch))
-      return next
-    })
+    const nextRepo = { ...repoValues, [field]: value }
+    setRepoValues(nextRepo)
+    setErrors(validateDeliverableForm({ ...values, repoUrl: nextRepo.repoUrl, branch: nextRepo.branch }))
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截。
-    const nextRepoErrors = repoFieldErrors(repoValues.repoUrl, repoValues.branch)
-    setRepoErrors(nextRepoErrors)
-    if (Object.keys(nextRepoErrors).length > 0) {
-      const first = firstInvalidField(['repoUrl', 'branch'], nextRepoErrors)
+    // P1-5：统一受控内联校验，首错聚焦；拦截即零写盘。
+    const nextErrors = validateDeliverableForm({ ...values, repoUrl: repoValues.repoUrl, branch: repoValues.branch })
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['name', 'dueDate', 'repoUrl', 'branch'], nextErrors)
       if (first) {
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
@@ -3415,18 +3810,17 @@ function DeliverableForm({
       return
     }
     const form = new FormData(event.currentTarget)
-    const dueDate = String(form.get('dueDate') ?? '')
     const changeNote = String(form.get('changeNote') ?? '').trim()
     const repoUrl = repoValues.repoUrl.trim()
     const branch = repoValues.branch.trim()
     const common = {
-      name: form.get('name'),
+      name: values.name.trim(),
       version: String(form.get('version') ?? '').trim(),
       owner: form.get('owner'),
       status: form.get('status'),
       location: form.get('location'),
       description: form.get('description'),
-      dueDate: dueDate || null,
+      dueDate: (values.dueDate ?? '').trim() || null,
       ...(changeNote ? { changeNote } : {}),
       // update 用 `fields.repoUrl ?? current`：清空必须显式传 ''（core 再删键），omit 会回退成旧值。
       repoUrl,
@@ -3438,39 +3832,60 @@ function DeliverableForm({
     if (success) onSaved()
   }
   return <>
-    <form className="pm-drawer-form" onSubmit={event => void submit(event)}>
-      <Field label="交付物名称" wide><input name="name" defaultValue={deliverable?.name} required autoFocus/></Field>
-      <Field label="版本"><input name="version" defaultValue={deliverable?.version} placeholder="如 v1.0"/></Field>
-      <Field label="状态"><select name="status" defaultValue={deliverable?.status ?? 'planned'}>
-        {Object.entries(deliverableStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-      </select></Field>
-      <Field label="负责人"><input name="owner" defaultValue={deliverable?.owner}/></Field>
-      <Field label="计划交付日期" wide><input name="dueDate" type="date" defaultValue={deliverable?.dueDate ?? ''}/></Field>
-      <Field label="位置（路径 / 链接 / 存放说明）" wide><input name="location" defaultValue={deliverable?.location} placeholder="exports/交付物.md 或 https://..."/></Field>
-      <Field label="说明" wide><textarea name="description" rows={4} defaultValue={deliverable?.description}/></Field>
-      {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
-      <Field label="仓库地址（可选）" wide error={repoErrors.repoUrl} errorId="deliverable-repo-error">
-        <input
-          name="repoUrl" data-repo-field="repoUrl" value={repoValues.repoUrl} placeholder="https://host/org/repo.git"
-          onChange={e => setRepoField('repoUrl', e.currentTarget.value)}
-          aria-invalid={repoErrors.repoUrl ? true : undefined}
-          aria-describedby={repoErrors.repoUrl ? 'deliverable-repo-error' : undefined}
-        />
-      </Field>
-      <Field label="分支（可选）" error={repoErrors.branch} errorId="deliverable-branch-error">
-        <input
-          name="branch" data-repo-field="branch" value={repoValues.branch} placeholder="main"
-          onChange={e => setRepoField('branch', e.currentTarget.value)}
-          aria-invalid={repoErrors.branch ? true : undefined}
-          aria-describedby={repoErrors.branch ? 'deliverable-branch-error' : undefined}
-        />
-      </Field>
-      {deliverable && <Field label="本次变更说明（版本/状态变化时留痕）" wide>
-        <input name="changeNote" placeholder="如：提交评审、验收通过"/>
-      </Field>}
+    <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+      <FormSection index="01" title="基础信息">
+        <Field label="交付物名称" wide required error={errors.name} errorId="deliverable-name-error">
+          <input
+            name="name" value={values.name} autoFocus
+            onChange={e => setField('name', e.currentTarget.value)}
+            aria-required="true"
+            aria-invalid={errors.name ? true : undefined}
+            aria-describedby={errors.name ? 'deliverable-name-error' : undefined}
+          />
+        </Field>
+        <Field label="版本"><input name="version" defaultValue={deliverable?.version} placeholder="如 v1.0"/></Field>
+        <Field label="状态"><select name="status" defaultValue={deliverable?.status ?? 'planned'}>
+          {Object.entries(deliverableStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select></Field>
+        <Field label="负责人"><input name="owner" defaultValue={deliverable?.owner}/></Field>
+        <Field label="位置（路径 / 链接 / 存放说明）" wide><input name="location" defaultValue={deliverable?.location} placeholder="exports/交付物.md 或 https://..."/></Field>
+        <Field label="说明" wide><textarea name="description" rows={4} defaultValue={deliverable?.description}/></Field>
+        {deliverable && <Field label="本次变更说明（版本/状态变化时留痕）" wide>
+          <input name="changeNote" placeholder="如：提交评审、验收通过"/>
+        </Field>}
+      </FormSection>
+      <FormSection index="02" title="排期与进度">
+        <Field label="计划交付日期" wide error={errors.dueDate} errorId="deliverable-due-error">
+          <input
+            name="dueDate" type="date" value={values.dueDate}
+            onChange={e => setField('dueDate', e.currentTarget.value)}
+            aria-invalid={errors.dueDate ? true : undefined}
+            aria-describedby={errors.dueDate ? 'deliverable-due-error' : undefined}
+          />
+        </Field>
+      </FormSection>
+      <FormSection index="03" title="关联与仓库">
+        {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
+        <Field label="仓库地址（可选）" wide error={errors.repoUrl} errorId="deliverable-repo-error">
+          <input
+            name="repoUrl" data-repo-field="repoUrl" value={repoValues.repoUrl} placeholder="https://host/org/repo.git"
+            onChange={e => setRepoField('repoUrl', e.currentTarget.value)}
+            aria-invalid={errors.repoUrl ? true : undefined}
+            aria-describedby={errors.repoUrl ? 'deliverable-repo-error' : undefined}
+          />
+        </Field>
+        <Field label="分支（可选）" error={errors.branch} errorId="deliverable-branch-error">
+          <input
+            name="branch" data-repo-field="branch" value={repoValues.branch} placeholder="main"
+            onChange={e => setRepoField('branch', e.currentTarget.value)}
+            aria-invalid={errors.branch ? true : undefined}
+            aria-describedby={errors.branch ? 'deliverable-branch-error' : undefined}
+          />
+        </Field>
+      </FormSection>
       <div className="pm-drawer-actions">
         {deliverable && <button
-          className="pm-button pm-button-danger"
+          className="pm-button pm-button-danger pm-actions-left"
           type="button"
           disabled={disabled}
           onClick={() => {
@@ -3479,6 +3894,7 @@ function DeliverableForm({
             }
           }}
         ><Trash2 size={15}/>删除</button>}
+        <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
         <button className="pm-button pm-button-primary" disabled={disabled}>
           {deliverable ? '保存更改' : '新增交付物'}
         </button>

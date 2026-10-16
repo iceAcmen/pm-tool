@@ -67,16 +67,27 @@
 
 .pm-tasks-root .pt-tools { display: flex; align-items: center; gap: var(--sp-3); }
 .pm-tasks-root .pt-density {
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.pm-tasks-root .pt-density-label {
+  font-size: var(--t-11); font-weight: 600; color: var(--muted); white-space: nowrap;
+}
+.pm-tasks-root .pt-density-seg {
   display: inline-flex; border: 1px solid var(--line);
   border-radius: 999px; padding: 2px; background: var(--field-bg);
 }
-.pm-tasks-root .pt-density button {
+.pm-tasks-root .pt-density-seg button {
   border: 0; background: transparent; color: var(--muted); font: inherit;
   font-size: var(--t-11); font-weight: 600; padding: 4px 10px;
-  border-radius: 999px; cursor: pointer;
+  border-radius: 999px; cursor: pointer; white-space: nowrap;
 }
-.pm-tasks-root .pt-density button.active {
+.pm-tasks-root .pt-density-seg button.active {
   color: var(--ink); background: var(--surface-3); box-shadow: var(--shadow-1);
+}
+.pm-tasks-root .pt-density-chip {
+  font-size: var(--t-10); font-weight: 600; color: var(--faint);
+  background: var(--field-bg); border: 1px solid var(--line);
+  padding: 2px 8px; border-radius: 999px; white-space: nowrap;
 }
 .pm-tasks-root .pt-ghost {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
@@ -144,8 +155,8 @@
 }
 .pm-tasks-root .pt-cell { padding: 0 var(--sp-2); min-width: 0; display: flex; align-items: center; }
 
-/* 紧凑密度 */
-.pm-tasks-root.pt-dense .pt-row { height: 42px; }
+/* 紧凑密度（P1-6：全局偏好由 shell 根 data-density 下发） */
+.pm-shell[data-density="compact"] .pm-tasks-root .pt-row { height: 42px; }
 
 /* 选择框：常态透明占位，hover 淡入（不占额外布局、不与 grip 重叠） */
 .pm-tasks-root .pt-sel { display: flex; align-items: center; justify-content: center; }
@@ -262,7 +273,7 @@
   background: color-mix(in srgb, var(--surface-2) 70%, transparent);
   padding: 0 var(--sp-2);
 }
-.pm-tasks-root.pt-dense .pt-group { height: 38px; }
+.pm-shell[data-density="compact"] .pm-tasks-root .pt-group { height: 38px; }
 /* 折叠 chevron：无方框，仅 hover 淡圆形底；展开 rotate(90°) */
 .pm-tasks-root .pt-tri {
   display: grid; place-items: center; width: 20px; height: 20px; padding: 0;
@@ -384,7 +395,7 @@
     border: 1px solid var(--line); border-radius: var(--r);
     background: var(--surface);
   }
-  .pm-tasks-root.pt-dense .pt-row { margin: 6px 4px; padding: 10px 12px; }
+  .pm-shell[data-density="compact"] .pm-tasks-root .pt-row { margin: 6px 4px; padding: 10px 12px; }
   .pm-tasks-root .pt-row.pt-active {
     background: var(--surface-3);
     box-shadow: inset 2px 0 0 var(--c-prog);

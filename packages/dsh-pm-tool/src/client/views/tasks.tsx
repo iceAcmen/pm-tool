@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
-import { blockingPredecessors } from '../../core/derived.js'
+import { blockingPredecessors, localTodayIso, isTaskOverdue } from '../../core/derived.js'
+import { clampProgress } from '../../core/progress-derivation.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical.mjs'
@@ -111,16 +112,18 @@ export function TaskTable(props: {
   run: Run
   execute: (line: string) => Promise<string>
   projectId: string
+  /** P1-6：全局密度偏好（localStorage pm-density），由 shell 持有并下发；根容器 data-density 生效。 */
+  density?: 'comfortable' | 'compact'
+  onDensityChange?: (d: 'comfortable' | 'compact') => void
   overlayOpen?: boolean
 }) {
   const {
     tasks, milestones, disabled = false, onCreate, onEdit,
-    onGenWbs, onSaved, run, execute, projectId, overlayOpen,
+    onGenWbs, onSaved, run, execute, projectId, density = 'comfortable', onDensityChange, overlayOpen,
   } = props
 
   const [query, setQuery] = useState('')
   const [chip, setChip] = useState<ChipKey>('all')
-  const [dense, setDense] = useState(false)
   const [grouped, setGrouped] = useState(false) // PROD-01：默认阶段树视图，按状态分组为可选开关
   const [sort, setSort] = useState<'code' | 'dueDate' | 'priority' | 'progress'>('code')
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
@@ -133,13 +136,8 @@ export function TaskTable(props: {
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
   const childMap = useMemo(() => indexChildren(tasks), [tasks])
 
-  const today = useMemo(() => {
-    const n = new Date()
-    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
-  }, [])
-  const daysFromToday = (d: string) => Math.round((Date.parse(d) - Date.parse(today)) / 86_400_000)
-  const isLate = (t: Task) =>
-    t.status !== 'done' && (t.progress ?? 0) < 100 && !!t.dueDate && daysFromToday(t.dueDate) < 0
+  // P1-5：逾期唯一纯谓词（core/derived isTaskOverdue），today 用本地日历日 localTodayIso()。
+  const isLate = (t: Task) => isTaskOverdue(t, localTodayIso())
   const isDone = (t: Task) => t.status === 'done' || (t.progress ?? 0) >= 100
 
   // 筛选：搜索 + 快捷 chips
@@ -155,7 +153,7 @@ export function TaskTable(props: {
         default: return true
       }
     })
-  }, [tasks, query, chip, today]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tasks, query, chip]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 排序（与旧实现一致：组内/扁平视图生效；树视图由 flattenVisible 按 WBS 序）
   const priorityRank = (p: string) => ({ P0: 0, P1: 1, P2: 2 }[p] ?? 3)
@@ -174,7 +172,7 @@ export function TaskTable(props: {
     done: tasks.filter(isDone).length,
     overdue: tasks.filter(isLate).length,
     mine: tasks.filter(t => t.assignee).length,
-  }), [tasks, today]) // eslint-disable-line react-hooks/exhaustive-deps
+  }), [tasks]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 按状态分组（PROD-01）：按 taskStatus 键序 todo/in_progress/blocked/done 扁平分组
   const statusGroups = useMemo(() =>
@@ -360,10 +358,10 @@ export function TaskTable(props: {
           />
         </div>
         <div className="pt-cell pt-prog">
-          <span className="pt-bar"><i style={{ width: `${t.progress ?? 0}%` }} /></span>
+          <span className="pt-bar"><i style={{ width: `${clampProgress(t.progress)}%` }} /></span>
           <input
             className="pt-pct pm-row-progress" aria-label={`${t.title} 进度`} disabled={disabled}
-            type="number" min={0} max={100} step={10} value={t.progress ?? 0}
+            type="number" min={0} max={100} step={10} value={clampProgress(t.progress)}
             onChange={e => {
               const upd = buildUpdate({ progress: e.currentTarget.value })
               if (!Object.keys(upd).length) return
@@ -447,7 +445,7 @@ export function TaskTable(props: {
   const doneTasks = tasks.filter(isDone).length
 
   return (
-    <div className={`pm-tasks-root${dense ? ' pt-dense' : ''}`} ref={activeRef}>
+    <div className="pm-tasks-root" ref={activeRef}>
       <style>{css}</style>
 
       {movePickerFor && (
@@ -529,9 +527,20 @@ export function TaskTable(props: {
                 }}
               />
             </label>
-            <div className="pt-density">
-              <button className={!dense ? 'active' : ''} onClick={() => setDense(false)}>舒适</button>
-              <button className={dense ? 'active' : ''} onClick={() => setDense(true)}>紧凑</button>
+            {/* P1-6：密度为全局持久偏好（localStorage pm-density，shell 根 data-density 下发，各视图生效）。 */}
+            <div className="pt-density" title="全局偏好：切换后即时生效并持久保存，各视图统一应用">
+              <span className="pt-density-label">密度（全局偏好）</span>
+              <div className="pt-density-seg" role="group" aria-label="全局密度偏好">
+                <button
+                  type="button" className={density === 'comfortable' ? 'active' : ''}
+                  onClick={() => onDensityChange?.('comfortable')}
+                >舒适</button>
+                <button
+                  type="button" className={density === 'compact' ? 'active' : ''}
+                  onClick={() => onDensityChange?.('compact')}
+                >紧凑</button>
+              </div>
+              <span className="pt-density-chip">全部视图生效 · 持久保存</span>
             </div>
             <button className="pt-primary" onClick={onCreate} disabled={disabled}>
               <Plus size={15} />新建任务
