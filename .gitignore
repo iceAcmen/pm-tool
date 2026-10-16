@@ -10,6 +10,9 @@ out/
 logs/
 tmp/
 .tmp/
+# 子代理产出目录（决定性截图证据复制到 docs/verification/ 后入库）
+artifacts/
+**/artifacts/
 
 # 环境变量与密钥（严禁提交）
 .env

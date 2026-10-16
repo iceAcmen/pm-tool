@@ -8,6 +8,27 @@
 
 ---
 
+## 看板 P0：编辑态异步拆分 + 布局持久化迁移 dsh-storage（含提前落地的 P2 后端地基 completedDate）（2026-10-16，平台：doubao-work）
+
+> 状态：**确定性验收 + 真实 dsh 宿主验证均通过，已核验**。`pnpm build`=0；全量 guard 67/67、0 污染；各块外部 require 仅 react 系。浏览态首屏 gzip 由 288.77KB 降到约 **202KB（净回收约 86.6KB / -30%，超出“约41KB”预期）**；看板布局不再用 localStorage，改经 dsh-storage（settings 表）跨设备持久化。
+
+- **P0-① 编辑态异步拆分（浏览态不加载 RGL/zod/expr/编辑器）**
+  - 新增编辑态异步块 `src/client/board/editor.tsx`（产物 `lib/client.editor.js`，gzip 约 75.75KB）：仅在点「布局编辑」时经 `require.async` 加载；内含 react-grid-layout + WidthProvider、卡片库抽屉、配置面板、zod 保存闸门、导入/导出/恢复默认。
+  - 新增公式异步块 `src/client/board/formula-expr.ts`（产物 `lib/client.formula-expr.js`，gzip 约 11.58KB）：仅当布局含公式卡时惰性加载 expr-eval 真实实现。
+  - `formula.ts` 改为主包惰性加载器（不静态 import expr-eval）；`widgets.tsx` 移除顶层 zod/expr 引用、descriptor 不再在浏览态挂 configSchema，卡片渲染组件与 schema 定义解耦（新增 WIDGET_CATALOG 供编辑器块使用）。
+  - 浏览态 `BoardBento.tsx` 用纯 CSS 静态栅格（与 RGL 同列/行高/间距）渲染卡片，不再挂 RGL；进入/退出编辑有加载态，卡片口径与拆分前一致。
+  - `tsdown.config.ts` 复刻宿主分块机制：chunkFileNames=client.[name].js、非入口块 banner 带 `chunk` 字段、动态 import 改写为 `require.async`；并新增插件清理 CJS 块内对入口的死引用、把 `__toESM` 等运行时 helper 内联进每个自包含块（实测宿主要求异步块完全自包含、块间无同步兄弟 require）。
+- **P0-② 持久化 localStorage→dsh-storage（跨设备不丢）**
+  - 新增后端命令 `src/commands/dashboard.ts`：`dashboard put <user|project> <JSON>`（轻校验：version 整数、widgets 数组）、`dashboard reset <user|project>`；落 pmtool 领域 settings 表。
+  - `web snapshot` 新增 `dashboards:{user,project}` 字段（透明存取，读不到为 null）；前端 `persist.ts` 移除 localStorage/zod，改为结构校验 + 迁移（parseLayout），初始布局从 snapshot.dashboards 读取（user>project>默认），保存/重置走 `execute('dashboard put/reset…')`；`panel.tsx` 经 GlobalBoard 透传 execute 为持久化回调，处理保存中/失败、失败不落盘。
+  - 内部落盘键因后端 per-record 路径安全约束（`^[a-zA-Z0-9_-]+$`，不接受冒号）用下划线 `dashboard_user`/`dashboard_project`，对外命令与 snapshot 契约不变。
+- **提前落地的 P2 后端地基（P2 前端 UI 后续再做）**
+  - `core/task.ts` 新增可选 `completedDate`（taskRecordSchema；taskUpdateSchema 可显式设置/纠正/清除）；`core/tasks.ts` 状态流转自动维护：非 done→done 记当天（或显式日期）、done→其它清除、已 done 改字段不覆盖；`core/completion-history.ts` 新增纯函数 `buildCompletionHistory`，只统计真实 completedDate、零数据显式空态（不造假）；新增 `task backfill-completed`（旧 done 任务据 dueDate 显式推断并标注、无据不编造）。
+- **验证**
+  - `pnpm build`=0；`node scripts/verify-isolation.mjs`：67/67 脚本通过、0 污染（before/after=160/160）；新增 `scripts/verify-dashboard.mjs`、`scripts/verify-completed-date.mjs`；扩展 `verify-client-bundle.mjs`（加载 editor/formula 块并断言外部 require 仅 react/react-dom/jsx-runtime）；`verify-formula.mjs` 改指 formula-expr。
+  - 真实 dsh 宿主（dev 实例重启后 PID 70706/3080）：点「布局编辑」`client.editor.js` 返回 200（无 404）；加卡→保存（dashboard put）→整页刷新后仍在；恢复默认→刷新后回默认。深+浅、浏览态+编辑态截图见 `docs/verification/p0-bento-perf-20261016/`。
+- **影响范围 / 边界**：不改跨项目看板视觉；不重设计其它页面（后续）；新增字段为可选、不破坏旧记录与既有能力；本提交即此条。
+
 ## [v0.7.4] 最终可发布：稳定性地基 S4 + war-room「进行中」KPI 热修（零 schema）（2026-10-14，平台：doubao-work）
 
 > 状态：**S4 稳定性批次 19/19 PASS（独立测试专家实测）+ war-room KPI 热修真实 Chrome 隔离实例 PASS，本补丁可发布**。暂不 commit/tag/push，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.3` 不移动。

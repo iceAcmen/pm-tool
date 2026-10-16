@@ -4,14 +4,12 @@
  * 数据口径全部复用 src/core 纯函数与现有 Snapshot，不杜撰、不画历史趋势。
  */
 import React from 'react'
-import { z } from 'zod'
 import type { Snapshot, Task } from '../panel.js'
 import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap } from '../../core/progress-derivation.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
-import { evaluateFormula } from './formula.js'
 
 export function todayIso(): string {
   const n = new Date()
@@ -26,41 +24,6 @@ const TONE = {
   todo: 'var(--pm-st-todo)',
   due: 'var(--pm-st-due)',
 } as const
-
-/* ---------- zod 配置 schema（保存闸门；字段与配置面板实际写入一致） ---------- */
-const entityEnum = z.enum(['tasks','milestones','riskIssues','deliverables','meetings','reports','projects'])
-const filterShape = z.object({
-  field: z.string(),
-  op: z.enum(['eq','ne','in','gte','lte','contains','isEmpty']),
-  value: z.string(),
-})
-const recordListSchema = z.object({
-  entity: entityEnum,
-  projectScope: z.string(),
-  filters: z.array(filterShape),
-  sort: z.object({ field: z.string(), dir: z.enum(['asc','desc']) }),
-  numberFormat: z.enum(['int','pct']),
-}).loose()
-const overdueSoonSchema = z.object({ projectScope: z.string() }).loose()
-const kpiSchema = z.object({
-  entity: entityEnum,
-  projectScope: z.string(),
-  filters: z.array(filterShape),
-  numberFormat: z.enum(['int','pct']).optional(),
-  formula: z.string().max(200).optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-}).loose()
-const noteSchema = z.object({ title: z.string(), body: z.string() }).loose()
-const formulaCardSchema = z.object({
-  entity: entityEnum,
-  projectScope: z.string(),
-  filters: z.array(filterShape),
-  formula: z.string().max(200, '公式不超过 200 字'),
-  numberFormat: z.enum(['int','pct']).optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-}).loose()
 
 /** 安全 markdown 子集：先转义 HTML 防 XSS，再做极轻量行内/块级转换。 */
 function renderMarkdown(src: string): string {
@@ -433,7 +396,6 @@ const recordList: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 5, minW: 3, minH: 3,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], sort: { field: 'date', dir: 'asc' }, numberFormat: 'int' },
-  configSchema: recordListSchema,
   render({ data, config, actions }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
@@ -486,7 +448,6 @@ const overdueSoon: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 5, minW: 3, minH: 3,
   requiredSources: ['tasks'],
   defaultConfig: { projectScope: 'all' },
-  configSchema: overdueSoonSchema,
   render({ data, actions }) {
     const today = todayIso()
     const rows = data.tasks
@@ -524,14 +485,19 @@ const kpiMetric: WidgetDescriptor<WidgetConfig> = {
   defaultW: 3, defaultH: 2, minW: 2, minH: 2,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [] },
-  configSchema: kpiSchema,
-  render({ data, config }) {
+  render({ data, config, evaluateFormula }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
     const rawList = rawListFor(data, entity)
     const filtered = applyFilter(data, entity, rows, rawList, config.projectScope ?? 'all', config.filters)
     let display: string
     if (typeof config.formula === 'string' && config.formula.trim()) {
+      if (!evaluateFormula) {
+        return <div className="pm-bento-card">
+          <div className="pm-bento-label">{config.title ?? ENTITY_LABEL[entity]}</div>
+          <div className="pm-kpi-big pm-kpi-err">…</div>
+        </div>
+      }
       const r = evaluateFormula(config.formula, { rows: filtered as unknown as Record<string, unknown>[], today: todayIso() })
       if (!r.ok) {
         return <div className="pm-bento-card">
@@ -564,8 +530,7 @@ const formulaCard: WidgetDescriptor<WidgetConfig> = {
   defaultW: 3, defaultH: 2, minW: 2, minH: 2,
   requiredSources: ['tasks'],
   defaultConfig: { entity: 'tasks', projectScope: 'all', filters: [], formula: '', numberFormat: 'int', title: '公式指标' },
-  configSchema: formulaCardSchema,
-  render({ data, config }) {
+  render({ data, config, evaluateFormula }) {
     const entity = (config.entity ?? 'tasks') as WidgetEntity
     const rows = selectEntity(data, entity)
     const rawList = rawListFor(data, entity)
@@ -576,6 +541,12 @@ const formulaCard: WidgetDescriptor<WidgetConfig> = {
         <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
         <div className="pm-kpi-big">—</div>
         <div className="pm-bento-foot">在右侧「公式」tab 填写公式</div>
+      </div>
+    }
+    if (!evaluateFormula) {
+      return <div className="pm-bento-card">
+        <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
+        <div className="pm-kpi-big pm-kpi-err">…</div>
       </div>
     }
     const r = evaluateFormula(f, { rows: filtered as unknown as Record<string, unknown>[], today: todayIso() })
@@ -645,7 +616,6 @@ const textNote: WidgetDescriptor<WidgetConfig> = {
   defaultW: 4, defaultH: 2, minW: 2, minH: 1,
   requiredSources: [],
   defaultConfig: { title: '备注', body: '' },
-  configSchema: noteSchema,
   render({ config }) {
     const body = typeof config.body === 'string' ? config.body : ''
     return <div className="pm-bento-card">
@@ -677,6 +647,27 @@ export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
     recordList, overdueSoon, kpiMetric, formulaCard, statusRing, textNote, divider]
     .map(d => [d.type, d]),
 )
+
+/** 卡片目录（纯数据）：供编辑器异步块的卡片库/添加卡片使用，避免编辑器块反向 import 渲染实现。 */
+export interface WidgetCatalogEntry {
+  type: string
+  name: string
+  category: WidgetDescriptor['category']
+  addable?: boolean
+  disabled?: boolean
+  defaultW: number
+  defaultH: number
+  minW: number
+  minH: number
+  requiredSources: WidgetDescriptor['requiredSources']
+  defaultConfig: WidgetConfig
+}
+export const WIDGET_CATALOG: WidgetCatalogEntry[] =
+  [...WIDGET_REGISTRY.values()].map(d => ({
+    type: d.type, name: d.name, category: d.category, addable: d.addable, disabled: d.disabled,
+    defaultW: d.defaultW, defaultH: d.defaultH, minW: d.minW, minH: d.minH,
+    requiredSources: d.requiredSources, defaultConfig: d.defaultConfig,
+  }))
 
 /** 卡片库抽屉分组顺序。 */
 export const DRAWER_GROUPS: Array<{ key: 'overview' | 'list' | 'kpi' | 'progress' | 'text'; label: string }> = [

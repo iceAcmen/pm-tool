@@ -28,6 +28,7 @@ import { handleDoctorCommand, doctorHelp } from './commands/doctor.js'
 import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
 import { handleModelCommand, modelHelp } from './commands/model.js'
+import { dashboardHelp, handleDashboardCommand, readDashboard } from './commands/dashboard.js'
 import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
 
@@ -81,6 +82,8 @@ function renderHelp(): CommandResult {
       backupHelp,
       '',
       exportHelp,
+      '',
+      dashboardHelp,
     ].join('\n'),
   }
 }
@@ -124,6 +127,10 @@ export async function apply(ctx: Context): Promise<void> {
             meetings: [...domain.table('meetings').entries()].map(([, value]) => value),
             reports: [...domain.table('reports').entries()].map(([, value]) => value),
             deliverables: [...domain.table('deliverables').entries()].map(([, value]) => value),
+            dashboards: {
+              user: readDashboard(domain, 'user'),
+              project: readDashboard(domain, 'project'),
+            },
           }),
         }
       }
@@ -161,6 +168,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (exportMatch) return handleExportCommand(exportMatch[1] ?? '', domain)
       const modelMatch = /^model(?:\s+([\s\S]*))?$/i.exec(raw)
       if (modelMatch) return handleModelCommand(modelMatch[1] ?? '', domain)
+      const dashboardMatch = /^dashboard(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (dashboardMatch) return handleDashboardCommand(dashboardMatch[1] ?? '', domain)
       const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)

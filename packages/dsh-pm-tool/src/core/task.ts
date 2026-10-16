@@ -13,6 +13,9 @@ export const taskPrioritySchema = z.enum(['P0', 'P1', 'P2'])
 
 const optionalDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).optional()
 const clearableDateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' }).nullable().optional()
+/** 完成日期：独立错误文案，便于 describeTaskValidation 精确提示。 */
+const optionalCompletedDateSchema = z.iso.date({ error: '完成日期须为有效 YYYY-MM-DD' }).optional()
+const clearableCompletedDateSchema = z.iso.date({ error: '完成日期须为有效 YYYY-MM-DD' }).nullable().optional()
 
 /**
  * v0.8 客观进度 v1 清单项：恰好 {id, text, done} 三键。
@@ -42,6 +45,9 @@ const taskFields = {
   priority: taskPrioritySchema,
   startDate: optionalDateSchema,
   dueDate: optionalDateSchema,
+  // 完成日期（YYYY-MM-DD）：由状态流转自动维护（非 done→done 记为当天/显式值；done→其他清除）。
+  // 旧 v1/v2 记录无此键照常读取；可显式纠正/清除。绝不据此反推历史之外的假数据。
+  completedDate: optionalCompletedDateSchema,
   progress: z.number().int().min(0).max(100),
   milestoneId: milestoneIdSchema.nullable(),
   // PROD-11 前置依赖：optional，缺省即无前缀（v1 旧记录无此键按 [] 处理）。
@@ -105,6 +111,7 @@ export const taskUpdateSchema = z.strictObject({
   priority: taskPrioritySchema.optional(),
   startDate: clearableDateSchema,
   dueDate: clearableDateSchema,
+  completedDate: clearableCompletedDateSchema,
   progress: taskFields.progress.optional(),
   milestoneId: milestoneIdSchema.nullable().optional(),
   predecessorIds: taskFields.predecessorIds,
@@ -127,6 +134,7 @@ export function describeTaskValidation(error: z.ZodError): string {
     priority: '优先级（P0/P1/P2）',
     startDate: '开始日期（有效 YYYY-MM-DD）',
     dueDate: '截止日期（有效 YYYY-MM-DD）',
+    completedDate: '完成日期（有效 YYYY-MM-DD，传 null 清除）',
     progress: '进度（0 到 100 的整数）',
     milestoneId: '里程碑 ID 或 null',
     predecessorIds: '前置依赖任务 ID 数组（须同项目、存在、不自指、不成环）',

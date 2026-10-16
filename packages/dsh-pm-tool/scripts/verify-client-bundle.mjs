@@ -46,4 +46,18 @@ const mockCtx = {
 out.apply(mockCtx)
 assert.deepEqual(new Set(registeredNames), new Set(['main', 'sidebar.panellist']),
   'apply 应注册 main 与 sidebar.panellist')
-console.log('PASS verify-client-bundle: factory 激活, apply 注册 main/sidebar, 仅 react 外部依赖')
+
+// P0 浏览态拆分：异步块 client.editor.js / client.formula-expr.js 也必须自包含，
+// 其外部 require 同样只能解析 react 系（RGL/zod/expr 已内联，不得 require 宿主答不出的名字）。
+for (const chunkFile of ['client.editor.js', 'client.formula-expr.js']) {
+  let capturedChunk = null
+  const chunkCtx = { window: { __ModuleLoader__: { load: ({ factory }) => { capturedChunk = factory } } }, console, process: { env: {} } }
+  vm.createContext(chunkCtx)
+  vm.runInContext(readFileSync(new URL(`../lib/${chunkFile}`, import.meta.url), 'utf8'), chunkCtx, { filename: chunkFile })
+  assert.equal(typeof capturedChunk, 'function', `${chunkFile} 应注册 factory`)
+  capturedChunk((id) => {
+    if (!(id in provide)) throw new Error(`${chunkFile} 引用了宿主未提供的模块: ` + id)
+    return provide[id]
+  }, { exports: {} })
+}
+console.log('PASS verify-client-bundle: factory 激活, apply 注册 main/sidebar, editor/formula 块自包含, 仅 react 外部依赖')

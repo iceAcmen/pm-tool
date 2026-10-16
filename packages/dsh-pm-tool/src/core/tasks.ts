@@ -11,6 +11,7 @@ import {
   type TaskUpdate,
 } from './task.js'
 import { assertParentHasNoChecklist } from './task-checklist.js'
+import { localTodayIso } from './derived.js'
 import type { PmDomain } from './storage.js'
 
 export class TaskProjectNotFoundError extends Error {}
@@ -209,6 +210,27 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     }
     if (fields.startDate === null) delete nextInput.startDate
     if (fields.dueDate === null) delete nextInput.dueDate
+    // 完成日期随状态流转自动维护（batchUpdateTasks 逐条走 updateTask，口径自动一致）：
+    //  - 非 done → done：显式传入的合法 completedDate 优先，否则记为【今天】(YYYY-MM-DD)；
+    //  - done → 其它状态：清除 completedDate（归一为缺键，与 startDate/dueDate 用 null 清除同构）；
+    //  - 已处于 done 但本次更新不含状态/不传 completedDate：spread 已保留原值，绝不因 updatedAt 刷新而覆盖。
+    const transitioningIntoDone = fields.status !== undefined
+      && current.status !== 'done'
+      && fields.status === 'done'
+    const transitioningOutOfDone = fields.status !== undefined
+      && current.status === 'done'
+      && fields.status !== 'done'
+    if (transitioningIntoDone) {
+      nextInput.completedDate = typeof fields.completedDate === 'string' && fields.completedDate
+        ? fields.completedDate
+        : localTodayIso()
+    } else if (transitioningOutOfDone) {
+      delete nextInput.completedDate
+    } else if (fields.completedDate !== undefined) {
+      // 显式纠正/清除完成日期（在状态未发生流转时）：null 即清除，字符串即采纳。
+      if (fields.completedDate === null) delete nextInput.completedDate
+      else nextInput.completedDate = fields.completedDate
+    }
     if (fields.predecessorIds !== undefined) {
       // 整体替换：显式传即覆盖；空数组归一为缺键（清空前置）。
       const normalized = validatePredecessorRelation(domain, current.projectId, current.id, fields.predecessorIds)
@@ -324,6 +346,52 @@ export async function batchUpdateTasks(
     if (result) { updated++; doneIds.push(id) } else { skipped++ }
   }
   return { updated, skipped, ids: doneIds }
+}
+
+export interface BackfillCompletedItem {
+  id: string
+  title: string
+}
+export interface BackfillCompletedResult {
+  /** 已是 done 且原本就带 completedDate、未改动的条数。 */
+  alreadyHad: number
+  /** 据 dueDate 显式推断补录 completedDate 的任务（绝不编造精确日期）。 */
+  inferred: (BackfillCompletedItem & { completedDate: string })[]
+  /** 是 done、缺 completedDate 且无 dueDate：保持空缺，不进入历史统计。 */
+  skippedNoDue: BackfillCompletedItem[]
+}
+
+/**
+ * 历史完成日期回填：原则【不编造】。
+ * 仅对 status=done 且缺 completedDate 的旧任务处理：
+ *  - 有 dueDate → 把 dueDate 作为【显式推断】的完成日期补录（命令层逐任务标注“据截止日期推断”）；
+ *  - 无 dueDate → 保持 null，不进入历史统计，绝不凭空捏造。
+ */
+export function backfillCompletedDates(domain: PmDomain, projectId?: string): Promise<BackfillCompletedResult> {
+  if (projectId !== undefined) projectIdSchema.parse(projectId)
+  return enqueueDomainWrite(domain, async () => {
+    const table = domain.table('tasks')
+    const inferred: BackfillCompletedResult['inferred'] = []
+    const skippedNoDue: BackfillCompletedItem[] = []
+    let alreadyHad = 0
+    for (const [, task] of table.entries()) {
+      if (projectId && task.projectId !== projectId) continue
+      if (task.status !== 'done') continue
+      if (task.completedDate) { alreadyHad++; continue }
+      if (!task.dueDate) {
+        skippedNoDue.push({ id: task.id, title: task.title })
+        continue
+      }
+      const next = taskWriteSchema.parse({
+        ...task,
+        completedDate: task.dueDate,
+        updatedAt: new Date().toISOString(),
+      })
+      await table.put(task.id, next)
+      inferred.push({ id: task.id, title: task.title, completedDate: task.dueDate })
+    }
+    return { alreadyHad, inferred, skippedNoDue }
+  })
 }
 
 /**

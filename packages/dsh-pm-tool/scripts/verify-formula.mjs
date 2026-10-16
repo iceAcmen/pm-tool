@@ -2,7 +2,8 @@
  * R11 安全公式求值器验证（阶段③）。覆盖：正确表达式、聚合、today；恶意/非法输入全部拒绝。
  */
 import assert from 'node:assert/strict'
-import { evaluateFormula } from '../lib/client/board/formula.js'
+// P0 浏览态拆分：真实 expr-eval 实现已移到异步块 formula-expr.ts（主包 formula.ts 仅惰性加载器）。
+import { evaluateFormula } from '../lib/client/board/formula-expr.js'
 
 const rows = [
   { id: 't1', title: 'a', status: 'done', estimate: 3, assignee: '张三' },

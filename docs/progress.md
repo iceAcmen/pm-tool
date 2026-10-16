@@ -2,9 +2,18 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-14（doubao-work **稳定性地基 S4 批次 19/19 PASS（独立测试专家实测）+ war-room「进行中」KPI 热修真实 Chrome 隔离端口 3122 PASS**：A1 fs-atomic 钉死 rename 前失败只清 tmp 不碰目标、tmpNameFactory 仅测试缝生产默认不变；A2 llm 不 inject、懒读 `ctx.reflect.get('llm',false)` 真实 Context，缺 provider 中文 NO_LLM 降级核心离线；A3 verify runner 跑完全部 62 专项并聚合失败、timeout 单独分类、正式资产 before/after manifest 零污染；war-room `doing`→`in_progress` KPI 热修（修复前进行中恒 0）。**零 schema**、domain 仍 v1；S4 本轮 guard **160** 资产零污染、war-room 真实 Chrome **159** 资产零污染（跨轮 session/cache 自然轮转、各轮 before==after，如实分开）；client sha256 已实测锁定 `9d0b118c…`（332510 B）。当前 HEAD `eb41b30`(v0.7.3 已发布，tag `v0.7.3`)，S4+war-room 候选在未提交工作树，待用户授权最终提交打 tag。先前一批：v0.7.3 甘特拖拽热修 22 项全绿+回归 7/7 PASS）
+最后更新：2026-10-16（doubao-work **看板 P0：编辑态异步拆分 + 布局持久化迁移 dsh-storage，已核验**：浏览态首屏 gzip 由 288.77KB 降到约 202KB（-30%）；编辑器块 client.editor.js（75.75KB）与公式块 client.formula-expr.js（11.58KB）按需 require.async 加载，浏览态不加载 RGL/zod/expr；新增后端命令 dashboard put/reset 与 snapshot.dashboards，布局经 dsh-storage 跨设备持久化；并提前落地 P2 后端地基 Task.completedDate 自动采集 + buildCompletionHistory 纯函数（只画真实数据、空态显空）。build=0、全量 guard 67/67、0 污染；真实 dsh 宿主验证编辑器块 200、持久化刷新后仍在、恢复默认生效。证据 docs/verification/p0-bento-perf-20261016/。上一发布基线 HEAD `eb41b30`/v0.7.3）
 
-## 当前阶段：稳定性地基 S4 + war-room KPI 热修 v0.7.4·19/19 PASS + 真实 Chrome PASS（2026-10-14，doubao-work）
+## 当前阶段：看板 P0 编辑态异步拆分 + 持久化迁移 dsh-storage·已核验（2026-10-16，doubao-work）
+
+- **成果**：看板浏览态首屏 gzip 由 288.77KB 降到约 **202KB（净回收约 86.6KB / -30%，超出约41KB预期）**；看板布局由 localStorage 改为经 dsh-storage（pmtool 领域 settings 表）跨设备持久化。
+- **编辑态异步拆分**：浏览态用纯 CSS 静态栅格渲染、不再静态加载 RGL/zod/expr；编辑器（RGL+卡片库+配置面板+zod 闸门）拆为 `lib/client.editor.js`（gzip≈75.75KB）、公式 expr-eval 拆为 `lib/client.formula-expr.js`（gzip≈11.58KB），均在需要时经 `require.async` 加载；`tsdown.config.ts` 复刻宿主分块机制（client.[name].js + chunk banner + 动态 import 改写）并做运行时 helper 内联与死引用清理，保证异步块自包含。
+- **持久化迁移**：新增后端命令 `src/commands/dashboard.ts`（`dashboard put/reset <scope>`）、`web snapshot` 新增 `dashboards:{user,project}`；前端 `persist.ts` 去 localStorage/zod 改结构校验 + 迁移，读写经 execute，`panel.tsx` 经 GlobalBoard 透传；保存中/失败有提示、失败不落盘。
+- **提前落地的 P2 后端地基**：Task 新增可选 `completedDate`（状态流转自动采集：非 done→done 记当天/显式日期、done→其它清除）；新增纯函数 `buildCompletionHistory`（只统计真实 completedDate、零数据显式空态、不造假）；新增 `task backfill-completed`（旧 done 据 dueDate 显式推断、无据不编造）。
+- **验收**：`pnpm build`=0；`node scripts/verify-isolation.mjs` 67/67 通过、0 污染（before/after=160/160）；新增 verify-dashboard / verify-completed-date，扩展 verify-client-bundle、verify-formula 改指；真实 dsh 宿主（dev 重启 PID 70706/3080）：编辑器块请求 200（无 404）、加卡→保存→整页刷新后仍在、恢复默认→刷新后回默认。深色+浅色、浏览态+编辑态截图与证据见 `docs/verification/p0-bento-perf-20261016/`。
+- **下一步**：看板 P1（像素落列/筛选二次级联/迁移链补全/窄卡项目名省略）→ P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 页面重设计（先出深+浅设计稿待确认）。
+
+## 历史阶段：稳定性地基 S4 + war-room KPI 热修 v0.7.4·19/19 PASS + 真实 Chrome PASS（2026-10-14，doubao-work）
 
 - **背景**：v0.7.3（`eb41b30`）之后的稳定性补丁——不含新业务功能，只做地基加固与一处真实 KPI bug 热修。**全程零 schema**（domain 仍 v1、表集合未变，`taskStatusSchema=z.enum([todo,in_progress,blocked,done])` 拒收 `doing`）。
 - **A1 fs-atomic 契约（`src/core/fs-atomic.ts`）**：`atomicWriteFile` 发布协议「同目录 tmp `.{basename}.{uuid}.tmp` → `open(tmp,'wx',0o600)` 排他 → write → fsync → close → `rename` POSIX 原子覆盖 → fsyncDirectory」；rename 前 open/write/sync/close/rename 任一失败，`finally` 仅在 rename 未发生时 `rm(tmp,{force:true})`，**目标文件逐字节不变、tmp 不残留**；rename 后目标即新内容、tmp 已消失。新增可选 `options.tmpNameFactory` **仅测试注入**（制造确定性 tmp 名/真实 EEXIST），生产不传时仍默认 `randomUUID`、对外行为完全不变。专项 `verify-fs-atomic.mjs` 退出 0（含 wx EEXIST 排他闭环 A1-02）。

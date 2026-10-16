@@ -227,6 +227,8 @@ export type Snapshot = {
   meetings: Meeting[]
   reports: ProgressReport[]
   deliverables: Deliverable[]
+  /** 看板布局（dsh-storage 透明存取）：user > project；读不到为 null。 */
+  dashboards?: { user: unknown, project: unknown }
 }
 type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people'
 type Drawer =
@@ -624,6 +626,7 @@ export function PmPanel({ execute }: PmPanelApi) {
       {dashOpen
         ? <GlobalBoard
             data={data}
+            execute={execute}
             onPickProject={(id) => { setSelected(id); setDashOpen(false) }}
             onOpenRecord={(pid, type, id) => { setDashOpen(false); openRecord(pid, type, id) }}
             onClose={() => setDashOpen(false)}
@@ -3609,8 +3612,9 @@ function collectBoardMatches(data: Snapshot, q: string): BoardHit[] {
     || a.id.localeCompare(b.id, 'en', { numeric: true }))
 }
 
-function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
+function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose }: {
   data: Snapshot
+  execute: (line: string) => Promise<string>
   onPickProject: (id: string) => void
   onOpenRecord: (projectId: string, type: string, id: string) => void
   onClose: () => void
@@ -3673,7 +3677,15 @@ function GlobalBoard({ data, onPickProject, onOpenRecord, onClose }: {
             })}
           </div>
         : <div className="pm-table-empty"><Search size={24}/><span>未找到匹配「{query.trim()}」的记录</span></div>)
-      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject }} />}
+      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject }} persistence={{
+          onSave: async (scope, layout) => {
+            // 紧凑 JSON 落 dsh-storage；后端做轻校验（version 整数、widgets 数组）。
+            await execute(`dashboard put ${scope} ${JSON.stringify(layout)}`)
+          },
+          onReset: async (scope) => {
+            await execute(`dashboard reset ${scope}`)
+          },
+        }} />}
   </div>
 }
 

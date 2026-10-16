@@ -1,87 +1,75 @@
 /**
- * 看板布局持久化（阶段②）。
+ * 看板布局结构校验 + 迁移（主包，不依赖 zod / localStorage）。
  *
- * 客户端只能经 execute('/pm …') 与后端通信，无 storage client 直连（已核实 panel.tsx 全部数据
- * 来自 `execute('web snapshot')`，现有视图偏好 pm-view/pm-selected-project 均落 localStorage）。
- * 故本期仍落 localStorage，但补齐三作用域与三层回退：
- *   global = 代码内置默认（DEFAULT_LAYOUT）；
- *   project = 团队模板覆盖（key project）；
- *   user   = 个人覆盖（key user）；优先级 user > project > global。
- * 未来切到 dsh-storage JSON 记录时只需替换本文件内部读写。
+ * 持久化已切到 dsh-storage：布局经 `execute('dashboard put/reset <scope>')` 落盘，
+ * 并由 `/pm web snapshot` 的 `dashboards.{user,project}` 读回。本文件只负责把后端透明返回的
+ * 未知 JSON 防御性地收窄成 DashboardLayout，并跑版本迁移；保存/重置由 BoardBento 经回调完成。
+ * 严格的逐卡片 configSchema 闸门（zod）在编辑器异步块内做。
  */
-import { z } from 'zod'
-import type { DashboardLayout, WidgetScope } from './types.js'
+import type { DashboardLayout, WidgetInstance, WidgetScope } from './types.js'
 
-/** 导入/持久化布局的 zod schema（阶段③补齐）。 */
-export const layoutSchema = z.object({
-  version: z.number().int(),
-  scope: z.enum(['global', 'project', 'user']).optional(),
-  widgets: z.array(z.object({
-    i: z.string(),
-    type: z.string(),
-    config: z.record(z.string(), z.unknown()).optional(),
-    layout: z.object({
-      i: z.string(),
-      x: z.number(), y: z.number(), w: z.number(), h: z.number(),
-      minW: z.number().optional(), minH: z.number().optional(),
-    }),
-  })),
-  revision: z.number().optional(),
-  updatedAt: z.string().optional(),
-  updatedBy: z.string().optional(),
-}).loose()
-
-const KEYS: Record<Exclude<WidgetScope, 'global'>, string> = {
-  user: 'pm-dashboard-layout:user',
-  project: 'pm-dashboard-layout:project',
-}
 export const LAYOUT_VERSION = 1
 
+/** 版本迁移链：v1 -> v2 ...（P1 补全；保留 v1）。 */
 const MIGRATIONS: Array<{ from: number, to: number, apply: (l: DashboardLayout) => DashboardLayout }> = []
 
-/** 结构 + 迁移；不做 zod（由调用方在 import 时跑 layoutSchema）。 */
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
+}
+
+function asNum(v: unknown): number | null {
+  return typeof v === 'number' && Number.isFinite(v) ? v : null
+}
+
+/** 把单个 widget 收窄成合法 WidgetInstance；非法则返回 null。 */
+function parseWidget(raw: unknown): WidgetInstance | null {
+  if (!isRecord(raw)) return null
+  const layout = isRecord(raw.layout) ? raw.layout : null
+  if (!layout) return null
+  const i = typeof layout.i === 'string' ? layout.i : typeof raw.i === 'string' ? raw.i : null
+  const type = typeof raw.type === 'string' ? raw.type : null
+  if (!i || !type) return null
+  const x = asNum(layout.x), y = asNum(layout.y), w = asNum(layout.w), h = asNum(layout.h)
+  if (x === null || y === null || w === null || h === null) return null
+  return {
+    i, type,
+    config: isRecord(raw.config) ? (raw.config as WidgetInstance['config']) : {},
+    layout: {
+      i, x, y, w, h,
+      minW: asNum(layout.minW) ?? undefined,
+      minH: asNum(layout.minH) ?? undefined,
+    },
+  }
+}
+
+/** 结构 + 迁移；不做逐卡片 zod（保存闸门在编辑器块）。非法/版本过新返回 null。 */
 export function parseLayout(raw: unknown): DashboardLayout | null {
-  const r = layoutSchema.safeParse(raw)
-  if (!r.success) return null
-  let layout = r.data as DashboardLayout
-  if (layout.version > LAYOUT_VERSION) return null // 版本过新
+  if (!isRecord(raw)) return null
+  const version = asNum(raw.version)
+  if (version === null || version < 1 || version > LAYOUT_VERSION) return null
+  if (!Array.isArray(raw.widgets)) return null
+  const widgets: WidgetInstance[] = []
+  for (const w of raw.widgets) {
+    const parsed = parseWidget(w)
+    if (parsed) widgets.push(parsed)
+  }
+  let layout: DashboardLayout = {
+    version,
+    scope: (raw.scope === 'global' || raw.scope === 'project' || raw.scope === 'user') ? raw.scope : 'global',
+    widgets,
+    updatedAt: typeof raw.updatedAt === 'string' ? raw.updatedAt : undefined,
+    updatedBy: typeof raw.updatedBy === 'string' ? raw.updatedBy : undefined,
+    revision: asNum(raw.revision) ?? undefined,
+  }
   for (const step of MIGRATIONS) {
     if (layout.version === step.from) layout = step.apply(layout)
   }
   return layout
 }
 
-function readScope(scope: Exclude<WidgetScope, 'global'>): DashboardLayout | null {
-  try {
-    const text = localStorage.getItem(KEYS[scope])
-    if (!text) return null
-    return parseLayout(JSON.parse(text))
-  } catch {
-    return null
-  }
+/** 三层回退：user > project > fallback(内置默认)。 */
+export function resolveDashboard(rawUser: unknown, rawProject: unknown, fallback: DashboardLayout): DashboardLayout {
+  return parseLayout(rawUser) ?? parseLayout(rawProject) ?? fallback
 }
 
-/** 三层回退：user > project > global(fallback)。 */
-export function resolveLayout(fallback: DashboardLayout): DashboardLayout {
-  return readScope('user') ?? readScope('project') ?? fallback
-}
-
-export function saveLayout(scope: WidgetScope, layout: DashboardLayout): void {
-  if (scope === 'global') return // global = 内置默认，不写
-  try {
-    const prev = readScope(scope)
-    const next: DashboardLayout = {
-      ...layout,
-      scope,
-      revision: (prev?.revision ?? 0) + 1,
-      updatedAt: new Date().toISOString(),
-      updatedBy: prev?.updatedBy ?? '',
-    }
-    localStorage.setItem(KEYS[scope], JSON.stringify(next))
-  } catch { /* 静默 */ }
-}
-
-export function resetScope(scope: WidgetScope): void {
-  if (scope === 'global') return
-  try { localStorage.removeItem(KEYS[scope]) } catch { /* ignore */ }
-}
+export type { WidgetScope }

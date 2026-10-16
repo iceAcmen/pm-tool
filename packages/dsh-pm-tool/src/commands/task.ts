@@ -25,6 +25,7 @@ import {
   batchUpdateTasks,
   planBatchDelete,
   batchDeleteCascade,
+  backfillCompletedDates,
 } from '../core/tasks.js'
 import {
   importTasksFromMarkdown,
@@ -80,6 +81,8 @@ export const taskHelp = [
   '删除、移动和重新编号不带 confirm 只显示提示，不会写盘。',
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
+  '任务标记为已完成时自动记录完成日期（可在 update 里用 completedDate 显式指定/纠正，传 null 清除）。',
+  '  /pm task backfill-completed [项目ID]   为已完成但缺完成日期的旧任务补录（仅据截止日期推断，无截止日期保持空缺、不伪造）。',
   'milestoneId 必须指向同项目已存在里程碑；ID、WBS 编号、同级顺序和时间戳由系统生成。',
   repoFieldHelpPhrase,
 ].join('\n')
@@ -97,6 +100,7 @@ function renderTask(task: Task): string {
     `优先级：${task.priority}`,
     `开始日期：${task.startDate ?? '未填写'}`,
     `截止日期：${task.dueDate ?? '未填写'}`,
+    `完成日期：${task.completedDate ?? '未填写'}`,
     `进度：${task.progress}%`,
     `里程碑：${task.milestoneId ?? '无'}`,
     `仓库：${formatRepoRef(task) || '未填写'}`,
@@ -210,7 +214,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
   const action = match[1].toLowerCase()
   const argument = match[2]?.trim() ?? ''
-  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'import-content', 'batch', 'wbs', 'checklist'].includes(action)) {
+  if (!['add', 'list', 'get', 'update', 'delete', 'move', 'renumber', 'import', 'importmd', 'import-content', 'batch', 'wbs', 'checklist', 'backfill-completed'].includes(action)) {
     return { kind: 'error', text: `不支持的任务操作。\n${taskHelp}` }
   }
   if (!domain) return { kind: 'error', text: '任务存储未就绪，请检查 pm profile 的存储配置及宿主日志。' }
@@ -667,6 +671,22 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         }
       }
       return { kind: 'error', text: '请使用：/pm task checklist <add|toggle|rename|remove> <任务ID> ...' }
+    }
+    if (action === 'backfill-completed') {
+      const projectId = argument.trim() || undefined
+      if (projectId && !domain.table('projects').get(projectId)) {
+        return { kind: 'error', text: `未找到项目：${projectId}。` }
+      }
+      const result = await backfillCompletedDates(domain, projectId)
+      const lines = [
+        `完成日期回填（范围：${projectId ? `项目 ${projectId}` : '全部项目'}）`,
+        `已是完成态且原本带完成日期：${result.alreadyHad} 条（未改动）`,
+        `据截止日期推断补录：${result.inferred.length} 条`,
+        ...result.inferred.map(item => `  - ${item.id}｜${item.title}：completedDate=${item.completedDate}（据截止日期推断）`),
+        `无截止日期、保持空缺不伪造：${result.skippedNoDue.length} 条`,
+        ...result.skippedNoDue.map(item => `  - ${item.id}｜${item.title}（无 dueDate，未进入历史统计）`),
+      ]
+      return { kind: 'success', text: lines.join('\n') }
     }
     const renumberMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!renumberMatch) {
