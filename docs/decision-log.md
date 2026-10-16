@@ -510,3 +510,16 @@
 - **理由**：窄窗不是另做一套布局，而是在不破坏桌面的前提下让固定宽骨架/网格在小视口自然回流；宽内容横滚比硬压到 390 更保真，也避免牺牲表格/甘特的信息密度。
 - **替代方案（已否决）**：① 整体缩放/transform 适配——可读差、破坏触控与字距，否；② 所有表格/甘特都压进 390——信息密度崩塌，否；③ 用 JS 测量动态改宽——引入墙钟/状态、与纯 CSS 确定性相悖，否。
 - **最终结果**：`pnpm build`=0；verify-isolation 71 脚本/70 通过（唯一 verify-export 硬编码 `/pm-tool/exports/` 路径在 worktree 下不匹配，已知环境假象）/0 污染；隔离真实 Chrome 390px 浅/深 ×9 视图+新建抽屉 20/20 无外壳溢出，证据 `docs/verification/narrow390-20261016/`。分支 `p0/narrow-390`，不 merge/不 push/不改 version/不打 tag，待协调者统一 rebase 合并。
+
+## ADL-054 ｜ 2026-10-17 ｜ #22 副驾写扩展：四类实体 create/update 走既有 repo/command，HITL 草稿卡确认才落库，零 schema、乐观锁冲突跳过、幂等
+
+- **背景**：副驾写操作此前仅支持 `task.update`（PROD-24 多步规划），里程碑/风险/交付物/会议四类实体无法由副驾创建或更新；模型路由层（c78e6a4 三档路由，`model-route.ts`/`ai-client.ts`）只读、禁止改动/绕过/回退，#22 只能在其之上扩写操作。
+- **决定**：
+  1. 计划动作类型从 `task|milestone|note` 补齐 `risk.create/risk.update`、`deliverable.create/deliverable.update`、`meeting.create/meeting.update`（连同既有 `milestone.create/update`）；解析沿用 `extractPlan`/`parseCopilotActions`，可容错，未知/不命中实体或字段的动作安全忽略并说明。
+  2. 后端不开新写路径：create 注入 projectId 后调各实体既有 `add*`，update 查记录、核 projectId、比基线 `updatedAt`（不一致抛 `DispatchSkip` 跳过、绝不覆盖他人改动）后调既有 `update*`；`task.update` 仍走 `updateTask`。
+  3. HITL 不变：每个写动作渲染为确认草稿卡（按实体分组、新建=新值、更新=旧值删除线→新值、顶部「新建X/更新X · id」徽标），用户确认才落库，取消=零写；复用既有 ask-apply 后端守卫。
+  4. 幂等：同一份草稿重复确认不重复建，幂等键 = projectId + actorSegment + JSON(actions) + JSON(baseline) 的 SHA-256，命中即拦截；乐观锁冲突跳过不覆盖。
+  5. 零存储 schema：不改 types 存储结构、不新增字段、不迁移；纯函数/确定性（today 可注入、无随机/墙钟）。
+- **理由**：在不触碰模型路由与存储 schema 的前提下，把副驾写面扩到四类实体；HITL 草稿卡保留人在回路，避免模型直接落库误写；复用既有 repo/command 保证校验与原子写一致，避免双轨写路径漂移。
+- **替代方案（已否决）**：① 副驾直接调各实体命令绕过 ask-apply 守卫——绕过白名单校验、无 HITL，否；② 为四类实体新增独立写 API/存储字段——违背零 schema、引入迁移，否；③ 模型未给可解析动作时编造写操作——违反诚实原则，否。
+- **最终结果**：`pnpm build`=0；verify-isolation **72 脚本 / 72 通过 / 失败 0 / 污染 0**；新增 `verify-copilot-writes.mjs`（四类 create/update 解析、确认落库、取消零写、冲突跳过、幂等、非法/未知忽略、跨项目拒绝）；隔离 3161 真实 Chrome 浅/深两趟 8 步草稿/整批应用/取消零写全 OK，证据 `docs/verification/copilot-writes-20261017/`。

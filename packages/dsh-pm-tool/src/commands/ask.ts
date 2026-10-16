@@ -5,6 +5,37 @@ import { resolveModelRoute, getModelMode, PROD_KEY_MISSING_TEXT } from '../core/
 import { buildAskContext, localToday, COPILOT_SYSTEM } from '../core/ask-copilot.js'
 
 export function handleAskCommand(argument: string, domain: PmDomain | undefined, llm: LlmGateway | undefined) {
+  // #22 实体演示缝：DSH_PM_E2E=1 且参数含 entities 时，不调模型，动态取本项目已有实体，
+  // 产出里程碑/风险/交付物/会议四类 create/update 混合计划，供 GUI 确定性截图。
+  if (process.env.DSH_PM_E2E === '1' && /entities/.test(argument)) {
+    const projectId = argument.split(/\s+/)[0]
+    if (!domain || !domain.table('projects').get(projectId ?? '')) {
+      return { kind: 'error' as const, text: '未找到项目' }
+    }
+    const list = (name: string) => [...(domain.table(name as never) as { entries(): IterableIterator<[string, unknown]> }).entries()].map(([, v]) => v as { id: string, projectId?: string })
+      .filter(x => x.projectId === projectId)
+    const ms = list('milestones')[0]
+    const ri = list('risk_issues')[0]
+    const dlv = list('deliverables')[0]
+    const mtg = list('meetings')[0]
+    const plan = [
+      { stepId: 's1', title: '创建里程碑', reason: '阶段收口需要一个目标节点', action: { op: 'milestone.create', patch: { title: '试运行里程碑', targetDate: '2026-11-30', status: 'planned', description: 'PoC 试运行验收节点' } }, needs: [] },
+      { stepId: 's2', title: '更新里程碑', reason: '目标日期微调', ...(ms ? { action: { op: 'milestone.update', id: ms.id, patch: { targetDate: '2026-11-28' } } } : { action: { op: 'milestone.create', patch: { title: '占位里程碑', targetDate: '2026-12-01' } } }), needs: [] },
+      { stepId: 's3', title: '登记新风险', reason: '第三方接口稳定性存疑', action: { op: 'risk.create', patch: { type: 'risk', title: '第三方接口限流风险', impact: 'high', probability: 'medium', status: 'open', responsePlan: '申请配额并准备降级方案' } }, needs: [] },
+      { stepId: 's4', title: '更新风险状态', reason: '已转入跟进', ...(ri ? { action: { op: 'risk.update', id: ri.id, patch: { status: 'monitoring' } } } : { action: { op: 'risk.create', patch: { type: 'issue', title: '占位问题', impact: 'low' } } }), needs: [] },
+      { stepId: 's5', title: '创建交付物', reason: '需归档验收材料', action: { op: 'deliverable.create', patch: { name: '试运行验收报告', status: 'planned', dueDate: '2026-12-10', description: '试运行阶段验收材料' } }, needs: [] },
+      { stepId: 's6', title: '更新交付物', reason: '进入制作中', ...(dlv ? { action: { op: 'deliverable.update', id: dlv.id, patch: { status: 'in_progress' } } } : { action: { op: 'deliverable.create', patch: { name: '占位交付物' } } }), needs: [] },
+      { stepId: 's7', title: '创建会议', reason: '安排阶段复盘', action: { op: 'meeting.create', patch: { title: '试运行复盘会', meetingDate: '2026-12-05', status: 'draft', participants: ['项目经理', '研发代表'], decisions: [] } }, needs: [] },
+      { stepId: 's8', title: '更新会议', reason: '已定稿', ...(mtg ? { action: { op: 'meeting.update', id: mtg.id, patch: { status: 'final' } } } : { action: { op: 'meeting.create', patch: { title: '占位会议', meetingDate: '2026-12-06' } } }), needs: [] },
+    ]
+    return {
+      kind: 'success' as const,
+      text: `【E2E 实体固定诊断】今天是 ${localToday()}，建议补齐里程碑/风险/交付物/会议台账。
+\`\`\`json
+{"plan":${JSON.stringify(plan)}}
+\`\`\``,
+    }
+  }
   // PROD-20 E2E 测试缝：仅当 DSH_PM_E2E=1 时可用，不调模型，返回固定"模拟模型原始输出"，
   // 后续 parseCopilotActions→validateActions→渲染→确认落盘与真实 ask 完全同路径；生产/所有者实例不注册。
   if (process.env.DSH_PM_E2E === '1' && /(^|\s)fixture(\s|$)/.test(argument)) {
@@ -89,6 +120,10 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
 // 杜绝双写；完成后写 TTL，失败清理 in-flight。不新增表、不把任何 token 当授权。
 import { validateActions, type CopilotAction } from '../core/copilot.js'
 import { updateTask } from '../core/tasks.js'
+import { addMilestone, updateMilestone } from '../core/milestones.js'
+import { addRiskIssue, updateRiskIssue } from '../core/risk-issues.js'
+import { addDeliverable, updateDeliverable } from '../core/deliverables.js'
+import { addMeeting, updateMeeting } from '../core/meetings.js'
 import {
   createSettingsIdempotencyRegistry,
   hashScopeKey,
@@ -115,10 +150,24 @@ export interface AskApplyResult {
 }
 
 async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
-  // 从 domain 重读当前项目全部任务，后端校验归属/字段/日期
-  const tasks = [...domain.table('tasks').entries()].map(([, v]) => v as { id: string, projectId?: string, updatedAt?: string })
-  const liveIds = new Set(tasks.filter(t => t.projectId === projectId).map(t => t.id))
-  const v = validateActions(actions, { taskIds: [...liveIds] })
+  // 从 domain 重读当前项目各实体，后端校验归属/字段/日期（validateActions 已在前面复核）。
+  const all = (table: string) => {
+    const t = domain.table(table as never) as { entries(): IterableIterator<[string, unknown]> }
+    return [...t.entries()].map(([, v]) => v as { id: string, projectId?: string, updatedAt?: string })
+  }
+  const tasks = all('tasks').filter(t => t.projectId === projectId)
+  const liveTaskIds = new Set(tasks.map(t => t.id))
+  const liveMilestoneIds = new Set(all('milestones').filter(m => m.projectId === projectId).map(m => m.id))
+  const liveRiskIds = new Set(all('risk_issues').filter(r => r.projectId === projectId).map(r => r.id))
+  const liveDeliverableIds = new Set(all('deliverables').filter(d => d.projectId === projectId).map(d => d.id))
+  const liveMeetingIds = new Set(all('meetings').filter(m => m.projectId === projectId).map(m => m.id))
+  const v = validateActions(actions, {
+    taskIds: [...liveTaskIds],
+    milestoneIds: [...liveMilestoneIds],
+    riskIds: [...liveRiskIds],
+    deliverableIds: [...liveDeliverableIds],
+    meetingIds: [...liveMeetingIds],
+  })
 
   // 计划步带 stepId/title/needs 元数据（旧扁平 action 无这些字段，行为不变）。
   const isPlan = actions.some(a => typeof a.stepId === 'string')
@@ -126,33 +175,93 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   const label = (a: CopilotAction): string => {
     const sid = typeof a.stepId === 'string' ? a.stepId : ''
     const title = typeof a.title === 'string' ? a.title : ''
-    const id = String(a.id ?? '(无id)')
+    const id = String(a.id ?? '(新建)')
     return sid ? `${sid} ${id}${title ? ` ${title}` : ''}` : id
   }
 
   const applied: string[] = []
   const blocked: string[] = []
   const appliedStepIds = new Set<string>()
+
+  // 按 op 分发到各实体既有 repo（零 schema 改动）；create 注入 projectId，update 走基线冲突比较。
+  const dispatch = async (a: CopilotAction): Promise<{ ok: boolean, nextUpdatedAt?: string }> => {
+    const patch = (a.patch ?? {}) as Record<string, unknown>
+    switch (a.op) {
+      case 'task.update': {
+        const rec = tasks.find(t => t.id === a.id)
+        if (!rec || rec.projectId !== projectId) throw new DispatchSkip('不存在或不属于本项目')
+        const base = baseline[a.id ?? '']
+        if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const next = await updateTask(domain, a.id!, patch)
+        // 同步本地快照 updatedAt，供同目标后续步冲突比较（与链式 baseline 一致）。
+        if (next?.updatedAt) rec.updatedAt = next.updatedAt
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'milestone.create': {
+        const next = await addMilestone(domain, { projectId, ...patch })
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'milestone.update': {
+        const rec = [...domain.table('milestones').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
+        if (!rec || rec.projectId !== projectId) throw new DispatchSkip('里程碑不存在或不属于本项目')
+        const base = baseline[a.id ?? '']
+        if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const next = await updateMilestone(domain, a.id!, patch)
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'risk.create': {
+        const next = await addRiskIssue(domain, { projectId, ...patch })
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'risk.update': {
+        const rec = [...domain.table('risk_issues').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
+        if (!rec || rec.projectId !== projectId) throw new DispatchSkip('风险/问题不存在或不属于本项目')
+        const base = baseline[a.id ?? '']
+        if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const next = await updateRiskIssue(domain, a.id!, patch)
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'deliverable.create': {
+        const next = await addDeliverable(domain, { projectId, ...patch })
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'deliverable.update': {
+        const rec = [...domain.table('deliverables').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
+        if (!rec || rec.projectId !== projectId) throw new DispatchSkip('交付物不存在或不属于本项目')
+        const base = baseline[a.id ?? '']
+        if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const next = await updateDeliverable(domain, a.id!, patch)
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'meeting.create': {
+        const next = await addMeeting(domain, { projectId, ...patch })
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      case 'meeting.update': {
+        const rec = [...domain.table('meetings').entries()].map(([, x]) => x as { id: string, projectId?: string, updatedAt?: string }).find(x => x.id === a.id)
+        if (!rec || rec.projectId !== projectId) throw new DispatchSkip('会议不存在或不属于本项目')
+        const base = baseline[a.id ?? '']
+        if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
+        const next = await updateMeeting(domain, a.id!, patch)
+        return { ok: true, nextUpdatedAt: next?.updatedAt }
+      }
+      default:
+        throw new DispatchSkip(`不允许的操作 ${a.op}`)
+    }
+  }
+
   for (const a of v.accepted) {
     // 依赖级联：本步 needs 指向的前置 stepId 未全部落库 -> 本步跳过（不自动补偿/重试）。
     const needs = Array.isArray(a.needs) ? a.needs.filter((n): n is string => typeof n === 'string') : []
     if (needs.some(n => !appliedStepIds.has(n))) { blocked.push(`${label(a)}：依赖步骤未执行，已跳过`); continue }
-    const rec = tasks.find(t => t.id === a.id) as { id: string, projectId?: string, updatedAt?: string } | undefined
-    if (!rec || rec.projectId !== projectId) { blocked.push(`${label(a)}：不存在或不属于本项目`); continue }
-    // 冲突：草稿基线 updatedAt 与当前不一致 -> 他人已改，拒绝覆盖
-    const base = baseline[a.id ?? '']
-    if (base && rec.updatedAt && rec.updatedAt !== base) { blocked.push(`${label(a)}：内容已被他人更新，为避免覆盖未执行`); continue }
     try {
-      const next = await updateTask(domain, a.id!, (a.patch ?? {}) as Record<string, unknown>)
+      const res = await dispatch(a)
       // 链式 baseline：同目标后续步用本次落库后的新 updatedAt 比较，不被误判「他人已改」；仅本次调用内存，不持久。
-      if (next?.updatedAt) {
-        baseline[a.id!] = next.updatedAt
-        rec.updatedAt = next.updatedAt // 同步本地快照，供同目标后续步冲突比较
-      }
+      if (res.nextUpdatedAt && a.id) baseline[a.id] = res.nextUpdatedAt
       if (typeof a.stepId === 'string') appliedStepIds.add(a.stepId)
       applied.push(label(a))
     } catch (e) {
-      blocked.push(`${label(a)}：写库失败（${e instanceof Error ? e.message : String(e)}）`)
+      blocked.push(`${label(a)}：${e instanceof DispatchSkip ? e.message : `写库失败（${e instanceof Error ? e.message : String(e)}）`}`)
     }
   }
   const extra = v.rejected.map(r => `${r.action.id ?? '(无id)'}：${r.reason}`)
@@ -161,6 +270,9 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
     + (extra.length ? `；拒绝 ${extra.length} ${unit}（${extra.join('；')}）` : '')
   return { kind: 'success', text, appliedCount: applied.length }
 }
+
+/** 分发内的「跳过/拒绝」信号（非异常），与真正写库失败区分。 */
+class DispatchSkip extends Error {}
 
 export async function handleAskApplyCommand(argument: string, domain: PmDomain | undefined): Promise<AskApplyResult> {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }

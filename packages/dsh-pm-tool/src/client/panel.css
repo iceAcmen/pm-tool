@@ -1210,6 +1210,27 @@ body[data-ds-dark-theme] .pm-project-menu {
 .pm-copilot-num { grid-column: span 1; }
 .pm-copilot-assignee { grid-column: span 3; }
 .pm-copilot-date { grid-column: span 3; }
+/* #22 四类实体草稿卡：徽标 + 只读字段摘要（新建=新值，更新=旧值→新值） */
+.pm-copilot-entity-badge {
+  display: inline-flex; align-items: center; margin-left: 6px; padding: 1px 7px;
+  font-size: 10px; line-height: 1.5; border-radius: 999px; white-space: nowrap;
+}
+.pm-copilot-entity-badge.is-create {
+  color: var(--pm-accent); background: color-mix(in srgb, var(--pm-accent) 12%, transparent);
+}
+.pm-copilot-entity-badge.is-update {
+  color: var(--pm-muted); background: color-mix(in srgb, var(--pm-line) 35%, transparent);
+}
+.pm-copilot-entity-summary {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 8px 10px; border: 1px solid var(--pm-line); border-radius: 9px; background: var(--pm-surface);
+}
+.pm-copilot-entity-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; font-size: 11.5px; line-height: 1.5; }
+.pm-copilot-entity-label { color: var(--pm-muted); flex: none; min-width: 4.5em; }
+.pm-copilot-entity-new { color: var(--pm-ink); font-weight: 500; word-break: break-word; }
+.pm-copilot-entity-diff { color: var(--pm-ink); word-break: break-word; }
+.pm-copilot-entity-from { color: var(--pm-muted); text-decoration: line-through; }
+.pm-copilot-entity-to { font-weight: 500; color: var(--pm-ink); }
 .pm-copilot-info {
   display: flex; align-items: flex-start; gap: 5px; font-size: 11px;
   color: var(--pm-accent); background: color-mix(in srgb, var(--pm-accent) 9%, transparent);

@@ -14,7 +14,13 @@ export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数�
 若确有可改进处，再在最后输出一个 json 代码块，给出多步计划：{"plan":[{"stepId":"s1","title":"一句人话","reason":"为什么这样改","action":{"op":"task.update","id":"任务ID","patch":{"字段":"值"}},"needs":[],"riskNote":"可选软风险提示"}]}。
 - stepId 用 s1/s2…唯一编号；needs 填依赖的前置 stepId（无依赖填 []）；同一步要改同一任务的多个字段就合并成一步，不要拆成两步。
 - 整份计划不超过 8 步、不超过 10 条不同任务；做不到就少给几步。
-- 唯一允许的写操作是 task.update；patch 仅允许 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，且 start 不得晚于 due)。禁止删除、禁止新建、禁止移动、禁止未知字段、禁止改会议/汇报/交付物/里程碑/风险。
+- 允许的写操作与字段（模型只产出草稿，PM 确认后才落库）：
+  - task.update：改任务；patch 仅 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，start 不得晚于 due)。
+  - milestone.create / milestone.update：里程碑；create 必填 title、targetDate(YYYY-MM-DD)，可选 status(planned|at_risk|achieved|missed)/achievedDate/description；update 可改 title/targetDate/status/achievedDate/description。achieved 必须给 achievedDate，非 achieved 必须 achievedDate=null。
+  - risk.create / risk.update：风险/问题；create 必填 type(risk|issue)、title、impact(low|medium|high|critical)，可选 description/owner/dueDate/status(open|monitoring|closed)/probability(low|medium|high)/responsePlan/solution；risk 必须给 probability 且不填 solution，issue 的 probability 必须为 null 且不填 responsePlan。
+  - deliverable.create / deliverable.update：交付物；create 必填 name，可选 version/owner/status(planned|in_progress|submitted|accepted)/location/description/dueDate/repoUrl/branch。
+  - meeting.create / meeting.update：会议；create 必填 title、meetingDate(YYYY-MM-DD)，可选 startTime(HH:mm)/durationMinutes(1-1440)/location/facilitator/recorder/participants(字符串数组)/status(draft|final)/summary/topics(数组)/decisions(数组)/notes。
+- 禁止删除、禁止移动、禁止未知字段、禁止改汇报；create 动作不要带 id（系统自动编号），update 必须带现有实体 id。
 - 没有建议动作就不要输出 json 块。`
 
 export interface AskContext {

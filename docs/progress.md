@@ -2,9 +2,22 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-17（doubao-work **#25 真 390px 窄窗响应式正式修复**：骨架+9 视图在 390px 无外壳溢出，窄屏规则全隔离在 ≤560px、桌面不变，配色 dsw/pm token 零 hex 跟随浅深。build=0、guard 71 脚本/70 通过/1 失败（verify-export 路径假象）/0 污染；隔离 3155 真实 Chrome 浅/深实测 20/20，证据 docs/verification/narrow390-20261016/。分支 p0/narrow-390，不 merge/不 push）
+最后更新：2026-10-17（doubao-work **#22 AI 副驾写操作扩展**：副驾写从仅 task.update 扩到里程碑/风险/交付物/会议四类 create+update，HITL 确认草稿卡、确认才落库、取消零写，复用 ask-apply 守卫、零 schema、乐观锁冲突跳过、幂等。build=0、guard 72 脚本/72 通过/0 失败/0 污染；隔离 3161 真实 Chrome 浅/深两趟 8 步草稿/整批应用/取消零写全 OK，证据 `docs/verification/copilot-writes-20261017/`）
 
-## 当前阶段：#25 真 390px 窄窗响应式正式修复·已核验（2026-10-17，doubao-work，分支 p0/narrow-390，不 push）
+## 当前阶段：#22 AI 副驾写操作扩展·已核验（2026-10-17，doubao-work）
+
+- **目标**：副驾 explorePlan/apply 从仅 `task.update` 扩到里程碑、风险、交付物、会议四类实体，每类支持「创建 + 更新」；保持 HITL（确认草稿卡，确认才落库、取消零写），复用既有 ask-apply 后端守卫，零存储 schema 改动，乐观锁冲突跳过、重复 apply 幂等。
+- **实现**：
+  - `core/copilot.ts`：`ALLOWED_OPS` 扩到 8 个实体 op；四类实体字段白名单 + 枚举/交叉约束校验（risk 必须 probability、禁 solution；issue 必须 probability=null、禁 responsePlan；deliverable 用 `name` 非 title；meeting 校验 meetingDate/startTime HH:mm/durationMinutes 1-1440/数组字段）；`validateActions` snapshot 扩为可选四实体 id 集合，`task.update` 逐字节不变。
+  - `commands/ask.ts`：`applyCore` 按 op 分发——create 注入 projectId 调 `addMilestone/addRiskIssue/addDeliverable/addMeeting`；update 查记录、核 projectId、比基线 `updatedAt`（不一致 `DispatchSkip` 跳过不覆盖）调 `updateMilestone/updateRiskIssue/updateDeliverable/updateMeeting`；`task.update` 仍走 `updateTask`；幂等键 SHA-256 命中拦截重复 apply。
+  - `core/ask-copilot.ts`：`COPILOT_SYSTEM` 放开四类实体 create/update 并写明字段口径。
+  - `client/panel.tsx`：`CopilotPanel` 收四实体清单并传 id 集合给校验；`task.update` 保留行内编辑，其余 op 渲染只读实体摘要卡（新建=新值；更新=旧值删除线→新值），徽标区分「新建X/更新X · id」。
+  - `client/panel.css`：实体徽标/摘要/行样式，颜色复用 `--pm-*`（底层 `--dsw-*`）零 hex，跟随 `body[data-ds-dark-theme]`。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` **72 脚本 / 72 通过 / 失败 0 / 污染 0**（before=after=165）；新增 `verify-copilot-writes.mjs`（四类实体 create/update 解析校验、确认落库、取消零写、updatedAt 冲突跳过、幂等、非法/未知动作安全忽略、跨项目拒绝，离线确定性）。隔离真实 Chrome headless（独立 DSH_HOME/存储/备份/端口 **3161**，正式 3080=PID 66364 未变、3091 未监听，ISS-027 单 PID TERM）：浅/深两趟均 8 步草稿（4 新建/4 更新）、整批应用 8 步、取消零写、served bundle 含实体卡、0 console error。证据 `docs/verification/copilot-writes-20261017/`。
+- **边界**：零 schema、零新增外部依赖；模型路由层只读不改；不做 #23 客观进度、#24 vitest/E2E/CI、#25 窄窗（已并入 main）。
+- **下一步**：看板 P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 视图重设计；prod 真实 Key 仍 MANUAL_PENDING。
+
+## 历史阶段：#25 真 390px 窄窗响应式正式修复·已核验（2026-10-17，doubao-work，已并入 main）
 
 - **目标**：GI-WEB-14 / PROD-07 遗留的真 390px 窄窗从 MANUAL_PENDING 转正式修复；390px 视口下面板骨架（顶栏/抽屉/弹窗/表单/按钮组）+ 9 视图无重叠/裁切/横向外壳溢出，≥1024 桌面不变。
 - **做法**：全部窄屏规则隔离在 `@media (max-width:560px)`，不命中桌面；天然宽内容（任务表 `.pt-scroll`、甘特 `.pm-gantt-scroll`、数据表 `.pm-table-scroll`）容器内部横滚，外壳不溢出。

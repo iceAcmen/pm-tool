@@ -8,7 +8,22 @@
 
 ---
 
-## 修复：真实网络 smoke 移出确定性隔离门；#25 并入 main（2026-10-17，平台：doubao-work）
+## #22 AI 副驾写操作扩展：里程碑/风险/交付物/会议 create+update，HITL 确认草稿卡（2026-10-17，平台：doubao-work）
+
+> 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **72 脚本 / 72 通过 / 失败 0 / 污染 0**（before=after=165）。零存储 schema 改动、零新增外部依赖；模型路由层（c78e6a4 三档路由）只读不改、不绕过、不回退。
+
+- **改了哪些文件**
+  - `packages/dsh-pm-tool/src/core/copilot.ts`：`ALLOWED_OPS` 从仅 `task.update` 扩到 `milestone.create/milestone.update`、`risk.create/risk.update`、`deliverable.create/deliverable.update`、`meeting.create/meeting.update`；新增四类实体字段白名单与枚举/交叉约束校验（milestone status；risk type/status/probability/impact 及 risk 必须 probability、禁 solution，issue 必须 probability=null、禁 responsePlan；deliverable status；meeting status/meetingDate/startTime/durationMinutes/participants/topics/decisions）；`validateActions` snapshot 从 `{taskIds}` 扩为可选 `milestoneIds/riskIds/deliverableIds/meetingIds`，`task.update` 分支逐字节保持原样。
+  - `packages/dsh-pm-tool/src/commands/ask.ts`：`applyCore` 按 op 分发——create 注入 projectId 后调 `addMilestone/addRiskIssue/addDeliverable/addMeeting`；update 查记录、核 projectId、比基线 `updatedAt`（不一致抛 `DispatchSkip` 跳过、不覆盖）后调 `updateMilestone/updateRiskIssue/updateDeliverable/updateMeeting`；`task.update` 仍走 `updateTask`；新增内部 `DispatchSkip` 区分「跳过/拒绝」与真正写库失败；幂等键（projectId+actorSegment+JSON(actions)+JSON(baseline) 的 SHA-256）命中即拦截重复 apply。
+  - `packages/dsh-pm-tool/src/core/ask-copilot.ts`：`COPILOT_SYSTEM` 从「唯一允许 task.update、禁止新建/改其他实体」改为允许四类实体 create/update 并写明各字段口径。
+  - `packages/dsh-pm-tool/src/client/panel.tsx`：`CopilotPanel` 接收 milestones/riskIssues/deliverables/meetings，`validatePlan`/行内校验传入实体 id 集合；`task.update` 保留原行内编辑（status/progress/assignee/起止日期），其余 op 渲染只读实体摘要卡（新建=新值；更新=旧值删除线→新值），顶部徽标区分「新建X/更新X · id」。
+  - `packages/dsh-pm-tool/src/client/panel.css`：新增 `.pm-copilot-entity-badge/.pm-copilot-entity-summary/.pm-copilot-entity-row` 等样式，颜色全部复用 `--pm-*`（底层 `--dsw-*` token），零硬编码 hex，跟随 `body[data-ds-dark-theme]`。
+  - 新增 `packages/dsh-pm-tool/scripts/verify-copilot-writes.mjs`（离线确定性表驱动 + 真实 repo 经 `handleAskApplyCommand`）。
+- **做了什么 / 为什么**：副驾写操作从仅「任务更新」扩到里程碑、风险、交付物、会议四类，每类支持创建+更新；每个写动作仍渲染为 HITL 确认草稿卡（按实体分组、展示新建/改了哪些字段、旧值→新值），用户确认才落库、取消=零写；复用既有 ask-apply 后端守卫，不开无校验写路径；零 schema（不改 types 存储结构、不新增字段、不迁移）。
+- **影响范围 / 如何手动跑**：`node scripts/verify-copilot-writes.mjs`；全量 `node scripts/verify-isolation.mjs`。E2E 演示缝仅在 `DSH_PM_E2E=1` 且 ask 参数含 `entities` 时返回固定实体计划，不调模型，生产/所有者实例不注册。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` 共 72 脚本、通过 72、失败 0、污染 0；隔离真实 Chrome headless（独立 DSH_HOME/存储/备份/端口 **3161**，正式 3080=PID 66364 全程未变、3091 未监听，ISS-027 单 PID TERM）：浅/深两趟均 8 步草稿（4 新建/4 更新）、整批应用 8 步、取消零写、served bundle 含实体卡、0 console error。证据 `docs/verification/copilot-writes-20261017/`。
+
+
 
 - **改了哪些文件**：`packages/dsh-pm-tool/scripts/verify-isolation.mjs`（默认自动发现清单剔除 `verify-real-model.mjs`，仅影响默认扫描，显式 argv 仍可纳入）、`docs/changelog.md`（本条）。
 - **做了什么 / 为什么**：c78e6a4（三档模型路由）新增的 `scripts/verify-real-model.mjs` 是**非 mock 的真实出网 smoke**（真实调用外部免费网关、依赖模型当次输出）。实测同机连跑 3 次为 通过/失败/通过，失败点不固定（偶发过度思考、不吐约定 JSON 计划或 WBS 勾选清单），属外部免费模型非确定性。它被自动纳入「离线、确定性」的 `verify-isolation` 后，会让隔离门无规律变红，违背隔离门零出网/可复现的定位。故将其移出默认扫描；离线确定性逻辑仍由 `verify-model-route.mjs`、`verify-ai-client.mjs` 覆盖（两者均通过）。

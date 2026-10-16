@@ -11,11 +11,80 @@ export interface CopilotAction {
   [k: string]: unknown
 }
 
-const ALLOWED_OPS = new Set(['task.update'])
+// #22：从仅 task.update 扩到里程碑/风险/交付物/会议四类实体的 create/update。
+// op 命名：<entity>.create / <entity>.update；task.update 保持原样不动。
+const ALLOWED_OPS = new Set([
+  'task.update',
+  'milestone.create', 'milestone.update',
+  'risk.create', 'risk.update',
+  'deliverable.create', 'deliverable.update',
+  'meeting.create', 'meeting.update',
+])
 // 直接复用 task.ts 导出的 taskStatusSchema，避免复制常量导致两端漂移；
 // 旧版误用 'doing' 会通过校验却在写库时被 zod 拒绝。
 import { TASK_STATUSES } from './status.js'
 const STATUS = new Set(TASK_STATUSES)
+
+// ===== #22 四类实体的字段白名单与枚举（与各实体 zod schema 对齐，供前置校验/前端卡片） =====
+const MILESTONE_STATUS = new Set(['planned', 'at_risk', 'achieved', 'missed'])
+const RISK_TYPE = new Set(['risk', 'issue'])
+const RISK_STATUS = new Set(['open', 'monitoring', 'closed'])
+const RISK_PROB = new Set(['low', 'medium', 'high'])
+const RISK_IMPACT = new Set(['low', 'medium', 'high', 'critical'])
+const DELIVERABLE_STATUS = new Set(['planned', 'in_progress', 'submitted', 'accepted'])
+const MEETING_STATUS = new Set(['draft', 'final'])
+
+const isStr = (v: unknown): v is string => typeof v === 'string'
+const isNullish = (v: unknown): boolean => v === null || v === undefined
+const isStrList = (v: unknown): v is string[] => Array.isArray(v) && v.every(isStr)
+const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
+
+/** 字段校验器：返回 '' 表示合法，否则返回错误原因。 */
+type FieldCheck = (v: unknown) => string
+
+const strField: FieldCheck = v => (isStr(v) ? '' : '须为字符串')
+const dateField: FieldCheck = v => (isValidDateStr(v) ? '' : '日期须为合法 YYYY-MM-DD')
+const nullableDate: FieldCheck = v => (isNullish(v) || isValidDateStr(v) ? '' : '须为合法日期或 null')
+const nullableEnum = (set: Set<string>): FieldCheck => v =>
+  (isNullish(v) || set.has(String(v))) ? '' : `须为 ${[...set].join('/')} 或 null`
+const enumField = (set: Set<string>): FieldCheck => v =>
+  set.has(String(v)) ? '' : `须为 ${[...set].join('/')}`
+
+/**
+ * 校验 patch 的字段白名单。allowed: 字段名 -> 校验器；required: 创建时必填字段。
+ * 返回首个错误原因，'' 表示全部合法；未知字段直接拒绝（白名单外不得透传到 repo）。
+ */
+function checkEntityFields(
+  patch: Record<string, unknown>,
+  allowed: Record<string, FieldCheck>,
+  required: string[],
+): string {
+  const keys = Object.keys(patch)
+  if (!keys.length) return '空 patch'
+  for (const r of required) {
+    if (isNullish(patch[r])) return `缺少必填字段 ${r}`
+  }
+  for (const k of keys) {
+    const checker = allowed[k]
+    if (!checker) return `未知字段 ${k}`
+    const bad = checker(patch[k])
+    if (bad) return `${k}：${bad}`
+  }
+  return ''
+}
+
+/** 风险 type 交叉约束：risk 必须概率、禁 solution；issue 概率必须 null、禁 responsePlan。 */
+function checkRiskTypeCross(patch: Record<string, unknown>): string {
+  const type = String(patch.type ?? '')
+  if (type === 'risk') {
+    if (!RISK_PROB.has(String(patch.probability))) return '风险必须填写 probability(low/medium/high)'
+    if (!isNullish(patch.solution) && String(patch.solution) !== '') return '风险不使用 solution 字段，请填 responsePlan'
+  } else if (type === 'issue') {
+    if (!isNullish(patch.probability)) return '问题的 probability 必须为 null'
+    if (!isNullish(patch.responsePlan) && String(patch.responsePlan) !== '') return '问题不使用 responsePlan 字段，请填 solution'
+  }
+  return ''
+}
 
 /** 真实日历合法性：YYYY-MM-DD 且不是 2 月 30 这类不存在的日期；过去/未来都可接受。 */
 export function isValidDateStr(v: unknown): boolean {
@@ -51,18 +120,30 @@ export interface ValidationResult {
   rejected: { action: CopilotAction, reason: string }[]
 }
 
-/** 逐条校验：op 白名单、目标存在、字段合法。非法剔除并给原因。 */
+export interface ActionSnapshot {
+  taskIds?: string[]
+  milestoneIds?: string[]
+  riskIds?: string[]
+  deliverableIds?: string[]
+  meetingIds?: string[]
+}
+
+/** 逐条校验：op 白名单、目标存在（update）、字段合法。非法剔除并给原因。 */
 export function validateActions(
   actions: CopilotAction[],
-  snapshot: { taskIds?: string[] },
+  snapshot: ActionSnapshot,
 ): ValidationResult {
   const accepted: CopilotAction[] = []
   const rejected: { action: CopilotAction, reason: string }[] = []
-  const ids = new Set(snapshot.taskIds ?? [])
+  const taskIds = new Set(snapshot.taskIds ?? [])
+  const milestoneIds = new Set(snapshot.milestoneIds ?? [])
+  const riskIds = new Set(snapshot.riskIds ?? [])
+  const deliverableIds = new Set(snapshot.deliverableIds ?? [])
+  const meetingIds = new Set(snapshot.meetingIds ?? [])
   for (const a of actions) {
     if (!ALLOWED_OPS.has(a.op)) { rejected.push({ action: a, reason: `不允许的操作 ${a.op}` }); continue }
     if (a.op === 'task.update') {
-      if (!a.id || !ids.has(a.id)) { rejected.push({ action: a, reason: `任务 ${a.id ?? '(无 id)'} 不存在` }); continue }
+      if (!a.id || !taskIds.has(a.id)) { rejected.push({ action: a, reason: `任务 ${a.id ?? '(无 id)'} 不存在` }); continue }
       const patch = (a.patch ?? {}) as Record<string, unknown>
       const keys = Object.keys(patch)
       if (!keys.length) { rejected.push({ action: a, reason: '空 patch' }); continue }
@@ -82,9 +163,96 @@ export function validateActions(
       }
       if (bad) { rejected.push({ action: a, reason: bad }); continue }
       accepted.push(a)
+      continue
+    }
+
+    // ===== #22 四类实体 create/update =====
+    const patch = (a.patch ?? {}) as Record<string, unknown>
+    const isCreate = a.op.endsWith('.create')
+
+    // 里程碑
+    if (a.op === 'milestone.create' || a.op === 'milestone.update') {
+      const allowed: Record<string, FieldCheck> = {
+        title: strField, targetDate: dateField, status: enumField(MILESTONE_STATUS),
+        achievedDate: nullableDate, description: strField,
+      }
+      const required = isCreate ? ['title', 'targetDate'] : []
+      let bad = checkEntityFields(patch, allowed, required)
+      if (!bad && a.op === 'milestone.update') {
+        if (!a.id || !milestoneIds.has(a.id)) { rejected.push({ action: a, reason: `里程碑 ${a.id ?? '(无 id)'} 不存在` }); continue }
+      }
+      if (!bad) bad = checkMilestoneStatusCross(patch)
+      if (bad) { rejected.push({ action: a, reason: bad }); continue }
+      accepted.push(a)
+      continue
+    }
+
+    // 风险/问题
+    if (a.op === 'risk.create' || a.op === 'risk.update') {
+      const allowed: Record<string, FieldCheck> = {
+        title: strField, description: strField, owner: strField, dueDate: nullableDate,
+        status: enumField(RISK_STATUS), probability: nullableEnum(RISK_PROB),
+        impact: enumField(RISK_IMPACT), responsePlan: strField, solution: strField,
+      }
+      // type 仅创建可给；更新不得改类型。
+      if (a.op === 'risk.create') allowed.type = enumField(RISK_TYPE)
+      const required = isCreate ? ['type', 'title', 'impact'] : []
+      let bad = checkEntityFields(patch, allowed, required)
+      if (!bad && a.op === 'risk.update') {
+        if (!a.id || !riskIds.has(a.id)) { rejected.push({ action: a, reason: `风险/问题 ${a.id ?? '(无 id)'} 不存在` }); continue }
+      }
+      if (!bad) bad = checkRiskTypeCross(patch)
+      if (bad) { rejected.push({ action: a, reason: bad }); continue }
+      accepted.push(a)
+      continue
+    }
+
+    // 交付物
+    if (a.op === 'deliverable.create' || a.op === 'deliverable.update') {
+      const allowed: Record<string, FieldCheck> = {
+        name: strField, version: strField, owner: strField, status: enumField(DELIVERABLE_STATUS),
+        location: strField, description: strField, dueDate: nullableDate,
+        repoUrl: strField, branch: strField,
+      }
+      const required = isCreate ? ['name'] : []
+      const bad = checkEntityFields(patch, allowed, required)
+      if (!bad && a.op === 'deliverable.update') {
+        if (!a.id || !deliverableIds.has(a.id)) { rejected.push({ action: a, reason: `交付物 ${a.id ?? '(无 id)'} 不存在` }); continue }
+      }
+      if (bad) { rejected.push({ action: a, reason: bad }); continue }
+      accepted.push(a)
+      continue
+    }
+
+    // 会议
+    if (a.op === 'meeting.create' || a.op === 'meeting.update') {
+      const allowed: Record<string, FieldCheck> = {
+        title: strField, meetingDate: dateField,
+        startTime: v => (isNullish(v) || HHMM.test(String(v))) ? '' : '时间须为 HH:mm 或 null',
+        durationMinutes: v => (isNullish(v) || (Number.isInteger(Number(v)) && Number(v) >= 1 && Number(v) <= 1440)) ? '' : '时长须为 1-1440 整数或 null',
+        location: strField, facilitator: strField, recorder: strField,
+        participants: v => (isStrList(v) ? '' : '须为字符串数组'), status: enumField(MEETING_STATUS),
+        summary: strField, topics: v => (isStrList(v) ? '' : '须为字符串数组'), decisions: v => (isStrList(v) ? '' : '须为字符串数组'), notes: strField,
+      }
+      const required = isCreate ? ['title', 'meetingDate'] : []
+      const bad = checkEntityFields(patch, allowed, required)
+      if (!bad && a.op === 'meeting.update') {
+        if (!a.id || !meetingIds.has(a.id)) { rejected.push({ action: a, reason: `会议 ${a.id ?? '(无 id)'} 不存在` }); continue }
+      }
+      if (bad) { rejected.push({ action: a, reason: bad }); continue }
+      accepted.push(a)
+      continue
     }
   }
   return { accepted, rejected }
+}
+
+/** 里程碑 achieved 交叉约束：achieved 必须有 achievedDate；非 achieved 必须 achievedDate=null。 */
+function checkMilestoneStatusCross(patch: Record<string, unknown>): string {
+  const status = String(patch.status ?? '')
+  if (status === 'achieved' && isNullish(patch.achievedDate)) return '状态 achieved 时必须填写 achievedDate'
+  if (status && status !== 'achieved' && !isNullish(patch.achievedDate)) return '非 achieved 状态 achievedDate 必须为 null'
+  return ''
 }
 
 // ===== PROD-24 多步规划（PROD-24）纯函数：解析 / DAG / 预算 / 同目标串行 =====
@@ -230,7 +398,7 @@ export const PLAN_MAX_TASKS = 10
  * 计划级校验：重复 stepId 拒 -> 预算护栏（>8 步或 >10 任务整份拒）-> 逐字段复用 validateActions
  * -> DAG 环/悬空依赖局部拒+下游级联 -> 同目标隐式串行拓扑序。坏步不拖合法独立步。
  */
-export function validatePlan(rawSteps: RawPlanStep[], snapshot: { taskIds?: string[] }): ValidatedPlan {
+export function validatePlan(rawSteps: RawPlanStep[], snapshot: ActionSnapshot): ValidatedPlan {
   const rejected: PlanRejection[] = []
 
   // 1) 重复 stepId：后者拒，不整份拒。

@@ -1,0 +1,53 @@
+{
+  "mode": "dark",
+  "servedBundles": [
+    {
+      "status": 200,
+      "bytes": 1724436,
+      "hasEntity": true
+    },
+    {
+      "status": 200,
+      "bytes": 1724436,
+      "hasEntity": true
+    }
+  ],
+  "results": [
+    {
+      "k": "draft.stepCount",
+      "ok": true,
+      "detail": "steps=8 badges=8"
+    },
+    {
+      "k": "draft.entityBadges",
+      "ok": true,
+      "detail": "badges=新建里程碑 | 更新里程碑 · m-0001 | 新建风险/问题 | 更新风险/问题 · ri-0001 | 新建交付物 | 更新交付物 · dlv-0001 | 新建会议 | 更新会议 · mtg-0001"
+    },
+    {
+      "k": "apply.batchApplied",
+      "ok": true,
+      "detail": "msg=已应用 8 步（s1 (新建) 创建里程碑；s2 m-0001 更新里程碑；s3 (新建) 登记新风险；s4 ri-0001 更新风险状态；s5 (新建) 创建交付物；s6 dlv-0001 更新交付物；s7 (新建) 创建会议；s8 mt"
+    },
+    {
+      "k": "cancel.clearsDraft",
+      "ok": true,
+      "detail": "取消后草稿卡片清空"
+    },
+    {
+      "k": "cancel.zeroWrite",
+      "ok": true,
+      "detail": "files before=8 after=8（取消零写）"
+    },
+    {
+      "k": "bundle.servesEntityCard",
+      "ok": true,
+      "detail": "bundles=200/1724436B/entity=true | 200/1724436B/entity=true"
+    },
+    {
+      "k": "console.clean",
+      "ok": true,
+      "detail": "errors=0 "
+    }
+  ],
+  "consoleErrors": []
+}

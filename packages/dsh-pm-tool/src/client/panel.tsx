@@ -1022,6 +1022,10 @@ export function PmPanel({ execute }: PmPanelApi) {
         {drawer.kind === 'copilot' && project && <CopilotPanel
           projectId={project.id}
           tasks={tasks}
+          milestones={milestones}
+          riskIssues={riskIssues}
+          deliverables={deliverables}
+          meetings={meetings}
           baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
           execute={execute}
           disabled={busy}
@@ -1917,9 +1921,48 @@ function softRisks(step: CopilotStep, task: Task | undefined, assignees: Set<str
   return out
 }
 
-function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSaved }: {
+// #22 四类实体草稿卡：字段中文名 + 枚举中文 + 实体徽标；只读展示模型将新建/改动的内容。
+const COPILOT_ENTITY_META: Record<string, { label: string, fields: Record<string, string>, enums?: Record<string, Record<string, string>> }> = {
+  milestone: {
+    label: '里程碑',
+    fields: { title: '标题', targetDate: '目标日期', status: '状态', achievedDate: '达成日期', description: '说明' },
+    enums: { status: { planned: '计划中', at_risk: '有风险', achieved: '已达成', missed: '已错过' } },
+  },
+  risk: {
+    label: '风险/问题',
+    fields: { type: '类型', title: '标题', description: '说明', owner: '负责人', dueDate: '截止日期', status: '状态', probability: '概率', impact: '影响', responsePlan: '应对措施', solution: '解决方案' },
+    enums: {
+      type: { risk: '风险', issue: '问题' },
+      status: { open: '待处理', monitoring: '跟进中', closed: '已关闭' },
+      probability: { low: '低', medium: '中', high: '高' },
+      impact: { low: '低', medium: '中', high: '高', critical: '严重' },
+    },
+  },
+  deliverable: {
+    label: '交付物',
+    fields: { name: '名称', version: '版本', owner: '负责人', status: '状态', location: '位置', description: '说明', dueDate: '交付日期', repoUrl: '仓库地址', branch: '分支' },
+    enums: { status: { planned: '计划中', in_progress: '制作中', submitted: '已提交', accepted: '已验收' } },
+  },
+  meeting: {
+    label: '会议',
+    fields: { title: '标题', meetingDate: '会议日期', startTime: '开始时间', durationMinutes: '时长(分)', location: '地点', facilitator: '主持人', recorder: '记录人', participants: '参会人', status: '状态', summary: '摘要', topics: '议题', decisions: '决议', notes: '备注' },
+    enums: { status: { draft: '草稿', final: '已定稿' } },
+  },
+}
+
+/** op -> 实体键；task.update 不走实体摘要。 */
+function copilotEntityOf(op: string): string | null {
+  const m = /^(milestone|risk|deliverable|meeting)\.(create|update)$/.exec(op)
+  return m ? m[1] : null
+}
+
+function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, disabled, onSaved }: {
   projectId: string
   tasks: Task[]
+  milestones: { id: string, title: string, targetDate?: string, status?: string }[]
+  riskIssues: { id: string, title: string, status?: string, type?: string, probability?: string | null, impact?: string }[]
+  deliverables: { id: string, name?: string, title?: string, status?: string, dueDate?: string | null }[]
+  meetings: { id: string, title: string, meetingDate?: string, status?: string }[]
   baselineMap: Record<string, string>
   execute: (line: string) => Promise<string>
   disabled: boolean
@@ -1928,6 +1971,10 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
   const taskIds = tasks.map(t => t.id)
   const taskById = new Map(tasks.map(t => [t.id, t]))
   const assignees = new Set(tasks.map(t => t.assignee).filter(Boolean))
+  const milestoneById = new Map(milestones.map(m => [m.id, m]))
+  const riskById = new Map(riskIssues.map(r => [r.id, r]))
+  const deliverableById = new Map(deliverables.map(d => [d.id, d]))
+  const meetingById = new Map(meetings.map(m => [m.id, m]))
   const today = new Date().toISOString().slice(0, 10)
 
   const [input, setInput] = useState('')
@@ -1978,7 +2025,13 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
       removePlaceholder()
       const { diagnosis, rawSteps } = parseCopilotPlan(text)
       setMsgs(m => [...m, { role: 'ai', text: diagnosis }])
-      const v = validatePlan(rawSteps, { taskIds })
+      const v = validatePlan(rawSteps, {
+        taskIds,
+        milestoneIds: milestones.map(m => m.id),
+        riskIds: riskIssues.map(r => r.id),
+        deliverableIds: deliverables.map(d => d.id),
+        meetingIds: meetings.map(m => m.id),
+      })
       if (v.steps.length || v.rejected.length) {
         setSteps(v.steps.map(s => ({ ...s, checked: true })))
         setRejected(v.rejected)
@@ -1999,9 +2052,16 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
       : s))
   }
   const invalidStepIds = new Set<string>()
+  const validateSnapshot = {
+    taskIds,
+    milestoneIds: milestones.map(m => m.id),
+    riskIds: riskIssues.map(r => r.id),
+    deliverableIds: deliverables.map(d => d.id),
+    meetingIds: meetings.map(m => m.id),
+  }
   for (const s of steps) {
     if (!s.checked) continue
-    if (validateActions([s.action], { taskIds }).rejected.length) invalidStepIds.add(s.stepId)
+    if (validateActions([s.action], validateSnapshot).rejected.length) invalidStepIds.add(s.stepId)
   }
   const checked = steps.filter(s => s.checked)
   const anyInvalid = invalidStepIds.size > 0
@@ -2079,13 +2139,30 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
         <div className="pm-copilot-draft-head">
           <ListChecks size={15}/>
           <strong>操作计划</strong>
-          <span className="pm-copilot-draft-meta">{steps.length} 步 · {new Set(steps.map(s => s.action.id)).size} 条任务</span>
+          <span className="pm-copilot-draft-meta">{steps.length} 步 · {steps.filter(s => s.action.op.endsWith('.create')).length} 新建 / {steps.filter(s => s.action.op.endsWith('.update')).length} 更新</span>
         </div>
         {staleHint && <div className="pm-copilot-warn">你打开草稿后台账有变化，确认时将逐行重新核对。</div>}
         {steps.map((s, idx) => {
           const invalid = invalidStepIds.has(s.stepId)
           const risks = softRisks(s, taskById.get(String(s.action.id)), assignees, today)
           const patch = editablePatch(s)
+          const op = s.action.op
+          const entity = copilotEntityOf(op)
+          const isCreate = op.endsWith('.create')
+          // update 时取当前记录做旧值→新值对照；create 无旧值。
+          const current = entity
+            ? (op.includes('milestone') ? milestoneById.get(String(s.action.id))
+              : op.includes('risk') ? riskById.get(String(s.action.id))
+              : op.includes('deliverable') ? deliverableById.get(String(s.action.id))
+              : meetingById.get(String(s.action.id)))
+            : undefined
+          const meta = entity ? COPILOT_ENTITY_META[entity] : undefined
+          const rows = meta ? Object.entries(patch).map(([k, v]) => {
+            const from = current ? String((current as Record<string, unknown>)[k] ?? '—') : ''
+            const enumMap = meta.enums?.[k]
+            const to = Array.isArray(v) ? (v as string[]).join('、') : enumMap?.[String(v)] ?? String(v ?? '')
+            return { label: meta.fields[k] ?? k, from, to }
+          }) : []
           return <div key={s.stepId} data-copilot-step className={`pm-copilot-step${invalid ? ' pm-copilot-step-invalid' : ''}`}>
             <div className="pm-copilot-stephead">
               <label className="pm-copilot-stepcheck">
@@ -2094,31 +2171,45 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
                 <span className="pm-copilot-stepnum">{idx + 1}</span>
               </label>
               <div className="pm-copilot-stepinfo">
-                <span className="pm-copilot-steptitle">{s.title || s.action.id}</span>
+                <span className="pm-copilot-steptitle">{s.title || s.action.id || `新建${meta?.label ?? ''}`}</span>
                 <span className="pm-copilot-stepid">{s.stepId}</span>
+                {entity && <span className={`pm-copilot-entity-badge${isCreate ? ' is-create' : ' is-update'}`}>{isCreate ? `新建${meta?.label}` : `更新${meta?.label}`}{s.action.id ? ` · ${s.action.id}` : ''}</span>}
               </div>
             </div>
             {s.reason
               ? <div className="pm-copilot-why"><Lightbulb size={11}/> {s.reason}</div>
               : <div className="pm-copilot-why pm-copilot-why-empty">模型未说明原因</div>}
             {s.needs.length > 0 && <div className="pm-copilot-needs"><GitBranch size={10}/> 依赖：{s.needs.join('、')}</div>}
-            <div className="pm-copilot-editrow">
-              <select value={String(patch.status ?? '')} data-copilot-edit={`${s.stepId}.status`} aria-label="状态"
-                onChange={e => e.target.value ? setPatch(s.stepId, 'status', e.target.value) : setPatch(s.stepId, 'status', undefined)}>
-                <option value="">状态</option>
-                {['todo', 'in_progress', 'blocked', 'done'].map(st => <option key={st} value={st}>{taskStatus[st] ?? st}</option>)}
-              </select>
-              <input className="pm-copilot-num" type="number" placeholder="进度" min={0} max={100} value={patch.progress == null ? '' : Number(patch.progress)}
-                data-copilot-edit={`${s.stepId}.progress`} aria-label="进度"
-                onChange={e => setPatch(s.stepId, 'progress', e.target.value === '' ? undefined : Number(e.target.value))}/>
-              <input className="pm-copilot-assignee" placeholder="负责人" value={String(patch.assignee ?? '')}
-                data-copilot-edit={`${s.stepId}.assignee`} aria-label="负责人"
-                onChange={e => setPatch(s.stepId, 'assignee', e.target.value)}/>
-              <input className="pm-copilot-date" placeholder="起 YYYY-MM-DD" value={String(patch.startDate ?? '')} data-copilot-edit={`${s.stepId}.startDate`} aria-label="开始日期"
-                onChange={e => setPatch(s.stepId, 'startDate', e.target.value || undefined)}/>
-              <input className="pm-copilot-date" placeholder="止 YYYY-MM-DD" value={String(patch.dueDate ?? '')} data-copilot-edit={`${s.stepId}.dueDate`} aria-label="截止日期"
-                onChange={e => setPatch(s.stepId, 'dueDate', e.target.value || undefined)}/>
-            </div>
+            {op === 'task.update' ? (
+              <div className="pm-copilot-editrow">
+                <select value={String(patch.status ?? '')} data-copilot-edit={`${s.stepId}.status`} aria-label="状态"
+                  onChange={e => e.target.value ? setPatch(s.stepId, 'status', e.target.value) : setPatch(s.stepId, 'status', undefined)}>
+                  <option value="">状态</option>
+                  {['todo', 'in_progress', 'blocked', 'done'].map(st => <option key={st} value={st}>{taskStatus[st] ?? st}</option>)}
+                </select>
+                <input className="pm-copilot-num" type="number" placeholder="进度" min={0} max={100} value={patch.progress == null ? '' : Number(patch.progress)}
+                  data-copilot-edit={`${s.stepId}.progress`} aria-label="进度"
+                  onChange={e => setPatch(s.stepId, 'progress', e.target.value === '' ? undefined : Number(e.target.value))}/>
+                <input className="pm-copilot-assignee" placeholder="负责人" value={String(patch.assignee ?? '')}
+                  data-copilot-edit={`${s.stepId}.assignee`} aria-label="负责人"
+                  onChange={e => setPatch(s.stepId, 'assignee', e.target.value)}/>
+                <input className="pm-copilot-date" placeholder="起 YYYY-MM-DD" value={String(patch.startDate ?? '')} data-copilot-edit={`${s.stepId}.startDate`} aria-label="开始日期"
+                  onChange={e => setPatch(s.stepId, 'startDate', e.target.value || undefined)}/>
+                <input className="pm-copilot-date" placeholder="止 YYYY-MM-DD" value={String(patch.dueDate ?? '')} data-copilot-edit={`${s.stepId}.dueDate`} aria-label="截止日期"
+                  onChange={e => setPatch(s.stepId, 'dueDate', e.target.value || undefined)}/>
+              </div>
+            ) : (
+              <div className="pm-copilot-entity-summary">
+                {rows.map((r, i) => (
+                  <div key={i} className="pm-copilot-entity-row">
+                    <span className="pm-copilot-entity-label">{r.label}</span>
+                    {isCreate
+                      ? <span className="pm-copilot-entity-new">{r.to}</span>
+                      : <span className="pm-copilot-entity-diff"><span className="pm-copilot-entity-from">{r.from}</span> → <span className="pm-copilot-entity-to">{r.to}</span></span>}
+                  </div>
+                ))}
+              </div>
+            )}
             {invalid && <div className="pm-copilot-err">该行字段不合法，已禁用确认</div>}
             {risks.map((r, i) => <div key={i} className="pm-copilot-warn">⚠ {r}</div>)}
             {s.riskNote && <div className="pm-copilot-info"><Sparkles size={11}/> 模型提示：{s.riskNote}</div>}
