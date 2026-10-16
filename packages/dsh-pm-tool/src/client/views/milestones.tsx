@@ -14,7 +14,7 @@ import CircleAlert from 'lucide-react/dist/esm/icons/circle-alert.mjs'
 import CircleX from 'lucide-react/dist/esm/icons/circle-x.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
-import { localTodayIso } from '../../core/derived.js'
+import { localTodayIso, isMilestoneMissed } from '../../core/derived.js'
 import css from './milestones.css?raw'
 import type { Milestone, Task, Run, View } from './types.js'
 
@@ -61,12 +61,12 @@ export function Milestones(props: MilestonesProps) {
     tasksByMilestone.set(t.milestoneId, arr)
   }
 
-  // 统计
+  // 统计：延期统一走 isMilestoneMissed 纯谓词（与卡片同口径），其余状态互斥不重复计数。
   const total = sorted.length
   const achieved = sorted.filter(m => m.status === 'achieved').length
-  const atRisk = sorted.filter(m => m.status === 'at_risk').length
-  const missed = sorted.filter(m => m.status === 'missed').length
-  const planned = sorted.filter(m => m.status === 'planned').length
+  const missed = sorted.filter(m => isMilestoneMissed(m, today)).length
+  const atRisk = sorted.filter(m => m.status === 'at_risk' && !isMilestoneMissed(m, today)).length
+  const planned = sorted.filter(m => m.status === 'planned' && !isMilestoneMissed(m, today)).length
   const rate = total ? Math.round((achieved / total) * 100) : 0
 
   return (
@@ -149,8 +149,7 @@ export function Milestones(props: MilestonesProps) {
                 linkedTasks.map(t => t.assignee?.trim()).filter(Boolean) as string[],
               )]
               const days = daysUntil(m.targetDate, today)
-              const isMissed = m.status === 'missed' ||
-                (m.status !== 'achieved' && days !== null && days < 0)
+              const isMissed = isMilestoneMissed(m, today)
 
               return (
                 <div className="ms-node" data-status={m.status === 'missed' || isMissed ? 'missed' : m.status} key={m.id}>

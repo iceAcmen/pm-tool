@@ -56,9 +56,9 @@ export function MeetingsView(props: {
     ), [meetings])
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const selected = sorted.find(m => m.id === selectedId) ?? sorted[0] ?? null
 
-  // 真过滤：搜索词 + 状态 segmented（只影响左侧列表可见性，不影响右侧已选中详情）
+  // 真过滤：搜索词 + 状态 segmented。selected 绑定 filtered 而非 sorted（S2-4/P0-3）：
+  // 仅在当前过滤结果内有效；过滤为空时右侧不残留上一条详情。
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | Meeting['status']>('all')
   const filtered = useMemo(() => {
@@ -70,6 +70,8 @@ export function MeetingsView(props: {
       return haystack.includes(q)
     })
   }, [sorted, query, statusFilter])
+
+  const selected = filtered.find(m => m.id === selectedId) ?? filtered[0] ?? null
 
   const decisionsTotal = meetings.reduce((n, m) => n + m.decisions.length, 0)
   const actionsTotal = meetings.reduce((n, m) => n + m.actions.length, 0)
@@ -170,8 +172,16 @@ export function MeetingsView(props: {
           ))}
         </div>
 
-        {/* 右：详情 */}
-        {selected && (
+        {/* 右：详情（过滤无匹配时显示空态，不残留上一条） */}
+        {filtered.length === 0 ? (
+          <section className="mt-detail mt-detail-empty">
+            <div className="mt-empty">
+              <div className="mt-ico"><Search size={20}/></div>
+              <h4>无匹配的会议</h4>
+              <p>当前搜索词或状态筛选没有匹配的会议。清除条件后即可恢复查看。</p>
+            </div>
+          </section>
+        ) : selected && (
           <section className="mt-detail">
             <div className="mt-detail-head">
               <h2>{selected.title || selected.id}</h2>

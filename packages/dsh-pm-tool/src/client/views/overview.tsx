@@ -18,6 +18,7 @@ import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import css from './overview.css?raw'
 import {
   localTodayIso,
+  isMilestoneMissed,
   scoreFromInputs as healthFromInputs,
   type HealthLamp,
 } from '../../core/derived.js'
@@ -131,7 +132,7 @@ export function Overview(props: {
     taskBlocked: tasks.filter(t => t.status === 'blocked').length,
     openHighRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'high').length,
     openCriticalRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'critical').length,
-    milestoneOverdue: milestones.filter(m => m.status !== 'achieved' && m.targetDate < today).length,
+    milestoneOverdue: milestones.filter(m => isMilestoneMissed(m, today)).length,
   }, settings)
 
   // ---- 派生计数（展示层聚合，不改变扣分/统计口径） ----
@@ -286,7 +287,7 @@ export function Overview(props: {
         {infoCells.map(c => (
           <div className="ov-info-cell" key={c.label}>
             <span className="ov-info-lab">{c.label}</span>
-            <span className="ov-info-val">{c.value}</span>
+            <span className="ov-info-val" title={c.value}>{c.value}</span>
           </div>
         ))}
       </section>

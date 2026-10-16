@@ -288,7 +288,12 @@ export function BoardEditor(props: BoardEditorProps) {
             const sel = selectedId === w.layout.i
             return <div key={w.layout.i}
               className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`}
-              onClick={(e) => { e.stopPropagation(); setSelectedId(w.layout.i) }}>
+              onClick={(e) => {
+                e.stopPropagation()
+                setSelectedId(w.layout.i)
+                // P0-7 / S3-3：选中卡片即打开右侧配置面板，自动收起左侧卡片库，二者不并存。
+                setDrawerOpen(false)
+              }}>
               <button type="button" className="pm-rgl-x" title="移除卡片" onClick={(e) => { e.stopPropagation(); removeWidget(w.layout.i) }}>×</button>
               {renderCard(w, true)}
             </div>

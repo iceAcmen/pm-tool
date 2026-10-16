@@ -389,7 +389,12 @@ function ProjectSwitcher({ projects, currentId, onPick }: {
               className={'pm-project-menu-item' + (selected ? ' is-selected' : '') + (i === activeIndex ? ' is-active' : '')}
               onMouseEnter={() => setActiveIndex(i)}
               onClick={() => choose(i)}>
-              <span className="pm-project-menu-name">{p.name}</span>
+              <span className="pm-project-menu-text">
+                <span className="pm-project-menu-name">{p.name}</span>
+                <span className="pm-project-menu-meta">
+                  {p.id}{p.startDate ? ` · ${p.startDate}` : ''}{p.owner ? ` · ${p.owner}` : ''}
+                </span>
+              </span>
               {selected && <Check size={15}/>}
             </button>
           })}
@@ -1846,7 +1851,12 @@ function ViewTab({
   children: ReactNode
   onClick: () => void
 }) {
-  return <button role="tab" aria-selected={active} className="pm-view-tab" onClick={onClick}>
+  const ref = useRef<HTMLButtonElement>(null)
+  // S2-5 / P0-1：窄窗横向标签条切换后，把当前标签滚入可视区（nearest，不跳动）。
+  useEffect(() => {
+    if (active) ref.current?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+  }, [active])
+  return <button ref={ref} role="tab" aria-selected={active} className="pm-view-tab" onClick={onClick}>
     {icon}{children}{count !== undefined && <span>{count}</span>}
   </button>
 }

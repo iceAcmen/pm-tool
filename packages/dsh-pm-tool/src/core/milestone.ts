@@ -63,6 +63,9 @@ export const milestoneUpdateSchema = z.strictObject(milestoneFields)
 export type Milestone = z.infer<typeof milestoneRecordSchema>
 export type MilestoneUpdate = z.infer<typeof milestoneUpdateSchema>
 
+/** 延期判定纯谓词的唯一实现见 derived.ts（zod-free，浏览器/服务端同源），此处再导出。 */
+export { isMilestoneMissed } from './derived.js'
+
 export function describeMilestoneValidation(error: z.ZodError): string {
   const labels: Record<string, string> = {
     projectId: '项目 ID',

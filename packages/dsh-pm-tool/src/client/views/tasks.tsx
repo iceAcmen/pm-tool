@@ -345,7 +345,7 @@ export function TaskTable(props: {
               <span className="pt-aname">{t.assignee}</span></>
             : <><span className="pt-av ghost">–</span><span className="pt-aname none">未指派</span></>}
         </div>
-        <div className="pt-cell">
+        <div className="pt-cell pt-pri-cell">
           <span className={`pt-pri ${t.priority === 'P0' ? 'p0' : ''}`}>{t.priority || 'P2'}</span>
         </div>
         <div className={`pt-cell pt-due${late ? ' late' : ''}${t.status === 'done' ? ' done' : ''}`}>

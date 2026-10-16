@@ -8,6 +8,7 @@
 import type { PmDomain } from './storage.js'
 import { projectIdSchema } from './project.js'
 import { todayIso } from './reminders.js'
+import { isMilestoneMissed } from './derived.js'
 
 export class StatsProjectNotFoundError extends Error {}
 
@@ -95,7 +96,7 @@ function statsForProject(
   const openRiskByImpact = zeroImpact()
   for (const record of openRisks) openRiskByImpact[record.impact] += 1
   const milestoneOverdue = milestones.filter(milestone =>
-    milestone.status !== 'achieved' && milestone.targetDate < today).length
+    isMilestoneMissed(milestone, today)).length
   const milestoneAchieved = milestones.filter(milestone => milestone.status === 'achieved').length
   const deliverableByStatus = zeroDeliverable()
   for (const deliverable of deliverables) deliverableByStatus[deliverable.status] += 1

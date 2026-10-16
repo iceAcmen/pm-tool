@@ -67,6 +67,22 @@ export function localTodayIso(now: Date = new Date()): string {
   return `${y}-${m}-${d}`
 }
 
+/**
+ * 里程碑是否「已延期」——唯一纯谓词，概览统计 / 时间轴卡片 / health·stats 同源复用，
+ * 消除「概览按原始 status、卡片按日期派生」两套口径（P0-2 / S2-2）。
+ *
+ * 判定：显式 `missed` 直接计延期；`achieved` 不延期；其余（planned/at_risk）在
+ * 目标日早于本地日历日 `today`（注入，避免 UTC 偏移）时计延期；无目标日诚实降级为不延期。
+ */
+export function isMilestoneMissed(
+  m: { status: string, targetDate?: string | null },
+  today: string,
+): boolean {
+  if (m.status === 'missed') return true
+  if (m.status === 'achieved') return false
+  return !!m.targetDate && m.targetDate < today
+}
+
 export interface PredecessorNode {
   id: string
   status: string
