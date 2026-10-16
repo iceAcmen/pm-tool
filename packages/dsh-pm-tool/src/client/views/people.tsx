@@ -17,7 +17,7 @@ import Users from 'lucide-react/dist/esm/icons/users.mjs'
 import css from './people.css?raw'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../../core/people-load.js'
 import { dateRange, daysFrom, taskDurationDays } from '../../core/gantt.js'
-import { localTodayIso } from '../../core/derived.js'
+import { localTodayIso, isTaskOverdue } from '../../core/derived.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import type { Project, Task, RiskIssue, View } from './types.js'
 
@@ -71,16 +71,26 @@ export function PeopleView(props: {
   const today = localTodayIso()
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set())
 
+  // ---- P1-2（S3-8）：仅叶子任务进入负载口径 ----
+  // WBS 父阶段（被其他任务以 parentId 引用的节点）是分组、不可分配、不进 open：
+  // 从负载报告与排期泳道的输入中一并剔除，保证「堆叠条 open 总数 == 展开明细叶子数」
+  // （两者同源同一份 leafTasks，core/people-load 四桶互斥汇总不变）。
+  const leafTasks = useMemo(() => {
+    const parentIds = new Set<string>()
+    for (const t of tasks) if (t.parentId) parentIds.add(t.parentId)
+    return tasks.filter(t => !parentIds.has(t.id))
+  }, [tasks])
+
   // ---- core 口径：负载报告（未分配置顶 people-load 已固定 people 序） ----
   const report = useMemo(
-    () => groupOpenTasksByAssignee(tasks, [{ id: project.id, name: project.name }], { settings }),
-    [tasks, project.id, project.name, settings],
+    () => groupOpenTasksByAssignee(leafTasks, [{ id: project.id, name: project.name }], { settings }),
+    [leafTasks, project.id, project.name, settings],
   )
 
-  // ---- 排期泳道：open 任务按归一 assignee 分组（与 core 同一归一函数） ----
+  // ---- 排期泳道：open 任务按归一 assignee 分组（与 core 同一归一函数，仅叶子） ----
   const byAssignee = useMemo(() => {
     const m = new Map<string, Task[]>()
-    for (const t of tasks) {
+    for (const t of leafTasks) {
       if (t.status === 'done' || (t.progress ?? 0) >= 100) continue
       const k = normalizePerson(t.assignee)
       const arr = m.get(k) ?? []
@@ -88,7 +98,7 @@ export function PeopleView(props: {
       m.set(k, arr)
     }
     return m
-  }, [tasks])
+  }, [leafTasks])
 
   // 时间轴：只吃 open 任务的真实起止；无日期任务不产生轴。
   const axis = useMemo(() => {
@@ -178,7 +188,8 @@ export function PeopleView(props: {
     return list
       .filter(t => t.startDate && t.dueDate)
       .map(t => {
-        const late = t.dueDate! < today
+        // 逾期判定统一走 derived.isTaskOverdue（status!=='done' 且 progress<100 且 dueDate<today）。
+        const late = isTaskOverdue(t, today)
         const soon = !late && t.dueDate && daysFrom(t.dueDate, today) <= report.withinDays
         const cls = late ? 'pp-gb-late' : t.status === 'in_progress' ? 'pp-gb-prog' : soon ? 'pp-gb-soon' : 'pp-gb-todo'
         return { id: t.id, title: `${t.code} ${t.title}`, cls, leftPct: pctOf(t.startDate!), widthPct: widthOf(t.startDate!, t.dueDate!) }

@@ -19,9 +19,11 @@ import css from './overview.css?raw'
 import {
   localTodayIso,
   isMilestoneMissed,
+  isTaskOverdue,
   scoreFromInputs as healthFromInputs,
   type HealthLamp,
 } from '../../core/derived.js'
+import { clampProgress } from '../../core/progress-derivation.js'
 import { computeKPI, buildAgenda } from '../../core/war-room.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import type { Project, Task, Milestone, RiskIssue } from './types.js'
@@ -128,7 +130,7 @@ export function Overview(props: {
   const kpi = computeKPI(tasks, milestones, riskIssues, today, undefined, settings)
   const health = healthFromInputs({
     taskTotal: tasks.length,
-    overdueTasks: tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done').length,
+    overdueTasks: tasks.filter(t => isTaskOverdue(t, today)).length,
     taskBlocked: tasks.filter(t => t.status === 'blocked').length,
     openHighRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'high').length,
     openCriticalRisk: riskIssues.filter(x => x.status !== 'closed' && x.impact === 'critical').length,
@@ -139,7 +141,7 @@ export function Overview(props: {
   const done = tasks.filter(isTaskDone).length
   const todoCount = tasks.filter(t => t.status === 'todo').length
   const blockedCount = tasks.filter(t => t.status === 'blocked').length
-  const overdueCount = tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done').length
+  const overdueCount = tasks.filter(t => isTaskOverdue(t, today)).length
   const achievedMiles = milestones.filter(m => m.status === 'achieved').length
   const plannedMiles = milestones.length - achievedMiles
   const unassigned = tasks.filter(t => !isTaskDone(t) && !t.assignee?.trim()).length
@@ -150,7 +152,9 @@ export function Overview(props: {
     .map(r => {
       const kids = tasks.filter(t => (t.code ?? '').startsWith(`${r.code}.`))
       const group = kids.length ? kids : [r]
-      const avg = Math.round(group.reduce((a, t) => a + (t.progress ?? 0), 0) / group.length)
+      // 累加前逐个 clamp 手工 progress（脏值如 123 / -5 不入平均），结果再收口到 0..100。
+      const rawAvg = group.reduce((a, t) => a + clampProgress(t.progress), 0) / group.length
+      const avg = clampProgress(Math.round(rawAvg))
       return { id: r.id, name: r.title, pct: r.status === 'done' ? 100 : avg }
     })
 

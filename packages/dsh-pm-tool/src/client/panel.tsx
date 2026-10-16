@@ -17,7 +17,7 @@ import {
   progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays,
 } from '../core/gantt.js'
-import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
+import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -911,7 +911,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                 const pname = (project!.name || project!.id).replace(/[\\/:*?"<>|\s]+/g, '-')
                 const rows: string[] = [`# ${project!.name}（${project!.id}）`, '']
                 const tasks = (snap.tasks ?? [] as { title: string, assignee?: string, progress?: number, dueDate?: string }[])
-                if (tasks.length) { rows.push('## 任务', ''); for (const t of tasks) rows.push(`- [ ] ${t.title}${t.assignee ? `（负责人：${t.assignee}）` : ''}${typeof t.progress === 'number' ? ` ${t.progress}%` : ''}${t.dueDate ? ` 截止 ${t.dueDate}` : ''}`) }
+                if (tasks.length) { rows.push('## 任务', ''); for (const t of tasks) rows.push(`- [ ] ${t.title}${t.assignee ? `（负责人：${t.assignee}）` : ''}${typeof t.progress === 'number' ? ` ${clampProgress(t.progress)}%` : ''}${t.dueDate ? ` 截止 ${t.dueDate}` : ''}`) }
                 downloadText(`pmtool-${pname}-${ts}.md`, rows.join('\n'), 'text/markdown')
                 setMessage(`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`)
               } catch (error) {
@@ -1347,9 +1347,10 @@ function ReminderCapsule({ tasks, milestones, disabled, run, onSaved, onOpenTask
   const items = useMemo<ReminderItem[]>(() => {
     const out: ReminderItem[] = []
     for (const t of tasks) {
-      if (t.status === 'done' || (t.progress ?? 0) >= 100 || !t.dueDate) continue
+      // 无截止日、已完成或进度已满不进提醒；逾期口径统一走 isTaskOverdue。
+      if (!t.dueDate || t.status === 'done' || (t.progress ?? 0) >= 100) continue
       const d = days(t.dueDate)
-      if (d <= range) out.push({ kind: 'task', id: t.id, title: t.title, owner: t.assignee, date: t.dueDate, d })
+      if (isTaskOverdue(t, today) || d <= range) out.push({ kind: 'task', id: t.id, title: t.title, owner: t.assignee, date: t.dueDate, d })
     }
     for (const m of milestones) {
       if (m.status === 'achieved') continue
@@ -2068,9 +2069,16 @@ type PlanStepView = CopilotStep & { checked: boolean }
 function softRisks(step: CopilotStep, task: Task | undefined, assignees: Set<string>, today: string): string[] {
   const out: string[] = []
   const p = (step.action.patch ?? {}) as Record<string, unknown>
+  if (typeof p.progress === 'number' && isProgressOutOfRange(p.progress)) out.push('进度超出 0-100 范围，需纠正')
   if (p.progress === 100 && p.status && p.status !== 'done') out.push('口径可能不一致：进度100但未标完成')
   if (p.status === 'done' && typeof p.progress === 'number' && p.progress < 100) out.push('口径可能不一致：已完成但进度未满')
-  if (p.status === 'in_progress' && task?.dueDate && task.dueDate < today) out.push('该任务已逾期')
+  // 逾期口径统一走 isTaskOverdue：合并提案 patch 与现有任务（status/progress/dueDate）。
+  const proposed = {
+    status: typeof p.status === 'string' ? p.status : task?.status,
+    progress: typeof p.progress === 'number' ? p.progress : task?.progress,
+    dueDate: task?.dueDate,
+  }
+  if (isTaskOverdue(proposed, today)) out.push('该任务已逾期')
   if (typeof p.assignee === 'string' && p.assignee && !assignees.has(p.assignee)) out.push('新负责人，确认不是错别字')
   return out
 }
@@ -2464,8 +2472,7 @@ function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose }: {
 
   const totalTasks = data.tasks.length
   const doneTasks = data.tasks.filter(task => task.status === 'done').length
-  const overdueTasks = data.tasks.filter(task =>
-    task.dueDate && task.dueDate < today && task.status !== 'done').length
+  const overdueTasks = data.tasks.filter(task => isTaskOverdue(task, today)).length
   const openRisks = data.riskIssues.filter(record => record.status !== 'closed').length
   const achieved = data.milestones.filter(milestone => milestone.status === 'achieved').length
   const completionRate = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0
@@ -2773,7 +2780,7 @@ function TaskForm({
     title: task?.title ?? '',
     startDate: task?.startDate ?? '',
     dueDate: task?.dueDate ?? '',
-    progress: task?.progress != null ? String(task.progress) : '0',
+    progress: String(clampProgress(task?.progress)),
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
   // PROD-11 前置依赖选择器：受控已选集合（初始 = 已落盘 predecessorIds）；

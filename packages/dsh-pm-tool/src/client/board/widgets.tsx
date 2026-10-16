@@ -6,7 +6,8 @@
 import React from 'react'
 import type { Snapshot, Task } from '../panel.js'
 import { groupOpenTasksByAssignee } from '../../core/people-load.js'
-import { deriveProgressMap } from '../../core/progress-derivation.js'
+import { deriveProgressMap, clampProgress } from '../../core/progress-derivation.js'
+import { isTaskOverdue } from '../../core/derived.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
 import { buildCompletionHistory } from '../../core/completion-history.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
@@ -117,8 +118,9 @@ const completionHero: WidgetDescriptor = {
       ['阻塞', blocked, TONE.blocked, 'blocked'],
     ]
     // 需要关注：逾期(按日期升序) > 阻塞 > 临期(7 天内，按日期升序)，最多 4 条。
+    // 逾期统一走 derived.isTaskOverdue（status!=='done' 且 progress<100 且 dueDate<today）。
     const overdue = data.tasks
-      .filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+      .filter(t => isTaskOverdue(t, today))
       .sort((a, b) => (a.dueDate! < b.dueDate! ? -1 : 1))
     const blockedTasks = data.tasks.filter(t => t.status === 'blocked')
     const dueSoon = data.tasks
@@ -277,7 +279,7 @@ const objectiveProgress: WidgetDescriptor = {
         {rows.map(t => {
           const p = progressMap.get(t.id)
           const frac = p && p.checklist ? p.checklist.checked / p.checklist.total : null
-          const pct = frac ? Math.round(frac * 100) : 0
+          const pct = clampProgress(frac ? Math.round(frac * 100) : 0)
           const color = pct >= 100 ? TONE.done : pct < 50 ? TONE.blocked : TONE.done
           return <div key={t.id} className="pm-obj-row">
             <div className="pm-obj-head"><span>{t.code} {t.title} · {t.assignee || '未分配'}</span><span className="pm-bento-m">{pct}%</span></div>
@@ -411,7 +413,7 @@ const weeklyPlan: WidgetDescriptor = {
     data.tasks.forEach(t => { if (t.status !== 'done' && t.dueDate && t.dueDate >= today) addDate(t.dueDate) })
     data.milestones.forEach(m => { if (m.targetDate && m.targetDate >= today) addDate(m.targetDate) })
     data.deliverables.forEach(d => { if (d.dueDate && d.dueDate >= today) addDate(d.dueDate) })
-    const overdue = data.tasks.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
+    const overdue = data.tasks.filter(t => isTaskOverdue(t, today))
     const od = overdue[0]
     const max = Math.max(1, ...buckets)
     const W = 720, H = 150, base = 120, bw = 30
@@ -511,10 +513,12 @@ const overdueSoon: WidgetDescriptor<WidgetConfig> = {
   defaultConfig: { projectScope: 'all' },
   render({ data, actions }) {
     const today = todayIso()
+    // 候选 = 未完成（status!=='done' 且 progress<100）且有截止；逾期走 isTaskOverdue 谓词，
+    // 临期 = 今天起 7 天内到期；其余丢弃。
     const rows = data.tasks
-      .filter(t => t.status !== 'done' && t.dueDate)
+      .filter(t => t.dueDate && t.status !== 'done' && (t.progress ?? 0) < 100)
       .map(t => ({
-        t, tone: t.dueDate! < today ? TONE.overdue : t.dueDate! <= addDays(today, 7) ? TONE.due : null,
+        t, tone: isTaskOverdue(t, today) ? TONE.overdue : t.dueDate! <= addDays(today, 7) ? TONE.due : null,
       }))
       .filter(r => r.tone)
       .sort((a, b) => (a.t.dueDate! < b.t.dueDate! ? -1 : 1))
@@ -567,7 +571,9 @@ const kpiMetric: WidgetDescriptor<WidgetConfig> = {
           <div className="pm-bento-foot">{r.error.message}</div>
         </div>
       }
-      display = config.numberFormat === 'pct' && typeof r.value === 'number' ? `${r.value}%` : String(r.value)
+      display = config.numberFormat === 'pct' && typeof r.value === 'number'
+        ? `${clampProgress(Math.round(r.value))}%`
+        : String(r.value)
     } else {
       const count = filtered.length
       display = config.numberFormat === 'pct'
@@ -618,7 +624,9 @@ const formulaCard: WidgetDescriptor<WidgetConfig> = {
         <div className="pm-bento-foot">{r.error.message}</div>
       </div>
     }
-    const display = config.numberFormat === 'pct' && typeof r.value === 'number' ? `${r.value}%` : String(r.value)
+    const display = config.numberFormat === 'pct' && typeof r.value === 'number'
+      ? `${clampProgress(Math.round(r.value))}%`
+      : String(r.value)
     return <div className="pm-bento-card">
       <div className="pm-bento-label">{config.title ?? '公式指标'}</div>
       <div className="pm-kpi-big">{display}</div>
