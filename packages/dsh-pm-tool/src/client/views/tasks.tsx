@@ -412,7 +412,7 @@ export function TaskTable(props: {
           <span className="pt-gstage-meta">{t.dueDate || '—'}</span>
         </div>
         <div className="pt-cell pt-prog">
-          <span className="pt-gstage-meta">{t.status === 'done' ? '已完成' : t.status === 'in_progress' ? '进行中' : t.progress ? `${t.progress}%` : '待开始'}</span>
+          <span className="pt-gstage-meta">{t.status === 'done' ? '已完成' : t.status === 'in_progress' ? '进行中' : t.progress ? `${clampProgress(t.progress)}%` : '待开始'}</span>
         </div>
         <div className="pt-cell pt-acts">
           <button className="pt-iconbtn" title="编辑阶段" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
