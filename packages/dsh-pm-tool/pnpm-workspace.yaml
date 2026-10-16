@@ -1,3 +1,9 @@
+# #24 修复：批准 esbuild（vite→vitest 依赖链）的构建脚本，使 CI 全新环境
+# `pnpm install --frozen-lockfile` 退出 0、不再报 ERR_PNPM_IGNORED_BUILDS。
+# pnpm 11.28.5 原生字段 allowBuilds（旧名 onlyBuiltDependencies 兼容）。
+allowBuilds:
+  esbuild: true
+
 minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-agent@0.2.1-alpha.2'
   - '@deepseek-ai/dsh-attachment@0.2.1-alpha.2'

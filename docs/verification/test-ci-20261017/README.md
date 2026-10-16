@@ -25,6 +25,12 @@
 - progress-meta.test.ts（5）：客观/人工双轨、manual 不污染 objective、无信号 none 不伪造、清除回落、仅人工。
 - copilot-validate.test.ts（10）：task.update 白名单/枚举/日期顺序，milestone/risk/issue/deliverable/meeting create/update 交叉约束，未知 op 拒。
 
+## 洁净安装（CI Install deps 关键证据）
+
+- 临时目录仅放 `package.json` / `pnpm-lock.yaml` / `pnpm-workspace.yaml`，跑 `pnpm install --frozen-lockfile`：**退出 0**、无 `ERR_PNPM_IGNORED_BUILDS`、`pnpm ignored-builds` = None、esbuild postinstall Done。
+- 主工作树 `pnpm install --frozen-lockfile`：**退出 0**。
+- 修复字段：`packages/dsh-pm-tool/pnpm-workspace.yaml` 的 pnpm 11.28.5 原生 `allowBuilds: { esbuild: true }`（批准 vite→vitest 依赖链里 esbuild 的构建脚本）；未用只写本机的 `pnpm approve-builds`，lockfile 无需变化。
+
 ## 限制（如实）
 
 - 本机无 `gh` 登录，未在 GitHub 端观测 Actions 实跑；CI 流程（`.github/workflows/ci.yml`）已配置，本地等价命令全绿。
