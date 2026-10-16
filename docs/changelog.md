@@ -8,6 +8,21 @@
 
 ---
 
+## GI-CP 关键路径只读高亮（CPM，零 schema/零写派生）（2026-10-16，平台：doubao-work）
+
+> 状态：**确定性纯函数 + 真实 dsh 宿主 Chrome 隔离实例均通过，已核验**。`pnpm build`=0；全量 guard **70/70、失败 0、资产污染 0**（before/after=162/162）；不新增 zod schema、不改 storage.ts、不回写派生字段、不引入 vitest。
+
+- **core 纯函数（`src/core/gantt.ts` 新增 `criticalPath`）**
+  - 基于 `predecessorIds` 依赖图（唯一真源）做 AON 正向/反向遍历，算 ES/EF/LS/LF 与总时差 slack（天偏移，工期取既有 startDate/dueDate 含端点、FS 零间隔、不建模 lag）；**slack=0 即关键路径**。确定性纯函数：无随机、无墙钟、无 I/O、不调用 run/execute。
+  - 诚实降级：成环（3 色迭代 DFS，不死循环/不栈溢出）环上节点标 `inCycle`、跳过正/反遍历、不高亮、**不自动打断/改期**；缺 startDate/dueDate 标 `missingDate`、不参与、**不补日期/不顺延**；自指/悬空边计数剔除；多连通分量（并查集）各自取组件最大 EF 做反向，短分量不被全局终点挤出假正时差；多结束任务汇点 LF=组件最大 EF、内部取 min 传播；空输入不抛。
+- **甘特只读高亮（`src/client/views/gantt.tsx` + `gantt.css`）**
+  - 关键任务条加 `pm-gantt-bar--critical`（2px 强调色描边环 + 淡衬底，box-shadow ring 不被 overdue/blocked border-color 覆盖）；关键依赖边 `pm-gantt-link-path--critical` 加粗强调色描边 + 独立强调色箭头；工具条图例「关键路径 N」；成环徽标「循环不可计算」、缺日期徽标「缺日期段已跳过」（均带 tooltip 说明原因）；条 tooltip 追加「关键路径（总时差 0 天）」；左标签「关键」小徽标。
+  - 配色全走 dsw 别名 token（`--c-prog`/`--c-late`/`--c-block`，底层映射 `--dsw-*`），**零硬编码 hex**；跟随 `body[data-ds-dark-theme]`，浅/深两态均清晰。高亮纯视觉，不触发任何 run/execute 写命令。
+- **验证**
+  - 新增 `scripts/verify-critical-path.mjs`：线性链 A→B→C 全排期 ES/EF/LS/LF/slack 与关键边、并行时差分支非关键、成环不崩/不高亮、缺日期降级、多分量、自指/悬空、空输入、同输入两次逐字节一致、core/gantt.ts 零写静态 grep（无 run(/execute(/fs 写）；`verify-gui-contract.mjs` 补关键路径静态钩子。
+  - 真实 Chrome headless 隔离实例（独立 DSH_HOME + 独立 storage/备份 + 端口 **3131**，正式 3080=PID 66364 全程未变、3091/3131 无残留）：GI-CP-01 链三条高亮/关键边 2/3/图例/tooltip；GI-CP-02 成环不高亮+「循环不可计算」；GI-CP-03 缺日期无条+「未排期」+徽标；GI-CP-04 深色趟零写哈希逐字节一致、静态零写；GI-CP-05 拖链尾 t-0003（10-10~10-14→10-13~10-17）前置 t-0001/t-0002 全记录逐字节不变、progress/predecessorIds 不动、不自动顺延。浅/深/拖后截图见 `docs/verification/gui-critical-path-20261016/`。
+- **边界**：仅只读显示；关键路径**自动排期/压缩/改期**属产品「甘特B 长期观望」，本批不做；vitest/E2E/CI 留 #24；不配置生产 Key。
+
 ## 看板 P1：拖拽像素落列 / 筛选二次级联 / 迁移链补全 / 窄卡省略（2026-10-16，平台：doubao-work）
 
 > 状态：**确定性验收 + 真实 dsh 宿主验证均通过，已核验**。`pnpm build`=0；全量 guard 68/68、0 污染；各块外部 require 仅 react/react-dom/jsx-runtime。

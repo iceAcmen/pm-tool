@@ -13,7 +13,7 @@ import { localTodayIso } from '../../core/derived.js'
 import {
   dateRange, todayOffset, daysFrom, shiftDatesByDrag, progressFill,
   barLabelPolicy, shortDate, dependencyEdges, parentBarRange, milestoneOffset,
-  taskDurationDays, routeEdge,
+  taskDurationDays, routeEdge, criticalPath,
 } from '../../core/gantt.js'
 import { deriveProgressMap, checklistFraction, type TaskProgress } from '../../core/progress-derivation.js'
 import { sampleGanttTicks } from '../../core/ui-feedback.js'
@@ -107,6 +107,13 @@ export function GanttView(props: {
   }
   const edges = dependencyEdges(tasks, axis.start, PX, { rowHeight: ROW_H })
 
+  // ---- 关键路径（只读 CPM，纯派生，零写；成环/缺日期诚实降级，不打断/不补日期） ----
+  const cpm = criticalPath(tasks)
+  const criticalIds = new Set(cpm.criticalPath)
+  const criticalEdgeKeys = new Set(
+    cpm.edges.filter(e => e.onCriticalPath).map(e => `${e.fromId}->${e.toId}`),
+  )
+
   const onPointerDownBar = (e: React.PointerEvent, task: Task) => {
     if (saving || disabled) return // 保存中/禁用态禁拖：防并发连拖同一任务覆盖
     draggedRef.current = false
@@ -180,17 +187,19 @@ export function GanttView(props: {
   }
 
   // ---- 依赖路由：紧贴 L / 正常 L / 重叠绕行；同一前置的多条边错峰不叠线 ----
-  const edgeRoutes: { key: string, d: string, title: string }[] = []
+  const edgeRoutes: { key: string, d: string, title: string, critical: boolean }[] = []
   {
     const outCount = new Map<string, number>()
     for (const e of edges.edges) {
       const n = outCount.get(e.fromId) ?? 0
       outCount.set(e.fromId, n + 1)
       const r = routeEdge({ ...e, bRight: geomOf.get(e.toId)?.rightX }, { lane: n, pxPerDay: PX })
+      const critical = criticalEdgeKeys.has(`${e.fromId}->${e.toId}`)
       edgeRoutes.push({
         key: `${e.fromId}-${e.toId}-${n}`,
         d: r.d,
-        title: `前置 ${byId.get(e.fromId)?.title ?? e.fromId} → ${byId.get(e.toId)?.title ?? e.toId}`,
+        critical,
+        title: `前置 ${byId.get(e.fromId)?.title ?? e.fromId} → ${byId.get(e.toId)?.title ?? e.toId}${critical ? '（关键路径）' : ''}`,
       })
     }
   }
@@ -207,9 +216,10 @@ export function GanttView(props: {
     const policy = barLabelPolicy(widthDays, PX)
     const overdue = !done && !range.derived && t.dueDate && t.dueDate < today
     const blocked = !done && t.status === 'blocked'
+    const isCritical = !range.derived && criticalIds.has(t.id)
     const preNames = (t.predecessorIds ?? [])
       .map(pid => byId.get(pid)?.title).filter(Boolean).join('、')
-    const aria = `任务 ${t.title}：${range.start} ~ ${range.end}，工期 ${widthDays} 天，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}。按回车打开详情。`
+    const aria = `任务 ${t.title}：${range.start} ~ ${range.end}，工期 ${widthDays} 天，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。按回车打开详情。`
     const ghost = preview && preview.id === t.id
       ? shiftDatesByDrag(range.start, range.end, preview.shiftDays * PX, PX)
       : null
@@ -218,6 +228,7 @@ export function GanttView(props: {
       'pm-gantt-bar',
       stCls,
       range.derived ? 'pm-gantt-bar--parent' : '',
+      isCritical ? 'pm-gantt-bar--critical' : '',
       overdue ? 'is-overdue' : '',
       blocked ? 'is-blocked' : '',
     ].filter(Boolean).join(' ')
@@ -228,7 +239,7 @@ export function GanttView(props: {
       role="button"
       aria-label={aria}
       style={{ left: `${leftDays * PX}px`, width: `${widthDays * PX}px`, top: `${(ROW_H - BAR_H) / 2}px` }}
-      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}`}
+      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}${isCritical ? ' · 关键路径（总时差 0 天）' : ''}`}
       onClick={() => openBar(t)}
       onKeyDown={(e) => onKeyDownBar(e, t)}
       onPointerDown={(e) => { if (!range.derived) onPointerDownBar(e, t) }}
@@ -267,6 +278,21 @@ export function GanttView(props: {
         ))}
       </div>
       <label className="pm-switch"><input type="checkbox" checked={showDeps} onChange={e => setShowDeps(e.target.checked)} /><span>依赖线</span></label>
+      {cpm.criticalPath.length > 0 && (
+        <span className="pm-gantt-legend" title="关键路径：总时差为 0 的任务串，决定项目最短工期；纯只读派生，不写库、不改期。">
+          <span className="pm-gantt-legend-swatch pm-gantt-legend-swatch--critical" />关键路径 {cpm.criticalPath.length}
+        </span>
+      )}
+      {cpm.hasCycle && (
+        <span className="pm-gantt-warn pm-gantt-warn--cycle" title={cpm.warnings.find(w => w.includes('成环')) ?? ''}>
+          循环不可计算
+        </span>
+      )}
+      {cpm.hasMissingDate && (
+        <span className="pm-gantt-warn pm-gantt-warn--missing" title={cpm.warnings.find(w => w.includes('缺少开始')) ?? ''}>
+          缺日期段已跳过
+        </span>
+      )}
       <button className="pm-chip" onClick={locateToday}>◉ 定位到今天</button>
       <button className="pm-chip pm-chip-primary" onClick={onCreate}>＋ 新建任务</button>
     </div>
@@ -280,11 +306,13 @@ export function GanttView(props: {
           const tprog = progressMap.get(t.id)
           const frac = checklistFraction(tprog ?? emptyProgress)
           const done = t.status === 'done'
+          const crit = !!er && criticalIds.has(t.id)
           return (
-            <div key={t.id} className={`pm-gantt-label-row ${done ? 'is-done' : ''} ${t.parentId ? '' : 'is-parent'}`}
+            <div key={t.id} className={`pm-gantt-label-row ${done ? 'is-done' : ''} ${t.parentId ? '' : 'is-parent'} ${crit ? 'is-critical' : ''}`}
               style={{ height: `${ROW_H}px`, paddingLeft: `${10 + depth * 12}px` }}>
               <span className="pm-gantt-label-code">{t.code}</span>
               <span className="pm-gantt-label-title">{t.title}</span>
+              {crit && <span className="pm-gantt-critical-tag">关键</span>}
               {frac && <span className="pm-gantt-label-frac">{frac}</span>}
               {!er && <span className="pm-gantt-unscheduled">未排期</span>}
             </div>
@@ -349,11 +377,19 @@ export function GanttView(props: {
                     markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path className="pm-gantt-link-arrow" d="M 0 0 L 10 5 L 0 10 z" />
                   </marker>
+                  <marker id="pm-gantt-link-arrow-critical" viewBox="0 0 10 10" refX="8" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path className="pm-gantt-link-arrow pm-gantt-link-arrow--critical" d="M 0 0 L 10 5 L 0 10 z" />
+                  </marker>
                 </defs>
                 {edgeRoutes.map(r => (
                   <g key={r.key}>
                     <title>{r.title}</title>
-                    <path d={r.d} className="pm-gantt-link-path" markerEnd="url(#pm-gantt-link-arrow)" />
+                    <path
+                      d={r.d}
+                      className={`pm-gantt-link-path${r.critical ? ' pm-gantt-link-path--critical' : ''}`}
+                      markerEnd={r.critical ? 'url(#pm-gantt-link-arrow-critical)' : 'url(#pm-gantt-link-arrow)'}
+                    />
                   </g>
                 ))}
               </svg>

@@ -1,0 +1,81 @@
+{
+  "builtClientSha256": "c829fb4a7ba2afa603f869bf8480902cd260f073a53d4c7e5aee450ce5e58ae9",
+  "servedBundles": [
+    {
+      "u": "http://127.0.0.1:3131/plugins/??dsh-our-free-model/client.js,@deepseek-ai/dsh-typert-registry/client.js,@deepseek-ai/dsh-api-session-controller/client.js,@deepseek-ai/dsh-client-connection/client.js,@deepseek-ai/dsh-session-log-export/client.js,@deepseek-ai/dsh-api-workspace-controller/client.js,@deepseek-ai/dsh-client-ui-deliverables/client.js,dsh-pm-tool/client.js,@deepseek-ai/dsh-client-ui-directory-picker-native/client.js&rev=fbecf2723547",
+      "status": 200,
+      "bytes": 1690787,
+      "sha": "49e05a4b6487d2943f55103506945fe471a1e3ed2aa9899d47e4874fc4325c42",
+      "hasCritical": true
+    }
+  ],
+  "mode": "dark",
+  "results": [
+    {
+      "k": "CP01.linearChain.criticalBars",
+      "ok": true,
+      "detail": "critical=t-0001,t-0002,t-0003 all=t-0001,t-0002,t-0003,t-0004,t-0005,t-0006"
+    },
+    {
+      "k": "CP01.slackBranch.notCritical",
+      "ok": true,
+      "detail": "t-0004(时差分支) critical=false"
+    },
+    {
+      "k": "CP01.legend.present",
+      "ok": true,
+      "detail": "legend=\"关键路径 3\""
+    },
+    {
+      "k": "CP01.criticalEdgeHighlight",
+      "ok": true,
+      "detail": "criticalEdges=2/3"
+    },
+    {
+      "k": "CP01.tooltip.marked",
+      "ok": true,
+      "detail": "t-0001 title=\"需求分析（2026-10-01 ~ 2026-10-03）· 进度 — · 负责人 甲 · 关键路径（总时差 0 天）\""
+    },
+    {
+      "k": "CP01.bundle.servesCritical",
+      "ok": true,
+      "detail": "bundles=200/1690787B/critical=true"
+    },
+    {
+      "k": "CP02.cycle.notHighlighted",
+      "ok": true,
+      "detail": "cycle t-0005/t-0006 critical=none"
+    },
+    {
+      "k": "CP02.cycle.warnChip",
+      "ok": true,
+      "detail": "chip=\"循环不可计算\""
+    },
+    {
+      "k": "CP03.missingDate.noBar",
+      "ok": true,
+      "detail": "t-0007 bar=false unscheduled=未排期"
+    },
+    {
+      "k": "CP03.missingDate.warnChip",
+      "ok": true,
+      "detail": "chip=\"缺日期段已跳过\""
+    },
+    {
+      "k": "DARK.nativeTheme",
+      "ok": true,
+      "detail": "body/html data-ds-dark-theme=true"
+    },
+    {
+      "k": "DARK.criticalStillVisible",
+      "ok": true,
+      "detail": "dark critical=t-0001,t-0002,t-0003"
+    },
+    {
+      "k": "console.clean",
+      "ok": true,
+      "detail": "errors=0 "
+    }
+  ],
+  "consoleErrors": []
+}

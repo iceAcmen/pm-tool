@@ -76,4 +76,12 @@ assert.match(ganttView, /const effectiveRange = \(t: Task\)/, 'GanttView 应定�
 assert.match(ganttView, /const er = effectiveRange\(t\)/, '左标签日期应取 effectiveRange（与派生父条一致）')
 assert.match(ganttView, /renderBar\(t, range\)/, '画布条应取 effectiveRange（父=子 min~max 派生，不读自身存储日期）')
 
+// ---------- GI-CP-01 关键路径只读高亮静态钩子 ----------
+assert.match(ganttView, /criticalPath\(tasks\)/, '甘特应调用 core criticalPath 纯派生计算关键路径')
+assert.match(ganttView, /pm-gantt-bar--critical/, '关键任务条应带 pm-gantt-bar--critical 高亮 class')
+assert.match(ganttView, /pm-gantt-link-path--critical/, '关键依赖边应带 pm-gantt-link-path--critical 描边 class')
+assert.match(ganttView, /pm-gantt-legend/, '甘特应渲染关键路径图例说明')
+assert.match(ganttView, /循环不可计算|成环/, '成环降级应有「循环不可计算」诚实提示')
+assert.match(ganttView, /缺日期/, '缺日期降级应有诚实提示（不自动补日期）')
+
 console.log('通过：表单前置多选/repo/branch、任务页等待前置、概览健康环与 repo 链接、/pm doctor 与 /pm health 静态钩子齐备；甘特可聚焦/直显/进度层/依赖箭头/本地今日线/零写契约齐备。')

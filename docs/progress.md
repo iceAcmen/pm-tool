@@ -2,9 +2,18 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-16（doubao-work **看板 P1：拖拽像素落列 / 筛选二次级联 / 迁移链补全 / 窄卡省略，已核验**：卡片库拖入按松手像素落列（非末尾），真实浏览器原生拖拽落点中部；修复卡片库打开时栅格被挤压塌缩（工具条独占一行、左侧抽屉、右侧栅格）；切换实体后筛选字段/操作符/值整体重置；persist 迁移升级为按版本有序链（保留 v1，新增 verify-migration）；窄卡项目名单行省略 + title 全名。build=0、全量 guard 68/68、0 污染；外部 require 仅 react 系。证据 docs/verification/p1-*.png。P0 此前已完成并推送）
+最后更新：2026-10-16（doubao-work **GI-CP 关键路径只读高亮（CPM）**：core 纯函数 criticalPath 算 ES/EF/LS/LF/slack、slack=0 即关键路径；成环/缺日期/多分量/自指悬空诚实降级不打断不补日期；甘特关键条+关键边只读高亮、图例、循环/缺日期徽标，配色走 dsw token 浅深两态；零 schema/零写派生。build=0、全量 guard 70/70、0 污染；隔离 3131 真实 Chrome 浅/深/拖链尾实测，证据 docs/verification/gui-critical-path-20261016/）
 
-## 当前阶段：看板 P1 拖拽落列/筛选级联/迁移链/窄卡省略·已核验（2026-10-16，doubao-work）
+## 当前阶段：GI-CP 关键路径只读高亮 CPM·已核验（2026-10-16，doubao-work）
+
+- **core 纯函数 `criticalPath(tasks)`（src/core/gantt.ts）**：predecessorIds 依赖图 AON 正/反向遍历，ES/EF/LS/LF（相对组件起点天偏移）、slack=LS−ES，**slack=0 → 关键路径**；确定性、无 I/O、无随机、无墙钟、不调用 run/execute、不回写派生字段、零 schema。
+- **诚实降级**：成环 3 色 DFS 标 inCycle、跳过遍历不高亮、不自动打断/改期；缺日期标 missingDate、不补日期/不顺延；自指/悬空计数剔除；多连通分量（并查集）各自取组件最大 EF，短分量无假正时差；多结束汇点 LF=组件最大 EF、内部 min 传播；空输入不抛。
+- **甘特只读高亮（gantt.tsx/gantt.css）**：关键条 `pm-gantt-bar--critical`（2px 强调环+淡衬底，ring 不被 overdue/blocked 覆盖）、关键边 `pm-gantt-link-path--critical` 加粗+强调箭头、图例「关键路径 N」、「循环不可计算」「缺日期段已跳过」徽标与 tooltip、条 tooltip「关键路径（总时差 0 天）」、左标签「关键」徽标；配色全走 dsw 别名 token（底层 `--dsw-*`）零 hex，跟随 `body[data-ds-dark-theme]`。
+- **验收**：`pnpm build`=0；`verify-isolation.mjs` **70/70 通过、失败 0、污染 0**（before/after=162/162）；新增 `verify-critical-path.mjs`（线性链数值/时差分支/成环/缺日期/多分量/自指悬空/空输入/确定性/零写静态 grep），`verify-gui-contract.mjs` 补静态钩子。真实 Chrome headless 隔离 3131（独立 DSH_HOME/存储/备份，正式 3080=PID 66364 未变）：GI-CP-01 链三条+关键边 2/3+图例+tooltip；CP-02 成环不高亮；CP-03 缺日期无条+未排期；CP-04 深色趟零写哈希一致；CP-05 拖链尾 t-0003 前置 t1/t2 逐字节不变、progress/pred 不动、不顺延。证据 `docs/verification/gui-critical-path-20261016/`（10-light / 11-after-drag / 12-dark）。
+- **边界**：只读显示；自动排期/压缩/改期（甘特B 长期观望）本批不做；vitest/E2E/CI 留 #24；不配生产 Key。
+- **下一步**：看板 P2（联动过滤/卡片元素增强/completedDate 历史趋势 UI/markdown 增强）→ 9 页面重设计；GI-WEB-14 真 390 窄窗目视、prod 真实 Key 仍 MANUAL_PENDING。
+
+## 历史阶段：看板 P1 拖拽落列/筛选级联/迁移链/窄卡省略·已核验（2026-10-16，doubao-work）
 
 - **P1-① 拖拽像素落列**：编辑器 RGL 启用 isDroppable + onDrop，按松手像素换算的 layoutItem.x/y 落位（点 ＋ 仍追加末尾兜底）；真实浏览器拖拽「任务状态环」落栅格中部、非末尾；onDrop 增加坐标兜底防御。修复阻断缺陷：卡片库原 in-flow 挤压栅格到 7px，改为工具条独占一行、卡片库为左侧窄抽屉、栅格在右侧保持真实宽度并正确重算 colWidth。
 - **P1-② 切实体二次级联**：切换数据源实体后，字段选项更新、已选筛选字段/操作符/值整体清空，不残留旧实体筛选；字段→操作符按类型联动。

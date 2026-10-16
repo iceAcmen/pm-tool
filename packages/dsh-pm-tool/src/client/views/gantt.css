@@ -203,3 +203,57 @@
 
 /* ---------------- 状态行 ---------------- */
 .pm-gantt-root .pm-gantt-hint { margin: 0 var(--sp-6) var(--sp-4); font-size: var(--t-12); color: var(--muted); }
+
+/* ---------------- 关键路径（只读 CPM 高亮；色全走 dsw 别名 token，浅深跟随） ---------------- */
+/* 关键任务条：强调色加粗描边环 + 淡色衬底，不改变状态填充；ring 用 box-shadow，
+   即便 overdue/blocked 改写 border-color，关键环仍在。 */
+.pm-gantt-root .pm-gantt-bar--critical {
+  border-width: 2px;
+  border-color: var(--c-prog);
+  background: color-mix(in srgb, var(--c-prog) 22%, transparent);
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--c-prog) 55%, transparent);
+  font-weight: 700;
+}
+.pm-gantt-root .pm-gantt-bar--critical .pm-gantt-bar-dates,
+.pm-gantt-root .pm-gantt-bar--critical .pm-gantt-bar-pct { color: var(--ink); }
+/* 关键依赖边：加粗强调色描边 + 强调色箭头，普通边保持 muted 灰 */
+.pm-gantt-root .pm-gantt-link-path--critical {
+  stroke: var(--c-prog);
+  stroke-width: 2.5;
+}
+.pm-gantt-root .pm-gantt-link-arrow--critical { fill: var(--c-prog); }
+
+/* 工具栏图例 / 降级徽标 */
+.pm-gantt-root .pm-gantt-legend {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--t-11); font-weight: 600; color: var(--ink-2);
+  border: 1px solid var(--line); border-radius: var(--r-xs);
+  padding: 3px 8px; background: var(--surface-2);
+}
+.pm-gantt-root .pm-gantt-legend-swatch {
+  width: 10px; height: 10px; border-radius: 3px; display: inline-block;
+}
+.pm-gantt-root .pm-gantt-legend-swatch--critical {
+  background: var(--c-prog);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-prog) 55%, transparent);
+}
+.pm-gantt-root .pm-gantt-warn {
+  display: inline-flex; align-items: center;
+  font-size: var(--t-11); font-weight: 600; border-radius: var(--r-xs); padding: 3px 8px;
+  border: 1px solid; cursor: help; white-space: nowrap;
+}
+.pm-gantt-root .pm-gantt-warn--cycle {
+  color: var(--c-late); border-color: color-mix(in srgb, var(--c-late) 45%, transparent);
+  background: color-mix(in srgb, var(--c-late) 12%, transparent);
+}
+.pm-gantt-root .pm-gantt-warn--missing {
+  color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 45%, transparent);
+  background: color-mix(in srgb, var(--c-block) 12%, transparent);
+}
+/* 左标签列关键任务：加粗 + 小「关键」徽标 */
+.pm-gantt-root .pm-gantt-label-row.is-critical { font-weight: 700; }
+.pm-gantt-root .pm-gantt-critical-tag {
+  flex: 0 0 auto; font-size: var(--t-10); font-weight: 700; color: var(--c-prog);
+  border: 1px solid color-mix(in srgb, var(--c-prog) 45%, transparent);
+  border-radius: var(--r-xs); padding: 0 5px; margin-left: auto;
+}

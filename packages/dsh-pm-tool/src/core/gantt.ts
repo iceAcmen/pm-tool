@@ -389,3 +389,267 @@ export function routeEdge(
   ].join(' ')
   return { d, kind: gap < 0 ? 'overlap-tight' : 'tight', channelX: ch, endX: x2, endY: y2 }
 }
+
+// ---------- 关键路径 CPM（AON 活动节点，只读纯函数） ----------
+// 红线（GI-CP-01~05）：只算不写——本函数无 I/O、不调用任何 run/execute、不回写派生字段；
+// 成环不打断、缺日期不补、不自动顺延。ES/EF/LS/LF 为「相对组件起点的整数天偏移」，
+// 工期取既有 startDate/dueDate（含端点，单日=1），不建模 lag（FS 零间隔），确定性无随机无墙钟。
+
+export interface CpmTaskInput {
+  id: string
+  startDate?: string
+  dueDate?: string
+  predecessorIds?: string[]
+}
+
+export interface CpmNode {
+  id: string
+  /** 工期天数（含端点）；缺日期为 null（不参与计算）。 */
+  durationDays: number | null
+  /** 最早开始 / 最早完成（天偏移）；缺日期或成环为 null。 */
+  es: number | null
+  ef: number | null
+  /** 最晚开始 / 最晚完成（天偏移）；缺日期或成环为 null。 */
+  ls: number | null
+  lf: number | null
+  /** 总时差（LS-ES，天）；缺日期或成环为 null。 */
+  slack: number | null
+  /** 总时差=0 → 在关键路径上。 */
+  onCriticalPath: boolean
+  /** 命中成环节点（不参与正/反遍历，不高亮，不自动打断）。 */
+  inCycle: boolean
+  /** 缺 startDate 或 dueDate（不参与，不高亮，不自动补日期）。 */
+  missingDate: boolean
+}
+
+export interface CpmEdge {
+  fromId: string
+  toId: string
+  /** 两端都在关键路径上 → 该连线属关键路径（用于描边高亮）。 */
+  onCriticalPath: boolean
+}
+
+export interface CpmReport {
+  nodes: Record<string, CpmNode>
+  /** 关键路径任务 id，按 ES 升序（并列按 id 字典序，保证确定性）。 */
+  criticalPath: string[]
+  edges: CpmEdge[]
+  skipped: { selfLoop: number, dangling: number, cycle: number, missingDate: number }
+  cycleTaskIds: string[]
+  missingDateTaskIds: string[]
+  danglingPredecessors: { taskId: string, missingId: string }[]
+  hasCycle: boolean
+  hasMissingDate: boolean
+  /** 人类可读降级说明（tooltip / 空态用），只陈述事实，不做修复建议式写动作。 */
+  warnings: string[]
+}
+
+/** 在原始 predecessorIds 图（前置→后继）上找成环节点集合（3 色迭代 DFS，不成栈溢出/不死循环）。 */
+function findCpmCycleIds(tasks: CpmTaskInput[]): Set<string> {
+  const byId = new Map(tasks.map(t => [t.id, t]))
+  const succ = new Map<string, string[]>()
+  for (const t of tasks) {
+    for (const pid of t.predecessorIds ?? []) {
+      if (pid === t.id || !byId.has(pid)) continue // 自指/悬空不入环检测图
+      const arr = succ.get(pid) ?? []
+      arr.push(t.id)
+      succ.set(pid, arr)
+    }
+  }
+  const WHITE = 0, GRAY = 1, BLACK = 2
+  const color = new Map(tasks.map(t => [t.id, WHITE]))
+  const cycle = new Set<string>()
+  for (const start of tasks) {
+    if (color.get(start.id) !== WHITE) continue
+    color.set(start.id, GRAY)
+    const stack: [string, number][] = [[start.id, 0]]
+    while (stack.length) {
+      const top = stack[stack.length - 1]
+      const list = succ.get(top[0]) ?? []
+      if (top[1] >= list.length) {
+        color.set(top[0], BLACK)
+        stack.pop()
+        continue
+      }
+      const next = list[top[1]]
+      top[1]++
+      const c = color.get(next) ?? WHITE
+      if (c === GRAY) {
+        for (let k = stack.length - 1; k >= 0; k--) {
+          cycle.add(stack[k][0])
+          if (stack[k][0] === next) break
+        }
+      } else if (c === WHITE) {
+        color.set(next, GRAY)
+        stack.push([next, 0])
+      }
+    }
+  }
+  return cycle
+}
+
+/**
+ * 关键路径只读计算。诚实降级：
+ *  - 成环：环上节点跳过正/反遍历，标 inCycle，不自动打断/改期；
+ *  - 缺日期：该节点不参与，标 missingDate，不自动补日期/顺延；
+ *  - 悬空/自指：边跳过并计数；
+ *  - 多个连通分量：按分量各自取组件最大 EF 做反向遍历，短分量不会被全局终点挤出假时差；
+ *  - 多结束任务：各汇点 LF=组件最大 EF，内部取 min 传播。
+ */
+export function criticalPath(tasks: CpmTaskInput[]): CpmReport {
+  const byId = new Map(tasks.map(t => [t.id, t]))
+  const cycle = findCpmCycleIds(tasks)
+  const skipped = { selfLoop: 0, dangling: 0, cycle: 0, missingDate: 0 }
+  const cycleTaskIds: string[] = []
+  const missingDateTaskIds: string[] = []
+  const danglingPredecessors: { taskId: string, missingId: string }[] = []
+
+  const nodes: Record<string, CpmNode> = {}
+  const dated = new Set<string>()
+  for (const t of tasks) {
+    const missingDate = !t.startDate || !t.dueDate
+    const inCycle = cycle.has(t.id)
+    if (missingDate) { skipped.missingDate++; missingDateTaskIds.push(t.id) }
+    if (inCycle) cycleTaskIds.push(t.id)
+    nodes[t.id] = {
+      id: t.id,
+      durationDays: missingDate ? null : taskDurationDays(t.startDate as string, t.dueDate as string),
+      es: null, ef: null, ls: null, lf: null, slack: null,
+      onCriticalPath: false, inCycle, missingDate,
+    }
+    if (!missingDate && !inCycle) dated.add(t.id)
+  }
+
+  // 合法边：两端都已排期、都不在环内；自指/悬空/成环/缺日期在此剔除并计数。
+  const adj = new Map<string, string[]>()   // pred -> succ（合法）
+  const radj = new Map<string, string[]>() // succ -> pred（合法）
+  const edges: CpmEdge[] = []
+  const addEdge = (p: string, s: string) => {
+    const a = adj.get(p) ?? []; a.push(s); adj.set(p, a)
+    const b = radj.get(s) ?? []; b.push(p); radj.set(s, b)
+    edges.push({ fromId: p, toId: s, onCriticalPath: false })
+  }
+  for (const t of tasks) {
+    for (const pid of t.predecessorIds ?? []) {
+      if (pid === t.id) { skipped.selfLoop++; continue }
+      const p = byId.get(pid)
+      if (!p) { skipped.dangling++; danglingPredecessors.push({ taskId: t.id, missingId: pid }); continue }
+      if (cycle.has(pid) || cycle.has(t.id)) { skipped.cycle++; continue }
+      if (!dated.has(pid) || !dated.has(t.id)) { skipped.missingDate++; continue }
+      addEdge(pid, t.id)
+    }
+  }
+
+  // 连通分量（合法无向边）：并查集，保证每个分量独立取组件最大 EF。
+  const parent = new Map<string, string>()
+  const find = (x: string): string => {
+    let r = x
+    while (parent.get(r) !== r) r = parent.get(r) as string
+    let cur = x
+    while (parent.get(cur) !== r) { const n = parent.get(cur) as string; parent.set(cur, r); cur = n }
+    return r
+  }
+  const union = (a: string, b: string) => {
+    const ra = find(a), rb = find(b)
+    if (ra !== rb) parent.set(ra, rb)
+  }
+  for (const id of dated) parent.set(id, id)
+  for (const e of edges) { if (parent.has(e.fromId) && parent.has(e.toId)) union(e.fromId, e.toId) }
+
+  // 按分量分组
+  const comps = new Map<string, string[]>()
+  for (const id of dated) {
+    const r = find(id)
+    const arr = comps.get(r) ?? []; arr.push(id); comps.set(r, arr)
+  }
+
+  for (const members of comps.values()) {
+    const mem = new Set(members)
+    // 正向遍历（Kahn）：ES=max(前置 EF)，根 ES=0。
+    const indeg = new Map<string, number>()
+    for (const id of mem) indeg.set(id, (radj.get(id) ?? []).filter(p => mem.has(p)).length)
+    const queue = members.filter(id => (indeg.get(id) ?? 0) === 0).sort()
+    for (const id of queue) {
+      nodes[id].es = 0
+      nodes[id].ef = (nodes[id].es as number) + (nodes[id].durationDays as number)
+    }
+    let head = 0
+    while (head < queue.length) {
+      const u = queue[head++]
+      for (const v of adj.get(u) ?? []) {
+        if (!mem.has(v)) continue
+        const cand = nodes[u].ef as number
+        if ((nodes[v].es ?? -Infinity) < cand) {
+          nodes[v].es = cand
+          nodes[v].ef = cand + (nodes[v].durationDays as number)
+        }
+        const d = (indeg.get(v) ?? 0) - 1
+        indeg.set(v, d)
+        if (d === 0) queue.push(v)
+      }
+    }
+    // 组件最大 EF（多结束任务取最大值）。
+    let compMax = 0
+    for (const id of mem) compMax = Math.max(compMax, nodes[id].ef as number)
+    // 反向遍历（Kahn）：汇点 LF=compMax，LF=min(后继 LF)，LS=LF-工期，slack=LS-ES。
+    const outdeg = new Map<string, number>()
+    for (const id of mem) outdeg.set(id, (adj.get(id) ?? []).filter(s => mem.has(s)).length)
+    const rq = members.filter(id => (outdeg.get(id) ?? 0) === 0).sort()
+    for (const id of rq) {
+      nodes[id].lf = compMax
+      nodes[id].ls = compMax - (nodes[id].durationDays as number)
+      nodes[id].slack = (nodes[id].ls as number) - (nodes[id].es as number)
+    }
+    let rh = 0
+    while (rh < rq.length) {
+      const u = rq[rh++]
+      for (const p of radj.get(u) ?? []) {
+        if (!mem.has(p)) continue
+        // 前驱 LF = min(后继 LS)：用后继最晚开始时刻，而非后继最晚完成。
+        const cand = nodes[u].ls as number
+        if ((nodes[p].lf ?? Infinity) > cand) {
+          nodes[p].lf = cand
+          nodes[p].ls = cand - (nodes[p].durationDays as number)
+          nodes[p].slack = (nodes[p].ls as number) - (nodes[p].es as number)
+        }
+        const d = (outdeg.get(p) ?? 0) - 1
+        outdeg.set(p, d)
+        if (d === 0) rq.push(p)
+      }
+    }
+    // 关键判定：总时差=0（整数天，容差 0）。
+    for (const id of mem) nodes[id].onCriticalPath = (nodes[id].slack as number) === 0
+  }
+
+  // 关键边：两端都在关键路径。
+  for (const e of edges) {
+    e.onCriticalPath = nodes[e.fromId].onCriticalPath && nodes[e.toId].onCriticalPath
+  }
+
+  // 关键路径汇总：onCriticalPath=true，按 ES 升序、并列按 id（确定性）。
+  const criticalPath = Object.values(nodes)
+    .filter(n => n.onCriticalPath)
+    .sort((a, b) => (a.es as number) - (b.es as number) || a.id.localeCompare(b.id))
+    .map(n => n.id)
+
+  const warnings: string[] = []
+  if (cycleTaskIds.length) {
+    warnings.push(`存在成环依赖（${[...cycleTaskIds].sort().join('、')}），该循环无法计算关键路径，已跳过，未自动打断或改期。`)
+  }
+  if (missingDateTaskIds.length) {
+    warnings.push(`任务 ${[...missingDateTaskIds].sort().join('、')} 缺少开始或截止日期，该段无法纳入关键路径计算，未自动补日期或顺延。`)
+  }
+
+  return {
+    nodes,
+    criticalPath,
+    edges,
+    skipped,
+    cycleTaskIds: [...cycleTaskIds].sort(),
+    missingDateTaskIds: [...missingDateTaskIds].sort(),
+    danglingPredecessors,
+    hasCycle: cycleTaskIds.length > 0,
+    hasMissingDate: missingDateTaskIds.length > 0,
+    warnings,
+  }
+}
