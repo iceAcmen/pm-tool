@@ -9,7 +9,27 @@
  *   user   = 个人覆盖（key user）；优先级 user > project > global。
  * 未来切到 dsh-storage JSON 记录时只需替换本文件内部读写。
  */
+import { z } from 'zod'
 import type { DashboardLayout, WidgetScope } from './types.js'
+
+/** 导入/持久化布局的 zod schema（阶段③补齐）。 */
+export const layoutSchema = z.object({
+  version: z.number().int(),
+  scope: z.enum(['global', 'project', 'user']).optional(),
+  widgets: z.array(z.object({
+    i: z.string(),
+    type: z.string(),
+    config: z.record(z.string(), z.unknown()).optional(),
+    layout: z.object({
+      i: z.string(),
+      x: z.number(), y: z.number(), w: z.number(), h: z.number(),
+      minW: z.number().optional(), minH: z.number().optional(),
+    }),
+  })),
+  revision: z.number().optional(),
+  updatedAt: z.string().optional(),
+  updatedBy: z.string().optional(),
+}).loose()
 
 const KEYS: Record<Exclude<WidgetScope, 'global'>, string> = {
   user: 'pm-dashboard-layout:user',
@@ -19,10 +39,12 @@ export const LAYOUT_VERSION = 1
 
 const MIGRATIONS: Array<{ from: number, to: number, apply: (l: DashboardLayout) => DashboardLayout }> = []
 
-function migrate(raw: unknown): DashboardLayout | null {
-  if (typeof raw !== 'object' || raw === null) return null
-  let layout = raw as DashboardLayout
-  if (typeof layout.version !== 'number' || !Array.isArray(layout.widgets)) return null
+/** 结构 + 迁移；不做 zod（由调用方在 import 时跑 layoutSchema）。 */
+export function parseLayout(raw: unknown): DashboardLayout | null {
+  const r = layoutSchema.safeParse(raw)
+  if (!r.success) return null
+  let layout = r.data as DashboardLayout
+  if (layout.version > LAYOUT_VERSION) return null // 版本过新
   for (const step of MIGRATIONS) {
     if (layout.version === step.from) layout = step.apply(layout)
   }
@@ -33,7 +55,7 @@ function readScope(scope: Exclude<WidgetScope, 'global'>): DashboardLayout | nul
   try {
     const text = localStorage.getItem(KEYS[scope])
     if (!text) return null
-    return migrate(JSON.parse(text))
+    return parseLayout(JSON.parse(text))
   } catch {
     return null
   }

@@ -8,7 +8,7 @@ import type { Snapshot } from '../panel.js'
 import { GRID, type DashboardLayout, type WidgetActions, type WidgetConfig, type WidgetEntity, type WidgetInstance, type WidgetScope, type FilterOp } from './types.js'
 import { WIDGET_REGISTRY, DRAWER_GROUPS, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
-import { resolveLayout, saveLayout, resetScope } from './persist.js'
+import { resolveLayout, saveLayout, resetScope, parseLayout } from './persist.js'
 import { selectEntity, applyFilter } from './query.js'
 import { evaluateFormula } from './formula.js'
 
@@ -78,13 +78,19 @@ export function BoardBento({ data, actions }: { data: Snapshot, actions: WidgetA
     reader.onload = () => {
       try {
         const parsed = JSON.parse(String(reader.result))
-        if (typeof parsed !== 'object' || parsed === null || typeof parsed.version !== 'number' || !Array.isArray(parsed.widgets)) {
-          setValidationError('导入失败：布局 JSON 结构不合法')
-          return
+        const layout = parseLayout(parsed)
+        if (!layout) { setValidationError('导入失败：布局结构不合法或版本不受支持'); return }
+        // 逐 widget：未知 type 拒绝；有 configSchema 则 safeParse
+        for (let i = 0; i < layout.widgets.length; i++) {
+          const w = layout.widgets[i]
+          const desc = WIDGET_REGISTRY.get(w.type)
+          if (!desc) { setValidationError(`导入失败：widgets[${i}].type=${w.type} 未知`); return }
+          if (desc.configSchema) {
+            const r = desc.configSchema.safeParse(w.config ?? {})
+            if (!r.success) { setValidationError(`导入失败：widgets[${i}](${desc.name}) 配置不合规`); return }
+          }
         }
-        // 最小迁移骨架：版本不符即拒绝
-        if (parsed.version > 1) { setValidationError('导入失败：布局版本过新'); return }
-        setDraft(parsed as DashboardLayout)
+        setDraft(layout)
       } catch {
         setValidationError('导入失败：JSON 解析错误')
       }
