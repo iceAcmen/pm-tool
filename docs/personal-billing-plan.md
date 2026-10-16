@@ -176,6 +176,8 @@ pm-tool 的 AI 是**非实时、一次性文本生成**，且大量复用系统�
 
 ## 5. 三个 Key 分别填在哪（速查表）
 
+> **最快方式：一键脚本。** 运行 `node packages/dsh-pm-tool/scripts/setup-keys.mjs`（交互模式），脚本引导你粘贴 Key、选择存储位置、自动备份并幂等写入下方全部配置；想先空跑预览加 `--dry-run`，自动化用 `--non-interactive`（Key 从环境变量读）。脚本强制把真实 Key 写在仓库外、`cordis.patch.yml` 只写环境变量名。下方表格供手动配置或理解脚本行为。
+
 | Key | 通道 | 用在哪 | 怎么填 |
 |---|---|---|---|
 | **方舟 Coding Plan Key** | ① 日常开发 | Claude Code / Cursor 等 | `ANTHROPIC_BASE_URL=.../api/coding`、`ANTHROPIC_AUTH_TOKEN=Key`（写 `~/.zshrc`） |
