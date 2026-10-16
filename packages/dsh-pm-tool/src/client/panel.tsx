@@ -46,6 +46,16 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left.mjs'
+import Zap from 'lucide-react/dist/esm/icons/zap.mjs'
+import KeyRound from 'lucide-react/dist/esm/icons/key-round.mjs'
+import Send from 'lucide-react/dist/esm/icons/send.mjs'
+import ClipboardList from 'lucide-react/dist/esm/icons/clipboard-list.mjs'
+import Eye from 'lucide-react/dist/esm/icons/eye.mjs'
+import Code2 from 'lucide-react/dist/esm/icons/code-2.mjs'
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.mjs'
+import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import {
   setPointerOpener, setRowOpener, takeOpenerSpec, resolveDrawerFocusTarget,
@@ -293,6 +303,187 @@ const deliverableStatus: Record<string, string> = {
   planned: '计划中', in_progress: '制作中', submitted: '已提交', accepted: '已验收',
 }
 
+/**
+ * 项目切换下拉（替代原生 select）：
+ *  - 触发按钮显示当前项目名 + 旋转箭头；
+ *  - 浮层菜单列出项目，选中项打勾高亮；
+ *  - 点击外部 / Esc 关闭，↑↓ 在项间移动、Enter 确认（可访问性）。
+ */
+function ProjectSwitcher({ projects, currentId, onPick }: {
+  projects: Snapshot['projects']
+  currentId?: string
+  onPick: (id: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const current = projects.find(p => p.id === currentId)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(event.target as Node)) setOpen(false)
+    }
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const choose = (index: number) => {
+    const item = projects[index]
+    if (item) { onPick(item.id); setOpen(false) }
+  }
+
+  return (
+    <div className="pm-project-switcher" ref={wrapRef}>
+      <button
+        type="button"
+        className="pm-project-switcher-btn"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => { setOpen(v => !v); setActiveIndex(-1) }}
+        onKeyDown={event => {
+          if (event.key === 'ArrowDown') {
+            event.preventDefault()
+            if (!open) setOpen(true)
+            setActiveIndex(i => (i + 1) % projects.length)
+          } else if (event.key === 'ArrowUp') {
+            event.preventDefault()
+            if (!open) setOpen(true)
+            setActiveIndex(i => (i <= 0 ? projects.length - 1 : i - 1))
+          } else if (event.key === 'Enter' && activeIndex >= 0) {
+            event.preventDefault()
+            choose(activeIndex)
+          }
+        }}>
+        <span className="pm-project-switcher-name">{current?.name ?? '暂无项目'}</span>
+        <ChevronDown size={15} className={open ? 'pm-caret-open' : undefined}/>
+      </button>
+      {open && (
+        <div className="pm-project-menu" role="listbox" aria-label="选择项目">
+          {projects.length === 0 && <div className="pm-project-menu-empty">暂无项目</div>}
+          {projects.map((p, i) => {
+            const selected = p.id === currentId
+            return <button
+              key={p.id}
+              type="button"
+              role="option"
+              aria-selected={selected}
+              className={'pm-project-menu-item' + (selected ? ' is-selected' : '') + (i === activeIndex ? ' is-active' : '')}
+              onMouseEnter={() => setActiveIndex(i)}
+              onClick={() => choose(i)}>
+              <span className="pm-project-menu-name">{p.name}</span>
+              {selected && <Check size={15}/>}
+            </button>
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
+ * 模型车道切换（AI 助手 / 副驾共用）：PoC 免费网关 vs 生产自有 Key。
+ * 视觉为胶囊式 segmented，跟随深浅主题；compact 用于窄栏。
+ */
+function LaneSwitcher({ lane, busy, onChange, compact }: {
+  lane: 'poc' | 'prod'
+  busy?: boolean
+  onChange: (lane: 'poc' | 'prod') => void
+  compact?: boolean
+}) {
+  return <div className={'pm-lane-switch pm-model-lane' + (compact ? ' is-compact' : '')} role="tablist" aria-label="模型车道">
+    <button type="button" role="tab" aria-selected={lane === 'poc'} disabled={busy}
+      className={'pm-lane-poc' + (lane === 'poc' ? ' is-on' : '')} onClick={() => onChange('poc')}>
+      <Zap size={13}/> PoC 免费
+    </button>
+    <button type="button" role="tab" aria-selected={lane === 'prod'} disabled={busy}
+      className={'pm-lane-prod' + (lane === 'prod' ? ' is-on' : '')} onClick={() => onChange('prod')}>
+      <KeyRound size={13}/> 生产 Key
+    </button>
+  </div>
+}
+
+/** 行内富文本：渲染 **加粗** 与 `代码`，其余按纯文本（安全，不产生 HTML）。 */
+function renderInlineRich(text: string, keyPrefix: string): ReactNode[] {
+  const nodes: ReactNode[] = []
+  const re = /(\*\*[^*]+\*\*|`[^`]+`)/g
+  let last = 0
+  let m: RegExpExecArray | null
+  let i = 0
+  while ((m = re.exec(text))) {
+    if (m.index > last) nodes.push(text.slice(last, m.index))
+    const tok = m[0]
+    if (tok.startsWith('**')) nodes.push(<strong key={keyPrefix + i}>{tok.slice(2, -2)}</strong>)
+    else nodes.push(<code key={keyPrefix + i} className="pm-md-code">{tok.slice(1, -1)}</code>)
+    last = m.index + tok.length
+    i += 1
+  }
+  if (last < text.length) nodes.push(text.slice(last))
+  return nodes
+}
+
+/** 轻量 Markdown 渲染：标题 / 有序无序列表 / 段落 / 行内加粗与代码（无 HTML、无注入面）。 */
+function MarkdownView({ text, className }: { text: string, className?: string }) {
+  const blocks: ReactNode[] = []
+  const lines = text.split('\n')
+  let list: { ordered: boolean, items: string[] } | null = null
+  const flushList = () => {
+    if (!list) return
+    const items = list.items.map((it, i) => <li key={i}>{renderInlineRich(it, 'li' + i)}</li>)
+    blocks.push(list.ordered
+      ? <ol key={'ol' + blocks.length}>{items}</ol>
+      : <ul key={'ul' + blocks.length}>{items}</ul>)
+    list = null
+  }
+  lines.forEach((raw, idx) => {
+    const line = raw.trim()
+    let m: RegExpExecArray | null
+    if ((m = /^(#{1,4})\s+(.*)$/.exec(line))) {
+      flushList()
+      blocks.push(<p key={'h' + idx} className={'pm-md-h' + m[1].length}>{renderInlineRich(m[2], 'h' + idx)}</p>)
+    } else if ((m = /^\s*[-*]\s+(.*)$/.exec(raw))) {
+      if (!list || list.ordered) { flushList(); list = { ordered: false, items: [] } }
+      list.items.push(m[1])
+    } else if ((m = /^\s*\d+[.、)]\s+(.*)$/.exec(raw))) {
+      if (!list || !list.ordered) { flushList(); list = { ordered: true, items: [] } }
+      list.items.push(m[1])
+    } else if (line) {
+      flushList()
+      blocks.push(<p key={'p' + idx} className="pm-md-p">{renderInlineRich(line, 'p' + idx)}</p>)
+    } else {
+      flushList()
+    }
+  })
+  flushList()
+  return <div className={'pm-md' + (className ? ' ' + className : '')}>{blocks}</div>
+}
+
+/** WBS 结构化预览：把缩进的 `- [ ]` / `- [x]` 清单渲染成任务树（所见即所得）。 */
+function WbsTreeView({ markdown }: { markdown: string }) {
+  const rows: { depth: number, done: boolean, title: string }[] = []
+  markdown.split('\n').forEach(line => {
+    const m = /^(\s*)[-*]\s+\[([ xX])\]\s+(.*)$/.exec(line)
+    if (m) {
+      const indent = m[1].replace(/\t/g, '  ').length
+      rows.push({ depth: Math.floor(indent / 2), done: m[2].toLowerCase() === 'x', title: m[3].trim() })
+    }
+  })
+  if (!rows.length) return null
+  return <div className="pm-wbs-tree">
+    {rows.map((r, i) =>
+      <div key={i} className={'pm-wbs-row' + (r.done ? ' is-done' : '') + (r.depth === 0 ? ' is-top' : '')}
+        style={{ paddingLeft: 10 + r.depth * 18 }}>
+        <span className="pm-wbs-box">{r.done ? <Check size={11}/> : null}</span>
+        <span className="pm-wbs-title">{r.title}</span>
+      </div>)}
+  </div>
+}
+
 export function PmPanel({ execute }: PmPanelApi) {
   const [restorePreview, setRestorePreview] = useState<{ fileName: string, content: string, text: string } | null>(null)
   const [data, setData] = useState<Snapshot>(empty)
@@ -457,21 +648,11 @@ export function PmPanel({ execute }: PmPanelApi) {
           <div>
             <span className="pm-kicker">项目工作台</span>
             {project
-              ? <label className="pm-project-select">
-                  <select
-                    value={project.id}
-                    onChange={event => {
-                      setSelected(event.currentTarget.value)
-                      setDrawer(undefined)
-                    }}
-                    aria-label="切换项目"
-                  >
-                    {data.projects.map(item =>
-                      <option key={item.id} value={item.id}>{item.name}</option>,
-                    )}
-                  </select>
-                  <ChevronDown size={15}/>
-                </label>
+              ? <ProjectSwitcher
+                  projects={data.projects}
+                  currentId={project.id}
+                  onPick={id => { setSelected(id); setDrawer(undefined) }}
+                />
               : <strong>暂无项目</strong>}
           </div>
         </div>
@@ -1209,6 +1390,14 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   }
   const [preview, setPreview] = useState('')
   const [working, setWorking] = useState(false)
+  const [stage, setStage] = useState<'pick' | 'create'>('pick')
+  const [docView, setDocView] = useState<'preview' | 'edit'>('preview')
+
+  const CAPABILITIES = [
+    { key: 'wbs' as const, icon: ListTree, name: 'WBS 任务拆解', desc: '一句话目标 → 结构化任务清单', tag: '任务' },
+    { key: 'narrate' as const, icon: FileText, name: '进度汇报叙述', desc: '项目数据 → 进展 / 风险 / 下周计划', tag: '汇报' },
+    { key: 'summarize' as const, icon: ClipboardList, name: '会议纪要归纳', desc: '会议速记 → 议题 / 决议 / 行动项', tag: '会议' },
+  ]
 
   const WBS_TEMPLATES: [string, string][] = [
     ['官网改版', '为一个小型企业官网改版项目制定工作分解，覆盖需求梳理、视觉设计、前后端开发、测试验收、上线'],
@@ -1233,10 +1422,15 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
     return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(preview)}` }
   }
 
-  const switchMode = (next: 'wbs' | 'narrate' | 'summarize') => {
+  const pickCapability = (next: 'wbs' | 'narrate' | 'summarize') => {
     if (working) return
-    setMode(next); setText(''); setPreview('')
+    setMode(next); setText(''); setPreview(''); setDocView('preview'); setStage('create')
     try { localStorage.setItem('pm-ai-mode', next) } catch {}
+  }
+
+  const backToPick = () => {
+    if (working) return
+    setStage('pick')
   }
 
   const fillTemplate = (goal: string) => {
@@ -1247,7 +1441,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
 
   const generate = async () => {
     if (!canGenerate) return
-    setWorking(true); setPreview('')
+    setWorking(true); setPreview(''); setDocView('preview')
     try {
       setPreview(await execute(lines().preview))
     } catch (error) {
@@ -1275,108 +1469,105 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
     summarize: '粘贴会议速记/原始记录，AI 归纳议题、结论与行动项（负责人/截止日）。',
   }
 
+  // 会议纪要预览：去掉「草稿」「确认命令」头尾，只保留结构化内容。
+  const cleanMeetingPreview = (raw: string) => raw.split('\n')
+    .filter(l => !/^AI 归纳草稿|^确认命令：/.test(l.trim()))
+    .join('\n')
+    .trim()
+
+  const currentCap = CAPABILITIES.find(c => c.key === mode)
   return <div className="pm-ai">
-    <div className="pm-ai-tabs">
-      {([
-        ['wbs', 'AI 拆解 WBS'],
-        ['narrate', 'AI 汇报叙述'],
-        ['summarize', 'AI 会议纪要'],
-      ] as const).map(([key, label]) =>
-        <button
-          key={key}
-          type="button"
-          className={`pm-button pm-ai-tab${mode === key ? ' pm-button-primary' : ''}`}
-          aria-pressed={mode === key}
-          disabled={working}
-          onClick={() => switchMode(key)}
-        >{label}</button>,
+    {stage === 'pick' ? <>
+      {/* 能力选择首页 */}
+      <div className="pm-ai-hero">
+        <span className="pm-ai-hero-badge"><Sparkles size={16}/></span>
+        <div>
+          <h3>AI 内容助手</h3>
+          <p>选择一个能力，AI 基于项目真实数据生成草稿，确认后才入库。</p>
+        </div>
+      </div>
+      <LaneSwitcher lane={lane} busy={working} onChange={switchLane}/>
+      <p className={'pm-ai-lane-note' + (lane === 'poc' ? ' pm-lane-warning' : ' pm-lane-note')}>{lane === 'poc'
+        ? 'PoC 为公共免费网关，仅用于概念验证，内容可能被记录。'
+        : '生产车道使用官方 API + 自有 Key，未配置 Key 时会给出中文引导。'}</p>
+      <div className="pm-ai-cap-grid">
+        {CAPABILITIES.map(c => {
+          const Icon = c.icon
+          return <button key={c.key} type="button" className="pm-ai-cap" disabled={working} onClick={() => pickCapability(c.key)}>
+            <span className="pm-ai-cap-icon"><Icon size={18}/></span>
+            <span className="pm-ai-cap-body">
+              <span className="pm-ai-cap-name">{c.name}</span>
+              <span className="pm-ai-cap-desc">{c.desc}</span>
+            </span>
+            <span className="pm-ai-cap-tag">{c.tag}</span>
+          </button>
+        })}
+      </div>
+    </> : <>
+      {/* 创作视图 */}
+      <div className="pm-ai-create-head">
+        <button type="button" className="pm-ai-back" onClick={backToPick} aria-label="返回能力选择"><ArrowLeft size={16}/></button>
+        <span className="pm-ai-create-title">{currentCap?.name}</span>
+        <LaneSwitcher lane={lane} busy={working} onChange={switchLane} compact/>
+      </div>
+      <p className="pm-ai-hint">{hints[mode]}</p>
+      {needsInput && mode === 'wbs' && (
+        <div className="pm-ai-templates">
+          {WBS_TEMPLATES.map(([label, goal]) =>
+            <button key={label} type="button" className="pm-chip" disabled={working} onClick={() => fillTemplate(goal)}>{label}</button>,
+          )}
+        </div>
       )}
-    </div>
-    <div className="pm-model-lane" role="tablist" aria-label="模型车道">
-      <button
-        type="button"
-        role="tab"
-        aria-selected={lane === 'poc'}
-        className={`pm-lane-poc pm-button${lane === 'poc' ? ' pm-button-primary' : ''}`}
-        disabled={working}
-        onClick={() => switchLane('poc')}
-      >PoC 验证（免费网关）</button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={lane === 'prod'}
-        className={`pm-lane-prod pm-button${lane === 'prod' ? ' pm-button-primary' : ''}`}
-        disabled={working}
-        onClick={() => switchLane('prod')}
-      >生产开发（官方 API）</button>
-    </div>
-    {lane === 'poc' && (
-      <p className="pm-lane-warning" role="note">⚠ 免费公共网关仅用于概念验证/界面原型，勿用于核心代码合并或生产提交；公共网关可能记录内容。</p>
-    )}
-    {lane === 'prod' && (
-      <p className="pm-lane-note" role="note">生产车道使用官方 API + 自有 Key（DeepSeek 优先 / Kimi 次之）；未配置 Key 时会给出中文引导。</p>
-    )}
-    <p className="pm-ai-hint">{hints[mode]}</p>
-    {needsInput && mode === 'wbs' && (
-      <div className="pm-ai-templates">
-        {WBS_TEMPLATES.map(([label, goal]) =>
-          <button key={label} type="button" className="pm-chip" disabled={working} onClick={() => fillTemplate(goal)}>{label}</button>,
-        )}
-      </div>
-    )}
-    {needsInput && (
-      <textarea
-        className="pm-ai-input"
-        rows={mode === 'summarize' ? 6 : 2}
-        value={text}
-        disabled={working}
-        placeholder={hints[mode]}
-        onChange={event => {
-          const v = event.currentTarget.value
-          setText(v)
-          if (mode === 'wbs') try { localStorage.setItem('pm-ai-goal', v) } catch {}
-        }}
-      />
-    )}
-    <div className="pm-ai-actions">
-      <button
-        type="button"
-        className="pm-button pm-button-primary"
-        disabled={!canGenerate || disabled}
-        onClick={() => void generate()}
-      >{working ? '生成中…' : '生成草稿'}</button>
-      <button
-        type="button"
-        className="pm-button pm-ai-confirm"
-        disabled={working || !preview}
-        onClick={() => void confirm()}
-      >确认入库</button>
-    </div>
-    {mode === 'wbs' && preview && (
-      <div className="pm-ai-preview-edit">
-        <p className="pm-ai-note">可在下方修改清单（缩进代表父子层级，`- [ ]`/`- [x]` 代表未完成/已完成），点「确认入库」按编辑结果落盘，不再调用模型。</p>
+      {needsInput && (
         <textarea
-          className="pm-ai-input pm-ai-markdown pm-ai-wbs-raw"
-          rows={10}
-          value={preview}
+          className="pm-ai-input"
+          rows={mode === 'summarize' ? 6 : 3}
+          value={text}
           disabled={working}
-          onChange={event => setPreview(event.currentTarget.value)}
+          placeholder={hints[mode]}
+          onChange={event => {
+            const v = event.currentTarget.value
+            setText(v)
+            if (mode === 'wbs') try { localStorage.setItem('pm-ai-goal', v) } catch {}
+          }}
         />
-      </div>
-    )}
-    {mode !== 'wbs' && preview && (
-      <div className="pm-ai-preview-edit">
-        <p className="pm-ai-note">可在下方修改{mode === 'narrate' ? '叙述段落' : '归纳内容'}，点「确认入库」按编辑结果落盘，不再调用模型。</p>
-        <textarea
-          className="pm-ai-input pm-ai-markdown pm-ai-raw"
-          rows={8}
-          value={preview}
-          disabled={working}
-          onChange={event => setPreview(event.currentTarget.value)}
-        />
-      </div>
-    )}
-    <p className="pm-ai-note">AI 结果为草稿，需点“确认入库”才写入项目；失败（如免费模型超时/限流）会显示中文提示，可重试或改用手工录入，核心台账不受影响。</p>
+      )}
+      <button type="button" className="pm-ai-generate" disabled={!canGenerate || disabled} onClick={() => void generate()}>
+        {working
+          ? <><RefreshCw size={15} className="pm-spin"/> 生成中…</>
+          : <><Sparkles size={15}/> 生成草稿</>}
+      </button>
+      {preview && (
+        <div className="pm-ai-result pm-ai-preview">
+          <div className="pm-ai-result-head">
+            <div className="pm-seg">
+              <button type="button" className={docView === 'preview' ? 'is-on' : ''} onClick={() => setDocView('preview')}><Eye size={13}/> 预览</button>
+              <button type="button" className={docView === 'edit' ? 'is-on' : ''} onClick={() => setDocView('edit')}><Code2 size={13}/> 编辑</button>
+            </div>
+            <button type="button" className="pm-ai-regen" disabled={working} onClick={() => void generate()} title="重新生成"><RotateCcw size={14}/></button>
+          </div>
+          {docView === 'preview' ? (
+            mode === 'wbs'
+              ? <WbsTreeView markdown={preview}/>
+              : <MarkdownView text={mode === 'summarize' ? cleanMeetingPreview(preview) : preview}/>
+          ) : (
+            <textarea
+              className={'pm-ai-input pm-ai-markdown' + (mode === 'wbs' ? ' pm-ai-wbs-raw' : ' pm-ai-raw')}
+              rows={mode === 'wbs' ? 12 : 9}
+              value={preview}
+              disabled={working}
+              onChange={event => setPreview(event.currentTarget.value)}
+            />
+          )}
+          <div className="pm-ai-result-actions pm-ai-actions">
+            <button type="button" className="pm-ai-confirm-btn pm-ai-confirm" disabled={working || !preview} onClick={() => void confirm()}>
+              <Check size={15}/> 确认入库
+            </button>
+          </div>
+        </div>
+      )}
+      <p className="pm-ai-footnote">AI 结果为草稿，需点「确认入库」才写入项目；失败时可重试或改用手工录入，核心台账不受影响。</p>
+    </>}
   </div>
 }
 
@@ -1604,9 +1795,17 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
     try { await execute(`model mode ${next}`) } catch { /* 状态条由下次 status 反映 */ }
   }
 
-  const send = async () => {
-    const q = input.trim(); if (!q || disabled || sending) return
-    setInput('')
+  const QUICK_ASKS = [
+    '本周会不会延期？',
+    '哪些任务需要重点关注？',
+    '人员负载是否均衡？',
+    '给我一份项目健康度总结',
+    '临近的里程碑有哪些风险？',
+  ]
+
+  const send = async (preset?: string) => {
+    const q = (preset ?? input).trim(); if (!q || disabled || sending) return
+    if (!preset) setInput('')
     const placeholderText = '思考中…'
     setMsgs(m => [...m, { role: 'me', text: q }, { role: 'sys', text: placeholderText }])
     setSending(true)
@@ -1680,77 +1879,111 @@ function CopilotPanel({ projectId, tasks, baselineMap, execute, disabled, onSave
   }
 
   const editablePatch = (s: PlanStepView) => (s.action.patch ?? {}) as Record<string, unknown>
+  const showQuick = steps.length === 0 && rejected.length === 0
   return <div className="pm-copilot">
-    <div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy={sending}>
-      {msgs.map((m, i) => <div key={i} className={`pm-copilot-msg pm-copilot-${m.role}`}>{m.text}</div>)}
+    {/* 顶部：说明 + 车道（drawer 标题已在头部，不重复） */}
+    <div className="pm-copilot-head">
+      <span className="pm-copilot-head-sub">只读诊断 · 确认后才执行</span>
+      <LaneSwitcher lane={lane} busy={busy || sending} onChange={l => void switchLane(l)} compact/>
     </div>
+
+    {/* 对话区 */}
+    <div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy={sending}>
+      {msgs.map((m, i) => {
+        if (m.role === 'me')
+          return <div key={i} className="pm-copilot-bubble pm-copilot-me">{m.text}</div>
+        if (m.role === 'ai')
+          return <div key={i} className="pm-copilot-bubble pm-copilot-ai"><MarkdownView text={m.text}/></div>
+        return <div key={i} className="pm-copilot-bubble pm-copilot-sys">
+          {sending && m.text === '思考中…'
+            ? <span className="pm-typing"><span/><span/><span/></span>
+            : m.text}
+        </div>
+      })}
+    </div>
+
+    {/* 快捷提问 */}
+    {showQuick && (
+      <div className="pm-copilot-quick">
+        {QUICK_ASKS.map(q =>
+          <button key={q} type="button" className="pm-copilot-quick-item" disabled={sending} onClick={() => void send(q)}>
+            <Lightbulb size={12}/> {q}
+          </button>)}
+      </div>
+    )}
+
+    {/* 操作计划 */}
     {steps.length > 0 || rejected.length > 0 ? (
       <div className="pm-copilot-draft" data-copilot-plan>
-        <strong>操作计划（{steps.length} 步，将影响 {new Set(steps.map(s => s.action.id)).size} 条任务，需确认）</strong>
+        <div className="pm-copilot-draft-head">
+          <ListChecks size={15}/>
+          <strong>操作计划</strong>
+          <span className="pm-copilot-draft-meta">{steps.length} 步 · {new Set(steps.map(s => s.action.id)).size} 条任务</span>
+        </div>
         {staleHint && <div className="pm-copilot-warn">你打开草稿后台账有变化，确认时将逐行重新核对。</div>}
-        {steps.map(s => {
+        {steps.map((s, idx) => {
           const invalid = invalidStepIds.has(s.stepId)
           const risks = softRisks(s, taskById.get(String(s.action.id)), assignees, today)
           const patch = editablePatch(s)
           return <div key={s.stepId} data-copilot-step className={`pm-copilot-step${invalid ? ' pm-copilot-step-invalid' : ''}`}>
-            <label className="pm-copilot-stephead">
-              <input type="checkbox" checked={s.checked} data-copilot-check={s.stepId}
-                onChange={e => setSteps(prev => prev.map(p => p.stepId === s.stepId ? { ...p, checked: e.target.checked } : p))}/>
-              <span><b>{s.stepId}</b> · {s.title || s.action.id}</span>
-            </label>
-            <div className="pm-copilot-why">{s.reason ? `为什么：${s.reason}` : <span className="pm-copilot-warn">模型未说明原因</span>}</div>
-            {s.needs.length > 0 && <div className="pm-copilot-needs">依赖：{s.needs.join('、')}</div>}
+            <div className="pm-copilot-stephead">
+              <label className="pm-copilot-stepcheck">
+                <input type="checkbox" checked={s.checked} data-copilot-check={s.stepId}
+                  onChange={e => setSteps(prev => prev.map(p => p.stepId === s.stepId ? { ...p, checked: e.target.checked } : p))}/>
+                <span className="pm-copilot-stepnum">{idx + 1}</span>
+              </label>
+              <div className="pm-copilot-stepinfo">
+                <span className="pm-copilot-steptitle">{s.title || s.action.id}</span>
+                <span className="pm-copilot-stepid">{s.stepId}</span>
+              </div>
+            </div>
+            {s.reason
+              ? <div className="pm-copilot-why"><Lightbulb size={11}/> {s.reason}</div>
+              : <div className="pm-copilot-why pm-copilot-why-empty">模型未说明原因</div>}
+            {s.needs.length > 0 && <div className="pm-copilot-needs"><GitBranch size={10}/> 依赖：{s.needs.join('、')}</div>}
             <div className="pm-copilot-editrow">
-              <select value={String(patch.status ?? '')} data-copilot-edit={`${s.stepId}.status`}
+              <select value={String(patch.status ?? '')} data-copilot-edit={`${s.stepId}.status`} aria-label="状态"
                 onChange={e => e.target.value ? setPatch(s.stepId, 'status', e.target.value) : setPatch(s.stepId, 'status', undefined)}>
                 <option value="">状态</option>
-                {['todo', 'in_progress', 'blocked', 'done'].map(st => <option key={st} value={st}>{st}</option>)}
+                {['todo', 'in_progress', 'blocked', 'done'].map(st => <option key={st} value={st}>{taskStatus[st] ?? st}</option>)}
               </select>
               <input className="pm-copilot-num" type="number" placeholder="进度" min={0} max={100} value={patch.progress == null ? '' : Number(patch.progress)}
-                data-copilot-edit={`${s.stepId}.progress`}
+                data-copilot-edit={`${s.stepId}.progress`} aria-label="进度"
                 onChange={e => setPatch(s.stepId, 'progress', e.target.value === '' ? undefined : Number(e.target.value))}/>
               <input className="pm-copilot-assignee" placeholder="负责人" value={String(patch.assignee ?? '')}
-                data-copilot-edit={`${s.stepId}.assignee`}
+                data-copilot-edit={`${s.stepId}.assignee`} aria-label="负责人"
                 onChange={e => setPatch(s.stepId, 'assignee', e.target.value)}/>
-              <input placeholder="起 YYYY-MM-DD" value={String(patch.startDate ?? '')} data-copilot-edit={`${s.stepId}.startDate`}
+              <input className="pm-copilot-date" placeholder="起 YYYY-MM-DD" value={String(patch.startDate ?? '')} data-copilot-edit={`${s.stepId}.startDate`} aria-label="开始日期"
                 onChange={e => setPatch(s.stepId, 'startDate', e.target.value || undefined)}/>
-              <input placeholder="止 YYYY-MM-DD" value={String(patch.dueDate ?? '')} data-copilot-edit={`${s.stepId}.dueDate`}
+              <input className="pm-copilot-date" placeholder="止 YYYY-MM-DD" value={String(patch.dueDate ?? '')} data-copilot-edit={`${s.stepId}.dueDate`} aria-label="截止日期"
                 onChange={e => setPatch(s.stepId, 'dueDate', e.target.value || undefined)}/>
             </div>
             {invalid && <div className="pm-copilot-err">该行字段不合法，已禁用确认</div>}
             {risks.map((r, i) => <div key={i} className="pm-copilot-warn">⚠ {r}</div>)}
-            {s.riskNote && <div className="pm-copilot-warn">模型提示：{s.riskNote}</div>}
+            {s.riskNote && <div className="pm-copilot-info"><Sparkles size={11}/> 模型提示：{s.riskNote}</div>}
           </div>
         })}
         {rejected.map((r, i) => <div key={`r${i}`} data-copilot-rejected className="pm-copilot-rejected">已拒绝：{r.stepId ? `${r.stepId} ` : ''}{r.reason}</div>)}
         <div className="pm-copilot-actions">
-          <button className="pm-button pm-copilot-confirm" data-copilot-apply-batch disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('batch')}>整批执行({checked.length}步)</button>
-          <button className="pm-button pm-copilot-confirm" data-copilot-apply-stepwise disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('stepwise')}>逐步执行</button>
-          <button className="pm-button pm-copilot-dismiss" data-copilot-cancel onClick={clearPlan}>再聊聊/取消</button>
+          <button className="pm-copilot-apply-main" data-copilot-apply-batch disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('batch')}>
+            <Check size={14}/> 整批执行（{checked.length}）
+          </button>
+          <button className="pm-copilot-apply-ghost" data-copilot-apply-stepwise disabled={busy || anyInvalid || !checked.length} onClick={() => void runApply('stepwise')}>
+            逐步执行
+          </button>
+          <button className="pm-copilot-apply-ghost" data-copilot-cancel onClick={clearPlan}>取消</button>
         </div>
       </div>
     ) : null}
+
+    {/* 底部输入 */}
     <div className="pm-copilot-inputrow">
-      <select
-        className="pm-copilot-lane pm-model-lane"
-        aria-label="模型车道"
-        title="切换模型车道（PoC 公共网关 / 生产自有 Key）"
-        value={lane}
-        disabled={sending}
-        onChange={e => void switchLane(e.currentTarget.value as 'poc' | 'prod')}
-      >
-        <option className="pm-lane-poc" value="poc">PoC 车道</option>
-        <option className="pm-lane-prod" value="prod">生产车道</option>
-      </select>
-      <span className="pm-lane-warning" hidden={false} data-lane={lane}>
-        {lane === 'prod' ? '生产车道需已配置自有 API Key' : 'PoC 为公共网关，仅概念验证'}
-      </span>
-      <input className="pm-copilot-input" value={input} placeholder="例如：下周会不会延期？"
+      <input className="pm-copilot-input" value={input} placeholder="问点什么，例如：下周会不会延期？"
         disabled={sending}
         onChange={e => setInput(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') void send() }}/>
-      <button className="pm-button pm-copilot-send" disabled={disabled || !input.trim() || sending} onClick={() => void send()}>
-        {sending ? '思考中…' : '发送'}
+      <button className="pm-copilot-send" aria-label="发送" disabled={disabled || !input.trim() || sending} onClick={() => void send()}>
+        {sending ? <RefreshCw size={15} className="pm-spin"/> : <Send size={15}/>}
       </button>
     </div>
   </div>

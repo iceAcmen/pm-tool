@@ -103,11 +103,11 @@ try {
   assert.match(bundle, /任务完成率/)
   assert.match(bundle, /未关闭风险/)
   assert.match(bundle, /逐项目明细/)
-  // A1：三个 AI 功能 Web 按钮（复用斜杠命令 core 草稿→confirm）。
+  // A1：三个 AI 创作能力（能力选择卡片，复用斜杠命令 core 草稿→confirm）。
   assert.match(bundle, /AI 助手/)
-  assert.match(bundle, /AI 拆解 WBS/)
-  assert.match(bundle, /AI 汇报叙述/)
-  assert.match(bundle, /AI 会议纪要/)
+  assert.match(bundle, /WBS 任务拆解/)
+  assert.match(bundle, /进度汇报叙述/)
+  assert.match(bundle, /会议纪要归纳/)
   assert.match(bundle, /生成草稿/)
   assert.match(bundle, /确认入库/)
   // AI 助手必须用裸子命令（execute 桥直接喂给 pm handler），不得带 /pm 前缀。

@@ -4,6 +4,7 @@ import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
 import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {} from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
+import KanbanSquare from 'lucide-react/dist/esm/icons/kanban-square.mjs'
 import { PmPanel, type PmPanelApi } from './panel.js'
 
 const PANEL_ID = 'pm-tool' as MainPanelId
@@ -40,5 +41,6 @@ export function apply(ctx: Context): void {
 }
 
 function PmIcon({ size }: { size: number }) {
-  return <span aria-hidden style={{ fontSize: Math.max(11, size * 0.42), fontWeight: 800 }}>PM</span>
+  const s = typeof size === 'number' && size > 0 ? size : 18
+  return <KanbanSquare size={s} strokeWidth={2} aria-hidden/>
 }
