@@ -1,0 +1,223 @@
+/* ============================================================================
+   会议纪要（重设计 v2 · dsh 主题对齐版）
+   - 全部选择器 scope 在 .pm-mt-root 下，不写 html/body/全局选择器。
+   - 颜色/阴影/圆角/间距/字号只消费 panel.css .pm-shell 已重映射的 dsh 别名。
+   - 扁平克制：透明度一律用 color-mix 派生，不内嵌字体。
+   ============================================================================ */
+
+.pm-mt-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  font-family: var(--pm-font-sans);
+  color: var(--ink);
+}
+
+/* ---------- 页头 ---------- */
+.pm-mt-root .mt-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); }
+.pm-mt-root .mt-head h1 { margin: 0; font-size: var(--t-22); font-weight: 700; letter-spacing: var(--ls-tight2); color: var(--ink); }
+.pm-mt-root .mt-head .mt-sub { margin: 4px 0 0; font-size: var(--t-12); color: var(--muted); }
+.pm-mt-root .mt-head .mt-sub b { color: var(--ink-2); font-weight: 600; }
+.pm-mt-root .mt-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto;
+  font-size: var(--t-13); font-weight: 600; color: rgb(255, 255, 255);
+  background: var(--c-prog); border: 0; border-radius: var(--r-sm);
+  padding: 9px var(--sp-4); cursor: pointer;
+}
+
+/* ---------- 小统计行 ---------- */
+.pm-mt-root .mt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
+.pm-mt-root .mt-stat {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-1);
+  padding: var(--sp-3) var(--sp-4);
+}
+.pm-mt-root .mt-stat .lab { font-size: var(--t-11); font-weight: 600; letter-spacing: var(--ls-cap); text-transform: uppercase; color: var(--faint); }
+.pm-mt-root .mt-stat .num {
+  margin-top: 4px; font-size: var(--t-22); font-weight: 750;
+  letter-spacing: var(--ls-tight2); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.pm-mt-root .mt-stat .num small { font-size: var(--t-12); font-weight: 600; color: var(--faint); margin-left: 3px; }
+.pm-mt-root .mt-stat .sub { margin-top: 4px; font-size: var(--t-11); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-mt-root .mt-stat.urgent .num { color: var(--c-late); }
+
+/* ---------- 主体：左列表 + 右详情 ---------- */
+.pm-mt-root .mt-body { display: grid; grid-template-columns: 340px 1fr; gap: var(--sp-4); align-items: start; }
+.pm-mt-root .mt-list { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; }
+
+/* 列表顶部：搜索框 + 状态 segmented */
+.pm-mt-root .mt-toolbar { display: flex; flex-direction: column; gap: var(--sp-2); }
+.pm-mt-root .mt-search {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--field-bg); border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 7px 10px; color: var(--faint);
+}
+.pm-mt-root .mt-search:focus-within { border-color: color-mix(in srgb, var(--c-prog) 45%, transparent); }
+.pm-mt-root .mt-search input {
+  flex: 1; min-width: 0; border: 0; background: transparent; outline: 0;
+  font: inherit; font-size: var(--t-13); color: var(--ink);
+}
+.pm-mt-root .mt-search input::placeholder { color: var(--faint); }
+.pm-mt-root .mt-seg {
+  display: inline-flex; align-items: center; gap: 2px; align-self: flex-start;
+  background: var(--field-bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px;
+}
+.pm-mt-root .mt-seg button {
+  border: 0; background: transparent; cursor: pointer;
+  font-size: var(--t-12); font-weight: 600; color: var(--muted);
+  padding: 4px 12px; border-radius: 999px;
+}
+.pm-mt-root .mt-seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-mt-root .mt-list-empty {
+  padding: var(--sp-4); text-align: center; font-size: var(--t-12); color: var(--faint);
+  border: 1px dashed var(--line); border-radius: var(--r);
+}
+.pm-mt-root .mt-item {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); box-shadow: var(--shadow-1);
+  padding: var(--sp-3) var(--sp-4); cursor: pointer; text-align: left;
+  display: block; width: 100%; font: inherit; color: inherit;
+}
+.pm-mt-root .mt-item:hover { background: var(--surface-3); }
+.pm-mt-root .mt-item.sel {
+  border-color: color-mix(in srgb, var(--c-prog) 45%, transparent);
+  box-shadow: inset 2px 0 0 var(--c-prog);
+}
+.pm-mt-root .mt-item-row1 { display: flex; align-items: center; gap: var(--sp-2); }
+.pm-mt-root .mt-item-date { font-size: var(--t-12); font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pm-mt-root .mt-item-wd { font-size: var(--t-11); color: var(--faint); }
+.pm-mt-root .mt-item-sp { flex: 1; }
+.pm-mt-root .mt-item-title {
+  margin-top: 5px; font-size: var(--t-14); font-weight: 650; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pm-mt-root .mt-item-meta { margin-top: 5px; font-size: var(--t-11); color: var(--faint); display: flex; gap: var(--sp-3); }
+
+/* 状态 chip（会议 draft/final 与行动项共用形状，颜色按 data 态） */
+.pm-mt-root .mt-chip {
+  display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto;
+  font-size: var(--t-11); font-weight: 600; line-height: 1;
+  padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line);
+  color: var(--muted); white-space: nowrap; background: transparent;
+}
+.pm-mt-root .mt-chip i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+.pm-mt-root .mt-chip.final { color: var(--c-done); border-color: color-mix(in srgb, var(--c-done) 30%, transparent); background: color-mix(in srgb, var(--c-done) 10%, transparent); }
+
+/* 行动项状态色：待办灰 / 进行蓝 / 完成绿 / 取消灰（逾期红由 due 标） */
+.pm-mt-root .mt-chip.act-todo { color: var(--muted); }
+.pm-mt-root .mt-chip.act-in_progress { color: var(--c-prog); border-color: color-mix(in srgb, var(--c-prog) 30%, transparent); background: color-mix(in srgb, var(--c-prog) 10%, transparent); }
+.pm-mt-root .mt-chip.act-done { color: var(--c-done); border-color: color-mix(in srgb, var(--c-done) 30%, transparent); background: color-mix(in srgb, var(--c-done) 10%, transparent); }
+.pm-mt-root .mt-chip.act-cancelled { color: var(--faint); text-decoration: line-through; }
+
+/* ---------- 详情卡 ---------- */
+.pm-mt-root .mt-detail {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-2);
+  padding: var(--sp-5) var(--sp-6);
+}
+.pm-mt-root .mt-detail-head { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.pm-mt-root .mt-detail-head h2 { margin: 0; font-size: var(--t-18); font-weight: 700; letter-spacing: var(--ls-tight); color: var(--ink); }
+.pm-mt-root .mt-ico-btn {
+  width: 28px; height: 28px; border: 1px solid transparent; border-radius: var(--r-sm);
+  display: grid; place-items: center; background: transparent; color: var(--muted); cursor: pointer;
+}
+.pm-mt-root .mt-ico-btn:hover { background: var(--surface-3); color: var(--ink); border-color: var(--line); }
+
+/* 会议信息栅格 */
+.pm-mt-root .mt-info {
+  margin-top: var(--sp-4); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4); background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.pm-mt-root .mt-info-cell { min-width: 0; }
+.pm-mt-root .mt-info-lab {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint); white-space: nowrap;
+}
+.pm-mt-root .mt-info-val {
+  margin-top: 3px; font-size: var(--t-13); font-weight: 600; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* 分区 */
+.pm-mt-root .mt-sec { margin-top: var(--sp-5); }
+.pm-mt-root .mt-sec-lab {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px;
+}
+.pm-mt-root .mt-sec-lab::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.pm-mt-root .mt-topics { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: 6px; }
+.pm-mt-root .mt-topic { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--t-13); color: var(--ink-2); }
+.pm-mt-root .mt-topic .no {
+  width: 20px; height: 20px; border-radius: 50%; flex: 0 0 auto;
+  display: grid; place-items: center; font-size: var(--t-10); font-weight: 700;
+  color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+}
+.pm-mt-root .mt-summary { margin-top: var(--sp-2); font-size: var(--t-13); color: var(--ink-2); line-height: 1.7; }
+
+/* 决议：绿色描边卡，扁平无发光 */
+.pm-mt-root .mt-decisions { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: var(--sp-2); }
+.pm-mt-root .mt-decision {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  border: 1px solid color-mix(in srgb, var(--c-done) 38%, transparent);
+  background: color-mix(in srgb, var(--c-done) 7%, transparent);
+  border-radius: var(--r); padding: var(--sp-3) var(--sp-4);
+  font-size: var(--t-13); color: var(--ink); line-height: 1.55;
+}
+.pm-mt-root .mt-decision .no { flex: 0 0 auto; font-size: var(--t-11); font-weight: 700; color: var(--c-done); font-variant-numeric: tabular-nums; }
+
+/* 行动项表 */
+.pm-mt-root .mt-actions { margin-top: var(--sp-2); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.pm-mt-root .mt-act-row {
+  display: grid; grid-template-columns: 1fr 130px 110px 92px;
+  align-items: center; gap: var(--sp-3); padding: 9px var(--sp-4);
+}
+.pm-mt-root .mt-act-row + .mt-act-row { border-top: 1px solid var(--line); }
+.pm-mt-root .mt-act-row.head { background: var(--field-bg); padding: 6px var(--sp-4); }
+.pm-mt-root .mt-act-row.head span {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint);
+}
+.pm-mt-root .mt-act-title { font-size: var(--t-13); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.pm-mt-root .mt-act-owner { display: inline-flex; align-items: center; gap: 6px; font-size: var(--t-12); color: var(--ink-2); white-space: nowrap; }
+.pm-mt-root .mt-ava {
+  width: 18px; height: 18px; border-radius: 50%; flex: 0 0 auto;
+  display: grid; place-items: center; font-size: var(--t-10); font-weight: 700; color: rgb(255, 255, 255);
+  background: var(--c-prog);
+}
+/* 截止列：数字 nowrap 绝不从日期中间断行；逾期为独立小 chip，日期在下一行 */
+.pm-mt-root .mt-act-due {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  font-size: var(--t-12); color: var(--muted); font-variant-numeric: tabular-nums;
+  white-space: nowrap; justify-content: center;
+}
+.pm-mt-root .mt-act-due .mt-due-date { white-space: nowrap; }
+.pm-mt-root .mt-act-due .mt-overdue-chip {
+  font-style: normal; font-size: var(--t-10); font-weight: 650; line-height: 1;
+  color: var(--c-late); border: 1px solid color-mix(in srgb, var(--c-late) 32%, transparent);
+  background: color-mix(in srgb, var(--c-late) 10%, transparent);
+  border-radius: 999px; padding: 2px 7px; white-space: nowrap;
+}
+.pm-mt-root .mt-act-due.overdue .mt-due-date { color: var(--c-late); font-weight: 650; }
+
+/* ---------- 整页空态 ---------- */
+.pm-mt-root .mt-empty-card { flex: 1; }
+.pm-mt-root .mt-empty {
+  margin: auto; padding: var(--sp-8) var(--sp-4); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);
+}
+.pm-mt-root .mt-empty .mt-ico {
+  width: 44px; height: 44px; border-radius: var(--r); display: grid; place-items: center;
+  color: var(--faint); background: var(--field-bg); border: 1px solid var(--line);
+}
+.pm-mt-root .mt-empty h4 { margin: var(--sp-1) 0 0; font-size: var(--t-14); font-weight: 650; color: var(--ink-2); }
+.pm-mt-root .mt-empty p { margin: 0; font-size: var(--t-12); color: var(--faint); max-width: 420px; line-height: 1.6; }
+.pm-mt-root .mt-empty .mt-btn-primary { margin-top: var(--sp-3); }
+
+/* ---------- 窄屏降级 ---------- */
+@media (max-width: 1100px) {
+  .pm-mt-root .mt-body { grid-template-columns: 1fr; }
+  .pm-mt-root .mt-stats { grid-template-columns: repeat(2, 1fr); }
+  .pm-mt-root .mt-info { grid-template-columns: repeat(2, 1fr); }
+}

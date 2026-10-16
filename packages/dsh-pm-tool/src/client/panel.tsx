@@ -59,6 +59,12 @@ import { BoardBento } from './board/BoardBento.js'
 import { TaskTable } from './views/tasks.js'
 import { Overview } from './views/overview.js'
 import { GanttView } from './views/gantt.js'
+import { Milestones as MilestoneView } from './views/milestones.js'
+import { RiskIssuesView as RiskIssueTable } from './views/risk-issues.js'
+import { MeetingsView as MeetingTable } from './views/meetings.js'
+import { ReportsView as ProgressReportTable } from './views/reports.js'
+import { Deliverables as DeliverableTable } from './views/deliverables.js'
+import { PeopleView } from './views/people.js'
 import styles from './panel.css?raw'
 
 /** R3-OBS-002：把焦点归还解析接到真实 document（测试时由伪 DOM 注入，不在此硬编码）。 */
@@ -179,7 +185,7 @@ type ProgressReport = {
   blockers: string[]
   snapshotAt: string
   snapshot: {
-    tasks: { total: number, done: number, blocked: number, averageProgress: number | null, calcVersion?: number }
+    tasks: { total: number, todo: number, inProgress: number, done: number, blocked: number, averageProgress: number | null, calcVersion?: number }
     milestones: { total: number, achieved: number, atRisk: number, missed: number }
     meetings: { inPeriod: number, decisions: number }
     periodMilestones: { id: string, title: string, targetDate: string, status: string }[]
@@ -647,7 +653,7 @@ export function PmPanel({ execute }: PmPanelApi) {
                   onOpenTask={(t) => setDrawer({ kind: 'task', task: t })}
                   onGotoView={changeView}
                 />
-              : view === 'gantt' || view === 'milestones' || view === 'risk-issues' || view === 'people'
+              : view === 'gantt' || view === 'milestones' || view === 'risk-issues' || view === 'people' || view === 'overview'
                 ? null
                 : <>
                   <ProjectBar
@@ -738,10 +744,12 @@ export function PmPanel({ execute }: PmPanelApi) {
               />}
               {view === 'deliverables' && <DeliverableTable
                 deliverables={deliverables}
+                milestones={milestones}
+                tasks={tasks}
                 onCreate={() => setDrawer({ kind: 'deliverable' })}
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
               />}
-              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues}/>}
+              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues} meetingsCount={meetings.length} reportsCount={reports.length} deliverablesCount={deliverables.length} onEditProject={() => setDrawer({ kind: 'project-edit', project })}/>}
               {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
               {view === 'people' && <PeopleView
                 project={project}
@@ -1256,144 +1264,6 @@ export function CrossProjectPeople({ data, onPickProject, onOpenRecord }: {
   </section>
 }
 
-const CAPACITY = 5 // 规划假设：每人同时进行任务上限，可在此调整
-
-/** 单项目成员视图：按真实任务状态聚合（含 done），不硬凑设计稿数字。 */
-function PeopleView({ project, tasks, riskIssues, onOpenRecord, onGotoView }: {
-  project: Project
-  tasks: Task[]
-  riskIssues: RiskIssue[]
-  onOpenRecord: (projectId: string, type: string, id: string) => void
-  onGotoView: (v: View) => void
-}) {
-  const today = useMemo(() => {
-    const n = new Date()
-    return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`
-  }, [])
-  const [expanded, setExpanded] = useState<Set<string>>(new Set())
-
-  // 成员集合：项目负责人 + 任务 assignee + 风险 owner（归一化 key 去重）
-  const members = useMemo(() => {
-    const map = new Map<string, { key: string; name: string; isOwner: boolean }>()
-    const ownerKey = normalizePerson(project.owner)
-    if (!map.has(ownerKey)) map.set(ownerKey, { key: ownerKey, name: project.owner, isOwner: true })
-    for (const t of tasks) {
-      if (!t.assignee) continue
-      const k = normalizePerson(t.assignee)
-      if (!map.has(k)) map.set(k, { key: k, name: t.assignee, isOwner: false })
-    }
-    for (const r of riskIssues) {
-      if (!r.owner) continue
-      const k = normalizePerson(r.owner)
-      if (!map.has(k)) map.set(k, { key: k, name: r.owner, isOwner: false })
-    }
-    return [...map.values()]
-  }, [project.owner, tasks, riskIssues])
-
-  const stats = useMemo(() => members.map(m => {
-    const mine = tasks.filter(t => t.assignee && normalizePerson(t.assignee) === m.key)
-    const done = mine.filter(t => t.status === 'done').length
-    const inProgress = mine.filter(t => t.status === 'in_progress').length
-    const blocked = mine.filter(t => t.status === 'blocked').length
-    const todo = mine.filter(t => t.status === 'todo').length
-    const overdue = mine.filter(t => t.dueDate && t.dueDate < today && t.status !== 'done')
-    return { ...m, total: mine.length, done, inProgress, blocked, todo, overdue, tasks: mine }
-  }), [members, tasks, today])
-
-  const inProgCount = stats.reduce((n, s) => n + s.inProgress, 0)
-  const doneCount = stats.reduce((n, s) => n + s.done, 0)
-  const inProgPeople = stats.filter(s => s.inProgress > 0).length
-  const donePeople = stats.filter(s => s.done > 0)
-  const alerts = stats.flatMap(s => [
-    ...s.overdue.map(t => ({ who: s.name, kind: '逾期', id: t.id })),
-    ...s.tasks.filter(t => t.status === 'blocked').map(t => ({ who: s.name, kind: '阻塞', id: t.id })),
-  ])
-  const executorCount = stats.filter(s => !s.isOwner).length
-  const maxTotal = Math.max(1, ...stats.map(s => s.total))
-
-  if (!stats.length) {
-    return <div className="pm-ppl-page"><div className="pm-table-frame"><TableEmpty text="暂无成员数据，先拆解 WBS 并指定负责人"/></div></div>
-  }
-
-  const loadPct = (s: typeof stats[number]) => Math.min(100, Math.round((s.inProgress + s.blocked) / CAPACITY * 100))
-  const badge = (s: typeof stats[number]) => {
-    if (s.overdue.length) return { cls: 'pm-ppl-badge-err', text: `逾期 ${s.overdue.length}` }
-    if (s.blocked) return { cls: 'pm-ppl-badge-warn', text: `阻塞 ${s.blocked}` }
-    if (s.total === 0) return { cls: 'pm-ppl-badge-idle', text: 'PM 统筹' }
-    if (s.inProgress + s.blocked === 0) return { cls: 'pm-ppl-badge-idle', text: '未开始' }
-    return { cls: 'pm-ppl-badge-info', text: `负载 ${loadPct(s)}%` }
-  }
-  const toggle = (k: string) => setExpanded(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n })
-
-  return <div className="pm-ppl-page">
-    <h1 className="pm-page-title">成员</h1>
-    <div className="pm-sub">{project.id} · {stats.length} 人 · 进行中任务 {inProgCount} · 已完成 {doneCount}</div>
-
-    <div className="pm-ms-cards">
-      <div className="pm-stat-card"><strong>{stats.length}</strong><span>{executorCount} 执行人 + PM</span></div>
-      <div className="pm-stat-card"><strong>{inProgCount}</strong><span>进行中任务 · 分布于 {inProgPeople} 人</span></div>
-      <div className="pm-stat-card"><strong>{doneCount}</strong><span>完成 · {donePeople.length > 2 ? donePeople.map(d => d.name).slice(0, 2).join(' · ') + ' 等' : donePeople.map(d => d.name).join(' · ') || '—'}</span></div>
-      <div className="pm-stat-card"><strong>{alerts.length}</strong><span>{alerts.length ? alerts.map(a => `${a.who}·${a.kind} ${a.id}`).join('；') : '无告警'}</span></div>
-    </div>
-
-    <div className="pm-ppl-grid">
-      {stats.map(s => {
-        const b = badge(s)
-        const open = expanded.has(s.key)
-        return <div className="pm-ppl-card" key={s.key}>
-          <button className="pm-ppl-cardhead" onClick={() => toggle(s.key)}>
-            <span className="pm-person"><span>{s.name.slice(0, 1)}</span>{s.name}</span>
-            <span className="pm-ppl-role">{s.isOwner ? '项目负责人' : '团队成员'}</span>
-            <span className={`pm-chip ${b.cls}`}>{b.text}</span>
-          </button>
-          <div className="pm-ppl-count">任务 {s.total} · 进行 {s.inProgress} · 完成 {s.done}{s.blocked ? ` · 阻塞 ${s.blocked}` : ''}{s.todo ? ` · 待办 ${s.todo}` : ''}</div>
-          <div className="pm-ppl-bar">
-            {s.total > 0 && <>
-              <span className="pm-ppl-seg done" style={{ flexGrow: s.done }} title={`已完成 ${s.done}`}/>
-              <span className="pm-ppl-seg prog" style={{ flexGrow: s.inProgress }} title={`进行中 ${s.inProgress}`}/>
-              <span className="pm-ppl-seg blocked" style={{ flexGrow: s.blocked }} title={`阻塞 ${s.blocked}`}/>
-              <span className="pm-ppl-seg todo" style={{ flexGrow: s.todo }} title={`待办 ${s.todo}`}/>
-            </>}
-          </div>
-          {s.isOwner && <div className="pm-ppl-note">统筹 · 风险 owner · 不派任务</div>}
-          {open && s.tasks.length > 0 && <ul className="pm-ppl-tasks">
-            {s.tasks.map(t => <li key={t.id}>
-              <button onClick={() => onOpenRecord(project.id, 'task', t.id)}>
-                <span className="pm-ri-id">{t.code} {t.title}</span>
-                <StatusTag kind="task" value={t.status}/>
-                <span className="pm-ri-due">截止 {t.dueDate || '—'}</span>
-              </button>
-            </li>)}
-          </ul>}
-        </div>
-      })}
-    </div>
-
-    <div className="pm-ppl-dist card">
-      <div className="pm-ri-cardhead">成员负载分布 · 按状态</div>
-      <div className="pm-ppl-legend">
-        <span><i className="pm-ppl-seg done"/>已完成</span>
-        <span><i className="pm-ppl-seg prog"/>进行中</span>
-        <span><i className="pm-ppl-seg blocked"/>阻塞</span>
-        <span><i className="pm-ppl-seg todo"/>待办</span>
-      </div>
-      {stats.map(s => {
-        const w = s.total / maxTotal * 100
-        return <div className="pm-ppl-row" key={s.key}>
-          <span className="pm-ppl-name">{s.name}{s.overdue.length ? ` · 逾期${s.overdue.length}` : ''}{s.blocked ? ` · 阻塞${s.blocked}` : ''}</span>
-          <div className="pm-ppl-bar" style={{ width: `${Math.max(4, w)}%` }}>
-            <span className="pm-ppl-seg done" style={{ flexGrow: s.done }}/>
-            <span className="pm-ppl-seg prog" style={{ flexGrow: s.inProgress }}/>
-            <span className="pm-ppl-seg blocked" style={{ flexGrow: s.blocked }}/>
-            <span className="pm-ppl-seg todo" style={{ flexGrow: s.todo }}/>
-          </div>
-          <span className="pm-ri-id">{s.total}</span>
-        </div>
-      })}
-    </div>
-    <p className="pm-ppl-footnote">注：角色/权限为未来多人协作预留，落地以真实成员模型为准。</p>
-  </div>
-}
 function BoardPeopleSection({ data, onPickProject, onOpenRecord }: {
   data: Snapshot
   onPickProject: (id: string) => void
@@ -1769,376 +1639,12 @@ function ViewTab({
   </button>
 }
 
-function MilestoneView({
-  milestones,
-  tasks,
-  disabled,
-  onCreate,
-  onEdit,
-  run,
-  onSaved,
-  onOpenTask,
-  onGotoView,
-}: {
-  milestones: Milestone[]
-  tasks: Task[]
-  disabled: boolean
-  onCreate: () => void
-  onEdit: (milestone: Milestone) => void
-  run: (line: string) => Promise<boolean>
-  onSaved: () => void
-  onOpenTask: (task: Task) => void
-  onGotoView: (v: View) => void
-}) {
-  const done = milestones.filter(m => m.status === 'achieved')
-  const risk = milestones.filter(m => m.status === 'at_risk')
-  const pct = milestones.length ? Math.round(done.length / milestones.length * 100) : 0
-  const R = 26, C = 2 * Math.PI * R
-  const sorted = [...milestones].sort((a, b) => (a.targetDate || '').localeCompare(b.targetDate || ''))
-  const sub = (arr: Milestone[], single: string, multi: string) =>
-    arr.length === 0 ? '—' : arr.length === 1 ? arr[0].title : `${arr.length} ${multi}`
-  const nodeCls = (s: string) => s === 'achieved' ? 'ok' : s === 'at_risk' ? 'warn' : s === 'missed' ? 'err' : 'idle'
-  return <div className="pm-ms-page">
-    <h1 className="pm-page-title">里程碑</h1>
-    <div className="pm-sub">{milestones.length} 个里程碑 · 已达成 {done.length} · 有风险 {risk.length}</div>
-    <ReminderCapsule tasks={tasks} milestones={milestones} disabled={disabled} run={run} onSaved={onSaved} onOpenTask={onOpenTask} onGotoView={onGotoView}/>
-
-    <div className="pm-ms-cards">
-      <div className="pm-stat-card pm-ms-ringcard">
-        <svg width="64" height="64" viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r={R} fill="none" stroke="var(--pm-line)" strokeWidth="6"/>
-          <circle cx="32" cy="32" r={R} fill="none" stroke="var(--pm-accent)" strokeWidth="6"
-            strokeDasharray={`${(pct / 100) * C} ${C}`} strokeLinecap="round" transform="rotate(-90 32 32)"/>
-          <text x="32" y="36" textAnchor="middle" fontSize="13" fontWeight="700" fill="var(--pm-ink)">{pct}%</text>
-        </svg>
-        <div className="pm-ms-ringmeta"><strong>{done.length}/{milestones.length}</strong><span>已达成</span></div>
-      </div>
-      <div className="pm-stat-card"><strong>{milestones.length}</strong><span>总数 · 本项目</span></div>
-      <div className="pm-stat-card"><strong>{done.length}</strong><span>{sub(done, '', '个已达成')}</span></div>
-      <div className="pm-stat-card"><strong>{risk.length}</strong><span>{sub(risk, '', '个有风险')}</span></div>
-    </div>
-
-    {!milestones.length
-      ? <div className="pm-table-frame"><TableEmpty text="暂无里程碑，点击新建"/></div>
-      : <div className="pm-ms-timeline">
-          {sorted.map(m => (
-            <div className="pm-ms-node" key={m.id}>
-              <div className={`pm-ms-dot pm-ms-dot-${nodeCls(m.status)}`}/>
-              <div className="pm-ms-body">
-                <div className="pm-ms-line1">
-                  <button className="pm-ms-title" onClick={() => onEdit(m)}>{m.title}</button>
-                  <StatusTag kind="milestone" value={m.status}/>
-                  <span className="pm-ms-sp"/>
-                  {m.status !== 'achieved' && <button className="pm-row-button" title="标记达成" disabled={disabled}
-                    onClick={() => void run(`milestone update ${m.id} ${JSON.stringify({ status: 'achieved', achievedDate: new Date().toISOString().slice(0, 10) })}`).then(ok => ok && onSaved())}>
-                    <Check size={13}/></button>}
-                  <button className="pm-row-button" title="编辑" onClick={() => onEdit(m)}><Pencil size={13}/></button>
-                </div>
-                <div className="pm-ms-meta">目标 {m.targetDate || '—'} · 达成 {m.achievedDate || '—'}</div>
-                <div className="pm-ms-desc">{m.description || '暂无说明'}</div>
-              </div>
-            </div>
-          ))}
-        </div>}
-    <button className="pm-ms-new" onClick={onCreate}><Plus size={14}/> 新建里程碑</button>
-  </div>
-}
-
-function RiskIssueTable({
-  records,
-  disabled,
-  onCreate,
-  onEdit,
-}: {
-  records: RiskIssue[]
-  disabled: boolean
-  onCreate: () => void
-  onEdit: (record: RiskIssue) => void
-}) {
-  const [tab, setTab] = useState<'risk' | 'issue'>('risk')
-  const today = localTodayIso()
-  const risks = records.filter(r => r.type === 'risk')
-  const issues = records.filter(r => r.type === 'issue')
-  const openRisk = risks.filter(r => r.status === 'open').length
-  const hot = risks.filter(r => r.probability === 'high' && (r.impact === 'high' || r.impact === 'critical')).length
-  const openIssue = issues.filter(r => r.status === 'open' || r.status === 'monitoring').length
-  const overdue = records.filter(r => r.dueDate && r.dueDate < today && r.status !== 'closed').length
-  const visible = records.filter(r => r.type === tab)
-  const projId = records[0]?.projectId || '—'
-  const impactCol = (im?: string | null) => im === 'critical' ? 'high' : im === 'high' ? 'high' : im === 'medium' ? 'medium' : 'low'
-  const probRow = (pr?: string | null) => pr === 'high' ? 'high' : pr === 'medium' ? 'medium' : 'low'
-  // 矩阵热力底（按概率行 × 影响列）
-  const matrixBg: Record<string, Record<string, string>> = {
-    high:   { low: 'color-mix(in srgb, var(--pm-warning) 14%, transparent)', medium: 'color-mix(in srgb, var(--pm-danger) 20%, transparent)', high: 'color-mix(in srgb, var(--pm-danger) 45%, transparent)' },
-    medium: { low: 'color-mix(in srgb, var(--pm-warning) 10%, transparent)', medium: 'color-mix(in srgb, var(--pm-warning) 18%, transparent)', high: 'color-mix(in srgb, var(--pm-danger) 26%, transparent)' },
-    low:    { low: 'color-mix(in srgb, var(--pm-success) 10%, transparent)', medium: 'color-mix(in srgb, var(--pm-warning) 12%, transparent)', high: 'color-mix(in srgb, var(--pm-warning) 20%, transparent)' },
-  }
-  const cellOf = (pr: string, im: string) => risks.filter(r => probRow(r.probability) === pr && impactCol(r.impact) === im)
-
-  return <div className="pm-ri-page">
-    <h1 className="pm-page-title">风险与问题</h1>
-    <div className="pm-sub">{projId} · 开放风险 {openRisk} · 监控中问题 {openIssue}</div>
-
-    <div className="pm-ri-tabs" role="tablist" aria-label="筛选记录类型">
-      <button className={tab === 'risk' ? 'on' : ''} onClick={() => setTab('risk')}>风险 {risks.length}</button>
-      <button className={tab === 'issue' ? 'on' : ''} onClick={() => setTab('issue')}>问题 {issues.length}</button>
-    </div>
-
-    <div className="pm-ms-cards">
-      <div className="pm-stat-card"><strong>{openRisk}</strong><span>开放风险 · 待处理</span></div>
-      <div className="pm-stat-card"><strong>{hot}</strong><span>高优先 · 高概率·高影响</span></div>
-      <div className="pm-stat-card"><strong>{openIssue}</strong><span>开放问题 · 待处理/监控中</span></div>
-      <div className="pm-stat-card"><strong>{overdue}</strong><span>逾期应对 · {overdue ? '有逾期' : '无逾期'}</span></div>
-    </div>
-
-    <div className="pm-ri-cols">
-      <div className="pm-ri-matrix card">
-        <div className="pm-ri-cardhead">风险矩阵 · 概率 × 影响</div>
-        <div className="pm-mtx">
-          <div className="pm-mtx-corner"/>
-          <div className="pm-mtx-colh">低</div><div className="pm-mtx-colh">中</div><div className="pm-mtx-colh">高</div>
-          {(['high', 'medium', 'low'] as const).map(pr =>
-            <>
-              <div key={pr + '-h'} className="pm-mtx-rowh">{pr === 'high' ? '高' : pr === 'medium' ? '中' : '低'}</div>
-              {(['low', 'medium', 'high'] as const).map(im => {
-                const cell = cellOf(pr, im)
-                return <div key={pr + im} className="pm-mtx-cell" style={{ background: matrixBg[pr][im] }}>
-                  {cell.map(r => <button key={r.id} className="pm-mtx-dot" title={`${r.id} ${r.title}`} onClick={() => onEdit(r)}>{r.id}</button>)}
-                </div>
-              })}
-            </>
-          )}
-        </div>
-      </div>
-
-      <div className="pm-ri-list card">
-        <div className="pm-ri-cardhead">{tab === 'risk' ? '风险' : '问题'}清单 · {visible.length}</div>
-        {!visible.length && <div className="pm-table-frame"><TableEmpty text={`暂无${tab === 'risk' ? '风险' : '问题'}`}/></div>}
-        {visible.map(r => (
-          <button key={r.id} className="pm-ri-item" onClick={() => onEdit(r)}>
-            <div className="pm-ri-line1">
-              <span className="pm-ri-id">{r.id}</span>
-              <span className="pm-type-tag" data-value={r.type}>{riskIssueType[r.type]}</span>
-              <span className="pm-ri-title">{r.title}</span>
-              <span className="pm-ms-sp"/>
-              {r.type === 'risk'
-                ? <span className="pm-ri-qual">{probabilityLabels[r.probability ?? ''] || '—'}·{impactLabels[r.impact]}</span>
-                : <span className="pm-ri-qual">影响{impactLabels[r.impact]}</span>}
-            </div>
-            <div className="pm-ri-desc">{r.description || '暂无说明'}</div>
-            <div className="pm-ri-plan">{r.type === 'risk' ? `应对：${r.responsePlan || '暂无'}` : `方案：${r.solution || '暂无'}`}</div>
-            <div className="pm-ri-line3">
-              <span className="pm-person"><span>{(r.owner || '未').slice(0, 1)}</span>{r.owner || '未指定'}</span>
-              <span className="pm-ri-due">截止 {r.dueDate || '—'}</span>
-              <span className="pm-ms-sp"/>
-              <StatusTag kind="risk-issue" value={r.status}/>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-
-    <button className="pm-ms-new" onClick={onCreate}><Plus size={14}/> 新建风险/问题</button>
-  </div>
-}
-
-function MeetingTable({
-  meetings,
-  onCreate,
-  onEdit,
-}: {
-  meetings: Meeting[]
-  onCreate: () => void
-  onEdit: (meeting: Meeting) => void
-}) {
-  const [query, setQuery] = useState('')
-  const [status, setStatus] = useState('all')
-  const visible = meetings.filter(meeting => {
-    const text = `${meeting.title} ${meeting.summary} ${meeting.facilitator} ${meeting.participants.join(' ')}`
-      .toLocaleLowerCase()
-    return text.includes(query.trim().toLocaleLowerCase())
-      && (status === 'all' || meeting.status === status)
-  })
-  return <>
-    <TableToolbar query={query} setQuery={setQuery} primaryLabel="新增会议" onCreate={onCreate}>
-      <label className="pm-toolbar-select">
-        <Filter size={14}/>
-        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选会议状态">
-          <option value="all">全部状态</option>
-          {Object.entries(meetingStatus).map(([value, label]) =>
-            <option key={value} value={value}>{label}</option>,
-          )}
-        </select>
-      </label>
-    </TableToolbar>
-    <div className="pm-table-frame">
-      <div className="pm-table-scroll">
-        <table className="pm-data-table pm-meeting-table">
-          <thead><tr>
-            <th>会议日期</th><th className="pm-col-title">标题</th><th>状态</th><th>主持人</th>
-            <th>参会人数</th><th>行动项</th><th>摘要</th><th className="pm-col-actions"/>
-          </tr></thead>
-          <tbody>
-            {visible.map(meeting => {
-              const done = meeting.actions.filter(action => action.status === 'done').length
-              const promoted = meeting.actions.filter(action => action.taskId).length
-              return <tr
-                className="pm-record-row pm-meeting-row"
-                key={meeting.id}
-                data-id={meeting.id}
-                onClick={() => onEdit(meeting)}
-              >
-                <td>{meeting.meetingDate}{meeting.startTime ? ` ${meeting.startTime}` : ''}</td>
-                <td className="pm-col-title"><button className="pm-title-cell" onClick={event => { event.stopPropagation(); onEdit(meeting) }}>{meeting.title}</button></td>
-                <td><StatusTag kind="meeting" value={meeting.status}/></td>
-                <td>{meeting.facilitator || <span className="pm-cell-empty">未指定</span>}</td>
-                <td>{meeting.participants.length}</td>
-                <td title={`已转任务 ${promoted} / 共 ${meeting.actions.length} 个行动项`}>{done}/{meeting.actions.length}</td>
-                <td className="pm-description-cell">{meeting.summary || <span className="pm-cell-empty">暂无摘要</span>}</td>
-                <td className="pm-col-actions">
-                  <button className="pm-row-button" aria-label={`编辑 ${meeting.title}`} onClick={event => { event.stopPropagation(); onEdit(meeting) }}><Pencil size={14}/></button>
-                  <button
-                    className="pm-meeting-detail-btn pm-row-button"
-                    data-id={meeting.id}
-                    aria-label={`查看 ${meeting.title} 详情`}
-                    title="查看详情/转任务"
-                    onClick={event => { event.stopPropagation(); onEdit(meeting) }}
-                  ><ChevronRight size={14}/></button>
-                </td>
-              </tr>
-            })}
-          </tbody>
-        </table>
-      </div>
-      {!visible.length && <TableEmpty text={meetings.length ? '没有符合筛选条件的会议' : '暂无会议纪要'}/>}
-      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>新增会议</button>
-    </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
-  </>
-}
-
 /** PROD-09：相邻周期对比徽标。null=无上一份不显示；0=持平；否则 ↑/↓ + 幅度（可带单位，如 %）。 */
 function DeltaBadge({ value, unit }: { value: number | null, unit?: string }) {
   if (value === null) return null
   if (value === 0) return <span className="pm-delta pm-delta--flat" title="与上一份持平">持平 0{unit ?? ''}</span>
   const up = value > 0
   return <span className={`pm-delta ${up ? 'pm-delta--up' : 'pm-delta--down'}`} title="与上一份相比">{up ? '↑' : '↓'}{Math.abs(value)}{unit ?? ''}</span>
-}
-
-function ProgressReportTable({
-  reports,
-  onCreate,
-  onEdit,
-}: {
-  reports: ProgressReport[]
-  onCreate: () => void
-  onEdit: (report: ProgressReport) => void
-}) {
-  const [query, setQuery] = useState('')
-  const [status, setStatus] = useState('all')
-  // 在全量（已按 periodEnd 降序）reports 上配对上一份，不随筛选改变配对口径。
-  const diff = useMemo(() => diffAgainstPrevious(reports), [reports])
-  const visible = reports.filter(report =>
-    `${report.title} ${report.executiveSummary}`.toLocaleLowerCase()
-      .includes(query.trim().toLocaleLowerCase())
-    && (status === 'all' || report.status === status))
-  return <>
-    <TableToolbar query={query} setQuery={setQuery} primaryLabel="生成快照" onCreate={onCreate}>
-      <label className="pm-toolbar-select">
-        <Filter size={14}/>
-        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选汇报状态">
-          <option value="all">全部状态</option>
-          {Object.entries(progressReportStatus).map(([value, label]) =>
-            <option key={value} value={value}>{label}</option>)}
-        </select>
-      </label>
-    </TableToolbar>
-    <div className="pm-table-frame">
-      <div className="pm-table-scroll">
-        <table className="pm-data-table pm-report-table">
-          <thead><tr>
-            <th>汇报周期</th><th className="pm-col-title">标题</th><th>状态</th>
-            <th>任务进度</th><th>里程碑</th><th>异常项</th><th>快照时间</th><th className="pm-col-actions"/>
-          </tr></thead>
-          <tbody>{visible.map(report => <tr className="pm-record-row" key={report.id}>
-            <td>{report.periodStart} 至 {report.periodEnd}</td>
-            <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(report)}>{report.title}</button></td>
-            <td><StatusTag kind="report" value={report.status}/></td>
-            <td><Progress value={report.snapshot.tasks.averageProgress}/> <DeltaBadge value={diff.get(report.id)?.avgProgress ?? null} unit="%"/></td>
-            <td>{report.snapshot.milestones.achieved}/{report.snapshot.milestones.total}</td>
-            <td>
-              <span className="pm-exception-count" data-alert={report.snapshot.exceptions.length > 0}>{report.snapshot.exceptions.length}</span>
-              <DeltaBadge value={diff.get(report.id)?.exceptionCount ?? null}/>
-              <div className="pm-delta-overdue">逾期 {report.snapshot.exceptions.filter(item => item.kind === 'overdue_task').length}<DeltaBadge value={diff.get(report.id)?.overdueTask ?? null}/></div>
-            </td>
-            <td>{report.snapshotAt.slice(0, 10)}</td>
-            <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${report.title}`} onClick={() => onEdit(report)}><Pencil size={14}/></button></td>
-          </tr>)}</tbody>
-        </table>
-      </div>
-      {!visible.length && <TableEmpty text={reports.length ? '没有符合筛选条件的进度汇报' : '暂无进度汇报'}/>}
-      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>生成快照</button>
-    </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
-  </>
-}
-
-function DeliverableTable({
-  deliverables,
-  onCreate,
-  onEdit,
-}: {
-  deliverables: Deliverable[]
-  onCreate: () => void
-  onEdit: (deliverable: Deliverable) => void
-}) {
-  const [query, setQuery] = useState('')
-  const [status, setStatus] = useState('all')
-  const visible = deliverables.filter(item => {
-    const text = `${item.name} ${item.version} ${item.owner} ${item.location} ${item.description}`
-      .toLocaleLowerCase()
-    return text.includes(query.trim().toLocaleLowerCase())
-      && (status === 'all' || item.status === status)
-  })
-  return <>
-    <TableToolbar query={query} setQuery={setQuery} primaryLabel="新增交付物" onCreate={onCreate}>
-      <label className="pm-toolbar-select">
-        <Filter size={14}/>
-        <select value={status} onChange={event => setStatus(event.currentTarget.value)} aria-label="筛选交付物状态">
-          <option value="all">全部状态</option>
-          {Object.entries(deliverableStatus).map(([value, label]) =>
-            <option key={value} value={value}>{label}</option>)}
-        </select>
-      </label>
-    </TableToolbar>
-    <div className="pm-table-frame">
-      <div className="pm-table-scroll">
-        <table className="pm-data-table pm-deliverable-table">
-          <thead><tr>
-            <th className="pm-col-title">交付物名称</th><th>版本</th><th>状态</th>
-            <th>负责人</th><th>计划交付日期</th><th>位置</th><th>变更次数</th><th className="pm-col-actions"/>
-          </tr></thead>
-          <tbody>{visible.map(item => <tr className="pm-record-row" key={item.id}>
-            <td className="pm-col-title"><button className="pm-title-cell" onClick={() => onEdit(item)}>{item.name}</button></td>
-            <td>{item.version
-              ? <span className="pm-cell-value">{item.version}</span>
-              : <span className="pm-cell-empty">-</span>}</td>
-            <td><StatusTag kind="deliverable" value={item.status}/></td>
-            <td>{item.owner
-              ? <span className="pm-person"><span>{item.owner.slice(0, 1)}</span>{item.owner}</span>
-              : <span className="pm-cell-empty">未指定</span>}</td>
-            <td>{item.dueDate || <span className="pm-cell-empty">-</span>}</td>
-            <td className="pm-description-cell">{item.location || <span className="pm-cell-empty">未登记位置</span>}</td>
-            <td>{item.history.length}</td>
-            <td className="pm-col-actions"><button className="pm-row-button" aria-label={`编辑 ${item.name}`} onClick={() => onEdit(item)}><Pencil size={14}/></button></td>
-          </tr>)}</tbody>
-        </table>
-      </div>
-      {!visible.length && <TableEmpty text={deliverables.length ? '没有符合筛选条件的交付物' : '暂无交付物台账'}/>}
-      <button className="pm-add-row" onClick={onCreate}><Plus size={14}/>新增交付物</button>
-    </div>
-    <div className="pm-table-footer">{visible.length} 条记录</div>
-  </>
 }
 
 function TableToolbar({
@@ -2749,6 +2255,10 @@ function TaskForm({
       return next
     })
   }
+  // PROD-11 前置依赖选择器：受控已选集合（初始 = 已落盘 predecessorIds）；
+  // 搜索词仅过滤视图，被过滤掉的已选项仍在集合中、照常随表单提交。
+  const [predQuery, setPredQuery] = useState('')
+  const [checkedIds, setCheckedIds] = useState<ReadonlySet<string>>(() => new Set(task?.predecessorIds ?? []))
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // T7：前端内联拦截非法仓库（中文 role=alert / aria-invalid），提交被拦截、磁盘零写。
@@ -2879,17 +2389,57 @@ function TaskForm({
         const selfId = task?.id
         const rows = flattenTaskTree(tasks, new Set()).filter(r => r.task.id !== selfId)
         if (!rows.length) return <span className="pm-muted">暂无可选前置任务</span>
-        return <div className="pm-predecessor-list">
-          {rows.map(row => (
-            <label key={row.task.id} className="pm-predecessor-item" style={{ paddingLeft: `${6 + row.depth * 14}px` }}>
-              <input
-                type="checkbox" name="predecessorIds" value={row.task.id}
-                defaultChecked={task?.predecessorIds?.includes(row.task.id) ?? false}
-              />
-              <span className="pm-predecessor-code">{row.task.code}</span>
-              <span>{row.task.title}{row.task.status === 'done' ? '（已完成）' : ''}</span>
-            </label>
-          ))}
+        // 搜索：按 code/标题实时过滤视图；被过滤掉的已选项仍在 checkedIds 中、照常提交。
+        const q = predQuery.trim().toLowerCase()
+        const matches = (row: { task: { code?: string, title: string } }) =>
+          !q || row.task.code?.toLowerCase().includes(q) || row.task.title.toLowerCase().includes(q)
+        // 层级引导线：前序遍历扁平行序列里，每行子树延伸到 subtreeEnd[i]；
+        // ancestorRows[i] = 该行各祖先层所在的行下标（depth 0..depth-1）。祖先层子树在本行之后还有行 → 竖线延续。
+        const subtreeEnd = rows.map((row, i) => {
+          let end = i
+          for (let j = i + 1; j < rows.length && rows[j].depth > row.depth; j++) end = j
+          return end
+        })
+        const ancestorRows: number[][] = rows.map((row, i) => {
+          const path: number[] = []
+          for (let j = i - 1; j >= 0 && path.length < row.depth; j--) {
+            if (rows[j].depth === path.length) path.unshift(j)
+          }
+          return path
+        })
+        return <div className="pm-pred-picker">
+          <input
+            className="pm-pred-search" type="search" placeholder="搜索编号或任务标题…"
+            value={predQuery} onChange={e => setPredQuery(e.currentTarget.value)}
+            aria-label="搜索前置任务"
+          />
+          <div className="pm-predecessor-list" role="group" aria-label="可选前置任务">
+            {rows.map((row, i) => {
+              if (!matches(row)) return null
+              const d = row.depth
+              return <label key={row.task.id} className="pm-predecessor-item" data-checked={checkedIds.has(row.task.id) || undefined}>
+                {Array.from({ length: d }, (_, k) => (
+                  <span key={k} className="pm-pred-guide"
+                    data-line={subtreeEnd[ancestorRows[i][k]] > i || undefined}
+                    data-tick={k === d - 1 || undefined}/>
+                ))}
+                <input
+                  type="checkbox" name="predecessorIds" value={row.task.id}
+                  checked={checkedIds.has(row.task.id)}
+                  onChange={e => setCheckedIds(prev => {
+                    const next = new Set(prev)
+                    if (e.currentTarget.checked) next.add(row.task.id); else next.delete(row.task.id)
+                    return next
+                  })}
+                />
+                <span className="pm-predecessor-code">{row.task.code}</span>
+                <span className="pm-predecessor-name">{row.task.title}</span>
+                <span className="pm-pred-status" data-status={row.task.status}>{taskStatus[row.task.status] ?? row.task.status}</span>
+              </label>
+            })}
+            {!rows.some(matches) && <span className="pm-muted">无匹配「{predQuery.trim()}」的任务</span>}
+          </div>
+          <div className="pm-pred-footer">已选 {checkedIds.size} 项</div>
         </div>
       })()}
     </Field>

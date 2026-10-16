@@ -17,69 +17,76 @@
 }
 
 .pm-shell {
-  /* Redesign palette (Linear-grade). Light = default; dark overrides under body[data-ds-dark-theme].
-     Colors expressed as rgb()/rgba() (same locked values as the HTML design spec) to keep the
-     no-hex-in-css verify contract; switching is owned entirely by dsh's body[data-ds-dark-theme]. */
-  /* Type stacks: Inter OFL embedded; CJK falls back to PingFang/Noto; dsw-font-family kept as last host fallback. */
-  --pm-font-sans: 'Inter', 'PingFang SC', 'Noto Sans SC', var(--dsw-font-family, system-ui), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --pm-font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
-  /* ---- light (default) ---- */
-  --pm-blue: rgb(94, 106, 210);
-  /* GI-WEB-13 §0.8：保留宿主语义变量别名桥接（下一行 redesign 锁定 indigo 后覆盖，runtime 取 rgb 值） */
-  --pm-accent: var(--dsw-alias-state-business-primary);
-  --pm-accent: rgb(94, 106, 210);
-  --pm-blue-hover: rgb(78, 90, 200);
-  --pm-blue-soft: rgba(94, 106, 210, 0.12);
-  --pm-ink: rgb(20, 23, 28);
-  --pm-secondary: rgb(92, 99, 112);
-  --pm-muted: rgb(138, 143, 152);
-  --pm-line: rgba(15, 20, 30, 0.08);
-  --pm-line-soft: rgba(15, 20, 30, 0.06);
-  --pm-canvas: rgb(255, 255, 255);
-  --pm-surface: rgb(255, 255, 255);
-  --pm-hover: rgb(244, 245, 247);
-  --pm-danger: rgb(220, 38, 38);
-  --pm-success: rgb(22, 163, 74);
-  --pm-warning: rgb(217, 119, 6);
+  /* dsh-aligned token layer. pm-tool consumes the dsh ui-theme (--dsw-*) tokens directly;
+     light/dark auto-follows body[data-ds-dark-theme] — no own theme detection. Fallbacks keep
+     the panel legible if ever mounted outside the host. Fonts are dsh's system stacks (no bundled
+     Inter); success green only for "done", primary interaction rides the dsh blue. */
+  --pm-font-sans: var(--dsw-font-family), -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --pm-font-brand: var(--dsw-font-family-brand), var(--pm-font-sans);
+  --pm-font-mono: var(--ds-font-family-code), ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* ===== 重设计 v2 设计语言（深色电影感 Bento / 浅色暖纸白）；rgb/rgba 表达，沿用无 hex 契约 ===== */
-  --bg: rgb(244, 242, 236);
-  --bg-grad:
-    radial-gradient(1100px 600px at 80% -12%, rgba(91, 141, 239, 0.06), transparent 60%),
-    radial-gradient(800px 500px at 5% 0%, rgba(53, 194, 138, 0.06), transparent 55%),
-    rgb(244, 242, 236);
-  --bg-elev: rgb(239, 236, 229);
-  --surface: rgb(253, 252, 248);
-  --surface-2: rgb(247, 244, 237);
-  --surface-3: rgb(239, 236, 226);
-  --surface-g: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 40%);
-  --line: rgba(28, 26, 20, 0.08);
-  --line-2: rgba(28, 26, 20, 0.12);
-  --line-3: rgba(28, 26, 20, 0.18);
-  --ink: rgb(36, 38, 44);
-  --ink-2: rgb(66, 69, 77);
-  --muted: rgb(110, 114, 123);
-  --faint: rgb(154, 160, 168);
-  --c-done: rgb(47, 174, 124);   --c-done-d: rgb(42, 157, 110);
-  --c-prog: rgb(63, 115, 216);   --c-prog-d: rgb(61, 111, 214);
-  --c-block: rgb(220, 116, 60);  --c-block-d: rgb(207, 107, 48);
-  --c-late: rgb(214, 64, 70);    --c-late-d: rgb(197, 59, 64);
-  --c-todo: rgb(124, 130, 140);  --c-todo-d: rgb(110, 116, 126);
-  --glow-done: radial-gradient(closest-side, rgba(53, 194, 138, 0.16), transparent 72%);
-  --glow-prog: radial-gradient(closest-side, rgba(91, 141, 239, 0.16), transparent 72%);
-  --glow-block: radial-gradient(closest-side, rgba(240, 135, 75, 0.14), transparent 72%);
-  --glow-late: radial-gradient(closest-side, rgba(229, 72, 77, 0.16), transparent 72%);
-  --glow-soft: radial-gradient(600px 300px at 50% -20%, rgba(91, 141, 239, 0.08), transparent 70%);
-  --shadow-1: 0 1px 2px rgba(70, 58, 38, 0.06);
-  --shadow-2: 0 1px 2px rgba(70, 58, 38, 0.05), 0 8px 22px rgba(70, 58, 38, 0.08);
-  --shadow-3: 0 2px 6px rgba(70, 58, 38, 0.06), 0 20px 50px rgba(70, 58, 38, 0.12);
-  --shadow-glow-done: 0 8px 26px rgba(47, 174, 124, 0.14);
-  --shadow-glow-prog: 0 8px 26px rgba(63, 115, 216, 0.16);
-  --shadow-glow-late: 0 8px 26px rgba(214, 64, 70, 0.15);
-  --field-bg: rgba(28, 26, 20, 0.04);
-  --field-bg-focus: rgba(91, 141, 239, 0.1);
-  /* 尺寸 / 排版基线（两主题一致；深色只覆盖颜色） */
-  --r-xs: 6px; --r-sm: 9px; --r: 12px; --r-lg: 16px; --r-xl: 20px; --r-2xl: 24px;
+  /* semantic / brand (dsh blue) */
+  --pm-accent: var(--dsw-alias-state-business-primary);
+  --pm-blue: var(--pm-accent);
+  --pm-blue-hover: var(--dsw-alias-button-info-hover, rgb(122, 170, 255));
+  --pm-blue-soft: var(--dsw-alias-state-business-tertiary, rgb(228, 237, 253));
+  --pm-ink: var(--dsw-alias-label-primary, rgb(28, 28, 30));
+  --pm-secondary: var(--dsw-alias-label-secondary, rgb(97, 102, 107));
+  --pm-muted: var(--dsw-alias-label-tertiary, rgb(129, 133, 140));
+  --pm-line: var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.1));
+  --pm-line-soft: var(--dsw-alias-border-l1, rgba(0, 0, 0, 0.04));
+  --pm-canvas: var(--dsw-alias-bg-base, rgb(255, 255, 255));
+  --pm-surface: var(--dsw-alias-bg-base, rgb(255, 255, 255));
+  --pm-hover: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.04));
+  --pm-danger: var(--dsw-alias-state-error-primary, rgb(239, 68, 68));
+  --pm-success: var(--dsw-alias-state-success-primary, rgb(34, 197, 94));
+  --pm-warning: var(--dsw-alias-state-warn-primary, rgb(245, 158, 11));
+
+  /* ===== dsh-flat design language (consumed by the redesign views) ===== */
+  --bg: var(--dsw-alias-bg-base, rgb(255, 255, 255));
+  --bg-grad: none;
+  --bg-elev: var(--dsw-alias-bg-layer-2, rgb(245, 246, 247));
+  --surface: var(--dsw-alias-bg-layer-1, rgb(255, 255, 255));
+  --surface-2: var(--dsw-alias-bg-layer-2, rgb(245, 246, 247));
+  --surface-3: var(--dsw-alias-bg-layer-3, rgb(237, 238, 242));
+  --surface-g: none;
+  --line: var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.1));
+  --line-2: var(--dsw-alias-border-l3, rgba(0, 0, 0, 0.12));
+  --line-3: var(--dsw-alias-border-l4, rgba(0, 0, 0, 0.16));
+  --ink: var(--dsw-alias-label-primary, rgb(28, 28, 30));
+  --ink-2: var(--dsw-alias-label-secondary, rgb(97, 102, 107));
+  --muted: var(--dsw-alias-label-tertiary, rgb(129, 133, 140));
+  --faint: var(--dsw-alias-label-caption, rgb(173, 178, 184));
+  --c-done: var(--dsw-alias-state-success-primary, rgb(34, 197, 94));
+  --c-done-d: var(--dsw-alias-state-success-secondary, rgb(78, 209, 126));
+  --c-prog: var(--dsw-alias-state-business-primary, rgb(65, 118, 230));
+  --c-prog-d: var(--dsw-static-deepseek-600, rgb(72, 104, 178));
+  --c-block: var(--dsw-alias-state-warn-primary, rgb(245, 158, 11));
+  --c-block-d: var(--dsw-alias-state-warn-label, rgb(221, 134, 41));
+  --c-late: var(--dsw-alias-state-error-primary, rgb(239, 68, 68));
+  --c-late-d: var(--dsw-alias-state-error-secondary, rgb(242, 90, 90));
+  --c-todo: var(--dsw-alias-state-idle-primary, rgb(212, 212, 212));
+  --c-todo-d: var(--dsw-static-neutral-500, rgb(127, 130, 135));
+  /* dsh is flat: ambient glows removed. */
+  --glow-done: none; --glow-prog: none; --glow-block: none;
+  --glow-late: none; --glow-soft: none;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.08);
+  --shadow-3: 0 2px 8px rgba(0, 0, 0, 0.08), 0 20px 48px rgba(0, 0, 0, 0.12);
+  --shadow-glow-done: 0 8px 22px rgba(34, 197, 94, 0.16);
+  --shadow-glow-prog: 0 8px 22px rgba(65, 118, 230, 0.20);
+  --shadow-glow-late: 0 8px 22px rgba(239, 68, 68, 0.18);
+  --field-bg: var(--dsw-alias-bg-module-platform, rgb(245, 246, 247));
+  --field-bg-focus: var(--dsw-alias-interactive-bg-active, rgba(65, 118, 230, 0.12));
+  /* corner radii follow dsh */
+  --r-xs: var(--dsw-radius-xs, 4px);
+  --r-sm: var(--dsw-radius-sm, 8px);
+  --r: var(--dsw-radius-md, 12px);
+  --r-lg: var(--dsw-radius-lg, 16px);
+  --r-xl: var(--dsw-radius-xl, 20px);
+  --r-2xl: var(--dsw-radius-panel, 28px);
+  /* spacing / type baseline (theme-independent) */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
   --sp-6: 24px; --sp-8: 32px; --sp-9: 40px; --sp-10: 48px; --sp-12: 64px;
   --t-10: 10px; --t-11: 11px; --t-12: 12px; --t-13: 13px; --t-14: 14px;
@@ -90,70 +97,23 @@
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-  background: var(--pm-surface);
-  color: var(--pm-ink);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--pm-font-sans);
-  /* All numbers use tabular (mono-width) figures, matching the design spec. */
-  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  font-feature-settings: 'tnum' 1;
   font-size: var(--dsh-content-font-size, 14px);
   container-type: inline-size;
   line-height: 1.45;
 }
 
-/* ---- dark theme: dsh toggles body[data-ds-dark-theme]; we override the palette ---- */
+/* dsh aliases already resolve to dark values under body[data-ds-dark-theme]; only the
+   theme-dependent shadow/field strength needs an override. */
 body[data-ds-dark-theme] .pm-shell {
-  --pm-blue: rgb(94, 106, 210);
-  --pm-accent: rgb(94, 106, 210);
-  --pm-blue-hover: rgb(126, 137, 239);
-  --pm-blue-soft: rgba(94, 106, 210, 0.16);
-  --pm-ink: rgb(247, 248, 248);
-  --pm-secondary: rgb(138, 143, 152);
-  --pm-muted: rgb(208, 214, 224);
-  --pm-line: rgba(255, 255, 255, 0.05);
-  --pm-line-soft: rgba(255, 255, 255, 0.04);
-  --pm-canvas: rgb(0, 0, 0);
-  --pm-surface: rgb(15, 16, 17);
-  --pm-hover: rgb(24, 25, 27);
-  --pm-danger: rgb(239, 68, 68);
-  --pm-success: rgb(34, 197, 94);
-  --pm-warning: rgb(245, 158, 11);
-
-  /* ===== 重设计 v2 · 深色覆盖（近黑冷灰 / 环境光晕 / 多层柔影 / 克制边框） ===== */
-  --bg: rgb(8, 9, 12);
-  --bg-grad:
-    radial-gradient(1200px 700px at 78% -10%, rgba(91, 141, 239, 0.07), transparent 60%),
-    radial-gradient(900px 600px at 8% 0%, rgba(53, 194, 138, 0.05), transparent 55%),
-    rgb(8, 9, 12);
-  --bg-elev: rgb(13, 15, 20);
-  --surface: rgb(18, 21, 27);
-  --surface-2: rgb(23, 26, 34);
-  --surface-3: rgb(29, 33, 43);
-  --surface-g: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 42%);
-  --line: rgba(255, 255, 255, 0.06);
-  --line-2: rgba(255, 255, 255, 0.10);
-  --line-3: rgba(255, 255, 255, 0.16);
-  --ink: rgb(233, 236, 241);
-  --ink-2: rgb(185, 191, 201);
-  --muted: rgb(139, 145, 157);
-  --faint: rgb(96, 102, 114);
-  --c-done: rgb(53, 194, 138);  --c-done-d: rgb(42, 157, 110);
-  --c-prog: rgb(91, 141, 239);  --c-prog-d: rgb(61, 111, 214);
-  --c-block: rgb(240, 135, 75); --c-block-d: rgb(207, 107, 48);
-  --c-late: rgb(229, 72, 77);   --c-late-d: rgb(197, 59, 64);
-  --c-todo: rgb(138, 143, 152); --c-todo-d: rgb(110, 116, 126);
-  --glow-done: radial-gradient(closest-side, rgba(53, 194, 138, 0.22), transparent 72%);
-  --glow-prog: radial-gradient(closest-side, rgba(91, 141, 239, 0.24), transparent 72%);
-  --glow-block: radial-gradient(closest-side, rgba(240, 135, 75, 0.20), transparent 72%);
-  --glow-late: radial-gradient(closest-side, rgba(229, 72, 77, 0.22), transparent 72%);
-  --glow-soft: radial-gradient(600px 300px at 50% -20%, rgba(140, 170, 255, 0.10), transparent 70%);
-  --shadow-1: 0 1px 1px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.40), 0 6px 18px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
-  --shadow-3: 0 2px 6px rgba(0, 0, 0, 0.40), 0 18px 48px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
-  --shadow-glow-done: 0 8px 30px rgba(53, 194, 138, 0.14);
-  --shadow-glow-prog: 0 8px 30px rgba(91, 141, 239, 0.16);
-  --shadow-glow-late: 0 8px 30px rgba(229, 72, 77, 0.16);
-  --field-bg: rgba(255, 255, 255, 0.04);
-  --field-bg-focus: rgba(91, 141, 239, 0.1);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 2px 8px rgba(0, 0, 0, 0.5), 0 22px 50px rgba(0, 0, 0, 0.65);
+  --field-bg: var(--dsw-alias-bg-module-platform, rgba(255, 255, 255, 0.06));
+  --field-bg-focus: var(--dsw-alias-interactive-bg-active, rgba(122, 170, 255, 0.18));
 }
 
 .pm-shell *, .pm-shell *::before, .pm-shell *::after { box-sizing: border-box; }
@@ -1131,16 +1091,46 @@ body[data-ds-dark-theme] .pm-shell {
 }
 
 /* PROD-11/21/23：前置多选、健康灯、仓库行 */
-.pm-predecessor-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow: auto; padding: 2px 0; }
-.pm-predecessor-item { display: flex; flex-direction: row; align-items: baseline; gap: 6px; font-size: 12px; min-height: 22px; line-height: 1.35; }
+/* 前置依赖选择器（横切重设计 v2）：搜索框 + WBS 层级细引导线 + 状态标签 + 整行选中高亮，全部走 dsh token。 */
+.pm-pred-picker { display: flex; flex-direction: column; gap: 0; }
+.pm-pred-search {
+  width: 100%; box-sizing: border-box; min-height: 32px; margin-bottom: 8px;
+  padding: 6px 10px; font-size: 12px;
+  border: 1px solid var(--dsw-alias-border-l4); border-radius: var(--dsw-radius-sm);
+  background: var(--pm-surface); color: var(--pm-ink);
+}
+.pm-pred-search:focus { border-color: var(--pm-blue); }
+.pm-predecessor-list { display: flex; flex-direction: column; gap: 2px; max-height: 260px; overflow: auto; padding: 2px; }
+.pm-predecessor-item {
+  display: flex; flex-direction: row; align-items: center; gap: 8px;
+  font-size: 12px; min-height: 30px; padding: 4px 6px;
+  border-radius: var(--dsw-radius-sm); cursor: pointer;
+}
+.pm-predecessor-item:hover { background: var(--pm-hover); }
+.pm-predecessor-item[data-checked="true"] { background: color-mix(in srgb, var(--pm-blue) 10%, transparent); }
 .pm-predecessor-item input[type="checkbox"] {
   width: 15px; height: 15px; min-width: 15px; min-height: 15px; flex: 0 0 auto;
   padding: 0; margin: 0; border: 0; border-radius: 0;
   accent-color: var(--pm-blue);
 }
-/* 横切重设计：前置清单任务名完整换行展示，不再省略号截断（抽屉已加宽到整行宽）。 */
-.pm-predecessor-item span { overflow-wrap: anywhere; }
-.pm-predecessor-code { color: var(--pm-muted); flex: 0 0 auto; font-size: 11px; }
+/* WBS 层级细引导线：每祖先层一格，竖线延续 / 父层横向连接符。 */
+.pm-pred-guide { position: relative; flex: 0 0 14px; align-self: stretch; }
+.pm-pred-guide[data-line]::before {
+  content: ''; position: absolute; left: 6px; top: 0; bottom: 0;
+  border-left: 1px solid var(--pm-line);
+}
+.pm-pred-guide[data-tick]::after {
+  content: ''; position: absolute; left: 6px; top: 50%; width: 7px;
+  border-top: 1px solid var(--pm-line);
+}
+.pm-predecessor-code { color: var(--pm-muted); flex: 0 0 auto; font-size: 11px; font-variant-numeric: tabular-nums; }
+.pm-predecessor-name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.pm-pred-status { flex: 0 0 auto; font-size: 11px; padding: 1px 8px; border-radius: 999px; line-height: 1.5; }
+.pm-pred-status[data-status="done"] { background: color-mix(in srgb, var(--pm-st-done) 14%, transparent); color: var(--pm-st-done); }
+.pm-pred-status[data-status="in_progress"] { background: color-mix(in srgb, var(--pm-st-progress) 14%, transparent); color: var(--pm-st-progress); }
+.pm-pred-status[data-status="blocked"] { background: color-mix(in srgb, var(--pm-st-blocked) 16%, transparent); color: var(--pm-st-blocked); }
+.pm-pred-status[data-status="todo"] { background: color-mix(in srgb, var(--pm-st-todo) 16%, transparent); color: var(--pm-st-todo); }
+.pm-pred-footer { margin-top: 6px; font-size: 11px; color: var(--pm-muted); text-align: right; }
 .pm-muted { color: var(--pm-muted); font-size: 12px; }
 .pm-health-card { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; border-radius: 8px; margin: 10px 0; border-left: 4px solid var(--pm-muted); }
 .pm-health-card[data-lamp="green"] { border-left-color: var(--pm-success); background: var(--pm-blue-soft); }

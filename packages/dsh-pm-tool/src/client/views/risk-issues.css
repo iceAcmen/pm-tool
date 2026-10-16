@@ -1,0 +1,167 @@
+/* ============================================================================
+   风险与问题（重设计 v2 · dsh 主题对齐版）
+   - 全部选择器 scope 在 .pm-ri-root 下，不写 html/body/全局选择器。
+   - 颜色/阴影/圆角/间距/字号只消费 panel.css .pm-shell 已重映射的 dsh 别名
+     （--surface / --line / --ink / --c-* / --shadow-* / --r-* / --sp-* / --t-*）。
+   - 扁平克制：透明度一律用 color-mix 派生，不内嵌字体。
+   ============================================================================ */
+
+.pm-ri-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  font-family: var(--pm-font-sans);
+  color: var(--ink);
+}
+
+/* ---------- 页头 ---------- */
+.pm-ri-root .ri-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); }
+.pm-ri-root .ri-head h1 { margin: 0; font-size: var(--t-22); font-weight: 700; letter-spacing: var(--ls-tight2); color: var(--ink); }
+.pm-ri-root .ri-head .ri-sub { margin: 4px 0 0; font-size: var(--t-12); color: var(--muted); }
+.pm-ri-root .ri-head .ri-sub b { color: var(--ink-2); font-weight: 600; }
+.pm-ri-root .ri-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto;
+  font-size: var(--t-13); font-weight: 600; color: rgb(255, 255, 255);
+  background: var(--c-prog); border: 0; border-radius: var(--r-sm);
+  padding: 9px var(--sp-4); cursor: pointer;
+}
+.pm-ri-root .ri-btn-primary:disabled { opacity: .55; cursor: default; }
+
+/* ---------- segmented 风险/问题 ---------- */
+.pm-ri-root .ri-seg {
+  display: inline-flex; align-items: center; gap: 2px; align-self: flex-start;
+  background: var(--field-bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px;
+}
+.pm-ri-root .ri-seg button {
+  border: 0; background: transparent; cursor: pointer;
+  font-size: var(--t-13); font-weight: 600; color: var(--muted);
+  padding: 6px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+}
+.pm-ri-root .ri-seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-ri-root .ri-seg .n {
+  font-size: var(--t-11); font-weight: 650; color: var(--faint);
+  background: var(--field-bg); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums;
+}
+.pm-ri-root .ri-seg button.on .n { color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 12%, transparent); }
+
+/* ---------- 主体：矩阵 + 列表 ---------- */
+.pm-ri-root .ri-body { display: grid; grid-template-columns: 460px 1fr; gap: var(--sp-4); align-items: stretch; }
+.pm-ri-root .ri-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-2);
+  padding: var(--sp-4) var(--sp-5); min-width: 0; display: flex; flex-direction: column;
+}
+.pm-ri-root .ri-card-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--sp-3); margin-bottom: var(--sp-3);
+}
+.pm-ri-root .ri-card-head h3 { margin: 0; font-size: var(--t-14); font-weight: 650; letter-spacing: var(--ls-tight); color: var(--ink); }
+.pm-ri-root .ri-card-head .more { font-size: var(--t-11); color: var(--faint); white-space: nowrap; }
+
+/* ---------- 风险矩阵 3×4 ---------- */
+.pm-ri-root .ri-mtx {
+  display: grid;
+  grid-template-columns: 56px repeat(4, 1fr);
+  grid-template-rows: 26px repeat(3, 1fr);
+  gap: 6px; flex: 1; min-height: 320px;
+}
+.pm-ri-root .ri-mtx .corner {}
+.pm-ri-root .ri-mtx .colh, .pm-ri-root .ri-mtx .rowh {
+  font-size: var(--t-11); color: var(--faint); font-weight: 600;
+  display: grid; place-items: center; white-space: nowrap;
+}
+.pm-ri-root .ri-mtx .rowh small { display: block; font-size: var(--t-10); opacity: .8; }
+.pm-ri-root .ri-mcell {
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 6px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 5px;
+  min-height: 86px;
+}
+.pm-ri-root .ri-mcell.is-low  { background: color-mix(in srgb, var(--c-done) 9%, transparent);  border-color: color-mix(in srgb, var(--c-done) 22%, transparent); }
+.pm-ri-root .ri-mcell.is-mid  { background: color-mix(in srgb, var(--c-block) 12%, transparent); border-color: color-mix(in srgb, var(--c-block) 26%, transparent); }
+.pm-ri-root .ri-mcell.is-high { background: color-mix(in srgb, var(--c-late) 13%, transparent);  border-color: color-mix(in srgb, var(--c-late) 28%, transparent); }
+.pm-ri-root .ri-dot-tag {
+  font-size: var(--t-11); font-weight: 650; line-height: 1;
+  padding: 4px 8px; border-radius: 999px; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--c-prog) 35%, transparent);
+  color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 10%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+.pm-ri-root .ri-mtx-foot {
+  margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: var(--sp-4);
+  font-size: var(--t-11); color: var(--faint);
+}
+.pm-ri-root .ri-mtx-foot .lg { display: inline-flex; align-items: center; gap: 5px; }
+.pm-ri-root .ri-mtx-foot .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.pm-ri-root .ri-mtx-foot .sw-low  { background: color-mix(in srgb, var(--c-done) 55%, transparent); }
+.pm-ri-root .ri-mtx-foot .sw-mid  { background: color-mix(in srgb, var(--c-block) 60%, transparent); }
+.pm-ri-root .ri-mtx-foot .sw-high { background: color-mix(in srgb, var(--c-late) 60%, transparent); }
+.pm-ri-root .ri-mtx-note { margin-left: auto; }
+
+/* ---------- 列表行 ---------- */
+.pm-ri-root .ri-row {
+  text-align: left; cursor: pointer; width: 100%;
+  background: transparent; border: 1px solid transparent; border-radius: var(--r);
+  padding: 10px var(--sp-3); display: block; font: inherit;
+}
+.pm-ri-root .ri-row + .ri-row { border-top: 1px solid var(--line); border-radius: 0; }
+.pm-ri-root .ri-row:hover { background: var(--surface-3); }
+.pm-ri-root .ri-row-l1 { display: flex; align-items: center; gap: var(--sp-2); }
+.pm-ri-root .ri-row-id { font-size: var(--t-11); font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; }
+.pm-ri-root .ri-row-title {
+  font-size: var(--t-13); font-weight: 650; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.pm-ri-root .ri-row-sp { flex: 1; }
+.pm-ri-root .ri-chip {
+  display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto;
+  font-size: var(--t-11); font-weight: 600; line-height: 1;
+  padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line);
+  color: var(--ink-2); white-space: nowrap; background: transparent;
+}
+.pm-ri-root .ri-chip i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+.pm-ri-root .ri-chip.sev-high { color: var(--c-late);  border-color: color-mix(in srgb, var(--c-late) 32%, transparent);  background: color-mix(in srgb, var(--c-late) 10%, transparent); }
+.pm-ri-root .ri-chip.sev-mid  { color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 32%, transparent); background: color-mix(in srgb, var(--c-block) 12%, transparent); }
+.pm-ri-root .ri-chip.sev-low  { color: var(--c-done);  border-color: color-mix(in srgb, var(--c-done) 30%, transparent);  background: color-mix(in srgb, var(--c-done) 10%, transparent); }
+.pm-ri-root .ri-chip.st-open     { color: var(--c-late);  border-color: color-mix(in srgb, var(--c-late) 26%, transparent); }
+.pm-ri-root .ri-chip.st-monitor  { color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 26%, transparent); }
+.pm-ri-root .ri-chip.st-closed   { color: var(--muted); }
+.pm-ri-root .ri-row-l2 {
+  margin-top: 6px; display: flex; align-items: center; gap: var(--sp-3);
+  font-size: var(--t-12); color: var(--muted); min-width: 0;
+}
+.pm-ri-root .ri-owner { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.pm-ri-root .ri-ava {
+  width: 18px; height: 18px; border-radius: 50%; flex: 0 0 auto;
+  display: grid; place-items: center; font-size: var(--t-10); font-weight: 700; color: rgb(255, 255, 255);
+  background: var(--c-prog);
+}
+.pm-ri-root .ri-ava.off { background: var(--c-todo); }
+.pm-ri-root .ri-qual { white-space: nowrap; color: var(--faint); font-variant-numeric: tabular-nums; }
+.pm-ri-root .ri-plan { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-ri-root .ri-plan b { font-weight: 600; color: var(--ink-2); }
+.pm-ri-root .ri-due { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pm-ri-root .ri-due.overdue { color: var(--c-late); font-weight: 650; }
+
+/* ---------- 分区内空态 ---------- */
+.pm-ri-root .ri-inline-empty { padding: var(--sp-4); text-align: center; font-size: var(--t-12); color: var(--faint); }
+
+/* ---------- 整页空态 ---------- */
+.pm-ri-root .ri-empty-card { flex: 1; }
+.pm-ri-root .ri-empty {
+  margin: auto; padding: var(--sp-8) var(--sp-4); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);
+}
+.pm-ri-root .ri-empty .ri-ico {
+  width: 44px; height: 44px; border-radius: var(--r); display: grid; place-items: center;
+  color: var(--faint); background: var(--field-bg); border: 1px solid var(--line);
+}
+.pm-ri-root .ri-empty h4 { margin: var(--sp-1) 0 0; font-size: var(--t-14); font-weight: 650; color: var(--ink-2); }
+.pm-ri-root .ri-empty p { margin: 0; font-size: var(--t-12); color: var(--faint); max-width: 380px; line-height: 1.6; }
+.pm-ri-root .ri-empty .ri-btn-primary { margin-top: var(--sp-3); }
+
+/* ---------- 窄屏降级 ---------- */
+@media (max-width: 1100px) {
+  .pm-ri-root .ri-body { grid-template-columns: 1fr; }
+}

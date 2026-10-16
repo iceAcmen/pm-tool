@@ -1,15 +1,20 @@
 /**
- * 单项目概览（重设计 v2 落地视图）。
+ * 单项目概览（重设计 v2 · dsh 主题对齐版）。
  *
  * 数据口径全部复用现有纯函数，不在本文件手算/编造：
  * - 健康分：core/derived.ts scoreFromInputs（别名 healthFromInputs），计数口径与 panel.tsx Overview 一致。
  * - KPI / 日程：core/war-room.ts computeKPI / buildAgenda（done 口径 = status==='done' 或 progress>=100）。
  * - 阶段进度：沿用 panel.tsx Overview 的 WBS 口径（顶层 code 为纯数字的任务组，子任务 code 以 "code." 开头）。
  *
- * 视觉基准：artifacts/redesign/overview/index.html（HERO + 健康环 + 12 列统一 BENTO）。
- * 样式见 overview.css，全部选择器 scope 在 .pm-ov-root 下，颜色只走 panel.css v2 变量。
+ * 视觉基准：artifacts/redesign/overview/index.html；主题 token 由 panel.css .pm-shell 统一重映射为
+ * dsh 宿主 --dsw-* 别名（深浅色跟随 body[data-ds-dark-theme]），本页只消费变量、不写死色值。
+ * 样式见 overview.css，全部选择器 scope 在 .pm-ov-root 下。
  */
 import { useState } from 'react'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
+import CalendarClock from 'lucide-react/dist/esm/icons/calendar-clock.mjs'
+import CircleCheck from 'lucide-react/dist/esm/icons/circle-check.mjs'
+import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import css from './overview.css?raw'
 import {
   localTodayIso,
@@ -51,6 +56,10 @@ const LAMP_LABEL: Record<HealthLamp, string> = {
 /** done 口径与 war-room.isTaskDone 保持一致：status==='done' 或 progress>=100。 */
 const isTaskDone = (t: Task): boolean => t.status === 'done' || (t.progress ?? 0) >= 100
 
+/** 距今天数（与 war-room daysFrom 同一公式）；无日期返回 null。 */
+const daysFromToday = (d: string | undefined, today: string): number | null =>
+  d ? Math.round((Date.parse(`${d}T00:00:00`) - Date.parse(`${today}T00:00:00`)) / 86_400_000) : null
+
 /** YYYY-MM-DD → { 日, 月标签 }；无日期渲染为「-- / 待定」。 */
 function splitDate(d?: string | null): { day: string, month: string } {
   if (!d) return { day: '--', month: '待定' }
@@ -87,11 +96,24 @@ interface AgendaRow {
   overdue: boolean
 }
 
+type RemTone = 'late' | 'block' | 'prog' | 'done'
+interface RemRow {
+  key: string
+  tone: RemTone
+  text: string
+}
+
 export function Overview(props: {
   project: Project
   tasks: Task[]
   milestones: Milestone[]
   riskIssues: RiskIssue[]
+  /** 会议/汇报/交付物计数（panel.tsx 已按项目过滤；可选，缺省渲染「未接入」占位格）。 */
+  meetingsCount?: number
+  reportsCount?: number
+  deliverablesCount?: number
+  /** 编辑项目元信息（面板层 ProjectBar 在概览页被省略，编辑入口并入 HERO）。 */
+  onEditProject?: () => void
 }) {
   const { project, tasks, milestones, riskIssues } = props
   const today = localTodayIso()
@@ -188,6 +210,24 @@ export function Overview(props: {
     }
   }
 
+  // 提醒列表：逾期红 / 阻塞橙 / 无主橙 / 里程碑临近蓝 / 全绿
+  const remRows: RemRow[] = []
+  if (overdueCount > 0) remRows.push({ key: 'overdue', tone: 'late', text: `${overdueCount} 项任务已逾期，需优先处理` })
+  if (blockedCount > 0) remRows.push({ key: 'blocked', tone: 'block', text: `${blockedCount} 项任务受阻，等待解除阻塞` })
+  if (unassigned > 0) remRows.push({ key: 'ownerless', tone: 'block', text: `${unassigned} 项未完成任务尚未指派负责人` })
+  for (const m of milestones) {
+    if (remRows.length >= 4) break
+    if (m.status === 'achieved') continue
+    const d = daysFromToday(m.targetDate, today)
+    if (d === null || d < 0 || d > 7) continue
+    remRows.push({
+      key: `mile-${m.id}`,
+      tone: 'prog',
+      text: `里程碑「${m.title}」${d === 0 ? '今天到期' : `${d} 天后到期`}`,
+    })
+  }
+  if (!remRows.length) remRows.push({ key: 'all-clear', tone: 'done', text: '一切正常 · 暂无待处理提醒' })
+
   const onCopyRepo = () => {
     if (!project.repoUrl) return
     const done2 = () => {
@@ -199,7 +239,18 @@ export function Overview(props: {
     }
   }
 
-  const blockedOrOverdue = blockedCount + overdueCount > 0
+  // 顶部信息栅格：label + value 结构化（9 格，覆盖项目元信息）
+  const infoCells: { label: string, value: string }[] = [
+    { label: '负责人', value: project.owner || '未指派' },
+    { label: '开始日期', value: project.startDate || '未定' },
+    { label: '目标日期', value: project.targetDate || '未定' },
+    { label: '任务数', value: String(tasks.length) },
+    { label: '里程碑', value: String(milestones.length) },
+    { label: '风险与问题', value: String(kpi.openRisks) },
+    { label: '会议', value: props.meetingsCount === undefined ? '未接入' : String(props.meetingsCount) },
+    { label: '汇报', value: props.reportsCount === undefined ? '未接入' : String(props.reportsCount) },
+    { label: '交付物', value: props.deliverablesCount === undefined ? '未接入' : String(props.deliverablesCount) },
+  ]
 
   return (
     <div className="pm-ov-root" data-lamp={health.score === null ? 'gray' : health.lamp}>
@@ -213,18 +264,27 @@ export function Overview(props: {
             <span className="ov-chip" data-status={project.status}>
               <i className="ov-dot"/>{PROJECT_STATUS_LABEL[project.status] ?? project.status}
             </span>
-          </div>
-          <div className="ov-hero-meta">
-            <span>负责人 · {project.owner || '未指派'}</span>
-            <i className="ov-dot-sep"/>
-            {project.startDate && <><span>开始 {project.startDate}</span><i className="ov-dot-sep"/></>}
-            <span>目标 {project.targetDate || '未定'}</span>
+            {props.onEditProject
+              ? <button type="button" className="ov-hero-edit" aria-label="编辑项目信息" onClick={props.onEditProject}>
+                  <Pencil size={14}/>
+                </button>
+              : null}
           </div>
           {project.description ? <p className="ov-hero-desc">{project.description}</p> : null}
         </div>
         <div className="ov-hero-right">
           <HealthRing score={health.score} lamp={health.score === null ? 'gray' : health.lamp}/>
         </div>
+      </section>
+
+      {/* 项目元信息栅格：label + value 结构化 */}
+      <section className="ov-card ov-info-grid" aria-label="项目元信息">
+        {infoCells.map(c => (
+          <div className="ov-info-cell" key={c.label}>
+            <span className="ov-info-lab">{c.label}</span>
+            <span className="ov-info-val">{c.value}</span>
+          </div>
+        ))}
       </section>
 
       {/* BENTO */}
@@ -249,7 +309,7 @@ export function Overview(props: {
             <span className="ov-lab">风险与问题</span>
             <span className="ov-num">{kpi.openRisks}</span>
             <span className="ov-sub">
-              {blockedOrOverdue ? `${blockedCount} 受阻 · ${overdueCount} 逾期` : '无阻塞 · 无逾期'}
+              {blockedCount + overdueCount > 0 ? `${blockedCount} 受阻 · ${overdueCount} 逾期` : '无阻塞 · 无逾期'}
             </span>
           </div>
           <div className="ov-card ov-stat">
@@ -310,7 +370,7 @@ export function Overview(props: {
           </div>
         </div>
 
-        {/* 接下来的日程 + 项目链接 + 需要关注 */}
+        {/* 接下来的日程 + 项目链接 + 提醒 */}
         <div className="ov-row-bottom">
           <div className="ov-card">
             <div className="ov-card-head">
@@ -354,21 +414,22 @@ export function Overview(props: {
 
           <div className="ov-card">
             <div className="ov-card-head">
-              <h3>需要关注</h3>
-              <span className="more">3 项检查</span>
+              <h3>提醒</h3>
+              <span className="more">{remRows.length} 条</span>
             </div>
-            <div className="ov-attn-main">
-              <div className={`ov-attn-ico${unassigned > 0 ? ' is-warn' : ' is-ok'}`}>{unassigned > 0 ? '!' : '✓'}</div>
-              <div>
-                <div className={`ov-attn-num${unassigned > 0 ? ' is-warn' : ' is-ok'}`}>{unassigned}</div>
-                <div className="ov-attn-txt">
-                  {unassigned > 0 ? '项未完成任务尚未指派负责人' : '未完成任务均已指派负责人'}
+            <div className="ov-rem-list">
+              {remRows.map(r => (
+                <div className="ov-rem-row" key={r.key} data-tone={r.tone}>
+                  <span className="ov-rem-ico" data-tone={r.tone}>
+                    {r.tone === 'done'
+                      ? <CircleCheck size={14}/>
+                      : r.tone === 'prog'
+                        ? <CalendarClock size={14}/>
+                        : <AlertTriangle size={14}/>}
+                  </span>
+                  <span className="ov-rem-text">{r.text}</span>
                 </div>
-              </div>
-            </div>
-            <div className="ov-attn-ok">
-              <span className="ok"><i className="ov-dot" style={{ background: blockedCount ? 'var(--c-block)' : 'var(--c-done)' }}/>阻塞 <b>{blockedCount}</b></span>
-              <span className="ok"><i className="ov-dot" style={{ background: overdueCount ? 'var(--c-late)' : 'var(--c-done)' }}/>逾期 <b>{overdueCount}</b></span>
+              ))}
             </div>
           </div>
         </div>

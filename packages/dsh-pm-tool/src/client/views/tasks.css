@@ -177,8 +177,8 @@
 /* 任务名 + 状态点 */
 .pm-tasks-root .pt-task { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .pm-tasks-root .pt-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; cursor: pointer; border: 0; padding: 0; }
-.pm-tasks-root .pt-dot.done { background: var(--c-done); box-shadow: 0 0 8px color-mix(in srgb, var(--c-done) 60%, transparent); }
-.pm-tasks-root .pt-dot.prog { background: var(--c-prog); box-shadow: 0 0 8px color-mix(in srgb, var(--c-prog) 60%, transparent); }
+.pm-tasks-root .pt-dot.done { background: var(--c-done); }
+.pm-tasks-root .pt-dot.prog { background: var(--c-prog); }
 .pm-tasks-root .pt-dot.blocked { background: var(--c-block); }
 .pm-tasks-root .pt-dot.todo { background: var(--c-todo); }
 .pm-tasks-root .pt-name {
@@ -263,8 +263,15 @@
   padding: 0 var(--sp-2);
 }
 .pm-tasks-root.pt-dense .pt-group { height: 38px; }
-.pm-tasks-root .pt-tri { color: var(--muted); transition: transform .18s var(--ease); }
-.pm-tasks-root .pt-group.open .pt-tri { transform: rotate(90deg); }
+/* 折叠 chevron：无方框，仅 hover 淡圆形底；展开 rotate(90°) */
+.pm-tasks-root .pt-tri {
+  display: grid; place-items: center; width: 20px; height: 20px; padding: 0;
+  border: 0; background: transparent; cursor: pointer;
+  color: var(--muted); border-radius: 50%;
+  transition: transform .18s var(--ease), background .15s var(--ease), color .15s var(--ease);
+}
+.pm-tasks-root .pt-tri:hover { background: var(--surface-3); color: var(--ink-2); }
+.pm-tasks-root .pt-tri.open { transform: rotate(90deg); }
 .pm-tasks-root .pt-gname {
   display: flex; align-items: center; gap: 10px; min-width: 0;
   font-size: var(--t-13); font-weight: 700; color: var(--ink);

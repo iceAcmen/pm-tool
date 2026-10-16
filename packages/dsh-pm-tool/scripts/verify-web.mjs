@@ -205,9 +205,9 @@ try {
   assert.match(bundle, /pm-row-status/)             // PROD-03 行内状态
   assert.match(bundle, /pm-row-progress/)           // PROD-03 行内进度
   assert.match(bundle, /pm-row-due/)
-  assert.match(bundle, /ov-attn-/)                // PROD-05 作战室（v2：需要关注卡）
+  assert.match(bundle, /ov-rem-/)                // PROD-05 作战室（v2：提醒列表卡）
   assert.match(bundle, /ov-cal/)                  // PROD-05 近期议程（v2：接下来的日程）
-  assert.match(bundle, /ov-attn-num/)             // PROD-05 风险矩阵（v2：需要关注计数）
+  assert.match(bundle, /ov-rem-row/)             // PROD-05 风险态势（v2：提醒条目）
   assert.match(bundle, /ov-stat/)                 // PROD-05 指标条（v2：KPI 统计卡）  assert.match(bundle, /pm-top-more/)              // PROD-08 顶栏更多
   assert.match(bundle, /pm-top-menu/)               // PROD-08 更多菜单
   assert.match(bundle, /pm-backup-btn/)             // PROD-08 收纳后备份仍在DOM

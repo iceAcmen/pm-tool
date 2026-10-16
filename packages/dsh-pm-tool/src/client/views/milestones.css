@@ -1,0 +1,228 @@
+/* ============================================================================
+   里程碑视图（重设计 v2 · dsh 主题对齐版）
+   - 全部选择器 scope 在 .pm-ms-root 下。
+   - 颜色/阴影/圆角/间距/字号只消费 panel.css .pm-shell 已重映射的 dsh --dsw-* 别名。
+   ============================================================================ */
+
+.pm-ms-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  color: var(--ink);
+}
+
+/* ---------- 页头 ---------- */
+.pm-ms-root .ms-pagehead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.pm-ms-root .ms-pagehead h1 {
+  margin: 0;
+  font-size: var(--t-22);
+  font-weight: 700;
+  letter-spacing: var(--ls-tight2);
+  color: var(--ink);
+  line-height: 1.1;
+}
+.pm-ms-root .ms-sub {
+  margin-top: 5px;
+  font-size: var(--t-12);
+  color: var(--muted);
+}
+.pm-ms-root .ms-sub b { color: var(--ink-2); font-weight: 600; }
+
+.pm-ms-root .ms-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--c-prog);
+  color: var(--on-primary);
+  border: 0;
+  cursor: pointer;
+  font-size: var(--t-12);
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+}
+
+/* ---------- 紧凑达成率总览带 ---------- */
+.pm-ms-root .ms-ovband { padding: var(--sp-3) var(--sp-4); }
+.pm-ms-root .ms-ov-row { display: flex; align-items: stretch; }
+.pm-ms-root .ms-ov-cell {
+  flex: 1 1 0; min-width: 0; padding: 0 var(--sp-3);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.pm-ms-root .ms-ov-cell:first-child { padding-left: 2px; }
+.pm-ms-root .ms-ov-cell + .ms-ov-cell { border-left: 1px solid var(--line); }
+.pm-ms-root .ms-ov-lab {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint);
+}
+.pm-ms-root .ms-ov-val {
+  margin-top: 3px; font-size: var(--t-22); font-weight: 740;
+  letter-spacing: var(--ls-tight2); line-height: 1; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.pm-ms-root .ms-ov-val small {
+  font-size: var(--t-12); font-weight: 600; color: var(--faint);
+  margin-left: 3px; letter-spacing: 0;
+}
+.pm-ms-root .ms-tone-done { color: var(--c-done); }
+.pm-ms-root .ms-tone-prog { color: var(--c-prog); }
+.pm-ms-root .ms-tone-block { color: var(--c-block); }
+.pm-ms-root .ms-tone-late { color: var(--c-late); }
+.pm-ms-root .ms-ov-sub {
+  margin-top: 4px; font-size: var(--t-11); color: var(--muted);
+  line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.pm-ms-root .ms-ov-rate-cell { flex: 0 0 180px; }
+.pm-ms-root .ms-ov-rate-track {
+  height: 6px; border-radius: 99px; background: var(--field-bg);
+  display: flex; overflow: hidden; margin-top: 6px;
+}
+.pm-ms-root .ms-ov-rate-track i { display: block; height: 100%; }
+
+/* ---------- 竖向时间轴 ---------- */
+.pm-ms-root .ms-tl {
+  position: relative;
+  padding: var(--sp-2) 0 0 var(--sp-2);
+}
+.pm-ms-root .ms-tl::before {
+  content: ""; position: absolute; left: 9px; top: 14px; bottom: 48px;
+  width: 2px; background: var(--line); border-radius: 2px;
+}
+
+.pm-ms-root .ms-node {
+  position: relative; display: grid;
+  grid-template-columns: 20px 1fr; gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+}
+.pm-ms-root .ms-node:last-of-type { padding-bottom: 0; }
+
+.pm-ms-root .ms-mk {
+  position: relative; z-index: 1;
+  width: 20px; height: 20px; margin-top: 12px;
+  border-radius: 50%; background: var(--surface);
+  display: grid; place-items: center; flex: 0 0 auto;
+  border: 2px solid var(--c-todo);
+  color: var(--faint);
+}
+.pm-ms-root .ms-node[data-status='achieved'] .ms-mk {
+  border-color: var(--c-done); background: var(--c-done); color: var(--on-primary);
+}
+.pm-ms-root .ms-node[data-status='at_risk'] .ms-mk {
+  border-color: var(--c-block); background: var(--c-block); color: var(--on-primary);
+}
+.pm-ms-root .ms-node[data-status='missed'] .ms-mk {
+  border-color: var(--c-late); background: var(--c-late); color: var(--on-primary);
+}
+
+/* ---------- 节点卡片 ---------- */
+.pm-ms-root .ms-mcard {
+  padding: 10px 14px; display: flex; flex-direction: column; gap: 6px;
+}
+.pm-ms-root .ms-node[data-status='achieved'] .ms-mcard {
+  border-color: color-mix(in srgb, var(--c-done) 28%, var(--line));
+}
+.pm-ms-root .ms-node[data-status='at_risk'] .ms-mcard {
+  border-color: color-mix(in srgb, var(--c-block) 32%, var(--line));
+}
+.pm-ms-root .ms-node[data-status='missed'] .ms-mcard {
+  border-color: color-mix(in srgb, var(--c-late) 28%, var(--line));
+}
+
+.pm-ms-root .ms-c-top {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
+}
+.pm-ms-root .ms-c-title { display: flex; align-items: baseline; gap: 9px; min-width: 0; }
+.pm-ms-root .ms-c-code {
+  font-family: var(--pm-font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--t-10); color: var(--faint);
+}
+.pm-ms-root .ms-c-title h3 {
+  margin: 0; font-size: var(--t-14); font-weight: 680;
+  color: var(--ink); letter-spacing: var(--ls-tight);
+}
+
+.pm-ms-root .ms-row-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border: 1px solid transparent; border-radius: var(--r-sm);
+  background: transparent; color: var(--faint); cursor: pointer; flex: 0 0 auto;
+}
+.pm-ms-root .ms-row-btn:hover { background: var(--surface-3); color: var(--ink); border-color: var(--line); }
+
+/* 状态 chip */
+.pm-ms-root .ms-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: var(--t-11); font-weight: 600; padding: 3px 9px;
+  border-radius: 999px; border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.pm-ms-root .ms-chip-achieved { color: var(--c-done); border-color: color-mix(in srgb, var(--c-done) 30%, transparent); background: color-mix(in srgb, var(--c-done) 10%, transparent); }
+.pm-ms-root .ms-chip-at_risk { color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 30%, transparent); background: color-mix(in srgb, var(--c-block) 12%, transparent); }
+.pm-ms-root .ms-chip-missed { color: var(--c-late); border-color: color-mix(in srgb, var(--c-late) 30%, transparent); background: color-mix(in srgb, var(--c-late) 10%, transparent); }
+.pm-ms-root .ms-chip-planned { color: var(--muted); }
+
+.pm-ms-root .ms-c-meta {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-size: var(--t-12); color: var(--muted); flex-wrap: wrap;
+}
+.pm-ms-root .ms-dt { font-variant-numeric: tabular-nums; }
+.pm-ms-root .ms-dt b { color: var(--ink-2); font-weight: 600; }
+.pm-ms-root .ms-late-note { color: var(--c-late); font-weight: 600; }
+
+.pm-ms-root .ms-c-row3 {
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+}
+.pm-ms-root .ms-owners { display: flex; align-items: center; gap: 6px; }
+.pm-ms-root .ms-lab { font-size: var(--t-11); color: var(--faint); }
+.pm-ms-root .ms-ow {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--t-11); color: var(--ink-2);
+}
+.pm-ms-root .ms-av2 {
+  width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center;
+  font-size: var(--t-10); font-weight: 700; color: var(--on-primary); background: var(--c-prog);
+}
+
+.pm-ms-root .ms-deliv { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.pm-ms-root .ms-chip-deliv {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--t-10); padding: 2px 7px; border-radius: var(--r-sm);
+  background: var(--field-bg); border: 1px solid var(--line); color: var(--ink-2);
+  cursor: pointer;
+}
+.pm-ms-root .ms-chip-deliv:hover { background: var(--hover-bg); }
+.pm-ms-root .ms-v { color: var(--faint); font-variant-numeric: tabular-nums; }
+
+.pm-ms-root .ms-c-desc { font-size: var(--t-12); color: var(--ink-2); line-height: 1.4; }
+
+/* 末端收口 */
+.pm-ms-root .ms-tl-end { position: relative; padding-left: 38px; margin-top: var(--sp-2); }
+.pm-ms-root .ms-tl-end::before {
+  content: ""; position: absolute; left: 9px; top: -22px;
+  width: 2px; height: 22px; background: var(--line);
+}
+.pm-ms-root .ms-end-mark {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: var(--t-11); color: var(--faint);
+  letter-spacing: var(--ls-cap); text-transform: uppercase; font-weight: 650;
+}
+.pm-ms-root .ms-end-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line-3); }
+
+/* 空态 */
+.pm-ms-root .ms-empty { padding: var(--sp-8) var(--sp-6); text-align: center; }
+.pm-ms-root .ms-empty-ico {
+  width: 48px; height: 48px; margin: 0 auto var(--sp-3); border-radius: var(--r);
+  background: var(--field-bg); display: grid; place-items: center; color: var(--faint);
+}
+.pm-ms-root .ms-empty h3 { margin: 0 0 6px; font-size: var(--t-16); font-weight: 650; color: var(--ink); }
+.pm-ms-root .ms-empty p {
+  margin: 0 auto; font-size: var(--t-12); color: var(--muted);
+  max-width: 380px; line-height: 1.6;
+}
+.pm-ms-root .ms-empty .ms-btn-primary { margin-top: var(--sp-4); }

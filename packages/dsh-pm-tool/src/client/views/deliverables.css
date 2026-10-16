@@ -1,0 +1,213 @@
+/* ============================================================================
+   交付物视图（重设计 v2 · dsh 主题对齐版）
+   - 全部选择器 scope 在 .pm-dv-root 下。
+   - 颜色/阴影/圆角/间距/字号只消费 panel.css .pm-shell 已重映射的 dsh --dsw-* 别名。
+   ============================================================================ */
+
+.pm-dv-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  color: var(--ink);
+}
+
+/* ---------- 页头 ---------- */
+.pm-dv-root .dv-pagehead {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4);
+}
+.pm-dv-root .dv-pagehead h1 {
+  margin: 0; font-size: var(--t-22); font-weight: 700;
+  letter-spacing: var(--ls-tight2); color: var(--ink); line-height: 1.1;
+}
+.pm-dv-root .dv-sub { margin-top: 5px; font-size: var(--t-12); color: var(--muted); }
+.pm-dv-root .dv-sub b { color: var(--ink-2); font-weight: 600; }
+
+.pm-dv-root .dv-btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--c-prog); color: var(--on-primary); border: 0; cursor: pointer;
+  font-size: var(--t-12); font-weight: 600; padding: 8px 14px; border-radius: var(--r-sm);
+}
+
+/* ---------- 总览带 ---------- */
+.pm-dv-root .dv-ovband { padding: var(--sp-3) var(--sp-4); }
+.pm-dv-root .dv-ov-row { display: flex; align-items: stretch; }
+.pm-dv-root .dv-ov-cell {
+  flex: 1 1 0; min-width: 0; padding: 0 var(--sp-3);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.pm-dv-root .dv-ov-cell:first-child { padding-left: 2px; }
+.pm-dv-root .dv-ov-cell + .dv-ov-cell { border-left: 1px solid var(--line); }
+.pm-dv-root .dv-ov-lab {
+  font-size: var(--t-10); font-weight: 650; letter-spacing: var(--ls-cap);
+  text-transform: uppercase; color: var(--faint);
+}
+.pm-dv-root .dv-ov-val {
+  margin-top: 3px; font-size: var(--t-22); font-weight: 740;
+  letter-spacing: var(--ls-tight2); line-height: 1; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.pm-dv-root .dv-ov-val small {
+  font-size: var(--t-12); font-weight: 600; color: var(--faint);
+  margin-left: 3px; letter-spacing: 0;
+}
+.pm-dv-root .dv-tone-done { color: var(--c-done); }
+.pm-dv-root .dv-tone-prog { color: var(--c-prog); }
+.pm-dv-root .dv-tone-todo { color: var(--c-todo); }
+.pm-dv-root .dv-ov-sub {
+  margin-top: 4px; font-size: var(--t-11); color: var(--muted); line-height: 1.35;
+}
+
+/* ---------- 筛选 chips ---------- */
+.pm-dv-root .dv-filters { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.pm-dv-root .dv-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--t-12); font-weight: 600; padding: 5px 12px;
+  border-radius: 999px; border: 1px solid var(--line);
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+.pm-dv-root .dv-chip .dv-dot { width: 7px; height: 7px; border-radius: 50%; }
+.pm-dv-root .dv-chip .dv-cnt {
+  font-size: var(--t-11); color: var(--faint); font-variant-numeric: tabular-nums;
+}
+.pm-dv-root .dv-chip:hover { background: var(--hover-bg); }
+.pm-dv-root .dv-chip.active {
+  background: var(--surface-2); border-color: var(--line-2); color: var(--ink);
+}
+.pm-dv-root .dv-chip[data-tone='accepted'] .dv-dot { background: var(--c-done); }
+.pm-dv-root .dv-chip[data-tone='in_progress'] .dv-dot { background: var(--c-prog); }
+.pm-dv-root .dv-chip[data-tone='submitted'] .dv-dot { background: var(--c-block); }
+.pm-dv-root .dv-chip[data-tone='planned'] .dv-dot { background: var(--c-todo); }
+
+/* ---------- 筛选行：chips + 搜索框 ---------- */
+.pm-dv-root .dv-filter-row {
+  display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+}
+.pm-dv-root .dv-search {
+  display: inline-flex; align-items: center; gap: 6px;
+  flex: 0 0 auto; margin-left: auto;
+  padding: 5px 10px; border-radius: var(--r-sm);
+  border: 1px solid var(--line); background: var(--field-bg);
+  color: var(--faint);
+}
+.pm-dv-root .dv-search:focus-within {
+  border-color: var(--c-prog); background: var(--surface);
+}
+.pm-dv-root .dv-search input {
+  border: 0; outline: 0; background: transparent;
+  font-size: var(--t-12); color: var(--ink); width: 160px;
+}
+.pm-dv-root .dv-search input::placeholder { color: var(--faint); }
+
+/* ---------- 无匹配空态 ---------- */
+.pm-dv-root .dv-nomatch { padding: var(--sp-6) var(--sp-6); text-align: center; }
+.pm-dv-root .dv-nomatch-ico {
+  width: 44px; height: 44px; margin: 0 auto var(--sp-3); border-radius: var(--r);
+  background: var(--field-bg); display: grid; place-items: center; color: var(--faint);
+}
+.pm-dv-root .dv-nomatch h3 { margin: 0 0 6px; font-size: var(--t-14); font-weight: 650; color: var(--ink); }
+.pm-dv-root .dv-nomatch p { margin: 0; font-size: var(--t-12); color: var(--muted); line-height: 1.5; }
+
+/* ---------- 分组 ---------- */
+.pm-dv-root .dv-group { display: flex; flex-direction: column; gap: var(--sp-2); }
+.pm-dv-root .dv-g-head {
+  display: flex; align-items: center; gap: var(--sp-3); padding: 0 2px;
+}
+.pm-dv-root .dv-g-dot { width: 8px; height: 8px; border-radius: 50%; }
+.pm-dv-root .dv-g-dot[data-tone='accepted'] { background: var(--c-done); }
+.pm-dv-root .dv-g-dot[data-tone='in_progress'] { background: var(--c-prog); }
+.pm-dv-root .dv-g-dot[data-tone='submitted'] { background: var(--c-block); }
+.pm-dv-root .dv-g-dot[data-tone='planned'] { background: var(--c-todo); }
+.pm-dv-root .dv-g-head h2 {
+  margin: 0; font-size: var(--t-14); font-weight: 680;
+  color: var(--ink); letter-spacing: var(--ls-tight);
+}
+.pm-dv-root .dv-g-count {
+  font-size: var(--t-11); color: var(--faint); font-variant-numeric: tabular-nums;
+}
+.pm-dv-root .dv-g-line { flex: 1; height: 1px; background: var(--line); }
+.pm-dv-root .dv-group-empty {
+  padding: var(--sp-3) var(--sp-2); font-size: var(--t-12); color: var(--faint);
+}
+
+.pm-dv-root .dv-g-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3);
+}
+
+/* ---------- 交付物卡片 ---------- */
+.pm-dv-root .dv-dcard {
+  padding: var(--sp-3) var(--sp-4); display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer; transition: border-color .15s ease;
+}
+.pm-dv-root .dv-dcard:hover { border-color: var(--line-2); }
+.pm-dv-root .dv-dcard[data-status='accepted'] {
+  border-color: color-mix(in srgb, var(--c-done) 28%, var(--line));
+}
+.pm-dv-root .dv-dcard[data-status='in_progress'] {
+  border-color: color-mix(in srgb, var(--c-prog) 32%, var(--line));
+}
+.pm-dv-root .dv-dcard[data-status='submitted'] {
+  border-color: color-mix(in srgb, var(--c-block) 30%, var(--line));
+}
+
+.pm-dv-root .dv-d-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3);
+}
+.pm-dv-root .dv-d-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pm-dv-root .dv-d-ico {
+  width: 28px; height: 28px; border-radius: var(--r-sm);
+  display: grid; place-items: center; flex: 0 0 auto;
+  background: var(--field-bg); color: var(--muted);
+}
+.pm-dv-root .dv-d-name h3 {
+  margin: 0; font-size: var(--t-13); font-weight: 680;
+  color: var(--ink); letter-spacing: var(--ls-tight);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pm-dv-root .dv-d-ver {
+  font-size: var(--t-11); color: var(--faint);
+  font-variant-numeric: tabular-nums; flex: 0 0 auto;
+}
+
+.pm-dv-root .dv-d-meta {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-size: var(--t-11); color: var(--muted); flex-wrap: wrap;
+}
+.pm-dv-root .dv-ow { display: inline-flex; align-items: center; gap: 5px; }
+.pm-dv-root .dv-av2 {
+  width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
+  font-size: var(--t-10); font-weight: 700; color: var(--on-primary); background: var(--c-prog);
+}
+.pm-dv-root .dv-ms { color: var(--faint); }
+.pm-dv-root .dv-due { font-variant-numeric: tabular-nums; }
+.pm-dv-root .dv-due b { color: var(--ink-2); font-weight: 600; }
+
+.pm-dv-root .dv-d-loc {
+  display: flex; align-items: center; gap: 5px;
+  font-size: var(--t-11); color: var(--faint);
+  font-family: var(--pm-font-mono, ui-monospace, Menlo, monospace);
+}
+
+/* 验收进度条 */
+.pm-dv-root .dv-d-prog { display: flex; align-items: center; gap: var(--sp-2); }
+.pm-dv-root .dv-track {
+  flex: 1; height: 5px; border-radius: 99px; background: var(--field-bg); overflow: hidden;
+}
+.pm-dv-root .dv-track i { display: block; height: 100%; border-radius: 99px; }
+.pm-dv-root .dv-pct {
+  font-size: var(--t-11); font-weight: 650; color: var(--ink-2);
+  font-variant-numeric: tabular-nums; width: 34px; text-align: right;
+}
+
+/* 空态 */
+.pm-dv-root .dv-empty { padding: var(--sp-8) var(--sp-6); text-align: center; }
+.pm-dv-root .dv-empty-ico {
+  width: 48px; height: 48px; margin: 0 auto var(--sp-3); border-radius: var(--r);
+  background: var(--field-bg); display: grid; place-items: center; color: var(--faint);
+}
+.pm-dv-root .dv-empty h3 { margin: 0 0 6px; font-size: var(--t-16); font-weight: 650; color: var(--ink); }
+.pm-dv-root .dv-empty p {
+  margin: 0 auto; font-size: var(--t-12); color: var(--muted);
+  max-width: 380px; line-height: 1.6;
+}
+.pm-dv-root .dv-empty .dv-btn-primary { margin-top: var(--sp-4); }

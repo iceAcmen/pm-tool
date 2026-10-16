@@ -303,10 +303,10 @@ export function TaskTable(props: {
         <div className="pt-cell pt-task">
           {row.hasChildren && (
             <button
-              className="pt-tri pm-task-toggle" aria-label={collapsed.has(t.id) ? `展开 ${t.title}` : `折叠 ${t.title}`}
-              style={{ transform: collapsed.has(t.id) ? 'none' : 'rotate(90deg)' }}
+              className={`pt-tri pm-task-toggle${collapsed.has(t.id) ? '' : ' open'}`}
+              aria-label={collapsed.has(t.id) ? `展开 ${t.title}` : `折叠 ${t.title}`}
               onClick={() => toggleCollapse(t.id)}
-            ><ChevronRight size={13} /></button>
+            ><ChevronRight size={14} /></button>
           )}
           <button
             className={`pt-dot ${t.status === 'done' ? 'done' : t.status === 'in_progress' ? 'prog' : t.status === 'blocked' ? 'blocked' : 'todo'}`}
@@ -391,7 +391,7 @@ export function TaskTable(props: {
         <div className="pt-cell pt-sel" />
         <div className="pt-cell pt-gutter">
           {hasKids
-            ? <button className="pt-tri" aria-label={open ? `折叠 ${t.title}` : `展开 ${t.title}`} onClick={() => toggleCollapse(t.id)}>
+            ? <button className={`pt-tri${open ? ' open' : ''}`} aria-label={open ? `折叠 ${t.title}` : `展开 ${t.title}`} onClick={() => toggleCollapse(t.id)}>
                 <ChevronRight size={14} />
               </button>
             : null}
