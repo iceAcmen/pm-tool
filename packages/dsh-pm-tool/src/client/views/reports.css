@@ -167,3 +167,9 @@
   .pm-rp-root .rp-cols { grid-template-columns: 1fr; }
   .pm-rp-root .rp-snap { grid-template-columns: repeat(4, 1fr); row-gap: var(--sp-2); }
 }
+
+/* #25 窄窗（≤560px / 390 档）：快照条收为 3 列，避免 7 宫格在窄窗挤压。 */
+@media (max-width: 560px) {
+  .pm-rp-root .rp-snap { grid-template-columns: repeat(3, 1fr); }
+  .pm-rp-root .rp-meta { flex-wrap: wrap; gap: var(--sp-2); }
+}

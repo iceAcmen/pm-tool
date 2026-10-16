@@ -183,3 +183,23 @@
 @media (max-width: 1100px) {
   .pm-pp-root .pp-lower { grid-template-columns: 1fr; }
 }
+
+/* #25 窄窗（≤560px / 390 档）：负载明细行由固定多列改为可换行卡片，
+   负责人/色条/计数/到期/状态徽章各占自然宽度，表头隐藏，外壳不溢出。 */
+@media (max-width: 560px) {
+  .pm-pp-root { padding: var(--sp-4) var(--sp-3); }
+  .pm-pp-root .pp-colhead { display: none; }
+  .pm-pp-root .pp-card-head { flex-direction: column; align-items: flex-start; gap: 2px; padding: var(--sp-3); }
+  .pm-pp-root .pp-note { white-space: normal; line-height: 1.5; }
+  .pm-pp-root .pp-row-main {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    grid-template-columns: none; padding: 10px var(--sp-3);
+  }
+  .pm-pp-root .pp-who { flex: 1 1 55%; }
+  .pm-pp-root .pp-bar { flex: 1 1 100%; order: 6; }
+  .pm-pp-root .pp-open { order: 3; text-align: left; }
+  .pm-pp-root .pp-due { order: 4; }
+  .pm-pp-root .pp-badge { order: 5; margin-left: auto; }
+  .pm-pp-root .pp-chev { order: 7; }
+  .pm-pp-root .pp-g-who { flex: 0 0 84px; }
+}

@@ -111,4 +111,24 @@ for (const [k, v] of [['healthOverduePer', 3], ['healthBlockedPer', 4], ['health
   assert.match(settingsCore, new RegExp(`${k}:\\s*${v}\\b`), `默认值 ${k}=${v} 应锁定在 settings.ts`)
 }
 
-console.log('通过：表单前置多选/repo/branch、任务页等待前置、概览健康环与 repo 链接、/pm doctor 与 /pm health 静态钩子齐备；甘特可聚焦/直显/进度层/依赖箭头/本地今日线/零写契约齐备。')
+// ---------- #25 真 390px 窄窗响应式静态契约（GI-WEB-14 / PROD-07） ----------
+const viewCssNames = ['tasks', 'people', 'meetings', 'milestones', 'risk-issues', 'deliverables', 'gantt', 'overview', 'reports']
+const viewCss = {}
+for (const n of viewCssNames) viewCss[n] = readFileSync(join(dir, `src/client/views/${n}.css`), 'utf8')
+// 骨架面板与每个视图都应有 ≤560px 收窄断点（≥1024 桌面不变）
+assert.match(panelCss, /#25 真 390px/, 'panel.css 应含 #25 窄窗修复块标记')
+assert.match(panelCss, /@media \(max-width: 560px\)/, 'panel.css 应有 ≤560px 收窄断点')
+for (const n of viewCssNames) {
+  assert.match(viewCss[n], /@media \(max-width: 560px\)/, `${n}.css 应有 ≤560px 窄窗收窄断点`)
+}
+// 配色零硬编码 hex：骨架 + 全部视图 CSS 只消费 dsw/pm token
+assert.doesNotMatch(panelCss, /#[0-9a-fA-F]{3,6}\b/, 'panel.css 不得硬编码 hex 色值')
+for (const n of viewCssNames) {
+  assert.doesNotMatch(viewCss[n], /#[0-9a-fA-F]{3,6}\b/, `${n}.css 不得硬编码 hex 色值`)
+}
+// 天然宽内容必须有内部横向滚动容器（表格 .pm-table-scroll / 任务表 .pt-scroll / 甘特 .pm-gantt-scroll）
+assert.match(panelCss, /\.pm-table-scroll\s*\{[^}]*overflow-x:\s*auto/, '数据表应在 .pm-table-scroll 内部横滚')
+assert.match(viewCss['tasks'], /\.pt-scroll\s*\{[^}]*overflow/, '任务表应在 .pt-scroll 内部横滚')
+assert.match(viewCss['gantt'], /\.pm-gantt-scroll\s*\{[^}]*overflow/, '甘特时间轴应在 .pm-gantt-scroll 内部横滚')
+
+console.log('通过：表单前置多选/repo/branch、任务页等待前置、概览健康环与 repo 链接、/pm doctor 与 /pm health 静态钩子齐备；甘特可聚焦/直显/进度层/依赖箭头/本地今日线/零写契约齐备；#25 窄窗断点/零 hex/内部横滚契约齐备。')

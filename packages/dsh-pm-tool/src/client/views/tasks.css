@@ -92,7 +92,7 @@
 }
 .pm-tasks-root .pt-primary {
   display: inline-flex; align-items: center; gap: 7px;
-  background: var(--c-prog); color: #fff; border: 0; cursor: pointer;
+  background: var(--c-prog); color: var(--dsw-alias-label-primary-foreground); border: 0; cursor: pointer;
   font-size: var(--t-13); font-weight: 650; padding: 9px 16px;
   border-radius: var(--r); box-shadow: var(--shadow-glow-prog);
   transition: filter .18s var(--ease);
@@ -352,4 +352,21 @@
   font-family: var(--pm-font-mono); font-size: var(--t-10);
   border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 4px;
   padding: 1px 5px; margin: 0 2px; color: var(--muted);
+}
+
+/* ===== #25 窄窗（≤560px / 390 档）：页头搜索通栏、工具条换行、卡片侧距收敛；
+   任务表格本身在 .pt-scroll 内部横向滚动，外壳不溢出。配色只走 dsh/pm token。 */
+@media (max-width: 560px) {
+  .pm-tasks-root .pt-head { padding: var(--sp-4) var(--sp-3) 0; }
+  .pm-tasks-root .pt-row1 { flex-direction: column; align-items: stretch; gap: var(--sp-3); }
+  .pm-tasks-root .pt-search { width: 100%; }
+  .pm-tasks-root .pt-toolbar { gap: var(--sp-2); }
+  .pm-tasks-root .pt-tools { flex-wrap: wrap; justify-content: flex-start; gap: var(--sp-2); }
+  .pm-tasks-root .pt-sort-wrap select { max-width: none; }
+  .pm-tasks-root .pt-primary { width: 100%; justify-content: center; }
+  .pm-tasks-root .pt-card { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
+  .pm-tasks-root .pt-batch { margin: 0 var(--sp-2); }
+  .pm-tasks-root .pt-import { margin: var(--sp-2) var(--sp-2) 0; }
+  /* 表格天然宽：内部 .pt-scroll 横向滚动，不撑破外壳 */
+  .pm-tasks-root .pt-scroll { overflow-x: auto; }
 }

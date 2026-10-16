@@ -45,7 +45,7 @@
 }
 .pm-gantt-root .pm-chip:hover { background: var(--surface-3); color: var(--ink); }
 .pm-gantt-root .pm-chip-primary {
-  background: var(--c-prog); border-color: transparent; color: rgb(255, 255, 255);
+  background: var(--c-prog); border-color: transparent; color: var(--dsw-alias-label-primary-foreground);
 }
 
 /* ---------------- 甘特卡片（与 tasks 页 pt-card 同基准：margin sp-4/sp-6，surface 卡片） ---------------- */
@@ -256,4 +256,12 @@
   flex: 0 0 auto; font-size: var(--t-10); font-weight: 700; color: var(--c-prog);
   border: 1px solid color-mix(in srgb, var(--c-prog) 45%, transparent);
   border-radius: var(--r-xs); padding: 0 5px; margin-left: auto;
+}
+
+/* #25 窄窗（≤560px / 390 档）：工具栏换行收敛、左标签列收窄；时间轴在 .pm-gantt-scroll
+   内部横向滚动，外壳不溢出。配色只走 dsh/pm token。 */
+@media (max-width: 560px) {
+  .pm-gantt-root .pm-gantt-toolbar { padding: var(--sp-4) var(--sp-3) 0; row-gap: var(--sp-2); }
+  .pm-gantt-root .pm-gantt { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
+  .pm-gantt-root .pm-gantt-labels { width: 150px; }
 }

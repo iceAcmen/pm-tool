@@ -1,0 +1,31 @@
+# #25 390px 外壳溢出扫描结果（真实 Chrome headless，视口 390×844，dpr=2）
+# 口径：.pm-shell 内任一元素 right - shell.right > 3px 记外壳溢出；有意内部滚动容器
+# （.pm-table-scroll / .pt-scroll / .pm-gantt-scroll / .pm-view-tabs）豁免。shellW=334
+# （390 窗口扣除宿主左栏后的实际面板宽）。
+
+BUNDLE 生效证明：真实响应体中聚合包 dsh-pm-tool/client.js 含 `#25 真 390px` 标记（marker=true）
+与 `max-width: 560px` 断点（bp=true）；重建后聚合 rev 指纹变化，证明下发 worktree 新 bundle。
+
+PASS light/项目概览 shellW=334
+PASS light/全部任务 shellW=334
+PASS light/里程碑 shellW=334
+PASS light/风险与问题 shellW=334
+PASS light/会议纪要 shellW=334
+PASS light/交付物 shellW=334
+PASS light/进度汇报 shellW=334
+PASS light/甘特排期 shellW=334
+PASS light/人员负载 shellW=334
+PASS light/drawer-new-task shellW=334
+PASS dark/项目概览 shellW=334
+PASS dark/全部任务 shellW=334
+PASS dark/里程碑 shellW=334
+PASS dark/风险与问题 shellW=334
+PASS dark/会议纪要 shellW=334
+PASS dark/交付物 shellW=334
+PASS dark/进度汇报 shellW=334
+PASS dark/甘特排期 shellW=334
+PASS dark/人员负载 shellW=334
+PASS dark/drawer-new-task shellW=334
+
+# 剩余非问题：单元格内日期/标题 ellipsis（内部省略）、任务表/甘特在内部滚动容器横滚，
+# 均非外壳溢出/裁切。

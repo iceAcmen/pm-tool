@@ -221,3 +221,14 @@
   .pm-mt-root .mt-stats { grid-template-columns: repeat(2, 1fr); }
   .pm-mt-root .mt-info { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* #25 窄窗（≤560px / 390 档）：行动项行由 4 固定列改为标题整行 + 负责人/到期/操作换行。 */
+@media (max-width: 560px) {
+  .pm-mt-root .mt-act-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+  }
+  .pm-mt-root .mt-act-row.head { display: none; }
+  .pm-mt-root .mt-act-owner,
+  .pm-mt-root .mt-act-due { flex-direction: row; align-items: center; }
+}

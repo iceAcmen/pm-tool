@@ -334,3 +334,11 @@
   .pm-ov-root .ov-row-main,
   .pm-ov-root .ov-row-bottom { grid-template-columns: 1fr; }
 }
+
+/* #25 窄窗（≤560px / 390 档）：概览边距收敛，统计卡两列保持，元信息栅格内距收紧。 */
+@media (max-width: 560px) {
+  .pm-ov-root { padding: var(--sp-3) var(--sp-3) var(--sp-4); }
+  .pm-ov-root .ov-info-grid { gap: var(--sp-2); }
+  .pm-ov-root .ov-info-cell { padding: 0 var(--sp-2); }
+  .pm-ov-root .ov-row-stats { gap: var(--sp-2); }
+}

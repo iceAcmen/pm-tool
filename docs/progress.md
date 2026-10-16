@@ -2,9 +2,20 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-16（doubao-work **#21 口径配置化**：健康分权重/封顶/灯号线、临期窗口、过载阈值做成项目级设置，默认值=原硬编码现值、可注入缺省回落默认、局部合并持久化+重启读回、设置抽屉校验/恢复默认，dsw token 浅深两态。build=0、全量 guard 71/71、失败 0、0 污染；隔离 3141 真实 Chrome 浅/深实测，证据 docs/verification/settings-20261016/）
+最后更新：2026-10-17（doubao-work **#25 真 390px 窄窗响应式正式修复**：骨架+9 视图在 390px 无外壳溢出，窄屏规则全隔离在 ≤560px、桌面不变，配色 dsw/pm token 零 hex 跟随浅深。build=0、guard 71 脚本/70 通过/1 失败（verify-export 路径假象）/0 污染；隔离 3155 真实 Chrome 浅/深实测 20/20，证据 docs/verification/narrow390-20261016/。分支 p0/narrow-390，不 merge/不 push）
 
-## 当前阶段：#21 口径配置化·已核验（2026-10-16，doubao-work）
+## 当前阶段：#25 真 390px 窄窗响应式正式修复·已核验（2026-10-17，doubao-work，分支 p0/narrow-390，不 push）
+
+- **目标**：GI-WEB-14 / PROD-07 遗留的真 390px 窄窗从 MANUAL_PENDING 转正式修复；390px 视口下面板骨架（顶栏/抽屉/弹窗/表单/按钮组）+ 9 视图无重叠/裁切/横向外壳溢出，≥1024 桌面不变。
+- **做法**：全部窄屏规则隔离在 `@media (max-width:560px)`，不命中桌面；天然宽内容（任务表 `.pt-scroll`、甘特 `.pm-gantt-scroll`、数据表 `.pm-table-scroll`）容器内部横滚，外壳不溢出。
+  - `panel.css`：顶栏换行/内距收敛、项目菜单钳 92vw、抽屉 `min(560px,100vw)`+单列表单、move-picker 不锁宽、副驾编辑行 6→2 列、矩阵 3→2、图例换行、旧人员名列不锁 130px。
+  - `tasks.css` 搜索通栏/工具条换行/主按钮通栏；`people.css` 固定 6 列网格→可换行卡片（隐藏表头、卡片头纵向、说明可换行）；`meetings.css` 行动项 4 固定列→单列堆叠；`milestones.css` 概览条换行/率格不锁 180；`risk-issues.css` 内距收敛/矩阵首列 44/第二行换行；`deliverables.css` 双栏→单列；`gantt.css` 工具栏换行/左标签 150px/时间轴内部横滚；`overview.css`/`reports.css` 补 ≤560（快照 7→3 列）。
+  - 顺手去两处硬编码白：`.pt-primary` `#fff`、`.pm-chip-primary` `rgb(255,255,255)` 均改 `--dsw-alias-label-primary-foreground`。
+- **验证**：`pnpm build`=0；`verify-isolation.mjs` **71 脚本 / 70 通过 / 1 失败（仅 verify-export.mjs 硬编码 `/pm-tool/exports/` 路径在 worktree 下不匹配，已知环境假象，非回归）/ 污染 0**；`verify-gui-contract.mjs` 补 #25 静态契约（每视图+骨架含 560 断点、零 hex、内部横滚容器）。隔离真实 Chrome 390px（独立 DSH_HOME/存储/备份/端口 3155，软链指 worktree 包，正式 3080=PID 66364 未变）：真实响应体证明聚合包含 #25 标记+560 断点，浅/深 ×9 视图+新建抽屉 20/20 无外壳溢出。证据 `docs/verification/narrow390-20261016/`。
+- **边界**：零新增依赖、零 schema、零业务逻辑、未改 tsx DOM 契约；不做 #22/#23/#24。
+- **下一步**：待协调者在主树恢复全绿后统一 rebase/合并到 main；之后看板 P2 → 9 视图重设计。
+
+## 历史阶段：#21 口径配置化·已核验（2026-10-16，doubao-work）
 
 - **口径清单（原值→设置键，现值即默认）**：健康分每逾期任务 3/每受阻 4/每高风险 6/每严重风险 10/每逾期里程碑 8；封顶 15/12/20/16；灯线绿 80/黄 60；临期窗口 7；过载阈值 5。`core/stats.ts` 逾期为严格 `dueDate<today`、本无数字阈值，不杜撰宽限键。
 - **core 可注入、缺省回落**：新增 `core/settings.ts`（默认值锁定、`SETTING_FIELDS` 元数据、`normalizeProjectSettings` 整数/区间/灯号倒挂校验、`sameSettings`）；`scoreFromInputs/computeProjectHealth/computeReminders/groupOpenTasksByAssignee/computeKPI/buildAgenda` 接受可选 settings，不传=默认（默认等价），命令行显式参数优先；纯函数/确定性/零写。

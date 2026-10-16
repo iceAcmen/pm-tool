@@ -1795,3 +1795,39 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 .pm-md-tr { display:contents; }
 .pm-md-tr span { border:1px solid var(--pm-line); padding:2px 6px; border-radius:4px; font-size:11px; }
 .pm-md-task { list-style:none; }
+
+/* ============================================================================
+   #25 真 390px 窄窗正式修复（GI-WEB-14 / PROD-07）：只在 ≤560px 收窄断点调整，
+   ≥1024 桌面布局保持不变。配色只消费 dsw/pm token，跟随 body[data-ds-dark-theme]。
+   天然宽内容（数据表格/甘特时间轴）在各自内部滚动容器横滚，外壳不整体溢出。
+   ============================================================================ */
+@media (max-width: 560px) {
+  /* 顶栏：两侧内距收敛、允许换行，项目名 ellipsis，操作按钮不再锁最小宽 */
+  .pm-topbar { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
+  .pm-project-switcher { min-width: 0; }
+  .pm-project-switcher-btn { max-width: 100%; }
+  .pm-project-menu { min-width: 0; max-width: 92vw; }
+  .pm-top-actions { flex-wrap: wrap; }
+
+  /* 抽屉：内距收敛到手机可读尺度，表单/设置栅格单列 */
+  .pm-drawer { width: min(560px, 100vw); }
+  .pm-drawer > header { padding: 12px 16px; }
+  .pm-drawer-body { padding: 18px 16px 20px; }
+  .pm-drawer-form { grid-template-columns: 1fr; }
+  .pm-settings-grid { grid-template-columns: 1fr; }
+
+  /* 弹窗选择器：不锁 320px 最小宽，钳到视口 */
+  .pm-move-picker { min-width: 0; width: min(320px, 92vw); }
+
+  /* 副驾编辑行（6 列）与风险矩阵（3 列）在窄窗改 2 列/堆叠 */
+  .pm-copilot-editrow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pm-copilot-editrow > select { grid-column: span 2; }
+  .pm-matrix-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* 健康环 + 图例允许换行，不顶出外壳 */
+  .pm-ring-wrap { flex-wrap: wrap; gap: 12px; }
+
+  /* 旧版人员表：姓名列不锁 130px，允许省略 */
+  .pm-ppl-name { width: auto; flex: 0 1 auto; }
+}
+

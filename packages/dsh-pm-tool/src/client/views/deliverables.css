@@ -211,3 +211,9 @@
   max-width: 380px; line-height: 1.6;
 }
 .pm-dv-root .dv-empty .dv-btn-primary { margin-top: var(--sp-4); }
+
+/* #25 窄窗（≤560px / 390 档）：交付物双栏卡片改单列，页边距收敛。 */
+@media (max-width: 560px) {
+  .pm-dv-root .dv-g-grid { grid-template-columns: 1fr; }
+  .pm-dv-root .dv-empty { padding: var(--sp-6) var(--sp-3); }
+}

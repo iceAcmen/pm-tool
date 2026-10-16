@@ -8,6 +8,26 @@
 
 ---
 
+## #25 真 390px 窄窗响应式正式修复（GI-WEB-14 / PROD-07 遗留，原 MANUAL_PENDING）（2026-10-17，平台：doubao-work）
+
+> 状态：**隔离 worktree 内完成，真实 Chrome 390px 浅/深实测 20/20 无外壳溢出，已核验**。`pnpm build`=0；`verify-isolation.mjs` **71 脚本 / 70 通过 / 1 失败**（唯一失败 `verify-export.mjs` 为硬编码路径须以 `/pm-tool/exports/` 结尾、worktree 在 `.tmp/p0-narrow390` 下不匹配的已知环境假象，非回归），资产污染 **0**。本项**只做 CSS/视图响应式，零新增依赖、零 schema、零业务逻辑改动**；分支 `p0/narrow-390`，**不 merge、不 push、不改 package.json version、不打 tag**。
+
+- **范围**：面板骨架（顶栏/抽屉/弹窗/表单/按钮组）+ 全部 9 视图（全部任务、里程碑、风险与问题、会议纪要、交付物、进度汇报、甘特排期、项目概览、人员负载）在 390px 视口无重叠/无裁切/无横向外壳溢出；≥1024 桌面布局不变（窄屏规则全部隔离在 `@media (max-width:560px)` 内，不命中桌面）。
+- **改了哪些文件**
+  - `src/client/panel.css`：末尾新增 #25 窄屏块——顶栏内距收敛+允许换行、项目菜单钳到 92vw、抽屉宽度 `min(560px,100vw)` 且 header/body 内距收敛、抽屉表单/设置栅格单列、move-picker 不锁 320px、副驾编辑行 6 列→2 列、风险矩阵 3→2 列、健康环图例允许换行、旧版人员姓名列不锁 130px。
+  - `src/client/views/tasks.css`：搜索框通栏、筛选/工具条换行、主按钮通栏居中、卡片侧距收敛；任务表在 `.pt-scroll` 内部横滚；顺手把 `.pt-primary` 硬编码 `#fff` 改为 `var(--dsw-alias-label-primary-foreground)`。
+  - `src/client/views/people.css`：隐藏固定列表头，负载明细行由固定 6 列网格（240px/1fr/64px/110px/110px/20px）改为可换行 flex 卡片（负责人/色条/计数/到期/状态徽章/箭头自然换行），卡片头纵向、说明行可换行。
+  - `src/client/views/meetings.css`：行动项 4 固定列（1fr/130px/110px/92px）改单列堆叠、隐藏表头行。
+  - `src/client/views/milestones.css`：概览统计条允许换行、达成率单元格不锁 180px、空态内距收敛。
+  - `src/client/views/risk-issues.css`：卡片内距收敛、矩阵首列 56→44px、列表第二行允许换行、处置措施整行。
+  - `src/client/views/deliverables.css`：双栏卡片改单列。
+  - `src/client/views/gantt.css`：工具栏换行收敛、左标签列 220→150px，时间轴在 `.pm-gantt-scroll` 内部横滚；`.pm-chip-primary` 硬编码 `rgb(255,255,255)` 改 token。
+  - `src/client/views/overview.css` / `reports.css`：补 ≤560 断点（概览边距/栅格内距收敛；汇报快照 7→3 列、元信息换行）。
+  - `scripts/verify-gui-contract.mjs`：新增 #25 静态契约——骨架+9 视图均须含 `@media (max-width:560px)` 断点、骨架与全部视图 CSS 零硬编码 hex、天然宽内容（`.pm-table-scroll`/`.pt-scroll`/`.pm-gantt-scroll`）必须内部横滚。
+- **为什么 / 口径**：天然宽内容（任务表、甘特时间轴）允许在各自**容器内部**横向滚动，外壳/页面不整体溢出；导航与主要操作在 390 下可达。配色一律走 `--dsw-*` / `--pm-*` 别名 token，零硬编码 hex，跟随 `body[data-ds-dark-theme]`，浅深两态清晰。
+- **验证**：隔离真实 Chrome headless（视口 390×844，dpr=2，独立 DSH_HOME + 独立存储/备份 + 端口 **3155**，profile `node_modules/dsh-pm-tool` 软链指向 worktree 包；正式 3080=PID 66364 全程未变、3091 未监听；ISS-027 单 PID TERM）。监听真实响应体证明下发聚合包 `dsh-pm-tool/client.js` 含 `#25 真 390px` 标记与 `max-width:560px` 断点（重建后 rev 指纹变化）；浅/深 × 9 视图 + 新建任务抽屉共 20 项扫描无外壳水平溢出。证据 `docs/verification/narrow390-20261016/`。
+- **边界**：本项不做 #22 副驾写扩展、#23 客观进度、#24 vitest/E2E/CI；未改任何 tsx DOM 契约/锚点 class；未新增外部依赖。
+
 ## #21 口径配置化：项目级设置（健康分权重/封顶/灯号线、临期窗口、过载阈值）（2026-10-16，平台：doubao-work）
 
 > 状态：**默认等价锁定 + 覆盖/非法/重启读回 + 隔离真实 Chrome 浅/深实测，已核验**。`pnpm build`=0；全量 guard **71/71、失败 0、资产污染 0**（before/after=162/162）；只新增设置、不改业务实体字段语义、不引入 vitest、不新增外部依赖（纯 TS）。

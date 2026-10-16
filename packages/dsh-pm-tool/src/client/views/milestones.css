@@ -226,3 +226,11 @@
   max-width: 380px; line-height: 1.6;
 }
 .pm-ms-root .ms-empty .ms-btn-primary { margin-top: var(--sp-4); }
+
+/* #25 窄窗（≤560px / 390 档）：概览统计条允许换行，达成率单元格不再锁死 180px。 */
+@media (max-width: 560px) {
+  .pm-ms-root .ms-ov-row { flex-wrap: wrap; row-gap: var(--sp-3); }
+  .pm-ms-root .ms-ov-cell { flex: 1 1 40%; }
+  .pm-ms-root .ms-ov-rate-cell { flex: 1 1 100%; }
+  .pm-ms-root .ms-empty { padding: var(--sp-6) var(--sp-3); }
+}
