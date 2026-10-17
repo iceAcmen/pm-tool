@@ -128,9 +128,6 @@ export function RiskIssuesView(props: {
             <b>{openCount} 开放</b> · {monitoringCount} 跟进中 · {overdueCount} 已逾期 · {closedCount} 已关闭
           </p>
         </div>
-        <button type="button" className="ri-btn-primary" disabled={disabled} onClick={onCreate}>
-          <Plus size={14}/> 登记风险/问题
-        </button>
       </header>
 
       {/* I6：完整 tab 模式——tablist/tab/tabpanel/aria-selected 齐备；←/→/↑/↓ 移动选中并跟随焦点，Home/End 跳首尾，roving tabindex。 */}

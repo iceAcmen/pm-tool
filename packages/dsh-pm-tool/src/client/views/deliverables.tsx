@@ -92,11 +92,6 @@ export function Deliverables(props: DeliverablesProps) {
             共 <b>{total}</b> 项交付物 · 按状态分组管理
           </div>
         </div>
-        {total > 0 && (
-          <button type="button" className="dv-btn-primary" onClick={onCreate}>
-            <Plus size={14}/> 新增交付物
-          </button>
-        )}
       </div>
 
       {total === 0 ? (

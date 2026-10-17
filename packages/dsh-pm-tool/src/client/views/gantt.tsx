@@ -51,7 +51,7 @@ export function GanttView(props: {
   disabled?: boolean
   onGotoView: (v: View) => void
 }) {
-  const { tasks, milestones, run, onEdit, onCreate, disabled } = props
+  const { tasks, milestones, run, onEdit, disabled } = props
   const axis = dateRange([...tasks, ...milestones])
   const today = localTodayIso() // 本地日期，避免 UTC 偏移把今天画到昨天
   // aria-live 状态行：成功『已更新：起 ~ 止』数秒自清除；失败『更新失败，请重试』。
@@ -401,7 +401,6 @@ export function GanttView(props: {
         </span>
       )}
       <button className="pm-chip" onClick={locateToday}>◉ 定位到今天</button>
-      <button className="pm-chip pm-chip-primary" onClick={onCreate}>＋ 新建任务</button>
     </div>
 
     <div className="pm-gantt">

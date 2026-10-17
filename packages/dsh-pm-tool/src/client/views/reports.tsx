@@ -101,7 +101,6 @@ export function ReportsView(props: {
           <h1>进度汇报</h1>
           <div className="rp-sub">按周期沉淀执行摘要与快照 · {sorted.length} 条汇报</div>
         </div>
-        <button type="button" className="rp-btn" onClick={onCreate}><Plus size={14} />生成快照</button>
       </div>
 
       <div className="rp-body">

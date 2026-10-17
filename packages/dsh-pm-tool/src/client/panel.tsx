@@ -856,6 +856,45 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <button className="pm-button" onClick={() => setDrawer({ kind: 'project-create' })}>
             <Plus size={15}/>新建项目
           </button>
+          {/* O1 方案②：视图主 CTA 常驻顶栏（与「新建项目」同层），落点九视图一致；
+              overview/people 无新建语义，不硬造。按钮样式走 accent 描边+12% tint，不走近黑实心。 */}
+          {(() => {
+            let cta: { label: string; action: () => void } | null = null
+            switch (view) {
+              case 'tasks':
+              case 'gantt':
+                cta = { label: '新建任务', action: () => setDrawer({ kind: 'task' }) }
+                break
+              case 'milestones':
+                cta = { label: '新增里程碑', action: () => setDrawer({ kind: 'milestone' }) }
+                break
+              case 'risk-issues':
+                cta = { label: '登记风险/问题', action: () => setDrawer({ kind: 'risk-issue' }) }
+                break
+              case 'meetings':
+                cta = { label: '新增会议', action: () => setDrawer({ kind: 'meeting' }) }
+                break
+              case 'reports':
+                cta = { label: '生成快照', action: () => setDrawer({ kind: 'report' }) }
+                break
+              case 'deliverables':
+                cta = { label: '新增交付物', action: () => setDrawer({ kind: 'deliverable' }) }
+                break
+              default:
+                cta = null
+            }
+            if (!cta) return null
+            return (
+              <button
+                type="button"
+                className="pm-button pm-view-cta"
+                disabled={!project || busy}
+                onClick={cta.action}
+              >
+                <Plus size={15}/>{cta.label}
+              </button>
+            )
+          })()}
           <button
             className="pm-button pm-top-secondary"
             disabled={!project || dashOpen}

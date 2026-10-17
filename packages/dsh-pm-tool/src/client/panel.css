@@ -376,6 +376,19 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-button:disabled, .pm-icon-button:disabled { cursor: not-allowed; opacity: .55; }
 .pm-button-primary { border-color: transparent; background: var(--dsw-alias-button-primary-fill); color: var(--dsw-alias-label-primary-foreground); }
 .pm-button-primary:hover:not(:disabled) { border-color: transparent; background: var(--dsw-alias-button-primary-hover); }
+/* O1 方案②：视图主 CTA 顶栏落点。accent 描边 + accent 12% tint 底 + link 色文字；
+   不走近黑实心（用户指令优先于 §9 H1 中性填充），与全局「新建项目」ghost 形成层级。 */
+.pm-view-cta {
+  border-color: var(--pm-accent);
+  background: var(--pm-tint-accent);
+  color: var(--pm-link);
+  font-weight: 550;
+}
+.pm-view-cta:hover:not(:disabled) {
+  border-color: var(--pm-accent);
+  background: var(--pm-accent-soft);
+  color: var(--pm-link);
+}
 .pm-button-danger { margin-right: auto; border-color: transparent; color: var(--pm-danger); }
 .pm-button-danger:hover:not(:disabled) { border-color: transparent; background: var(--dsw-alias-interactive-bg-hover-danger); }
 .pm-plain-icon {

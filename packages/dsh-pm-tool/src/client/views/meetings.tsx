@@ -115,9 +115,6 @@ export function MeetingsView(props: {
             <b>{meetings.length} 场</b> · 已定稿 {finalCount} · 草稿 {draftCount}
           </p>
         </div>
-        <button type="button" className="mt-btn-primary" onClick={onCreate}>
-          <Plus size={14}/> 新增会议
-        </button>
       </header>
 
       <div className="mt-stats">

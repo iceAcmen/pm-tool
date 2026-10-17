@@ -217,7 +217,7 @@ export function TaskTable(props: {
   onDismissDiagnosis?: (id: string) => void
 }) {
   const {
-    tasks, milestones, disabled = false, onCreate, onEdit,
+    tasks, milestones, disabled = false, onEdit,
     onGenWbs, onSaved, run, execute, projectId, projectName = '', density = 'comfortable', onDensityChange, overlayOpen,
     diagnosis = [], onDismissDiagnosis,
   } = props
@@ -997,9 +997,6 @@ export function TaskTable(props: {
               </div>
               <span className="pt-density-chip">全部视图生效 · 持久保存</span>
             </div>
-            <button className="pt-primary" onClick={onCreate} disabled={disabled}>
-              <Plus size={15} />新建任务
-            </button>
           </div>
         </div>
       </div>

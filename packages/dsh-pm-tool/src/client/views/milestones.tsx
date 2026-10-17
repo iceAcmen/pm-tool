@@ -81,11 +81,6 @@ export function Milestones(props: MilestonesProps) {
             共 <b>{total}</b> 个仪式节点 · 从需求冻结到验收交付
           </div>
         </div>
-        {!disabled && (
-          <button type="button" className="ms-btn-primary" onClick={onCreate}>
-            <Plus size={14}/> 新增里程碑
-          </button>
-        )}
       </div>
 
       {total === 0 ? (
