@@ -373,6 +373,147 @@
   padding: 1px 5px; margin: 0 2px; color: var(--muted);
 }
 
+/* ===== P2-5 命名视图：切换器 / 下拉菜单 / 另存为 / 管理弹窗 ===== */
+.pm-tasks-root .pt-viewleft {
+  display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; min-width: 0;
+}
+.pm-tasks-root .pt-viewswitch { position: relative; }
+.pm-tasks-root .pt-viewswitch-btn {
+  max-width: 220px; gap: 7px;
+}
+.pm-tasks-root .pt-viewswitch-name {
+  display: inline-flex; align-items: center; gap: 6px;
+  max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pm-tasks-root .pt-viewswitch-dirty {
+  font-style: normal; font-size: var(--t-10); font-weight: 700; color: var(--c-prog);
+  background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+  border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums;
+}
+.pm-tasks-root .pt-viewswitch-chev { color: var(--muted); flex-shrink: 0; }
+
+.pm-tasks-root .pt-vmenu {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: var(--z-modal, 30);
+  width: 300px; max-width: 86vw; background: var(--surface); background-image: var(--surface-g);
+  border: 1px solid var(--line-2); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3); padding: 6px;
+}
+.pm-tasks-root .pt-vmenu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  background: transparent; border: 0; border-radius: var(--r-xs); cursor: pointer;
+  padding: 9px 10px; font: inherit; color: var(--ink-2);
+}
+.pm-tasks-root .pt-vmenu-item:hover,
+.pm-tasks-root .pt-vmenu-item.active { background: var(--surface-3); color: var(--ink); }
+.pm-tasks-root .pt-vmenu-check {
+  width: 18px; height: 18px; flex-shrink: 0; display: inline-flex; align-items: center;
+  justify-content: center; color: var(--c-done);
+}
+.pm-tasks-root .pt-vmenu-main { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+.pm-tasks-root .pt-vmenu-name {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: var(--t-13); font-weight: 650; color: var(--ink);
+}
+.pm-tasks-root .pt-vmenu-star { color: var(--c-block); display: inline-flex; }
+.pm-tasks-root .pt-vmenu-builtin {
+  font-size: var(--t-10); font-weight: 600; color: var(--muted);
+  background: var(--surface-2); border-radius: 999px; padding: 1px 7px;
+}
+.pm-tasks-root .pt-vmenu-cond {
+  font-size: var(--t-11); color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pm-tasks-root .pt-vmenu-div { height: 1px; background: var(--line-soft); margin: 6px 4px; }
+.pm-tasks-root .pt-vmenu-go {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  background: transparent; border: 0; border-radius: var(--r-xs); cursor: pointer;
+  padding: 9px 10px; font: inherit; font-size: var(--t-12); font-weight: 600; color: var(--c-prog);
+}
+.pm-tasks-root .pt-vmenu-go:hover { background: var(--surface-3); }
+
+/* 弹窗（另存为 / 管理）：复用移动弹窗遮罩与视觉 token */
+.pm-tasks-root .pt-vm-mask {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: color-mix(in srgb, var(--bg) 45%, transparent);
+  display: grid; place-items: center; padding: var(--sp-4);
+}
+.pm-tasks-root .pt-vm {
+  width: min(460px, 94vw); max-height: 80vh; overflow: auto;
+  background: var(--surface); background-image: var(--surface-g);
+  border: 1px solid var(--line-2); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3); padding: var(--sp-4);
+}
+.pm-tasks-root .pt-vm header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: var(--t-14); font-weight: 700; color: var(--ink); margin-bottom: var(--sp-3);
+}
+.pm-tasks-root .pt-vm-x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: var(--r-xs);
+  background: transparent; border: 0; color: var(--muted); cursor: pointer;
+}
+.pm-tasks-root .pt-vm-x:hover { background: var(--surface-3); color: var(--ink); }
+
+.pm-tasks-root .pt-save-field { display: block; margin-bottom: var(--sp-3); }
+.pm-tasks-root .pt-save-field > span {
+  display: block; font-size: var(--t-12); font-weight: 650; color: var(--muted); margin-bottom: 6px;
+}
+.pm-tasks-root .pt-save-name {
+  width: 100%; height: 38px; padding: 0 12px; font: inherit; font-size: var(--t-13);
+  color: var(--ink); background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r); outline: 0;
+}
+.pm-tasks-root .pt-save-name:focus { border-color: var(--c-prog); }
+.pm-tasks-root .pt-save-state { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--sp-3); }
+.pm-tasks-root .pt-save-state-label { font-size: var(--t-12); font-weight: 650; color: var(--muted); }
+.pm-tasks-root .pt-save-chip {
+  align-self: flex-start; font-size: var(--t-12); font-weight: 600; color: var(--ink-2);
+  background: var(--surface-2); border-radius: var(--r); padding: 6px 10px;
+}
+.pm-tasks-root .pt-vm-foot {
+  display: flex; justify-content: flex-end; gap: var(--sp-2);
+  border-top: 1px solid var(--line-soft); padding-top: var(--sp-3);
+}
+
+.pm-tasks-root .pt-vm-list { display: flex; flex-direction: column; }
+.pm-tasks-root .pt-vm-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 12px 4px; border-bottom: 1px solid var(--line-soft);
+}
+.pm-tasks-root .pt-vm-row:last-child { border-bottom: 0; }
+.pm-tasks-root .pt-vm-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pm-tasks-root .pt-vm-name {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: var(--t-13); font-weight: 650; color: var(--ink);
+}
+.pm-tasks-root .pt-vm-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--t-10); font-weight: 600; border-radius: 999px; padding: 2px 8px;
+  font-variant-numeric: tabular-nums;
+}
+.pm-tasks-root .pt-vm-badge-default {
+  color: var(--c-block); background: color-mix(in srgb, var(--c-block) 15%, transparent);
+}
+.pm-tasks-root .pt-vm-badge-lock { color: var(--muted); background: var(--surface-2); }
+.pm-tasks-root .pt-vm-cond { font-size: var(--t-11); color: var(--muted); }
+.pm-tasks-root .pt-vm-rename-input {
+  height: 32px; padding: 0 10px; font: inherit; font-size: var(--t-13);
+  color: var(--ink); background: var(--field-bg); border: 1px solid var(--c-prog);
+  border-radius: var(--r); outline: 0; width: 100%; max-width: 220px;
+}
+.pm-tasks-root .pt-vm-acts { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.pm-tasks-root .pt-vm-act {
+  background: transparent; border: 0; cursor: pointer; font: inherit;
+  font-size: var(--t-12); font-weight: 600; color: var(--ink-2); padding: 4px 2px;
+}
+.pm-tasks-root .pt-vm-act:hover:not(:disabled) { color: var(--ink); }
+.pm-tasks-root .pt-vm-act:disabled { color: var(--faint); cursor: default; }
+.pm-tasks-root .pt-vm-del { display: inline-flex; align-items: center; gap: 4px; color: var(--c-late); }
+.pm-tasks-root .pt-vm-del:disabled { color: var(--faint); }
+.pm-tasks-root .pt-vm-note {
+  margin: var(--sp-3) 0 0; font-size: var(--t-11); color: var(--muted); line-height: 1.6;
+}
+
 /* ===== P0-1 / S1 窄窗（≤560px / 390 档）：弃用 9 列固定 grid，每条任务一张卡片。
    第一行：勾选 + 标题(完整不截断) + 状态；第二行：编号 · 负责人 · 优先级；
    第三行：截止日期 / 进度。分组（阶段父行）保留为可折叠标题条。配色只走 token。 */
@@ -454,3 +595,11 @@
   .pm-tasks-root .pt-group .pt-acts,
   .pm-tasks-root .pt-group > .pt-cell:not(.pt-gutter):not(.pt-gname) { display: none; }
 }
+
+  /* P2-5 窄窗：视图切换器占满一行，管理行纵向堆叠 */
+  .pm-tasks-root .pt-viewleft { width: 100%; }
+  .pm-tasks-root .pt-viewswitch { width: 100%; }
+  .pm-tasks-root .pt-viewswitch-btn { max-width: none; width: 100%; justify-content: flex-start; }
+  .pm-tasks-root .pt-vmenu { width: 100%; }
+  .pm-tasks-root .pt-vm-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .pm-tasks-root .pt-vm-acts { justify-content: flex-end; }

@@ -16,6 +16,34 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
+import Bookmark from 'lucide-react/dist/esm/icons/bookmark.mjs'
+import BookmarkPlus from 'lucide-react/dist/esm/icons/bookmark-plus.mjs'
+import Check from 'lucide-react/dist/esm/icons/check.mjs'
+import Star from 'lucide-react/dist/esm/icons/star.mjs'
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2.mjs'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
+import X from 'lucide-react/dist/esm/icons/x.mjs'
+import {
+  DEFAULT_VIEW_STATE,
+  VIEW_CHIP_OPTIONS,
+  VIEW_SORT_OPTIONS,
+  deleteTaskView,
+  describeTaskViewState,
+  findTaskView,
+  listAllViews,
+  renameTaskView,
+  resolveDefaultTaskView,
+  sameTaskViewState,
+  saveTaskView,
+  setDefaultTaskView,
+  type SavedTaskView,
+  type TaskViewChip,
+  type TaskViewSort,
+  type TaskViewState,
+  type TaskViewsStore,
+} from '../../core/task-views.js'
+import { loadTaskViews, newCustomViewId, persistTaskViews } from './task-views-persist.js'
 import type { Task, Milestone, Run } from './types.js'
 import css from './tasks.css?raw'
 
@@ -26,15 +54,11 @@ const taskStatus: Record<string, string> = {
   done: '已完成',
 }
 
-type ChipKey = 'all' | 'in_progress' | 'done' | 'overdue' | 'mine'
+type ChipKey = TaskViewChip
 
-const CHIPS: { key: ChipKey; label: string }[] = [
-  { key: 'all', label: '全部' },
-  { key: 'in_progress', label: '进行中' },
-  { key: 'done', label: '已完成' },
-  { key: 'overdue', label: '已逾期' },
-  { key: 'mine', label: '我负责的' },
-]
+// P2-5：chip/排序选项与 core/task-views 同源（口径不变，仅去重）。
+const CHIPS = VIEW_CHIP_OPTIONS
+const SORT_OPTIONS = VIEW_SORT_OPTIONS
 
 function arrayBufferToB64(buf: ArrayBuffer): string {
   const bytes = new Uint8Array(buf)
@@ -103,6 +127,54 @@ function MovePickerModal({ task, tasks, onChoose, onClose }: {
   )
 }
 
+/** P2-5 另存为命名视图弹窗：命名 + 展示将保存的四态摘要；空名禁止提交，关闭即取消（零写）。 */
+function SaveViewModal({ initialName, summary, onCancel, onConfirm }: {
+  initialName: string
+  summary: string
+  onCancel: () => void
+  onConfirm: (name: string) => void
+}) {
+  const [name, setName] = useState(initialName)
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    requestAnimationFrame(() => document.querySelector<HTMLElement>('.pt-save-name')?.focus())
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') { ev.stopPropagation(); onCancel() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      opener?.focus?.()
+    }
+  }, [onCancel])
+  const submit = () => { if (name.trim()) onConfirm(name.trim()) }
+  return (
+    <div className="pt-vm-mask" onClick={onCancel}>
+      <div className="pt-vm pt-save" role="dialog" aria-modal="true" aria-label="保存视图" onClick={e => e.stopPropagation()}>
+        <header>保存视图<button type="button" className="pt-vm-x" aria-label="关闭" onClick={onCancel}><X size={15} /></button></header>
+        <label className="pt-save-field">
+          <span>视图名称</span>
+          <input
+            className="pt-save-name" value={name} placeholder="例如：本周重点 · 按优先级" aria-label="视图名称"
+            onChange={e => setName(e.currentTarget.value)}
+            onKeyDown={e => { if (e.key === 'Enter') submit() }}
+          />
+        </label>
+        <div className="pt-save-state">
+          <span className="pt-save-state-label">随视图一并保存的状态</span>
+          <span className="pt-save-chip">{summary}</span>
+        </div>
+        <footer className="pt-vm-foot">
+          <button type="button" className="pt-ghost" onClick={onCancel}>取消</button>
+          <button type="button" className="pt-primary" disabled={!name.trim()} onClick={submit}>
+            <BookmarkPlus size={14} />保存视图
+          </button>
+        </footer>
+      </div>
+    </div>
+  )
+}
+
 /** P1-7 只读诊断气泡：附着在对应任务行下方，绝不写盘、不覆盖数据。 */
 export function DiagnosisBubbleView({ bubble, onDismiss }: {
   bubble: DiagnosisBubble
@@ -147,10 +219,23 @@ export function TaskTable(props: {
     diagnosis = [], onDismissDiagnosis,
   } = props
 
-  const [query, setQuery] = useState('')
-  const [chip, setChip] = useState<ChipKey>('all')
-  const [grouped, setGrouped] = useState(false) // PROD-01：默认阶段树视图，按状态分组为可选开关
-  const [sort, setSort] = useState<'code' | 'dueDate' | 'priority' | 'progress'>('code')
+  // P2-5：命名视图。首挂载按项目默认视图恢复四态；boot 只取一次，后续切换由 effect 驱动。
+  const [boot] = useState(() => {
+    const store = loadTaskViews(projectId)
+    return { store, def: resolveDefaultTaskView(store) }
+  })
+  const [viewsStore, setViewsStore] = useState<TaskViewsStore>(boot.store)
+  const [activeViewId, setActiveViewId] = useState<string | null>(boot.def?.id ?? null)
+  const [query, setQuery] = useState(boot.def?.state.query ?? DEFAULT_VIEW_STATE.query)
+  const [chip, setChip] = useState<TaskViewChip>(boot.def?.state.chip ?? DEFAULT_VIEW_STATE.chip)
+  const [grouped, setGrouped] = useState(boot.def?.state.grouped ?? DEFAULT_VIEW_STATE.grouped)
+  const [sort, setSort] = useState<TaskViewSort>(boot.def?.state.sort ?? DEFAULT_VIEW_STATE.sort)
+  // P2-5：视图切换菜单 / 另存为弹窗 / 管理弹窗的开合态。
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [saveModal, setSaveModal] = useState<string | null>(null)
+  const [manageOpen, setManageOpen] = useState(false)
+  const [renamingId, setRenamingId] = useState<string | null>(null)
+  const [renameDraft, setRenameDraft] = useState('')
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [movePickerFor, setMovePickerFor] = useState<Task | null>(null)
@@ -198,6 +283,98 @@ export function TaskTable(props: {
     overdue: tasks.filter(isLate).length,
     mine: tasks.filter(t => t.assignee).length,
   }), [tasks]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ---- P2-5：命名视图（过滤/排序/分组/搜索四态持久化与恢复）----
+  const switcherRef = useRef<HTMLDivElement | null>(null)
+  const activeView = findTaskView(viewsStore, activeViewId)
+  const currentState: TaskViewState = { query, chip, grouped, sort }
+  const dirty = activeView ? !sameTaskViewState(currentState, activeView.state) : true
+  const allViews = listAllViews(viewsStore)
+
+  const commitStore = (next: TaskViewsStore) => {
+    setViewsStore(next)
+    persistTaskViews(projectId, next)
+  }
+
+  const applyView = (v: SavedTaskView) => {
+    setQuery(v.state.query)
+    setChip(v.state.chip)
+    setGrouped(v.state.grouped)
+    setSort(v.state.sort)
+    setActiveViewId(v.id)
+    setMenuOpen(false)
+  }
+
+  /** 更新当前自定义视图（覆盖保存四态）；内置视图不可更新，走另存为。 */
+  const updateActiveView = () => {
+    if (!activeView || activeView.builtin) return
+    commitStore(saveTaskView(viewsStore, { id: activeView.id, name: activeView.name, state: currentState }))
+    setMenuOpen(false)
+  }
+
+  const confirmSaveAs = (name: string) => {
+    const id = newCustomViewId()
+    commitStore(saveTaskView(viewsStore, { id, name, state: currentState }))
+    setActiveViewId(id)
+    setSaveModal(null)
+  }
+
+  const handleRename = (id: string, name: string) => {
+    commitStore(renameTaskView(viewsStore, id, name))
+    setRenamingId(null)
+    setRenameDraft('')
+  }
+
+  const handleSetDefault = (id: string) => commitStore(setDefaultTaskView(viewsStore, id))
+
+  const handleDelete = (id: string) => {
+    const target = findTaskView(viewsStore, id)
+    if (!target || target.builtin) return
+    if (!window.confirm(`删除视图「${target.name}」？此操作只移除保存，不影响任务数据。`)) return
+    commitStore(deleteTaskView(viewsStore, id))
+    if (activeViewId === id) setActiveViewId(null)
+  }
+
+  // 切换项目：按项目键重新加载并恢复默认视图，避免串视图。
+  useEffect(() => {
+    const store = loadTaskViews(projectId)
+    setViewsStore(store)
+    const def = resolveDefaultTaskView(store)
+    if (def) {
+      setQuery(def.state.query)
+      setChip(def.state.chip)
+      setGrouped(def.state.grouped)
+      setSort(def.state.sort)
+      setActiveViewId(def.id)
+    } else {
+      setQuery(DEFAULT_VIEW_STATE.query)
+      setChip(DEFAULT_VIEW_STATE.chip)
+      setGrouped(DEFAULT_VIEW_STATE.grouped)
+      setSort(DEFAULT_VIEW_STATE.sort)
+      setActiveViewId(null)
+    }
+    setMenuOpen(false)
+    setManageOpen(false)
+    setSaveModal(null)
+    setRenamingId(null)
+  }, [projectId])
+
+  // 菜单：点击外部 / Escape 关闭（不依赖 hover）。
+  useEffect(() => {
+    if (!menuOpen) return
+    const onDown = (ev: MouseEvent) => {
+      if (switcherRef.current && !switcherRef.current.contains(ev.target as Node)) setMenuOpen(false)
+    }
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [menuOpen])
 
   // 按状态分组（PROD-01）：按 taskStatus 键序 todo/in_progress/blocked/done 扁平分组
   const statusGroups = useMemo(() =>
@@ -489,6 +666,81 @@ export function TaskTable(props: {
         />
       )}
 
+      {saveModal !== null && (
+        <SaveViewModal
+          initialName={saveModal}
+          summary={describeTaskViewState(currentState)}
+          onCancel={() => setSaveModal(null)}
+          onConfirm={confirmSaveAs}
+        />
+      )}
+
+      {manageOpen && (
+        <div className="pt-vm-mask" onClick={() => { setManageOpen(false); setRenamingId(null) }}>
+          <div className="pt-vm" role="dialog" aria-modal="true" aria-label="管理命名视图" onClick={e => e.stopPropagation()}>
+            <header>管理视图
+              <button type="button" className="pt-vm-x" aria-label="关闭" onClick={() => { setManageOpen(false); setRenamingId(null) }}><X size={15} /></button>
+            </header>
+            <div className="pt-vm-list">
+              {allViews.map(v => {
+                const isDefault = viewsStore.defaultViewId === v.id
+                const editing = renamingId === v.id
+                return (
+                  <div className="pt-vm-row" key={v.id}>
+                    <div className="pt-vm-main">
+                      {editing ? (
+                        <input
+                          className="pt-vm-rename-input" autoFocus value={renameDraft} aria-label={`重命名 ${v.name}`}
+                          onChange={e => setRenameDraft(e.currentTarget.value)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') handleRename(v.id, renameDraft)
+                            if (e.key === 'Escape') { setRenamingId(null); setRenameDraft('') }
+                          }}
+                        />
+                      ) : (
+                        <span className="pt-vm-name">
+                          {v.name}
+                          {isDefault && <span className="pt-vm-badge pt-vm-badge-default"><Star size={10} />默认</span>}
+                          {v.builtin && <span className="pt-vm-badge pt-vm-badge-lock">内置 · 锁定</span>}
+                        </span>
+                      )}
+                      <span className="pt-vm-cond">{describeTaskViewState(v.state)}</span>
+                    </div>
+                    <div className="pt-vm-acts">
+                      {editing ? (
+                        <>
+                          <button type="button" className="pt-vm-act" onClick={() => handleRename(v.id, renameDraft)}>确认</button>
+                          <button type="button" className="pt-vm-act" onClick={() => { setRenamingId(null); setRenameDraft('') }}>取消</button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button" className="pt-vm-act" disabled={v.builtin}
+                            title={v.builtin ? '内置视图不可重命名' : '重命名'}
+                            onClick={() => { setRenamingId(v.id); setRenameDraft(v.name) }}
+                          >重命名</button>
+                          <button
+                            type="button" className="pt-vm-act" disabled={isDefault}
+                            title={isDefault ? '已是默认视图' : '设为该项目默认起始视图'}
+                            onClick={() => handleSetDefault(v.id)}
+                          >设为默认</button>
+                          <button
+                            type="button" className="pt-vm-act pt-vm-del" disabled={v.builtin}
+                            title={v.builtin ? '内置视图不可删除' : '删除该视图'}
+                            onClick={() => handleDelete(v.id)}
+                          ><Trash2 size={13} />删除</button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="pt-vm-note">内置视图仅可设为默认；自定义视图支持重命名 / 设默认 / 删除。管理只影响本地保存，不改动任务数据。</p>
+          </div>
+        </div>
+      )}
+
       <div className="pt-head">
         <div className="pt-row1">
           <div className="pt-title">
@@ -506,15 +758,78 @@ export function TaskTable(props: {
           </div>
         </div>
         <div className="pt-toolbar">
-          <div className="pt-chips">
-            {CHIPS.map(c => (
+          <div className="pt-viewleft">
+            {/* P2-5：命名视图切换器（内置 + 自定义，默认标记，点击外部/Escape 关闭，不依赖 hover）。 */}
+            <div className="pt-viewswitch" ref={switcherRef}>
               <button
-                key={c.key} className={`pt-chip${chip === c.key ? ' active' : ''}`}
-                onClick={() => setChip(c.key)}
-              >{c.label}<span className="n">{chipCounts[c.key]}</span></button>
-            ))}
+                type="button" className="pt-ghost pt-viewswitch-btn"
+                aria-haspopup="listbox" aria-expanded={menuOpen} aria-label="切换命名视图"
+                onClick={() => setMenuOpen(v => !v)}
+              >
+                <Bookmark size={14} />
+                <span className="pt-viewswitch-name">
+                  {activeView ? activeView.name : '未命名视图'}
+                  {activeView && dirty && <em className="pt-viewswitch-dirty">已修改</em>}
+                </span>
+                <ChevronDown size={13} className="pt-viewswitch-chev" />
+              </button>
+              {menuOpen && (
+                <div className="pt-vmenu" role="listbox" aria-label="命名视图列表">
+                  {allViews.map(v => {
+                    const isActive = activeViewId === v.id
+                    const isDefault = viewsStore.defaultViewId === v.id
+                    return (
+                      <button
+                        key={v.id} type="button" role="option" aria-selected={isActive}
+                        className={`pt-vmenu-item${isActive ? ' active' : ''}`}
+                        onClick={() => applyView(v)}
+                      >
+                        <span className="pt-vmenu-check">{isActive && <Check size={14} />}</span>
+                        <span className="pt-vmenu-main">
+                          <span className="pt-vmenu-name">
+                            {v.name}
+                            {isDefault && <span className="pt-vmenu-star" title="默认视图"><Star size={11} /></span>}
+                            {v.builtin && <span className="pt-vmenu-builtin">内置</span>}
+                          </span>
+                          <span className="pt-vmenu-cond">{describeTaskViewState(v.state)}</span>
+                        </span>
+                      </button>
+                    )
+                  })}
+                  <div className="pt-vmenu-div" />
+                  <button
+                    type="button" className="pt-vmenu-go"
+                    onClick={() => { setMenuOpen(false); setManageOpen(true) }}
+                  ><Settings2 size={14} />管理视图…</button>
+                </div>
+              )}
+            </div>
+            <div className="pt-chips">
+              {CHIPS.map(c => (
+                <button
+                  key={c.key} className={`pt-chip${chip === c.key ? ' active' : ''}`}
+                  onClick={() => setChip(c.key)}
+                >{c.label}<span className="n">{chipCounts[c.key]}</span></button>
+              ))}
+            </div>
           </div>
           <div className="pt-tools">
+            {/* P2-5：当前为自定义视图 → 覆盖更新；否则另存为命名视图。 */}
+            {activeView && !activeView.builtin ? (
+              <button
+                type="button" className="pt-ghost pm-save-view"
+                aria-label={dirty ? `更新视图「${activeView.name}」` : `保存视图「${activeView.name}」`}
+                title={dirty ? '把当前过滤/排序/分组覆盖保存到该视图' : '保存当前视图'}
+                onClick={updateActiveView}
+              ><Bookmark size={14} />{dirty ? `更新「${activeView.name}」` : `保存「${activeView.name}」`}</button>
+            ) : (
+              <button
+                type="button" className="pt-ghost pm-save-view"
+                aria-label="另存为新命名视图"
+                title="把当前过滤/排序/分组命名保存为新视图"
+                onClick={() => setSaveModal(activeView?.name ?? '')}
+              ><BookmarkPlus size={14} />保存视图</button>
+            )}
             <button
               className="pt-ghost pm-group-toggle" aria-pressed={grouped}
               title="按任务状态扁平分组（替代阶段树）"
@@ -523,12 +838,9 @@ export function TaskTable(props: {
             <label className="pt-ghost pt-sort-wrap" title="任务排序">
               <select
                 className="pm-sort-select" aria-label="任务排序"
-                value={sort} onChange={e => setSort(e.currentTarget.value as typeof sort)}
+                value={sort} onChange={e => setSort(e.currentTarget.value as TaskViewSort)}
               >
-                <option value="code">按 WBS 编号</option>
-                <option value="dueDate">按截止日期</option>
-                <option value="priority">按优先级</option>
-                <option value="progress">按进度</option>
+                {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </label>
             <label className="pt-ghost pm-import-dropzone" title="导入 .csv / .xlsx 任务表">
