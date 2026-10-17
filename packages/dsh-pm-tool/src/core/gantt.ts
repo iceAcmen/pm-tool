@@ -72,17 +72,6 @@ export function taskDurationDays(startDate: string, dueDate: string): number {
 }
 
 /**
- * @deprecated v0.8 客观进度上线后，此函数用 legacy progress/status 伪造完成度，
- * 与客观口径冲突（status==='done' 无清单信号也返回 1）。阶段二冻结原实现一行不动、
- * 禁止新增调用点；阶段三 UI 切换到 progressFill 后删除本函数。
- */
-export function progressRatio(progress: number | undefined, status?: string): number {
-  if (status === 'done') return 1
-  const p = Number.isFinite(progress) ? (progress as number) : 0
-  return Math.min(1, Math.max(0, p / 100))
-}
-
-/**
  * v0.8 客观进度填充比例（纯渲染，无 I/O、无写副作用）。
  * 入参为真源 progress-derivation 的 TaskProgress：
  *  - value===null → 返回 null（无填充：不画实心条、不显示百分比；
