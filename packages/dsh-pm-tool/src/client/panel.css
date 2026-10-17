@@ -1093,7 +1093,8 @@ body[data-ds-dark-theme] .pm-project-menu {
   .pm-action-editor { grid-template-columns: 1fr; }
   .pm-action-editor strong, .pm-action-editor input, .pm-action-editor select { grid-column: 1; }
   .pm-action-create .pm-button { grid-column: 1 / -1; }
-  .pm-top-secondary { display: none; }
+  /* 仅隐藏顶栏次要 AI 按钮；限定 .pm-topbar，避免误伤抽屉 .pm-drawer-actions 的「保存口径」。 */
+  .pm-topbar .pm-top-secondary { display: none; }
 }
 
 /* AI 助手面板（A1） */
