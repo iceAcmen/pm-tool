@@ -1,0 +1,164 @@
+=== I4 Tab×32 逃逸点（补证前） ===
+[
+  {
+    "step": "Tab#30",
+    "tag": "input",
+    "role": null,
+    "aria": null,
+    "name": "",
+    "cls": "",
+    "inDrawer": true,
+    "inMenu": false,
+    "inPM": true
+  },
+  {
+    "step": "Tab#31",
+    "tag": "input",
+    "role": null,
+    "aria": null,
+    "name": "",
+    "cls": "",
+    "inDrawer": true,
+    "inMenu": false,
+    "inPM": true
+  },
+  {
+    "step": "Tab#32",
+    "tag": "input",
+    "role": null,
+    "aria": null,
+    "name": "",
+    "cls": "",
+    "inDrawer": true,
+    "inMenu": false,
+    "inPM": true
+  }
+]
+=== I3 命名视图：焦点在选项内按 Esc（补证前） ===
+{
+  "inOption": {
+    "tag": "button",
+    "role": "option",
+    "aria": null,
+    "name": "全部任务内置全部 · 按 WBS 编号",
+    "cls": "pt-vmenu-item",
+    "inDrawer": false,
+    "inMenu": true,
+    "inPM": true
+  },
+  "afterEsc": {
+    "none": true,
+    "active": "BODY"
+  },
+  "menuGone": true
+}
+=== I3 导出：焦点在选项内按 Esc（补证前） ===
+{
+  "inOption": {
+    "tag": "button",
+    "role": "menuitem",
+    "aria": null,
+    "name": "MDMarkdown 周报结论 / 行动项 / 风险，适合贴进周会汇报",
+    "cls": "pt-vmenu-item",
+    "inDrawer": false,
+    "inMenu": true,
+    "inPM": true
+  },
+  "afterEsc": {
+    "none": true,
+    "active": "BODY"
+  },
+  "menuGone": true
+}
+=== I6 模型车道 tablist（补证前） ===
+{
+  "found": true,
+  "outer": "<div class=\"pm-lane-switch pm-model-lane\" role=\"tablist\" aria-label=\"模型车道\"><button type=\"button\" role=\"tab\" aria-selected=\"true\" class=\"pm-lane-poc is-on\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-zap\" aria-hidden=\"true\"><path d=\"M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z\"></path></svg> PoC 免费</button><button type=\"button\" role=\"tab\" aria-selected=\"false\" class=\"pm-lane-prod\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-key-round\" aria-hidden=\"true\"><path d=\"M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z\"></path><circle cx=\"16.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"></circle></svg> 生产 Key</button></div>"
+}
+=== I6 车道 ArrowRight（补证前） ===
+{
+  "after": {
+    "tag": "button",
+    "role": "tab",
+    "aria": null,
+    "name": "PoC 免费",
+    "cls": "pm-lane-poc is-on",
+    "inDrawer": true,
+    "inMenu": false,
+    "inPM": true
+  },
+  "tabs": [
+    {
+      "text": "PoC 免费",
+      "sel": "true",
+      "focused": true
+    },
+    {
+      "text": "生产 Key",
+      "sel": "false",
+      "focused": false
+    }
+  ]
+}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: '总览看板' }).first()[22m
+[2m    - locator resolved to <button type="button" class="pm-rail-item">…</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    56 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at /Users/bytedance/Projects/dsh-pm/deepseek-harness/f3-baseline2.mjs:90:58 {
+  log: [
+    "  - waiting for getByRole('button', { name: '总览看板' }).first()",
+    '    - locator resolved to <button type="button" class="pm-rail-item">…</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    56 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <button aria-label="关闭编辑抽屉" class="pm-drawer-scrim"></button> from <div class="pm-drawer-layer">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.2

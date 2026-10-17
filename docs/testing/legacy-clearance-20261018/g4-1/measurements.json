@@ -1,0 +1,1029 @@
+[
+  {
+    "tag": "320",
+    "view": "总览看板",
+    "slug": "dashboard",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-dashboard-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail-hidden-js",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": false
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "pm-barrow.pm-linkable",
+          "text": "张三1",
+          "beyond": 166,
+          "right": 486
+        },
+        {
+          "cls": "pm-ppl-name",
+          "text": "张三",
+          "beyond": 119,
+          "right": 439
+        },
+        {
+          "cls": "pm-bento-m",
+          "text": "1",
+          "beyond": 155,
+          "right": 475
+        },
+        {
+          "cls": "pm-barrow.pm-linkable",
+          "text": "李四1",
+          "beyond": 166,
+          "right": 486
+        },
+        {
+          "cls": "pm-ppl-name",
+          "text": "李四",
+          "beyond": 119,
+          "right": 439
+        },
+        {
+          "cls": "pm-bento-m",
+          "text": "1",
+          "beyond": 155,
+          "right": 475
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "总览看板",
+          "top": 86
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "项目概览",
+    "slug": "overview",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-overview-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail-hidden-js",
+      "matched": true,
+      "verified": true,
+      "swText": "项目概览",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "G3 验收项目",
+          "top": 140
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "全部任务",
+    "slug": "tasks",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-tasks-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "全部任务5",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 338,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "pt-tools",
+          "text": "保存视图按状态分组按 WBS 编号按截止日期按优",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-viewswitch.pt-export",
+          "text": "导出",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-ghost.pt-viewswitch-btn",
+          "text": "导出",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-density",
+          "text": "密度（全局偏好）舒适紧凑全部视图生效 · 持久保",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-density-chip",
+          "text": "全部视图生效 · 持久保存",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-primary",
+          "text": "新建任务",
+          "beyond": 74,
+          "right": 394
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "任务",
+          "top": 82
+        },
+        {
+          "t": "任务",
+          "top": 235
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "甘特排期",
+    "slug": "gantt",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-gantt-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "甘特排期",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": []
+    }
+  },
+  {
+    "tag": "320",
+    "view": "里程碑",
+    "slug": "milestones",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-milestones-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "里程碑1",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "里程碑",
+          "top": 162
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "风险与问题",
+    "slug": "risk",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-risk-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "风险与问题1",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 297,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "colh",
+          "text": "影响 严重",
+          "beyond": 33,
+          "right": 353
+        },
+        {
+          "cls": "ri-mcell.is-high",
+          "text": "",
+          "beyond": 33,
+          "right": 353
+        },
+        {
+          "cls": "ri-mcell.is-high",
+          "text": "",
+          "beyond": 33,
+          "right": 353
+        },
+        {
+          "cls": "ri-mcell.is-mid",
+          "text": "",
+          "beyond": 33,
+          "right": 353
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "风险与问题",
+          "top": 131
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "人员负载",
+    "slug": "people",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-people-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "人员负载",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 273,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "pp-g-month",
+          "text": "1月",
+          "beyond": 9,
+          "right": 329
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "人员负载",
+          "top": 127
+        },
+        {
+          "t": "负载明细",
+          "top": 230
+        },
+        {
+          "t": "排期负载",
+          "top": 826
+        },
+        {
+          "t": "团队分布 · 过载预警",
+          "top": 1111
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "会议纪要",
+    "slug": "meetings",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-meetings-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "会议纪要0",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "会议纪要",
+          "top": 166
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "进度汇报",
+    "slug": "reports",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-reports-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "进度汇报0",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "进度汇报",
+          "top": 166
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320",
+    "view": "交付物",
+    "slug": "deliverables",
+    "dark": false,
+    "zoom": false,
+    "file": "G4-1-320-deliverables-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "交付物1",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "交付物",
+          "top": 127
+        },
+        {
+          "t": "已验收",
+          "top": 591
+        },
+        {
+          "t": "已提交",
+          "top": 672
+        },
+        {
+          "t": "进行中",
+          "top": 754
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320-dark",
+    "view": "全部任务",
+    "slug": "tasks",
+    "dark": true,
+    "zoom": false,
+    "file": "G4-1-320-tasks-dark.png",
+    "themeBg": "rgb(21, 21, 23)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "全部任务5",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 338,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "pt-tools",
+          "text": "保存视图按状态分组按 WBS 编号按截止日期按优",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-viewswitch.pt-export",
+          "text": "导出",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-ghost.pt-viewswitch-btn",
+          "text": "导出",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-density",
+          "text": "密度（全局偏好）舒适紧凑全部视图生效 · 持久保",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-density-chip",
+          "text": "全部视图生效 · 持久保存",
+          "beyond": 74,
+          "right": 394
+        },
+        {
+          "cls": "pt-primary",
+          "text": "新建任务",
+          "beyond": 74,
+          "right": 394
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "任务",
+          "top": 82
+        },
+        {
+          "t": "任务",
+          "top": 235
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320-dark",
+    "view": "甘特排期",
+    "slug": "gantt",
+    "dark": true,
+    "zoom": false,
+    "file": "G4-1-320-gantt-dark.png",
+    "themeBg": "rgb(21, 21, 23)",
+    "nav": {
+      "how": "switcher-open",
+      "matched": true,
+      "verified": true,
+      "swText": "甘特排期",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": []
+    }
+  },
+  {
+    "tag": "320-dark",
+    "view": "总览看板",
+    "slug": "dashboard",
+    "dark": true,
+    "zoom": false,
+    "file": "G4-1-320-dashboard-dark.png",
+    "themeBg": "rgb(21, 21, 23)",
+    "nav": {
+      "how": "rail-hidden-js",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": false
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [
+        {
+          "cls": "pm-barrow.pm-linkable",
+          "text": "张三1",
+          "beyond": 166,
+          "right": 486
+        },
+        {
+          "cls": "pm-ppl-name",
+          "text": "张三",
+          "beyond": 119,
+          "right": 439
+        },
+        {
+          "cls": "pm-bento-m",
+          "text": "1",
+          "beyond": 155,
+          "right": 475
+        },
+        {
+          "cls": "pm-barrow.pm-linkable",
+          "text": "李四1",
+          "beyond": 166,
+          "right": 486
+        },
+        {
+          "cls": "pm-ppl-name",
+          "text": "李四",
+          "beyond": 119,
+          "right": 439
+        },
+        {
+          "cls": "pm-bento-m",
+          "text": "1",
+          "beyond": 155,
+          "right": 475
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "总览看板",
+          "top": 86
+        }
+      ]
+    }
+  },
+  {
+    "tag": "320-dark",
+    "view": "项目概览",
+    "slug": "overview",
+    "dark": true,
+    "zoom": false,
+    "file": "G4-1-320-overview-dark.png",
+    "themeBg": "rgb(21, 21, 23)",
+    "nav": {
+      "how": "rail-hidden-js",
+      "matched": true,
+      "verified": true,
+      "swText": "项目概览",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 320,
+      "docCW": 320,
+      "bodySW": 320,
+      "vw": 320,
+      "shellW": 264,
+      "shellX": 56,
+      "shellSW": 264,
+      "shellCW": 264,
+      "rawBeyond": [],
+      "painted": [],
+      "headings": [
+        {
+          "t": "G3 验收项目",
+          "top": 140
+        }
+      ]
+    }
+  },
+  {
+    "tag": "zoom200",
+    "view": "全部任务",
+    "slug": "tasks",
+    "dark": false,
+    "zoom": true,
+    "file": "G4-1-zoom200-tasks-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 768,
+      "docCW": 768,
+      "bodySW": 384,
+      "vw": 768,
+      "shellW": 656,
+      "shellX": 112,
+      "shellSW": 1313,
+      "shellCW": 328,
+      "rawBeyond": [
+        {
+          "cls": "pm-project-switcher",
+          "text": "G3 验收项目",
+          "beyond": 186,
+          "right": 954
+        },
+        {
+          "cls": "pm-project-switcher-btn",
+          "text": "G3 验收项目",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "pm-project-switcher-name",
+          "text": "G3 验收项目",
+          "beyond": 86,
+          "right": 854
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 120,
+          "right": 888
+        },
+        {
+          "cls": "pm-capsule-wrap",
+          "text": "逾期 0 · 临期 1",
+          "beyond": 165,
+          "right": 933
+        },
+        {
+          "cls": "pm-capsule",
+          "text": "逾期 0 · 临期 1",
+          "beyond": 165,
+          "right": 933
+        },
+        {
+          "cls": "SPAN",
+          "text": "逾期 0 · 临期 1",
+          "beyond": 103,
+          "right": 871
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "任务",
+          "top": 386
+        },
+        {
+          "t": "任务",
+          "top": 751
+        }
+      ]
+    }
+  },
+  {
+    "tag": "zoom200",
+    "view": "甘特排期",
+    "slug": "gantt",
+    "dark": false,
+    "zoom": true,
+    "file": "G4-1-zoom200-gantt-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 768,
+      "docCW": 768,
+      "bodySW": 384,
+      "vw": 768,
+      "shellW": 656,
+      "shellX": 112,
+      "shellSW": 421,
+      "shellCW": 328,
+      "rawBeyond": [
+        {
+          "cls": "pm-project-switcher",
+          "text": "G3 验收项目",
+          "beyond": 186,
+          "right": 954
+        },
+        {
+          "cls": "pm-project-switcher-btn",
+          "text": "G3 验收项目",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "pm-project-switcher-name",
+          "text": "G3 验收项目",
+          "beyond": 86,
+          "right": 854
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 120,
+          "right": 888
+        },
+        {
+          "cls": "pm-seg",
+          "text": "日周月",
+          "beyond": 98,
+          "right": 866
+        },
+        {
+          "cls": "BUTTON",
+          "text": "周",
+          "beyond": 13,
+          "right": 781
+        },
+        {
+          "cls": "BUTTON",
+          "text": "月",
+          "beyond": 90,
+          "right": 858
+        }
+      ],
+      "painted": [],
+      "headings": []
+    }
+  },
+  {
+    "tag": "zoom200",
+    "view": "总览看板",
+    "slug": "dashboard",
+    "dark": false,
+    "zoom": true,
+    "file": "G4-1-zoom200-dashboard-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 768,
+      "docCW": 768,
+      "bodySW": 384,
+      "vw": 768,
+      "shellW": 656,
+      "shellX": 112,
+      "shellSW": 421,
+      "shellCW": 328,
+      "rawBeyond": [
+        {
+          "cls": "pm-project-switcher",
+          "text": "G3 验收项目",
+          "beyond": 186,
+          "right": 954
+        },
+        {
+          "cls": "pm-project-switcher-btn",
+          "text": "G3 验收项目",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "pm-project-switcher-name",
+          "text": "G3 验收项目",
+          "beyond": 86,
+          "right": 854
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 120,
+          "right": 888
+        },
+        {
+          "cls": "pm-bento-stats",
+          "text": "项目总数 1（1 进行中）任务完成率 20%未关",
+          "beyond": 57,
+          "right": 825
+        },
+        {
+          "cls": "SPAN",
+          "text": "未关闭风险 1",
+          "beyond": 57,
+          "right": 825
+        },
+        {
+          "cls": "B",
+          "text": "1",
+          "beyond": 52,
+          "right": 820
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "总览看板",
+          "top": 172
+        }
+      ]
+    }
+  },
+  {
+    "tag": "zoom200",
+    "view": "项目概览",
+    "slug": "overview",
+    "dark": false,
+    "zoom": true,
+    "file": "G4-1-zoom200-overview-light.png",
+    "themeBg": "rgb(255, 255, 255)",
+    "nav": {
+      "how": "rail",
+      "matched": true,
+      "verified": true,
+      "swText": "",
+      "entryVisible": true
+    },
+    "measure": {
+      "shell": true,
+      "docSW": 768,
+      "docCW": 768,
+      "bodySW": 384,
+      "vw": 768,
+      "shellW": 656,
+      "shellX": 112,
+      "shellSW": 449,
+      "shellCW": 328,
+      "rawBeyond": [
+        {
+          "cls": "pm-project-switcher",
+          "text": "G3 验收项目",
+          "beyond": 186,
+          "right": 954
+        },
+        {
+          "cls": "pm-project-switcher-btn",
+          "text": "G3 验收项目",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "pm-project-switcher-name",
+          "text": "G3 验收项目",
+          "beyond": 86,
+          "right": 854
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 128,
+          "right": 896
+        },
+        {
+          "cls": "[object.SVGAnimatedString]",
+          "text": "",
+          "beyond": 120,
+          "right": 888
+        },
+        {
+          "cls": "ov-hero-left",
+          "text": "G3 验收项目进行中P2-2 视觉验收种子项目",
+          "beyond": 17,
+          "right": 785
+        },
+        {
+          "cls": "ov-hero-title-row",
+          "text": "G3 验收项目进行中",
+          "beyond": 17,
+          "right": 785
+        },
+        {
+          "cls": "H1",
+          "text": "G3 验收项目",
+          "beyond": 17,
+          "right": 785
+        }
+      ],
+      "painted": [],
+      "headings": [
+        {
+          "t": "G3 验收项目",
+          "top": 416
+        }
+      ]
+    }
+  }
+]

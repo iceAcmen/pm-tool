@@ -1,0 +1,17 @@
+### BUILD
+$ tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && tsdown --config tsdown.config.ts
+ℹ tsdown v0.15.10 powered by rolldown v1.0.0-beta.44
+ℹ Using tsdown config: /Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/tsdown.config.ts
+ℹ entry: lib/client/index.js
+ℹ target: es2022
+ℹ tsconfig: tsconfig.json
+ℹ Build start
+ℹ lib/client.js                   1029.64 kB
+ℹ lib/client.js.map               1447.28 kB
+ℹ lib/client.editor.js.map         869.34 kB │ gzip: 190.15 kB
+ℹ lib/client.editor.js             359.54 kB │ gzip:  80.05 kB
+ℹ lib/client.formula-expr.js.map    92.22 kB │ gzip:  20.14 kB
+ℹ lib/client.formula-expr.js        51.29 kB │ gzip:  11.90 kB
+ℹ 6 files, total: 3849.32 kB
+✔ Build complete in 121ms
+BUILD_EXIT=0

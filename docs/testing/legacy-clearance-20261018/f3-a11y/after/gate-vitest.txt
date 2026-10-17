@@ -1,0 +1,29 @@
+### VITEST
+
+ RUN  v2.1.9 /Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool
+
+ ✓ src/core/provenance-view.test.ts (10 tests) 3ms
+ ✓ src/core/task-views.test.ts (25 tests) 7ms
+ ✓ src/core/provenance.test.ts (15 tests) 6ms
+ ✓ src/core/derived.test.ts (27 tests) 3ms
+ ✓ src/core/copilot-validate.test.ts (10 tests) 4ms
+ ✓ src/core/task-export.test.ts (11 tests) 3ms
+ ✓ src/core/provenance-store.test.ts (14 tests) 13ms
+ ✓ src/core/suggestion-engine.test.ts (11 tests) 5ms
+ ✓ src/core/nav.test.ts (10 tests) 4ms
+ ✓ src/core/gantt.criticalPath.test.ts (8 tests) 17ms
+ ✓ src/core/stale-placeholder.test.ts (6 tests) 2ms
+ ✓ src/core/design-tokens.test.ts (10 tests) 5ms
+ ✓ src/core/progress-clamp.test.ts (11 tests) 3ms
+ ✓ src/core/task-inline.test.ts (18 tests) 19ms
+ ✓ src/core/settings.test.ts (6 tests) 6ms
+ ✓ src/core/progress-meta.test.ts (5 tests) 4ms
+ ✓ src/core/gantt.routeEdge.test.ts (5 tests) 5ms
+ ✓ src/core/milestone.test.ts (7 tests) 2ms
+
+ Test Files  18 passed (18)
+      Tests  209 passed (209)
+   Start at  02:31:59
+   Duration  1.05s (transform 570ms, setup 0ms, collect 1.26s, tests 111ms, environment 2ms, prepare 1.01s)
+
+VITEST_EXIT=0

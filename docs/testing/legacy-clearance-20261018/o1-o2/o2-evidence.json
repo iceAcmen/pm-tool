@@ -1,0 +1,48 @@
+{
+  "record": {
+    "type": "任务(task)",
+    "title": "O2 链接补证任务",
+    "repoUrl": "https://example.com",
+    "evidenceUrl": "https://example.com/evidence"
+  },
+  "railBadge": "全部任务6",
+  "dom": {
+    "anchor": {
+      "tag": "a",
+      "href": "https://example.com",
+      "resolvedHref": "https://example.com/",
+      "target": "_blank",
+      "rel": "noopener noreferrer",
+      "text": "https://example.com",
+      "outerHTML": "<a href=\"https://example.com\" target=\"_blank\" rel=\"noopener noreferrer\">https://example.com</a>",
+      "color": "rgb(15, 17, 21)",
+      "textDecoration": "underline",
+      "cursor": "pointer",
+      "tabIndex": 0,
+      "rect": {
+        "x": 931,
+        "right": 1046,
+        "y": 101,
+        "w": 115,
+        "h": 17
+      },
+      "visible": true
+    },
+    "evidenceField": {
+      "value": "https://example.com/evidence",
+      "rendersAsAnchor": false
+    }
+  },
+  "shiftTab": {
+    "steps": 1,
+    "reached": true
+  },
+  "forwardTab30Reached": false,
+  "enter": {
+    "focused": true,
+    "activated": true,
+    "openedUrls": [
+      "https://example.com/"
+    ]
+  }
+}

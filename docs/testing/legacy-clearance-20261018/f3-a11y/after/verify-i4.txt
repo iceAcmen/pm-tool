@@ -1,0 +1,286 @@
+=== I4 抽屉可聚焦元素清单（42）===
+[
+  {
+    "tag": "button",
+    "type": "submit",
+    "name": "关闭抽屉"
+  },
+  {
+    "tag": "input",
+    "type": "text",
+    "name": ""
+  },
+  {
+    "tag": "textarea",
+    "type": "textarea",
+    "name": ""
+  },
+  {
+    "tag": "select",
+    "type": "select-one",
+    "name": "未开始进行中受阻已完成"
+  },
+  {
+    "tag": "select",
+    "type": "select-one",
+    "name": "P0 - 高优P1 - 一般P2 - 较低"
+  },
+  {
+    "tag": "input",
+    "type": "text",
+    "name": ""
+  },
+  {
+    "tag": "select",
+    "type": "select-one",
+    "name": "根任务1 需求分析阶段1.1 调研竞品官网功能1.2 输出需"
+  },
+  {
+    "tag": "input",
+    "type": "date",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "date",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "number",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "number",
+    "name": "如 3.5（实际投入，非估算）"
+  },
+  {
+    "tag": "input",
+    "type": "text",
+    "name": "https://… 完成/进度的客观佐证链接"
+  },
+  {
+    "tag": "input",
+    "type": "number",
+    "name": "留空即回落客观进度"
+  },
+  {
+    "tag": "textarea",
+    "type": "textarea",
+    "name": "记录为何人工设定，便于追溯口径"
+  },
+  {
+    "tag": "select",
+    "type": "select-one",
+    "name": "不关联123"
+  },
+  {
+    "tag": "input",
+    "type": "text",
+    "name": "https://host/org/repo.git"
+  },
+  {
+    "tag": "input",
+    "type": "text",
+    "name": "main"
+  },
+  {
+    "tag": "input",
+    "type": "search",
+    "name": "搜索前置任务"
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "input",
+    "type": "checkbox",
+    "name": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "name": "取消"
+  },
+  {
+    "tag": "button",
+    "type": "submit",
+    "name": "添加任务"
+  }
+]
+=== I4 Tab×20 逃逸检查（期望 escaped=0）===
+{
+  "escapedCount": 0,
+  "escaped": [],
+  "last": {
+    "step": "Tab#20",
+    "tag": "input",
+    "type": "text",
+    "name": "https://host/org/repo.git",
+    "inDrawer": true,
+    "inPM": true
+  }
+}
+=== I4 末项后 Tab 回绕（期望回到抽屉内首项，不逃逸）===
+{
+  "before": {
+    "tag": "input",
+    "type": "text",
+    "name": "https://host/org/repo.git",
+    "inDrawer": true,
+    "inPM": true
+  },
+  "after": {
+    "tag": "input",
+    "type": "text",
+    "name": "main",
+    "inDrawer": true,
+    "inPM": true
+  }
+}
+=== I4 首项 Shift+Tab 回绕到末项（期望 inDrawer=true）===
+{
+  "tag": "button",
+  "type": "submit",
+  "name": "添加任务",
+  "inDrawer": true,
+  "inPM": true
+}
+=== I4 末项「添加任务」Tab 正向回绕（期望回到抽屉内首项，inDrawer=true）===
+{
+  "before": {
+    "tag": "button",
+    "type": "submit",
+    "name": "添加任务",
+    "inDrawer": true,
+    "inPM": true
+  },
+  "after": {
+    "tag": "button",
+    "type": "submit",
+    "name": "关闭抽屉",
+    "inDrawer": true,
+    "inPM": true
+  }
+}
+=== I4 Esc 关闭归还焦点（期望回到「新建任务」按钮）===
+{
+  "before": {
+    "tag": "button",
+    "type": "submit",
+    "name": "关闭抽屉",
+    "inDrawer": true,
+    "inPM": true
+  },
+  "after": {
+    "tag": "button",
+    "type": "submit",
+    "name": "新建任务",
+    "inDrawer": false,
+    "inPM": true
+  },
+  "drawerGone": true
+}

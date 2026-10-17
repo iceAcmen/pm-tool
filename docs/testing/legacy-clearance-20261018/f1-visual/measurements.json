@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "task": "Wave-2 F1: D7/D8 contrast >=4.5:1 + 390 switcher occlusion / 768 overview overlap / 320 breakage",
+    "instance": "http://127.0.0.1:3172/",
+    "measured_at": "2026-10-18T01:35+08:00",
+    "method": "Playwright chrome headless; computedStyle fg/bg + WCAG relative-luminance ratio; elementFromPoint for hit-test; getBoundingClientRect for overlap"
+  },
+  "contrast": {
+    "rail_logo_P": { "fg": "rgb(255,255,255)", "bg": "rgb(72,104,178)", "ratio": 5.39, "pass": true, "fs": "15px", "fw": "800", "schemes": ["light", "dark"] },
+    "pt_density_chip": { "txt": "全部视图生效 · 持久保存", "fg": "rgb(173,178,184)", "bg": "rgb(53,54,56)", "ratio": 5.67, "pass": true, "fs": "10px", "fw": "600", "schemes": ["light", "dark"] },
+    "pt_gcount_done": { "txt": "3/3 完成", "fg": "rgb(34,197,94)", "bg": "rgb(53,54,56)", "ratio": 5.31, "pass": true, "fs": "11px", "fw": "600" },
+    "pt_gcount_muted": { "txt": "2/3 完成 / 0/3 完成 / 无子任务", "fg": "rgb(173,178,184)", "bg": "rgb(53,54,56)", "ratio": 5.67, "pass": true, "fs": "11px", "fw": "600", "schemes": ["light", "dark"] },
+    "sweep_result": "targeted selector sweep across default/风险与问题/交付物/项目概览, light+dark: 0 FAIL (>=4.5:1) for .ri-ava/.ov-avatar/.dv-av2/.pp-ava/.ri-mtx colh/rowh/foot/.ri-row-id/.ri-qual/.ov-stat .ov-lab"
+  },
+  "layout_B_390": {
+    "viewport": "390x844",
+    "views": ["风险与问题", "人员负载", "交付物", "项目概览", "进度汇报"],
+    "schemes": ["light", "dark"],
+    "result": "all 10 frames ov_sw=0 (switcher/action-bar overlap 0px), every action button center hits itself; zero blocked buttons"
+  },
+  "layout_C_768": {
+    "viewport": "768x1024",
+    "view": "项目概览",
+    "schemes": ["light", "dark"],
+    "result": "ov_cb=0 (action bar vs .pm-crumb-bar overlap 0px), 新建项目/刷新 center hits self; 更多 normal"
+  },
+  "layout_D1_320_dashboard": {
+    "viewport": "320x844",
+    "reachable_via_switcher": true,
+    "card_count": 10,
+    "min_card_h_px": 119,
+    "before_min_h_px": 65,
+    "labels_wrapped_readable": true,
+    "dark_spot": "reachable, 10 cards"
+  },
+  "D2_D3_note": "本隔离实例 4 个项目均无风险/交付物填充记录（无 .ri-mtx 矩阵 / 无 .dv-ov-row 漏斗），填充态横滑/换行无法在本会话渲染复测；修复为代码层 CSS（矩阵 <=560 minmax(52px,1fr)+min-width:264px+overflow-x:auto 内部横滑；交付物 <=560 flex-wrap 两列、去竖线、.dv-ov-sub 允许换行）。"
+}

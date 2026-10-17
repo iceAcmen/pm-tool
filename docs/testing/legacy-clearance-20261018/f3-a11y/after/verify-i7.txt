@@ -1,0 +1,119 @@
+=== I7 wrap 可聚焦性（修复后，期望 tabindex=0 role=group 全量）===
+[
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "任务完成率卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "里程碑 · 交付物卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "项目状态 · 规模卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "客观进度 · 清单卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "成员负载卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "风险矩阵卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "未来按周计划卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "完成历史趋势卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "KPI 指标卡片；Enter 打开配置，方向键移动位置"
+  },
+  {
+    "tabindex": 0,
+    "role": "group",
+    "aria": "记录列表卡片；Enter 打开配置，方向键移动位置"
+  }
+]
+=== I7 键盘移动前（wrap#1）===
+{
+  "tabindex": 0,
+  "role": "group",
+  "aria": "里程碑 · 交付物卡片；Enter 打开配置，方向键移动位置",
+  "x": 303,
+  "y": 12,
+  "selected": false
+}
+=== I7 ArrowRight 后（期望 x 变化/交换，selected=true，不逃逸）===
+{
+  "tabindex": 0,
+  "role": "group",
+  "aria": "里程碑 · 交付物卡片；Enter 打开配置，方向键移动位置",
+  "x": 212,
+  "y": 12,
+  "selected": true
+}
+=== I7 配置面板位置/尺寸输入（键盘等价路径）===
+{
+  "cfgPanel": true,
+  "posBlock": [
+    "位置与尺寸（栅格列/行/宽/高，可键盘输入）",
+    "列 X",
+    "行 Y",
+    "宽 W",
+    "高 H",
+    "数据源 · 实体",
+    "项目范围"
+  ],
+  "numInputs": [
+    {
+      "label": "列 X",
+      "value": "4",
+      "min": "0",
+      "max": "4"
+    },
+    {
+      "label": "行 Y",
+      "value": "0",
+      "min": "0",
+      "max": ""
+    },
+    {
+      "label": "宽 W",
+      "value": "8",
+      "min": "4",
+      "max": "12"
+    },
+    {
+      "label": "高 H",
+      "value": "3",
+      "min": "2",
+      "max": ""
+    }
+  ]
+}
+=== I7 键盘写入 X=0 后 wrap#1 几何 ===
+{
+  "tabindex": 0,
+  "role": "group",
+  "aria": "里程碑 · 交付物卡片；Enter 打开配置，方向键移动位置",
+  "x": 12,
+  "y": 492,
+  "selected": true
+}

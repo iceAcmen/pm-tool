@@ -1,0 +1,70 @@
+登记按钮数= 1
+抽屉输入框= [
+  { type: 'text', ph: '' },
+  { type: 'text', ph: '' },
+  { type: 'date', ph: '' }
+]
+=== I6 风险 tablist + panel DOM（修复后）===
+{
+  "tablist": "<div class=\"ri-seg\" role=\"tablist\" aria-label=\"筛选记录类型\"><button id=\"ri-tab-risk\" type=\"button\" role=\"tab\" aria-selected=\"true\" aria-controls=\"ri-panel\" tabindex=\"0\" class=\"on\">风险 <span class=\"n\">1</span></button><button id=\"ri-tab-issue\" type=\"button\" role=\"tab\" aria-selected=\"false\" aria-controls=\"ri-panel\" tabindex=\"-1\" class=\"\">问题 <span class=\"n\">0</span></button></div>",
+  "panel": {
+    "role": "tabpanel",
+    "labelledby": "ri-tab-risk"
+  }
+}
+=== I6 风险 ArrowRight：选中翻转+焦点移动+panel 关联翻转 ===
+{
+  "before": {
+    "text": "风险 1",
+    "sel": "true"
+  },
+  "after": {
+    "text": "问题 0",
+    "sel": "true"
+  },
+  "tabs": [
+    {
+      "text": "风险 1",
+      "sel": "false",
+      "controls": "ri-panel",
+      "tabindex": -1,
+      "focused": false
+    },
+    {
+      "text": "问题 0",
+      "sel": "true",
+      "controls": "ri-panel",
+      "tabindex": 0,
+      "focused": true
+    }
+  ],
+  "panelLabelledby": "ri-tab-issue"
+}
+=== I6 风险 ArrowLeft 回风险 ===
+{
+  "text": "风险 1",
+  "sel": "true"
+}
+=== 编辑抽屉按钮（探查删除入口）===
+[
+  {
+    "aria": "关闭抽屉",
+    "text": "",
+    "cls": "pm-icon-button"
+  },
+  {
+    "aria": null,
+    "text": "删除",
+    "cls": "pm-button pm-button-danger pm-"
+  },
+  {
+    "aria": null,
+    "text": "取消",
+    "cls": "pm-button"
+  },
+  {
+    "aria": null,
+    "text": "保存更改",
+    "cls": "pm-button pm-button-primary"
+  }
+]

@@ -1,0 +1,36 @@
+=== I3 命名视图菜单 Esc 归还 trigger ===
+{
+  "inOption": {
+    "tag": "button",
+    "role": "option",
+    "aria": null,
+    "name": "全部任务内置全部 · 按 WBS 编号",
+    "inMenu": true
+  },
+  "afterEsc": {
+    "tag": "button",
+    "role": null,
+    "aria": "切换命名视图",
+    "name": "切换命名视图",
+    "inMenu": false
+  },
+  "menuGone": true
+}
+=== I3 导出菜单 Esc 归还 trigger ===
+{
+  "inOption": {
+    "tag": "button",
+    "role": "menuitem",
+    "aria": null,
+    "name": "MDMarkdown 周报结论 / 行动项 / 风险，适合贴进周会汇报",
+    "inMenu": true
+  },
+  "afterEsc": {
+    "tag": "button",
+    "role": null,
+    "aria": "导出当前视图",
+    "name": "导出当前视图",
+    "inMenu": false
+  },
+  "menuGone": true
+}
