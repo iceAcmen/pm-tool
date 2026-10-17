@@ -1,0 +1,41 @@
+{
+  "e2_task": {
+    "errorText": "任务名称不能为空",
+    "errorId": "task-title-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "task-title-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>任务名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"title\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"task-title-error\"><span class=\"pm-field-error\" id=\"task-title-error\" role=\"alert\">任务名称不能为空</span></label>"
+  },
+  "e2_deliverable": {
+    "errorText": "交付物名称不能为空",
+    "errorId": "deliverable-name-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "deliverable-name-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"name\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"deliverable-name-error\"><span class=\"pm-field-error\" id=\"deliverable-name-error\" role=\"alert\">交付物名称不能为空</span></label>"
+  },
+  "e11_before": {
+    "chip": "全部29",
+    "sort": "dueDate",
+    "shellScrollTop": 420
+  },
+  "e10_rowDelta": 1,
+  "f9_notice": {
+    "visible": true,
+    "role": "status",
+    "ariaLive": "polite",
+    "tone": "pm-notice",
+    "text": "任务已新增并保存。任务 ID：t-0030WBS：15项目 ID：p-0001父任务：无标题：F2最终复测-待删除说明：",
+    "focusedInside": false,
+    "activeTag": "BUTTON"
+  },
+  "e11_after": {
+    "chip": "全部30",
+    "sort": "dueDate",
+    "shellScrollTop": 420,
+    "drawerClosed": true
+  }
+}

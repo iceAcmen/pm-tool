@@ -1,0 +1,98 @@
+{
+  "e2_task": {
+    "errorText": "任务名称不能为空",
+    "errorId": "task-title-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "task-title-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>任务名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"title\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"task-title-error\"><span class=\"pm-field-error\" id=\"task-title-error\" role=\"alert\">任务名称不能为空</span></label>"
+  },
+  "e2_deliverable": {
+    "errorText": "交付物名称不能为空",
+    "errorId": "deliverable-name-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "deliverable-name-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"name\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"deliverable-name-error\"><span class=\"pm-field-error\" id=\"deliverable-name-error\" role=\"alert\">交付物名称不能为空</span></label>"
+  },
+  "e11_before": {
+    "chip": "全部24",
+    "sort": "dueDate",
+    "shellScrollTop": 420
+  },
+  "e10_samples": [
+    {
+      "t": "180ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "360ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "540ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "720ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "900ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "1080ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "1260ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "1440ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    },
+    {
+      "t": "1620ms",
+      "disabled": true,
+      "ariaBusy": "true",
+      "text": "提交中…"
+    }
+  ],
+  "e10_secondClick": "blocked: 按钮 disabled，二次点击无效",
+  "e10_rowDelta": 1,
+  "f9_notice": {
+    "visible": true,
+    "role": "status",
+    "ariaLive": "polite",
+    "tone": "pm-notice",
+    "text": "任务已新增并保存。任务 ID：t-0025WBS：10项目 ID：p-0001父任务：无标题：F2复测-E10E11F9",
+    "focusedInside": false,
+    "activeTag": "BUTTON"
+  },
+  "e11_after": {
+    "chip": "全部25",
+    "sort": "dueDate",
+    "shellScrollTop": 0,
+    "drawerClosed": true
+  }
+}

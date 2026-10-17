@@ -1,0 +1,48 @@
+{
+  "e2_task": {
+    "errorVisible": true,
+    "errorText": "任务名称不能为空",
+    "errorId": "task-title-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "task-title-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>任务名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"title\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"task-title-error\"><span class=\"pm-field-error\" id=\"task-title-error\" role=\"alert\">任务名称不能为空</span></label>"
+  },
+  "e2_deliverable": {
+    "errorVisible": false,
+    "errorId": null,
+    "inputName": "name",
+    "inputAriaDescribedby": null,
+    "inputAriaInvalid": null,
+    "bound": false,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"name\" aria-required=\"true\" value=\"\"></label>",
+    "allErrorIds": []
+  },
+  "e11_before": {
+    "chip": "进行中1",
+    "sort": "dueDate",
+    "scrollTop": 0
+  },
+  "e10_buttonStates": [
+    {
+      "disabled": true,
+      "ariaDisabled": null,
+      "text": "添加任务"
+    }
+  ],
+  "f9_notice": {
+    "visible": true,
+    "role": "status",
+    "ariaLive": null,
+    "text": "任务已新增并保存。任务 ID：t-0023WBS：8项目 ID：p-0001父任务：无标题：F2基线探测任务-待删除说明：未填写负责人：未填写状态：未开始优先级",
+    "activeElement": "pt-primary",
+    "focusedInside": false
+  },
+  "e11_after": {
+    "chip": "进行中1",
+    "sort": "dueDate",
+    "scrollTop": 0,
+    "noticeStillThere": true
+  }
+}

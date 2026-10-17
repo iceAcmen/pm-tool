@@ -1,0 +1,51 @@
+{
+  "dvButtons": [
+    "浏览器功能验收",
+    "新建项目",
+    "AI 助手",
+    "AI 副驾",
+    "更多",
+    "新增交付物"
+  ],
+  "e2_deliverable": {
+    "errorVisible": true,
+    "errorText": "交付物名称不能为空",
+    "errorId": "deliverable-name-error",
+    "errorRole": "alert",
+    "inputAriaDescribedby": "deliverable-name-error",
+    "inputAriaInvalid": "true",
+    "bound": true,
+    "fieldOuterHTML": "<label class=\"pm-field\" data-wide=\"true\" data-invalid=\"true\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input name=\"name\" aria-required=\"true\" value=\"\" aria-invalid=\"true\" aria-describedby=\"deliverable-name-error\"><span class=\"pm-field-error\" id=\"deliverable-name-error\" role=\"alert\">交付物名称不能为空</span></label>"
+  },
+  "scrollCaps": {
+    ".pm-shell": {
+      "sh": 900,
+      "ch": 900,
+      "st": 0,
+      "oy": "auto"
+    },
+    ".pm-main": {
+      "sh": 900,
+      "ch": 900,
+      "st": 0,
+      "oy": "visible"
+    },
+    ".pm-view": {
+      "sh": 413,
+      "ch": 413,
+      "st": 0,
+      "oy": "visible"
+    },
+    "window": {
+      "y": 0,
+      "docH": 900
+    }
+  },
+  "e11_before": {
+    "chip": "进行中1",
+    "sort": "dueDate",
+    "shell": 0,
+    "main": 0,
+    "win": 0
+  }
+}

@@ -98,6 +98,26 @@ const pmFocusDoc: FocusDoc = {
   anyRowTitle: () => document.querySelector('.pm-title-cell') as HTMLElement | null,
 }
 
+/**
+ * E11：列表滚动位模块级快照。抽屉打开期间（autofocus / 开合）会把 .pm-shell 带回顶部，
+ * 这里只在「抽屉关闭、用户浏览列表」时记录最后滚动位；抽屉打开期间不覆盖，
+ * 关闭（保存成功 / 取消）时还原，保证保存后回到原筛选 / 排序 / 滚动上下文。
+ * 纯滚动位置保留，不改筛选状态、不碰焦点 / tab 导航。
+ */
+let drawerOpenDepth = 0
+let lastListScroller: Element | null = null
+let lastListScrollTop = 0
+if (typeof document !== 'undefined') {
+  document.addEventListener('scroll', (ev) => {
+    if (drawerOpenDepth > 0) return
+    const t = ev.target
+    if (t instanceof Element && t.classList?.contains('pm-shell')) {
+      lastListScroller = t
+      lastListScrollTop = t.scrollTop
+    }
+  }, true)
+}
+
 /** R3-OBS-002：捕获打开抽屉的真实 opener。
  *  pointerdown 覆盖鼠标点击；click 捕获额外覆盖「键盘 Tab 聚焦按钮后 Enter/Space」触发的原生 click
  *  （该路径不经过 TaskTable 的 openActive，也无 pointerdown）。抽屉内交互一律不记录，避免污染已快照的 opener。 */
@@ -662,6 +682,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   }
   const [drawer, setDrawer] = useState<Drawer>()
   const [busy, setBusy] = useState(false)
+  // E10：在途命令并发守卫。同一时刻只允许一条命令执行；第二次并发调用直接返回 false，
+  // 不重复落库（双击 / 回车连发 / pending 期间二次点击都被挡）。
+  const inflightRef = useRef(false)
   const [message, setMessage] = useState('')
   const [dashOpen, setDashOpen] = useState(false)
   const [topMenuOpen, setTopMenuOpen] = useState(false)
@@ -708,6 +731,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   // quiet：专用执行（甘特拖拽等就地反馈场景）。成功只 refresh 一次、不弹全字段大 Notice；
   // 但 catch 仍 setMessage——quiet 绝不吞掉错误提示。非 quiet 行为与原先完全一致。
   const run = async (line: string, options?: { quiet?: boolean }): Promise<boolean> => {
+    // E10：pending 期间第二次并发调用直接拒绝，二次提交不可能；按钮由 busy/submitting 禁用。
+    if (inflightRef.current) return false
+    inflightRef.current = true
     setBusy(true)
     try {
       const response = await execute(line)
@@ -718,6 +744,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       setMessage(error instanceof Error ? error.message : String(error))
       setBusy(false)
       return false
+    } finally {
+      inflightRef.current = false
     }
   }
 
@@ -2002,7 +2030,13 @@ function Notice({ message, onClose }: { message: string, onClose: () => void }) 
   const lines = formatNoticeLines(message)
   const isError = /失败|错误|拒绝|不可用|无法处理/i.test(message)
   const path = extractBackupPath(message)
-  return <div className={`pm-notice${isError ? ' pm-notice--error' : ''}`} role="status">
+  // F9：成功反馈 role=status + aria-live=polite（可编程、不抢焦点）；
+  // 错误变体按 §7 用 role=alert + aria-live=assertive。组件从不 focus()，两种变体均不抢焦点。
+  return <div
+    className={`pm-notice${isError ? ' pm-notice--error' : ''}`}
+    role={isError ? 'alert' : 'status'}
+    aria-live={isError ? 'assertive' : 'polite'}
+  >
     {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
     <div className="pm-notice-lines">
       {lines.map((line, i) => <div key={i}>{line}</div>)}
@@ -2667,8 +2701,13 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   // R3-OBS-002：mount 时快照「打开动作发生那一刻」记录的 opener，
   // 绝不在 mount 后读 document.activeElement（已被表单 autoFocus 抢成抽屉内 input）。
   const openerRef = useRef<OpenerSpec>({ kind: 'none' })
+  // E11：打开瞬间取用模块级列表滚动快照（抽屉打开期间监听器已停止覆盖），关闭时还原。
+  const scrollSnapRef = useRef<{ el: Element, top: number } | null>(null)
   useLayoutEffect(() => {
     openerRef.current = takeOpenerSpec()
+    drawerOpenDepth += 1
+    if (lastListScroller) scrollSnapRef.current = { el: lastListScroller, top: lastListScrollTop }
+    return () => { drawerOpenDepth -= 1 }
   }, [])
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
@@ -2677,12 +2716,19 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose])
+  // E11：卸载（保存成功 / 取消关闭）时把列表滚动位还原到打开前快照。
+  useEffect(() => () => {
+    const snap = scrollSnapRef.current
+    if (snap) snap.el.scrollTop = snap.top
+  }, [])
   // 关闭/卸载时归还焦点：真实 opener → 行内 title/edit → 当前视图「添加记录」控件，
   // opener 已删除才兜底，绝不落到全局 .pm-button-primary / 提醒条。
+  // E11：preventScroll 阻止焦点归还（尤其新建时回到顶部 CTA）把列表滚动位置带回顶部，
+  // 焦点仍归还（可达性不变），只抑制附带的滚动跳转，保留原筛选/排序/滚动上下文。
   useEffect(() => () => {
     requestAnimationFrame(() => {
       const target = resolveDrawerFocusTarget(openerRef.current, pmFocusDoc)
-      if (target instanceof HTMLElement) target.focus()
+      if (target instanceof HTMLElement) target.focus({ preventScroll: true })
     })
   }, [])
   return <div className="pm-drawer-layer">
@@ -2695,6 +2741,24 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
       <div className="pm-drawer-body">{children}</div>
     </aside>
   </div>
+}
+
+/** E10：表单本地提交防重态。begin() 在途时重复调用返回 false（二次提交直接忽略）；
+ *  end() 释放。配合父级 inflightRef 与 busy 禁用，pending 期间按钮 disabled + 「提交中…」加载态。 */
+function useSubmitGuard(): [boolean, () => boolean, () => void] {
+  const [submitting, setSubmitting] = useState(false)
+  const inFlight = useRef(false)
+  const begin = () => {
+    if (inFlight.current) return false
+    inFlight.current = true
+    setSubmitting(true)
+    return true
+  }
+  const end = () => {
+    inFlight.current = false
+    setSubmitting(false)
+  }
+  return [submitting, begin, end]
 }
 
 /** R3-UX-001：Field 增加可选 required（必填星号）与 error（受控中文内联错误）。
@@ -2751,6 +2815,8 @@ function ProjectForm({
     branch: project?.branch ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof ProjectFormValues, value: string) => {
     setValues(prev => {
       const next = { ...prev, [field]: value }
@@ -2761,6 +2827,7 @@ function ProjectForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     // 受控校验：与按钮/Enter 同路径（submit 默认提交即此处）。不通过则定位到首个错误字段，不发命令。
     const nextErrors = validateProjectForm(values)
     setErrors(nextErrors)
@@ -2770,6 +2837,7 @@ function ProjectForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     // 前端校验通过后再交服务端；服务端 run 错误（重名等）仍由全局 Notice 展示，不在这里掩盖。
@@ -2787,9 +2855,14 @@ function ProjectForm({
     const payload = project
       ? { name: values.name, status: form.get('status'), ...base, ...repoFields }
       : { name: values.name, ...base, ...repoFields }
-    const success = await run(project
-      ? `project update ${project.id} ${JSON.stringify(payload)}`
-      : `project add ${JSON.stringify(payload)}`)
+    let success = false
+    try {
+      success = await run(project
+        ? `project update ${project.id} ${JSON.stringify(payload)}`
+        : `project add ${JSON.stringify(payload)}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
@@ -2859,7 +2932,9 @@ function ProjectForm({
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled}>{project ? '保存更改' : '创建项目'}</button>
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : project ? '保存更改' : '创建项目'}
+      </button>
     </div>
   </form>
 }
@@ -2912,6 +2987,8 @@ function TaskForm({
     progress: String(clampProgress(task?.progress)),
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   // PROD-11 前置依赖选择器：受控已选集合（初始 = 已落盘 predecessorIds）；
   // 搜索词仅过滤视图，被过滤掉的已选项仍在集合中、照常随表单提交。
   const [predQuery, setPredQuery] = useState('')
@@ -2953,6 +3030,7 @@ function TaskForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     // P1-5：统一受控内联校验，首错聚焦；拦截即零写盘。
     const nextErrors = validateTaskForm(collectTaskValues())
     setErrors(nextErrors)
@@ -2965,6 +3043,7 @@ function TaskForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     const form = new FormData(event.currentTarget)
@@ -3021,9 +3100,14 @@ function TaskForm({
       ...(manualProgress.trim() !== '' ? { manualProgress: parseProgressInput(manualProgress) } : {}),
       ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
     }
-    const success = await run(task
-      ? `task update ${task.id} ${JSON.stringify(payload)}`
-      : `task add ${JSON.stringify(createPayload)}`)
+    let success = false
+    try {
+      success = await run(task
+        ? `task update ${task.id} ${JSON.stringify(payload)}`
+        : `task add ${JSON.stringify(createPayload)}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
@@ -3275,7 +3359,9 @@ function TaskForm({
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled}>{task ? '保存更改' : '添加任务'}</button>
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : task ? '保存更改' : '添加任务'}
+      </button>
     </div>
   </form>
 }
@@ -3301,6 +3387,8 @@ function MilestoneForm({
     targetDate: milestone?.targetDate ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof MilestoneFormValues, value: string) => {
     setValues(prev => {
       const next = { ...prev, [field]: value }
@@ -3310,6 +3398,7 @@ function MilestoneForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     const nextErrors = validateMilestoneForm(values)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
@@ -3318,6 +3407,7 @@ function MilestoneForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     const form = new FormData(event.currentTarget)
@@ -3329,9 +3419,14 @@ function MilestoneForm({
       status,
       achievedDate: status === 'achieved' ? form.get('achievedDate') || new Date().toISOString().slice(0, 10) : null,
     }
-    const success = await run(milestone
-      ? `milestone update ${milestone.id} ${JSON.stringify(payload)}`
-      : `milestone add ${JSON.stringify({ projectId, ...payload })}`)
+    let success = false
+    try {
+      success = await run(milestone
+        ? `milestone update ${milestone.id} ${JSON.stringify(payload)}`
+        : `milestone add ${JSON.stringify({ projectId, ...payload })}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
@@ -3374,7 +3469,9 @@ function MilestoneForm({
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled}>{milestone ? '保存更改' : '添加里程碑'}</button>
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : milestone ? '保存更改' : '添加里程碑'}
+      </button>
     </div>
   </form>
 }
@@ -3401,6 +3498,8 @@ function RiskIssueForm({
     dueDate: record?.dueDate ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof RiskIssueFormValues, value: string) => {
     const next = { ...values, [field]: value }
     setValues(next)
@@ -3408,6 +3507,7 @@ function RiskIssueForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     const nextErrors = validateRiskIssueForm(values)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
@@ -3416,6 +3516,7 @@ function RiskIssueForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     const form = new FormData(event.currentTarget)
@@ -3431,9 +3532,14 @@ function RiskIssueForm({
       responsePlan: type === 'risk' ? form.get('responsePlan') : '',
       solution: type === 'issue' ? form.get('solution') : '',
     }
-    const success = await run(record
-      ? `risk-issue update ${record.id} ${JSON.stringify(common)}`
-      : `risk-issue add ${JSON.stringify({ projectId, type, ...common })}`)
+    let success = false
+    try {
+      success = await run(record
+        ? `risk-issue update ${record.id} ${JSON.stringify(common)}`
+        : `risk-issue add ${JSON.stringify({ projectId, type, ...common })}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
@@ -3495,8 +3601,8 @@ function RiskIssueForm({
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled}>
-        {record ? '保存更改' : '添加记录'}
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : record ? '保存更改' : '添加记录'}
       </button>
     </div>
   </form>
@@ -3533,6 +3639,8 @@ function MeetingForm({
     durationMinutes: meeting?.durationMinutes != null ? String(meeting.durationMinutes) : '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof MeetingFormValues, value: string) => {
     const next = { ...values, [field]: value }
     setValues(next)
@@ -3540,6 +3648,7 @@ function MeetingForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     const nextErrors = validateMeetingForm(values)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
@@ -3548,6 +3657,7 @@ function MeetingForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     const form = new FormData(event.currentTarget)
@@ -3567,23 +3677,27 @@ function MeetingForm({
       decisions: textList(form.get('decisions')),
       notes: String(form.get('notes') ?? ''),
     }
-    const meetingSaved = await run(meeting
-      ? `meeting update ${meeting.id} ${JSON.stringify(payload)}`
-      : `meeting add ${JSON.stringify({ projectId, ...payload })}`)
-    if (!meetingSaved) return
-    if (meeting && actionsRef.current) {
-      const actionForms = [...actionsRef.current.querySelectorAll<HTMLFormElement>('form[data-action-form]')]
-      for (const actionForm of actionForms) {
-        const actionId = actionForm.dataset.actionId
-        const actionPayload = meetingActionPayload(new FormData(actionForm))
-        if (!actionId && !String(actionPayload.title).trim()) continue
-        const actionSaved = await run(actionId
-          ? `meeting action update ${meeting.id} ${actionId} ${JSON.stringify(actionPayload)}`
-          : `meeting action add ${meeting.id} ${JSON.stringify(actionPayload)}`)
-        if (!actionSaved) return
+    try {
+      const meetingSaved = await run(meeting
+        ? `meeting update ${meeting.id} ${JSON.stringify(payload)}`
+        : `meeting add ${JSON.stringify({ projectId, ...payload })}`)
+      if (!meetingSaved) return
+      if (meeting && actionsRef.current) {
+        const actionForms = [...actionsRef.current.querySelectorAll<HTMLFormElement>('form[data-action-form]')]
+        for (const actionForm of actionForms) {
+          const actionId = actionForm.dataset.actionId
+          const actionPayload = meetingActionPayload(new FormData(actionForm))
+          if (!actionId && !String(actionPayload.title).trim()) continue
+          const actionSaved = await run(actionId
+            ? `meeting action update ${meeting.id} ${actionId} ${JSON.stringify(actionPayload)}`
+            : `meeting action add ${meeting.id} ${JSON.stringify(actionPayload)}`)
+          if (!actionSaved) return
+        }
       }
+      onSaved()
+    } finally {
+      endSubmit()
     }
-    onSaved()
   }
   return <>
     <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
@@ -3641,7 +3755,9 @@ function MeetingForm({
           }}
         ><Trash2 size={15}/>删除会议</button>}
         <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-        <button className="pm-button pm-button-primary" disabled={disabled}>{meeting ? '保存会议' : '创建会议'}</button>
+        <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+          {submitting ? '提交中…' : meeting ? '保存会议' : '创建会议'}
+        </button>
       </div>
     </form>
     {meeting && <MeetingActions
@@ -3793,6 +3909,8 @@ function ProgressReportForm({
     periodEnd: report?.periodEnd ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof ReportFormValues, value: string) => {
     const next = { ...values, [field]: value }
     setValues(next)
@@ -3800,6 +3918,7 @@ function ProgressReportForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     if (!report) {
       const nextErrors = validateReportForm(values)
       setErrors(nextErrors)
@@ -3809,6 +3928,7 @@ function ProgressReportForm({
           const el = event.currentTarget.elements.namedItem(first)
           if (el instanceof HTMLElement) el.focus()
         }
+        endSubmit()
         return
       }
     }
@@ -3822,9 +3942,14 @@ function ProgressReportForm({
       nextPlans: textList(form.get('nextPlans')),
       blockers: textList(form.get('blockers')),
     }
-    const success = await run(report
-      ? `report update ${report.id} ${JSON.stringify(payload)}`
-      : `report generate ${projectId} ${values.periodStart} ${values.periodEnd} ${JSON.stringify(payload)}`)
+    let success = false
+    try {
+      success = await run(report
+        ? `report update ${report.id} ${JSON.stringify(payload)}`
+        : `report generate ${projectId} ${values.periodStart} ${values.periodEnd} ${JSON.stringify(payload)}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <>
@@ -3878,8 +4003,8 @@ function ProgressReportForm({
           </button>
         </>}
         <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-        <button className="pm-button pm-button-primary" disabled={disabled}>
-          {report ? '保存汇报' : '生成固定快照'}
+        <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+          {submitting ? '提交中…' : report ? '保存汇报' : '生成固定快照'}
         </button>
       </div>
     </form>
@@ -3925,6 +4050,8 @@ function DeliverableForm({
     dueDate: deliverable?.dueDate ?? '',
   })
   const [errors, setErrors] = useState<FormFieldErrors>({})
+  // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const setField = (field: keyof DeliverableFormValues, value: string) => {
     const next = { ...values, [field]: value }
     setValues(next)
@@ -3937,6 +4064,7 @@ function DeliverableForm({
   }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!beginSubmit()) return
     // P1-5：统一受控内联校验，首错聚焦；拦截即零写盘。
     const nextErrors = validateDeliverableForm({ ...values, repoUrl: repoValues.repoUrl, branch: repoValues.branch })
     setErrors(nextErrors)
@@ -3946,6 +4074,7 @@ function DeliverableForm({
         const el = event.currentTarget.elements.namedItem(first)
         if (el instanceof HTMLElement) el.focus()
       }
+      endSubmit()
       return
     }
     const form = new FormData(event.currentTarget)
@@ -3965,9 +4094,14 @@ function DeliverableForm({
       repoUrl,
       branch,
     }
-    const success = await run(deliverable
-      ? `deliverable update ${deliverable.id} ${JSON.stringify(common)}`
-      : `deliverable add ${JSON.stringify({ projectId, ...common })}`)
+    let success = false
+    try {
+      success = await run(deliverable
+        ? `deliverable update ${deliverable.id} ${JSON.stringify(common)}`
+        : `deliverable add ${JSON.stringify({ projectId, ...common })}`)
+    } finally {
+      endSubmit()
+    }
     if (success) onSaved()
   }
   return <>
@@ -4034,8 +4168,8 @@ function DeliverableForm({
           }}
         ><Trash2 size={15}/>删除</button>}
         <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-        <button className="pm-button pm-button-primary" disabled={disabled}>
-          {deliverable ? '保存更改' : '新增交付物'}
+        <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+          {submitting ? '提交中…' : deliverable ? '保存更改' : '新增交付物'}
         </button>
       </div>
     </form>

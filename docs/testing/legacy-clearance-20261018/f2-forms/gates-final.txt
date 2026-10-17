@@ -1,0 +1,19 @@
+### BUILD
+ℹ lib/client.editor.js             354.91 kB │ gzip:  78.92 kB
+ℹ lib/client.formula-expr.js.map    92.22 kB │ gzip:  20.14 kB
+ℹ lib/client.formula-expr.js        51.29 kB │ gzip:  11.90 kB
+ℹ 6 files, total: 3825.06 kB
+✔ Build complete in 117ms
+### VITEST
+
+ Test Files  18 passed (18)
+      Tests  209 passed (209)
+   Start at  02:08:03
+   Duration  989ms (transform 529ms, setup 0ms, collect 1.17s, tests 105ms, environment 5ms, prepare 944ms)
+
+### ISOLATION
+[guard] ========== 汇总 ==========
+[guard] 脚本：共 2，通过 2，失败 0
+[guard] 资产：before=172 after=172，污染 0
+
+[guard] PASS：正式 data/共享 backups/exports hash+mtime 清单零变化，共 172 个文件未被污染。
