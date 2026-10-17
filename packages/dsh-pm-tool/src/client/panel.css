@@ -95,6 +95,9 @@
   --sp-6: 24px; --sp-8: 32px; --sp-9: 40px; --sp-10: 48px; --sp-12: 64px;
   --t-10: 10px; --t-11: 11px; --t-12: 12px; --t-13: 13px; --t-14: 14px;
   --t-16: 16px; --t-18: 18px; --t-22: 22px; --t-26: 26px; --t-32: 30px; --t-40: 38px;
+  /* §4.1 页面标题角色：16/700 视图页题（字号绑定既有 --t-16，不新造字阶值；字重 700 为冻结设计约束） */
+  --pm-type-page-title: var(--t-16);
+  --pm-type-page-title-weight: 700;
   --ls-tight: -0.015em; --ls-tight2: -0.025em; --ls-cap: 0.09em;
   --z-sticky: 20; --z-pop: 40; --z-modal: 60;
   --ease: cubic-bezier(.22, .61, .36, 1);
@@ -171,6 +174,10 @@ body:not([data-ds-dark-theme]) .pm-shell {
   --muted: rgb(105, 110, 116);   /* #696e74，白底 ≥4.5:1 */
   --faint: rgb(113, 118, 124);   /* #71767c，次要/装饰文字 */
   --pm-muted: rgb(105, 110, 116);
+  /* W-DEF-004：浅色链接强制 AA #4868b2（白底 5.39:1，facts A.1 既有 fallback 值，非新造色）；
+     宿主 link 别名实测落到 #4176e6（4.23:1<AA，§5.2 禁作文字色）故在此纠偏。
+     --pm-accent 保留选中/焦点环等非文字用途，与链接语义分离；深色 link 7.83:1 达标，不在此覆盖。 */
+  --pm-link: rgb(72, 104, 178);
 }
 
 .pm-shell *, .pm-shell *::before, .pm-shell *::after { box-sizing: border-box; }
@@ -909,7 +916,9 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 /* P1-5：抽屉表单改纵向流式，分区自带两列栅格；组与组之间弱分隔。 */
 .pm-drawer-form { display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
 .pm-source-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pm-secondary); }
-.pm-source-link-button { padding: 0; border: 0; background: none; color: var(--pm-blue); cursor: pointer; font-size: 12px; text-decoration: underline; }
+/* W-DEF-004：抽屉「来自会议」文字链接改指链接语义 token --pm-link（浅色 AA #4868b2），
+   不再裸用 --pm-blue（#4176e6<AA 且与 accent 混用）。 */
+.pm-source-link-button { padding: 0; border: 0; background: none; color: var(--pm-link); cursor: pointer; font-size: 12px; text-decoration: underline; }
 .pm-source-extra { font-size: 11px; opacity: 0.7; }
 
 /* P1-5：分区（01 基础信息 / 02 排期与进度 / 03 关联与仓库）：eyebrow 序号 + 650 标题 + 弱分隔线。 */
@@ -1678,7 +1687,8 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 
 /* ===== 任务页顶部：方案 C（大标题 + 统计副标题 + 胶囊提醒条 + 时间线浮层） ===== */
 .pm-tasks-head { position: relative; padding: 18px 22px 0; }
-.pm-tasks-title-row h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--pm-ink); }
+/* W-DEF-003：视图页题收敛 §4.1 16/700（语义类型 token，原 20px 非冻结页题字阶） */
+.pm-tasks-title-row h1 { margin: 0; font-size: var(--pm-type-page-title); font-weight: var(--pm-type-page-title-weight); letter-spacing: -0.02em; color: var(--pm-ink); }
 .pm-tasks-sub { margin-top: 4px; font-size: 12.5px; color: var(--pm-secondary); font-variant-numeric: tabular-nums; }
 .pm-capsule-wrap { position: relative; margin-top: 12px; width: fit-content; }
 .pm-capsule { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--pm-line); border-radius: 999px; background: var(--pm-surface); color: var(--pm-secondary); font-size: 12px; cursor: pointer; }
@@ -1999,7 +2009,10 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-md p { margin: 0 0 6px; }
 .pm-md ul { margin: 4px 0; padding-left: 18px; }
 .pm-md code { background: var(--pm-line); padding: 1px 4px; border-radius: 4px; }
-.pm-md a { color: var(--pm-accent, inherit); }
+/* W-DEF-004：markdown 行内文字链接改指链接语义 token --pm-link（浅色 AA #4868b2），
+   不再用 --pm-accent（选中/焦点环用途，浅色 #4176e6<AA 禁作文字色）。 */
+.pm-md a { color: var(--pm-link); }
+.pm-md a:hover { text-decoration: underline; text-underline-offset: 2px; }
 .pm-kpi-err { color: var(--pm-st-overdue); font-size: 20px; }
 .pm-cfg-help { font-size: 11px; color: var(--pm-secondary); margin: 6px 0; line-height: 1.5; }
 .pm-cfg-trial { margin-top: 6px; font-size: 12px; color: var(--pm-progress, inherit); }

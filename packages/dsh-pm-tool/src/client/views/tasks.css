@@ -20,7 +20,9 @@
   gap: var(--sp-4);
 }
 .pm-tasks-root .pt-title h1 {
-  margin: 0; font-size: var(--t-26); font-weight: 750;
+  margin: 0;
+  /* W-DEF-003：视图页题收敛 §4.1 16/700（语义类型 token，原 t-26/750 为非冻结字阶） */
+  font-size: var(--pm-type-page-title); font-weight: var(--pm-type-page-title-weight);
   letter-spacing: var(--ls-tight2); line-height: 1.1;
 }
 .pm-tasks-root .pt-sub {
@@ -49,7 +51,10 @@
 .pm-tasks-root .pt-chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
 .pm-tasks-root .pt-chip {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-  padding: 6px 12px; border-radius: 999px; font-size: var(--t-12); font-weight: 600;
+  padding: 6px 12px;
+  /* W-DEF-002：筛选 chip 由 999px 胶囊收敛到控件统一 sm(8)（§3.2/B2），与同条 ghost 一致 */
+  border-radius: var(--r-sm);
+  font-size: var(--t-12); font-weight: 600;
   color: var(--muted); border: 1px solid var(--line); background: transparent;
   transition: all .18s var(--ease);
 }
@@ -105,7 +110,8 @@
   display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
   background: var(--dsw-alias-button-primary-fill); color: var(--pm-on-primary); border: 0; cursor: pointer;
   font-size: var(--t-13); font-weight: 650; padding: 9px 16px;
-  border-radius: var(--r);
+  /* W-DEF-001：主按钮与同工具条 ghost/icon 统一 sm(8)，不再分叉到 md(12)（§3.2/§9.1） */
+  border-radius: var(--r-sm);
   transition: background .18s var(--ease);
 }
 .pm-tasks-root .pt-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }

@@ -1,0 +1,388 @@
+{
+  "meta": {
+    "date": "2026-10-17",
+    "channel": "chrome",
+    "contexts": "fresh ephemeral, no user session",
+    "viewports": [
+      "1440x900",
+      "768x1024",
+      "390x844"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "contrast": {
+    "light": {
+      "--pm-text": {
+        "raw": "#0f1115",
+        "onCanvas": 18.9,
+        "onSurface": 18.9,
+        "onSurface2": 18.9
+      },
+      "--pm-text-2": {
+        "raw": "#61666b",
+        "onCanvas": 5.8,
+        "onSurface": 5.8,
+        "onSurface2": 5.8
+      },
+      "--pm-muted": {
+        "raw": "rgb(105, 110, 116)",
+        "onCanvas": 5.14,
+        "onSurface": 5.14,
+        "onSurface2": 5.14
+      },
+      "--pm-faint": {
+        "raw": "rgb(113, 118, 124)",
+        "onCanvas": 4.58,
+        "onSurface": 4.58,
+        "onSurface2": 4.58
+      },
+      "--pm-link": {
+        "raw": "#4176e6",
+        "onCanvas": 4.23,
+        "onSurface": 4.23,
+        "onSurface2": 4.23
+      },
+      "--pm-success": {
+        "raw": "#22c55e",
+        "onCanvas": 2.28,
+        "onSurface": 2.28,
+        "onSurface2": 2.28
+      },
+      "--pm-warning": {
+        "raw": "#f59e0b",
+        "onCanvas": 2.15,
+        "onSurface": 2.15,
+        "onSurface2": 2.15
+      },
+      "--pm-danger": {
+        "raw": "#ec1313",
+        "onCanvas": 4.5,
+        "onSurface": 4.5,
+        "onSurface2": 4.5
+      }
+    },
+    "dark": {
+      "--pm-text": {
+        "raw": "#f9fafb",
+        "onCanvas": 17.45,
+        "onSurface": 17.45,
+        "onSurface2": 13.34
+      },
+      "--pm-text-2": {
+        "raw": "#cfd3d6",
+        "onCanvas": 12.11,
+        "onSurface": 12.11,
+        "onSurface2": 9.25
+      },
+      "--pm-muted": {
+        "raw": "#adb2b8",
+        "onCanvas": 8.54,
+        "onSurface": 8.54,
+        "onSurface2": 6.53
+      },
+      "--pm-faint": {
+        "raw": "#81858c",
+        "onCanvas": 4.92,
+        "onSurface": 4.92,
+        "onSurface2": 3.76
+      },
+      "--pm-link": {
+        "raw": "#7aaaff",
+        "onCanvas": 7.83,
+        "onSurface": 7.83,
+        "onSurface2": 5.99
+      },
+      "--pm-success": {
+        "raw": "#22c55e",
+        "onCanvas": 8,
+        "onSurface": 8,
+        "onSurface2": 6.12
+      },
+      "--pm-warning": {
+        "raw": "#f59e0b",
+        "onCanvas": 8.49,
+        "onSurface": 8.49,
+        "onSurface2": 6.49
+      },
+      "--pm-danger": {
+        "raw": "#f25a5a",
+        "onCanvas": 5.55,
+        "onSurface": 5.55,
+        "onSurface2": 4.24
+      }
+    },
+    "onPrimary": {
+      "light": {
+        "fill": "#0f1115",
+        "onPrimary": 18.9
+      },
+      "dark": {
+        "fill": "#f9fafb",
+        "onPrimary": 18.08
+      }
+    },
+    "surfaces": {
+      "light": {
+        "canvas": "#fff",
+        "surface": "#fff",
+        "surface2": "#fff"
+      },
+      "dark": {
+        "canvas": "#151517",
+        "surface": "#151517",
+        "surface2": "#2c2c2e"
+      }
+    }
+  },
+  "tokens": {
+    "light": {
+      "--pm-canvas": "#fff",
+      "--pm-surface": "#fff",
+      "--pm-text": "#0f1115",
+      "--pm-text-2": "#61666b",
+      "--pm-muted": "rgb(105, 110, 116)",
+      "--pm-faint": "rgb(113, 118, 124)",
+      "--pm-link": "#4176e6",
+      "--pm-accent": "#4176e6",
+      "--pm-success": "#22c55e",
+      "--pm-warning": "#f59e0b",
+      "--pm-danger": "#ec1313",
+      "--pm-line": "#0000001a",
+      "--pm-line-soft": "#0000000a",
+      "--pm-hover": "#2631480f",
+      "--pm-on-primary": "#fff",
+      "--pm-tint-accent": "color-mix(in srgb, #4176e6 12%, transparent)",
+      "--surface-2": "#fff",
+      "--faint": "rgb(113, 118, 124)"
+    },
+    "dark": {
+      "--pm-canvas": "#151517",
+      "--pm-surface": "#151517",
+      "--pm-text": "#f9fafb",
+      "--pm-text-2": "#cfd3d6",
+      "--pm-muted": "#adb2b8",
+      "--pm-faint": "#81858c",
+      "--pm-link": "#7aaaff",
+      "--pm-accent": "#7aaaff",
+      "--pm-success": "#22c55e",
+      "--pm-warning": "#f59e0b",
+      "--pm-danger": "#f25a5a",
+      "--pm-line": "#ffffff1f",
+      "--pm-line-soft": "#ffffff0f",
+      "--pm-hover": "#ffffff14",
+      "--pm-on-primary": "#0f1115",
+      "--pm-tint-accent": "color-mix(in srgb, #7aaaff 12%, transparent)",
+      "--surface-2": "#2c2c2e",
+      "--faint": "#81858c"
+    }
+  },
+  "radius": {
+    "light": {
+      "ghost": [
+        "8px"
+      ],
+      "primary": [
+        "12px"
+      ],
+      "chip": [],
+      "vmenu": [
+        "8px"
+      ],
+      "dialog": [
+        "12px"
+      ],
+      "card": []
+    },
+    "note": "primary=12px vs ghost/vmenu=8px (B4 fork)"
+  },
+  "focusRing": [
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "设置",
+      "outlineStyle": "auto",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "0px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "INPUT",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "1px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "总览看板",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "1px",
+      "boxShadow": "none"
+    }
+  ],
+  "drawer": {
+    "probe1": {
+      "padding": "0px",
+      "width": "560px",
+      "maxWidth": "none",
+      "formGap": "18px",
+      "overflowX": "visible"
+    },
+    "probe2panel": {
+      "open": true,
+      "role": "dialog",
+      "width": "560px",
+      "maxWidth": "none",
+      "panelPadding": "24px 28px 28px",
+      "formGap": "18px",
+      "overflowX": "visible"
+    },
+    "form": {
+      "fieldCount": 22,
+      "nativeRequired": 0,
+      "wrapLabel": true
+    }
+  },
+  "overlays": {
+    "exportMenu": {
+      "open": true,
+      "role": "menu",
+      "items": [
+        "MDMarkdown 周报结论 / 行动项 / 风险，适合贴进周会汇报",
+        "CSVCSV 表格UTF-8，Excel 直开，便于二次统计",
+        "JSONJSON 结构化全字段，供脚本 / 二次开发"
+      ],
+      "bg": "rgb(255, 255, 255)",
+      "radius": "8px",
+      "shadow": "rgba(16, 18, 20, 0.06) 0px 1px 2px 0px, rgba(16, 18, 20, 0.0"
+    },
+    "saveDialog": {
+      "open": true,
+      "role": "dialog",
+      "ariaLabel": "保存视图",
+      "radius": "12px",
+      "shadow": "rgba(16, 18, 20, 0.08) 0px 2px 8px 0px, rgba(16, 18, 20, 0.1",
+      "maskBg": "rgba(0, 0, 0, 0.24)"
+    },
+    "drawer": {
+      "open": true,
+      "role": "dialog",
+      "width": "560px",
+      "maxWidth": "none",
+      "panelPadding": "24px 28px 28px",
+      "formGap": "18px",
+      "overflowX": "visible"
+    }
+  },
+  "fontHist": {
+    "10": 162,
+    "11": 113,
+    "12": 102,
+    "13": 46,
+    "14": 49,
+    "16": 1,
+    "18": 1,
+    "20": 1,
+    "22": 6,
+    "23": 1,
+    "26": 7,
+    "12.5": 1
+  },
+  "iconCoverage": {
+    "total": 250,
+    "named": 250,
+    "pct": 100
+  },
+  "saveDialogDisabled": {
+    "disabled": true,
+    "ariaDisabled": null,
+    "opacity": "0.5",
+    "cursor": "not-allowed",
+    "text": "保存视图",
+    "inputPresent": true
+  },
+  "overflow": {
+    "1440-light": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(255, 255, 255)"
+      ]
+    },
+    "1440-dark": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(21, 21, 23)"
+      ]
+    },
+    "768-light": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(255, 255, 255)"
+      ]
+    },
+    "768-dark": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(21, 21, 23)"
+      ]
+    },
+    "390-light": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(255, 255, 255)"
+      ]
+    },
+    "390-dark": {
+      "frames": 10,
+      "hOverflow": 0,
+      "bodyBg": [
+        "rgb(21, 21, 23)"
+      ]
+    }
+  },
+  "rawFiles": [
+    "probe-light.json",
+    "probe-dark.json",
+    "probe2-light.json",
+    "probe3-light.json"
+  ]
+}

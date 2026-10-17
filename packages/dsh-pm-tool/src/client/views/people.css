@@ -15,7 +15,8 @@
 
 /* ---------- 页头 ---------- */
 .pm-pp-root .pp-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
-.pm-pp-root .pp-head h1 { margin: 0; font-size: var(--t-22); font-weight: 700; letter-spacing: var(--ls-tight2); color: var(--ink); line-height: 1.1; }
+/* W-DEF-003：视图页题收敛 §4.1 16/700（语义类型 token，原 t-22 非冻结页题字阶） */
+.pm-pp-root .pp-head h1 { margin: 0; font-size: var(--pm-type-page-title); font-weight: var(--pm-type-page-title-weight); letter-spacing: var(--ls-tight2); color: var(--ink); line-height: 1.1; }
 .pm-pp-root .pp-sub { margin-top: 6px; font-size: var(--t-12); color: var(--muted); }
 .pm-pp-root .pp-sub b { color: var(--ink-2); font-weight: 600; }
 .pm-pp-root .pp-chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }

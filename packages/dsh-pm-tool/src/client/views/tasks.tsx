@@ -868,6 +868,8 @@ export function TaskTable(props: {
               {CHIPS.map(c => (
                 <button
                   key={c.key} className={`pt-chip${chip === c.key ? ' active' : ''}`}
+                  /* W-DEF-005：筛选 chip 选中态可编程——选中 aria-pressed="true"，未选中省略（undefined 不渲染属性） */
+                  aria-pressed={chip === c.key || undefined}
                   onClick={() => setChip(c.key)}
                 >{c.label}<span className="n">{chipCounts[c.key]}</span></button>
               ))}

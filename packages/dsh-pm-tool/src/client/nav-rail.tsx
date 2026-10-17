@@ -77,6 +77,8 @@ export function NavRail({
         type="button"
         disabled={item.disabled}
         aria-disabled={item.disabled || undefined}
+        /* W-DEF-005：rail 分组项当前视图用 aria-current="page" 表达选中（导航语义），未选中省略 */
+        aria-current={isActive ? 'page' : undefined}
         className={`pm-rail-item${isActive ? ' active' : ''}`}
         onClick={() => {
           if (item.disabled) return

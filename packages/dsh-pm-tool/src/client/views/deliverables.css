@@ -17,7 +17,9 @@
   display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4);
 }
 .pm-dv-root .dv-pagehead h1 {
-  margin: 0; font-size: var(--t-22); font-weight: 700;
+  margin: 0;
+  /* W-DEF-003：视图页题收敛 §4.1 16/700（语义类型 token，原 t-22 非冻结页题字阶） */
+  font-size: var(--pm-type-page-title); font-weight: var(--pm-type-page-title-weight);
   letter-spacing: var(--ls-tight2); color: var(--ink); line-height: 1.1;
 }
 .pm-dv-root .dv-sub { margin-top: 5px; font-size: var(--t-12); color: var(--muted); }

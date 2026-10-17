@@ -78,8 +78,9 @@ export function ReportsView(props: {
             <h1>进度汇报</h1>
             <div className="rp-sub">按周期沉淀执行摘要与快照</div>
           </div>
-          <button type="button" className="rp-btn" onClick={onCreate}><Plus size={14} />生成快照</button>
         </div>
+        {/* W-DEF-006（规范 §7 空态 CTA 去重）：空态仅在诚实空态卡保留唯一「生成快照」主 CTA，
+            删除与空态卡重复的页头入口；有数据分支的页头 CTA 保持不变。 */}
         <div className="rp-card rp-empty-card">
           <FileText size={28} />
           <p>暂无进度汇报。基于当前任务 / 里程碑 / 会议快照生成第一份周期汇报。</p>

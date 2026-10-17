@@ -1,0 +1,1359 @@
+{
+  "theme": "light",
+  "tokens": {
+    "tokens": {
+      "--pm-canvas": "#fff",
+      "--pm-surface": "#fff",
+      "--pm-text": "#0f1115",
+      "--pm-text-2": "#61666b",
+      "--pm-muted": "rgb(105, 110, 116)",
+      "--pm-faint": "rgb(113, 118, 124)",
+      "--pm-link": "#4176e6",
+      "--pm-accent": "#4176e6",
+      "--pm-success": "#22c55e",
+      "--pm-warning": "#f59e0b",
+      "--pm-danger": "#ec1313",
+      "--pm-line": "#0000001a",
+      "--pm-line-soft": "#0000000a",
+      "--pm-hover": "#2631480f",
+      "--pm-on-primary": "#fff",
+      "--pm-tint-accent": "color-mix(in srgb, #4176e6 12%, transparent)",
+      "--surface-2": "#fff",
+      "--faint": "rgb(113, 118, 124)"
+    },
+    "bodyBg": "rgb(255, 255, 255)",
+    "shellBg": "rgb(255, 255, 255)",
+    "dark": false
+  },
+  "contrast": {
+    "surfaces": {
+      "canvas": "#fff",
+      "surface": "#fff",
+      "surface2": "#fff"
+    },
+    "matrix": {
+      "--pm-text": {
+        "raw": "#0f1115",
+        "onCanvas": 18.9,
+        "onSurface": 18.9,
+        "onSurface2": 18.9
+      },
+      "--pm-text-2": {
+        "raw": "#61666b",
+        "onCanvas": 5.8,
+        "onSurface": 5.8,
+        "onSurface2": 5.8
+      },
+      "--pm-muted": {
+        "raw": "rgb(105, 110, 116)",
+        "onCanvas": 5.14,
+        "onSurface": 5.14,
+        "onSurface2": 5.14
+      },
+      "--pm-faint": {
+        "raw": "rgb(113, 118, 124)",
+        "onCanvas": 4.58,
+        "onSurface": 4.58,
+        "onSurface2": 4.58
+      },
+      "--pm-link": {
+        "raw": "#4176e6",
+        "onCanvas": 4.23,
+        "onSurface": 4.23,
+        "onSurface2": 4.23
+      },
+      "--pm-success": {
+        "raw": "#22c55e",
+        "onCanvas": 2.28,
+        "onSurface": 2.28,
+        "onSurface2": 2.28
+      },
+      "--pm-warning": {
+        "raw": "#f59e0b",
+        "onCanvas": 2.15,
+        "onSurface": 2.15,
+        "onSurface2": 2.15
+      },
+      "--pm-danger": {
+        "raw": "#ec1313",
+        "onCanvas": 4.5,
+        "onSurface": 4.5,
+        "onSurface2": 4.5
+      }
+    },
+    "onPrimary": {
+      "fill": "#0f1115",
+      "onPrimary": 18.9
+    }
+  },
+  "radius": {
+    "ghost": [
+      "8px"
+    ],
+    "primary": [
+      "12px"
+    ],
+    "chip": [],
+    "vmenu": [
+      "8px"
+    ],
+    "dialog": [
+      "12px"
+    ],
+    "card": []
+  },
+  "focusRing": [
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "-2px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "设置",
+      "outlineStyle": "auto",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "0px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "INPUT",
+      "focusedText": "",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "1px",
+      "boxShadow": "none"
+    },
+    {
+      "focusedTag": "BUTTON",
+      "focusedText": "总览看板",
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(65, 118, 230)",
+      "outlineOffset": "1px",
+      "boxShadow": "none"
+    }
+  ],
+  "views": {
+    "board": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 29,
+      "btnNamed": 29,
+      "btnUnnamed": [],
+      "roles": {
+        "img": 1,
+        "toolbar": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "overview": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 20,
+      "btnNamed": 20,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "img": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "tasks": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 43,
+      "btnNamed": 43,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "group": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "gantt": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 24,
+      "btnNamed": 24,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "button": 5
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "milestones": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 21,
+      "btnNamed": 21,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "risk": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 24,
+      "btnNamed": 24,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "tablist": 1,
+        "tab": 2
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "people": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 23,
+      "btnNamed": 23,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "img": 4
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "meetings": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 20,
+      "btnNamed": 20,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "reports": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 21,
+      "btnNamed": 21,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    },
+    "deliverables": {
+      "sizeHist": {},
+      "typeRoles": {
+        "pageTitle": [],
+        "sectionH3": [],
+        "body": [],
+        "label": []
+      },
+      "btnTotal": 25,
+      "btnNamed": 25,
+      "btnUnnamed": [],
+      "roles": {
+        "tabpanel": 1,
+        "group": 1,
+        "button": 1
+      },
+      "bare": [
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "总览看板"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "项目概览"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "计划与排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "全部任务"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "5"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "甘特排期"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "里程碑"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "风险与问题"
+        },
+        {
+          "cls": "pm-rail-count",
+          "tag": "SPAN",
+          "txt": "1"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        },
+        {
+          "cls": "pm-rail-label",
+          "tag": "SPAN",
+          "txt": "人员负载"
+        },
+        {
+          "cls": "pm-rail-section-title",
+          "tag": "SPAN",
+          "txt": "协作与记录"
+        },
+        {
+          "cls": "pm-rail-ico",
+          "tag": "SPAN",
+          "txt": ""
+        }
+      ],
+      "nativeRequired": 0
+    }
+  },
+  "drawer": {
+    "padding": "0px",
+    "width": "560px",
+    "maxWidth": "none",
+    "formGap": "18px",
+    "overflowX": "visible"
+  }
+}
