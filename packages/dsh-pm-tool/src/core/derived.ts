@@ -101,6 +101,55 @@ export function isTaskOverdue(
     && task.dueDate < today
 }
 
+/**
+ * 本地日历日加 days 天，返回 YYYY-MM-DD（today 注入、零墙钟、确定性）。
+ * 用本地 Date 算术（setDate），由引擎正确处理大小月 / 闰年 / 跨年；输出零填充。
+ */
+export function addDaysIso(today: string, days: number): string {
+  const [y, m, d] = today.split('-').map(Number)
+  const dt = new Date(y, m - 1, d)
+  dt.setDate(dt.getDate() + days)
+  const yy = dt.getFullYear()
+  const mm = String(dt.getMonth() + 1).padStart(2, '0')
+  const dd = String(dt.getDate()).padStart(2, '0')
+  return `${yy}-${mm}-${dd}`
+}
+
+/**
+ * 任务是否「未来 days 天内到期」（本周到期视图，days=7）——唯一纯谓词。
+ *
+ * 冻结语义：未完成（status !== 'done' 且 (progress ?? 0) < 100）且有 dueDate，
+ * 且 dueDate <= addDaysIso(today, days)。**含已逾期**：逾期 dueDate 同样满足
+ * ≤ today+7，语义是「本周（未来 7 天）要处理的到期清单」，不是只看未来。
+ * 已完成 / 进度已达 100 / 无截止日 不入选。today 注入，避免 UTC 偏移。
+ */
+export function isTaskDueWithin(
+  task: { status?: string, progress?: number | null, dueDate?: string | null },
+  today: string,
+  days: number,
+): boolean {
+  if (task.status === 'done' || (task.progress ?? 0) >= 100) return false
+  return !!task.dueDate && task.dueDate <= addDaysIso(today, days)
+}
+
+/**
+ * 任务是否「有风险」（风险视图）——满足任一即 true：
+ * 1. status === 'blocked'（受阻）；
+ * 2. isTaskOverdue(task, today)（已逾期）；
+ * 3. 传入关联里程碑且 isMilestoneMissed(milestone, today)（里程碑已延期）。
+ * milestone 可选，缺省只判前两者；纯函数、today 注入、零墙钟。
+ */
+export function isTaskAtRisk(
+  task: { status?: string, progress?: number | null, dueDate?: string | null },
+  today: string,
+  milestone?: { status: string, targetDate?: string | null } | null,
+): boolean {
+  if (task.status === 'blocked') return true
+  if (isTaskOverdue(task, today)) return true
+  if (milestone && isMilestoneMissed(milestone, today)) return true
+  return false
+}
+
 export interface PredecessorNode {
   id: string
   status: string

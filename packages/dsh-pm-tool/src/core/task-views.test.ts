@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   BUILTIN_VIEWS,
   DEFAULT_VIEW_STATE,
+  VIEW_CHIP_OPTIONS,
   describeTaskViewState,
   deleteTaskView,
   emptyTaskViewsStore,
@@ -28,14 +29,33 @@ describe('DEFAULT_VIEW_STATE 锁定表格初始现值', () => {
 })
 
 describe('BUILTIN_VIEWS 内置视图', () => {
-  it('提供全部任务 / 我的任务 / 进行中 / 已逾期四个，且只用现有四态', () => {
+  it('提供全部任务 / 我的任务 / 进行中 / 已逾期 / 本周到期 / 风险视图，且只用现有四态', () => {
     expect(BUILTIN_VIEWS.map(v => v.id)).toEqual([
       'builtin-all', 'builtin-mine', 'builtin-in_progress', 'builtin-overdue',
+      'builtin-due-week', 'builtin-risk',
     ])
     for (const v of BUILTIN_VIEWS) {
       expect(v.builtin).toBe(true)
-      expect(v.state).toMatchObject({ query: '', grouped: false, sort: 'code' })
+      expect(v.state.query).toBe('')
+      expect(v.state.grouped).toBe(false)
     }
+  })
+
+  it('本周到期 / 风险视图内置条目：id/name/chip/sort 正确', () => {
+    const due = BUILTIN_VIEWS.find(v => v.id === 'builtin-due-week')
+    const risk = BUILTIN_VIEWS.find(v => v.id === 'builtin-risk')
+    expect(due).toBeDefined()
+    expect(due!.name).toBe('本周到期')
+    expect(due!.state).toEqual({ query: '', chip: 'due_week', grouped: false, sort: 'dueDate' })
+    expect(risk).toBeDefined()
+    expect(risk!.name).toBe('风险视图')
+    expect(risk!.state).toEqual({ query: '', chip: 'risk', grouped: false, sort: 'dueDate' })
+  })
+
+  it('顶部快捷栏 VIEW_CHIP_OPTIONS 不含 due_week / risk（新视图仅由切换器选中）', () => {
+    expect(VIEW_CHIP_OPTIONS.map(o => o.key)).toEqual([
+      'all', 'in_progress', 'done', 'overdue', 'mine',
+    ])
   })
 })
 
@@ -199,8 +219,9 @@ describe('listAllViews / findTaskView / describeTaskViewState', () => {
   it('内置在前、自定义在后；findTaskView 先内置后自定义', () => {
     let store = saveTaskView(emptyTaskViewsStore(), { id: 'c1', name: '我的', state: DEFAULT_VIEW_STATE })
     const all = listAllViews(store)
-    expect(all.slice(0, 4).map(v => v.builtin)).toEqual([true, true, true, true])
-    expect(all[4]).toMatchObject({ id: 'c1', name: '我的' })
+    const builtinCount = BUILTIN_VIEWS.length
+    expect(all.slice(0, builtinCount).map(v => v.builtin)).toEqual(Array(builtinCount).fill(true))
+    expect(all[builtinCount]).toMatchObject({ id: 'c1', name: '我的' })
     expect(findTaskView(store, 'builtin-mine')?.name).toBe('我的任务')
     expect(findTaskView(store, 'c1')?.name).toBe('我的')
     expect(findTaskView(store, 'nope')).toBeUndefined()
@@ -213,5 +234,19 @@ describe('listAllViews / findTaskView / describeTaskViewState', () => {
     expect(text).toContain('按优先级')
     expect(text).toContain('按状态分组')
     expect(text).toContain('登录')
+  })
+})
+
+describe('新增 due_week / risk chip 归一化与中文摘要', () => {
+  it('normalizeTaskViewState 对 chip:due_week / risk 原样保留，不回落默认', () => {
+    expect(normalizeTaskViewState({ chip: 'due_week' }).chip).toBe('due_week')
+    expect(normalizeTaskViewState({ chip: 'risk' }).chip).toBe('risk')
+    expect(normalizeTaskViewState({ chip: 'due_week', sort: 'dueDate' }).sort).toBe('dueDate')
+    expect(normalizeTaskViewState({ chip: 'risk', sort: 'dueDate' }).sort).toBe('dueDate')
+  })
+
+  it('describeTaskViewState 对新 chip 输出中文标签，不显示原始 key', () => {
+    expect(describeTaskViewState({ query: '', chip: 'due_week', grouped: false, sort: 'dueDate' })).toContain('本周到期')
+    expect(describeTaskViewState({ query: '', chip: 'risk', grouped: false, sort: 'dueDate' })).toContain('风险视图')
   })
 })

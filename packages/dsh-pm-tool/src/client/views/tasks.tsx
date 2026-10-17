@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
-import { blockingPredecessors, localTodayIso, isTaskOverdue } from '../../core/derived.js'
+import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
@@ -245,6 +245,8 @@ export function TaskTable(props: {
 
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
   const childMap = useMemo(() => indexChildren(tasks), [tasks])
+  // P2-5 风险视图：按 milestoneId 关联里程碑，供 isTaskAtRisk 判断里程碑是否延期。
+  const milestoneById = useMemo(() => new Map(milestones.map(m => [m.id, m])), [milestones])
 
   // P1-5：逾期唯一纯谓词（core/derived isTaskOverdue），today 用本地日历日 localTodayIso()。
   const isLate = (t: Task) => isTaskOverdue(t, localTodayIso())
@@ -260,10 +262,13 @@ export function TaskTable(props: {
         case 'done': return isDone(task)
         case 'overdue': return isLate(task)
         case 'mine': return !!task.assignee
+        // P2-5 复合谓词内置视图（不进顶部快捷栏，仅切换器选中）。
+        case 'due_week': return isTaskDueWithin(task, localTodayIso(), 7)
+        case 'risk': return isTaskAtRisk(task, localTodayIso(), task.milestoneId ? milestoneById.get(task.milestoneId) : undefined)
         default: return true
       }
     })
-  }, [tasks, query, chip]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tasks, query, chip, milestones, milestoneById]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 排序（与旧实现一致：组内/扁平视图生效；树视图由 flattenVisible 按 WBS 序）
   const priorityRank = (p: string) => ({ P0: 0, P1: 1, P2: 2 }[p] ?? 3)
@@ -276,13 +281,16 @@ export function TaskTable(props: {
     return arr
   }, [filtered, sort]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const chipCounts = useMemo(() => ({
+  // 顶部快捷栏只展示前五项；due_week/risk 计数仅为类型完备（不渲染、不改动栏位）。
+  const chipCounts = useMemo<Record<TaskViewChip, number>>(() => ({
     all: tasks.length,
     in_progress: tasks.filter(t => t.status === 'in_progress').length,
     done: tasks.filter(isDone).length,
     overdue: tasks.filter(isLate).length,
     mine: tasks.filter(t => t.assignee).length,
-  }), [tasks]) // eslint-disable-line react-hooks/exhaustive-deps
+    due_week: tasks.filter(t => isTaskDueWithin(t, localTodayIso(), 7)).length,
+    risk: tasks.filter(t => isTaskAtRisk(t, localTodayIso(), t.milestoneId ? milestoneById.get(t.milestoneId) : undefined)).length,
+  }), [tasks, milestoneById]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---- P2-5：命名视图（过滤/排序/分组/搜索四态持久化与恢复）----
   const switcherRef = useRef<HTMLDivElement | null>(null)

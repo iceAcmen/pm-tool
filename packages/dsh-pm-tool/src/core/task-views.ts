@@ -9,8 +9,11 @@
  * 内置视图（BUILTIN_VIEWS）不落盘、不可重命名/删除，但可设为默认；自定义视图存于 store.views。
  */
 
-/** 快捷过滤 chip（与 tasks.tsx 既有口径一致，不新增谓词）。 */
-export type TaskViewChip = 'all' | 'in_progress' | 'done' | 'overdue' | 'mine'
+/**
+ * 过滤 chip。前五项进顶部快捷栏（VIEW_CHIP_OPTIONS）；
+ * due_week / risk 仅由内置视图使用（复合谓词），不进顶部快捷栏，避免拥挤。
+ */
+export type TaskViewChip = 'all' | 'in_progress' | 'done' | 'overdue' | 'mine' | 'due_week' | 'risk'
 
 /** 排序键（与 tasks.tsx 既有口径一致）。 */
 export type TaskViewSort = 'code' | 'dueDate' | 'priority' | 'progress'
@@ -54,7 +57,30 @@ export const VIEW_SORT_OPTIONS: { value: TaskViewSort; label: string }[] = [
   { value: 'progress', label: '按进度' },
 ]
 
-const CHIP_KEYS = new Set(VIEW_CHIP_OPTIONS.map(c => c.key))
+/** 顶部快捷栏实际展示的 chip（VIEW_CHIP_OPTIONS 键集），保持原五项。 */
+const BAR_CHIP_KEYS = new Set(VIEW_CHIP_OPTIONS.map(c => c.key))
+
+/**
+ * 归一化校验用全量合法 chip：含仅内置视图使用、不进顶部快捷栏的 due_week / risk，
+ * 否则反序列化这两个 chip 会被错误回落默认。
+ */
+const ALL_CHIP_KEYS: ReadonlySet<TaskViewChip> = new Set([
+  ...BAR_CHIP_KEYS,
+  'due_week',
+  'risk',
+])
+
+/** chip → 中文标签（describeTaskViewState 副文案用；新内置视图也给中文，不显示原始 key）。 */
+const CHIP_LABELS: Record<TaskViewChip, string> = {
+  all: '全部',
+  in_progress: '进行中',
+  done: '已完成',
+  overdue: '已逾期',
+  mine: '我负责的',
+  due_week: '本周到期',
+  risk: '风险视图',
+}
+
 const SORT_KEYS = new Set(VIEW_SORT_OPTIONS.map(s => s.value))
 
 /** 默认四态：与表格初始 useState 现值逐值相等（默认等价，老用户零迁移）。 */
@@ -71,6 +97,9 @@ export const BUILTIN_VIEWS: SavedTaskView[] = [
   { id: 'builtin-mine', name: '我的任务', builtin: true, state: { query: '', chip: 'mine', grouped: false, sort: 'code' } },
   { id: 'builtin-in_progress', name: '进行中', builtin: true, state: { query: '', chip: 'in_progress', grouped: false, sort: 'code' } },
   { id: 'builtin-overdue', name: '已逾期', builtin: true, state: { query: '', chip: 'overdue', grouped: false, sort: 'code' } },
+  // P2-5：复合谓词内置视图（不进顶部快捷 chip 栏，仅由切换器选中）。
+  { id: 'builtin-due-week', name: '本周到期', builtin: true, state: { query: '', chip: 'due_week', grouped: false, sort: 'dueDate' } },
+  { id: 'builtin-risk', name: '风险视图', builtin: true, state: { query: '', chip: 'risk', grouped: false, sort: 'dueDate' } },
 ]
 
 const BUILTIN_IDS = new Set(BUILTIN_VIEWS.map(v => v.id))
@@ -89,7 +118,7 @@ export function normalizeTaskViewState(raw: unknown): TaskViewState {
   if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) return state
   const obj = raw as Record<string, unknown>
   if (typeof obj.query === 'string') state.query = obj.query
-  if (typeof obj.chip === 'string' && CHIP_KEYS.has(obj.chip as TaskViewChip)) {
+  if (typeof obj.chip === 'string' && ALL_CHIP_KEYS.has(obj.chip as TaskViewChip)) {
     state.chip = obj.chip as TaskViewChip
   }
   if (typeof obj.grouped === 'boolean') state.grouped = obj.grouped
@@ -230,7 +259,7 @@ export function resolveDefaultTaskView(store: TaskViewsStore): SavedTaskView | u
 
 /** 状态人类可读摘要（切换器/管理列表副文案），纯函数。 */
 export function describeTaskViewState(state: TaskViewState): string {
-  const chip = VIEW_CHIP_OPTIONS.find(c => c.key === state.chip)?.label ?? state.chip
+  const chip = CHIP_LABELS[state.chip] ?? state.chip
   const sort = VIEW_SORT_OPTIONS.find(s => s.value === state.sort)?.label ?? state.sort
   const parts: string[] = [chip, sort]
   if (state.grouped) parts.push('按状态分组')
