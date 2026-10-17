@@ -5,6 +5,7 @@ import { blockingPredecessors, localTodayIso, isTaskOverdue } from '../../core/d
 import { clampProgress } from '../../core/progress-derivation.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
+import type { DiagnosisBubble } from '../../core/suggestion-engine.js'
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
@@ -102,6 +103,25 @@ function MovePickerModal({ task, tasks, onChoose, onClose }: {
   )
 }
 
+/** P1-7 只读诊断气泡：附着在对应任务行下方，绝不写盘、不覆盖数据。 */
+export function DiagnosisBubbleView({ bubble, onDismiss }: {
+  bubble: DiagnosisBubble
+  onDismiss?: (id: string) => void
+}) {
+  return (
+    <div className={`pm-diagnosis-bubble pm-diag-${bubble.kind}`} role="note">
+      <span className="pm-diag-bar" />
+      <Sparkles size={15} className="pm-diag-ico" />
+      <div className="pm-diag-body">
+        <span className="pm-diag-tag">{bubble.tag}</span>
+        <span className="pm-diag-title">{bubble.title}</span>
+        <span className="pm-diag-text">{bubble.text}</span>
+      </div>
+      {onDismiss && <button type="button" className="pm-diag-x" aria-label="关闭诊断" onClick={() => onDismiss(bubble.id)}>×</button>}
+    </div>
+  )
+}
+
 export function TaskTable(props: {
   tasks: Task[]
   milestones: Milestone[]
@@ -117,10 +137,14 @@ export function TaskTable(props: {
   density?: 'comfortable' | 'compact'
   onDensityChange?: (d: 'comfortable' | 'compact') => void
   overlayOpen?: boolean
+  /** P1-7 规则诊断气泡（只在任务行旁渲染，只读、不落库）。 */
+  diagnosis?: DiagnosisBubble[]
+  onDismissDiagnosis?: (id: string) => void
 }) {
   const {
     tasks, milestones, disabled = false, onCreate, onEdit,
     onGenWbs, onSaved, run, execute, projectId, density = 'comfortable', onDensityChange, overlayOpen,
+    diagnosis = [], onDismissDiagnosis,
   } = props
 
   const [query, setQuery] = useState('')
@@ -278,7 +302,8 @@ export function TaskTable(props: {
     const late = isLate(t)
     const milestone = milestones.find(m => m.id === t.milestoneId)
     const blocking = blockingPredecessors(t, byId)
-    return (
+    const diag = diagnosis.find(d => d.targetId === t.id)
+    return <>
       <div
         className={`pt-grid pt-row pm-task-row${effectiveActiveId === t.id ? ' pt-active' : ''}`}
         data-pm-row={t.id}
@@ -380,7 +405,8 @@ export function TaskTable(props: {
           </button>
         </div>
       </div>
-    )
+      {diag && <DiagnosisBubbleView bubble={diag} onDismiss={onDismissDiagnosis}/>}
+    </>
   }
 
   const groupRow = (row: { task: Task, hasChildren: boolean }) => {

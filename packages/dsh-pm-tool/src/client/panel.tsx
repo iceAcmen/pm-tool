@@ -20,6 +20,7 @@ import {
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
+import { buildDiagnosis, diagnosisCounts, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
@@ -662,6 +663,12 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [message, setMessage] = useState('')
   const [dashOpen, setDashOpen] = useState(false)
   const [topMenuOpen, setTopMenuOpen] = useState(false)
+  // P1-7 副驾内嵌建议层（替代全屏抽屉）。
+  const [copilotLayer, setCopilotLayer] = useState(false)
+  // 右侧面板模式：只读诊断 / 草稿待确认。
+  const [copilotMode, setCopilotMode] = useState<'diagnosis' | 'draft'>('diagnosis')
+  // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
+  const [dismissedDiagnosis, setDismissedDiagnosis] = useState<ReadonlySet<string>>(new Set())
 
   const refresh = async () => {
     setBusy(true)
@@ -753,6 +760,19 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     [data.settings],
   )
 
+  // P1-7：规则诊断（确定性，复用统一口径）；过滤掉已逐条关闭的气泡。
+  const allDiagnosis = useMemo(
+    () => buildDiagnosis({ tasks, settings }),
+    [tasks, settings],
+  )
+  const diagnosis = useMemo(
+    () => allDiagnosis.filter(d => !dismissedDiagnosis.has(d.id)),
+    [allDiagnosis, dismissedDiagnosis],
+  )
+  const dismissDiagnosis = (id: string) => setDismissedDiagnosis(prev => {
+    const next = new Set(prev); next.add(id); return next
+  })
+
   return <>
     <style>{styles}</style>
     <main
@@ -815,11 +835,13 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           </button>
           <button
             className="pm-button pm-top-secondary pm-copilot-open"
+            data-active={copilotLayer || undefined}
             disabled={!project || dashOpen}
-            title="提问式副驾：只读诊断 + 操作草稿卡（确认才落库）"
-            onClick={() => setDrawer({ kind: 'copilot' })}
+            aria-pressed={copilotLayer}
+            title="内嵌副驾：只读诊断气泡附着记录 + 操作草稿卡（确认才落库）"
+            onClick={() => setCopilotLayer(v => !v)}
           >
-            <MessageSquare size={15}/>AI 副驾
+            <MessageSquare size={15}/>{copilotLayer ? 'AI 副驾 · 内嵌' : 'AI 副驾'}
           </button>
           <div className="pm-top-more-wrap">
           <button
@@ -848,9 +870,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <button
             className="pm-button pm-menu-item"
             disabled={!project}
-            onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'copilot' }) }}
+            onClick={() => { setTopMenuOpen(false); setCopilotLayer(true) }}
           >
-            <MessageSquare size={15}/>AI 副驾
+            <MessageSquare size={15}/>AI 副驾 · 内嵌
           </button>
           <button
             className="pm-button pm-menu-item"
@@ -1026,6 +1048,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 </ViewTab>
               </nav>
             )}
+            <div className="pm-suggest-split" data-open={copilotLayer || undefined}>
             <section className="pm-view" role="tabpanel">
               {view === 'tasks' && <TaskTable
                 tasks={tasks}
@@ -1045,6 +1068,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 density={density}
                 onDensityChange={setDensity}
                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
+                diagnosis={diagnosis}
+                onDismissDiagnosis={dismissDiagnosis}
               />}
               {view === 'milestones' && <MilestoneView
                 milestones={milestones}
@@ -1091,6 +1116,27 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 onGotoView={changeView}
               />}
             </section>
+            {copilotLayer && project && <aside className="pm-suggest-layer" aria-label="AI 副驾建议层">
+              <CopilotPanel
+                projectId={project.id}
+                tasks={tasks}
+                milestones={milestones}
+                riskIssues={riskIssues}
+                deliverables={deliverables}
+                meetings={meetings}
+                baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
+                execute={execute}
+                executeRaw={executeRaw}
+                disabled={busy}
+                onSaved={() => void refresh()}
+                embedded
+                diagnosis={diagnosis}
+                onDismissDiagnosis={dismissDiagnosis}
+                mode={copilotMode}
+                onModeChange={setCopilotMode}
+              />
+            </aside>}
+            </div>
           </>}
 
       {drawer && <DrawerPanel title={drawerTitle(drawer)} onClose={() => setDrawer(undefined)}>
@@ -2121,7 +2167,7 @@ function copilotEntityOf(op: string): string | null {
   return m ? m[1] : null
 }
 
-function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, executeRaw, disabled, onSaved }: {
+function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, executeRaw, disabled, onSaved, embedded = false, diagnosis = [], onDismissDiagnosis, mode = 'diagnosis', onModeChange }: {
   projectId: string
   tasks: Task[]
   milestones: { id: string, title: string, targetDate?: string, status?: string }[]
@@ -2133,6 +2179,14 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   executeRaw: (line: string) => Promise<{ kind: string, text: string }>
   disabled: boolean
   onSaved: () => void
+  /** P1-7 内嵌形态（右侧建议层，非抽屉）。 */
+  embedded?: boolean
+  /** 规则诊断气泡（只读，确定性）。 */
+  diagnosis?: DiagnosisBubble[]
+  onDismissDiagnosis?: (id: string) => void
+  /** 右侧面板模式：只读诊断 / 草稿待确认（受控）。 */
+  mode?: 'diagnosis' | 'draft'
+  onModeChange?: (m: 'diagnosis' | 'draft') => void
 }) {
   const taskIds = tasks.map(t => t.id)
   const taskById = new Map(tasks.map(t => [t.id, t]))
@@ -2298,14 +2352,48 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
 
   const editablePatch = (s: PlanStepView) => (s.action.patch ?? {}) as Record<string, unknown>
   const showQuick = steps.length === 0 && rejected.length === 0
-  return <div className="pm-copilot">
-    {/* 顶部：说明 + 车道（drawer 标题已在头部，不重复） */}
+  return <div className="pm-copilot" data-mode={mode} data-embedded={embedded || undefined}>
+    {/* 顶部：内嵌标题 + 模式切换 + 车道（drawer 标题已在头部，不重复） */}
     <div className="pm-copilot-head">
-      <span className="pm-copilot-head-sub">只读诊断 · 确认后才执行</span>
-      <LaneSwitcher lane={lane} busy={busy || sending} onChange={l => void switchLane(l)} compact/>
+      {embedded
+        ? <div className="pm-copilot-title">
+            <span className="pm-copilot-title-text"><Sparkles size={14}/> AI 副驾 · 建议层</span>
+            <span className="pm-copilot-title-sub">附着当前上下文，不另起独立房间</span>
+          </div>
+        : <span className="pm-copilot-head-sub">只读诊断 · 确认后才执行</span>}
+      <div className="pm-copilot-head-right">
+        <div className="pm-copilot-mode" role="tablist" aria-label="副驾模式">
+          <button type="button" role="tab" data-active={mode === 'diagnosis' || undefined} aria-selected={mode === 'diagnosis'}
+            onClick={() => onModeChange?.('diagnosis')}>只读诊断</button>
+          <button type="button" role="tab" data-active={mode === 'draft' || undefined} aria-selected={mode === 'draft'}
+            onClick={() => onModeChange?.('draft')}>草稿待确认{steps.length ? ` (${steps.length})` : ''}</button>
+        </div>
+        <LaneSwitcher lane={lane} busy={busy || sending} onChange={l => void switchLane(l)} compact/>
+      </div>
     </div>
 
-    {/* 对话区 */}
+    {/* P1-7：只读诊断模式下的规则诊断摘要（确定性、不依赖提问）。 */}
+    {mode === 'diagnosis' && embedded && (
+      <div className="pm-copilot-diag">
+        <div className="pm-copilot-diag-head">
+          <ListChecks size={13}/>
+          <strong>规则诊断</strong>
+          <span className="pm-copilot-diag-meta">{diagnosis.length ? `${diagnosis.length} 项需关注` : '暂无需要关注的问题'}</span>
+        </div>
+        {diagnosis.length
+          ? diagnosis.map(d => (
+              <div key={d.id} className={`pm-copilot-diag-item pm-diag-${d.kind}`}>
+                <span className="pm-copilot-diag-title">{d.title}</span>
+                <span className="pm-copilot-diag-text">{d.text}</span>
+                {onDismissDiagnosis && <button type="button" className="pm-copilot-diag-x" aria-label="忽略" onClick={() => onDismissDiagnosis(d.id)}>×</button>}
+              </div>
+            ))
+          : <div className="pm-copilot-diag-empty">当前口径下没有阻塞、逾期、过载或未指派任务，保持。</div>}
+      </div>
+    )}
+
+    {/* 对话区（只读诊断模式） */}
+    {mode === 'diagnosis' && (
     <div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy={sending}>
       {msgs.map((m, i) => {
         if (m.role === 'me')
@@ -2319,8 +2407,9 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
         </div>
       })}
     </div>
+    )}
 
-    {/* 撤销条：最近落库 10 分钟内可一键回滚 */}
+    {/* 撤销条：最近落库 10 分钟内可一键回滚（两种模式通用） */}
     {undoIds.length > 0 && (
       <div className="pm-copilot-undo">
         {undoIds.map(u => (
@@ -2331,8 +2420,8 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       </div>
     )}
 
-    {/* 快捷提问 */}
-    {showQuick && (
+    {/* 快捷提问（只读诊断模式） */}
+    {mode === 'diagnosis' && showQuick && (
       <div className="pm-copilot-quick">
         {QUICK_ASKS.map(q =>
           <button key={q} type="button" className="pm-copilot-quick-item" disabled={sending} onClick={() => void send(q)}>
@@ -2341,9 +2430,17 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       </div>
     )}
 
-    {/* 操作计划 */}
-    {steps.length > 0 || rejected.length > 0 ? (
+    {/* 操作计划（草稿待确认模式） */}
+    {mode === 'draft' && (
       <div className="pm-copilot-draft" data-copilot-plan>
+        {steps.length === 0 && rejected.length === 0
+          ? <div className="pm-copilot-draft-empty">
+              <ListChecks size={20}/>
+              <div className="pm-copilot-draft-empty-title">暂无草稿</div>
+              <div className="pm-copilot-draft-empty-sub">切到「只读诊断」提出操作诉求（如“把李四部分任务改派给张三”），AI 生成多步计划后回到这里确认。</div>
+            </div>
+          : null}
+        {steps.length > 0 || rejected.length > 0 ? <>
         <div className="pm-copilot-draft-head">
           <ListChecks size={15}/>
           <strong>操作计划</strong>
@@ -2433,10 +2530,13 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
           </button>
           <button className="pm-copilot-apply-ghost" data-copilot-cancel onClick={clearPlan}>取消</button>
         </div>
+        </>
+        : null}
       </div>
-    ) : null}
+    )}
 
-    {/* 底部输入 */}
+    {/* 底部输入（只读诊断模式） */}
+    {mode === 'diagnosis' && (
     <div className="pm-copilot-inputrow">
       <input className="pm-copilot-input" value={input} placeholder="问点什么，例如：下周会不会延期？"
         disabled={sending}
@@ -2446,6 +2546,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
         {sending ? <RefreshCw size={15} className="pm-spin"/> : <Send size={15}/>}
       </button>
     </div>
+    )}
   </div>
 }
 
