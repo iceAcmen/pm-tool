@@ -813,7 +813,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           reports: reports.length,
           deliverables: deliverables.length,
         }}
-        onPickView={(v) => changeView(v as View)}
+        onPickView={(v) => { setDashOpen(false); changeView(v as View) }}
         onOpenDash={() => setDashOpen(true)}
         onOpenSettings={() => setDrawer({ kind: 'settings' })}
       />

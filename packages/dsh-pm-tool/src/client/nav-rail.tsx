@@ -128,6 +128,7 @@ export function NavRail({
           </div>
         ) : (
           <div key={g.id}>
+            {g.id === 'project' && <div className="pm-rail-divider" aria-hidden="true"/>}
             <div className="pm-rail-group-label">{g.title}</div>
             {g.items.map(renderItem)}
           </div>

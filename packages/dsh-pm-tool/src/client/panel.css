@@ -174,6 +174,8 @@ body:not([data-ds-dark-theme]) .pm-shell {
 }
 .pm-rail-search input:focus { border-color: var(--c-prog); }
 .pm-rail-nav { flex: 1; overflow-y: auto; padding: 0 10px 10px; }
+/* 设计图：跨项目（固定组）与当前项目（固定组）之间的弱分隔线。 */
+.pm-rail-divider { height: 1px; background: var(--pm-line-soft); margin: 9px 8px; }
 .pm-rail-group-label { padding: 10px 10px 5px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: var(--pm-muted); }
 .pm-rail-section {
   display: flex; align-items: center; gap: 6px; width: 100%; padding: 9px 10px 4px;
@@ -190,6 +192,10 @@ body:not([data-ds-dark-theme]) .pm-shell {
 }
 .pm-rail-item:hover { background: var(--pm-hover); color: var(--ink); }
 .pm-rail-item.active { background: color-mix(in srgb, var(--c-prog) 12%, transparent); color: var(--c-prog); font-weight: 600; }
+/* AA：浅色下业务蓝在 12% 淡底上仅 ~4.2:1，改用既有 deepseek-600 深色 token 把 active 文字/计数提到 ≥4.5；
+   深色走宿主提亮别名，保持现状。 */
+body:not([data-ds-dark-theme]) .pm-rail-item.active { color: var(--c-prog-d); }
+body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(--c-prog-d); }
 .pm-rail-item:disabled { opacity: .5; cursor: default; }
 .pm-rail-item:disabled:hover { background: transparent; color: var(--ink-2); }
 .pm-rail-ico { width: 17px; height: 17px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
@@ -2011,6 +2017,15 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
 
   /* 旧版人员表：姓名列不锁 130px，允许省略 */
   .pm-ppl-name { width: auto; flex: 0 1 auto; }
+}
+
+/* P2-1：rail 固定占 232px 后，561–960 中间档主区（shell−232）单行放不下项目切换器 + 全部操作，
+   顶栏改为两行流式、次要 AI 按钮收敛到「更多」菜单，避免文字/按钮挤压重叠；≥961 桌面单行不变，
+   ≤560 走上面的既有窄窗档。配色只消费 token，跟随 body[data-ds-dark-theme]。 */
+@media (min-width: 561px) and (max-width: 960px) {
+  .pm-topbar { flex-wrap: wrap; row-gap: 8px; }
+  .pm-top-actions { flex-wrap: wrap; margin-left: auto; }
+  .pm-top-secondary { display: none; }
 }
 
 
