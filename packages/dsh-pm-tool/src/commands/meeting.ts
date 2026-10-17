@@ -32,6 +32,8 @@ import {
   recallSummary,
 } from '../core/meeting-summarize.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
+import { buildSourceRefs, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type SourceRecord } from '../core/provenance.js'
+import { recordProvenance } from '../core/provenance-store.js'
 import type { PmDomain } from '../core/storage.js'
 
 export const meetingHelp = [
@@ -148,6 +150,29 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         })
       }
       const saved = getMeeting(domain, meeting.id)!
+      // F15：会议建会 confirm 落盘后 best-effort 记录来源（basis=新建会议；原始逐字稿不入库，摘要中说明）。
+      {
+        const recMap = new Map<string, SourceRecord>()
+        for (const [, rec] of (domain.table('meetings') as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+          const r = rec as SourceRecord
+          if (r.projectId === projectId) recMap.set(`meetings:${r.id}`, r)
+        }
+        // M-2：如实口径，不做自指伪引用；只记录行动项真实关联的任务作为上下文。
+        const linkedTasks = draft.actions
+          .map(a => (a as { taskId?: string }).taskId)
+          .filter((tid): tid is string => !!tid)
+          .map(tid => ({ table: 'tasks' as const, id: tid }))
+        const refs = buildSourceRefs({
+          actions: [], records: recMap,
+          context: linkedTasks,
+          snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION,
+        })
+        void recordProvenance(domain, {
+          projectId, kind: 'meeting-summarize',
+          summary: `AI 归纳建会 ${saved.id}（行动项 ${draft.actions.length}；原始逐字稿不持久化）`,
+          refs,
+        })
+      }
       return {
         kind: 'success',
         text: [`已按 AI 草稿创建 draft 会议纪要并挂载 ${draft.actions.length} 个行动项。\n${renderMeeting(saved)}`].join('\n'),

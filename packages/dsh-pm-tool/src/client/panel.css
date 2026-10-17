@@ -60,7 +60,8 @@
   --faint: var(--dsw-alias-label-caption, rgb(113, 118, 124));
   /* P0-5：主按钮文字 / 链接别名（替换未定义的 --on-primary / --c-link），浅深跟随宿主。 */
   --pm-on-primary: var(--dsw-alias-label-primary-foreground, rgb(255, 255, 255));
-  --pm-link: var(--dsw-alias-state-business-primary, rgb(45, 99, 214));
+  /* 文本链接：浅色 fallback #4868b2（5.39:1 白底 AA），深色走宿主 link 提亮别名 */
+  --pm-link: var(--dsw-alias-link, var(--dsw-alias-state-business-primary, rgb(72, 104, 178)));
   --c-done: var(--dsw-alias-state-success-primary, rgb(34, 197, 94));
   --c-done-d: var(--dsw-alias-state-success-secondary, rgb(78, 209, 126));
   --c-prog: var(--dsw-alias-state-business-primary, rgb(65, 118, 230));
@@ -97,6 +98,49 @@
   --ls-tight: -0.015em; --ls-tight2: -0.025em; --ls-cap: 0.09em;
   --z-sticky: 20; --z-pop: 40; --z-modal: 60;
   --ease: cubic-bezier(.22, .61, .36, 1);
+
+  /* ===== P2-2 Token 2.0 单层语义层（加性，不替换旧两层；宿主别名优先 → fallback）=====
+     旧 --pm-* 与 dsh-flat --* 全部保留为同值别名，本批不改名、不删除、不全局粗替换；
+     fallback 仅补 AA 中性与缺失项，不覆盖宿主主题；深色跟随宿主别名自动提亮。 */
+  /* 文本角色 */
+  --pm-text: var(--dsw-alias-label-primary, rgb(28, 28, 30));
+  --pm-text-2: var(--dsw-alias-label-secondary, rgb(97, 102, 107));
+  --pm-faint: var(--faint);
+  /* 闭合历史未定义/无 fallback 别名（解析到既有同值 token，不改视觉） */
+  --pm-bg: var(--pm-canvas);
+  --pm-border: var(--pm-line);
+  --hover-bg: var(--pm-hover);
+  --line-soft: var(--pm-line-soft);
+  --pm-ink-muted: var(--pm-secondary);
+  --pm-surface-muted: var(--surface-2);
+  --pm-progress: var(--c-prog);
+  --pm-accent-soft: var(--dsw-alias-state-business-tertiary, rgb(228, 237, 253));
+  --pm-line-strong: var(--dsw-alias-state-idle-primary, rgb(212, 212, 212));
+
+  /* 选中/悬停浅底 tint（语义化，替代各组件手写 color-mix 百分比） */
+  --pm-tint-accent: color-mix(in srgb, var(--pm-accent) 12%, transparent);
+  --pm-tint-success: color-mix(in srgb, var(--pm-success) 12%, transparent);
+  --pm-tint-warning: color-mix(in srgb, var(--pm-warning) 12%, transparent);
+  --pm-tint-danger: color-mix(in srgb, var(--pm-danger) 10%, transparent);
+
+  /* 阴影：菜单（轻）/ 弹窗（中）；暗色由宿主别名与暗色覆写处理，不机械反色 */
+  --pm-shadow-menu: 0 1px 2px rgba(16, 18, 20, 0.06), 0 6px 18px rgba(16, 18, 20, 0.08);
+  --pm-shadow-modal: 0 2px 8px rgba(16, 18, 20, 0.08), 0 18px 44px rgba(16, 18, 20, 0.14);
+
+  /* 动效 token：只动 transform/opacity；退出短于进入；reduced-motion 由全局兜底 */
+  --pm-motion-fast: 120ms;
+  --pm-motion-base: 180ms;
+
+  /* 图表序列：S1–S3 启用；S4 本批不定义（多项目未来采纳时再定，不在此写死 hex） */
+  --pm-chart-s1: var(--c-prog);
+  --pm-chart-s2: var(--c-done);
+  --pm-chart-s3: var(--c-block);
+
+  /* P2-6 预留槽位（本批只定义不启用；中性底 + 虚线边 + 文字/图标区分，不用紫色品牌色） */
+  --pm-ai-surface: transparent;
+  --pm-ai-edge: var(--pm-line);
+  --pm-ai-mark: var(--pm-text-2);
+
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
@@ -117,6 +161,9 @@ body[data-ds-dark-theme] .pm-shell {
   --shadow-3: 0 2px 8px rgba(0, 0, 0, 0.5), 0 22px 50px rgba(0, 0, 0, 0.65);
   --field-bg: var(--dsw-alias-bg-module-platform, rgba(255, 255, 255, 0.06));
   --field-bg-focus: var(--dsw-alias-interactive-bg-active, rgba(122, 170, 255, 0.18));
+  /* P2-2：暗色浮层阴影加深、抬升差加大（非机械反色） */
+  --pm-shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.5);
+  --pm-shadow-modal: 0 2px 8px rgba(0, 0, 0, 0.5), 0 22px 50px rgba(0, 0, 0, 0.65);
 }
 /* P0-5 / S2-3：浅色强制 AA 中性灰，不被宿主偏浅的 tertiary/caption 别名拉低对比度；
    深色仍走宿主别名（暗色下别名自动提亮），不在此覆盖。 */
@@ -159,8 +206,9 @@ body:not([data-ds-dark-theme]) .pm-shell {
 .pm-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
 .pm-rail-brand { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; }
 .pm-rail-logo {
-  width: 30px; height: 30px; flex-shrink: 0; border-radius: 9px;
-  background: linear-gradient(135deg, var(--c-prog), var(--c-prog-d));
+  width: 30px; height: 30px; flex-shrink: 0; border-radius: var(--r-sm);
+  /* P2-2：无渐变，品牌平涂（dsh-flat 规则） */
+  background: var(--c-prog);
   color: #fff; font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
 }
@@ -184,14 +232,14 @@ body:not([data-ds-dark-theme]) .pm-shell {
 .pm-rail-section-title { flex: 1; text-align: left; }
 .pm-rail-chev { transition: transform .2s var(--ease); flex-shrink: 0; }
 .pm-rail-section.collapsed .pm-rail-chev { transform: rotate(-90deg); }
-.pm-rail-sub { padding-left: 8px; }
+.pm-rail-group-items { padding-left: 8px; }
 .pm-rail-item {
   display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 10px;
   border: 0; border-radius: 8px; background: transparent; color: var(--ink-2);
   font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; text-align: left;
 }
 .pm-rail-item:hover { background: var(--pm-hover); color: var(--ink); }
-.pm-rail-item.active { background: color-mix(in srgb, var(--c-prog) 12%, transparent); color: var(--c-prog); font-weight: 600; }
+.pm-rail-item.active { background: var(--pm-tint-accent); color: var(--c-prog); font-weight: 600; }
 /* AA：浅色下业务蓝在 12% 淡底上仅 ~4.2:1，改用既有 deepseek-600 深色 token 把 active 文字/计数提到 ≥4.5；
    深色走宿主提亮别名，保持现状。 */
 body:not([data-ds-dark-theme]) .pm-rail-item.active { color: var(--c-prog-d); }
@@ -261,15 +309,11 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   max-height: 340px;
   padding: 6px;
   overflow: auto;
+  /* P2-2：表面/边框/阴影走语义 token，暗色随宿主别名，不硬编码深色面 */
   background: var(--pm-surface);
   border: 1px solid var(--pm-line);
-  border-radius: 10px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
-}
-body[data-ds-dark-theme] .pm-project-menu {
-  background: rgb(24, 25, 27);
-  border-color: rgba(255, 255, 255, 0.10);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  border-radius: var(--r-sm);
+  box-shadow: var(--pm-shadow-menu);
 }
 .pm-project-menu-empty { padding: 8px 10px; color: var(--pm-muted); font-size: 13px; }
 .pm-project-menu-item {
@@ -446,7 +490,8 @@ body[data-ds-dark-theme] .pm-project-menu {
   max-height: 60vh; overflow: auto;
   background: var(--pm-surface);
   border-bottom: 1px solid var(--pm-line);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  box-shadow: var(--pm-shadow-menu);
 }
 .pm-view-menu-item {
   display: flex; align-items: center; gap: 10px; width: 100%;
@@ -1291,7 +1336,7 @@ body[data-ds-dark-theme] .pm-project-menu {
 .pm-risk-cell-tag { display: block; cursor: pointer; }
 
 .pm-top-more-wrap { position: relative; display: inline-flex; }
-.pm-top-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; display: flex; flex-direction: column; gap: 4px; min-width: 170px; padding: 6px; background: var(--pm-bg); border: 1px solid var(--pm-border); border-radius: 8px; box-shadow: 0 6px 24px rgb(31 35 41 / 14%); }
+.pm-top-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; display: flex; flex-direction: column; gap: 4px; min-width: 170px; padding: 6px; background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: var(--r-sm); box-shadow: var(--pm-shadow-menu); }
 .pm-top-menu .pm-button { justify-content: flex-start; width: auto; overflow: visible; color: inherit; gap: 6px; }
 .pm-menu-divider { height: 1px; background: var(--pm-line); margin: 2px 0; }
 .pm-menu-note { font-size: 10px; line-height: 1.4; color: var(--pm-muted); margin: 2px 4px; padding: 0; }
@@ -1646,8 +1691,7 @@ body[data-ds-dark-theme] .pm-project-menu {
 .pm-capsule[data-open="true"] .pm-capsule-chev { transform: rotate(180deg); }
 
 .pm-pop-scrim { position: fixed; inset: 0; z-index: 40; background: transparent; }
-.pm-pop { position: absolute; top: calc(100% + 6px); left: 0; width: 460px; max-width: calc(100vw - 44px); z-index: 41; background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18); overflow: hidden; text-align: left; }
-body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rgba(255, 255, 255, 0.10); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5); }
+.pm-pop { position: absolute; top: calc(100% + 6px); left: 0; width: 460px; max-width: calc(100vw - 44px); z-index: 41; background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: var(--r); box-shadow: var(--pm-shadow-modal); overflow: hidden; text-align: left; }
 .pm-pop-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--pm-line); }
 .pm-pop-title { font-size: 13px; font-weight: 600; color: var(--pm-ink); }
 .pm-pop-seg { margin-left: auto; display: inline-flex; gap: 2px; padding: 2px; border-radius: 6px; background: var(--pm-line-soft); }
@@ -2215,4 +2259,101 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
     position: static; flex: none; width: 100%; max-width: none;
     max-height: none; order: -1;
   }
+}
+
+/* P2-6 溯源静态说明（视觉待真实浏览器认证采证）：仅做弱提示，复用语义 token，不硬编码颜色。 */
+.pm-ai-provenance-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--pm-ink-muted, var(--pm-text));
+}
+
+/* P2-6 撤销限制弱提示（视觉待真实浏览器认证采证）：复用现有语义，不硬编码颜色。 */
+.pm-copilot-undo-limit {
+  margin-inline-start: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--pm-ink-muted, var(--pm-text));
+}
+
+/* ===== P2-6 AI 溯源台账（F05 来源证据 / F06 失效置灰 / F12 重校历史）=====
+   弱容器 + 语义 token；色调只走 success/warning/danger/accent  tint，不硬编码 hex，
+   浅/深两态由宿主别名自动切换；数字与时刻 tabular-nums。 */
+.pm-prov-panel {
+  margin-top: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+  border: 1px solid var(--pm-line); border-radius: 12px; background: var(--pm-surface);
+}
+.pm-prov-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.pm-prov-title { margin: 0; font-size: 13px; font-weight: 600; color: var(--pm-text); }
+.pm-prov-toolbar-actions { display: flex; align-items: center; gap: 8px; }
+.pm-prov-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px;
+  border: 1px solid var(--pm-line); background: transparent; color: var(--pm-secondary);
+  font-size: 12px; cursor: pointer; white-space: nowrap;
+}
+.pm-prov-btn:hover:not(:disabled) { border-color: var(--pm-accent); color: var(--pm-ink); }
+.pm-prov-btn:disabled { opacity: .5; cursor: default; }
+.pm-prov-list { display: flex; flex-direction: column; gap: 10px; }
+.pm-prov-entry {
+  padding: 12px; border: 1px solid var(--pm-line-soft); border-radius: 10px;
+  background: var(--pm-surface-muted, var(--pm-line-soft)); display: flex; flex-direction: column; gap: 6px;
+}
+.pm-prov-entry-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pm-prov-kind {
+  font-size: 11px; padding: 2px 9px; border-radius: 999px; background: var(--pm-line-soft); color: var(--pm-secondary);
+}
+.pm-prov-chip {
+  display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px;
+}
+.pm-prov-tone-ok { background: var(--pm-tint-success); color: var(--pm-success); }
+.pm-prov-tone-warn { background: var(--pm-tint-warning); color: var(--pm-warning); }
+.pm-prov-tone-danger { background: var(--pm-tint-danger); color: var(--pm-danger); }
+.pm-prov-tone-muted { background: var(--pm-line-soft); color: var(--pm-secondary); }
+.pm-prov-time { margin-left: auto; font-size: 11px; color: var(--pm-muted); font-variant-numeric: tabular-nums; }
+.pm-prov-summary { margin: 2px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--pm-text); }
+.pm-prov-meta-line { margin: 0; font-size: 11.5px; color: var(--pm-muted); }
+.pm-prov-entry-id { margin-left: 8px; font-family: var(--pm-font-mono, monospace); font-variant-numeric: tabular-nums; }
+.pm-prov-warn {
+  display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 8px; font-size: 11.5px; line-height: 1.5;
+}
+.pm-prov-warn-warn { background: var(--pm-tint-warning); color: var(--pm-warning); }
+.pm-prov-warn-danger { background: var(--pm-tint-danger); color: var(--pm-danger); }
+.pm-prov-group { margin-top: 4px; }
+.pm-prov-group > summary {
+  cursor: pointer; font-size: 12px; font-weight: 600; color: var(--pm-secondary);
+  display: flex; align-items: center; gap: 6px; padding: 4px 0; list-style: revert;
+}
+.pm-prov-subgroup-title { font-size: 11px; color: var(--pm-muted); margin: 8px 0 4px; letter-spacing: .02em; }
+.pm-prov-refs { list-style: none; margin: 0; padding: 0; }
+.pm-prov-ref { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 3px 0; font-size: 12px; }
+.pm-prov-ref.is-stale { opacity: .55; }
+.pm-prov-ref-role { color: var(--pm-muted); font-size: 11px; min-width: 34px; }
+.pm-prov-ref-link {
+  display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; cursor: pointer;
+  color: var(--pm-link); font: inherit; padding: 0;
+}
+.pm-prov-ref-link:hover { text-decoration: underline; }
+.pm-prov-ref-label { color: var(--pm-text); }
+.pm-prov-ref-meta { color: var(--pm-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.pm-prov-ref-state { font-size: 11px; }
+.pm-prov-state-changed { color: var(--pm-warning); }
+.pm-prov-state-missing, .pm-prov-state-cross-project { color: var(--pm-danger); }
+.pm-prov-state-consistent { color: var(--pm-success); }
+.pm-prov-invalid { margin-top: 8px; font-size: 11.5px; color: var(--pm-muted); display: flex; flex-wrap: wrap; gap: 6px; }
+.pm-prov-invalid-item { padding: 2px 8px; border-radius: 999px; background: var(--pm-tint-danger); color: var(--pm-danger); }
+.pm-prov-history { list-style: none; margin: 6px 0 0; padding: 0; }
+.pm-prov-history-item { padding: 8px 0; border-top: 1px solid var(--pm-line-soft); }
+.pm-prov-history-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pm-prov-history-meta { font-size: 11px; color: var(--pm-muted); font-variant-numeric: tabular-nums; }
+.pm-prov-history-rows { list-style: none; margin: 6px 0 0; padding: 0; }
+.pm-prov-history-row { font-size: 11.5px; padding: 2px 0; color: var(--pm-secondary); }
+.pm-prov-history-note { margin: 6px 0 0; font-size: 11px; color: var(--pm-muted); line-height: 1.5; }
+.pm-prov-pending { padding: 8px 10px; border-radius: 8px; background: var(--pm-tint-warning); color: var(--pm-warning); font-size: 11.5px; line-height: 1.5; }
+.pm-prov-notice { padding: 8px 10px; border-radius: 8px; background: var(--pm-tint-danger); color: var(--pm-danger); font-size: 11.5px; }
+.pm-prov-summary-line { margin: 0; font-size: 11.5px; color: var(--pm-muted); font-variant-numeric: tabular-nums; }
+.pm-prov-empty { margin: 4px 0; font-size: 12px; color: var(--pm-muted); line-height: 1.5; }
+@media (max-width: 560px) {
+  .pm-prov-panel { padding: 12px; }
+  .pm-prov-time { margin-left: 0; width: 100%; }
 }

@@ -11,6 +11,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import { CommandDefinitionId } from '@deepseek-ai/dsh-commands/brand'
 import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
 import { openPmDomain, type PmDomain } from './core/storage.js'
+import { sweepPending } from './core/provenance-store.js'
 import { formatDomainOpenError } from './core/domain-error.js'
 import { handleProjectCommand, projectHelp } from './commands/project.js'
 import { handleTaskCommand, taskHelp } from './commands/task.js'
@@ -33,6 +34,7 @@ import { settingsHelp, handleSettingsCommand, readProjectSettings } from './comm
 import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
 import { handleAskUndoCommand } from './commands/ask.js'
+import { handleAskProvenanceCommand, handleAskRecheckCommand } from './commands/ask.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -105,6 +107,9 @@ export async function apply(ctx: Context): Promise<void> {
     domain = opened
     ctx.effect(() => () => opened.close())
     console.info('[pm-tool] 存储领域 pmtool 已打开')
+    // B-2：插件装载/进程启动时自动 sweep 一次 pending 补偿（best-effort，失败不阻断注册）；
+    // 查询前仍保留 lazy sweep，并在响应暴露 pendingCount。
+    void sweepPending(opened).catch(() => {})
   } catch (error) {
     // 存储未配置好时不应阻断命令注册；selftest 会提示具体原因。
     // 结构化中文点名坏记录（相对路径 + 表/键/字段），绝不输出绝对路径，绝不静默 backup-skip 隔离。
@@ -180,6 +185,10 @@ export async function apply(ctx: Context): Promise<void> {
       if (settingsMatch) return handleSettingsCommand(settingsMatch[1] ?? '', domain)
       const askApplyMatch = /^ask-apply(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askApplyMatch) return await handleAskApplyCommand(askApplyMatch[1] ?? '', domain)
+      const askProvenanceMatch = /^ask-provenance(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (askProvenanceMatch) return await handleAskProvenanceCommand(askProvenanceMatch[1] ?? '', domain)
+      const askRecheckMatch = /^ask-recheck(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (askRecheckMatch) return await handleAskRecheckCommand(askRecheckMatch[1] ?? '', domain)
       const askUndoMatch = /^ask-undo(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askUndoMatch) return await handleAskUndoCommand(askUndoMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)

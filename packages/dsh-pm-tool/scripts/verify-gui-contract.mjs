@@ -59,8 +59,11 @@ assert.match(ganttView, /pm-gantt-links/, '甘特画布应渲染 SVG 依赖线�
 assert.match(ganttView, /pm-gantt-link-arrow/, '依赖线应带箭头（前置→后继方向）')
 // GI-WEB-10/本地时区：今日线用本地日期 localTodayIso
 assert.match(ganttView, /localTodayIso\(\)/, '甘特今日线应使用本地日期 localTodayIso（避免 UTC 偏移）')
-// GI-WRITE：拖拽落库走既有 task update 通道（payload 白名单在 verify-gantt.mjs 纯函数层断言）
-assert.match(ganttView, /task update \$\{task\.id\} \$\{JSON\.stringify\(next\)\}/, '拖拽落库应走既有 task update 通道')
+// GI-WRITE：拖拽落库走既有 task update 通道（commitDates 统一封装；payload 白名单在 verify-gantt-drag 与纯函数层断言）
+assert.match(ganttView, /const commitDates = async \(id: string, payload: \{ startDate\?: string, dueDate\?: string \}/,
+  'GanttView 应定义 commitDates 统一落库封装')
+assert.match(ganttView, /await run\(`task update \$\{id\} \$\{JSON\.stringify\(payload\)\}`, \{ quiet: true \}\)/,
+  'commitDates 应经既有 task update 通道 quiet 落库')
 // GI-COLLAB-01：core/gantt.ts 纯派生零写命令
 assert.doesNotMatch(ganttCore, /\brun\s*\(/, 'core/gantt.ts 纯派生不得含 run( 写命令')
 assert.doesNotMatch(ganttCore, /\bexecute\s*\(/, 'core/gantt.ts 纯派生不得含 execute( 写命令')
@@ -121,8 +124,24 @@ assert.match(panelCss, /@media \(max-width: 560px\)/, 'panel.css 应有 ≤560px
 for (const n of viewCssNames) {
   assert.match(viewCss[n], /@media \(max-width: 560px\)/, `${n}.css 应有 ≤560px 窄窗收窄断点`)
 }
-// 配色零硬编码 hex：骨架 + 全部视图 CSS 只消费 dsw/pm token
-assert.doesNotMatch(panelCss, /#[0-9a-fA-F]{3,6}\b/, 'panel.css 不得硬编码 hex 色值')
+// 配色零硬编码 hex：骨架 + 全部视图 CSS 只消费 dsw/pm token。
+// 声明区 hex 仅允许两处带语义上下文的白名单（mask-image 的 #000 遮罩、.pm-rail-logo 白字 #fff）；
+// 注释先剥离（注释里 AA 中性 hex 仅留档，非声明色）。
+{
+  const declared = panelCss.replace(/\/\*[\s\S]*?\*\//g, '')
+  const lines = declared.split('\n')
+  const violations = []
+  lines.forEach((line, idx) => {
+    for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
+      const hex = m[0].toLowerCase()
+      const isMask = /mask-image/.test(line) && (hex === '#000' || hex === '#000000')
+      const isBrand = /\.pm-rail-logo/.test(lines.slice(Math.max(0, idx - 8), idx + 1).join('\n'))
+        && /color:\s*#fff\b/.test(line) && (hex === '#fff' || hex === '#ffffff')
+      if (!isMask && !isBrand) violations.push(`panel.css line ${idx + 1}: ${hex}`)
+    }
+  })
+  assert.deepEqual(violations, [], `panel.css 出现非白名单 hex：\n${violations.join('\n')}`)
+}
 for (const n of viewCssNames) {
   assert.doesNotMatch(viewCss[n], /#[0-9a-fA-F]{3,6}\b/, `${n}.css 不得硬编码 hex 色值`)
 }

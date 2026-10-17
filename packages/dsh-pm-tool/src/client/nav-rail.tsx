@@ -122,8 +122,9 @@ export function NavRail({
               <span className="pm-rail-section-title">{g.title}</span>
               <ChevronDown size={14} className="pm-rail-chev"/>
             </button>
+            {/* P2-2：折叠组容器独立类名 pm-rail-group-items，避免与副标题 .pm-rail-sub 类名碰撞 */}
             {(!collapsed.has(g.id) || !!query.trim()) && (
-              <div className="pm-rail-sub">{g.items.map(renderItem)}</div>
+              <div className="pm-rail-group-items">{g.items.map(renderItem)}</div>
             )}
           </div>
         ) : (

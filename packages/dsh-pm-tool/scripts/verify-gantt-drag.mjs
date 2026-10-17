@@ -77,9 +77,13 @@ assert.equal((runBlock.match(/await refresh\(\)/g) ?? []).length, 1,
   'run 体内 refresh() 恰好一次（避免 run + onSaved 双刷新）')
 assert.match(runBlock, /return true/, 'run 成功返回 true')
 
-// 拖拽调用带 quiet
-assert.match(ganttSrc, /run\(`task update \$\{task\.id\} \$\{JSON\.stringify\(next\)\}`, \{ quiet: true \}\)/,
-  '甘特拖拽落库必须走 quiet 执行（不弹全字段 Notice）')
+// 当前落库契约：统一走 commitDates(id, payload, okText) → run(`task update ${id} ${JSON.stringify(payload)}`, { quiet: true })
+const commitBlock = extractBlock(ganttSrc, 'const commitDates = async (id: string, payload: { startDate?: string, dueDate?: string }, okText: string) => {')
+assert.match(commitBlock, /await run\(`task update \$\{id\} \$\{JSON\.stringify\(payload\)\}`, \{ quiet: true \}\)/,
+  'commitDates 必须走 quiet 执行（不弹全字段 Notice），并经既有 task update 通道')
+// payload 白名单：commitDates 形参仅声明 startDate/dueDate，不得携带 progress/predecessorIds/status/assignee
+assert.match(commitBlock, /payload: \{ startDate\?: string, dueDate\?: string \}/,
+  'commitDates payload 类型仅允许 startDate/dueDate（白名单）')
 // 拖拽成功后不再 onSaved()
 assert.doesNotMatch(ganttSrc, /if \(ok\) onSaved\(\)/,
   '拖拽成功后不得再 onSaved()（run-quiet 已 refresh 一次）')
@@ -99,9 +103,10 @@ const onUpBlock = extractBlock(ganttSrc, 'const onPointerUpBar = async')
 assert.doesNotMatch(onUpBlock, /refresh\(\)/, '失败分支不得 refresh（条体保持原坐标，快照不变）')
 
 // ---------- D. inflight 并发保护 + timer 清理 ----------
-assert.match(onUpBlock, /setSaving\(true\)/, '保存开始必须置 saving')
-assert.match(onUpBlock, /finally[\s\S]*setSaving\(false\)/,
-  '保存结束（无论成败）必须 setSaving(false) 解锁；finally 防漏')
+// saving 状态在统一落库封装 commitDates 内翻转（拖拽/缩放/键盘微调共用），不在 onPointerUpBar。
+assert.match(commitBlock, /setSaving\(true\)/, '保存开始必须置 saving（commitDates 内）')
+assert.match(commitBlock, /finally[\s\S]*setSaving\(false\)/,
+  '保存结束（无论成败）必须 setSaving(false) 解锁；finally 防漏（commitDates 内）')
 const onDownBlock = extractBlock(ganttSrc, 'const onPointerDownBar =')
 assert.match(onDownBlock, /if \(saving \|\| disabled\) return/,
   '保存中/禁用态必须拒绝新 pointerdown——阻止并发连拖覆盖同一任务')

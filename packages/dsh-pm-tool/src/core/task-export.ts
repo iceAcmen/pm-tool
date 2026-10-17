@@ -276,29 +276,32 @@ export function buildTaskSnapshotHtml(rows: ExportTaskRow[], ctx: TaskExportCtx)
 <title>${escapeHtml(ctx.projectName ?? '任务只读快照')} · 只读快照</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f6f7f9;color:rgb(28,28,30);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;padding:28px 18px}
-  .snapshot{max-width:1080px;margin:0 auto;background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,18,20,.05)}
-  .snap-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 18px;background:#f4f5f7;border-bottom:1px solid rgba(16,18,20,.09);font-size:12.5px;color:rgb(105,110,116)}
+  /* P2-2：自包含只读快照，中性值对齐冻结规范（surface-2 #f5f6f7 / muted #696e74 AA / md 12 圆角），无外链 */
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f7;color:rgb(28,28,30);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;padding:28px 18px}
+  .snapshot{max-width:1080px;margin:0 auto;background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(16,18,20,.05)}
+  .snap-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 18px;background:#f5f6f7;border-bottom:1px solid rgba(16,18,20,.09);font-size:12.5px;color:#696e74}
+  .snap-lock{display:inline-flex;align-items:center;justify-content:center;color:#696e74}
   .snap-bar b{color:rgb(28,28,30);font-weight:650}
-  .snap-bar .ro{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:rgb(105,110,116);background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:999px;padding:3px 10px}
-  .snap-note{padding:10px 18px;border-bottom:1px solid rgba(16,18,20,.05);font-size:12px;color:rgb(105,110,116)}
+  .snap-bar .ro{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#696e74;background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:999px;padding:3px 10px}
+  .snap-note{padding:10px 18px;border-bottom:1px solid rgba(16,18,20,.05);font-size:12px;color:#696e74}
   .snap-body{padding:8px 18px 14px;overflow-x:auto}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th{text-align:left;font-size:11.5px;font-weight:650;color:rgb(105,110,116);padding:9px 10px;border-bottom:1px solid rgba(16,18,20,.09);white-space:nowrap}
+  th{text-align:left;font-size:11.5px;font-weight:650;color:#696e74;padding:9px 10px;border-bottom:1px solid rgba(16,18,20,.09);white-space:nowrap}
   td{padding:10px;border-bottom:1px solid rgba(16,18,20,.05);color:rgb(28,28,30);vertical-align:top}
   tr:last-child td{border-bottom:0}
-  .c-code{color:rgb(105,110,116);white-space:nowrap}
+  .c-code{color:#696e74;white-space:nowrap}
   .c-title{font-weight:600;min-width:180px}
   .num{text-align:right;white-space:nowrap}
   .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
   .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
-  .snap-foot{padding:11px 18px;border-top:1px solid rgba(16,18,20,.05);font-size:11.5px;color:rgb(105,110,116)}
+  .snap-foot{padding:11px 18px;border-top:1px solid rgba(16,18,20,.05);font-size:11.5px;color:#696e74}
 </style>
 </head>
 <body>
 <div class="snapshot">
   <div class="snap-bar">
-    <span>🔒</span>
+    <!-- P2-2：锁用内联 SVG（非 emoji），当前色跟随 muted -->
+    <span class="snap-lock" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
     <b>只读快照</b>
     <span>· 生成于 ${escapeHtml(ctx.generatedAt)} · 来自视图「${escapeHtml(ctx.viewName ?? '未命名视图')}」${ctx.filterSummary ? ` · ${escapeHtml(ctx.filterSummary)}` : ''}</span>
     <span class="ro">只读 · 不可编辑</span>

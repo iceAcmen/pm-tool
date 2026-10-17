@@ -37,41 +37,52 @@ try {
   await apply(ctx)
   const domain = facility.get('pmtool')
 
-  // poc 路由固定到免费插件。
+  // poc 路由固定到免费插件；候选链 4 条全部非思考。
   const poc = resolveModelRoute('poc')
   assert.equal(poc.provider, 'our-free-model')
   assert.equal(poc.model, 'kilo-auto/free')
+  assert.equal(poc.models.length, 4)
+  assert.ok(poc.models.every((c) => c.reasoningEffort === 'off'), 'PoC 链全部非思考')
 
-  // prod 无 Key：抛结构化错误（绝不回退免费）。
-  assert.throws(() => resolveModelRoute('prod'), /PROD_KEY_MISSING/)
-  // 统一无 Key 提示含可复制切回命令，且不回显 Key 明文。
-  assert.match(PROD_KEY_MISSING_TEXT, /\/pm model mode poc/)
-  assert.match(PROD_KEY_MISSING_TEXT, /DEEPSEEK_API_KEY|KIMI_API_KEY/)
-  assert.doesNotMatch(PROD_KEY_MISSING_TEXT, /sk-[A-Za-z0-9]{6}/)
-
-  // 有 DeepSeek Key：副驾优先 DeepSeek flash（思考 high）；无则 Kimi。
-  process.env.DEEPSEEK_API_KEY = 'fake'
+  // prod 路由（当前确定性契约：不按环境 Key 选池，凭据由 dsh 在请求时从凭据服务解析）。
+  // 副驾：Flash 思考 high 为主，Pro 升级 high，GLM 非思考兜底。
   const copilot = resolveModelRoute('prod', 'copilot')
-  assert.equal(copilot.provider, 'deepseek-official')
-  assert.equal(copilot.model, 'deepseek-flash')
+  assert.equal(copilot.provider, 'ark-plan')
+  assert.equal(copilot.model, 'deepseek-v4-1-flash-260910')
   assert.equal(copilot.reasoningEffort, 'high', '副驾默认开思考')
-  // WBS 用同一 flash 但非思考。
+  assert.deepEqual(
+    copilot.models.map((c) => [c.model, c.reasoningEffort]),
+    [
+      ['deepseek-v4-1-flash-260910', 'high'],
+      ['deepseek-v4-pro-ga-260813', 'high'],
+      ['glm-5-3-flash-260828', 'off'],
+    ],
+    '副驾候选链顺序与档位固定',
+  )
+  // WBS：Flash 非思考为主，GLM、Doubao 兜底。
   const wbs = resolveModelRoute('prod', 'wbs')
-  assert.equal(wbs.model, 'deepseek-flash')
+  assert.equal(wbs.model, 'deepseek-v4-1-flash-260910')
   assert.equal(wbs.reasoningEffort, 'off', 'WBS 非思考')
-  delete process.env.DEEPSEEK_API_KEY
-  process.env.KIMI_API_KEY = 'fake'
-  assert.equal(resolveModelRoute('prod', 'copilot').provider, 'kimi-official')
-  delete process.env.KIMI_API_KEY
-
-  // 有阿里百炼 Key：叙述/标题走 qwen-turbo（降本），纪要走 qwen3-coder-flash。
-  process.env.DASHSCOPE_API_KEY = 'fake'
-  const narrative = resolveModelRoute('prod', 'narrative')
-  assert.equal(narrative.provider, 'aliyun-official')
-  assert.equal(narrative.model, 'qwen-turbo')
+  assert.deepEqual(wbs.models.map((c) => c.model), [
+    'deepseek-v4-1-flash-260910', 'glm-5-3-flash-260828', 'doubao-seed-2-1-lite-260915',
+  ])
+  // 纪要：GLM（JSON 强）为主，Flash、Doubao 兜底。
   const meeting = resolveModelRoute('prod', 'meeting')
-  assert.equal(meeting.model, 'qwen3-coder-flash')
-  delete process.env.DASHSCOPE_API_KEY
+  assert.equal(meeting.model, 'glm-5-3-flash-260828')
+  assert.equal(meeting.reasoningEffort, 'off')
+  // 叙述：Doubao Lite 降本为主，Flash、GLM 兜底。
+  const narrative = resolveModelRoute('prod', 'narrative')
+  assert.equal(narrative.model, 'doubao-seed-2-1-lite-260915')
+  assert.equal(narrative.reasoningEffort, 'off')
+  // 标题/分类：Doubao Lite 为主，GLM、Flash 兜底。
+  const title = resolveModelRoute('prod', 'title')
+  assert.equal(title.model, 'doubao-seed-2-1-lite-260915')
+  assert.equal(title.reasoningEffort, 'off')
+
+  // 无 Key 提示文本（常量仍保留供未来缺配场景）：含切回命令、不回显 Key 明文。
+  assert.match(PROD_KEY_MISSING_TEXT, /\/pm model mode poc/)
+  assert.match(PROD_KEY_MISSING_TEXT, /CODING_PLAN_API_KEY/)
+  assert.doesNotMatch(PROD_KEY_MISSING_TEXT, /sk-[A-Za-z0-9]{6}/)
 
   // describeLanes 不回显 Key 明文：poc + 主力/降本/升级 共 4 条。
   const lanes = describeLanes('poc')
@@ -107,11 +118,11 @@ try {
   assert.doesNotMatch(pocStatus.text, /^▶ \[prod\]/m, '非当前 prod 行不得带 ▶')
   assert.equal(parseActiveModelLane(pocStatus.text), 'poc', '真实 poc status 须被解析回 poc')
 
-  // prod 无 Key：两条 prod 候选均「未就绪」，但 ▶ 仍落在首条 [prod] 行；
+  // prod：环境无 CODING_PLAN_API_KEY 时 describeLanes 标未就绪；▶ 仍落在首条 [prod] 行；
   // parser 不得因「未就绪 / 无 Key」而退回 null 或误判 poc。
   await setModelMode(domain, 'prod')
-  // 双保险：环境里确实没有 Key（resolveModelRoute('prod') 应抛 PROD_KEY_MISSING）。
-  assert.throws(() => resolveModelRoute('prod'), /PROD_KEY_MISSING/)
+  // 当前确定性路由：prod 不再因缺 Key 抛错（凭据由 dsh 请求时解析），只断言路由可解析。
+  assert.ok(resolveModelRoute('prod', 'copilot').models.length >= 1)
   const prodStatus = await handleModelCommand('status', domain)
   assert.equal(prodStatus.kind, 'success')
   assert.match(prodStatus.text, /未就绪/, 'prod 无 Key 时车道应显示未就绪')

@@ -1,10 +1,19 @@
 import assert from 'node:assert'
-import { nextStatus, clampProgress, cleanDate, buildUpdate } from '../lib/core/task-inline.js'
+import { clampProgress, cleanDate, buildUpdate, parseProgressInput } from '../lib/core/task-inline.js'
 
-assert.equal(nextStatus('todo'), 'doing')
-assert.equal(nextStatus('doing'), 'done')
-assert.equal(nextStatus('done'), 'todo')
-assert.equal(nextStatus('bogus'), 'todo') // 非法值回 todo
+// 当前契约：进度输入解析（旧 nextStatus 状态轮转已移除，不再测）。
+// null/undefined/空串/非有限 → undefined（语义「不写该字段」）；合法 → 0..100 四舍五入整数。
+assert.equal(parseProgressInput(null), undefined)
+assert.equal(parseProgressInput(undefined), undefined)
+assert.equal(parseProgressInput(''), undefined)
+assert.equal(parseProgressInput('   '), undefined) // trim 空白
+assert.equal(parseProgressInput(NaN), undefined)
+assert.equal(parseProgressInput(Infinity), undefined)
+assert.equal(parseProgressInput(0), 0)
+assert.equal(parseProgressInput(55), 55)
+assert.equal(parseProgressInput('33'), 33)
+assert.equal(parseProgressInput(150), 100) // 超界钳制
+assert.equal(parseProgressInput(-5), 0)
 
 assert.equal(clampProgress(0), 0)
 assert.equal(clampProgress(55), 55)

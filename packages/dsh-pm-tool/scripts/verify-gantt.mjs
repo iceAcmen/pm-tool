@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import {
   dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
-  progressRatio, progressFill, barLabelPolicy, shortDate, dependencyEdges,
+  progressFill, barLabelPolicy, shortDate, dependencyEdges,
   parentBarRange, milestoneOffset, taskDurationDays, routeEdge,
 } from '../lib/core/gantt.js'
 
@@ -45,14 +45,7 @@ assert.ok(clamp.startDate <= clamp.dueDate)
 
 // ---------- 本轮增强（GI-PURE-03/04/05/06/07 + 里程碑无 NaN） ----------
 
-// GI-PURE-03：legacy 口径 progressRatio（v0.8 起 @deprecated 冻结，阶段三删除前行为不变）
-assert.equal(progressRatio(0, 'todo'), 0)
-assert.equal(progressRatio(50, 'todo'), 0.5)
-assert.equal(progressRatio(100, 'todo'), 1)
-assert.equal(progressRatio(30, 'done'), 1)
-assert.equal(progressRatio(undefined, 'todo'), 0)
-assert.equal(progressRatio(150, 'todo'), 1) // 超界钳制
-
+// GI-PURE-03（当前契约）：进度只认真源 TaskProgress.value；legacyProgress/coverage 旁字段不得伪造填充。
 // v0.8 progressFill：只认真源 TaskProgress.value；null（无填充）与 0（0% 填充）严格区分
 const tp = (value) => ({
   value, source: value === null ? 'none' : 'checklist', checklist: null,
@@ -66,6 +59,10 @@ assert.equal(progressFill(tp(150)), 1)      // 超界钳制
 assert.equal(progressFill(tp(null)), null)  // null → 无填充（不画实心、不显示百分比）
 // 关键红线：done 但无清单信号（value=null）→ 仍无填充，绝不伪造 100%
 assert.equal(progressFill(tp(null)), null)
+// 反例/不变量：旁字段（legacyProgress/coverage/待验收）不得伪造填充；只认 value。
+assert.equal(progressFill({ value: null, legacyProgress: 90, coverage: { coveredLeaves: 3, totalLeaves: 3 }, pendingAcceptance: true }), null)
+assert.equal(progressFill({ value: 0, legacyProgress: 100 }), 0) // 0 填充 ≠ null 无填充，严格区分
+assert.equal(progressFill({ value: 100 }), 1)                   // 全勾=实心 100%，不靠旁字段
 
 // GI-PURE-06：窄条三态决策（PX=16）——条内 / 条右侧外置 / 仅 tooltip
 assert.equal(barLabelPolicy(1, 16), 'hidden')   // 单日 16px：不硬塞
@@ -207,8 +204,8 @@ const cases = [
   { label: 'gap=8 边界（case2）', edge: { x1: 100, y1: 12, x2: 108, y2: 40, bRight: 160 }, kind: 'tight' },
   { label: 'gap=11 周粒度 1 天（[8,14)）', edge: { x1: 100, y1: 12, x2: 111, y2: 40, bRight: 170 }, kind: 'tight' },
   { label: 'gap=13（case2 上限）', edge: { x1: 100, y1: 12, x2: 113, y2: 40, bRight: 172 }, kind: 'tight' },
-  { label: 'gap=14 边界（case1）', edge: { x1: 100, y1: 12, x2: 114, y2: 40, bRight: 172 }, kind: 'normal' },
-  { label: 'gap=16 日粒度 1 天（≥14）', edge: { x1: 100, y1: 12, x2: 116, y2: 40, bRight: 176 }, kind: 'normal' },
+  { label: 'gap=16（跨行间间隙 <21 仍 tight：normal 需 gap-stubA6-rrN6 ≥ arrowClear9）', edge: { x1: 100, y1: 12, x2: 116, y2: 40, bRight: 176 }, kind: 'tight' },
+  { label: 'gap=21 边界（刚好 normal，通道落到 A 右缘 stubA 右侧）', edge: { x1: 100, y1: 12, x2: 121, y2: 40, bRight: 176 }, kind: 'normal' },
   { label: 'gap=32 日粒度 2 天', edge: { x1: 100, y1: 12, x2: 132, y2: 40, bRight: 192 }, kind: 'normal' },
 ]
 for (const c of cases) {

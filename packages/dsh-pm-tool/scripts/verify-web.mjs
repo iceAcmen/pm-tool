@@ -139,7 +139,28 @@ try {
   assert.match(bundle, /备份完成/)
   assert.match(css, /\.pm-capsule-err/)
   assert.match(css, /\.pm-capsule-warn/)
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i, '面板配色应来自宿主主题 token')
+  // 面板配色必须来自宿主主题 token：hex 仅允许两处带语义上下文的白名单，其余一律失败（不做全跳）。
+  // 白名单：① mask-image 渐隐遮罩里的 #000（alpha 遮罩，非填充色）；
+  // ② .pm-rail-logo 品牌平涂色块上的前景白字 #fff（on-primary 等价）。
+  {
+    // 先剥离 /* */ 注释（注释里写 AA 中性色 hex 仅为留档，不是声明色），再扫声明区。
+    const declared = css.replace(/\/\*[\s\S]*?\*\//g, '')
+    const lines = declared.split('\n')
+    const violations = []
+    lines.forEach((line, idx) => {
+      const hexes = [...line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)]
+      for (const m of hexes) {
+        const hex = m[0].toLowerCase()
+        const isMask = /mask-image/.test(line) && (hex === '#000' || hex === '#000000')
+        const isBrandOnPrimary = /\.pm-rail-logo/.test(declared.split('\n').slice(Math.max(0, idx - 8), idx + 1).join('\n'))
+          && /color:\s*#fff\b/.test(line) && (hex === '#fff' || hex === '#ffffff')
+        if (!isMask && !isBrandOnPrimary) {
+          violations.push(`line ${idx + 1}: ${hex}（非白名单 hex，配色须走宿主 token）`)
+        }
+      }
+    })
+    assert.deepEqual(violations, [], `面板 CSS 出现非白名单 hex：\n${violations.join('\n')}`)
+  }
 
   // 可达性修复 + 第二档控件稳定选择器契约。
   assert.match(bundle, /pm-meeting-row/)

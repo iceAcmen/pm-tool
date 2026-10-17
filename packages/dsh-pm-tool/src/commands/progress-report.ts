@@ -18,6 +18,8 @@ import {
 } from '../core/progress-report.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { buildBrief, defaultPeriod, generateNarrative, rememberNarrative, recallNarrative } from '../core/report-narrate.js'
+import { buildSourceRefs, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type SourceRecord } from '../core/provenance.js'
+import { recordProvenance } from '../core/provenance-store.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -102,6 +104,31 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       const report = await generateProgressReport(domain, {
         projectId, periodStart, periodEnd, executiveSummary: narrative, status: 'draft',
       })
+      // F15：叙述快照 confirm 落盘后 best-effort 记录来源（确定性数字为 basis，AI 只写叙述；置信度未提供）。
+      {
+        const recMap = new Map<string, SourceRecord>()
+        for (const tableName of ['reports', 'tasks', 'milestones'] as const) {
+          for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+            const r = rec as SourceRecord
+            if (r.projectId === projectId) recMap.set(`${tableName}:${r.id}`, r)
+          }
+        }
+        // M-1：汇报的 basis=项目内任务（确定性数字采集来源），连同报告自身作为上下文进 refs。
+        const basisTasks = [...recMap.entries()]
+          .filter(([k]) => k.startsWith('tasks:'))
+          .map(([, r]) => ({ table: 'tasks', id: r.id }))
+        const refs = buildSourceRefs({
+          actions: [],
+          records: recMap,
+          context: [{ table: 'reports', id: report.id }, ...basisTasks],
+          snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION,
+        })
+        void recordProvenance(domain, {
+          projectId, kind: 'report-narrate',
+          summary: `进度叙述快照 ${report.id}（确定性数字采集，AI 仅写叙述）`,
+          refs,
+        })
+      }
       return {
         kind: 'success',
         text: [`已按 AI 叙述生成进度快照（executiveSummary 已写入）。\n${render(report)}`].join('\n'),
@@ -119,6 +146,30 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       const report = await generateProgressReport(domain, {
         projectId, periodStart, periodEnd, executiveSummary: text.trim(), status: 'draft',
       })
+      // F15/M-1：用户编辑后叙述直接落快照，确定性任务数字为 basis，AI 不参与；置信度未提供。
+      {
+        const recMap = new Map<string, SourceRecord>()
+        for (const tableName of ['reports', 'tasks', 'milestones'] as const) {
+          for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+            const r = rec as SourceRecord
+            if (r.projectId === projectId) recMap.set(`${tableName}:${r.id}`, r)
+          }
+        }
+        const basisTasks = [...recMap.entries()]
+          .filter(([k]) => k.startsWith('tasks:'))
+          .map(([, r]) => ({ table: 'tasks', id: r.id }))
+        const refs = buildSourceRefs({
+          actions: [],
+          records: recMap,
+          context: [{ table: 'reports', id: report.id }, ...basisTasks],
+          snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION,
+        })
+        void recordProvenance(domain, {
+          projectId, kind: 'report-narrate',
+          summary: `进度叙述快照 ${report.id}（用户编辑文本，确定性数字采集）`,
+          refs,
+        })
+      }
       return { kind: 'success', text: `已按编辑后叙述生成进度快照（不再调用模型）。\n${render(report)}` }
     }
     const generateMatch = /^generate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)

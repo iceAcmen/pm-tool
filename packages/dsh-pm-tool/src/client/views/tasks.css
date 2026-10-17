@@ -93,7 +93,7 @@
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
   background: transparent; border: 1px solid var(--line-2); color: var(--ink-2);
   font: inherit; font-size: var(--t-12); font-weight: 600;
-  padding: 7px 12px; border-radius: var(--r);
+  padding: 7px 12px; border-radius: var(--r-sm);
   transition: all .15s var(--ease);
 }
 .pm-tasks-root .pt-ghost:hover { background: var(--surface-3); color: var(--ink); }
@@ -215,8 +215,9 @@
 /* 关联里程碑 chip：旗帜图标 + 链接蓝，与进度数字、等待前置（红）在视觉上区分。 */
 .pm-tasks-root .pt-milestone-chip {
   display: inline-flex; align-items: center; gap: 3px;
-  font-size: var(--t-10); color: var(--c-link); background: color-mix(in srgb, var(--c-link) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--c-link) 28%, transparent);
+  /* P2-2：闭合未定义 --c-link，改指链接语义 token --pm-link */
+  font-size: var(--t-10); color: var(--pm-link); background: var(--pm-tint-accent);
+  border: 1px solid color-mix(in srgb, var(--pm-link) 28%, transparent);
   padding: 1px 6px 1px 5px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
 }
 .pm-tasks-root .pt-milestone-chip svg { flex: 0 0 auto; }
@@ -395,8 +396,10 @@
 .pm-tasks-root .pt-vmenu {
   position: absolute; top: calc(100% + 6px); left: 0; z-index: var(--z-modal, 30);
   width: 300px; max-width: 86vw; background: var(--surface); background-image: var(--surface-g);
-  border: 1px solid var(--line-2); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-3); padding: 6px;
+  border: 1px solid var(--line-2);
+  /* P2-2：菜单圆角/阴影走语义 token（sm 8 / menu 轻阴影），不用 r-lg + shadow-3 */
+  border-radius: var(--r-sm);
+  box-shadow: var(--pm-shadow-menu); padding: 6px;
 }
 .pm-tasks-root .pt-vmenu-item {
   display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
@@ -404,7 +407,7 @@
   padding: 9px 10px; font: inherit; color: var(--ink-2);
 }
 .pm-tasks-root .pt-vmenu-item:hover,
-.pm-tasks-root .pt-vmenu-item.active { background: var(--surface-3); color: var(--ink); }
+.pm-tasks-root .pt-vmenu-item.active { background: var(--pm-hover); color: var(--ink); }
 .pm-tasks-root .pt-vmenu-check {
   width: 18px; height: 18px; flex-shrink: 0; display: inline-flex; align-items: center;
   justify-content: center; color: var(--c-done);
@@ -429,7 +432,7 @@
   background: transparent; border: 0; border-radius: var(--r-xs); cursor: pointer;
   padding: 9px 10px; font: inherit; font-size: var(--t-12); font-weight: 600; color: var(--c-prog);
 }
-.pm-tasks-root .pt-vmenu-go:hover { background: var(--surface-3); }
+.pm-tasks-root .pt-vmenu-go:hover { background: var(--pm-hover); }
 
 /* 导出菜单格式徽标（复用 token，不新造风格） */
 .pm-tasks-root .pt-exp-ic {
@@ -438,17 +441,20 @@
   font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 800; color: var(--ink-2);
 }
 
-/* 弹窗（另存为 / 管理）：复用移动弹窗遮罩与视觉 token */
-.pm-tasks-root .pt-vm-mask {
+/* 弹窗（另存为 / 管理）：复用移动弹窗遮罩与视觉 token；类名对齐规范 .pm-modal-mask（G12 校准） */
+.pm-tasks-root .pm-modal-mask {
   position: fixed; inset: 0; z-index: var(--z-modal);
-  background: color-mix(in srgb, var(--bg) 45%, transparent);
+  /* P2-2：遮罩复用宿主 mask 别名，不自造半透明 */
+  background: var(--dsw-alias-bg-mask-1, color-mix(in srgb, var(--bg) 45%, transparent));
   display: grid; place-items: center; padding: var(--sp-4);
 }
 .pm-tasks-root .pt-vm {
   width: min(460px, 94vw); max-height: 80vh; overflow: auto;
   background: var(--surface); background-image: var(--surface-g);
-  border: 1px solid var(--line-2); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-3); padding: var(--sp-4);
+  border: 1px solid var(--line-2);
+  /* P2-2：弹窗圆角 md 12 / 中阴影，与菜单区分层级 */
+  border-radius: var(--r);
+  box-shadow: var(--pm-shadow-modal); padding: var(--sp-4);
 }
 .pm-tasks-root .pt-vm header {
   display: flex; align-items: center; justify-content: space-between;
@@ -459,7 +465,7 @@
   width: 28px; height: 28px; border-radius: var(--r-xs);
   background: transparent; border: 0; color: var(--muted); cursor: pointer;
 }
-.pm-tasks-root .pt-vm-x:hover { background: var(--surface-3); color: var(--ink); }
+.pm-tasks-root .pt-vm-x:hover { background: var(--pm-hover); color: var(--ink); }
 
 .pm-tasks-root .pt-save-field { display: block; margin-bottom: var(--sp-3); }
 .pm-tasks-root .pt-save-field > span {

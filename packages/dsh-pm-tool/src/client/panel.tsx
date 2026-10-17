@@ -87,6 +87,7 @@ import { MeetingsView as MeetingTable } from './views/meetings.js'
 import { ReportsView as ProgressReportTable } from './views/reports.js'
 import { Deliverables as DeliverableTable } from './views/deliverables.js'
 import { PeopleView } from './views/people.js'
+import { ProvenancePanel } from './provenance-panel.js'
 import styles from './panel.css?raw'
 
 /** R3-OBS-002：把焦点归还解析接到真实 document（测试时由伪 DOM 注入，不在此硬编码）。 */
@@ -1208,6 +1209,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           execute={execute}
           disabled={busy}
           onConfirmed={() => { void refresh(); setDrawer(undefined) }}
+          onOpenRecord={(recordType, id) => openRecord(project.id, recordType, id)}
         />}
         {drawer.kind === 'settings' && <SettingsPanel
           settings={settings}
@@ -1710,11 +1712,12 @@ function drawerTitle(drawer: Drawer): string {
  * “生成草稿”发一次预览命令（调一次模型），“确认入库”发对应 confirm 命令
  * （复用进程内草稿缓存，不再调模型）。AI 结果一律先预览、显式确认才落库。
  */
-function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
+function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }: {
   projectId: string
   execute: (line: string) => Promise<string>
   disabled?: boolean
   onConfirmed: () => void
+  onOpenRecord: (recordType: string, id: string) => void
 }) {
   const [mode, setMode] = useState<'wbs' | 'narrate' | 'summarize'>(() => {
     try {
@@ -1735,6 +1738,8 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
   const [working, setWorking] = useState(false)
   const [stage, setStage] = useState<'pick' | 'create'>('pick')
   const [docView, setDocView] = useState<'preview' | 'edit'>('preview')
+  // P2-6：确认入库后自增，用于重挂载台账面板触发只读刷新（F05/F06/F12 展示层）。
+  const [provTick, setProvTick] = useState(0)
 
   const CAPABILITIES = [
     { key: 'wbs' as const, icon: ListTree, name: 'WBS 任务拆解', desc: '一句话目标 → 结构化任务清单', tag: '任务' },
@@ -1800,6 +1805,8 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
     try {
       await execute(lines().confirm)
       onConfirmed()
+      // 确认入库后只读刷新溯源台账（面板自拉取；自增 tick 触发重挂载重载）。
+      setProvTick(t => t + 1)
     } catch (error) {
       setPreview(error instanceof Error ? error.message : String(error))
       setWorking(false)
@@ -1907,10 +1914,21 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed }: {
               <Check size={15}/> 确认入库
             </button>
           </div>
+          {/* P2-6 溯源静态标记：只列实际依赖对象，置信度恒未提供，不按来源数评分。 */}
+          <div className="pm-ai-provenance-note" aria-label="溯源说明">
+            来源仅记录本次实际依赖对象｜置信度：未提供（不按来源数量评分）
+          </div>
         </div>
       )}
       <p className="pm-ai-footnote">AI 结果为草稿，需点「确认入库」才写入项目；失败时可重试或改用手工录入，核心台账不受影响。</p>
     </>}
+    {/* P2-6 溯源台账（F05 来源证据 / F06 失效置灰 / F12 重校历史）：只读展示，独立拉取，不写业务。 */}
+    <ProvenancePanel
+      key={provTick}
+      projectId={projectId}
+      execute={execute}
+      onOpenRecord={onOpenRecord}
+    />
   </div>
 }
 
@@ -2373,6 +2391,9 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
             <RotateCcw size={12}/> 撤销{u.label ? ` · ${u.label}` : ''}
           </button>
         ))}
+        <span className="pm-copilot-undo-limit" title="撤销为进程内临时能力">
+          限 10 分钟 / 最多 3 条 / 一次性，重启后失效；确认后被人工修改的记录会保留不覆盖
+        </span>
       </div>
     )}
 

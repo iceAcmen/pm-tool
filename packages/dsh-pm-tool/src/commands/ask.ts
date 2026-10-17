@@ -3,6 +3,8 @@ import type { LlmGateway } from '../core/ai-client.js'
 import { generateDraft, AiDraftError } from '../core/ai-client.js'
 import { resolveModelRoute, getModelMode, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { buildAskContext, localToday, COPILOT_SYSTEM } from '../core/ask-copilot.js'
+import { capturePostimage, classifyUndoTarget, buildSourceRefs, evaluateStale, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type Postimage, type SourceRecord } from '../core/provenance.js'
+import { recordProvenance, PROVENANCE_UNDO_TTL_MS, recordUndoOutcome, listProvenance, sweepPending, recordRecheck, PROVENANCE_PENDING_ROW } from '../core/provenance-store.js'
 
 export function handleAskCommand(argument: string, domain: PmDomain | undefined, llm: LlmGateway | undefined) {
   // #22 实体演示缝：DSH_PM_E2E=1 且参数含 entities 时，不调模型，动态取本项目已有实体，
@@ -151,12 +153,14 @@ export interface AskApplyResult {
   undoId?: string
 }
 
-/** 一条可撤销改动：update 记原始记录，create 标记为新建（撤销时删除）。 */
+/** 一条可撤销改动：update 记原始记录 + 落库后 postimage（冲突守卫），create 标记为新建（撤销时删除）。 */
 interface UndoChange {
   table: string
   id: string
   kind: 'update' | 'create'
   original?: unknown
+  /** F14：落库后全对象快照，撤销前比对，拒绝覆盖确认后的人工改动。 */
+  postimage?: Postimage
 }
 
 /** 一次 ask-apply 的撤销快照。 */
@@ -210,6 +214,7 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
   if (record.used) return { kind: 'error', text: '该批改动已撤销过，不能重复撤销。' }
   const reverted: string[] = []
   const failed: string[] = []
+  const conflicts: string[] = []
   const changes = [...record.changes].reverse()
   for (const change of changes) {
     const table = domain.table(change.table as never) as unknown as {
@@ -217,12 +222,21 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
       delete(key: string): Promise<unknown>
       get(key: string): unknown
     }
+    // F14：撤销前用落库后 postimage 全对象比对；m-3：缺 postimage 不再自比 clean（防绕过守卫），交给 classifyUndoTarget 判 absent/skip。
+    const current = table.get(change.id) as SourceRecord | undefined
+    const plan = classifyUndoTarget(
+      { table: change.table, id: change.id, kind: change.kind, postimage: change.postimage ?? capturePostimage(change.table, undefined) },
+      current,
+    )
+    if (plan.action === 'refuse') {
+      conflicts.push(`${change.table}/${change.id}：${plan.reason}${plan.note ? `（${plan.note}）` : ''}`)
+      continue
+    }
+    if (plan.action === 'skip') continue
     try {
-      if (change.kind === 'create') {
-        // 仅当记录仍存在时删除，避免删掉用户在落库后又手工建立的同名记录。
-        if (table.get(change.id)) await table.delete(change.id)
+      if (plan.action === 'delete') {
+        await table.delete(change.id)
       } else {
-        // 恢复原始快照（含原 updatedAt），让基线回到落库前。
         await table.put(change.id, change.original)
       }
       reverted.push(`${change.table}/${change.id}`)
@@ -230,10 +244,70 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
       failed.push(`${change.table}/${change.id}：${e instanceof Error ? e.message : String(e)}`)
     }
   }
-  record.used = true
+  // m-4：仅当无冲突且无失败（全部可撤销项已处理）才烧毁句柄；混合/冲突项保留 used=false 可重试。
+  if (conflicts.length === 0 && failed.length === 0) record.used = true
+  // F14：撤销结果写入溯源账本审计（成功/冲突/失败），best-effort 不影响撤销返回。
+  void recordUndoOutcome(domain, undoId, {
+    at: new Date().toISOString(),
+    kind: conflicts.length && reverted.length === 0 ? 'conflict' : failed.length ? 'failed' : 'undone',
+    object: undoId,
+    result: `撤销 ${reverted.length} 项${conflicts.length ? `，冲突保留 ${conflicts.length} 项` : ''}${failed.length ? `，失败 ${failed.length} 项` : ''}`,
+  })
   const text = `已撤销 ${reverted.length} 项${reverted.length ? `（${reverted.join('；')}）` : ''}`
+    + (conflicts.length ? `；${conflicts.length} 项因确认后已被人工修改而保留未动（${conflicts.join('；')}）` : '')
     + (failed.length ? `；${failed.length} 项撤销失败（${failed.join('；')}）` : '')
-  return failed.length ? { kind: 'error', text } : { kind: 'success', text }
+  return failed.length
+    ? { kind: 'error', text }
+    : (conflicts.length && reverted.length === 0)
+      ? { kind: 'error', text }
+      : { kind: 'success', text }
+}
+
+/**
+ * F13：只读查询项目溯源台账（条目 status/refs/confidence/undo/audit），供后续 UI 渲染；
+ * 不写业务、不改模型。查询前先幂等补偿一次 pending（B-2：暴露 pending 数量供界面提示）。
+ */
+export async function handleAskProvenanceCommand(argument: string, domain: PmDomain | undefined): Promise<{ kind: 'success' | 'error', text: string }> {
+  if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+  const projectId = argument.trim()
+  await sweepPending(domain)
+  // 构建只读记录视图（跨表），供 B-1 失效评估（validateSourceRefs/classifyStale/recheckProvenance）。
+  const records = new Map<string, SourceRecord>()
+  for (const tableName of ['tasks', 'milestones', 'risk_issues', 'deliverables', 'meetings', 'reports'] as const) {
+    for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+      const r = rec as SourceRecord
+      records.set(`${tableName}:${r.id}`, r)
+    }
+  }
+  const entries = listProvenance(domain, projectId).map(e => {
+    const recheck = evaluateStale(e.refs, records)
+    return { ...e, recheck: { conclusion: recheck.conclusion, rows: recheck.rows, invalid: recheck.invalid } }
+  })
+  // 补偿后剩余 pending 即未并入项（通常为 0；非 0 时供界面提示需手动补偿/重试）。
+  const pendingRows = (domain.table('settings').get(PROVENANCE_PENDING_ROW) as { value?: { entries?: unknown[] } } | null)?.value?.entries ?? []
+  return { kind: 'success', text: JSON.stringify({ entries, pendingCount: pendingRows.length }) }
+}
+
+/**
+ * B-1 可触发失效重校入口：/pm ask-recheck <projectId>。
+ * 真实调用 validateSourceRefs + recheckProvenance（内部 classifyStale）；失效行不删除、不参与
+ * supported 汇总，旧证据与不可变历史保留。返回每条结论与汇总（仅 consistent 计入 supported）。
+ */
+export async function handleAskRecheckCommand(argument: string, domain: PmDomain | undefined): Promise<{ kind: 'success' | 'error', text: string }> {
+  if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+  const projectId = argument.trim()
+  await sweepPending(domain)
+  const records = new Map<string, SourceRecord>()
+  for (const tableName of ['tasks', 'milestones', 'risk_issues', 'deliverables', 'meetings', 'reports'] as const) {
+    for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+      const r = rec as SourceRecord
+      records.set(`${tableName}:${r.id}`, r)
+    }
+  }
+  const rows = await recordRecheck(domain, projectId, records)
+  const supported = rows.filter(r => r.conclusion === 'consistent').length
+  const stale = rows.length - supported
+  return { kind: 'success', text: JSON.stringify({ projectId, rows, summary: { total: rows.length, supported, stale } }) }
 }
 
 async function applyCore(projectId: string, actions: CopilotAction[], baseline: Record<string, string>, domain: PmDomain): Promise<AskApplyResult> {
@@ -270,6 +344,7 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   const blocked: string[] = []
   const appliedStepIds = new Set<string>()
   const undoChanges: UndoChange[] = []
+  const appliedActions: CopilotAction[] = []
 
   // 按 op 分发到各实体既有 repo（零 schema 改动）；create 注入 projectId，update 走基线冲突比较。
   const dispatch = async (a: CopilotAction): Promise<{ ok: boolean, nextUpdatedAt?: string, undo?: UndoChange }> => {
@@ -352,9 +427,15 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
       const res = await dispatch(a)
       // 链式 baseline：同目标后续步用本次落库后的新 updatedAt 比较，不被误判「他人已改」；仅本次调用内存，不持久。
       if (res.nextUpdatedAt && a.id) baseline[a.id] = res.nextUpdatedAt
-      if (res.undo) undoChanges.push(res.undo)
+      if (res.undo) {
+        // F14：落库后抓全对象 postimage 作为撤销守卫，不依赖重放原请求猜测。
+        const cur = (domain.table(res.undo.table as never) as { get(k: string): unknown }).get(res.undo.id) as SourceRecord | undefined
+        res.undo.postimage = capturePostimage(res.undo.table, cur)
+        undoChanges.push(res.undo)
+      }
       if (typeof a.stepId === 'string') appliedStepIds.add(a.stepId)
       applied.push(label(a))
+      appliedActions.push(a) // m-1：refs 只收真正落库的动作，不含被拒/跳过/失败步
     } catch (e) {
       blocked.push(`${label(a)}：${e instanceof DispatchSkip ? e.message : `写库失败（${e instanceof Error ? e.message : String(e)}）`}`)
     }
@@ -365,6 +446,32 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
     + (extra.length ? `；拒绝 ${extra.length} ${unit}（${extra.join('；')}）` : '')
   // 有真正落库的改动才生成撤销句柄（前端随后通过 ask-undo list 查询，因 dsh 命令结果只透传 kind/text）。
   const undoId = undoChanges.length ? stashUndo(undoChanges) : undefined
+  // F13：业务落库成功后 best-effort 记录溯源（含 undo 句柄元数据）；账本写失败不回滚已落库业务。
+  if (undoId && applied.length) {
+    const recMap = new Map<string, SourceRecord>()
+    for (const tableName of ['tasks', 'milestones', 'risk_issues', 'deliverables', 'meetings'] as const) {
+      for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+        const r = rec as SourceRecord
+        if (r.projectId === projectId) recMap.set(`${tableName}:${r.id}`, r)
+      }
+    }
+    const refs = buildSourceRefs({ actions: appliedActions, records: recMap, snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION })
+    void recordProvenance(domain, {
+      projectId,
+      kind: 'ask-apply',
+      summary: `已应用 ${applied.length} 条 AI 建议`,
+      refs,
+      undo: {
+        handle: undoId,
+        expiresAt: Date.now() + PROVENANCE_UNDO_TTL_MS,
+        used: false,
+        postimages: undoChanges.map(c => ({
+          table: c.table, id: c.id, kind: c.kind,
+          postimage: c.postimage ?? capturePostimage(c.table, undefined),
+        })),
+      },
+    })
+  }
   return { kind: 'success', text, appliedCount: applied.length, undoId }
 }
 

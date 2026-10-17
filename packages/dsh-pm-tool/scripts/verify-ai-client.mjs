@@ -113,16 +113,19 @@ function recordingGateway(behaviorByModel) {
   assert.equal(g.calls[0].model, 'deepseek-flash')
 }
 
-// 6b) reasoningEffort 透传：副驾 high、非思考 off；stream 收到的档位须正确。
+// 6b) reasoningEffort 契约：档位在 prepareCall 阶段按候选传入（high/off）；
+// stream 阶段沿用 prepared config，不重复传 reasoningEffort（prepared call 一致性 callConfigEquals）。
 {
-  const streamRecords = []
-  function recordingStreamGateway(chunks) {
+  const prepared = []
+  const streamSeen = []
+  function recordingGateway(chunks) {
     return {
-      async prepareCall() {
+      async prepareCall({ provider, model, reasoningEffort, maxTokens }) {
+        prepared.push({ provider, model, reasoningEffort, maxTokens })
         return {
-          config: {},
+          config: { provider, model },
           async *stream(options) {
-            streamRecords.push(options.reasoningEffort)
+            streamSeen.push(options)
             for (const t of chunks) yield chunkText(t)
           },
         }
@@ -130,19 +133,24 @@ function recordingGateway(behaviorByModel) {
     }
   }
   // 候选带 high（副驾）。
-  const g1 = recordingStreamGateway(['ok'])
+  const g1 = recordingGateway(['ok'])
   await generateDraft(g1, {
     system: 's', user: 'u',
     models: [{ provider: 'deepseek-official', model: 'deepseek-flash', reasoningEffort: 'high' }],
   })
-  assert.equal(streamRecords[0], 'high', '副驾候选须传 reasoningEffort=high')
+  assert.equal(prepared[0].reasoningEffort, 'high', '副驾候选须在 prepareCall 阶段传 reasoningEffort=high')
+  // stream 阶段不重复传档位；prepared config 已携带，只追加 system/messages/signal。
+  assert.ok(!('reasoningEffort' in streamSeen[0]), 'stream 阶段不得重复传 reasoningEffort（prepared 已给齐）')
+  assert.equal(streamSeen[0].system, 's', 'stream 应携带 system 消息')
+  assert.ok(Array.isArray(streamSeen[0].messages), 'stream 应携带 messages 数组')
   // 候选带 off（WBS）。
-  const g2 = recordingStreamGateway(['ok'])
+  const g2 = recordingGateway(['ok'])
   await generateDraft(g2, {
     system: 's', user: 'u',
     models: [{ provider: 'deepseek-official', model: 'deepseek-flash', reasoningEffort: 'off' }],
   })
-  assert.equal(streamRecords[1], 'off', '非思考候选须传 reasoningEffort=off')
+  assert.equal(prepared[1].reasoningEffort, 'off', '非思考候选须在 prepareCall 阶段传 reasoningEffort=off')
+  assert.ok(!('reasoningEffort' in streamSeen[1]), 'stream 阶段不得重复传 reasoningEffort（prepared 已给齐）')
 }
 
 // 7) 显式 prod provider 缺适配器：NO_ADAPTER 文案必须点名实际 attempted provider，不得误报 our-free-model。

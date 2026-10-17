@@ -43,7 +43,7 @@
 .pm-gantt-root .pm-chip {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: var(--t-12); font-weight: 600; line-height: 1;
-  padding: 7px 12px; border-radius: var(--r);
+  padding: 7px 12px; border-radius: var(--r-sm);
   border: 1px solid var(--line); background: transparent; color: var(--ink-2); cursor: pointer;
 }
 .pm-gantt-root .pm-chip:hover { background: var(--surface-3); color: var(--ink); }

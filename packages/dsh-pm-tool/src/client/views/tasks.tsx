@@ -153,7 +153,7 @@ function SaveViewModal({ initialName, summary, onCancel, onConfirm }: {
   }, [onCancel])
   const submit = () => { if (name.trim()) onConfirm(name.trim()) }
   return (
-    <div className="pt-vm-mask" onClick={onCancel}>
+    <div className="pm-modal-mask" onClick={onCancel}>
       <div className="pt-vm pt-save" role="dialog" aria-modal="true" aria-label="保存视图" onClick={e => e.stopPropagation()}>
         <header>保存视图<button type="button" className="pt-vm-x" aria-label="关闭" onClick={onCancel}><X size={15} /></button></header>
         <label className="pt-save-field">
@@ -736,7 +736,7 @@ export function TaskTable(props: {
       )}
 
       {manageOpen && (
-        <div className="pt-vm-mask" onClick={() => { setManageOpen(false); setRenamingId(null) }}>
+        <div className="pm-modal-mask" onClick={() => { setManageOpen(false); setRenamingId(null) }}>
           <div className="pt-vm" role="dialog" aria-modal="true" aria-label="管理命名视图" onClick={e => e.stopPropagation()}>
             <header>管理视图
               <button type="button" className="pt-vm-x" aria-label="关闭" onClick={() => { setManageOpen(false); setRenamingId(null) }}><X size={15} /></button>

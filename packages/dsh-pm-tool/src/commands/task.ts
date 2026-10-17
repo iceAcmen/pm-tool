@@ -46,6 +46,8 @@ import {
   TaskChecklistTaskNotFoundError,
 } from '../core/task-checklist.js'
 import { generateWbsMarkdown, previewWbsDraft, rememberDraft, recallDraft } from '../core/wbs-ai.js'
+import { buildSourceRefs, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type SourceRecord } from '../core/provenance.js'
+import { recordProvenance } from '../core/provenance-store.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
@@ -600,6 +602,25 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         }
       }
       const created = await importTasksFromMarkdown(domain, projectId, markdown)
+      // F15：WBS confirm 落盘后 best-effort 记录来源（basis=本次新建任务）；置信度统一未提供。
+      {
+        const recMap = new Map<string, SourceRecord>()
+        for (const [, rec] of (domain.table('tasks') as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+          const r = rec as SourceRecord
+          if (r.projectId === projectId) recMap.set(`tasks:${r.id}`, r)
+        }
+        const refs = buildSourceRefs({
+          actions: created.map(t => ({ op: 'task.create', id: t.id })),
+          records: recMap,
+          context: created.map(t => ({ table: 'tasks', id: t.id })),
+          snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION,
+        })
+        void recordProvenance(domain, {
+          projectId, kind: 'wbs-import',
+          summary: `WBS 确认创建 ${created.length} 个任务`,
+          refs,
+        })
+      }
       return {
         kind: 'success',
         text: [
