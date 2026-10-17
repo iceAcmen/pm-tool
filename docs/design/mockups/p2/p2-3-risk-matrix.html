@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2-3 可交互风险矩阵 · 点击下钻</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f4f5f7; --surface-3:#eceef1;
+    --ink:#1b1d20; --ink-2:#5b6066; --muted:#8a8f96; --faint:#b3b8bf;
+    --line:rgba(16,18,20,.09); --line-soft:rgba(16,18,20,.05);
+    --prog:#3b6fe0; --done:#23a55a; --block:#e5930a; --late:#e0483d; --violet:#7c5cf0;
+    --shadow:0 1px 2px rgba(16,18,20,.05),0 2px 8px rgba(16,18,20,.04);
+    --shadow-pop:0 8px 30px rgba(16,18,20,.12);
+  }
+  body[data-theme="dark"]{
+    --bg:#15171a; --surface:#1c1f23; --surface-2:#23272c; --surface-3:#2b3036;
+    --ink:#e9ebed; --ink-2:#a9afb6; --muted:#828a93; --faint:#5f6770;
+    --line:rgba(233,235,238,.10); --line-soft:rgba(233,235,238,.06);
+    --prog:#5b8af0; --done:#3cc073; --block:#efab35; --late:#f0635a; --violet:#9a80f5;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.25);
+    --shadow-pop:0 8px 30px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1240px;margin:0 auto;padding:30px 26px 80px}
+  .head{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+  .head h1{font-size:23px;font-weight:750;letter-spacing:-.02em}
+  .head p{font-size:13px;color:var(--muted);margin-top:3px}
+  .seg{display:inline-flex;background:var(--surface-2);border-radius:9px;padding:3px}
+  .seg button{border:none;background:none;padding:6px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+  .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .head-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+  .btn-primary{background:var(--ink);color:var(--surface);border-color:transparent}
+  .toggle{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+  .switch{width:34px;height:19px;border-radius:999px;background:var(--surface-3);position:relative;transition:background .15s}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:var(--surface);transition:left .15s;box-shadow:var(--shadow)}
+  .toggle.on .switch{background:var(--prog)}
+  .toggle.on .switch::after{left:17px}
+  /* 矩阵 + 清单 */
+  .layout{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .card-head h3{font-size:14.5px;font-weight:650}
+  .card-head .tag{margin-left:auto;font-size:11.5px;color:var(--muted)}
+  /* 矩阵 */
+  .matrix-wrap{display:flex;gap:10px;align-items:stretch}
+  .y-title{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:650;color:var(--muted);letter-spacing:.12em;width:18px}
+  .matrix{flex:1;display:grid;grid-template-columns:24px repeat(5,1fr);gap:5px;align-items:stretch}
+  .axis-num{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);font-weight:600;height:22px}
+  .cell{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;border:2px solid transparent;transition:transform .12s,border-color .12s}
+  .cell:hover{transform:scale(1.05)}
+  .cell.selected{border-color:var(--ink)}
+  .cell .cnt{font-size:15px;font-weight:750}
+  .cell.empty{background:var(--surface-2);cursor:default}
+  .cell.empty:hover{transform:none}
+  .x-label{grid-column:2/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:2px}
+  .x-axis-title{text-align:center;font-size:11px;font-weight:650;color:var(--muted);letter-spacing:.08em;margin-top:6px}
+  .legend{display:flex;gap:14px;margin-top:14px;justify-content:center;font-size:11.5px;color:var(--ink-2)}
+  .legend i{width:11px;height:11px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-1px}
+  /* 下钻清单 */
+  .drill-empty{text-align:center;color:var(--muted);font-size:12.5px;padding:40px 10px}
+  .drill-empty svg{display:block;margin:0 auto 10px;opacity:.5}
+  .risk-item{padding:12px 4px;border-bottom:1px solid var(--line-soft)}
+  .risk-item:last-child{border-bottom:none}
+  .risk-top{display:flex;align-items:center;gap:9px}
+  .risk-top .t{font-size:13.5px;font-weight:650}
+  .risk-score{margin-left:auto;font-size:12px;font-weight:750}
+  .risk-meta{font-size:11.5px;color:var(--muted);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap}
+  .risk-bar{height:5px;border-radius:999px;background:var(--surface-2);margin-top:8px;overflow:hidden}
+  .risk-bar i{display:block;height:100%;border-radius:999px}
+  .status-chip{font-size:10.5px;padding:2px 8px;border-radius:999px;font-weight:600}
+  /* 全量列表 */
+  .full-list{margin-top:16px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-size:11px;color:var(--muted);font-weight:650;padding:9px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line-soft)}
+  .score-pill{display:inline-flex;width:26px;height:22px;border-radius:6px;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .annotation{margin-top:16px;background:color-mix(in srgb,var(--violet) 8%,transparent);border:1px dashed color-mix(in srgb,var(--violet) 35%,transparent);border-radius:12px;padding:14px 16px;font-size:12.5px;color:var(--ink-2)}
+  .annotation b{color:var(--violet)}
+  .theme-toggle{position:fixed;right:20px;bottom:20px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-pop);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-2)}
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>风险与问题</h1>
+      <p>点击矩阵格子下钻该等级的风险清单，从静态图到行动</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg"><button class="on">风险</button><button>问题</button></div>
+      <div class="toggle" id="closedToggle"><span class="switch"></span>含已闭环</div>
+      <button class="btn btn-primary"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- 矩阵 -->
+    <div class="card">
+      <div class="card-head"><h3>概率 × 影响矩阵</h3><span class="tag">数字为风险数</span></div>
+      <div class="matrix-wrap">
+        <div class="y-title">影响</div>
+        <div class="matrix" id="matrix"></div>
+      </div>
+      <div class="x-axis-title">发生概率 →</div>
+      <div class="legend">
+        <span><i style="background:var(--done)"></i>低 (1–6)</span>
+        <span><i style="background:var(--block)"></i>中 (8–12)</span>
+        <span><i style="background:var(--late)"></i>高 (15–25)</span>
+      </div>
+    </div>
+
+    <!-- 下钻清单 -->
+    <div class="card">
+      <div class="card-head"><h3 id="drillTitle">风险清单</h3><span class="tag" id="drillTag">全部</span></div>
+      <div id="drillList"></div>
+    </div>
+  </div>
+
+  <!-- 全量表 -->
+  <div class="card full-list">
+    <div class="card-head"><h3>全部风险登记</h3><span class="tag">按风险评分排序</span></div>
+    <table>
+      <thead><tr><th>风险</th><th>概率</th><th>影响</th><th>评分</th><th>负责人</th><th>状态</th><th>缓解措施</th></tr></thead>
+      <tbody id="fullTbody"></tbody>
+    </table>
+  </div>
+
+  <div class="annotation">
+    <b>P2-3 关键变化：</b>风险矩阵从静态热力图升级为<strong>可交互</strong>——格子直接显示风险数，点击下钻该（概率、影响）的风险清单，定位到负责人、状态与缓解措施，形成「发现 → 定位 → 行动」闭环。评分与分区口径复用统一口径引擎，不发明新指标。
+  </div>
+</div>
+
+<button class="theme-toggle" id="themeToggle"><svg id="themeIcon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+<script>
+const risks=[
+ {id:'R-01',title:'需求范围蔓延',prob:4,impact:4,owner:'张三',status:'缓解中',mit:'变更评审 + 冻结基线'},
+ {id:'R-02',title:'排期整体延期',prob:5,impact:3,owner:'史冰冰',status:'开放',mit:'关键路径日报，缓冲 3 天'},
+ {id:'R-03',title:'第三方接口不稳定',prob:4,impact:3,owner:'李四',status:'缓解中',mit:'超时降级 + Mock 兜底'},
+ {id:'R-04',title:'测试覆盖不足',prob:4,impact:2,owner:'王五',status:'开放',mit:'核心路径补集成测试'},
+ {id:'R-05',title:'关键人员离职',prob:2,impact:4,owner:'史冰冰',status:'缓解中',mit:'知识文档化 + 交叉备份'},
+ {id:'R-06',title:'服务器宕机',prob:2,impact:5,owner:'李四',status:'已闭环',mit:'双活 + 自动切换'},
+ {id:'R-07',title:'兼容性问题',prob:3,impact:3,owner:'王五',status:'开放',mit:'浏览器矩阵走查'},
+ {id:'R-08',title:'预算超支',prob:2,impact:3,owner:'史冰冰',status:'开放',mit:'资源周度核对'},
+ {id:'R-09',title:'安全漏洞',prob:1,impact:5,owner:'李四',status:'缓解中',mit:'上线前安全扫描'},
+ {id:'R-10',title:'数据迁移丢失',prob:1,impact:5,owner:'李四',status:'开放',mit:'迁移校验 + 回滚预案'},
+]
+const score=r=>r.prob*r.impact
+const band=s=>s>=15?['late','#e0483d']:s>=8?['block','#e5930a']:['done','#23a55a']
+const statusCls=st=>st==='已闭环'?'done':st==='缓解中'?'prog':'block'
+function statusColor(st){return st==='已闭环'?'var(--done)':st==='缓解中'?'var(--prog)':'var(--block)'}
+
+// 构建矩阵
+const matrix=document.getElementById('matrix')
+// 顶部 x 轴数字
+const corner=document.createElement('div');matrix.appendChild(corner)
+for(let xp=1;xp<=5;xp++){const n=document.createElement('div');n.className='axis-num';n.textContent=xp;matrix.appendChild(n)}
+// 数据行
+for(let impact=5;impact>=1;impact--){
+  const num=document.createElement('div');num.className='axis-num';num.textContent=impact;matrix.appendChild(num)
+  for(let prob=1;prob<=5;prob++){
+    const cell=document.createElement('div');cell.className='cell'
+    const list=risks.filter(r=>r.prob===prob&&r.impact===impact)
+    const s=prob*impact
+    if(list.length){
+      const [,c]=band(s)
+      cell.style.background=hexA(c,.18)
+      cell.innerHTML=`<span class="cnt" style="color:${c}">${list.length}</span>`
+      cell.dataset.prob=prob;cell.dataset.impact=impact
+      cell.addEventListener('click',()=>selectCell(cell,prob,impact))
+    }else{
+      cell.classList.add('empty')
+    }
+    matrix.appendChild(cell)
+  }
+}
+function hexA(hex,a){
+  const n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255
+  return `rgba(${r},${g},${b},${a})`
+}
+function selectCell(cell,prob,impact){
+  document.querySelectorAll('.cell.selected').forEach(c=>c.classList.remove('selected'))
+  cell.classList.add('selected')
+  const list=risks.filter(r=>r.prob===prob&&r.impact===impact)
+  document.getElementById('drillTag').textContent=`概率${prob} · 影响${impact} · 评分${prob*impact}`
+  renderDrill(list)
+}
+function renderDrill(list){
+  const box=document.getElementById('drillList')
+  if(!list.length){
+    box.innerHTML=`<div class="drill-empty"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>该区域暂无风险</div>`;return
+  }
+  box.innerHTML=list.map(r=>{
+    const s=score(r),[,c]=band(s)
+    return `<div class="risk-item">
+      <div class="risk-top"><span class="t">${r.id} · ${r.title}</span><span class="risk-score" style="color:${c}">${s}</span></div>
+      <div class="risk-bar"><i style="width:${s/25*100}%;background:${c}"></i></div>
+      <div class="risk-meta"><span>负责人 ${r.owner}</span><span class="status-chip" style="background:hexA2('${statusColor(r.status)}');color:${statusColor(r.status)}">${r.status}</span><span>${r.mit}</span></div>
+    </div>`
+  }).join('')
+  // 替换 hexA2
+  box.querySelectorAll('.risk-meta').forEach(m=>{
+    m.querySelectorAll('.status-chip').forEach(ch=>{
+      const col=ch.style.color
+      ch.style.background=col==='var(--done)'?'rgba(35,165,90,.13)':col==='var(--prog)'?'rgba(59,111,224,.13)':'rgba(229,147,10,.13)'
+    })
+  })
+}
+// 初始：全部高风险
+document.getElementById('drillTitle').textContent='高风险（评分≥15）'
+renderDrill(risks.filter(r=>score(r)>=15))
+
+// 全量表
+const tbody=document.getElementById('fullTbody')
+tbody.innerHTML=[...risks].sort((a,b)=>score(b)-score(a)).map(r=>{
+  const s=score(r),[bn,c]=band(s)
+  return `<tr>
+    <td><b style="font-weight:650">${r.title}</b></td>
+    <td>${r.prob}</td><td>${r.impact}</td>
+    <td><span class="score-pill" style="background:${hexA(c,.15)};color:${c}">${s}</span></td>
+    <td>${r.owner}</td>
+    <td><span class="status-chip" style="color:${statusColor(r.status)}">${r.status}</span></td>
+    <td style="color:var(--ink-2);max-width:200px">${r.mit}</td>
+  </tr>`
+}).join('')
+tbody.querySelectorAll('.status-chip').forEach(ch=>{
+  const col=ch.style.color
+  ch.style.background=col==='var(--done)'?'rgba(35,165,90,.13)':col==='var(--prog)'?'rgba(59,111,224,.13)':'rgba(229,147,10,.13)'
+})
+
+// 含已闭环
+let showClosed=false
+document.getElementById('closedToggle').addEventListener('click',function(){
+  showClosed=!showClosed;this.classList.toggle('on',showClosed)
+  location.reload()
+})
+
+// 主题
+const body=document.body,icon=document.getElementById('themeIcon')
+const sun='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+const moon='<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>'
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const dark=body.dataset.theme==='dark'
+  body.dataset.theme=dark?'light':'dark'
+  icon.innerHTML=dark?sun:moon
+})
+</script>
+</body>
+</html>
