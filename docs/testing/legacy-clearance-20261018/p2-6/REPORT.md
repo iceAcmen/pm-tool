@@ -63,3 +63,35 @@
 - MANUAL_PENDING→DONE 未真实发生，F09 L3 维持 MANUAL_PENDING。
 - 失效/警告条未触发（无已确认条目、禁止删改来源记录）。
 - 会议纪要归纳未单独尝试（同网关同判定）。
+
+---
+
+# r9 复测（2026-10-18 03:55–04:02，实例重启后）—— 结论：PASS（F09 L3 DONE）
+
+> 本章为权威复测结果；上方旧章为「补证前状态」（旧实例 NO_ADAPTER BLOCKED，其 mtime/旧数据根口径已作废，根因系旧实例早于 ark-plan 配置启动，重启后已加载）。
+
+## 补证前状态（BLOCKED 已解除）
+
+- 旧章 BLOCKED 仅适用于 02:49 启动的旧实例；03:35 实例重启（PID 10819）后 ark-plan 适配器已加载。
+- 写入前进程级核验数据根 = `/Users/bytedance/Projects/dsh-pm/pm-tool/data/pmtool/`（仓库内 gitignored dev 数据，非用户业务；证据 `r9-ready/disk-evidence.md` §1）。
+- provider 真实核验：直连 ark HTTP 200 + 真实补全；UI 生产车道真实返回计划，无 NO_ADAPTER（§2）。
+
+## 动作（真实 UI，无 mock）
+
+1. 副驾 ask（生产 Key）真实生成 1 步计划：新建交付物「P2-6 复测：AI 溯源验证报告」（planned / 2026-10-25）；task.create 步被 ALLOWED_OPS 剔除（设计内，不含 task.create）。
+2. 真实点击「整批执行（1）」确认入库。
+3. 磁盘核对交付物 JSON + 台账 entry；UI 目视溯源台账；真实「立即重校」；观察警告条。
+
+## 结果证据
+
+- 入库交付物：`deliverables/dlv-0001.json`（status=planned，dueDate=2026-10-25，name 带测试前缀）。
+- 台账 entry：`prv-mvctk2dq-8ws70u`，`kind=ask-apply`，`status=confirmed`，`confidence=未提供`，`summary=已应用 1 条 AI 建议`，`refs=[]`（纯新建无依据，设计内），undo handle `undo-mvctk2dq-4l9kcp`（未使用），audit「业务已落库，溯源已登记」；重校 history conclusion=consistent。
+- 溯源目视：AI 助手抽屉「AI 溯源台账」显示 AI 询问应用·与来源一致·置信度未提供·记录号·来源 0 条（`r9-ready/shots/05、06`）。
+- 警告条（F06）：本 entry refs=[] 无失效对象，重校「一致 1 · 待处理 0」，不出现警告条属设计内正确，不编造失效场景。
+- 截图：`r9-ready/shots/01-ask-diag.png`、`02-ask-draft.png`、`03-applied.png`、`04-deliverable-list.png`、`05-provenance-ledger.png`、`06-recheck.png`。
+- 逐步骤时间线：`r9-ready/operation-log-r9.md`；磁盘/网络摘录：`r9-ready/disk-evidence.md`。
+
+## 结论
+
+**PASS**：F09 L3 真实模型闭环（生成→确认入库→台账登记→重校）真实走通，MANUAL_PENDING→**DONE**。
+保留项：测试交付物 dlv-0001 与台账 entry 按要求留存不清；F09「撤销」步不实做（保留证据，撤销由 L2/F04 覆盖）；F06 警告条本流程设计内不触发。
