@@ -1,7 +1,7 @@
 import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
-import { buildUpdate } from '../core/task-inline.js'
+import { buildUpdate, clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
 import { diffAgainstPrevious } from '../core/report-diff.js'
 import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
@@ -2980,8 +2980,9 @@ function TaskForm({
     const branch = repoValues.branch.trim()
     // PROD-11：前置依赖整体替换（多选复选）；空数组即清空。
     const predecessorIds = form.getAll('predecessorIds').map(String)
+    // 写路径「必须有值」语义：空 → 0，复用 task-inline 的 clampProgress（round + 0..100）。
     const progressRaw = values.progress ?? '0'
-    const progressNum = progressRaw.trim() === '' ? 0 : Math.max(0, Math.min(100, Math.round(Number(progressRaw))))
+    const progressNum = progressRaw.trim() === '' ? 0 : writeClampProgress(progressRaw)
     const payload = {
       title: values.title.trim(),
       description: form.get('description'),
@@ -2998,7 +2999,8 @@ function TaskForm({
       // #23：# 仅在填了值时传；manualProgress 空串 → null（清除人工设定，回落客观）。
       ...(effortHours.trim() !== '' && Number.isFinite(Number(effortHours)) ? { effortHours: Number(effortHours) } : {}),
       ...(evidenceUrl.trim() !== '' ? { evidenceUrl: evidenceUrl.trim() } : {}),
-      manualProgress: manualProgress.trim() === '' ? null : Math.max(0, Math.min(100, Math.round(Number(manualProgress)))),
+      // 更新语义：空 → null（清除人工设定，回落客观）；非空复用写路径 clampProgress。
+      manualProgress: manualProgress.trim() === '' ? null : writeClampProgress(manualProgress),
       ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
     }
     const createPayload = {
@@ -3018,7 +3020,8 @@ function TaskForm({
       ...(branch ? { branch } : {}),
       ...(effortHours.trim() !== '' && Number.isFinite(Number(effortHours)) ? { effortHours: Number(effortHours) } : {}),
       ...(evidenceUrl.trim() !== '' ? { evidenceUrl: evidenceUrl.trim() } : {}),
-      ...(manualProgress.trim() !== '' ? { manualProgress: Math.max(0, Math.min(100, Math.round(Number(manualProgress)))) } : {}),
+      // 新建语义：空 → 整个键省略；非空用 parseProgressInput（非法 → undefined 不写）。
+      ...(manualProgress.trim() !== '' ? { manualProgress: parseProgressInput(manualProgress) } : {}),
       ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
     }
     const success = await run(task

@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs'
 import { addTask } from './tasks.js'
 import { getProject } from './projects.js'
 import { projectIdSchema } from './project.js'
+import { parseProgressInput } from './task-inline.js'
 import type { PmDomain } from './storage.js'
 
 export class CsvImportError extends Error {}
@@ -88,7 +89,8 @@ export function parseCsvTasks(text: string): CsvRow[] {
       priority: cell(cells, colIndex.get('priority')),
       startDate: cell(cells, colIndex.get('startDate')),
       dueDate: cell(cells, colIndex.get('dueDate')),
-      progress: progressRaw ? clampProgress(progressRaw) : undefined,
+      // CSV 专属 "80%" 写法：先去尾百分号，再交共享的 parseProgressInput（纯数值语义）。
+      progress: progressRaw ? parseProgressInput(progressRaw.replace(/%$/, '')) : undefined,
     })
   }
   if (!rows.length) throw new CsvImportError('CSV 中没有可导入的数据行')
@@ -99,13 +101,6 @@ function cell(cells: string[], idx: number | undefined): string | undefined {
   if (idx == null) return undefined
   const v = (cells[idx] ?? '').trim()
   return v || undefined
-}
-
-function clampProgress(raw: string): number | undefined {
-  // 支持 "80" 或 "80%"
-  const n = parseInt(raw.replace('%', ''), 10)
-  if (Number.isNaN(n)) return undefined
-  return Math.min(100, Math.max(0, n))
 }
 
 function ensureProject(domain: PmDomain, projectId: string): void {
@@ -231,7 +226,8 @@ function parseGridTasks(grid: string[][]): CsvRow[] {
       priority: cell(cells, colIndex.get('priority')),
       startDate: cell(cells, colIndex.get('startDate')),
       dueDate: cell(cells, colIndex.get('dueDate')),
-      progress: progressRaw ? clampProgress(progressRaw) : undefined,
+      // CSV 专属 "80%" 写法：先去尾百分号，再交共享的 parseProgressInput（纯数值语义）。
+      progress: progressRaw ? parseProgressInput(progressRaw.replace(/%$/, '')) : undefined,
     })
   }
   if (!rows.length) throw new CsvImportError('没有可导入的数据行')

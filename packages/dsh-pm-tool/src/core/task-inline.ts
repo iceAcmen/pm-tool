@@ -8,16 +8,23 @@ import { TASK_STATUSES, type TaskStatus } from './status.js'
 export { TASK_STATUSES }
 export type { TaskStatus }
 
-/** 状态循环：todo -> in_progress -> blocked -> done -> todo（非法值回到 todo）。 */
-export function nextStatus(cur: string): TaskStatus {
-  const i = TASK_STATUSES.indexOf(cur as TaskStatus)
-  return TASK_STATUSES[(i + 1) % TASK_STATUSES.length]
-}
-
-/** 进度钳制到 0-100 整数；非数字回退 0。 */
+/** 进度钳制到 0-100 整数；非数字回退 0。（写路径「必须有值」语义：空/非法统一落 0） */
 export function clampProgress(v: unknown): number {
   const n = Number(v)
   if (!Number.isFinite(n)) return 0
+  return Math.max(0, Math.min(100, Math.round(n)))
+}
+
+/**
+ * 写路径进度输入解析：null/undefined、trim 后空串、非有限（NaN/Infinity）→ undefined（语义「不写该字段」）；
+ * 合法值 → round 到 0..100 整数。注意 Number(null)/Number('')/Number(' ') 均为 0，
+ * 因此必须先显式判空/判空串再 Number。
+ */
+export function parseProgressInput(raw: unknown): number | undefined {
+  if (raw == null) return undefined
+  if (typeof raw === 'string' && raw.trim() === '') return undefined
+  const n = Number(raw)
+  if (!Number.isFinite(n)) return undefined
   return Math.max(0, Math.min(100, Math.round(n)))
 }
 
