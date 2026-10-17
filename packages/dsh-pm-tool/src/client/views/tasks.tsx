@@ -3,6 +3,8 @@ import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
+import { tasksToCsv, tasksToMarkdown, tasksToJson, type TaskExportCtx } from '../../core/task-export.js'
+import { downloadText } from '../download.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
 import type { DiagnosisBubble } from '../../core/suggestion-engine.js'
@@ -24,6 +26,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2.mjs'
 import Settings2 from 'lucide-react/dist/esm/icons/settings-2.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
+import Download from 'lucide-react/dist/esm/icons/download.mjs'
 import {
   DEFAULT_VIEW_STATE,
   VIEW_CHIP_OPTIONS,
@@ -205,6 +208,8 @@ export function TaskTable(props: {
   run: Run
   execute: (line: string) => Promise<string>
   projectId: string
+  /** 项目名（导出/快照标题用，panel 接线注入；缺省走空串兜底）。 */
+  projectName?: string
   /** P1-6：全局密度偏好（localStorage pm-density），由 shell 持有并下发；根容器 data-density 生效。 */
   density?: 'comfortable' | 'compact'
   onDensityChange?: (d: 'comfortable' | 'compact') => void
@@ -215,7 +220,7 @@ export function TaskTable(props: {
 }) {
   const {
     tasks, milestones, disabled = false, onCreate, onEdit,
-    onGenWbs, onSaved, run, execute, projectId, density = 'comfortable', onDensityChange, overlayOpen,
+    onGenWbs, onSaved, run, execute, projectId, projectName = '', density = 'comfortable', onDensityChange, overlayOpen,
     diagnosis = [], onDismissDiagnosis,
   } = props
 
@@ -232,6 +237,9 @@ export function TaskTable(props: {
   const [sort, setSort] = useState<TaskViewSort>(boot.def?.state.sort ?? DEFAULT_VIEW_STATE.sort)
   // P2-5：视图切换菜单 / 另存为弹窗 / 管理弹窗的开合态。
   const [menuOpen, setMenuOpen] = useState(false)
+  // 导出下拉（Markdown/CSV/JSON）开合态，与视图切换器同构：点外部 / Esc 关闭。
+  const [exportOpen, setExportOpen] = useState(false)
+  const exportRef = useRef<HTMLDivElement | null>(null)
   const [saveModal, setSaveModal] = useState<string | null>(null)
   const [manageOpen, setManageOpen] = useState(false)
   const [renamingId, setRenamingId] = useState<string | null>(null)
@@ -298,6 +306,28 @@ export function TaskTable(props: {
   const currentState: TaskViewState = { query, chip, grouped, sort }
   const dirty = activeView ? !sameTaskViewState(currentState, activeView.state) : true
   const allViews = listAllViews(viewsStore)
+
+  // ---- 导出 / 分享：仅取当前过滤+排序后的 visible，本地日历生成，core 不碰墙钟 ----
+  const buildExportCtx = (): TaskExportCtx => ({
+    projectName,
+    viewName: activeView?.name ?? '未命名视图',
+    filterSummary: describeTaskViewState(currentState),
+    generatedAt: new Date().toLocaleString('zh-CN', { hour12: false }),
+    today: localTodayIso(),
+    milestoneTitle: (id) => milestoneById.get(id)?.title,
+  })
+  const exportFileBase = () => {
+    const safe = (projectName || '未命名项目').replace(/[\\/:*?"<>|\s]+/g, '-').replace(/^-+|-+$/g, '') || '任务'
+    return `${safe}-任务-${localTodayIso()}`
+  }
+  const exportAs = (kind: 'md' | 'csv' | 'json') => {
+    const ctx = buildExportCtx()
+    const base = exportFileBase()
+    if (kind === 'md') downloadText(`${base}.md`, tasksToMarkdown(visible, ctx), 'text/markdown;charset=utf-8')
+    else if (kind === 'csv') downloadText(`${base}.csv`, tasksToCsv(visible, ctx), 'text/csv;charset=utf-8')
+    else downloadText(`${base}.json`, JSON.stringify(tasksToJson(visible, ctx), null, 2), 'application/json;charset=utf-8')
+    setExportOpen(false)
+  }
 
   const commitStore = (next: TaskViewsStore) => {
     setViewsStore(next)
@@ -383,6 +413,23 @@ export function TaskTable(props: {
       window.removeEventListener('keydown', onKey)
     }
   }, [menuOpen])
+
+  // 导出菜单：点击外部 / Escape 关闭（与视图切换器同构）。
+  useEffect(() => {
+    if (!exportOpen) return
+    const onDown = (ev: MouseEvent) => {
+      if (exportRef.current && !exportRef.current.contains(ev.target as Node)) setExportOpen(false)
+    }
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') setExportOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [exportOpen])
 
   // 按状态分组（PROD-01）：按 taskStatus 键序 todo/in_progress/blocked/done 扁平分组
   const statusGroups = useMemo(() =>
@@ -878,6 +925,41 @@ export function TaskTable(props: {
                 }}
               />
             </label>
+            {/* 导出当前可见视图：Markdown / CSV / JSON，前端 Blob 下载，不写服务器。 */}
+            <div className="pt-viewswitch pt-export" ref={exportRef}>
+              <button
+                type="button" className="pt-ghost pt-viewswitch-btn"
+                aria-haspopup="menu" aria-expanded={exportOpen} aria-label="导出当前视图"
+                onClick={() => setExportOpen(v => !v)}
+              >
+                <Download size={14} />导出<ChevronDown size={13} className="pt-viewswitch-chev" />
+              </button>
+              {exportOpen && (
+                <div className="pt-vmenu" role="menu" aria-label="导出格式">
+                  <button type="button" role="menuitem" className="pt-vmenu-item" onClick={() => exportAs('md')}>
+                    <span className="pt-exp-ic">MD</span>
+                    <span className="pt-vmenu-main">
+                      <span className="pt-vmenu-name">Markdown 周报</span>
+                      <span className="pt-vmenu-cond">结论 / 行动项 / 风险，适合贴进周会汇报</span>
+                    </span>
+                  </button>
+                  <button type="button" role="menuitem" className="pt-vmenu-item" onClick={() => exportAs('csv')}>
+                    <span className="pt-exp-ic">CSV</span>
+                    <span className="pt-vmenu-main">
+                      <span className="pt-vmenu-name">CSV 表格</span>
+                      <span className="pt-vmenu-cond">UTF-8，Excel 直开，便于二次统计</span>
+                    </span>
+                  </button>
+                  <button type="button" role="menuitem" className="pt-vmenu-item" onClick={() => exportAs('json')}>
+                    <span className="pt-exp-ic">JSON</span>
+                    <span className="pt-vmenu-main">
+                      <span className="pt-vmenu-name">JSON 结构化</span>
+                      <span className="pt-vmenu-cond">全字段，供脚本 / 二次开发</span>
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
             {/* P1-6：密度为全局持久偏好（localStorage pm-density，shell 根 data-density 下发，各视图生效）。 */}
             <div className="pt-density" title="全局偏好：切换后即时生效并持久保存，各视图统一应用">
               <span className="pt-density-label">密度（全局偏好）</span>

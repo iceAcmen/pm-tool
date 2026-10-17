@@ -431,6 +431,13 @@
 }
 .pm-tasks-root .pt-vmenu-go:hover { background: var(--surface-3); }
 
+/* 导出菜单格式徽标（复用 token，不新造风格） */
+.pm-tasks-root .pt-exp-ic {
+  width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px;
+  background: var(--surface-2); display: inline-flex; align-items: center; justify-content: center;
+  font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 800; color: var(--ink-2);
+}
+
 /* 弹窗（另存为 / 管理）：复用移动弹窗遮罩与视觉 token */
 .pm-tasks-root .pt-vm-mask {
   position: fixed; inset: 0; z-index: var(--z-modal);

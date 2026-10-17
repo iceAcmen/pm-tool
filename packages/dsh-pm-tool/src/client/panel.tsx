@@ -1064,6 +1064,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 run={run}
                 execute={execute}
                 projectId={project.id}
+                projectName={project.name}
                 density={density}
                 onDensityChange={setDensity}
                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
