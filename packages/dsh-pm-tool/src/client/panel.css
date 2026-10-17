@@ -150,6 +150,59 @@ body:not([data-ds-dark-theme]) .pm-shell {
   border-bottom: 1px solid var(--pm-line);
   background: var(--pm-canvas);
 }
+/* P2-1：左分组导航驾驶舱——shell 横向 flex，rail 粘性固定，右侧 pm-main 纵向堆叠。 */
+.pm-shell { display: flex; align-items: stretch; }
+.pm-rail {
+  width: 232px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; align-self: flex-start;
+  display: flex; flex-direction: column; background: var(--pm-canvas); border-right: 1px solid var(--pm-line);
+}
+.pm-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.pm-rail-brand { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; }
+.pm-rail-logo {
+  width: 30px; height: 30px; flex-shrink: 0; border-radius: 9px;
+  background: linear-gradient(135deg, var(--c-prog), var(--c-prog-d));
+  color: #fff; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pm-rail-name { font-size: 15px; font-weight: 700; letter-spacing: var(--ls-tight); color: var(--pm-ink); }
+.pm-rail-sub { font-size: 10.5px; color: var(--pm-muted); }
+.pm-rail-search { margin: 2px 12px 10px; position: relative; }
+.pm-rail-search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--pm-muted); }
+.pm-rail-search input {
+  width: 100%; border: 1px solid var(--pm-line); background: var(--surface-2); border-radius: 8px;
+  padding: 7px 10px 7px 30px; font: inherit; font-size: 12.5px; color: var(--ink); outline: none;
+}
+.pm-rail-search input:focus { border-color: var(--c-prog); }
+.pm-rail-nav { flex: 1; overflow-y: auto; padding: 0 10px 10px; }
+.pm-rail-group-label { padding: 10px 10px 5px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: var(--pm-muted); }
+.pm-rail-section {
+  display: flex; align-items: center; gap: 6px; width: 100%; padding: 9px 10px 4px;
+  background: none; border: 0; cursor: pointer; font: inherit; font-size: 11px; font-weight: 700; color: var(--pm-muted);
+}
+.pm-rail-section-title { flex: 1; text-align: left; }
+.pm-rail-chev { transition: transform .2s var(--ease); flex-shrink: 0; }
+.pm-rail-section.collapsed .pm-rail-chev { transform: rotate(-90deg); }
+.pm-rail-sub { padding-left: 8px; }
+.pm-rail-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 10px;
+  border: 0; border-radius: 8px; background: transparent; color: var(--ink-2);
+  font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; text-align: left;
+}
+.pm-rail-item:hover { background: var(--pm-hover); color: var(--ink); }
+.pm-rail-item.active { background: color-mix(in srgb, var(--c-prog) 12%, transparent); color: var(--c-prog); font-weight: 600; }
+.pm-rail-item:disabled { opacity: .5; cursor: default; }
+.pm-rail-item:disabled:hover { background: transparent; color: var(--ink-2); }
+.pm-rail-ico { width: 17px; height: 17px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.pm-rail-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-rail-count { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--pm-muted); font-variant-numeric: tabular-nums; }
+.pm-rail-item.active .pm-rail-count { color: var(--c-prog); }
+.pm-rail-foot { padding: 10px; border-top: 1px solid var(--pm-line-soft); }
+.pm-crumb-bar { display: flex; align-items: center; padding: 8px 22px; border-bottom: 1px solid var(--pm-line-soft); background: var(--pm-canvas); font-size: 13px; }
+.pm-crumb { display: flex; align-items: center; gap: 8px; color: var(--pm-muted); }
+.pm-crumb-here { color: var(--pm-secondary); }
+.pm-crumb-sep { color: var(--faint); }
+.pm-crumb b { color: var(--pm-ink); font-weight: 600; }
+
 .pm-project-switch { display: flex; min-width: 0; align-items: center; gap: 11px; }
 .pm-app-mark {
   width: 34px;
@@ -1927,6 +1980,9 @@ body[data-ds-dark-theme] .pm-pop { background: rgb(24, 25, 27); border-color: rg
    天然宽内容（数据表格/甘特时间轴）在各自内部滚动容器横滚，外壳不整体溢出。
    ============================================================================ */
 @media (max-width: 560px) {
+  /* P2-1：窄屏隐藏左 rail，沿用现有 ViewSwitcher 下拉，品牌不重复。 */
+  .pm-rail { display: none; }
+  .pm-crumb-bar { display: none; }
   /* 顶栏：两侧内距收敛、允许换行，项目名 ellipsis，操作按钮不再锁最小宽 */
   .pm-topbar { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
   .pm-project-switcher { min-width: 0; }

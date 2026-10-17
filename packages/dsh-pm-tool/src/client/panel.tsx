@@ -1,6 +1,8 @@
 import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
+import { VIEW_LABELS } from '../core/nav.js'
+import { NavRail } from './nav-rail.js'
 import { buildUpdate, clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
 import { diffAgainstPrevious } from '../core/report-diff.js'
@@ -798,6 +800,24 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
         </div>
       )}
+      <NavRail
+        view={view}
+        dashOpen={dashOpen}
+        hasProject={!!project}
+        projectName={project?.name}
+        counts={{
+          tasks: tasks.length,
+          milestones: milestones.length,
+          riskIssues: riskIssues.length,
+          meetings: meetings.length,
+          reports: reports.length,
+          deliverables: deliverables.length,
+        }}
+        onPickView={(v) => changeView(v as View)}
+        onOpenDash={() => setDashOpen(true)}
+        onOpenSettings={() => setDrawer({ kind: 'settings' })}
+      />
+      <div className="pm-main">
       <header className="pm-topbar">
         <div className="pm-project-switch">
           <span className="pm-app-mark"><FolderKanban size={17}/></span>
@@ -813,14 +833,6 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           </div>
         </div>
         <div className="pm-top-actions">
-          <button
-            className="pm-button pm-top-secondary"
-            aria-pressed={dashOpen}
-            title="跨项目总览看板与全局搜索"
-            onClick={() => setDashOpen(value => !value)}
-          >
-            <LayoutDashboard size={15}/>总览看板
-          </button>
           <button className="pm-button" onClick={() => setDrawer({ kind: 'project-create' })}>
             <Plus size={15}/>新建项目
           </button>
@@ -978,6 +990,16 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
         </div>
       </header>
 
+      {!dashOpen && project && !narrow && (
+        <div className="pm-crumb-bar">
+          <span className="pm-crumb">
+            <span className="pm-crumb-here">{project.name}</span>
+            <span className="pm-crumb-sep">/</span>
+            <b>{VIEW_LABELS[view] ?? view}</b>
+          </span>
+        </div>
+      )}
+
       {dashOpen
         ? <GlobalBoard
             data={data}
@@ -1000,7 +1022,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   onGotoView={changeView}
                 />
               : null}
-            {narrow ? (
+            {narrow && (
               <ViewSwitcher
                 current={view}
                 items={[
@@ -1016,36 +1038,6 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 ]}
                 onPick={changeView}
               />
-            ) : (
-              <nav className="pm-view-tabs" aria-label="项目视图" role="tablist">
-                <ViewTab active={view === 'tasks'} count={tasks.length} onClick={() => changeView('tasks')}>
-                  全部任务
-                </ViewTab>
-                <ViewTab active={view === 'milestones'} count={milestones.length} onClick={() => changeView('milestones')}>
-                  里程碑
-                </ViewTab>
-                <ViewTab active={view === 'risk-issues'} count={riskIssues.length} onClick={() => changeView('risk-issues')}>
-                  风险与问题
-                </ViewTab>
-                <ViewTab active={view === 'meetings'} count={meetings.length} onClick={() => changeView('meetings')}>
-                  会议纪要
-                </ViewTab>
-                <ViewTab active={view === 'reports'} count={reports.length} onClick={() => changeView('reports')}>
-                  进度汇报
-                </ViewTab>
-                <ViewTab active={view === 'deliverables'} count={deliverables.length} onClick={() => changeView('deliverables')}>
-                  交付物
-                </ViewTab>
-                <ViewTab active={view === 'overview'} onClick={() => changeView('overview')}>
-                  项目概览
-                </ViewTab>
-                <ViewTab active={view === 'gantt'} onClick={() => changeView('gantt')}>
-                  甘特排期
-                </ViewTab>
-                <ViewTab active={view === 'people'} onClick={() => changeView('people')}>
-                  人员负载
-                </ViewTab>
-              </nav>
             )}
             <div className="pm-suggest-split" data-open={copilotLayer || undefined}>
             <section className="pm-view" role="tabpanel">
@@ -1138,6 +1130,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             </aside>}
             </div>
           </>}
+      </div>
 
       {drawer && <DrawerPanel title={drawerTitle(drawer)} onClose={() => setDrawer(undefined)}>
         {drawer.kind === 'project-create' && <ProjectForm
@@ -2011,29 +2004,6 @@ function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () =>
       {onAI && <button className="pm-button pm-button-primary pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
     </div>
   </div>
-}
-
-function ViewTab({
-  active,
-  icon,
-  count,
-  children,
-  onClick,
-}: {
-  active: boolean
-  icon?: ReactNode
-  count?: number
-  children: ReactNode
-  onClick: () => void
-}) {
-  const ref = useRef<HTMLButtonElement>(null)
-  // S2-5 / P0-1：窄窗横向标签条切换后，把当前标签滚入可视区（nearest，不跳动）。
-  useEffect(() => {
-    if (active) ref.current?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
-  }, [active])
-  return <button ref={ref} role="tab" aria-selected={active} className="pm-view-tab" onClick={onClick}>
-    {icon}{children}{count !== undefined && <span>{count}</span>}
-  </button>
 }
 
 /** PROD-09：相邻周期对比徽标。null=无上一份不显示；0=持平；否则 ↑/↓ + 幅度（可带单位，如 %）。 */
