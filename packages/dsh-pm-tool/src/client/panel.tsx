@@ -277,7 +277,6 @@ type Drawer =
   | { kind: 'report', report?: ProgressReport }
   | { kind: 'deliverable', deliverable?: Deliverable }
   | { kind: 'ai' }
-  | { kind: 'copilot' }
   | { kind: 'settings' }
 
 export interface PmPanelApi {
@@ -1216,19 +1215,6 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           disabled={busy}
           onConfirmed={() => { void refresh(); setDrawer(undefined) }}
         />}
-        {drawer.kind === 'copilot' && project && <CopilotPanel
-          projectId={project.id}
-          tasks={tasks}
-          milestones={milestones}
-          riskIssues={riskIssues}
-          deliverables={deliverables}
-          meetings={meetings}
-          baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
-          execute={execute}
-          executeRaw={executeRaw}
-          disabled={busy}
-          onSaved={() => void refresh()}
-        />}
         {drawer.kind === 'settings' && <SettingsPanel
           settings={settings}
           execute={execute}
@@ -1721,7 +1707,6 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
   if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
   if (drawer.kind === 'ai') return 'AI 助手'
-  if (drawer.kind === 'copilot') return 'AI 项目副驾'
   if (drawer.kind === 'settings') return '口径设置'
   return drawer.deliverable ? '编辑交付物' : '新增交付物'
 }
