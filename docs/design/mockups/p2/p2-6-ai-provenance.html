@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2-6 AI 溯源与治理</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f4f5f7; --surface-3:#eceef1;
+    --ink:#1b1d20; --ink-2:#5b6066; --muted:#8a8f96; --faint:#b3b8bf;
+    --line:rgba(16,18,20,.09); --line-soft:rgba(16,18,20,.05);
+    --prog:#3b6fe0; --done:#23a55a; --block:#e5930a; --late:#e0483d; --violet:#7c5cf0;
+    --shadow:0 1px 2px rgba(16,18,20,.05),0 2px 8px rgba(16,18,20,.04);
+    --shadow-pop:0 8px 30px rgba(16,18,20,.12);
+  }
+  body[data-theme="dark"]{
+    --bg:#15171a; --surface:#1c1f23; --surface-2:#23272c; --surface-3:#2b3036;
+    --ink:#e9ebed; --ink-2:#a9afb6; --muted:#828a93; --faint:#5f6770;
+    --line:rgba(233,235,238,.10); --line-soft:rgba(233,235,238,.06);
+    --prog:#5b8af0; --done:#3cc073; --block:#efab35; --late:#f0635a; --violet:#9a80f5;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.25);
+    --shadow-pop:0 8px 30px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1240px;margin:0 auto;padding:30px 26px 80px}
+  .head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+  .head h1{font-size:23px;font-weight:750;letter-spacing:-.02em}
+  .head p{font-size:13px;color:var(--muted);margin-top:3px}
+  .seg{display:inline-flex;background:var(--surface-2);border-radius:9px;padding:3px}
+  .seg button{border:none;background:none;padding:6px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+  .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .head-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+  .btn-primary{background:var(--ink);color:var(--surface);border-color:transparent}
+  .btn-sm{padding:6px 12px;font-size:12.5px;border-radius:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+  /* 离线降级条 */
+  .offline-strip{display:flex;align-items:center;gap:11px;background:color-mix(in srgb,var(--block) 9%,transparent);border:1px solid color-mix(in srgb,var(--block) 28%,transparent);border-radius:12px;padding:11px 15px;margin-bottom:18px;font-size:12.5px;color:var(--ink-2)}
+  .offline-strip .oi{width:30px;height:30px;border-radius:9px;background:color-mix(in srgb,var(--block) 15%,transparent);color:var(--block);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .offline-strip b{color:var(--ink);font-weight:650}
+  .offline-strip .cache{margin-left:auto;color:var(--muted);font-size:11.5px}
+  /* 区块小标题 */
+  .sec-label{display:flex;align-items:baseline;gap:10px;margin:26px 0 12px}
+  .sec-label .no{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;font-weight:700;color:var(--violet)}
+  .sec-label h2{font-size:16px;font-weight:700}
+  .sec-label span{font-size:12px;color:var(--muted)}
+  /* 卡片 */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .card-head h3{font-size:14.5px;font-weight:650}
+  .card-head .tag{margin-left:auto;font-size:11.5px;color:var(--muted)}
+  .grid-2{display:grid;grid-template-columns:1.32fr 1fr;gap:16px;align-items:start}
+  .grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  /* AI 标记 / 来源标记 */
+  .ai-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--violet);background:color-mix(in srgb,var(--violet) 11%,transparent);padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .src-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+  .src-chip svg{color:var(--violet)}
+  .src-chip .chev{color:var(--faint)}
+  /* 草稿态卡片 */
+  .draft-card{border:1.5px dashed color-mix(in srgb,var(--violet) 45%,var(--line));background:color-mix(in srgb,var(--violet) 3%,var(--surface))}
+  .draft-para{padding:11px 0;border-bottom:1px solid var(--line-soft)}
+  .draft-para:last-of-type{border-bottom:none}
+  .draft-para .p-text{font-size:13.5px;color:var(--ink);line-height:1.6}
+  .draft-para .p-meta{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  .draft-foot{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft)}
+  .draft-foot .hint{font-size:11.5px;color:var(--muted);margin-left:auto}
+  /* 建议卡 */
+  .sug-card{position:relative}
+  .sug-title{font-size:15px;font-weight:700;line-height:1.5}
+  .sug-sub{font-size:12.5px;color:var(--ink-2);margin-top:6px;line-height:1.6}
+  .conf-row{display:flex;align-items:center;gap:14px;margin:14px 0;padding:12px 14px;background:var(--surface-2);border-radius:12px}
+  .conf-ring{position:relative;flex-shrink:0}
+  .conf-meta{flex:1}
+  .conf-meta .v{font-size:20px;font-weight:750}
+  .conf-meta .lb{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .band-legend{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--muted)}
+  .band-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:-1px}
+  .cite-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+  .cite-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface-2);border-radius:10px;font-size:12.5px}
+  .cite-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .cite-row .cid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);flex-shrink:0;width:46px}
+  .cite-row .ct{flex:1;color:var(--ink-2)}
+  .cite-row .ct b{color:var(--ink);font-weight:600}
+  .cite-row .cm{font-size:11px;color:var(--muted);flex-shrink:0}
+  .cite-row .go{color:var(--prog);font-size:11.5px;font-weight:600;flex-shrink:0}
+  .sug-foot{display:flex;gap:8px;margin-top:14px}
+  /* 溯源面板（展开态，常驻可见） */
+  .prov-panel{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-pop);overflow:hidden}
+  .prov-head{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--line-soft)}
+  .prov-head h4{font-size:13.5px;font-weight:650}
+  .prov-head .tag{margin-left:auto;font-size:11px;color:var(--muted)}
+  .prov-group{padding:10px 16px 6px}
+  .prov-group .gh{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;padding:4px 0 6px}
+  .prov-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;font-size:12.5px}
+  .prov-row:hover{background:var(--surface-2)}
+  .prov-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .prov-row .pid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);flex-shrink:0;width:46px}
+  .prov-row .pt{flex:1;color:var(--ink-2)}
+  .prov-row .pt b{color:var(--ink);font-weight:600}
+  .prov-row .pm{font-size:11px;color:var(--muted);flex-shrink:0}
+  .prov-row .go{color:var(--prog);font-size:11.5px;font-weight:600;flex-shrink:0}
+  .prov-foot{padding:11px 16px;border-top:1px solid var(--line-soft);font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  /* 全链路状态条 */
+  .flow{display:grid;grid-template-columns:1fr 36px 1fr 36px 1fr;align-items:stretch;gap:0;margin-top:6px}
+  .flow-node{background:var(--surface-2);border-radius:12px;padding:14px 15px;position:relative}
+  .flow-node.draft{border:1.5px dashed color-mix(in srgb,var(--violet) 45%,var(--line));background:color-mix(in srgb,var(--violet) 3%,var(--surface))}
+  .flow-node.done{border:1px solid color-mix(in srgb,var(--done) 35%,var(--line));background:color-mix(in srgb,var(--done) 5%,var(--surface))}
+  .flow-node.undo{opacity:.92}
+  .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:18px;font-weight:700}
+  .flow-node .fn-top{display:flex;align-items:center;gap:8px}
+  .flow-node .fn-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .flow-node h4{font-size:13.5px;font-weight:650}
+  .flow-node .fn-desc{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.55}
+  .flow-node .fn-chip{display:inline-flex;margin-top:9px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+  /* 审计行 */
+  .audit-row{display:flex;align-items:center;gap:12px;margin-top:16px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+  .audit-row .adot{width:9px;height:9px;border-radius:50%;background:var(--done);flex-shrink:0}
+  .audit-row .at{flex:1;font-size:13px;color:var(--ink-2)}
+  .audit-row .at b{color:var(--ink);font-weight:650}
+  .audit-row .am{font-size:11.5px;color:var(--muted);flex-shrink:0}
+  /* 失效治理 */
+  .stale-card{border:1.5px dashed color-mix(in srgb,var(--late) 40%,var(--line));background:color-mix(in srgb,var(--late) 3%,var(--surface))}
+  .stale-body{color:var(--muted)}
+  .stale-body .old-text{text-decoration:line-through;text-decoration-color:var(--faint);font-size:13.5px}
+  .warn-strip{display:flex;align-items:flex-start;gap:9px;margin-top:12px;padding:11px 13px;border-radius:10px;background:color-mix(in srgb,var(--late) 9%,transparent);border:1px solid color-mix(in srgb,var(--late) 26%,transparent);font-size:12.5px;color:var(--ink-2);line-height:1.6}
+  .warn-strip svg{color:var(--late);flex-shrink:0;margin-top:1px}
+  .warn-strip b{color:var(--late);font-weight:650}
+  .stale-foot{display:flex;align-items:center;gap:8px;margin-top:13px}
+  .stale-foot .keep{font-size:11.5px;color:var(--muted);margin-left:auto}
+  .fresh-card{border:1px solid color-mix(in srgb,var(--done) 35%,var(--line))}
+  .fresh-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .fresh-head .ok-chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--done);background:color-mix(in srgb,var(--done) 12%,transparent);padding:3px 10px;border-radius:999px}
+  .fresh-body{font-size:13.5px;color:var(--ink);line-height:1.6}
+  .fresh-meta{display:flex;align-items:center;gap:10px;margin-top:11px;flex-wrap:wrap}
+  .compare-arrow{display:flex;align-items:center;justify-content:center;align-self:center;min-height:80px}
+  .annotation{margin-top:22px;background:color-mix(in srgb,var(--violet) 8%,transparent);border:1px dashed color-mix(in srgb,var(--violet) 35%,transparent);border-radius:12px;padding:14px 16px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
+  .annotation b{color:var(--violet)}
+  .theme-toggle{position:fixed;right:20px;bottom:20px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-pop);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-2)}
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>AI 溯源与治理</h1>
+      <p>每段 AI 产出可溯来源 · 草稿 → 确认 → 撤销全留痕 · 失效自动标灰、可重新校验</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg"><button class="on">全部</button><button>待确认</button><button>已确认</button><button>已失效</button></div>
+      <button class="btn">火山引擎官网改版 ▾</button>
+    </div>
+  </div>
+
+  <!-- 离线降级 -->
+  <div class="offline-strip">
+    <div class="oi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+    <div><b>AI 离线降级</b> · 仅展示已缓存溯源信息，新建议暂不可生成；本地记录读取不受影响</div>
+    <div class="cache">缓存于 10-17 10:00 · 项目 p-0001 · owner 史冰冰 · 周期 10-10 ~ 10-31</div>
+  </div>
+
+  <!-- 01 来源标记 + 草稿态 / 建议卡 + 溯源面板 -->
+  <div class="sec-label"><span class="no">01</span><h2>AI 产出标记与建议卡</h2><span>来源数量可展开 · 置信度分档 · 引用逐条可查</span></div>
+  <div class="grid-2">
+    <!-- 周报草稿（草稿态） -->
+    <div class="card draft-card">
+      <div class="card-head">
+        <span class="ai-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></svg>AI 生成 · 草稿</span>
+        <h3 style="margin-left:4px">本周周报初稿</h3>
+        <span class="tag">未入库 · 可编辑 / 拒绝</span>
+      </div>
+
+      <div class="draft-para">
+        <div class="p-text">本周共推进 8 条任务，完成 6 条；登录页与首页改版已提测，整体进度符合 10-31 交付基线。</div>
+        <div class="p-meta">
+          <span class="src-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>基于 8 条本周变更任务 · 统一口径 v3<span class="chev">▾</span></span>
+          <span style="font-size:11px;color:var(--muted)">生成于 10:02 · 会话 ai-session-7f2c</span>
+        </div>
+      </div>
+
+      <div class="draft-para">
+        <div class="p-text">设计组已完成 5 项设计交付，剩余 2 项等待评审反馈。</div>
+        <div class="p-meta">
+          <span class="src-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>基于 5 条任务 · 1 条里程碑<span class="chev">▾</span></span>
+          <span style="font-size:11.5px;font-weight:600;color:var(--late)">⚠ 1 条引用已失效，待重新校验</span>
+        </div>
+      </div>
+
+      <div class="draft-para">
+        <div class="p-text">里程碑 M-02「UI 设计交付」已延期 2 天，建议本周内与设计组锁定重排日期，避免继续传导至定价页。</div>
+        <div class="p-meta">
+          <span class="src-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>基于 1 条里程碑 · 2 条关联任务 · 口径 v3<span class="chev">▾</span></span>
+          <span style="font-size:11px;color:var(--muted)">延期判定口径 v3</span>
+        </div>
+      </div>
+
+      <div class="draft-foot">
+        <button class="btn btn-primary btn-sm">确认落库</button>
+        <button class="btn btn-sm">编辑</button>
+        <button class="btn btn-sm">拒绝</button>
+        <span class="hint">确认前不写入台账；草稿保留 7 天</span>
+      </div>
+    </div>
+
+    <!-- 右列：建议卡 + 溯源面板 -->
+    <div>
+      <div class="card sug-card">
+        <div class="card-head">
+          <span class="ai-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></svg>AI 建议</span>
+          <span class="tag">离线 · 缓存建议</span>
+        </div>
+        <div class="sug-title">定价页重构可能延期 2 天</div>
+        <div class="sug-sub">关键路径上的「多语言方案接入」处于阻塞，定价页重构（截止 10-22）缺少依赖输入，按当前速率预计顺延至 10-24。</div>
+
+        <div class="conf-row">
+          <div class="conf-ring">
+            <svg width="62" height="62" viewBox="0 0 62 62">
+              <circle cx="31" cy="31" r="25" fill="none" stroke="var(--surface-3)" stroke-width="6"/>
+              <circle cx="31" cy="31" r="25" fill="none" stroke="var(--done)" stroke-width="6" stroke-linecap="round" stroke-dasharray="135.1" stroke-dashoffset="18.9" transform="rotate(-90 31 31)"/>
+              <text x="31" y="30" text-anchor="middle" font-size="15" font-weight="750" fill="var(--ink)">86%</text>
+              <text x="31" y="43" text-anchor="middle" font-size="9.5" fill="var(--muted)">置信度</text>
+            </svg>
+          </div>
+          <div class="conf-meta">
+            <div class="v" style="color:var(--done)">高</div>
+            <div class="lb">依据 2 条任务 + 1 条里程碑，阻塞项未解除前建议保持关注</div>
+            <div class="band-legend">
+              <span><i style="background:var(--done)"></i>高 ≥80</span>
+              <span><i style="background:var(--block)"></i>中 60–79</span>
+              <span><i style="background:var(--late)"></i>低 &lt;60</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cite-list">
+          <div class="cite-row">
+            <span class="dot" style="background:var(--prog)"></span>
+            <span class="cid">T-031</span>
+            <span class="ct"><b>定价页重构</b> · 进行中</span>
+            <span class="cm">截止 10-22</span>
+            <span class="go">查看 →</span>
+          </div>
+          <div class="cite-row">
+            <span class="dot" style="background:var(--block)"></span>
+            <span class="cid">T-028</span>
+            <span class="ct"><b>多语言方案接入</b> · 阻塞，等待设计交付</span>
+            <span class="cm">依赖前置</span>
+            <span class="go">查看 →</span>
+          </div>
+          <div class="cite-row">
+            <span class="dot" style="background:var(--late)"></span>
+            <span class="cid">M-02</span>
+            <span class="ct"><b>UI 设计交付</b> · 已延期里程碑</span>
+            <span class="cm">原 10-16</span>
+            <span class="go">查看 →</span>
+          </div>
+        </div>
+
+        <div class="sug-foot">
+          <button class="btn btn-primary btn-sm">采纳为风险登记</button>
+          <button class="btn btn-sm">忽略</button>
+        </div>
+      </div>
+
+      <!-- 溯源面板（展开态常驻） -->
+      <div class="prov-panel">
+        <div class="prov-head">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>
+          <h4>来源溯源 · 延期建议</h4>
+          <span class="tag">只读 · 分组列出依据记录</span>
+        </div>
+        <div class="prov-group">
+          <div class="gh">任务 · 2</div>
+          <div class="prov-row"><span class="dot" style="background:var(--prog)"></span><span class="pid">T-031</span><span class="pt"><b>定价页重构</b> · 进行中 · 截止 10-22</span><span class="pm">陈昊</span><span class="go">跳转 →</span></div>
+          <div class="prov-row"><span class="dot" style="background:var(--block)"></span><span class="pid">T-028</span><span class="pt"><b>多语言方案接入</b> · 阻塞 · 等待设计交付</span><span class="pm">李四</span><span class="go">跳转 →</span></div>
+        </div>
+        <div class="prov-group">
+          <div class="gh">里程碑 · 1</div>
+          <div class="prov-row"><span class="dot" style="background:var(--late)"></span><span class="pid">M-02</span><span class="pt"><b>UI 设计交付</b> · 已延期 · 原计划 10-16</span><span class="pm">史冰冰</span><span class="go">跳转 →</span></div>
+        </div>
+        <div class="prov-group">
+          <div class="gh">口径来源 · 1</div>
+          <div class="prov-row"><span class="dot" style="background:var(--done)"></span><span class="pid">口径</span><span class="pt"><b>统一口径 v3</b> · 延期判定 / 关键路径规则（当前生效）</span><span class="go">查看 →</span></div>
+        </div>
+        <div class="prov-foot">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+          AI 仅引用本地已缓存记录，不编造外部事实；离线期间来源快照不更新
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 草稿 → 确认 → 撤销 -->
+  <div class="sec-label"><span class="no">02</span><h2>草稿 → 确认 → 撤销全链路</h2><span>确认才落库 · 落库后仍可一键撤销 · 每步留快照</span></div>
+  <div class="card">
+    <div class="card-head"><h3>AI 写入三态</h3><span class="tag">状态条 · 以已落库的周报段落为例</span></div>
+    <div class="flow">
+      <div class="flow-node draft">
+        <div class="fn-top">
+          <div class="fn-ico" style="background:color-mix(in srgb,var(--violet) 12%,transparent);color:var(--violet)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></svg></div>
+          <h4>草稿</h4>
+        </div>
+        <div class="fn-desc">AI 生成，虚线框 + AI 标记；可编辑、可拒绝，<b>不写入台账</b>。</div>
+        <span class="fn-chip" style="color:var(--violet);background:color-mix(in srgb,var(--violet) 11%,transparent)">未入库</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node done">
+        <div class="fn-top">
+          <div class="fn-ico" style="background:color-mix(in srgb,var(--done) 14%,transparent);color:var(--done)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h4>已确认 · 已落库</h4>
+        </div>
+        <div class="fn-desc">人工确认后写入台账，保存前自动快照；带确认人与时间。</div>
+        <span class="fn-chip" style="color:var(--done);background:color-mix(in srgb,var(--done) 12%,transparent)">已入库 · 可撤销</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node undo">
+        <div class="fn-top">
+          <div class="fn-ico" style="background:var(--surface-3);color:var(--ink-2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div>
+          <h4>撤销 AI 写入</h4>
+        </div>
+        <div class="fn-desc">一键恢复确认前快照；台账回滚，操作留痕不删除。</div>
+        <span class="fn-chip" style="color:var(--ink-2);background:var(--surface-3)">快照可恢复</span>
+      </div>
+    </div>
+
+    <div class="audit-row">
+      <span class="adot"></span>
+      <div class="at"><b>周报段落「本周共推进 8 条任务，完成 6 条」</b> · 10:08 由史冰冰确认落库 · 快照 snap-0417</div>
+      <span class="am">确认人 史冰冰 · 10:08</span>
+      <button class="btn btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>撤销 AI 写入</button>
+    </div>
+  </div>
+
+  <!-- 03 失效行治理 -->
+  <div class="sec-label"><span class="no">03</span><h2>失效行治理 · 重新校验前后对比</h2><span>引用被删 / 口径变更 → 置灰警告 · 不删除 · 一键重校</span></div>
+  <div class="grid-2b" style="grid-template-columns:1fr 56px 1fr;align-items:start">
+    <!-- 失效态 -->
+    <div class="card stale-card">
+      <div class="card-head"><h3>失效态（重新校验前）</h3><span class="tag">置灰保留备查</span></div>
+      <div class="stale-body">
+        <div class="old-text">设计组已完成 5 项设计交付，剩余 2 项等待评审反馈。</div>
+        <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap">
+          <span class="src-chip" style="opacity:.7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>基于 5 条任务（1 条已删除）· 口径 v2（已停用）<span class="chev">▾</span></span>
+        </div>
+      </div>
+      <div class="warn-strip">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        <div><b>该行引用的 2 条记录已删除 / 失效</b>（#T-104 已被删除 · 口径「健康分」由 v2 升至 v3），结论可能失效，请勿直接引用。</div>
+      </div>
+      <div class="stale-foot">
+        <button class="btn btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>重新校验</button>
+        <span class="keep">原行保留备查，不删除、不参与汇总</span>
+      </div>
+    </div>
+
+    <div class="compare-arrow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+
+    <!-- 已更新态 -->
+    <div class="card fresh-card">
+      <div class="card-head"><h3>已更新态（重新校验后）</h3><span class="tag">10:12 重校 · 口径 v3</span></div>
+      <div class="fresh-head">
+        <span class="ok-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>已重新校验</span>
+      </div>
+      <div class="fresh-body">设计组已完成 4 项设计交付（剔除已删除的 #T-104），剩余 2 项等待评审反馈；健康分按口径 v3 重算为 71。</div>
+      <div class="fresh-meta">
+        <span class="src-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v15a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 17V4.5A2.5 2.5 0 0 1 4 2z"/></svg>基于 4 条现存任务 · 统一口径 v3<span class="chev">▾</span></span>
+        <span style="font-size:11.5px;color:var(--muted)">重校人 史冰冰 · 10:12 · 旧版结论留痕可查</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <b>P2-6 关键变化：</b>AI 产出从「直接显示文字」升级为<b>可溯源、可治理</b>：① 每段周报 / 建议都带「基于 N 条任务 · N 条里程碑 · 口径版本」来源标记，展开分组列出依据记录，状态点 + 跳转暗示只读可查；② 建议卡展示引用来源与分档置信度（高 / 中 / 低对应 done / block / late）；③ 写入走<b>草稿 → 确认 → 撤销 AI 写入</b>三态，确认才落库、落库可回滚快照、全程留痕；④ 引用记录被删或口径变更时，相关行自动置灰标失效并给出警告条与「重新校验」，重校前后对比清晰；⑤ 离线降级时仅展示已缓存溯源信息，不生成新建议。
+  </div>
+</div>
+
+<button class="theme-toggle" id="themeToggle"><svg id="themeIcon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M12 2h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+<script>
+const body=document.body,icon=document.getElementById('themeIcon')
+const sun='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M12 2h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+const moon='<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>'
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const dark=body.dataset.theme==='dark'
+  body.dataset.theme=dark?'light':'dark'
+  icon.innerHTML=dark?sun:moon
+})
+</script>
+</body>
+</html>
