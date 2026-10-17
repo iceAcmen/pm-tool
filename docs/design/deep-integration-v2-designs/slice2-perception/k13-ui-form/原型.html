@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K13 UI 形态 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK13%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* 对话投影卡片 */
+  .projection{max-width:560px;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--elev);margin:10px 0}
+  .projection .p-title{font-weight:600;font-size:13.5px}
+  .projection .p-body{font-size:12.5px;color:var(--secondary);margin:6px 0 10px}
+  .p-ver{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .p-acts{display:flex;gap:8px;margin-top:10px;align-items:center}
+  .btn{font-size:12.5px;padding:7px 16px;border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--secondary)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .errline{font-family:var(--mono);font-size:11.5px;color:var(--overdue);margin-top:8px;display:none}
+  .projection.stale{opacity:.62}
+  .projection.stale .p-acts{pointer-events:none}
+  .stamp{font-family:var(--mono);font-size:10.5px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 9px}
+  /* 设置卡 vs 面板 */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .panel-col{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+  .panel-col h3{font-size:13.5px;font-weight:700;margin-bottom:8px}
+  .knob{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--line-soft);font-size:13px}
+  .knob:first-of-type{border-top:none}
+  .knob .v{font-family:var(--mono);font-size:12px;color:var(--secondary)}
+  .panel-col.biz{background:var(--elev)}
+  .panel-col.biz li{font-size:12.5px;color:var(--secondary);margin:6px 0 6px 18px}
+  /* 命令行 */
+  .cmd{font-family:var(--mono);font-size:12.5px;padding:9px 12px;border:1px solid var(--line-soft);border-radius:var(--r-sm);background:var(--elev);margin:6px 0;color:var(--secondary)}
+  .cmd b{color:var(--ink)}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .dropped{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .dropped span{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:line-through;border:1px solid var(--line-soft);border-radius:999px;padding:3px 10px}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:var(--r-sm);opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K13 · UI 形态与宿主原生寄生（只读投影 / 版本闸 / 设置卡技术旋钮 / 命令补充）</div>
+      <h1>单真源 · 寄生面最小化（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A/B：修正采纳</span>
+    <span class="chip">终局：接近饱和</span>
+    <span class="chip e6">E6：版本戳写入口径、窄错误行实现登记</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <div class="card">
+    <h2>对话内卡片 = 只读投影（真源在本地数据，唯一写通道回写，无第二状态库）</h2>
+
+    <div class="projection" id="cardOk">
+      <div class="p-title">建议调整 <span class="mono">T-12</span> 到期日至 10-20 <span class="p-ver">· 快照 v12 · 10:02</span></div>
+      <div class="p-body">理由：关键链上 M1 受 T-12 拖累（示例）。卡片只读，动作经唯一写通道回写本地真源。</div>
+      <div class="p-acts">
+        <button class="btn primary" onclick="adopt()">采纳</button>
+        <button class="btn" onclick="showToast('已忽略（示例）')">忽略</button>
+        <span class="stamp">版本闸：动作前比对当前版本</span>
+      </div>
+    </div>
+
+    <div class="projection stale" id="cardStale">
+      <div class="p-title">建议把两条低优任务并入 <span class="mono">PRJ-07</span> <span class="p-ver">· 快照 v9 · 09:40</span></div>
+      <div class="p-body">已处理 / 记录已变更 → 失效遮罩置灰，过期可点面关闭，重复采纳路径被版本闸堵住。</div>
+      <div class="p-acts"><span class="btn" style="opacity:.45;cursor:default">已失效</span></div>
+    </div>
+
+    <div class="projection" id="cardVer">
+      <div class="p-title">建议补挂证据链接到 <span class="mono">T-19</span> <span class="p-ver">· 快照 v7 · 09:12（本地已至 v11）</span></div>
+      <div class="p-body">服务端比对当前版本不符 → 拒收，不扩成反馈面板。</div>
+      <div class="p-acts">
+        <button class="btn" onclick="verReject()">采纳</button>
+        <span class="errline" id="errLine">记录已变更（v7 → v11），请回面板处理</span>
+      </div>
+    </div>
+
+    <div class="dropped">
+      <span>详情页逾期徽标（寄生位错配）</span><span>对话内业务卡片双状态源</span><span>系统全局快捷键（实为窗口内命令注册）</span>
+    </div>
+    <div class="note">9 视图自绘面板不拆：甘特/关键路径/人员负载矩阵是纯视觉、离线、无模型轮次的派生能力，退命令行会自残。</div>
+  </div>
+
+  <div class="card">
+    <h2>寄生分工：宿主设置卡只放技术旋钮，业务口径留面板</h2>
+    <div class="two">
+      <div class="panel-col">
+        <h3>宿主设置卡（volatile 即时表单）· 技术开关/阈值</h3>
+        <div class="knob"><span>模型车道偏好</span><span class="v">稳定通道优先</span></div>
+        <div class="knob"><span>临期窗口天数</span><span class="v">7 天</span></div>
+        <div class="knob"><span>过载阈值（在提示例）</span><span class="v">5</span></div>
+        <div class="knob"><span>主动投递静音（接 K11）</span><span class="v">off</span></div>
+      </div>
+      <div class="panel-col biz">
+        <h3>自绘面板 · 13 项业务口径不进设置卡</h3>
+        <ul>
+          <li>健康分权重 / 封顶 / 灯号线</li>
+          <li>项目战略权重三档（K8）</li>
+          <li>归属建议与人工裁决（K9/X7）</li>
+          <li>规则集阈值与豁免表（K10/K11）</li>
+          <li>草稿/定稿工作流口径（X6）</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">宿主设置卡是 Config volatile 即时表单，适合开关/阈值，不适合承载七实体业务口径，13 项塞入即位置错配（A13-K13-04）。</div>
+  </div>
+
+  <div class="card">
+    <h2>命令行补充通道（人直接触发，不耗模型轮次）</h2>
+    <div class="cmd"><b>/pm due</b>　派生逾期/临期清单（读时）</div>
+    <div class="cmd"><b>/pm health</b>　健康分与规则扫描结果</div>
+    <div class="cmd"><b>/pm board-export</b>　显式刷新文件投影（接 K1）</div>
+    <div class="note">命令仅作补充通道，不替代自绘面板；动作目标 ID 由工具结果严格生成，第一期幻觉面小，窄错误行兜底。</div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：A13-K13-01 详情徽标寄生位错配（致命）→ 撤徽标；A13-K13-02 卡片与 9 视图双状态源（致命）→ 只读投影单真源；R2-A-K13-01 投影过期/重复采纳（显著）→ 版本闸+失效遮罩；R2-A-K13-02 拒收无回显（局部）→ 窄错误行；A13-K13-05 退命令行自残 → 命令仅补充。</li>
+      <li>依赖：C6（alpha 上游只读、破坏性变更登记）。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+function adopt(){
+  const c=document.getElementById('cardOk');
+  c.classList.add('stale');
+  c.querySelector('.p-title').innerHTML+=' <span class="stamp">已采纳</span>';
+  c.querySelectorAll('.btn').forEach(b=>{b.disabled=true;b.textContent=b.classList.contains('primary')?'已采纳':'已忽略';});
+  showToast('已采纳，回写本地真源（示例）');
+}
+function verReject(){
+  const e=document.getElementById('errLine');e.style.display='block';
+  const c=document.getElementById('cardVer');c.classList.add('stale');
+}
+</script>
+</body>
+</html>

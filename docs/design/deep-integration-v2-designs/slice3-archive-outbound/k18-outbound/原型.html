@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K18 对外接触面（原型）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --warn:#9a6212; --warn-soft:#f6efe2;
+    --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --warn:#e0a458; --warn-soft:#2e2619;
+    --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .app{display:flex;min-height:100vh}
+  .rail{width:188px;flex:0 0 188px;border-right:1px solid var(--line);padding:16px 10px;display:none}
+  @media(min-width:900px){.rail{display:block}}
+  .rail-brand{font-weight:700;font-size:13px;padding:6px 10px 14px}
+  .rail-item{padding:7px 10px;border-radius:8px;color:var(--text-2);font-size:13px}
+  .rail-item.active{background:var(--accent-soft);color:var(--ink);font-weight:600}
+  .rail-sec{font-size:11px;color:var(--faint);letter-spacing:.09em;padding:14px 10px 4px}
+  .main{flex:1;min-width:0;padding:24px 28px;max-width:1000px}
+  @media(max-width:600px){.main{padding:16px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .unit-tag{font-size:12px;color:var(--faint)}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:64ch}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .tab{font:inherit;font-size:12.5px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:var(--canvas);color:var(--text-2);cursor:pointer;min-height:34px}
+  .tab.on{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+  .preview{background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:13px;min-height:120px}
+  .preview h3{font-size:13.5px;margin-bottom:6px}
+  .preview .meta{font-size:12px;color:var(--faint);margin-bottom:10px}
+  .preview ul{padding-left:18px;color:var(--text-2)}
+  .preview li{margin:3px 0}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  /* 出站卡 */
+  .out-card{display:flex;gap:14px;align-items:flex-start;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px 16px;flex-wrap:wrap}
+  .out-card .body{flex:1;min-width:220px}
+  .out-card .t{font-weight:600;font-size:13.5px}
+  .out-card .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .static-link{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--link);background:var(--accent-soft);border-radius:8px;padding:5px 10px;margin-top:8px}
+  .btn{font:inherit;font-size:13px;border-radius:8px;padding:8px 16px;min-height:38px;cursor:pointer;border:1px solid var(--line);background:var(--canvas);color:var(--ink)}
+  .btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+  /* 日志 */
+  .log-list{list-style:none}
+  .log-list li{display:grid;grid-template-columns:110px 1fr auto;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13px;align-items:baseline}
+  @media(max-width:600px){.log-list li{grid-template-columns:84px 1fr;}.log-list li .right{grid-column:2}}
+  .log-time{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .log-state{font-size:12px;padding:2px 8px;border-radius:6px;justify-self:start}
+  .log-state.sent{background:var(--ok-soft);color:var(--ok)}
+  .log-state.revoked{background:var(--warn-soft);color:var(--warn)}
+  .log-state.fail{background:var(--danger-soft,#f8ecea);color:#b3402f}
+  html.dark .log-state.fail{background:#2e211e;color:#e08a7d}
+  .ttl{font-size:11.5px;color:var(--faint)}
+  .callout{border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px}
+  .callout b{font-weight:600}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--primary);color:var(--on-primary);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="rail-brand">pm-tool · 面板</div>
+    <div class="rail-sec">视图</div>
+    <div class="rail-item">看板</div>
+    <div class="rail-item">任务</div>
+    <div class="rail-item">周报</div>
+    <div class="rail-sec">对外</div>
+    <div class="rail-item active">只读导出 / 状态页</div>
+    <div class="rail-item">出站记录（两类日志）</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <span class="unit-tag">K18 · 对外接触面</span>
+      <span class="verdict ok">采纳 · 单向只增 + 分受众</span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+    </div>
+
+    <h1>对外接触面：只读导出、单向出站、外部为唯一事实源</h1>
+    <p class="sub">出站只写不回读，不镜像外部状态；外部系统的真实状态由外部自己回答。目标平台名称待核验（E6），本页不写死具体产品。示例数据为虚构演示。</p>
+
+    <div class="panel">
+      <h2>分受众只读导出 / 状态页
+        <div class="tabs">
+          <button class="tab on" data-aud="tech" type="button">技术读者 · MD</button>
+          <button class="tab" data-aud="web" type="button">非技术 · 在线增强档</button>
+          <button class="tab" data-aud="txt" type="button">纯文本兜底</button>
+        </div>
+      </h2>
+      <div class="preview" id="audPreview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>出站写：单向只增，任务卡留静态关联位</h2>
+      <div class="out-card">
+        <div class="body">
+          <div class="t">示例任务：完成看板改版的交付物清单核对（虚构）</div>
+          <div class="d">经外部 MCP 向目标平台（待核验，E6）创建一条 issue；发出后本地只留静态关联，不拉回外部状态、不做双向同步。</div>
+          <span class="static-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>已发 #（目标平台编号 · 静态记录）</span>
+        </div>
+        <button class="btn primary" id="sendBtn" type="button">发一条出站（演示）</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>两类日志（不合并）
+        <div class="tabs">
+          <button class="tab on" data-log="audit" type="button">审计只增流 · 长期保留</button>
+          <button class="tab" data-log="action" type="button">动作已发 · TTL 归档折叠</button>
+        </div>
+      </h2>
+      <ul class="log-list" id="logList"></ul>
+    </div>
+
+    <div class="callout">
+      <b>事实源边界：</b>外部系统是其自身状态的唯一事实源；本地不保存外部状态镜像，不承诺双向一致。撤回与失败同样只增留痕（审计流），动作日志到期归档折叠，两者保留期不同、不合并。
+    </div>
+
+    <div class="src">来源：终局台账 K18 行；裁判 A/B「采纳（出站写单向只增；外部为唯一事实源；两类日志；分受众导出）」；`rebuttal/D-终局核验.md` §四；`rebuttal/K18-往复.md` R2-D-K18-01/02。原始想法：round2 D1-R2-06 / D2-R2-05（出站写）、D1-R2-10 / D2-R2-08 / D4-R2-09 / D5-R2-07（持续只读状态页）、D1-R2-09 / D4-R2-08（手机只读）。</div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('k18-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('k18-theme',d?'dark':'light');
+  });
+
+  var AUD={
+    tech:{h:'技术读者 · Markdown 导出',m:'含任务 ID、状态枚举、依赖关系与证据链接；可被其他工具直接解析。',
+      body:'<h3>示例项目看板改版 · 周报快照（虚构）</h3><div class="meta">导出时刻冻结 · 不随活库刷新</div><ul><li><span class="mono">t-12</span> 交付物清单核对 · done · 证据：交付物 d-03</li><li><span class="mono">t-13</span> 状态页只读档 · in_progress · 依赖 t-12</li></ul>'},
+    web:{h:'非技术读者 · 在线增强档',m:'无 ID 与枚举，用状态色与一句话进展；只读、可自助打开，不提供写操作。',
+      body:'<h3>看板改版进展（虚构）</h3><div class="meta">最近更新：导出时刻 · 只读页面</div><ul><li>已完成：交付物清单核对</li><li>进行中：只读状态页整理</li><li>无待办对外承诺，外部以目标平台为准</li></ul>'},
+    txt:{h:'纯文本兜底',m:'无格式依赖，任何环境可打开；不假设接收方有 Markdown 渲染或浏览器。',
+      body:'<h3>看板改版 · 进展（虚构）</h3><div class="meta">纯文本 · 导出时刻冻结</div><ul><li>已完成：交付物清单核对</li><li>进行中：只读状态页整理</li></ul>'}
+  };
+  function renderAud(k){document.getElementById('audPreview').innerHTML=AUD[k].body;}
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      var box=t.closest('.panel');
+      box.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on');
+      if(t.dataset.aud) renderAud(t.dataset.aud);
+      if(t.dataset.log) renderLog(t.dataset.log);
+    });
+  });
+  renderAud('tech');
+
+  var LOG={
+    audit:[
+      {time:'2026-03-14 10:22',txt:'出站：向目标平台（待核验 E6）创建 issue，关联 t-12',st:'sent',label:'已发'},
+      {time:'2026-03-14 10:25',txt:'撤回：#关联号 因内容修正被撤回，留痕不删除',st:'revoked',label:'已撤回'},
+      {time:'2026-03-15 09:02',txt:'失败：目标平台不可达，未写入，本地无伪成功',st:'fail',label:'失败'}
+    ],
+    action:[
+      {time:'2026-03-14 10:22',txt:'动作已发 #（静态关联）',st:'sent',label:'已发',ttl:'TTL 30 天 · 到期折叠归档'},
+      {time:'2026-03-10 16:40',txt:'动作已发 #（静态关联）',st:'sent',label:'已发',ttl:'已到期 · 折叠归档'}
+    ]
+  };
+  function renderLog(k){
+    var ul=document.getElementById('logList'); ul.innerHTML='';
+    LOG[k].forEach(function(r){
+      var li=document.createElement('li');
+      li.innerHTML='<div class="log-time">'+r.time+'</div><div>'+r.txt+'</div>'+
+        '<div class="right"><span class="log-state '+r.st+'">'+r.label+'</span>'+
+        (r.ttl?'<div class="ttl">'+r.ttl+'</div>':'')+'</div>';
+      ul.appendChild(li);
+    });
+  }
+  renderLog('audit');
+  function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')},1600);}
+  document.getElementById('sendBtn').addEventListener('click',function(){toast('演示：只写出站，不拉回外部状态')});
+</script>
+</body>
+</html>

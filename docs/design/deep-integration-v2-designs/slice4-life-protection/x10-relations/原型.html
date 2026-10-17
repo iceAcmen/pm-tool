@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X10 对人关系维护 · 原型（@对象字段 + 可识别性剥离）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='20' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EX10%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff; --chip-bg:#eef1f5;
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d; --chip-bg:#2a2e35;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.cond{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.demo-badge{font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:24px 0 10px}
+p.lead{color:var(--ink-2);max-width:70ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+/* task field mock */
+.taskcard{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px;overflow:hidden}
+.taskhead{padding:14px 16px;border-bottom:1px solid var(--line-soft);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.taskhead .t{font-weight:650;font-size:14.5px}
+.field{padding:12px 16px;border-bottom:1px solid var(--line-soft);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.field:last-child{border-bottom:none}
+.field .k{width:110px;flex-shrink:0;font-size:12.5px;color:var(--faint)}
+.field .v{font-size:13.5px}
+.atobj{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:7px;padding:2px 9px;font-size:13px;background:var(--surface-2)}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(max-width:680px){.flow{grid-template-columns:1fr}}
+.flow .f{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface)}
+.flow .f h4{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.flow .f p{font-size:12.5px;color:var(--ink-2)}
+.flow .f .to{color:var(--success);font-weight:600}
+/* per-row review */
+.rev{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px;overflow:hidden}
+.rrow{padding:13px 16px;border-bottom:1px solid var(--line-soft)}
+.rrow:last-child{border-bottom:none}
+.rrow .src{font-size:13.5px}
+.rrow .ctx{font-size:12.5px;color:var(--muted);margin-top:3px}
+.rrow .ctrl{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;background:var(--surface);color:var(--muted);padding:6px 13px;font-size:12.5px;cursor:pointer}
+.seg button.on-id{background:var(--neutral-fill);color:var(--on-neutral)}
+.seg button.on-anon{background:var(--surface-2);color:var(--ink)}
+.rrow .act{font-size:12.5px;color:var(--ink-2);margin-left:auto}
+/* preview */
+.preview{border:1px dashed var(--line);border-radius:12px;padding:16px;margin-top:14px;background:var(--surface-2)}
+.preview h3{font-size:13.5px;margin-bottom:8px}
+.pvrow{font-size:13.5px;padding:6px 0;border-bottom:1px solid var(--line-soft)}
+.pvrow:last-child{border-bottom:none}
+.pvrow.gone{color:var(--faint);text-decoration:line-through}
+.banner{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-2)}
+.banner b{color:var(--ink)}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">X10</span>
+    <span class="unit-title">对人关系维护（不立实体 · @对象字段）</span>
+    <span class="chip cond">独立方向撤回 · 降 K4/K11 子件 · 条件性采纳</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例数据 · 非真实业务 · 称谓均为虚构</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="entry" type="button">录入态 · @对象字段（非实体）</button>
+    <button class="tab" data-panel="review" type="button">导出前 · 按可识别性逐条判定</button>
+    <button class="tab" data-panel="preview" type="button">泛化后 · 导出预览</button>
+  </div>
+
+  <!-- 录入态 -->
+  <section class="panel active" id="entry">
+    <h2>不立联系人实体：对象只是 task 上的一个字段</h2>
+    <p class="lead">不建联系人档案、不做关系强度计算、不做人脉网络视图。动作（答应/承诺）归 K4 承诺浮出，提醒归 K11 呈现层，对象降为 task 的 @对象字段。</p>
+    <div class="taskcard">
+      <div class="taskhead"><span class="t">回电确认 Q3 预算口径（示例任务）</span><span class="mono" style="color:var(--faint)">task #t-104</span></div>
+      <div class="field"><span class="k">@对象字段</span><span class="v"><span class="atobj">@ 协作方 · 采购对接人（示例化名）</span></span></div>
+      <div class="field"><span class="k">承诺事项</span><span class="v">回电确认 Q3 预算口径（动作由 K4 浮出、人归类签字）</span></div>
+      <div class="field"><span class="k">到期</span><span class="v mono">2026-10-22（提醒归 K11，不另建跟进提醒机制）</span></div>
+      <div class="field"><span class="k">备注语境</span><span class="v" style="color:var(--muted)">私人事件/家庭信息等语境细节默认不进导出（示例位）</span></div>
+    </div>
+    <div class="flow">
+      <div class="f"><h4>动作层</h4><p>「答应某人的事」<span class="to">归 K4</span> 承诺浮出，人归类签字。</p></div>
+      <div class="f"><h4>提醒层</h4><p>到期跟进 <span class="to">归 K11</span> 呈现层，不承诺跟进价值。</p></div>
+      <div class="f"><h4>对象层</h4><p>仅余 task 的 <span class="to">@对象字段</span>，无联系人主库，更正删除权归通讯录。</p></div>
+    </div>
+  </section>
+
+  <!-- 逐条判定 -->
+  <section class="panel" id="review">
+    <h2>导出前：按「是否可识别」逐条判定，非按字段删</h2>
+    <p class="lead">PIPL 第 4 条个人信息含已识别/可识别（含间接识别）；仅删姓名/电话/职务而保留称谓+语境，熟人圈仍可间接定位到人。逐条判定每条文本是否可识别，再决定泛化或剔除。</p>
+    <div class="rev" id="revBox">
+      <div class="rrow" data-id="a">
+        <div class="src">「@王总 答应下周回电确认预算」（示例称谓）</div>
+        <div class="ctx">称谓 + 职务组合，接收方同圈可定位到人 → 可识别</div>
+        <div class="ctrl">
+          <span class="seg"><button type="button" data-mode="anon">泛化为化名</button><button type="button" data-mode="drop">整条剔除</button></span>
+          <span class="act">默认：泛化（不留姓氏+身份组合）</span>
+        </div>
+      </div>
+      <div class="rrow" data-id="b">
+        <div class="src">「上次聊到孩子升学，顺便问问」（示例语境）</div>
+        <div class="ctx">私人家庭细节，与承诺无关 → 默认剔除，不进导出</div>
+        <div class="ctrl">
+          <span class="seg"><button type="button" data-mode="anon">泛化为化名</button><button type="button" data-mode="drop">整条剔除</button></span>
+          <span class="act">默认：剔除语境，仅留承诺事项与到期</span>
+        </div>
+      </div>
+      <div class="rrow" data-id="c">
+        <div class="src">「回电确认 Q3 预算口径 · 到期 10-22」（承诺本体）</div>
+        <div class="ctx">无个人识别信息，仅事项与日期 → 可带</div>
+        <div class="ctrl">
+          <span class="seg"><button type="button" data-mode="anon">泛化为化名</button><button type="button" data-mode="drop">整条剔除</button></span>
+          <span class="act">默认：保留</span>
+        </div>
+      </div>
+    </div>
+    <div class="banner">
+      <b>PIPL 第 23 条：</b>向他人提供个人信息需告知并取得单独同意；告知与同意由用户在工具外完成，工具不内建同意记录、不代宣称已取得同意。
+    </div>
+  </section>
+
+  <!-- 预览 -->
+  <section class="panel" id="preview">
+    <h2>泛化后导出预览：化名 + 仅承诺事项与到期</h2>
+    <p class="lead">公开分发走化名、不留回溯线索；私人语境默认剔除。预览随上一页逐条判定实时更新。</p>
+    <div class="preview">
+      <h3>导出内容（示例，仅演示剥离规则）</h3>
+      <div id="pv"></div>
+    </div>
+    <p class="note">跨记录聚合/去重/关系强度存在价值但 E6 登记，本期不做；不立实体成立。纯本机自用不触发本检查（H11 分发场景才出现）。</p>
+  </section>
+
+  <footer>
+    X10 · 阶段7 分片4 概念原型 · 示例数据显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：R2-G-X10-01（可识别性逐条判定+称谓泛化+语境默认剔除）；PIPL 第4/23条 E5；终局接近饱和，登记项=第23条同意在工具外。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    b.classList.add('active');document.getElementById(b.dataset.panel).classList.add('active');
+  });});
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+
+  // 逐条判定状态：anon=泛化, drop=剔除, keep=保留（仅 c）
+  var state={a:'anon',b:'drop',c:'keep'};
+  var rows={
+    a:{anon:'@协作方 · 采购对接人（化名）：回电确认 Q3 预算口径',drop:'（称谓条目已剔除）',keep:'@协作方：回电确认 Q3 预算口径'},
+    b:{anon:'（私人语境已泛化，不出现）',drop:'「孩子升学」私人语境已剔除',keep:'（私人语境不应保留）'},
+    c:{anon:'回电确认 Q3 预算口径 · 到期 2026-10-22',drop:'（承诺本体被剔除）',keep:'回电确认 Q3 预算口径 · 到期 2026-10-22'}
+  };
+  function renderPV(){
+    var box=document.getElementById('pv');box.innerHTML='';
+    [['a','@对象（化名）'],['b','私人语境'],['c','承诺事项与到期']].forEach(function(pair){
+      var id=pair[0],label=pair[1],st=state[id];
+      var div=document.createElement('div');div.className='pvrow';
+      var text=rows[id][st]||rows[id].keep;
+      if(st==='drop'){div.classList.add('gone');}
+      div.innerHTML='<span class="mono" style="color:var(--faint);margin-right:8px">'+label+'</span>'+text;
+      box.appendChild(div);
+    });
+  }
+  document.querySelectorAll('.rrow').forEach(function(row){
+    var id=row.dataset.id;
+    row.querySelectorAll('.seg button').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        row.querySelectorAll('.seg button').forEach(function(x){x.classList.remove('on-id','on-anon')});
+        var mode=btn.dataset.mode;state[id]=mode;
+        btn.classList.add(mode==='drop'?'on-id':'on-anon');
+        renderPV();
+      });
+    });
+  });
+  // 初始高亮
+  document.querySelector('.rrow[data-id="a"] .seg button[data-mode="anon"]').classList.add('on-anon');
+  document.querySelector('.rrow[data-id="b"] .seg button[data-mode="drop"]').classList.add('on-id');
+  renderPV();
+})();
+</script>
+</body>
+</html>

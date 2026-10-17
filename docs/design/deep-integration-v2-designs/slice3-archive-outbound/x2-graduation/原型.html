@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X2 毕业导向 · 人工声明与洁净度标签（原型）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --warn:#9a6212; --warn-soft:#f6efe2;
+    --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --warn:#e0a458; --warn-soft:#2e2619;
+    --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .app{display:flex;min-height:100vh}
+  .rail{width:188px;flex:0 0 188px;border-right:1px solid var(--line);padding:16px 10px;display:none}
+  @media(min-width:900px){.rail{display:block}}
+  .rail-brand{font-weight:700;font-size:13px;padding:6px 10px 14px}
+  .rail-item{padding:7px 10px;border-radius:8px;color:var(--text-2);font-size:13px}
+  .rail-item.active{background:var(--accent-soft);color:var(--ink);font-weight:600}
+  .rail-sec{font-size:11px;color:var(--faint);letter-spacing:.09em;padding:14px 10px 4px}
+  .main{flex:1;min-width:0;padding:24px 28px;max-width:960px}
+  @media(max-width:600px){.main{padding:16px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .unit-tag{font-size:12px;color:var(--faint)}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:64ch}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:14px;font-weight:700;margin-bottom:12px}
+  .proj{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .proj .name{font-weight:600;font-size:14px}
+  .proj .meta{font-size:12.5px;color:var(--muted)}
+  .tag-grad{font-size:12px;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:3px 10px;display:none}
+  .tag-grad.show{display:inline-block}
+  .btn{font:inherit;font-size:13px;border-radius:8px;padding:8px 16px;min-height:38px;cursor:pointer;border:1px solid var(--line);background:var(--canvas);color:var(--ink)}
+  .btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+  .btn:disabled{cursor:not-allowed;opacity:.5}
+  .checks{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .checks li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;min-height:36px}
+  .checks label{cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+  .checks input{margin-top:4px;width:17px;height:17px;accent-color:var(--link)}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.rules{grid-template-columns:1fr}}
+  .rule{background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--text-2)}
+  .rule h3{font-size:13.5px;color:var(--ink);margin-bottom:6px}
+  .callout{border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px}
+  .callout b{font-weight:600}
+  /* 弹层 */
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+  .mask.show{display:flex}
+  .modal{background:var(--canvas);border:1px solid var(--line);border-radius:14px;max-width:480px;width:100%;padding:20px 22px}
+  .modal h2{font-size:15px;margin-bottom:10px}
+  .modal .row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--primary);color:var(--on-primary);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="rail-brand">pm-tool · 面板</div>
+    <div class="rail-sec">视图</div>
+    <div class="rail-item">看板</div>
+    <div class="rail-item">任务</div>
+    <div class="rail-sec">归档</div>
+    <div class="rail-item active">已归档项目</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <span class="unit-tag">X2 · 毕业导向</span>
+      <span class="verdict ok">条件性采纳 · 人工声明 · 取消零干预</span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+    </div>
+
+    <h1>毕业：人主动声明，不做自动成功 KPI</h1>
+    <p class="sub">「毕业」由人在归档视图手动声明并逐条确认洁净度；系统不统计连续未打开周数、不自动判定成功。保留低强度召回，取消完全零干预。示例为虚构演示。</p>
+
+    <div class="panel">
+      <h2>已归档项目 · 示例（虚构）</h2>
+      <div class="proj">
+        <div>
+          <div class="name">客户侧看板改版</div>
+          <div class="meta">archived · 结项时刻 2026-03-14 · 非系统自动判定</div>
+        </div>
+        <span class="tag-grad" id="gradTag">已声明毕业 · 洁净度标签</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn" id="declareBtn" type="button">声明毕业</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>洁净度自检（人工逐条，系统不代判）</h2>
+      <ul class="checks" id="checks">
+        <li><label><input type="checkbox" data-k="c1">无未完成任务 / 悬挂交付物</label></li>
+        <li><label><input type="checkbox" data-k="c2">无回潮承诺（未在别处重开该项目的工作项）</label></li>
+        <li><label><input type="checkbox" data-k="c3">无未关闭风险与遗留决策待办</label></li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>标签失效规则（声明之后仍受约束）</h2>
+      <div class="rules">
+        <div class="rule"><h3>自动摘标条件一</h3>该项目之后出现任何未完成任务或新交付物，洁净度标签自动失效并提示重新核对。</div>
+        <div class="rule"><h3>自动摘标条件二</h3>出现回潮承诺（别处重新挂起该项目工作），标签失效；项目回到普通归档态。</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>取消项：</b>不设「连续 N 周未打开 = 成功」的零干预 KPI，不做自动毕业判定；毕业是人的主动声明。保留低强度召回（归档项目在年度回顾中可见），不是彻底消失。
+    </div>
+
+    <div class="src">来源：终局台账 X2 行；裁判 A「条件性采纳（人工声明+洁净度+失效规则；取消零干预 KPI）」；裁判 B「条件性采纳」；`rebuttal/F-终局核验.md` §三；`rebuttal/K20-X2-往复.md`。原始想法：round4/diverger-1.md N1（毕业导向/反活跃成功度量），登记于 round4-new-directions.md。</div>
+  </main>
+</div>
+
+<div class="mask" id="mask">
+  <div class="modal" role="dialog" aria-label="声明毕业确认">
+    <h2>声明毕业？</h2>
+    <p style="font-size:13px;color:var(--muted)">逐条确认洁净度后可声明；声明后标签受失效规则约束。系统不会替你判断项目是否真的完成。</p>
+    <div class="row">
+      <button class="btn" id="cancelBtn" type="button">取消</button>
+      <button class="btn primary" id="confirmBtn" type="button" disabled>确认声明（需逐条勾选）</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('x2-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('x2-theme',d?'dark':'light');
+  });
+  var mask=document.getElementById('mask'), confirmBtn=document.getElementById('confirmBtn');
+  function refresh(){
+    var all=[...document.querySelectorAll('#checks input')].every(function(i){return i.checked});
+    confirmBtn.disabled=!all;
+  }
+  document.querySelectorAll('#checks input').forEach(function(i){i.addEventListener('change',refresh)});
+  document.getElementById('declareBtn').addEventListener('click',function(){mask.classList.add('show')});
+  document.getElementById('cancelBtn').addEventListener('click',function(){mask.classList.remove('show')});
+  mask.addEventListener('click',function(e){if(e.target===mask) mask.classList.remove('show')});
+  function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')},1600);}
+  confirmBtn.addEventListener('click',function(){
+    mask.classList.remove('show');
+    document.getElementById('gradTag').classList.add('show');
+    document.getElementById('declareBtn').textContent='已声明毕业';
+    document.getElementById('declareBtn').disabled=true;
+    toast('已声明毕业 · 标签受失效规则约束');
+  });
+</script>
+</body>
+</html>

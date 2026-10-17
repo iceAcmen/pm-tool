@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K19 人的保护面 · 概念可视化与撤除论证</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='20' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EK19%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff;
+  --chip-bg:#eef1f5; --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d;
+  --chip-bg:#2a2e35; --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--ink);font-family:var(--pm-font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif);font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+/* header */
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px;color:var(--ink)}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.warn{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.chip.off{color:var(--muted)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.theme-btn:hover{background:var(--surface-2)}
+.demo-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+/* tabs */
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}
+.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:26px 0 10px}
+h3{font-size:14.5px;font-weight:650;margin:16px 0 8px}
+p.lead{color:var(--ink-2);max-width:68ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:6px}
+/* concept dashed frame */
+.concept{border:1.5px dashed var(--line);border-radius:12px;padding:16px 18px;background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
+.concept-tag{font-size:12px;color:var(--faint);letter-spacing:.02em;margin-bottom:10px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:720px){.grid6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid6{grid-template-columns:1fr}}
+.cmp{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--surface)}
+.cmp .ic{width:22px;height:22px;color:var(--muted);margin-bottom:6px}
+.cmp h4{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.cmp p{font-size:12.5px;color:var(--ink-2)}
+.cmp.dead{opacity:.92;border-color:color-mix(in srgb,var(--danger) 30%,var(--line))}
+/* causal chain */
+.chain{display:flex;align-items:stretch;gap:0;margin:14px 0;flex-wrap:wrap}
+.chain .node{flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface)}
+.chain .node.up{border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+.chain .arrow{display:flex;align-items:center;justify-content:center;width:46px;color:var(--faint);font-size:20px}
+.chain .node .k{font-size:12px;color:var(--faint);margin-bottom:2px}
+.chain .node .v{font-size:13.5px;font-weight:600}
+.chain .node .s{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+.gate-mark{display:inline-block;margin-top:8px;font-size:12px;color:var(--danger);font-weight:600}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{color:var(--faint);font-weight:600;font-size:12.5px;background:var(--surface-2)}
+td .mono{color:var(--link)}
+.togo{color:var(--success);font-weight:600}
+/* fact display (降级存活形态) */
+.factcard{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.factrow{display:flex;align-items:baseline;gap:14px;padding:13px 16px;border-bottom:1px solid var(--line-soft)}
+.factrow:last-child{border-bottom:none}
+.factrow .label{width:150px;flex-shrink:0;font-size:13px;color:var(--ink-2)}
+.factrow .val{font-size:13.5px}
+.factrow .tag{margin-left:auto;font-size:11.5px;color:var(--faint);border:1px solid var(--line-soft);border-radius:6px;padding:1px 8px;white-space:nowrap}
+.no-trigger{margin:12px 16px 16px;padding:10px 13px;border-radius:8px;background:var(--surface-2);font-size:12.5px;color:var(--muted)}
+/* reasons */
+.reason{border-left:2px solid var(--danger);padding:8px 0 8px 14px;margin:10px 0}
+.reason .rid{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--danger);font-weight:700}
+.reason h4{font-size:13.5px;font-weight:600;margin:2px 0}
+.reason p{font-size:13px;color:var(--ink-2)}
+.principle{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2)}
+footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">K19</span>
+    <span class="unit-title">目的翻转 · 人的保护面</span>
+    <span class="chip warn">撤除待拍板 · 条件性撤除（待用户确认）</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例数据 · 非真实业务 · 概念推演非当前功能</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="concept" type="button">概念推演：若立项的形态</button>
+    <button class="tab" data-panel="fallback" type="button">降级存活形态：纯事实陈列</button>
+    <button class="tab" data-panel="reasons" type="button">不推荐理由与去向</button>
+  </div>
+
+  <!-- ============ 概念推演 ============ -->
+  <section class="panel active" id="concept">
+    <h2>概念可视化：该方向若立项，会呈现为一套「主动保护」控件</h2>
+    <p class="lead">以下为概念推演，用于让决策者看见「独立方向」原本主张的完整形态；它不是当前产品已具备的功能，也不代表推荐立项。</p>
+    <div class="concept" style="margin-top:14px">
+      <div class="concept-tag">概念推演框 · 六件主张过的保护控件</div>
+      <div class="grid6">
+        <div class="cmp dead">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+          <h4>WIP 硬上限闸</h4>
+          <p>在途任务超过阈值 N 时，新条目录入被拦截。</p>
+        </div>
+        <div class="cmp dead">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          <h4>拒单闸</h4>
+          <p>在录入口拦截新承诺，代用户说「这个先不接」。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 14A8 8 0 1 1 10 4a7 7 0 0 0 10 10z"/></svg>
+          <h4>非工作时间静默</h4>
+          <p>夜间 / 周末不推送提示。<span style="color:var(--success)">已并入 K11</span>。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 12h8"/></svg>
+          <h4>留白配额</h4>
+          <p>每周预留无承诺时段，工具主动腾空日历。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+          <h4>负荷体检</h4>
+          <p>陈列在途数、改期次数、深夜/周末编辑记录。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19h16M7 15l4-4 3 3 5-6"/></svg>
+          <h4>合法烂尾两列</h4>
+          <p>把可体面终止与应继续的项目分两列收纳。</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>致命缺口：闸门装在下游，拦截不到上游的承诺</h2>
+    <p class="lead">WIP 硬上限与拒单闸的拦截对象是「正在形成的承诺」，但本工具无入站请求通道，承诺在公司系统（飞书项目 / Jira）内形成后才被录入。录入口闸门位于因果链下游。</p>
+    <div class="chain">
+      <div class="node up">
+        <div class="k">上游 · 公司系统（H2）</div>
+        <div class="v">承诺在这里形成</div>
+        <div class="s">协作方提出、会议口头认领、邮件答应——本工具看不到。</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="k">下游 · 本工具录入口</div>
+        <div class="v">闸门只能拦已录入条目</div>
+        <div class="s">此时承诺已成立，拦得住记录、拦不住接单。</div>
+        <span class="gate-mark">F19-K19-01 致命：拦截点错位</span>
+      </div>
+    </div>
+    <p class="note">依据：红队 F/K19.md F19-K19-01（当前阶段致命）；终局核验 F-终局核验 §三.1；裁判 A「撤并确认」、裁判 B「条件性撤除（建议成立，待用户拍板）」。</p>
+  </section>
+
+  <!-- ============ 降级存活形态 ============ -->
+  <section class="panel" id="fallback">
+    <h2>降级后存活的唯一形态：纯事实陈列（无触发、无裁决）</h2>
+    <p class="lead">撤除独立方向后，剩余内容只是把已有事实摆出来。它不设阈值、不下「过载」结论、不主动提醒，被忽略即结束。</p>
+    <div class="factcard" style="margin-top:14px">
+      <div class="factrow">
+        <span class="label">在途条目数</span>
+        <span class="val mono">12（todo 4 · in_progress 8 · blocked 3，示例）</span>
+        <span class="tag">只读计数 · 无阈值</span>
+      </div>
+      <div class="factrow">
+        <span class="label">改期次数（近 30 天）</span>
+        <span class="val mono">5 次（示例，逐条可点开）</span>
+        <span class="tag">只读事实 · 无警告</span>
+      </div>
+      <div class="factrow">
+        <span class="label">深夜 / 周末编辑记录</span>
+        <span class="val mono">工作日 22:00 后 3 次 · 周末 2 次（示例）</span>
+        <span class="tag">只读事实 · 不贴健康标签</span>
+      </div>
+      <div class="no-trigger">本陈列不含触发判定：没有阈值线、没有「过载」文案、没有主动弹窗；与现有 people-load 聚合、health 派生、progress 陈列同用途，不新增计算原语。</div>
+    </div>
+    <p class="note">红线（用户确认版）：当前形态仅纯事实陈列，无触发阈值、不宣称过载警告，不虚构「智能提醒保护」。带宽锚、漏标率、本人接受度三项为 E6 待用户数据，不构成独立方向存续理由。</p>
+  </section>
+
+  <!-- ============ 不推荐理由与去向 ============ -->
+  <section class="panel" id="reasons">
+    <h2>不推荐独立立项的理由（引用台账致命/显著攻击）</h2>
+    <div class="reason">
+      <span class="rid">F19-K19-01 · 致命（当前阶段）</span>
+      <h4>WIP 硬上限 / 拒单闸执行不到因果节点</h4>
+      <p>无入站请求通道、承诺在上游形成，闸门装在台账录入口；降级为「对已录入条目建议砍/缓」后退化为 K8 组合取舍的保护面文案变体。</p>
+    </div>
+    <div class="reason">
+      <span class="rid">R2-F-K19-01 · 显著</span>
+      <h4>相对负载提示无个人带宽锚</h4>
+      <p>撤回绝对 N 后改「相对近期在途量偏离」，慢性过载下基线长期偏高，相对值不指向保护触发；无个人带宽历史校准，触发含义失效。</p>
+    </div>
+    <div class="reason">
+      <span class="rid">R2-F-K19-02 · 局部</span>
+      <h4>等待项剔除依赖人主动标 blocked，漏标即绕过</h4>
+      <p>task 状态枚举仅 todo / in_progress / blocked / done，无独立 waiting；等待关系在公司系统，工具无法自动识别，剔除规则无兜底。</p>
+    </div>
+    <div class="reason">
+      <span class="rid">R2-F-K19-03 · 局部</span>
+      <h4>合法烂尾列与 paused / archived 构成第三套停滞语义</h4>
+      <p>project 已有 paused（已暂停）、archived（已归档）两个停滞态；烂尾列应收敛为其上面的视图过滤标签，非新收纳位。</p>
+    </div>
+
+    <h2>剩余组件去向（撤除名分后不散失）</h2>
+    <table>
+      <colgroup><col style="width:26%"><col style="width:40%"><col style="width:34%"></colgroup>
+      <thead><tr><th>原组件</th><th>终局形态</th><th>去向</th></tr></thead>
+      <tbody>
+        <tr><td>负载纯事实陈列</td><td>在途数 / 改期次数 / 深夜周末编辑记录，只读无阈值</td><td class="togo">并入现有陈列层（people-load / health / progress）</td></tr>
+        <tr><td>台账内可见事实提示（劝停改）</td><td>无触发、无裁决、被忽略即结束</td><td class="togo">陈列层静态文案，不独立成机制</td></tr>
+        <tr><td>合法烂尾立场</td><td>paused / archived 上的视图过滤标签</td><td class="togo">非新实体、非新状态</td></tr>
+        <tr><td>非工作时间静默</td><td>时段过滤规则</td><td class="togo">已并入 K11 节奏呈现层</td></tr>
+      </tbody>
+    </table>
+
+    <h2>保留项：立场留原则，不留名分</h2>
+    <div class="principle">
+      撤除的是「独立方向名分」，不是「保护人」价值取向——5 名发散者独立趋同。该立场作为全局设计原则贯穿 K8（组合取舍：允许缓/砍/休眠）与 K11（沉默：到达后安静呈现）的陈列层，不单独建实体、不建触发。
+    </div>
+  </section>
+
+  <footer>
+    K19 · 阶段7 分片4「人生与保护面」概念原型 · 示例数据显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：F19-K19-01（redteam-F/K19.md）、R2-F-K19-01/02/03（F-终局核验）、终局台账 K19 行、裁判 A/B 裁决。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.remove('active')});
+      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+      b.classList.add('active');
+      document.getElementById(b.dataset.panel).classList.add('active');
+    });
+  });
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+})();
+</script>
+</body>
+</html>

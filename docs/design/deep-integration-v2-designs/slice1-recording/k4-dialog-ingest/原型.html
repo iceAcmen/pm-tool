@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K4 台账吃对话 · 原型（示例数据）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234176e6'/%3E%3Ccircle cx='8' cy='8' r='3' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+    --ink:#1c1c1e; --text-2:#61666b; --muted:#696e74; --faint:#71767c;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+    --accent:#4176e6; --accent-deep:#4868b2; --accent-soft:#e4edfd;
+    --success:#22c55e; --success-soft:rgba(34,197,94,.12);
+    --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+    --danger:#ef4444; --danger-soft:rgba(239,68,68,.10);
+    --todo:#d4d4d4;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,18,20,.06);
+    --shadow-2:0 1px 2px rgba(16,18,20,.06),0 6px 18px rgba(16,18,20,.07);
+    --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  body[data-ds-dark-theme]{
+    --bg:#1f2023; --surface:#26272b; --surface-2:#2e3034; --surface-3:#383a3f;
+    --ink:#ececee; --text-2:#a8adb3; --muted:#9aa0a6; --faint:#8b9096;
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+    --accent:#7aaaff; --accent-deep:#7aaaff; --accent-soft:rgba(122,170,255,.16);
+    --success-soft:rgba(34,197,94,.16); --warn-soft:rgba(245,158,11,.16); --danger-soft:rgba(239,68,68,.16);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45;font-feature-settings:'tnum' 1}
+  button{font:inherit;white-space:nowrap;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  input,textarea{font:inherit}
+  .topbar{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .tb-badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent-deep);border-radius:var(--r-sm);padding:3px 9px}
+  .tb-title{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .tb-sub{font-size:12px;color:var(--muted)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-pill);padding:3px 10px;font-weight:600}
+  .theme-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:6px 12px;font-size:12.5px}
+  .theme-btn:hover{background:var(--surface-3);color:var(--ink)}
+  .shell{display:flex;align-items:stretch;max-width:1180px;margin:0 auto}
+  .rail{width:216px;flex-shrink:0;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+  .rail-h{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.09em;padding:0 8px 8px}
+  .rail-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--text-2);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+  .rail-item:hover{background:var(--surface-2);color:var(--ink)}
+  .rail-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .rail-item .dot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex-shrink:0}
+  .rail-item.active .dot{background:var(--accent)}
+  .main{flex:1;min-width:0;padding:22px 26px 48px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-2);padding:18px 20px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .card .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;max-width:660px;line-height:1.6}
+  /* 模式切换 */
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+  .seg button{padding:8px 16px;font-size:13px;background:var(--surface-2);color:var(--text-2);border:none}
+  .seg button.on{background:var(--accent);color:#fff;font-weight:600}
+  .mode-note{margin-top:10px;font-size:12.5px;line-height:1.6;border-radius:var(--r);padding:12px 14px}
+  .mode-note.observe{background:var(--warn-soft);color:var(--text-2)}
+  .mode-note.live{background:var(--accent-soft);color:var(--text-2)}
+  /* 候选条 */
+  .cand{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;background:var(--surface)}
+  .cand-top{display:flex;gap:10px;align-items:flex-start}
+  .cand-check{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+  .cand-body{flex:1;min-width:0}
+  .cand-quote{font-size:13.5px;font-weight:600}
+  .cand-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+  .fld{display:flex;flex-direction:column;gap:4px}
+  .fld label{font-size:11px;color:var(--faint);letter-spacing:.05em}
+  .fld input{border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 10px;font-size:13px;background:var(--surface-2);color:var(--ink)}
+  .cand-foot{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);background:var(--surface-2);white-space:nowrap}
+  .chip.ok{color:var(--success);background:var(--success-soft);border-color:transparent}
+  .chip.warn{color:var(--warn);background:var(--warn-soft);border-color:transparent}
+  .chip.low{color:var(--muted);background:var(--surface-3)}
+  .mini-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:5px 12px;font-size:12.5px}
+  .mini-btn:hover{border-color:var(--accent);color:var(--accent-deep)}
+  .batch-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:var(--r-sm);padding:8px 18px;font-size:13px;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--text-2);border-color:var(--line)}
+  .done-line{font-size:12.5px;color:var(--success);margin-top:8px;display:none}
+  .done-line.show{display:block}
+  .sug{border:1px dashed var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;background:var(--surface-2)}
+  .sug .q{font-size:13px;color:var(--text-2)}
+  .sug .foot{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
+  .third{border-left:3px solid var(--warn)}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;border-left:2px solid var(--line);padding-left:12px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:10px 18px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+  .toast.show{opacity:1}
+  @media(max-width:860px){.shell{flex-direction:column}.rail{width:100%;border-right:none;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}.cand-fields{grid-template-columns:1fr}}
+  @media(max-width:860px){.fld input{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-left">
+    <span class="tb-badge">K4</span>
+    <div>
+      <div class="tb-title">台账吃对话 · 预填减负 + 人裁决批处理</div>
+      <div class="tb-sub">显式主档高置信进箱；会话结束被动低置信待收补档；观察模式先行；不宣称「录入趋零」</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="demo-tag">示例数据 · 非生产 API</span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="分片单元导航">
+    <div class="rail-h">分片1 · 录入与证据流</div>
+    <button class="rail-item" type="button" data-jump="K2"><span class="dot"></span>K2 写边界</button>
+    <button class="rail-item" type="button" data-jump="K3"><span class="dot"></span>K3 证据闭环</button>
+    <div class="rail-item active" aria-current="page"><span class="dot"></span>K4 台账吃对话</div>
+    <button class="rail-item" type="button" data-jump="K5"><span class="dot"></span>K5 会议流（撤并）</button>
+    <button class="rail-item" type="button" data-jump="K6"><span class="dot"></span>K6 完成评判层</button>
+    <button class="rail-item" type="button" data-jump="X6"><span class="dot"></span>X6 完成仪式感</button>
+    <button class="rail-item" type="button" data-jump="K12"><span class="dot"></span>K12 自我计量</button>
+  </nav>
+
+  <main class="main">
+    <!-- 模式 -->
+    <section class="card">
+      <h2>启用前置：稳定模型通道 + 观察模式先行</h2>
+      <p class="desc">prod Key 未配 / 样本不足期不启用自动浮出，全手工；不预设 recall/precision 下限，样本积累后按本机分布自定阈值再切启用。切换观察/启用仅为演示。</p>
+      <div class="seg" role="tablist">
+        <button type="button" id="mObs" class="on">观察模式（默认）</button>
+        <button type="button" id="mLive">启用模式</button>
+      </div>
+      <div class="mode-note observe" id="modeNote">
+        观察模式：只记录浮出结果与人工核对，<b>不进箱、不落库</b>；用于积累本机 recall/precision 分布，达标阈值由样本自定，无既定标准。
+      </div>
+    </section>
+
+    <!-- 显式主档候选箱 -->
+    <section class="card">
+      <h2>显式主档 · 高置信进箱（人逐条判真 / 归并 / 签字）</h2>
+      <p class="desc">人在会话收尾喊收或标记段落触发；系统预填标题/到期/负责人占位，被消灭的只是「新建条目、构造字段」的录入动作，逐条阅读、判真、归并、签字的认知动作保留。勾选后批量签字才落库（C3）。</p>
+
+      <div class="cand" data-c="1">
+        <div class="cand-top">
+          <input type="checkbox" class="cand-check" aria-label="选择候选1">
+          <div class="cand-body">
+            <div class="cand-quote">「我周五前把 Q4 评审材料发给张工过目。」</div>
+            <div class="cand-fields">
+              <div class="fld"><label>标题（预填，可改）</label><input value="发送 Q4 评审材料给张工过目"></div>
+              <div class="fld"><label>到期（预填，相对日期不臆造）</label><input value="本周五（待确认）"></div>
+              <div class="fld"><label>负责人</label><input value="本人"></div>
+            </div>
+            <div class="cand-foot">
+              <span class="chip ok">高置信 · 显式喊收</span>
+              <button class="mini-btn" type="button" data-merge="1">与 t-118 归并</button>
+              <button class="mini-btn" type="button" data-drop="1">判否，丢弃</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cand" data-c="2">
+        <div class="cand-top">
+          <input type="checkbox" class="cand-check" aria-label="选择候选2">
+          <div class="cand-body">
+            <div class="cand-quote">「下周一例会同步评审结论，纪要我来整理。」</div>
+            <div class="cand-fields">
+              <div class="fld"><label>标题（预填，可改）</label><input value="整理评审结论纪要并在周一例会同步"></div>
+              <div class="fld"><label>到期（预填，待确认）</label><input value="下周一例会前（待确认）"></div>
+              <div class="fld"><label>负责人</label><input value="本人"></div>
+            </div>
+            <div class="cand-foot">
+              <span class="chip ok">高置信 · 显式喊收</span>
+              <button class="mini-btn" type="button" data-merge="2">与 t-121 归并</button>
+              <button class="mini-btn" type="button" data-drop="2">判否，丢弃</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="batch-bar">
+        <button class="btn" type="button" id="signBtn">批量签字落库（已勾选）</button>
+        <span class="chip low">未勾选不落库</span>
+        <span class="done-line" id="doneLine">已签字落库 0 条（演示）</span>
+      </div>
+    </section>
+
+    <!-- 被动低置信补档 -->
+    <section class="card">
+      <h2>会话结束 · 被动低置信「待收建议」补档（不进箱、不催、可整条忽略）</h2>
+      <p class="desc">为遗忘喊收提供可见补捞面；只列会话内内容，不自动落库，可整条忽略。与显式主档分开陈列，不混入高置信箱。</p>
+
+      <div class="sug" data-s="1">
+        <div class="q">「之前提过的那个模板，回头可以再对一下版本。」（探讨句，低置信）</div>
+        <div class="foot">
+          <span class="chip low">低置信 · 待收建议</span>
+          <button class="mini-btn" type="button" data-promote="1">转显式主档核对</button>
+          <button class="mini-btn" type="button" data-ignore="1">整条忽略</button>
+        </div>
+      </div>
+
+      <div class="sug third" data-s="2">
+        <div class="q">「让研发那边给个反馈。」（第三方承诺，协作方不登录本工具）</div>
+        <div class="foot">
+          <span class="chip warn">第三方承诺 · 仅记录、不跟进、不催办</span>
+          <button class="mini-btn" type="button" data-note="2">存为 task 备注留痕</button>
+          <button class="mini-btn" type="button" data-ignore="2">忽略</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="note">
+        1. 触发成功率 / 漏报率 / 单条裁决时长、净减负均待 K12 三计数验证，未达区间不扩大启用；<br>
+        2. 只捕获 dsh 会话内承诺，公司系统/线下承诺归 K3/K18，净收益按子集折算；<br>
+        3. 第三方承诺不建独立观察区死数据列表，仅会话内留痕或作 task 备注；<br>
+        4. 本页为设计原型，全部条目为示例数据，不调用生产 API。
+      </p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var dark=false,btn=document.getElementById('themeBtn');
+  btn.addEventListener('click',function(){dark=!dark;if(dark){document.body.setAttribute('data-ds-dark-theme','');btn.textContent='切回浅色';}else{document.body.removeAttribute('data-ds-dark-theme');btn.textContent='切换深浅';}});
+  var toast=document.getElementById('toast'),tt;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800);}
+  document.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){showToast('本页仅演示 K4；'+b.dataset.jump+' 单元见分片覆盖索引。');});});
+
+  var mObs=document.getElementById('mObs'),mLive=document.getElementById('mLive'),note=document.getElementById('modeNote');
+  function setMode(live){
+    mObs.classList.toggle('on',!live);mLive.classList.toggle('on',live);
+    if(live){note.className='mode-note live';note.innerHTML='启用模式：高置信主档进箱等待签字；阈值已由观察样本本机自定（演示），未达标不切此模式。';}
+    else{note.className='mode-note observe';note.innerHTML='观察模式：只记录浮出结果与人工核对，<b>不进箱、不落库</b>；用于积累本机 recall/precision 分布，达标阈值由样本自定，无既定标准。';}
+  }
+  mObs.addEventListener('click',function(){setMode(false);});
+  mLive.addEventListener('click',function(){setMode(true);});
+
+  var signed=0;
+  document.getElementById('signBtn').addEventListener('click',function(){
+    var n=0;
+    document.querySelectorAll('.cand').forEach(function(c){
+      var cb=c.querySelector('.cand-check');
+      if(cb && cb.checked && !c.dataset.done){c.dataset.done='1';c.style.opacity='.55';n++;}
+    });
+    signed+=n;
+    var dl=document.getElementById('doneLine');
+    dl.textContent='已签字落库 '+signed+' 条（演示）；未勾选条目保持在箱内。';dl.classList.add('show');
+    showToast(n>0?'已批量签字落库 '+n+' 条。':'没有勾选任何条目，未落库。');
+  });
+  document.querySelectorAll('[data-merge]').forEach(function(b){b.addEventListener('click',function(){showToast('已标记归并到现有任务，待签字时一并处理（演示）。');});});
+  document.querySelectorAll('[data-drop]').forEach(function(b){b.addEventListener('click',function(){var r=document.querySelector('[data-c="'+b.dataset.drop+'"]');r.style.opacity='.4';showToast('已判否丢弃，不落库（演示）。');});});
+  document.querySelectorAll('[data-promote]').forEach(function(b){b.addEventListener('click',function(){showToast('已转入显式主档核对区，仍需人签字（演示）。');});});
+  document.querySelectorAll('[data-ignore]').forEach(function(b){b.addEventListener('click',function(){var r=document.querySelector('[data-s="'+b.dataset.ignore+'"]');r.style.opacity='.4';showToast('已整条忽略，不留跟进义务（演示）。');});});
+  document.querySelectorAll('[data-note]').forEach(function(b){b.addEventListener('click',function(){showToast('仅存为 task 备注留痕：不跟进、不催办（演示）。');});});
+})();
+</script>
+</body>
+</html>

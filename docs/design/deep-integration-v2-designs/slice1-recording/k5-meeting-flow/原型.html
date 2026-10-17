@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K5 会议流三段捕获 · 撤并说明（概念可视化）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234176e6'/%3E%3Ccircle cx='8' cy='8' r='3' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+    --ink:#1c1c1e; --text-2:#61666b; --muted:#696e74; --faint:#71767c;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+    --accent:#4176e6; --accent-deep:#4868b2; --accent-soft:#e4edfd;
+    --success:#22c55e; --success-soft:rgba(34,197,94,.12);
+    --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+    --danger:#ef4444; --danger-soft:rgba(239,68,68,.10);
+    --todo:#d4d4d4;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,18,20,.06);
+    --shadow-2:0 1px 2px rgba(16,18,20,.06),0 6px 18px rgba(16,18,20,.07);
+    --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  body[data-ds-dark-theme]{
+    --bg:#1f2023; --surface:#26272b; --surface-2:#2e3034; --surface-3:#383a3f;
+    --ink:#ececee; --text-2:#a8adb3; --muted:#9aa0a6; --faint:#8b9096;
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+    --accent:#7aaaff; --accent-deep:#7aaaff; --accent-soft:rgba(122,170,255,.16);
+    --success-soft:rgba(34,197,94,.16); --warn-soft:rgba(245,158,11,.16); --danger-soft:rgba(239,68,68,.16);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45}
+  button{font:inherit;white-space:nowrap;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .topbar{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .tb-badge{font-size:11px;font-weight:700;color:#fff;background:var(--faint);border-radius:var(--r-sm);padding:3px 9px}
+  .tb-title{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .tb-sub{font-size:12px;color:var(--muted)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-pill);padding:3px 10px;font-weight:600}
+  .theme-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:6px 12px;font-size:12.5px}
+  .theme-btn:hover{background:var(--surface-3);color:var(--ink)}
+  .shell{display:flex;align-items:stretch;max-width:1180px;margin:0 auto}
+  .rail{width:216px;flex-shrink:0;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+  .rail-h{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.09em;padding:0 8px 8px}
+  .rail-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--text-2);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+  .rail-item:hover{background:var(--surface-2);color:var(--ink)}
+  .rail-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .rail-item .dot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex-shrink:0}
+  .rail-item.active .dot{background:var(--accent)}
+  .main{flex:1;min-width:0;padding:22px 26px 48px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-2);padding:18px 20px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .card .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;max-width:660px;line-height:1.6}
+  .verdict-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--faint);background:var(--surface-3);border-radius:var(--r-pill);padding:4px 12px}
+  /* 去向图 */
+  .map{display:flex;flex-direction:column;gap:12px}
+  .map-row{display:grid;grid-template-columns:1fr 56px 1fr;gap:12px;align-items:stretch}
+  .seg-box{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;background:var(--surface-2)}
+  .seg-box .n{font-family:var(--font-mono);font-size:11px;color:var(--faint)}
+  .seg-box .t{font-size:13.5px;font-weight:600;margin:4px 0 3px}
+  .seg-box .d{font-size:12px;color:var(--muted);line-height:1.6}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent-deep);font-size:22px;font-family:var(--font-mono)}
+  .to-box{border:1px solid var(--accent);border-radius:var(--r);padding:14px 16px;background:var(--accent-soft)}
+  .to-box .t{font-size:13.5px;font-weight:700;color:var(--accent-deep)}
+  .to-box .d{font-size:12px;color:var(--text-2);line-height:1.6;margin-top:3px}
+  /* 理由折叠 */
+  .reason{border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+  .reason-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:var(--surface);text-align:left;color:var(--ink)}
+  .reason-head:hover{background:var(--surface-2)}
+  .reason-head .rt{font-size:13.5px;font-weight:600}
+  .reason-head .rn{font-family:var(--font-mono);font-size:11px;color:var(--faint)}
+  .reason-body{display:none;padding:0 16px 14px;font-size:12.5px;color:var(--text-2);line-height:1.7;border-top:1px solid var(--line-soft)}
+  .reason.open .reason-body{display:block;padding-top:12px}
+  .reason-body ul{padding-left:18px}
+  .reason-body li{margin:4px 0}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);background:var(--surface-2);white-space:nowrap}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;border-left:2px solid var(--line);padding-left:12px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:10px 18px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+  .toast.show{opacity:1}
+  @media(max-width:860px){.shell{flex-direction:column}.rail{width:100%;border-right:none;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}.map-row{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:28px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-left">
+    <span class="tb-badge">K5 · 撤并</span>
+    <div>
+      <div class="tb-title">会议流三段捕获 · 不独立成立，三段各归承接方</div>
+      <div class="tb-sub">概念可视化 + 不推荐理由；无独立 schema / 命令 / 视图残留</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="demo-tag">概念页 · 非功能原型</span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="分片单元导航">
+    <div class="rail-h">分片1 · 录入与证据流</div>
+    <button class="rail-item" type="button" data-jump="K2"><span class="dot"></span>K2 写边界</button>
+    <button class="rail-item" type="button" data-jump="K3"><span class="dot"></span>K3 证据闭环</button>
+    <button class="rail-item" type="button" data-jump="K4"><span class="dot"></span>K4 台账吃对话</button>
+    <div class="rail-item active" aria-current="page"><span class="dot"></span>K5 会议流（撤并）</div>
+    <button class="rail-item" type="button" data-jump="K6"><span class="dot"></span>K6 完成评判层</button>
+    <button class="rail-item" type="button" data-jump="X6"><span class="dot"></span>X6 完成仪式感</button>
+    <button class="rail-item" type="button" data-jump="K12"><span class="dot"></span>K12 自我计量</button>
+  </nav>
+
+  <main class="main">
+    <section class="card">
+      <h2>撤并判定 <span class="verdict-chip">已撤并 · 不建独立方向</span></h2>
+      <p class="desc">按 E4 判据：一个概念只有在不被相邻方向吸收、且自身带机制增量时才独立成立。K5 三段分别已有承接方，独立方向无新增机制，故撤并；本页只做去向说明，不承诺独立产品形态。</p>
+      <div class="map">
+        <div class="map-row">
+          <div class="seg-box"><div class="n">会前 · 应读包</div><div class="t">开会前自动列应读历史</div><div class="d">把相关任务/纪要/证据快照打包成会前材料。</div></div>
+          <div class="arrow">→</div>
+          <div class="to-box"><div class="t">归入 K1 时间触发变体</div><div class="d">应读快照作为 K1 触发载荷的一种内容形态，不新建独立会前模块。</div></div>
+        </div>
+        <div class="map-row">
+          <div class="seg-box"><div class="n">会后 · 行动项认领</div><div class="t">散会后行动项浮出待认领</div><div class="d">会后承诺/行动项进入待确认清单。</div></div>
+          <div class="arrow">→</div>
+          <div class="to-box"><div class="t">归入 K4 候选箱同一机制</div><div class="d">与会话结束被动低置信待收建议共用候选箱与签字流，不另设认领窗口。</div></div>
+        </div>
+        <div class="map-row">
+          <div class="seg-box"><div class="n">会中 · 分段 STT 捕获</div><div class="t">边开边转写、分段落行动项</div><div class="d">实时监听会议语音并切分。</div></div>
+          <div class="arrow">→</div>
+          <div class="to-box"><div class="t">降为 meeting-summarize 输入方式</div><div class="d">粘贴文本/附件作为现有 summarize 的输入增强，不做独立实时监听。</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>为什么不推荐独立成立（点击展开理由）</h2>
+      <p class="desc">四条理由均来自攻防终局核验，非主观偏好。</p>
+
+      <div class="reason open">
+        <button class="reason-head" type="button"><span class="rt">理由 1 · 会中连续监听撞 C7 无常驻约束</span><span class="rn">B5-K5-01 / R2-C-K5-01</span></button>
+        <div class="reason-body">
+          <ul>
+            <li>宿主无常驻进程、无后台监听能力（C7），dsh 也不是会议容器，没有日历/会议生命周期感知；</li>
+            <li>「边开边落」需要持续在线采集，第一期无承载通道，实时监听形态不成立。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reason">
+        <button class="reason-head" type="button"><span class="rt">理由 2 · FTS5 选译依赖，避免复杂度下沉本体</span><span class="rn">B5-K5-02</span></button>
+        <div class="reason-body">
+          <ul>
+            <li>会中/会后检索若依赖宿主 session-query FTS5 选译，属于可选依赖；</li>
+            <li>独立方向会把该依赖的实现复杂度压到本体，撤并后由承接方按需取用。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reason">
+        <button class="reason-head" type="button"><span class="rt">理由 3 · 硬时间窗（60 秒）已取消</span><span class="rn">R2-C-K5-02</span></button>
+        <div class="reason-body">
+          <ul>
+            <li>「散会后 60 秒黄金认领窗口」是独立方向的标志性机制，已被取消；</li>
+            <li>取消后会后认领退化为普通候选箱条目，不再需要独立时间窗设计。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reason">
+        <button class="reason-head" type="button"><span class="rt">理由 4 · 三段均被相邻方向吸收，无机制增量</span><span class="rn">E4 判据</span></button>
+        <div class="reason-body">
+          <ul>
+            <li>会前包=K1 载荷形态；会后认领=K4 候选箱；STT=现有 summarize 输入方式；</li>
+            <li>独立 K5 不产生新的 schema、命令或视图，按 E4 不构成独立方向。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="note">
+        残留：现有 meeting-summarize 可继续接受粘贴文本/附件作为输入方式增强（局部），不升级为独立会议流；本页为概念说明，不产出可交互功能原型。
+      </p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var dark=false,btn=document.getElementById('themeBtn');
+  btn.addEventListener('click',function(){dark=!dark;if(dark){document.body.setAttribute('data-ds-dark-theme','');btn.textContent='切回浅色';}else{document.body.removeAttribute('data-ds-dark-theme');btn.textContent='切换深浅';}});
+  var toast=document.getElementById('toast'),tt;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800);}
+  document.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){showToast('本页为 K5 撤并概念页；'+b.dataset.jump+' 见分片覆盖索引。');});});
+  document.querySelectorAll('.reason-head').forEach(function(h){
+    h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});
+  });
+})();
+</script>
+</body>
+</html>

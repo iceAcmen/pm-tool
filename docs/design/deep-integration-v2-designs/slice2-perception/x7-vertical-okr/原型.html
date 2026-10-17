@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X7 纵向愿景 OKR + 习惯层 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EX7%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* 愿景树 */
+  .tree{display:flex;flex-direction:column;gap:8px}
+  .tnode{border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .tnode.vision{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 35%,transparent);font-weight:700}
+  .tnode.okr{margin-left:28px}
+  .tnode.proj{margin-left:56px}
+  .tdot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+  .tdot.soft{background:transparent;border:1.5px dashed var(--muted)}
+  .tmeta{font-family:var(--mono);font-size:11px;color:var(--muted);flex:none}
+  .soft-line{margin-left:56px;padding:8px 14px;border:1px dashed var(--line);border-radius:var(--r-sm);font-size:12.5px;color:var(--secondary);display:flex;gap:10px;align-items:center}
+  /* 归属建议 */
+  .sug{border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin:10px 0;background:var(--elev)}
+  .sug .why{font-size:12.5px;color:var(--secondary);margin:6px 0 10px}
+  .acts{display:flex;gap:8px}
+  .btn{font-size:12.5px;padding:7px 16px;border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--secondary)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+  /* 习惯 */
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:12px 0}
+  .day{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 6px;text-align:center;cursor:default;min-height:74px;display:flex;flex-direction:column;justify-content:space-between;gap:6px}
+  .day.today{cursor:pointer;border-color:var(--accent)}
+  .day .dl{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .day .ds{font-size:11px;color:var(--muted)}
+  .day.done{background:color-mix(in srgb,var(--done) 12%,transparent);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .day.done .ds{color:var(--done);font-weight:600}
+  .day.empty .ds{color:var(--line-strong,var(--muted))}
+  .day.today{border-color:var(--accent)}
+  .streak{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .streak .box{border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+  .streak .v{font-family:var(--mono);font-size:22px;font-weight:700}
+  .streak .l{font-size:12px;color:var(--secondary);margin-top:2px}
+  .补记{font-size:12.5px;color:var(--secondary);margin-top:10px}
+  .补记 button{font-family:var(--sans);font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;text-decoration:underline}
+  /* 形态并陈 */
+  .forms{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:760px){.forms,.streak{grid-template-columns:1fr}.week{grid-template-columns:repeat(4,1fr)}.tnode.okr{margin-left:14px}.tnode.proj,.soft-line{margin-left:28px}}
+  .form{border:1px solid var(--line);border-radius:var(--r);padding:15px 16px}
+  .form.chosen{border-color:color-mix(in srgb,var(--done) 45%,transparent)}
+  .form h3{font-size:13.5px;font-weight:700;margin-bottom:6px}
+  .form p{font-size:12.5px;color:var(--secondary)}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:var(--r-sm);opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">X7 · 纵向愿景 OKR（项目之上）+ 习惯/日常节奏（项目之下）</div>
+      <h1>两层都要 · 软关联不计权重 · streak 连续/累计分离（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A/B：采纳（用户 §三 拍板正式方向）</span>
+    <span class="chip">终局：饱和（正式方向）</span>
+    <span class="chip e6">E6：单人保留率待证；习惯层本期是否同批待拍板</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <!-- 形态并陈 -->
+  <div class="card">
+    <h2>两种承载形态并陈（论证结论与待验证）</h2>
+    <div class="forms">
+      <div class="form chosen">
+        <h3>形态 A · 独立纵向层（本设计采用）</h3>
+        <p>愿景/年度 OKR 为项目之上实体，习惯为项目之下层；用户 §三 裁定「两层都要」推翻弱候选判定，独立资格成立。周期触发归 K11，草稿/定稿复用 X6。</p>
+      </div>
+      <div class="form">
+        <h3>形态 B · 复用 K8/K11 挂载（对照，不采用）</h3>
+        <p>愿景作 K8 战略权重标签、习惯作 K11 节奏条目；边界：不产生可分解/可追踪的上层目标与连续/累计分离档案。作为对照保留，待习惯层分期拍板。</p>
+      </div>
+    </div>
+    <div class="note">待验证：单人保留率 E6（企业 42% 转述仅登记不外推）；习惯层（项目之下）本期是否与愿景/OKR 层同批纳入，列入拍板清单第 5 条。</div>
+  </div>
+
+  <!-- 愿景树 -->
+  <div class="card">
+    <h2>项目之上：愿景 → 年度 OKR → 项目（单父 primaryOkrId，软关联不计权重）</h2>
+    <div class="tree">
+      <div class="tnode vision"><span><span class="tdot"></span> 愿景：成为能独立带复杂项目的 PM（示例）</span><span class="tmeta">vision</span></div>
+      <div class="tnode okr"><span><span class="tdot"></span> O1 年度：主导交付 2 个完整改版项目</span><span class="tmeta">OKR · 2026</span></div>
+      <div class="tnode proj"><span><span class="tdot"></span> PRJ-01 官网改版二期（主归属 O1）</span><span class="tmeta">primaryOkrId</span></div>
+      <div class="tnode proj"><span><span class="tdot"></span> PRJ-04 支付联调收口（主归属 O1）</span><span class="tmeta">primaryOkrId</span></div>
+      <div class="soft-line"><span class="tdot soft"></span> PRJ-07 知识库迁移 · 关联 O2（软关联行可见，不计入主归属权重）</div>
+    </div>
+    <div class="sug" id="sugBox">
+      <div style="font-weight:600;font-size:13.5px">agent 代起草归属建议：PRJ-11 移动端适配 → 建议主归属 O1</div>
+      <div class="why">依据：与 O1「完整改版交付」连续（示例）。未确认才进收件区，季度回访集中清空；人确认后落 primaryOkrId。</div>
+      <div class="acts">
+        <button class="btn primary" onclick="confirmSug()">确认归属</button>
+        <button class="btn" onclick="dismissSug()">忽略</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 习惯层 -->
+  <div class="card">
+    <h2>项目之下：习惯「每日 30 分钟专业阅读」· 会话派生 + 轻补记</h2>
+    <div class="week" id="week"></div>
+    <div class="补记">
+      <button onclick="backfill()">补记昨天（2 天窗内回填，保持连续）</button>
+      <span class="muted fs12"> · 空日如实留空，不伪造全 0 曲线；完成率分母只在有记录的活跃周期计。</span>
+    </div>
+    <div class="streak">
+      <div class="box"><div class="v" id="curStreak">2</div><div class="l">连续 streak（断签超窗重置 0）</div></div>
+      <div class="box"><div class="v">12 天 / 86</div><div class="l">累计档案：最长段 12 天 · 累计 86 天（永久保留，不清零）</div></div>
+    </div>
+    <div class="note">周期触发（每日提醒/季度回访）归 K11 节奏呈现层，X6 保留事件触发即时复盘，两套周期提醒不并行；66 天维持窗口来自 Lally 2010（E1，仅适用简单/每日/线索固定行为，不外推复杂习惯）。</div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：R2-E-X7-01 单父低估多目标 → 软关联行可见不计权重+代起草确认；R2-E-X7-02 会话外空白 → 一键今日完成轻补记+空日留空；R2-E-X7-03 续接矛盾 → 连续/累计分离+2 天窗回填；R2-E-X7-04 周期触发撞车 → 归 K11，X6 仅事件触发。</li>
+      <li>登记：同日派生/补记去重（X7-a）、关联行视觉区分（X7-b）、单人保留率 E6。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+// 最近 7 天（示例）：今天=第 7 格；前 6 天完成 4、空 2
+const days=[
+  {lab:'周一',done:true},{lab:'周二',done:false},{lab:'周三',done:true},
+  {lab:'周四',done:true},{lab:'周五',done:false},{lab:'周六',done:true},{lab:'今天',done:false,today:true}
+];
+let streak=2;
+function renderWeek(){
+  const w=document.getElementById('week');w.innerHTML='';
+  days.forEach((d,i)=>{
+    const el=document.createElement('div');
+    el.className='day '+(d.done?'done':'empty')+(d.today?' today':'');
+    el.innerHTML=`<div class="dl">${d.lab}</div><div class="ds">${d.done?'完成':'留空'}</div>`;
+    if(d.today)el.addEventListener('click',()=>{if(!d.done){d.done=true;streak++;renderWeek();showToast('已记今日完成（示例）');}});
+    w.appendChild(el);
+  });
+  document.getElementById('curStreak').textContent=streak;
+}
+function backfill(){
+  const idx=4; // 2 天窗内最近空日（周五），回填保持连续
+  if(!days[idx].done){days[idx].done=true;streak++;renderWeek();showToast('已回填 2 天窗内记录，连续保持（示例）');}
+}
+function confirmSug(){document.getElementById('sugBox').style.display='none';showToast('已确认归属 O1（示例）');}
+function dismissSug(){document.getElementById('sugBox').style.display='none';showToast('已忽略，进季度回访清空（示例）');}
+renderWeek();
+</script>
+</body>
+</html>

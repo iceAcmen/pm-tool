@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K2 写边界与自主度光谱 · 原型（示例数据）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234176e6'/%3E%3Ccircle cx='8' cy='8' r='3' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+    --ink:#1c1c1e; --text-2:#61666b; --muted:#696e74; --faint:#71767c;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+    --accent:#4176e6; --accent-deep:#4868b2; --accent-soft:#e4edfd;
+    --success:#22c55e; --success-soft:rgba(34,197,94,.12);
+    --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+    --danger:#ef4444; --danger-soft:rgba(239,68,68,.10);
+    --todo:#d4d4d4;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,18,20,.06);
+    --shadow-2:0 1px 2px rgba(16,18,20,.06),0 6px 18px rgba(16,18,20,.07);
+    --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  body[data-ds-dark-theme]{
+    --bg:#1f2023; --surface:#26272b; --surface-2:#2e3034; --surface-3:#383a3f;
+    --ink:#ececee; --text-2:#a8adb3; --muted:#9aa0a6; --faint:#8b9096;
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+    --accent:#7aaaff; --accent-deep:#7aaaff; --accent-soft:rgba(122,170,255,.16);
+    --success-soft:rgba(34,197,94,.16); --warn-soft:rgba(245,158,11,.16); --danger-soft:rgba(239,68,68,.16);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45;font-feature-settings:'tnum' 1}
+  button{font:inherit;white-space:nowrap;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  /* ===== 顶栏 ===== */
+  .topbar{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .tb-badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent-deep);border-radius:var(--r-sm);padding:3px 9px;letter-spacing:.02em}
+  .tb-title{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .tb-sub{font-size:12px;color:var(--muted)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-pill);padding:3px 10px;font-weight:600}
+  .theme-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:6px 12px;font-size:12.5px}
+  .theme-btn:hover{background:var(--surface-3);color:var(--ink)}
+  /* ===== 布局 ===== */
+  .shell{display:flex;align-items:stretch;max-width:1180px;margin:0 auto}
+  .rail{width:216px;flex-shrink:0;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+  .rail-h{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.09em;padding:0 8px 8px}
+  .rail-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--text-2);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+  .rail-item:hover{background:var(--surface-2);color:var(--ink)}
+  .rail-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .rail-item .dot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex-shrink:0}
+  .rail-item.active .dot{background:var(--accent)}
+  .rail-item.off .dot{background:var(--faint)}
+  .main{flex:1;min-width:0;padding:22px 26px 48px;display:flex;flex-direction:column;gap:18px}
+  /* ===== 卡片 ===== */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-2);padding:18px 20px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .card .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;max-width:640px}
+  /* ===== 光谱标尺 ===== */
+  .spectrum{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .sp{border:1px solid var(--line);border-radius:var(--r);padding:12px 12px 10px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-height:118px}
+  .sp .sp-no{font-family:var(--font-mono);font-size:11px;color:var(--faint)}
+  .sp .sp-name{font-size:13px;font-weight:600}
+  .sp .sp-note{font-size:11.5px;color:var(--muted);line-height:1.5}
+  .sp.open{border-color:var(--accent);background:var(--accent-soft)}
+  .sp.open .sp-name{color:var(--accent-deep)}
+  .sp.closed{opacity:.55}
+  .sp .sp-state{margin-top:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);align-self:flex-start}
+  .sp.open .sp-state{color:var(--success);background:var(--success-soft)}
+  .sp.closed .sp-state{color:var(--faint);background:var(--surface-3)}
+  /* ===== 白名单表 ===== */
+  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  th{font-size:11.5px;font-weight:700;color:var(--faint);letter-spacing:.06em}
+  .mono{font-family:var(--font-mono);font-size:12px;color:var(--text-2)}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);background:var(--surface-2);white-space:nowrap}
+  .chip.ok{color:var(--success);background:var(--success-soft);border-color:transparent}
+  .chip.no{color:var(--faint);background:var(--surface-3)}
+  .chip.warn{color:var(--warn);background:var(--warn-soft);border-color:transparent}
+  /* ===== 演示台 ===== */
+  .case{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;background:var(--surface)}
+  .case-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .case-title{font-size:13.5px;font-weight:600}
+  .case-meta{font-size:11.5px;color:var(--faint);font-family:var(--font-mono)}
+  .case-body{margin-top:10px;font-size:13px;color:var(--text-2)}
+  .case-body .field{display:flex;gap:8px;padding:3px 0}
+  .case-body .k{color:var(--faint);min-width:86px;font-family:var(--font-mono);font-size:12px}
+  .run-btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:var(--r-sm);padding:7px 16px;font-size:13px;font-weight:600}
+  .run-btn:hover{filter:brightness(1.06)}
+  .undo-btn{border:1px solid var(--line);background:transparent;color:var(--text-2);border-radius:var(--r-sm);padding:5px 12px;font-size:12.5px}
+  .undo-btn:hover{border-color:var(--danger);color:var(--danger)}
+  .verdict{margin-top:12px;border-radius:var(--r);padding:12px 14px;font-size:13px;display:none}
+  .verdict.show{display:block}
+  .verdict.pass{background:var(--success-soft);border:1px solid var(--success)}
+  .verdict.reject{background:var(--danger-soft);border:1px solid var(--danger)}
+  .verdict.hold{background:var(--warn-soft);border:1px solid var(--warn)}
+  .verdict .v-head{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .verdict.pass .v-head{color:var(--success)}
+  .verdict.reject .v-head{color:var(--danger)}
+  .verdict.hold .v-head{color:var(--warn)}
+  .verdict p{color:var(--text-2);font-size:12.5px;line-height:1.6}
+  .prov{margin-top:8px;font-family:var(--font-mono);font-size:11.5px;color:var(--faint);border-top:1px dashed var(--line);padding-top:8px}
+  /* ===== 挂起卡 ===== */
+  .hold-card{border:1px dashed var(--warn);border-radius:var(--r);padding:14px 16px;background:var(--warn-soft)}
+  .hold-card h3{font-size:13.5px;font-weight:700;color:var(--warn);margin-bottom:8px}
+  .hold-card p{font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:10px}
+  .schema-row{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+  .schema-row span{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;border-left:2px solid var(--line);padding-left:12px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:10px 18px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+  .toast.show{opacity:1}
+  @media(max-width:860px){
+    .shell{flex-direction:column}
+    .rail{width:100%;border-right:none;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}
+    .spectrum{grid-template-columns:1fr 1fr}
+  }
+  /* L2 修复：窄屏宽表容器内横滑 + 右侧渐隐 + 可横滑提示（仅窄屏出现） */
+  .tbl-scroll{position:relative}
+  .scroll-hint{display:none;font-size:11.5px;color:var(--faint);margin-top:8px;text-align:right}
+  @media(max-width:860px){
+    .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent);-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent)}
+    .tbl-scroll table{display:block;min-width:560px}
+    .tbl-scroll th,.tbl-scroll td{min-width:110px}
+    .chip{white-space:normal}
+    .scroll-hint{display:block}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-left">
+    <span class="tb-badge">K2</span>
+    <div>
+      <div class="tb-title">写边界与自主度光谱 · 第一期窄集 2 项</div>
+      <div class="tb-sub">agent 限内直写 + 双层闸门 + 事后可撤销；人裁决位保留（C3）</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="demo-tag">示例数据 · 非生产 API</span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="分片单元导航">
+    <div class="rail-h">分片1 · 录入与证据流</div>
+    <div class="rail-item active" aria-current="page"><span class="dot"></span>K2 写边界</div>
+    <button class="rail-item" type="button" data-jump="K3"><span class="dot"></span>K3 证据闭环</button>
+    <button class="rail-item" type="button" data-jump="K4"><span class="dot"></span>K4 台账吃对话</button>
+    <button class="rail-item" type="button" data-jump="K5"><span class="dot"></span>K5 会议流（撤并）</button>
+    <button class="rail-item" type="button" data-jump="K6"><span class="dot"></span>K6 完成评判层</button>
+    <button class="rail-item" type="button" data-jump="X6"><span class="dot"></span>X6 完成仪式感</button>
+    <button class="rail-item" type="button" data-jump="K12"><span class="dot"></span>K12 自我计量</button>
+  </nav>
+
+  <main class="main">
+    <!-- 自主度光谱 -->
+    <section class="card">
+      <h2>自主度光谱：本期只点亮第 3 档</h2>
+      <p class="desc">五档从「人只写」到「全自治」连续排列。第一期只开放「AI 限内直写」一档中的窄集 2 项；第 4 档（规则自批）、第 5 档（全自治）不开放，第 2 档（AI 提议、人点确认）为现状 ask-apply 路径，保持不变。</p>
+      <div class="spectrum">
+        <div class="sp closed">
+          <span class="sp-no">L1</span>
+          <span class="sp-name">人只写</span>
+          <span class="sp-note">所有写动作由人在面板完成，现状基线。</span>
+          <span class="sp-state">现状</span>
+        </div>
+        <div class="sp closed">
+          <span class="sp-no">L2</span>
+          <span class="sp-name">AI 提议 · 人确认</span>
+          <span class="sp-note">ask-apply 草稿流：人点确认即即时落库，provenance 记已应用历史。</span>
+          <span class="sp-state">现状保留</span>
+        </div>
+        <div class="sp open">
+          <span class="sp-no">L3</span>
+          <span class="sp-name">AI 限内直写 · 本期</span>
+          <span class="sp-note">服务端双层闸放行窄集 2 项，落库留痕、可事后撤销。</span>
+          <span class="sp-state">本期开放</span>
+        </div>
+        <div class="sp closed">
+          <span class="sp-no">L4</span>
+          <span class="sp-name">规则自批</span>
+          <span class="sp-note">需 approved-pending 持久批准队列建成后评估，本期挂起。</span>
+          <span class="sp-state">挂起</span>
+        </div>
+        <div class="sp closed">
+          <span class="sp-no">L5</span>
+          <span class="sp-name">全自治</span>
+          <span class="sp-note">越过 C3 人裁决，第一期不开放，扩界须另行论证。</span>
+          <span class="sp-state">不开放</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 白名单 -->
+    <section class="card">
+      <h2>第一期字段级白名单（类型闸 + 字段闸双层约束）</h2>
+      <p class="desc">类型闸回答「这是哪类动作」，字段闸回答「该动作允许改哪些字段」；两层缺一不放行，未知/非允许字段直接拒收。标完成、状态流转、排期、依赖均不在白名单。</p>
+      <div class="tbl-scroll">
+      <table>
+        <colgroup><col style="width:22%"><col style="width:34%"><col style="width:30%"><col style="width:14%"></colgroup>
+        <thead><tr><th>白名单动作</th><th>允许修改的字段集</th><th>明确拒收的字段</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>① 纯文本 / 备注修改</td>
+            <td class="mono">notes / description（字段级白名单内的自由文本）</td>
+            <td class="mono">status、progress、dueDate、predecessorIds、assignee</td>
+            <td><span class="chip ok">开放</span></td>
+          </tr>
+          <tr>
+            <td>② 补挂证据链接</td>
+            <td class="mono">evidenceUrl / repoUrl（单链，max 2048）</td>
+            <td class="mono">标题、状态、排期、归属、依赖</td>
+            <td><span class="chip ok">开放</span></td>
+          </tr>
+          <tr>
+            <td>③ 采纳已批草稿落库</td>
+            <td class="mono">—（无服务端可验的已批准持久状态）</td>
+            <td>整体动作本期不放行，回 L2 人点确认即时落库</td>
+            <td><span class="chip warn">挂起</span></td>
+          </tr>
+          <tr>
+            <td>标完成 / 状态流转</td>
+            <td class="mono">—</td>
+            <td>完成判据归 K6，状态机写全部留人裁决</td>
+            <td><span class="chip no">移出白名单</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="scroll-hint">左右滑动查看完整字段（明确拒收的字段 / 状态）</p>
+    </section>
+
+    <!-- 演示台 -->
+    <section class="card">
+      <h2>闸门演示：三条 agent 动作样本（点击运行观察判定）</h2>
+      <p class="desc">样本为虚构示例。判定顺序：先类型闸（动作枚举 ∈ 白名单），再字段闸（载荷字段 ⊆ 允许集）；任一层拒收即退回 L2 人裁决草稿，不静默落库。</p>
+
+      <div class="case" id="case1">
+        <div class="case-head">
+          <span class="case-title">样本 A · 备注补写（合规）</span>
+          <span class="case-meta">action=update-notes · target=t-118</span>
+        </div>
+        <div class="case-body">
+          <div class="field"><span class="k">notes</span><span>「与研发确认评审窗口改到周四下午，待补会议纪要。」</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="run-btn" type="button" data-case="1">运行闸门</button></div>
+        <div class="verdict pass" id="v1">
+          <div class="v-head">类型闸通过 · 字段闸通过 · 限内直写落库</div>
+          <p>动作类型 ∈ 白名单，载荷仅含允许字段 notes；落库成功并写一条 provenance（kind=auto-whitelist-write），本人可在台账记录上事后撤销。</p>
+          <div class="prov">provenance: auto-whitelist-write · t-118.notes · 2026-10-18 14:02 · 可撤销</div>
+          <div style="margin-top:8px"><button class="undo-btn" type="button" data-undo="v1">撤销本条直写</button></div>
+        </div>
+      </div>
+
+      <div class="case" id="case2">
+        <div class="case-head">
+          <span class="case-title">样本 B · 夹带排期字段（类型过、字段拒）</span>
+          <span class="case-meta">action=update-notes · target=t-118 · 夹带 dueDate</span>
+        </div>
+        <div class="case-body">
+          <div class="field"><span class="k">notes</span><span>补充备注正文（允许字段）</span></div>
+          <div class="field"><span class="k">dueDate</span><span>改为 10-25（非允许字段，类型闸看不出）</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="run-btn" type="button" data-case="2">运行闸门</button></div>
+        <div class="verdict reject" id="v2">
+          <div class="v-head">类型闸通过 · 字段闸拒收 · 退回人裁决草稿</div>
+          <p>类型层「改备注」合法，但载荷夹带非允许字段 dueDate；字段闸整体拒收，不部分落库。动作转 L2 草稿流，由人决定是否修改排期，模型声明「只是顺手」不作放行依据。</p>
+        </div>
+      </div>
+
+      <div class="case" id="case3">
+        <div class="case-head">
+          <span class="case-title">样本 C · 第 3 项「采纳已批草稿落库」（挂起拒收）</span>
+          <span class="case-meta">action=apply-approved-draft · 无队列记录</span>
+        </div>
+        <div class="case-body">
+          <div class="field"><span class="k">声明</span><span>模型侧称「该草稿已被人批准」，但服务端查不到 pending 队列项。</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="run-btn" type="button" data-case="3">运行闸门</button></div>
+        <div class="verdict hold" id="v3">
+          <div class="v-head">无持久批准事实 · 拒收 · 回 L2</div>
+          <p>现状 ask-apply 确认即即时落库，provenance 仅记已应用历史，不存在「已批准未落库」队列；规则只重放 status=pending 且未过期的队列项，模型侧「已批准」声明不作放行依据。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 挂起后续件 -->
+    <section class="hold-card">
+      <h3>挂起后续件 · approved-pending 待落库队列（本期不开放，待用户拍板）</h3>
+      <p>队列建成前第 3 项保持挂起，第一期 2 项不依赖它。放行唯一依据是服务端持久队列记录，而非模型声明；落库成功转 applied，过期惰性转 expired。队列快照与当前白名单一致性、惰性过期时机为实现口径。</p>
+      <div class="schema-row">
+        <span>id</span><span>approvedBy</span><span>approvedAt</span><span>actionPackage{类型,目标记录,字段集快照}</span><span>expiresAt</span><span>status: pending/applied/expired</span><span>appliedAt</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>边界与残留登记</h2>
+      <p class="note">
+        1. H5（期望 agent 代执行）与 C3（保留人裁决）的张力未由用户一锤定音，直写扩界须阶段5 再论证；<br>
+        2. 字段集随实体 schema 演进同步维护（局部）；规则异常检测只能覆盖已枚举模式，新模式落在盲区，扩界前需补规则（局部）；<br>
+        3. 第一期直写限定为即时可核验、错误可手动重填的低风险写；错误补偿事务后置，一旦扩大直写范围须先补补偿层；<br>
+        4. 本页为设计原型，全部条目为示例数据，不调用生产 API。
+      </p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var dark=false;
+  var btn=document.getElementById('themeBtn');
+  btn.addEventListener('click',function(){
+    dark=!dark;
+    if(dark){document.body.setAttribute('data-ds-dark-theme','');btn.textContent='切回浅色';}
+    else{document.body.removeAttribute('data-ds-dark-theme');btn.textContent='切换深浅';}
+  });
+  var toast=document.getElementById('toast'),tt;
+  function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800);}
+  document.querySelectorAll('[data-jump]').forEach(function(b){
+    b.addEventListener('click',function(){showToast('本页仅演示 K2；'+b.dataset.jump+' 单元见同目录分片覆盖索引。');});
+  });
+  function runCase(n){
+    var v=document.getElementById('v'+n);
+    v.classList.add('show');
+    v.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  document.querySelectorAll('.run-btn').forEach(function(b){
+    b.addEventListener('click',function(){runCase(b.dataset.case);});
+  });
+  document.querySelectorAll('[data-undo]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var v=document.getElementById(b.dataset.undo);
+      v.classList.remove('show');
+      showToast('已撤销本条直写，记录恢复到写入前状态（演示）。');
+    });
+  });
+})();
+</script>
+</body>
+</html>

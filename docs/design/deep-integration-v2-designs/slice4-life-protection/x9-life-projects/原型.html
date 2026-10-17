@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X9 个人生活 / 人生项目 · 原型</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='24' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EX9%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff; --chip-bg:#eef1f5;
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d; --chip-bg:#2a2e35;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.cond{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.demo-badge{font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:24px 0 10px}
+h3{font-size:14.5px;font-weight:650;margin:16px 0 8px}
+p.lead{color:var(--ink-2);max-width:70ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+/* discrete projects */
+.plist{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px;overflow:hidden}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.prow:last-child{border-bottom:none}
+.prow .pname{font-weight:600;font-size:14px}
+.dom{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:1px 8px;color:var(--ink-2)}
+.dom.sens{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.prow .pstate{margin-left:auto;font-size:12.5px;color:var(--muted)}
+/* model cards */
+.models{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:720px){.models{grid-template-columns:1fr}}
+.model{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:15px 16px}
+.model h3{margin-top:0}
+.model .unit-tag{font-size:11.5px;color:var(--faint);font-family:ui-monospace,Menlo,monospace}
+.params{margin-top:8px}
+.params div{font-size:12.5px;color:var(--ink-2);padding:2px 0}
+.chartbox{margin-top:10px;border:1px solid var(--line-soft);border-radius:8px;padding:10px;background:var(--canvas)}
+.chartbox svg{width:100%;height:auto;display:block}
+.legend{font-size:11.5px;color:var(--faint);margin-top:6px}
+.divider-note{margin:14px 0;padding:10px 14px;border:1px dashed var(--line);border-radius:10px;font-size:13px;color:var(--ink-2)}
+/* export check */
+.exp{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px;overflow:hidden}
+.erow{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line-soft)}
+.erow:last-child{border-bottom:none}
+.erow input{width:18px;height:18px;accent-color:var(--accent)}
+.erow .ename{font-size:14px}
+.erow .etag{font-size:11.5px;border-radius:6px;padding:1px 8px;border:1px solid var(--line)}
+.etag.sens{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.etag.work{color:var(--muted)}
+.erow .estate{margin-left:auto;font-size:12.5px;color:var(--muted)}
+.banner{margin:14px 16px 0;padding:12px 14px;border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-2)}
+.banner b{color:var(--ink)}
+.ack{display:flex;gap:10px;align-items:flex-start;margin:12px 16px;padding:12px 14px;border:1px solid var(--line);border-radius:10px}
+.ack input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent)}
+.actions{display:flex;gap:10px;padding:14px 16px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--neutral-fill);color:var(--on-neutral);border-radius:8px;padding:8px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn.ghost{background:var(--surface);color:var(--ink-2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.preview{margin:0 16px 16px;border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);display:none}
+.preview.show{display:block}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">X9</span>
+    <span class="unit-title">个人生活 / 人生项目（离散组 · 连续组双模型）</span>
+    <span class="chip cond">条件性采纳 · 连续组两模型举证悬置 E6 · 失败降级内容切面</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例数据 · 非真实业务</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="discrete" type="button">离散组 · 并入 project</button>
+    <button class="tab" data-panel="habit" type="button">连续组 · 习惯模型（独立 schema）</button>
+    <button class="tab" data-panel="saving" type="button">连续组 · 储蓄模型（独立 schema）</button>
+    <button class="tab" data-panel="export" type="button">分发前 · 敏感域检查入口</button>
+  </div>
+
+  <!-- 离散组 -->
+  <section class="panel active" id="discrete">
+    <h2>离散组：二值完成项直接并入 project，无新状态机</h2>
+    <p class="lead">家庭、旅行、办证等离散项目与现有 project 完全同构（二值完成、离散枚举），换「家庭/旅行」标签不产生新状态机；隔离降为标签约定，不强制分文件，跨域总览不承诺自动聚合。</p>
+    <div class="plist">
+      <div class="prow"><span class="pname">证件续签（示例）</span><span class="dom">家庭</span><span class="pstate">active · 普通 project 状态机</span></div>
+      <div class="prow"><span class="pname">秋季旅行行程（示例）</span><span class="dom">旅行</span><span class="pstate">planning · 普通 project 状态机</span></div>
+      <div class="prow"><span class="pname">年度体检预约（示例）</span><span class="dom sens">健康 · 敏感域标签</span><span class="pstate">todo · 标签约定，非分文件隔离</span></div>
+      <div class="prow"><span class="pname">应急储蓄目标（示例）</span><span class="dom sens">财务 · 敏感域标签</span><span class="pstate">连续组 · 见储蓄模型页</span></div>
+    </div>
+    <p class="note">独立方向身份只由连续组承担；离散组不构成新机制。跨域总览靠标签筛选，不承诺自动跨文件聚合。</p>
+  </section>
+
+  <!-- 习惯模型 -->
+  <section class="panel" id="habit">
+    <h2>习惯模型：SRHI 自报自动化评分渐近曲线 + 单次缺失回弹</h2>
+    <p class="lead">独立 schema 之一。度量单位=自动化评分（SRHI 自报），无金额、无利率；无完成点，不判 done/失败。与储蓄模型不共享状态机（R2-G-X9-01 伪统一已拆除）。</p>
+    <div class="models">
+      <div class="model">
+        <h3>习惯模型 <span class="unit-tag">schema A · 度量：自动化评分 0–5</span></h3>
+        <div class="chartbox">
+          <svg viewBox="0 0 320 150" role="img" aria-label="自动化评分渐近曲线示例">
+            <line x1="34" y1="120" x2="306" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <path d="M34,112 C90,108 120,86 160,66 C200,48 250,40 306,38" fill="none" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="160" cy="66" r="3" fill="var(--warning)"/>
+            <text x="170" y="62" font-size="10" fill="var(--faint)">缺失 1 天（示例）· 回弹不掉零</text>
+            <text x="40" y="136" font-size="10" fill="var(--faint)">天数（示例）</text>
+            <text x="6" y="30" font-size="10" fill="var(--faint)">评分</text>
+          </svg>
+        </div>
+        <div class="params">
+          <div>参数集：自报自动化评分、记录日期、缺失标记、2 天补记窗</div>
+          <div>状态：进行中（无 done / 无失败终态）</div>
+        </div>
+      </div>
+      <div class="model">
+        <h3>适用条件与边界</h3>
+        <div class="params">
+          <div>· 证据 E1：Lally et al. 2010（DOI 10.1002/ejsp.674），96 人 12 周自报，到达 95% 自动化平台 18–254 天、中位约 66 天。</div>
+          <div>· 适用条件：简单 / 每日 / 线索固定的健康行为；自选择样本、自报度量。</div>
+          <div>· 不外推：复杂习惯、专业医疗戒断、他人监督行为。</div>
+          <div>· 单次缺失不致命：曲线回弹，连续计数断签超窗重置 0，累计档案不清零。</div>
+        </div>
+        <div class="divider-note">E6 举证悬置：本独立 schema 是否成立待本机样本举证；举证失败则 X9 降级为 project 内容切面，本期不实现。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 储蓄模型 -->
+  <section class="panel" id="saving">
+    <h2>储蓄模型：金额复利累积（本金 / 利率 / 期数 / 支取），独立状态机</h2>
+    <p class="lead">独立 schema 之二。度量单位=货币金额，参数集与习惯模型完全不相交，不合并、不共用曲线。</p>
+    <div class="models">
+      <div class="model">
+        <h3>储蓄模型 <span class="unit-tag">schema B · 度量：货币金额</span></h3>
+        <div class="chartbox">
+          <svg viewBox="0 0 320 150" role="img" aria-label="复利累积示例曲线">
+            <line x1="34" y1="120" x2="306" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <path d="M34,116 L90,108 L150,94 L210,72 L262,48 L306,30" fill="none" stroke="var(--success)" stroke-width="2"/>
+            <text x="40" y="136" font-size="10" fill="var(--faint)">期数（示例）</text>
+            <text x="6" y="30" font-size="10" fill="var(--faint)">金额</text>
+          </svg>
+        </div>
+        <div class="params">
+          <div>参数集：本金、每期投入、年利率、期数、支取记录、币种</div>
+          <div>状态：累积中 / 已支取（独立状态机，与自动化评分无关）</div>
+        </div>
+      </div>
+      <div class="model">
+        <h3>与习惯模型的边界</h3>
+        <div class="params">
+          <div>· 度量单位：货币金额 vs 自动化评分，不相交。</div>
+          <div>· 参数集：利率/期数/支取 vs 缺失标记/补记窗，不共享。</div>
+          <div>· 不伪统一进一个「连续模型」schema（R2-G-X9-01 闭合）。</div>
+          <div>· 不外推专业理财模型；本模型仅个人记账式累积演示。</div>
+        </div>
+        <div class="divider-note">E6 举证悬置：两模型独立成立条件待证；任一举证失败即降级，不另立 schema。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分发前敏感域检查 -->
+  <section class="panel" id="export">
+    <h2>分发前敏感域检查：默认不带敏感域，工具只给检查入口</h2>
+    <p class="lead">隔离为标签约定（非强制分文件）。导出/分发默认不带财务、健康等敏感域，宁可不带不误带（排除清单 E6 实现前的保守默认）。工具呈现检查入口与逐条勾选，不替用户完成合规判断。</p>
+    <div class="exp">
+      <div class="erow">
+        <input type="checkbox" id="r1" checked disabled>
+        <span class="ename">证件续签 · 家庭事务进展</span>
+        <span class="etag work">工作/一般域 · 默认可带</span>
+        <span class="estate">已纳入导出（示例）</span>
+      </div>
+      <div class="erow">
+        <input type="checkbox" id="r2" disabled>
+        <span class="ename">年度体检记录与指标</span>
+        <span class="etag sens">健康 · 敏感域 · 默认剔除</span>
+        <span class="estate">默认不带（示例）</span>
+      </div>
+      <div class="erow">
+        <input type="checkbox" id="r3" disabled>
+        <span class="ename">应急储蓄余额与利率</span>
+        <span class="etag sens">财务 · 敏感域 · 默认剔除</span>
+        <span class="estate">默认不带（示例）</span>
+      </div>
+      <div class="banner">
+        <b>PIPL 第 23 条：</b>向他人提供个人信息需告知并取得单独同意。本工具不代用户完成告知、不验证同意是否取得；该义务在工具外完成，工具不宣称「已取得同意」。
+      </div>
+      <label class="ack">
+        <input type="checkbox" id="ack">
+        <span>本人已在工具外完成告知并取得单独同意（仅登记勾选，工具不核验、不留存同意凭证）。</span>
+      </label>
+      <div class="actions">
+        <button class="btn" id="expBtn" type="button" disabled>生成剔除敏感域的导出预览</button>
+        <button class="btn ghost" id="expReset" type="button">重置</button>
+      </div>
+      <div class="preview" id="preview"></div>
+    </div>
+    <p class="note">排除清单功能 E6 待实现；落地前由「默认不带敏感域」保守默认兜底。纯本机自用不触发本检查（H11 分发场景才出现）。</p>
+  </section>
+
+  <footer>
+    X9 · 阶段7 分片4 概念原型 · 示例数据显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：R2-G-X9-01（伪统一拆双模型）、R2-G-X9-02（标签约定+默认不带敏感域）；Lally 2010 E1 标适用条件；PIPL 第23条 E5。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    b.classList.add('active');document.getElementById(b.dataset.panel).classList.add('active');
+  });});
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+
+  var ack=document.getElementById('ack'),btn=document.getElementById('expBtn'),pv=document.getElementById('preview');
+  ack.addEventListener('change',function(){btn.disabled=!ack.checked;});
+  btn.addEventListener('click',function(){
+    pv.classList.add('show');
+    pv.innerHTML='导出预览（示例）：仅含「证件续签 · 家庭事务进展」；健康、财务敏感域已默认剔除。同意状态仅为本地勾选，工具外告知由本人负责。';
+  });
+  document.getElementById('expReset').addEventListener('click',function(){
+    ack.checked=false;btn.disabled=true;pv.classList.remove('show');pv.innerHTML='';
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+{
+  "src": "k6-completion-judgement/原型.html",
+  "url": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/%E5%8E%9F%E5%9E%8B.html",
+  "outdir": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "screenshot": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots/原型_desktop.jpg",
+      "screenshotBytes": 66693,
+      "truncated": false,
+      "structure": {
+        "title": "K6 完成评判层 · 原型（示例数据）",
+        "firstH1": "",
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 921
+        },
+        "counts": {
+          "section": 3,
+          "h1": 0,
+          "h2": 2,
+          "img": 0,
+          "canvas": 0,
+          "svg": 0,
+          "links": 0,
+          "buttons": 8
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "reportSource": "cdp"
+    },
+    "mobile": {
+      "screenshot": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots/原型_mobile.jpg",
+      "screenshotBytes": 104199,
+      "truncated": false,
+      "structure": {
+        "title": "K6 完成评判层 · 原型（示例数据）",
+        "firstH1": "",
+        "viewport": {
+          "w": 390,
+          "h": 844
+        },
+        "fullpage": {
+          "w": 390,
+          "h": 1817
+        },
+        "counts": {
+          "section": 3,
+          "h1": 0,
+          "h2": 2,
+          "img": 0,
+          "canvas": 0,
+          "svg": 0,
+          "links": 0,
+          "buttons": 8
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "/Users/bytedance/Library/Caches/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "elapsedSec": 5.26,
+  "schemaVersion": 2,
+  "status": "pass",
+  "engineInfo": {
+    "name": "chrome_cli",
+    "degraded": true,
+    "degradedReasons": [
+      "playwright 未装"
+    ]
+  },
+  "input": {
+    "original": "k6-completion-judgement/原型.html",
+    "resolvedPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/原型.html",
+    "baseUrl": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/%E5%8E%9F%E5%9E%8B.html",
+    "protocol": "file",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots/原型_desktop.jpg",
+        "size": 66693,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots/原型_mobile.jpg",
+        "size": 104199,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "findings": [],
+  "prioritizedActions": [],
+  "reportPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice1-recording/k6-completion-judgement/_shots/report.json"
+}

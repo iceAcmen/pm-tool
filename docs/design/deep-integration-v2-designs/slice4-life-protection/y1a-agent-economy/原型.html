@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Y1a 代理经济对外缔约 · 概念可视化与并入 C3 论证</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='20' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EY1a%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff; --chip-bg:#eef1f5;
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d; --chip-bg:#2a2e35;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.off{color:var(--muted)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.demo-badge{font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:24px 0 10px}
+p.lead{color:var(--ink-2);max-width:70ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+.concept{border:1.5px dashed var(--line);border-radius:12px;padding:16px 18px;background:color-mix(in srgb,var(--surface-2) 55%,transparent);margin-top:14px}
+.concept-tag{font-size:12px;color:var(--faint);margin-bottom:12px}
+.agents{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+@media(max-width:680px){.agents{grid-template-columns:1fr}.agents .mid{transform:rotate(90deg)}}
+.agent{border:1px solid var(--line);border-radius:10px;padding:13px 14px;background:var(--surface)}
+.agent h4{font-size:13.5px;font-weight:600;margin-bottom:4px}
+.agent p{font-size:12.5px;color:var(--ink-2)}
+.mid{text-align:center;color:var(--faint);font-size:18px}
+.reason{border-left:2px solid var(--danger);padding:8px 0 8px 14px;margin:12px 0}
+.reason.fatal{border-left-width:3px}
+.reason .rid{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--danger);font-weight:700}
+.reason h4{font-size:13.5px;font-weight:600;margin:2px 0}
+.reason p{font-size:13px;color:var(--ink-2)}
+.cutface{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2);margin-top:12px}
+.cutface h3{font-size:14px;margin-bottom:6px}
+.cutface p{font-size:13px;color:var(--ink-2)}
+.e6{font-size:13px;color:var(--ink-2);padding:10px 14px;border:1px dashed var(--line);border-radius:10px;margin-top:12px}
+.law{font-size:12.5px;color:var(--muted);padding:8px 12px;background:var(--surface-2);border-radius:8px;margin-top:8px}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">Y1a</span>
+    <span class="unit-title">代理经济 · 对外缔约 / 自主结算</span>
+    <span class="chip off">并入 C3 · 独立方向不成立（两层致命）</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例场景 · 非真实业务 · 概念推演</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="concept" type="button">概念推演：若做的 agent 缔约形态</button>
+    <button class="tab" data-panel="reasons" type="button">两层致命理由（法律主体 / 结算）</button>
+    <button class="tab" data-panel="cut" type="button">唯一切片并入 C3 + E6 登记</button>
+  </div>
+
+  <section class="panel active" id="concept">
+    <h2>概念可视化：该方向若成立，会是多 agent 独立缔约与结算网络</h2>
+    <p class="lead">以下为概念推演，展示未来叙事原本想象的形态；它不是当前能力，也不代表推荐立项。</p>
+    <div class="concept">
+      <div class="concept-tag">概念推演框 · 主张过的 agent 经济能力</div>
+      <div class="agents">
+        <div class="agent">
+          <h4>本方 agent（概念）</h4>
+          <p>独立报价、独立承诺、签署对外合同，拥有独立履约账与信用记录。</p>
+        </div>
+        <div class="mid">⇄ 缔约 / 结算</div>
+        <div class="agent">
+          <h4>他方 agent（概念）</h4>
+          <p>各代表其客户独立履约，自主完成资金结算，形成 agent 间市场。</p>
+        </div>
+      </div>
+      <div class="concept-tag" style="margin-top:14px;margin-bottom:0">当前 H5 事实：代执行止于 PM 白名单命令，不产生对外法律行为；对外缔约已超出授权范围，撞 C3 边界。</div>
+    </div>
+  </section>
+
+  <section class="panel" id="reasons">
+    <h2>两层致命：法律主体不成立 + 结算通道不存在</h2>
+    <div class="reason fatal">
+      <span class="rid">GY1a-01 · 致命（法律主体，E5 现行法）</span>
+      <h4>AI 不是民事主体，不能独立缔约；代理后果归被代理人</h4>
+      <p>民法典第 2 条（自然人）、第 57 条（法人）、第 102 条（非法人组织）界定主体范围，AI 不在其中；第 162 条代理后果直接归属于被代理人。agent 只能是使者/工具，合同关系始终在人与相对人之间。</p>
+      <div class="law">E3：中国现行法框架下相关判例（如杭州互联网法院首例 AI 相关纠纷）均未承认 AI 的独立缔约资格。</div>
+    </div>
+    <div class="reason fatal">
+      <span class="rid">GY1a-03 · 致命（结算，E5）</span>
+      <h4>无责任财产、无持牌支付通道，不能自主结算</h4>
+      <p>agent 名下无责任财产、不持有支付牌照，自主扣款/转账缺乏合法通道；自主结算主张当前无落点，不能写成产品能力。</p>
+    </div>
+    <div class="reason">
+      <span class="rid">GY1a-04 · 显著（授权范围，H5）</span>
+      <h4>代执行止于 PM 白名单，对外缔约超授权</h4>
+      <p>超出白名单的对外法律行为直接撞 C3（人发令、人对外负责）边界，不是加确认弹窗可修补。</p>
+    </div>
+  </section>
+
+  <section class="panel" id="cut">
+    <h2>成立切片：交涉/报价文本草稿代拟，并入 C3</h2>
+    <div class="cutface">
+      <h3>唯一可落：草稿代拟（人确认 · 人发出 · 人结算）</h3>
+      <p>agent 只生成交涉/报价的文本草稿；本人确认、本人发出、本人结算，责任与人未分离。该切片并入 C3 草稿代拟，不单立「代理经济」方向。</p>
+    </div>
+    <div class="e6">
+      <b>E6 未来叙事登记（不写成当前方向）：</b>若未来法律承认 AI 主体资格、或出现合法 agent 支付结算通道，可重新评估；本期不把未来立法/通道写成现存能力，不预留对外自主缔约按钮。
+    </div>
+    <p class="note">裁判 A/B：撤并确认（独立方向撤回成立；唯一切片并入 C3 草稿代拟）。</p>
+  </section>
+
+  <footer>
+    Y1a · 阶段7 分片4 概念原型 · 示例场景显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：GY1a-01/03/04（redteam-G/Y1a.md）；民法典第2/57/102/162条 E5；E3 判例；终局台账 Y1a 行。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    b.classList.add('active');document.getElementById(b.dataset.panel).classList.add('active');
+  });});
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+})();
+</script>
+</body>
+</html>

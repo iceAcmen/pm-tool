@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K15 商业与生态分发 · 撤并概念页（原型）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --danger:#b3402f; --danger-soft:#f8ecea;
+    --warn:#9a6212; --warn-soft:#f6efe2; --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --danger:#e08a7d; --danger-soft:#2e211e;
+    --warn:#e0a458; --warn-soft:#2e2619; --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:28px 24px}
+  @media(max-width:600px){.wrap{padding:18px 14px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .unit-tag{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.drop{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:999px;padding:3px 10px;font-weight:600}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:64ch}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:14px;font-weight:700;margin-bottom:12px}
+  /* 归并映射行 */
+  .map-row{display:grid;grid-template-columns:1fr 36px 1fr;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .map-row:last-child{border-bottom:none}
+  @media(max-width:640px){.map-row{grid-template-columns:1fr;gap:6px}.map-arrow{transform:rotate(90deg)}}
+  .from{background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .from .t{font-weight:600;font-size:13.5px;margin-bottom:2px}
+  .from .d{font-size:12.5px;color:var(--muted)}
+  .map-arrow{color:var(--faint);text-align:center}
+  .to{font-size:13px;padding:12px 14px;border-radius:10px;border:1px solid var(--line)}
+  .to.cut{background:var(--danger-soft);color:var(--danger)}
+  .to.merge{background:var(--ok-soft);color:var(--ok)}
+  .to.free{background:var(--accent-soft);color:var(--link)}
+  /* 不推荐理由卡 */
+  .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:760px){.reasons{grid-template-columns:1fr}}
+  .reason{background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .reason .rk{font-size:11.5px;color:var(--faint);letter-spacing:.06em;margin-bottom:6px}
+  .reason h3{font-size:13.5px;font-weight:600;margin-bottom:6px}
+  .reason p{font-size:12.5px;color:var(--text-2)}
+  .ev{margin-top:8px;font-size:11.5px;color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .callout{border-left:3px solid var(--ok);background:var(--ok-soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px}
+  .reg{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .reg span{font-size:12.5px;color:var(--text-2);background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--primary);color:var(--on-primary);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-tag">K15 · 商业与生态分发</span>
+    <span class="verdict drop">撤并确认 · 降为 K14 发布注记</span>
+    <span class="demo-tag">示例数据 · 虚构演示</span>
+    <span class="spacer"></span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+
+  <h1>商业与生态分发：为什么不作为独立方向</h1>
+  <p class="sub">本页是撤并概念可视化，不规划任何市场、定价或商店页面。原主张逐块清点去向，不推荐理由与归并结果同屏展示，避免用好看原型洗掉致命风险。示例为虚构演示。</p>
+
+  <div class="panel">
+    <h2>原主张拆解：三块各自去向</h2>
+    <div class="map-row">
+      <div class="from"><div class="t">npm / 插件市场发布 + 自然获客</div><div class="d">假设存在已核验的公开插件市场与 registry 自然流量。</div></div>
+      <div class="map-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="to merge">免费发布动作归 K14；市场渠道客观不存在，不立项</div>
+    </div>
+    <div class="map-row">
+      <div class="from"><div class="t">分层定价 / open-core / 方法论即产品付费</div><div class="d">向使用者收费的软件商品假设。</div></div>
+      <div class="map-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="to cut">收费半臂整体删除：无合法收费标的</div>
+    </div>
+    <div class="map-row">
+      <div class="from"><div class="t">PM 方法论 skill 包独立出售</div><div class="d">Markdown / SKILL.md 文本，零边际成本、无 DRM。</div></div>
+      <div class="map-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="to free">改免费附赠，非独立商品</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>不推荐理由（三条，均经攻防核验）</h2>
+    <div class="reasons">
+      <div class="reason">
+        <div class="rk">理由一 · 合规层空心化</div>
+        <h3>没有可合法收费的标的</h3>
+        <p>各自持 key 时作者对 AI 消耗无收费权；代持 / 转售套餐额度直接落入个人计费计划 §1.1 红线；文本方法论包零边际成本、MIT 允许再分发，付费墙不可闭合。</p>
+        <div class="ev">E1 本机 package.json private:true / npm 404 · E2 MIT License</div>
+      </div>
+      <div class="reason">
+        <div class="rk">理由二 · 渠道层缺失</div>
+        <h3>无官方市场、无自然流量</h3>
+        <p>dsh 无已核验公开插件市场；npm 上包从未发布。长尾分布下多数包周下载 0–10，分发链路第一环即缺失，营销漏斗无入口。</p>
+        <div class="ev">E1 arXiv:2003.03471 长尾（适用：全生态分布，不推定单包零下载）</div>
+      </div>
+      <div class="reason">
+        <div class="rk">理由三 · 受众类型不重合</div>
+        <h3>阅读 / 汇报 ≠ 安装使用者</h3>
+        <p>H11 的外部受众是团队 / 朋友阅读与汇报，不是安装 alpha 插件并自配 key 的使用者；熟人阅读不经 registry 搜索，自然流量缺失不被 H11 解除。</p>
+        <div class="ev">E5 用户确认版 H11 · R2-E-K15-02</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>归并落点：</b>免费发布与最小治理（LICENSE / README，不运营社区）作为 K14 的发布策略注记承载；K15 不产生独立 schema / 视图 / 命令 / 流程。
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <h2>残留登记（E6，不作定量结论）</h2>
+    <div class="reg">
+      <span>履历背书与公开仓库响应率的量化关联：E6 待样本</span>
+      <span>§1.2 推断合规暴露审核风险：作者自担，不消除仅登记</span>
+    </div>
+  </div>
+
+  <div class="src">来源：终局台账 K15 行；裁判 A/B「撤并确认（成立；降 K14 发布注记）」；`rebuttal/E-终局核验.md` §一；`rebuttal/K15-往复.md` R2-E-K15-01/02/03。原始想法：round1 D1-17 / D1-29、round2 D1-R2-15 / D2-R2-13 / D4-R2-14 / D5-R2-13。</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('k15-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('k15-theme',d?'dark':'light');
+  });
+</script>
+</body>
+</html>

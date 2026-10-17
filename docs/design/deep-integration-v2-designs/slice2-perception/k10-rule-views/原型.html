@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K10 多 agent 角色组织 · 撤并概念页（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK10%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.merge{color:var(--todo);border-color:color-mix(in srgb,var(--todo) 45%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* 撤并图 */
+  .merge-map{display:grid;grid-template-columns:1fr 48px 1fr;gap:10px;align-items:center;margin:12px 0}
+  .merge-map .src{border:1.5px dashed var(--todo);border-radius:var(--r);padding:14px;text-align:center;color:var(--secondary)}
+  .merge-map .dst{border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--elev)}
+  .merge-map .arr{text-align:center;color:var(--accent);font-family:var(--mono);font-size:20px}
+  @media(max-width:720px){.merge-map{grid-template-columns:1fr}.merge-map .arr{transform:rotate(90deg)}}
+  .dropped{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .dropped span{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:line-through;border:1px solid var(--line-soft);border-radius:999px;padding:3px 10px}
+  /* 规则集 */
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  @media(max-width:720px){.rules{grid-template-columns:1fr}}
+  .rule{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+  .rule .rid{font-family:var(--mono);font-size:11px;color:var(--accent)}
+  .rule h3{font-size:13.5px;font-weight:700;margin:4px 0 6px}
+  .rule p{font-size:12.5px;color:var(--secondary)}
+  .rule .gap{margin-top:8px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);padding-top:8px}
+  .spawn{margin-top:14px;border:1px dashed var(--line);border-radius:var(--r);padding:14px 16px;font-size:12.5px;color:var(--secondary)}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K10 · 多 agent 角色组织（PMO 班底 / 常驻副驾 / 巡检 / 考核）</div>
+      <h1>独立方向撤并 · 4 项规则集并入规则视图（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip merge">裁判 A/B：撤并确认（成立）</span>
+    <span class="chip">终局：饱和（独立方向撤并）</span>
+    <span class="chip e6">E6：spawn 净增益 N/M/命中率待 K12</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <div class="card">
+    <h2>撤并去向图</h2>
+    <div class="merge-map">
+      <div class="src">
+        <div class="mono fs12 muted">K10 独立方向（消亡）</div>
+        <div style="font-weight:700;margin-top:4px">常驻班底 / 副驾 / 三独立稿 / 考核 / 预埋</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="dst">
+        <div class="mono fs12" style="color:var(--accent)">规则视图方向（纯函数扫描承载）</div>
+        <div class="secondary fs12" style="margin-top:4px">4 项新规则集；不并入 K8 组合取舍本体</div>
+      </div>
+    </div>
+    <div class="dropped">
+      <span>常驻 PMO 四角色班底</span><span>常驻副驾</span><span>三独立稿并行</span><span>考核 agent</span><span>预埋角色</span>
+    </div>
+    <div class="note">撤并依据（E1/E2/E4）：宿主无常驻副驾载体（C7 禁常驻）；单人空台账无第二被考核人；四角色同读一份台账不产生独立信息集；独立方向需不可被相邻方向吸收的机制，K10 不满足。</div>
+  </div>
+
+  <div class="card">
+    <h2>留存：4 项新规则集（纯函数，无 agent 常驻）</h2>
+    <div class="rules">
+      <div class="rule">
+        <div class="rid">规则集 ①</div>
+        <h3>里程碑偏差趋势</h3>
+        <p>比较连续时点的里程碑滑期方向，而非单点逾期。</p>
+        <div class="gap">现有 health.ts 仅 L37 单点 milestoneOverdue，不判趋势（E1）。</div>
+      </div>
+      <div class="rule">
+        <div class="rid">规则集 ②</div>
+        <h3>风险超期 SLA 未处理</h3>
+        <p>风险条目超过约定处理时限仍 open/monitoring。</p>
+        <div class="gap">现有 risk-issue schema 无 slaDays 字段（E1）；实现时借 dueDate/updatedAt 近似，或在并入方向内补字段（L-K10-01）。</div>
+      </div>
+      <div class="rule">
+        <div class="rid">规则集 ③</div>
+        <h3>跨周期承诺未闭环</h3>
+        <p>跨周期延续的承诺未在新周期闭合/结转。</p>
+        <div class="gap">reminders.ts 仅 task/milestone 单点逾期临期，不判跨周期闭环（E1）。</div>
+      </div>
+      <div class="rule">
+        <div class="rid">规则集 ④</div>
+        <h3>已完成但缺证据</h3>
+        <p>done/progress≥100 但无绑定证据候选。</p>
+        <div class="gap">现有派生不检查完成态与证据集的一致性（E1）。</div>
+      </div>
+    </div>
+    <div class="spawn">
+      <b>低频可选 spawn（E6 登记，非功能承诺）：</b>同读一份台账的进程隔离不产生信息独立；增益 N/M/命中率待 K12。接入 K3 外部证据后才产生第二信息源，当前不写成功能。
+    </div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：C-K10-01 无常驻载体（致命）、C-K10-02 单人无对象+同读一表（致命）→ 主体抽空撤并；R2-C-K10-02 单角色巡检与 health/reminders 重叠 → 以 4 项确不覆盖的新规则集留存；R2-C-K10-03 spawn 无信息独立 → E6 登记。</li>
+      <li>归属待收敛：四项规则集并入规则引擎/规则视图方向（非 K8 本体），见拍板清单第 8 条。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+</script>
+</body>
+</html>

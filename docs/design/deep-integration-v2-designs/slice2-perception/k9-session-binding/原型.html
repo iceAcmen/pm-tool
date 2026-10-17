@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K9 会话载体寿命绑定 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK9%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* 寿命单向 */
+  .flow{display:grid;grid-template-columns:1fr 56px 1fr;align-items:center;gap:10px;margin:10px 0}
+  .flow .box{border:1px solid var(--line);border-radius:var(--r);padding:14px;text-align:center}
+  .flow .box.short{background:var(--elev)}
+  .flow .arrow{text-align:center;color:var(--accent);font-family:var(--mono);font-size:22px}
+  .flow .box h3{font-size:13.5px;font-weight:700}
+  .flow .box p{font-size:12px;color:var(--muted);margin-top:4px}
+  @media(max-width:720px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}}
+  /* 代挂建议条 */
+  .suggest{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:10px 0}
+  .suggest.hi{border-color:color-mix(in srgb,var(--done) 45%,transparent);background:color-mix(in srgb,var(--done) 6%,transparent)}
+  .suggest .head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+  .suggest .title{font-weight:600;font-size:13.5px}
+  .conf{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--secondary)}
+  .conf.hi{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .suggest .why{font-size:12.5px;color:var(--secondary);margin:8px 0}
+  .acts{display:flex;gap:8px;margin-top:10px}
+  .btn{font-size:12.5px;padding:7px 16px;border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--secondary)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+  .btn:hover{opacity:.92}
+  .bound{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--r-sm);background:var(--elev);font-size:13px;margin-top:10px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--done);flex:none}
+  /* DAG */
+  .dag{background:var(--elev);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:18px;font-family:var(--mono);font-size:12.5px;line-height:2;overflow-x:auto}
+  .dag .node{display:inline-block;border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 10px;background:var(--bg);color:var(--secondary)}
+  .dag .edge{color:var(--muted);margin:0 8px}
+  .readonly-tag{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 9px}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .transfer{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px dashed var(--line);border-radius:var(--r);font-size:12.5px;color:var(--secondary)}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:var(--r-sm);opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K9 · 会话载体寿命绑定与执行编排（只读 DAG + agent 代挂建议）</div>
+      <h1>短命会话单向结存进长寿台账 · 人只裁决建议（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A/B：修正采纳</span>
+    <span class="chip">终局：接近饱和</span>
+    <span class="chip e6">E6：绑定率/采纳率待 K12；alpha 日志耦合点登记</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <div class="card">
+    <h2>寿命单向：会话短命载体 → 台账长寿实体（不双向镜像）</h2>
+    <div class="flow">
+      <div class="box short"><h3>会话级 todo / goal</h3><p>随对话存在，会话结束即消散；不回写台账</p></div>
+      <div class="arrow">→</div>
+      <div class="box"><h3>长寿台账（project/task）</h3><p>单向结存；绑定为会话↔taskId 关联元数据，非状态机落库写</p></div>
+    </div>
+    <div class="note">撤回：扇出执行、无人值守油门、常驻、goal 规则刹车（白名单在 PM 语义任务上无可穷举对象，删除不留占位件）。</div>
+  </div>
+
+  <div class="card">
+    <h2>agent 代挂建议 · 人一键确认（C3 裁决位保留）</h2>
+    <div class="suggest hi" id="autoBound">
+      <div class="head">
+        <span class="title">本会话已自动挂接 <span class="mono">T-19 支付联调</span>（高置信）</span>
+        <span class="conf hi">高置信 · 自动挂</span>
+      </div>
+      <div class="why">依据：会话内容与 T-19 的交付物/进展连续匹配。绑定为关联元数据，可撤销，不改任务状态机。</div>
+      <div class="acts">
+        <button class="btn" onclick="unbind()">撤销挂接</button>
+      </div>
+    </div>
+    <div class="suggest" id="lowSug">
+      <div class="head">
+        <span class="title">建议把本会话挂到 <span class="mono">T-12 官网改版·首页联调</span></span>
+        <span class="conf">低置信 · 待你裁决</span>
+      </div>
+      <div class="why">依据：会话提及首页联调，但与 PRJ-01 多条任务相关，归属不确定。人不主动挂接，只采纳或忽略。</div>
+      <div class="acts">
+        <button class="btn primary" onclick="adopt()">采纳挂接</button>
+        <button class="btn" onclick="dismiss()">忽略</button>
+      </div>
+    </div>
+    <div class="bound" id="adoptedState" style="display:none">
+      <span class="dot"></span><span>已采纳挂接 <span class="mono">T-12</span> · 可在条目上撤销（示例）</span>
+    </div>
+    <div class="note warn">边界：「高置信自动挂」的置信判定口径待定义（模型自判置信未校准，L-K9-01）；绑定率/采纳率交 K12 计数，不足不强行扩大回收面。</div>
+  </div>
+
+  <div class="card">
+    <h2>只读 DAG <span class="readonly-tag">只读 · 无编辑句柄</span></h2>
+    <div class="dag">
+      <span class="node">T-08 内容定稿</span><span class="edge">→</span><span class="node">T-12 首页联调</span><span class="edge">→</span><span class="node">T-19 支付联调</span><br>
+      <span class="node">T-14 验收清单</span><span class="edge">→</span><span class="node">M1 Beta 里程碑</span>
+    </div>
+    <p class="secondary fs12" style="margin-top:10px">由现有 predecessorIds 派生，只读展示关键路径依赖，不提供拖拽/改边；无边时退树状平铺。唯一只读适配点 sessionQuery 读 alpha 日志格式，残余耦合登记，格式稳定期不额外投入（L-K9-02）。</p>
+  </div>
+
+  <div class="card">
+    <h2>移交出口</h2>
+    <div class="transfer">
+      <span>纯文件缺席队列（不读 session/goal/todo 任何载体的通用待办持久化）移交 <b>K11 节奏呈现层</b>；H6 建成前按现状打开时派生，不承诺主动触达。公司系统动作无日志的原料缺口归 K3/K18，不由 K9 承诺覆盖。</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：R2-C-K09-01（显式人挂与 H5 代执行互斥）→ agent 代挂建议+人确认；R2-C-K09-02（sessionQuery 耦合/公司系统无日志）→ 耦合点登记、缺口移交；R2-C-K09-03（规则刹车名存实亡）→ 删除不留占位；R2-C-K09-04（缺席队列脱离主题）→ 移交 K11。</li>
+      <li>依赖：H5（代执行方向一致）、H8（带宽可承担耦合）。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+function adopt(){
+  document.getElementById('lowSug').style.display='none';
+  document.getElementById('adoptedState').style.display='flex';
+  showToast('已采纳挂接（示例）');
+}
+function dismiss(){document.getElementById('lowSug').style.display='none';showToast('已忽略建议（示例）');}
+function unbind(){showToast('已撤销自动挂接（示例）');}
+</script>
+</body>
+</html>

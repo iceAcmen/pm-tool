@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K3 工作痕迹证据闭环 · 原型（示例数据）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234176e6'/%3E%3Ccircle cx='8' cy='8' r='3' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+    --ink:#1c1c1e; --text-2:#61666b; --muted:#696e74; --faint:#71767c;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+    --accent:#4176e6; --accent-deep:#4868b2; --accent-soft:#e4edfd;
+    --success:#22c55e; --success-soft:rgba(34,197,94,.12);
+    --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+    --danger:#ef4444; --danger-soft:rgba(239,68,68,.10);
+    --todo:#d4d4d4;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,18,20,.06);
+    --shadow-2:0 1px 2px rgba(16,18,20,.06),0 6px 18px rgba(16,18,20,.07);
+    --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  body[data-ds-dark-theme]{
+    --bg:#1f2023; --surface:#26272b; --surface-2:#2e3034; --surface-3:#383a3f;
+    --ink:#ececee; --text-2:#a8adb3; --muted:#9aa0a6; --faint:#8b9096;
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+    --accent:#7aaaff; --accent-deep:#7aaaff; --accent-soft:rgba(122,170,255,.16);
+    --success-soft:rgba(34,197,94,.16); --warn-soft:rgba(245,158,11,.16); --danger-soft:rgba(239,68,68,.16);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45;font-feature-settings:'tnum' 1}
+  button{font:inherit;white-space:nowrap;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .topbar{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .tb-badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent-deep);border-radius:var(--r-sm);padding:3px 9px}
+  .tb-title{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .tb-sub{font-size:12px;color:var(--muted)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-pill);padding:3px 10px;font-weight:600}
+  .theme-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:6px 12px;font-size:12.5px}
+  .theme-btn:hover{background:var(--surface-3);color:var(--ink)}
+  .shell{display:flex;align-items:stretch;max-width:1180px;margin:0 auto}
+  .rail{width:216px;flex-shrink:0;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+  .rail-h{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.09em;padding:0 8px 8px}
+  .rail-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--text-2);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+  .rail-item:hover{background:var(--surface-2);color:var(--ink)}
+  .rail-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .rail-item .dot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex-shrink:0}
+  .rail-item.active .dot{background:var(--accent)}
+  .main{flex:1;min-width:0;padding:22px 26px 48px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-2);padding:18px 20px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .card .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;max-width:660px;line-height:1.6}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);background:var(--surface-2);white-space:nowrap}
+  .chip.ok{color:var(--success);background:var(--success-soft);border-color:transparent}
+  .chip.warn{color:var(--warn);background:var(--warn-soft);border-color:transparent}
+  .chip.no{color:var(--faint);background:var(--surface-3)}
+  .chip.src{font-family:var(--font-mono);font-size:11px}
+  /* 绑定建议条 */
+  .bind-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--r);padding:14px 16px}
+  .bind-info{flex:1;min-width:220px}
+  .bind-info .t{font-size:13.5px;font-weight:600}
+  .bind-info .s{font-size:12px;color:var(--text-2);margin-top:3px}
+  .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:var(--r-sm);padding:7px 16px;font-size:13px;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--text-2);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--muted);color:var(--ink)}
+  .bind-state{font-size:12.5px;color:var(--success);font-weight:600;display:none}
+  .bind-state.show{display:block}
+  /* 候选列表 */
+  .ev-row{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;background:var(--surface)}
+  .ev-check{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+  .ev-main{flex:1;min-width:0}
+  .ev-title{font-size:13.5px;font-weight:600}
+  .ev-meta{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.6}
+  .ev-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+  .mini-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:5px 12px;font-size:12.5px}
+  .mini-btn:hover{border-color:var(--accent);color:var(--accent-deep)}
+  .mini-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .ev-row.claimed{opacity:.62}
+  .ev-row.claimed .ev-title::after{content:' · 已归属';color:var(--success);font-weight:600}
+  .ev-row.declare{border-style:dashed}
+  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  th{font-size:11.5px;font-weight:700;color:var(--faint);letter-spacing:.06em}
+  .mono{font-family:var(--font-mono);font-size:12px;color:var(--text-2)}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;border-left:2px solid var(--line);padding-left:12px}
+  .flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+  .flow-step{flex:1;min-width:150px;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface-2)}
+  .flow-step .n{font-family:var(--font-mono);font-size:11px;color:var(--faint)}
+  .flow-step .t{font-size:13px;font-weight:600;margin:4px 0 3px}
+  .flow-step .d{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:10px 18px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+  .toast.show{opacity:1}
+  @media(max-width:860px){.shell{flex-direction:column}.rail{width:100%;border-right:none;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-left">
+    <span class="tb-badge">K3</span>
+    <div>
+      <div class="tb-title">工作痕迹证据闭环 · 最小绑定版</div>
+      <div class="tb-sub">agent 代挂草案 + 人一键确认；证据候选库唯一落盘；只承诺已绑定会话子集</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="demo-tag">示例数据 · 非生产 API</span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="分片单元导航">
+    <div class="rail-h">分片1 · 录入与证据流</div>
+    <button class="rail-item" type="button" data-jump="K2"><span class="dot"></span>K2 写边界</button>
+    <div class="rail-item active" aria-current="page"><span class="dot"></span>K3 证据闭环</div>
+    <button class="rail-item" type="button" data-jump="K4"><span class="dot"></span>K4 台账吃对话</button>
+    <button class="rail-item" type="button" data-jump="K5"><span class="dot"></span>K5 会议流（撤并）</button>
+    <button class="rail-item" type="button" data-jump="K6"><span class="dot"></span>K6 完成评判层</button>
+    <button class="rail-item" type="button" data-jump="X6"><span class="dot"></span>X6 完成仪式感</button>
+    <button class="rail-item" type="button" data-jump="K12"><span class="dot"></span>K12 自我计量</button>
+  </nav>
+
+  <main class="main">
+    <!-- 最小绑定 -->
+    <section class="card">
+      <h2>开工最小绑定：agent 代挂草案，人一键确认（不等 K9）</h2>
+      <p class="desc">会话开始时 agent 依据首条对话识别在册任务，代挂一个主归属草案；人确认或忽略。绑定任务仅作主归属，会话内其他改动不整会话错挂，进候选池由人认领。机制先于 K9 完整会话编排存在。</p>
+      <div class="bind-bar" id="bindBar">
+        <div class="bind-info">
+          <div class="t">建议主归属：t-118「评审材料准备 · Q4 方案评审」</div>
+          <div class="s">依据：本会话首条对话提及该任务；低置信落空则不绑定，退回人工贴 evidenceUrl。</div>
+        </div>
+        <button class="btn" type="button" id="bindOk">确认绑定</button>
+        <button class="btn ghost" type="button" id="bindSkip">忽略，不绑定</button>
+        <span class="bind-state" id="bindState"></span>
+      </div>
+    </section>
+
+    <!-- 证据候选 -->
+    <section class="card">
+      <h2>会话结束 · 证据候选（人确认归属，不自动落库）</h2>
+      <p class="desc">自动收成只覆盖已绑定会话内的工作痕迹；每条线索带来源类型提示（非可靠度档位、不进排序权重）。客观改动类可进证完成侧；present 声明类线索不作完成证据。未绑定会话的改动进孤儿池，认领成本与现状手动贴链接同量级，如实承认。</p>
+
+      <div class="ev-row" data-ev="1">
+        <input type="checkbox" class="ev-check" aria-label="选择线索1">
+        <div class="ev-main">
+          <div class="ev-title">git diff：修改 <span class="mono">docs/review-q4.md</span>（3 个文件，+142/-31）</div>
+          <div class="ev-meta"><span class="chip src">来源 · git 线索之一</span> 仓库/桩 git 缺失时该渠道静默跳过并记一条日志，不报错、不伪造。</div>
+        </div>
+        <div class="ev-actions">
+          <button class="mini-btn primary" type="button" data-claim="1">归属 t-118</button>
+          <button class="mini-btn" type="button" data-pool="1">进候选池</button>
+        </div>
+      </div>
+
+      <div class="ev-row" data-ev="2">
+        <input type="checkbox" class="ev-check" aria-label="选择线索2">
+        <div class="ev-main">
+          <div class="ev-title">附件：评审稿截图（白板照 / 设计稿，内容寻址本地存储）</div>
+          <div class="ev-meta"><span class="chip src">来源 · attachment</span> 客观材料，可挂任务；人确认后写入证据候选库。</div>
+        </div>
+        <div class="ev-actions">
+          <button class="mini-btn primary" type="button" data-claim="2">归属 t-118</button>
+          <button class="mini-btn" type="button" data-pool="2">进候选池</button>
+        </div>
+      </div>
+
+      <div class="ev-row declare" data-ev="3">
+        <input type="checkbox" class="ev-check" aria-label="选择线索3" disabled>
+        <div class="ev-main">
+          <div class="ev-title">present 声明：「这份材料应该够评审用了」</div>
+          <div class="ev-meta"><span class="chip warn">声明类 · 不作完成证据</span> 路径声明非完成事实，只留会话内留痕，不进证完成侧。</div>
+        </div>
+        <div class="ev-actions"><span class="chip no">不可勾选</span></div>
+      </div>
+
+      <div class="ev-row" data-ev="4">
+        <input type="checkbox" class="ev-check" aria-label="选择线索4">
+        <div class="ev-main">
+          <div class="ev-title">夹带改动：t-121「纪要整理」的一轮对话（非主归属任务）</div>
+          <div class="ev-meta"><span class="chip src">来源 · 会话轮次</span> 主归属只挂 t-118；本条不整会话错挂，由人认领。</div>
+        </div>
+        <div class="ev-actions">
+          <button class="mini-btn" type="button" data-claim="4">认领为 t-121</button>
+          <button class="mini-btn" type="button" data-pool="4">进孤儿池</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 唯一落盘 -->
+    <section class="card">
+      <h2>证据候选库 = 新证据族唯一落盘处（不并行第二真源）</h2>
+      <p class="desc">复用现有 core/backup.ts 备份链与人类可读 JSON，不新建第二条恢复路径；旧 task.evidenceUrl 单链降级为兼容只读字段，迁移时逐条提升为库内记录。</p>
+      <table>
+        <colgroup><col style="width:20%"><col style="width:34%"><col style="width:32%"><col style="width:14%"></colgroup>
+        <thead><tr><th>记录</th><th>库内条目（唯一落盘）</th><th>旧 evidenceUrl 单链</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">ev-0007</td>
+            <td>git diff 快照 + 提交短哈希 + 采集时间 + 来源类型</td>
+            <td class="mono">兼容只读，迁移时提升为库内记录</td>
+            <td><span class="chip ok">已落盘</span></td>
+          </tr>
+          <tr>
+            <td class="mono">ev-0008</td>
+            <td>附件内容寻址引用 + 采集时间 + 来源类型</td>
+            <td class="mono">同上</td>
+            <td><span class="chip ok">已落盘</span></td>
+          </tr>
+          <tr>
+            <td class="mono">ev-0009</td>
+            <td>待认领（孤儿池），人认领后才落盘归属</td>
+            <td class="mono">不写单链</td>
+            <td><span class="chip warn">待认领</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 覆盖边界 -->
+    <section class="card">
+      <h2>覆盖边界（诚实声明）</h2>
+      <div class="flow">
+        <div class="flow-step"><div class="n">01</div><div class="t">会话内支流</div><div class="d">只对 dsh 会话内完成的工作痕迹自动收成；绑定率（代挂且被确认的会话/相关会话）待 K12 计数，E6 无实测，不预先主张全量闭环。</div></div>
+        <div class="flow-step"><div class="n">02</div><div class="t">公司系统侧</div><div class="d">不承诺覆盖飞书项目/Jira 等公司系统动作；外部证据走现状人工 evidenceUrl 粘贴与 K18 单向链接登记。</div></div>
+        <div class="flow-step"><div class="n">03</div><div class="t">git 降级线索</div><div class="d">非仓库/桩 git、手动编辑等五类失效静默跳过记日志，渠道失效退化为人工粘贴，不报错、不伪造。</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="note">本页为设计原型，全部条目为示例数据；绑定率、会话内动作占比为 E6 待 K12 本机计数项，未包装为实证。</p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var dark=false,btn=document.getElementById('themeBtn');
+  btn.addEventListener('click',function(){dark=!dark;if(dark){document.body.setAttribute('data-ds-dark-theme','');btn.textContent='切回浅色';}else{document.body.removeAttribute('data-ds-dark-theme');btn.textContent='切换深浅';}});
+  var toast=document.getElementById('toast'),tt;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800);}
+  document.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){showToast('本页仅演示 K3；'+b.dataset.jump+' 单元见分片覆盖索引。');});});
+  document.getElementById('bindOk').addEventListener('click',function(){
+    var s=document.getElementById('bindState');s.textContent='已绑定 t-118（主归属）';s.classList.add('show');showToast('主归属已确认，会话内其他改动进候选池认领。');
+  });
+  document.getElementById('bindSkip').addEventListener('click',function(){
+    var s=document.getElementById('bindState');s.textContent='未绑定：本会话改动将进孤儿池，由人工认领。';s.classList.add('show');
+  });
+  document.querySelectorAll('[data-claim]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var row=document.querySelector('[data-ev="'+b.dataset.claim+'"]');row.classList.add('claimed');
+      showToast('已归属并写入证据候选库（演示）。');
+    });
+  });
+  document.querySelectorAll('[data-pool]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var row=document.querySelector('[data-ev="'+b.dataset.pool+'"]');row.classList.add('claimed');
+      showToast('已转入候选池/孤儿池，等待人工认领（演示）。');
+    });
+  });
+})();
+</script>
+</body>
+</html>

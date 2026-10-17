@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K11 节奏沉默与噪音治理 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK11%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* H6 悬置告示 */
+  .h6{display:flex;gap:12px;align-items:flex-start;border:1px dashed var(--due);border-radius:var(--r);padding:14px 16px;background:transparent;margin-bottom:14px}
+  .h6 .ic{flex:none;width:18px;height:18px;border:1px solid var(--due);border-radius:50%;color:var(--due);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center}
+  .h6 p{font-size:12.5px;color:var(--secondary)}
+  .h6 b{color:var(--ink)}
+  /* mute 开关 */
+  .mute-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line-soft)}
+  .mute-row:first-of-type{border-top:none}
+  .switch{position:relative;width:42px;height:24px;flex:none;cursor:pointer}
+  .switch input{display:none}
+  .track{position:absolute;inset:0;border-radius:999px;background:var(--elev-2);border:1px solid var(--line);transition:background .16s}
+  .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .16s}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track .knob{transform:translateX(18px)}
+  /* 补记队列 */
+  .queue-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+  .qitem{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px}
+  .qitem.top{border-color:color-mix(in srgb,var(--overdue) 45%,transparent)}
+  .qsev{flex:none;font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:999px;margin-top:2px}
+  .qsev.ov{color:var(--overdue);background:color-mix(in srgb,var(--overdue) 10%,transparent)}
+  .qsev.soon{color:var(--due);background:color-mix(in srgb,var(--due) 12%,transparent)}
+  .qbody{min-width:0;flex:1}
+  .qtitle{font-weight:600;font-size:13.5px}
+  .qmeta{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:3px}
+  .qmeta .late{color:var(--overdue)}
+  .exempt{font-family:var(--mono);font-size:10.5px;color:var(--done);border:1px solid color-mix(in srgb,var(--done) 40%,transparent);border-radius:999px;padding:2px 8px;flex:none;margin-top:2px;cursor:pointer;background:transparent}
+  .fold{width:100%;text-align:center;font-size:12.5px;color:var(--secondary);background:var(--elev);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:9px;cursor:pointer}
+  .fold:hover{background:var(--elev-2)}
+  .hidden{display:none}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K11 · 节奏、沉默与噪音治理（读时派生 / 补记队列 / 二态静音）</div>
+      <h1>只做到达后 · 打开时如何安静呈现（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A：条件性采纳（仅呈现层）</span>
+    <span class="chip rec">裁判 B：修正采纳（H6 显式剥离悬置）</span>
+    <span class="chip">终局：接近饱和</span>
+    <span class="chip e6">登记：H6 主动触达悬置为宿主级通知能力</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <div class="h6">
+    <div class="ic">!</div>
+    <p><b>H6 主动触达悬置：</b>当前宿主无系统推送 / 邮件 / 短信 / IM webhook 外部通知渠道（E3：schedule 到期提醒仅作为普通 follow-up 进原对话）。本层<b>不伪造推送、不做常驻弹窗假象</b>；主动触达 leg 悬置待宿主级通知能力，归属与 C7 是否解除由用户拍板。</p>
+  </div>
+
+  <div class="card">
+    <h2>静音开关（二态 mute / all）· 压主动投递，不隐藏打开视图</h2>
+    <div class="mute-row">
+      <div>
+        <div style="font-weight:600;font-size:13.5px">静音主动投递</div>
+        <div class="secondary fs12">mute 只压主动投递动作；打开面板时补记队列照常可见，不隐藏。</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="muteSw" onchange="renderMute()"><span class="track"><span class="knob"></span></span></label>
+    </div>
+    <div class="mute-row">
+      <div>
+        <div style="font-weight:600;font-size:13.5px">关键项豁免（high opt-in 同一份登记表）</div>
+        <div class="secondary fs12">豁免项在 mute 期打开仍可见；与 high opt-in 复用同一份表，不另立第二张表。</div>
+      </div>
+      <span class="mono fs12 muted" id="muteState">当前：all（未静音）</span>
+    </div>
+    <div class="note">自适应降频外置为实验附加，默认不启用：单人个位数样本下二项比例点估计方差极大，1–2 次阴性观察即翻转；缺席（忙/在公司系统/忘）≠拒绝。</div>
+  </div>
+
+  <div class="card">
+    <h2>补记队列 · 读时派生（本次打开补齐自上次打开以来到期未达条目）</h2>
+    <div class="queue-head">
+      <span class="secondary fs12">排序键：严重度（逾期 &gt; 临期）→ 同级按到期时间升序；首屏 Top1，其余折叠</span>
+      <span class="mono fs12 muted" id="qCount"></span>
+    </div>
+    <div id="queue"></div>
+    <button class="fold" id="foldBtn" onclick="toggleFold()"></button>
+    <div class="note">读时派生不承诺实时到达：本次打开时补齐自上次打开以来到期未达的条目（补记窗口）；schedule 仅作可选辅助，错过不补发。配额/TTL 控制建议积压，high opt-in 登记关键项。</div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：R2-D-K11-01（积压无排序键/迟到标识/首屏上限）→ 严重度+到期排序、积压 N 天、Top1+折叠；R2-D-K11-02（mute×豁免交集留白）→ 两层划清、复用同一份表；R2-D-K11-03（借 H6 主张常驻推送）→ 显式剥离，只承担呈现层。</li>
+      <li>承接：K9 缺席队列、K19 时段静默、X7 周期触发统一归并到本层，避免多套提醒并行。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+const ITEMS=[
+  {id:'T-12',sev:'ov',sevLab:'逾期',title:'官网改版 · 首页联调',due:'应到期 10-14',late:4,exempt:false,top:true},
+  {id:'M1',sev:'ov',sevLab:'逾期',title:'Beta 里程碑',due:'应到期 10-16',late:2,exempt:true,top:false},
+  {id:'T-08',sev:'soon',sevLab:'临期',title:'内容定稿',due:'3 天后到期',late:1,exempt:false,top:false},
+  {id:'T-14',sev:'soon',sevLab:'临期',title:'验收清单',due:'5 天后到期',late:6,exempt:false,top:false},
+];
+let folded=true;
+function renderQueue(){
+  const q=document.getElementById('queue');q.innerHTML='';
+  ITEMS.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='qitem'+(it.top?' top':'')+(folded&&!it.top?' hidden':'');
+    d.innerHTML=`
+      <span class="qsev ${it.sev}">${it.sevLab}</span>
+      <div class="qbody">
+        <div class="qtitle">${it.title} <span class="mono fs12 muted">${it.id}</span></div>
+        <div class="qmeta"><span>${it.due}</span><span class="late">积压 ${it.late} 天</span></div>
+      </div>
+      ${it.exempt?'<span class="exempt" onclick="toggleExempt(this)">豁免 · 点按取消</span>':'<span class="exempt" onclick="toggleExempt(this)">设为豁免</span>'}`;
+    q.appendChild(d);
+  });
+  const rest=ITEMS.length-1;
+  document.getElementById('foldBtn').textContent=folded?`还有 ${rest} 条 · 展开`:`收起`;
+  document.getElementById('qCount').textContent=`共 ${ITEMS.length} 条（示例）`;
+}
+function toggleFold(){folded=!folded;renderQueue();}
+function toggleExempt(el){
+  const row=el.closest('.qitem');
+  const it=ITEMS.find(x=>row.textContent.includes(x.id));
+  if(it){it.exempt=!it.exempt;renderQueue();}
+}
+function renderMute(){
+  const m=document.getElementById('muteSw').checked;
+  document.getElementById('muteState').textContent=m?'当前：mute（压主动投递，视图不隐藏）':'当前：all（未静音）';
+}
+renderQueue();
+</script>
+</body>
+</html>

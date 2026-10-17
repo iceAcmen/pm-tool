@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X4 对外举证 · 归并 K12（概念页）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --danger:#b3402f; --danger-soft:#f8ecea;
+    --warn:#9a6212; --warn-soft:#f6efe2; --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --danger:#e08a7d; --danger-soft:#2e211e;
+    --warn:#e0a458; --warn-soft:#2e2619; --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:28px 24px}
+  @media(max-width:600px){.wrap{padding:18px 14px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .unit-tag{font-size:12px;color:var(--faint)}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.cut{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:999px;padding:3px 10px;font-weight:600}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:18px;max-width:64ch}
+  .boundary{border:1.5px solid var(--danger);background:var(--danger-soft);border-radius:12px;padding:14px 18px;font-size:13.5px;margin-bottom:18px}
+  .boundary b{font-weight:700;color:var(--danger)}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:14px;font-weight:700;margin-bottom:12px}
+  .cut-row{display:grid;grid-template-columns:1fr 40px 1.2fr;gap:10px;align-items:start;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .cut-row:last-child{border-bottom:none}
+  @media(max-width:680px){.cut-row{grid-template-columns:1fr;gap:6px}.cut-arrow{transform:rotate(90deg)}}
+  .claim{background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .claim .t{font-weight:600;font-size:13.5px;text-decoration:line-through;color:var(--faint)}
+  .claim .d{font-size:12.5px;color:var(--muted);margin-top:2px;text-decoration:line-through}
+  .cut-arrow{color:var(--danger);text-align:center;padding-top:10px}
+  .reason{font-size:12.5px;color:var(--text-2);padding:12px 14px;border-radius:10px;background:var(--canvas);border:1px solid var(--line)}
+  .reason .ev{display:block;margin-top:6px;font-size:11.5px;color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .keep{background:var(--ok-soft);border-radius:10px;padding:14px 16px;font-size:13.5px}
+  .keep h3{font-size:14px;color:var(--ok);margin-bottom:6px}
+  .future{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .future span{font-size:12.5px;background:var(--canvas);border:1px dashed var(--line);border-radius:8px;padding:6px 12px;color:var(--text-2)}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-tag">X4 · 对外举证（归并 K12）</span>
+    <span class="verdict cut">法律承诺撤回 · 非第三方可采信</span>
+    <span class="demo-tag">概念演示 · 虚构示例</span>
+    <span class="spacer"></span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+
+  <h1>对外举证：自我回顾时间线材料，非第三方可采信</h1>
+  <p class="sub">本页为归并概念页，不新建举证包。K12 只增审计流继续作为自我回顾时间线使用；任何「可对第三方出示 / 不可篡改 / 法定留存」承诺均已撤回。示例为虚构演示。</p>
+
+  <div class="boundary">
+    <b>边界声明：</b>本机自录事件流是<b>自我回顾材料</b>，不构成第三方可采信证据：自录内容证明力弱、可被本机篡改、时间来自本机时钟；本工具不提供公证、时间戳存证或法律举证能力。
+  </div>
+
+  <div class="panel">
+    <h2>原承诺逐条划除与理由</h2>
+    <div class="cut-row">
+      <div class="claim"><div class="t">可对第三方出示的不可篡改举证包</div><div class="d">只增事件流升级为对外可采信证据</div></div>
+      <div class="cut-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+      <div class="reason">民诉法项下当事人自录材料证明力弱，对方可质疑真实性；本地只增不等于不可篡改，存储文件可被本机改写。<span class="ev">E2 民诉 Art93/94 证据类型 · 自录属当事人陈述/书证边缘</span></div>
+    </div>
+    <div class="cut-row">
+      <div class="claim"><div class="t">独立出示 / 法定留存期承诺</div><div class="d">按法定留存期保存、可独立提交</div></div>
+      <div class="cut-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+      <div class="reason">时间戳来自本机时钟，无外部时间锚；无法满足法定留存对来源可信的要求，不作留存承诺。<span class="ev">E1 本机时钟可改 · 无外部锚</span></div>
+    </div>
+    <div class="cut-row">
+      <div class="claim"><div class="t">删除留痕对抗删除权</div><div class="d">永久保留以对抗 PIPL 删除权</div></div>
+      <div class="cut-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+      <div class="reason">与 PIPL Art47 删除权冲突；永久留存非合法合规设计，删除请求仍须被响应。<span class="ev">E2 PIPL Art47 个人信息删除权</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>现存能力（归并 K12，不新增）</h2>
+    <div class="keep">
+      <h3>自我回顾时间线材料</h3>
+      K12 只增审计流同载体：供本人回顾「何时做了什么、改过什么」，带 diff 与来源标注；用途限于自我管理与述职自述，不作对外证据主张。
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>未来条件性储备（另立，不在本期）</h2>
+    <div class="future">
+      <span>外部可信时间戳 / 公证存证服务 · 需外部锚</span>
+      <span>区块链存证 · 受成本与 PIPL 约束</span>
+      <span>仅在真实法律场景出现时重新评估，本期不实现</span>
+    </div>
+  </div>
+
+  <div class="src">来源：终局台账 X4 行；裁判 A/B「归并 K12；法律承诺撤回；自我回顾时间线材料，非第三方可采信」；`rebuttal/F-终局核验.md` §四；`rebuttal/K20-X4-往复.md` R2-F-X4-01/02。原始想法：round4/diverger-3.md N1、diverger-5.md N3，登记于 round4-new-directions.md。</div>
+</div>
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('x4-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('x4-theme',d?'dark':'light');
+  });
+</script>
+</body>
+</html>

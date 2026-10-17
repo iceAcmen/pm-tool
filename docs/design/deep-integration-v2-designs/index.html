@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pm-tool × DeepSeek Harness 深度融合 · 全方案设计总览</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a;
+    --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484;
+    --acc:#4f9cff; --acc2:#7bb8ff; --ok:#3fbf7f; --warn:#d9a13f; --bad:#d96a5a;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;line-height:1.65;font-size:15px}
+  .wrap{max-width:1120px;margin:0 auto;padding:32px 24px 80px}
+  header.hero{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:28px}
+  .kicker{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.12em;text-transform:uppercase}
+  h1{font-size:26px;font-weight:650;margin:10px 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--fg2);font-size:14px}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;border:1px solid var(--line);color:var(--fg2);margin-right:8px}
+  .badge.ok{color:var(--ok);border-color:rgba(63,191,127,.4)}
+  .badge.warn{color:var(--warn);border-color:rgba(217,161,63,.4)}
+  .badge.bad{color:var(--bad);border-color:rgba(217,106,90,.4)}
+  h2{font-size:19px;font-weight:600;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--line)}
+  h3{font-size:15px;font-weight:600;margin:22px 0 10px;color:var(--fg)}
+  p{margin:8px 0;color:var(--fg2)}
+  .slice{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+  .slice-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+  .slice-title{font-size:16px;font-weight:650}
+  .slice-note{font-size:12px;color:var(--fg3)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--fg3);font-weight:500;font-size:12px;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:7px 8px;border-bottom:1px solid rgba(42,47,58,.5);vertical-align:top}
+  tr:hover td{background:rgba(79,156,255,.04)}
+  .unit{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--fg);white-space:nowrap}
+  .st{font-size:12px;white-space:nowrap}
+  .st.sat{color:var(--ok)} .st.semi{color:var(--warn)} .st.drop{color:var(--fg3)} .st.formal{color:var(--acc2)}
+  a{color:var(--acc);text-decoration:none} a:hover{text-decoration:underline}
+  .links{font-size:12.5px;white-space:nowrap}
+  .links a{margin-right:8px}
+  .note{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:8px;padding:14px 16px;font-size:13.5px;color:var(--fg2);margin:14px 0}
+  .warnbox{border-left-color:var(--warn)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+  .layer{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px}
+  .layer b{display:block;margin-bottom:4px;font-size:13.5px}
+  .layer span{color:var(--fg3);font-size:12px}
+  .foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--fg3);font-size:12px}
+  code{font-family:var(--mono);font-size:12px;background:var(--panel2);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">PM WORKBENCH × DSH · Design Review Pack</div>
+  <h1>pm-tool × DeepSeek Harness 深度融合 · 全方案设计总览</h1>
+  <div class="sub">七阶段脑暴 v2（阶段 0–6 收敛定稿）→ 阶段 7 专家深化设计 · 30 候选单元全覆盖 · 浅深两态 HTML 原型</div>
+  <div style="margin-top:12px">
+    <span class="badge ok">方法依据：brainstorm-v2 终局台账 + 双裁判裁决 + 元审计（有条件通过）</span>
+    <span class="badge">假设基线：user-confirmed-assumptions H1–H12</span>
+    <span class="badge warn">示例数据均为虚构标注，无真实业务数据</span>
+  </div>
+</header>
+
+<h2>导航索引（30 单元 / 4 分片）</h2>
+
+<div class="slice">
+  <div class="slice-head"><span class="slice-title">分片 1 · 录入与证据流</span><span class="slice-note">台账怎么进来、怎么被证明、怎么算完成</span></div>
+  <table>
+    <tr><th>单元</th><th>终局档位</th><th>打开</th></tr>
+    <tr><td class="unit">K2 写边界与自主度</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice1-recording/k2-write-boundary/原型.html">原型</a><a href="slice1-recording/k2-write-boundary/设计说明.md">说明</a><a href="slice1-recording/k2-write-boundary/_shots/">截图</a></td></tr>
+    <tr><td class="unit">K3 证据闭环</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice1-recording/k3-evidence-loop/原型.html">原型</a><a href="slice1-recording/k3-evidence-loop/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K4 台账吃对话</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice1-recording/k4-dialog-ingest/原型.html">原型</a><a href="slice1-recording/k4-dialog-ingest/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K5 会议流捕获</td><td class="st drop">饱和 · 撤并（概念页+不推荐理由）</td><td class="links"><a href="slice1-recording/k5-meeting-flow/原型.html">概念页</a><a href="slice1-recording/k5-meeting-flow/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K6 完成评判层</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice1-recording/k6-completion-judgement/原型.html">原型</a><a href="slice1-recording/k6-completion-judgement/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X6 完成仪式感</td><td class="st formal">正式方向 · 三层触发</td><td class="links"><a href="slice1-recording/x6-completion-ritual/原型.html">原型</a><a href="slice1-recording/x6-completion-ritual/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K12 自我计量</td><td class="st sat">饱和 · 采纳</td><td class="links"><a href="slice1-recording/k12-self-metric/原型.html">原型</a><a href="slice1-recording/k12-self-metric/设计说明.md">说明</a></td></tr>
+  </table>
+  <a href="slice1-recording/覆盖索引.md" style="display:inline-block;margin-top:8px;font-size:12.5px">覆盖索引（台账行号 L14–L18/L24/L36）</a>
+</div>
+
+<div class="slice">
+  <div class="slice-head"><span class="slice-title">分片 2 · 感知与节奏</span><span class="slice-note">系统怎么知道、什么时候说、长什么样</span></div>
+  <table>
+    <tr><th>单元</th><th>终局档位</th><th>打开</th></tr>
+    <tr><td class="unit">K1 可见性供给面</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice2-perception/k1-visibility/原型.html">原型</a><a href="slice2-perception/k1-visibility/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K7 规划智能</td><td class="st drop">饱和 · 后置（概念页+重启门槛）</td><td class="links"><a href="slice2-perception/k7-planning/原型.html">概念页</a><a href="slice2-perception/k7-planning/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K8 组合与复用</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice2-perception/k8-composition/原型.html">原型</a><a href="slice2-perception/k8-composition/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K9 会话绑定</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice2-perception/k9-session-binding/原型.html">原型</a><a href="slice2-perception/k9-session-binding/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K10 规则视图</td><td class="st drop">饱和 · 撤并（概念页+4 规则集）</td><td class="links"><a href="slice2-perception/k10-rule-views/原型.html">概念页</a><a href="slice2-perception/k10-rule-views/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K11 节奏沉默</td><td class="st semi">接近饱和 · H6 触达悬置</td><td class="links"><a href="slice2-perception/k11-rhythm/原型.html">原型</a><a href="slice2-perception/k11-rhythm/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K13 UI 形态</td><td class="st semi">接近饱和 · 修正采纳</td><td class="links"><a href="slice2-perception/k13-ui-form/原型.html">原型</a><a href="slice2-perception/k13-ui-form/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X7 愿景 OKR+习惯层</td><td class="st formal">正式方向 · 两层结构</td><td class="links"><a href="slice2-perception/x7-vertical-okr/原型.html">原型</a><a href="slice2-perception/x7-vertical-okr/设计说明.md">说明</a></td></tr>
+  </table>
+  <a href="slice2-perception/覆盖索引.md" style="display:inline-block;margin-top:8px;font-size:12.5px">覆盖索引（台账行号 L13/L19–L23/L25/L37）</a>
+</div>
+
+<div class="slice">
+  <div class="slice-head"><span class="slice-title">分片 3 · 档案与对外</span><span class="slice-note">数据怎么活十年、怎么对外</span></div>
+  <table>
+    <tr><th>单元</th><th>终局档位</th><th>打开</th></tr>
+    <tr><td class="unit">K14 宿主解绑</td><td class="st sat">饱和 · 登记层（与 K16 合并计分）</td><td class="links"><a href="slice3-archive-outbound/k14-detach/原型.html">原型</a><a href="slice3-archive-outbound/k14-detach/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K15 商业分发</td><td class="st drop">饱和 · 撤并（概念页+不推荐理由）</td><td class="links"><a href="slice3-archive-outbound/k15-distribution/原型.html">概念页</a><a href="slice3-archive-outbound/k15-distribution/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K16 档案长寿</td><td class="st sat">饱和 · 采纳（最小保存包）</td><td class="links"><a href="slice3-archive-outbound/k16-archive/原型.html">原型</a><a href="slice3-archive-outbound/k16-archive/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K17 平台终局</td><td class="st drop">饱和 · 关系立场附注</td><td class="links"><a href="slice3-archive-outbound/k17-platform-endgame/原型.html">概念页</a><a href="slice3-archive-outbound/k17-platform-endgame/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">K18 对外接触面</td><td class="st semi">接近饱和 · 条件性采纳</td><td class="links"><a href="slice3-archive-outbound/k18-outbound/原型.html">原型</a><a href="slice3-archive-outbound/k18-outbound/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X2 毕业导向</td><td class="st semi">接近饱和 · 条件性采纳</td><td class="links"><a href="slice3-archive-outbound/x2-graduation/原型.html">原型</a><a href="slice3-archive-outbound/x2-graduation/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X4 对外举证</td><td class="st drop">饱和 · 归并 K12（概念页+边界声明）</td><td class="links"><a href="slice3-archive-outbound/x4-evidence/原型.html">概念页</a><a href="slice3-archive-outbound/x4-evidence/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X5 成就库</td><td class="st semi">接近饱和 · 条件性采纳</td><td class="links"><a href="slice3-archive-outbound/x5-achievements/原型.html">原型</a><a href="slice3-archive-outbound/x5-achievements/设计说明.md">说明</a></td></tr>
+  </table>
+  <a href="slice3-archive-outbound/覆盖索引.md" style="display:inline-block;margin-top:8px;font-size:12.5px">覆盖索引（台账行号 L26–L35）</a>
+</div>
+
+<div class="slice">
+  <div class="slice-head"><span class="slice-title">分片 4 · 人生与保护面</span><span class="slice-note">人与生活的边界（含撤除/撤回单元的概念页）</span></div>
+  <table>
+    <tr><th>单元</th><th>终局档位</th><th>打开</th></tr>
+    <tr><td class="unit">K19 人的保护面</td><td class="st drop">饱和 · 撤除待拍板（概念页）</td><td class="links"><a href="slice4-life-protection/k19-protection/原型.html">概念页</a><a href="slice4-life-protection/k19-protection/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X3 失败墓地</td><td class="st semi">接近饱和 · 条件性采纳</td><td class="links"><a href="slice4-life-protection/x3-failure-cemetery/原型.html">原型</a><a href="slice4-life-protection/x3-failure-cemetery/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X8 实物供应链</td><td class="st drop">饱和 · 独立方向撤回（概念页）</td><td class="links"><a href="slice4-life-protection/x8-physical/原型.html">概念页</a><a href="slice4-life-protection/x8-physical/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X9 人生项目</td><td class="st semi">接近饱和 · 双独立模型</td><td class="links"><a href="slice4-life-protection/x9-life-projects/原型.html">原型</a><a href="slice4-life-protection/x9-life-projects/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">X10 对人关系</td><td class="st semi">接近饱和 · 不立实体</td><td class="links"><a href="slice4-life-protection/x10-relations/原型.html">原型</a><a href="slice4-life-protection/x10-relations/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">Y1a 代理缔约</td><td class="st drop">饱和 · 并入 C3（概念页）</td><td class="links"><a href="slice4-life-protection/y1a-agent-economy/原型.html">概念页</a><a href="slice4-life-protection/y1a-agent-economy/设计说明.md">说明</a></td></tr>
+    <tr><td class="unit">Y1b 信创等保</td><td class="st drop">饱和 · 降合规知识清单（概念页）</td><td class="links"><a href="slice4-life-protection/y1b-comply/原型.html">概念页</a><a href="slice4-life-protection/y1b-comply/设计说明.md">说明</a></td></tr>
+  </table>
+  <a href="slice4-life-protection/覆盖索引.md" style="display:inline-block;margin-top:8px;font-size:12.5px">覆盖索引（台账行号 L31/L33/L38–L42）</a>
+</div>
+
+<h2>推荐组合预览（阶段 6 收敛 · 分层路线图）</h2>
+<div class="grid">
+  <div class="layer"><b>第 0 层 · 底座</b>K12 自我计量（N/M 供给枢纽）· K2 窄集 2 项写边界 · K1 poll 主路线<span>当期可建，无外部前提</span></div>
+  <div class="layer"><b>第 1 层 · 采集主线</b>K4 对话补档（观察模式先行）· K3 证据闭环（最小绑定）· K9 单向结存 · X6 即时草稿<span>条件性：稳定通道前置</span></div>
+  <div class="layer"><b>第 2 层 · 呈现降噪</b>K11 补记队列与静音 · K13 只读投影 · K6-L2 寄生评估<span>承接 K9 缺席队列等转交件</span></div>
+  <div class="layer"><b>第 3 层 · 对外长寿</b>K18 单向只读分发 · K16 最小保存包（K14 合并计分）· X2/X5/X3 轻件<span>平台事实源待举证（拍板项 6）</span></div>
+  <div class="layer"><b>第 4 层 · 纵向</b>X7 愿景/OKR 层先、习惯层分期待拍板<span>周期触发归 K11、草稿复用 X6</span></div>
+  <div class="layer"><b>后置 / 悬置</b>K7 规划智能（样本达标重启）· H6 主动触达（宿主级能力）· K17/K14 登记附注<span>不占当期路线</span></div>
+</div>
+
+<h2>被淘汰 / 撤并方案（概念页均含不推荐理由）</h2>
+<div class="note warnbox">K5 会议流、K7 规划智能（后置）、K10 多 agent 角色、K15 商业分发、K17 平台终局（附注）、K19 保护面（撤除待拍板）、X4 对外举证（归并 K12）、X8 实物供应链、Y1a 代理缔约（并入 C3）、Y1b 信创等保（降知识清单）——每页均为「概念可视化 + 不推荐理由」，理由引用终局台账致命攻击（如 AI 非民事主体不能独立缔约、本地自录无外部时间锚、npm 市场客观不存在等），不以好看原型掩盖论证风险。</div>
+
+<div class="note">红线自查摘要：X6 三层触发默认锚 L1、证据不足留白不编造、完成态不与复盘定稿绑定；K11 无系统级推送假象（H6 主动触达悬置）；X9 分发默认不带敏感域 + PIPL 第 23 条单独告知；示例数据全部显式标注，无真实业务数据/生产 API。</div>
+
+<div class="foot">
+  设计依据：<code>pm-tool/docs/design/deep-integration-brainstorm-v2-20261018.md</code>（第四～七部分）· 终局台账与裁决矩阵：工作区 <code>brainstorm-v2/phase4/</code> · 假设基线：<code>brainstorm-v2/phase3/user-confirmed-assumptions.md</code><br>
+  独立评审报告：<a href="评审报告.md">评审报告.md</a>（阶段 7 交付前独立走查）· 本目录仅设计探讨，未修改任何产品源码/配置/依赖。
+</div>
+
+</div>
+</body>
+</html>

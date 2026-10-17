@@ -1,0 +1,214 @@
+{
+  "src": "y1a-agent-economy/原型.html",
+  "url": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/%E5%8E%9F%E5%9E%8B.html",
+  "outdir": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "screenshot": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots/原型_desktop.jpg",
+      "screenshotBytes": 36023,
+      "truncated": false,
+      "structure": {
+        "title": "Y1a 代理经济对外缔约 · 概念可视化与并入 C3 论证",
+        "firstH1": "",
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 900
+        },
+        "counts": {
+          "section": 3,
+          "h1": 0,
+          "h2": 3,
+          "img": 0,
+          "canvas": 0,
+          "svg": 0,
+          "links": 0,
+          "buttons": 4
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "misalignedBlocks": [
+        {
+          "tag": "h2",
+          "text": "概念可视化：该方向若成立，会是多 agent 独立缔约与结算网络",
+          "rect": [
+            252,
+            147,
+            936,
+            28
+          ],
+          "widthDeltaVsGrid": 319,
+          "gridWidth": 617,
+          "containerWidth": 936,
+          "containerTag": "section#concept"
+        },
+        {
+          "tag": "div.concept",
+          "text": "概念推演框 · 主张过的 agent 经济能力\n      \n        \n          本方 agent（概",
+          "rect": [
+            252,
+            222,
+            936,
+            195
+          ],
+          "widthDeltaVsGrid": 319,
+          "gridWidth": 617,
+          "containerWidth": 936,
+          "containerTag": "section#concept"
+        }
+      ],
+      "misalignedBlocksHint": "含义：section/main/article 直接子级里，个别元素撑到父容器全宽、其他兄弟明显更窄。widthDeltaVsGrid=比栅格宽多少 px、gridWidth=正常栅格宽度、containerWidth=父容器宽度。最常见根因：HTML 标签闭合错位（<p> 忘了 </p> 等）导致元素跳出 .wrap/.container 层级，浏览器容错解析、不报 console 错但布局层级已被打乱。 | 修法：从 containerTag 定位到出问题的 section，逐行检查该 section 内前面的 HTML 标签闭合。 | 豁免：(1) **full-bleed / breakout 布局**——故意做全宽 hero、全宽 gradient divider、文章里跳出正文栏的大图/引用块（杂志排版）。看截图确认是设计意图后忽略；(2) sticky/absolute 顶栏错放在 section 直接子级下（罕见）。",
+      "reportSource": "cdp"
+    },
+    "mobile": {
+      "screenshot": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots/原型_mobile.jpg",
+      "screenshotBytes": 53820,
+      "truncated": false,
+      "structure": {
+        "title": "Y1a 代理经济对外缔约 · 概念可视化与并入 C3 论证",
+        "firstH1": "",
+        "viewport": {
+          "w": 390,
+          "h": 844
+        },
+        "fullpage": {
+          "w": 390,
+          "h": 985
+        },
+        "counts": {
+          "section": 3,
+          "h1": 0,
+          "h2": 3,
+          "img": 0,
+          "canvas": 0,
+          "svg": 0,
+          "links": 0,
+          "buttons": 4
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "/Users/bytedance/Library/Caches/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "elapsedSec": 5.32,
+  "schemaVersion": 2,
+  "status": "warning",
+  "engineInfo": {
+    "name": "chrome_cli",
+    "degraded": true,
+    "degradedReasons": [
+      "playwright 未装"
+    ]
+  },
+  "input": {
+    "original": "y1a-agent-economy/原型.html",
+    "resolvedPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/原型.html",
+    "baseUrl": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/%E5%8E%9F%E5%9E%8B.html",
+    "protocol": "file",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots/原型_desktop.jpg",
+        "size": 36023,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots/原型_mobile.jpg",
+        "size": 53820,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 0,
+    "warning": 2,
+    "info": 0
+  },
+  "findings": [
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "kind": "layout",
+      "viewport": "desktop",
+      "selector": "h2",
+      "evidence": {
+        "tag": "h2",
+        "text": "概念可视化：该方向若成立，会是多 agent 独立缔约与结算网络",
+        "rect": [
+          252,
+          147,
+          936,
+          28
+        ],
+        "widthDeltaVsGrid": 319,
+        "gridWidth": 617,
+        "containerWidth": 936,
+        "containerTag": "section#concept"
+      },
+      "dedupeKey": "misalignedBlocks|desktop|h2|0"
+    },
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "kind": "layout",
+      "viewport": "desktop",
+      "selector": "div.concept",
+      "evidence": {
+        "tag": "div.concept",
+        "text": "概念推演框 · 主张过的 agent 经济能力\n      \n        \n          本方 agent（概",
+        "rect": [
+          252,
+          222,
+          936,
+          195
+        ],
+        "widthDeltaVsGrid": 319,
+        "gridWidth": 617,
+        "containerWidth": 936,
+        "containerTag": "section#concept"
+      },
+      "dedupeKey": "misalignedBlocks|desktop|div.concept|1"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "viewport": "desktop",
+      "selector": "h2"
+    }
+  ],
+  "reportPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs/slice4-life-protection/y1a-agent-economy/_shots/report.json"
+}

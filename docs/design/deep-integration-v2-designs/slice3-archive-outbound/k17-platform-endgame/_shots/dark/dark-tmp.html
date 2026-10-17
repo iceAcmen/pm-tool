@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K17 平台终局三姿态 · 关系立场附注（原型）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --warn:#9a6212; --warn-soft:#f6efe2;
+    --mute:#8a8f96; --mute-soft:#f0f1f3; --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --warn:#e0a458; --warn-soft:#2e2619;
+    --mute:#9aa0a7; --mute-soft:#22262c; --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 24px}
+  @media(max-width:600px){.wrap{padding:18px 14px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .unit-tag{font-size:12px;color:var(--faint)}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.note{background:var(--accent-soft);color:var(--link);border-color:transparent}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:999px;padding:3px 10px;font-weight:600}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:64ch}
+  /* 当前立场条 */
+  .stance{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ok-soft);border-radius:12px;padding:14px 18px;margin-bottom:18px;font-size:13.5px}
+  .stance b{font-weight:700}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+  .card.off{opacity:.72}
+  .card h2{font-size:14.5px;font-weight:700}
+  .card .tag{font-size:11.5px;letter-spacing:.06em;color:var(--faint)}
+  .card dl{font-size:12.5px;color:var(--text-2);display:flex;flex-direction:column;gap:8px}
+  .card dt{color:var(--faint);font-size:11.5px}
+  .card dd{margin-top:2px}
+  .badge{align-self:flex-start;font-size:12px;padding:3px 10px;border-radius:999px}
+  .badge.take{background:var(--ok-soft);color:var(--ok)}
+  .badge.cond{background:var(--warn-soft);color:var(--warn)}
+  .badge.mute{background:var(--mute-soft);color:var(--mute)}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:16px;font-size:13px;color:var(--text-2)}
+  .panel h2{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px}
+  .dep{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .dep span{font-size:12.5px;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--primary);color:var(--on-primary);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-tag">K17 · 平台终局三姿态</span>
+    <span class="verdict note">关系立场附注 · 依附 K14 / K16 · 无独立交付物</span>
+    <span class="demo-tag">概念演示 · 虚构示例</span>
+    <span class="spacer"></span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+
+  <h1>平台终局：吞并 / 退出 / 冻结，三种关系姿态</h1>
+  <p class="sub">本页是立场附注，不是可切换的设置项。三姿态仅在触发条件出现时讨论；当前立场由 H9 决定，本页不产生独立 schema / 视图 / 命令。示例为虚构演示。</p>
+
+  <div class="stance">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ok)"><path d="M9 11l3 3 8-8M20 12a8 8 0 11-8-8"/></svg>
+    <span><b>当前立场：留在 dsh 融合使用（H9）。</b>有意留在宿主、按 2 年尺度使用；三姿态均为未来触发时的讨论框架，不是今天的选项。</span>
+  </div>
+
+  <div class="cards">
+    <div class="card off">
+      <span class="tag">姿态一 · 假设极端位</span>
+      <h2>吞并</h2>
+      <span class="badge mute">两端落空 · 不采纳</span>
+      <dl>
+        <div><dt>成立条件</dt><dd>pm-tool 内化 agent runtime 并取代 dsh 对话循环（内化）；或 dsh 原生长出项目管理能力反向吞并。</dd></div>
+        <div><dt>为什么落空</dt><dd>内化方向被 product/11 契约（域接口为唯一边界）否定；被原生替代方向需要 dsh 真实长出同等能力，触发信号当前不存在（E6）。</dd></div>
+      </dl>
+    </div>
+    <div class="card">
+      <span class="tag">姿态二 · 被动触发</span>
+      <h2>退出</h2>
+      <span class="badge cond">条件性 · 由 K16 / K14 承载</span>
+      <dl>
+        <div><dt>成立条件</dt><dd>dsh 停更 / 弃用 / API 破坏（与 K14 信号触发同一条件）。</dd></div>
+        <div><dt>落地依靠</dt><dd>数据可移植性由 K16 通用语法契约与结项快照保证；脱离成本核对由 K14 登记件完成。K17 自身不新建导出。</dd></div>
+      </dl>
+    </div>
+    <div class="card off">
+      <span class="tag">姿态三 · 被动默认</span>
+      <h2>冻结</h2>
+      <span class="badge mute">无主动动作 · E6 悬空</span>
+      <dl>
+        <div><dt>含义</dt><dd>维持现状、仅被动修补；没有触发时不投入。</dd></div>
+        <div><dt>悬空项</dt><dd>被动修补的持续预算与触发判定阈值未量化（E6），不写数值承诺。</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>依附关系（K17 不独立交付）</h2>
+    退出姿态的全部机制由既存单元承载，K17 只在路线图与说明中记录这层立场关系，避免被误读为需要新建切换界面。
+    <div class="dep">
+      <span>数据可移植 → K16 通用语法契约</span>
+      <span>脱离核对 → K14 韧性保险登记件</span>
+      <span>触发信号 → 与 K14 信号触发共用</span>
+    </div>
+  </div>
+
+  <div class="src">来源：终局台账 K17 行；裁判 A「附注（E6 触发器悬空）」；裁判 B「附注（依附 K14 / K16，无独立交付）」；`rebuttal/E-终局核验.md` §二；`rebuttal/K17-往复.md` R2-E-K17-01/02。原始想法：round2 D1-R2-14、D2-R2-11 / D2-R2-12、D4-R2-13、D5-R2-11 / D5-R2-12（吞并极端 + 退出协议）。</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('k17-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('k17-theme',d?'dark':'light');
+  });
+</script>
+</body>
+</html>

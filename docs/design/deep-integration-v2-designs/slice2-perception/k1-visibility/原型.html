@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K1 模型可见性供给面 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253); --link:rgb(72,104,178);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --progress:rgb(91,141,239);
+    --done:rgb(53,194,138); --todo:rgb(138,143,152); --blocked:rgb(240,135,75);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18); --link:#9db8e8;
+    --overdue:#f26d71; --due:#e8c25a; --done:#46c98f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}
+  /* 顶栏 */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .topbar .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-family:var(--sans);font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .theme-btn:hover{background:var(--elev-2)}
+  /* 元信息条 */
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  /* 路线 tab */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .tab{font-size:13px;padding:7px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--bg);color:var(--secondary);cursor:pointer}
+  .tab.active{background:var(--accent-soft);color:var(--ink);border-color:color-mix(in srgb,var(--accent) 45%,transparent);font-weight:600}
+  .panel{display:none}
+  .panel.active{display:block}
+  .card{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .card h3{font-size:13px;font-weight:600;margin:14px 0 6px;color:var(--secondary)}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)}
+  .mono{font-family:var(--mono)} .fs12{font-size:12px}
+  /* 三路线总表 */
+  .route-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .route{border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer;background:var(--bg)}
+  .route.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+  .route .rk{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .route .rn{font-size:14px;font-weight:700;margin:4px 0 6px}
+  .route .rd{font-size:12px;color:var(--secondary)}
+  .route .role{margin-top:10px;font-size:11px;font-family:var(--mono);color:var(--accent)}
+  @media(max-width:720px){.route-grid{grid-template-columns:1fr}}
+  /* 代码块 */
+  pre{background:var(--elev);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--secondary)}
+  pre .k{color:var(--accent)} pre .c{color:var(--muted)}
+  /* 会话回显 */
+  .chat{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .msg{max-width:82%;padding:10px 13px;border-radius:10px;font-size:13px}
+  .msg.user{align-self:flex-end;background:var(--accent-soft);border-bottom-right-radius:4px}
+  .msg.model{align-self:flex-start;background:var(--elev);border-bottom-left-radius:4px;color:var(--secondary)}
+  .tool-line{font-family:var(--mono);font-size:11px;color:var(--muted);margin:2px 0}
+  /* 文件投影 */
+  .filebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .refresh{font-size:12px;font-family:var(--sans);background:var(--accent);color:#fff;border:none;border-radius:var(--r-sm);padding:7px 14px;cursor:pointer}
+  .refresh:hover{opacity:.9}
+  .file-body{font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--secondary);background:var(--elev);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:14px 16px}
+  .file-body .h{color:var(--ink);font-weight:700}
+  .file-body .ov{color:var(--overdue)} .file-body .soon{color:var(--due)}
+  /* push 计数条 */
+  .push-strip{display:flex;align-items:baseline;gap:14px;padding:14px 16px;border:1px dashed var(--line);border-radius:var(--r);background:var(--elev)}
+  .push-strip .n{font-family:var(--mono);font-size:22px;font-weight:700}
+  .push-strip .lab{font-size:12px;color:var(--secondary)}
+  /* N/M 证伪位 */
+  .nm{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+  .nm .cell{min-width:140px}
+  .nm .v{font-family:var(--mono);font-size:20px;font-weight:700}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:10px}
+  .warn{border-left-color:var(--due)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:var(--r-sm);opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K1 · 模型可见性供给面</div>
+      <h1>poll &gt; 文件 &gt; push 浅耦合三路线（示例数据）</h1>
+    </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A：修正采纳（条件性，先证消费方）</span>
+    <span class="chip rec">裁判 B：采纳（接近饱和形态）</span>
+    <span class="chip">终局：接近饱和</span>
+    <span class="chip e6">E6：锚点开放度 / 免费车道漏调用率待实测</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <!-- 路线总览 -->
+  <div class="card">
+    <h2>供给面三路线 · 耦合深浅排序，当期角色并陈</h2>
+    <div class="route-grid">
+      <div class="route active" data-r="poll" onclick="showRoute('poll')">
+        <div class="rk">路线 ① 主路线</div>
+        <div class="rn">poll 按需工具</div>
+        <div class="rd">模型被问到时经只读工具取台账；不常驻、不占每轮预算；细节缺口由此补位。</div>
+        <div class="role">当期启用</div>
+      </div>
+      <div class="route" data-r="file" onclick="showRoute('file')">
+        <div class="rk">路线 ② 载体</div>
+        <div class="rn">文件只读投影</div>
+        <div class="rd">渲染 PROJECTS.md 经宿主 agent-instructions 装载；无 watcher，显式命令刷新。</div>
+        <div class="role">当期启用（显式刷新）</div>
+      </div>
+      <div class="route" data-r="push" onclick="showRoute('push')">
+        <div class="rk">路线 ③ 降级</div>
+        <div class="rn">push 全局轻量计数</div>
+        <div class="rd">撤常驻注入；只载全局逾期/临期条数，不做主题门控；注入层自去重（替换非追加）。</div>
+        <div class="role">仅计数 · 无主题判定</div>
+      </div>
+    </div>
+    <div class="note warn">事实（E5）：宿主注入消息以 user 角色进入会话历史，长会话经 compaction 被摘要化，「常驻承诺」在真实使用条件下破产；故 push 不退常驻，只留每轮可重建的全局计数。</div>
+  </div>
+
+  <!-- poll -->
+  <div class="panel active" id="panel-poll">
+    <div class="card">
+      <h2>① poll：只读工具 schema（确定性、人不转述）</h2>
+      <pre><span class="c">// 工具由 defineTool 注册，参数 schema 自动进系统提示词；只读，无写动作</span>
+{
+  <span class="k">"name"</span>: "pm_board_snapshot",
+  <span class="k">"readOnly"</span>: true,
+  <span class="k">"params"</span>: {
+    <span class="k">"scope"</span>: "all | active",          <span class="c">// 全量 vs 当前工作集（计数范围口径，E6 待定）</span>
+    <span class="k">"include"</span>: ["overdue","dueSoon"]  <span class="c">// 不做主题分类，只取服务端派生事实</span>
+  }
+}</pre>
+      <h3>会话内一次调用回显（示例）</h3>
+      <div class="chat">
+        <div class="msg user">现在有哪些逾期？我直接处理。</div>
+        <div class="tool-line">→ pm_board_snapshot(scope=active) · 0.2s · 只读</div>
+        <div class="msg model">当前工作集逾期 3 项：T-12（官网改版·首页）逾期 4 天；T-19（支付联调）逾期 1 天；M1（Beta 里程碑）逾期 2 天。临期 5 项见快照。<span class="muted">细节由工具返回，模型不自行门控取舍。</span></div>
+      </div>
+      <div class="note">供给面不产生消费需求：上线即挂 K12 的 N/M 计数（被调用次数 / 被引用台账次数），N≈0 即证伪即收，不以假设替代实测。</div>
+    </div>
+  </div>
+
+  <!-- file -->
+  <div class="panel" id="panel-file">
+    <div class="card">
+      <h2>② 文件载体：PROJECTS.md 只读投影 · 显式刷新</h2>
+      <div class="filebar">
+        <span class="mono fs12 muted">工作区根目录 PROJECTS.md（只读投影，台账 JSON 为唯一真源）</span>
+        <button class="refresh" onclick="refreshFile()">/pm board-export 刷新</button>
+      </div>
+      <div class="file-body" id="fileBody">
+<span class="h"># 当前工作集（示例 · 由台账渲染，非手工维护）</span>
+
+## 逾期（服务端派生，非模型判定）
+- <span class="ov">[逾期 4 天]</span> T-12 官网改版 · 首页联调
+- <span class="ov">[逾期 1 天]</span> T-19 支付联调
+- <span class="ov">[逾期 2 天]</span> M1 Beta 里程碑
+
+## 临期 7 天内
+- <span class="soon">[3 天]</span> T-08 内容定稿
+- <span class="soon">[5 天]</span> T-14 验收清单
+      </div>
+      <div class="note">宿主无文件 watcher：改台账后不自动重渲染，需人/agent 跑一次显式刷新命令；派生件 gitignore，ledger.json 为唯一 git 真源，渲染 diff 不入历史。</div>
+    </div>
+  </div>
+
+  <!-- push -->
+  <div class="panel" id="panel-push">
+    <div class="card">
+      <h2>③ push：全局轻量计数条（撤主题门控后）</h2>
+      <div class="push-strip">
+        <div><div class="n" style="color:var(--overdue)">3</div><div class="lab">全项目逾期（示例）</div></div>
+        <div><div class="n" style="color:var(--due)">5</div><div class="lab">临期（示例）</div></div>
+        <div class="lab" style="align-self:center">不含项目细节、不含「该不该看」的分类判定；<br>项目细节一律走 ① poll。</div>
+      </div>
+      <h3>为什么不做主题门控</h3>
+      <p class="secondary fs12">门控要求模型对「该给没给 / 不该给给了」做二分类判定，双向误判无信号可纠；撤除门控后 push 退化为纯计数，二分类错误消失，漏取由「未引用台账」显式信号兜底。注入层自去重（替换非追加），避免每轮重注重复累积。</p>
+      <div class="note warn">登记（局部，非攻击）：全局计数的项目范围口径（全量 vs 当前工作集）未定义；稳定前缀锚点对插件的开放度为 E6，不写进承诺。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>证伪挂接位（K12 计量底座）</h2>
+    <div class="nm">
+      <div class="cell"><div class="v" id="nCall">0</div><div class="secondary fs12">本期被调用次数 N（示例位）</div></div>
+      <div class="cell"><div class="v" id="mRef">0</div><div class="secondary fs12">被引用台账回合 M（示例位）</div></div>
+      <div class="cell"><div class="v" class="muted">N≈0 证伪即收</div><div class="secondary fs12">消费方存在性以实测计数落地，不由 H3 假设直接替代</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：A1-K1-01（push 常驻在 compaction 下破产）→ 撤常驻；A1-K1-02（供给面不产生消费需求，N≈0 证伪）→ 挂 K12 N/M；R2-A-K1-01（主题门控双向误判）→ push 只载全局计数；R2-A-K1-02（重注累积/锚点开放度）→ 自去重+E6 登记；R2-A-K1-03（git 噪音）→ 派生件 gitignore。</li>
+      <li>依赖：H1（真实痛点存在）、H3（日常跑会话，消费方存在）、H7（默认在线）、H12（通道稳定）。</li>
+      <li>定位：本期核心组合第 2 位（K12 底座 → K1 poll+文件，push 仅计数）。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast">已刷新（示例）</div>
+<script>
+function toggleTheme(){
+  const el=document.documentElement;
+  const next=el.getAttribute('data-theme')==='dark'?'light':'dark';
+  el.setAttribute('data-theme',next);
+}
+function showRoute(r){
+  document.querySelectorAll('.route').forEach(x=>x.classList.toggle('active',x.dataset.r===r));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id==='panel-'+r));
+}
+function refreshFile(){
+  const t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1400);
+}
+// 示例位计数（仅演示挂接形态，非真实统计）
+document.getElementById('nCall').textContent='—';
+document.getElementById('mRef').textContent='—';
+</script>
+</body>
+</html>

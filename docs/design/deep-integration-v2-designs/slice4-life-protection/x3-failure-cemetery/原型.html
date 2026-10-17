@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X3 失败墓地 / 死因档案 · 原型</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='24' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EX3%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff; --chip-bg:#eef1f5;
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d; --chip-bg:#2a2e35;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.cond{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.demo-badge{font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:24px 0 10px}
+p.lead{color:var(--ink-2);max-width:68ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+/* death card */
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;margin-top:14px}
+.card-head{padding:14px 16px;border-bottom:1px solid var(--line-soft);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.card-head .name{font-size:15px;font-weight:650}
+.meta{font-size:12.5px;color:var(--muted)}
+.tag-neutral{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:1px 8px;color:var(--ink-2)}
+.anchor{padding:13px 16px;background:var(--surface-2);border-bottom:1px solid var(--line-soft)}
+.anchor .k{font-size:12px;color:var(--faint);margin-bottom:4px}
+.anchor .quote{font-size:13.5px;color:var(--ink);border-left:2px solid var(--accent);padding-left:10px}
+.anchor .ptr{font-size:12.5px;color:var(--link);margin-top:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:680px){.cols{grid-template-columns:1fr}}
+.col{padding:14px 16px}
+.col:first-child{border-right:1px solid var(--line-soft)}
+@media(max-width:680px){.col:first-child{border-right:none;border-bottom:1px solid var(--line-soft)}}
+.col .k{font-size:12.5px;font-weight:650;margin-bottom:6px}
+.col.improve .k{color:var(--success)}
+.col.external .k{color:var(--muted)}
+.col ul{padding-left:18px}.col li{font-size:13px;color:var(--ink-2);margin:4px 0}
+/* no-anchor blank state */
+.blank{padding:26px 16px;text-align:center}
+.blank .state{font-size:14px;font-weight:600;margin-bottom:6px}
+.blank .why{font-size:12.5px;color:var(--faint);max-width:52ch;margin:0 auto}
+.blank .gate{margin-top:12px;display:inline-block;font-size:12px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:6px 12px}
+/* snapshot pry */
+.snap{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface);margin-top:14px}
+.snap label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:6px}
+.snap textarea{width:100%;min-height:74px;border:1px solid var(--line);border-radius:8px;background:var(--canvas);color:var(--ink);padding:10px 12px;font:inherit;font-size:16px;resize:vertical}
+.snap .row{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--neutral-fill);color:var(--on-neutral);border-radius:8px;padding:8px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn.ghost{background:var(--surface);color:var(--ink-2)}
+.snap .hint{font-size:12px;color:var(--faint)}
+/* search */
+.searchbox{display:flex;gap:10px;margin-top:14px}
+.searchbox input{flex:1;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:10px 12px;font:inherit;font-size:16px;min-width:0}
+.hit{border:1px solid var(--line);border-radius:10px;padding:13px 16px;margin-top:10px;background:var(--surface)}
+.hit .hname{font-weight:650;font-size:14px}
+.hit .why-improve{font-size:13px;color:var(--ink-2);margin-top:4px}
+.hit .why-improve b{color:var(--success);font-weight:600}
+details.ext{margin-top:8px}
+details.ext summary{font-size:12.5px;color:var(--faint);cursor:pointer}
+details.ext p{font-size:12.5px;color:var(--muted);padding:6px 0 0 4px}
+.toggle-note{font-size:12.5px;color:var(--muted);margin-top:10px;padding:9px 12px;background:var(--surface-2);border-radius:8px}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">X3</span>
+    <span class="unit-title">失败墓地 / 死因档案</span>
+    <span class="chip cond">条件性采纳 · 原料前提 E6（H1/H2）· 当前仅记录不强制</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例数据 · 非真实业务</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="anchored" type="button">有锚点 · 双栏归因卡</button>
+    <button class="tab" data-panel="noanchor" type="button">无锚点 · 归因栏留白</button>
+    <button class="tab" data-panel="snap" type="button">启动期 · 一句话快照撬点</button>
+    <button class="tab" data-panel="search" type="button">检索 · 默认只取可改进栏</button>
+  </div>
+
+  <!-- 有锚点 -->
+  <section class="panel active" id="anchored">
+    <h2>死因卡：原始锚点为第一栏，归因分两栏</h2>
+    <p class="lead">第一栏是当时留存的客观材料（承诺快照、证据指针），归因只在锚点存在时开放；左栏「个人可改进」供下次规避，右栏「外部原因」仅作背景，不作为可规避教训。</p>
+    <div class="card">
+      <div class="card-head">
+        <span class="name">内部知识检索工具 v1（示例）</span>
+        <span class="tag-neutral">主动暂停 · 已归档（二级页）</span>
+        <span class="meta mono">终止 2026-03-18 · 非立项门禁，不阻断新项目</span>
+      </div>
+      <div class="anchor">
+        <div class="k">第一栏 · 原始材料锚点（当时快照 / 证据指针）</div>
+        <div class="quote">「目标是两周内上线，覆盖团队全部历史文档；先不做权限区分，全员可搜。」——2026-03-02 会话记录（示例）</div>
+        <div class="ptr">证据指针：会话快照 #s-0318 · 设计文档链接位（示例，可空）</div>
+      </div>
+      <div class="cols">
+        <div class="col improve">
+          <div class="k">个人可改进 · 下次可规避</div>
+          <ul>
+            <li>上线前未先限定文档范围，索引体积膨胀后回填成本高。</li>
+            <li>权限区分被推到「以后再说」，导致验收时无法收口。</li>
+          </ul>
+        </div>
+        <div class="col external">
+          <div class="k">外部原因 · 仅背景（不可控）</div>
+          <ul>
+            <li>期间团队合并，原文档归属变更（组织因素，示例）。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="note">中性终止事实归档：不使用「止损为荣」荣誉叙事，也不做成失败耻辱墙；墓地墙位于二级页，不进入立项主流程。</p>
+  </section>
+
+  <!-- 无锚点 -->
+  <section class="panel" id="noanchor">
+    <h2>锚点空缺：只存外部事实，不开归因栏</h2>
+    <p class="lead">H1 确认沟通进展 / 文档更新不在系统实时更新，H2 当前为个人练习场；当时快照未回流时，双栏归因整体关闭，不渲染空输入框，避免事后主观自填（Miller & Ross 自利偏差最强部位无锚可纠）。</p>
+    <div class="card">
+      <div class="card-head">
+        <span class="name">季度营销素材库（示例）</span>
+        <span class="tag-neutral">到期未续 · 已归档</span>
+        <span class="meta mono">终止 2026-01-09</span>
+      </div>
+      <div class="anchor">
+        <div class="k">第一栏 · 原始材料锚点</div>
+        <div class="quote" style="border-left-color:var(--faint);color:var(--muted)">当时承诺快照未回流（H1/H2 原料前提，E6 待目标形态缓解）。</div>
+      </div>
+      <div class="blank">
+        <div class="state">锚点缺失，归因栏暂不开放</div>
+        <div class="why">本卡只保留可核验的外部事实（项目名、终止日期、终止方式）；主观死因待锚点回流后再填，结构上关闭自填通道。</div>
+        <span class="gate">外部事实已存 · 归因栏留白（非必填、不催填）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 一句话撬点 -->
+  <section class="panel" id="snap">
+    <h2>启动期低摩擦：一句话快照撬点（非完整四字段）</h2>
+    <p class="lead">库规模达标（≥N 卡）前仅记录、不强制立项门禁；冷启动期用一句话即可存档，完整四字段（锚点/双栏/时间线）延迟补填，空缺处显式标注「待补」。</p>
+    <div class="snap">
+      <label for="snapTxt">一句话记下这个项目怎么停的（示例输入位，不要求完整字段）</label>
+      <textarea id="snapTxt" placeholder="例：做到一半发现文档源不在自己手上，先停了。"></textarea>
+      <div class="row">
+        <button class="btn" id="snapSave" type="button">存为一句话快照</button>
+        <button class="btn ghost" type="button" id="snapClear">清空</button>
+        <span class="hint">存档后进入待补填队列，不强制、不催办；锚点齐全后才开放双栏。</span>
+      </div>
+    </div>
+    <div class="toggle-note" id="snapOut" hidden></div>
+  </section>
+
+  <!-- 检索 -->
+  <section class="panel" id="search">
+    <h2>新立项前检索：默认只返回「个人可改进」栏</h2>
+    <p class="lead">语义检索（H7 在线前提下）按卡内栏位过滤：结果只呈现可规避的个人改进项；外部原因栏折叠为背景，避免把组织级不可控事件误读为个人可规避项。当前库规模达标前，检索为词面子串匹配，不承诺语义命中。</p>
+    <div class="searchbox">
+      <input id="q" type="text" placeholder="检索同类终止项目，例：先做内部工具" aria-label="检索同类死因">
+      <button class="btn" id="qBtn" type="button">检索</button>
+    </div>
+    <div id="hits"></div>
+    <p class="note">原料前提 E6：跨周期失败归因原料依赖 H1/H2 目标形态回流；库规模达标前同类匹配无样本，仅记录不强制。</p>
+  </section>
+
+  <footer>
+    X3 · 阶段7 分片4 概念原型 · 示例数据显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：R2-F-X3-01（锚点空缺不开归因栏）、R2-F-X3-02（一句话快照撬点）、R2-F-X3-03（检索默认只返回可改进栏）；终局接近饱和，原料前提 E6。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    b.classList.add('active');document.getElementById(b.dataset.panel).classList.add('active');
+  });});
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+
+  // 一句话撬点：真实 handler，仅本地演示
+  document.getElementById('snapSave').addEventListener('click',function(){
+    var v=document.getElementById('snapTxt').value.trim();
+    var out=document.getElementById('snapOut');out.hidden=false;
+    out.textContent=v?('已存为一句话快照（示例）：「'+v+'」——进入待补填队列，锚点齐全后开放双栏。'):'请先写一句话再存档。';
+  });
+  document.getElementById('snapClear').addEventListener('click',function(){document.getElementById('snapTxt').value='';document.getElementById('snapOut').hidden=true;});
+
+  // 检索：确定性词面子串匹配，只渲染可改进栏
+  var DATA=[
+    {name:'内部知识检索工具 v1（示例）',imp:'上线前未先限定文档范围；权限区分被推到以后。',ext:'团队合并导致文档归属变更（外部，背景）。'},
+    {name:'自动化周报脚本（示例）',imp:'需求口径每周变，先固化格式再写自动化返工。',ext:'平台改版使接口失效（外部，背景）。'}
+  ];
+  function render(list){
+    var box=document.getElementById('hits');box.innerHTML='';
+    if(!list.length){box.innerHTML='<div class="toggle-note">无命中（示例库）。外部原因栏不在结果中单独出现。</div>';return;}
+    list.forEach(function(d){
+      var el=document.createElement('div');el.className='hit';
+      el.innerHTML='<div class="hname">'+d.name+'</div><div class="why-improve"><b>个人可改进：</b>'+d.imp+'</div>'+
+        '<details class="ext"><summary>外部原因（仅背景，不可规避）</summary><p>'+d.ext+'</p></details>';
+      box.appendChild(el);
+    });
+  }
+  function doSearch(){
+    var q=document.getElementById('q').value.trim();
+    if(!q){render(DATA);return;}
+    render(DATA.filter(function(d){return d.imp.indexOf(q)>=0||d.name.indexOf(q)>=0;}));
+  }
+  document.getElementById('qBtn').addEventListener('click',doSearch);
+  document.getElementById('q').addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
+  render(DATA);
+})();
+</script>
+</body>
+</html>

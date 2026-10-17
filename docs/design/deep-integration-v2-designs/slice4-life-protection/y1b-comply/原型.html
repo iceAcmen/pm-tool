@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Y1b 信创 / 等保部署市场 · 概念可视化与降知识清单论证</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1e'/%3E%3Ctext x='32' y='42' font-size='20' text-anchor='middle' fill='%23ffffff' font-family='ui-monospace,monospace'%3EY1b%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#eceef0;
+  --ink:#1c1c1e; --ink-2:#61666b; --muted:#696e74; --faint:#71767c;
+  --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+  --link:#4868b2; --accent:#3d63b8; --danger:#b42318; --success:#16794c; --warning:#b45309;
+  --neutral-fill:#0f1115; --on-neutral:#ffffff; --chip-bg:#eef1f5;
+}
+[data-theme="dark"]{
+  --canvas:#17191d; --surface:#1e2126; --surface-2:#26292f; --surface-3:#2f333a;
+  --ink:#ececee; --ink-2:#b4b9c0; --muted:#9aa0a8; --faint:#868c94;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --link:#8fa9e6; --accent:#8fa9e6; --danger:#f08a80; --success:#6fc79a; --warning:#e6b06a;
+  --neutral-fill:#e8e9eb; --on-neutral:#17191d; --chip-bg:#2a2e35;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px 64px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.unit-code{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px}
+.unit-title{font-size:15px;font-weight:600}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink-2)}
+.chip.off{color:var(--muted)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.demo-badge{font-size:12px;color:var(--faint);border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.tabs{display:flex;gap:4px;margin:20px 0 14px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13.5px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:700;margin:24px 0 10px}
+p.lead{color:var(--ink-2);max-width:70ch}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+.concept{border:1.5px dashed var(--line);border-radius:12px;padding:16px 18px;background:color-mix(in srgb,var(--surface-2) 55%,transparent);margin-top:14px}
+.concept-tag{font-size:12px;color:var(--faint);margin-bottom:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:720px){.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid3{grid-template-columns:1fr}}
+.cmp{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--surface)}
+.cmp .ic{width:22px;height:22px;color:var(--muted);margin-bottom:6px}
+.cmp h4{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.cmp p{font-size:12.5px;color:var(--ink-2)}
+.mismatch{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:720px){.mismatch{grid-template-columns:1fr}}
+.mm{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--surface)}
+.mm .rid{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--danger);font-weight:700}
+.mm h4{font-size:13.5px;font-weight:600;margin:4px 0}
+.mm p{font-size:12.5px;color:var(--ink-2)}
+.law{font-size:12px;color:var(--muted);margin-top:6px;padding:6px 9px;background:var(--surface-2);border-radius:7px}
+.cutface{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2);margin-top:12px}
+.cutface h3{font-size:14px;margin-bottom:6px}
+.cutface p{font-size:13px;color:var(--ink-2)}
+.clist{margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.clist div{padding:10px 14px;border-bottom:1px solid var(--line-soft);font-size:13px}
+.clist div:last-child{border-bottom:none}
+.clist b{font-weight:600}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="unit-code">Y1b</span>
+    <span class="unit-title">信创 / 等保部署市场（适配 · 测评 · 私有化）</span>
+    <span class="chip off">降合规知识清单 · 独立方向不成立（三层错配）</span>
+    <span class="spacer"></span>
+    <span class="demo-badge">示例场景 · 非真实业务 · 概念推演</span>
+    <button class="theme-btn" id="themeBtn" type="button">深色</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="concept" type="button">概念推演：若做的部署市场形态</button>
+    <button class="tab" data-panel="mismatch" type="button">三层错配理由</button>
+    <button class="tab" data-panel="cut" type="button">降合规知识清单（唯一切片）</button>
+  </div>
+
+  <section class="panel active" id="concept">
+    <h2>概念可视化：该方向若立项，会面向政企采购做信创适配与等保交付</h2>
+    <p class="lead">以下为概念推演，展示原本想象的市场形态；不是当前能力，也不代表推荐立项。</p>
+    <div class="concept">
+      <div class="concept-tag">概念推演框 · 主张过的部署市场能力</div>
+      <div class="grid3">
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <h4>信创适配</h4>
+          <p>国产 OS / 芯片 / 中间件适配认证清单。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7l7-4z"/></svg>
+          <h4>等保测评包</h4>
+          <p>三重防护材料、测评配合、密评对接。</p>
+        </div>
+        <div class="cmp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          <h4>涉密内网离线版</h4>
+          <p>无网环境交付、私有化部署、介质管控。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="mismatch">
+    <h2>三层错配：承接主体 / 保护对象 / 持续义务均对不上</h2>
+    <div class="mismatch">
+      <div class="mm">
+        <span class="rid">GY1b-01 · 致命（承接主体，E5）</span>
+        <h4>政府采购要求法人资格，H11 受众不是法人</h4>
+        <p>政府采购法第 21 条（供应商为法人/其他组织/自然人）、第 22 条（资格条件含独立承担民事责任能力、软著等）；个人创作者不构成可承接政企采购的供应商。</p>
+      </div>
+      <div class="mm">
+        <span class="rid">GY1b-02 · 致命（保护对象，E5）</span>
+        <h4>等保/密评保护对象是网络与信息系统，alpha 插件无对象可测</h4>
+        <p>等保三重防护、商用密码应用安全性评估的对象是组织级系统与网络；单个 alpha 浏览器插件不是可定级测评的对象。</p>
+      </div>
+      <div class="mm">
+        <span class="rid">GY1b-03 · 致命（持续义务，E5）</span>
+        <h4>年度测评+密评+整改需多岗位与经费，个人不可承担</h4>
+        <p>持证/测评配合/整改闭环是组织级长期义务；单人无法持续承担，也无经费与岗位结构。</p>
+        <div class="law">政府采购法第 77 条：虚假宣称资格/认证承担采购项目有独立法律责任——不宣称过认证是硬边界。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="cut">
+    <h2>唯一切片：合规知识清单 / 自查模板（内容资料层）</h2>
+    <div class="cutface">
+      <h3>降格保留：知识，不进认证与采购体系</h3>
+      <p>只作为内容资料层的科普/自查模板：帮助读者理解等保、信创、密评是什么、谁需要做；不宣称过认证、不承接测评、不进入政府采购供应商体系。</p>
+    </div>
+    <div class="clist">
+      <div><b>知识条目（示例）：</b>等保 2.0 三级是什么、适用谁——科普说明，非认证承诺。</div>
+      <div><b>自查模板（示例）：</b>个人/小团队判断自己是否需要做合规的清单，不替代测评。</div>
+      <div><b>明确不做：</b>适配认证申报、测评配合、密评对接、私有化离线交付承诺。</div>
+    </div>
+    <p class="note">裁判 A/B：撤并确认（独立方向撤回；降合规知识清单/自查模板）。</p>
+  </section>
+
+  <footer>
+    Y1b · 阶段7 分片4 概念原型 · 示例场景显式标注 · 纯设计探讨，未改产品源码/配置/依赖。<br>
+    证据：GY1b-01/02/03（redteam-G/Y1b.md）；政府采购法第21/22/77条、等保/密评对象 E5；终局台账 Y1b 行。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    b.classList.add('active');document.getElementById(b.dataset.panel).classList.add('active');
+  });});
+  var t=document.getElementById('themeBtn');
+  function apply(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');t.textContent=dark?'浅色':'深色';}
+  var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;apply(dark);
+  t.addEventListener('click',function(){dark=!dark;apply(dark);});
+})();
+</script>
+</body>
+</html>

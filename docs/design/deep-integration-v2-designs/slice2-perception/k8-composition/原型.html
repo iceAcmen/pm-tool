@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K8 组合与复用 · 原型（示例数据）</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234176E6'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='white' font-family='monospace'%3EK8%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --elev:#f5f6f7; --elev-2:#eceef0;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.05);
+    --ink:rgb(28,28,30); --secondary:rgb(97,102,107); --muted:rgb(105,110,116);
+    --accent:rgb(65,118,230); --accent-soft:rgb(228,237,253);
+    --overdue:rgb(229,72,77); --due:rgb(232,185,63); --done:rgb(53,194,138); --todo:rgb(138,143,152);
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --r:8px; --r-sm:6px;
+  }
+  html[data-theme="dark"]{
+    --bg:#1c1d20; --elev:#26272b; --elev-2:#2f3035;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+    --ink:#ececee; --secondary:#b3b7bd; --muted:#8e939a;
+    --accent:#7aaaff; --accent-soft:rgba(65,118,230,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .topbar h1{font-size:18px;font-weight:700;margin-top:2px}
+  .theme-btn{font-size:12px;color:var(--secondary);background:var(--elev);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+  .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--secondary)}
+  .chip.rec{color:var(--done);border-color:color-mix(in srgb,var(--done) 40%,transparent)}
+  .chip.e6{color:var(--muted);border-style:dashed}
+  .demo-tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+  .muted{color:var(--muted)} .secondary{color:var(--secondary)} .fs12{font-size:12px} .mono{font-family:var(--mono)}
+  /* 阈值切换 */
+  .sim-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .sim-bar .lab{font-size:12.5px;color:var(--secondary)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+  .seg button{font-size:12.5px;padding:6px 14px;border:none;background:var(--bg);color:var(--secondary);cursor:pointer;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--accent-soft);color:var(--ink);font-weight:600}
+  /* 隐藏态（阈值未到） */
+  .collapsed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px dashed var(--line);border-radius:var(--r);color:var(--muted);font-size:13px;cursor:pointer;background:transparent}
+  .collapsed:hover{border-color:var(--accent);color:var(--secondary)}
+  /* 项目行 */
+  .prow{display:grid;grid-template-columns:1fr auto;gap:10px 18px;align-items:center;padding:13px 0;border-top:1px solid var(--line-soft)}
+  .prow:first-of-type{border-top:none}
+  .pname{font-weight:600;font-size:14px}
+  .pfacts{display:flex;gap:14px;flex-wrap:wrap;margin-top:3px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .pfacts .ov{color:var(--overdue)} .pfacts .soon{color:var(--due)}
+  .rating{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+  .rating button{font-size:12px;padding:5px 11px;border:none;background:var(--bg);color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
+  .rating button:last-child{border-right:none}
+  .rating button.on{background:var(--accent-soft);color:var(--ink);font-weight:600}
+  .verdict-zone{margin-top:12px;padding:10px 13px;border-radius:var(--r-sm);background:var(--elev);font-size:12.5px;color:var(--muted)}
+  .note{border-left:2px solid var(--line);padding:8px 0 8px 12px;color:var(--muted);font-size:12px;margin-top:12px}
+  .warn{border-left-color:var(--due)}
+  .h6strip{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px dashed var(--due);border-radius:var(--r);background:transparent;font-size:12.5px;color:var(--secondary)}
+  .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .footer li{margin:4px 0 4px 18px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:var(--r-sm);opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="unit">K8 · 组合与复用（三档轻选 / 阈值隐藏 / 打开置顶）</div>
+      <h1>空置不给结论 · 删客观分配（示例数据）</h1>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">切换浅色 / 深色</button>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip rec">裁判 A：修正采纳</span>
+    <span class="chip rec">裁判 B：条件性采纳（阈值触发隐藏；主动召回待 H6）</span>
+    <span class="chip">终局：接近饱和</span>
+    <span class="chip e6">E6：三档填充率待 K12 计数</span>
+    <span class="demo-tag">原型内全部为示例数据，不接生产 API</span>
+  </div>
+
+  <div class="card">
+    <h2>阈值触发隐藏：并行持有 ≤ 阈值（默认 5）时不展开</h2>
+    <div class="sim-bar">
+      <span class="lab">模拟当前在持项目数（示例）：</span>
+      <div class="seg" id="countSeg">
+        <button data-n="4" class="on" onclick="setCount(4)">4 个（现状 N=4）</button>
+        <button data-n="6" onclick="setCount(6)">6 个（超阈值）</button>
+      </div>
+      <span class="muted fs12">或主动打开</span>
+    </div>
+    <div id="collapsedView">
+      <div class="collapsed" onclick="expand(true)">
+        <span>组合取舍面已隐藏：在持 4 个 ≤ 阈值 5（工作记忆容量 4±1）。点此主动打开。</span>
+        <span class="mono fs12 muted">主动打开</span>
+      </div>
+    </div>
+    <div id="openView" style="display:none">
+      <div class="verdict-zone" id="topPin">待决策区（打开时醒目置顶）：以下只陈列紧急度事实，空置不输出「保 / 缓 / 砍」结论。</div>
+      <div id="prows"></div>
+      <div class="h6strip" style="margin-top:14px">
+        <span>主动到期召回（reviewBy）显式绑定 H6 推送里程碑：通道建成前仅「打开时置顶」，<b>本页不宣称主动触达</b>，无定时投递、无弹窗。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三档轻选：高 / 中 / 低，默认中性空置</h2>
+    <p class="secondary fs12">权重为人给的三档轻选，不强制、空置=中性；选档记录的是人的偏好，系统不据此生成「保/缓/砍」裁决——单人单写者下已删除「客观分配给谁」（无第二对象）。聚合不新建独立视图：未完成/P0/逾期计数并入现有看板项目分组列。</p>
+    <div class="note warn">登记（L-K8-01）：三档填充率无本机实测，待 K12 计数；低填充率下「空置不给结论」已保证不产生错误决策。（L-K8-02）主动召回闭环时点绑定 H6 里程碑，属外部前提依赖而非机制缺陷。</div>
+  </div>
+
+  <div class="footer">
+    <ul>
+      <li>攻防关系：R2-C-K08-01（权重空置→双轴退回单轴伪决策）→ 空置不给结论+三档轻选；R2-C-K08-02（reviewBy 依赖未建成 H6）→ 打开时置顶+绑定里程碑；R2-C-K08-03（聚合视图信息差小）→ 并入看板分组列；R2-C-K08-04（受众分叉）→ isExemptFromActiveStats 预留 audience 参数，external 不实现。</li>
+      <li>定位：条件性采纳，本期寄生/轻量层；H6 主动召回 leg 悬置。示例数据，未接生产 API。</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function toggleTheme(){document.documentElement.setAttribute('data-theme',document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+const PROJECTS=[
+  {id:'PRJ-01',name:'官网改版二期',ov:3,soon:2,active:'2 天前'},
+  {id:'PRJ-04',name:'支付联调收口',ov:1,soon:0,active:'今天'},
+  {id:'PRJ-07',name:'内部知识库迁移',ov:0,soon:1,active:'6 天前'},
+  {id:'PRJ-09',name:'季度复盘材料',ov:0,soon:0,active:'12 天前'},
+  {id:'PRJ-11',name:'移动端适配排期',ov:0,soon:3,active:'4 天前'},
+  {id:'PRJ-13',name:'旧版下线清单',ov:0,soon:0,active:'19 天前'},
+];
+let rating={};
+function renderRows(n){
+  const el=document.getElementById('prows');el.innerHTML='';
+  PROJECTS.slice(0,n).forEach(p=>{
+    const row=document.createElement('div');row.className='prow';
+    const cur=rating[p.id]||'中性';
+    row.innerHTML=`
+      <div>
+        <div class="pname">${p.name} <span class="mono fs12 muted">${p.id}</span></div>
+        <div class="pfacts">
+          ${p.ov?`<span class="ov">逾期 ${p.ov}</span>`:'<span>逾期 0</span>'}
+          ${p.soon?`<span class="soon">临期 ${p.soon}</span>`:'<span>临期 0</span>'}
+          <span>最近活动 ${p.active}</span>
+          <span class="muted">${cur==='中性'?'未评级 · 仅陈列事实':'已记偏好：'+cur}</span>
+        </div>
+      </div>
+      <div class="rating" data-id="${p.id}">
+        <button data-v="高" class="${cur==='高'?'on':''}">高</button>
+        <button data-v="中" class="${cur==='中'?'on':''}">中</button>
+        <button data-v="低" class="${cur==='低'?'on':''}">低</button>
+        <button data-v="中性" class="${cur==='中性'?'on':''}">中性</button>
+      </div>`;
+    el.appendChild(row);
+  });
+  el.querySelectorAll('.rating').forEach(r=>{
+    r.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      rating[r.dataset.id]=b.dataset.v;
+      renderRows(currentN);
+      showToast('已记录偏好（不生成保/缓/砍结论）');
+    }));
+  });
+}
+let currentN=4;
+function setCount(n){
+  currentN=n;
+  document.querySelectorAll('#countSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));
+  const hide=n<=5;
+  document.getElementById('collapsedView').style.display=hide?'block':'none';
+  document.getElementById('openView').style.display=hide?'none':'block';
+  if(!hide) renderRows(n);
+}
+function expand(manual){
+  document.getElementById('collapsedView').style.display='none';
+  document.getElementById('openView').style.display='block';
+  renderRows(currentN);
+}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+</script>
+</body>
+</html>

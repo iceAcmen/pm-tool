@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X5 成就库 · 述职素材导出闸门（原型）</title>
+<style>
+  :root{
+    --canvas:#ffffff; --surface:#f5f6f7; --surface-2:#eef0f2; --ink:#1c1c1e; --text-2:#61666b;
+    --muted:#696e74; --faint:#71767c; --link:#4868b2; --primary:#0f1115; --on-primary:#ffffff;
+    --line:#e4e6e9; --line-soft:#eef0f2; --ok:#1f8a4c; --ok-soft:#e7f2ec; --warn:#9a6212; --warn-soft:#f6efe2;
+    --accent-soft:#e4edfd; --chip:#eef0f2;
+  }
+  html.dark{
+    --canvas:#15171a; --surface:#1c1f24; --surface-2:#23272d; --ink:#e9eaec; --text-2:#a7acb2;
+    --muted:#8d9298; --faint:#7e8389; --link:#a9c0ea; --primary:#e8eaee; --on-primary:#15171a;
+    --line:#2c3138; --line-soft:#22262c; --ok:#4fc282; --ok-soft:#1e2e26; --warn:#e0a458; --warn-soft:#2e2619;
+    --accent-soft:#243044; --chip:#23272d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--canvas);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .app{display:flex;min-height:100vh}
+  .rail{width:188px;flex:0 0 188px;border-right:1px solid var(--line);padding:16px 10px;display:none}
+  @media(min-width:900px){.rail{display:block}}
+  .rail-brand{font-weight:700;font-size:13px;padding:6px 10px 14px}
+  .rail-item{padding:7px 10px;border-radius:8px;color:var(--text-2);font-size:13px}
+  .rail-item.active{background:var(--accent-soft);color:var(--ink);font-weight:600}
+  .rail-sec{font-size:11px;color:var(--faint);letter-spacing:.09em;padding:14px 10px 4px}
+  .main{flex:1;min-width:0;padding:24px 28px;max-width:1000px}
+  @media(max-width:600px){.main{padding:16px}}
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .unit-tag{font-size:12px;color:var(--faint)}
+  .verdict{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--text-2);border:1px solid var(--line)}
+  .verdict.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .spacer{flex:1}
+  .theme-btn{font:inherit;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+  h1{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:64ch}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-size:14px;font-weight:700;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;table-layout:fixed}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-soft);font-size:13px;vertical-align:top}
+  th{color:var(--faint);font-weight:600;font-size:12px}
+  td input{width:17px;height:17px;accent-color:var(--link);margin-top:3px}
+  .self{color:var(--text-2)}
+  .ev{color:var(--text-2)}
+  .pend{display:inline-block;font-size:11.5px;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:2px 8px;margin-top:4px}
+  .verified{display:inline-block;font-size:11.5px;color:var(--ok);background:var(--ok-soft);border-radius:6px;padding:2px 8px;margin-top:4px}
+  .gate{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .gate .info{flex:1;min-width:220px;font-size:13px;color:var(--text-2)}
+  .gate .count{font-weight:700;color:var(--warn)}
+  .btn{font:inherit;font-size:13px;border-radius:8px;padding:8px 16px;min-height:38px;cursor:pointer;border:1px solid var(--line);background:var(--canvas);color:var(--ink)}
+  .btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+  .btn:disabled{cursor:not-allowed;opacity:.5}
+  .preview{margin-top:12px;background:var(--canvas);border:1px dashed var(--line);border-radius:10px;padding:14px 16px;font-size:13px;display:none}
+  .preview.show{display:block}
+  .preview ul{padding-left:18px;color:var(--text-2)}
+  .callout{border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px}
+  .callout b{font-weight:600}
+  .src{margin-top:22px;font-size:12px;color:var(--faint);border-top:1px solid var(--line-soft);padding-top:12px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--primary);color:var(--on-primary);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c1c1e'/%3E%3Crect x='4' y='4' width='8' height='8' rx='1.5' fill='%23e8eaee'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="rail-brand">pm-tool · 面板</div>
+    <div class="rail-sec">视图</div>
+    <div class="rail-item">看板</div>
+    <div class="rail-item">周报</div>
+    <div class="rail-sec">个人</div>
+    <div class="rail-item active">述职素材库</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <span class="unit-tag">X5 · 终身职业成就证据库（去证明力）</span>
+      <span class="verdict ok">条件性采纳 · 素材库非证据链</span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+    </div>
+
+    <h1>述职素材库：自述与可核验证据分栏，导出闸门排待核</h1>
+    <p class="sub">跨项目聚合的选择性述职素材，不是完整贡献记录，也不是 X4 式证据链。自述数字默认待核，导出时待核栏被闸门排除。示例为虚构演示。</p>
+
+    <div class="panel">
+      <h2>素材条目（虚构示例）</h2>
+      <table>
+        <colgroup><col style="width:6%"><col style="width:38%"><col style="width:38%"><col style="width:18%"></colgroup>
+        <thead><tr><th></th><th>自述数字（本人陈述）</th><th>可核验证据 / 外部链接 / 证明人</th><th>状态</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>导出闸门</h2>
+      <div class="gate">
+        <div class="info">已选 <span id="selN" class="count">0</span> 条；其中 <span id="pendN" class="count">0</span> 条自述待核，<b>默认排除</b>，不进入导出稿。可核验证据齐全的条目才进导出。</div>
+        <button class="btn primary" id="exportBtn" type="button" disabled>生成述职素材稿（演示）</button>
+      </div>
+      <div class="preview" id="preview">
+        <b>导出预览（仅含已核验条目）：</b>
+        <ul id="previewList"></ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>边界：</b>素材库是本人挑选的述职材料，<b>非完整贡献记录、非对外证据链</b>（与 X4 撤回的举证承诺无关）；外部链接与证明人为过渡字段，不保证第三方采信。
+    </div>
+
+    <div class="src">来源：终局台账 X5 行；裁判 A「条件性采纳（述职素材库去证明力；导出闸门排待核栏）」；裁判 B「条件性采纳（素材库非证据链；导出闸门排待核）」；`rebuttal/F-终局核验.md` §五；`rebuttal/K20-X5-往复.md` R2-F-X5-01/02。原始想法：round4/diverger-3.md N3，登记于 round4-new-directions.md。</div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  var root=document.documentElement;
+  var saved=localStorage.getItem('x5-theme'); if(saved) root.classList.toggle('dark',saved==='dark');
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var d=root.classList.toggle('dark'); localStorage.setItem('x5-theme',d?'dark':'light');
+  });
+
+  var ITEMS=[
+    {id:1, self:'主导交付看板改版，6 周完成，覆盖 3 个视图', ev:'交付物 d-03 + 结项周报链接；证明人：直属主管（过渡字段）', verified:true},
+    {id:2, self:'周报自动整理使周均节省约 2 小时（自述估算）', ev:'无外部链接 / 无证明人', verified:false},
+    {id:3, self:'梳理风险登记法并固化为模板', ev:'交付物 d-07 模板文件 + 团队采用记录链接', verified:true}
+  ];
+  var tbody=document.getElementById('rows');
+  ITEMS.forEach(function(it){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="checkbox" class="pick" data-id="'+it.id+'"></td>'+
+      '<td class="self">'+it.self+'</td>'+
+      '<td class="ev">'+it.ev+'</td>'+
+      '<td>'+(it.verified?'<span class="verified">已核验</span>':'<span class="pend">自述待核</span>')+'</td>';
+    tbody.appendChild(tr);
+  });
+  function refresh(){
+    var picks=[...document.querySelectorAll('.pick:checked')];
+    var pend=picks.filter(function(c){return !ITEMS.find(function(i){return i.id==c.dataset.id}).verified}).length;
+    var ver=picks.length-pend;
+    document.getElementById('selN').textContent=picks.length;
+    document.getElementById('pendN').textContent=pend;
+    document.getElementById('exportBtn').disabled=ver===0;
+    return {picks:picks,ver:ver,pend:pend};
+  }
+  document.querySelectorAll('.pick').forEach(function(c){c.addEventListener('change',refresh)});
+  function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')},1600);}
+  document.getElementById('exportBtn').addEventListener('click',function(){
+    var r=refresh(), ul=document.getElementById('previewList'); ul.innerHTML='';
+    ITEMS.forEach(function(it){
+      var c=document.querySelector('.pick[data-id="'+it.id+'"]');
+      if(c && c.checked && it.verified){
+        var li=document.createElement('li'); li.textContent=it.self; ul.appendChild(li);
+      }
+    });
+    document.getElementById('preview').classList.add('show');
+    toast('演示：已排除 '+r.pend+' 条自述待核条目');
+  });
+</script>
+</body>
+</html>

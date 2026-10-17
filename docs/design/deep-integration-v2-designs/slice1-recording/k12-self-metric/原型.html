@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K12 自我计量与可信底座 · 原型（示例数据）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234176e6'/%3E%3Ccircle cx='8' cy='8' r='3' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f6f7; --surface-3:#edeef2;
+    --ink:#1c1c1e; --text-2:#61666b; --muted:#696e74; --faint:#71767c;
+    --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.045);
+    --accent:#4176e6; --accent-deep:#4868b2; --accent-soft:#e4edfd;
+    --success:#22c55e; --success-soft:rgba(34,197,94,.12);
+    --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+    --danger:#ef4444; --danger-soft:rgba(239,68,68,.10);
+    --todo:#d4d4d4;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,18,20,.06);
+    --shadow-2:0 1px 2px rgba(16,18,20,.06),0 6px 18px rgba(16,18,20,.07);
+    --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  body[data-ds-dark-theme]{
+    --bg:#1f2023; --surface:#26272b; --surface-2:#2e3034; --surface-3:#383a3f;
+    --ink:#ececee; --text-2:#a8adb3; --muted:#9aa0a6; --faint:#8b9096;
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+    --accent:#7aaaff; --accent-deep:#7aaaff; --accent-soft:rgba(122,170,255,.16);
+    --success-soft:rgba(34,197,94,.16); --warn-soft:rgba(245,158,11,.16); --danger-soft:rgba(239,68,68,.16);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45;font-feature-settings:'tnum' 1}
+  button{font:inherit;white-space:nowrap;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .topbar{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+  .tb-badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent-deep);border-radius:var(--r-sm);padding:3px 9px}
+  .tb-title{font-size:16px;font-weight:700;letter-spacing:-.015em}
+  .tb-sub{font-size:12px;color:var(--muted)}
+  .tb-right{display:flex;align-items:center;gap:10px}
+  .demo-tag{font-size:11px;color:var(--warn);background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-pill);padding:3px 10px;font-weight:600}
+  .theme-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:6px 12px;font-size:12.5px}
+  .theme-btn:hover{background:var(--surface-3);color:var(--ink)}
+  .shell{display:flex;align-items:stretch;max-width:1180px;margin:0 auto}
+  .rail{width:216px;flex-shrink:0;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+  .rail-h{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.09em;padding:0 8px 8px}
+  .rail-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--text-2);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+  .rail-item:hover{background:var(--surface-2);color:var(--ink)}
+  .rail-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .rail-item .dot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex-shrink:0}
+  .rail-item.active .dot{background:var(--accent)}
+  .main{flex:1;min-width:0;padding:22px 26px 48px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-2);padding:18px 20px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .card .desc{font-size:12.5px;color:var(--muted);margin-bottom:14px;max-width:680px;line-height:1.6}
+  /* 只增日志 */
+  .log-row{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;background:var(--surface)}
+  .log-id{font-family:var(--font-mono);font-size:11.5px;color:var(--faint);min-width:92px}
+  .log-body{flex:1;min-width:0;font-size:13px}
+  .log-meta{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+  .mini-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:var(--r-sm);padding:5px 12px;font-size:12.5px}
+  .mini-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+  /* 采纳率 */
+  .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .metric{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;background:var(--surface-2)}
+  .metric .ml{font-size:11.5px;color:var(--faint);letter-spacing:.05em}
+  .metric .mv{font-size:24px;font-weight:750;margin-top:6px;font-family:var(--font-mono);letter-spacing:-.02em}
+  .metric .ms{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.55}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-bottom:12px}
+  .seg button{padding:7px 16px;font-size:13px;background:var(--surface-2);color:var(--text-2);border:none}
+  .seg button.on{background:var(--accent);color:#fff;font-weight:600}
+  .verdict-box{border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.7;margin-top:10px}
+  .verdict-box.low{background:var(--warn-soft);border:1px solid var(--warn);color:var(--text-2)}
+  .verdict-box.ok{background:var(--success-soft);border:1px solid var(--success);color:var(--text-2)}
+  /* 来源档 */
+  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  th{font-size:11.5px;font-weight:700;color:var(--faint);letter-spacing:.06em}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);background:var(--surface-2);white-space:nowrap}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;border-left:2px solid var(--line);padding-left:12px}
+  .list-plain{padding-left:18px;font-size:12.5px;color:var(--text-2);line-height:1.9}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:10px 18px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+  .toast.show{opacity:1}
+  @media(max-width:860px){.shell{flex-direction:column}.rail{width:100%;border-right:none;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}.metric-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-left">
+    <span class="tb-badge">K12</span>
+    <div>
+      <div class="tb-title">自我计量与可信底座 · 回滚账本 / 只增日志 / 采纳率 N/M</div>
+      <div class="tb-sub">撤哈希链与法律举证；达标前只给描述统计；删除权优先；来源档降提示</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="demo-tag">示例数据 · 非生产 API</span>
+    <button class="theme-btn" id="themeBtn" type="button">切换深浅</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="分片单元导航">
+    <div class="rail-h">分片1 · 录入与证据流</div>
+    <button class="rail-item" type="button" data-jump="K2"><span class="dot"></span>K2 写边界</button>
+    <button class="rail-item" type="button" data-jump="K3"><span class="dot"></span>K3 证据闭环</button>
+    <button class="rail-item" type="button" data-jump="K4"><span class="dot"></span>K4 台账吃对话</button>
+    <button class="rail-item" type="button" data-jump="K5"><span class="dot"></span>K5 会议流（撤并）</button>
+    <button class="rail-item" type="button" data-jump="K6"><span class="dot"></span>K6 完成评判层</button>
+    <button class="rail-item" type="button" data-jump="X6"><span class="dot"></span>X6 完成仪式感</button>
+    <div class="rail-item active" aria-current="page"><span class="dot"></span>K12 自我计量</div>
+  </nav>
+
+  <main class="main">
+    <!-- 账本定位 -->
+    <section class="card">
+      <h2>回滚账本定位：变更流水记录，不做操作回滚引擎</h2>
+      <p class="desc">账本只回答「这条记录被谁、在何时、改成什么」，供人回看与手工订正；不承诺自动逆操作、不做防篡改哈希链、不做法律举证包（X4 归并）。独立记录编号 + 只增日志（append-only），同时保留物理删除/归档通道，删除权优先。</p>
+      <div id="logList">
+        <div class="log-row" data-log="log-0004">
+          <span class="log-id">log-0004</span>
+          <div class="log-body">t-118.notes 由 agent 直写（白名单①），provenance=auto-whitelist-write<div class="log-meta">2026-10-18 14:02 · append-only · 独立编号</div></div>
+          <button class="mini-btn danger" type="button" data-del="log-0004">物理删除本条</button>
+        </div>
+        <div class="log-row" data-log="log-0003">
+          <span class="log-id">log-0003</span>
+          <div class="log-body">K4 候选箱条目签字落库（人裁决）<div class="log-meta">2026-10-18 11:40 · append-only · 独立编号</div></div>
+          <button class="mini-btn danger" type="button" data-del="log-0003">物理删除本条</button>
+        </div>
+        <div class="log-row" data-log="log-0002">
+          <span class="log-id">log-0002</span>
+          <div class="log-body">K3 证据 ev-0008 归属 t-118（人确认）<div class="log-meta">2026-10-17 19:12 · append-only · 独立编号</div></div>
+          <button class="mini-btn danger" type="button" data-del="log-0002">物理删除本条</button>
+        </div>
+        <div class="log-row" data-log="log-0001">
+          <span class="log-id">log-0001</span>
+          <div class="log-body">手动新建 t-121「纪要整理」<div class="log-meta">2026-10-17 09:05 · append-only · 独立编号</div></div>
+          <button class="mini-btn danger" type="button" data-del="log-0001">物理删除本条</button>
+        </div>
+      </div>
+      <p class="note" style="margin-top:10px">物理删除即从存储移除该条，不做断链校验、不保留哈希链证明；只增指新变更以新编号追加、不改写历史，删除是用户明确保留的例外通道。</p>
+    </section>
+
+    <!-- 采纳率 -->
+    <section class="card">
+      <h2>采纳率 N/M：达标前只展示描述统计，不下失败裁决</h2>
+      <p class="desc">分子 N=被采纳/签字的建议数；分母 M=唤起过且进入人裁决的建议数；未唤起（模型根本没提出）从分母分离，不计入失败；零调用不裁决。样本不足（Wilson/精确区间门槛未达）只给 N/M 描述统计，不给成败结论。切换样本量观察两态。</p>
+      <div class="seg">
+        <button type="button" id="sLow" class="on">样本不足（演示）</button>
+        <button type="button" id="sOk">样本达标（演示）</button>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><div class="ml">采纳 N</div><div class="mv" id="mN">3</div><div class="ms">进入人裁决后被采纳/签字</div></div>
+        <div class="metric"><div class="ml">裁决 M</div><div class="mv" id="mM">7</div><div class="ms">唤起过并进入裁决；未唤起另计</div></div>
+        <div class="metric"><div class="ml">未唤起（分离）</div><div class="mv" id="mNo">12</div><div class="ms">模型没提出，不计入失败分母</div></div>
+      </div>
+      <div class="verdict-box low" id="vBox">
+        <b>样本不足，不下失败裁决：</b>当前仅 3/7（描述统计），未达 Wilson/精确区间门槛，只展示数字分布，不判「建议质量差」、不据此关闭功能。
+      </div>
+    </section>
+
+    <!-- 来源档 -->
+    <section class="card">
+      <h2>来源档降「提示」：不显示可靠度档位，不进排序权重</h2>
+      <p class="desc">agent 自动建议、手动录入、外部粘贴只作为来源提示 chip 展示，不做 A/B/C 可靠度分级，也不参与列表排序权重；可靠度判断留给人。</p>
+      <table>
+        <colgroup><col style="width:26%"><col style="width:38%"><col style="width:36%"></colgroup>
+        <thead><tr><th>条目来源</th><th>界面提示</th><th>不做什么</th></tr></thead>
+        <tbody>
+          <tr><td>agent 自动建议（K3/K4）</td><td><span class="chip">来源 · agent 建议</span></td><td>不标可靠度档、不排前</td></tr>
+          <tr><td>本人手动录入</td><td><span class="chip">来源 · 手动</span></td><td>不与建议比「可靠度」</td></tr>
+          <tr><td>外部链接/粘贴（K18/K3）</td><td><span class="chip">来源 · 外部粘贴</span></td><td>不进排序权重</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- E6 待补 -->
+    <section class="card">
+      <h2>E6 待补清单（本机样本积累后回填）</h2>
+      <ul class="list-plain">
+        <li>来源类型与建议正确率的相关性（本地计数后再下结论，不预设）；</li>
+        <li>路由成本回包：每次模型调用的 token/耗时与采纳收益对比，达标前不做成本主张；</li>
+        <li>三计数（触发成功率/漏报率/单条裁决时长）由本单元埋点提供，供 K3/K4 启用区间判定。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <p class="note">本页为设计原型，全部数字为示例；撤哈希链、法律举证、防篡改均不在第一期范围。</p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var dark=false,btn=document.getElementById('themeBtn');
+  btn.addEventListener('click',function(){dark=!dark;if(dark){document.body.setAttribute('data-ds-dark-theme','');btn.textContent='切回浅色';}else{document.body.removeAttribute('data-ds-dark-theme');btn.textContent='切换深浅';}});
+  var toast=document.getElementById('toast'),tt;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800);}
+  document.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){showToast('本页仅演示 K12；'+b.dataset.jump+' 单元见分片覆盖索引。');});});
+
+  document.querySelectorAll('[data-del]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var row=document.querySelector('[data-log="'+b.dataset.del+'"]');
+      row.remove();showToast('已物理删除该条（演示）；不做断链校验。');
+    });
+  });
+
+  var sLow=document.getElementById('sLow'),sOk=document.getElementById('sOk'),vBox=document.getElementById('vBox');
+  function setSample(ok){
+    sLow.classList.toggle('on',!ok);sOk.classList.toggle('on',ok);
+    if(ok){
+      document.getElementById('mN').textContent='26';
+      document.getElementById('mM').textContent='34';
+      document.getElementById('mNo').textContent='9';
+      vBox.className='verdict-box ok';
+      vBox.innerHTML='<b>样本达标：</b>26/34 采纳（描述统计），区间估计落在可解释范围；仍只描述分布，不做奖惩式裁决，未唤起 9 条保持分离。';
+    }else{
+      document.getElementById('mN').textContent='3';
+      document.getElementById('mM').textContent='7';
+      document.getElementById('mNo').textContent='12';
+      vBox.className='verdict-box low';
+      vBox.innerHTML='<b>样本不足，不下失败裁决：</b>当前仅 3/7（描述统计），未达 Wilson/精确区间门槛，只展示数字分布，不判「建议质量差」、不据此关闭功能。';
+    }
+  }
+  sLow.addEventListener('click',function(){setSample(false);});
+  sOk.addEventListener('click',function(){setSample(true);});
+})();
+</script>
+</body>
+</html>
