@@ -212,6 +212,14 @@
   border: 1px solid color-mix(in srgb, var(--c-block) 30%, transparent);
   padding: 1px 6px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
 }
+/* 关联里程碑 chip：旗帜图标 + 链接蓝，与进度数字、等待前置（红）在视觉上区分。 */
+.pm-tasks-root .pt-milestone-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: var(--t-10); color: var(--c-link); background: color-mix(in srgb, var(--c-link) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-link) 28%, transparent);
+  padding: 1px 6px 1px 5px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
+}
+.pm-tasks-root .pt-milestone-chip svg { flex: 0 0 auto; }
 
 /* 负责人首字头像 */
 .pm-tasks-root .pt-assignee { display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -424,7 +432,7 @@
   }
   .pm-tasks-root .pt-status { flex: 0 0 auto; }
   .pm-tasks-root .pt-task { row-gap: 4px; }
-  .pm-tasks-root .pt-wait { flex-basis: 100%; }
+  .pm-tasks-root .pt-wait, .pm-tasks-root .pt-milestone-chip { flex-basis: 100%; }
 
   /* 截止日期输入收窄，进度条让位 */
   .pm-tasks-root .pt-due input[type="date"] { width: auto; max-width: 100%; }

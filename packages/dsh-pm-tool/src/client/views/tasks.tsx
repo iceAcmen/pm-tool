@@ -14,6 +14,7 @@ import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
+import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import type { Task, Milestone, Run } from './types.js'
 import css from './tasks.css?raw'
 
@@ -335,7 +336,11 @@ export function TaskTable(props: {
               等待前置×{blocking.length}
             </span>
           )}
-          {milestone && <span className="pt-wait" style={{ borderStyle: 'dashed' }}>{milestone.title}</span>}
+          {milestone && (
+            <span className="pt-milestone-chip" style={{ borderStyle: 'dashed' }} title={`关联里程碑：${milestone.title}（${milestone.targetDate ?? '未设定日期'}）`}>
+              <Flag size={11} strokeWidth={2.2}/>{milestone.title}
+            </span>
+          )}
         </div>
         <div className="pt-cell pt-assignee">
           {t.assignee
