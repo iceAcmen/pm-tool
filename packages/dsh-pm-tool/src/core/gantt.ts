@@ -290,7 +290,9 @@ export function routeEdge(
   edge: { x1: number, y1: number, x2: number, y2: number, bRight?: number },
   opts: EdgeRouteOpts = {},
 ): EdgeRoute {
-  const arrowClear = opts.arrowClear ?? 8
+  // marker 实宽 = markerWidth(6) × stroke-width(1.5) = 9px；纯水平箭头段必须 ≥ 9px，
+  // 否则 marker 覆盖范围跨入圆角、方向被渲染歪（短水平段箭头朝左的根因）。
+  const arrowClear = opts.arrowClear ?? 9
   const stubA = opts.stubA ?? 6
   const detourGap = opts.detourGap ?? 12
   const laneStep = opts.laneStep ?? 14
@@ -329,43 +331,59 @@ export function routeEdge(
     return { d: `M ${r1(x1)} ${r1(y1)} H ${r1(x2)}`, kind: gap >= stubA + arrowClear ? 'normal' : 'tight', channelX: x1, endX: x2, endY: y2 }
   }
 
-  // ---- 情况1：normal（gap ≥ stubA+arrowClear）标准 L ----
-  if (gap >= stubA + arrowClear) {
-    let ch = x1 + stubA + lane * laneStep
-    if (x2 - ch < arrowClear) ch = x1 + stubA // lane 错峰放不下 → 回退 lane=0
-    const rr = Math.min(cornerR, ch - x1, x2 - ch, ady / 2)
+  // ---- 情况1：normal 标准 L（通道在 A 右缘右侧间隙）----
+  // 用实际几何判定：最后纯水平段（圆角结束→x2）必须 ≥ arrowClear，否则 marker 歪。
+  let chN = x1 + stubA + lane * laneStep
+  let rrN = Math.min(cornerR, chN - x1, x2 - chN, ady / 2)
+  if (x2 - (chN + rrN) < arrowClear) { // lane 错峰放不下 → 回退 lane=0
+    chN = x1 + stubA
+    rrN = Math.min(cornerR, chN - x1, x2 - chN, ady / 2)
+  }
+  if (x2 - (chN + rrN) >= arrowClear) {
     const d = [
       `M ${r1(x1)} ${r1(y1)}`,
-      `H ${r1(ch - rr)}`,
-      `Q ${r1(ch)} ${r1(y1)} ${r1(ch)} ${r1(y1 + sy * rr)}`,
-      `V ${r1(y2 - sy * rr)}`,
-      `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
+      `H ${r1(chN - rrN)}`,
+      `Q ${r1(chN)} ${r1(y1)} ${r1(chN)} ${r1(y1 + sy * rrN)}`,
+      `V ${r1(y2 - sy * rrN)}`,
+      `Q ${r1(chN)} ${r1(y2)} ${r1(chN + rrN)} ${r1(y2)}`,
       `H ${r1(x2)}`,
     ].join(' ')
-    return { d, kind: 'normal', channelX: ch, endX: x2, endY: y2 }
+    return { d, kind: 'normal', channelX: chN, endX: x2, endY: y2 }
   }
 
-  // ---- 情况2：arrowClear ≤ gap < stubA+arrowClear，A 右缘直接垂直 ----
-  if (gap >= arrowClear) {
-    const ch = x1
-    const rr = Math.min(cornerR, gap, ady / 2)
+  // ---- 情况2：tight（A 右缘直接垂直，无 A 探出）----
+  // 圆角随可用间隙自适应收紧：间隙越小圆角越小，保证纯水平段 ≥ arrowClear；
+  // rrT=0（gap=arrowClear）时退化为直角。
+  const rrT = Math.min(cornerR, gap - arrowClear, ady / 2)
+  if (rrT >= 0) {
+    const corner = rrT > 0
+      ? `Q ${r1(x1)} ${r1(y2)} ${r1(x1 + rrT)} ${r1(y2)}`
+      : ''
+    const vEnd = rrT > 0 ? y2 - sy * rrT : y2
     const d = [
       `M ${r1(x1)} ${r1(y1)}`,
-      `V ${r1(y2 - sy * rr)}`,
-      `Q ${r1(ch)} ${r1(y2)} ${r1(ch + rr)} ${r1(y2)}`,
+      `V ${r1(vEnd)}`,
+      corner,
       `H ${r1(x2)}`,
-    ].join(' ')
-    return { d, kind: 'tight', channelX: ch, endX: x2, endY: y2 }
+    ].filter(Boolean).join(' ')
+    return { d, kind: 'tight', channelX: x1, endX: x2, endY: y2 }
   }
 
   // ---- 情况3：gap < arrowClear（含 gap=0 紧贴；及 gap∈[-2pxPerDay,0) 的轻度重叠/衔接）
-  // 「小凹形」让通道到 B 左缘左侧：先垂直深入行间离开 A 条，在行间空隙水平让到 ch 再下行，
-  // 水平左移段绝不落在 y1 行（不穿 A 条）。
-  // gap≥0 → kind='tight'（紧贴）；gap<0（重叠 1~2 天，A.due=B.start 当天衔接）→ kind='overlap-tight'，
-  // 视觉与紧贴一致（行间小凹形、箭头朝右落 B 左缘），绝不走严重重叠的大 U。
-  const ch = x2 - arrowClear
-  const t1 = Math.min(8, ady * 0.35, Math.max(0, ady - 8))
-  const rr = Math.min(4, t1 / 2, ady / 2)
+  // 「行间小凹形」：先垂直进入行间空隙（A 条底缘下方），在行间水平让位到 ch，再下行，
+  // 最后留足纯水平箭头段（≥ marker 实宽）指向 B 左缘、箭头朝右。
+  // 水平让位段完全落在行间空隙，绝不穿 A/B 条；marker 覆盖范围不跨圆角，方向才稳定。
+  // gap≥0 → kind='tight'；gap<0（重叠 1~2 天）→ kind='overlap-tight'，绝不走严重重叠的大 U。
+  const barHalf = 8
+  const arrowTail = 10 // 纯水平箭头段（markerWidth6 × stroke-width1.5 = 9px，留 10）
+  const t1 = ady / 2    // 行间空隙中央
+  // 圆角：垂直段与水平让位段都必须在行间空隙内（离开 A 条底缘 / B 条顶缘各 ≥2px）
+  const rr = Math.min(
+    4,
+    Math.max(0, t1 - barHalf - 2),
+    Math.max(0, ady - t1 - barHalf - 2),
+  )
+  const ch = x2 - arrowTail - rr
   const d = [
     `M ${r1(x1)} ${r1(y1)}`,
     `V ${r1(y1 + sy * (t1 - rr))}`,
