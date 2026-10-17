@@ -68,6 +68,7 @@
 
 > 规则：完成任务的平台在收工时更新本区，随当次改动一起提交；只改本区即可，勿改正文流程。
 
+- **当前候选（2026-10-17 doubao-work，进行中 · 未提交 · 未放行，勿当作已发布基线）**：**P2-2 Token 2.0 视觉基准**。冻结视觉规范 `docs/design/p2-2-visual-token-baseline-20261017.md`（唯一视觉真源）+ 迁移映射 `docs/design/p2-2-token-migration-map.md`；新增单层语义 token 层（`src/core/design-tokens.ts` + `design-tokens.test.ts`），对已实现的 P2-1 左导航、P2-5 命名视图/复合过滤/导出/只读快照做视觉校准；不另造功能、不改名、不全局粗替换。开发自测：build=0、vitest 164/164、coverage 退出 0、verify-isolation 73/73/0 污染、e2e PASS；陈旧脚本断言已按当前契约修正并补边界/反例。**G3 真实浏览器目视门 BLOCKED（当前执行通道无法采集视觉证据），未发布；P2-6 AI 溯源治理零实现、顺序门未到。** 未 commit/push/部署；changelog/ADL/progress/handoff 待独立 PASS + 协调人放行后补写。
 - **快照更新时间**：2026-10-17
 - **最近更新平台**：doubao-work（**#24 测试框架 + CI**——vitest 离线纯函数单测 4 文件 29 用例（criticalPath/settings/resolveTaskProgressMeta/validateActions），v8 子集覆盖率门，确定性 E2E=`pnpm e2e`（隔离 DSH_HOME/非生产端口/DSH_PM_E2E=1 不出网），`.github/workflows/ci.yml` 分 core/e2e；只加 devDeps、版本仍 0.7.4。build=0、guard 73/73/0 失败/0 污染、vitest 29/29、e2e 本机可重复 PASS；本机无 gh 未观测 Actions 实跑。已 commit+push main）
 - **提交定位（本批已 push main）**：本批在 main 直接提交「#24 测试框架 + CI（vitest 单测 + v8 覆盖率门 + 确定性 E2E + GitHub Actions）」并 `git push origin main`；不改 package.json version（仍 0.7.4）、不打 tag；发布基线仍 v0.7.3=`eb41b30`。

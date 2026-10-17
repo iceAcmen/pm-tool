@@ -2,7 +2,15 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-17（doubao-work **#24 测试框架 + CI**：vitest 离线确定性纯函数单测 4 文件 29 用例（criticalPath/settings/resolveTaskProgressMeta/validateActions），v8 子集覆盖率门（lines40/branches80/functions35），确定性 E2E 固化为 `pnpm e2e`（隔离 DSH_HOME/非生产端口/DSH_PM_E2E=1 不出网），`.github/workflows/ci.yml` 分 core/e2e 两 job；只加 devDeps、版本仍 0.7.4。build=0、guard 73/73/0 失败/0 污染、vitest 29/29、e2e 本机可重复 PASS）
+最后更新：2026-10-17（doubao-work 进行中候选 **P2-2 Token 2.0 视觉基准**：未提交/未放行；开发侧自测 build=0、vitest 164/164、test:coverage 退出 0、verify-isolation 73/73/0 污染、e2e PASS；脚本陈旧断言已按当前契约修正并补边界/反例；G3 真实浏览器目视门仍 BLOCKED（当前执行通道无法采集视觉证据）；P2-6 未启动。历史：**#24 测试框架 + CI**：vitest 离线确定性纯函数单测 4 文件 29 用例（criticalPath/settings/resolveTaskProgressMeta/validateActions），v8 子集覆盖率门（lines40/branches80/functions35），确定性 E2E 固化为 `pnpm e2e`（隔离 DSH_HOME/非生产端口/DSH_PM_E2E=1 不出网），`.github/workflows/ci.yml` 分 core/e2e 两 job；只加 devDeps、版本仍 0.7.4。build=0、guard 73/73/0 失败/0 污染、vitest 29/29、e2e 本机可重复 PASS）
+
+## 进行中候选：P2-2 Token 2.0 视觉基准（2026-10-17，doubao-work；未提交 / 未放行）
+
+- **范围**：冻结视觉规范（`docs/design/p2-2-visual-token-baseline-20261017.md`，唯一视觉真源）+ 单层语义 token 层 + 对已实现的 P2-1 左导航、P2-5 命名视图/复合过滤/导出/只读快照做视觉校准；不另造功能、不改名、不全局粗替换。**P2-6 AI 溯源治理未启动、零实现**（仅预留 AI 槽位 token，不启用）。
+- **开发侧自测（未提交候选）**：`pnpm build`=0；vitest **164/164**；`test:coverage` 退出 0；`pnpm e2e` PASS（console errors=0）；`verify-isolation.mjs` **73/73 通过、失败 0、污染 0**（before=after=169）。
+- **脚本修正（不改生产业务行为）**：独立测试 G2 静态/受影响 G4 通过、G1 七项阻塞；开发按当前契约修正 7 个 verify 脚本的陈旧断言——移除已删除的 `progressRatio`/`nextStatus` 导入与断言、`commitDates(id,payload)` quiet 落库契约、`prepareCall` 阶段 `reasoningEffort`（high/off）与 stream 透传一致性、prod 确定性路由/候选链/失败回退、hex 有限语义白名单（mask `#000`、品牌平涂白字 `#fff`，注释先剥离，状态色硬编码仍被拒）；并补边界/反例（progressFill 旁字段不伪造、0≠null、超界钳制、parseProgressInput 非法/空白/NaN/Infinity、路由档位链顺序）。
+- **阻塞**：真实浏览器目视门（浅/深 × 1440/768/390）当前执行通道无法采集视觉证据，判 BLOCKED；结构与静态计算不替代目视 PASS，未发布。
+- **未做**：未 commit/push/部署；changelog / ADL / 发布登记待独立测试 PASS + 协调人放行后补写；P2-6 AI 溯源治理零实现。
 
 ## 当前阶段：#24 测试框架 + CI·已核验（2026-10-17，doubao-work）
 

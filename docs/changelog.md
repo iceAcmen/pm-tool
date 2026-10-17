@@ -8,6 +8,25 @@
 
 ---
 
+## P2-2 Token 2.0 视觉基准（候选进行中 · 未提交 · 未放行，2026-10-17，平台：doubao-work）
+
+> 状态：**进行中候选，非发布、未 commit/push/部署**。本条目只记录当前候选状态，待独立测试 PASS + 协调人放行后再补正式登记。
+> 开发自测（未提交候选）：`pnpm build`=0；vitest **164/164**（14 文件）；`pnpm test:coverage` 退出 0；`node scripts/verify-isolation.mjs` **73/73 通过 / 失败 0 / 污染 0**（before=after=169）；`pnpm e2e` PASS（console errors=0）；`git diff --check` 干净。**G3 真实浏览器目视门 BLOCKED（当前执行通道无法采集视觉证据），未发布；P2-6 AI 溯源治理零实现、顺序门未到。**
+
+- **范围**：冻结视觉规范（`docs/design/p2-2-visual-token-baseline-20261017.md`，唯一视觉真源）+ 迁移映射（`docs/design/p2-2-token-migration-map.md`）；新增纯契约模块 `src/core/design-tokens.ts`（AA 计算、语义角色、闭合映射、保留别名、图表/AI 槽位）与 `design-tokens.test.ts`（10 例）；对已实现的 P2-1 左导航、P2-5 命名视图/复合过滤/导出/只读快照做视觉校准。不另造功能、不改业务逻辑、零 schema、不改交互行为。
+- **本批脚本修正（不改生产业务行为、不删断言、不用 NOT_RUN 掩盖可测项）**：独立测试 G2 静态/受影响 G4 通过、G1 七项阻塞；开发仅按当前契约修正 7 个 `scripts/verify-*.mjs` 陈旧断言并补边界/反例——
+  - `verify-gantt.mjs`：移除已删除的 legacy `progressRatio` 导入/断言，改测当前 `progressFill`；补反例（旁字段 legacyProgress/coverage/pendingAcceptance 不伪造填充、0 填充≠null 无填充、value=100→1）。
+  - `verify-task-inline.mjs`：移除已删除的 `nextStatus` 状态轮转断言，新增 `parseProgressInput` 当前契约（null/undefined/''/空白/NaN/Infinity→undefined；合法→0..100 四舍五入；150→100、-5→0）。
+  - `verify-gantt-drag.mjs`：旧 `next` 模式 grep 改为 `commitDates(id,payload)` 块内 quiet `task update` + payload 白名单仅 startDate/dueDate；saving 翻转改挂 commitDates。
+  - `verify-gui-contract.mjs`：改断言 GanttView 定义 `commitDates` 且内部 quiet 落库。
+  - `verify-ai-client.mjs`：6b 重写——记录 `prepareCall` 的 `reasoningEffort`(high/off)，断言 stream 不重复传（prepared 已给齐、callConfigEquals 一致性）、携带 system/messages。
+  - `verify-model-route.mjs`：删除「prod 无 Key 抛 PROD_KEY_MISSING」两处 throw（当前凭据由 dsh 请求时从凭据服务解析，prod 不再抛错），按确定性路由/候选链/失败回退重写。
+  - `verify-web.mjs`：全局 hex 禁用改有限语义白名单（先剥离注释，仅放行 mask-image 的 `#000` 遮罩与 `.pm-rail-logo` 白字 `#fff`；状态色硬编码仍失败）。
+- **待独立测试审证的开放点（不在飞改代码）**：panel.css 中保留图表槽位 `--pm-chart-s4: #7c5cf0` 已被移除；冻结规范/迁移映射/`design-tokens.ts` 仍称「S4 仅定义不启用」，与当前 CSS 存在表述差异，待独立测试审证后统一（恢复定义槽位并放宽白名单，或删除 S4 预留并同步改规范/契约），不得为测试绿偷删设计契约。
+- **影响范围 / 如何手动跑**：`pnpm run build`、`pnpm run test`、`pnpm run test:coverage`、`node scripts/verify-isolation.mjs`、`pnpm e2e`（隔离 DSH_HOME/临时存储备份/非生产端口 3171，DSH_PM_E2E=1 不出网，正式 3080/3091 不触碰）。
+
+---
+
 ## #24 测试框架 + CI：vitest 离线单测 + v8 覆盖率门 + 确定性 E2E + GitHub Actions（2026-10-17，平台：doubao-work）
 
 > 状态：**已完成并核验**。`pnpm build`=0；`verify-isolation.mjs` **73 脚本 / 73 通过 / 失败 0 / 污染 0**（before=after=165）；vitest **4 文件 / 29 用例全过**，v8 子集覆盖率门绿。只加 devDependencies，不改 package.json version（仍 0.7.4）、不打 tag；`verify-real-model.mjs` 真实出网 smoke 不进任何必经 job。
