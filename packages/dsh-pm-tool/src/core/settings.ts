@@ -90,8 +90,6 @@ export const SETTING_FIELDS: SettingFieldMeta[] = [
   { key: 'loadOverloadThreshold', group: '人员负载', label: '过载阈值', hint: '单人 open 任务数达到即标为过载', min: 1, max: 100, step: 1, unit: '项' },
 ]
 
-const FIELD_MAP = new Map(SETTING_FIELDS.map(f => [f.key, f]))
-
 function isIntInRange(v: unknown, min: number, max: number): v is number {
   return typeof v === 'number' && Number.isFinite(v) && Number.isInteger(v) && v >= min && v <= max
 }
@@ -142,9 +140,4 @@ export function sameSettings(a: ProjectSettings, b: ProjectSettings): boolean {
     if (a[field.key] !== b[field.key]) return false
   }
   return true
-}
-
-/** 取字段元数据（命令/UI 共用）。 */
-export function settingField(key: keyof ProjectSettings): SettingFieldMeta | undefined {
-  return FIELD_MAP.get(key)
 }

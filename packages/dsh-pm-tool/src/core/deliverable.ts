@@ -9,12 +9,8 @@ export const deliverableIdSchema = z.string().regex(
 )
 // 交付物生命周期：计划中 → 制作中 → 已提交（待验收）→ 已验收。
 export const deliverableStatusSchema = z.enum(['planned', 'in_progress', 'submitted', 'accepted'])
-export const deliverableStatusLabels: Record<z.infer<typeof deliverableStatusSchema>, string> = {
-  planned: '计划中',
-  in_progress: '制作中',
-  submitted: '已提交',
-  accepted: '已验收',
-}
+// 标签单一来源在 labels.ts（zod-free），此处再导出兼容既有引用。
+export { deliverableStatusLabels } from './labels.js'
 
 const dateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' })
 

@@ -116,11 +116,6 @@ export const SCENARIO_LABEL: Record<AiTaskKind, string> = {
   title: '标题/分类',
 }
 
-/** 思考档位人读标签。 */
-export function effortLabel(effort: ReasoningLevel): string {
-  return effort === 'off' ? '非思考' : `思考·${effort}`
-}
-
 /**
  * 解析当前车道在某场景下的路由。
  * @param mode - poc / prod 车道。

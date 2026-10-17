@@ -65,8 +65,6 @@ export type RiskIssue = {
   solution: string
 }
 
-export type MilestoneStatus = 'planned' | 'at_risk' | 'achieved' | 'missed'
-
 export type MeetingActionStatus = 'todo' | 'in_progress' | 'done' | 'cancelled'
 
 export type MeetingAction = {

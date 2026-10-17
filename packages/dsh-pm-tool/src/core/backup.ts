@@ -31,7 +31,6 @@ export const defaultBackupDirectory = resolveBackupDirectory()
 export const BACKUP_TABLES = [
   'projects', 'tasks', 'milestones', 'risk_issues', 'meetings', 'reports', 'deliverables',
 ] as const
-export type BackupTable = (typeof BACKUP_TABLES)[number]
 
 export interface PmBackup {
   format: 'pm-tool-backup'

@@ -71,10 +71,6 @@ export async function exportProjectMarkdown(
   return { path: target, content }
 }
 
-export function resolveExportPath(directory: string | undefined, filename: string): string {
-  return resolve(expandDirectory(directory), filename)
-}
-
 export async function exportProgressReportMarkdown(
   domain: PmDomain,
   reportId: string,

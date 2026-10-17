@@ -1,12 +1,8 @@
 /** 任务状态纯常量（无 zod 依赖，浏览器/Node 共享单一来源）。 */
 export const TASK_STATUSES = ['todo', 'in_progress', 'blocked', 'done'] as const
 export type TaskStatus = (typeof TASK_STATUSES)[number]
-export const taskStatusLabels: Record<TaskStatus, string> = {
-  todo: '未开始',
-  in_progress: '进行中',
-  blocked: '受阻',
-  done: '已完成',
-}
+// 标签单一来源在 labels.ts（zod-free），此处再导出兼容既有引用。
+export { taskStatusLabels } from './labels.js'
 
 /**
  * 状态谓词闭包（单一来源）：业务处一律复用，禁止散落字面量比较，

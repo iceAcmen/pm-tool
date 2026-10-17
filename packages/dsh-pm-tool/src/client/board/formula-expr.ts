@@ -101,8 +101,3 @@ export function evaluateFormula(expr: string, ctx: FormulaContext): FormulaResul
     return { ok: false, error: { kind: 'runtime', message: msg } }
   }
 }
-
-export const FORMULA_HELP = {
-  variables: ['rows（筛选后行数组）', 'today（YYYY-MM-DD）'],
-  functions: ['count(rows)', 'sum(rows,field)', 'avg(rows,field)', 'min/max(rows,field)', 'countIf(rows,field,value)', 'pct(part,all)'],
-}

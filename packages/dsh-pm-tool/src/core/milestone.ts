@@ -7,13 +7,8 @@ export const milestoneIdSchema = z.string().regex(
   '里程碑 ID 只能包含字母、数字、下划线和连字符',
 )
 export const milestoneStatusSchema = z.enum(['planned', 'at_risk', 'achieved', 'missed'])
-
-export const milestoneStatusLabels: Record<z.infer<typeof milestoneStatusSchema>, string> = {
-  planned: '计划中',
-  at_risk: '有风险',
-  achieved: '已达成',
-  missed: '已错过',
-}
+// 标签单一来源在 labels.ts（zod-free），此处再导出兼容既有引用。
+export { milestoneStatusLabels } from './labels.js'
 
 const dateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' })
 

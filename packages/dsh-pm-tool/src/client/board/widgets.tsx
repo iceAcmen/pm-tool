@@ -9,6 +9,7 @@ import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap, clampProgress } from '../../core/progress-derivation.js'
 import { isTaskOverdue } from '../../core/derived.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
+import { projectStatusLabels } from '../../core/labels.js'
 import { buildCompletionHistory } from '../../core/completion-history.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
@@ -255,7 +256,7 @@ const projectScale: WidgetDescriptor = {
 }
 
 function projectStatusLabel(s: string): string {
-  return ({ planning: '计划中', active: '进行中', paused: '已暂停', done: '已完成', archived: '已归档' } as Record<string, string>)[s] ?? s
+  return projectStatusLabels[s as keyof typeof projectStatusLabels] ?? s
 }
 
 /* ---------- 4. objectiveProgress 客观进度·清单 ---------- */

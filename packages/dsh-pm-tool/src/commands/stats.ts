@@ -5,7 +5,6 @@ import { collectStats, StatsProjectNotFoundError, type ProjectStats, type StatsR
 import { projectStatusLabels } from '../core/project.js'
 import { taskStatusLabels } from '../core/task.js'
 import { milestoneStatusLabels } from '../core/milestone.js'
-import { riskImpactLabels } from '../core/risk-issue.js'
 import { deliverableStatusLabels } from '../core/deliverable.js'
 import type { PmDomain } from '../core/storage.js'
 

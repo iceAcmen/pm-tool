@@ -4,14 +4,8 @@ import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRel
 
 export const projectIdSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/, '项目 ID 只能包含字母、数字、下划线和连字符')
 export const projectStatusSchema = z.enum(['planning', 'active', 'paused', 'done', 'archived'])
-
-export const projectStatusLabels: Record<z.infer<typeof projectStatusSchema>, string> = {
-  planning: '计划中',
-  active: '进行中',
-  paused: '已暂停',
-  done: '已完成',
-  archived: '已归档',
-}
+// 标签单一来源在 labels.ts（zod-free），此处再导出兼容既有引用。
+export { projectStatusLabels } from './labels.js'
 
 // 日期使用 ISO 日历校验，拒绝 2026-02-30 等不存在的日期。
 const dateSchema = z.iso.date({ error: '日期须为有效的 YYYY-MM-DD' })

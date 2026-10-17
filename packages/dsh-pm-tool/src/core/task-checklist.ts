@@ -25,8 +25,6 @@ import type { PmDomain } from './storage.js'
 
 export class TaskChecklistTaskNotFoundError extends Error {}
 export class ChecklistItemNotFoundError extends Error {}
-/** 入参校验（空文本 / expectedDone 非布尔等）：消息即给用户看的中文说明。 */
-export class ChecklistValidationError extends Error {}
 /** 内部节点（已有子任务）挂清单：冻结中文文案「有子任务的任务不挂清单」（OP-CK-02）。 */
 export class ChecklistHasChildrenError extends Error {}
 /** 有非空清单的叶子被要求收子任务（addTask(parentId) / move / move+renumber 三条路径）。 */

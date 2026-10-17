@@ -3,8 +3,7 @@
  * 只读派生：依赖线 / 父条范围 / 进度填充全部由既有字段渲染，绝不回写；
  * 拖拽改期落库白名单仅 startDate/dueDate（走既有 task update 通道）。
  *
- * 与 panel.tsx 旧 GanttView 并存：本文件自包含样式（gantt.css?raw 内联），
- * 全部选择器 scope 在 .pm-gantt-root 下，不污染旧实现。
+ * 本文件自包含样式（gantt.css?raw 内联），全部选择器 scope 在 .pm-gantt-root 下。
  */
 import { useEffect, useRef, useState } from 'react'
 import type { Task, Milestone, Run, View } from './types.js'
@@ -27,6 +26,11 @@ const HANDLE_PX = 6
 /** 本地日历日平移 n 天（UTC 午夜对齐，避免时区把日期拨回昨天）。 */
 const addDays = (iso: string, n: number) =>
   new Date(Date.parse(iso) + n * DAY_MS).toISOString().slice(0, 10)
+
+/** 钳制：开始不得晚于截止（ISO 字符串字典序即时间序）。 */
+const clampStart = (start: string, due: string) => (start > due ? due : start)
+/** 钳制：截止不得早于开始。 */
+const clampDue = (due: string, start: string) => (due < start ? start : due)
 
 type DragMode = 'move' | 'start' | 'end'
 
@@ -181,12 +185,10 @@ export function GanttView(props: {
     if (!moved) { setPreview(null); return }
     const deltaDays = Math.round((e.clientX - cur.startX) / PX)
     if (cur.mode === 'start') {
-      let ns = addDays(cur.origStart, deltaDays)
-      if (ns > cur.origDue) ns = cur.origDue // 钳制：开始不得晚于截止
+      const ns = clampStart(addDays(cur.origStart, deltaDays), cur.origDue)
       setPreview({ id: cur.id, mode: 'start', startDate: ns, dueDate: cur.origDue })
     } else {
-      let nd = addDays(cur.origDue, deltaDays)
-      if (nd < cur.origStart) nd = cur.origStart // 钳制：截止不得早于开始
+      const nd = clampDue(addDays(cur.origDue, deltaDays), cur.origStart)
       setPreview({ id: cur.id, mode: 'end', startDate: cur.origStart, dueDate: nd })
     }
   }
@@ -204,13 +206,11 @@ export function GanttView(props: {
       await commitDates(cur.id, next, `已更新：${next.startDate} ~ ${next.dueDate}`)
     } else if (cur.mode === 'start') {
       // 左缘 resize：只改 startDate，dueDate 不动。
-      let ns = addDays(cur.origStart, Math.round(deltaPx / PX))
-      if (ns > cur.origDue) ns = cur.origDue
+      const ns = clampStart(addDays(cur.origStart, Math.round(deltaPx / PX)), cur.origDue)
       await commitDates(cur.id, { startDate: ns }, `开始日期调整为 ${ns}`)
     } else {
       // 右缘 resize：只改 dueDate，startDate 不动。
-      let nd = addDays(cur.origDue, Math.round(deltaPx / PX))
-      if (nd < cur.origStart) nd = cur.origStart
+      const nd = clampDue(addDays(cur.origDue, Math.round(deltaPx / PX)), cur.origStart)
       await commitDates(cur.id, { dueDate: nd }, `截止日期调整为 ${nd}`)
     }
   }
@@ -246,8 +246,7 @@ export function GanttView(props: {
       const dir = e.key === 'ArrowRight' ? 1 : -1
       if (e.shiftKey) {
         // Shift+←/→：调整 1 天工期（右缘延长/缩短），只改 dueDate。
-        let nd = addDays(task.dueDate, dir)
-        if (nd < task.startDate) nd = task.startDate
+        const nd = clampDue(addDays(task.dueDate, dir), task.startDate)
         await commitDates(task.id, { dueDate: nd }, `截止日期调整为 ${nd}`)
       } else {
         // ←/→：整体移动 1 天，startDate/dueDate 同向平移。

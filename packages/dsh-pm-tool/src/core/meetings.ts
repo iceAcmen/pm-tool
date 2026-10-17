@@ -225,22 +225,6 @@ export function deleteMeetingAction(
   })
 }
 
-export function findMeetingActionByTask(domain: PmDomain, taskId: string): { meeting: Meeting, action: MeetingAction } | undefined {
-  for (const [, meeting] of domain.table('meetings').entries()) {
-    const action = meeting.actions.find(item => item.taskId === taskId)
-    if (action) return { meeting: structuredClone(meeting), action: structuredClone(action) }
-  }
-  return undefined
-}
-
-export function findMeetingActionByRiskIssue(domain: PmDomain, riskIssueId: string): { meeting: Meeting, action: MeetingAction } | undefined {
-  for (const [, meeting] of domain.table('meetings').entries()) {
-    const action = meeting.actions.find(item => item.riskIssueId === riskIssueId)
-    if (action) return { meeting: structuredClone(meeting), action: structuredClone(action) }
-  }
-  return undefined
-}
-
 export interface PromoteResult {
   created: boolean
   taskId: string

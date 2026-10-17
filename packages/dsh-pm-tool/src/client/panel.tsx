@@ -1,28 +1,21 @@
-import { panelKeyboard, fromKeyboardEvent } from '../core/panel-kbd.js'
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { VIEW_LABELS } from '../core/nav.js'
 import { NavRail } from './nav-rail.js'
-import { buildUpdate, clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
+import { clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
-import { diffAgainstPrevious } from '../core/report-diff.js'
-import { computeKPI, buildAgenda, groupRiskMatrix } from '../core/war-room.js'
-import { scoreFromInputs as healthFromInputs, blockingPredecessors, localTodayIso, isTaskOverdue } from '../core/derived.js'
+import { localTodayIso, isTaskOverdue } from '../core/derived.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { listAssigneeCandidates } from '../core/people-candidates.js'
 import {
   DEFAULT_PROJECT_SETTINGS, SETTING_FIELDS, normalizeProjectSettings, sameSettings,
   type ProjectSettings, type SettingFieldMeta,
 } from '../core/settings.js'
-import {
-  dateRange, shiftDatesByDrag, barGeometry, todayOffset, daysFrom,
-  progressFill, barLabelPolicy, shortDate, dependencyEdges,
-  parentBarRange, milestoneOffset, taskDurationDays,
-} from '../core/gantt.js'
+import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
-import { parseCopilotActions, validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
-import { formatNoticeLines, extractBackupPath, shouldHandleGlobalKbd, sampleGanttTicks, parseActiveModelLane, nextRowId } from '../core/ui-feedback.js'
-import { buildDiagnosis, diagnosisCounts, type DiagnosisBubble } from '../core/suggestion-engine.js'
+import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
+import { formatNoticeLines, extractBackupPath, parseActiveModelLane } from '../core/ui-feedback.js'
+import { buildDiagnosis, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
 import Bell from 'lucide-react/dist/esm/icons/bell.mjs'
@@ -66,7 +59,7 @@ import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.mjs'
 import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type RefObject } from 'react'
 import {
-  setPointerOpener, setRowOpener, takeOpenerSpec, resolveDrawerFocusTarget,
+  setPointerOpener, takeOpenerSpec, resolveDrawerFocusTarget,
   type FocusDoc, type OpenerSpec,
 } from '../core/drawer-focus.js'
 import {
@@ -309,25 +302,12 @@ export interface PmPanelApi {
 }
 
 const empty: Snapshot = { projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [] }
-const projectStatus: Record<string, string> = {
-  planning: '计划中',
-  active: '进行中',
-  paused: '已暂停',
-  done: '已完成',
-  archived: '已归档',
-}
-const taskStatus: Record<string, string> = {
-  todo: '未开始',
-  in_progress: '进行中',
-  blocked: '受阻',
-  done: '已完成',
-}
-const milestoneStatus: Record<string, string> = {
-  planned: '计划中',
-  at_risk: '有风险',
-  achieved: '已达成',
-  missed: '已错过',
-}
+// 单一来源来自 core 各 *Labels；转 Record<string,string> 以兼容以 string 变量索引的既有调用点。
+const projectStatus = projectStatusLabels as Record<string, string>
+const taskStatus = taskStatusLabels as Record<string, string>
+const milestoneStatus = milestoneStatusLabels as Record<string, string>
+const deliverableStatus = deliverableStatusLabels as Record<string, string>
+
 const riskIssueStatus: Record<string, string> = {
   open: '待处理',
   monitoring: '跟进中',
@@ -341,10 +321,6 @@ const meetingActionStatus: Record<string, string> = {
   todo: '未开始', in_progress: '进行中', done: '已完成', cancelled: '已取消',
 }
 const progressReportStatus: Record<string, string> = { draft: '草稿', final: '已定稿' }
-const deliverableStatus: Record<string, string> = {
-  planned: '计划中', in_progress: '制作中', submitted: '已提交', accepted: '已验收',
-}
-
 /**
  * 项目切换下拉（替代原生 select）：
  *  - 触发按钮显示当前项目名 + 旋转箭头；
@@ -1732,17 +1708,6 @@ export function CrossProjectPeople({ data, onPickProject, onOpenRecord }: {
   </section>
 }
 
-function BoardPeopleSection({ data, onPickProject, onOpenRecord }: {
-  data: Snapshot
-  onPickProject: (id: string) => void
-  onOpenRecord: (projectId: string, type: string, id: string) => void
-}) {
-  return <div className="pm-board-section">
-    <h2>人员负载（跨项目）</h2>
-    <CrossProjectPeople data={data} onPickProject={onPickProject} onOpenRecord={onOpenRecord}/>
-  </div>
-}
-
 function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'project-create') return '新建项目'
   if (drawer.kind === 'project-edit') return '编辑项目'
@@ -1982,38 +1947,6 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
 }
 
 /** OPT-05：批量字段输入（负责人文本 / 截止日期），回车或按钮触发应用。 */
-function BatchField({ className, placeholder, type = 'text', onApply }: {
-  className?: string
-  placeholder: string
-  type?: string
-  onApply: (json: string) => Promise<boolean | void>
-}) {
-  const [value, setValue] = useState('')
-  const field = type === 'date' ? 'dueDate' : 'assignee'
-  return <span className={`pm-batch-field-wrap ${className ?? ''}`}>
-    <input
-      type={type}
-      className="pm-batch-input"
-      value={value}
-      placeholder={placeholder}
-      aria-label={placeholder}
-      onChange={(e) => setValue(e.currentTarget.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' && value.trim()) {
-          e.preventDefault()
-          void onApply(JSON.stringify({ [field]: value.trim() })).then(() => setValue(''))
-        }
-      }}
-    />
-    <button
-      type="button"
-      className="pm-tool-button"
-      disabled={!value.trim()}
-      onClick={() => { void onApply(JSON.stringify({ [field]: value.trim() })).then(() => setValue('')) }}
-    >应用</button>
-  </span>
-}
-
 /** OPT-03：从 localStorage 记住的项目 id 解析出有效选中值；已删除/空则回退。 */
 export function resolveRememberedProject(storedId: string | undefined, projectIds: string[], fallback?: string): string {
   if (storedId && projectIds.includes(storedId)) return storedId
@@ -2077,69 +2010,6 @@ function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () =>
       {onAI && <button className="pm-button pm-button-primary pm-empty-ai-cta" onClick={onAI}><Sparkles size={15}/>用 AI 一键生成 WBS</button>}
     </div>
   </div>
-}
-
-/** PROD-09：相邻周期对比徽标。null=无上一份不显示；0=持平；否则 ↑/↓ + 幅度（可带单位，如 %）。 */
-function DeltaBadge({ value, unit }: { value: number | null, unit?: string }) {
-  if (value === null) return null
-  if (value === 0) return <span className="pm-delta pm-delta--flat" title="与上一份持平">持平 0{unit ?? ''}</span>
-  const up = value > 0
-  return <span className={`pm-delta ${up ? 'pm-delta--up' : 'pm-delta--down'}`} title="与上一份相比">{up ? '↑' : '↓'}{Math.abs(value)}{unit ?? ''}</span>
-}
-
-function TableToolbar({
-  query,
-  setQuery,
-  primaryLabel,
-  onCreate,
-  children,
-}: {
-  query: string
-  setQuery: (value: string) => void
-  primaryLabel: string
-  onCreate: () => void
-  children?: ReactNode
-}) {
-  return <div className="pm-table-toolbar">
-    <button className="pm-add-button" onClick={onCreate}><Plus size={15}/>{primaryLabel}</button>
-    {children}
-    <label className="pm-table-search">
-      <Search size={14}/>
-      <input value={query} onChange={event => setQuery(event.currentTarget.value)} placeholder="搜索记录" aria-label="搜索记录"/>
-    </label>
-  </div>
-}
-
-function StatusTag({ kind, value }: { kind: 'project' | 'task' | 'milestone' | 'risk-issue' | 'meeting' | 'report' | 'deliverable', value: string }) {
-  const labels = kind === 'project'
-    ? projectStatus
-    : kind === 'task'
-      ? taskStatus
-      : kind === 'milestone'
-        ? milestoneStatus
-        : kind === 'risk-issue'
-          ? riskIssueStatus
-          : kind === 'meeting'
-            ? meetingStatus
-            : kind === 'report'
-              ? progressReportStatus
-              : deliverableStatus
-  return <span className="pm-tag" data-kind={kind} data-value={value}>
-    <i/>{labels[value] ?? value}
-  </span>
-}
-
-function Progress({ value }: { value: number | null }) {
-  // v0.8：averageProgress=null = 无清单覆盖（证据不足），不渲染假百分比条。
-  if (value === null) return <span className="pm-progress-cell pm-progress-cell--muted">证据不足</span>
-  return <span className="pm-progress-cell">
-    <span><i style={{ width: `${value}%` }}/></span>
-    <b>{value}%</b>
-  </span>
-}
-
-function TableEmpty({ text, action }: { text: string, action?: React.ReactNode }) {
-  return <div className="pm-table-empty"><ListTree size={24}/><span>{text}</span>{action}</div>
 }
 
 type PlanStepView = CopilotStep & { checked: boolean }

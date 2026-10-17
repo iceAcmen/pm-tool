@@ -3,6 +3,7 @@ import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
+import { taskStatusLabels } from '../../core/labels.js'
 import { tasksToCsv, tasksToMarkdown, tasksToJson, buildTaskSnapshotHtml, type TaskExportCtx } from '../../core/task-export.js'
 import { downloadText } from '../download.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
@@ -51,12 +52,8 @@ import { loadTaskViews, newCustomViewId, persistTaskViews } from './task-views-p
 import type { Task, Milestone, Run } from './types.js'
 import css from './tasks.css?raw'
 
-const taskStatus: Record<string, string> = {
-  todo: '未开始',
-  in_progress: '进行中',
-  blocked: '受阻',
-  done: '已完成',
-}
+// 单一来源来自 core/status.ts taskStatusLabels；转 Record<string,string> 兼容 string 索引。
+const taskStatus = taskStatusLabels as Record<string, string>
 
 type ChipKey = TaskViewChip
 

@@ -26,29 +26,13 @@ import {
 import { clampProgress } from '../../core/progress-derivation.js'
 import { computeKPI, buildAgenda } from '../../core/war-room.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
+import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels } from '../../core/labels.js'
 import type { Project, Task, Milestone, RiskIssue } from './types.js'
 
-const PROJECT_STATUS_LABEL: Record<string, string> = {
-  planning: '计划中',
-  active: '进行中',
-  paused: '已暂停',
-  done: '已完成',
-  archived: '已归档',
-}
-
-const TASK_STATUS_LABEL: Record<string, string> = {
-  todo: '未开始',
-  in_progress: '进行中',
-  blocked: '受阻',
-  done: '已完成',
-}
-
-const MILESTONE_STATUS_LABEL: Record<string, string> = {
-  planned: '计划中',
-  at_risk: '有风险',
-  achieved: '已达成',
-  missed: '已错过',
-}
+// 单一来源来自 core 各 *Labels；转 Record<string,string> 兼容 string 索引调用点。
+const PROJECT_STATUS_LABEL = projectStatusLabels as Record<string, string>
+const TASK_STATUS_LABEL = taskStatusLabels as Record<string, string>
+const MILESTONE_STATUS_LABEL = milestoneStatusLabels as Record<string, string>
 
 const LAMP_LABEL: Record<HealthLamp, string> = {
   green: '健康',

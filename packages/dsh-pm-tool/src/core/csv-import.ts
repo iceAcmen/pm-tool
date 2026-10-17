@@ -3,7 +3,6 @@
  * 约定表头（中文，列顺序任意，按表头名匹配）：层级 / 标题 / 负责人 / 优先级 / 开始 / 截止 / 进度。
  * 纯离线、确定性，复用 addTask 的编号、父子校验与落盘。无 confirm 只预览不落盘。
  */
-import { readFileSync } from 'node:fs'
 import { addTask } from './tasks.js'
 import { getProject } from './projects.js'
 import { projectIdSchema } from './project.js'
@@ -106,24 +105,6 @@ function cell(cells: string[], idx: number | undefined): string | undefined {
 function ensureProject(domain: PmDomain, projectId: string): void {
   projectIdSchema.parse(projectId)
   if (!getProject(domain, projectId)) throw new CsvImportError(`未找到项目：${projectId}`)
-}
-
-/** 预览：计算投影 WBS 编号（与既有任务无关）。 */
-export function planCsvImport(domain: PmDomain, projectId: string, csv: string): { total: number, outline: { depth: number, code: string, title: string }[] } {
-  return planGridCsvImport(domain, projectId, parseCsv(csv))
-}
-
-/** 真正导入：缩进栈还原父子，逐项 addTask（带负责人/截止/进度）。 */
-export async function importTasksFromCsv(
-  domain: PmDomain,
-  projectId: string,
-  csv: string,
-): Promise<{ id: string, code: string, title: string }[]> {
-  return importTasksFromGrid(domain, projectId, parseCsv(csv))
-}
-
-export function readCsvFile(path: string): string {
-  return readFileSync(path, 'utf8')
 }
 
 /** 用 SheetJS（命令侧/node，不进 client bundle）读取 .xlsx 首个工作表为二维字符串数组。 */

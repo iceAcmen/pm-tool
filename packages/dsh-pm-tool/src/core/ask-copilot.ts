@@ -3,10 +3,7 @@
  * 写动作一律不自动执行——由前端草稿卡点【确认执行】才落库。
  * 上下文只喂"当前真实数据"：缺会议/汇报/交付物时显式标注"无"，禁止模型把缺信息推断为事实。
  */
-import { generateDraft, type LlmGateway } from './ai-client.js'
-import { parseCopilotActions, validateActions, type CopilotAction } from './copilot.js'
-import type { ModelRoute } from './model-route.js'
-import type { Meeting, MeetingAction } from './meeting.js'
+import type { MeetingAction } from './meeting.js'
 
 /** 对外暴露的统一 SYSTEM（ask.ts 复用同一处，避免状态枚举等口径漂移）。 */
 export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数据（含"今天"日期），先用一段简洁中文回答用户问题（只读诊断）。
@@ -59,12 +56,6 @@ export function buildAskContext(c: AskContext): string {
   return lines.join('\n')
 }
 
-export interface AskResult {
-  diagnosis: string
-  accepted: CopilotAction[]
-  rejected: { action: CopilotAction, reason: string }[]
-}
-
 /** 本地日零点 YYYY-MM-DD（Asia/Shanghai 语义由调用方环境决定；离线测试直接传 today）。 */
 export function localToday(d = new Date()): string {
   const y = d.getFullYear()
@@ -73,22 +64,3 @@ export function localToday(d = new Date()): string {
   return `${y}-${m}-${day}`
 }
 
-export async function askCopilot(
-  llm: LlmGateway | undefined,
-  route: ModelRoute,
-  ctxText: string,
-  question: string,
-  taskIds: string[],
-): Promise<AskResult> {
-  // user 结构：项目快照（稳定前缀，多轮追问命中缓存）在前，用户问题（变化）在最后。
-  const raw = await generateDraft(llm, {
-    system: COPILOT_SYSTEM,
-    user: `【项目数据】\n${ctxText}\n\n【用户问题】${question}`,
-    maxTokens: 4000,
-    models: route.models,
-  })
-  const v = validateActions(parseCopilotActions(raw), { taskIds })
-  // 诊断 = 去掉 json 块后的正文
-  const diagnosis = raw.replace(/```(?:json)?[\s\S]*?```/gi, '').trim() || '（模型未给出诊断正文）'
-  return { diagnosis, accepted: v.accepted, rejected: v.rejected }
-}

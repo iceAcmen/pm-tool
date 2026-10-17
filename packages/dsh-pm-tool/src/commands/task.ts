@@ -33,7 +33,7 @@ import {
   TaskImportEmptyError,
   TaskImportNoProjectError,
 } from '../core/task-import.js'
-import { planCsvImport, importTasksFromCsv, planGridCsvImport, importTasksFromGrid, readXlsxGrid, readXlsxGridFromBuffer, parseCsv as parseCsvLocal } from '../core/csv-import.js'
+import { planGridCsvImport, importTasksFromGrid, readXlsxGrid, readXlsxGridFromBuffer, parseCsv as parseCsvLocal } from '../core/csv-import.js'
 import {
   addTaskChecklistItem,
   ChecklistHasChildrenError,

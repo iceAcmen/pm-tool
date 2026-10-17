@@ -28,7 +28,6 @@ export const checklistItemSchema = z.strictObject({
   text: z.string().trim().min(1, '清单项文本不能为空'),
   done: z.boolean(),
 })
-export type ChecklistItem = z.infer<typeof checklistItemSchema>
 export const taskChecklistSchema = z.array(checklistItemSchema)
   .max(CHECKLIST_MAX_ITEMS, `单个任务的清单最多 ${CHECKLIST_MAX_ITEMS} 项`)
   .refine(

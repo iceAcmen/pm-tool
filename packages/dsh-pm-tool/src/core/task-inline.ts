@@ -25,7 +25,7 @@ export function parseProgressInput(raw: unknown): number | undefined {
   if (typeof raw === 'string' && raw.trim() === '') return undefined
   const n = Number(raw)
   if (!Number.isFinite(n)) return undefined
-  return Math.max(0, Math.min(100, Math.round(n)))
+  return clampProgress(n)
 }
 
 /** 合法日期字符串（YYYY-MM-DD）才返回，否则 null（不写空串覆盖）。 */

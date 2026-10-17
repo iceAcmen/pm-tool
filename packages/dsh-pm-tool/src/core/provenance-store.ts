@@ -171,23 +171,6 @@ export function listProvenance(domain: PmDomain, projectId: string): ProvenanceL
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
-/** F14：向指定条目追加审计事件（撤销成功/冲突/失败）；best-effort。 */
-export function appendUndoAudit(
-  domain: PmDomain,
-  entryId: string,
-  event: ProvenanceAuditEvent,
-): Promise<void> {
-  return enqueueDomainWrite(domain, async () => {
-    const entries = readRows(domain, PROVENANCE_LEDGER_ROW)
-    const target = entries.find(e => e.id === entryId)
-    if (target) {
-      target.audit.push(event)
-      if (event.kind === 'undone' && target.undo) target.undo.used = true
-    }
-    await domain.table('settings').put(PROVENANCE_LEDGER_ROW, { value: { entries }, updatedAt: new Date().toISOString() })
-  }).catch(() => {})
-}
-
 /** F14：按 undo 句柄（handle）追加撤销结果审计（成功/冲突/失败），无需条目 id；best-effort。 */
 export function recordUndoOutcome(
   domain: PmDomain,
