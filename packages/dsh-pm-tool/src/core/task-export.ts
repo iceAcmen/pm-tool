@@ -221,3 +221,99 @@ export function tasksToJson(rows: ExportTaskRow[], ctx: TaskExportCtx): ExportPa
     records,
   }
 }
+
+// ---------- 只读自包含 HTML 快照（零外链 / 无脚本 / 无可操作 CTA） ----------
+
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+interface StatusChip {
+  label: string
+  dot: string
+  text: string
+}
+
+function chipFor(row: ExportTaskRow, today: string): StatusChip {
+  if (isTaskOverdue(row, today)) return { label: '延期', dot: 'rgb(239,68,68)', text: 'rgb(239,68,68)' }
+  switch (row.status) {
+    case 'done': return { label: statusLabel('done'), dot: 'rgb(34,197,94)', text: 'rgb(28,28,30)' }
+    case 'in_progress': return { label: statusLabel('in_progress'), dot: 'rgb(65,118,230)', text: 'rgb(28,28,30)' }
+    case 'blocked': return { label: statusLabel('blocked'), dot: 'rgb(245,158,11)', text: 'rgb(28,28,30)' }
+    default: return { label: statusLabel('todo'), dot: 'rgb(212,212,212)', text: 'rgb(127,130,135)' }
+  }
+}
+
+/**
+ * 自包含只读 HTML：全部 CSS 内联、无外链字体/图片、无脚本、无可操作按钮；
+ * 冻结于生成时刻，可作为本地静态文件自行转发。
+ */
+export function buildTaskSnapshotHtml(rows: ExportTaskRow[], ctx: TaskExportCtx): string {
+  const bodyRows = rows.map(r => {
+    const chip = chipFor(r, ctx.today)
+    return `<tr>
+  <td class="c-code">${escapeHtml(r.code ?? '')}</td>
+  <td class="c-title">${escapeHtml(r.title)}</td>
+  <td><span class="chip"><span class="dot" style="background:${chip.dot}"></span><span style="color:${chip.text}">${chip.label}</span></span></td>
+  <td>${escapeHtml(r.assignee ?? '')}</td>
+  <td>${escapeHtml(r.startDate ?? '')}</td>
+  <td>${escapeHtml(r.dueDate ?? '')}</td>
+  <td>${escapeHtml(r.priority ?? '')}</td>
+  <td class="num">${progressText(r)}</td>
+  <td>${escapeHtml(milestoneName(ctx, r))}</td>
+</tr>`
+  }).join('\n')
+
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHtml(ctx.projectName ?? '任务只读快照')} · 只读快照</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f6f7f9;color:rgb(28,28,30);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;padding:28px 18px}
+  .snapshot{max-width:1080px;margin:0 auto;background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,18,20,.05)}
+  .snap-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 18px;background:#f4f5f7;border-bottom:1px solid rgba(16,18,20,.09);font-size:12.5px;color:rgb(105,110,116)}
+  .snap-bar b{color:rgb(28,28,30);font-weight:650}
+  .snap-bar .ro{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:rgb(105,110,116);background:#fff;border:1px solid rgba(16,18,20,.09);border-radius:999px;padding:3px 10px}
+  .snap-note{padding:10px 18px;border-bottom:1px solid rgba(16,18,20,.05);font-size:12px;color:rgb(105,110,116)}
+  .snap-body{padding:8px 18px 14px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:11.5px;font-weight:650;color:rgb(105,110,116);padding:9px 10px;border-bottom:1px solid rgba(16,18,20,.09);white-space:nowrap}
+  td{padding:10px;border-bottom:1px solid rgba(16,18,20,.05);color:rgb(28,28,30);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  .c-code{color:rgb(105,110,116);white-space:nowrap}
+  .c-title{font-weight:600;min-width:180px}
+  .num{text-align:right;white-space:nowrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .snap-foot{padding:11px 18px;border-top:1px solid rgba(16,18,20,.05);font-size:11.5px;color:rgb(105,110,116)}
+</style>
+</head>
+<body>
+<div class="snapshot">
+  <div class="snap-bar">
+    <span>🔒</span>
+    <b>只读快照</b>
+    <span>· 生成于 ${escapeHtml(ctx.generatedAt)} · 来自视图「${escapeHtml(ctx.viewName ?? '未命名视图')}」${ctx.filterSummary ? ` · ${escapeHtml(ctx.filterSummary)}` : ''}</span>
+    <span class="ro">只读 · 不可编辑</span>
+  </div>
+  <div class="snap-note">此页冻结于生成时刻，不随台账变化；本地静态文件，可自行转发，无需联网。</div>
+  <div class="snap-body">
+    <table>
+      <thead><tr><th>WBS编号</th><th>标题</th><th>状态</th><th>负责人</th><th>开始</th><th>截止</th><th>优先级</th><th style="text-align:right">进度</th><th>里程碑</th></tr></thead>
+      <tbody>
+${bodyRows}
+      </tbody>
+    </table>
+  </div>
+  <div class="snap-foot">此页冻结于生成时刻，不随台账实时更新；视图口径与导出文件一致。</div>
+</div>
+</body>
+</html>`
+}

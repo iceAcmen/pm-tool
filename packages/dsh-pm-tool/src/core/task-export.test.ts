@@ -3,6 +3,7 @@ import {
   tasksToCsv,
   tasksToMarkdown,
   tasksToJson,
+  buildTaskSnapshotHtml,
   TASK_EXPORT_VERSION,
   type ExportTaskRow,
   type TaskExportCtx,
@@ -102,5 +103,30 @@ describe('tasksToJson：meta 结构 / version / records 全字段 / 里程碑解
     const blocked = payload.records.find(r => r.id === 't-2')!
     expect(blocked.milestone).toBe('')
     expect(blocked.statusLabel).toBe('受阻')
+  })
+})
+
+describe('buildTaskSnapshotHtml：只读自包含、无外链、冻结声明', () => {
+  const html = buildTaskSnapshotHtml(rows, ctx)
+
+  it('含只读快照 / 只读·不可编辑 / 冻结声明 / 生成时间 / 视图名 / 可见数据行', () => {
+    expect(html).toContain('只读快照')
+    expect(html).toContain('只读 · 不可编辑')
+    expect(html).toContain('冻结于生成时刻')
+    expect(html).toContain('2026-10-17 14:32')
+    expect(html).toContain('全部任务')
+    expect(html).toContain('首页 Hero 改版')
+    expect(html).toContain('性能预算验收')
+  })
+
+  it('零外链：不含 http(s) 资源、不含 <script>、无可操作按钮', () => {
+    expect(/https?:\/\//i.test(html)).toBe(false)
+    expect(/<script/i.test(html)).toBe(false)
+    expect(/<button/i.test(html)).toBe(false)
+  })
+
+  it('逾期任务渲染延期语义徽章（红色口径）', () => {
+    expect(html).toContain('延期')
+    expect(html).toContain('rgb(239,68,68)')
   })
 })

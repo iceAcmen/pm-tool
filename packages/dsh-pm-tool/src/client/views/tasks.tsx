@@ -3,7 +3,7 @@ import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
-import { tasksToCsv, tasksToMarkdown, tasksToJson, type TaskExportCtx } from '../../core/task-export.js'
+import { tasksToCsv, tasksToMarkdown, tasksToJson, buildTaskSnapshotHtml, type TaskExportCtx } from '../../core/task-export.js'
 import { downloadText } from '../download.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
@@ -27,6 +27,7 @@ import Settings2 from 'lucide-react/dist/esm/icons/settings-2.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
 import Download from 'lucide-react/dist/esm/icons/download.mjs'
+import Share2 from 'lucide-react/dist/esm/icons/share-2.mjs'
 import {
   DEFAULT_VIEW_STATE,
   VIEW_CHIP_OPTIONS,
@@ -327,6 +328,10 @@ export function TaskTable(props: {
     else if (kind === 'csv') downloadText(`${base}.csv`, tasksToCsv(visible, ctx), 'text/csv;charset=utf-8')
     else downloadText(`${base}.json`, JSON.stringify(tasksToJson(visible, ctx), null, 2), 'application/json;charset=utf-8')
     setExportOpen(false)
+  }
+  const shareSnapshot = () => {
+    const ctx = buildExportCtx()
+    downloadText(`${exportFileBase()}.html`, buildTaskSnapshotHtml(visible, ctx), 'text/html;charset=utf-8')
   }
 
   const commitStore = (next: TaskViewsStore) => {
@@ -960,6 +965,11 @@ export function TaskTable(props: {
                 </div>
               )}
             </div>
+            <button
+              type="button" className="pt-ghost" aria-label="分享只读快照"
+              title="生成只读 HTML 快照（本地静态文件，可自行转发，不联网）"
+              onClick={shareSnapshot}
+            ><Share2 size={14} />分享</button>
             {/* P1-6：密度为全局持久偏好（localStorage pm-density，shell 根 data-density 下发，各视图生效）。 */}
             <div className="pt-density" title="全局偏好：切换后即时生效并持久保存，各视图统一应用">
               <span className="pt-density-label">密度（全局偏好）</span>
