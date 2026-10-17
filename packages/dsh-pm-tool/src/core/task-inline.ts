@@ -1,11 +1,14 @@
 /**
  * PROD-03：任务行内快速编辑的纯逻辑（无 React，可离线单测）。
  */
+import { TASK_STATUSES, type TaskStatus } from './status.js'
 
-export const TASK_STATUSES = ['todo', 'doing', 'done'] as const
-export type TaskStatus = (typeof TASK_STATUSES)[number]
+// 状态枚举以 core/status.ts 为单一事实来源（zod 写库 schema 同源），此处仅转发，
+// 不再维护本地副本，避免旧枚举（todo/doing/done）导致 in_progress/blocked 被静默丢弃。
+export { TASK_STATUSES }
+export type { TaskStatus }
 
-/** 状态循环：todo -> doing -> done -> todo（非法值回到 todo）。 */
+/** 状态循环：todo -> in_progress -> blocked -> done -> todo（非法值回到 todo）。 */
 export function nextStatus(cur: string): TaskStatus {
   const i = TASK_STATUSES.indexOf(cur as TaskStatus)
   return TASK_STATUSES[(i + 1) % TASK_STATUSES.length]
