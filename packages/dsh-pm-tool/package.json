@@ -28,6 +28,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "e2e": "node scripts/e2e.mjs",
+    "setup-keys": "node scripts/setup-keys.mjs",
     "verify": "pnpm run build && node scripts/verify-isolation.mjs",
     "verify:isolation-only": "pnpm run build && node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs"
   },

@@ -29,9 +29,33 @@
 
 | Provider | 协议 | 模型 | 说明 |
 |---|---|---|---|
+| `ark-plan`（Coding Plan 主通道） | openai-completions | `deepseek-v4-1-flash-260910`（默认）、`deepseek-v4-pro-ga-260813`、`doubao-seed-2-1-lite-260915`、`glm-5-3-flash-260828` | pi-ai provider，`baseURL=https://ark.cn-beijing.volces.com/api/coding/v3`，Key 走 `CODING_PLAN_API_KEY`；默认 provider/model 由 `agent-default-model` 条目锁定 |
 | `deepseek-official` | anthropic-messages | `deepseek-flash`、`deepseek-v4-pro` | **base 内置**，无需在 profile 声明；默认 catalog 见 `llm-deepseek/src/models.ts` |
 | `aliyun-official` | openai-completions | `qwen-turbo`、`qwen3-coder-flash` | pi-ai provider，需在 profile 声明 |
 | `kimi-official` | openai-completions | `kimi-k2-0905-preview` | pi-ai provider |
+
+### ark-plan（方舟 Coding Plan）主通道与一键脚本
+
+离职重装 / 新机器复现时，主通道由 `scripts/setup-keys.mjs` 一键配好（脚本只写仓库外的 `~/.dsh/`，Key 不入库、不回显、不进日志，改前自动备份、重复运行零变更）：
+
+- **provider 声明**写入 `~/.dsh/profiles/pm/cordis.patch.yml` 的 `llm-pi-ai.config.providers.ark-plan`：`api=openai-completions`、`baseURL=https://ark.cn-beijing.volces.com/api/coding/v3`、`apiKeyEnv=CODING_PLAN_API_KEY`，含上述四模型（带 `maxTokens/input/reasoningEfforts/compat`）。
+- **默认模型**由独立条目 `- id: agent-default-model` 锁定为 `provider: ark-plan` / `model: deepseek-v4-1-flash-260910`。
+- **Key** 写入 dsh credentials service `~/.dsh/.credentials.yaml`（`refs.CODING_PLAN_API_KEY`，权限 0600），或按选择写 `~/.zshrc`。
+
+用法（在 `packages/dsh-pm-tool/` 下）：
+
+```bash
+pnpm run setup-keys -- --check        # 只读自检：credentials 权限/非空(掩码)、ark-plan 四模型、默认模型；全 OK 退出 0，缺项退出 1 并给修复提示；不写盘
+pnpm run setup-keys -- --dry-run      # 只打印将要做的变更，不写盘
+pnpm run setup-keys                   # 交互模式：隐藏输入粘贴 Key，选择存储位置，自动备份、幂等写入
+# 非交互（CI / 预装）：Key 从环境变量读
+CODING_PLAN_API_KEY=<你的key> pnpm run setup-keys -- --non-interactive --skip-claude-code
+# 等价直接调用：node scripts/setup-keys.mjs [--check|--dry-run|--non-interactive|--storage=credentials|zshrc|--include-standard|--verify|--help]
+```
+
+> **文件层 ≠ 运行时已加载**：`--check` 只校验文件层（credentials 文件与 patch 声明是否齐全、权限是否正确），不探测进程、不声称宿主已注册。文件齐全后需**重启 dsh**，再到「设置 → 模型」目视确认看到 Ark Coding Plan 四模型与默认模型切换。
+
+**重装 / 新机器操作顺序**：① 装好 dsh 并初始化 `profile=pm`（生成 `~/.dsh/profiles/pm/cordis.patch.yml` 骨架）→ ② `pnpm run setup-keys -- --check` 先看缺什么 → ③ `pnpm run setup-keys -- --dry-run` 预览 → ④ `pnpm run setup-keys` 交互粘贴 Coding Plan Key（或非交互传环境变量）→ ⑤ `pnpm run setup-keys -- --check` 复核全 ✓ → ⑥ 重启 dsh，「设置 → 模型」目视确认。脚本可用 `DSH_HOME=<目录>` 覆盖 dsh 家目录（隔离测试/CI）。
 
 > 老端点 `deepseek-chat`（DeepSeek V3）已由 `deepseek-flash`（DeepSeek V4.1-Flash）承接；旧名仅在迁移期保留。
 
@@ -62,6 +86,7 @@ Key 只由「启动 dsh 的进程环境」或 Web「设置→模型」凭据服�
 
 | 环境变量 | 覆盖场景 |
 |---|---|
+| `CODING_PLAN_API_KEY` | **主通道** ark-plan（dsh 开发 + pm-tool，方舟 Coding Plan /api/coding/v3）；由 setup-keys 写入 dsh credentials，不入库 |
 | `DEEPSEEK_API_KEY` | 全部场景（主力 + 升级） |
 | `DASHSCOPE_API_KEY`（或 `ALIBABA_CLOUD_API_KEY`） | 叙述/标题/纪要降本 |
 | `KIMI_API_KEY` / `MOONSHOT_API_KEY` | 兜底 |

@@ -157,7 +157,7 @@ arkcli helper                # Plan profile 选 coding-plan_cn-beijing_personal 
 
 ## 5. Key 填在哪（速查表）与一键脚本
 
-> **最快方式：一键脚本。** 运行 `node packages/dsh-pm-tool/scripts/setup-keys.mjs`（交互模式），引导你粘贴 Key、选择存储位置、自动备份并幂等写入；先空跑预览加 `--dry-run`，自动化用 `--non-interactive`（Key 从环境变量读）。脚本强制把真实 Key 写在仓库外、`cordis.patch.yml` 只写环境变量名。
+> **最快方式：一键脚本。** 在 `packages/dsh-pm-tool/` 下 `pnpm run setup-keys`（交互模式），引导你隐藏输入粘贴 Key、选择存储位置、自动备份并幂等写入；ark-plan 固定写 canonical 四模型（`deepseek-v4-1-flash-260910` 默认 / `deepseek-v4-pro-ga-260813` / `doubao-seed-2-1-lite-260915` / `glm-5-3-flash-260828`）并用 `agent-default-model` 锁定默认。先 `pnpm run setup-keys -- --check` 只读自检（全 ✓ 退出 0，缺项退出 1 并给修复提示，不写盘），`--dry-run` 预览变更，自动化用 `--non-interactive`（Key 从环境变量读）。脚本强制把真实 Key 写在仓库外（credentials 0600 或 ~/.zshrc）、`cordis.patch.yml` 只写环境变量名；`--check` 只验文件层，加载需重启 dsh 后到「设置→模型」目视确认。
 
 | Key | 用途 | 用在哪 | 怎么填 |
 |---|---|---|---|

@@ -268,3 +268,7 @@ curl -X POST https://openrouter.ai/api/v1/chat/completions \
 - 已实现按任务类型候选降级链（结构化任务给足预算/低思考）；免费池固有波动，成功率实测见 verify-model-route。
 - 官方 Key 暂不配置；生产无 Key → PROD_KEY_MISSING 文案，不回退、不静默用免费池。
 - DSH_PM_E2E=1 时 ask-fixture 测试缝可用（不调模型，固定诊断+动作，仍走同 parse/validate/ask-apply 写路径）。
+
+## 个人付费主通道：ark-plan（方舟 Coding Plan）与一键复现脚本
+
+离职/新机器复现的主通道为 `ark-plan`（`baseURL=https://ark.cn-beijing.volces.com/api/coding/v3`，`CODING_PLAN_API_KEY`），四模型 `deepseek-v4-1-flash-260910`（默认）/ `deepseek-v4-pro-ga-260813` / `doubao-seed-2-1-lite-260915` / `glm-5-3-flash-260828`，默认由 `agent-default-model` 条目锁定。用法与重装顺序见 `packages/dsh-pm-tool/docs/model-providers.md`「ark-plan 主通道与一键脚本」；脚本：`packages/dsh-pm-tool/scripts/setup-keys.mjs`（`pnpm run setup-keys -- --check` 只读自检 / `--dry-run` 预览 / 交互写入，Key 不入库不回显、自动备份、幂等）。`--check` 只验文件层，加载需重启 dsh 后到「设置→模型」目视确认。商务与红线见 `docs/personal-billing-plan.md`。
