@@ -64,7 +64,7 @@ import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
 import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal.mjs'
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.mjs'
 import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type RefObject } from 'react'
 import {
   setPointerOpener, setRowOpener, takeOpenerSpec, resolveDrawerFocusTarget,
   type FocusDoc, type OpenerSpec,
@@ -531,12 +531,27 @@ function LaneSwitcher({ lane, busy, onChange, compact }: {
   onChange: (lane: 'poc' | 'prod') => void
   compact?: boolean
 }) {
-  return <div className={'pm-lane-switch pm-model-lane' + (compact ? ' is-compact' : '')} role="tablist" aria-label="模型车道">
-    <button type="button" role="tab" aria-selected={lane === 'poc'} disabled={busy}
+  // I6：自定义 tab 完整键盘行为——←/→（↑/↓）循环移动选中并跟随焦点，roving tabindex。
+  const order = ['poc', 'prod'] as const
+  const onKey = (ev: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (busy) return
+    if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft' && ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return
+    ev.preventDefault()
+    const list = ev.currentTarget
+    const idx = order.indexOf(lane)
+    const next = order[(idx + (ev.key === 'ArrowRight' || ev.key === 'ArrowDown' ? 1 : order.length - 1)) % order.length]
+    onChange(next)
+    requestAnimationFrame(() => {
+      const btns = [...list.querySelectorAll<HTMLElement>('[role=tab]')]
+      btns[order.indexOf(next)]?.focus()
+    })
+  }
+  return <div className={'pm-lane-switch pm-model-lane' + (compact ? ' is-compact' : '')} role="tablist" aria-label="模型车道" onKeyDown={onKey}>
+    <button type="button" role="tab" aria-selected={lane === 'poc'} tabIndex={lane === 'poc' ? 0 : -1} disabled={busy}
       className={'pm-lane-poc' + (lane === 'poc' ? ' is-on' : '')} onClick={() => onChange('poc')}>
       <Zap size={13}/> PoC 免费
     </button>
-    <button type="button" role="tab" aria-selected={lane === 'prod'} disabled={busy}
+    <button type="button" role="tab" aria-selected={lane === 'prod'} tabIndex={lane === 'prod' ? 0 : -1} disabled={busy}
       className={'pm-lane-prod' + (lane === 'prod' ? ' is-on' : '')} onClick={() => onChange('prod')}>
       <KeyRound size={13}/> 生产 Key
     </button>
@@ -1074,7 +1089,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               />
             )}
             <div className="pm-suggest-split" data-open={copilotLayer || undefined}>
-            <section className="pm-view" role="tabpanel">
+            {/* I6：此处无归属它的 tablist（导航为 rail 菜单），移除孤立 role=tabpanel，避免无主面板。 */}
+            <section className="pm-view">
               {view === 'tasks' && <TaskTable
                 tasks={tasks}
                 milestones={milestones}
@@ -2375,10 +2391,28 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
           </div>
         : <span className="pm-copilot-head-sub">只读诊断 · 确认后才执行</span>}
       <div className="pm-copilot-head-right">
-        <div className="pm-copilot-mode" role="tablist" aria-label="副驾模式">
-          <button type="button" role="tab" data-active={mode === 'diagnosis' || undefined} aria-selected={mode === 'diagnosis'}
+        {/* I6：完整 tab 模式——←/→ 移动选中并跟随焦点，roving tabindex，tab 与 tabpanel 经 aria-controls/aria-labelledby 关联。 */}
+        <div
+          className="pm-copilot-mode" role="tablist" aria-label="副驾模式"
+          onKeyDown={(ev: ReactKeyboardEvent<HTMLDivElement>) => {
+            const order = ['diagnosis', 'draft'] as const
+            if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft' && ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return
+            ev.preventDefault()
+            const list = ev.currentTarget
+            const idx = order.indexOf(mode)
+            const next = order[(idx + (ev.key === 'ArrowRight' || ev.key === 'ArrowDown' ? 1 : order.length - 1)) % order.length]
+            onModeChange?.(next)
+            requestAnimationFrame(() => {
+              const btns = [...list.querySelectorAll<HTMLElement>('[role=tab]')]
+              btns[order.indexOf(next)]?.focus()
+            })
+          }}
+        >
+          <button id="cp-tab-diag" type="button" role="tab" data-active={mode === 'diagnosis' || undefined}
+            aria-selected={mode === 'diagnosis'} aria-controls="cp-panel-diag" tabIndex={mode === 'diagnosis' ? 0 : -1}
             onClick={() => onModeChange?.('diagnosis')}>只读诊断</button>
-          <button type="button" role="tab" data-active={mode === 'draft' || undefined} aria-selected={mode === 'draft'}
+          <button id="cp-tab-draft" type="button" role="tab" data-active={mode === 'draft' || undefined}
+            aria-selected={mode === 'draft'} aria-controls="cp-panel-draft" tabIndex={mode === 'draft' ? 0 : -1}
             onClick={() => onModeChange?.('draft')}>草稿待确认{steps.length ? ` (${steps.length})` : ''}</button>
         </div>
         <LaneSwitcher lane={lane} busy={busy || sending} onChange={l => void switchLane(l)} compact/>
@@ -2405,8 +2439,9 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       </div>
     )}
 
-    {/* 对话区（只读诊断模式） */}
+    {/* 对话区（只读诊断模式）；I6：role=tabpanel 与「只读诊断」tab 关联，内层保留 role=log 直播。 */}
     {mode === 'diagnosis' && (
+    <div role="tabpanel" id="cp-panel-diag" aria-labelledby="cp-tab-diag">
     <div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy={sending}>
       {msgs.map((m, i) => {
         if (m.role === 'me')
@@ -2419,6 +2454,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
             : m.text}
         </div>
       })}
+    </div>
     </div>
     )}
 
@@ -2446,9 +2482,9 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       </div>
     )}
 
-    {/* 操作计划（草稿待确认模式） */}
+    {/* 操作计划（草稿待确认模式）；I6：role=tabpanel 与「草稿待确认」tab 关联。 */}
     {mode === 'draft' && (
-      <div className="pm-copilot-draft" data-copilot-plan>
+      <div className="pm-copilot-draft" data-copilot-plan role="tabpanel" id="cp-panel-draft" aria-labelledby="cp-tab-draft">
         {steps.length === 0 && rejected.length === 0
           ? <div className="pm-copilot-draft-empty">
               <ListChecks size={20}/>
@@ -2701,6 +2737,8 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   // R3-OBS-002：mount 时快照「打开动作发生那一刻」记录的 opener，
   // 绝不在 mount 后读 document.activeElement（已被表单 autoFocus 抢成抽屉内 input）。
   const openerRef = useRef<OpenerSpec>({ kind: 'none' })
+  // I4：对话框容器引用，供焦点陷阱在抽屉内收集可聚焦元素并循环回绕。
+  const asideRef = useRef<HTMLElement>(null)
   // E11：打开瞬间取用模块级列表滚动快照（抽屉打开期间监听器已停止覆盖），关闭时还原。
   const scrollSnapRef = useRef<{ el: Element, top: number } | null>(null)
   useLayoutEffect(() => {
@@ -2711,7 +2749,23 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   }, [])
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') { ev.stopPropagation(); onClose() }
+      if (ev.key === 'Escape') { ev.stopPropagation(); onClose(); return }
+      // I4 焦点陷阱：模态抽屉内 Tab/Shift+Tab 循环回绕，不逃逸到宿主应用、也不困死。
+      if (ev.key !== 'Tab' || !asideRef.current) return
+      const root = asideRef.current
+      const sel = 'a[href], button:not([disabled]), input:not([disabled]):not([type=hidden]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      const items = [...root.querySelectorAll<HTMLElement>(sel)]
+        .filter(el => el.getClientRects().length > 0 || el.offsetParent !== null)
+      if (!items.length) { ev.preventDefault(); return }
+      const first = items[0]
+      const last = items[items.length - 1]
+      const active = document.activeElement as HTMLElement | null
+      const inside = !!active && root.contains(active)
+      if (ev.shiftKey) {
+        if (!inside || active === first) { ev.preventDefault(); last.focus() }
+      } else if (!inside || active === last) {
+        ev.preventDefault(); first.focus()
+      }
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
@@ -2733,7 +2787,7 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   }, [])
   return <div className="pm-drawer-layer">
     <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={onClose}/>
-    <aside className="pm-drawer" role="dialog" aria-modal="true" aria-label={title}>
+    <aside ref={asideRef} className="pm-drawer" role="dialog" aria-modal="true" aria-label={title}>
       <header>
         <div><span>项目记录</span><h2>{title}</h2></div>
         <button className="pm-icon-button" aria-label="关闭抽屉" onClick={onClose}><X size={17}/></button>

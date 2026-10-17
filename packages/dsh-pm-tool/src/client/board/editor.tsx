@@ -222,6 +222,43 @@ export function BoardEditor(props: BoardEditorProps) {
     })
   }
 
+  /** I7：布局补丁（坐标/尺寸的非指针编辑路径，供配置面板数字输入）。 */
+  const updateLayout = (i: string, patch: Partial<WidgetInstance['layout']>) => {
+    setDraft(d => ({
+      ...d,
+      widgets: d.widgets.map(w => w.layout.i === i
+        ? { ...w, layout: { ...w.layout, ...patch } }
+        : w),
+    }))
+  }
+
+  /**
+   * I7：键盘方向键移动卡片（拖拽的非指针替代）。按 dx/dy 步进一格；
+   * 落入他卡占用格时与该卡交换坐标（不产生重叠），边界按 cols 夹紧。
+   * 纯 draft 状态改写，不干预 RGL 鼠标拖拽链路。
+   */
+  const nudgeWidget = (i: string, dx: number, dy: number) => {
+    setDraft(d => {
+      const widgets = d.widgets.map(w => ({ ...w, layout: { ...w.layout } }))
+      const cur = widgets.find(w => w.layout.i === i)
+      if (!cur) return d
+      const L = cur.layout
+      const nx = Math.max(0, Math.min(L.x + dx, grid.cols - L.w))
+      const ny = Math.max(0, L.y + dy)
+      const hit = widgets.find(o => o.layout.i !== i
+        && nx < o.layout.x + o.layout.w && nx + L.w > o.layout.x
+        && ny < o.layout.y + o.layout.h && ny + L.h > o.layout.y)
+      if (hit) {
+        const hx = hit.layout.x, hy = hit.layout.y
+        hit.layout.x = L.x; hit.layout.y = L.y
+        cur.layout.x = hx; cur.layout.y = hy
+      } else {
+        cur.layout.x = nx; cur.layout.y = ny
+      }
+      return { ...d, widgets }
+    })
+  }
+
   const selected = selectedId ? live.widgets.find(w => w.layout.i === selectedId) : null
 
   return <div className="pm-bento-body pm-bento-editing">
@@ -286,21 +323,40 @@ export function BoardEditor(props: BoardEditorProps) {
         >
           {live.widgets.map(w => {
             const sel = selectedId === w.layout.i
+            const desc = catalog.find(c => c.type === w.type)
+            const label = desc?.name ?? w.type
+            const select = () => {
+              setSelectedId(w.layout.i)
+              // P0-7 / S3-3：选中卡片即打开右侧配置面板，自动收起左侧卡片库，二者不并存。
+              setDrawerOpen(false)
+            }
+            // I7：卡片可聚焦；Enter/Space 选中配置，方向键上/下/左/右步进移动（拖拽的键盘替代），不影响鼠标拖拽。
+            const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); return }
+              const delta: Record<string, [number, number]> = {
+                ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1],
+              }
+              const d = delta[e.key]
+              if (!d) return
+              e.preventDefault()
+              select()
+              nudgeWidget(w.layout.i, d[0], d[1])
+            }
             return <div key={w.layout.i}
               className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                setSelectedId(w.layout.i)
-                // P0-7 / S3-3：选中卡片即打开右侧配置面板，自动收起左侧卡片库，二者不并存。
-                setDrawerOpen(false)
-              }}>
-              <button type="button" className="pm-rgl-x" title="移除卡片" onClick={(e) => { e.stopPropagation(); removeWidget(w.layout.i) }}>×</button>
+              tabIndex={0} role="group"
+              aria-label={`${label}卡片；Enter 打开配置，方向键移动位置`}
+              onClick={(e) => { e.stopPropagation(); select() }}
+              onKeyDown={onKeyDown}>
+              <button type="button" className="pm-rgl-x" title="移除卡片" aria-label={`移除${label}卡片`} onClick={(e) => { e.stopPropagation(); removeWidget(w.layout.i) }}>×</button>
               {renderCard(w, true)}
             </div>
           })}
         </GridLayout>
       </div>
-      {selected && <ConfigPanel inst={selected} data={data} fieldWhitelist={fieldWhitelist} onTrial={onTrial} onPatch={(p) => updateConfig(selected.layout.i, p)} onClose={() => setSelectedId(null)}/>}
+      {selected && <ConfigPanel inst={selected} data={data} fieldWhitelist={fieldWhitelist} cols={grid.cols}
+        onTrial={onTrial} onPatch={(p) => updateConfig(selected.layout.i, p)}
+        onLayout={(p) => updateLayout(selected.layout.i, p)} onClose={() => setSelectedId(null)}/>}
     </div>
   </div>
 }
@@ -340,11 +396,14 @@ function CardDrawer({ live, catalog, query, setQuery, onAdd }: {
 }
 
 /* ---------- 配置面板 ---------- */
-function ConfigPanel({ inst, data, fieldWhitelist, onPatch, onClose, onTrial }: {
+function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onClose, onTrial }: {
   inst: WidgetInstance
   data: Snapshot
   fieldWhitelist: Record<string, string[]>
+  cols: number
   onPatch: (p: Partial<WidgetInstance['config']>) => void
+  /** I7：布局补丁（坐标 x/y、尺寸 w/h），拖拽位移/缩放的非指针编辑路径。 */
+  onLayout: (p: Partial<WidgetInstance['layout']>) => void
   onClose: () => void
   onTrial: (formula: string, entity: string, projectScope: string, filters: FilterRule[]) => string
 }) {
@@ -365,6 +424,30 @@ function ConfigPanel({ inst, data, fieldWhitelist, onPatch, onClose, onTrial }: 
         <span key={t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
           {{ data: '数据源', filter: '筛选', sort: '排序', formula: '公式', show: '显示元素', look: '外观' }[t]}
         </span>)}
+    </div>
+
+    {/* I7：位置与尺寸数字输入（拖拽位移/缩放的非指针编辑路径，键盘可完成移动与改尺寸）。 */}
+    <div className="pm-cfg-fld">
+      <label>位置与尺寸（栅格列/行/宽/高，可键盘输入）</label>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+        <label style={{ fontSize: 11, opacity: 0.85 }}>列 X
+          <input className="pm-cfg-sel" type="number" min={0} max={Math.max(0, cols - inst.layout.w)}
+            value={inst.layout.x}
+            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ x: Math.max(0, Math.min(v, cols - inst.layout.w)) }) }}/>
+        </label>
+        <label style={{ fontSize: 11, opacity: 0.85 }}>行 Y
+          <input className="pm-cfg-sel" type="number" min={0} value={inst.layout.y}
+            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ y: Math.max(0, v) }) }}/>
+        </label>
+        <label style={{ fontSize: 11, opacity: 0.85 }}>宽 W
+          <input className="pm-cfg-sel" type="number" min={inst.layout.minW ?? 1} max={cols} value={inst.layout.w}
+            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ w: Math.max(inst.layout.minW ?? 1, Math.min(v, cols)) }) }}/>
+        </label>
+        <label style={{ fontSize: 11, opacity: 0.85 }}>高 H
+          <input className="pm-cfg-sel" type="number" min={inst.layout.minH ?? 1} value={inst.layout.h}
+            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ h: Math.max(inst.layout.minH ?? 1, v) }) }}/>
+        </label>
+      </div>
     </div>
 
     {tab === 'formula' && isFormula && <div className="pm-cfg-fld">

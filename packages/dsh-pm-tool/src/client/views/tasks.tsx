@@ -303,6 +303,9 @@ export function TaskTable(props: {
 
   // ---- P2-5：命名视图（过滤/排序/分组/搜索四态持久化与恢复）----
   const switcherRef = useRef<HTMLDivElement | null>(null)
+  // I3：菜单 trigger 引用，Esc 关闭后把焦点归还触发按钮（焦点曾落在已卸载的选项上落到 body）。
+  const nvTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const exTriggerRef = useRef<HTMLButtonElement | null>(null)
   const activeView = findTaskView(viewsStore, activeViewId)
   const currentState: TaskViewState = { query, chip, grouped, sort }
   const dirty = activeView ? !sameTaskViewState(currentState, activeView.state) : true
@@ -402,14 +405,18 @@ export function TaskTable(props: {
     setRenamingId(null)
   }, [projectId])
 
-  // 菜单：点击外部 / Escape 关闭（不依赖 hover）。
+  // 菜单：点击外部 / Escape 关闭（不依赖 hover）。I3：Esc 关闭后焦点归还 trigger。
   useEffect(() => {
     if (!menuOpen) return
     const onDown = (ev: MouseEvent) => {
       if (switcherRef.current && !switcherRef.current.contains(ev.target as Node)) setMenuOpen(false)
     }
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') setMenuOpen(false)
+      if (ev.key === 'Escape') {
+        ev.stopPropagation()
+        setMenuOpen(false)
+        requestAnimationFrame(() => nvTriggerRef.current?.focus())
+      }
     }
     document.addEventListener('mousedown', onDown)
     window.addEventListener('keydown', onKey)
@@ -419,14 +426,18 @@ export function TaskTable(props: {
     }
   }, [menuOpen])
 
-  // 导出菜单：点击外部 / Escape 关闭（与视图切换器同构）。
+  // 导出菜单：点击外部 / Escape 关闭（与视图切换器同构）。I3：Esc 关闭后焦点归还 trigger。
   useEffect(() => {
     if (!exportOpen) return
     const onDown = (ev: MouseEvent) => {
       if (exportRef.current && !exportRef.current.contains(ev.target as Node)) setExportOpen(false)
     }
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') setExportOpen(false)
+      if (ev.key === 'Escape') {
+        ev.stopPropagation()
+        setExportOpen(false)
+        requestAnimationFrame(() => exTriggerRef.current?.focus())
+      }
     }
     document.addEventListener('mousedown', onDown)
     window.addEventListener('keydown', onKey)
@@ -822,6 +833,7 @@ export function TaskTable(props: {
             {/* P2-5：命名视图切换器（内置 + 自定义，默认标记，点击外部/Escape 关闭，不依赖 hover）。 */}
             <div className="pt-viewswitch" ref={switcherRef}>
               <button
+                ref={nvTriggerRef}
                 type="button" className="pt-ghost pt-viewswitch-btn"
                 aria-haspopup="listbox" aria-expanded={menuOpen} aria-label="切换命名视图"
                 onClick={() => setMenuOpen(v => !v)}
@@ -935,6 +947,7 @@ export function TaskTable(props: {
             {/* 导出当前可见视图：Markdown / CSV / JSON，前端 Blob 下载，不写服务器。 */}
             <div className="pt-viewswitch pt-export" ref={exportRef}>
               <button
+                ref={exTriggerRef}
                 type="button" className="pt-ghost pt-viewswitch-btn"
                 aria-haspopup="menu" aria-expanded={exportOpen} aria-label="导出当前视图"
                 onClick={() => setExportOpen(v => !v)}

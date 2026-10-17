@@ -12,7 +12,7 @@
  * props 签名（DESIGN-SPEC §6）：{ records, disabled?, onCreate, onEdit }。
  * 样式见 risk-issues.css，全部选择器 scope 在 .pm-ri-root 下。
  */
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState, type KeyboardEvent } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
 import css from './risk-issues.css?raw'
@@ -133,15 +133,33 @@ export function RiskIssuesView(props: {
         </button>
       </header>
 
-      <div className="ri-seg" role="tablist" aria-label="筛选记录类型">
+      {/* I6：完整 tab 模式——tablist/tab/tabpanel/aria-selected 齐备；←/→/↑/↓ 移动选中并跟随焦点，Home/End 跳首尾，roving tabindex。 */}
+      <div
+        className="ri-seg" role="tablist" aria-label="筛选记录类型"
+        onKeyDown={(ev: KeyboardEvent<HTMLDivElement>) => {
+          const order = ['risk', 'issue'] as const
+          const idx = order.indexOf(tab)
+          let next: typeof tab | null = null
+          if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') next = order[(idx + 1) % order.length]
+          else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') next = order[(idx - 1 + order.length) % order.length]
+          else if (ev.key === 'Home') next = order[0]
+          else if (ev.key === 'End') next = order[order.length - 1]
+          if (!next) return
+          ev.preventDefault()
+          setTab(next)
+          requestAnimationFrame(() => document.getElementById(`ri-tab-${next}`)?.focus())
+        }}
+      >
         <button
-          type="button" role="tab" aria-selected={tab === 'risk'}
+          id="ri-tab-risk" type="button" role="tab" aria-selected={tab === 'risk'}
+          aria-controls="ri-panel" tabIndex={tab === 'risk' ? 0 : -1}
           className={tab === 'risk' ? 'on' : ''} onClick={() => setTab('risk')}
         >
           风险 <span className="n">{risks.length}</span>
         </button>
         <button
-          type="button" role="tab" aria-selected={tab === 'issue'}
+          id="ri-tab-issue" type="button" role="tab" aria-selected={tab === 'issue'}
+          aria-controls="ri-panel" tabIndex={tab === 'issue' ? 0 : -1}
           className={tab === 'issue' ? 'on' : ''} onClick={() => setTab('issue')}
         >
           问题 <span className="n">{issues.length}</span>
@@ -191,7 +209,8 @@ export function RiskIssuesView(props: {
           </section>
         )}
 
-        <section className="ri-card">
+        <section className="ri-card" role="tabpanel" id="ri-panel"
+          aria-labelledby={tab === 'risk' ? 'ri-tab-risk' : 'ri-tab-issue'}>
           <div className="ri-card-head">
             <h3>{tab === 'risk' ? '风险' : '问题'}清单 · {visible.length}</h3>
             <span className="more">按严重度排序</span>
