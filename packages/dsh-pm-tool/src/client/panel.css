@@ -214,9 +214,10 @@ body:not([data-ds-dark-theme]) .pm-shell {
 .pm-rail-brand { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; }
 .pm-rail-logo {
   width: 30px; height: 30px; flex-shrink: 0; border-radius: var(--r-sm);
-  /* P2-2：无渐变，品牌平涂（dsh-flat 规则） */
-  background: var(--c-prog);
-  color: #fff; font-weight: 800; font-size: 15px;
+  /* P2-2：无渐变，品牌平涂（dsh-flat 规则）。D7：徽标字色走 on-primary 别名，
+     底色用 --c-prog-d（深一档品牌蓝），保证浅/深两态白字 ≥4.5:1（浅 #4176e6 仅 4.23、深 #7aaaff 仅 2.33）。 */
+  background: var(--c-prog-d);
+  color: rgb(255, 255, 255); font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
 }
 .pm-rail-name { font-size: 15px; font-weight: 700; letter-spacing: var(--ls-tight); color: var(--pm-ink); }
@@ -2047,12 +2048,21 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   /* P2-1：窄屏隐藏左 rail，沿用现有 ViewSwitcher 下拉，品牌不重复。 */
   .pm-rail { display: none; }
   .pm-crumb-bar { display: none; }
-  /* 顶栏：两侧内距收敛、允许换行，项目名 ellipsis，操作按钮不再锁最小宽 */
-  .pm-topbar { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
+  /* 顶栏：两侧内距收敛、允许换行，项目名 ellipsis，操作按钮不再锁最小宽。
+     B（390 switcher 遮挡）：项目切换器与操作条各占一整行纵向堆叠，顶栏随内容自然增高，
+     后续 .pm-view-switcher 流式落在顶栏之下，与操作条零重叠、按钮可点（与进度汇报同口径）。 */
+  /* B（390）：用两行 grid 替代 flex 换行，行高随内容确定，顶栏必然增高到两行，
+     后续 switcher 流式落在其下，与操作条零重叠（不依赖 flex 换行的隐式增高）。 */
+  .pm-topbar {
+    padding: 10px 14px; row-gap: 10px; column-gap: 10px;
+    display: grid; grid-template-rows: auto auto; align-items: stretch;
+    height: auto; flex: 0 0 auto; flex-shrink: 0;
+  }
+  .pm-topbar > * { min-width: 0; min-height: 0; }
   .pm-project-switcher { min-width: 0; }
   .pm-project-switcher-btn { max-width: 100%; }
   .pm-project-menu { min-width: 0; max-width: 92vw; }
-  .pm-top-actions { flex-wrap: wrap; }
+  .pm-top-actions { flex-wrap: wrap; justify-content: flex-start; }
 
   /* 抽屉：内距收敛到手机可读尺度，表单/设置栅格单列 */
   .pm-drawer { width: min(560px, 100vw); }
@@ -2075,14 +2085,28 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 
   /* 旧版人员表：姓名列不锁 130px，允许省略 */
   .pm-ppl-name { width: auto; flex: 0 1 auto; }
+
+  /* D3（320 总览看板）：浏览态静态 12 列栅格在 ~264px 内把卡片压到 65px、标签逐字竖排。
+     改两列自动行高，用 !important 复位卡片内联的跨列/跨行与固定 minHeight（不改拖拽编辑器逻辑），
+     卡片给可读最小高、标签允许换行。 */
+  .pm-bento-grid-static { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+  .pm-bento-grid-static > div { grid-column: auto !important; grid-row: auto !important; min-height: 0 !important; }
+  .pm-bento-grid-static .pm-bento-card { min-height: 116px; }
+  .pm-bento-label { white-space: normal; flex-wrap: wrap; gap: 4px; }
 }
 
 /* P2-1：rail 固定占 232px 后，561–960 中间档主区（shell−232）单行放不下项目切换器 + 全部操作，
    顶栏改为两行流式、次要 AI 按钮收敛到「更多」菜单，避免文字/按钮挤压重叠；≥961 桌面单行不变，
    ≤560 走上面的既有窄窗档。配色只消费 token，跟随 body[data-ds-dark-theme]。 */
 @media (min-width: 561px) and (max-width: 960px) {
-  .pm-topbar { flex-wrap: wrap; row-gap: 8px; }
-  .pm-top-actions { flex-wrap: wrap; margin-left: auto; }
+  /* C（768 概览叠印）：项目切换器与操作条两行 grid，行高随内容确定、顶栏必然增高，
+     下方 .pm-crumb-bar 流式落在顶栏之下，与操作条零重叠、按钮可点（不依赖 flex 隐式增高）。 */
+  .pm-topbar {
+    display: grid; grid-template-rows: auto auto; row-gap: 8px; column-gap: 10px;
+    align-items: stretch; height: auto; flex: 0 0 auto; flex-shrink: 0;
+  }
+  .pm-topbar > * { min-width: 0; min-height: 0; }
+  .pm-top-actions { flex-wrap: wrap; margin-left: auto; justify-content: flex-end; }
   /* 仅隐藏顶栏的 AI 助手/AI 副驾独立按钮（「更多」菜单仍有入口）；
      选择器限定 .pm-topbar，避免误伤抽屉 .pm-drawer-actions 里的「保存口径」按钮。 */
   .pm-topbar .pm-top-secondary { display: none; }

@@ -174,7 +174,8 @@
   font-weight: 600;
   letter-spacing: var(--ls-cap);
   text-transform: uppercase;
-  color: var(--faint);
+  /* D8：深档 raised 卡上 --faint 4.24:1，改 --muted 达标。 */
+  color: var(--muted);
 }
 .pm-ov-root .ov-stat .ov-num {
   margin-top: var(--sp-2);
@@ -227,8 +228,9 @@
   place-items: center;
   font-size: var(--t-12);
   font-weight: 700;
+  /* D7：白字落品牌蓝浅/深仅 4.23/2.33:1；底色换 --c-prog-d，白字两态 ≥4.5。 */
   color: rgb(255, 255, 255);
-  background: var(--c-prog);
+  background: var(--c-prog-d);
   flex: 0 0 auto;
 }
 .pm-ov-root .ov-team-body { flex: 1; min-width: 0; }

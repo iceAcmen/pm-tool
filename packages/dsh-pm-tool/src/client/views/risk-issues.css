@@ -71,7 +71,8 @@
 }
 .pm-ri-root .ri-mtx .corner {}
 .pm-ri-root .ri-mtx .colh, .pm-ri-root .ri-mtx .rowh {
-  font-size: var(--t-11); color: var(--faint); font-weight: 600;
+  /* D8：深档 raised 卡片上 --faint 仅 4.24:1，改 --muted（浅/深均 ≥4.5）。 */
+  font-size: var(--t-11); color: var(--muted); font-weight: 600;
   display: grid; place-items: center; white-space: nowrap;
 }
 .pm-ri-root .ri-mtx .rowh small { display: block; font-size: var(--t-10); opacity: .8; }
@@ -93,7 +94,7 @@
 .pm-ri-root .ri-mtx-foot {
   margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--line);
   display: flex; align-items: center; gap: var(--sp-4);
-  font-size: var(--t-11); color: var(--faint);
+  font-size: var(--t-11); color: var(--muted);
 }
 .pm-ri-root .ri-mtx-foot .lg { display: inline-flex; align-items: center; gap: 5px; }
 .pm-ri-root .ri-mtx-foot .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
@@ -111,7 +112,7 @@
 .pm-ri-root .ri-row + .ri-row { border-top: 1px solid var(--line); border-radius: 0; }
 .pm-ri-root .ri-row:hover { background: var(--surface-3); }
 .pm-ri-root .ri-row-l1 { display: flex; align-items: center; gap: var(--sp-2); }
-.pm-ri-root .ri-row-id { font-size: var(--t-11); font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; }
+.pm-ri-root .ri-row-id { font-size: var(--t-11); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pm-ri-root .ri-row-title {
   font-size: var(--t-13); font-weight: 650; color: var(--ink);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
@@ -138,10 +139,11 @@
 .pm-ri-root .ri-ava {
   width: 18px; height: 18px; border-radius: 50%; flex: 0 0 auto;
   display: grid; place-items: center; font-size: var(--t-10); font-weight: 700; color: rgb(255, 255, 255);
-  background: var(--c-prog);
+  /* D7：深档白字落亮蓝 2.33:1、浅档 4.23:1；底色用 --c-prog-d 深一档品牌蓝，白字两态 ≥4.5。 */
+  background: var(--c-prog-d);
 }
-.pm-ri-root .ri-ava.off { background: var(--c-todo); }
-.pm-ri-root .ri-qual { white-space: nowrap; color: var(--faint); font-variant-numeric: tabular-nums; }
+.pm-ri-root .ri-ava.off { background: var(--c-todo); color: var(--ink-2); }
+.pm-ri-root .ri-qual { white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pm-ri-root .ri-plan { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-ri-root .ri-plan b { font-weight: 600; color: var(--ink-2); }
 .pm-ri-root .ri-due { white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -172,7 +174,12 @@
 /* #25 窄窗（≤560px / 390 档）：卡片内距收敛、矩阵首列收窄、列表第二行允许换行。 */
 @media (max-width: 560px) {
   .pm-ri-root .ri-card { padding: var(--sp-3) var(--sp-3); }
-  .pm-ri-root .ri-mtx { grid-template-columns: 44px repeat(4, 1fr); gap: 5px; }
+  /* D3（320 风险矩阵）：4 列 1fr 在 ~190px 内被压到裁切（严重列丢失）。
+     给矩阵合法内部横滑：列设最小可读宽、整体 min-width，容器 overflow-x:auto，不裁切内容。 */
+  .pm-ri-root .ri-mtx {
+    grid-template-columns: 44px repeat(4, minmax(52px, 1fr));
+    gap: 5px; min-width: 264px; overflow-x: auto;
+  }
   .pm-ri-root .ri-row { padding: 10px var(--sp-2); }
   .pm-ri-root .ri-row-l2 { flex-wrap: wrap; row-gap: 4px; }
   .pm-ri-root .ri-plan { flex: 1 1 100%; }

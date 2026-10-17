@@ -180,7 +180,8 @@
 .pm-dv-root .dv-ow { display: inline-flex; align-items: center; gap: 5px; }
 .pm-dv-root .dv-av2 {
   width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
-  font-size: var(--t-10); font-weight: 700; color: var(--pm-on-primary); background: var(--c-prog);
+  /* D7：品牌蓝浅/深白字 4.23/2.33:1；底色换 --c-prog-d，白字两态 ≥4.5。 */
+  font-size: var(--t-10); font-weight: 700; color: rgb(255, 255, 255); background: var(--c-prog-d);
 }
 .pm-dv-root .dv-ms { color: var(--faint); }
 .pm-dv-root .dv-due { font-variant-numeric: tabular-nums; }
@@ -220,4 +221,10 @@
 @media (max-width: 560px) {
   .pm-dv-root .dv-g-grid { grid-template-columns: 1fr; }
   .pm-dv-root .dv-empty { padding: var(--sp-6) var(--sp-3); }
+  /* D3（320 漏斗统计）：6 个等宽单元格挤在 ~264px 内会逐字竖排断裂；改两列换行，
+     去掉竖分隔线、补纵向间距，文字完整可读。 */
+  .pm-dv-root .dv-ov-row { flex-wrap: wrap; row-gap: var(--sp-3); padding: var(--sp-2) 0; }
+  .pm-dv-root .dv-ov-cell { flex: 1 1 45%; min-width: 0; border-left: none !important; padding: 4px var(--sp-2); }
+  .pm-dv-root .dv-ov-cell:first-child { padding-left: var(--sp-2); }
+  .pm-dv-root .dv-ov-sub { white-space: normal; }
 }

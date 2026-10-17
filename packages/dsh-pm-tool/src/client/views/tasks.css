@@ -90,7 +90,8 @@
   color: var(--ink); background: var(--surface-3); box-shadow: var(--shadow-1);
 }
 .pm-tasks-root .pt-density-chip {
-  font-size: var(--t-10); font-weight: 600; color: var(--faint);
+  /* D8：field-bg 上 --faint 浅 4.23/深 3.26:1，改 --muted 达标。 */
+  font-size: var(--t-10); font-weight: 600; color: var(--muted);
   background: var(--field-bg); border: 1px solid var(--line);
   padding: 2px 8px; border-radius: 999px; white-space: nowrap;
 }
@@ -308,7 +309,7 @@
   padding: 2px 8px; border-radius: 999px; white-space: nowrap;
 }
 .pm-tasks-root .pt-gcount.all { color: var(--c-done); border-color: color-mix(in srgb, var(--c-done) 30%, transparent); }
-.pm-tasks-root .pt-gcount.none { color: var(--faint); }
+.pm-tasks-root .pt-gcount.none { color: var(--muted); }
 .pm-tasks-root .pt-group .pt-cell .pt-gstage-meta { font-size: var(--t-12); color: var(--muted); }
 
 /* ---------------- 空态 ---------------- */

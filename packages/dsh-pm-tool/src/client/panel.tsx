@@ -421,8 +421,8 @@ function ProjectSwitcher({ projects, currentId, onPick }: {
  */
 function ViewSwitcher({ current, items, onPick }: {
   current: View
-  items: { key: View, label: string, count?: number }[]
-  onPick: (v: View) => void
+  items: { key: View | 'dashboard', label: string, count?: number }[]
+  onPick: (v: View | 'dashboard') => void
 }) {
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -1027,6 +1027,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               <ViewSwitcher
                 current={view}
                 items={[
+                  { key: 'dashboard', label: '总览看板' },
                   { key: 'tasks', label: '全部任务', count: tasks.length },
                   { key: 'milestones', label: '里程碑', count: milestones.length },
                   { key: 'risk-issues', label: '风险与问题', count: riskIssues.length },
@@ -1037,7 +1038,11 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   { key: 'gantt', label: '甘特排期' },
                   { key: 'people', label: '人员负载' },
                 ]}
-                onPick={changeView}
+                onPick={(key) => {
+                  // D3（320 看板可达）：扁平下拉补「总览看板」入口，打开全局看板，不再只能经隐藏 rail 进入。
+                  if (key === 'dashboard') { setDashOpen(true); return }
+                  changeView(key as View)
+                }}
               />
             )}
             <div className="pm-suggest-split" data-open={copilotLayer || undefined}>
