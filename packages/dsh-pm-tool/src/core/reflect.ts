@@ -79,8 +79,13 @@ export function buildReflectionDraft(
   task: Pick<Task, 'title' | 'description' | 'completedDate' | 'evidenceUrl' | 'checklist' | 'deliverableId'>,
   at: string,
 ): ReflectionRecord['draft'] {
+  // 缺 completedDate 时，完成时刻取传入 at 的本地日历日（可注入稳定时间，不读墙钟）。
+  const fallbackDay = (() => {
+    const d = new Date(at)
+    return Number.isNaN(d.getTime()) ? localTodayIso() : localTodayIso(d)
+  })()
   const lines: ReflectionRecord['draft']['lines'] = [
-    { text: `完成时刻 ${task.completedDate ?? localTodayIso()}`, mark: 'known' },
+    { text: `完成时刻 ${task.completedDate ?? fallbackDay}`, mark: 'known' },
   ]
   const description = truncate(task.description ?? '', DESCRIPTION_MAX)
   if (description) lines.push({ text: `任务说明：${description}`, mark: 'known' })
@@ -155,8 +160,13 @@ export function buildMilestoneReflectionDraft(
   linkedTasks: LinkedTaskDraftInput[],
   at: string,
 ): ReflectionRecord['draft'] {
+  // 缺 achievedDate 时，达成时刻取传入 at 的本地日历日（可注入稳定时间，不读墙钟）。
+  const fallbackDay = (() => {
+    const d = new Date(at)
+    return Number.isNaN(d.getTime()) ? localTodayIso() : localTodayIso(d)
+  })()
   const lines: ReflectionRecord['draft']['lines'] = [
-    { text: `达成时刻 ${milestone.achievedDate ?? localTodayIso()}`, mark: 'known' },
+    { text: `达成时刻 ${milestone.achievedDate ?? fallbackDay}`, mark: 'known' },
   ]
   const description = truncate(milestone.description ?? '', DESCRIPTION_MAX)
   if (description) lines.push({ text: `里程碑说明/达成标准：${description}`, mark: 'known' })

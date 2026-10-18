@@ -16,6 +16,7 @@ import {
   type Milestone,
 } from '../core/milestone.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const milestoneHelp = [
   '里程碑命令（离线，无需 API Key）：',
@@ -45,6 +46,17 @@ function renderMilestone(milestone: Milestone): string {
   ].join('\n')
 }
 
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeMilestoneChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.title !== undefined) labels.push('标题')
+  if (input.targetDate !== undefined) labels.push('目标日期')
+  if (input.status !== undefined) labels.push('状态')
+  if (input.achievedDate !== undefined) labels.push('实际达成日期')
+  if (input.description !== undefined) labels.push('说明')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
+}
+
 export async function handleMilestoneCommand(rawInput: string, domain?: PmDomain): Promise<CommandResult> {
   const input = rawInput.trim()
   if (!input || input.toLowerCase() === 'help') return { kind: 'success', text: milestoneHelp }
@@ -65,7 +77,13 @@ export async function handleMilestoneCommand(rawInput: string, domain?: PmDomain
         return { kind: 'error', text: `里程碑参数须为合法 JSON 对象，请使用英文双引号。\n${milestoneHelp}` }
       }
       const milestone = await addMilestone(domain, fields)
-      return { kind: 'success', text: `里程碑已新增并保存。\n${renderMilestone(milestone)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`里程碑已新增｜${milestone.id} ${milestone.title}`, `${milestone.targetDate}｜${milestoneStatusLabels[milestone.status]}`],
+          renderMilestone(milestone),
+        ),
+      }
     }
     if (action === 'list') {
       if (!argument || /\s/.test(argument)) {
@@ -107,7 +125,13 @@ export async function handleMilestoneCommand(rawInput: string, domain?: PmDomain
       }
       const milestone = await updateMilestone(domain, updateMatch[1], fields)
       return milestone
-        ? { kind: 'success', text: `里程碑已更新并保存。\n${renderMilestone(milestone)}` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`里程碑已更新并保存｜${milestone.id} ${milestone.title}`, describeMilestoneChanges(fields as Record<string, unknown>)],
+              renderMilestone(milestone),
+            ),
+          }
         : { kind: 'error', text: `未找到里程碑：${updateMatch[1]}。` }
     }
     const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
@@ -121,13 +145,19 @@ export async function handleMilestoneCommand(rawInput: string, domain?: PmDomain
         text: [
           `即将删除里程碑：${current.id}｜${current.title}｜${current.targetDate}。`,
           '当前未执行删除；有关联任务时即使确认也会被阻止。',
-          `确认命令：/pm milestone delete ${current.id} confirm`,
+          buildActionLine('确认删除', `/pm milestone delete ${current.id} confirm`),
         ].join('\n'),
       }
     }
     const deleted = await deleteMilestone(domain, id)
     return deleted
-      ? { kind: 'success', text: `里程碑已删除：${deleted.id}｜${deleted.title}。` }
+      ? {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`里程碑已删除｜${deleted.id} ${deleted.title}`],
+            null,
+          ),
+        }
       : { kind: 'error', text: `未找到里程碑：${id}。` }
   } catch (error) {
     if (error instanceof z.ZodError) {

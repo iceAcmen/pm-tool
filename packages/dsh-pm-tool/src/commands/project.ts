@@ -18,6 +18,7 @@ import {
 import { describeProjectValidation, projectStatusLabels, type Project } from '../core/project.js'
 import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const projectHelp = [
   '项目命令（离线，无需 API Key）：',
@@ -48,6 +49,21 @@ function renderProject(project: Project): string {
     `创建时间：${project.createdAt}`,
     `更新时间：${project.updatedAt}`,
   ].join('\n')
+}
+
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeProjectChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.name !== undefined) labels.push('名称')
+  if (input.description !== undefined) labels.push('目标描述')
+  if (input.owner !== undefined) labels.push('负责人')
+  if (input.status !== undefined) labels.push('状态')
+  if (input.startDate !== undefined) labels.push('开始日期')
+  if (input.targetDate !== undefined) labels.push('完成日期')
+  if (input.tags !== undefined) labels.push('标签')
+  if (input.repoUrl !== undefined) labels.push('仓库链接')
+  if (input.branch !== undefined) labels.push('分支')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
 function parseJsonWithConfirm(argument: string): { fields: unknown, confirm: boolean } | undefined {
@@ -85,7 +101,13 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
         return { kind: 'error', text: `项目参数须为合法 JSON 对象，请使用英文双引号。\n${projectHelp}` }
       }
       const project = await addProject(domain, parsed.fields, parsed.confirm)
-      return { kind: 'success', text: `项目已新增并保存。\n${renderProject(project)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`项目已新增｜${project.id} ${project.name}`, `${projectStatusLabels[project.status]}｜${project.startDate} → ${project.targetDate}`],
+          renderProject(project),
+        ),
+      }
     }
     if (action === 'list') {
       if (argument) return { kind: 'error', text: '项目列表命令不接受参数：/pm project list' }
@@ -122,7 +144,13 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
       }
       const project = await updateProject(domain, id, parsed.fields, parsed.confirm)
       return project
-        ? { kind: 'success', text: `项目已更新并保存。\n${renderProject(project)}` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`项目已更新并保存｜${project.id} ${project.name}`, describeProjectChanges(parsed.fields as Record<string, unknown>)],
+              renderProject(project),
+            ),
+          }
         : { kind: 'error', text: `未找到项目：${id}。请用 /pm project list 查看已有项目。` }
     }
     const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
@@ -140,13 +168,19 @@ export async function handleProjectCommand(rawInput: string, domain?: PmDomain):
         text: [
           `即将删除项目：${current.id}｜${current.name}。`,
           '当前未执行删除。确认后项目记录将从本地 JSON 存储移除。',
-          `确认命令：/pm project delete ${current.id} confirm`,
+          buildActionLine('确认删除', `/pm project delete ${current.id} confirm`),
         ].join('\n'),
       }
     }
     const deleted = await deleteProject(domain, id)
     return deleted
-      ? { kind: 'success', text: `项目已删除：${deleted.id}｜${deleted.name}。` }
+      ? {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`项目已删除｜${deleted.id} ${deleted.name}`],
+            null,
+          ),
+        }
       : { kind: 'error', text: `未找到项目：${id}。请用 /pm project list 查看已有项目。` }
   } catch (error) {
     if (error instanceof z.ZodError) {

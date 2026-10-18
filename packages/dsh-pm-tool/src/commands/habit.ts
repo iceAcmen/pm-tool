@@ -25,6 +25,7 @@ import {
   listHabitSuggestions,
   listHabitsByProject,
   suggestHabit,
+  updateHabit,
   HabitCheckinWindowError,
   HabitNotFoundError,
   HabitOkrNotFoundError,
@@ -35,10 +36,12 @@ import {
   type HabitSuggestion,
 } from '../core/habits.js'
 import { localTodayIso } from '../core/derived.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 import type { PmDomain, HabitRecord } from '../core/storage.js'
 
 export const habitHelp =
-  '  /pm habit add <项目ID> <JSON>             人录入习惯（draft，可关联 okrId）\n' +
+  '  /pm habit add <项目ID> <JSON>             人录入习惯（draft；title/goal/frequency/notes/okrId）\n' +
+  '  /pm habit update <habitID> <JSON>         人更新（title/goal/frequency/notes/okrId；okrId=null 取消关联，文本 null 清空）\n' +
   '  /pm habit checkin <habitID> [YYYY-MM-DD] [note]   打卡；缺省今天；允许过去 2 天回填（backfilled:true）\n' +
   '  /pm habit list <项目ID>                   只读列出（streak 文本档案）\n' +
   '  /pm habit suggest <项目ID> <JSON>         agent 代起草习惯建议（只进收件区，不自动生效）\n' +
@@ -46,7 +49,7 @@ export const habitHelp =
   '  /pm habit confirm <建议ID>                人确认建议 → 建 habit draft 记录\n' +
   '  /pm habit ignore <建议ID>                 忽略建议（保留在收件区标 ignored）\n' +
   '  /pm habit final <habitID>                 人定稿（draft/confirmed → final，幂等）\n' +
-  '说明：建议未确认不进主档；streak 仅纯文本档案（无积分/动效/徽章）；周期触发为占位不启用。'
+  '说明：建议未确认不进主档；status/checkIns/streak 不可经 update 修改；streak 仅纯文本档案（无积分/动效/徽章）；周期触发为占位不启用。'
 
 const STATUS_LABELS: Record<HabitRecord['status'], string> = {
   draft: '草稿',
@@ -77,6 +80,16 @@ function renderHabitLine(rec: HabitRecord, todayIso: string): string[] {
   return [head, archive, body]
 }
 
+/** 完整字段详情（进 [pm:detail] 折叠卡，不进短摘要）。 */
+function renderHabitDetail(rec: HabitRecord, todayIso: string): string {
+  const lines = [...renderHabitLine(rec, todayIso)]
+  if (rec.goal) lines.push(`  目标：${rec.goal}`)
+  if (rec.frequency) lines.push(`  频率：${rec.frequency}`)
+  if (rec.notes) lines.push(`  备注：${rec.notes}`)
+  lines.push(`  创建时间：${rec.createdAt}`, `  更新时间：${rec.updatedAt}`)
+  return lines.join('\n')
+}
+
 function renderSuggestion(s: HabitSuggestion): string {
   const status = s.status === 'confirmed'
     ? `已确认 → ${s.confirmedHabitId ?? ''}`
@@ -86,6 +99,18 @@ function renderSuggestion(s: HabitSuggestion): string {
   const okr = s.okrId ? `｜关联 ${s.okrId}` : ''
   const rationale = s.rationale ? `｜理由：${s.rationale}` : ''
   return `${s.id}｜${s.title}｜${status}${okr}${rationale}｜${s.at}`
+}
+
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeHabitChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.title !== undefined) labels.push('标题')
+  if (input.goal !== undefined) labels.push('目标')
+  if (input.frequency !== undefined) labels.push('频率')
+  if (input.notes !== undefined) labels.push('备注')
+  if (input.okrId === null) labels.push('取消关联OKR')
+  else if (input.okrId !== undefined) labels.push('关联OKR')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
 export async function handleHabitCommand(
@@ -111,11 +136,29 @@ export async function handleHabitCommand(
       const record = await addHabit(domain, projectId, fields)
       return {
         kind: 'success',
-        text: [
-          '习惯已录入并保存（草稿；定稿请用 final）。',
-          ...renderHabitLine(record, localTodayIso()),
-          `创建时间：${record.createdAt}`,
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          [`习惯已录入（草稿）｜${record.id} ${record.title}`, '定稿请用 /pm habit final'],
+          renderHabitDetail(record, localTodayIso()),
+        ),
+      }
+    }
+
+    // ===== update <habitID> <JSON> =====
+    if (action === 'update') {
+      const upMatch = /^(\S+)\s+([\s\S]+)$/.exec(rest)
+      if (!upMatch) return { kind: 'error', text: '请使用：/pm habit update <habitID> {JSON}' }
+      const habitId = upMatch[1]
+      const fields = parseJson(upMatch[2])
+      if (fields === undefined) return { kind: 'error', text: '习惯更新参数须为合法 JSON 对象，请使用英文双引号。' }
+      const record = await updateHabit(domain, habitId, fields)
+      if (!record) return { kind: 'error', text: `未找到习惯：${habitId}。` }
+      const changed = describeHabitChanges(fields as Record<string, unknown>)
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`习惯已更新｜${record.id} ${record.title}`, changed],
+          renderHabitDetail(record, localTodayIso()),
+        ),
       }
     }
 
@@ -138,12 +181,15 @@ export async function handleHabitCommand(
       }
       const record = await checkinHabit(domain, habitId, dateIso, note)
       const backfilled = record.checkIns.at(-1)?.backfilled === true
+      const at = record.checkIns.at(-1)?.at ?? ''
+      const summary = [`已打卡｜${record.id} ${at}`]
+      if (backfilled) summary.push('补记已标 backfilled')
       return {
         kind: 'success',
-        text: [
-          `已打卡 ${record.id}（${record.checkIns.at(-1)?.at ?? ''}${backfilled ? '，补记已标 backfilled' : ''}）。`,
-          ...renderHabitLine(record, localTodayIso()),
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          summary,
+          renderHabitDetail(record, localTodayIso()),
+        ),
       }
     }
 
@@ -171,7 +217,8 @@ export async function handleHabitCommand(
         text: [
           '建议已进入收件区（未确认不生效，不会创建习惯记录）。',
           renderSuggestion(suggestion),
-          `确认：/pm habit confirm ${suggestion.id}｜忽略：/pm habit ignore ${suggestion.id}`,
+          buildActionLine('确认采纳', `/pm habit confirm ${suggestion.id}`),
+          `忽略：/pm habit ignore ${suggestion.id}`,
         ].join('\n'),
       }
     }
@@ -197,10 +244,10 @@ export async function handleHabitCommand(
       const { record, suggestion } = await confirmHabitSuggestion(domain, rest)
       return {
         kind: 'success',
-        text: [
-          `已确认建议 ${suggestion.id}，创建草稿习惯记录 ${record.id}（定稿请用 final，无自动定稿）。`,
-          ...renderHabitLine(record, localTodayIso()),
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          [`已确认建议 ${suggestion.id}，创建草稿习惯记录 ${record.id}`, '草稿；定稿请用 final，无自动定稿'],
+          renderHabitDetail(record, localTodayIso()),
+        ),
       }
     }
 
@@ -210,7 +257,10 @@ export async function handleHabitCommand(
       const suggestion = await ignoreHabitSuggestion(domain, rest)
       return {
         kind: 'success',
-        text: `已忽略建议 ${suggestion.id}（保留在收件区标 ignored，可逆；不会创建记录）。`,
+        text: buildSuccessEnvelope(
+          [`已忽略建议 ${suggestion.id}`, '保留在收件区标 ignored，可逆；不会创建记录'],
+          null,
+        ),
       }
     }
 
@@ -221,10 +271,10 @@ export async function handleHabitCommand(
       if (!record) return { kind: 'error', text: `未找到习惯：${rest}。` }
       return {
         kind: 'success',
-        text: [
-          `习惯 ${record.id} 已定稿（draft/confirmed → final，仅人触发；重复执行幂等）。`,
-          ...renderHabitLine(record, localTodayIso()),
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          [`习惯已定稿｜${record.id} ${record.title}`, 'draft/confirmed → final，仅人触发；重复执行幂等'],
+          renderHabitDetail(record, localTodayIso()),
+        ),
       }
     }
 

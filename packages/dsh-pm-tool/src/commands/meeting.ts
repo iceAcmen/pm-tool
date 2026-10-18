@@ -35,6 +35,7 @@ import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/
 import { buildSourceRefs, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type SourceRecord } from '../core/provenance.js'
 import { recordProvenance } from '../core/provenance-store.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const meetingHelp = [
   '会议纪要命令（离线，无需 API Key）：',
@@ -73,6 +74,25 @@ function renderMeeting(meeting: Meeting): string {
     `行动项（${meeting.actions.length}）：`,
     ...(meeting.actions.length ? meeting.actions.map(renderAction) : ['暂无']),
   ].join('\n')
+}
+
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeMeetingChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.title !== undefined) labels.push('标题')
+  if (input.meetingDate !== undefined) labels.push('日期')
+  if (input.startTime !== undefined) labels.push('开始时间')
+  if (input.durationMinutes !== undefined) labels.push('时长')
+  if (input.location !== undefined) labels.push('地点/链接')
+  if (input.facilitator !== undefined) labels.push('主持人')
+  if (input.recorder !== undefined) labels.push('记录人')
+  if (input.participants !== undefined) labels.push('参会人')
+  if (input.status !== undefined) labels.push('状态')
+  if (input.summary !== undefined) labels.push('摘要')
+  if (input.topics !== undefined) labels.push('议题')
+  if (input.decisions !== undefined) labels.push('决议')
+  if (input.notes !== undefined) labels.push('备注')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
 function parseJson(value: string): unknown {
@@ -120,7 +140,7 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         return {
           kind: 'success',
           text: [
-            'AI 归纳草稿（当前未写入）：',
+            'AI 归纳草稿（当前未写入，仅预览）：',
             `标题：${draft.title}`,
             `摘要：${draft.summary || '（空）'}`,
             `议题：${draft.topics.join('；') || '（无）'}`,
@@ -129,7 +149,8 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
             ...(draft.actions.length
               ? draft.actions.map(a => `  - ${a.title}｜负责人 ${a.owner || '待定'}｜截止 ${a.dueDate ?? '未定'}`)
               : ['  （无）']),
-            `确认命令：/pm meeting summarize ${projectId} ${transcript} confirm`,
+            // content/action 分离：确认命令独立挂动作行，不进保存正文；预览本身持久（不加 success 信封）。
+            buildActionLine('确认建会', `/pm meeting summarize ${projectId} ${transcript} confirm`),
           ].join('\n'),
         }
       }
@@ -175,7 +196,10 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       }
       return {
         kind: 'success',
-        text: [`已按 AI 草稿创建 draft 会议纪要并挂载 ${draft.actions.length} 个行动项。\n${renderMeeting(saved)}`].join('\n'),
+        text: buildSuccessEnvelope(
+          [`已按 AI 草稿创建 draft 会议纪要｜${saved.id} ${saved.title}`, `挂载 ${draft.actions.length} 个行动项；原始逐字稿不入库`],
+          renderMeeting(saved),
+        ),
       }
     }
 
@@ -187,14 +211,26 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         const match = /^(\S+)\s+([\s\S]+)$/.exec(argument)
         if (!match) return { kind: 'error', text: '请使用：/pm meeting action add <会议ID> {JSON}' }
         const result = await addMeetingAction(domain, match[1], parseJson(match[2]))
-        return { kind: 'success', text: `行动项已新增：${renderAction(result)}` }
+        return {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`行动项已新增｜${result.id} ${result.title}`, meetingActionStatusLabels[result.status]],
+            renderAction(result),
+          ),
+        }
       }
       if (operation === 'update') {
         const match = /^(\S+)\s+(\S+)\s+([\s\S]+)$/.exec(argument)
         if (!match) return { kind: 'error', text: '请使用：/pm meeting action update <会议ID> <行动项ID> {JSON}' }
         const result = await updateMeetingAction(domain, match[1], match[2], parseJson(match[3]))
         return result
-          ? { kind: 'success', text: `行动项已更新：${renderAction(result)}` }
+          ? {
+              kind: 'success',
+              text: buildSuccessEnvelope(
+                [`行动项已更新｜${result.id} ${result.title}`, meetingActionStatusLabels[result.status]],
+                renderAction(result),
+              ),
+            }
           : { kind: 'error', text: `未找到行动项：${match[2]}。` }
       }
       if (operation === 'promote') {
@@ -204,7 +240,13 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
         const current = meeting?.actions.find(item => item.id === match[2])
         if (!current) return { kind: 'error', text: `未找到行动项：${match[1]}/${match[2]}。` }
         if (current.taskId) {
-          return { kind: 'success', text: `该行动项已转为任务 ${current.taskId}，无需重复转换。` }
+          return {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`该行动项已转为任务 ${current.taskId}`, '无需重复转换'],
+              null,
+            ),
+          }
         }
         if (!match[3]) {
           return {
@@ -216,14 +258,26 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
               `  截止：${current.dueDate || '未设置'}`,
               `  所属项目：${meeting!.projectId}`,
               '当前未创建任务。',
-              `确认命令：/pm meeting action promote ${match[1]} ${match[2]} confirm`,
+              buildActionLine('确认转任务', `/pm meeting action promote ${match[1]} ${match[2]} confirm`),
             ].join('\n'),
           }
         }
         const result = await promoteActionToTask(domain, match[1], match[2])
         return result.created
-          ? { kind: 'success', text: `已创建任务 ${result.taskId}（${result.title}）并回写行动项关联。` }
-          : { kind: 'success', text: `该行动项已转为任务 ${result.taskId}，无需重复转换。` }
+          ? {
+              kind: 'success',
+              text: buildSuccessEnvelope(
+                [`已创建任务 ${result.taskId}（${result.title}）`, '并回写行动项关联'],
+                null,
+              ),
+            }
+          : {
+              kind: 'success',
+              text: buildSuccessEnvelope(
+                [`该行动项已转为任务 ${result.taskId}`, '无需重复转换'],
+                null,
+              ),
+            }
       }
       const match = /^(\S+)\s+(\S+)(?:\s+(confirm))?$/i.exec(argument)
       if (!match) return { kind: 'error', text: '请使用：/pm meeting action delete <会议ID> <行动项ID> confirm' }
@@ -231,10 +285,23 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       const current = meeting?.actions.find(item => item.id === match[2])
       if (!current) return { kind: 'error', text: `未找到行动项：${match[2]}。` }
       if (!match[3]) {
-        return { kind: 'success', text: `即将删除行动项：${renderAction(current)}。\n当前未执行删除。\n确认命令：/pm meeting action delete ${match[1]} ${match[2]} confirm` }
+        return {
+          kind: 'success',
+          text: [
+            `即将删除行动项：${renderAction(current)}。`,
+            '当前未执行删除。',
+            buildActionLine('确认删除', `/pm meeting action delete ${match[1]} ${match[2]} confirm`),
+          ].join('\n'),
+        }
       }
       const result = await deleteMeetingAction(domain, match[1], match[2])
-      return { kind: 'success', text: `行动项已删除：${result!.id}｜${result!.title}。` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`行动项已删除｜${result!.id} ${result!.title}`],
+          null,
+        ),
+      }
     }
 
     const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input)!
@@ -242,7 +309,13 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
     const argument = match[2]?.trim() ?? ''
     if (operation === 'add') {
       const meeting = await addMeeting(domain, parseJson(argument))
-      return { kind: 'success', text: `会议纪要已新增并保存。\n${renderMeeting(meeting)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`会议纪要已新增｜${meeting.id} ${meeting.title}`, meetingStatusLabels[meeting.status]],
+          renderMeeting(meeting),
+        ),
+      }
     }
     if (operation === 'list') {
       const parts = argument.split(/\s+/).filter(Boolean)
@@ -270,7 +343,13 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       if (!updateMatch) return { kind: 'error', text: '请使用：/pm meeting update <会议ID> {JSON片段}' }
       const meeting = await updateMeeting(domain, updateMatch[1], parseJson(updateMatch[2]))
       return meeting
-        ? { kind: 'success', text: `会议纪要已更新并保存。\n${renderMeeting(meeting)}` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`会议纪要已更新并保存｜${meeting.id} ${meeting.title}`, describeMeetingChanges(parseJson(updateMatch[2]) as Record<string, unknown>)],
+              renderMeeting(meeting),
+            ),
+          }
         : { kind: 'error', text: `未找到会议：${updateMatch[1]}。` }
     }
     if (operation === 'delete') {
@@ -279,10 +358,23 @@ export async function handleMeetingCommand(rawInput: string, domain?: PmDomain, 
       const current = getMeeting(domain, deleteMatch[1])
       if (!current) return { kind: 'error', text: `未找到会议：${deleteMatch[1]}。` }
       if (!deleteMatch[2]) {
-        return { kind: 'success', text: `即将删除会议：${current.id}｜${current.title}。\n当前未执行删除。\n确认命令：/pm meeting delete ${current.id} confirm` }
+        return {
+          kind: 'success',
+          text: [
+            `即将删除会议：${current.id}｜${current.title}。`,
+            '当前未执行删除。',
+            buildActionLine('确认删除', `/pm meeting delete ${current.id} confirm`),
+          ].join('\n'),
+        }
       }
       await deleteMeeting(domain, current.id)
-      return { kind: 'success', text: `会议纪要已删除：${current.id}｜${current.title}。` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`会议纪要已删除｜${current.id} ${current.title}`],
+          null,
+        ),
+      }
     }
     return { kind: 'error', text: `不支持的会议操作。\n${meetingHelp}` }
   } catch (error) {

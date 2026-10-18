@@ -21,6 +21,7 @@ import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
 import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import { addProject } from '../lib/core/projects.js'
+import { setFixedTodayIso, clearFixedTodayIso } from '../lib/core/derived.js'
 import { apply } from '../lib/index.js'
 
 const root = mkdtempSync(join(tmpdir(), 'pm-tool-p1a-queue-'))
@@ -50,7 +51,8 @@ try {
   await apply(ctx)
   const domain = facility.get('pmtool')
   assert.ok(domain)
-
+  // 夹具以 2026-10-18 为「今天」：注入固定时钟解耦墙钟，不改任何断言预期。
+  setFixedTodayIso('2026-10-18')
   const project = await addProject(domain, { name: 'P1A 队列验证项目', startDate: '2026-10-10', targetDate: '2026-12-31' })
   const pid = project.id
 
@@ -137,6 +139,8 @@ try {
   check('disk.sessions', readdirSync(sessDir).length >= 1, 'sessions 目录有绑定记录')
 } catch (e) {
   check('FATAL', false, e instanceof Error ? e.stack ?? e.message : String(e))
+} finally {
+  clearFixedTodayIso()
 }
 
 const failed = results.filter(r => !r.ok)

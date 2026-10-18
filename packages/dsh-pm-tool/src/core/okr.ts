@@ -43,6 +43,8 @@ export const okrCreateSchema = z.strictObject({
   relatedOkrIds: z.array(z.string()).optional(),
   owner: z.string().optional(),
   targetDate: z.iso.date({ error: '目标日期须为有效 YYYY-MM-DD' }).optional(),
+  /** 说明/补充描述（兼容新增，optional；旧记录缺键照常读取，不批量迁移）。 */
+  description: z.string().trim().optional(),
   status: z.enum(['draft', 'confirmed']).optional(),
   /** K11 周期触发接线点（类型预留，本期不实现周期调度，不产出任何定时任务）。 */
   cycleDue: z.string().optional(),
@@ -56,6 +58,7 @@ export const okrUpdateSchema = z.strictObject({
   relatedOkrIds: z.array(z.string()).optional(),
   owner: z.string().nullable().optional(),
   targetDate: z.iso.date({ error: '目标日期须为有效 YYYY-MM-DD' }).nullable().optional(),
+  description: z.string().trim().nullable().optional(),
   status: z.enum(['draft', 'confirmed']).optional(),
   cycleDue: z.string().nullable().optional(),
 }).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
@@ -327,6 +330,7 @@ export function addOkr(domain: PmDomain, projectId: string, input: unknown): Pro
       relatedOkrIds,
       ...(fields.owner ? { owner: fields.owner } : {}),
       ...(fields.targetDate ? { targetDate: fields.targetDate } : {}),
+      ...(fields.description ? { description: fields.description } : {}),
       status: fields.status ?? 'draft',
       ...(fields.cycleDue ? { cycleDue: fields.cycleDue } : {}),
       createdAt: at,
@@ -362,6 +366,7 @@ export function updateOkr(domain: PmDomain, id: string, input: unknown): Promise
     // null 清除可选字段（与 task/deliverable 清空口径同构），不留 null 污染记录。
     if (fields.targetDate === null) delete nextInput.targetDate
     if (fields.owner === null) delete nextInput.owner
+    if (fields.description === null) delete nextInput.description
     if (fields.cycleDue === null) delete nextInput.cycleDue
     const next = okrRecordSchema.parse(nextInput)
     await table.put(id, next)
@@ -475,6 +480,7 @@ const OKR_FIELD_LABELS: Record<string, string> = {
   relatedOkrIds: '软关联目标 ID 数组（可见不计权重，须同项目存在）',
   owner: '负责人（文本）',
   targetDate: '目标日期（有效 YYYY-MM-DD）',
+  description: '说明/补充描述（文本，传 null 清空）',
   status: '状态（draft 草稿 / confirmed 定稿，定稿只能由人触发）',
   cycleDue: '周期接线点（K11 预留，本期不调度）',
 }

@@ -13,6 +13,7 @@ import {
   listHabitSuggestions,
   readHabitInbox,
   suggestHabit,
+  updateHabit,
   HabitCheckinWindowError,
   HabitNotFoundError,
   HabitOkrNotFoundError,
@@ -332,5 +333,79 @@ describe('cycle-hooks：K11 周期触发接线占位（未启用）', () => {
   it('占位不产生副作用：domain/today 不被读取，无定时器', () => {
     const result = cycleHookPoint('daily-archive', undefined, today)
     expect(result).toEqual({ hook: 'daily-archive', enabled: false, reason: 'H6 宿主通知能力未实现前不启用' })
+  })
+})
+
+// ===== 8. updateHabit：人更新（title/goal/frequency/notes/okrId），status/checkIns/streak 不可改 =====
+
+describe('updateHabit：兼容新增 goal/frequency/notes，保护系统字段', () => {
+  it('改名 + 补目标/频率/备注，其它字段原样保留', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走', okrId: 'okr-a' })
+    const updated = await updateHabit(domain, created.id, {
+      title: '清晨快走',
+      goal: '一周五练',
+      frequency: '每天',
+      notes: '雨天改室内',
+    })
+    expect(updated?.title).toBe('清晨快走')
+    expect(updated?.goal).toBe('一周五练')
+    expect(updated?.frequency).toBe('每天')
+    expect(updated?.notes).toBe('雨天改室内')
+    // okrId 未传入 → 保留既有关联；status/checkIns/streak/projectId/createdAt 不动。
+    expect(updated?.okrId).toBe('okr-a')
+    expect(updated?.status).toBe('draft')
+    expect(updated?.checkIns).toEqual([])
+    expect(updated?.projectId).toBe('p-0001')
+    expect(updated?.createdAt).toBe(created.createdAt)
+  })
+
+  it('okrId=null 取消关联；文本字段传 null 清空', async () => {
+    const { domain, tables } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', {
+      title: '读书', okrId: 'okr-a', goal: '目标X', frequency: '每天', notes: '备注Y',
+    })
+    const updated = await updateHabit(domain, created.id, {
+      okrId: null, goal: null, frequency: null, notes: null,
+    })
+    expect(updated?.okrId).toBeUndefined()
+    expect(updated?.goal).toBeUndefined()
+    expect(updated?.frequency).toBeUndefined()
+    expect(updated?.notes).toBeUndefined()
+    // 未传 title → 标题保留
+    expect(updated?.title).toBe('读书')
+    // 落库记录实际删除键（不以 undefined 残留造成 JSON 往返歧义）。
+    const stored = tables.get('habits')!.get(created.id) as Record<string, unknown>
+    expect(Object.prototype.hasOwnProperty.call(stored, 'okrId')).toBe(false)
+    expect(Object.prototype.hasOwnProperty.call(stored, 'goal')).toBe(false)
+    expect(Object.prototype.hasOwnProperty.call(stored, 'frequency')).toBe(false)
+    expect(Object.prototype.hasOwnProperty.call(stored, 'notes')).toBe(false)
+  })
+
+  it('关联同项目 OKR 通过；跨项目 OKR 拒绝（HabitOkrProjectMismatchError）', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走' })
+    const linked = await updateHabit(domain, created.id, { okrId: 'okr-a' })
+    expect(linked?.okrId).toBe('okr-a')
+    await expect(updateHabit(domain, created.id, { okrId: 'okr-b' })).rejects.toThrow(HabitOkrProjectMismatchError)
+  })
+
+  it('关联不存在 OKR 拒绝（HabitOkrNotFoundError）', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走' })
+    await expect(updateHabit(domain, created.id, { okrId: 'okr-missing' })).rejects.toThrow(HabitOkrNotFoundError)
+  })
+
+  it('空 patch（无任何字段）zod 拒绝；未知字段 strictObject 拒绝', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走' })
+    await expect(updateHabit(domain, created.id, {})).rejects.toThrow()
+    await expect(updateHabit(domain, created.id, { status: 'final' })).rejects.toThrow()
+    await expect(updateHabit(domain, created.id, { checkIns: [] })).rejects.toThrow()
+  })
+
+  it('未找到记录 → 返回 undefined（命令层转错误）', async () => {
+    const { domain } = buildFakeDomain()
+    expect(await updateHabit(domain, 'habit-nope', { title: 'x' })).toBeUndefined()
   })
 })

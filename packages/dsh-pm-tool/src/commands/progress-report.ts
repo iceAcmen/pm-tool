@@ -22,6 +22,7 @@ import { buildSourceRefs, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type 
 import { recordProvenance } from '../core/provenance-store.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const progressReportHelp = [
   '进度汇报命令（离线固定快照，无需 API Key）：',
@@ -89,6 +90,8 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       }
       const { periodStart, periodEnd } = defaultPeriod(7)
       if (!confirmation) {
+        // content/action 分离：叙述正文（content）与确认命令（action）分行；
+        // 正文不含任何命令尾注，confirm 落盘的 executiveSummary 也只存纯叙述。
         return {
           kind: 'success',
           text: [
@@ -97,7 +100,7 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
             narrative,
             '',
             '以上为草稿（基于确定性数字生成），尚未写入。',
-            `确认命令：/pm report narrate ${projectId} confirm`,
+            buildActionLine('确认入库', `/pm report narrate ${projectId} confirm`),
           ].join('\n'),
         }
       }
@@ -131,7 +134,10 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       }
       return {
         kind: 'success',
-        text: [`已按 AI 叙述生成进度快照（executiveSummary 已写入）。\n${render(report)}`].join('\n'),
+        text: buildSuccessEnvelope(
+          [`已按 AI 叙述生成进度快照｜${report.id}`, 'executiveSummary 已写入；确定性数字采集'],
+          render(report),
+        ),
       }
     }
     // OPT-08：/pm report narrateuse <项目ID> "<JSON编码的编辑后叙述>" —— 按用户编辑后的文本直接落快照，不再调模型。
@@ -170,7 +176,13 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
           refs,
         })
       }
-      return { kind: 'success', text: `已按编辑后叙述生成进度快照（不再调用模型）。\n${render(report)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`已按编辑后叙述生成进度快照｜${report.id}`, '不再调用模型；确定性数字采集'],
+          render(report),
+        ),
+      }
     }
     const generateMatch = /^generate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
     if (generateMatch) {
@@ -184,7 +196,13 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
         periodStart: generateMatch[2],
         periodEnd: generateMatch[3],
       })
-      return { kind: 'success', text: `进度汇报快照已生成并保存。\n${render(report)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`进度汇报快照已生成并保存｜${report.id} ${report.title}`, `${report.periodStart} 至 ${report.periodEnd}｜${progressReportStatusLabels[report.status]}`],
+          render(report),
+        ),
+      }
     }
     const listMatch = /^list\s+(\S+)(?:\s+(all|draft|final))?$/i.exec(input)
     if (listMatch) {
@@ -212,7 +230,13 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
     if (updateMatch) {
       const report = await updateProgressReport(domain, updateMatch[1], JSON.parse(updateMatch[2]))
       return report
-        ? { kind: 'success', text: `进度汇报已更新，固定快照未改变。\n${render(report)}` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`进度汇报已更新｜${report.id} ${report.title}`, '固定快照未改变'],
+              render(report),
+            ),
+          }
         : { kind: 'error', text: `未找到进度汇报：${updateMatch[1]}。` }
     }
     const exportMatch = /^export\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
@@ -242,10 +266,23 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
       const current = getProgressReport(domain, deleteMatch[1])
       if (!current) return { kind: 'error', text: `未找到进度汇报：${deleteMatch[1]}。` }
       if (!deleteMatch[2]) {
-        return { kind: 'success', text: `即将删除进度汇报：${current.id}｜${current.title}。\n当前未执行删除。\n确认命令：/pm report delete ${current.id} confirm` }
+        return {
+          kind: 'success',
+          text: [
+            `即将删除进度汇报：${current.id}｜${current.title}。`,
+            '当前未执行删除。',
+            buildActionLine('确认删除', `/pm report delete ${current.id} confirm`),
+          ].join('\n'),
+        }
       }
       await deleteProgressReport(domain, current.id)
-      return { kind: 'success', text: `进度汇报已删除：${current.id}｜${current.title}。` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`进度汇报已删除｜${current.id} ${current.title}`],
+          null,
+        ),
+      }
     }
     return { kind: 'error', text: `不支持的进度汇报操作。\n${progressReportHelp}` }
   } catch (error) {

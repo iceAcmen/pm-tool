@@ -37,6 +37,7 @@ import {
   type OkrTreeNode,
 } from '../core/okr.js'
 import type { PmDomain, OkrRecord } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const okrHelp =
   '  /pm okr add <项目ID> <JSON>       人直接录入 OKR/KR（primaryOkrId 主归属、relatedOkrIds 软关联，默认草稿）\n' +
@@ -78,6 +79,31 @@ function renderOkrLine(rec: OkrLineRecord, depth: number): string {
   ].filter(Boolean).join('｜')
   const relatedTag = rec.related ? '〔关联〕' : ''
   return `${'  '.repeat(depth)}· [${KIND_LABELS[rec.kind]}] ${rec.id}｜${rec.title}${relatedTag}${meta ? `（${meta}）` : ''}`
+}
+
+/** 完整字段详情（进 [pm:detail] 折叠卡，不进短摘要）。 */
+function renderOkrDetail(rec: OkrRecord): string {
+  const lines = [renderOkrLine(rec, 0)]
+  if (rec.description) lines.push(`  说明：${rec.description}`)
+  if (rec.primaryOkrId) lines.push(`  父目标：${rec.primaryOkrId}`)
+  if (rec.relatedOkrIds.length) lines.push(`  软关联：${rec.relatedOkrIds.join('、')}`)
+  lines.push(`  创建时间：${rec.createdAt}`, `  更新时间：${rec.updatedAt}`)
+  return lines.join('\n')
+}
+
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeOkrChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.title !== undefined) labels.push('标题')
+  if (input.kind !== undefined) labels.push('类型')
+  if (input.primaryOkrId !== undefined) labels.push(input.primaryOkrId === null ? '取消父目标' : '父目标')
+  if (input.relatedOkrIds !== undefined) labels.push('软关联')
+  if (input.owner !== undefined) labels.push(input.owner === null ? '清空负责人' : '负责人')
+  if (input.targetDate !== undefined) labels.push(input.targetDate === null ? '清空目标日期' : '目标日期')
+  if (input.description !== undefined) labels.push(input.description === null ? '清空说明' : '说明')
+  if (input.status !== undefined) labels.push(input.status === 'confirmed' ? '人定稿' : '状态')
+  if (input.cycleDue !== undefined) labels.push(input.cycleDue === null ? '清空周期预留' : '周期预留')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
 function renderTreeNodes(nodes: OkrTreeNode[], depth: number, lines: string[]): void {
@@ -124,11 +150,10 @@ export async function handleOkrCommand(
       const record = await addOkr(domain, projectId, fields)
       return {
         kind: 'success',
-        text: [
-          'OKR 已录入并保存（草稿；定稿请用 update）。',
-          renderOkrLine(record, 0),
-          `创建时间：${record.createdAt}`,
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          [`OKR 已录入（草稿）｜${record.id} ${record.title}`, '定稿请用 /pm okr update'],
+          renderOkrDetail(record),
+        ),
       }
     }
 
@@ -139,9 +164,14 @@ export async function handleOkrCommand(
       const fields = parseJson(updateMatch[2])
       if (fields === undefined) return { kind: 'error', text: '更新参数须为合法 JSON 对象，请使用英文双引号。' }
       const record = await updateOkr(domain, updateMatch[1], fields)
-      return record
-        ? { kind: 'success', text: `OKR 已更新并保存。\n${renderOkrLine(record, 0)}\n更新时间：${record.updatedAt}` }
-        : { kind: 'error', text: `未找到 OKR：${updateMatch[1]}。` }
+      if (!record) return { kind: 'error', text: `未找到 OKR：${updateMatch[1]}。` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`OKR 已更新｜${record.id} ${record.title}`, describeOkrChanges(fields as Record<string, unknown>)],
+          renderOkrDetail(record),
+        ),
+      }
     }
 
     // ===== list <项目ID>：树形 JSON =====
@@ -183,7 +213,8 @@ export async function handleOkrCommand(
         text: [
           '建议已进入收件区（未确认不生效，不会创建 OKR 记录）。',
           renderSuggestion(suggestion),
-          `确认：/pm okr confirm ${suggestion.id}｜忽略：/pm okr ignore ${suggestion.id}`,
+          buildActionLine('确认采纳', `/pm okr confirm ${suggestion.id}`),
+          `忽略：/pm okr ignore ${suggestion.id}`,
         ].join('\n'),
       }
     }
@@ -224,10 +255,10 @@ export async function handleOkrCommand(
       const { record, suggestion } = await confirmOkrSuggestion(domain, rest)
       return {
         kind: 'success',
-        text: [
-          `已确认建议 ${suggestion.id}，创建草稿 OKR 记录 ${record.id}（定稿请用 update，无自动定稿）。`,
-          renderOkrLine(record, 0),
-        ].join('\n'),
+        text: buildSuccessEnvelope(
+          [`已确认建议 ${suggestion.id}，创建草稿 OKR 记录 ${record.id}`, '草稿；定稿请用 update，无自动定稿'],
+          renderOkrDetail(record),
+        ),
       }
     }
 
@@ -237,7 +268,10 @@ export async function handleOkrCommand(
       const suggestion = await ignoreOkrSuggestion(domain, rest)
       return {
         kind: 'success',
-        text: `已忽略建议 ${suggestion.id}（保留在收件区标 ignored，可逆；不会创建记录）。`,
+        text: buildSuccessEnvelope(
+          [`已忽略建议 ${suggestion.id}`, '保留在收件区标 ignored，可逆；不会创建记录'],
+          null,
+        ),
       }
     }
 

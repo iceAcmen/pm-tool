@@ -60,8 +60,24 @@ export function scoreFromInputs(
   return { lamp, score, factors }
 }
 
+/**
+ * 测试/verify 专用固定时钟覆盖（默认 null=走真实墙钟，生产无行为变化）。
+ * 用于把硬编码日历日的夹具从墙钟解耦：set 后 localTodayIso 一律返回该日期，
+ * 脚本结束必须 clearFixedTodayIso 复位，避免污染其它用例。
+ */
+let fixedToday: string | null = null
+
+export function setFixedTodayIso(iso: string | null): void {
+  fixedToday = iso
+}
+
+export function clearFixedTodayIso(): void {
+  fixedToday = null
+}
+
 /** 本地日历日 YYYY-MM-DD（无 zod、可浏览器用）：避免 UTC 偏移把今天写成昨天。 */
 export function localTodayIso(now: Date = new Date()): string {
+  if (fixedToday !== null) return fixedToday
   const y = now.getFullYear()
   const m = String(now.getMonth() + 1).padStart(2, '0')
   const d = String(now.getDate()).padStart(2, '0')

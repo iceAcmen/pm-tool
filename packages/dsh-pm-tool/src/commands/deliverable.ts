@@ -17,6 +17,7 @@ import {
 } from '../core/deliverable.js'
 import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const deliverableHelp = [
   '交付物台账命令（离线，无需 API Key）：',
@@ -65,6 +66,21 @@ function renderDeliverable(record: Deliverable): string {
   return lines.join('\n')
 }
 
+/** update 变更字段中文短标签（只列本次传入业务字段；operator/changeNote 仅留痕参数）。 */
+function describeDeliverableChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.name !== undefined) labels.push('名称')
+  if (input.version !== undefined) labels.push('版本')
+  if (input.owner !== undefined) labels.push('负责人')
+  if (input.status !== undefined) labels.push('状态')
+  if (input.location !== undefined) labels.push('位置')
+  if (input.description !== undefined) labels.push('说明')
+  if (input.dueDate !== undefined) labels.push('计划交付日期')
+  if (input.repoUrl !== undefined) labels.push('仓库链接')
+  if (input.branch !== undefined) labels.push('分支')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
+}
+
 function parseList(argument: string): { projectId: string, status?: DeliverableStatus } | undefined {
   const parts = argument.split(/\s+/).filter(Boolean)
   if (parts.length < 1 || parts.length > 2) return undefined
@@ -93,7 +109,13 @@ export async function handleDeliverableCommand(rawInput: string, domain?: PmDoma
         return { kind: 'error', text: `交付物参数须为合法 JSON 对象，请使用英文双引号。\n${deliverableHelp}` }
       }
       const record = await addDeliverable(domain, fields)
-      return { kind: 'success', text: `交付物已新增并保存。\n${renderDeliverable(record)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`交付物已新增｜${record.id} ${record.name}`, `${record.version || '无版本'}｜${deliverableStatusLabels[record.status]}`],
+          renderDeliverable(record),
+        ),
+      }
     }
     if (action === 'list') {
       const filter = parseList(argument)
@@ -137,9 +159,18 @@ export async function handleDeliverableCommand(rawInput: string, domain?: PmDoma
       if (!record) return { kind: 'error', text: `未找到交付物：${updateMatch[1]}。` }
       // X2：人显式收尾（wrapped）后文案明示「已收尾 ≠ 正式验收」，状态变更自动进 history 留痕。
       const wrappedNote = record.status === 'wrapped'
-        ? '\n注意：已收尾（wrapped）≠ 正式验收（accepted）；该交付物未计入完成，AI 不得代写。'
+        ? '注意：已收尾（wrapped）≠ 正式验收（accepted）；该交付物未计入完成，AI 不得代写。'
         : ''
-      return { kind: 'success', text: `交付物已更新并保存。${wrappedNote}\n${renderDeliverable(record)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [
+            `交付物已更新并保存｜${record.id} ${record.name}`,
+            wrappedNote || describeDeliverableChanges(fields as Record<string, unknown>),
+          ],
+          renderDeliverable(record),
+        ),
+      }
     }
     const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!deleteMatch) return { kind: 'error', text: '请使用：/pm deliverable delete <交付物ID> confirm' }
@@ -152,13 +183,19 @@ export async function handleDeliverableCommand(rawInput: string, domain?: PmDoma
         text: [
           `即将删除交付物：${current.id}｜${current.name}。`,
           '当前未执行删除。',
-          `确认命令：/pm deliverable delete ${current.id} confirm`,
+          buildActionLine('确认删除', `/pm deliverable delete ${current.id} confirm`),
         ].join('\n'),
       }
     }
     const deleted = await deleteDeliverable(domain, id)
     return deleted
-      ? { kind: 'success', text: `交付物已删除：${deleted.id}｜${deleted.name}。` }
+      ? {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`交付物已删除｜${deleted.id} ${deleted.name}`],
+            null,
+          ),
+        }
       : { kind: 'error', text: `未找到交付物：${id}。` }
   } catch (error) {
     if (error instanceof z.ZodError) {

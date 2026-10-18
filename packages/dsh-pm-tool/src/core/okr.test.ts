@@ -310,4 +310,28 @@ describe('人定稿与记录写入', () => {
     // 本模块不导出任何调度/定时器 API（习惯层/周期触发不在本期）。
     expect(typeof clearProcessedSuggestions).toBe('function')
   })
+
+  it('description 兼容新增：add 携带、update 改写、null 清空；旧记录缺键照常读取', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addOkr(domain, 'p-0001', {
+      title: 'O', kind: 'objective', description: '首期交付口径',
+    })
+    expect(created.description).toBe('首期交付口径')
+    const renamed = await updateOkr(domain, created.id, { description: '修订口径' })
+    expect(renamed?.description).toBe('修订口径')
+    const cleared = await updateOkr(domain, created.id, { description: null })
+    expect(cleared?.description).toBeUndefined()
+    // null 清空物理删键，不以 undefined 残留造成 JSON 往返歧义。
+    const storedOkr = domain.table('okrs').get(created.id) as Record<string, unknown>
+    expect(Object.prototype.hasOwnProperty.call(storedOkr, 'description')).toBe(false)
+    // 旧记录（无 description 键）直接入表，读取不报错、不臆造字段。
+    domain.table('okrs').put('okr-legacy', {
+      id: 'okr-legacy', projectId: 'p-0001', title: '旧目标', kind: 'objective',
+      primaryOkrId: null, relatedOkrIds: [], status: 'draft',
+      createdAt: '2026-01-01T00:00:00.000Z', updatedAt: '2026-01-01T00:00:00.000Z',
+    })
+    const legacy = domain.table('okrs').get('okr-legacy')
+    expect(legacy).toBeTruthy()
+    expect((legacy as { description?: string }).description).toBeUndefined()
+  })
 })

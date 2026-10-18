@@ -21,6 +21,7 @@ import {
   type RiskIssueType,
 } from '../core/risk-issue.js'
 import type { PmDomain } from '../core/storage.js'
+import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const riskIssueHelp = [
   '风险与问题命令（离线，无需 API Key）：',
@@ -52,6 +53,21 @@ function renderRiskIssue(record: RiskIssue): string {
     `创建时间：${record.createdAt}`,
     `更新时间：${record.updatedAt}`,
   ].join('\n')
+}
+
+/** update 变更字段中文短标签（只列本次传入字段；供短摘要第二行）。 */
+function describeRiskChanges(input: Record<string, unknown>): string {
+  const labels: string[] = []
+  if (input.title !== undefined) labels.push('标题')
+  if (input.description !== undefined) labels.push('说明')
+  if (input.owner !== undefined) labels.push('负责人')
+  if (input.dueDate !== undefined) labels.push('截止日期')
+  if (input.status !== undefined) labels.push('状态')
+  if (input.probability !== undefined) labels.push('概率')
+  if (input.impact !== undefined) labels.push('影响')
+  if (input.responsePlan !== undefined) labels.push('应对措施')
+  if (input.solution !== undefined) labels.push('解决方案')
+  return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
 function parseList(argument: string):
@@ -89,7 +105,13 @@ export async function handleRiskIssueCommand(rawInput: string, domain?: PmDomain
         return { kind: 'error', text: `风险/问题参数须为合法 JSON 对象，请使用英文双引号。\n${riskIssueHelp}` }
       }
       const record = await addRiskIssue(domain, fields)
-      return { kind: 'success', text: `风险/问题已新增并保存。\n${renderRiskIssue(record)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`${riskIssueTypeLabels[record.type]}已新增｜${record.id} ${record.title}`, `${riskIssueStatusLabels[record.status]}｜影响${riskImpactLabels[record.impact]}`],
+          renderRiskIssue(record),
+        ),
+      }
     }
     if (action === 'list') {
       const filter = parseList(argument)
@@ -135,7 +157,13 @@ export async function handleRiskIssueCommand(rawInput: string, domain?: PmDomain
       }
       const record = await updateRiskIssue(domain, updateMatch[1], fields)
       return record
-        ? { kind: 'success', text: `风险/问题已更新并保存。\n${renderRiskIssue(record)}` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`风险/问题已更新并保存｜${record.id} ${record.title}`, describeRiskChanges(fields as Record<string, unknown>)],
+              renderRiskIssue(record),
+            ),
+          }
         : { kind: 'error', text: `未找到风险/问题：${updateMatch[1]}。` }
     }
     const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
@@ -149,13 +177,19 @@ export async function handleRiskIssueCommand(rawInput: string, domain?: PmDomain
         text: [
           `即将删除${riskIssueTypeLabels[current.type]}：${current.id}｜${current.title}。`,
           '当前未执行删除。',
-          `确认命令：/pm risk-issue delete ${current.id} confirm`,
+          buildActionLine('确认删除', `/pm risk-issue delete ${current.id} confirm`),
         ].join('\n'),
       }
     }
     const deleted = await deleteRiskIssue(domain, id)
     return deleted
-      ? { kind: 'success', text: `${riskIssueTypeLabels[deleted.type]}已删除：${deleted.id}｜${deleted.title}。` }
+      ? {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`${riskIssueTypeLabels[deleted.type]}已删除｜${deleted.id} ${deleted.title}`],
+            null,
+          ),
+        }
       : { kind: 'error', text: `未找到风险/问题：${id}。` }
   } catch (error) {
     if (error instanceof z.ZodError) {

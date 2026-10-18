@@ -22,8 +22,22 @@ export function formatNoticeLines(message: string): string[] {
  */
 export const PM_SUMMARY_PREFIX = '[pm:summary]'
 export const PM_DETAIL_MARKER = '[pm:detail]'
+/**
+ * 动作行标记：AI 草稿预览等「内容/动作分离」场景，把可触发命令挂在独立动作行，
+ * 命令不进保存正文、不与草稿内容混排。格式：`[pm:action]<按钮文案>：<可执行命令>`。
+ * 与 success 信封解耦：草稿预览本身持久（不加 [pm:summary]），仅用本标记标注动作。
+ */
+export const PM_ACTION_MARKER = '[pm:action]'
 /** 成功提示自动消失时长（合同 §5：success 3s；错误持久）。 */
 export const FEEDBACK_SUCCESS_TTL_MS = 3000
+
+/** 结构化动作（UI 据此渲染独立按钮；命令绝不进保存正文）。 */
+export interface FeedbackAction {
+  /** 按钮文案（如「确认入库」「确认建会」）。 */
+  label: string
+  /** 可执行命令串（如 /pm report narrate p-0001 confirm）。 */
+  command: string
+}
 
 export interface ParsedFeedback {
   /** 是否为命令层结构化信封（否则走原样回退）。 */
@@ -32,13 +46,55 @@ export interface ParsedFeedback {
   summary: string[]
   /** 完整字段详情（可展开卡）；无则 null。 */
   detail: string | null
+  /** 独立动作（确认命令等）；无则 null。原样回退文本也会抽取动作行。 */
+  action: FeedbackAction | null
+}
+
+/** 解析 `[pm:action]文案：命令` 动作行；格式不符返回 null。 */
+export function parseActionLine(line: string): FeedbackAction | null {
+  const body = line.slice(PM_ACTION_MARKER.length).trim()
+  if (!body) return null
+  const sep = /[：:]/.exec(body)
+  if (!sep) return null
+  const label = body.slice(0, sep.index).trim()
+  const command = body.slice(sep.index + 1).trim()
+  if (!label || !command) return null
+  return { label, command }
+}
+
+/** 构造动作行（AI 草稿预览等 content/action 分离场景；命令不进保存正文）。 */
+export function buildActionLine(label: string, command: string): string {
+  return `${PM_ACTION_MARKER}${label}：${command}`
+}
+
+/**
+ * 构造成功结构化信封：≤2 行短摘要（类型｜ID｜标题｜变更字段），完整字段进 detail 折叠区。
+ * 七类写实体（task/milestone/risk-issue/meeting/report/deliverable/project）统一走本形态。
+ */
+export function buildSuccessEnvelope(summaryLines: Array<string | null | undefined>, detail?: string | null): string {
+  const lines = summaryLines
+    .filter((line): line is string => !!line && line.trim().length > 0)
+    .map(line => `${PM_SUMMARY_PREFIX}${line.trim()}`)
+  if (detail && detail.trim()) {
+    lines.push(PM_DETAIL_MARKER, detail.trim())
+  }
+  return lines.join('\n')
 }
 
 export function parseFeedback(text: string): ParsedFeedback {
   const lines = text.split('\n')
+  const action = lines
+    .map(l => l.trim())
+    .filter(l => l.startsWith(PM_ACTION_MARKER))
+    .map(parseActionLine)
+    .find((a): a is FeedbackAction => !!a) ?? null
   const hasSummary = lines.some(l => l.trimStart().startsWith(PM_SUMMARY_PREFIX))
   if (!hasSummary) {
-    return { structured: false, summary: formatNoticeLines(text), detail: null }
+    // 非结构化回退：动作行单独抽出，不混进展示正文（content/action 分离）。
+    const body = lines
+      .map(l => l.trim())
+      .filter(l => l.length > 0 && !l.startsWith(PM_ACTION_MARKER))
+    return { structured: false, summary: body, detail: null, action }
   }
   const summary: string[] = []
   const detail: string[] = []
@@ -47,12 +103,13 @@ export function parseFeedback(text: string): ParsedFeedback {
     const line = raw.trim()
     if (line === PM_DETAIL_MARKER) { inDetail = true; continue }
     if (inDetail) { detail.push(raw); continue }
+    if (line.startsWith(PM_ACTION_MARKER)) continue
     if (line.startsWith(PM_SUMMARY_PREFIX)) {
       const s = line.slice(PM_SUMMARY_PREFIX.length).trim()
       if (s) summary.push(s)
     }
   }
-  return { structured: true, summary, detail: detail.join('\n').trim() || null }
+  return { structured: true, summary, detail: detail.join('\n').trim() || null, action }
 }
 
 /** 错误判定（集中一处）：命中即持久单处提示，不自动消失。 */
@@ -69,6 +126,8 @@ export interface ClassifiedFeedback {
   summary: string[]
   /** 完整字段详情（独立展开卡）；无则 null。 */
   detail: string | null
+  /** 独立动作（确认命令等）；无则 null。 */
+  action: FeedbackAction | null
   /** 成功结构化提示自动消失时长；错误/非结构化返回 null（持久）。 */
   autoDismissMs: number | null
 }
@@ -85,6 +144,7 @@ export function classifyFeedback(message: string): ClassifiedFeedback {
     structured: parsed.structured,
     summary: parsed.summary,
     detail: parsed.detail,
+    action: parsed.action,
     autoDismissMs: !isError && parsed.structured ? FEEDBACK_SUCCESS_TTL_MS : null,
   }
 }

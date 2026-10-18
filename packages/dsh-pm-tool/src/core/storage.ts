@@ -70,6 +70,8 @@ export const okrRecordSchema = z.object({
   relatedOkrIds: z.array(z.string()).default([]),
   owner: z.string().optional(),
   targetDate: z.iso.date().optional(),
+  /** 说明/补充描述（兼容新增，optional：旧记录缺键照常读取，不批量迁移）。 */
+  description: z.string().optional(),
   /** 草稿/定稿复用 X6 机制：draft→confirmed 由人触发；ignored 仅用于收件区建议。 */
   status: z.enum(['draft', 'confirmed']).default('draft'),
   /** K11 周期触发接线点（类型预留，本期不实现周期调度）。 */
@@ -108,6 +110,12 @@ export const habitRecordSchema = z.object({
   /** 可选关联 P2 愿景/OKR 层实体（同项目校验）。 */
   okrId: z.string().optional(),
   title: z.string().min(1, '习惯标题不能为空'),
+  /** 目标/期望结果（兼容新增，optional：旧记录缺键照常读取，不批量迁移）。 */
+  goal: z.string().optional(),
+  /** 频率（自由文本，如 每天/工作日/每周一；兼容新增，optional，不实现调度）。 */
+  frequency: z.string().optional(),
+  /** 备注（兼容新增，optional）。 */
+  notes: z.string().optional(),
   status: z.enum(['draft', 'confirmed', 'final']).default('draft'),
   checkIns: z.array(z.object({
     at: z.iso.date(),

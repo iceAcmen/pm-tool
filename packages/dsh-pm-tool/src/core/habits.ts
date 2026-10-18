@@ -39,7 +39,26 @@ export const habitCreateSchema = z.strictObject({
   title: z.string().trim().min(1, '习惯标题不能为空'),
   /** 可选关联 P2 OKR（同项目存在性校验）。 */
   okrId: z.string().optional(),
+  /** 目标/期望结果（兼容新增，可空；旧记录缺键照常读取，不批量迁移）。 */
+  goal: z.string().trim().optional(),
+  /** 频率（自由文本：每天/工作日/每周一 等；仅记录，不实现调度）。 */
+  frequency: z.string().trim().max(40, '频率说明过长（≤40 字）').optional(),
+  /** 备注（可空）。 */
+  notes: z.string().trim().optional(),
 })
+
+/**
+ * 习惯更新（兼容新增字段 goal/frequency/notes）。
+ * 不开放：status（draft→confirmed/final 仅 confirm/final 人触发）、checkIns（仅 checkin）、
+ * streak/cycleDue/createdAt/projectId/id（系统维护）。okrId 传 null 取消关联；文本字段传 null 清空。
+ */
+export const habitUpdateSchema = z.strictObject({
+  title: z.string().trim().min(1, '习惯标题不能为空').optional(),
+  goal: z.string().trim().nullable().optional(),
+  frequency: z.string().trim().max(40, '频率说明过长（≤40 字）').nullable().optional(),
+  notes: z.string().trim().nullable().optional(),
+  okrId: z.string().nullable().optional(),
+}).refine(value => Object.keys(value).length > 0, '至少提供一个要更新的字段')
 
 /** agent 代起草建议形状：只进收件区，不建记录。 */
 export const habitSuggestionSchema = z.strictObject({
@@ -49,6 +68,7 @@ export const habitSuggestionSchema = z.strictObject({
 })
 
 export type HabitCreateInput = z.infer<typeof habitCreateSchema>
+export type HabitUpdateInput = z.infer<typeof habitUpdateSchema>
 export type HabitSuggestionInput = z.infer<typeof habitSuggestionSchema>
 
 // ---- 收件区（settings 固定行 pmHabitInbox，数组只增；处理状态原地标注，不删 pending）----
@@ -244,6 +264,9 @@ export function addHabit(domain: PmDomain, projectId: string, input: unknown): P
       projectId,
       title: fields.title,
       ...(okrId ? { okrId } : {}),
+      ...(fields.goal ? { goal: fields.goal } : {}),
+      ...(fields.frequency ? { frequency: fields.frequency } : {}),
+      ...(fields.notes ? { notes: fields.notes } : {}),
       status: 'draft',
       checkIns: [],
       streak: { current: 0, longest: 0, totalDays: 0 },
@@ -252,6 +275,50 @@ export function addHabit(domain: PmDomain, projectId: string, input: unknown): P
     })
     await domain.table('habits').put(record.id, record)
     return structuredClone(record)
+  })
+}
+
+/**
+ * 人更新习惯：仅开放 title/goal/frequency/notes/okrId；status/checkIns/streak/cycleDue/
+ * createdAt/projectId/id 不可改。okrId=null 取消关联；goal/frequency/notes 传 null 清空。
+ * 关联 OKR 沿用本记录 projectId 做同项目存在性校验；未找到记录返回 undefined（命令层转错误）。
+ */
+export function updateHabit(
+  domain: PmDomain,
+  id: string,
+  input: unknown,
+): Promise<HabitRecord | undefined> {
+  // 校验放进串行写队列内，所有拒绝一律走异步 rejection（与 add/checkin 同构）。
+  return enqueueDomainWrite(domain, async () => {
+    const fields = habitUpdateSchema.parse(input)
+    const current = domain.table('habits').get(id) as HabitRecord | undefined
+    if (!current) return undefined
+    const at = new Date().toISOString()
+    // 从当前记录克隆可变副本；null = 显式删除该键（不以 undefined 残留造成 JSON 往返歧义）。
+    const next = structuredClone(current) as Record<string, unknown>
+    if (fields.title !== undefined) next.title = fields.title
+    if (fields.goal !== undefined) {
+      if (fields.goal === null) delete next.goal
+      else next.goal = fields.goal
+    }
+    if (fields.frequency !== undefined) {
+      if (fields.frequency === null) delete next.frequency
+      else next.frequency = fields.frequency
+    }
+    if (fields.notes !== undefined) {
+      if (fields.notes === null) delete next.notes
+      else next.notes = fields.notes
+    }
+    if (fields.okrId !== undefined) {
+      // okrId=null 解绑：validateHabitOkr(undefined) 返回 undefined → 删除旧关联键。
+      const okrId = validateHabitOkr(domain, current.projectId, fields.okrId ?? undefined)
+      if (okrId) next.okrId = okrId
+      else delete next.okrId
+    }
+    next.updatedAt = at
+    const merged = habitRecordSchema.parse(next)
+    await domain.table('habits').put(id, merged)
+    return structuredClone(merged)
   })
 }
 
@@ -406,7 +473,10 @@ export function finalizeHabit(domain: PmDomain, id: string): Promise<HabitRecord
 
 const HABIT_FIELD_LABELS: Record<string, string> = {
   title: '习惯名（非空文本）',
-  okrId: '关联 OKR ID（须同项目存在，可空）',
+  okrId: '关联 OKR ID（须同项目存在，传 null 取消关联）',
+  goal: '目标/期望结果（文本，可空，传 null 清空）',
+  frequency: '频率（文本 ≤40 字，如 每天/工作日/每周一，可空，传 null 清空）',
+  notes: '备注（文本，可空，传 null 清空）',
   rationale: '建议理由（文本，可空）',
 }
 

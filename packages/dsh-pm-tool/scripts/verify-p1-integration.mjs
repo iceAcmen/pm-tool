@@ -27,6 +27,7 @@ import { addProject } from '../lib/core/projects.js'
 import { addMilestone } from '../lib/core/milestones.js'
 import { addDeliverable } from '../lib/core/deliverables.js'
 import { loadFacts, stanceSuggestions, staleStanceTags } from '../lib/core/load-stance.js'
+import { setFixedTodayIso, clearFixedTodayIso } from '../lib/core/derived.js'
 import { extractReferencedTaskIds, latestAppliedBatches } from '../lib/core/ask-projection.js'
 import { apply } from '../lib/index.js'
 
@@ -59,6 +60,8 @@ try {
   await apply(ctx)
   const domain = facility.get('pmtool')
   assert.ok(domain)
+  // 夹具以 2026-10-18 为「今天」：注入固定时钟解耦墙钟，不改任何断言预期。
+  setFixedTodayIso('2026-10-18')
 
   const project = await addProject(domain, { name: 'P1 集成验证项目', startDate: '2026-10-01', targetDate: '2026-12-31' })
   const pid = project.id
@@ -222,4 +225,6 @@ try {
   console.log(`=== 已执行 ${results.length} 项，其中 ${failed.length} 项失败 ===`)
   for (const f of failed) console.log(`  ${f.k} :: ${f.detail}`)
   process.exitCode = 1
+} finally {
+  clearFixedTodayIso()
 }

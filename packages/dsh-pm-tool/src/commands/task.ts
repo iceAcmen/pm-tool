@@ -53,7 +53,7 @@ import { recordProvenance } from '../core/provenance-store.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
-import { PM_SUMMARY_PREFIX, PM_DETAIL_MARKER } from '../core/ui-feedback.js'
+import { PM_SUMMARY_PREFIX, PM_DETAIL_MARKER, buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -254,7 +254,13 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         return { kind: 'error', text: `任务参数须为合法 JSON 对象，请使用英文双引号。\n${taskHelp}` }
       }
       const task = await addTask(domain, fields)
-      return { kind: 'success', text: `任务已新增并保存。\n${renderTask(task)}` }
+      return {
+        kind: 'success',
+        text: buildSuccessEnvelope(
+          [`任务已新增｜${task.code}｜${task.id} ${task.title}`, task.parentId ? `父任务：${task.parentId}` : '根层级'],
+          '```\n' + renderTask(task) + '\n```',
+        ),
+      }
     }
     if (action === 'list') {
       if (!argument || /\s/.test(argument)) {
@@ -334,7 +340,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
               `任务 ${current.code}｜${current.id}｜${current.title} 含 ${subtree.length - 1} 个子任务。`,
               '当前未删除。级联删除将同时移除以下整棵子树：',
               ...subtree.map(task => `  ${task.code}｜${task.id}｜${task.title}`),
-              `如确需级联删除，确认命令：/pm task delete ${id} cascade confirm`,
+              buildActionLine('确认级联删除', `/pm task delete ${id} cascade confirm`),
             ].join('\n'),
           }
         }
@@ -343,7 +349,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
           text: [
             `即将删除任务：${current.code}｜${current.id}｜${current.title}。`,
             '当前未执行删除。',
-            `确认命令：/pm task delete ${current.id} confirm`,
+            buildActionLine('确认删除', `/pm task delete ${current.id} confirm`),
           ].join('\n'),
         }
       }
@@ -356,16 +362,25 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       }
       if (cascadeWord) {
         const deleted = await deleteTaskCascade(domain, id)
-        return {
-          kind: 'success',
-          text: deleted.length
-            ? `已级联删除 ${deleted.length} 个任务（${current.code} 及其 ${deleted.length - 1} 个后代）；旁支任务不受影响。`
-            : `未删除任何任务：${id}。`,
-        }
+        return deleted.length
+          ? {
+              kind: 'success',
+              text: buildSuccessEnvelope(
+                [`已级联删除 ${deleted.length} 个任务`, `${current.code} 及其 ${deleted.length - 1} 个后代；旁支任务不受影响`],
+                `已删除 ID：${deleted.join('、')}`,
+              ),
+            }
+          : { kind: 'error', text: `未删除任何任务：${id}。` }
       }
       const deleted = await deleteTask(domain, id)
       return deleted
-        ? { kind: 'success', text: `任务已删除：${deleted.code}｜${deleted.id}｜${deleted.title}。WBS 编号未自动调整。` }
+        ? {
+            kind: 'success',
+            text: buildSuccessEnvelope(
+              [`任务已删除｜${deleted.code}｜${deleted.id} ${deleted.title}`, 'WBS 编号未自动调整'],
+              null,
+            ),
+          }
         : { kind: 'error', text: `未找到任务：${id}。` }
     }
     if (action === 'move') {
@@ -390,7 +405,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
             wantRenumber
               ? '将在移动后立即按新树重建全项目连续 WBS 编号（单事务，失败整体回滚）。'
               : '移动后保留旧 WBS 编号；需要连续编号时再显式执行 renumber。',
-            `确认命令：/pm task move ${current.id} ${newParentId ?? 'root'}${wantRenumber ? ' --renumber' : ''} confirm`,
+            buildActionLine('确认移动', `/pm task move ${current.id} ${newParentId ?? 'root'}${wantRenumber ? ' --renumber' : ''} confirm`),
           ].join('\n'),
         }
       }
@@ -400,9 +415,15 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       return moved
         ? {
             kind: 'success',
-            text: wantRenumber
-              ? `任务已移动到${moved.parentId ? `父任务 ${moved.parentId}` : '根层级'}，并重编号为 ${moved.code}。\n${renderTask(moved)}`
-              : `任务已移动到${moved.parentId ? `父任务 ${moved.parentId}` : '根层级'}；原 WBS 编号 ${moved.code} 暂时保留。\n${renderTask(moved)}`,
+            text: buildSuccessEnvelope(
+              [
+                `任务已移动｜${moved.code}｜${moved.id} ${moved.title}`,
+                moved.parentId
+                  ? `父任务 ${moved.parentId}${wantRenumber ? `；重编号为 ${moved.code}` : ''}`
+                  : `移至根层级${wantRenumber ? `；重编号为 ${moved.code}` : ''}`,
+              ],
+              wantRenumber ? null : '```\n' + renderTask(moved) + '\n```',
+            ),
           }
         : { kind: 'error', text: `未找到任务：${id}。` }
     }
