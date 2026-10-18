@@ -45,6 +45,7 @@ import { handleOkrCommand, okrHelp } from './commands/okr.js'
 import { handleLessonCommand, lessonHelp } from './commands/lesson.js'
 import { handleReviewCommand, reviewHelp } from './commands/review.js'
 import { handleArchiveCommand, archiveHelp } from './commands/archive.js'
+import { handleHabitCommand, habitHelp } from './commands/habit.js'
 import { buildQueueForProject } from './core/queue.js'
 import { localTodayIso } from './core/derived.js'
 
@@ -122,6 +123,8 @@ function renderHelp(): CommandResult {
       reviewHelp,
       '',
       archiveHelp,
+      '',
+      habitHelp,
     ].join('\n'),
   }
 }
@@ -180,6 +183,7 @@ export async function apply(ctx: Context): Promise<void> {
             deliverables: [...domain.table('deliverables').entries()].map(([, value]) => value),
             okrs: [...domain.table('okrs').entries()].map(([, value]) => value),
             lessons: [...domain.table('lessons').entries()].map(([, value]) => value),
+            habits: [...domain.table('habits').entries()].map(([, value]) => value),
             dashboards: {
               user: readDashboard(domain, 'user'),
               project: readDashboard(domain, 'project'),
@@ -265,6 +269,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (reviewMatch) return handleReviewCommand(reviewMatch[1] ?? '', domain)
       const archiveMatch = /^archive(?:\s+([\s\S]*))?$/i.exec(raw)
       if (archiveMatch) return handleArchiveCommand(archiveMatch[1] ?? '', domain)
+      const habitMatch = /^habit(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (habitMatch) return handleHabitCommand(habitMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

@@ -2777,3 +2777,95 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 }
 .pm-export-slot--done { color: var(--pm-success); }
 .pm-export-slot--none { color: var(--pm-muted); opacity: .8; }
+
+/* --- P3 X7 习惯层视图（.pm-habit-*）：只读呈现 + 命令通道；streak 纯文本档案，无积分/连胜动效/徽章 --- */
+.pm-habit-root { display: flex; flex-direction: column; gap: 16px; padding: 4px 2px 24px; }
+.pm-habit-head h1 { margin: 0; font-size: 16px; font-weight: 700; color: var(--pm-ink); }
+.pm-habit-sub { margin: 4px 0 0; font-size: 12px; color: var(--pm-muted); line-height: 1.6; }
+.pm-habit-list { display: flex; flex-direction: column; gap: 12px; }
+.pm-habit-card { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.pm-habit-card-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pm-habit-title { margin: 0; font-size: 14px; font-weight: 600; color: var(--pm-ink); }
+.pm-habit-meta { font-size: 11px; color: var(--pm-muted); font-family: var(--pm-font-mono); }
+.pm-habit-status {
+  margin-left: auto; font-size: 10.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+}
+.pm-habit-status--draft { background: color-mix(in srgb, var(--pm-warning) 14%, transparent); color: var(--pm-warning); }
+.pm-habit-status--confirmed { background: color-mix(in srgb, var(--pm-accent) 14%, transparent); color: var(--pm-accent); }
+.pm-habit-status--final { background: color-mix(in srgb, var(--pm-success) 14%, transparent); color: var(--pm-success); }
+.pm-habit-okr {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--pm-muted);
+  padding: 4px 8px; border: 1px dashed var(--pm-line); border-radius: 7px; width: fit-content;
+}
+/* streak 纯文本档案：中性次级文本，无徽章底色、无动效、无积分。 */
+.pm-habit-streak {
+  margin: 0; font-size: 12.5px; color: var(--pm-secondary); line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+.pm-habit-checkins { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pm-habit-checkin {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 6px 10px; border-radius: 8px;
+  background: color-mix(in srgb, var(--pm-surface-muted) 60%, transparent);
+  font-size: 12px; color: var(--pm-ink);
+}
+.pm-habit-checkin--empty { background: transparent; border: 1px dashed var(--pm-line); color: var(--pm-muted); }
+.pm-habit-checkin-date { font-variant-numeric: tabular-nums; color: var(--pm-secondary); }
+.pm-habit-backfilled {
+  font-size: 10.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px;
+  background: color-mix(in srgb, var(--pm-warning) 14%, transparent); color: var(--pm-warning);
+}
+.pm-habit-checkin-note { color: var(--pm-muted); font-size: 11.5px; }
+.pm-habit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.pm-habit-btn {
+  font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  border: 1px solid transparent;
+}
+.pm-habit-btn:disabled { opacity: .55; cursor: not-allowed; }
+.pm-habit-btn-primary { background: var(--pm-accent); color: var(--pm-on-primary); }
+.pm-habit-btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
+.pm-habit-btn-ghost { background: transparent; border-color: var(--pm-line); color: var(--pm-secondary); }
+.pm-habit-btn-ghost:hover:not(:disabled) { border-color: var(--pm-accent); color: var(--pm-accent); }
+
+/* 空态：无数据时居中占位，不注入示例。 */
+.pm-habit-empty {
+  padding: 32px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  color: var(--pm-muted);
+}
+.pm-habit-empty h3 { margin: 0; font-size: 14px; color: var(--pm-ink); }
+.pm-habit-empty p { margin: 0; font-size: 12px; max-width: 420px; line-height: 1.6; }
+.pm-habit-empty code {
+  font-family: var(--pm-font-mono); font-size: 11.5px;
+  background: color-mix(in srgb, var(--pm-line) 30%, transparent); padding: 1px 6px; border-radius: 5px;
+}
+
+/* 收件区入口（.pm-habit-inbox-*）：待确认建议，confirm/ignore 走命令通道。 */
+.pm-habit-inbox { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.pm-habit-inbox-head { display: flex; align-items: center; gap: 8px; }
+.pm-habit-inbox-head h2 { margin: 0; font-size: 14px; font-weight: 600; color: var(--pm-ink); }
+.pm-habit-inbox-count {
+  font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px;
+  background: color-mix(in srgb, var(--pm-accent) 12%, transparent); color: var(--pm-accent);
+}
+.pm-habit-inbox-hint { margin: 0; font-size: 12px; color: var(--pm-muted); line-height: 1.7; }
+.pm-habit-inbox-hint code {
+  font-family: var(--pm-font-mono); font-size: 11.5px;
+  background: color-mix(in srgb, var(--pm-line) 30%, transparent); padding: 1px 6px; border-radius: 5px;
+}
+.pm-habit-suggestions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.pm-habit-suggestion {
+  padding: 10px 12px; border-radius: 9px;
+  border: 1px solid var(--pm-line); background: color-mix(in srgb, var(--pm-surface-muted) 45%, transparent);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.pm-habit-suggestion[data-state='ignored'] { opacity: .62; }
+.pm-habit-suggestion-main { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pm-habit-suggestion-id { font-family: var(--pm-font-mono); font-size: 11px; color: var(--pm-muted); }
+.pm-habit-suggestion-title { font-size: 13px; font-weight: 600; color: var(--pm-ink); }
+.pm-habit-suggestion-at { margin-left: auto; font-size: 11px; color: var(--pm-muted); font-variant-numeric: tabular-nums; }
+.pm-habit-suggestion-rationale { margin: 0; font-size: 12px; color: var(--pm-secondary); line-height: 1.6; }
+.pm-habit-suggestion-actions { display: flex; gap: 8px; }
+.pm-habit-processed-tag {
+  font-size: 11px; color: var(--pm-muted); padding: 2px 8px; border-radius: 999px;
+  background: color-mix(in srgb, var(--pm-line) 30%, transparent);
+}

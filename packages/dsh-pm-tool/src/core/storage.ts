@@ -96,6 +96,39 @@ export const lessonRecordSchema = z.object({
 })
 export type LessonRecord = z.infer<typeof lessonRecordSchema>
 
+/**
+ * P3 X7 习惯层：会话派生习惯（轻确认/2 天补记窗回填）+ streak 连续段档案。
+ * 克制清单延续：无积分/连胜动效/徽章，仅文本归档；断签超窗当前 streak 重置 0，
+ * longest/totalDays 累计档案永久保留；草稿/定稿复用 X6（draft→confirmed→final 仅人触发）；
+ * cycleDue 为 K11 周期触发接线点（类型预留，本期不实现调度）。
+ */
+export const habitRecordSchema = z.object({
+  id: z.string().regex(/^habit-[a-zA-Z0-9_-]+$/, '习惯 ID 只能包含字母、数字、下划线和连字符'),
+  projectId: z.string(),
+  /** 可选关联 P2 愿景/OKR 层实体（同项目校验）。 */
+  okrId: z.string().optional(),
+  title: z.string().min(1, '习惯标题不能为空'),
+  status: z.enum(['draft', 'confirmed', 'final']).default('draft'),
+  checkIns: z.array(z.object({
+    at: z.iso.date(),
+    /** 2 天补记窗回填标记（补记仍计入连续，但如实标注）。 */
+    backfilled: z.boolean().default(false),
+    note: z.string().optional(),
+  })).default([]),
+  streak: z.object({
+    current: z.number().int().min(0).default(0),
+    lastDate: z.string().optional(),
+    /** 累计档案永久保留：断签重置只影响 current，不清 longest/totalDays。 */
+    longest: z.number().int().min(0).default(0),
+    totalDays: z.number().int().min(0).default(0),
+  }).default({ current: 0, longest: 0, totalDays: 0 }),
+  /** K11 周期触发接线点（类型预留，不实现调度器）。 */
+  cycleDue: z.string().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+export type HabitRecord = z.infer<typeof habitRecordSchema>
+
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
   // v0.6.0 schema v2：本版读 v1 时代记录（compatibleVersions 含 1），写入一律打 v2 信封。
@@ -118,6 +151,7 @@ export const pmDomainSpec = defineDomain({
     reflections: domainTable(reflectionRecordSchema),
     okrs: domainTable(okrRecordSchema),
     lessons: domainTable(lessonRecordSchema),
+    habits: domainTable(habitRecordSchema),
   },
 })
 

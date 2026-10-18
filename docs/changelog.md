@@ -21,6 +21,16 @@
 - **前端整合**：新视图 `views/okrs.tsx` + `okr-model.ts`（树形/软关联「关联」行/草稿定稿徽章/收件区入口走命令通道 confirm|ignore；snapshot 未携带收件区只显示命令提示不伪造）；`panel.tsx` 接线视图切换器「目标（OKR）」+ Snapshot.okrs 字段；tasks.tsx wrapped 徽章 + 出站关联位（latestExport 有值「已导出·最近 HH:MM·外部为唯一事实源」、无值「未导出」占位，**只显示不回写**）；panel.css 仅追加 `.pm-okr-*`/`.pm-wrapped-*`/`.pm-export-*` 区块（浅深 token、无 emoji）。
 - **写操作纪律延续**：所有写走 enqueueDomainWrite；导出/归档默认拒覆盖 confirm 才覆盖；suggest 未确认不生效；未触碰宿主常驻通知能力；未影响运行中服务；不写外部平台。
 
+## P3 深度融合：纵向+宿主层（X7 习惯层/K11 周期接线占位/H6 常驻推送立项调研）（已 push main，2026-10-18，平台：doubao-work）
+
+> P2（07c23e0）验收通过后的纵向+宿主阶段。规格 `docs/design/deep-integration-v2-p3-dev.md`、验证 `docs/design/deep-integration-v2-p3-verify.md`、证据 `docs/verification/p3-20261018/`、H6 调研 `docs/design/deep-integration-v2-h6-research.md`。3 分片并行（后端/前端/调研）+ 契约层；build=0、vitest 38 文件 / **427/427**、guard 全通过/0 污染（176 资产 before=after）、集成链 **29/29**、分片自验 p3a 22/22。
+
+- **X7 习惯层（可开发）**：新表 `habits`（habitRecordSchema：checkIns[{at,backfilled,note?}]、streak{current,lastDate,longest,totalDays}、okrId? 关联 P2 OKR、status draft|confirmed|final、cycleDue 预留）+ `core/habits.ts`（deriveHabitStreak 纯函数 today 注入：**断签缺口>2 天 → current 重置 0，longest/totalDays 累计档案永久保留**；2 天补记窗内回填算连续；buildHabitArchive 纯文本归档「当前连续 N 天 · 历史最长 M 天 · 累计 X 天」；收件区 pmHabitInbox 信封复用 P2 模式）+ 命令 8 子命令 add/checkin/list/suggest/inbox/confirm/ignore/final（checkin 只允许今天+过去 2 天，超窗中文拒，回填标 backfilled:true；suggest 只进收件区零写入；confirm 建 draft；finalize 幂等）；**克制清单延续：无积分/连胜动效/徽章，仅文本归档；空日如实留空不伪造**。
+- **K11 周期触发接线（占位）**：新 `core/cycle-hooks.ts`——`CYCLE_HOOKS=['daily-archive','quarterly-review']` + `cycleHookPoint` 恒返回 `enabled:false`（reason「H6 宿主通知能力未实现前不启用」）；**无 setInterval/后台进程/宿主 schedule 调用**，文件头注明调度器待用户拍板后立项。
+- **H6 常驻推送立项调研（调研+结论，零代码）**：`docs/design/deep-integration-v2-h6-research.md`（证据分级 E1-E6）——宿主 Web/Chrome 形态**无任何外部通知渠道**（cordis 无定时器 API、notification 帧为助手流式输出、UI 插槽全在窗口内、宿主 schedule 到期只投回原会话、Desktop Electron 未对插件暴露通知通道）；**推荐：维持路线 B（应用内打开面板即派生，ADL-039 现状），不立项路线 A，H6 保持未实现**；路线 A 拍板条件四则（书面接受常驻常开+新 ADL、通道可达、接受改上游维护成本、提供凭据真实验收）；簿记修正：离线基调实际锚在 ADL-009+ADL-039（ADL-011 实为落盘布局）。
+- **前端**：新 `client/views/habits.tsx`（习惯列表：status 徽章三档 + streak 纯文本档案 + 打卡记录含「补记」标注 + OKR 关联标题；收件区 confirm/ignore 命令通道、snapshot 未携带时仅命令提示不伪造；打卡今天/回填按钮；空态与空日留白）+ `panel.tsx` 接线「习惯」视图切换器 + Snapshot.habits 字段 + `panel.css` 仅追加 `.pm-habit-*`（浅深 token、无 emoji、零硬编码）。
+- **写操作纪律延续**：所有写走 enqueueDomainWrite；补记窗超窗拒写；定稿仅人触发；未触碰宿主常驻通知能力（调研未拍板）；未影响运行中服务。
+
 ## P1 深度融合：呈现+交互层（K11 补记队列/K13 对话内投影/K6 完整版/X6-L2 完整复盘草稿流/K19 保护面组件）（已 push main，2026-10-18，平台：doubao-work）
 
 > P0（73037f7）验收通过后的呈现+交互阶段，对应效果图 S1 完整化与 S3 深化。规格 `docs/design/deep-integration-v2-p1-dev.md`、验证 `docs/design/deep-integration-v2-p1-verify.md`、证据 `docs/verification/p1-20261018/`。

@@ -313,3 +313,10 @@
 - **推进**：P2 规格文档 → 契约层（wrapped 枚举+okrs/lessons 表+4 路由+snapshot 字段，基线 326 不回退）→ 4 分片并行（文件级互斥：A export/B okr/C wrapped+lesson+archive/D review+前端）→ 集成（panel.tsx okrs 视图接线+Snapshot.okrs）→ verify-p2-integration.mjs 56/56 → 证据+档案 → commit+push（[doubao-work]）。
 - **门禁**：build=0；vitest 37 文件 / 399/399（基线 326 → 399，新增 73）；guard 84/84 失败 0 污染 0；集成 56/56；分片自验 a 26/26、b 26/26、c 28/28、d 通过；既有 verify-export 不回退。
 - **遗留**：okrs 收件区面板内直接渲染留 P3（本期命令提示入口）；出站关联位 latestExport prop 面板传入留 P3（现安全落「未导出」）；P3 立项：H6 常驻推送、X7 习惯层、K11 周期触发（cycleDue 类型已预留）。
+
+## P3 深度融合：纵向+宿主层（2026-10-18 完成并 push main）
+
+- **范围**：X7 习惯层（会话派生习惯轻确认+2 天补记窗回填+streak 断签重置/累计档案永久+克制清单文本归档+关联 P2 OKR）、K11 周期触发接线（占位不启用）、H6 常驻推送立项调研（调研+结论+拍板条件，零代码）。
+- **推进**：P3 规格 → 契约层（habits 表+路由+snapshot）→ 3 分片并行（A 习惯后端/B 习惯前端/C H6 调研）→ 集成（panel.tsx habit 视图接线+Snapshot.habits）→ verify-p3-integration.mjs 29/29 → 证据+档案 → commit+push（[doubao-work]）。
+- **门禁**：build=0；vitest 38 文件 / 427/427（基线 399 → 427，新增 28）；guard 全通过/0 污染；集成 29/29；分片自验 p3a 22/22。
+- **H6 结论（待用户拍板）**：宿主无外部通知渠道；推荐维持「应用内打开面板即派生」（ADL-039 现状），不立项宿主级推送；路线 A 四前提（书面接受常驻常开+新 ADL、通道可达、接受改上游成本、凭据真实验收）。调研文档：`docs/design/deep-integration-v2-h6-research.md`。
