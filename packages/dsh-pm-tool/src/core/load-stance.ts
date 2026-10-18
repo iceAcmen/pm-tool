@@ -10,6 +10,7 @@
  * 契约见 docs/design/deep-integration-v2-p1-dev.md §五（K19）。
  */
 import { isTaskOverdue, localTodayIso } from './derived.js'
+import { isWrappedStatus } from './status.js'
 import { displayForm, normalizePerson } from './people-load.js'
 
 /** K19 派生所需窄字段（与 Task 结构兼容，挑必需项，便于浏览器/snapshot 直接喂入）。 */
@@ -79,8 +80,9 @@ function isoDatePart(value?: string | null): string | null {
   return /^\d{4}-\d{2}-\d{2}$/.test(part) ? part : null
 }
 
+/** open = 未完成且未收尾：done 已完成、wrapped 已收尾均不计入 open 负载。 */
 function isOpen(task: StanceTaskInput): boolean {
-  return task.status !== 'done' && (task.progress ?? 0) < 100
+  return task.status !== 'done' && !isWrappedStatus(task.status) && (task.progress ?? 0) < 100
 }
 
 /**
@@ -137,6 +139,8 @@ export function stanceSuggestions(
   const blocked: { item: StanceSuggestion, staleDays: number }[] = []
   for (const task of tasks) {
     if (suggested.has(task.id)) continue
+    // wrapped 已收尾：不建议砍/缓（已由人收尾），直接跳过。
+    if (isWrappedStatus(task.status)) continue
     // 拖期：dueDate 逾期且未 done（复用 derived.isTaskOverdue 统一口径）。
     if (isTaskOverdue(task, today)) {
       suggested.add(task.id)
@@ -186,6 +190,8 @@ export function staleStanceTags(
   const today = options.today ?? localTodayIso()
   const result: StaleStanceTag[] = []
   for (const task of tasks) {
+    // wrapped 已收尾：不再打「烂尾倾向」标签（已由人收尾，非待救停滞）。
+    if (isWrappedStatus(task.status)) continue
     const startDay = isoDatePart(task.startDate)
     const updatedDay = isoDatePart(task.updatedAt)
     if (!startDay || !updatedDay) continue

@@ -8,7 +8,8 @@ export const deliverableIdSchema = z.string().regex(
   '交付物 ID 格式应为 dlv-数字',
 )
 // 交付物生命周期：计划中 → 制作中 → 已提交（待验收）→ 已验收。
-export const deliverableStatusSchema = z.enum(['planned', 'in_progress', 'submitted', 'accepted'])
+// P2 X2：'wrapped' = 未完成但已收尾（停办/不再推进），区别于 accepted 的正式验收。
+export const deliverableStatusSchema = z.enum(['planned', 'in_progress', 'submitted', 'accepted', 'wrapped'])
 // 标签单一来源在 labels.ts（zod-free），此处再导出兼容既有引用。
 export { deliverableStatusLabels } from './labels.js'
 

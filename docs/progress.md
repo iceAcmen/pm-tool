@@ -306,3 +306,10 @@
 - **验收（独立测试专家实测 + 真实 Chrome）**：S4 **19/19 PASS**、全量 guard **62/62** 全绿、权威资产本轮 **before=160/after=160 零污染**；war-room 真实 Chrome **3122** 逐项 PASS、正式 **before=159/after=159 零污染**（160 vs 159 = 跨轮 session/cache 自然轮转、各轮 before==after，如实分开）。client sha256 已实测锁定 `9d0b118c6f469856c5c7caee52175a88b0a2082fc4333daf2b2a45bc2302aa8b`（332510 B）。
 - **人工项**：**v0.8 客观进度（checklist/progress-derivation/汇报 calcVersion）= NOT_RUN/deferred**（矩阵已冻结未实现）；**M-01 生产（prod）真实 Key 仍 MANUAL_PENDING（不阻塞 v0.7.4 发布）**，PoC 车道 `our-free-model`/`kilo-auto/free` 免费免 Key；GI-WEB-14 真 390 窄窗、GI-CP 关键路径仍 deferred/MANUAL_PENDING；G8/H5 不可逆动作仍 MANUAL_PENDING。
 - **发布动作**：本批**暂不 commit/tag/push**，待用户最终通知执行最终提交、打注解 tag（client sha256 已实测锁定）。
+
+## P2 深度融合：对外+长寿层（2026-10-18 完成并 push main）
+
+- **范围**：K18 单向出站（三档导出+出站日志两类）、X7 愿景/OKR 层（独立实体+收件区+树形权重）、X2 收尾标记（wrapped 口径波及 11+ 处）、X3 失败经验（句级标注草稿纪律）、K16 档案最小保存包、X5 述职素材（三段结构）。
+- **推进**：P2 规格文档 → 契约层（wrapped 枚举+okrs/lessons 表+4 路由+snapshot 字段，基线 326 不回退）→ 4 分片并行（文件级互斥：A export/B okr/C wrapped+lesson+archive/D review+前端）→ 集成（panel.tsx okrs 视图接线+Snapshot.okrs）→ verify-p2-integration.mjs 56/56 → 证据+档案 → commit+push（[doubao-work]）。
+- **门禁**：build=0；vitest 37 文件 / 399/399（基线 326 → 399，新增 73）；guard 84/84 失败 0 污染 0；集成 56/56；分片自验 a 26/26、b 26/26、c 28/28、d 通过；既有 verify-export 不回退。
+- **遗留**：okrs 收件区面板内直接渲染留 P3（本期命令提示入口）；出站关联位 latestExport prop 面板传入留 P3（现安全落「未导出」）；P3 立项：H6 常驻推送、X7 习惯层、K11 周期触发（cycleDue 类型已预留）。

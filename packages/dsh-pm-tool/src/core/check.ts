@@ -10,6 +10,7 @@
  * 契约见 docs/design/deep-integration-v2-p0-dev.md §三（K6）。
  */
 import { addDaysIso, localTodayIso } from './derived.js'
+import { isWrappedStatus } from './status.js'
 import type { PmDomain } from './storage.js'
 
 /** 检查规则编号（与命令输出 JSON 的 rule 字段一一对应）。 */
@@ -55,9 +56,11 @@ export function evaluateChecks(tasks: CheckableTask[], today: string): CheckFind
 
   for (const task of tasks) {
     const isDone = task.status === 'done'
+    // wrapped 已收尾：done 类规则（c/d）本就不命中；逾期(a)/满进度(e)也不提示，收尾不催办。
+    const isWrapped = isWrappedStatus(task.status)
 
-    // a) 逾期未动：dueDate < today 且 status != done（字面口径；进度 100 的另由 e 提示）。
-    if (!isDone && task.dueDate && task.dueDate < today) {
+    // a) 逾期未动：dueDate < today 且 status != done、非 wrapped（字面口径；进度 100 的另由 e 提示）。
+    if (!isDone && !isWrapped && task.dueDate && task.dueDate < today) {
       findings.push({
         rule: 'overdue-untouched',
         taskId: task.id,
@@ -101,8 +104,8 @@ export function evaluateChecks(tasks: CheckableTask[], today: string): CheckFind
       })
     }
 
-    // e) 进度与状态不符：progress=100 且 status != done。
-    if (!isDone && (task.progress ?? 0) === 100) {
+    // e) 进度与状态不符：progress=100 且 status != done、非 wrapped（已收尾不提示口径不符）。
+    if (!isDone && !isWrapped && (task.progress ?? 0) === 100) {
       findings.push({
         rule: 'progress-100-not-done',
         taskId: task.id,

@@ -39,6 +39,16 @@ describe('task.update', () => {
     ], snapshot)
     expect(rejected[0].reason).toContain('开始日期不得晚于')
   })
+
+  it('X2：AI 直写 wrapped 被拒（收尾是人显式决策），中文拒因', () => {
+    const { accepted, rejected } = validateActions([
+      op({ op: 'task.update', id: 't-1', patch: { status: 'wrapped' } }),
+      { op: 'deliverable.update', id: 'dlv-1', patch: { status: 'wrapped' } },
+    ], snapshot)
+    expect(accepted).toHaveLength(0)
+    expect(rejected).toHaveLength(2)
+    expect(rejected.every(r => /wrapped/.test(r.reason) && /显式决策|手动收尾/.test(r.reason))).toBe(true)
+  })
 })
 
 describe('milestone create/update', () => {

@@ -10,7 +10,9 @@
  *  - 缺 id / 悬空父 / 跨项目父 / 成环 → warnings 降级，不挂死、不跨项目汇总。
  *
  * 本模块刻意不 import Zod / Node / 任何运行时，输入按结构鸭子类型读取，便于四界面与离线测试共用。
+ * X2：wrapped（已收尾）叶子不参与 done 派生——不挂待验收标签、不计入项目/父覆盖率聚合。
  */
+import { isWrappedStatus } from './status.js'
 
 // ---------- 公开类型 ----------
 
@@ -183,8 +185,10 @@ function compute(tasks: readonly ProgressTaskInput[]): Computed {
       // 对外百分比一律 clamp（清单比率天然 0..100，此处为防御性收口脏值）。
       const value = hasObjective ? clampProgress(Math.round((checked / total) * 100)) : null
       const source: ProgressSource = hasObjective ? 'checklist' : 'none'
-      const pending = hasObjective && checked === total && task.status !== 'done'
-      if (task.status === 'done' && hasObjective && checked < total) {
+      // X2：wrapped 已收尾不挂待验收标签（不参与 done 派生）。
+      const wrapped = isWrappedStatus(task.status)
+      const pending = !wrapped && hasObjective && checked === total && task.status !== 'done'
+      if (!wrapped && task.status === 'done' && hasObjective && checked < total) {
         warnings.push(`任务已标记完成，但清单仅勾选 ${checked}/${total}，请确认验收。`)
       }
       results.set(id, {
@@ -197,14 +201,17 @@ function compute(tasks: readonly ProgressTaskInput[]): Computed {
         legacyProgress,
         warnings,
       })
-      // 叶子聚合（仅叶子进入项目/父汇总）
-      leafAggOut.set(id, {
-        sum: hasObjective ? checked / total : 0,
-        covered: hasObjective ? 1 : 0,
-        total: 1,
-        pending: pending ? 1 : 0,
-      })
-      fold(projAggOf(projKey(task)), leafAggOut.get(id)!)
+      // 叶子聚合（仅叶子进入项目/父汇总）；X2 wrapped 已收尾叶子不进覆盖率分母/分子。
+      const leafAgg = wrapped
+        ? { sum: 0, covered: 0, total: 0, pending: 0 }
+        : {
+            sum: hasObjective ? checked / total : 0,
+            covered: hasObjective ? 1 : 0,
+            total: 1,
+            pending: pending ? 1 : 0,
+          }
+      leafAggOut.set(id, leafAgg)
+      if (!wrapped) fold(projAggOf(projKey(task)), leafAgg)
       for (const w of warnings) if (w.includes('其他项目') || w.includes('父任务') || w.includes('环')) pushProjWarn(projKey(task), w)
     } else {
       // ---- 内部节点：仅累计已完成子节点聚合（环边不入） ----

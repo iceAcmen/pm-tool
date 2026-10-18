@@ -58,6 +58,12 @@ import css from './tasks.css?raw'
 // 单一来源来自 core/status.ts taskStatusLabels；转 Record<string,string> 兼容 string 索引。
 const taskStatus = taskStatusLabels as Record<string, string>
 
+/** 从 ISO 时间或「YYYY-MM-DD HH:MM」取 HH:MM（出站关联位静态展示用，不回写）。 */
+function hhmm(at: string): string {
+  const m = at.match(/T(\d{2}:\d{2})/) ?? at.match(/\s(\d{2}:\d{2})/)
+  return m ? m[1] : at.slice(0, 16)
+}
+
 type ChipKey = TaskViewChip
 
 // P2-5：chip/排序选项与 core/task-views 同源（口径不变，仅去重）。
@@ -233,11 +239,16 @@ export function TaskTable(props: {
   /** P1-7 规则诊断气泡（只在任务行旁渲染，只读、不落库）。 */
   diagnosis?: DiagnosisBubble[]
   onDismissDiagnosis?: (id: string) => void
+  /**
+   * K18 出站关联位（只读静态标识，只显示不回写）：分片A 审计派生的项目级最近导出；
+   * 未携带/无导出记录时呈现「未导出」占位，不伪造、不触发任何写。
+   */
+  latestExport?: { at: string, format?: string } | null
 }) {
   const {
     tasks, milestones, disabled = false, onEdit,
     onGenWbs, onSaved, run, execute, projectId, projectName = '', density = 'comfortable', onDensityChange, overlayOpen,
-    diagnosis = [], onDismissDiagnosis,
+    diagnosis = [], onDismissDiagnosis, latestExport = null,
   } = props
 
   // P2-5：命名视图。首挂载按项目默认视图恢复四态；boot 只取一次，后续切换由 effect 驱动。
@@ -636,6 +647,12 @@ export function TaskTable(props: {
           <button className="pt-name" data-done={t.status === 'done'} onClick={() => onEdit(t)}>
             {t.title}
           </button>
+          {/* X2 收尾徽章：wrapped=已收尾·非正式完成（中性灰，不进入 done 视觉体系，不下成败裁决）。 */}
+          {t.status === 'wrapped' && (
+            <span className="pm-wrapped-badge" title="未完成但已收尾（弃置/停办），非正式完成，不计入完成数">
+              已收尾 · 非正式完成
+            </span>
+          )}
           <select
             className="pt-status pm-row-status" aria-label={`${t.title} 状态`} disabled={disabled}
             value={t.status}
@@ -691,6 +708,17 @@ export function TaskTable(props: {
           />
         </div>
         <div className="pt-cell pt-acts">
+          {/* K18 任务卡静态出站关联位：只显示不回写；审计未就绪/无记录时「未导出」占位，不伪造。 */}
+          {latestExport?.at ? (
+            <span
+              className="pm-export-slot pm-export-slot--done"
+              title="已导出：外部文件为唯一事实源，工具不做后续同步/镜像"
+            >
+              已导出 · 最近 {hhmm(latestExport.at)} · 外部为唯一事实源
+            </span>
+          ) : (
+            <span className="pm-export-slot pm-export-slot--none" title="暂无导出记录">未导出</span>
+          )}
           <button className="pt-iconbtn" title="编辑" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
             <Pencil size={15} />
           </button>

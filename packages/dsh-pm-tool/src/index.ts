@@ -41,6 +41,10 @@ import { handleReflectCommand, reflectHelp } from './commands/reflect.js'
 import { handleCheckCommand, checkHelp } from './commands/check.js'
 import { handleMetricCommand, metricHelp } from './commands/metric.js'
 import { handleQueueCommand, queueHelp } from './commands/queue.js'
+import { handleOkrCommand, okrHelp } from './commands/okr.js'
+import { handleLessonCommand, lessonHelp } from './commands/lesson.js'
+import { handleReviewCommand, reviewHelp } from './commands/review.js'
+import { handleArchiveCommand, archiveHelp } from './commands/archive.js'
 import { buildQueueForProject } from './core/queue.js'
 import { localTodayIso } from './core/derived.js'
 
@@ -110,6 +114,14 @@ function renderHelp(): CommandResult {
       metricHelp,
       '',
       queueHelp,
+      '',
+      okrHelp,
+      '',
+      lessonHelp,
+      '',
+      reviewHelp,
+      '',
+      archiveHelp,
     ].join('\n'),
   }
 }
@@ -166,6 +178,8 @@ export async function apply(ctx: Context): Promise<void> {
             meetings: [...domain.table('meetings').entries()].map(([, value]) => value),
             reports: [...domain.table('reports').entries()].map(([, value]) => value),
             deliverables: [...domain.table('deliverables').entries()].map(([, value]) => value),
+            okrs: [...domain.table('okrs').entries()].map(([, value]) => value),
+            lessons: [...domain.table('lessons').entries()].map(([, value]) => value),
             dashboards: {
               user: readDashboard(domain, 'user'),
               project: readDashboard(domain, 'project'),
@@ -243,6 +257,14 @@ export async function apply(ctx: Context): Promise<void> {
       if (metricMatch) return handleMetricCommand(metricMatch[1] ?? '', domain)
       const queueMatch = /^queue(?:\s+([\s\S]*))?$/i.exec(raw)
       if (queueMatch) return handleQueueCommand(queueMatch[1] ?? '', domain)
+      const okrMatch = /^okr(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (okrMatch) return handleOkrCommand(okrMatch[1] ?? '', domain)
+      const lessonMatch = /^lesson(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (lessonMatch) return handleLessonCommand(lessonMatch[1] ?? '', domain)
+      const reviewMatch = /^review(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (reviewMatch) return handleReviewCommand(reviewMatch[1] ?? '', domain)
+      const archiveMatch = /^archive(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (archiveMatch) return handleArchiveCommand(archiveMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

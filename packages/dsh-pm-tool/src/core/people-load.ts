@@ -1,7 +1,7 @@
 /**
  * 人员与负载视图纯派生（P0 / v0.5.1）。
  *
- * 只读遍历「未完成任务」（status!=='done' 且 progress<100），按归一化 assignee 分组，
+ * 只读遍历「未完成且未收尾任务」（status!=='done'、非 wrapped、progress<100），按归一化 assignee 分组，
  * 产出每人跨项目负载指标与任务明细。**零写盘、零 schema、不碰 domain**。
  *
  * 仿 `war-room.ts`：吃普通可序列化数组（不吃 PmDomain），同一函数可在浏览器端基于
@@ -11,6 +11,7 @@
  */
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 import { isTaskOverdue, localTodayIso } from './derived.js'
+import { isWrappedStatus } from './status.js'
 
 export interface PeopleTaskInput {
   id: string
@@ -103,8 +104,9 @@ export function displayForm(raw: unknown): string {
   return String(raw).trim().replace(/\s+/g, ' ')
 }
 
+/** open = 未完成且未收尾：done 已完成、wrapped 已收尾均不计入负载。 */
 function isOpen(task: PeopleTaskInput): boolean {
-  return task.status !== 'done' && (task.progress ?? 0) < 100
+  return task.status !== 'done' && !isWrappedStatus(task.status) && (task.progress ?? 0) < 100
 }
 
 /** 两个 YYYY-MM-DD 日历日相差天数（a - b）。 */

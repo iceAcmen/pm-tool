@@ -9,6 +9,7 @@ import type { PmDomain } from './storage.js'
 import { projectIdSchema } from './project.js'
 import { todayIso } from './reminders.js'
 import { isMilestoneMissed, isTaskOverdue } from './derived.js'
+import { isWrappedStatus } from './status.js'
 
 export class StatsProjectNotFoundError extends Error {}
 
@@ -18,7 +19,7 @@ function todayString(): string {
 }
 
 const zeroImpact = () => ({ low: 0, medium: 0, high: 0, critical: 0 })
-const zeroDeliverable = () => ({ planned: 0, in_progress: 0, submitted: 0, accepted: 0 })
+const zeroDeliverable = () => ({ planned: 0, in_progress: 0, submitted: 0, accepted: 0, wrapped: 0 })
 
 export interface ProjectStats {
   projectId: string
@@ -29,6 +30,8 @@ export interface ProjectStats {
   taskInProgress: number
   taskTodo: number
   taskBlocked: number
+  /** X2 已收尾（wrapped）单列：不计 done、不计 open，不等于正式完成。 */
+  taskWrapped: number
   completionRate: number
   overdueTasks: number
   milestoneTotal: number
@@ -38,7 +41,7 @@ export interface ProjectStats {
   openRiskByImpact: { low: number, medium: number, high: number, critical: number }
   meetingCount: number
   reportCount: number
-  deliverableByStatus: { planned: number, in_progress: number, submitted: number, accepted: number }
+  deliverableByStatus: { planned: number, in_progress: number, submitted: number, accepted: number, wrapped: number }
 }
 
 export interface StatsReport {
@@ -49,6 +52,7 @@ export interface StatsReport {
   totals: {
     taskTotal: number
     taskDone: number
+    taskWrapped: number
     taskOverdue: number
     milestoneTotal: number
     milestoneOverdue: number
@@ -90,6 +94,8 @@ function statsForProject(
   const taskInProgress = tasks.filter(task => task.status === 'in_progress').length
   const taskBlocked = tasks.filter(task => task.status === 'blocked').length
   const taskTodo = tasks.filter(task => task.status === 'todo').length
+  // X2：wrapped 已收尾单列，不计 done、不计 open（todo/in_progress/blocked）。
+  const taskWrapped = tasks.filter(task => isWrappedStatus(task.status)).length
   // 逾期口径统一走 derived.isTaskOverdue（未完成 且 progress<100 且 dueDate<today）。
   const overdueTasks = tasks.filter(task => isTaskOverdue(task, today)).length
   const openRisks = risks.filter(record => record.status !== 'closed')
@@ -110,6 +116,7 @@ function statsForProject(
     taskInProgress,
     taskTodo,
     taskBlocked,
+    taskWrapped,
     completionRate: tasks.length ? Math.round(taskDone / tasks.length * 100) : 0,
     overdueTasks,
     milestoneTotal: milestones.length,
@@ -160,6 +167,7 @@ export function collectStats(domain: PmDomain, projectId?: string, today?: strin
     totals: {
       taskTotal: sum(stat => stat.taskTotal),
       taskDone: sum(stat => stat.taskDone),
+      taskWrapped: sum(stat => stat.taskWrapped),
       taskOverdue: sum(stat => stat.overdueTasks),
       milestoneTotal: sum(stat => stat.milestoneTotal),
       milestoneOverdue: sum(stat => stat.milestoneOverdue),

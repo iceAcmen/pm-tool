@@ -3,6 +3,7 @@
  * 避免面板 bundle 间接拉入 zod。仅依赖普通类型。
  */
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
+import { isWrappedStatus } from './status.js'
 
 export type HealthLamp = 'green' | 'yellow' | 'red' | 'gray'
 
@@ -87,15 +88,16 @@ export function isMilestoneMissed(
  * 任务是否「已逾期」——唯一纯谓词，stats / people-load / reminders / war-room 同源复用，
  * 对齐现网 tasks.tsx isLate（P1 口径唯一，消除各模块各自算逾期）。
  *
- * 冻结语义：`status !== 'done'` 且 `(progress ?? 0) < 100` 且有 dueDate 且
- * dueDate 早于本地日历日 `today`（注入，避免 UTC 偏移）。
- * 已完成 / 进度已达 100 / 无截止日 / 今天到期 / 未来到期均不逾期。
+ * 冻结语义：`status !== 'done'` 且非 `wrapped`（已收尾不催办）且 `(progress ?? 0) < 100`
+ * 且有 dueDate 且 dueDate 早于本地日历日 `today`（注入，避免 UTC 偏移）。
+ * 已完成 / 已收尾 / 进度已达 100 / 无截止日 / 今天到期 / 未来到期均不逾期。
  */
 export function isTaskOverdue(
   task: { status?: string, progress?: number | null, dueDate?: string | null },
   today: string,
 ): boolean {
   return task.status !== 'done'
+    && !isWrappedStatus(task.status)
     && (task.progress ?? 0) < 100
     && !!task.dueDate
     && task.dueDate < today
@@ -118,17 +120,17 @@ export function addDaysIso(today: string, days: number): string {
 /**
  * 任务是否「未来 days 天内到期」（本周到期视图，days=7）——唯一纯谓词。
  *
- * 冻结语义：未完成（status !== 'done' 且 (progress ?? 0) < 100）且有 dueDate，
+ * 冻结语义：未完成（status !== 'done'、非 wrapped 已收尾、(progress ?? 0) < 100）且有 dueDate，
  * 且 dueDate <= addDaysIso(today, days)。**含已逾期**：逾期 dueDate 同样满足
  * ≤ today+7，语义是「本周（未来 7 天）要处理的到期清单」，不是只看未来。
- * 已完成 / 进度已达 100 / 无截止日 不入选。today 注入，避免 UTC 偏移。
+ * 已完成 / 已收尾 / 进度已达 100 / 无截止日 不入选。today 注入，避免 UTC 偏移。
  */
 export function isTaskDueWithin(
   task: { status?: string, progress?: number | null, dueDate?: string | null },
   today: string,
   days: number,
 ): boolean {
-  if (task.status === 'done' || (task.progress ?? 0) >= 100) return false
+  if (task.status === 'done' || isWrappedStatus(task.status) || (task.progress ?? 0) >= 100) return false
   return !!task.dueDate && task.dueDate <= addDaysIso(today, days)
 }
 

@@ -16,6 +16,7 @@ export const taskStatusLabels: Record<string, string> = {
   in_progress: '进行中',
   blocked: '受阻',
   done: '已完成',
+  wrapped: '已收尾',
 }
 
 export const milestoneStatusLabels: Record<string, string> = {
@@ -30,4 +31,5 @@ export const deliverableStatusLabels: Record<string, string> = {
   in_progress: '制作中',
   submitted: '已提交',
   accepted: '已验收',
+  wrapped: '已收尾',
 }

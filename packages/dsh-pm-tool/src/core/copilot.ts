@@ -178,7 +178,11 @@ export function validateActions(
       let bad = ''
       for (const k of keys) {
         const v = patch[k]
-        if (k === 'status') { if (!STATUS.has(String(v) as 'todo')) bad = `非法状态 ${String(v)}` }
+        if (k === 'status') {
+          // X2：AI 不得直写 wrapped（已收尾是人显式决策，非模型可代判）。
+          if (String(v) === 'wrapped') bad = 'AI 不得直接写 wrapped（已收尾是人显式决策，请由人手动收尾）'
+          else if (!STATUS.has(String(v) as 'todo')) bad = `非法状态 ${String(v)}`
+        }
         else if (k === 'progress') { const n = Number(v); if (!Number.isInteger(n) || n < 0 || n > 100) bad = '进度须 0-100 整数' }
         else if (k === 'dueDate' || k === 'startDate') { if (!isValidDateStr(v)) bad = '日期须合法 YYYY-MM-DD' }
         else if (k === 'assignee') { if (typeof v !== 'string') bad = '负责人须为字符串' }
@@ -242,7 +246,11 @@ export function validateActions(
     // 交付物
     if (a.op === 'deliverable.create' || a.op === 'deliverable.update') {
       const allowed: Record<string, FieldCheck> = {
-        name: strField, version: strField, owner: strField, status: enumField(DELIVERABLE_STATUS),
+        name: strField, version: strField, owner: strField,
+        // X2：AI 不得直写 wrapped（已收尾是人显式决策）；枚举集本就不含 wrapped，这里给出明确中文拒因。
+        status: v => String(v) === 'wrapped'
+          ? 'AI 不得直接写 wrapped（已收尾是人显式决策，请由人手动收尾）'
+          : enumField(DELIVERABLE_STATUS)(v),
         location: strField, description: strField, dueDate: nullableDate,
         repoUrl: strField, branch: strField,
       }

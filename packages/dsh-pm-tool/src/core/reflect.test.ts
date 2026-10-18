@@ -120,6 +120,13 @@ describe('ensureReflectionOnDone 落库与幂等', () => {
     expect(again?.id).toBe(rec?.id)
     expect([...tables.get('reflections')!.entries()]).toHaveLength(1)
   })
+
+  it('X2：wrapped 已收尾不触发 done 复盘草稿（收尾≠完成，无完成事件）', async () => {
+    const { domain, tables } = buildFakeDomain()
+    const rec = await ensureReflectionOnDone(domain, doneTask({ status: 'wrapped', progress: 0 }))
+    expect(rec).toBeUndefined()
+    expect(tables.get('reflections')?.size ?? 0).toBe(0)
+  })
 })
 
 describe('finalizeReflection 人定稿 / updateReflectionDraft 补材料', () => {

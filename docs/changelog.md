@@ -8,6 +8,19 @@
 
 ---
 
+## P2 深度融合：对外+长寿层（K18 单向出站/X7 愿景/OKR 层/X2 收尾标记/X3 失败经验/K16 档案最小保存包/X5 述职素材）（已 push main，2026-10-18，平台：doubao-work）
+
+> P1（8e7b7b0）验收通过后的对外+长寿阶段，对应效果图 S4 分受众分享与 S5 档案与目标连通。规格 `docs/design/deep-integration-v2-p2-dev.md`、验证 `docs/design/deep-integration-v2-p2-verify.md`、证据 `docs/verification/p2-20261018/`。4 分片并行（文件级互斥）+ 契约层；build=0、vitest 37 文件 / **399/399**、guard **84/84/0 失败/0 污染**（176 资产 before=after）、集成链 **56/56**（真实命令+真实 JSON 落盘）、分片自验 a 26/26、b 26/26、c 28/28、d 通过。
+
+- **K18 单向出站（核心）**：`core/export.ts` 三档——markdown（既有档+证据/交付物/复盘引用附录）、web（自包含单文件 HTML：无脚本无外链、`@media (prefers-color-scheme: dark)` 浅深双态、页首「只读快照·非实时数据」+生成时间、空项「暂无数据」占位）、plain（纯文本无 markdown 符号）；**出站日志两类**（settings 键）——`pmExportAudit`（append-only 长期保留：{at,projectId,format,targetPath,itemCount}）+ `pmExportSent`（TTL=30 天，过期在下次导出时自动归档 `pmExportSentArchive` 长期保留，partitionSentEntries 纯函数 nowIso 可注入）；命令 `export markdown|web|plain <项目ID> [目录] [confirm]` + `export audit|sent` 只读；默认拒覆盖 confirm 才覆盖；成功返回含「外部文件为唯一事实源」声明。**只读分发非双向同步**：导出是瞬时快照、外部为唯一事实源、不级联不镜像不回写；不预设 GitHub/不写外部平台；撤持续状态页/实时移动页。
+- **X7 愿景/OKR 层**：新表 `okrs`（okrRecordSchema：kind objective|key-result、单父 primaryOkrId 权重归属、relatedOkrIds 软关联可见不计权重、status draft|confirmed、cycleDue 仅 K11 类型预留）+ `core/okr.ts` 纯函数（buildOkrTree 树形/孤儿单列/环保护）+ 命令 8 子命令（add/update/list/tree/suggest/inbox/confirm/ignore/inbox clear）；**收件区保证点**：suggest 只追加 settings `pmOkrInbox`（信封 {entries}）、okrs 表零写入，confirm 才建 draft 记录，ignore 保留标 ignored，clear 只清已处理/已忽略保留 pending；draft→confirmed 仅人 update；**习惯层（每日补记/续接/66 天/streak）明确未做（P3）**。
+- **X2 收尾标记（wrapped 口径波及 11+ 处）**：TASK_STATUSES +`wrapped`（契约层谓词 isWrappedStatus 收口）——逾期/催办（derived/reminders/queue）不催办、不计 done/open（stats taskWrapped 单列、people-load/load-stance isOpen 排除）、进度派生不参与、check done 类规则不命中、reflect done 钩子不触发、**copilot AI 直写 wrapped 一律中文拒因**（收尾是人显式决策）、命令层人显式 `task|deliverable update {status:'wrapped'}` + 文案「已收尾≠正式完成」；前端中性灰徽章「已收尾·非正式完成」不进入 done 视觉体系。
+- **X3 失败经验**：新表 `lessons`（lessonRecordSchema：taskId 可空、status draft|final、lines 句级 known/pending/blank、gaps）+ `core/lessons.ts` + 命令 add/list/final/edit；**草稿纪律复用 X6**：句级已核/待核/留白、证据不足留白不编造、仅人定稿。
+- **K16 档案最小保存包**：`core/archive.ts` 只读打包（package.json：origin=pm-tool、exportedAt/archivedAt、任务/交付物/证据/复盘 known 行/里程碑通用字段 + `README-字段说明.md` 每字段一句话）；命令 `archive <项目ID> [目录] [confirm]`；默认拒覆盖；**非全量镜像**（不含评论/活动流/OKR/积分）；**不写 K18 出站日志**。
+- **X5 述职素材**：`core/review-materials.ts` 只读聚合（done/wrapped 任务 done 标记区分、milestone achieved、复盘 known 行，周期 [起] [止] 过滤缺省近 30 天）+ 命令 `review <项目ID> [起] [止]`（Markdown 三段「做了什么/量化结果/关键产出」+ 同数据 JSON；wrapped 计 done=false 不计完成数；无完成条目 avgDoneProgress=null 不伪造）。
+- **前端整合**：新视图 `views/okrs.tsx` + `okr-model.ts`（树形/软关联「关联」行/草稿定稿徽章/收件区入口走命令通道 confirm|ignore；snapshot 未携带收件区只显示命令提示不伪造）；`panel.tsx` 接线视图切换器「目标（OKR）」+ Snapshot.okrs 字段；tasks.tsx wrapped 徽章 + 出站关联位（latestExport 有值「已导出·最近 HH:MM·外部为唯一事实源」、无值「未导出」占位，**只显示不回写**）；panel.css 仅追加 `.pm-okr-*`/`.pm-wrapped-*`/`.pm-export-*` 区块（浅深 token、无 emoji）。
+- **写操作纪律延续**：所有写走 enqueueDomainWrite；导出/归档默认拒覆盖 confirm 才覆盖；suggest 未确认不生效；未触碰宿主常驻通知能力；未影响运行中服务；不写外部平台。
+
 ## P1 深度融合：呈现+交互层（K11 补记队列/K13 对话内投影/K6 完整版/X6-L2 完整复盘草稿流/K19 保护面组件）（已 push main，2026-10-18，平台：doubao-work）
 
 > P0（73037f7）验收通过后的呈现+交互阶段，对应效果图 S1 完整化与 S3 深化。规格 `docs/design/deep-integration-v2-p1-dev.md`、验证 `docs/design/deep-integration-v2-p1-verify.md`、证据 `docs/verification/p1-20261018/`。

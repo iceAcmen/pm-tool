@@ -39,6 +39,17 @@ describe('loadFacts 纯事实陈列（分组计数，不裁决）', () => {
     expect(wang.overdueCount).toBe(0)
   })
 
+  it('X2：wrapped 已收尾计入 taskCount，但不计 done/open/overdue', () => {
+    const facts = loadFacts([
+      task({ id: 't-w', assignee: '李工', status: 'wrapped', progress: 0, dueDate: '2026-10-10' }),
+    ], { today: TODAY })
+    const li = facts.find(f => f.personId === '李工'.toLowerCase())!
+    expect(li.taskCount).toBe(1)
+    expect(li.doneCount).toBe(0)
+    expect(li.openCount).toBe(0)
+    expect(li.overdueCount).toBe(0)
+  })
+
   it('未分配桶 personId 为空串、name=未分配；不修改入参数组/对象', () => {
     const input = [task({ id: 't-1', assignee: '', status: 'todo' })]
     const snapshot = structuredClone(input)

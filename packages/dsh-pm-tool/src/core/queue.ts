@@ -15,6 +15,7 @@
  * 能力边界：打开时呈现 ≠ 常驻推送（H6 悬置 P3）；mute 不隐藏打开视图折叠列表。
  */
 import { addDaysIso } from './derived.js'
+import { isWrappedStatus } from './status.js'
 import type { PmDomain } from './storage.js'
 
 /** 积压迟到阈值（天）：逾期 ≥ LATE_DAYS 即「积压」档（lateDays 仍如实给全量逾期天数）。 */
@@ -197,9 +198,9 @@ export function deriveQueue(
   const mute = options.mute ?? {}
   const items: QueueItem[] = []
 
-  // 1) 到期未达：dueDate <= today 且未 done、progress<100。
+  // 1) 到期未达：dueDate <= today 且未 done、非 wrapped 已收尾、progress<100。
   for (const task of tasks) {
-    if (task.status === 'done') continue
+    if (task.status === 'done' || isWrappedStatus(task.status)) continue
     if ((task.progress ?? 0) >= 100) continue
     if (!task.dueDate || task.dueDate > today) continue
     const entry = mute[task.id]
@@ -224,7 +225,7 @@ export function deriveQueue(
   const bound = new Set(sessions.map(s => s.taskId))
   for (const task of tasks) {
     if (!bound.has(task.id)) continue
-    if (task.status === 'done') continue
+    if (task.status === 'done' || isWrappedStatus(task.status)) continue
     if (!task.createdAt || !task.updatedAt || task.updatedAt !== task.createdAt) continue
     // 已在到期清单里的缺席任务不重复追加。
     if (items.some(it => it.taskId === task.id)) continue

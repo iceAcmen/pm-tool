@@ -86,6 +86,7 @@ export const taskHelp = [
   '移动/删除不自动改写 WBS 编号；renumber 才按当前任务树重建连续编号。',
   '更新用 null 清空 startDate/dueDate/milestoneId；移动用 root 表示移到根层级。',
   '任务标记为已完成时自动记录完成日期（可在 update 里用 completedDate 显式指定/纠正，传 null 清除）。',
+  '  /pm task update t-0001 {"status":"wrapped"}   人显式收尾（弃置/停办）：已收尾≠正式完成，不催办、不计 done、不计 open；AI 不得代写。',
   '  /pm task backfill-completed [项目ID]   为已完成但缺完成日期的旧任务补录（仅据截止日期推断，无截止日期保持空缺、不伪造）。',
   'milestoneId 必须指向同项目已存在里程碑；ID、WBS 编号、同级顺序和时间戳由系统生成。',
   repoFieldHelpPhrase,
@@ -100,7 +101,7 @@ function renderTask(task: Task): string {
     `标题：${task.title}`,
     `说明：${task.description || '未填写'}`,
     `负责人：${task.assignee || '未填写'}`,
-    `状态：${taskStatusLabels[task.status]}`,
+    `状态：${taskStatusLabels[task.status]}${task.status === 'wrapped' ? '（已收尾 · 非正式完成）' : ''}`,
     `优先级：${task.priority}`,
     `开始日期：${task.startDate ?? '未填写'}`,
     `截止日期：${task.dueDate ?? '未填写'}`,
@@ -269,9 +270,12 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
         return { kind: 'error', text: '更新参数须为合法 JSON 对象，请使用英文双引号。' }
       }
       const task = await updateTask(domain, updateMatch[1], fields)
-      return task
-        ? { kind: 'success', text: `任务已更新并保存。\n${renderTask(task)}` }
-        : { kind: 'error', text: `未找到任务：${updateMatch[1]}。` }
+      if (!task) return { kind: 'error', text: `未找到任务：${updateMatch[1]}。` }
+      // X2：人显式收尾（wrapped）转换成功后，文案明示「已收尾 ≠ 正式完成」，不越界裁决成败。
+      const wrappedNote = task.status === 'wrapped'
+        ? '\n注意：已收尾（wrapped）≠ 正式完成（done）；该任务未计入完成，不催办、不计入 open 负载。'
+        : ''
+      return { kind: 'success', text: `任务已更新并保存。${wrappedNote}\n${renderTask(task)}` }
     }
     if (action === 'delete') {
       const deleteMatch = /^(\S+)(?:\s+(cascade))?(?:\s+(confirm))?$/i.exec(argument)

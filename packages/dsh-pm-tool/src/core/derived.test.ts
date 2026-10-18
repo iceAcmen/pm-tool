@@ -144,3 +144,28 @@ describe('isTaskAtRisk 风险视图冻结口径', () => {
     expect(isTaskAtRisk({ status: 'in_progress', progress: 10, dueDate: '2026-11-01' }, TODAY)).toBe(false)
   })
 })
+
+describe('X2 wrapped 口径：已收尾不催办', () => {
+  it('isTaskOverdue 对 wrapped 返回 false（即使过期未完成）', () => {
+    expect(isTaskOverdue(
+      { status: 'wrapped', progress: 0, dueDate: '2026-10-01' },
+      '2026-10-18',
+    )).toBe(false)
+  })
+
+  it('isTaskDueWithin 对 wrapped 不入选（即使到期落在窗口内）', () => {
+    expect(isTaskDueWithin(
+      { status: 'wrapped', progress: 0, dueDate: '2026-10-20' },
+      '2026-10-18',
+      7,
+    )).toBe(false)
+  })
+
+  it('isTaskAtRisk 不因 wrapped 且过期而报风险（逾期谓词已排除）', () => {
+    expect(isTaskAtRisk(
+      { status: 'wrapped', progress: 0, dueDate: '2026-10-01', isBlocked: false },
+      '2026-10-18',
+      [],
+    )).toBe(false)
+  })
+})

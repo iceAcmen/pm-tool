@@ -28,7 +28,7 @@ function renderProjectLine(stat: ProjectStats): string {
     : ''
   return [
     `${stat.projectId}｜${stat.projectName}｜${projectStatusLabels[stat.status as keyof typeof projectStatusLabels] ?? stat.status}`,
-    `  任务 ${stat.taskDone}/${stat.taskTotal}（完成率 ${stat.completionRate}%，进行中 ${stat.taskInProgress}，受阻 ${stat.taskBlocked}）`,
+    `  任务 ${stat.taskDone}/${stat.taskTotal}（完成率 ${stat.completionRate}%，进行中 ${stat.taskInProgress}，受阻 ${stat.taskBlocked}${stat.taskWrapped ? `，已收尾 ${stat.taskWrapped}` : ''}）`,
     `  里程碑 ${stat.milestoneAchieved}/${stat.milestoneTotal} 已达成`,
     `  ${impactText(stat)}`,
     `  会议 ${stat.meetingCount}｜汇报 ${stat.reportCount}｜交付物 ${stat.deliverableByStatus.planned + stat.deliverableByStatus.in_progress + stat.deliverableByStatus.submitted + stat.deliverableByStatus.accepted}`,
@@ -58,6 +58,7 @@ function renderStats(report: StatsReport): string {
     lines.push(`状态：${projectStatusLabels[stat.status as keyof typeof projectStatusLabels] ?? stat.status}`)
     lines.push(`任务：完成 ${stat.taskDone}/${stat.taskTotal}，完成率 ${stat.completionRate}%`)
     lines.push(`  ${taskStatusLabels.todo} ${stat.taskTodo}｜${taskStatusLabels.in_progress} ${stat.taskInProgress}｜${taskStatusLabels.blocked} ${stat.taskBlocked}｜${taskStatusLabels.done} ${stat.taskDone}`)
+    if (stat.taskWrapped) lines.push(`  ${taskStatusLabels.wrapped} ${stat.taskWrapped}（已收尾 ≠ 正式完成，不计完成/不计 open）`)
     lines.push(stat.overdueTasks ? `⚠ 已逾期未完成任务 ${stat.overdueTasks} 个。` : '无逾期任务。')
     lines.push(`里程碑：已达成 ${stat.milestoneAchieved}/${stat.milestoneTotal}`)
     lines.push(stat.milestoneOverdue ? `⚠ 已逾期里程碑 ${stat.milestoneOverdue} 个（${milestoneStatusLabels.missed} / 有风险）。` : '无逾期里程碑。')
@@ -68,6 +69,7 @@ function renderStats(report: StatsReport): string {
       '交付物四态：'
       + `${deliverableStatusLabels.planned} ${d.planned}｜${deliverableStatusLabels.in_progress} ${d.in_progress}｜${deliverableStatusLabels.submitted} ${d.submitted}｜${deliverableStatusLabels.accepted} ${d.accepted}`,
     )
+    if (d.wrapped) lines.push(`  ${deliverableStatusLabels.wrapped} ${d.wrapped}（已收尾 ≠ 正式验收）`)
   }
   return lines.join('\n')
 }

@@ -81,6 +81,8 @@ import { MeetingsView as MeetingTable } from './views/meetings.js'
 import { ReportsView as ProgressReportTable } from './views/reports.js'
 import { Deliverables as DeliverableTable } from './views/deliverables.js'
 import { PeopleView } from './views/people.js'
+import { OkrsView } from './views/okrs.js'
+import type { OkrViewRecord } from './views/okr-model.js'
 import { ProvenancePanel } from './provenance-panel.js'
 import styles from './panel.css?raw'
 
@@ -278,12 +280,14 @@ export type Snapshot = {
   meetings: Meeting[]
   reports: ProgressReport[]
   deliverables: Deliverable[]
+  /** P2 X7 愿景/OKR 层：snapshot.okrs 由服务端快照注入；缺失/旧档时前端回落空数组。 */
+  okrs?: OkrViewRecord[]
   /** 看板布局（dsh-storage 透明存取）：user > project；读不到为 null。 */
   dashboards?: { user: unknown, project: unknown }
   /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
   settings?: unknown
 }
-type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people'
+type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people' | 'okrs'
 type Drawer =
   | { kind: 'project-create' }
   | { kind: 'project-edit', project: Project }
@@ -624,7 +628,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [view, setView] = useState<View>(() => {
     try {
       const v = localStorage.getItem('pm-view')
-      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview' || v === 'gantt' || v === 'people') return v
+      if (v === 'tasks' || v === 'milestones' || v === 'risk-issues' || v === 'meetings' || v === 'reports' || v === 'deliverables' || v === 'overview' || v === 'gantt' || v === 'people' || v === 'okrs') return v
     } catch { /* ignore */ }
     return 'tasks'
   })
@@ -766,6 +770,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
   [data.deliverables, selected])
+  const okrs = useMemo(() => (data.okrs ?? [])
+    .filter(item => item.projectId === selected),
+  [data.okrs, selected])
   // T8：assignee 候选只从**当前全量 snapshot** 跨项目派生（project.owner→task.assignee→
   // riskIssue.owner→deliverable.owner→meeting.participants），纯内存、零写盘；刷新即重算。
   const assigneeCandidates = useMemo(() => listAssigneeCandidates({
@@ -1098,6 +1105,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   { key: 'overview', label: '项目概览' },
                   { key: 'gantt', label: '甘特排期' },
                   { key: 'people', label: '人员负载' },
+                  { key: 'okrs', label: '目标（OKR）' },
                 ]}
                 onPick={(key) => {
                   // D3（320 看板可达）：扁平下拉补「总览看板」入口，打开全局看板，不再只能经隐藏 rail 进入。
@@ -1174,6 +1182,12 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 settings={settings}
                 onOpenRecord={(pid, type, id) => openRecord(pid, type, id)}
                 onGotoView={changeView}
+              />}
+              {view === 'okrs' && <OkrsView
+                projectId={project.id}
+                okrs={okrs}
+                run={run}
+                onSaved={refresh}
               />}
             </section>
             {copilotLayer && project && <aside className="pm-suggest-layer" aria-label="AI 副驾建议层">

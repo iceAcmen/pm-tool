@@ -16,6 +16,7 @@ import type { Task } from './task.js'
 import type { Milestone } from './milestone.js'
 import type { Deliverable } from './deliverable.js'
 import { localTodayIso } from './derived.js'
+import { isWrappedStatus } from './status.js'
 
 export class ReflectionNotFoundError extends Error {}
 
@@ -239,6 +240,8 @@ export function listReflections(domain: PmDomain, projectId: string): Reflection
  * best-effort 由调用方 catch；本函数自身仍走串行写队列，失败向外抛。
  */
 export function ensureReflectionOnDone(domain: PmDomain, task: Task): Promise<ReflectionRecord | undefined> {
+  // X2：wrapped（已收尾）不是完成事件，不触发 done 复盘草稿（收尾≠正式完成）。
+  if (isWrappedStatus(task.status)) return Promise.resolve(undefined)
   return enqueueDomainWrite(domain, async () => {
     const table = domain.table('reflections')
     const existing = getReflection(domain, task.id)

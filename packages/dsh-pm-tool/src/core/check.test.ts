@@ -108,3 +108,19 @@ describe('K6 交付检查五类规则', () => {
     expect(JSON.stringify(input)).toEqual(snapshot)
   })
 })
+
+describe('X2 wrapped 口径：done 类规则不命中已收尾', () => {
+  it('a 逾期未动：wrapped 即使过期也不提示', () => {
+    const findings = evaluateChecks([
+      task({ id: 't-w1', title: '已收尾过期', status: 'wrapped', dueDate: '2026-10-01', progress: 0 }),
+    ], TODAY)
+    expect(findings).toHaveLength(0)
+  })
+
+  it('e 进度100未done：wrapped 满进度也不提示口径不符', () => {
+    const findings = evaluateChecks([
+      task({ id: 't-w2', title: '已收尾满进度', status: 'wrapped', progress: 100 }),
+    ], TODAY)
+    expect(findings).toHaveLength(0)
+  })
+})

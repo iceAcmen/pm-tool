@@ -1,12 +1,13 @@
 /**
  * R16 临期/逾期提醒：纯离线派生（不做后台常驻/调度）。
  *
- * 逾期：未完成任务（status!=='done' 且 progress<100）dueDate<今天；未达成里程碑 targetDate<今天。
+ * 逾期：未完成任务（status!=='done'、非 wrapped 已收尾、progress<100）dueDate<今天；未达成里程碑 targetDate<今天。
  * 临期：未完成/未达成且截止/目标日落在 [今天, 今天+withinDays]。
- * 已完成(done)/已达成(achieved)不计。跨项目分组、按日期升序。
+ * 已完成(done)/已收尾(wrapped，不催办)/已达成(achieved)不计。跨项目分组、按日期升序。
  */
 import type { PmDomain } from './storage.js'
 import { localTodayIso, isTaskOverdue } from './derived.js'
+import { isWrappedStatus } from './status.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from './settings.js'
 
 export type ReminderSeverity = 'overdue' | 'due-soon'
@@ -55,7 +56,8 @@ export function computeReminders(domain: PmDomain, options: ReminderOptions = {}
 
   for (const [, task] of domain.table('tasks').entries()) {
     if (options.projectId && task.projectId !== options.projectId) continue
-    if (task.status === 'done' || (task.progress ?? 0) >= 100) continue
+    // done 已完成 / wrapped 已收尾（不催办）/ 进度已满 均不进提醒。
+    if (task.status === 'done' || isWrappedStatus(task.status) || (task.progress ?? 0) >= 100) continue
     if (!task.dueDate) continue
     const daysUntil = Math.round((parseDate(task.dueDate) - todayMs) / 86_400_000)
     // 逾期判定统一走 derived.isTaskOverdue（上方已先剔除 done / progress>=100 / 无日期）。

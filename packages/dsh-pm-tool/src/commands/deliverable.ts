@@ -25,7 +25,7 @@ export const deliverableHelp = [
   '  /pm deliverable get dlv-0001',
   '  /pm deliverable update dlv-0001 {"status":"submitted","version":"v1.1","changeNote":"提交评审","operator":"Ice"}',
   '  /pm deliverable delete dlv-0001 confirm',
-  '状态支持 planned（计划中）/ in_progress（制作中）/ submitted（已提交）/ accepted（已验收）。',
+  '状态支持 planned（计划中）/ in_progress（制作中）/ submitted（已提交）/ accepted（已验收）；wrapped（已收尾）为人显式收尾，≠正式验收，AI 不得代写。',
   '版本或状态变化会自动追加一条变更留痕；删除不带 confirm 只显示提示。',
   '项目归属、ID、变更历史和时间戳创建后不可直接修改。',
   // 共享句式与 project/task 同真源；deliverable 保留 history 专属后缀（只改 repo 不追加留痕）。
@@ -38,7 +38,7 @@ function renderDeliverable(record: Deliverable): string {
     `项目 ID：${record.projectId}`,
     `名称：${record.name}`,
     `版本：${record.version || '未填写'}`,
-    `状态：${deliverableStatusLabels[record.status]}`,
+    `状态：${deliverableStatusLabels[record.status]}${record.status === 'wrapped' ? '（已收尾 · 非正式验收）' : ''}`,
     `负责人：${record.owner || '未填写'}`,
     `计划交付日期：${record.dueDate ?? '未填写'}`,
     `位置：${record.location || '未填写'}`,
@@ -134,9 +134,12 @@ export async function handleDeliverableCommand(rawInput: string, domain?: PmDoma
         return { kind: 'error', text: '更新参数须为合法 JSON 对象，请使用英文双引号。' }
       }
       const record = await updateDeliverable(domain, updateMatch[1], fields)
-      return record
-        ? { kind: 'success', text: `交付物已更新并保存。\n${renderDeliverable(record)}` }
-        : { kind: 'error', text: `未找到交付物：${updateMatch[1]}。` }
+      if (!record) return { kind: 'error', text: `未找到交付物：${updateMatch[1]}。` }
+      // X2：人显式收尾（wrapped）后文案明示「已收尾 ≠ 正式验收」，状态变更自动进 history 留痕。
+      const wrappedNote = record.status === 'wrapped'
+        ? '\n注意：已收尾（wrapped）≠ 正式验收（accepted）；该交付物未计入完成，AI 不得代写。'
+        : ''
+      return { kind: 'success', text: `交付物已更新并保存。${wrappedNote}\n${renderDeliverable(record)}` }
     }
     const deleteMatch = /^(\S+)(?:\s+(confirm))?$/i.exec(argument)
     if (!deleteMatch) return { kind: 'error', text: '请使用：/pm deliverable delete <交付物ID> confirm' }

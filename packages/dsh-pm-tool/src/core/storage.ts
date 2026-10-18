@@ -58,6 +58,44 @@ export const reflectionRecordSchema = z.object({
 })
 export type ReflectionRecord = z.infer<typeof reflectionRecordSchema>
 
+/** P2 X7 愿景/OKR 层：独立实体。单父 primaryOkrId 主归属（权重只认这一条），软关联「关联目标」行可见不计权重；草稿/定稿复用 X6 机制；习惯层（每日补记/66 天窗口/streak）不在本期（P3）。 */
+export const okrRecordSchema = z.object({
+  id: z.string().regex(/^okr-[a-zA-Z0-9_-]+$/, 'OKR ID 只能包含字母、数字、下划线和连字符'),
+  projectId: z.string(),
+  title: z.string().min(1, 'OKR 标题不能为空'),
+  kind: z.enum(['objective', 'key-result']),
+  /** 单父主归属：KR 的父 OKR，权重归属只认这一条；objective 为 null。 */
+  primaryOkrId: z.string().nullable(),
+  /** 软关联「关联目标」：可见不计权重。 */
+  relatedOkrIds: z.array(z.string()).default([]),
+  owner: z.string().optional(),
+  targetDate: z.iso.date().optional(),
+  /** 草稿/定稿复用 X6 机制：draft→confirmed 由人触发；ignored 仅用于收件区建议。 */
+  status: z.enum(['draft', 'confirmed']).default('draft'),
+  /** K11 周期触发接线点（类型预留，本期不实现周期调度）。 */
+  cycleDue: z.string().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+export type OkrRecord = z.infer<typeof okrRecordSchema>
+
+/** P2 X3 失败经验：失败/烂尾条目的经验沉淀。句级 known/pending/blank，证据不足留白不编造（复用 X6 草稿纪律）；仅人定稿。 */
+export const lessonRecordSchema = z.object({
+  id: z.string().regex(/^lesson-[a-zA-Z0-9_-]+$/, '经验记录 ID 只能包含字母、数字、下划线和连字符'),
+  projectId: z.string(),
+  /** 关联失败/烂尾任务，可空。 */
+  taskId: z.string().optional(),
+  status: z.enum(['draft', 'final']).default('draft'),
+  lines: z.array(z.object({
+    text: z.string(),
+    mark: z.enum(['known', 'pending', 'blank']),
+  })),
+  gaps: z.array(z.string()).default([]),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+export type LessonRecord = z.infer<typeof lessonRecordSchema>
+
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
   // v0.6.0 schema v2：本版读 v1 时代记录（compatibleVersions 含 1），写入一律打 v2 信封。
@@ -78,6 +116,8 @@ export const pmDomainSpec = defineDomain({
     deliverables: domainTable(deliverableRecordSchema),
     sessions: domainTable(sessionRecordSchema),
     reflections: domainTable(reflectionRecordSchema),
+    okrs: domainTable(okrRecordSchema),
+    lessons: domainTable(lessonRecordSchema),
   },
 })
 

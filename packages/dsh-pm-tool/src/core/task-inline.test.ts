@@ -38,7 +38,7 @@ describe('buildUpdate：状态枚举对齐 todo/in_progress/blocked/done', () =>
   })
 
   it('转发权威枚举，与 status.ts 单一来源一致', () => {
-    expect([...TASK_STATUSES]).toEqual(['todo', 'in_progress', 'blocked', 'done'])
+    expect([...TASK_STATUSES]).toEqual(['todo', 'in_progress', 'blocked', 'done', 'wrapped'])
   })
 })
 

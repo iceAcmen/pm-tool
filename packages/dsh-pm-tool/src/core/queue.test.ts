@@ -239,3 +239,14 @@ describe('K11 首次打开与预留接线点', () => {
     expect('backfill' in q.top!).toBe(false)
   })
 })
+
+describe('X2 wrapped 口径：已收尾不进队列', () => {
+  it('wrapped 即使到期/逾期也不入选（done 排除规则之外单独剔除）', () => {
+    const q = deriveQueue('p-0001', [
+      t({ id: 'w1', title: '已收尾逾期', status: 'wrapped', dueDate: '2026-10-16', progress: 0 }),
+      t({ id: 'n1', title: '正常逾期', status: 'in_progress', dueDate: '2026-10-16', progress: 20 }),
+    ], [], { today: TODAY })
+    const ids = [q.top, ...q.rest].filter(Boolean).map(i => i!.taskId)
+    expect(ids).toEqual(['n1'])
+  })
+})
