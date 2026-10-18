@@ -15,20 +15,36 @@
 .pm-bento .pm-md-stack { display: flex; flex-direction: column; gap: 12px; justify-content: center; flex: 1; min-width: 0; }
 .pm-bento .pm-md-row { display: grid; grid-template-columns: 64px 1fr 24px; align-items: center; gap: 10px; font-size: 12px; min-width: 0; }
 
-/* 迁移 banner：中性 info（非 overdue 红），可折叠、关闭态持久（localStorage 在组件内管）。 */
-.pm-bento .pm-bento-validation.pm-mig {
-  background: color-mix(in srgb, var(--pm-st-progress) 10%, var(--pm-surface));
+/* R8 迁移反馈：中性 info 细条（非红/非暖黄/非黑块），首屏只给白话摘要，技术明细折叠进次级内滚区。 */
+.pm-bento .pm-mig {
+  margin: 0 0 10px;
+  padding: 8px 12px;
   border: 1px solid var(--pm-line);
+  border-left: 3px solid var(--pm-st-progress);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--pm-st-progress) 8%, var(--pm-surface));
   color: var(--pm-text-2);
-  border-radius: 12px;
+  font-size: 12px;
 }
-.pm-bento .pm-mig-summary {
-  display: flex; align-items: center; gap: 8px; width: 100%;
-  background: none; border: 0; cursor: pointer; text-align: left;
-  color: inherit; font: inherit; padding: 0;
+.pm-bento .pm-mig-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.pm-bento .pm-mig-dot { flex: 0 0 auto; width: 6px; height: 6px; border-radius: 50%; background: var(--pm-st-progress); }
+.pm-bento .pm-mig-text { flex: 1 1 auto; min-width: 0; }
+.pm-bento .pm-mig-title { margin: 0; line-height: 1.5; }
+.pm-bento .pm-mig-skip { margin: 2px 0 0; color: var(--pm-muted); line-height: 1.5; }
+.pm-bento .pm-mig-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
+.pm-bento .pm-mig-detail-btn,
+.pm-bento .pm-mig-close {
+  background: none; border: 1px solid var(--pm-line); border-radius: 6px;
+  padding: 3px 10px; font-size: 12px; line-height: 1.4; cursor: pointer; color: var(--pm-text-2);
 }
-.pm-bento .pm-mig-toggle { flex: 0 0 auto; font-size: 11px; color: var(--pm-muted); }
-.pm-bento .pm-mig-body { margin-top: 6px; font-size: 12px; line-height: 1.6; }
+.pm-bento .pm-mig-detail-btn:hover,
+.pm-bento .pm-mig-close:hover { background: color-mix(in srgb, var(--pm-st-progress) 12%, transparent); }
+/* 技术明细：次级内滚区，max-height 限高，不占首屏、不与摘要并排撑大块。 */
+.pm-bento .pm-mig-detail {
+  margin-top: 8px; padding: 8px 10px; max-height: 160px; overflow-y: auto;
+  border: 1px dashed var(--pm-line); border-radius: 6px;
+  font-size: 11.5px; line-height: 1.6; color: var(--pm-muted);
+}
 
 /* 编号占位：无 code 的存量卡显短 ID，弱化等宽，不重新编号。 */
 .pm-bento .pm-bento-code-missing {

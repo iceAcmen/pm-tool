@@ -16,6 +16,7 @@ import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
 import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions } from './projection.js'
+import { buildMigrationSummary, migrationSignature, isMigrationRead, markMigrationRead, parseMigrationReadMap, type MigrationReadMap } from './migration-banner.js'
 import boardCss from './board.css?raw'
 // type-only：编辑器块不被静态打包，仅取类型。
 import type { BoardEditorProps } from './editor.js'
@@ -44,17 +45,16 @@ export function BoardBento({ data, actions, persistence }: {
   const [adopting, setAdopting] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
 
-  // 契约 §3.6：迁移提示与瞬时成功/错误分离——迁移降为中性 info、可折叠「N 张卡已自动归位」一行，
-  // 关闭/折叠态板级 localStorage 持久（不写 core、不落盘布局）；成功/错误仍走 alert 横幅。
-  const [migrationNotes, setMigrationNotes] = useState<string[]>([])
-  const [migDismissed, setMigDismissed] = useState<boolean>(() => {
-    try { return localStorage.getItem('pm-bento-mig-dismissed') === '1' } catch { return false }
+  // R8：迁移反馈降级为中性 info 摘要（首屏 1–2 行白话，无 w-*/坐标）；技术明细默认折叠进次级「详情」。
+  // 不提供「撤销」（history 仅保存后历史，不支持迁移前恢复，放假按钮即误导）。已读按签名 localStorage 持久。
+  const [migDetail, setMigDetail] = useState<{ warnings: string[], skipped: string[] } | null>(null)
+  const [migOpen, setMigOpen] = useState(false)
+  const [migRead, setMigRead] = useState<MigrationReadMap>(() => {
+    try { return parseMigrationReadMap(localStorage.getItem('pm-bento-mig-read')) } catch { return {} }
   })
-  const [migCollapsed, setMigCollapsed] = useState<boolean>(() => {
-    try { return localStorage.getItem('pm-bento-mig-collapsed') === '1' } catch { return false }
-  })
-  const persistMigFlag = (key: string, v: boolean) => {
-    try { localStorage.setItem(key, v ? '1' : '0') } catch { /* 隐私模式忽略，不阻断 */ }
+  const persistMigRead = (next: MigrationReadMap) => {
+    setMigRead(next)
+    try { localStorage.setItem('pm-bento-mig-read', JSON.stringify(next)) } catch { /* 隐私模式忽略 */ }
   }
 
   // 会话内「上次成功保存」canonical 布局，供编辑器预览/恢复（落盘历史槽位另由 capability 评估）。
@@ -65,13 +65,10 @@ export function BoardBento({ data, actions, persistence }: {
     const u = loadDashboard(data.dashboards?.user, knownTypes)
     const p = u ?? loadDashboard(data.dashboards?.project, knownTypes)
     if (!p) return
-    const notes = [...p.warnings]
-    // 未知类型合并为单条非阻断摘要（不每卡一条巨大提示）；仅列类型，其余卡原样保留。
-    if (p.skipped.length) {
-      const types = [...new Set(p.skipped.map(s => s.split('（')[0]))]
-      notes.push(`跳过 ${p.skipped.length} 个未知卡片类型（${types.join('、')}），其余卡片原样保留，未整份重置。`)
+    // 仅保存技术明细（夹紧/下沉/未知类型），白话摘要由 buildMigrationSummary 现算，不回显坐标/ID。
+    if (p.warnings.length || p.skipped.length) {
+      setMigDetail({ warnings: [...p.warnings], skipped: [...p.skipped] })
     }
-    if (notes.length) setMigrationNotes(notes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knownTypes])
 
@@ -172,6 +169,11 @@ export function BoardBento({ data, actions, persistence }: {
     return desc.render({ data, config: w.config, actions, isEditing, evaluateFormula, linkage: isEditing ? undefined : linkage, onLink: isEditing ? undefined : onLink })
   }
 
+  // R8：迁移反馈派生——白话摘要 + 签名已读判断；技术明细仅在展开「详情」时渲染。
+  const migSummary = migDetail ? buildMigrationSummary(migDetail.warnings, migDetail.skipped) : null
+  const migSig = migDetail ? migrationSignature(migDetail.warnings, migDetail.skipped) : null
+  const migVisible = !!migDetail && !!migSig && !isMigrationRead(migRead, migSig)
+
   return <div className="pm-bento" ref={rootRef}>
     <style>{boardCss}</style>
     <div className="pm-bento-head">
@@ -215,21 +217,33 @@ export function BoardBento({ data, actions, persistence }: {
         <button type="button" className="pm-linkbar-clear" onClick={() => setLinkage({})}>全部清除</button>
       </div>
     )}
-    {!migDismissed && migrationNotes.length > 0 && (
-      <div className="pm-bento-validation pm-mig" role="status">
-        <button type="button" className="pm-mig-summary"
-          onClick={() => { const v = !migCollapsed; setMigCollapsed(v); persistMigFlag('pm-bento-mig-collapsed', v) }}
-          aria-expanded={!migCollapsed}>
-          <span>布局已自动归位（{migrationNotes.length} 条自愈说明）</span>
-          <span className="pm-mig-toggle">{migCollapsed ? '展开 ▸' : '收起 ▾'}</span>
-          <span
-            role="button" tabIndex={0} className="pm-bento-validation-x" aria-label="关闭迁移提示"
-            onClick={(e) => { e.stopPropagation(); setMigDismissed(true); persistMigFlag('pm-bento-mig-dismissed', true) }}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); setMigDismissed(true); persistMigFlag('pm-bento-mig-dismissed', true) } }}>×</span>
-        </button>
-        {!migCollapsed && (
-          <div className="pm-mig-body">
-            {migrationNotes.map((n, i) => <div key={i}>· {n}</div>)}
+    {migVisible && migDetail && migSummary && (
+      <div className="pm-mig" role="status" aria-label="布局自动调整说明">
+        <div className="pm-mig-main">
+          <span className="pm-mig-dot" aria-hidden="true" />
+          <div className="pm-mig-text">
+            <p className="pm-mig-title">{migSummary.title}</p>
+            {migSummary.skippedNote && <p className="pm-mig-skip">{migSummary.skippedNote}</p>}
+          </div>
+          <div className="pm-mig-actions">
+            <button
+              type="button" className="pm-mig-detail-btn"
+              onClick={() => setMigOpen(v => !v)}
+              aria-expanded={migOpen} aria-controls="pm-mig-detail">
+              {migOpen ? '收起详情' : '查看详情'}
+            </button>
+            <button
+              type="button" className="pm-mig-close"
+              aria-label="关闭迁移提示"
+              onClick={() => { if (migSig) persistMigRead(markMigrationRead(migRead, migSig)) }}>
+              关闭
+            </button>
+          </div>
+        </div>
+        {migOpen && (
+          <div className="pm-mig-detail" id="pm-mig-detail">
+            {migDetail.warnings.map((n, i) => <div key={`w${i}`}>· {n}</div>)}
+            {migDetail.skipped.map((s, i) => <div key={`s${i}`}>· 无法识别的卡片类型：{s}</div>)}
           </div>
         )}
       </div>
