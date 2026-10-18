@@ -18,6 +18,8 @@ import {
   TaskMoveCycleError,
   TaskMilestoneNotFoundError,
   TaskMilestoneProjectMismatchError,
+  TaskDeliverableNotFoundError,
+  TaskDeliverableProjectMismatchError,
   TaskProjectNotFoundError,
   TaskReferencedByMeetingError,
   TaskReferencedByPredecessorError,
@@ -743,6 +745,8 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       || error instanceof TaskMoveCycleError
       || error instanceof TaskMilestoneNotFoundError
       || error instanceof TaskMilestoneProjectMismatchError
+      || error instanceof TaskDeliverableNotFoundError
+      || error instanceof TaskDeliverableProjectMismatchError
       || error instanceof TaskReferencedByMeetingError
       || error instanceof TaskReferencedByPredecessorError
       || error instanceof TaskImportNoProjectError

@@ -13,6 +13,7 @@ import { projectStatusLabels } from '../../core/labels.js'
 import { buildCompletionHistory } from '../../core/completion-history.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
+import { queueCard } from './queue-card.js'
 
 export function todayIso(): string {
   const n = new Date()
@@ -760,7 +761,7 @@ const divider: WidgetDescriptor = {
 /* ---------- Registry + 内置默认布局（坐标严格按方案 §4.2.1） ---------- */
 export const WIDGET_REGISTRY: Map<string, WidgetDescriptor> = new Map(
   [completionHero, milestoneDeliverable, projectScale, objectiveProgress, peopleLoad, riskMatrix, weeklyPlan,
-    recordList, overdueSoon, kpiMetric, formulaCard, statusRing, completionTrend, textNote, divider]
+    recordList, overdueSoon, kpiMetric, formulaCard, statusRing, completionTrend, textNote, divider, queueCard]
     .map(d => [d.type, d]),
 )
 
@@ -807,6 +808,7 @@ export const DEFAULT_LAYOUT: DashboardLayout = {
     { i: 'w-load', type: 'peopleLoad', config: {}, layout: { i: 'w-load', x: 4, y: 7, w: 8, h: 3, minW: 4, minH: 2 } },
     { i: 'w-risk', type: 'riskMatrix', config: {}, layout: { i: 'w-risk', x: 0, y: 10, w: 4, h: 4, minW: 3, minH: 3 } },
     { i: 'w-week', type: 'weeklyPlan', config: {}, layout: { i: 'w-week', x: 4, y: 10, w: 8, h: 4, minW: 4, minH: 3 } },
+    { i: 'w-queue', type: 'queueCard', config: {}, layout: { i: 'w-queue', x: 0, y: 14, w: 4, h: 5, minW: 3, minH: 3 } },
   ],
 }
 

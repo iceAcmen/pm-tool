@@ -22,6 +22,8 @@ export class TaskHasChildrenError extends Error {}
 export class TaskMoveCycleError extends Error {}
 export class TaskMilestoneNotFoundError extends Error {}
 export class TaskMilestoneProjectMismatchError extends Error {}
+export class TaskDeliverableNotFoundError extends Error {}
+export class TaskDeliverableProjectMismatchError extends Error {}
 export class TaskReferencedByMeetingError extends Error {}
 export class TaskReferencedByPredecessorError extends Error {}
 
@@ -31,6 +33,23 @@ function validateMilestoneRelation(domain: PmDomain, projectId: string, mileston
   if (!milestone) throw new TaskMilestoneNotFoundError(`未找到里程碑：${milestoneId}`)
   if (milestone.projectId !== projectId) {
     throw new TaskMilestoneProjectMismatchError('里程碑不属于指定项目')
+  }
+}
+
+/**
+ * P0 遗留补齐：task.deliverableId 存在性/同项目校验（与 validateMilestoneRelation 同构）。
+ * null/缺省=不设置，放行；显式传入必须存在且与任务同项目，否则拒绝落库。
+ */
+function validateDeliverableRelation(
+  domain: PmDomain,
+  projectId: string,
+  deliverableId: string | null | undefined,
+): void {
+  if (!deliverableId) return
+  const deliverable = domain.table('deliverables').get(deliverableId)
+  if (!deliverable) throw new TaskDeliverableNotFoundError(`未找到交付物：${deliverableId}`)
+  if (deliverable.projectId !== projectId) {
+    throw new TaskDeliverableProjectMismatchError('交付物不属于指定项目')
   }
 }
 
@@ -100,6 +119,7 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
     // v0.8 父子互斥：已有非空清单的叶子不能收子任务（拒绝，不删除清单）。
     assertParentHasNoChecklist(parent)
     validateMilestoneRelation(domain, fields.projectId, fields.milestoneId)
+    validateDeliverableRelation(domain, fields.projectId, fields.deliverableId)
 
     let maxId = 0n
     let maxOrder = 0
@@ -199,6 +219,9 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     if (!current) return undefined
     if (fields.milestoneId !== undefined) {
       validateMilestoneRelation(domain, current.projectId, fields.milestoneId)
+    }
+    if (fields.deliverableId !== undefined) {
+      validateDeliverableRelation(domain, current.projectId, fields.deliverableId)
     }
     const nextInput: Record<string, unknown> = {
       ...current,

@@ -2,24 +2,22 @@
 
 > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
 
-最后更新：2026-10-18（doubao-work 完成 **P0 深度融合·底座+采集闭环**：K1/K2 窄集/K4/K3/K9/K12/X6-L1/K6 八项能力已实现并 push main；build=0、vitest 282/282、verify-isolation 77/77/0 污染、verify-p0-integration 28/28（真实命令+真实 JSON 落盘+溯源 confirmed）、verify-reflect PASS；未碰 3172；规格 `docs/design/deep-integration-v2-p0-dev.md`、验证 `docs/design/deep-integration-v2-p0-verify.md`、证据 `docs/verification/p0-20261018/`。历史：**P2-2 Token 2.0 视觉基准**仍为进行中候选未放行；**#24 测试框架 + CI** 已 push）
+最后更新：2026-10-18（doubao-work 完成 **P1 深度融合·呈现+交互层**：K11 补记队列/K13 对话内投影/K6 完整版/X6-L2 完整复盘草稿流/K19 保护面组件已实现并 push main；build=0、vitest 326/326、verify-isolation 80/80/0 污染、verify-p1-integration 45/45（真实命令+真实 JSON 落盘+幂等+负例）；未碰 3172；规格 `docs/design/deep-integration-v2-p1-dev.md`、验证 `docs/design/deep-integration-v2-p1-verify.md`、证据 `docs/verification/p1-20261018/`。历史：P0 深度融合·底座+采集闭环已 push；P2-2 Token 2.0 视觉基准仍为进行中候选未放行）
 
-## 当前阶段：P0 深度融合 · 底座+采集闭环·已核验（2026-10-18，doubao-work，已 push main）
+## 当前阶段：P1 深度融合 · 呈现+交互层·已核验（2026-10-18，doubao-work，已 push main）
 
-- **目标**：用户对「PM工作台 × DeepSeek Harness 深度融合」推荐组合主线拍板「按推荐执行」后的真实开发第一阶段（P0 = 第 0 层底座 + 第 1 层采集闭环，对应返工效果图 S1/S2）。
-- **已实现 8 项能力**：
-  - K1 上下文读取增强（ask 上下文补备注/证据/交付物连接，如实标注不编造）
-  - K2 受限直写窄集（task.update 白名单 5→9：+description/evidenceUrl/repoUrl/branch；类型闸+未知拒绝不变；不扩状态/排期）
-  - K4 对话补档（capture 观察模式草稿 / capture-apply 人确认落库 / E2E 缝）
-  - K3 证据闭环（attach-evidence 单条轻确认直挂 evidenceUrl）
-  - K9 会话结存（新表 sessions，bind/list/notes 单向结存）
-  - K12 自我计量（metric 只读汇总，小样本不下结论）
-  - X6-L1 即时复盘草稿（task.deliverableId 连接字段 + reflections 表 + updateTask done 钩子自动建轻量草稿，句级已核/待核/留白，人定稿）
-  - K6 交付检查（check 五类规则只读提示，未覆盖≠未完成）
-- **验证**：`pnpm build`=0；`pnpm test` 26 文件 / **282 用例全绿**；`verify-isolation.mjs` **77 脚本 / 77 通过 / 失败 0 / 污染 0**（176 资产 before=after）；`verify-p0-integration.mjs` **28/28**；`verify-reflect.mjs` PASS。全部在隔离临时根，未碰 3172、未写正式 data。
-- **能力边界**：K2 仅备注/证据链接类受限直写+草稿确认+ask-undo 可撤销；X6 草稿≠定稿、业务完成≠复盘定稿；K9 单向结存非双向同步；capture 不自动建任务；H6 常驻推送 P3 立项本期不实现；未改前端视图（P1）。
-- **下一步**：P1 补 K11 补记队列/K13 对话内投影前端呈现层（数据基础已就绪）+ deliverableId 存在性校验；K2 窄集跑通后用户复核再扩界；真实 LLM 草稿质量留待用户真实实例复核。
+- **目标**：P0 验收通过后的呈现+交互阶段（S1 完整化 + S3 深化），5 分片并行（文件级互斥）+ 组织者契约层（storage sourceEvent 枚举扩展、queue 骨架与路由）+ 集成验证。
+- **已实现 5 项能力**：
+  - K11 补记队列（读时派生：到期未达/严重度排序/迟到标识/Top1+折叠/mute 二态+TTL/关键项豁免/K9 缺席/时段静默；命令 queue open|list|mute|unmute|quiet；snapshot 携带 queue；看板队列卡）
+  - K13 对话内只读投影（相关任务卡/处理结果/下一步入口；**防过时**——渲染时最新状态+「数据截至」+刷新）
+  - K6 完整版呈现（tasks 视图核对卡，三组规则，「提示不代替人验收」）
+  - X6-L2 完整复盘草稿流（milestone achieved/deliverable accepted 钩子→完整草稿；关联任务清单+留白；人定稿；deliverableId 存在性/同项目校验补齐）
+  - K19 保护面组件（loadFacts 纯事实/stanceSuggestions 建议砍缓/staleStanceTags 烂尾标签；people 负载卡；无裁决无硬上限）
+- **验证**：`pnpm build`=0；`pnpm test` 30 文件 / **326 用例全绿**；`verify-isolation.mjs` **80 脚本 / 80 通过 / 失败 0 / 污染 0**（176 资产 before=after）；`verify-p1-integration.mjs` **45/45**；分片自验 p1a 22/22、p1c 22/22、队列卡 SSR 13/13。
+- **能力边界**：K11 打开时呈现≠常驻推送（H6 P3 悬置）；mute 不隐藏打开视图；X6-L2 草稿≠定稿；K19 无 WIP 硬上限；K6 只提示；写操作全可逆。
+- **下一步**：P2 X7 愿景/OKR 层（K11 周期触发接线点已预留）；H6 P3 立项（先调研宿主通知能力）；K2 窄集复核后扩界；真实宿主渲染与真实 LLM 草稿质量留待用户真实实例复核。
 
+（P0 阶段已收口并 push，详情见 changelog 与 `docs/design/deep-integration-v2-p0-verify.md`，此处不再赘述。）
 
 ## 进行中候选：P2-2 Token 2.0 视觉基准（2026-10-17，doubao-work；未提交 / 未放行）
 

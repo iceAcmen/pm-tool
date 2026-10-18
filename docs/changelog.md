@@ -8,7 +8,21 @@
 
 ---
 
-## P0 深度融合：底座+采集闭环（K1/K2 窄集/K4/K3/K9/K12/X6-L1/K6）（已 push main，2026-10-18，平台：doubao-work）
+## P1 深度融合：呈现+交互层（K11 补记队列/K13 对话内投影/K6 完整版/X6-L2 完整复盘草稿流/K19 保护面组件）（已 push main，2026-10-18，平台：doubao-work）
+
+> P0（73037f7）验收通过后的呈现+交互阶段，对应效果图 S1 完整化与 S3 深化。规格 `docs/design/deep-integration-v2-p1-dev.md`、验证 `docs/design/deep-integration-v2-p1-verify.md`、证据 `docs/verification/p1-20261018/`。
+
+- **K11 补记队列（核心，读时派生）**：新 `core/queue.ts` 纯函数（到期未达/严重度>到期排序/积压迟到 LATE_DAYS=3 标识/Top1+折叠 rest/mute 二态与 TTL/关键项豁免 blocked 或 lateDays>0/K9 缺席/时段静默 quietMode 降级/X7 cycleDue·X8 backfill 仅类型预留）+ 命令 `queue open|list|mute|unmute|quiet`（写操作全可逆）+ web snapshot 携带 `queue[projectId]`（读时派生零写）。前端：新 `board/queue-card.tsx` 总览看板卡（Top1 醒目+rest 折叠、迟到徽标、静音条目折叠可见、quiet 降级、mute/unmute 走 runCommand 接缝可逆）+ `.pm-queue-*` 样式。
+- **K13 对话内只读投影**：CopilotPanel AI 回答旁投影相关任务卡/最近处理结果/下一步入口；新 `core/ask-projection.ts` 纯函数（引用解析/批次归并）；**防过时硬要求**——投影渲染时从最新 tasks 快照现取状态、标注「数据截至 HH:MM:SS」+刷新入口，ask 旧会话卡片渲染时刷新，不显示过期状态。
+- **K6 完整版（呈现）**：tasks 视图交付前核对卡，消费 P0 check 规则分三组呈现（日期排期/未回应要求/缺依据与状态不符），卡片含「提示不代替人验收」「未覆盖≠未完成」。
+- **X6-L2 完整复盘草稿流**：milestone achieved / deliverable accepted 触发完整草稿（sourceEvent 扩展、milestoneId/deliverableId 字段、关联任务清单行、gaps 留白不编造）；`reflect final/edit` 人定稿复用；**P0 遗留补齐**——task.deliverableId 存在性/同项目校验（TaskDeliverableNotFoundError/TaskDeliverableProjectMismatchError，中文文案）。
+- **K19 保护面组件**：新 `core/load-stance.ts` 纯函数（loadFacts 纯事实陈列/stanceSuggestions「建议砍/缓」含「建议供人决策，不自动执行」/staleStanceTags「烂尾倾向」过滤标签）；people 视图负载卡呈现；无 WIP 硬上限/拒单闸。
+- **改动文件**：新建 `src/core/queue.ts`、`src/commands/queue.ts`、`src/core/ask-projection.ts`、`src/core/load-stance.ts`、`src/client/board/queue-card.tsx`、测试 queue/ask-projection/reflect-l2/load-stance 4 文件（+44 例）；改 `src/index.ts`（snapshot queue 段）、`src/core/reflect.ts`/`milestones.ts`/`deliverables.ts`/`tasks.ts`/`task.ts`（commands/task.ts 错误透传）、`src/client/panel.tsx`/`panel.css`（投影 + 接线 runCommand/refreshBoard）、`src/client/board/types.ts`/`widgets.tsx`、`src/client/views/people.tsx`/`tasks.tsx`、`src/core/storage.ts`（契约层 sourceEvent 枚举扩展）；新建 `scripts/verify-p1-integration.mjs`；修正 `scripts/verify-reflect.mjs`（deliverableId 校验语义升级）。
+- **验证**：`pnpm build`=0；`pnpm test` **30 文件 / 326 用例全绿**（基线 282→326）；`verify-isolation.mjs` **80 脚本 / 80 通过 / 失败 0 / 污染 0**；`verify-p1-integration.mjs` **45/45**（真实命令+真实 JSON 落盘+幂等+负例）；分片自验 p1a 22/22、p1c 22/22、队列卡 SSR 13/13。
+- **能力边界（未夸大）**：K11 打开时呈现≠常驻推送（H6 悬置 P3，卡脚注明）；mute 不隐藏打开视图；X6-L2 草稿≠定稿（人定稿/复盘会）；K19 无裁决无硬上限；K6 只提示；写操作全可逆；未改上游宿主、未动 3172。
+- **遗留/下一步**：P2 X7 愿景/OKR 层（周期触发接线点已预留）；H6 P3 立项；K2 窄集复核后扩界；真实宿主渲染与真实 LLM 草稿质量留待用户真实实例复核。已 commit+push main。
+
+---
 
 > 用户已对「PM工作台 × DeepSeek Harness 深度融合」推荐组合主线拍板「按推荐执行」，进入真实开发阶段。P0 = 第 0 层底座 + 第 1 层采集闭环，对应返工效果图 S1/S2；规格与验证记录见 `docs/design/deep-integration-v2-p0-dev.md`、`docs/design/deep-integration-v2-p0-verify.md`；证据 `docs/verification/p0-20261018/`。
 

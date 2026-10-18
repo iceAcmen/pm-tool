@@ -83,6 +83,14 @@ export interface DashboardLayout {
 export interface WidgetActions {
   openRecord: (projectId: string, type: string, id: string) => void
   pickProject: (id: string) => void
+  /**
+   * P1-D K11 命令通道接缝：面板接入后透传（execute/run 执行 `queue mute|unmute <id>`）。
+   * 可选：分片B 面板接线前缺失时，队列卡不渲染静音按钮（不做僵尸点击）；只读浏览不受影响。
+   * 命令行不带 `/pm` 前缀（与面板既有 execute 调用同口径，宿主自行补前缀）。
+   */
+  runCommand?: (line: string) => Promise<unknown>
+  /** 写操作成功后由面板触发快照刷新；缺失时卡片仅结束本地 busy 态。 */
+  refreshBoard?: () => Promise<void> | void
 }
 
 /** 联动筛选维度。 */

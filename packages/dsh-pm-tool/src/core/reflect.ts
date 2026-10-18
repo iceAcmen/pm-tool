@@ -13,6 +13,8 @@
 import { enqueueDomainWrite } from './projects.js'
 import { reflectionRecordSchema, type PmDomain, type ReflectionRecord } from './storage.js'
 import type { Task } from './task.js'
+import type { Milestone } from './milestone.js'
+import type { Deliverable } from './deliverable.js'
 import { localTodayIso } from './derived.js'
 
 export class ReflectionNotFoundError extends Error {}
@@ -98,6 +100,119 @@ export function buildReflectionDraft(
   }
 }
 
+/** X6-L2：反查里程碑/交付物关联任务所需的窄字段（不吃完整 Task，便于纯函数单测）。 */
+export interface LinkedTaskDraftInput {
+  id: string
+  title: string
+  status: string
+  progress?: number | null
+  evidenceUrl?: string
+}
+
+/**
+ * 关联任务清单行的保守定级（纯函数）：
+ * - done 且有佐证链接 → known（只陈述「已连接」，不评判质量）；
+ * - done 但无佐证 → pending（已完成待核）并进 gaps 留白；
+ * - 未完成 → pending（未完成）并进 gaps 留白，绝不编造完成结论。
+ */
+function linkedTaskLines(
+  linkedTasks: LinkedTaskDraftInput[],
+  lines: ReflectionRecord['draft']['lines'],
+  gaps: string[],
+): void {
+  for (const task of linkedTasks) {
+    const done = task.status === 'done'
+    const hasEvidence = !!task.evidenceUrl
+    if (done && hasEvidence) {
+      lines.push({ text: `关联任务已完成并有佐证：${task.title}（${task.id}）`, mark: 'known' })
+    } else if (done) {
+      lines.push({
+        text: `关联任务已完成待核：${task.title}（${task.id}，缺佐证链接，质量由人复核）`,
+        mark: 'pending',
+      })
+      gaps.push(`待补：任务 ${task.id}「${task.title}」的完成佐证材料`)
+    } else {
+      lines.push({
+        text: `关联任务未完成：${task.title}（${task.id}，当前状态 ${task.status}）`,
+        mark: 'pending',
+      })
+      gaps.push(`待补：关联任务 ${task.id}「${task.title}」尚未闭环（未完成/缺证据，留白不编造）`)
+    }
+  }
+}
+
+/**
+ * X6-L2 里程碑达成复盘草稿（纯函数，可单测）：
+ * - title=`${title} · 里程碑达成复盘（草稿）`；
+ * - known 行=达成日期（缺省落本地今天，不编造精确时刻）+ 说明/达成标准摘要（截断 200 字）；
+ * - 关联任务清单行（task.milestoneId 反查，未完成/无证据任务标 pending）；
+ * - gaps=未达成/缺证据清单，留白不编造；无关联任务时留白提示由人核对覆盖范围。
+ * 克制清单不变：无积分/连胜/动效/徽章；句级已核/待核/留白；仅事件触发。
+ */
+export function buildMilestoneReflectionDraft(
+  milestone: Pick<Milestone, 'title' | 'achievedDate' | 'description'>,
+  linkedTasks: LinkedTaskDraftInput[],
+  at: string,
+): ReflectionRecord['draft'] {
+  const lines: ReflectionRecord['draft']['lines'] = [
+    { text: `达成时刻 ${milestone.achievedDate ?? localTodayIso()}`, mark: 'known' },
+  ]
+  const description = truncate(milestone.description ?? '', DESCRIPTION_MAX)
+  if (description) lines.push({ text: `里程碑说明/达成标准：${description}`, mark: 'known' })
+  const gaps: string[] = []
+  if (linkedTasks.length === 0) {
+    gaps.push('待补：未反查到关联任务清单，达成覆盖范围由人核对（留白不编造）')
+  }
+  linkedTaskLines(linkedTasks, lines, gaps)
+  return {
+    title: `${milestone.title} · 里程碑达成复盘（草稿）`,
+    at,
+    lines,
+    gaps,
+  }
+}
+
+/**
+ * X6-L2 交付验收复盘草稿（纯函数，可单测）：
+ * - title=`${name} · 交付验收复盘（草稿）`；
+ * - known 行=验收状态 + 版本/存放位置 + 说明摘要 + 已登记仓库连接（只陈述已连接，不评判质量）；
+ * - 关联任务行（task.deliverableId 反查，未完成/无证据任务标 pending）；
+ * - gaps=验收证据缺失清单，留白不编造。
+ */
+export function buildDeliverableReflectionDraft(
+  deliverable: Pick<Deliverable, 'name' | 'version' | 'status' | 'location' | 'description' | 'repoUrl'>,
+  linkedTasks: LinkedTaskDraftInput[],
+  at: string,
+): ReflectionRecord['draft'] {
+  const lines: ReflectionRecord['draft']['lines'] = [
+    { text: `验收状态：${deliverable.status}（验收结论由人确认，草稿不替代验收）`, mark: 'known' },
+    {
+      text: `版本/存放：版本 ${deliverable.version || '未填写'}；位置 ${deliverable.location || '未填写'}`,
+      mark: 'known',
+    },
+  ]
+  const description = truncate(deliverable.description ?? '', DESCRIPTION_MAX)
+  if (description) lines.push({ text: `交付物说明：${description}`, mark: 'known' })
+  if (deliverable.repoUrl) {
+    lines.push({ text: `已登记仓库连接（质量由人复核）：${deliverable.repoUrl}`, mark: 'known' })
+  }
+  const gaps: string[] = []
+  if (linkedTasks.length === 0) {
+    gaps.push('待补：未反查到关联任务清单，验收覆盖范围由人核对（留白不编造）')
+  }
+  linkedTaskLines(linkedTasks, lines, gaps)
+  const anyTaskEvidence = linkedTasks.some(task => task.evidenceUrl)
+  if (!anyTaskEvidence && !deliverable.repoUrl) {
+    gaps.push('待补：验收材料与证据链接')
+  }
+  return {
+    title: `${deliverable.name} · 交付验收复盘（草稿）`,
+    at,
+    lines,
+    gaps,
+  }
+}
+
 /** 按任务 id 查最新一条复盘记录（同步读，深拷贝）。 */
 export function getReflection(domain: PmDomain, taskId: string): ReflectionRecord | undefined {
   let latest: ReflectionRecord | undefined
@@ -136,6 +251,74 @@ export function ensureReflectionOnDone(domain: PmDomain, task: Task): Promise<Re
       status: 'draft',
       sourceEvent: 'task-done',
       draft: buildReflectionDraft(task, at),
+      createdAt: at,
+      updatedAt: at,
+    })
+    await table.put(record.id, record)
+    return structuredClone(record)
+  })
+}
+
+/**
+ * X6-L2 里程碑达成事件钩子：状态刚变 achieved 且该里程碑尚无复盘记录时创建草稿。
+ * 幂等：已有 draft/final 记录（按 milestoneId 匹配）则直接返回既有记录，不重复建。
+ * best-effort 由调用方 catch；本函数自身仍走串行写队列，失败向外抛。
+ */
+export function ensureReflectionOnMilestone(
+  domain: PmDomain,
+  milestone: Milestone,
+): Promise<ReflectionRecord | undefined> {
+  return enqueueDomainWrite(domain, async () => {
+    const table = domain.table('reflections')
+    for (const [, rec] of table.entries()) {
+      const existing = rec as ReflectionRecord
+      if (existing.milestoneId === milestone.id) return structuredClone(existing)
+    }
+    const linkedTasks = [...domain.table('tasks').entries()]
+      .map(([, task]) => task as Task)
+      .filter(task => task.milestoneId === milestone.id)
+    const at = new Date().toISOString()
+    const record = reflectionRecordSchema.parse({
+      id: makeId(),
+      projectId: milestone.projectId,
+      milestoneId: milestone.id,
+      status: 'draft',
+      sourceEvent: 'milestone-achieved',
+      draft: buildMilestoneReflectionDraft(milestone, linkedTasks, at),
+      createdAt: at,
+      updatedAt: at,
+    })
+    await table.put(record.id, record)
+    return structuredClone(record)
+  })
+}
+
+/**
+ * X6-L2 交付验收事件钩子：状态刚变 accepted 且该交付物尚无复盘记录时创建草稿。
+ * 幂等：已有 draft/final 记录（按 deliverableId 匹配）则直接返回既有记录，不重复建。
+ * best-effort 由调用方 catch；本函数自身仍走串行写队列，失败向外抛。
+ */
+export function ensureReflectionOnDeliverable(
+  domain: PmDomain,
+  deliverable: Deliverable,
+): Promise<ReflectionRecord | undefined> {
+  return enqueueDomainWrite(domain, async () => {
+    const table = domain.table('reflections')
+    for (const [, rec] of table.entries()) {
+      const existing = rec as ReflectionRecord
+      if (existing.deliverableId === deliverable.id) return structuredClone(existing)
+    }
+    const linkedTasks = [...domain.table('tasks').entries()]
+      .map(([, task]) => task as Task)
+      .filter(task => task.deliverableId === deliverable.id)
+    const at = new Date().toISOString()
+    const record = reflectionRecordSchema.parse({
+      id: makeId(),
+      projectId: deliverable.projectId,
+      deliverableId: deliverable.id,
+      status: 'draft',
+      sourceEvent: 'deliverable-accepted',
+      draft: buildDeliverableReflectionDraft(deliverable, linkedTasks, at),
       createdAt: at,
       updatedAt: at,
     })

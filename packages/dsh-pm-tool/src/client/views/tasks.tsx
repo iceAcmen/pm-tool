@@ -4,6 +4,8 @@ import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
 import { taskStatusLabels } from '../../core/labels.js'
+// K6 交付检查：复用 P0 纯函数 evaluateChecks（只读规则提示，不下完成裁决），前端不另造规则。
+import { evaluateChecks, type CheckFinding, type CheckableTask } from '../../core/check.js'
 import { tasksToCsv, tasksToMarkdown, tasksToJson, buildTaskSnapshotHtml, type TaskExportCtx } from '../../core/task-export.js'
 import { downloadText } from '../download.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
@@ -18,6 +20,7 @@ import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
+import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import Bookmark from 'lucide-react/dist/esm/icons/bookmark.mjs'
 import BookmarkPlus from 'lucide-react/dist/esm/icons/bookmark-plus.mjs'
@@ -60,6 +63,21 @@ type ChipKey = TaskViewChip
 // P2-5：chip/排序选项与 core/task-views 同源（口径不变，仅去重）。
 const CHIPS = VIEW_CHIP_OPTIONS
 const SORT_OPTIONS = VIEW_SORT_OPTIONS
+
+// ---- K6 交付检查（只读）：规则标签/分组与 P0 core/check.ts 五类规则一一对应，前端不新增规则、不下完成裁决。
+const K6_RULE_LABELS: Record<CheckFinding['rule'], string> = {
+  'overdue-untouched': '逾期未动',
+  'due-soon-untouched': '临期未动（≤2天仍待办）',
+  'done-open-checklist': '完成却有未完成清单项',
+  'done-missing-materials': '完成但缺交付/证据材料',
+  'progress-100-not-done': '进度100但状态未完成',
+}
+
+const K6_GROUPS: { key: string, title: string, rules: CheckFinding['rule'][] }[] = [
+  { key: 'date', title: '日期与排期待核对（日期冲突）', rules: ['overdue-untouched', 'due-soon-untouched'] },
+  { key: 'open-req', title: '完成前未回应要求', rules: ['done-open-checklist'] },
+  { key: 'evidence', title: '缺依据与状态不符', rules: ['done-missing-materials', 'progress-100-not-done'] },
+]
 
 function arrayBufferToB64(buf: ArrayBuffer): string {
   const bytes = new Uint8Array(buf)
@@ -297,6 +315,34 @@ export function TaskTable(props: {
     due_week: tasks.filter(t => isTaskDueWithin(t, localTodayIso(), 7)).length,
     risk: tasks.filter(t => isTaskAtRisk(t, localTodayIso(), t.milestoneId ? milestoneById.get(t.milestoneId) : undefined)).length,
   }), [tasks, milestoneById]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ---- K6 交付检查：前端用 P0 纯函数 evaluateChecks 从当前任务派生（与 /pm check 同规则）。
+  // 只读：不写库、不改状态/进度；「未覆盖≠未完成」，最终验收由人判断。
+  const checkFindings = useMemo<CheckFinding[]>(() => {
+    const today = localTodayIso()
+    const checkable: CheckableTask[] = tasks.map(t => {
+      const raw = t as Task & Partial<CheckableTask>
+      return {
+        id: t.id,
+        title: t.title,
+        status: t.status,
+        progress: t.progress,
+        dueDate: t.dueDate ?? null,
+        evidenceUrl: raw.evidenceUrl ?? null,
+        deliverableId: raw.deliverableId ?? null,
+        checklist: (t.checklist ?? null) as { done: boolean }[] | null,
+      }
+    })
+    return evaluateChecks(checkable, today)
+  }, [tasks])
+
+  const [checkOpen, setCheckOpen] = useState(true)
+  const checkGroups = useMemo(
+    () => K6_GROUPS
+      .map(g => ({ ...g, rows: checkFindings.filter(f => g.rules.includes(f.rule)) }))
+      .filter(g => g.rows.length > 0),
+    [checkFindings],
+  )
 
   // ---- P2-5：命名视图（过滤/排序/分组/搜索四态持久化与恢复）----
   const switcherRef = useRef<HTMLDivElement | null>(null)
@@ -1000,6 +1046,52 @@ export function TaskTable(props: {
           </div>
         </div>
       </div>
+
+      {/* K6 交付检查卡：只读规则提示，按规则分组；提示不代替人验收，不改任务状态。
+          挂载点：工具条与任务表之间（任务视图内），点击条目经 onEdit 打开任务抽屉（只读导航，无写路径）。 */}
+      <section className="pm-check-card" aria-label="交付检查">
+        <button type="button" className="pm-check-head" aria-expanded={checkOpen} onClick={() => setCheckOpen(v => !v)}>
+          <ListChecks size={16} className="pm-check-ico" />
+          <span className="pm-check-head-txt">
+            <h2>交付前核对</h2>
+            <span className="pm-check-head-sub">对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决</span>
+          </span>
+          <span className={`pm-check-count${checkFindings.length > 0 ? ' has' : ''}`}>{checkFindings.length} 条提示</span>
+          <ChevronDown size={15} className={`pm-check-chev${checkOpen ? ' on' : ''}`} />
+        </button>
+        {checkOpen && (
+          <div className="pm-check-body">
+            {checkFindings.length === 0 ? (
+              <p className="pm-check-empty">未命中规则提示。这不构成完成验收；最终验收由人判断。</p>
+            ) : (
+              checkGroups.map(g => (
+                <div className="pm-check-group" key={g.key}>
+                  <h3>{g.title}<span className="pm-check-group-n">{g.rows.length}</span></h3>
+                  {g.rows.map(f => {
+                    const target = byId.get(f.taskId)
+                    return (
+                      <button
+                        type="button"
+                        className="pm-check-item"
+                        key={`${f.rule}-${f.taskId}`}
+                        onClick={() => target && onEdit(target)}
+                      >
+                        <span className={`pm-check-rule is-${f.rule}`}>{K6_RULE_LABELS[f.rule]}</span>
+                        <span className="pm-check-main">
+                          <span className="pm-check-title">{f.taskId} · {f.title}</span>
+                          <span className="pm-check-reason">{f.reason}</span>
+                          <span className="pm-check-suggest">{f.suggestion}</span>
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              ))
+            )}
+            <p className="pm-check-foot">本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。</p>
+          </div>
+        )}
+      </section>
 
       {importPreview && (
         <div className="pt-import">

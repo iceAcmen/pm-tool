@@ -14,6 +14,7 @@ import {
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
+import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, type AppliedBatch } from '../core/ask-projection.js'
 import { formatNoticeLines, extractBackupPath, parseActiveModelLane } from '../core/ui-feedback.js'
 import { buildDiagnosis, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -57,7 +58,7 @@ import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
 import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal.mjs'
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.mjs'
 import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type RefObject } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type RefObject } from 'react'
 import {
   setPointerOpener, takeOpenerSpec, resolveDrawerFocusTarget,
   type FocusDoc, type OpenerSpec,
@@ -1066,6 +1067,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             onPickProject={(id) => { setSelected(id); setDashOpen(false) }}
             onOpenRecord={(pid, type, id) => { setDashOpen(false); openRecord(pid, type, id) }}
             onClose={() => setDashOpen(false)}
+            runCommand={(line) => run(line)}
+            refreshBoard={() => refresh()}
           />
         : !project
           ? <EmptyWorkspace onCreate={() => setDrawer({ kind: 'project-create' })}/>
@@ -1186,6 +1189,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 executeRaw={executeRaw}
                 disabled={busy}
                 onSaved={() => void refresh()}
+                onOpenRecord={openRecord}
                 embedded
                 diagnosis={diagnosis}
                 onDismissDiagnosis={dismissDiagnosis}
@@ -2105,7 +2109,109 @@ function copilotEntityOf(op: string): string | null {
   return m ? m[1] : null
 }
 
-function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, executeRaw, disabled, onSaved, embedded = false, diagnosis = [], onDismissDiagnosis, mode = 'diagnosis', onModeChange }: {
+/** K13：本地时钟 HH:MM:SS（「数据截至」标注，仅展示渲染时刻）。 */
+const projHhmmss = (d: Date) => [d.getHours(), d.getMinutes(), d.getSeconds()]
+  .map(n => String(n).padStart(2, '0')).join(':')
+
+/**
+ * K13 单条相关任务只读投影卡。所有业务值（状态/进度/截止/证据）渲染时从最新快照现取；
+ * baselineUpdatedAt 仅用于「回答后又被改动」提示，不用于展示旧状态。
+ */
+function ProjectionTaskCard({ task, baselineUpdatedAt, milestoneTitle, onOpen }: {
+  task: Task
+  baselineUpdatedAt?: string
+  milestoneTitle?: string
+  onOpen?: () => void
+}) {
+  const today = localTodayIso()
+  const urg = dueUrgency(task, today)
+  const liveUpdatedAt = (task as { updatedAt?: string }).updatedAt
+  const changed = !!baselineUpdatedAt && !!liveUpdatedAt && liveUpdatedAt !== baselineUpdatedAt
+  const hasEvidence = !!(task.evidenceUrl && String(task.evidenceUrl).trim())
+  const pct = clampProgress(task.progress)
+  return (
+    <article className="pm-proj-card" data-status={task.status}>
+      <div className="pm-proj-card-head">
+        <span className="pm-proj-id">{task.code || task.id}</span>
+        <span className={`pm-proj-status pm-proj-st-${task.status}`}>{taskStatus[task.status] ?? task.status}</span>
+        {urg.kind === 'overdue' && <span className="pm-proj-chip pm-proj-chip-overdue">逾期{urg.days}天</span>}
+        {urg.kind === 'soon' && <span className="pm-proj-chip pm-proj-chip-soon">临期{urg.days}天</span>}
+      </div>
+      <div className="pm-proj-card-title">{task.title}</div>
+      <div className="pm-proj-rows">
+        <span>负责人{task.assignee ? `：${task.assignee}` : '：未指派'}</span>
+        <span>截止{task.dueDate ? `：${task.dueDate}` : '：无'}</span>
+        <span>进度：{pct}%</span>
+        <span>证据：{hasEvidence ? '有' : '无'}</span>
+        {milestoneTitle ? <span>里程碑：{milestoneTitle}</span> : null}
+      </div>
+      <div className="pm-proj-bar" aria-hidden="true"><i style={{ width: `${pct}%` }}/></div>
+      {changed && <div className="pm-proj-changed">回答后该任务又有更新，已按最新状态显示</div>}
+      <div className="pm-proj-foot">
+        <span className="pm-proj-note">本地台账只读投影，单动作回写</span>
+        {onOpen && (
+          <button type="button" className="pm-proj-open" onClick={onOpen}>打开任务</button>
+        )}
+      </div>
+    </article>
+  )
+}
+
+/**
+ * K13「最近处理结果」块：ask-apply 落库批次摘要（只读），涉及任务按最新快照现取状态。
+ */
+function AppliedBatchBlock({ batch, taskById, projectId, onOpen, onRefresh, refreshing, asOf }: {
+  batch: AppliedBatch
+  taskById: Map<string, Task>
+  projectId: string
+  onOpen?: (projectId: string, type: string, id: string) => void
+  onRefresh: () => void
+  refreshing: boolean
+  asOf: Date
+}) {
+  const rows = batch.basisTaskIds
+    .map(id => taskById.get(id))
+    .filter((t): t is Task => !!t)
+  const when = batch.createdAt ? batch.createdAt.replace('T', ' ').slice(0, 16) : ''
+  return (
+    <section className="pm-proj pm-proj-applied" aria-label="最近处理结果">
+      <div className="pm-proj-head">
+        <span className="pm-proj-title">最近处理结果（AI 已落库）</span>
+        <span className="pm-proj-asof">数据截至 {projHhmmss(asOf)}</span>
+        <button type="button" className="pm-proj-refresh" disabled={refreshing} onClick={onRefresh}>
+          <RefreshCw size={11} className={refreshing ? 'pm-spin' : ''}/>刷新
+        </button>
+      </div>
+      <p className="pm-proj-applied-summary">
+        {batch.summary}{batch.undone ? '（该批次已撤销）' : ''}
+      </p>
+      {when && <p className="pm-proj-applied-time">落库于 {when}</p>}
+      {rows.map(t => (
+        <ProjectionTaskCard
+          key={t.id}
+          task={t}
+          milestoneTitle={undefined}
+          onOpen={onOpen ? () => onOpen(projectId, 'task', t.id) : undefined}
+        />
+      ))}
+      {!rows.length && <div className="pm-proj-missing">本批次涉及的任务已不在当前项目，以任务视图为准</div>}
+    </section>
+  )
+}
+
+/**
+ * K13 对话内只读投影：消息条目。refTaskIds 只存回答引用到的任务身份；
+ * refBaseline 只存回答时刻各任务的 updatedAt（用于「回答后又被改动」提示），
+ * 业务状态/进度/截止一律在渲染时从最新快照现取，绝不缓存旧值。
+ */
+type ChatMsg = {
+  role: string
+  text: string
+  refTaskIds?: string[]
+  refBaseline?: Record<string, string>
+}
+
+function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, meetings, baselineMap, execute, executeRaw, disabled, onSaved, onOpenRecord, embedded = false, diagnosis = [], onDismissDiagnosis, mode = 'diagnosis', onModeChange }: {
   projectId: string
   tasks: Task[]
   milestones: { id: string, title: string, targetDate?: string, status?: string }[]
@@ -2117,6 +2223,8 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   executeRaw: (line: string) => Promise<{ kind: string, text: string }>
   disabled: boolean
   onSaved: () => void
+  /** K13：复用面板既有「打开记录」导航（切视图+开抽屉），投影不新建写路径。 */
+  onOpenRecord?: (projectId: string, type: string, id: string) => void
   /** P1-7 内嵌形态（右侧建议层，非抽屉）。 */
   embedded?: boolean
   /** 规则诊断气泡（只读，确定性）。 */
@@ -2136,7 +2244,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   const today = new Date().toISOString().slice(0, 10)
 
   const [input, setInput] = useState('')
-  const [msgs, setMsgs] = useState<{ role: string, text: string }[]>([{ role: 'sys', text: '向副驾提问（只读诊断）；若给出多步计划，可勾选/编辑后整批或逐步执行，确认才落库。' }])
+  const [msgs, setMsgs] = useState<ChatMsg[]>([{ role: 'sys', text: '向副驾提问（只读诊断）；若给出多步计划，可勾选/编辑后整批或逐步执行，确认才落库。' }])
   const [steps, setSteps] = useState<PlanStepView[]>([])
   const [rejected, setRejected] = useState<{ stepId?: string, reason: string }[]>([])
   const [openedAt, setOpenedAt] = useState<Record<string, string> | null>(null)
@@ -2145,6 +2253,12 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   const [lane, setLane] = useState<'poc' | 'prod'>('poc')
   // 最近落库的撤销句柄（10 分钟内有效）；最多保留 3 条，新的在前。
   const [undoIds, setUndoIds] = useState<{ id: string, label: string, at: number }[]>([])
+  // K13 投影：最近一次 ask-apply 处理结果（只读，来自 ask-provenance 台账，best-effort）。
+  const [applied, setApplied] = useState<AppliedBatch[]>([])
+  // K13 防过时：投影「数据截至」本地时钟；最新快照到达或手动刷新时重盖，不使用 ask 发起时刻。
+  const [asOf, setAsOf] = useState(() => new Date())
+  const [projRefreshing, setProjRefreshing] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   /** 执行撤销：发 ask-undo，成功后移除该句柄。 */
   const runUndo = async (undoId: string) => {
@@ -2176,6 +2290,37 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
     try { await execute(`model mode ${next}`) } catch { /* 状态条由下次 status 反映 */ }
   }
 
+  // K13：只读拉取最近一次 ask-apply 处理结果（台账 best-effort，失败静默，不写业务）。
+  const loadApplied = async () => {
+    try {
+      const raw = await execute(`ask-provenance ${projectId}`)
+      const parsed = JSON.parse(raw) as { entries?: unknown }
+      setApplied(latestAppliedBatches(parsed.entries, 1))
+    } catch { /* 台账只读失败静默，不阻断主流程 */ }
+  }
+  useEffect(() => {
+    void loadApplied()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId])
+
+  // K13 防过时：最新快照（tasks prop）到达即重盖「数据截至」时钟；卡片状态始终读最新 props，不存 ask 时刻旧值。
+  useEffect(() => { setAsOf(new Date()) }, [tasks])
+
+  // K13 刷新：onSaved 触发父级重读 web snapshot，再重挂号处理结果，最后重盖时钟。
+  const refreshProjection = async () => {
+    if (projRefreshing) return
+    setProjRefreshing(true)
+    try {
+      await onSaved()
+      await loadApplied()
+    } finally {
+      setAsOf(new Date())
+      setProjRefreshing(false)
+    }
+  }
+
+  const focusInput = () => inputRef.current?.focus()
+
   const QUICK_ASKS = [
     '本周会不会延期？',
     '哪些任务需要重点关注？',
@@ -2197,7 +2342,6 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       const text = await execute(`ask ${projectId} ${isFixture ? 'fixture' : ''} ${isFixture ? '' : JSON.stringify(q)}`.trim())
       removePlaceholder()
       const { diagnosis, rawSteps } = parseCopilotPlan(text)
-      setMsgs(m => [...m, { role: 'ai', text: diagnosis }])
       const v = validatePlan(rawSteps, {
         taskIds,
         milestoneIds: milestones.map(m => m.id),
@@ -2205,6 +2349,14 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
         deliverableIds: deliverables.map(d => d.id),
         meetingIds: meetings.map(m => m.id),
       })
+      // K13：只记录回答正文提及 + 已校验计划涉及的任务「身份」；状态渲染时从最新快照现取。
+      const knownIds = new Set(taskIds)
+      const refTaskIds = [...new Set([
+        ...extractReferencedTaskIds(diagnosis, knownIds),
+        ...planTaskIds(v.steps),
+      ])]
+      const refBaseline = Object.fromEntries(refTaskIds.map(id => [id, baselineMap[id] ?? '']))
+      setMsgs(m => [...m, { role: 'ai', text: diagnosis, refTaskIds, refBaseline }])
       if (v.steps.length || v.rejected.length) {
         setSteps(v.steps.map(s => ({ ...s, checked: true })))
         setRejected(v.rejected)
@@ -2282,7 +2434,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       }
       // 新撤销句柄置顶，最多保留 3 条。
       if (newUndo.length) setUndoIds(prev => [...[...newUndo].reverse(), ...prev].slice(0, 3))
-      clearPlan(); onSaved()
+      clearPlan(); onSaved(); void loadApplied()
     } catch (e) {
       setMsgs(m => [...m, { role: 'ai', text: `执行失败：${e instanceof Error ? e.message : String(e)}` }])
     } finally { setBusy(false) }
@@ -2355,8 +2507,40 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       {msgs.map((m, i) => {
         if (m.role === 'me')
           return <div key={i} className="pm-copilot-bubble pm-copilot-me">{m.text}</div>
-        if (m.role === 'ai')
-          return <div key={i} className="pm-copilot-bubble pm-copilot-ai"><MarkdownView text={m.text}/></div>
+        if (m.role === 'ai') {
+          // K13：身份（refTaskIds）来自回答时刻，状态渲染时从最新 tasks 快照现取，不缓存旧值。
+          const refs = m.refTaskIds ?? []
+          const live = refs.map(id => taskById.get(id)).filter((t): t is Task => !!t)
+          const missing = refs.filter(id => !taskById.has(id))
+          return (
+            <Fragment key={i}>
+              <div className="pm-copilot-bubble pm-copilot-ai"><MarkdownView text={m.text}/></div>
+              {(live.length > 0 || missing.length > 0) && (
+                <div className="pm-proj" data-projection>
+                  <div className="pm-proj-head">
+                    <span className="pm-proj-title">相关任务（只读投影）</span>
+                    <span className="pm-proj-asof">数据截至 {projHhmmss(asOf)}</span>
+                    <button type="button" className="pm-proj-refresh" disabled={projRefreshing} onClick={() => void refreshProjection()}>
+                      <RefreshCw size={11} className={projRefreshing ? 'pm-spin' : ''}/>刷新
+                    </button>
+                  </div>
+                  {live.map(t => (
+                    <ProjectionTaskCard
+                      key={t.id}
+                      task={t}
+                      baselineUpdatedAt={m.refBaseline?.[t.id]}
+                      milestoneTitle={t.milestoneId ? milestoneById.get(t.milestoneId)?.title : undefined}
+                      onOpen={onOpenRecord ? () => onOpenRecord(projectId, 'task', t.id) : undefined}
+                    />
+                  ))}
+                  {missing.map(id => (
+                    <div key={id} className="pm-proj-missing">任务 {id} 已不在当前项目，以任务视图为准</div>
+                  ))}
+                </div>
+              )}
+            </Fragment>
+          )
+        }
         return <div key={i} className="pm-copilot-bubble pm-copilot-sys">
           {sending && m.text === '思考中…'
             ? <span className="pm-typing"><span/><span/><span/></span>
@@ -2365,6 +2549,40 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       })}
     </div>
     </div>
+    )}
+
+    {/* K13：最近一次 ask-apply 处理结果（只读台账摘要，任务状态按最新快照现取） */}
+    {mode === 'diagnosis' && applied.length > 0 && (
+      <AppliedBatchBlock
+        batch={applied[0]}
+        taskById={taskById}
+        projectId={projectId}
+        onOpen={onOpenRecord}
+        refreshing={projRefreshing}
+        asOf={asOf}
+        onRefresh={() => void refreshProjection()}
+      />
+    )}
+
+    {/* K13：处理结果空态占位（有过回答但暂无 AI 落库批次时，如实留白，不编造） */}
+    {mode === 'diagnosis' && applied.length === 0 && msgs.some(m => m.role === 'ai') && (
+      <div className="pm-proj" data-projection>
+        <div className="pm-proj-head">
+          <span className="pm-proj-title">最近处理结果</span>
+          <span className="pm-proj-asof">数据截至 {projHhmmss(asOf)}</span>
+          <button type="button" className="pm-proj-refresh" disabled={projRefreshing} onClick={() => void refreshProjection()}>
+            <RefreshCw size={11} className={projRefreshing ? 'pm-spin' : ''}/>刷新
+          </button>
+        </div>
+        <div className="pm-proj-missing">暂无 AI 确认落库的处理结果；草稿确认执行后，在此显示任务变化摘要。</div>
+      </div>
+    )}
+
+    {/* K13：下一步入口（复用既有导航/输入，不新建写路径）：有过回答才显示继续追问 */}
+    {mode === 'diagnosis' && msgs.some(m => m.role === 'ai') && (
+      <div className="pm-proj-next">
+        <button type="button" className="pm-proj-open" onClick={focusInput}>继续追问</button>
+      </div>
     )}
 
     {/* 撤销条：最近落库 10 分钟内可一键回滚（两种模式通用） */}
@@ -2499,7 +2717,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
     {/* 底部输入（只读诊断模式） */}
     {mode === 'diagnosis' && (
     <div className="pm-copilot-inputrow">
-      <input className="pm-copilot-input" value={input} placeholder="问点什么，例如：下周会不会延期？"
+      <input ref={inputRef} className="pm-copilot-input" value={input} placeholder="问点什么，例如：下周会不会延期？"
         disabled={sending}
         onChange={e => setInput(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') void send() }}/>
@@ -2566,12 +2784,15 @@ function collectBoardMatches(data: Snapshot, q: string): BoardHit[] {
     || a.id.localeCompare(b.id, 'en', { numeric: true }))
 }
 
-function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose }: {
+function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose, runCommand, refreshBoard }: {
   data: Snapshot
   execute: (line: string) => Promise<string>
   onPickProject: (id: string) => void
   onOpenRecord: (projectId: string, type: string, id: string) => void
   onClose: () => void
+  /** K11 看板部件接缝：命令执行 / 快照刷新（由 PmPanel 注入既有 run/refresh）。 */
+  runCommand?: (line: string) => Promise<unknown>
+  refreshBoard?: () => Promise<void> | void
 }) {
   const [query, setQuery] = useState('')
   const today = new Date().toISOString().slice(0, 10)
@@ -2630,7 +2851,7 @@ function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose }: {
             })}
           </div>
         : <div className="pm-table-empty"><Search size={24}/><span>未找到匹配「{query.trim()}」的记录</span></div>)
-      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject }} persistence={{
+      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject, runCommand, refreshBoard }} persistence={{
           onSave: async (scope, layout) => {
             // 紧凑 JSON 落 dsh-storage；后端做轻校验（version 整数、widgets 数组）。
             await execute(`dashboard put ${scope} ${JSON.stringify(layout)}`)

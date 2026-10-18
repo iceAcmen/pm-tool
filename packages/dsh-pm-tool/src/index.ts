@@ -40,6 +40,9 @@ import { handleSessionCommand, sessionHelp } from './commands/session.js'
 import { handleReflectCommand, reflectHelp } from './commands/reflect.js'
 import { handleCheckCommand, checkHelp } from './commands/check.js'
 import { handleMetricCommand, metricHelp } from './commands/metric.js'
+import { handleQueueCommand, queueHelp } from './commands/queue.js'
+import { buildQueueForProject } from './core/queue.js'
+import { localTodayIso } from './core/derived.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -105,6 +108,8 @@ function renderHelp(): CommandResult {
       checkHelp,
       '',
       metricHelp,
+      '',
+      queueHelp,
     ].join('\n'),
   }
 }
@@ -141,6 +146,16 @@ export async function apply(ctx: Context): Promise<void> {
       const raw = invocation.rawInput.trim()
       if (/^web\s+snapshot$/i.test(raw)) {
         if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
+        // K11 补记队列：按 projects 表逐个读时派生（零写，同 /pm queue list 口径），
+        // 供前端打开视图直接消费 {top, rest, quietMode, openedAt}；新增键不破坏既有字段。
+        const snapNow = new Date()
+        const snapHhmm = `${String(snapNow.getHours()).padStart(2, '0')}:${String(snapNow.getMinutes()).padStart(2, '0')}`
+        const queue = Object.fromEntries(
+          [...domain.table('projects').entries()].map(([pid]) => [
+            pid,
+            buildQueueForProject(domain, pid, { today: localTodayIso(), nowHhmm: snapHhmm }),
+          ]),
+        )
         return {
           kind: 'success',
           text: JSON.stringify({
@@ -157,6 +172,8 @@ export async function apply(ctx: Context): Promise<void> {
             },
             // #21 口径设置：归一化后的生效口径（缺省=默认），供 Web 设置 UI 与派生视图直接消费。
             settings: readProjectSettings(domain),
+            // K11：按项目派生的补记队列（读时派生、零写）。
+            queue,
           }),
         }
       }
@@ -224,6 +241,8 @@ export async function apply(ctx: Context): Promise<void> {
       if (checkMatch) return handleCheckCommand(checkMatch[1] ?? '', domain)
       const metricMatch = /^metric(?:\s+([\s\S]*))?$/i.exec(raw)
       if (metricMatch) return handleMetricCommand(metricMatch[1] ?? '', domain)
+      const queueMatch = /^queue(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (queueMatch) return handleQueueCommand(queueMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

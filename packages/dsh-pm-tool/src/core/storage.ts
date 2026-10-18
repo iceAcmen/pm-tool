@@ -38,9 +38,12 @@ export type SessionRecord = z.infer<typeof sessionRecordSchema>
 export const reflectionRecordSchema = z.object({
   id: z.string().regex(/^ref-[a-zA-Z0-9_-]+$/, '复盘 ID 只能包含字母、数字、下划线和连字符'),
   projectId: z.string(),
-  taskId: z.string(),
+  taskId: z.string().optional(),
+  /** X6-L2：里程碑达成/交付验收复盘草稿的关联实体（L1 任务草稿不填）。 */
+  milestoneId: z.string().optional(),
+  deliverableId: z.string().optional(),
   status: z.enum(['draft', 'final']),
-  sourceEvent: z.enum(['task-done']),
+  sourceEvent: z.enum(['task-done', 'milestone-achieved', 'deliverable-accepted']),
   draft: z.object({
     title: z.string(),
     at: z.iso.datetime(),

@@ -10,6 +10,7 @@ import {
   type MilestoneUpdate,
 } from './milestone.js'
 import type { PmDomain } from './storage.js'
+import { ensureReflectionOnMilestone } from './reflect.js'
 
 export class MilestoneProjectNotFoundError extends Error {}
 export class MilestoneHasTasksError extends Error {}
@@ -62,10 +63,13 @@ export function updateMilestone(
 ): Promise<Milestone | undefined> {
   milestoneIdSchema.parse(id)
   const fields: MilestoneUpdate = milestoneUpdateSchema.parse(input)
+  // X6-L2：是否本次由非 achieved 转入 achieved（在写队列外记录，供落库成功后 best-effort 挂复盘草稿钩子）。
+  let becameAchieved = false
   return enqueueDomainWrite(domain, async () => {
     const table = domain.table('milestones')
     const current = table.get(id)
     if (!current) return undefined
+    becameAchieved = current.status !== 'achieved' && fields.status === 'achieved'
     const next = milestoneWriteSchema.parse({
       ...current,
       ...fields,
@@ -76,6 +80,15 @@ export function updateMilestone(
     })
     await table.put(id, next)
     return structuredClone(next)
+  }).then((result) => {
+    // X6-L2：里程碑已落库为 achieved 后 best-effort 建达成复盘草稿（照 tasks.ts done 钩子单点模式）。
+    // 钩子在写队列外链式触发（不嵌套入队、不参与本事务）；失败仅 console.warn，绝不阻断里程碑落库。
+    if (becameAchieved && result) {
+      void ensureReflectionOnMilestone(domain, result).catch((error: unknown) => {
+        console.warn('[pm-tool] 里程碑达成复盘草稿生成失败（不阻断里程碑落库）：', error)
+      })
+    }
+    return result
   })
 }
 

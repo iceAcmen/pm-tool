@@ -12,6 +12,7 @@ import {
 import { projectIdSchema } from './project.js'
 import { omitEmptyRepoKeys } from './repo.js'
 import { enqueueDomainWrite } from './projects.js'
+import { ensureReflectionOnDeliverable } from './reflect.js'
 import type { PmDomain } from './storage.js'
 
 export class DeliverableProjectNotFoundError extends Error {}
@@ -92,10 +93,13 @@ export function updateDeliverable(
 ): Promise<Deliverable | undefined> {
   deliverableIdSchema.parse(id)
   const fields = deliverableUpdateSchema.parse(input)
+  // X6-L2：是否本次由非 accepted 转入 accepted（在写队列外记录，供落库成功后 best-effort 挂复盘草稿钩子）。
+  let becameAccepted = false
   return enqueueDomainWrite(domain, async () => {
     const table = domain.table('deliverables')
     const current = table.get(id)
     if (!current) return undefined
+    becameAccepted = current.status !== 'accepted' && fields.status === 'accepted'
     const at = new Date().toISOString()
     const history = [...current.history]
     // 仅在版本或状态确实变化时追加留痕，按状态、版本顺序记录。
@@ -135,6 +139,15 @@ export function updateDeliverable(
     const next = deliverableRecordSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)
+  }).then((result) => {
+    // X6-L2：交付物已落库为 accepted 后 best-effort 建验收复盘草稿（照 tasks.ts done 钩子单点模式）。
+    // 钩子在写队列外链式触发（不嵌套入队、不参与本事务）；失败仅 console.warn，绝不阻断交付物落库。
+    if (becameAccepted && result) {
+      void ensureReflectionOnDeliverable(domain, result).catch((error: unknown) => {
+        console.warn('[pm-tool] 交付验收复盘草稿生成失败（不阻断交付物落库）：', error)
+      })
+    }
+    return result
   })
 }
 

@@ -59,9 +59,15 @@ try {
   // c：给 t-0004 加一条未勾清单（保持 open，供 done-open-checklist 命中）。
   await run('task checklist add t-0004 写验收报告')
 
-  // taskUpdateSchema 接受 deliverableId（连接字段，不自动生成交付物）。
-  await run(`task update t-0006 ${JSON.stringify({ deliverableId: 'dlv-0001' })}`)
-  assert.equal(getTask(domain, 't-0006').deliverableId, 'dlv-0001')
+  // taskUpdateSchema 接受 deliverableId（连接字段，不自动生成交付物）；P1 起存在性校验：
+  // 先真实创建交付物再挂接（P0 时无校验可挂任意值，P1 补齐后不存在的交付物被拒）。
+  await run('deliverable add ' + JSON.stringify({ projectId: pid, name: '验收报告', version: '1.0' }))
+  const dlv = [...domain.table('deliverables').entries()][0][1]
+  await run(`task update t-0006 ${JSON.stringify({ deliverableId: dlv.id })}`)
+  assert.equal(getTask(domain, 't-0006').deliverableId, dlv.id)
+  // 负例：不存在的交付物被拒（存在性校验）。
+  const badDlv = await run(`task update t-0006 ${JSON.stringify({ deliverableId: 'dlv-9999' })}`, 'error')
+  assert.match(badDlv, /未找到交付物/)
 
   // 1) done 钩子：t-0001 收尾后 reflections 自动落盘。
   await run('task update t-0001 {"status":"done","progress":100}')

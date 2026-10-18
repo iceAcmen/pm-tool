@@ -16,6 +16,16 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.mjs'
 import Users from 'lucide-react/dist/esm/icons/users.mjs'
 import css from './people.css?raw'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../../core/people-load.js'
+// K19 保护面：直接消费分片C core/load-stance 纯函数（单一真源，前端不另造规则/不重复派生）。
+import {
+  loadFacts as stanceLoadFacts,
+  stanceSuggestions as stanceSuggestionsOf,
+  staleStanceTags as staleStanceTagsOf,
+  type StanceFactPerson,
+  type StanceSuggestion,
+  type StaleStanceTag,
+  type StanceTaskInput,
+} from '../../core/load-stance.js'
 import { dateRange, daysFrom, taskDurationDays } from '../../core/gantt.js'
 import { localTodayIso, isTaskOverdue } from '../../core/derived.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
@@ -32,6 +42,11 @@ const ROLES: Record<string, string> = {
 }
 
 interface Seg { late: number, soon: number, prog: number, todo: number }
+
+// ---- K19 保护面（P1 规格 §五）：直接消费分片C `core/load-stance.ts` 纯函数（单一真源，前端不另造规则）。
+// props 预留后端注入；未注入时由 core 函数基于视图已加载的 leafTasks 现算，数据未就绪空态不崩。
+// 能力边界：纯事实陈列 + 建议文案，不做 WIP 硬上限 / 拒单闸，不自动执行、不下裁决。
+export type { StanceFactPerson, StanceSuggestion, StaleStanceTag } from '../../core/load-stance.js'
 
 /** 由 row.tasks 的 bucket+status 精确互斥汇总，四者之和恰为 openTotal。 */
 function segmentsOf(row: PersonRow): Seg {
@@ -61,6 +76,10 @@ export function PeopleView(props: {
   riskIssues: RiskIssue[]
   /** #21 口径设置（缺省=默认）：临期窗口 + 过载阈值。 */
   settings?: ProjectSettings
+  /** K19 保护面：后端分片C core/load-stance 派生结果（预留注入）；缺省时由 core 纯函数基于当前 tasks 现算，空态不崩。 */
+  loadFacts?: StanceFactPerson[]
+  stanceSuggestions?: StanceSuggestion[]
+  staleStanceTags?: StaleStanceTag[]
   onOpenRecord: (projectId: string, type: string, id: string) => void
   onGotoView: (v: View) => void
 }) {
@@ -86,6 +105,31 @@ export function PeopleView(props: {
     () => groupOpenTasksByAssignee(leafTasks, [{ id: project.id, name: project.name }], { settings }),
     [leafTasks, project.id, project.name, settings],
   )
+
+  // ---- K19 保护面：props 优先（后端分片C 注入），缺省直接调 core/load-stance 纯函数基于当前 leafTasks 现算。
+  // 仅喂 §五 窄字段（updatedAt 运行时快照携带，视图类型未声明，按原始记录安全读取）；不注入示例数据。
+  const stanceInputs = useMemo<StanceTaskInput[]>(() => leafTasks.map(t => {
+    const raw = t as Task & { updatedAt?: string }
+    return {
+      id: t.id,
+      title: t.title,
+      assignee: t.assignee,
+      status: t.status,
+      progress: t.progress,
+      dueDate: t.dueDate ?? null,
+      startDate: t.startDate ?? null,
+      updatedAt: raw.updatedAt ?? null,
+    }
+  }), [leafTasks])
+
+  const facts = props.loadFacts ?? stanceLoadFacts(stanceInputs, { today })
+  const suggestions = props.stanceSuggestions ?? stanceSuggestionsOf(stanceInputs, { today })
+  const staleTags = props.staleStanceTags ?? staleStanceTagsOf(stanceInputs, { today })
+  const staleIds = useMemo(() => new Set(staleTags.map(s => s.taskId)), [staleTags])
+  const [staleOnly, setStaleOnly] = useState(false)
+  const visibleSuggestions = staleOnly
+    ? suggestions.filter(s => staleIds.has(s.taskId))
+    : suggestions
 
   // ---- 排期泳道：open 任务按归一 assignee 分组（与 core 同一归一函数，仅叶子） ----
   const byAssignee = useMemo(() => {
@@ -278,6 +322,82 @@ export function PeopleView(props: {
             })}
           </div>
         )}
+      </section>
+
+      {/* K19 保护面：纯事实陈列 + 建议砍/缓文案 + 烂尾倾向过滤标签。
+          只读呈现；建议供人决策，不自动执行；不做 WIP 硬上限 / 拒单闸 / 裁决。 */}
+      <section className="pm-stance-card" aria-label="负载事实与处置建议（保护面）">
+        <div className="pm-stance-head">
+          <h2>负载事实与处置建议</h2>
+          <span className="pm-stance-note">纯事实陈列 + 建议文案 · 建议供人决策，不自动执行；不做 WIP 硬上限、不做拒单闸、不下裁决</span>
+        </div>
+
+        {facts.length > 0 && (
+          <div className="pm-stance-facts">
+            <div className="pm-stance-facts-row pm-stance-facts-head">
+              <span>人员</span><span>任务总数</span><span>未完成</span><span>逾期</span><span>已完成</span>
+            </div>
+            {facts.map(f => (
+              <div className="pm-stance-facts-row" key={f.personId}>
+                <span className="pm-stance-fact-name">{f.name}</span>
+                <span className="pm-stance-num">{f.taskCount}</span>
+                <span className="pm-stance-num">{f.openCount}</span>
+                <span className={`pm-stance-num${f.overdueCount > 0 ? ' is-late' : ''}`}>{f.overdueCount}</span>
+                <span className="pm-stance-num">{f.doneCount}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="pm-stance-sug-head">
+          <h3>建议砍 / 缓（供人决策）</h3>
+          <button
+            type="button"
+            className={`pm-stance-filter${staleOnly ? ' active' : ''}`}
+            aria-pressed={staleOnly || undefined}
+            onClick={() => setStaleOnly(v => !v)}
+          >仅看烂尾倾向{staleTags.length > 0 ? `（${staleTags.length}）` : ''}</button>
+        </div>
+
+        {visibleSuggestions.length > 0 ? (
+          <ul className="pm-stance-list">
+            {visibleSuggestions.map(s => {
+              const stale = staleTags.find(t => t.taskId === s.taskId)
+              return (
+                <li key={s.taskId}>
+                  <button type="button" className="pm-stance-item" onClick={() => onOpenRecord(project.id, 'task', s.taskId)}>
+                    <span className={`pm-stance-stance is-${s.stance}`}>{s.stance === 'cut' ? '建议砍' : '建议缓'}</span>
+                    <span className="pm-stance-main">
+                      <span className="pm-stance-title">{s.title}{s.dueDate ? ` · 截止 ${s.dueDate}` : ''}</span>
+                      <span className="pm-stance-reason">{s.reason}</span>
+                      {stale && (
+                        <span className="pm-stance-stale">烂尾倾向 · 启动 {stale.daysSinceStart} 天 / 未更新 {stale.daysSinceUpdate} 天（过滤标签，非裁决）</span>
+                      )}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        ) : staleTags.length > 0 ? (
+          <ul className="pm-stance-list">
+            {staleTags.map(t => (
+              <li key={t.taskId}>
+                <button type="button" className="pm-stance-item" onClick={() => onOpenRecord(project.id, 'task', t.taskId)}>
+                  <span className="pm-stance-stale-tag">烂尾倾向</span>
+                  <span className="pm-stance-main">
+                    <span className="pm-stance-title">{t.title}</span>
+                    <span className="pm-stance-reason">启动 {t.daysSinceStart} 天、未更新 {t.daysSinceUpdate} 天，进度长期未动；仅作筛选参考，不是裁决结论。</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="pm-stance-empty">当前没有需要提示的砍/缓建议，也没有烂尾倾向标签。</p>
+        )}
+
+        <p className="pm-stance-foot">建议供人决策，不自动执行：砍或缓由你判断，系统不自动改任务状态、不做 WIP 硬上限、不拦截新任务。</p>
       </section>
 
       {/* 下半：B 排期泳道 + C 分布预警 */}
