@@ -9,8 +9,9 @@ import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap, clampProgress } from '../../core/progress-derivation.js'
 import { isTaskOverdue } from '../../core/derived.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
-import { projectStatusLabels } from '../../core/labels.js'
+import { projectStatusLabels, taskStatusLabels } from '../../core/labels.js'
 import { buildCompletionHistory } from '../../core/completion-history.js'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
 import { selectEntity, applyFilter, applySort, FIELD_WHITELIST } from './query.js'
 import { queueCard } from './queue-card.js'
@@ -29,70 +30,14 @@ const TONE = {
   due: 'var(--pm-st-due)',
 } as const
 
-/** 安全 markdown：先全量 HTML 转义，再做块级/行内转换；链接仅允许 http/https。 */
-function renderMarkdown(src: string): string {
-  const esc = src.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-  const lines = esc.split(/\r?\n/)
-  const out: string[] = []
-  let listType: 'ul' | 'ol' | null = null
-  const closeList = () => { if (listType) { out.push(listType === 'ul' ? '</ul>' : '</ol>'); listType = null } }
-  for (const raw of lines) {
-    const line = raw
-    // 分隔线
-    if (/^\s*(-\s*){3,}$/.test(line) || /^\s*(\*\s*){3,}$/.test(line)) { closeList(); out.push('<hr/>'); continue }
-    // 标题
-    if (/^#{1,3}\s+/.test(line)) { closeList(); out.push('<div class="pm-md-h">' + inline(line.replace(/^#{1,3}\s+/, '')) + '</div>'); continue }
-    // 引用
-    if (/^\s*&gt;\s?/.test(line)) { closeList(); out.push('<blockquote class="pm-md-q">' + inline(line.replace(/^\s*&gt;\s?/, '')) + '</blockquote>'); continue }
-    // 任务清单 - [ ] / - [x]
-    const task = line.match(/^\s*[-*]\s+\[( |x|X)\]\s+(.*)$/)
-    if (task) {
-      if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul' }
-      const checked = task[1].toLowerCase() === 'x'
-      out.push(`<li class="pm-md-task"><input type="checkbox" disabled ${checked ? 'checked' : ''}/> ` + inline(task[2]) + '</li>')
-      continue
-    }
-    // 无序列表（含嵌套缩进）
-    const ul = line.match(/^(\s*)[-*]\s+(.*)$/)
-    if (ul) {
-      if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul' }
-      out.push('<li>' + inline(ul[2]) + '</li>')
-      continue
-    }
-    // 有序列表
-    const ol = line.match(/^\s*\d+\.\s+(.*)$/)
-    if (ol) {
-      if (listType !== 'ol') { closeList(); out.push('<ol>'); listType = 'ol' }
-      out.push('<li>' + inline(ol[1]) + '</li>')
-      continue
-    }
-    // 代码块 ```
-    if (/^\s*```/.test(line)) { closeList(); out.push('<pre class="pm-md-pre"><code>' + line.replace(/^\s*```\w*/, '') + '</code></pre>'); continue }
-    // 表格（首行 | a | b |，次行 |---|---|）
-    if (/^\s*\|.*\|\s*$/.test(line)) {
-      closeList()
-      const cells = line.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim())
-      if (cells.every(c => /^:?-{2,}:?$/.test(c))) continue // 分隔行
-      out.push('<div class="pm-md-table"><div class="pm-md-tr">' + cells.map(c => `<span>${inline(c)}</span>`).join('') + '</div></div>')
-      continue
-    }
-    closeList()
-    if (line.trim() === '') out.push('')
-    else out.push('<p>' + inline(line) + '</p>')
-  }
-  closeList()
-  return out.join('\n')
-  function inline(s: string): string {
-    return s
-      .replace(/~~([^~]+)~~/g, '<del>$1</del>')
-      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-      .replace(/(^|[^*])\*([^*]+)\*/g, '$1<i>$2</i>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (_m, text, url) => {
-        const safe = /^https?:\/\//i.test(url) ? url : '#'
-        return `<a href="${safe}" target="_blank" rel="noreferrer">${text}</a>`
-      })
-  }
+/**
+ * 任务编号占位（契约 §7）：有值显 code；无值（schema 前存量记录）显短 ID，不重新编号、不回写。
+ * missing=true 时由调用方加弱化样式。
+ */
+function taskCodeLabel(t: { id: string, code?: string }): { text: string, missing: boolean } {
+  const code = typeof t.code === 'string' ? t.code.trim() : ''
+  if (code) return { text: code, missing: false }
+  return { text: t.id, missing: true }
 }
 
 /* ---------- 1. completionHero 完成率主卡（左列高卡） ---------- */
@@ -137,7 +82,7 @@ const completionHero: WidgetDescriptor = {
     const od = overdue[0]
     return <div className="pm-bento-card">
       <div className="pm-bento-label">任务完成率
-        {od && <span className="pm-bento-pill pm-bento-pill-overdue">逾期 {od.code} · 应 {od.dueDate!.slice(5)}</span>}
+        {od && <span className="pm-bento-pill pm-bento-pill-overdue" title={od.dueDate ?? undefined}>逾期 {taskCodeLabel(od).text} · 应 {od.dueDate}</span>}
       </div>
       <div className="pm-hero-main">
         <svg width="116" height="116" viewBox="0 0 140 140" aria-hidden>
@@ -166,9 +111,9 @@ const completionHero: WidgetDescriptor = {
           <button key={t.id} type="button" className="pm-attn" data-open-record data-open-type="task" data-open-id={t.id}
             onClick={() => actions.openRecord(t.projectId, 'task', t.id)}>
             <i style={{ background: tone }}/>
-            <span><b>{t.code}</b> · {why}</span>
+            <span><b className={taskCodeLabel(t).missing ? 'pm-bento-code-missing' : ''}>{taskCodeLabel(t).text}</b> · {why}</span>
             <span className="pm-bento-faint">{t.assignee || '未分配'}</span>
-            <span className="pm-attn-arr">{t.dueDate?.slice(5) ?? '—'}</span>
+            <span className="pm-attn-arr" title={t.dueDate ?? undefined}>{t.dueDate ?? '—'}</span>
           </button>
         ))}
         {attn.length === 0 && <div className="pm-bento-faint">当前无需特别关注的任务。</div>}
@@ -203,7 +148,7 @@ const milestoneDeliverable: WidgetDescriptor = {
     const dlvPlan = dlv.length - dlvAcc - dlvProg
     return <div className="pm-bento-card">
       <div className="pm-bento-label">里程碑 · 交付物</div>
-      <div className="pm-seg-two">
+      <div className="pm-md-stack">
         <SegRow label="里程碑" segs={[[msAch, TONE.done], [msRisk, TONE.blocked], [Math.max(msPlan, 0), TONE.todo]]} total={ms.length}/>
         <SegRow label="交付物" segs={[[dlvAcc, TONE.done], [dlvProg, TONE.progress], [Math.max(dlvPlan, 0), TONE.todo]]} total={dlv.length}/>
       </div>
@@ -213,9 +158,9 @@ const milestoneDeliverable: WidgetDescriptor = {
 
 function SegRow({ label, segs, total }: { label: string, segs: Array<[number, string]>, total: number }) {
   return <div>
-    <div className="pm-segrow">
+    <div className="pm-md-row">
       <span className="pm-bento-muted">{label}</span>
-      <div className="pm-seg">
+      <div className="pm-progress-bar">
         {segs.map(([n, c], i) => <i key={i} style={{ width: `${total ? n / total * 100 : 0}%`, background: c }}/>)}
       </div>
       <span className="pm-bento-m">{total}</span>
@@ -284,7 +229,7 @@ const objectiveProgress: WidgetDescriptor = {
           const pct = clampProgress(frac ? Math.round(frac * 100) : 0)
           const color = pct >= 100 ? TONE.done : pct < 50 ? TONE.blocked : TONE.done
           return <div key={t.id} className="pm-obj-row">
-            <div className="pm-obj-head"><span>{t.code} {t.title} · {t.assignee || '未分配'}</span><span className="pm-bento-m">{pct}%</span></div>
+            <div className="pm-obj-head"><span><span className={taskCodeLabel(t).missing ? 'pm-bento-code-missing' : ''}>{taskCodeLabel(t).text}</span> {t.title} · {t.assignee || '未分配'}</span><span className="pm-bento-m">{pct}%</span></div>
             <div className="pm-pbar"><i style={{ width: `${pct}%`, background: color }}/></div>
           </div>
         })}
@@ -377,7 +322,7 @@ const riskMatrix: WidgetDescriptor = {
             {probs.map(pr => {
               const cell = risks.filter(r => r.probability === pr && r.impact === imp)
               const heat = heatLevel(pr, imp)
-              return <div key={pr} className="pm-mcell" style={{ background: `rgba(240,135,75,${heat})` }}>
+              return <div key={pr} className="pm-mcell" style={{ background: `color-mix(in srgb, var(--pm-st-progress) ${Math.round(heat * 100)}%, transparent)` }}>
                 {cell[0] && <button type="button" className="pm-mdot" data-open-record data-open-type="risk" data-open-id={cell[0].id}
                   onClick={() => actions.openRecord(cell[0]!.projectId, 'risk', cell[0]!.id)}>{cell[0].id}</button>}
               </div>
@@ -421,7 +366,7 @@ const weeklyPlan: WidgetDescriptor = {
     const W = 720, H = 150, base = 120, bw = 30
     return <div className="pm-bento-card">
       <div className="pm-bento-label">未来按周计划
-        {od && <span className="pm-bento-pill pm-bento-pill-overdue">逾期 {od.code} · 应 {od.dueDate!.slice(5)}</span>}
+        {od && <span className="pm-bento-pill pm-bento-pill-overdue" title={od.dueDate ?? undefined}>逾期 {taskCodeLabel(od).text} · 应 {od.dueDate}</span>}
       </div>
       <svg width="100%" height="150" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="未来按周任务数">
         {buckets.map((n, i) => {
@@ -477,8 +422,8 @@ const recordList: WidgetDescriptor<WidgetConfig> = {
           <button key={r.id} type="button" className="pm-rec" data-open-record data-open-type={r.recordType} data-open-id={r.id}
             onClick={() => actions.openRecord(r.projectId, r.recordType, r.id)}>
             <span className="pm-rec-title">{r.title}</span>
-            {showPill && r.status && <span className="pm-bento-pill">{r.status}</span>}
-            {showDate && <span className="pm-bento-m">{r.date?.slice(5) ?? '—'}</span>}
+            {showPill && r.status && <span className="pm-bento-pill">{taskStatusLabels[r.status as keyof typeof taskStatusLabels] ?? r.status}</span>}
+            {showDate && <span className="pm-bento-m" title={r.date ?? undefined}>{r.date?.slice(5) ?? '—'}</span>}
           </button>
         ))}
         {sorted.length === 0 && <div className="pm-bento-faint">暂无符合条件的记录。</div>}
@@ -532,9 +477,9 @@ const overdueSoon: WidgetDescriptor<WidgetConfig> = {
           <button key={t.id} type="button" className="pm-attn" data-open-record data-open-type="task" data-open-id={t.id}
             onClick={() => actions.openRecord(t.projectId, 'task', t.id)}>
             <i style={{ background: tone ?? TONE.due }}/>
-            <span><b>{t.code}</b> · {t.title}</span>
+            <span><b className={taskCodeLabel(t).missing ? 'pm-bento-code-missing' : ''}>{taskCodeLabel(t).text}</b> · {t.title}</span>
             <span className="pm-bento-faint">{t.assignee || '未分配'}</span>
-            <span className="pm-attn-arr">{t.dueDate!.slice(5)} ›</span>
+            <span className="pm-attn-arr" title={t.dueDate}>应 {t.dueDate} ›</span>
           </button>
         ))}
         {rows.length === 0 && <div className="pm-bento-faint">没有逾期或临期任务。</div>}
@@ -738,7 +683,7 @@ const textNote: WidgetDescriptor<WidgetConfig> = {
     return <div className="pm-bento-card">
       {config.title && <div className="pm-bento-label">{config.title}</div>}
       {body
-        ? <div className="pm-note-body pm-md" dangerouslySetInnerHTML={{ __html: renderMarkdown(body) }} />
+        ? <MarkdownView source={body} className="pm-note-body" density="compact" />
         : <div className="pm-note-body">（空备注，在右侧配置面板编辑正文）</div>}
     </div>
   },

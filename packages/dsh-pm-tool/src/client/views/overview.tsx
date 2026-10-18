@@ -22,6 +22,7 @@ import {
   isTaskOverdue,
   scoreFromInputs as healthFromInputs,
   type HealthLamp,
+  type HealthFactor,
 } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
 import { computeKPI, buildAgenda } from '../../core/war-room.js'
@@ -75,6 +76,39 @@ function HealthRing({ score, lamp }: { score: number | null, lamp: HealthLamp })
   )
 }
 
+/** 健康分可解释面板：只展示 core 已算好的 factors/扣分/灯链，不改阈值、不简化隐藏分数。 */
+function HealthBreakdown({ factors, score, lamp, greenAt, yellowAt }: {
+  factors: HealthFactor[], score: number | null, lamp: HealthLamp, greenAt: number, yellowAt: number
+}) {
+  if (score === null) {
+    return (
+      <div className="ov-health-explain">
+        <p className="ov-health-note">暂无任务记录，健康分数据不足（灰灯）。</p>
+      </div>
+    )
+  }
+  const totalDeduct = factors.reduce((a, f) => a + Math.abs(f.deduction), 0)
+  return (
+    <div className="ov-health-explain">
+      <div className="ov-health-formula">100 − {totalDeduct} 扣分 = <b>{score} 分</b> · {LAMP_LABEL[lamp]}</div>
+      <ul className="ov-health-factors">
+        {factors.length === 0
+          ? <li className="ov-health-note">无扣分项（各项均未触发）。</li>
+          : factors.map(f => (
+              <li key={f.key}>
+                <span className="ov-health-factor-label">{f.label} × {f.count}</span>
+                <span className="ov-health-factor-deduct">{f.deduction}</span>
+              </li>
+            ))}
+      </ul>
+      <div className="ov-health-lamp-chain">
+        灯链：绿 ≥ {greenAt} · 黄 ≥ {yellowAt} · 否则红
+      </div>
+      <p className="ov-health-disclaimer">健康分仅供排期参考，不做绩效评价。</p>
+    </div>
+  )
+}
+
 interface AgendaRow {
   id: string
   day: string
@@ -121,14 +155,17 @@ export function Overview(props: {
     milestoneOverdue: milestones.filter(m => isMilestoneMissed(m, today)).length,
   }, settings)
 
-  // ---- 派生计数（展示层聚合，不改变扣分/统计口径） ----
+  // ---- 派生计数（展示层聚合，不改变扣分/统计口径）；5 态互斥，wrapped 单独成桶 ----
   const done = tasks.filter(isTaskDone).length
   const todoCount = tasks.filter(t => t.status === 'todo').length
+  const inProgressCount = tasks.filter(t => t.status === 'in_progress').length
   const blockedCount = tasks.filter(t => t.status === 'blocked').length
+  const wrappedCount = tasks.filter(t => t.status === 'wrapped').length
   const overdueCount = tasks.filter(t => isTaskOverdue(t, today)).length
   const achievedMiles = milestones.filter(m => m.status === 'achieved').length
   const plannedMiles = milestones.length - achievedMiles
-  const unassigned = tasks.filter(t => !isTaskDone(t) && !t.assignee?.trim()).length
+  // 项目负责人(project.owner) 与任务执行人(assignee) 语义分离：未指派执行人只看 open 任务。
+  const unassigned = tasks.filter(t => !isTaskDone(t) && t.status !== 'wrapped' && !t.assignee?.trim()).length
 
   // 阶段进度：WBS 顶层分组口径（同 panel.tsx Overview）
   const phases = tasks
@@ -203,23 +240,32 @@ export function Overview(props: {
     }
   }
 
-  // 提醒列表：逾期红 / 阻塞橙 / 无主橙 / 里程碑临近蓝 / 全绿
-  const remRows: RemRow[] = []
-  if (overdueCount > 0) remRows.push({ key: 'overdue', tone: 'late', text: `${overdueCount} 项任务已逾期，需优先处理` })
-  if (blockedCount > 0) remRows.push({ key: 'blocked', tone: 'block', text: `${blockedCount} 项任务受阻，等待解除阻塞` })
-  if (unassigned > 0) remRows.push({ key: 'ownerless', tone: 'block', text: `${unassigned} 项未完成任务尚未指派负责人` })
+  // 提醒按严重度分组：需立即处理(逾期) → 需关注(受阻/无主) → 近期安排(临期里程碑) → 正常。
+  interface RemGroup { key: 'late' | 'block' | 'prog' | 'done', title: string, rows: RemRow[] }
+  const remGroups: RemGroup[] = [
+    { key: 'late', title: '需立即处理', rows: [] },
+    { key: 'block', title: '需关注', rows: [] },
+    { key: 'prog', title: '近期安排', rows: [] },
+    { key: 'done', title: '正常', rows: [] },
+  ]
+  const pushRem = (g: RemGroup, row: RemRow) => g.rows.push(row)
+  if (overdueCount > 0) pushRem(remGroups[0], { key: 'overdue', tone: 'late', text: `${overdueCount} 项任务已逾期，需优先处理` })
+  if (blockedCount > 0) pushRem(remGroups[1], { key: 'blocked', tone: 'block', text: `${blockedCount} 项任务受阻，等待解除阻塞` })
+  if (unassigned > 0) pushRem(remGroups[1], { key: 'ownerless', tone: 'block', text: `${unassigned} 项未完成任务尚未指派执行人` })
   for (const m of milestones) {
-    if (remRows.length >= 4) break
     if (m.status === 'achieved') continue
     const d = daysFromToday(m.targetDate, today)
     if (d === null || d < 0 || d > settings.reminderWithinDays) continue
-    remRows.push({
+    pushRem(remGroups[2], {
       key: `mile-${m.id}`,
       tone: 'prog',
       text: `里程碑「${m.title}」${d === 0 ? '今天到期' : `${d} 天后到期`}`,
     })
   }
-  if (!remRows.length) remRows.push({ key: 'all-clear', tone: 'done', text: '一切正常 · 暂无待处理提醒' })
+  if (remGroups.every(g => !g.rows.length)) {
+    pushRem(remGroups[3], { key: 'all-clear', tone: 'done', text: '一切正常 · 暂无待处理提醒' })
+  }
+  const visibleRemGroups = remGroups.filter(g => g.rows.length)
 
   const onCopyRepo = () => {
     if (!project.repoUrl) return
@@ -232,14 +278,11 @@ export function Overview(props: {
     }
   }
 
-  // 顶部信息栅格：label + value 结构化（9 格，覆盖项目元信息）
+  // 顶部信息栅格：只放项目元信息（负责人/日期/协作计数）；任务数/里程碑/风险等动态计数由下方统计卡同源呈现，避免双份。
   const infoCells: { label: string, value: string }[] = [
-    { label: '负责人', value: project.owner || '未指派' },
+    { label: '项目负责人', value: project.owner || '未指派' },
     { label: '开始日期', value: project.startDate || '未定' },
     { label: '目标日期', value: project.targetDate || '未定' },
-    { label: '任务数', value: String(tasks.length) },
-    { label: '里程碑', value: String(milestones.length) },
-    { label: '风险与问题', value: String(kpi.openRisks) },
     { label: '会议', value: props.meetingsCount === undefined ? '未接入' : String(props.meetingsCount) },
     { label: '汇报', value: props.reportsCount === undefined ? '未接入' : String(props.reportsCount) },
     { label: '交付物', value: props.deliverablesCount === undefined ? '未接入' : String(props.deliverablesCount) },
@@ -267,6 +310,13 @@ export function Overview(props: {
         </div>
         <div className="ov-hero-right">
           <HealthRing score={health.score} lamp={health.score === null ? 'gray' : health.lamp}/>
+          <HealthBreakdown
+            factors={health.factors}
+            score={health.score}
+            lamp={health.score === null ? 'gray' : health.lamp}
+            greenAt={settings.healthGreenAt}
+            yellowAt={settings.healthYellowAt}
+          />
         </div>
       </section>
 
@@ -306,10 +356,10 @@ export function Overview(props: {
             </span>
           </div>
           <div className="ov-card ov-stat">
-            <span className="ov-lab">未开始</span>
-            <span className="ov-num">{tasks.length - done}</span>
+            <span className="ov-lab">未完成</span>
+            <span className="ov-num">{todoCount + inProgressCount + blockedCount}<small>/{tasks.length}</small></span>
             <span className="ov-sub">
-              {todoCount} 待办 · {kpi.inProgress} 进行中{blockedCount ? ` · ${blockedCount} 受阻` : ''}
+              {todoCount} 待办 · {inProgressCount} 进行中{blockedCount ? ` · ${blockedCount} 受阻` : ''}{wrappedCount ? ` · ${wrappedCount} 已收尾` : ''}
             </span>
           </div>
         </div>
@@ -338,8 +388,8 @@ export function Overview(props: {
 
           <div className="ov-card">
             <div className="ov-card-head">
-              <h3>团队负载</h3>
-              <span className="more">按负责人</span>
+              <h3>任务执行人</h3>
+              <span className="more">按 assignee 聚合 · 与项目负责人分开</span>
             </div>
             {teamRows.length ? teamRows.map(tr => (
               <div className="ov-team-row" key={tr.name}>
@@ -357,8 +407,8 @@ export function Overview(props: {
               </div>
             )) : <p className="ov-empty">任务尚未指派负责人</p>}
             <div className="ov-team-foot">
-              <span>负责人 · {project.owner || '未指派'}</span>
-              <span>{teamRows.length} 人已指派</span>
+              <span>项目负责人 · {project.owner || '未指派'}</span>
+              <span>{teamRows.length} 人已承接任务</span>
             </div>
           </div>
         </div>
@@ -408,19 +458,24 @@ export function Overview(props: {
           <div className="ov-card">
             <div className="ov-card-head">
               <h3>提醒</h3>
-              <span className="more">{remRows.length} 条</span>
+              <span className="more">{visibleRemGroups.reduce((n, g) => n + g.rows.length, 0)} 条 · 按严重度分组</span>
             </div>
             <div className="ov-rem-list">
-              {remRows.map(r => (
-                <div className="ov-rem-row" key={r.key} data-tone={r.tone}>
-                  <span className="ov-rem-ico" data-tone={r.tone}>
-                    {r.tone === 'done'
-                      ? <CircleCheck size={14}/>
-                      : r.tone === 'prog'
-                        ? <CalendarClock size={14}/>
-                        : <AlertTriangle size={14}/>}
-                  </span>
-                  <span className="ov-rem-text">{r.text}</span>
+              {visibleRemGroups.map(g => (
+                <div className="ov-rem-group" key={g.key}>
+                  <div className="ov-rem-group-title" data-tone={g.key}>{g.title}</div>
+                  {g.rows.map(r => (
+                    <div className="ov-rem-row" key={r.key} data-tone={r.tone}>
+                      <span className="ov-rem-ico" data-tone={r.tone}>
+                        {r.tone === 'done'
+                          ? <CircleCheck size={14}/>
+                          : r.tone === 'prog'
+                            ? <CalendarClock size={14}/>
+                            : <AlertTriangle size={14}/>}
+                      </span>
+                      <span className="ov-rem-text">{r.text}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>

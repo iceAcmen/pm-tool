@@ -13,8 +13,8 @@
   font-size: var(--t-14);
 }
 
-/* ---------------- 页头 ---------------- */
-.pm-tasks-root .pt-head { padding: var(--sp-5) var(--sp-6) 0; }
+/* ---------------- 页头：水平内边距由 PageShell 提供（R4），页面不自叠 ---------------- */
+.pm-tasks-root .pt-head { padding: 0; }
 .pm-tasks-root .pt-row1 {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: var(--sp-4);
@@ -99,7 +99,8 @@
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
   background: transparent; border: 1px solid var(--line-2); color: var(--ink-2);
   font: inherit; font-size: var(--t-12); font-weight: 600;
-  padding: 7px 12px; border-radius: var(--r-sm);
+  /* 契约 §3.1：按钮统一 36px / r8 / nowrap，与邻钮同高同圆角。 */
+  height: 36px; padding: 0 14px; border-radius: 8px; white-space: nowrap;
   transition: all .15s var(--ease);
 }
 .pm-tasks-root .pt-ghost:hover { background: var(--surface-3); color: var(--ink); }
@@ -109,18 +110,20 @@
 }
 .pm-tasks-root .pt-primary {
   display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
-  background: var(--dsw-alias-button-primary-fill); color: var(--pm-on-primary); border: 0; cursor: pointer;
-  font-size: var(--t-13); font-weight: 650; padding: 9px 16px;
-  /* W-DEF-001：主按钮与同工具条 ghost/icon 统一 sm(8)，不再分叉到 md(12)（§3.2/§9.1） */
-  border-radius: var(--r-sm);
+  /* 契约 §2.1 专用 accessible action token：fill/hover/on 全部走共享 token，模块不硬编码 rgb/白色字值。 */
+  background: var(--pm-action-fill); color: var(--pm-action-on); border: 0; cursor: pointer;
+  font-size: var(--t-13); font-weight: 650;
+  height: 36px; padding: 0 14px; border-radius: 8px;
   transition: background .18s var(--ease);
 }
-.pm-tasks-root .pt-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-tasks-root .pt-primary:hover:not(:disabled) {
+  background: var(--pm-action-hover);
+}
 .pm-tasks-root .pt-primary:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ---------------- 表格卡片 ---------------- */
 .pm-tasks-root .pt-card {
-  margin: var(--sp-4) var(--sp-6) var(--sp-6);
+  margin: 0;
   flex: 1; min-height: 0; display: flex; flex-direction: column;
   background: var(--surface); background-image: var(--surface-g);
   border: 1px solid var(--line); border-radius: var(--r-lg);
@@ -323,7 +326,7 @@
 /* ---------------- 批量操作条 ---------------- */
 .pm-tasks-root .pt-batch {
   display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
-  margin: 0 var(--sp-6); padding: var(--sp-2) var(--sp-3);
+  margin: 0; padding: var(--sp-2) var(--sp-3);
   border: 1px solid var(--line-2); border-radius: var(--r);
   background: var(--surface-3); box-shadow: var(--shadow-1);
 }
@@ -341,7 +344,7 @@
 
 /* ---------------- 导入预览 ---------------- */
 .pm-tasks-root .pt-import {
-  margin: var(--sp-2) var(--sp-6) 0; padding: var(--sp-3);
+  margin: var(--sp-2) 0 0; padding: var(--sp-3);
   border: 1px solid var(--line-2); border-radius: var(--r); background: var(--surface-2);
 }
 .pm-tasks-root .pt-import pre {
@@ -538,16 +541,16 @@
    第一行：勾选 + 标题(完整不截断) + 状态；第二行：编号 · 负责人 · 优先级；
    第三行：截止日期 / 进度。分组（阶段父行）保留为可折叠标题条。配色只走 token。 */
 @media (max-width: 560px) {
-  .pm-tasks-root .pt-head { padding: var(--sp-4) var(--sp-3) 0; }
+  .pm-tasks-root .pt-head { padding: 0; }
   .pm-tasks-root .pt-row1 { flex-direction: column; align-items: stretch; gap: var(--sp-3); }
   .pm-tasks-root .pt-search { width: 100%; }
   .pm-tasks-root .pt-toolbar { gap: var(--sp-2); }
   .pm-tasks-root .pt-tools { flex-wrap: wrap; justify-content: flex-start; gap: var(--sp-2); }
   .pm-tasks-root .pt-sort-wrap select { max-width: none; }
   .pm-tasks-root .pt-primary { width: 100%; justify-content: center; }
-  .pm-tasks-root .pt-card { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
-  .pm-tasks-root .pt-batch { margin: 0 var(--sp-2); }
-  .pm-tasks-root .pt-import { margin: var(--sp-2) var(--sp-2) 0; }
+  .pm-tasks-root .pt-card { margin: 0; }
+  .pm-tasks-root .pt-batch { margin: 0; }
+  .pm-tasks-root .pt-import { margin: var(--sp-2) 0 0; }
 
   /* 表头隐藏；卡片纵向堆叠，不再横向滚动 */
   .pm-tasks-root .pt-thead { display: none; }
@@ -556,8 +559,8 @@
   /* ---- 叶子任务卡片 ---- */
   .pm-tasks-root .pt-row {
     display: grid;
-    grid-template-columns: 24px minmax(0, 1fr) auto;
-    grid-template-rows: auto auto auto;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto auto;
     gap: 6px 10px;
     height: auto; align-items: center;
     margin: 8px 4px; padding: 12px;
@@ -577,9 +580,9 @@
   .pm-tasks-root .pt-code { grid-row: 2; grid-column: 1; }
   .pm-tasks-root .pt-assignee { grid-row: 2; grid-column: 2; min-width: 0; }
   .pm-tasks-root .pt-pri-cell { grid-row: 2; grid-column: 3; justify-self: end; }
-  /* 行3：截止日期 / 进度 */
-  .pm-tasks-root .pt-due { grid-row: 3; grid-column: 1 / span 2; }
-  .pm-tasks-root .pt-prog { grid-row: 3; grid-column: 3; }
+  /* 行3：截止日期整行；行4：进度整行（不挤 col3，避免标题列被压窄） */
+  .pm-tasks-root .pt-due { grid-row: 3; grid-column: 1 / -1; }
+  .pm-tasks-root .pt-prog { grid-row: 4; grid-column: 1 / -1; justify-self: stretch; }
   /* 移动手柄窄窗隐藏（桌面可用），不占卡片空间 */
   .pm-tasks-root .pt-gutter { display: none; }
 
@@ -595,10 +598,10 @@
   .pm-tasks-root .pt-task { row-gap: 4px; }
   .pm-tasks-root .pt-wait, .pm-tasks-root .pt-milestone-chip { flex-basis: 100%; }
 
-  /* 截止日期输入收窄，进度条让位 */
+  /* 截止日期输入收窄；进度整行拉伸，进度条弹性填充不固定最小宽 */
   .pm-tasks-root .pt-due input[type="date"] { width: auto; max-width: 100%; }
-  .pm-tasks-root .pt-prog { gap: 8px; justify-self: end; }
-  .pm-tasks-root .pt-bar { min-width: 60px; }
+  .pm-tasks-root .pt-prog { gap: 8px; }
+  .pm-tasks-root .pt-bar { flex: 1 1 0; min-width: 0; }
 
   /* ---- 阶段父行 / 状态分组头：可折叠标题条 ---- */
   .pm-tasks-root .pt-group {
@@ -623,3 +626,60 @@
   .pm-tasks-root .pt-vmenu { width: 100%; }
   .pm-tasks-root .pt-vm-row { flex-direction: column; align-items: stretch; gap: 8px; }
   .pm-tasks-root .pt-vm-acts { justify-content: flex-end; }
+
+/* ===== 契约补丁（B 组，全部 scope 在 .pm-tasks-root，不改 panel.css 共享块） ===== */
+/* 编号占位：缺 code 的存量记录显短 ID，弱化等宽，不重新编号（§7）。 */
+.pm-tasks-root .pt-code-missing {
+  color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+
+/* 进度格：状态标签 + 百分比双字段同显；progress=null 显「证据不足」，不按 0%（§3.4 / 数字口径）。 */
+.pm-tasks-root .pt-prog-status { font-size: var(--t-11); color: var(--muted); white-space: nowrap; flex: 0 0 auto; }
+.pm-tasks-root .pt-pct-null { font-size: var(--t-11); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* R5：36px/r8/nowrap 由共享 .pm-import-dropzone 基准提供，模块仅做位置/对齐微调，不重述尺寸。 */
+.pm-tasks-root .pm-import-dropzone { align-items: center; }
+.pm-tasks-root .pm-import-dropzone input { display: none; }
+
+/* §3.8：工具条/密度行允许换行，不越出文档宽（right:394 越界 4px 修正）。 */
+.pm-tasks-root .pt-tools { max-width: 100%; flex-wrap: wrap; }
+@media (max-width: 560px) {
+  .pm-tasks-root .pt-density { flex-wrap: wrap; max-width: 100%; }
+  .pm-tasks-root .pt-density-chip { white-space: normal; }
+}
+
+/* §3.8 交付检查卡：panel:210 全局 `.pm-shell button{white-space:nowrap}` 会继承到条目内文字，
+   导致标题/说明整行不换行、固有 ~574–694px 被父级 hidden 裁掉。这里显式恢复 normal 并流式换行，
+   文本列 min-width:0、长 URL/标题可断，规则 badge 不顶宽；不靠 overflow:hidden 遮蔽。 */
+.pm-tasks-root .pm-check-card { box-sizing: border-box; max-width: 100%; min-width: 0; }
+.pm-tasks-root .pm-check-body,
+.pm-tasks-root .pm-check-group { min-width: 0; max-width: 100%; }
+/* 头部按钮同样受 panel:210 nowrap 影响：副标题单行不撑宽，允许换行、文本列可收缩。 */
+.pm-tasks-root .pm-check-head { white-space: normal; flex-wrap: wrap; }
+.pm-tasks-root .pm-check-head-txt { flex: 1 1 auto; min-width: 0; }
+.pm-tasks-root .pm-check-head-sub { white-space: normal; overflow-wrap: anywhere; min-width: 0; }
+.pm-tasks-root .pm-check-count { flex: 0 0 auto; }
+.pm-tasks-root .pm-check-item {
+  flex-wrap: wrap; min-width: 0; max-width: 100%;
+  white-space: normal; align-items: flex-start;
+}
+.pm-tasks-root .pm-check-rule { flex: 0 0 auto; white-space: nowrap; }
+.pm-tasks-root .pm-check-main { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; }
+.pm-tasks-root .pm-check-title,
+.pm-tasks-root .pm-check-reason,
+.pm-tasks-root .pm-check-suggest {
+  white-space: normal; overflow-wrap: anywhere; word-break: break-word; min-width: 0;
+}
+@media (max-width: 560px) {
+  .pm-tasks-root .pm-check-item { flex-direction: column; align-items: stretch; gap: 8px; }
+  .pm-tasks-root .pm-check-rule { align-self: flex-start; }
+}
+
+/* §3.8 工具行（pt-tools）390 档：容器允许换行、不顶出父宽；按钮自身仍按契约 nowrap/36px/r8。 */
+@media (max-width: 560px) {
+  .pm-tasks-root .pt-toolbar { flex-direction: column; align-items: stretch; }
+  .pm-tasks-root .pt-tools {
+    flex-wrap: wrap; justify-content: flex-start;
+    width: 100%; max-width: 100%; row-gap: var(--sp-2);
+  }
+}

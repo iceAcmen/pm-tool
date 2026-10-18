@@ -210,8 +210,8 @@ try {
   // B2：Gantt 左列与 axis 同高的表头角块（v2 命名 pm-gantt-corner）。
   assert.match(bundle, /pm-gantt-corner/)
   assert.match(ganttCss, /\.pm-gantt-corner/)
-  // S1：更多菜单恢复说明行。
-  assert.match(bundle, /pm-menu-note/)
+  // S1：更多菜单分组（导航 / 数据管理 caption；旧长帮助段落已移出，标题 tooltip 承载说明）。
+  assert.match(bundle, /pm-menu-caption/)
   // Copilot 消息区 aria-live + aria-busy（发送中 true、结束/失败 finally 复位 false）。
   assert.match(bundle, /aria-live"?:\s*"?polite/)
   assert.match(bundle, /aria-busy"?:\s*sending/)

@@ -16,6 +16,7 @@ import Upload from 'lucide-react/dist/esm/icons/upload.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import SearchX from 'lucide-react/dist/esm/icons/search-x.mjs'
 import css from './deliverables.css?raw'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { Deliverable, Milestone, Task } from './types.js'
 
 const STATUS_LABEL: Record<string, string> = {
@@ -216,6 +217,10 @@ export function Deliverables(props: DeliverablesProps) {
                             <div className="dv-d-loc">
                               <MapPin size={11}/>{d.location}
                             </div>
+                          )}
+                          {/* 多行描述五环节：卡面以安全 Markdown 可见，不只在抽屉表单里编辑。 */}
+                          {d.description?.trim() && (
+                            <MarkdownView source={d.description} density="compact" className="dv-d-desc"/>
                           )}
                           <div className="dv-d-prog">
                             <span className="dv-track">

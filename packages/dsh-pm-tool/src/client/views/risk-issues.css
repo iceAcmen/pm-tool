@@ -6,11 +6,12 @@
    - 扁平克制：透明度一律用 color-mix 派生，不内嵌字体。
    ============================================================================ */
 
+/* §1：左右 padding 由外层 PageShell bare 壳统一提供，视图根只留纵向 gap，禁止自叠。 */
 .pm-ri-root {
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  padding: 0;
   font-family: var(--pm-font-sans);
   color: var(--ink);
 }
@@ -23,12 +24,12 @@
 .pm-ri-root .ri-head .ri-sub b { color: var(--ink-2); font-weight: 600; }
 .pm-ri-root .ri-btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto; white-space: nowrap;
-  font-size: var(--t-13); font-weight: 600; color: var(--pm-on-primary);
-  background: var(--dsw-alias-button-primary-fill); border: 0; border-radius: var(--r-sm);
+  font-size: var(--t-13); font-weight: 600; color: var(--pm-action-ink);
+  background: var(--pm-action-fill); border: 0; border-radius: var(--r-sm);
   padding: 9px var(--sp-4); cursor: pointer;
   transition: background .15s var(--ease);
 }
-.pm-ri-root .ri-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-ri-root .ri-btn-primary:hover:not(:disabled) { background: var(--pm-action-fill-hover); }
 .pm-ri-root .ri-btn-primary:disabled { opacity: .55; cursor: default; }
 
 /* ---------- segmented 风险/问题 ---------- */
@@ -41,12 +42,12 @@
   font-size: var(--t-13); font-weight: 600; color: var(--muted);
   padding: 6px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
 }
-.pm-ri-root .ri-seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-ri-root .ri-seg button.is-on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
 .pm-ri-root .ri-seg .n {
   font-size: var(--t-11); font-weight: 650; color: var(--faint);
   background: var(--field-bg); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums;
 }
-.pm-ri-root .ri-seg button.on .n { color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 12%, transparent); }
+.pm-ri-root .ri-seg button.is-on .n { color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 12%, transparent); }
 
 /* ---------- 主体：矩阵 + 列表 ---------- */
 .pm-ri-root .ri-body { display: grid; grid-template-columns: 460px 1fr; gap: var(--sp-4); align-items: stretch; }
@@ -105,12 +106,20 @@
 
 /* ---------- 列表行 ---------- */
 .pm-ri-root .ri-row {
-  text-align: left; cursor: pointer; width: 100%;
+  width: 100%; display: block; font: inherit;
   background: transparent; border: 1px solid transparent; border-radius: var(--r);
-  padding: 10px var(--sp-3); display: block; font: inherit;
 }
 .pm-ri-root .ri-row + .ri-row { border-top: 1px solid var(--line); border-radius: 0; }
-.pm-ri-root .ri-row:hover { background: var(--surface-3); }
+/* 主行按钮：整行可点开抽屉，hover 反馈落在主行，不包住 Markdown 详情。 */
+.pm-ri-root .ri-row-main {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  background: transparent; border: 0; padding: 10px var(--sp-3); font: inherit;
+  border-radius: inherit;
+}
+.pm-ri-root .ri-row-main:hover { background: var(--surface-3); }
+.pm-ri-root .ri-row-detail { padding: 0 var(--sp-3) 10px; display: flex; flex-direction: column; gap: 6px; }
+.pm-ri-root .ri-md { font-size: var(--t-12); color: var(--ink-2); }
+.pm-ri-root .ri-md-plan b { color: var(--ink-2); font-weight: 600; }
 .pm-ri-root .ri-row-l1 { display: flex; align-items: center; gap: var(--sp-2); }
 .pm-ri-root .ri-row-id { font-size: var(--t-11); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pm-ri-root .ri-row-title {

@@ -8,18 +8,9 @@ import RGL, { type Layout } from 'react-grid-layout'
 import { z } from 'zod'
 import type { Snapshot } from '../panel.js'
 import type { DashboardLayout, FilterRule, WidgetActions, WidgetInstance, WidgetScope } from './types.js'
+import type { ProjectionApi, BreakpointCols } from './projection.js'
+import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntry } from './history.js'
 
-/** R-B3：编辑器内本地 bbox 碰撞检测（避免跨 chunk 共享 persist）。 */
-function bboxOverlap(a: WidgetInstance['layout'], b: WidgetInstance['layout']): boolean {
-  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
-}
-function findCollisions(widgets: WidgetInstance[]): Array<[string, string]> {
-  const out: Array<[string, string]> = []
-  for (let i = 0; i < widgets.length; i++)
-    for (let j = i + 1; j < widgets.length; j++)
-      if (bboxOverlap(widgets[i].layout, widgets[j].layout)) out.push([widgets[i].layout.i, widgets[j].layout.i])
-  return out
-}
 import type { WidgetCatalogEntry } from './widgets.js'
 
 /**
@@ -106,17 +97,23 @@ export interface BoardEditorProps {
   catalog: WidgetCatalogEntry[]
   fieldWhitelist: Record<string, string[]>
   grid: { cols: number, rowHeight: number, margin: [number, number] }
+  /** 投影纯函数由 entry 主包注入（避免编辑器块静态依赖投影而被拆成宿主未注册 chunk）。 */
+  projection: ProjectionApi
+  /** 布局解析器由 entry 主包注入（parseLayout 留在 persist，避免编辑器块共享 persist chunk）。 */
+  parseLayout: (raw: unknown) => DashboardLayout | null
   renderCard: (w: WidgetInstance, isEditing: boolean) => React.ReactNode
   onTrial: (formula: string, entity: string, projectScope: string, filters: FilterRule[]) => string
   /** 导入文件：主包做结构解析 + 目录校验，返回布局或错误串。 */
   onImportText: (text: string) => { ok: true, layout: DashboardLayout } | { ok: false, error: string }
+  /** 上次成功保存的 canonical 布局（会话内「恢复上次保存」预览/恢复；落盘历史槽位另议）。 */
+  savedLayout?: DashboardLayout
   onExit: () => void
   onSave: (scope: WidgetScope, layout: DashboardLayout) => Promise<void>
   onReset: (scope: WidgetScope) => Promise<void>
 }
 
 export function BoardEditor(props: BoardEditorProps) {
-  const { initialLayout, data, actions, catalog, fieldWhitelist, grid, renderCard, onTrial, onImportText, onExit, onSave, onReset } = props
+  const { initialLayout, data, actions, catalog, fieldWhitelist, grid, projection, parseLayout, renderCard, onTrial, onImportText, onExit, onSave, onReset, savedLayout } = props
   const [draft, setDraft] = useState<DashboardLayout>(() => structuredClone(initialLayout))
   const [scope, setScope] = useState<WidgetScope>('user')
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -138,14 +135,14 @@ export function BoardEditor(props: BoardEditorProps) {
     if (prev) setDraft(prev)
   }
   // R-B1：响应式断点列数 12/8/4/单列（≥1200=12，≥996=8，≥768=4，<768=1），替代固定 cols=12。
-  const [activeCols, setActiveCols] = useState(grid.cols)
+  const [activeCols, setActiveCols] = useState<BreakpointCols>(grid.cols as BreakpointCols)
   const stageRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     const el = stageRef.current
     if (!el || typeof ResizeObserver === 'undefined') return
     const measure = () => {
       const wpx = el.clientWidth
-      setActiveCols(wpx >= 1200 ? 12 : wpx >= 996 ? 8 : wpx >= 768 ? 4 : 1)
+      setActiveCols(projection.breakpointForWidth(wpx))
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -155,14 +152,31 @@ export function BoardEditor(props: BoardEditorProps) {
   // R-B9：重置二次确认（破坏性，先点「恢复默认」出现确认态，再点才执行）。
   const [resetArmed, setResetArmed] = useState(false)
 
+  // T6：跨会话 localStorage 布局历史（bounded ≤5，非破坏）。按作用域隔离读取；
+  // 恢复仅把某版克隆进 draft 预览，必须再点「保存」才落盘，不自动写回。
+  const safeStorage = (): Storage | null => (typeof localStorage !== 'undefined' ? localStorage : null)
+  const [hist, setHist] = useState<LayoutHistoryEntry[]>([])
+  const [histOpen, setHistOpen] = useState(false)
+  useEffect(() => {
+    const s = safeStorage()
+    setHist(s ? readHistory(s, scope, parseLayout) : [])
+  }, [scope])
+  const restoreSnapshot = (entry: LayoutHistoryEntry) => {
+    pushHistory()
+    setDraft(snapshotForPreview(entry))
+    setValidationError(null)
+  }
+
   const live = draft
 
+  // 契约 §3.6：draft 永远是 canonical 12 列真源；rglLayout 仅按当前断点投影显示，
+  // onLayoutChange 再回算 12 列写回 draft，杜绝窄断点坐标直接落盘导致宽屏塌缩。
   const rglLayout: Layout[] = useMemo(
-    () => live.widgets.map(w => ({
-      i: w.layout.i, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h,
-      minW: w.layout.minW, minH: w.layout.minH, static: false,
+    () => projection.projectToBreakpoint(live.widgets, activeCols).map(l => ({
+      i: l.i, x: l.x, y: l.y, w: l.w, h: l.h,
+      minW: l.minW, minH: l.minH, static: false,
     })),
-    [live],
+    [live, activeCols],
   )
 
   const saveEdit = async () => {
@@ -177,8 +191,8 @@ export function BoardEditor(props: BoardEditorProps) {
       setValidationError(`配置校验未通过，未保存：\n${bad.join('；')}`)
       return
     }
-    // R-B3：持久化前 bbox 碰撞检测；重叠即整批拒绝、零写入，提示具体卡对。
-    const collisions = findCollisions(draft.widgets)
+    // R-B3：持久化前 canonical bbox 碰撞检测（projection 纯模块同源）；重叠即整批拒绝、零写入。
+    const collisions = projection.findCanonicalCollisions(draft.widgets)
     if (collisions.length) {
       setValidationError(`存在卡片重叠，未保存：${collisions.map(([a, b]) => `${a} ↔ ${b}`).join('，')}。请先分开或下沉。`)
       return
@@ -186,6 +200,9 @@ export function BoardEditor(props: BoardEditorProps) {
     const final: DashboardLayout = { ...draft, scope, version: 1 }
     try {
       await onSave(scope, final)
+      // T6：成功落盘后把 canonical 快照写入 localStorage 历史（bounded≤5，非破坏，失败静默）。
+      const s = safeStorage()
+      if (s) setHist(recordSnapshot(s, scope, final, undefined, undefined, parseLayout))
       setValidationError(null)
       onExit()
     } catch (e) {
@@ -254,8 +271,9 @@ export function BoardEditor(props: BoardEditorProps) {
     if (draft.widgets.some(w => w.type === type)) return
     pushHistory()
     const i = nextId()
-    // 约束到栅格内（按当前断点列数夹紧）
-    const cx = Math.max(0, Math.min(x, activeCols - desc.defaultW))
+    // 落点 x 来自当前断点列空间，回算到 canonical 12 列；y/h 与断点无关直接保留。
+    const scale = grid.cols / activeCols
+    const cx = Math.max(0, Math.min(Math.round(x * scale), grid.cols - desc.defaultW))
     const cy = Math.max(0, y)
     setDraft({ ...draft, widgets: [...draft.widgets, {
       i, type, config: structuredClone(desc.defaultConfig),
@@ -301,7 +319,7 @@ export function BoardEditor(props: BoardEditorProps) {
       const cur = widgets.find(w => w.layout.i === i)
       if (!cur) return d
       const L = cur.layout
-      const nx = Math.max(0, Math.min(L.x + dx, activeCols - L.w))
+      const nx = Math.max(0, Math.min(L.x + dx, grid.cols - L.w))
       const ny = Math.max(0, L.y + dy)
       const hit = widgets.find(o => o.layout.i !== i
         && nx < o.layout.x + o.layout.w && nx + L.w > o.layout.x
@@ -337,6 +355,14 @@ export function BoardEditor(props: BoardEditorProps) {
       <button type="button" className="pm-bento-toolbtn" onClick={() => fileRef.current?.click()}>导入</button>
       <input ref={fileRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={importLayout}/>
       <button type="button" className="pm-bento-toolbtn" onClick={undo} disabled={!canUndo} title="撤销上一步（最多 20 步）">↶ 撤销</button>
+      {savedLayout && (
+        <button type="button" className="pm-bento-toolbtn"
+          title="恢复上次成功保存的布局（本会话预览，需再点保存才落盘）"
+          onClick={() => { pushHistory(); setDraft(structuredClone(savedLayout)) }}>↺ 恢复上次保存</button>
+      )}
+      <button type="button" className="pm-bento-toolbtn"
+        title={`本作用域已保存的历史版本（最多 ${5} 版，localStorage 持久，跨 reload/重启保留）；预览后需再点保存`}
+        onClick={() => setHistOpen(o => !o)}>🕘 历史版本（{hist.length}）</button>
       <button
         type="button"
         className={`pm-bento-toolbtn${resetArmed ? ' pm-bento-danger' : ''}`}
@@ -348,6 +374,23 @@ export function BoardEditor(props: BoardEditorProps) {
       <button type="button" className="pm-bento-toolbtn" onClick={onExit}>取消</button>
       <button type="button" className="pm-button-primary" onClick={() => void saveEdit()}>保存</button>
     </div>
+
+    {histOpen && (
+      <div className="pm-bento-history" role="region" aria-label="历史版本">
+        <p className="pm-bento-history-note">
+          显式预览：点「预览」把该版载入画布，确认后再点「保存」才写回；不自动落盘、不删除现有卡片。
+        </p>
+        {hist.length === 0 && <p className="pm-bento-history-empty">本作用域暂无已保存历史（保存一次后自动留档，最多 5 版）。</p>}
+        {hist.map((entry, idx) => (
+          <div className="pm-bento-history-row" key={entry.ts}>
+            <span className="pm-bento-history-meta">
+              {idx === 0 ? '最新' : `第 ${idx + 1} 版`} · {new Date(entry.ts).toLocaleString()} · {entry.layout.widgets.length} 张卡
+            </span>
+            <button type="button" className="pm-bento-toolbtn" onClick={() => restoreSnapshot(entry)}>预览</button>
+          </div>
+        ))}
+      </div>
+    )}
 
     <div className="pm-bento-stage" ref={stageRef}>
       {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget}/>}
@@ -380,10 +423,7 @@ export function BoardEditor(props: BoardEditorProps) {
           onLayoutChange={(next: Layout[]) => {
             setDraft(d => ({
               ...d,
-              widgets: d.widgets.map(w => {
-                const l = next.find(n => n.i === w.layout.i)
-                return l ? { ...w, layout: { ...w.layout, x: l.x, y: l.y, w: l.w, h: l.h } } : w
-              }),
+              widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols),
             }))
           }}
         >

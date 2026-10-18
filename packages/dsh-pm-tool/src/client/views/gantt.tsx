@@ -379,9 +379,9 @@ export function GanttView(props: {
       <div className="pm-gantt-title">甘特图</div>
       <div className="pm-gantt-sub">{axis.start} → {axis.end} · {tasks.length} 任务 · {milestones.length} 里程碑</div>
       <div className="pm-gantt-spacer" />
-      <div className="pm-seg">
+      <div className="pm-gantt-seg">
         {(['day', 'week', 'month'] as const).map(g => (
-          <button key={g} className={gran === g ? 'on' : ''} onClick={() => setGran(g)}>{g === 'day' ? '日' : g === 'week' ? '周' : '月'}</button>
+          <button key={g} className={gran === g ? 'is-on' : ''} onClick={() => setGran(g)}>{g === 'day' ? '日' : g === 'week' ? '周' : '月'}</button>
         ))}
       </div>
       <label className="pm-switch"><input type="checkbox" checked={showDeps} onChange={e => setShowDeps(e.target.checked)} /><span>依赖线</span></label>

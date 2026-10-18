@@ -14,6 +14,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import css from './reports.css?raw'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { ProgressReport } from './types.js'
 
 type PeriodType = 'w' | 'm' | 'c'
@@ -91,6 +92,10 @@ export function ReportsView(props: {
   }
 
   const snap = current?.snapshot
+  // wrapped（收口态）= 总数 − done/inProgress/todo/blocked，残差口径保证五态求和闭合，非负兜底。
+  const wrappedCount = snap
+    ? Math.max(0, snap.tasks.total - snap.tasks.done - snap.tasks.inProgress - snap.tasks.todo - snap.tasks.blocked)
+    : 0
 
   return (
     <div className="pm-rp-root">
@@ -126,7 +131,7 @@ export function ReportsView(props: {
                 <button
                   type="button"
                   key={s}
-                  className={`rp-seg-btn${statusFilter === s ? ' on' : ''}`}
+                  className={`rp-seg-btn${statusFilter === s ? ' is-on' : ''}`}
                   aria-pressed={statusFilter === s}
                   onClick={() => setStatusFilter(s)}
                 >
@@ -183,7 +188,9 @@ export function ReportsView(props: {
                 </span>
                 <button type="button" className="rp-edit" onClick={() => onEdit(current)}>编辑</button>
               </div>
-              <p className="rp-summary">{current.executiveSummary || '（暂无执行摘要）'}</p>
+              {current.executiveSummary.trim()
+                ? <MarkdownView source={current.executiveSummary} density="detail" className="rp-summary-md"/>
+                : <p className="rp-summary">（暂无执行摘要）</p>}
               <div className="rp-meta">
                 <span>快照于 {current.snapshotAt.slice(0, 10)}</span>
               </div>
@@ -198,6 +205,13 @@ export function ReportsView(props: {
                   <div className="rp-cell"><span className="rp-k">进行中</span><span className="rp-v rp-v-prog">{snap.tasks.inProgress}</span></div>
                   <div className="rp-cell"><span className="rp-k">待办</span><span className="rp-v">{snap.tasks.todo}</span></div>
                   <div className="rp-cell"><span className="rp-k">受阻</span><span className="rp-v rp-v-block">{snap.tasks.blocked}</span></div>
+                  {/* wrapped（非 done 非 open 的收口态）用总数残差派生，保证五态求和与总数闭合，不甩给 TaskTable。 */}
+                  <div className="rp-cell"><span className="rp-k">已收口(wrapped)</span><span className="rp-v">{wrappedCount}</span></div>
+                  {/* averageProgress=null 表示样本不足，显式「证据不足」，不得当 0%。 */}
+                  <div className="rp-cell">
+                    <span className="rp-k">平均进度</span>
+                    <span className="rp-v">{snap.tasks.averageProgress == null ? '证据不足' : `${Math.round(snap.tasks.averageProgress)}%`}</span>
+                  </div>
                   <div className="rp-cell"><span className="rp-k">里程碑</span><span className="rp-v">{snap.milestones.achieved}<small> / {snap.milestones.total}</small></span></div>
                   <div className="rp-cell"><span className="rp-k">会议</span><span className="rp-v">{snap.meetings.inPeriod}<small> 次 · 决议 {snap.meetings.decisions}</small></span></div>
                 </div>

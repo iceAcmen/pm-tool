@@ -11,6 +11,8 @@
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import Target from 'lucide-react/dist/esm/icons/target.mjs'
 import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
+import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
+import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import {
   buildOkrTree,
   countPendingInbox,
@@ -19,6 +21,7 @@ import {
   type OkrInboxSuggestion,
   type OkrViewRecord,
 } from './okr-model.js'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { Run } from './types.js'
 
 export interface OkrsViewProps {
@@ -29,6 +32,10 @@ export interface OkrsViewProps {
   inbox?: OkrInboxSuggestion[]
   run?: Run
   onSaved?: () => void
+  /** 打开新建 OKR 抽屉。 */
+  onCreate?: () => void
+  /** 打开编辑抽屉（record 为快照全量记录，description 等兼容位一并回显）。 */
+  onEdit?: (record: OkrViewRecord) => void
 }
 
 const KIND_LABEL: Record<OkrViewRecord['kind'], string> = {
@@ -36,7 +43,7 @@ const KIND_LABEL: Record<OkrViewRecord['kind'], string> = {
   'key-result': '关键结果 KR',
 }
 
-export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsViewProps) {
+export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, onEdit }: OkrsViewProps) {
   const tree = buildOkrTree(okrs, projectId)
   const pending = countPendingInbox(inbox, projectId)
   const suggestions = filterInbox(inbox, projectId)
@@ -49,11 +56,18 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
 
   return (
     <div className="pm-okr-root">
+      {/* §1 页头由外层 PageShell bare 壳提供统一 padding，视图只出标题/副题/CTA，不自加左右 padding。 */}
       <header className="pm-okr-head">
-        <h1>愿景 → 年度目标 → 项目归属</h1>
-        <p className="pm-okr-sub">X7 愿景/OKR 层（本期先做）：单父主归属计权重，软关联可见不计权重；草稿由人定稿，前端不下裁决。</p>
+        <div className="pm-okr-head-text">
+          <h1>愿景 → 年度目标 → 项目归属</h1>
+          <p className="pm-okr-sub">X7 愿景/OKR 层：单父主归属计权重，软关联可见不计权重；草稿由人定稿，前端不下裁决。</p>
+        </div>
+        {onCreate && (
+          <button type="button" className="pm-okr-btn pm-okr-btn-primary" onClick={onCreate}>
+            <Plus size={14}/>新建 OKR
+          </button>
+        )}
       </header>
-
       {/* 树形：objective 根 → KR 子节点；软关联行单独标注「关联」。 */}
       <section className="pm-okr-tree" aria-label="目标归属树">
         {tree.roots.length === 0 && tree.orphans.length === 0 ? (
@@ -61,6 +75,11 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
             <Target size={22}/>
             <h3>暂无 OKR 记录</h3>
             <p>由人录入或经收件区确认归属后在此呈现；前端不自动创建、不自动定稿。</p>
+            {onCreate && (
+              <button type="button" className="pm-okr-btn pm-okr-btn-primary" onClick={onCreate}>
+                <Plus size={14}/>新建首个 OKR
+              </button>
+            )}
           </div>
         ) : (
           tree.roots.map(root => (
@@ -71,9 +90,17 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
                 <span className={`pm-okr-status pm-okr-status--${root.record.status}`}>
                   {okrStatusLabel(root.record.status)}
                 </span>
+                {onEdit && (
+                  <button type="button" className="pm-okr-btn pm-okr-btn-ghost" aria-label="编辑此 OKR" onClick={() => onEdit(root.record)}>
+                    <Pencil size={12}/>编辑
+                  </button>
+                )}
               </div>
               {root.record.owner && <div className="pm-okr-meta">负责人：{root.record.owner}</div>}
               {root.record.targetDate && <div className="pm-okr-meta">目标日期：{root.record.targetDate}</div>}
+              {root.record.description?.trim() && (
+                <MarkdownView source={root.record.description} density="compact" className="pm-okr-desc"/>
+              )}
 
               {root.children.length > 0 && (
                 <ul className="pm-okr-krs">
@@ -85,6 +112,11 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
                       <span className={`pm-okr-status pm-okr-status--${kr.record.status}`}>
                         {okrStatusLabel(kr.record.status)}
                       </span>
+                      {onEdit && (
+                        <button type="button" className="pm-okr-btn pm-okr-btn-ghost" aria-label="编辑此关键结果" onClick={() => onEdit(kr.record)}>
+                          <Pencil size={12}/>编辑
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -112,6 +144,11 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
                 <span className="pm-okr-kind pm-okr-kind--kr">{KIND_LABEL[o.record.kind]}</span>
                 <span className="pm-okr-kr-title">{o.record.title}</span>
                 <span className="pm-okr-own-note">未挂主归属</span>
+                {onEdit && (
+                  <button type="button" className="pm-okr-btn pm-okr-btn-ghost" aria-label="编辑此关键结果" onClick={() => onEdit(o.record)}>
+                    <Pencil size={12}/>编辑
+                  </button>
+                )}
               </div>
             ))}
           </div>

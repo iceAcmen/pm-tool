@@ -15,6 +15,7 @@ import CircleX from 'lucide-react/dist/esm/icons/circle-x.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import { localTodayIso, isMilestoneMissed } from '../../core/derived.js'
+import { MarkdownView } from '../shared/markdown-view.js'
 import css from './milestones.css?raw'
 import type { Milestone, Task, Run, View } from './types.js'
 
@@ -205,8 +206,8 @@ export function Milestones(props: MilestonesProps) {
                         )}
                       </div>
                     )}
-                    {m.description && (
-                      <div className="ms-c-desc">{m.description}</div>
+                    {m.description?.trim() && (
+                      <MarkdownView source={m.description} density="detail" className="ms-c-desc"/>
                     )}
                   </div>
                 </div>

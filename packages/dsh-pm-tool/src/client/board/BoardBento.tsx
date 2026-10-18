@@ -5,7 +5,7 @@
  *  - 公式卡：expr-eval 在 client.formula.js，首次需要时惰性加载；加载完成后同步渲染，口径与编辑态一致。
  *  - 持久化：初始布局取自 data.dashboards（user>project>默认）；保存/重置经回调走 dsh-storage。
  */
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { Snapshot } from '../panel.js'
 import { GRID, type DashboardLayout, type FilterRule, type LinkageDim, type LinkageState, type WidgetActions, type WidgetEntity, type WidgetScope } from './types.js'
 import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor, knownWidgetTypeSet } from './widgets.js'
@@ -15,6 +15,8 @@ import { appendQueueCard } from './layout-append.js'
 import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
+import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions } from './projection.js'
+import boardCss from './board.css?raw'
 // type-only：编辑器块不被静态打包，仅取类型。
 import type { BoardEditorProps } from './editor.js'
 
@@ -42,7 +44,23 @@ export function BoardBento({ data, actions, persistence }: {
   const [adopting, setAdopting] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
 
-  // R-B11：旧布局经安全归一（未知类型跳过并列名、越界夹紧、碰撞下沉）后，迁移提示走 banner，不静默改写/重置。
+  // 契约 §3.6：迁移提示与瞬时成功/错误分离——迁移降为中性 info、可折叠「N 张卡已自动归位」一行，
+  // 关闭/折叠态板级 localStorage 持久（不写 core、不落盘布局）；成功/错误仍走 alert 横幅。
+  const [migrationNotes, setMigrationNotes] = useState<string[]>([])
+  const [migDismissed, setMigDismissed] = useState<boolean>(() => {
+    try { return localStorage.getItem('pm-bento-mig-dismissed') === '1' } catch { return false }
+  })
+  const [migCollapsed, setMigCollapsed] = useState<boolean>(() => {
+    try { return localStorage.getItem('pm-bento-mig-collapsed') === '1' } catch { return false }
+  })
+  const persistMigFlag = (key: string, v: boolean) => {
+    try { localStorage.setItem(key, v ? '1' : '0') } catch { /* 隐私模式忽略，不阻断 */ }
+  }
+
+  // 会话内「上次成功保存」canonical 布局，供编辑器预览/恢复（落盘历史槽位另由 capability 评估）。
+  const [savedLayout, setSavedLayout] = useState<DashboardLayout | null>(() => structuredClone(layout))
+
+  // R-B11：旧布局经安全归一（未知类型跳过并列名、越界夹紧、碰撞下沉）后，迁移提示走中性 banner，不静默改写/重置。
   useEffect(() => {
     const u = loadDashboard(data.dashboards?.user, knownTypes)
     const p = u ?? loadDashboard(data.dashboards?.project, knownTypes)
@@ -53,9 +71,26 @@ export function BoardBento({ data, actions, persistence }: {
       const types = [...new Set(p.skipped.map(s => s.split('（')[0]))]
       notes.push(`跳过 ${p.skipped.length} 个未知卡片类型（${types.join('、')}），其余卡片原样保留，未整份重置。`)
     }
-    if (notes.length) setBanner(`布局迁移：${notes.join('；')}`)
+    if (notes.length) setMigrationNotes(notes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knownTypes])
+
+  // 浏览态断点投影：与编辑态同一 canonical→断点换算（契约 §3.6「浏览态=编辑态同一坐标换算」）。
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [viewCols, setViewCols] = useState<number>(GRID.cols)
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const measure = () => setViewCols(breakpointForWidth(el.clientWidth))
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  const projected = useMemo(
+    () => projectToBreakpoint(layout.widgets, viewCols as 12 | 8 | 4 | 1),
+    [layout, viewCols],
+  )
   /** 已存布局是否已含补记队列卡；缺省时在头部给显式新增入口（不静默改布局、不重排旧卡）。 */
   const hasQueueCard = layout.widgets.some(w => w.type === 'queueCard')
 
@@ -137,7 +172,8 @@ export function BoardBento({ data, actions, persistence }: {
     return desc.render({ data, config: w.config, actions, isEditing, evaluateFormula, linkage: isEditing ? undefined : linkage, onLink: isEditing ? undefined : onLink })
   }
 
-  return <div className="pm-bento">
+  return <div className="pm-bento" ref={rootRef}>
+    <style>{boardCss}</style>
     <div className="pm-bento-head">
       <div className="pm-bento-stats">
         <span>项目总数 <b>{totalProjects}</b>（{activeProjects} 进行中）</span>
@@ -179,6 +215,25 @@ export function BoardBento({ data, actions, persistence }: {
         <button type="button" className="pm-linkbar-clear" onClick={() => setLinkage({})}>全部清除</button>
       </div>
     )}
+    {!migDismissed && migrationNotes.length > 0 && (
+      <div className="pm-bento-validation pm-mig" role="status">
+        <button type="button" className="pm-mig-summary"
+          onClick={() => { const v = !migCollapsed; setMigCollapsed(v); persistMigFlag('pm-bento-mig-collapsed', v) }}
+          aria-expanded={!migCollapsed}>
+          <span>布局已自动归位（{migrationNotes.length} 条自愈说明）</span>
+          <span className="pm-mig-toggle">{migCollapsed ? '展开 ▸' : '收起 ▾'}</span>
+          <span
+            role="button" tabIndex={0} className="pm-bento-validation-x" aria-label="关闭迁移提示"
+            onClick={(e) => { e.stopPropagation(); setMigDismissed(true); persistMigFlag('pm-bento-mig-dismissed', true) }}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); setMigDismissed(true); persistMigFlag('pm-bento-mig-dismissed', true) } }}>×</span>
+        </button>
+        {!migCollapsed && (
+          <div className="pm-mig-body">
+            {migrationNotes.map((n, i) => <div key={i}>· {n}</div>)}
+          </div>
+        )}
+      </div>
+    )}
     {(banner || editorError) && (
       <div className="pm-bento-validation" role="alert">
         <span>{editorError ?? banner}</span>
@@ -194,6 +249,8 @@ export function BoardBento({ data, actions, persistence }: {
           catalog={WIDGET_CATALOG}
           fieldWhitelist={FIELD_WHITELIST}
           grid={GRID}
+          projection={{ projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions }}
+          parseLayout={parseLayout}
           renderCard={renderCard}
           onTrial={(formula, entity, projectScope, filters) => trialFormula(data, formula, entity, projectScope, filters)}
           onImportText={(text) => {
@@ -210,6 +267,7 @@ export function BoardBento({ data, actions, persistence }: {
             }
           }}
           onExit={() => setEditing(false)}
+          savedLayout={savedLayout ?? undefined}
           onSave={async (scope, final) => {
             setSaving(true)
             // R-B8 两步保存：先落盘，再确认快照刷新成功，才 setLayout + 成功提示；任一步失败不给成功假态。
@@ -218,6 +276,7 @@ export function BoardBento({ data, actions, persistence }: {
               if (typeof actions.refreshBoard !== 'function') throw new Error('缺少看板快照刷新通道')
               await refreshAndConfirm(actions.refreshBoard)
               setLayout(final)
+              setSavedLayout(structuredClone(final))
               setBanner('布局已保存并刷新。')
             } catch (e) {
               setBanner('保存失败，未落盘：' + (e instanceof Error ? e.message : String(e)))
@@ -228,20 +287,24 @@ export function BoardBento({ data, actions, persistence }: {
             // R-B9：重置同样走刷新闸门；失败不本地回退成「假成功」。
             await persistence.onReset(scope)
             if (typeof actions.refreshBoard === 'function') await refreshAndConfirm(actions.refreshBoard)
-            setLayout(resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes))
+            const resolved = resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes)
+            setLayout(resolved)
+            setSavedLayout(structuredClone(resolved))
             setBanner('已恢复默认布局。')
           }}
         />
-      : <div className="pm-bento-grid pm-bento-grid-static">
-          {layout.widgets.map(w => (
-            <div key={w.layout.i} style={{
-              gridColumn: `${w.layout.x + 1} / span ${w.layout.w}`,
-              gridRow: `${w.layout.y + 1} / span ${w.layout.h}`,
-              minHeight: (w.layout.h * GRID.rowHeight) + ((w.layout.h - 1) * GRID.margin[1]),
+      : <div className="pm-bento-grid pm-bento-grid-static" style={{ gridTemplateColumns: `repeat(${viewCols}, minmax(0, 1fr))` }}>
+          {projected.map(p => {
+            const w = layout.widgets.find(x => x.layout.i === p.i)
+            if (!w) return null
+            return <div key={p.i} style={{
+              gridColumn: `${p.x + 1} / span ${p.w}`,
+              gridRow: `${p.y + 1} / span ${p.h}`,
+              minHeight: (p.h * GRID.rowHeight) + ((p.h - 1) * GRID.margin[1]),
             }}>
               {renderCard(w, false)}
             </div>
-          ))}
+          })}
         </div>}
 
     <div aria-hidden style={{ display: 'none' }}>

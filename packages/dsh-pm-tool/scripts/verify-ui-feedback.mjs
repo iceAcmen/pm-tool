@@ -13,6 +13,11 @@ import {
   sampleGanttTicks,
   parseActiveModelLane,
   nextRowId,
+  classifyFeedback,
+  parseActionLine,
+  buildSuccessEnvelope,
+  buildActionLine,
+  FEEDBACK_SUCCESS_TTL_MS,
 } from '../lib/core/ui-feedback.js'
 import { flattenVisible } from '../lib/core/task-tree.js'
 
@@ -225,13 +230,134 @@ assert.match(taskSrc, /PM_SUMMARY_PREFIX/, 'task update 成功须走结构化信
 assert.match(taskSrc, /PM_DETAIL_MARKER/, '完整字段须经 detail 标记分离，不进 toast')
 assert.doesNotMatch(taskSrc, /<details><summary>完整字段<\/summary>/, '命令层不得再把 <details> 塞进成功文本')
 assert.match(panelSrc, /classifyFeedback\(message\)/, 'Notice 须经 classifyFeedback 分型，不整体平铺')
-assert.match(panelSrc, /pm-notice-detail/, '完整字段须进独立可展开详情卡')
+assert.match(panelSrc, /pm-result-card__detail/, '完整字段须进独立可展开详情卡（ResultCard 折叠 detail）')
 assert.match(panelSrc, /autoDismissMs/, '成功提示须按 TTL 自动消失')
 assert.match(panelSrc, /classifyFeedback/, '错误集中判定并持久单处展示')
+// 错误卡 role=alert 单处、成功 toast role=status。
+assert.match(panelSrc, /role=\{isError \? 'alert' : 'status'\}/, '错误 role=alert / 成功 role=status')
 // 保存完成回调关闭抽屉（TaskForm onSaved → setDrawer(undefined)），不卡「提交中」。
 assert.match(panelSrc, /<TaskForm[\s\S]*?onSaved=\{\(\) => setDrawer\(undefined\)\}/, '任务抽屉保存成功须关闭（onSaved 关抽屉）')
 // 摘要条本身不滚动、不出 HTML/MD；限高滚动只允许在详情 pre。
-assert.doesNotMatch(css, /\.pm-notice-lines\s*\{[^}]*overflow:\s*auto/, '摘要条不得内部滚动')
-assert.match(css, /\.pm-notice-detail pre\s*\{[^}]*overflow:\s*auto/, '完整字段限高滚动应在详情卡内')
+assert.doesNotMatch(css, /\.pm-result-card__summary\s*\{[^}]*overflow(-y)?:\s*auto/, '摘要条不得内部滚动')
+assert.match(css, /\.pm-result-card__detail\s*\{[^}]*overflow-y:\s*auto/, '完整字段限高滚动应在详情卡内')
+
+// ---- OKR 命令构造：strict okrCreateSchema/okrUpdateSchema 拒绝未知字段 ----
+{
+  // add：projectId 由命令位置参数注入，body 不得嵌 projectId/id/createdAt。
+  const addIdx = panelSrc.indexOf('okr add ${projectId}')
+  assert.ok(addIdx > 0, '须存在 okr add ${projectId} 命令构造')
+  const addBlock = panelSrc.slice(Math.max(0, addIdx - 600), addIdx)
+  assert.match(addBlock, /kind: values\.kind/, '定位到 OKR add 表单块')
+  assert.doesNotMatch(addBlock, /projectId\s*:/, 'okr add body 不得嵌 projectId（位置参数注入）')
+  assert.doesNotMatch(addBlock, /\bcreatedAt\s*:/, 'okr add body 不得嵌 createdAt')
+  // update：patch 不嵌 id/projectId/createdAt（系统字段不可改）。
+  const updIdx = panelSrc.indexOf('okr update ${record.id}')
+  assert.ok(updIdx > 0, '须存在 okr update ${record.id} 命令构造')
+  const updBlock = panelSrc.slice(Math.max(0, updIdx - 700), updIdx)
+  assert.match(updBlock, /const patch: Record<string, unknown>/, '定位到 OKR update patch 块')
+  assert.doesNotMatch(updBlock, /projectId\s*:/, 'okr update patch 不得嵌 projectId')
+  assert.doesNotMatch(updBlock, /createdAt\s*:/, 'okr update patch 不得嵌 createdAt')
+  // habit add/update 同样不嵌 projectId/id/createdAt。
+  const hAdd = panelSrc.indexOf('habit add ${projectId}')
+  assert.ok(hAdd > 0, '须存在 habit add ${projectId}')
+  assert.doesNotMatch(panelSrc.slice(Math.max(0, hAdd - 400), hAdd), /projectId\s*:/, 'habit add body 不得嵌 projectId')
+  const hUpd = panelSrc.indexOf('habit update ${record.id}')
+  assert.ok(hUpd > 0, '须存在 habit update ${record.id}')
+  assert.doesNotMatch(panelSrc.slice(Math.max(0, hUpd - 400), hUpd), /projectId\s*:|createdAt\s*:/, 'habit update patch 不得嵌 projectId/createdAt')
+}
+
+// ---- classifyFeedback 接线：成功信封短摘要/详情分离/3s TTL；错误持久；非结构化原样 ----
+{
+  // 成功信封：摘要进 toast（≤2 行、3s 消逝），detail 只进持久卡，action 独立。
+  const env = buildSuccessEnvelope(
+    ['任务 t-0001 已完成', '负责人：张三'],
+    '完整字段：标题=验收页面\n状态=done\n截止=2026-10-20',
+  )
+  const ok = classifyFeedback(env)
+  assert.equal(ok.isError, false, '成功信封不得判错')
+  assert.equal(ok.structured, true, '带 [pm:summary] 应为结构化')
+  assert.deepEqual(ok.summary, ['任务 t-0001 已完成', '负责人：张三'], '摘要行须去前缀原样保留')
+  assert.ok(ok.detail && ok.detail.includes('完整字段'), '完整字段须进 detail，不进 summary')
+  assert.equal(ok.autoDismissMs, FEEDBACK_SUCCESS_TTL_MS, '成功结构化提示 3s 自动消逝')
+
+  // 错误：持久（autoDismissMs=null）、isError=true、单处展示。
+  const err = classifyFeedback('更新失败：未找到任务 t-9999')
+  assert.equal(err.isError, true, '含「失败/未找到」须判错')
+  assert.equal(err.autoDismissMs, null, '错误必须持久，不得自动消逝')
+  assert.equal(err.structured, false, '非信封错误走原样回退')
+
+  // 非结构化普通文本：不吞、不改写，原样进 summary，持久不自动消逝。
+  const plain = classifyFeedback('这是一行普通返回，没有任何信封标记')
+  assert.equal(plain.isError, false)
+  assert.equal(plain.structured, false)
+  assert.deepEqual(plain.summary, ['这是一行普通返回，没有任何信封标记'])
+  assert.equal(plain.autoDismissMs, null, '非结构化原样持久，不加 TTL')
+
+  // [pm:detail] 完整字段不得泄漏进 toast 摘要。
+  const mixed = classifyFeedback(buildSuccessEnvelope(['KR 已保存'], '详情：频率=每天\n备注=晚间复盘'))
+  assert.doesNotMatch(mixed.summary.join('\n'), /详情：|频率=/, 'detail 内容不得出现在 summary')
+}
+
+// ---- 七类写实体成功信封联调样本（core 已产信封，UI 消费契约锁定）----
+{
+  // 每类：短摘要进 3s toast、完整字段进持久 detail 卡、isError=false、TTL=3000。
+  const entities = [
+    { name: 'milestone', summary: ['里程碑 ms-0001 已创建', '目标日期 2026-11-01'], detail: '标题=MVP 封板\n状态=planned' },
+    { name: 'risk-issue', summary: ['风险 ri-0001 已登记', '中危 · 待处理'], detail: '描述=依赖方排期延迟\n应对=提前两周对齐' },
+    { name: 'meeting', summary: ['会议 mt-0001 已保存', '草稿 · 3 条行动项'], detail: '议题=Q3 验收\n决议=双周评审' },
+    { name: 'report', summary: ['汇报 rp-0001 已生成', '本期完成 5 项'], detail: '执行摘要=…\n阻塞=无' },
+    { name: 'deliverable', summary: ['交付物 dv-0001 已提交', 'v1.0 · 待验收'], detail: '位置=dist/app.zip\n里程碑=ms-0001' },
+    { name: 'okr', summary: ['OKR okr-0001 已保存', '草稿 · objective'], detail: '负责人=张三\n说明=提升交付节奏' },
+    { name: 'habit', summary: ['习惯 hb-0001 已创建', '频率=每天'], detail: '目标=每日站会复盘\n备注=晚间补记' },
+  ]
+  for (const e of entities) {
+    const fb = classifyFeedback(buildSuccessEnvelope(e.summary, e.detail))
+    assert.equal(fb.isError, false, `${e.name} 成功信封不得判错`)
+    assert.equal(fb.structured, true, `${e.name} 应为结构化信封`)
+    assert.deepEqual(fb.summary, e.summary, `${e.name} 摘要行原样进 toast`)
+    assert.ok(fb.detail && fb.detail.includes(e.detail.split('\n')[0]), `${e.name} 完整字段进 detail 卡`)
+    assert.equal(fb.autoDismissMs, FEEDBACK_SUCCESS_TTL_MS, `${e.name} 成功提示 3s 消逝`)
+  }
+  // 七实体错误样本：持久、isError、不自动消逝、原样保留。
+  const errSamples = [
+    '里程碑创建失败：缺少项目ID',
+    '风险保存失败：标题不合法',
+    '会议保存失败：未找到项目',
+    '汇报生成失败：快照不可用',
+    '交付物提交失败：文件缺失',
+    'OKR 保存失败：父目标不存在',
+    '习惯更新失败：习惯 hb-9999 未找到',
+  ]
+  for (const msg of errSamples) {
+    const fb = classifyFeedback(msg)
+    assert.equal(fb.isError, true, `错误样本须判错：${msg}`)
+    assert.equal(fb.autoDismissMs, null, `错误样本必须持久：${msg}`)
+    assert.equal(fb.structured, false, `错误样本走原样回退：${msg}`)
+    assert.deepEqual(fb.summary, [msg], `错误原文不得被改写：${msg}`)
+  }
+}
+
+// ---- [pm:action] 整行协议：命令内含中文冒号也只切「标签：命令」分隔，命令整段保留不二次切 ----
+{
+  // 命令串本身含中文冒号（如速记/备注参数里的「要点：…」），只能在首个分隔处切 label。
+  const line = buildActionLine('确认建会', 'meeting summarize p-0001 速记要点：评审安排 confirm')
+  const action = parseActionLine(line)
+  assert.ok(action, '动作行须解析成功')
+  assert.equal(action.label, '确认建会')
+  assert.equal(
+    action.command,
+    'meeting summarize p-0001 速记要点：评审安排 confirm',
+    '命令内的中文冒号属于命令本体，必须整段保留，不得按首冒号二次切',
+  )
+  // classifyFeedback 同样整行抽出 action，正文不含动作行。
+  const fb = classifyFeedback(['议题：Q3 验收安排', line].join('\n'))
+  assert.ok(fb.action, '非结构化正文里的动作行也须独立抽出')
+  assert.equal(fb.action.command, action.command)
+  assert.ok(!fb.summary.join('\n').includes('[pm:action]'), '动作行不得混入展示正文')
+  // 半角冒号分隔同样成立。
+  const ascii = parseActionLine('[pm:action]Confirm:/pm report narrate p-1 confirm')
+  assert.equal(ascii.label, 'Confirm')
+  assert.equal(ascii.command, '/pm report narrate p-1 confirm')
+}
 
 console.log('verify-ui-feedback OK')

@@ -19,6 +19,8 @@ export interface OkrViewRecord {
   owner?: string
   targetDate?: string
   status: 'draft' | 'confirmed'
+  /** 兼容补充描述（snapshot 全量下发；旧记录缺键时 undefined，编辑表单留空合法）。 */
+  description?: string
 }
 
 /** 收件区建议（settings 条目 pmOkrInbox；未确认不自动生效）。 */

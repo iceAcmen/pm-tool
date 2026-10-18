@@ -4,11 +4,12 @@
    - 关键修复：左列表行高严格一致、日期列 nowrap + tabular-nums，不换行撑高。
    ============================================================================ */
 
+/* §1：左右 padding 由外层 PageShell bare 壳统一提供，视图根只留纵向 gap，禁止自叠。 */
 .pm-rp-root {
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  padding: 0;
   height: 100%;
   min-height: 0;
   color: var(--ink);
@@ -21,12 +22,12 @@
 .pm-rp-root .rp-sub { margin-top: 6px; font-size: var(--t-12); color: var(--muted); }
 .pm-rp-root .rp-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: var(--t-12); font-weight: 600; color: var(--pm-on-primary);
-  background: var(--dsw-alias-button-primary-fill); border: 0; border-radius: var(--r-sm);
+  font-size: var(--t-12); font-weight: 600; color: var(--pm-action-ink);
+  background: var(--pm-action-fill); border: 0; border-radius: var(--r-sm);
   padding: 8px 14px; cursor: pointer; white-space: nowrap;
   transition: background .15s var(--ease);
 }
-.pm-rp-root .rp-btn:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-rp-root .rp-btn:hover:not(:disabled) { background: var(--pm-action-fill-hover); }
 
 .pm-rp-root .rp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px 1fr; gap: var(--sp-4); }
 
@@ -68,7 +69,7 @@
   font-size: var(--t-11); font-weight: 600; color: var(--muted); white-space: nowrap; padding: 0;
 }
 .pm-rp-root .rp-seg-btn:hover { color: var(--ink-2); }
-.pm-rp-root .rp-seg-btn.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-rp-root .rp-seg-btn.is-on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
 .pm-rp-root .rp-list-empty { padding: var(--sp-4) var(--sp-2); font-size: var(--t-12); color: var(--faint); text-align: center; }
 
 /* 关键：每行固定最小高度、grid 对齐；日期列 nowrap + tabular-nums */
@@ -127,17 +128,19 @@
   background: transparent; border: 0; cursor: pointer; padding: 4px 6px;
 }
 .pm-rp-root .rp-summary { margin: var(--sp-3) 0 0; font-size: var(--t-13); line-height: 1.65; color: var(--ink-2); }
+.pm-rp-root .rp-summary-md { margin: var(--sp-3) 0 0; color: var(--ink-2); }
 .pm-rp-root .rp-meta { margin-top: var(--sp-3); display: flex; gap: var(--sp-4); font-size: var(--t-11); color: var(--faint); }
 
 /* 快照条 */
-.pm-rp-root .rp-snap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; margin-top: var(--sp-2); }
+.pm-rp-root .rp-snap { display: grid; grid-template-columns: repeat(9, 1fr); gap: 0; margin-top: var(--sp-2); }
 .pm-rp-root .rp-cell { padding: 4px var(--sp-3); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .pm-rp-root .rp-cell:last-child { border-right: 0; }
 .pm-rp-root .rp-k { font-size: var(--t-10); color: var(--faint); font-weight: 650; letter-spacing: var(--ls-cap); text-transform: uppercase; }
 .pm-rp-root .rp-v { font-size: var(--t-18); font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
 .pm-rp-root .rp-v small { font-size: var(--t-10); font-weight: 500; color: var(--faint); }
-.pm-rp-root .rp-v-done { color: var(--c-done); }
-.pm-rp-root .rp-v-prog { color: var(--c-prog); }
+/* KPI 墨色：完成/进行中/待办/里程碑/会议一律 ink，仅受阻（风险）保留警示色。 */
+.pm-rp-root .rp-v-done { color: var(--ink); }
+.pm-rp-root .rp-v-prog { color: var(--ink); }
 .pm-rp-root .rp-v-block { color: var(--c-block); }
 
 /* 三栏列表：align-start 贴合内容，单行卡不被 stretch 拉高（P0-6 / S3-4） */
@@ -168,7 +171,7 @@
 @media (max-width: 1100px) {
   .pm-rp-root .rp-body { grid-template-columns: 1fr; }
   .pm-rp-root .rp-cols { grid-template-columns: 1fr; }
-  .pm-rp-root .rp-snap { grid-template-columns: repeat(4, 1fr); row-gap: var(--sp-2); }
+  .pm-rp-root .rp-snap { grid-template-columns: repeat(5, 1fr); row-gap: var(--sp-2); }
 }
 
 /* #25 窄窗（≤560px / 390 档）：快照条收为 3 列，避免 7 宫格在窄窗挤压。 */

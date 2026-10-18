@@ -4,11 +4,12 @@
    - 颜色/阴影/圆角/间距/字号只消费 panel.css .pm-shell 已重映射的 dsh --dsw-* 别名。
    ============================================================================ */
 
+/* §1：左右 padding 由外层 PageShell bare 壳统一提供，视图根只留纵向 gap，禁止自叠。 */
 .pm-ms-root {
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  padding: 0;
   color: var(--ink);
 }
 
@@ -40,8 +41,8 @@
   align-items: center;
   gap: 6px;
   white-space: nowrap;
-  background: var(--dsw-alias-button-primary-fill);
-  color: var(--pm-on-primary);
+  background: var(--pm-action-fill);
+  color: var(--pm-action-ink);
   border: 0;
   cursor: pointer;
   font-size: var(--t-12);
@@ -50,7 +51,7 @@
   border-radius: var(--r-sm);
   transition: background .15s var(--ease);
 }
-.pm-ms-root .ms-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-ms-root .ms-btn-primary:hover:not(:disabled) { background: var(--pm-action-fill-hover); }
 
 /* ---------- 紧凑达成率总览带 ---------- */
 .pm-ms-root .ms-ovband { padding: var(--sp-3) var(--sp-4); }

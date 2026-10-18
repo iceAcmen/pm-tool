@@ -260,6 +260,80 @@ export function validateDeliverableForm(values: DeliverableFormValues): FormFiel
   return errors
 }
 
+// ---------- OKR（人直接录入 / 编辑；接既有 okr add / okr update） ----------
+
+/** OKR 表单即时校验字段。description 为兼容位：能力门补齐 schema 前留空合法，不报错。 */
+export interface OkrFormValues {
+  title: string
+  kind: 'objective' | 'key-result'
+  owner?: string
+  targetDate?: string
+  primaryOkrId?: string
+  relatedOkrIds?: string
+  status?: 'draft' | 'confirmed'
+  description?: string
+}
+
+export const OKR_KINDS = ['objective', 'key-result'] as const
+export const OKR_STATUSES = ['draft', 'confirmed'] as const
+
+/** 逗号/中文逗号分隔的 ID 列表 → trim 后去空去重数组。 */
+export function parseIdList(raw: string | undefined): string[] {
+  return (raw ?? '')
+    .split(/[,，]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter((v, i, arr) => arr.indexOf(v) === i)
+}
+
+/**
+ * 校验 OKR 表单：标题必填；kind 枚举；目标日期选填须真实日历日；
+ * primaryOkrId 若填写须落在既有 objective 集合内（客户端防误挂，服务端仍兜底）；
+ * relatedOkrIds 逗号列表只做非空格式校验，存在性由服务端校验。
+ */
+export function validateOkrForm(values: OkrFormValues, objectiveIds: ReadonlySet<string> = new Set()): FormFieldErrors {
+  const errors: FormFieldErrors = {}
+  if (!values.title.trim()) errors.title = 'OKR 标题不能为空'
+  if (!OKR_KINDS.includes(values.kind)) errors.kind = '类型须为目标或关键结果'
+
+  const targetDate = (values.targetDate ?? '').trim()
+  if (targetDate && !isRealIsoDate(targetDate)) errors.targetDate = '目标日期须为有效的 YYYY-MM-DD'
+
+  const primary = (values.primaryOkrId ?? '').trim()
+  if (primary && objectiveIds.size > 0 && !objectiveIds.has(primary)) {
+    errors.primaryOkrId = '父目标须从本项目既有目标中选择'
+  }
+  if (values.status && !OKR_STATUSES.includes(values.status)) errors.status = '状态须为草稿或定稿'
+  return errors
+}
+
+// ---------- 习惯（接既有 habit add / habit update；字段对齐 core/habits.ts schema） ----------
+
+/**
+ * 习惯表单即时校验字段。对齐 habitCreateSchema / habitUpdateSchema：
+ * title 必填；goal/frequency/notes/okrId 可选；okrId 填写即须符合 ID 格式，存在性由服务端校验。
+ */
+export interface HabitFormValues {
+  title: string
+  goal?: string
+  frequency?: string
+  notes?: string
+  okrId?: string
+}
+
+/** 标题必填且 ≤80；目标 ≤200；频率 ≤40；备注 ≤500；OKR ID 格式校验。 */
+export function validateHabitForm(values: HabitFormValues): FormFieldErrors {
+  const errors: FormFieldErrors = {}
+  if (!values.title?.trim()) errors.title = '习惯名称不能为空'
+  else if (values.title.trim().length > 80) errors.title = '名称 ≤80 字'
+  if ((values.goal ?? '').trim().length > 200) errors.goal = '目标 ≤200 字'
+  if ((values.frequency ?? '').trim().length > 40) errors.frequency = '频率 ≤40 字'
+  if ((values.notes ?? '').trim().length > 500) errors.notes = '备注 ≤500 字'
+  const okrId = (values.okrId ?? '').trim()
+  if (okrId && !/^[A-Za-z0-9_-]+$/.test(okrId)) errors.okrId = 'OKR ID 格式非法（字母/数字/-/_）'
+  return errors
+}
+
 /**
  * 按字段展示顺序取第一个出错的字段，供提交失败后把焦点移到该字段。
  * 顺序即用户从上到下填表的顺序；返回 `undefined` 表示无错误。

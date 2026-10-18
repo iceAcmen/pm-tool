@@ -24,7 +24,7 @@
     "locale/*.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && tsdown --config tsdown.config.ts",
+    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && mkdir -p lib/client/board && cp src/client/board/*.css lib/client/board/ && rm -f lib/client.*.js lib/client.*.js.map && tsdown --config tsdown.config.ts",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "e2e": "node scripts/e2e.mjs",

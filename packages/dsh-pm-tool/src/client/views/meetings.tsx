@@ -18,6 +18,7 @@ import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import CalendarClock from 'lucide-react/dist/esm/icons/calendar-clock.mjs'
 import css from './meetings.css?raw'
 import { localTodayIso } from '../../core/derived.js'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { Meeting } from './types.js'
 
 const MEETING_STATUS_LABEL: Record<Meeting['status'], string> = {
@@ -137,9 +138,9 @@ export function MeetingsView(props: {
               />
             </label>
             <div className="mt-seg" role="group" aria-label="筛选会议状态">
-              <button type="button" className={statusFilter === 'all' ? 'on' : ''} onClick={() => setStatusFilter('all')}>全部</button>
-              <button type="button" className={statusFilter === 'final' ? 'on' : ''} onClick={() => setStatusFilter('final')}>已定稿</button>
-              <button type="button" className={statusFilter === 'draft' ? 'on' : ''} onClick={() => setStatusFilter('draft')}>草稿</button>
+              <button type="button" className={statusFilter === 'all' ? 'is-on' : ''} onClick={() => setStatusFilter('all')}>全部</button>
+              <button type="button" className={statusFilter === 'final' ? 'is-on' : ''} onClick={() => setStatusFilter('final')}>已定稿</button>
+              <button type="button" className={statusFilter === 'draft' ? 'is-on' : ''} onClick={() => setStatusFilter('draft')}>草稿</button>
             </div>
           </div>
 
@@ -217,7 +218,7 @@ export function MeetingsView(props: {
             {selected.summary && (
               <div className="mt-sec">
                 <div className="mt-sec-lab">讨论纪要 Summary</div>
-                <p className="mt-summary">{selected.summary}</p>
+                <MarkdownView source={selected.summary} density="detail" className="mt-summary-md"/>
               </div>
             )}
 

@@ -17,6 +17,7 @@ import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
 import css from './risk-issues.css?raw'
 import { localTodayIso } from '../../core/derived.js'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { RiskIssue } from './types.js'
 
 const STATUS_LABEL: Record<RiskIssue['status'], string> = {
@@ -150,14 +151,14 @@ export function RiskIssuesView(props: {
         <button
           id="ri-tab-risk" type="button" role="tab" aria-selected={tab === 'risk'}
           aria-controls="ri-panel" tabIndex={tab === 'risk' ? 0 : -1}
-          className={tab === 'risk' ? 'on' : ''} onClick={() => setTab('risk')}
+          className={tab === 'risk' ? 'is-on' : ''} onClick={() => setTab('risk')}
         >
           风险 <span className="n">{risks.length}</span>
         </button>
         <button
           id="ri-tab-issue" type="button" role="tab" aria-selected={tab === 'issue'}
           aria-controls="ri-panel" tabIndex={tab === 'issue' ? 0 : -1}
-          className={tab === 'issue' ? 'on' : ''} onClick={() => setTab('issue')}
+          className={tab === 'issue' ? 'is-on' : ''} onClick={() => setTab('issue')}
         >
           问题 <span className="n">{issues.length}</span>
         </button>
@@ -222,33 +223,47 @@ export function RiskIssuesView(props: {
           {visible.map(r => {
             const sev = severityOf(r)
             const overdue = isOverdue(r)
+            const planText = r.type === 'risk' ? (r.responsePlan ?? '') : (r.solution ?? '')
+            const hasDetail = (r.description ?? '').trim() || planText.trim()
             return (
-              <button type="button" className="ri-row" key={r.id} onClick={() => onEdit(r)}>
-                <span className="ri-row-l1">
-                  <span className="ri-row-id">{r.id}</span>
-                  <span className={`ri-chip sev-${sev}`}><i/>{SEV_LABEL[sev]}</span>
-                  <span className="ri-row-title">{r.title}</span>
-                  <span className="ri-row-sp"/>
-                  <span className={`ri-chip st-${r.status}`}><i/>{STATUS_LABEL[r.status]}</span>
-                </span>
-                <span className="ri-row-l2">
-                  <span className="ri-owner">
-                    <span className={r.owner ? 'ri-ava' : 'ri-ava off'}>{r.owner ? r.owner.slice(0, 1) : '未'}</span>
-                    {r.owner || '未指定'}
+              <div className="ri-row" key={r.id}>
+                <button type="button" className="ri-row-main" onClick={() => onEdit(r)}>
+                  <span className="ri-row-l1">
+                    <span className="ri-row-id">{r.id}</span>
+                    <span className={`ri-chip sev-${sev}`}><i/>{SEV_LABEL[sev]}</span>
+                    <span className="ri-row-title">{r.title}</span>
+                    <span className="ri-row-sp"/>
+                    <span className={`ri-chip st-${r.status}`}><i/>{STATUS_LABEL[r.status]}</span>
                   </span>
-                  {r.type === 'risk' && (
-                    <span className="ri-qual">概率 {PROB_LABEL[r.probability ?? 'low']} × 影响 {IMPACT_LABEL[r.impact]}</span>
-                  )}
-                  {r.type === 'issue' && <span className="ri-qual">影响 {IMPACT_LABEL[r.impact]}</span>}
-                  <span className="ri-plan">
-                    <b>{r.type === 'risk' ? '应对' : '方案'}：</b>
-                    {r.type === 'risk' ? (r.responsePlan || '暂无') : (r.solution || '暂无')}
+                  <span className="ri-row-l2">
+                    <span className="ri-owner">
+                      <span className={r.owner ? 'ri-ava' : 'ri-ava off'}>{r.owner ? r.owner.slice(0, 1) : '未'}</span>
+                      {r.owner || '未指定'}
+                    </span>
+                    {r.type === 'risk' && (
+                      <span className="ri-qual">概率 {PROB_LABEL[r.probability ?? 'low']} × 影响 {IMPACT_LABEL[r.impact]}</span>
+                    )}
+                    {r.type === 'issue' && <span className="ri-qual">影响 {IMPACT_LABEL[r.impact]}</span>}
+                    <span className={overdue ? 'ri-due overdue' : 'ri-due'}>
+                      {r.dueDate ? (overdue ? `逾期 · ${r.dueDate}` : `截止 ${r.dueDate}`) : '无截止'}
+                    </span>
                   </span>
-                  <span className={overdue ? 'ri-due overdue' : 'ri-due'}>
-                    {r.dueDate ? (overdue ? `逾期 · ${r.dueDate}` : `截止 ${r.dueDate}`) : '无截止'}
-                  </span>
-                </span>
-              </button>
+                </button>
+                {/* 多行字段五环节：描述 + 应对/方案以安全 Markdown 在卡面可见，不只在抽屉表单里编辑。 */}
+                {hasDetail && (
+                  <div className="ri-row-detail">
+                    {(r.description ?? '').trim() && (
+                      <MarkdownView source={r.description!} density="compact" className="ri-md"/>
+                    )}
+                    {planText.trim() && (
+                      <div className="ri-md-plan">
+                        <b>{r.type === 'risk' ? '应对措施' : '解决方案'}：</b>
+                        <MarkdownView source={planText} density="compact" className="ri-md"/>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             )
           })}
         </section>

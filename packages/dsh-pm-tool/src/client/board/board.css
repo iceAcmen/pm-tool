@@ -1,0 +1,65 @@
+/* 看板专属样式（B 组持有，scope 在 .pm-bento 下，不写 panel.css）。
+   契约 §3.6 卡体内滚不外溢；§4 进度条 .pm-progress-bar；迁移 banner 中性 info。 */
+
+/* §4：10px 进度轨道（原裸 .pm-seg 用法，A 组删除 panel.css 裸定义后由本文件承接）。 */
+.pm-bento .pm-progress-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--pm-line);
+}
+.pm-bento .pm-progress-bar > i { display: block; height: 100%; }
+
+/* 里程碑·交付物双段堆叠（原 panel.css 裸 .pm-seg-two/.pm-segrow，A 删裸定义后由本文件承接）。 */
+.pm-bento .pm-md-stack { display: flex; flex-direction: column; gap: 12px; justify-content: center; flex: 1; min-width: 0; }
+.pm-bento .pm-md-row { display: grid; grid-template-columns: 64px 1fr 24px; align-items: center; gap: 10px; font-size: 12px; min-width: 0; }
+
+/* 迁移 banner：中性 info（非 overdue 红），可折叠、关闭态持久（localStorage 在组件内管）。 */
+.pm-bento .pm-bento-validation.pm-mig {
+  background: color-mix(in srgb, var(--pm-st-progress) 10%, var(--pm-surface));
+  border: 1px solid var(--pm-line);
+  color: var(--pm-text-2);
+  border-radius: 12px;
+}
+.pm-bento .pm-mig-summary {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: none; border: 0; cursor: pointer; text-align: left;
+  color: inherit; font: inherit; padding: 0;
+}
+.pm-bento .pm-mig-toggle { flex: 0 0 auto; font-size: 11px; color: var(--pm-muted); }
+.pm-bento .pm-mig-body { margin-top: 6px; font-size: 12px; line-height: 1.6; }
+
+/* 编号占位：无 code 的存量卡显短 ID，弱化等宽，不重新编号。 */
+.pm-bento .pm-bento-code-missing {
+  color: var(--pm-muted);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 卡体内部自适应：min-width:0 链路 + 长文本可断，禁横向溢出（不靠 overflow:hidden 裁切）。 */
+.pm-bento .pm-bento-card { min-width: 0; }
+.pm-bento .pm-attn,
+.pm-bento .pm-obj-row,
+.pm-bento .pm-rec,
+.pm-bento .pm-board-project { min-width: 0; }
+.pm-bento .pm-attn > span:nth-child(2),
+.pm-bento .pm-obj-head,
+.pm-bento .pm-rec-title,
+.pm-bento .pm-board-project-name { min-width: 0; overflow-wrap: anywhere; }
+.pm-bento .pm-note-body { min-width: 0; overflow-wrap: anywhere; line-height: 1.6; }
+
+/* 浏览态静态栅格：投影后单元格内滚，长内容不顶破网格。 */
+.pm-bento-grid-static > div { min-width: 0; }
+.pm-bento-grid-static .pm-bento-card { overflow-y: auto; }
+
+/* T6 历史版本列表面板（board 专属，token 深浅跟随；水平边距由 PageShell/工具条上下文给）。 */
+.pm-bento .pm-bento-history {
+  display: flex; flex-direction: column; gap: 6px;
+  border: 1px solid var(--pm-line); border-radius: var(--r-lg);
+  background: var(--pm-surface); padding: var(--sp-3) var(--sp-4); margin-bottom: 12px;
+}
+.pm-bento .pm-bento-history-note { margin: 0; font-size: var(--t-11); color: var(--pm-muted); line-height: 1.5; }
+.pm-bento .pm-bento-history-empty { margin: 0; font-size: var(--t-12); color: var(--pm-muted); }
+.pm-bento .pm-bento-history-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.pm-bento .pm-bento-history-meta { font-size: var(--t-12); color: var(--pm-text-2); font-variant-numeric: tabular-nums; min-width: 0; }

@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  /* 页面级左右/上下内边距由 PageShell --pm-shell-pad-x 统一提供（R4），本页不自叠。 */
   font-family: var(--pm-font-sans);
   color: var(--ink);
 }
@@ -89,10 +89,10 @@
 /* 健康环（hero 右侧，扁平 dsh：无环境光晕） */
 .pm-ov-root .ov-hero-right {
   flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 138px;
-  height: 138px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
 }
 .pm-ov-root .ov-ring-disc {
   position: relative;
@@ -126,7 +126,7 @@
 /* ---------- 项目元信息栅格（label + value） ---------- */
 .pm-ov-root .ov-info-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   padding-top: var(--sp-3);
   padding-bottom: var(--sp-3);
 }
@@ -144,10 +144,11 @@
   font-size: var(--t-14);
   font-weight: 600;
   color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* 日期/负责人完整常显，不截断不省略；长串可断。 */
+  white-space: normal;
+  overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
+  min-width: 0;
 }
 
 /* ---------- BENTO 布局 ---------- */
@@ -228,8 +229,8 @@
   place-items: center;
   font-size: var(--t-12);
   font-weight: 700;
-  /* D7：白字落品牌蓝浅/深仅 4.23/2.33:1；底色换 --c-prog-d，白字两态 ≥4.5。 */
-  color: rgb(255, 255, 255);
+  /* D7：深底徽章文字走宿主 foreground 别名（浅深皆白，非 CTA，不与 --pm-action-ink 混用）。 */
+  color: var(--dsw-alias-label-primary-foreground);
   background: var(--c-prog-d);
   flex: 0 0 auto;
 }
@@ -290,8 +291,11 @@
   gap: 6px;
   font-size: var(--t-12);
   font-weight: 600;
-  padding: 8px var(--sp-3);
-  border-radius: var(--r);
+  /* 契约 §3.1：按钮统一 36px / r8 / nowrap。 */
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  white-space: nowrap;
   border: 1px solid var(--line-2);
   color: var(--ink-2);
   background: var(--surface-2);
@@ -299,10 +303,11 @@
   text-decoration: none;
 }
 .pm-ov-root .ov-btn.primary {
-  background: var(--dsw-alias-button-primary-fill); border-color: transparent; color: var(--pm-on-primary);
+  /* 契约 §2.1 action token，fill/hover/on 全走共享，不硬编码、不用宿主近黑 fill。 */
+  background: var(--pm-action-fill); border-color: transparent; color: var(--pm-action-on);
   white-space: nowrap;
 }
-.pm-ov-root .ov-btn.primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-ov-root .ov-btn.primary:hover:not(:disabled) { background: var(--pm-action-hover); color: var(--pm-action-on); }
 .pm-ov-root .ov-btn.ghost { background: transparent; }
 .pm-ov-root .ov-repo-note { margin-top: var(--sp-3); font-size: var(--t-11); color: var(--faint); display: flex; align-items: center; gap: 6px; }
 .pm-ov-root .ov-repo-empty { padding: var(--sp-3) 4px; text-align: center; font-size: var(--t-12); color: var(--faint); margin: 0; }
@@ -334,7 +339,7 @@
   .pm-ov-root .ov-info-cell + .ov-info-cell { border-left: 0; }
 }
 @media (max-width: 900px) {
-  .pm-ov-root { padding: var(--sp-4); }
+  .pm-ov-root { gap: var(--sp-3); }
   .pm-ov-root .ov-hero { flex-direction: column; align-items: flex-start; }
   .pm-ov-root .ov-row-stats { grid-template-columns: repeat(2, 1fr); }
   .pm-ov-root .ov-row-main,
@@ -343,10 +348,36 @@
 
 /* #25 窄窗（≤560px / 390 档）：概览边距收敛，统计卡两列保持，元信息栅格内距收紧。 */
 @media (max-width: 560px) {
-  .pm-ov-root { padding: var(--sp-3) var(--sp-3) var(--sp-4); }
   .pm-ov-root .ov-info-grid { gap: var(--sp-2); }
   .pm-ov-root .ov-info-cell { padding: 0 var(--sp-2); }
   .pm-ov-root .ov-row-stats { gap: var(--sp-2); }
   /* S3-1：日期/长值窄窗允许换行，不裸截断（悬停仍有 title 全名） */
   .pm-ov-root .ov-info-val { white-space: normal; overflow: visible; text-overflow: clip; }
 }
+
+/* ===== 契约补丁（B 组，scope .pm-ov-root）：健康可解释 / 提醒分组 ===== */
+.pm-ov-root .ov-health-explain {
+  width: 100%;
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: var(--t-11); color: var(--ink-2);
+}
+.pm-ov-root .ov-health-formula { font-weight: 650; color: var(--ink); }
+.pm-ov-root .ov-health-factors { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.pm-ov-root .ov-health-factors li {
+  display: flex; justify-content: space-between; gap: 12px; min-width: 0;
+}
+.pm-ov-root .ov-health-factor-label { color: var(--ink-2); min-width: 0; overflow-wrap: anywhere; }
+.pm-ov-root .ov-health-factor-deduct { color: var(--c-late); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+.pm-ov-root .ov-health-lamp-chain { color: var(--muted); }
+.pm-ov-root .ov-health-disclaimer { margin: 2px 0 0; font-size: var(--t-10); color: var(--faint); }
+.pm-ov-root .ov-health-note { margin: 0; color: var(--muted); }
+
+.pm-ov-root .ov-rem-group + .ov-rem-group { margin-top: var(--sp-2); }
+.pm-ov-root .ov-rem-group-title {
+  font-size: var(--t-10); font-weight: 700; letter-spacing: var(--ls-cap);
+  color: var(--faint); margin-bottom: 2px;
+}
+.pm-ov-root .ov-rem-group[data-tone='late'] .ov-rem-group-title { color: var(--c-late); }
+.pm-ov-root .ov-rem-group[data-tone='block'] .ov-rem-group-title { color: var(--c-block); }
+.pm-ov-root .ov-rem-group[data-tone='prog'] .ov-rem-group-title { color: var(--c-prog); }
+.pm-ov-root .ov-rem-group[data-tone='done'] .ov-rem-group-title { color: var(--c-done); }

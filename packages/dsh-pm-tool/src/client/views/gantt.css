@@ -15,28 +15,28 @@
   font-size: var(--t-14);
 }
 
-/* ---------------- 页头/工具栏（与 tasks 页 pt-head 同基准：sp-5 sp-6 0） ---------------- */
+/* ---------------- 页头/工具栏：水平内边距由 PageShell --pm-shell-pad-x 统一提供，页面不自叠（R4） ---------------- */
 .pm-gantt-root .pm-gantt-toolbar {
   display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
-  padding: var(--sp-5) var(--sp-6) 0;
+  padding: 0;
 }
 /* W-DEF-003：甘特视图页题收敛 §4.1 16/700（语义类型 token，原 t-26/750 为非冻结字阶） */
 .pm-gantt-root .pm-gantt-title { font-size: var(--pm-type-page-title); font-weight: var(--pm-type-page-title-weight); letter-spacing: var(--ls-tight2); line-height: 1.1; }
 .pm-gantt-root .pm-gantt-sub { font-size: var(--t-13); color: var(--muted); }
 .pm-gantt-root .pm-gantt-spacer { flex: 1; }
 
-.pm-gantt-root .pm-seg {
-  /* P0-4 / S2-1：重置 panel.css 通用进度条 .pm-seg{height:10px;overflow:hidden} 的碰撞，
-     日/周/月三字完整可见、不被垂直裁切。 */
+.pm-gantt-root .pm-gantt-seg {
+  /* 契约 §4 三分区命名：甘特/任务筛选分段 .pm-gantt-seg，选中 .is-on；
+     与 AI 段、进度条解耦，不再依赖 panel.css 裸 .pm-seg 重置。 */
   display: inline-flex; padding: 3px; gap: 2px;
   height: auto; overflow: visible;
-  background: var(--field-bg); border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface-2, var(--field-bg)); border: 1px solid var(--line); border-radius: 999px;
 }
-.pm-gantt-root .pm-seg button {
+.pm-gantt-root .pm-gantt-seg button {
   all: unset; cursor: pointer; font-size: var(--t-12); font-weight: 600;
   color: var(--muted); padding: 5px 12px; border-radius: 999px; line-height: 1;
 }
-.pm-gantt-root .pm-seg button.on { background: var(--surface-3); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-gantt-root .pm-gantt-seg button.is-on { background: var(--surface-3); color: var(--ink); box-shadow: var(--shadow-1); }
 
 .pm-gantt-root .pm-switch { display: inline-flex; align-items: center; gap: 7px; font-size: var(--t-12); color: var(--ink-2); cursor: pointer; }
 .pm-gantt-root .pm-switch input { accent-color: var(--c-prog); }
@@ -49,15 +49,20 @@
 }
 .pm-gantt-root .pm-chip:hover { background: var(--surface-3); color: var(--ink); }
 .pm-gantt-root .pm-chip-primary {
-  background: var(--dsw-alias-button-primary-fill); border-color: transparent; color: var(--pm-on-primary);
+  /* 契约 §2.1 专用 accessible action token：fill/hover/on 全走共享 token，模块不硬编码 rgb/白色字值。 */
+  background: var(--pm-action-fill);
+  border-color: transparent; color: var(--pm-action-on);
   white-space: nowrap;
 }
-.pm-gantt-root .pm-chip-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); color: var(--pm-on-primary); }
+.pm-gantt-root .pm-chip-primary:hover:not(:disabled) {
+  background: var(--pm-action-hover);
+  color: var(--pm-action-on);
+}
 
-/* ---------------- 甘特卡片（与 tasks 页 pt-card 同基准：margin sp-4/sp-6，surface 卡片） ---------------- */
+/* ---------------- 甘特卡片：水平边距由 PageShell 提供，页面不自叠（R4） ---------------- */
 .pm-gantt-root .pm-gantt {
   display: flex; flex-wrap: nowrap;
-  margin: var(--sp-4) var(--sp-6) var(--sp-6);
+  margin: 0;
   flex: 1; min-height: 0;
   border: 1px solid var(--line); border-radius: var(--r-lg);
   background: var(--surface); box-shadow: var(--shadow-2); overflow: hidden;
@@ -124,7 +129,7 @@
 .pm-gantt-root .pm-gantt-today { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--c-late); opacity: .85; z-index: 6; pointer-events: none; }
 .pm-gantt-root .pm-gantt-today-tag {
   position: absolute; top: 4px; font-size: var(--t-10); font-weight: 700;
-  color: rgb(255, 255, 255); background: var(--c-late);
+  color: var(--dsw-alias-label-primary-foreground); background: var(--c-late);
   padding: 2px 6px; border-radius: var(--r-xs); z-index: 6; pointer-events: none;
 }
 
@@ -226,7 +231,7 @@
 /* ---------------- P1-3：键盘微调提示条（常驻，token 深浅跟随） ---------------- */
 .pm-gantt-root .pm-gantt-kbdbar {
   display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
-  margin: var(--sp-3) var(--sp-6) 0; padding: var(--sp-3) var(--sp-4);
+  margin: var(--sp-3) 0 0; padding: var(--sp-3) var(--sp-4);
   border: 1px solid var(--line); border-radius: var(--r-lg);
   background: var(--surface); font-size: var(--t-12); color: var(--ink-2);
 }
@@ -257,7 +262,7 @@
 .pm-gantt-root .pm-gantt-link-arrow { fill: var(--muted); }
 
 /* ---------------- 状态行 ---------------- */
-.pm-gantt-root .pm-gantt-hint { margin: 0 var(--sp-6) var(--sp-4); font-size: var(--t-12); color: var(--muted); }
+.pm-gantt-root .pm-gantt-hint { margin: 0 0 var(--sp-4); font-size: var(--t-12); color: var(--muted); }
 
 /* ---------------- 关键路径（只读 CPM 高亮；色全走 dsw 别名 token，浅深跟随） ---------------- */
 /* 关键任务条：强调色加粗描边环 + 淡色衬底，不改变状态填充；ring 用 box-shadow，
@@ -316,9 +321,9 @@
 /* #25 窄窗（≤560px / 390 档）：工具栏换行收敛、左标签列收窄；时间轴在 .pm-gantt-scroll
    内部横向滚动，外壳不溢出。配色只走 dsh/pm token。 */
 @media (max-width: 560px) {
-  .pm-gantt-root .pm-gantt-toolbar { padding: var(--sp-4) var(--sp-3) 0; row-gap: var(--sp-2); }
-  .pm-gantt-root .pm-gantt { margin: var(--sp-3) var(--sp-2) var(--sp-4); }
+  .pm-gantt-root .pm-gantt-toolbar { padding: 0; row-gap: var(--sp-2); }
+  .pm-gantt-root .pm-gantt { margin: 0; }
   .pm-gantt-root .pm-gantt-labels { width: 150px; }
-  .pm-gantt-root .pm-gantt-kbdbar { margin: var(--sp-3) var(--sp-2) 0; gap: var(--sp-2); }
+  .pm-gantt-root .pm-gantt-kbdbar { margin: var(--sp-3) 0 0; gap: var(--sp-2); }
   .pm-gantt-root .pm-gantt-kbdbar-note { margin-left: 0; max-width: none; }
 }

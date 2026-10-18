@@ -16,6 +16,9 @@
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import Repeat from 'lucide-react/dist/esm/icons/repeat.mjs'
 import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
+import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
+import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
+import { MarkdownView } from '../shared/markdown-view.js'
 import type { Run } from './types.js'
 
 /** 与 core/storage.ts habitRecordSchema.checkIns 对齐的前端本地镜像（不 zod、不依赖存储层）。 */
@@ -43,6 +46,10 @@ export interface HabitViewRecord {
   checkIns: HabitCheckIn[]
   streak: HabitStreak
   updatedAt?: string
+  /** 兼容补充字段（snapshot 全量下发；旧记录缺键时 undefined，编辑表单留空合法）。 */
+  goal?: string
+  frequency?: string
+  notes?: string
 }
 
 /** 收件区建议（settings 键 pmHabitInbox，信封 { entries: [...] }；未确认不自动生效）。 */
@@ -72,6 +79,10 @@ export interface HabitsViewProps {
   okrs?: HabitOkrRef[]
   run?: Run
   onSaved?: () => void
+  /** 打开新建习惯抽屉。 */
+  onCreate?: () => void
+  /** 打开编辑抽屉（record 为快照全量记录，goal/frequency/notes 兼容位一并回显）。 */
+  onEdit?: (record: HabitViewRecord) => void
 }
 
 /** 状态徽章文案：draft=草稿（建议/录入），confirmed=已确认（人轻确认），final=已定稿（人定稿）；前端不定稿。 */
@@ -95,7 +106,7 @@ function localOffsetIso(daysAgo: number): string {
   return `${d.getFullYear()}-${m}-${day}`
 }
 
-export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved }: HabitsViewProps) {
+export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, onCreate, onEdit }: HabitsViewProps) {
   const mine = habits
     .filter(h => h.projectId === projectId)
     .slice()
@@ -114,14 +125,21 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved }
 
   return (
     <div className="pm-habit-root">
+      {/* §1 页头由外层 PageShell bare 壳提供统一 padding，视图只出标题/副题/CTA，不自加左右 padding。 */}
       <header className="pm-habit-head">
-        <h1>每日记录 · 习惯层</h1>
-        <p className="pm-habit-sub">
-          X7 习惯层（只读呈现）：建议轻确认、未确认不生效；streak 为纯文本档案（无积分、无连胜动效、无徽章）；
-          打卡允许过去 2 天回填，补记如实标注，空日留空不补。
-        </p>
+        <div className="pm-habit-head-text">
+          <h1>每日记录 · 习惯层</h1>
+          <p className="pm-habit-sub">
+            X7 习惯层：建议轻确认、未确认不生效；streak 为纯文本档案（无积分、无连胜动效、无徽章）；
+            打卡允许过去 2 天回填，补记如实标注，空日留空不补。
+          </p>
+        </div>
+        {onCreate && (
+          <button type="button" className="pm-habit-btn pm-habit-btn-primary" onClick={onCreate}>
+            <Plus size={14}/>新建习惯
+          </button>
+        )}
       </header>
-
       {/* 习惯卡片：streak 文本档案 + 打卡记录 + 命令通道打卡入口。 */}
       <section className="pm-habit-list" aria-label="习惯记录">
         {mine.length === 0 ? (
@@ -129,9 +147,13 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved }
             <Repeat size={22}/>
             <h3>暂无习惯记录</h3>
             <p>
-              由人录入（<code>/pm habit add {projectId} &lt;JSON&gt;</code>）或经收件区确认后在此呈现；
-              前端不自动创建、不自动定稿。
+              由人录入或经收件区确认后在此呈现；前端不自动创建、不自动定稿。
             </p>
+            {onCreate && (
+              <button type="button" className="pm-habit-btn pm-habit-btn-primary" onClick={onCreate}>
+                <Plus size={14}/>新建首个习惯
+              </button>
+            )}
           </div>
         ) : (
           mine.map(h => {
@@ -146,6 +168,11 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved }
                   <span className={`pm-habit-status pm-habit-status--${h.status}`}>
                     {habitStatusLabel(h.status)}
                   </span>
+                  {onEdit && (
+                    <button type="button" className="pm-habit-btn pm-habit-btn-ghost" aria-label="编辑此习惯" onClick={() => onEdit(h)}>
+                      <Pencil size={12}/>编辑
+                    </button>
+                  )}
                 </div>
                 <div className="pm-habit-meta">ID：{h.id}</div>
 
@@ -155,6 +182,11 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved }
                     {okrTitle ? <>关联 OKR：{okrTitle}（{h.okrId} · 只展示）</> : <>关联 OKR：{h.okrId}（只展示）</>}
                   </div>
                 )}
+
+                {/* goal / frequency / notes 为 update 兼容字段，回显不留空（缺键 undefined 时整行省略）。 */}
+                {h.frequency?.trim() && <div className="pm-habit-field"><span className="pm-habit-field-lab">频率</span>{h.frequency}</div>}
+                {h.goal?.trim() && <div className="pm-habit-field"><span className="pm-habit-field-lab">目标</span>{h.goal}</div>}
+                {h.notes?.trim() && <MarkdownView source={h.notes} density="compact" className="pm-habit-notes"/>}
 
                 {/* streak 纯文本档案：不套徽章、不加动效。 */}
                 <p className="pm-habit-streak">{streakArchiveText(h.streak)}</p>

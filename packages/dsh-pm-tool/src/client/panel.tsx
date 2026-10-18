@@ -67,10 +67,12 @@ import {
 import {
   validateProjectForm, validateMilestoneForm, validateTaskForm, validateRiskIssueForm,
   validateMeetingForm, validateReportForm, validateDeliverableForm,
+  validateOkrForm, validateHabitForm, parseIdList, OKR_KINDS, OKR_STATUSES,
   repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
   type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
   type TaskFormValues, type RiskIssueFormValues, type MeetingFormValues,
   type ReportFormValues, type DeliverableFormValues,
+  type OkrFormValues, type HabitFormValues,
 } from './form-validation.js'
 import { BoardBento } from './board/BoardBento.js'
 import { TaskTable } from './views/tasks.js'
@@ -85,6 +87,8 @@ import { PeopleView } from './views/people.js'
 import { OkrsView } from './views/okrs.js'
 import { HabitsView, type HabitViewRecord, type HabitInboxSuggestion } from './views/habits.js'
 import type { OkrViewRecord, OkrInboxSuggestion } from './views/okr-model.js'
+import { MarkdownView } from './shared/markdown-view.js'
+import { PageShell } from './shared/page-shell.js'
 import { ProvenancePanel } from './provenance-panel.js'
 import styles from './panel.css?raw'
 
@@ -317,6 +321,8 @@ type Drawer =
   | { kind: 'meeting', meeting?: Meeting }
   | { kind: 'report', report?: ProgressReport }
   | { kind: 'deliverable', deliverable?: Deliverable }
+  | { kind: 'okr', record?: OkrViewRecord }
+  | { kind: 'habit', record?: HabitViewRecord }
   | { kind: 'ai' }
   | { kind: 'settings' }
 
@@ -559,60 +565,10 @@ function LaneSwitcher({ lane, busy, onChange, compact }: {
   </div>
 }
 
-/** 行内富文本：渲染 **加粗** 与 `代码`，其余按纯文本（安全，不产生 HTML）。 */
-function renderInlineRich(text: string, keyPrefix: string): ReactNode[] {
-  const nodes: ReactNode[] = []
-  const re = /(\*\*[^*]+\*\*|`[^`]+`)/g
-  let last = 0
-  let m: RegExpExecArray | null
-  let i = 0
-  while ((m = re.exec(text))) {
-    if (m.index > last) nodes.push(text.slice(last, m.index))
-    const tok = m[0]
-    if (tok.startsWith('**')) nodes.push(<strong key={keyPrefix + i}>{tok.slice(2, -2)}</strong>)
-    else nodes.push(<code key={keyPrefix + i} className="pm-md-code">{tok.slice(1, -1)}</code>)
-    last = m.index + tok.length
-    i += 1
-  }
-  if (last < text.length) nodes.push(text.slice(last))
-  return nodes
-}
-
-/** 轻量 Markdown 渲染：标题 / 有序无序列表 / 段落 / 行内加粗与代码（无 HTML、无注入面）。 */
-function MarkdownView({ text, className }: { text: string, className?: string }) {
-  const blocks: ReactNode[] = []
-  const lines = text.split('\n')
-  let list: { ordered: boolean, items: string[] } | null = null
-  const flushList = () => {
-    if (!list) return
-    const items = list.items.map((it, i) => <li key={i}>{renderInlineRich(it, 'li' + i)}</li>)
-    blocks.push(list.ordered
-      ? <ol key={'ol' + blocks.length}>{items}</ol>
-      : <ul key={'ul' + blocks.length}>{items}</ul>)
-    list = null
-  }
-  lines.forEach((raw, idx) => {
-    const line = raw.trim()
-    let m: RegExpExecArray | null
-    if ((m = /^(#{1,4})\s+(.*)$/.exec(line))) {
-      flushList()
-      blocks.push(<p key={'h' + idx} className={'pm-md-h' + m[1].length}>{renderInlineRich(m[2], 'h' + idx)}</p>)
-    } else if ((m = /^\s*[-*]\s+(.*)$/.exec(raw))) {
-      if (!list || list.ordered) { flushList(); list = { ordered: false, items: [] } }
-      list.items.push(m[1])
-    } else if ((m = /^\s*\d+[.、)]\s+(.*)$/.exec(raw))) {
-      if (!list || !list.ordered) { flushList(); list = { ordered: true, items: [] } }
-      list.items.push(m[1])
-    } else if (line) {
-      flushList()
-      blocks.push(<p key={'p' + idx} className="pm-md-p">{renderInlineRich(line, 'p' + idx)}</p>)
-    } else {
-      flushList()
-    }
-  })
-  flushList()
-  return <div className={'pm-md' + (className ? ' ' + className : '')}>{blocks}</div>
-}
+/**
+ * Markdown 统一走 shared/markdown-view.tsx（§3.3 同一安全 renderer，编辑/预览/详情同语义）；
+ * 本地旧富文本解析器已删，不再维护第二套。
+ */
 
 /** WBS 结构化预览：把缩进的 `- [ ]` / `- [x]` 清单渲染成任务树（所见即所得）。 */
 function WbsTreeView({ markdown }: { markdown: string }) {
@@ -902,7 +858,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       onPointerDownCapture={recordDrawerOpener}
       onClickCapture={recordDrawerOpener}
     >
-      {message && <Notice message={message} onClose={() => setMessage('')}/>}
+      <FeedbackToast message={message}/>
 
       {restorePreview && (
         <div className="pm-restore-preview">
@@ -910,11 +866,25 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <pre className="pm-restore-preview-text">{restorePreview.text}</pre>
           <button
             className="pm-button pm-button-primary pm-restore-confirm"
-            onClick={() => {
+            onClick={async () => {
+              // 预览面板（已展示全文+危险说明）之上再走阻断式二次确认，防误触整体替换。
+              const ok = await confirmDanger({
+                title: '确认整体恢复？',
+                objectType: '七类实体',
+                objectTitle: restorePreview.fileName,
+                impact: `将用「${restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照，现有数据会被覆盖）。`,
+                confirmLabel: '确认恢复',
+              })
+              if (!ok) return
               const enc = JSON.stringify(restorePreview.content)
-              void execute(`restore-content ${enc} confirm`)
-                .then((r) => { setMessage(String(r ?? '已恢复')); setRestorePreview(null); void refresh() })
-                .catch((e) => setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`))
+              try {
+                const r = await execute(`restore-content ${enc} confirm`)
+                setMessage(String(r ?? '已恢复'))
+                setRestorePreview(null)
+                void refresh()
+              } catch (e) {
+                setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`)
+              }
             }}
           >确认恢复</button>
           <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
@@ -1032,6 +1002,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           </button>
           {topMenuOpen && (
             <div className="pm-top-menu" onMouseLeave={() => setTopMenuOpen(false)}>
+          <div className="pm-menu-caption">导航</div>
           <button
             className="pm-button pm-menu-item"
             onClick={() => { setTopMenuOpen(false); setDashOpen(true) }}
@@ -1060,6 +1031,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             <SlidersHorizontal size={15}/>口径设置
           </button>
           <div className="pm-menu-divider"/>
+          <div className="pm-menu-caption">数据管理</div>
           <button
             className="pm-button pm-backup-btn"
             disabled={busy}
@@ -1107,7 +1079,6 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               }}
             />
           </label>
-          <p className="pm-menu-note">备份默认存于内置 packages/backups/（隔离实例可能不同）；以备份成功提示的完整路径为准。恢复请选 pm-tool 备份 JSON，先预览、确认后才替换七类实体。</p>
           <button
             className="pm-button pm-export-md-btn"
             disabled={busy || !project}
@@ -1209,8 +1180,19 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 }}
               />
             )}
+            {message && (
+              <div className="pm-result-zone">
+                <ResultCard
+                  message={message}
+                  onClose={() => setMessage('')}
+                  onAction={(command) => { void run(command) }}
+                />
+              </div>
+            )}
             <div className="pm-suggest-split" data-open={copilotLayer || undefined}>
             {/* I6：此处无归属它的 tablist（导航为 rail 菜单），移除孤立 role=tabpanel，避免无主面板。 */}
+            {/* §1 统一 bare 壳：12 视图共用单层 --pm-shell-pad-x，视图不再自加左右 padding（B 组已删自叠 padding，此处承接避免塌陷）。 */}
+            <PageShell bare className="pm-view-shell">
             <section className="pm-view">
               {view === 'tasks' && <TaskTable
                 tasks={tasks}
@@ -1284,6 +1266,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 inbox={okrInbox}
                 run={run}
                 onSaved={refresh}
+                onCreate={() => setDrawer({ kind: 'okr' })}
+                onEdit={(record) => setDrawer({ kind: 'okr', record })}
               />}
               {view === 'habits' && <HabitsView
                 projectId={project.id}
@@ -1292,8 +1276,11 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 okrs={okrs}
                 run={run}
                 onSaved={refresh}
+                onCreate={() => setDrawer({ kind: 'habit' })}
+                onEdit={(record) => setDrawer({ kind: 'habit', record })}
               />}
             </section>
+            </PageShell>
             </div>
             {/* R-S：Portal fixed 浮层，脱离 flex 流；开关前后主列宽完全一致（非 modal，role=region）。 */}
             {copilotLayer && project && (
@@ -1410,6 +1397,26 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           key={drawer.deliverable ? `deliverable-${drawer.deliverable.id}` : 'deliverable-new'}
           projectId={project.id}
           deliverable={drawer.deliverable}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
+        />}
+        {drawer.kind === 'okr' && project && <OkrForm
+          key={drawer.record ? `okr-${drawer.record.id}` : 'okr-new'}
+          projectId={project.id}
+          record={drawer.record}
+          objectives={okrs.filter(o => o.kind === 'objective')}
+          disabled={busy}
+          run={run}
+          onSaved={() => setDrawer(undefined)}
+          onCancel={() => setDrawer(undefined)}
+        />}
+        {drawer.kind === 'habit' && project && <HabitForm
+          key={drawer.record ? `habit-${drawer.record.id}` : 'habit-new'}
+          projectId={project.id}
+          record={drawer.record}
+          okrs={okrs}
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
@@ -1641,7 +1648,7 @@ function ReminderCapsule({ tasks, milestones, disabled, run, onSaved, onOpenTask
             <span className="pm-pop-seg">
               {[3, 7, 14, 30].map(d =>
                 <button key={d} type="button" aria-pressed={range === d}
-                  className={range === d ? 'on' : ''} onClick={() => setRange(d)}>{d} 天</button>,
+                  className={range === d ? 'is-on' : ''} onClick={() => setRange(d)}>{d} 天</button>,
               )}
             </span>
             <button type="button" className="pm-pop-x" aria-label="关闭提醒" onClick={() => setOpen(false)}><X size={14}/></button>
@@ -1702,16 +1709,8 @@ function TasksHeader({ tasks, milestones, disabled, run, onSaved, onOpenTask, on
   onOpenTask: (task: Task) => void
   onGotoView: (v: View) => void
 }) {
-  const total = tasks.length
-  const inProg = tasks.filter(t => t.status === 'in_progress').length
-  const doneN = tasks.filter(t => t.status === 'done').length
-  const blocked = tasks.filter(t => t.status === 'blocked').length
-
+  // R3：计数统一由 TaskTable 内同源互斥四桶呈现，壳层不再重复算总数（避免各算各的）。
   return <div className="pm-tasks-head">
-    <div className="pm-tasks-title-row">
-      <h1>任务</h1>
-    </div>
-    <div className="pm-tasks-sub">{total} 个任务 · 进行中 {inProg} · 已完成 {doneN} · 阻塞 {blocked}</div>
     <ReminderCapsule tasks={tasks} milestones={milestones} disabled={disabled} run={run} onSaved={onSaved} onOpenTask={onOpenTask} onGotoView={onGotoView}/>
   </div>
 }
@@ -1902,6 +1901,8 @@ function drawerTitle(drawer: Drawer): string {
   if (drawer.kind === 'risk-issue') return drawer.record ? '编辑风险或问题' : '新增风险或问题'
   if (drawer.kind === 'meeting') return drawer.meeting ? '编辑会议纪要' : '新增会议纪要'
   if (drawer.kind === 'report') return drawer.report ? '编辑进度汇报' : '生成进度汇报'
+  if (drawer.kind === 'okr') return drawer.record ? '编辑 OKR' : '新建 OKR'
+  if (drawer.kind === 'habit') return drawer.record ? '编辑习惯' : '新建习惯'
   if (drawer.kind === 'ai') return 'AI 助手'
   if (drawer.kind === 'settings') return '口径设置'
   return drawer.deliverable ? '编辑交付物' : '新增交付物'
@@ -1959,7 +1960,8 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
   const lines = (): { preview: string; confirm: string } => {
     if (mode === 'narrate') {
       // OPT-08：预览可编辑，确认按编辑后文本落盘（report narrateuse，不再调模型）。
-      return { preview: `report narrate ${projectId}`, confirm: `report narrateuse ${projectId} ${JSON.stringify(preview)}` }
+      // 落盘前清洗尾注/action 行，避免草稿说明与确认命令被写进 executiveSummary（旧记录非破坏）。
+      return { preview: `report narrate ${projectId}`, confirm: `report narrateuse ${projectId} ${JSON.stringify(cleanAiPreview(preview))}` }
     }
     if (mode === 'wbs') {
       const goal = text.trim()
@@ -1967,7 +1969,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
       return { preview: `task wbs ${projectId} ${goal} --raw`, confirm: `task importmd ${projectId} ${JSON.stringify(preview)} confirm` }
     }
     const transcript = text.trim()
-    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(preview)}` }
+    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(cleanAiPreview(preview))}` }
   }
 
   const pickCapability = (next: 'wbs' | 'narrate' | 'summarize') => {
@@ -2019,9 +2021,10 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
     summarize: '粘贴会议速记/原始记录，AI 归纳议题、结论与行动项（负责人/截止日）。',
   }
 
-  // 会议纪要预览：去掉「草稿」「确认命令」头尾，只保留结构化内容。
-  const cleanMeetingPreview = (raw: string) => raw.split('\n')
-    .filter(l => !/^AI 归纳草稿|^确认命令：/.test(l.trim()))
+  // AI 预览清洗：去掉「AI 归纳草稿」头、「确认命令：」行、「以上为草稿…」尾注与 [pm:action] 协议行，
+  // 展示与落盘（narrateuse / summarize confirm）都只保留纯正文，尾注/命令不进保存内容（content/action 分离）。
+  const cleanAiPreview = (raw: string) => raw.split('\n')
+    .filter(l => !/^(AI 归纳草稿|确认命令：|以上为草稿|\[pm:action\])/.test(l.trim()))
     .join('\n')
     .trim()
 
@@ -2090,7 +2093,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
       {preview && (
         <div className="pm-ai-result pm-ai-preview">
           <div className="pm-ai-result-head">
-            <div className="pm-seg">
+            <div className="pm-ai-seg">
               <button type="button" className={docView === 'preview' ? 'is-on' : ''} onClick={() => setDocView('preview')}><Eye size={13}/> 预览</button>
               <button type="button" className={docView === 'edit' ? 'is-on' : ''} onClick={() => setDocView('edit')}><Code2 size={13}/> 编辑</button>
             </div>
@@ -2099,7 +2102,7 @@ function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenRecord }
           {docView === 'preview' ? (
             mode === 'wbs'
               ? <WbsTreeView markdown={preview}/>
-              : <MarkdownView text={mode === 'summarize' ? cleanMeetingPreview(preview) : preview}/>
+              : <MarkdownView source={cleanAiPreview(preview)}/>
           ) : (
             <textarea
               className={'pm-ai-input pm-ai-markdown' + (mode === 'wbs' ? ' pm-ai-wbs-raw' : ' pm-ai-raw')}
@@ -2161,41 +2164,86 @@ function downloadText(filename: string, text: string, mime: string) {  try {
   }
 }
 
-function Notice({ message, onClose }: { message: string, onClose: () => void }) {
+/**
+ * §3.2 反馈分型（v2）：
+ * - FeedbackToast：仅结构化成功摘要进瞬时 toast（≤2 行、role=status、3s 自动消逝）；
+ *   error/warn/非结构化不进 toast。
+ * - ResultCard：非瞬时持久卡。错误 role=alert 单处呈现；结构化成功短摘要常显 + 详情折叠；
+ *   非结构化原样持久（不吞不改写）；[pm:action] 渲染独立确认按钮，命令不进保存正文。
+ * 两层都从不 focus()，不抢焦点；表单输入在错误时保留（抽屉不卸载）。
+ */
+function FeedbackToast({ message }: { message: string }) {
   const fb = classifyFeedback(message)
-  const isError = fb.isError
-  const path = extractBackupPath(message)
-  // J5：成功结构化提示按 autoDismissMs(3s) 自动消失；错误/无信封持久且单处。
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
+    setVisible(true)
     if (!fb.autoDismissMs) return
-    const timer = setTimeout(onClose, fb.autoDismissMs)
+    const timer = setTimeout(() => setVisible(false), fb.autoDismissMs)
     return () => clearTimeout(timer)
-  }, [fb.autoDismissMs, onClose])
-  // F9：成功反馈 role=status + aria-live=polite（可编程、不抢焦点）；
-  // 错误变体按 §7 用 role=alert + aria-live=assertive。组件从不 focus()，两种变体均不抢焦点。
-  return <div
-    className={`pm-notice${isError ? ' pm-notice--error' : ''}`}
-    role={isError ? 'alert' : 'status'}
-    aria-live={isError ? 'assertive' : 'polite'}
-  >
-    {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
-    <div className="pm-notice-lines">
-      {fb.summary.map((line, i) => <div key={i}>{line}</div>)}
+  }, [message, fb.autoDismissMs])
+  if (!visible || fb.isError || !fb.autoDismissMs || !fb.summary.length) return null
+  return (
+    <div className="pm-toast pm-toast--success" role="status" aria-live="polite">
+      <Check size={15}/>
+      <div className="pm-toast__msg">{fb.summary.slice(0, 2).join('\n')}</div>
     </div>
-    {fb.detail && (
-      <details className="pm-notice-detail">
-        <summary>查看完整字段</summary>
-        <pre>{fb.detail}</pre>
-      </details>
-    )}
-    {path && (
-      <button
-        className="pm-button pm-notice-copy"
-        onClick={() => { void navigator.clipboard?.writeText(path).catch(() => {}) }}
-      >复制路径</button>
-    )}
-    <button className="pm-plain-icon" aria-label="关闭通知" onClick={onClose}><X size={14}/></button>
-  </div>
+  )
+}
+
+function ResultCard({ message, onClose, onAction }: {
+  message: string
+  onClose: () => void
+  onAction: (command: string) => void
+}) {
+  const fb = classifyFeedback(message)
+  const [detailOpen, setDetailOpen] = useState(false)
+  const path = extractBackupPath(message)
+  const isError = fb.isError
+  // 非结构化回退：原样全量进卡体（不强行折叠、不改写）；结构化成功：摘要常显、详情折叠。
+  const showInlineRaw = !fb.structured
+  return (
+    <div className={`pm-result-card${isError ? ' pm-result-card--error' : ''}`}
+      role={isError ? 'alert' : 'status'}
+      aria-live={isError ? 'assertive' : 'polite'}
+    >
+      <div className="pm-result-card__bar">
+        {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
+        <div className="pm-result-card__summary">
+          {showInlineRaw ? message : fb.summary.join('\n')}
+        </div>
+        <button className="pm-plain-icon" aria-label="关闭结果卡" onClick={onClose}><X size={14}/></button>
+      </div>
+      {fb.detail && (
+        <>
+          <button
+            className="pm-result-card__toggle"
+            aria-expanded={detailOpen}
+            onClick={() => setDetailOpen(v => !v)}
+          >{detailOpen ? '收起详情 ▴' : '详情 ▾'}</button>
+          {detailOpen ? <pre className="pm-result-card__detail">{fb.detail}</pre> : null}
+        </>
+      )}
+      {fb.action && (
+        <div className="pm-result-card__actions">
+          <button className="pm-result-action" onClick={() => onAction(fb.action!.command)}>
+            {fb.action.label}
+          </button>
+        </div>
+      )}
+      <div className="pm-result-card__actions">
+        <button
+          className="pm-result-card__copy"
+          onClick={() => { void navigator.clipboard?.writeText(message).catch(() => {}) }}
+        >复制原文</button>
+        {path && (
+          <button
+            className="pm-result-card__copy"
+            onClick={() => { void navigator.clipboard?.writeText(path).catch(() => {}) }}
+          >复制路径</button>
+        )}
+      </div>
+    </div>
+  )
 }
 
 function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () => void }) {
@@ -3918,6 +3966,313 @@ function MilestoneForm({
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
         {submitting ? '提交中…' : milestone ? '保存更改' : '添加里程碑'}
+      </button>
+    </div>
+  </form>
+}
+
+/**
+ * OKR 新建/编辑抽屉：接既有 `okr add <项目ID> <JSON>` / `okr update <okrID> <JSON>`。
+ * 字段严格对齐 add/update schema：kind/title/owner/targetDate/primaryOkrId/relatedOkrIds/status/description；
+ * 默认草稿（draft→confirmed 由人在表单显式选择，前端不自动定稿）。无删除/归档按钮。
+ */
+function OkrForm({
+  projectId,
+  record,
+  objectives,
+  disabled,
+  run,
+  onSaved,
+  onCancel,
+}: {
+  projectId: string
+  record?: OkrViewRecord
+  objectives: OkrViewRecord[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+  onCancel: () => void
+}) {
+  const [values, setValues] = useState<OkrFormValues>({
+    title: record?.title ?? '',
+    kind: record?.kind ?? 'objective',
+    owner: record?.owner ?? '',
+    targetDate: record?.targetDate ?? '',
+    primaryOkrId: record?.primaryOkrId ?? '',
+    relatedOkrIds: (record?.relatedOkrIds ?? []).join(', '),
+    status: record?.status ?? 'draft',
+    description: record?.description ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
+  const objectiveIds = new Set(objectives.map(o => o.id))
+  const setField = (field: keyof OkrFormValues, value: string) => {
+    setValues(prev => {
+      const next = { ...prev, [field]: value }
+      setErrors(validateOkrForm(next, objectiveIds))
+      return next
+    })
+  }
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!beginSubmit()) return
+    const nextErrors = validateOkrForm(values, objectiveIds)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['title', 'kind', 'targetDate', 'primaryOkrId', 'status'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      endSubmit()
+      return
+    }
+    const related = parseIdList(values.relatedOkrIds)
+    const description = values.description?.trim()
+    const owner = values.owner?.trim()
+    const targetDate = values.targetDate?.trim()
+    let success = false
+    try {
+      if (record) {
+        // update 为 patch：可清空字段显式传 null；kind/status 随表单值提交。
+        const patch: Record<string, unknown> = {
+          title: values.title.trim(),
+          kind: values.kind,
+          owner: owner || null,
+          targetDate: targetDate || null,
+          description: description || null,
+          status: values.status,
+          primaryOkrId: values.kind === 'key-result' ? (values.primaryOkrId?.trim() || null) : null,
+          relatedOkrIds: related,
+        }
+        success = await run(`okr update ${record.id} ${JSON.stringify(patch)}`)
+      } else {
+        // strict okrCreateSchema：projectId 由命令位置参数注入，body 绝不嵌 projectId/id/createdAt。
+        const payload: Record<string, unknown> = {
+          title: values.title.trim(),
+          kind: values.kind,
+          status: values.status,
+          primaryOkrId: values.kind === 'key-result' ? (values.primaryOkrId?.trim() || null) : null,
+          relatedOkrIds: related,
+        }
+        if (owner) payload.owner = owner
+        if (targetDate) payload.targetDate = targetDate
+        if (description) payload.description = description
+        success = await run(`okr add ${projectId} ${JSON.stringify(payload)}`)
+      }
+    } finally {
+      endSubmit()
+    }
+    if (success) onSaved()
+  }
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+    <FormSection index="01" title="基础信息">
+      <Field label="类型" required error={errors.kind} errorId="okr-kind-error">
+        <select
+          name="kind" value={values.kind}
+          onChange={e => setField('kind', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.kind ? true : undefined}
+          aria-describedby={errors.kind ? 'okr-kind-error' : undefined}
+        >
+          {OKR_KINDS.map(k => <option key={k} value={k}>{k === 'objective' ? '目标 O' : '关键结果 KR'}</option>)}
+        </select>
+      </Field>
+      <Field label="标题" wide required error={errors.title} errorId="okr-title-error">
+        <input
+          name="title" value={values.title} autoFocus
+          onChange={e => setField('title', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? 'okr-title-error' : undefined}
+        />
+      </Field>
+      <Field label="负责人">
+        <input name="owner" value={values.owner ?? ''} onChange={e => setField('owner', e.currentTarget.value)}/>
+      </Field>
+      <Field label="目标日期" error={errors.targetDate} errorId="okr-target-error">
+        <input
+          name="targetDate" type="date" value={values.targetDate ?? ''}
+          onChange={e => setField('targetDate', e.currentTarget.value)}
+          aria-invalid={errors.targetDate ? true : undefined}
+          aria-describedby={errors.targetDate ? 'okr-target-error' : undefined}
+        />
+      </Field>
+      <Field label="状态" error={errors.status} errorId="okr-status-error">
+        <select
+          name="status" value={values.status}
+          onChange={e => setField('status', e.currentTarget.value)}
+          aria-invalid={errors.status ? true : undefined}
+          aria-describedby={errors.status ? 'okr-status-error' : undefined}
+        >
+          {OKR_STATUSES.map(s => <option key={s} value={s}>{s === 'confirmed' ? '已定稿' : '草稿'}</option>)}
+        </select>
+      </Field>
+    </FormSection>
+    <FormSection index="02" title="归属与关联">
+      {values.kind === 'key-result' && (
+        <Field label="父目标（主归属）" wide error={errors.primaryOkrId} errorId="okr-primary-error">
+          <select
+            name="primaryOkrId" value={values.primaryOkrId ?? ''}
+            onChange={e => setField('primaryOkrId', e.currentTarget.value)}
+            aria-invalid={errors.primaryOkrId ? true : undefined}
+            aria-describedby={errors.primaryOkrId ? 'okr-primary-error' : undefined}
+          >
+            <option value="">（未指定，可后补）</option>
+            {objectives.map(o => <option key={o.id} value={o.id}>{o.title}（{o.id}）</option>)}
+          </select>
+        </Field>
+      )}
+      <Field label="软关联 OKR（逗号分隔，不计权重）" wide>
+        <input
+          name="relatedOkrIds" value={values.relatedOkrIds ?? ''}
+          onChange={e => setField('relatedOkrIds', e.currentTarget.value)}
+          placeholder="如 okr-a, okr-b"
+        />
+      </Field>
+      <Field label="说明 / 补充描述（多行，安全 Markdown）" wide>
+        <textarea name="description" rows={5} value={values.description ?? ''} onChange={e => setField('description', e.currentTarget.value)}/>
+      </Field>
+    </FormSection>
+    <div className="pm-drawer-actions">
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : record ? '保存更改' : '添加 OKR'}
+      </button>
+    </div>
+  </form>
+}
+
+/**
+ * 习惯新建/编辑抽屉：接既有 `habit add <项目ID> <JSON>` / `habit update <habitID> <JSON>`。
+ * 字段对齐 habitCreateSchema/habitUpdateSchema：title/goal/frequency/notes/okrId；
+ * update patch 中空文本传 null 清空、空 okrId 传 null 解绑；不改 status/checkIns/streak 等系统字段。
+ */
+function HabitForm({
+  projectId,
+  record,
+  okrs,
+  disabled,
+  run,
+  onSaved,
+  onCancel,
+}: {
+  projectId: string
+  record?: HabitViewRecord
+  okrs: OkrViewRecord[]
+  disabled: boolean
+  run: (line: string) => Promise<boolean>
+  onSaved: () => void
+  onCancel: () => void
+}) {
+  const [values, setValues] = useState<HabitFormValues>({
+    title: record?.title ?? '',
+    goal: record?.goal ?? '',
+    frequency: record?.frequency ?? '',
+    notes: record?.notes ?? '',
+    okrId: record?.okrId ?? '',
+  })
+  const [errors, setErrors] = useState<FormFieldErrors>({})
+  const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
+  const setField = (field: keyof HabitFormValues, value: string) => {
+    setValues(prev => {
+      const next = { ...prev, [field]: value }
+      setErrors(validateHabitForm(next))
+      return next
+    })
+  }
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!beginSubmit()) return
+    const nextErrors = validateHabitForm(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const first = firstInvalidField(['title', 'goal', 'frequency', 'notes', 'okrId'], nextErrors)
+      if (first) {
+        const el = event.currentTarget.elements.namedItem(first)
+        if (el instanceof HTMLElement) el.focus()
+      }
+      endSubmit()
+      return
+    }
+    const goal = values.goal?.trim()
+    const frequency = values.frequency?.trim()
+    const notes = values.notes?.trim()
+    const okrId = values.okrId?.trim()
+    let success = false
+    try {
+      if (record) {
+        // update patch：空文本显式 null 清空；okrId 空 → null 解绑；strict 非空对象。
+        const patch: Record<string, unknown> = { title: values.title.trim() }
+        patch.goal = goal || null
+        patch.frequency = frequency || null
+        patch.notes = notes || null
+        patch.okrId = okrId || null
+        success = await run(`habit update ${record.id} ${JSON.stringify(patch)}`)
+      } else {
+        const payload: Record<string, unknown> = { title: values.title.trim() }
+        if (goal) payload.goal = goal
+        if (frequency) payload.frequency = frequency
+        if (notes) payload.notes = notes
+        if (okrId) payload.okrId = okrId
+        success = await run(`habit add ${projectId} ${JSON.stringify(payload)}`)
+      }
+    } finally {
+      endSubmit()
+    }
+    if (success) onSaved()
+  }
+  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+    <FormSection index="01" title="基础信息">
+      <Field label="习惯名称" wide required error={errors.title} errorId="habit-title-error">
+        <input
+          name="title" value={values.title} autoFocus
+          onChange={e => setField('title', e.currentTarget.value)}
+          aria-required="true"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? 'habit-title-error' : undefined}
+        />
+      </Field>
+      <Field label="频率（自由文本：每天 / 工作日 / 每周一…）" wide error={errors.frequency} errorId="habit-frequency-error">
+        <input
+          name="frequency" value={values.frequency ?? ''}
+          onChange={e => setField('frequency', e.currentTarget.value)}
+          aria-invalid={errors.frequency ? true : undefined}
+          aria-describedby={errors.frequency ? 'habit-frequency-error' : undefined}
+        />
+      </Field>
+      <Field label="目标 / 期望结果" wide error={errors.goal} errorId="habit-goal-error">
+        <textarea
+          name="goal" rows={3} value={values.goal ?? ''}
+          onChange={e => setField('goal', e.currentTarget.value)}
+          aria-invalid={errors.goal ? true : undefined}
+          aria-describedby={errors.goal ? 'habit-goal-error' : undefined}
+        />
+      </Field>
+      <Field label="备注（多行，安全 Markdown）" wide error={errors.notes} errorId="habit-notes-error">
+        <textarea
+          name="notes" rows={4} value={values.notes ?? ''}
+          onChange={e => setField('notes', e.currentTarget.value)}
+          aria-invalid={errors.notes ? true : undefined}
+          aria-describedby={errors.notes ? 'habit-notes-error' : undefined}
+        />
+      </Field>
+      <Field label="关联 OKR（可选）" wide error={errors.okrId} errorId="habit-okr-error">
+        <select
+          name="okrId" value={values.okrId ?? ''}
+          onChange={e => setField('okrId', e.currentTarget.value)}
+          aria-invalid={errors.okrId ? true : undefined}
+          aria-describedby={errors.okrId ? 'habit-okr-error' : undefined}
+        >
+          <option value="">（不关联）</option>
+          {okrs.map(o => <option key={o.id} value={o.id}>{o.title}（{o.id}）</option>)}
+        </select>
+      </Field>
+    </FormSection>
+    <div className="pm-drawer-actions">
+      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
+      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
+        {submitting ? '提交中…' : record ? '保存更改' : '添加习惯'}
       </button>
     </div>
   </form>

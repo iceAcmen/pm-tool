@@ -5,11 +5,12 @@
    - 扁平克制：透明度一律用 color-mix 派生，不内嵌字体。
    ============================================================================ */
 
+/* §1：左右 padding 由外层 PageShell bare 壳统一提供，视图根只留纵向 gap，禁止自叠。 */
 .pm-mt-root {
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  padding: 0;
   font-family: var(--pm-font-sans);
   color: var(--ink);
 }
@@ -22,12 +23,12 @@
 .pm-mt-root .mt-head .mt-sub b { color: var(--ink-2); font-weight: 600; }
 .pm-mt-root .mt-btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto;
-  font-size: var(--t-13); font-weight: 600; color: var(--pm-on-primary); white-space: nowrap;
-  background: var(--dsw-alias-button-primary-fill); border: 0; border-radius: var(--r-sm);
+  font-size: var(--t-13); font-weight: 600; color: var(--pm-action-ink); white-space: nowrap;
+  background: var(--pm-action-fill); border: 0; border-radius: var(--r-sm);
   padding: 9px var(--sp-4); cursor: pointer;
   transition: background .15s var(--ease);
 }
-.pm-mt-root .mt-btn-primary:hover:not(:disabled) { background: var(--dsw-alias-button-primary-hover); }
+.pm-mt-root .mt-btn-primary:hover:not(:disabled) { background: var(--pm-action-fill-hover); }
 .pm-mt-root .mt-btn-primary:disabled { opacity: .55; cursor: default; }
 
 /* ---------- 小统计行 ---------- */
@@ -72,7 +73,7 @@
   font-size: var(--t-12); font-weight: 600; color: var(--muted);
   padding: 4px 12px; border-radius: 999px;
 }
-.pm-mt-root .mt-seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.pm-mt-root .mt-seg button.is-on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
 .pm-mt-root .mt-list-empty {
   padding: var(--sp-4); text-align: center; font-size: var(--t-12); color: var(--faint);
   border: 1px dashed var(--line); border-radius: var(--r);
@@ -161,6 +162,7 @@
   color: var(--c-prog); background: color-mix(in srgb, var(--c-prog) 12%, transparent);
 }
 .pm-mt-root .mt-summary { margin-top: var(--sp-2); font-size: var(--t-13); color: var(--ink-2); line-height: 1.7; }
+.pm-mt-root .mt-summary-md { margin-top: var(--sp-2); color: var(--ink-2); }
 
 /* 决议：绿色描边卡，扁平无发光 */
 .pm-mt-root .mt-decisions { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: var(--sp-2); }

@@ -3,6 +3,7 @@ import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
+import { tallyTasksByStatus, donePercent } from './tasks-tally.js'
 import { taskStatusLabels } from '../../core/labels.js'
 // K6 交付检查：复用 P0 纯函数 evaluateChecks（只读规则提示，不下完成裁决），前端不另造规则。
 import { evaluateChecks, type CheckFinding, type CheckableTask } from '../../core/check.js'
@@ -292,7 +293,7 @@ export function TaskTable(props: {
   const filtered = useMemo(() => {
     const q = query.trim().toLocaleLowerCase()
     return tasks.filter(task => {
-      if (q && !`${task.code} ${task.title} ${task.assignee}`.toLocaleLowerCase().includes(q)) return false
+      if (q && !`${task.code ?? ''} ${task.title} ${task.assignee ?? ''}`.toLocaleLowerCase().includes(q)) return false
       switch (chip) {
         case 'in_progress': return task.status === 'in_progress'
         case 'done': return isDone(task)
@@ -313,9 +314,14 @@ export function TaskTable(props: {
     if (sort === 'dueDate') arr.sort((a, b) => String(a.dueDate ?? '9999').localeCompare(String(b.dueDate ?? '9999')))
     else if (sort === 'priority') arr.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
     else if (sort === 'progress') arr.sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0))
-    else arr.sort((a, b) => a.code.localeCompare(b.code, 'en', { numeric: true }))
+    else arr.sort((a, b) => (a.code ?? a.id).localeCompare(b.code ?? b.id, 'en', { numeric: true }))
     return arr
   }, [filtered, sort]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 契约 §7 + 数字口径字典：5 态互斥（todo/in_progress/blocked/done/wrapped）合计=总数，
+  // 纯函数同源；open=todo+in_progress+blocked；wrapped 单独成桶，不并入 done、不漏算。
+  const statusTally = useMemo(() => tallyTasksByStatus(tasks.map(t => t.status)), [tasks])
+  const donePct = donePercent(statusTally, tasks.length)
 
   // 顶部快捷栏只展示前五项；due_week/risk 计数仅为类型完备（不渲染、不改动栏位）。
   const chipCounts = useMemo<Record<TaskViewChip, number>>(() => ({
@@ -638,7 +644,11 @@ export function TaskTable(props: {
             onClick={() => setMovePickerFor(t)}
           ><GripVertical size={15} /></button>
         </div>
-        <div className="pt-cell pt-code">{t.code}</div>
+        <div className="pt-cell pt-code">
+          {t.code && t.code.trim()
+            ? t.code
+            : <span className="pt-code-missing" title="存量记录缺编号，按约定不重新编号，显示短 ID">{t.id}</span>}
+        </div>
         <div className="pt-cell pt-task">
           {row.hasChildren && (
             <button
@@ -709,16 +719,19 @@ export function TaskTable(props: {
           />
         </div>
         <div className="pt-cell pt-prog">
-          <span className="pt-bar"><i style={{ width: `${clampProgress(t.progress)}%` }} /></span>
-          <input
-            className="pt-pct pm-row-progress" aria-label={`${t.title} 进度`} disabled={disabled}
-            type="number" min={0} max={100} step={10} value={clampProgress(t.progress)}
-            onChange={e => {
-              const upd = buildUpdate({ progress: e.currentTarget.value })
-              if (!Object.keys(upd).length) return
-              void run(`task update ${t.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
-            }}
-          />
+          <span className="pt-prog-status">{taskStatusLabels[t.status] ?? t.status}</span>
+          <span className="pt-bar"><i style={{ width: `${clampProgress(t.progress ?? 0)}%` }} /></span>
+          {t.progress == null
+            ? <span className="pt-pct-null" title="无客观进度依据，显示证据不足，不按 0% 计">证据不足</span>
+            : <input
+                className="pt-pct pm-row-progress" aria-label={`${t.title} 进度`} disabled={disabled}
+                type="number" min={0} max={100} step={10} value={clampProgress(t.progress)}
+                onChange={e => {
+                  const upd = buildUpdate({ progress: e.currentTarget.value })
+                  if (!Object.keys(upd).length) return
+                  void run(`task update ${t.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+                }}
+              />}
         </div>
         <div className="pt-cell pt-acts">
           {/* K18 任务卡静态出站关联位：只显示不回写；审计未就绪/无记录时「未导出」占位，不伪造。 */}
@@ -805,7 +818,6 @@ export function TaskTable(props: {
   )
 
   const totalTasks = tasks.length
-  const doneTasks = tasks.filter(isDone).length
 
   return (
     <div className="pm-tasks-root" ref={activeRef}>
@@ -901,7 +913,8 @@ export function TaskTable(props: {
           <div className="pt-title">
             <h1>任务</h1>
             <div className="pt-sub">
-              <b>{totalTasks} 项任务</b> · 已完成 {doneTasks} · 进行中 {tasks.filter(t => t.status === 'in_progress').length}
+              <b>{totalTasks} 项任务</b>
+              · 完成 {statusTally.done}（{donePct}%）· 进行中 {statusTally.in_progress} · 阻塞 {statusTally.blocked} · 待办 {statusTally.todo}{statusTally.wrapped > 0 ? ` · 已收尾 ${statusTally.wrapped}` : ''}
             </div>
           </div>
           <div className="pt-search">
@@ -1001,7 +1014,16 @@ export function TaskTable(props: {
                 {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </label>
-            <label className="pt-ghost pm-import-dropzone" title="导入 .csv / .xlsx 任务表">
+            <button
+              type="button" className="pt-ghost pm-import-template"
+              title="下载 CSV 导入模板（仅本地下载，不写盘；字段以导入预览为准）"
+              onClick={() => downloadText(
+                'task-import-template.csv',
+                '标题,负责人,截止日期,优先级,状态,进度,前置,里程碑\n示例任务,张三,2026-11-01,P1,todo,0,,\n',
+                'text/csv;charset=utf-8',
+              )}
+            ><FileText size={14} />模板</button>
+            <label className="pt-ghost pm-import-dropzone" title="导入 .csv / .xlsx 任务表（先预览，确认后才落盘）">
               <FileText size={14} />导入
               <input
                 type="file" accept=".csv,.xlsx" hidden className="pm-import-file"
@@ -1018,7 +1040,7 @@ export function TaskTable(props: {
                     const enc = JSON.stringify(content)
                     try {
                       const text = await execute(`task import-content ${pid} ${file.name} ${enc}`)
-                      if (/失败|错误|不支持|无法/.test(text)) { setImportPreview({ text, confirm: '' }); return }
+                      if (/失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/.test(text)) { setImportPreview({ text, confirm: '' }); return }
                       setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc}` })
                     } catch (err) {
                       setImportPreview({ text: `解析失败：${err instanceof Error ? err.message : String(err)}`, confirm: '' })
