@@ -4,6 +4,7 @@ import {
   planTaskIds,
   dueUrgency,
   latestAppliedBatches,
+  refreshSucceeded,
 } from './ask-projection.js'
 
 // K13 对话内只读投影 · 纯函数层：身份解析 + 紧迫度派生 + 处理结果归并。
@@ -90,5 +91,13 @@ describe('latestAppliedBatches', () => {
   it('非数组 / 空入参静默返回空，不抛错', () => {
     expect(latestAppliedBatches(undefined)).toEqual([])
     expect(latestAppliedBatches([], 3)).toEqual([])
+  })
+})
+
+describe('refreshSucceeded：父级刷新失败不重盖「数据截至」', () => {
+  it('true=成功；false=失败（不盖时钟）；undefined 兼容旧同步回调=成功', () => {
+    expect(refreshSucceeded(true)).toBe(true)
+    expect(refreshSucceeded(false)).toBe(false)
+    expect(refreshSucceeded(undefined)).toBe(true)
   })
 })

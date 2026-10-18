@@ -2760,6 +2760,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-okr-btn-ghost { background: transparent; border-color: var(--pm-line); color: var(--pm-secondary); }
 .pm-okr-btn-ghost:hover { border-color: var(--pm-accent); color: var(--pm-accent); }
 .pm-okr-ignored-tag { font-size: 11px; color: var(--pm-muted); padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--pm-line) 30%, transparent); }
+.pm-okr-adopted-tag { font-size: 11px; color: var(--pm-on-primary); padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--pm-accent) 28%, transparent); }
 
 /* --- X2 收尾徽章（.pm-wrapped-*）：中性灰，不进入 done 视觉体系 --- */
 .pm-wrapped-badge {

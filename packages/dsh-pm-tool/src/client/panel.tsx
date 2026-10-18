@@ -1,6 +1,6 @@
 import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
-import { VIEW_LABELS } from '../core/nav.js'
+import { VIEW_LABELS, buildNarrowSwitcher } from '../core/nav.js'
 import { NavRail } from './nav-rail.js'
 import { clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
@@ -14,7 +14,7 @@ import {
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
-import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, type AppliedBatch } from '../core/ask-projection.js'
+import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, refreshSucceeded, type AppliedBatch } from '../core/ask-projection.js'
 import { formatNoticeLines, extractBackupPath, parseActiveModelLane } from '../core/ui-feedback.js'
 import { buildDiagnosis, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
@@ -82,8 +82,8 @@ import { ReportsView as ProgressReportTable } from './views/reports.js'
 import { Deliverables as DeliverableTable } from './views/deliverables.js'
 import { PeopleView } from './views/people.js'
 import { OkrsView } from './views/okrs.js'
-import { HabitsView, type HabitViewRecord } from './views/habits.js'
-import type { OkrViewRecord } from './views/okr-model.js'
+import { HabitsView, type HabitViewRecord, type HabitInboxSuggestion } from './views/habits.js'
+import type { OkrViewRecord, OkrInboxSuggestion } from './views/okr-model.js'
 import { ProvenancePanel } from './provenance-panel.js'
 import styles from './panel.css?raw'
 
@@ -273,6 +273,18 @@ export type Deliverable = {
   branch?: string
 }
 
+/** 后端 okr 收件区原始条目（status 口径）；前端视图用 state:'ignored'，此处做映射。 */
+type RawOkrSuggestion = {
+  id: string
+  at: string
+  projectId: string
+  title: string
+  kind: 'objective' | 'key-result'
+  primaryOkrId?: string | null
+  rationale?: string
+  status?: 'pending' | 'confirmed' | 'ignored'
+}
+
 export type Snapshot = {
   projects: Project[]
   tasks: Task[]
@@ -283,8 +295,12 @@ export type Snapshot = {
   deliverables: Deliverable[]
   /** P2 X7 愿景/OKR 层：snapshot.okrs 由服务端快照注入；缺失/旧档时前端回落空数组。 */
   okrs?: OkrViewRecord[]
+  /** P2 收件区 pmOkrInbox：snapshot.okrInbox 透传；未携带（undefined）时视图只显示命令提示，不伪造建议。 */
+  okrInbox?: RawOkrSuggestion[]
   /** P3 X7 习惯层：snapshot.habits 由服务端快照注入；缺失/旧档时前端回落空数组。 */
   habits?: HabitViewRecord[]
+  /** P3 收件区 pmHabitInbox：snapshot.habitInbox 透传；未携带（undefined）时视图只显示命令提示，不伪造建议。 */
+  habitInbox?: HabitInboxSuggestion[]
   /** 看板布局（dsh-storage 透明存取）：user > project；读不到为 null。 */
   dashboards?: { user: unknown, project: unknown }
   /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
@@ -425,8 +441,8 @@ function ProjectSwitcher({ projects, currentId, onPick }: {
  */
 function ViewSwitcher({ current, items, onPick }: {
   current: View
-  items: { key: View | 'dashboard', label: string, count?: number }[]
-  onPick: (v: View | 'dashboard') => void
+  items: { key: string, label: string, count?: number }[]
+  onPick: (v: string) => void
 }) {
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -694,7 +710,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
   const [dismissedDiagnosis, setDismissedDiagnosis] = useState<ReadonlySet<string>>(new Set())
 
-  const refresh = async () => {
+  /** 重读 web snapshot；返回是否成功（失败仅置消息并返回 false，不抛，兼容既有 void 调用方）。 */
+  const refresh = async (): Promise<boolean> => {
     setBusy(true)
     try {
       const next = JSON.parse(await execute('web snapshot')) as Snapshot
@@ -704,8 +721,10 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       let stored = ''
       try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }
       setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
+      return true
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error))
+      return false
     } finally {
       setBusy(false)
     }
@@ -779,6 +798,28 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const habits = useMemo(() => (data.habits ?? [])
     .filter(item => item.projectId === selected),
   [data.habits, selected])
+  // X7 收件区：snapshot 未携带（undefined）时原样透传，视图据此只显示命令提示，不伪造建议。
+  // 后端 status(ignored) → 前端 state(ignored) 映射；其余状态不落 state。
+  const okrInbox = useMemo<OkrInboxSuggestion[] | undefined>(() => {
+    if (data.okrInbox === undefined) return undefined
+    return data.okrInbox.map(s => ({
+      id: s.id, at: s.at, projectId: s.projectId, title: s.title,
+      kind: s.kind, primaryOkrId: s.primaryOkrId ?? null, rationale: s.rationale,
+      state: s.status === 'ignored' ? 'ignored' : s.status === 'confirmed' ? 'confirmed' : undefined,
+    }))
+  }, [data.okrInbox])
+  const habitInbox = useMemo(() => data.habitInbox, [data.habitInbox])
+  // 窄屏切换项与桌面 rail 同源：由导航模型派生（buildNarrowSwitcher），不在组件内硬编码标签/条目。
+  const switcherItems = useMemo(() => buildNarrowSwitcher({
+    tasks: tasks.length,
+    milestones: milestones.length,
+    riskIssues: riskIssues.length,
+    meetings: meetings.length,
+    reports: reports.length,
+    deliverables: deliverables.length,
+    okrs: okrInbox?.filter(s => s.projectId === selected && s.state === undefined).length,
+    habits: habitInbox?.filter(s => s.projectId === selected && s.status === 'pending').length,
+  }), [tasks, milestones, riskIssues, meetings, reports, deliverables, okrInbox, habitInbox, selected])
   // T8：assignee 候选只从**当前全量 snapshot** 跨项目派生（project.owner→task.assignee→
   // riskIssue.owner→deliverable.owner→meeting.participants），纯内存、零写盘；刷新即重算。
   const assigneeCandidates = useMemo(() => listAssigneeCandidates({
@@ -846,6 +887,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           meetings: meetings.length,
           reports: reports.length,
           deliverables: deliverables.length,
+          okrs: okrInbox?.filter(s => s.projectId === selected && s.state === undefined).length,
+          habits: habitInbox?.filter(s => s.projectId === selected && s.status === 'pending').length,
         }}
         onPickView={(v) => { setDashOpen(false); changeView(v as View) }}
         onOpenDash={() => setDashOpen(true)}
@@ -920,10 +963,14 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <button
             className="pm-button pm-top-secondary pm-copilot-open"
             data-active={copilotLayer || undefined}
-            disabled={!project || dashOpen}
+            disabled={!project}
             aria-pressed={copilotLayer}
-            title="内嵌副驾：只读诊断气泡附着记录 + 操作草稿卡（确认才落库）"
-            onClick={() => setCopilotLayer(v => !v)}
+            title="PM 插件内副驾：只读诊断气泡附着记录 + 操作草稿卡（确认才落库）；非宿主全局聊天"
+            onClick={() => {
+              // 副驾层挂在项目视图分支：总览看板下先退出全局看板回到当前项目，再切换副驾，避免点了无面板。
+              if (dashOpen) setDashOpen(false)
+              setCopilotLayer(v => !v)
+            }}
           >
             <MessageSquare size={15}/>{copilotLayer ? 'AI 副驾 · 内嵌' : 'AI 副驾'}
           </button>
@@ -954,7 +1001,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           <button
             className="pm-button pm-menu-item"
             disabled={!project}
-            onClick={() => { setTopMenuOpen(false); setCopilotLayer(true) }}
+            onClick={() => { setTopMenuOpen(false); setDashOpen(false); setCopilotLayer(true) }}
           >
             <MessageSquare size={15}/>AI 副驾 · 内嵌
           </button>
@@ -1100,20 +1147,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             {narrow && (
               <ViewSwitcher
                 current={view}
-                items={[
-                  { key: 'dashboard', label: '总览看板' },
-                  { key: 'tasks', label: '全部任务', count: tasks.length },
-                  { key: 'milestones', label: '里程碑', count: milestones.length },
-                  { key: 'risk-issues', label: '风险与问题', count: riskIssues.length },
-                  { key: 'meetings', label: '会议纪要', count: meetings.length },
-                  { key: 'reports', label: '进度汇报', count: reports.length },
-                  { key: 'deliverables', label: '交付物', count: deliverables.length },
-                  { key: 'overview', label: '项目概览' },
-                  { key: 'gantt', label: '甘特排期' },
-                  { key: 'people', label: '人员负载' },
-                  { key: 'okrs', label: '目标（OKR）' },
-                  { key: 'habits', label: '习惯' },
-                ]}
+                items={switcherItems}
                 onPick={(key) => {
                   // D3（320 看板可达）：扁平下拉补「总览看板」入口，打开全局看板，不再只能经隐藏 rail 进入。
                   if (key === 'dashboard') { setDashOpen(true); return }
@@ -1193,12 +1227,14 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               {view === 'okrs' && <OkrsView
                 projectId={project.id}
                 okrs={okrs}
+                inbox={okrInbox}
                 run={run}
                 onSaved={refresh}
               />}
               {view === 'habits' && <HabitsView
                 projectId={project.id}
                 habits={habits}
+                inbox={habitInbox}
                 okrs={okrs}
                 run={run}
                 onSaved={refresh}
@@ -1216,7 +1252,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 execute={execute}
                 executeRaw={executeRaw}
                 disabled={busy}
-                onSaved={() => void refresh()}
+                onSaved={refresh}
                 onOpenRecord={openRecord}
                 embedded
                 diagnosis={diagnosis}
@@ -2250,7 +2286,8 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   execute: (line: string) => Promise<string>
   executeRaw: (line: string) => Promise<{ kind: string, text: string }>
   disabled: boolean
-  onSaved: () => void
+  /** 落库/刷新回调：可 async；返回 boolean 表示是否成功（undefined 视为兼容旧同步回调=成功）。投影仅成功才重盖时钟。 */
+  onSaved: () => Promise<boolean | void> | boolean | void
   /** K13：复用面板既有「打开记录」导航（切视图+开抽屉），投影不新建写路径。 */
   onOpenRecord?: (projectId: string, type: string, id: string) => void
   /** P1-7 内嵌形态（右侧建议层，非抽屉）。 */
@@ -2334,15 +2371,22 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   // K13 防过时：最新快照（tasks prop）到达即重盖「数据截至」时钟；卡片状态始终读最新 props，不存 ask 时刻旧值。
   useEffect(() => { setAsOf(new Date()) }, [tasks])
 
-  // K13 刷新：onSaved 触发父级重读 web snapshot，再重挂号处理结果，最后重盖时钟。
+  // K13 刷新：await 父级重读 web snapshot；仅真实成功（返回 true）才重挂号并盖「数据截至」。
+  // 失败保留旧时钟并提示，不照盖新时间（父 refresh 失败只 setMessage 吞错、会 resolve）。
   const refreshProjection = async () => {
     if (projRefreshing) return
     setProjRefreshing(true)
     try {
-      await onSaved()
+      const result = await onSaved()
+      if (!refreshSucceeded(result)) {
+        setMsgs(m => [...m, { role: 'sys', text: '刷新失败：快照未更新，保留原「数据截至」时间。' }])
+        return
+      }
       await loadApplied()
-    } finally {
       setAsOf(new Date())
+    } catch (e) {
+      setMsgs(m => [...m, { role: 'sys', text: `刷新失败：${e instanceof Error ? e.message : String(e)}` }])
+    } finally {
       setProjRefreshing(false)
     }
   }
@@ -2462,7 +2506,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       }
       // 新撤销句柄置顶，最多保留 3 条。
       if (newUndo.length) setUndoIds(prev => [...[...newUndo].reverse(), ...prev].slice(0, 3))
-      clearPlan(); onSaved(); void loadApplied()
+      clearPlan(); await onSaved(); await loadApplied()
     } catch (e) {
       setMsgs(m => [...m, { role: 'ai', text: `执行失败：${e instanceof Error ? e.message : String(e)}` }])
     } finally { setBusy(false) }
@@ -2476,7 +2520,7 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
       {embedded
         ? <div className="pm-copilot-title">
             <span className="pm-copilot-title-text"><Sparkles size={14}/> AI 副驾 · 建议层</span>
-            <span className="pm-copilot-title-sub">附着当前上下文，不另起独立房间</span>
+            <span className="pm-copilot-title-sub">PM 插件内副驾，只读本插件项目台账；非宿主全局聊天，不另起独立房间</span>
           </div>
         : <span className="pm-copilot-head-sub">只读诊断 · 确认后才执行</span>}
       <div className="pm-copilot-head-right">
@@ -2820,7 +2864,7 @@ function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose, runC
   onClose: () => void
   /** K11 看板部件接缝：命令执行 / 快照刷新（由 PmPanel 注入既有 run/refresh）。 */
   runCommand?: (line: string) => Promise<unknown>
-  refreshBoard?: () => Promise<void> | void
+  refreshBoard?: () => Promise<boolean> | boolean | void
 }) {
   const [query, setQuery] = useState('')
   const today = new Date().toISOString().slice(0, 10)
@@ -2879,7 +2923,7 @@ function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose, runC
             })}
           </div>
         : <div className="pm-table-empty"><Search size={24}/><span>未找到匹配「{query.trim()}」的记录</span></div>)
-      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject, runCommand, refreshBoard }} persistence={{
+      : <BoardBento data={data} actions={{ openRecord: onOpenRecord, pickProject: onPickProject, runCommand, refreshBoard: refreshBoard ? () => refreshBoard() : undefined }} persistence={{
           onSave: async (scope, layout) => {
             // 紧凑 JSON 落 dsh-storage；后端做轻校验（version 整数、widgets 数组）。
             await execute(`dashboard put ${scope} ${JSON.stringify(layout)}`)

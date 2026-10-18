@@ -30,8 +30,8 @@ export interface OkrInboxSuggestion {
   kind: 'objective' | 'key-result'
   primaryOkrId?: string | null
   rationale?: string
-  /** 已忽略（保留在收件区但标 ignored）；未处理为 undefined。 */
-  state?: 'ignored'
+  /** processed 态：confirmed=已采纳（保留在收件区，不再出待确认/不显示写按钮），ignored=已忽略；未处理为 undefined。 */
+  state?: 'confirmed' | 'ignored'
 }
 
 export interface OkrTreeNode {
@@ -92,10 +92,10 @@ export function buildOkrTree(okrs: OkrViewRecord[], projectId: string): OkrTreeM
   return { roots, orphans, total: mine.length }
 }
 
-/** 收件区待处理（未忽略）建议数；已忽略不计入待确认。 */
+/** 收件区待确认数：仅未处理（state===undefined）计入；confirmed 已采纳 / ignored 已忽略均不计。 */
 export function countPendingInbox(inbox: OkrInboxSuggestion[] | undefined, projectId: string): number {
   if (!inbox) return 0
-  return inbox.filter(s => s.projectId === projectId && s.state !== 'ignored').length
+  return inbox.filter(s => s.projectId === projectId && s.state === undefined).length
 }
 
 /** 收件区建议按项目过滤；未携带（undefined）返回空数组，调用方据此只显示命令提示。 */

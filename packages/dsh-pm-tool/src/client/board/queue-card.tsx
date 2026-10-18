@@ -1,15 +1,16 @@
 /**
  * P1-D · K11 补记队列卡（总览看板呈现层）。
  *
- * 数据源：web snapshot 的 `queue` 字段（分片A 按 P1 规格 §2.3 产出
- * `{ top, rest, quietMode, openedAt }`，读时派生、零写）。
- * 分片A 未合入前 snapshot 无 queue 字段 → 走空态，不杜撰、不注入示例数据。
+ * 数据源：web snapshot 的 `queue` 字段。后端按项目产出
+ * `Record<projectId, { top, rest, quietMode, openedAt }>`（读时派生、零写）；
+ * 本卡跨项目合并聚合，条目标注所属项目，打开直达真实任务。
  *
  * 呈现口径（§2.2 / §2.3）：
  *  - 首屏 Top1 醒目卡（标题/状态/截止/迟到 N 天徽标），其余 rest 折叠、可展开；
  *  - lateDays>0 标「迟到 N 天」；muted 条目在折叠区仍可见并标「已静音」（mute 压主动投递，不隐藏打开视图）；
  *  - quietMode 时段静默：不高亮 Top1，全部条目仅折叠列示；
- *  - openedAt 显示「上次打开 HH:MM」；无条目展示「暂无到期未达」空态。
+ *  - 缺 queue 字段（missing）/格式异常（malformed）显示中性提示，绝不拿「暂无条目」假空态冒充；
+ *    有效但无条目（ready 空）才显示诚实空态。
  *
  * 写操作：mute/unmute 走 WidgetActions.runCommand 命令通道（`queue mute|unmute <任务ID>`），
  * 成功后 refreshBoard 刷新快照；通道未接入时按钮禁用，不做僵尸点击。
@@ -19,79 +20,7 @@ import { useState } from 'react'
 import type { Snapshot } from '../panel.js'
 import { taskStatusLabels } from '../../core/labels.js'
 import type { WidgetDescriptor, WidgetContext } from './types.js'
-
-/* ---------- 契约类型（与分片A §2.3 对齐；结构宽松，缺字段安全回落） ---------- */
-
-export interface QueueItem {
-  id: string
-  projectId?: string
-  /** 记录类型：任务 / 风险；K9 缺席条目仍落 task。 */
-  recordType?: 'task' | 'risk' | 'session'
-  code?: string
-  title: string
-  status?: string
-  assignee?: string
-  dueDate?: string | null
-  progress?: number
-  /** 积压迟到天数（dueDate < today - LATE_DAYS）。 */
-  lateDays?: number
-  /** 逾期天数（派生附带，展示用）。 */
-  overdueDays?: number
-  muted?: boolean
-  /** 一句来源说明（承诺/逾期/K9 缺席）。 */
-  reason?: string
-  /** K9 缺席：会话有结存，任务未跟进。 */
-  absent?: boolean
-}
-
-export interface QueueSnapshot {
-  top: QueueItem | null
-  rest: QueueItem[]
-  quietMode?: boolean
-  openedAt?: string | null
-}
-
-type RawQueue = Partial<QueueSnapshot> | null | undefined
-
-function asItem(v: unknown): QueueItem | null {
-  if (!v || typeof v !== 'object') return null
-  const r = v as Record<string, unknown>
-  if (typeof r.id !== 'string' || !r.id) return null
-  return {
-    id: r.id,
-    projectId: typeof r.projectId === 'string' ? r.projectId : undefined,
-    recordType: r.recordType === 'risk' || r.recordType === 'session' ? r.recordType : 'task',
-    code: typeof r.code === 'string' ? r.code : undefined,
-    title: typeof r.title === 'string' ? r.title : '',
-    status: typeof r.status === 'string' ? r.status : undefined,
-    assignee: typeof r.assignee === 'string' ? r.assignee : undefined,
-    dueDate: typeof r.dueDate === 'string' ? r.dueDate : null,
-    progress: typeof r.progress === 'number' ? r.progress : undefined,
-    lateDays: typeof r.lateDays === 'number' ? r.lateDays : undefined,
-    overdueDays: typeof r.overdueDays === 'number' ? r.overdueDays : undefined,
-    muted: r.muted === true,
-    reason: typeof r.reason === 'string' ? r.reason : undefined,
-    absent: r.absent === true,
-  }
-}
-
-function normalizeQueue(raw: RawQueue): { top: QueueItem | null, rest: QueueItem[], quietMode: boolean, openedAt: string | null } {
-  if (!raw || typeof raw !== 'object') return { top: null, rest: [], quietMode: false, openedAt: null }
-  const top = asItem(raw.top)
-  const rest = Array.isArray(raw.rest) ? raw.rest.map(asItem).filter((x): x is QueueItem => x !== null) : []
-  const openedAt = typeof raw.openedAt === 'string' ? raw.openedAt : null
-  return { top, rest, quietMode: raw.quietMode === true, openedAt }
-}
-
-/** ISO → HH:MM（本地时区）；非法输入返回 null。 */
-function formatOpenedAt(iso: string | null): string | null {
-  if (!iso) return null
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return null
-  const hh = String(d.getHours()).padStart(2, '0')
-  const mm = String(d.getMinutes()).padStart(2, '0')
-  return `${hh}:${mm}`
-}
+import { aggregateQueue, type QueueViewItem } from './queue-aggregate.js'
 
 function statusLabel(s?: string): string {
   if (!s) return ''
@@ -99,10 +28,9 @@ function statusLabel(s?: string): string {
 }
 
 /** 条目语义色：阻塞 > 迟到 > 逾期 > 临期/进行。 */
-function itemTone(item: QueueItem): string {
+function itemTone(item: QueueViewItem): string {
   if (item.status === 'blocked') return 'var(--pm-st-blocked)'
-  if (typeof item.lateDays === 'number' && item.lateDays > 0) return 'var(--pm-st-overdue)'
-  if (typeof item.overdueDays === 'number' && item.overdueDays > 0) return 'var(--pm-st-overdue)'
+  if (item.lateDays > 0) return 'var(--pm-st-overdue)'
   if (item.status === 'in_progress') return 'var(--pm-st-progress)'
   return 'var(--pm-st-due)'
 }
@@ -110,7 +38,7 @@ function itemTone(item: QueueItem): string {
 /* ---------- 条目行（Top1 醒目块与折叠列表共用） ---------- */
 
 function QueueRow({ item, variant, busy, onOpen, onToggleMute }: {
-  item: QueueItem
+  item: QueueViewItem
   variant: 'top' | 'rest'
   busy: boolean
   onOpen: () => void
@@ -123,23 +51,18 @@ function QueueRow({ item, variant, busy, onOpen, onToggleMute }: {
     <div className={`pm-queue-row ${variant === 'top' ? 'pm-queue-row-top' : ''} ${item.muted ? 'is-muted' : ''}`}>
       <div className="pm-queue-row-head">
         <i className="pm-queue-dot" style={{ background: tone }} aria-hidden />
-        {item.code && <span className="pm-queue-code">{item.code}</span>}
-        <button type="button" className="pm-queue-title" onClick={onOpen} title="打开记录">{item.title || item.id}</button>
+        <button type="button" className="pm-queue-title" onClick={onOpen} title="打开任务">{item.title || item.taskId}</button>
+        {item.projectName && <span className="pm-queue-code">{item.projectName}</span>}
         {item.absent && <span className="pm-queue-tag pm-queue-tag-absent">会话有结存 · 未跟进</span>}
         {item.muted && <span className="pm-queue-tag pm-queue-tag-muted">已静音</span>}
       </div>
       <div className="pm-queue-row-meta">
         {item.status && <span className="pm-queue-pill">{statusLabel(item.status)}</span>}
-        {typeof item.lateDays === 'number' && item.lateDays > 0 && (
+        {item.lateDays > 0 && (
           <span className="pm-queue-badge pm-queue-badge-late">迟到 {item.lateDays} 天</span>
         )}
-        {typeof item.overdueDays === 'number' && item.overdueDays > 0 && item.lateDays == null && (
-          <span className="pm-queue-badge pm-queue-badge-overdue">逾期 {item.overdueDays} 天</span>
-        )}
         {item.dueDate && <span className="pm-queue-due">应 {item.dueDate.slice(5)}</span>}
-        {item.assignee && <span className="pm-queue-assignee">{item.assignee}</span>}
       </div>
-      {item.reason && <div className="pm-queue-reason">{item.reason}</div>}
       <div className="pm-queue-row-actions">
         <button type="button" className="pm-queue-btn" onClick={onOpen}>打开</button>
         {canMute && (
@@ -161,32 +84,32 @@ function QueueRow({ item, variant, busy, onOpen, onToggleMute }: {
 /* ---------- 卡片组件 ---------- */
 
 function QueueCard({ data, actions }: WidgetContext) {
-  const raw = (data as Snapshot & { queue?: RawQueue }).queue
-  const q = normalizeQueue(raw)
+  const rawQueue = (data as Snapshot & { queue?: unknown }).queue
+  const projectNames = new Map(data.projects.map(p => [p.id, p.name]))
+  const agg = aggregateQueue(rawQueue, projectNames)
+
   const [expanded, setExpanded] = useState(false)
   const [busyId, setBusyId] = useState<string | null>(null)
 
   // quietMode：top 不高亮，并入折叠列示（§2.2.7）。
-  const top = q.quietMode ? null : q.top
-  const rest = q.quietMode
-    ? [...(q.top ? [q.top] : []), ...q.rest]
-    : q.rest
+  const top = agg.quietMode ? null : agg.top
+  const rest = agg.quietMode ? [...(agg.top ? [agg.top] : []), ...agg.rest] : agg.rest
   const all = [...(top ? [top] : []), ...rest]
-  const lateCount = all.filter(i => typeof i.lateDays === 'number' && i.lateDays > 0).length
-  const opened = formatOpenedAt(q.openedAt)
+  const lateCount = all.filter(i => i.lateDays > 0).length
 
-  const resolveOpen = (item: QueueItem) => {
+  const resolveOpen = (item: QueueViewItem) => {
+    // 优先用条目自带 projectId；缺失时回落到 tasks 表反查，保证直达真实任务。
     const projectId = item.projectId
-      ?? data.tasks.find(t => t.id === item.id)?.projectId
+      ?? data.tasks.find(t => t.id === item.taskId)?.projectId
       ?? ''
-    actions.openRecord(projectId, item.recordType === 'risk' ? 'risk' : 'task', item.id)
+    actions.openRecord(projectId, 'task', item.taskId)
   }
 
-  const toggleMute = async (item: QueueItem) => {
+  const toggleMute = async (item: QueueViewItem) => {
     if (!actions.runCommand || busyId) return
-    setBusyId(item.id)
+    setBusyId(item.taskId)
     try {
-      await actions.runCommand(item.muted ? `queue unmute ${item.id}` : `queue mute ${item.id}`)
+      await actions.runCommand(item.muted ? `queue unmute ${item.taskId}` : `queue mute ${item.taskId}`)
       await actions.refreshBoard?.()
     } finally {
       setBusyId(null)
@@ -195,23 +118,62 @@ function QueueCard({ data, actions }: WidgetContext) {
 
   const channelReady = typeof actions.runCommand === 'function'
 
+  // missing：快照未提供 queue 字段（后端旧版/未接入）——中性提示，不冒充空态。
+  if (agg.state === 'missing') {
+    return (
+      <div className="pm-bento-card pm-queue-card">
+        <div className="pm-bento-label">补记队列</div>
+        <div className="pm-queue-empty">
+          <div className="pm-queue-empty-sub">当前快照未提供补记队列数据（无 queue 字段）。</div>
+        </div>
+        <div className="pm-bento-foot">打开时呈现，不替代常驻通知。</div>
+      </div>
+    )
+  }
+
+  // malformed：有 queue 字段但形状异常——中性提示，跳过，不显示假空态。
+  if (agg.state === 'malformed') {
+    return (
+      <div className="pm-bento-card pm-queue-card">
+        <div className="pm-bento-label">补记队列</div>
+        <div className="pm-queue-empty">
+          <div className="pm-queue-empty-sub">补记队列数据格式异常，已跳过展示。</div>
+        </div>
+        <div className="pm-bento-foot">打开时呈现，不替代常驻通知。</div>
+      </div>
+    )
+  }
+
   return (
     <div className="pm-bento-card pm-queue-card">
       <div className="pm-bento-label">
         补记队列
         <span className="pm-bento-m">
-          {q.quietMode ? '静默时段' : opened ? `上次打开 ${opened}` : '打开时整理'}
+          {agg.quietMode ? '静默时段' : '打开时整理'}
         </span>
       </div>
 
-      {q.quietMode && (
+      {agg.quietMode && (
         <div className="pm-queue-quiet-banner">静默时段 · 仅折叠列示，不高亮打扰</div>
+      )}
+
+      {agg.partial && (
+        <div className="pm-queue-quiet-banner">部分队列/条目格式异常，无效部分已跳过。</div>
       )}
 
       {all.length === 0 ? (
         <div className="pm-queue-empty">
-          <div className="pm-queue-empty-title">暂无到期未达条目</div>
-          <div className="pm-queue-empty-sub">队列在打开时本地整理，不做常驻推送。</div>
+          {agg.partial ? (
+            <>
+              <div className="pm-queue-empty-title">有效数据中暂无条目</div>
+              <div className="pm-queue-empty-sub">仍有部分异常未能读取，无效部分已跳过。</div>
+            </>
+          ) : (
+            <>
+              <div className="pm-queue-empty-title">暂无到期未达条目</div>
+              <div className="pm-queue-empty-sub">队列在打开时本地整理，不做常驻推送。</div>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -224,7 +186,7 @@ function QueueCard({ data, actions }: WidgetContext) {
             <QueueRow
               item={top}
               variant="top"
-              busy={busyId === top.id}
+              busy={busyId === top.taskId}
               onOpen={() => resolveOpen(top)}
               onToggleMute={channelReady ? () => void toggleMute(top) : undefined}
             />
@@ -235,10 +197,10 @@ function QueueCard({ data, actions }: WidgetContext) {
               {/* 折叠态：静音条目仍可见（mute 压主动投递，不隐藏打开视图）；非静音条目展开后列出。 */}
               {(expanded ? rest : rest.filter(i => i.muted)).map(item => (
                 <QueueRow
-                  key={item.id}
+                  key={item.taskId}
                   item={item}
                   variant="rest"
-                  busy={busyId === item.id}
+                  busy={busyId === item.taskId}
                   onOpen={() => resolveOpen(item)}
                   onToggleMute={channelReady ? () => void toggleMute(item) : undefined}
                 />

@@ -14,6 +14,8 @@ import UserRound from 'lucide-react/dist/esm/icons/user-round.mjs'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up.mjs'
 import Package from 'lucide-react/dist/esm/icons/package.mjs'
+import Target from 'lucide-react/dist/esm/icons/target.mjs'
+import Repeat from 'lucide-react/dist/esm/icons/repeat.mjs'
 import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
@@ -31,6 +33,8 @@ const ICONS: Record<string, ReactNode> = {
   meetings: <CalendarDays size={17}/>,
   reports: <TrendingUp size={17}/>,
   deliverables: <Package size={17}/>,
+  okrs: <Target size={17}/>,
+  habits: <Repeat size={17}/>,
 }
 
 export interface NavRailProps {

@@ -44,6 +44,9 @@ try {
   await run('meeting action add mtg-0001 {"title":"页面行动项","taskId":"t-0001"}')
   await run('report generate p-0001 2026-10-01 2026-10-31 {"title":"页面进度汇报"}')
   await run('deliverable add {"projectId":"p-0001","name":"页面交付物","version":"v1.0","status":"in_progress","location":"exports/页面交付物.md"}')
+  // X7 收件区种子：真实 suggest 落 settings 收件区，再由 web snapshot 透传（契约回归，防透传字段丢失）。
+  await run('okr suggest p-0001 ' + JSON.stringify({ title: '建议补一条稳定性验收 KR', kind: 'key-result', rationale: '三项交付物围绕稳定性验收' }))
+  await run('habit suggest p-0001 ' + JSON.stringify({ title: '每日复盘 10 分钟', rationale: '晚间对话规律最稳定' }))
 
   const snapshot = JSON.parse(await run('web snapshot'))
   assert.deepEqual(snapshot.projects.map(item => item.id), ['p-0001'])
@@ -60,6 +63,27 @@ try {
   assert.equal(snapshot.riskIssues[0].projectId, snapshot.projects[0].id)
   assert.equal(snapshot.meetings[0].actions[0].taskId, snapshot.tasks[0].id)
   assert.equal(snapshot.reports[0].snapshot.tasks.total, 1)
+
+  // X7 收件区快照契约：okrInbox/habitInbox 必须为数组且条目形状真实（id/at/projectId/title/status），
+  // 种子建议须出现在对应数组中；queue 由队列分片提供，存在即校验形状，缺失不失败。
+  assert.ok(Array.isArray(snapshot.okrInbox), 'snapshot.okrInbox 必须是数组')
+  const okrSeed = snapshot.okrInbox.find(s => s.title === '建议补一条稳定性验收 KR')
+  assert.ok(okrSeed, 'okr suggest 种子应透传到 snapshot.okrInbox')
+  for (const s of snapshot.okrInbox) {
+    assert.ok(s.id && s.at && s.projectId && s.title && typeof s.status === 'string', `okrInbox 条目形状非法：${JSON.stringify(s)}`)
+  }
+  assert.ok(Array.isArray(snapshot.habitInbox), 'snapshot.habitInbox 必须是数组')
+  const habitSeed = snapshot.habitInbox.find(s => s.title === '每日复盘 10 分钟')
+  assert.ok(habitSeed, 'habit suggest 种子应透传到 snapshot.habitInbox')
+  for (const s of snapshot.habitInbox) {
+    assert.ok(s.id && s.at && s.projectId && s.title && typeof s.status === 'string', `habitInbox 条目形状非法：${JSON.stringify(s)}`)
+  }
+  if (snapshot.queue !== undefined) {
+    assert.ok(typeof snapshot.queue === 'object' && snapshot.queue !== null, 'queue 须为 Record<projectId,Queue>')
+    for (const q of Object.values(snapshot.queue)) {
+      assert.ok(Array.isArray(q.rest), 'Queue.rest 必须是数组')
+    }
+  }
 
   const manifest = JSON.parse(readFileSync(join(here, '..', 'package.json'), 'utf8'))
   assert.equal(manifest.dsh.client.platform, 'web')

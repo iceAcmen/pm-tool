@@ -63,12 +63,13 @@ describe('buildOkrTree 单父归属与软关联', () => {
 })
 
 describe('收件区纯函数', () => {
-  it('countPendingInbox 不计已忽略；undefined 返回 0', () => {
+  it('countPendingInbox 仅计未处理：confirmed 已采纳 / ignored 已忽略都不计；undefined 返回 0', () => {
     expect(countPendingInbox(undefined, 'p-1')).toBe(0)
     expect(countPendingInbox([
-      { id: 's-1', at: '2026-10-01T00:00:00Z', projectId: 'p-1', title: '建议1', kind: 'objective' },
+      { id: 's-1', at: '2026-10-01T00:00:00Z', projectId: 'p-1', title: '待确认', kind: 'objective' },
       { id: 's-2', at: '2026-10-02T00:00:00Z', projectId: 'p-1', title: '已忽略', kind: 'key-result', state: 'ignored' },
-      { id: 's-3', at: '2026-10-03T00:00:00Z', projectId: 'p-2', title: '别项目', kind: 'objective' },
+      { id: 's-3', at: '2026-10-03T00:00:00Z', projectId: 'p-1', title: '已采纳', kind: 'objective', state: 'confirmed' },
+      { id: 's-4', at: '2026-10-04T00:00:00Z', projectId: 'p-2', title: '别项目', kind: 'objective' },
     ], 'p-1')).toBe(1)
   })
 

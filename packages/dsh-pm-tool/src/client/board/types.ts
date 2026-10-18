@@ -89,8 +89,11 @@ export interface WidgetActions {
    * 命令行不带 `/pm` 前缀（与面板既有 execute 调用同口径，宿主自行补前缀）。
    */
   runCommand?: (line: string) => Promise<unknown>
-  /** 写操作成功后由面板触发快照刷新；缺失时卡片仅结束本地 busy 态。 */
-  refreshBoard?: () => Promise<void> | void
+  /**
+   * 写操作成功后由面板触发快照刷新；返回 false 视为刷新失败（BoardBento 不得给成功态）。
+   * 实现可返回 Promise<boolean> / boolean / void；面板接缝必须透传 Promise，不得 void 吞掉。
+   */
+  refreshBoard?: () => Promise<boolean> | boolean | void
 }
 
 /** 联动筛选维度。 */

@@ -3,13 +3,13 @@
  * 零 DOM、零墙钟、零 localStorage（持久化由组件读写），便于单测。
  */
 
-/** 导航目标：跨项目看板 'dash' 或九个项目视图 key（与 client View 字面量对齐）。 */
+/** 导航目标：跨项目看板 'dash' 或项目视图 key（与 client View 字面量对齐）。 */
 export type NavTarget =
   | 'dash'
   | 'overview' | 'tasks' | 'gantt' | 'milestones' | 'risk-issues' | 'people'
-  | 'meetings' | 'reports' | 'deliverables'
+  | 'meetings' | 'reports' | 'deliverables' | 'okrs' | 'habits'
 
-/** 各项目视图的现行计数（缺省不显示徽标）。 */
+/** 各项目视图的现行计数（缺省不显示徽标；okrs/habits 为收件区待确认数，缺省不显示）。 */
 export interface NavCountMap {
   tasks?: number
   milestones?: number
@@ -17,6 +17,8 @@ export interface NavCountMap {
   meetings?: number
   reports?: number
   deliverables?: number
+  okrs?: number
+  habits?: number
 }
 
 export interface NavEntry {
@@ -48,6 +50,8 @@ export const VIEW_LABELS: Record<string, string> = {
   meetings: '会议纪要',
   reports: '进度汇报',
   deliverables: '交付物',
+  okrs: '目标（OKR）',
+  habits: '习惯',
 }
 
 /**
@@ -97,6 +101,16 @@ export function buildNavModel(
         { key: 'deliverables', label: '交付物', count: num(counts.deliverables), disabled: projectDisabled, keywords: ['deliverable', '交付', 'artifact'] },
       ],
     },
+    {
+      // X7 愿景/OKR 层 + 习惯层：长期个人档，独立成组，与窄屏 ViewSwitcher 末尾顺序同源。
+      id: 'growth',
+      title: '目标与习惯',
+      collapsible: true,
+      items: [
+        { key: 'okrs', label: '目标（OKR）', count: num(counts.okrs), disabled: projectDisabled, keywords: ['okr', '目标', '愿景', 'objective', 'key result', 'kr'] },
+        { key: 'habits', label: '习惯', count: num(counts.habits), disabled: projectDisabled, keywords: ['habit', '习惯', '打卡', 'streak', '连续'] },
+      ],
+    },
   ]
 }
 
@@ -120,4 +134,42 @@ export function toggleCollapsed(collapsed: ReadonlySet<string>, id: string): Set
   if (next.has(id)) next.delete(id)
   else next.add(id)
   return next
+}
+
+/**
+ * 窄屏 ViewSwitcher 扁平顺序（桌面分组模型之外平铺；dashboard = 全局看板特殊入口）。
+ * 标签/计数全部由 buildNavModel 同源派生；未列入本数组的模型目标兜底追加，杜绝新增视图硬编码漏入。
+ */
+export const NARROW_VIEW_ORDER = [
+  'dashboard', 'tasks', 'milestones', 'risk-issues', 'meetings', 'reports',
+  'deliverables', 'overview', 'gantt', 'people', 'okrs', 'habits',
+] as const
+
+export interface NarrowSwitcherItem {
+  key: string
+  label: string
+  count?: number
+}
+
+/** 由导航模型派生窄屏扁平切换项（与桌面 rail 同源，不再各自硬编码标签/条目）。 */
+export function buildNarrowSwitcher(counts: NavCountMap): NarrowSwitcherItem[] {
+  const flat = buildNavModel(counts, { hasProject: true }).flatMap(g => g.items)
+  const byKey = new Map<NavTarget, NavEntry>(flat.map(i => [i.key, i]))
+  const out: NarrowSwitcherItem[] = []
+  for (const key of NARROW_VIEW_ORDER) {
+    if (key === 'dashboard') {
+      out.push({ key, label: byKey.get('dash')?.label ?? '总览看板' })
+      continue
+    }
+    const entry = byKey.get(key as NavTarget)
+    out.push({ key, label: entry?.label ?? VIEW_LABELS[key] ?? key, count: entry?.count })
+  }
+  // 兜底：模型新增目标未列入 NARROW_VIEW_ORDER 时追加在后，避免硬编码漏项。
+  for (const entry of flat) {
+    if (entry.key === 'dash') continue
+    if (!(NARROW_VIEW_ORDER as readonly string[]).includes(entry.key)) {
+      out.push({ key: entry.key, label: entry.label, count: entry.count })
+    }
+  }
+  return out
 }

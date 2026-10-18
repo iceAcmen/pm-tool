@@ -320,3 +320,10 @@
 - **推进**：P3 规格 → 契约层（habits 表+路由+snapshot）→ 3 分片并行（A 习惯后端/B 习惯前端/C H6 调研）→ 集成（panel.tsx habit 视图接线+Snapshot.habits）→ verify-p3-integration.mjs 29/29 → 证据+档案 → commit+push（[doubao-work]）。
 - **门禁**：build=0；vitest 38 文件 / 427/427（基线 399 → 427，新增 28）；guard 全通过/0 污染；集成 29/29；分片自验 p3a 22/22。
 - **H6 结论（待用户拍板）**：宿主无外部通知渠道；推荐维持「应用内打开面板即派生」（ADL-039 现状），不立项宿主级推送；路线 A 四前提（书面接受常驻常开+新 ADL、通道可达、接受改上游成本、凭据真实验收）。调研文档：`docs/design/deep-integration-v2-h6-research.md`。
+
+## 可达性修复：OKR/习惯导航与页面、两收件区、K13 副驾（2026-10-18，3172 真实 GUI PASS · 675×745，未 commit/push）
+
+- **GUI 实测 PASS（675×745）**：OKR/习惯桌面左导航「目标与习惯」组与窄屏切换器同源可达；两收件区（pmOkrInbox/pmHabitInbox）由 snapshot 透传到页面，confirmed=已采纳不计待确认/不显写按钮；队列离板回总览、全局刷新、浏览器 reload 三持久化路径均 PASS，只见队列卡、无「＋」新增入口；PM 副驾真实问 t-0008 出现投影卡并可打开抽屉，仅 PM 插件内只读、非宿主全局聊天。
+- **根因**：桌面左导航缺 okrs/habits（仅窄屏 ViewSwitcher 有）；pmOkrInbox/pmHabitInbox 未由 snapshot 透传、panel 未注入 inbox；K13 副驾在总览看板只切状态不挂载层。
+- **修复**：nav「目标与习惯」组与窄屏同源（buildNarrowSwitcher 模型派生+防漏测试）；snapshot 透传 okrInbox/habitInbox（confirmed=已采纳不计待确认/不显写按钮，confirm/ignore 成功后 refresh，未携带只显命令提示不伪造）；副驾总览下先退出全局看板再开层；刷新 await 父级成功才盖「数据截至」，失败保旧时钟。
+- **边界**：个人看板布局为用户明确触发的可逆写，正式业务数据未改、不入 git；H6 常驻推送仍暂停（未实现）；未碰 3172 进程。

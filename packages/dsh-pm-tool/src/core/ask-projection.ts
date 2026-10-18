@@ -110,3 +110,11 @@ export function latestAppliedBatches(entries: unknown, limit = 1): AppliedBatch[
     undone: e.undo?.used === true,
   }))
 }
+
+/**
+ * 投影刷新成功门：父级 refresh 返回 boolean；`undefined` 兼容旧同步回调视为成功；
+ * `false`=刷新失败，投影保留旧「数据截至」时钟、不照盖新时间。
+ */
+export function refreshSucceeded(result: boolean | void | undefined): boolean {
+  return result === undefined || result !== false
+}

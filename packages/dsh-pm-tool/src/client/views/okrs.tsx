@@ -144,7 +144,9 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved }: OkrsView
                 </div>
                 {s.rationale && <p className="pm-okr-suggestion-rationale">{s.rationale}</p>}
                 <div className="pm-okr-suggestion-actions">
-                  {s.state === 'ignored' ? (
+                  {s.state === 'confirmed' ? (
+                    <span className="pm-okr-adopted-tag">已采纳</span>
+                  ) : s.state === 'ignored' ? (
                     <span className="pm-okr-ignored-tag">已忽略</span>
                   ) : (
                     <>

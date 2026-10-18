@@ -11,6 +11,8 @@ import { GRID, type DashboardLayout, type FilterRule, type LinkageDim, type Link
 import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
 import { resolveDashboard, parseLayout } from './persist.js'
+import { appendQueueCard } from './layout-append.js'
+import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
 // type-only：编辑器块不被静态打包，仅取类型。
@@ -32,7 +34,32 @@ export function BoardBento({ data, actions, persistence }: {
   const [editorLoading, setEditorLoading] = useState(false)
   const [editorError, setEditorError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [adopting, setAdopting] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
+  /** 已存布局是否已含补记队列卡；缺省时在头部给显式新增入口（不静默改布局、不重排旧卡）。 */
+  const hasQueueCard = layout.widgets.some(w => w.type === 'queueCard')
+
+  const adoptQueueCard = async () => {
+    setAdopting(true)
+    try {
+      const next = appendQueueCard(layout)
+      // 先落盘（executeRaw 遇 command.kind=error 会 throw）；成功后刷新父快照。
+      // 仅当落盘 + 快照刷新都成功，才 setLayout 并给成功提示，避免「成功假态、重进丢失」。
+      await persistence.onSave('user', next)
+      // 缺失/undefined 刷新通道即抛错：不 setLayout、不给成功 banner（合同完整，即便现网恒注入）。
+      if (typeof actions.refreshBoard !== 'function') {
+        throw new Error('缺少看板快照刷新通道')
+      }
+      // 落盘成功后确认快照刷新；返回 false 即失败，调用方不给成功态。
+      await refreshAndConfirm(actions.refreshBoard)
+      setLayout(next)
+      setBanner('已添加补记队列并保存到个人布局。')
+    } catch (e) {
+      setBanner('添加补记队列失败：' + (e instanceof Error ? e.message : String(e)))
+    } finally {
+      setAdopting(false)
+    }
+  }
   /** P2-① 跨卡片联动筛选（临时态，不写盘）。 */
   const [linkage, setLinkage] = useState<LinkageState>({})
   const onLink = (dim: LinkageDim, value: string) => {
@@ -100,9 +127,22 @@ export function BoardBento({ data, actions, persistence }: {
       <div className="pm-bento-tools">
         {editing
           ? <span className="pm-bento-hint">编辑模式 · 保存后经 dsh-storage 落盘{saving ? '（保存中…）' : ''}</span>
-          : <button type="button" className="pm-bento-toolbtn" onClick={() => void startEdit()} disabled={editorLoading}>
-              {editorLoading ? '加载编辑器…' : '布局编辑'}
-            </button>}
+          : <>
+              {!hasQueueCard && (
+                <button
+                  type="button"
+                  className="pm-bento-toolbtn"
+                  onClick={() => void adoptQueueCard()}
+                  disabled={adopting}
+                  title="把补记队列卡追加到看板末尾空闲行，不移动已有卡片"
+                >
+                  {adopting ? '添加中…' : '＋ 添加补记队列'}
+                </button>
+              )}
+              <button type="button" className="pm-bento-toolbtn" onClick={() => void startEdit()} disabled={editorLoading}>
+                {editorLoading ? '加载编辑器…' : '布局编辑'}
+              </button>
+            </>}
       </div>
     </div>
 

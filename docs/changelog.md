@@ -8,6 +8,17 @@
 
 ---
 
+## 可达性修复：OKR/习惯导航与页面、两收件区、K13 副驾（2026-10-18，平台：doubao-work，3172 真实 GUI PASS · 675×745，未 commit/push）
+
+> 状态：**主端 3172 真实实例 GUI 全 PASS（窗口 675×745）**；自动化门（build=0、vitest 41 文件 / 458 全绿、verify-p1b-adopt、verify-web、isolation 87/87）为代码层证据。个人看板布局为用户明确触发的可逆写，正式业务数据未改、不入 git；H6 常驻推送仍暂停（未实现）。
+
+- **GUI 实测 PASS（675×745）**：OKR/习惯桌面左导航「目标与习惯」组与窄屏切换器同源可达；两收件区（pmOkrInbox/pmHabitInbox）由 snapshot 透传到页面，confirmed=已采纳不计待确认/不显写按钮，confirm/ignore 成功后刷新；K13 副驾真实问 t-0008 出现投影卡并可打开抽屉；队列离板回总览、全局刷新、浏览器 reload 三持久化路径均 PASS，只见队列卡、无「＋」新增入口；副驾仅 PM 插件内只读，非宿主全局聊天。
+- **实际根因**：① 桌面左导航（`core/nav.ts` NavTarget/VIEW_LABELS/buildNavModel + `client/nav-rail.tsx` ICONS）未含 okrs/habits，仅窄屏 ViewSwitcher 有这两项，桌面无入口；② `pmOkrInbox`/`pmHabitInbox` 收件区未由 snapshot 暴露、panel 未把 `inbox` 注入视图，视图只能显示命令提示空态；③ K13 副驾按钮在总览看板（dashOpen）只切状态不挂载层，且未文案区分「PM 插件内副驾」与宿主全局聊天。
+- **新入口（同源）**：导航新增「目标与习惯」折叠组（okrs 目标（OKR）/habits 习惯），窄屏由 `buildNarrowSwitcher` 从同一导航模型派生（防漏测试），类型/标签/选中/面包屑 VIEW_LABELS 一致；面包屑经 VIEW_LABELS 解析，`pm-view` 视图持久化已含两键。
+- **inbox 接线（snapshot→panel→视图）**：`web snapshot` 透传 `okrInbox`/`habitInbox`（复用后端 readOkrInbox/readHabitInbox，坏行/非数组诚实回落空，不伪造建议）；panel 把后端 `status` 映射为前端 state：pending=未处理、confirmed=已采纳（显「已采纳」标签、不计待确认、不显示写按钮）、ignored=已忽略；confirm/ignore/checkin 走既有 `run` 命令通道，成功后 `onSaved=refresh` 重读快照；snapshot 未携带（undefined）时视图只显示命令提示，不编造。verify-web 已对两收件区做真实种子 + 字段形状契约断言。
+- **K13 边界**：副驾为 PM 插件内只读诊断，只读本插件项目台账，**非宿主全局聊天、不扩原生聊天嵌入**；「打开任务」复用既有 openRecord 开抽屉；「刷新」await 父级重读快照，仅真实成功（返回 true）才重挂号并盖「数据截至」，失败保留旧时钟并提示（父 refresh 失败只 setMessage 吞错、会 resolve，故用返回值门控）。
+- **改动文件**：`core/nav.ts`、`core/nav.test.ts`、`client/nav-rail.tsx`、`client/panel.tsx`、`client/views/okr-model.ts`/测试、`client/views/okrs.tsx`、`client/panel.css`、`core/ask-projection.ts`/测试、`src/index.ts`、`scripts/verify-web.mjs`；队列侧 `client/board/queue-aggregate.ts`/测试、`queue-card.tsx`、`BoardBento.tsx` 由队列分片修复并一并纳入实测；未碰 3172 进程。
+
 ## P2 深度融合：对外+长寿层（K18 单向出站/X7 愿景/OKR 层/X2 收尾标记/X3 失败经验/K16 档案最小保存包/X5 述职素材）（已 push main，2026-10-18，平台：doubao-work）
 
 > P1（8e7b7b0）验收通过后的对外+长寿阶段，对应效果图 S4 分受众分享与 S5 档案与目标连通。规格 `docs/design/deep-integration-v2-p2-dev.md`、验证 `docs/design/deep-integration-v2-p2-verify.md`、证据 `docs/verification/p2-20261018/`。4 分片并行（文件级互斥）+ 契约层；build=0、vitest 37 文件 / **399/399**、guard **84/84/0 失败/0 污染**（176 资产 before=after）、集成链 **56/56**（真实命令+真实 JSON 落盘）、分片自验 a 26/26、b 26/26、c 28/28、d 通过。

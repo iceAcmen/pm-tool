@@ -48,6 +48,8 @@ import { handleArchiveCommand, archiveHelp } from './commands/archive.js'
 import { handleHabitCommand, habitHelp } from './commands/habit.js'
 import { buildQueueForProject } from './core/queue.js'
 import { localTodayIso } from './core/derived.js'
+import { readOkrInbox } from './core/okr.js'
+import { readHabitInbox } from './core/habits.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -184,6 +186,9 @@ export async function apply(ctx: Context): Promise<void> {
             okrs: [...domain.table('okrs').entries()].map(([, value]) => value),
             lessons: [...domain.table('lessons').entries()].map(([, value]) => value),
             habits: [...domain.table('habits').entries()].map(([, value]) => value),
+            // X7 收件区（settings 固定行，只读透传；前端按项目过滤，未确认不生效）。
+            okrInbox: readOkrInbox(domain),
+            habitInbox: readHabitInbox(domain),
             dashboards: {
               user: readDashboard(domain, 'user'),
               project: readDashboard(domain, 'project'),
