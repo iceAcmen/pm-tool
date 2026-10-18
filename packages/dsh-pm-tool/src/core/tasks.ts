@@ -12,6 +12,7 @@ import {
 } from './task.js'
 import { assertParentHasNoChecklist } from './task-checklist.js'
 import { localTodayIso } from './derived.js'
+import { ensureReflectionOnDone } from './reflect.js'
 import type { PmDomain } from './storage.js'
 
 export class TaskProjectNotFoundError extends Error {}
@@ -190,6 +191,8 @@ export function getTask(domain: PmDomain, id: string): Task | undefined {
 export function updateTask(domain: PmDomain, id: string, input: unknown): Promise<Task | undefined> {
   taskIdSchema.parse(id)
   const fields: TaskUpdate = taskUpdateSchema.parse(input)
+  // X6-L1：是否本次由非 done 转入 done（在写队列外记录，供落库成功后 best-effort 挂复盘草稿钩子）。
+  let becameDone = false
   return enqueueDomainWrite(domain, async () => {
     const table = domain.table('tasks')
     const current = table.get(id)
@@ -217,6 +220,7 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     const transitioningIntoDone = fields.status !== undefined
       && current.status !== 'done'
       && fields.status === 'done'
+    becameDone = transitioningIntoDone
     const transitioningOutOfDone = fields.status !== undefined
       && current.status === 'done'
       && fields.status !== 'done'
@@ -244,6 +248,16 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     const next = taskWriteSchema.parse(nextInput)
     await table.put(id, next)
     return structuredClone(next)
+  }).then((result) => {
+    // X6-L1：任务已落库为 done 后 best-effort 建即时复盘草稿。
+    // 钩子在写队列外链式触发（不嵌套入队、不参与本事务）；失败仅 console.warn，绝不阻断任务落库。
+    // ask-apply 的 task.update 同样走本函数，故单点钩子即可覆盖，无需在 commands/ask.ts 另接。
+    if (becameDone && result) {
+      void ensureReflectionOnDone(domain, result).catch((error: unknown) => {
+        console.warn('[pm-tool] 即时复盘草稿生成失败（不阻断任务落库）：', error)
+      })
+    }
+    return result
   })
 }
 

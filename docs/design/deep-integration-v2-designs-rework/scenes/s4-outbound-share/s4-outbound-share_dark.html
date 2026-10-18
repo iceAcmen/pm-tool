@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给不同的人一份合适的进展材料（K18·X5·X2·X3）— 场景S4</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%234f7cff'/%3E%3C/svg%3E">
+<style>
+/* ============ dsh 壳 token（浅深两态，沿用宿主真实界面） ============ */
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --panel2:#f2f4f7; --line:#e5e7eb; --line2:#d0d5dd;
+  --fg:#1f2329; --fg2:#5b6472; --fg3:#8a93a0;
+  --acc:#4f7cff; --acc-bg:#eef2ff;
+  --ok:#168a5a; --ok-bg:#e8f6ef; --warn:#b7791f; --warn-bg:#fdf3e0; --bad:#c9404a; --bad-bg:#fdecef;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a; --line2:#3a4150;
+  --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484;
+  --acc:#6f9cff; --acc-bg:#1c2740;
+  --ok:#4cc08a; --ok-bg:#153226; --warn:#d9a13f; --warn-bg:#33291a; --bad:#e07a70; --bad-bg:#3a2025;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--acc);text-decoration:none;cursor:pointer}
+a:hover{text-decoration:underline}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ============ 场景导语条 ============ */
+.banner{max-width:1320px;margin:0 auto;padding:14px 20px 0}
+.guide{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--fg2)}
+.guide b{color:var(--fg)}
+.guide .tag{font-size:11px;color:var(--fg3);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:8px;white-space:nowrap}
+.guide .expand{margin-left:auto;color:var(--acc);font-size:12px}
+.guide-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--fg2)}
+.guide-detail.open{display:block}
+.guide-detail p{margin:4px 0}
+
+/* ============ dsh 三栏壳 ============ */
+.shell{max-width:1320px;margin:12px auto 24px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.cols{display:grid;grid-template-columns:200px 210px 1fr;min-height:760px}
+.nav1{background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.brand .logo{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#4f7cff,#7c5cff);flex:none}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:13px;color:var(--fg2);cursor:pointer}
+.nav-item:hover{background:var(--panel2)}
+.nav-item.active{background:var(--acc-bg);color:var(--acc);font-weight:500}
+.nav-item .ic{width:14px;height:14px;flex:none;opacity:.75}
+.nav-group{padding:12px 8px 4px;font-size:11px;color:var(--fg3);letter-spacing:.04em}
+.nav-spacer{flex:1}
+.nav-item.bottom{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
+.nav2{background:var(--panel2);border-right:1px solid var(--line);padding:14px 10px}
+.plug-brand{font-weight:600;font-size:13px;padding:2px 8px 2px}
+.plug-sub{font-size:11px;color:var(--fg3);padding:0 8px 8px}
+.plug-search{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--fg3);background:var(--panel);margin:4px 0 10px}
+.nav2 .nav-item{font-size:12.5px}
+.nav2 .nav-item .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--fg3)}
+.nav2 .nav-item.active .cnt{color:var(--acc)}
+.nav2 .sub{padding-left:24px;font-size:12px}
+.main{background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto minmax(560px,1fr) auto;min-width:0}
+.main .topbar{grid-column:1/3;grid-row:1}
+.main .stage{grid-column:1;grid-row:2}
+.main .queue{grid-column:2;grid-row:2;width:auto}
+.main .composer{grid-column:1/3;grid-row:3}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+.crumb{font-size:12.5px;color:var(--fg3)}
+.crumb b{color:var(--fg)}
+.topbar .acts{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);background:var(--panel)}
+.btn:hover{border-color:var(--line2);color:var(--fg)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.primary:hover{opacity:.92}
+.btn.theme{width:30px;height:28px;padding:0;justify-content:center;font-size:13px}
+
+/* ============ 主舞台 + 页签 ============ */
+.stage{overflow:auto;padding:16px 24px 12px;min-height:560px}
+.tabbar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:13px;color:var(--fg2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--fg)}
+.tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:500}
+.panel{display:none}
+.panel.active{display:block}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.card-h{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card-h .t{font-weight:600;font-size:14px}
+.card-h .s{font-size:12px;color:var(--fg3)}
+.card-b{padding:14px 16px}
+
+/* K18 受众选择 */
+.aud-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.aud{border:1px solid var(--line);border-radius:8px;padding:9px 13px;font-size:12.5px;color:var(--fg2);background:var(--panel);text-align:center}
+.aud .a-t{font-weight:600;color:var(--fg);font-size:13px;display:block}
+.aud .a-s{font-size:11px;color:var(--fg3);display:block;margin-top:2px}
+.aud.sel{border-color:var(--acc);background:var(--acc-bg);color:var(--acc)}
+.aud.sel .a-t{color:var(--acc)}
+
+.scope-row{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0}
+.scope-row label{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--fg2);cursor:pointer}
+.scope-row input{accent-color:var(--acc)}
+
+/* 导出预览 */
+.preview{border:1px solid var(--line);border-radius:8px;background:var(--panel2);overflow:hidden}
+.pv-meta{display:flex;gap:10px;flex-wrap:wrap;padding:9px 14px;border-bottom:1px dashed var(--line);font-size:12px;color:var(--fg2)}
+.pv-meta b{color:var(--fg)}
+.pv-body{padding:12px 14px;font-size:12.5px;line-height:1.7;white-space:pre-wrap;color:var(--fg)}
+.pv-platform{font-size:11.5px;color:var(--fg3);padding:8px 14px;border-top:1px dashed var(--line)}
+.pv-acts{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.mini-btn{padding:5px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);background:var(--panel)}
+.mini-btn:hover{border-color:var(--line2);color:var(--fg)}
+.mini-btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.note-line{font-size:12px;color:var(--fg2);padding:10px 16px;background:var(--warn-bg);border-top:1px solid var(--line)}
+.note-line b{color:var(--warn)}
+
+/* 已发出日志 */
+.log-row{display:flex;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;flex-wrap:wrap}
+.log-row:last-child{border-bottom:none}
+.log-row .when{font-family:var(--mono);font-size:11.5px;color:var(--fg3)}
+.log-row .who{font-weight:500}
+.log-row .scope{color:var(--fg2);font-size:12px}
+.log-row .file{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--acc)}
+.readonly-tag{font-size:10.5px;color:var(--fg3);border:1px solid var(--line);border-radius:4px;padding:0 6px}
+
+/* X5 述职素材表 */
+.x5-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12.5px}
+.x5-table th{text-align:left;font-size:11.5px;color:var(--fg3);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line)}
+.x5-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--fg2)}
+.x5-table tr:last-child td{border-bottom:none}
+.st-pill{font-size:11px;border-radius:4px;padding:1px 8px;font-weight:500;white-space:nowrap}
+.st-ok{background:var(--ok-bg);color:var(--ok)}
+.st-warn{background:var(--warn-bg);color:var(--warn)}
+.x5-num{font-family:var(--mono);font-size:12px}
+
+/* X2 毕业勾选 */
+.grad-list{display:flex;flex-direction:column;gap:8px}
+.grad-list label{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--fg2);cursor:pointer;padding:6px 8px;border-radius:6px}
+.grad-list label:hover{background:var(--panel2)}
+.grad-list input{accent-color:var(--acc);margin-top:3px}
+.claim-box{border:1px dashed var(--line2);border-radius:8px;padding:12px;margin:10px 0;font-size:12.5px;color:var(--fg2)}
+
+/* X3 失败教训双栏 */
+.x3-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.x3-head{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.x3-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.x3-col{background:var(--panel2);border-radius:6px;padding:10px 12px;font-size:12.5px;color:var(--fg2)}
+.x3-col h5{font-size:11.5px;color:var(--fg3);font-weight:500;margin-bottom:4px}
+.x3-fact{font-size:12.5px;color:var(--fg2);background:var(--panel2);border-radius:6px;padding:10px 12px}
+.x3-fact h5{font-size:11.5px;color:var(--fg3);font-weight:500;margin-bottom:4px}
+
+/* ============ 右侧栏 ============ */
+.queue{width:300px;background:var(--panel2);border-left:1px solid var(--line);padding:14px;overflow:auto;flex:none}
+.qhead{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.qsub{font-size:11.5px;color:var(--fg3);margin-bottom:10px}
+.st-block{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.st-block h4{font-size:12.5px;font-weight:600;margin-bottom:6px}
+.st-line{font-size:12px;color:var(--fg2);display:flex;gap:6px;align-items:center;padding:3px 0;flex-wrap:wrap}
+.st-line .k{color:var(--fg3)}
+.qmore{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.qmore a{font-size:12px}
+
+/* ============ 输入框（dsh 真实样式） ============ */
+.composer{border-top:1px solid var(--line);background:var(--panel);padding:10px 16px}
+.composer .box{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel)}
+.composer .ph{color:var(--fg3);font-size:13px}
+.composer .tools{display:flex;align-items:center;gap:8px;margin-top:8px}
+.composer .tools .mode{font-size:12px;color:var(--fg2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.composer .tools .spacer{flex:1}
+.composer .tools .model{font-size:12px;color:var(--fg2)}
+.composer .send{width:34px;height:34px;border-radius:8px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+
+/* ============ 移动端 ============ */
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr;min-height:0}
+  .main{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .topbar{flex-wrap:wrap;row-gap:6px;padding:8px 12px}
+  .topbar .crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .topbar .acts{gap:6px}
+  .topbar .acts .btn:not(.primary):not(.theme){display:none}
+  .nav1,.nav2,.queue{display:none}
+  .stage{min-height:430px;padding:12px 14px 6px}
+  .banner{padding:8px 10px 0}
+  .guide{font-size:12px}
+  .aud-seg{grid-template-columns:1fr}
+  .x3-cols{grid-template-columns:1fr}
+  .x5-table{display:block;overflow-x:auto}
+  .mobq{display:block;margin:10px 12px 0;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+}
+.mobq{display:none}
+
+/* ============ 附注 ============ */
+.footnote{max-width:1320px;margin:0 auto 30px;padding:0 20px;font-size:12px;color:var(--fg3)}
+.footnote .box{background:var(--panel);border:1px dashed var(--line);border-radius:8px;padding:10px 14px}
+</style>
+</head>
+<body>
+
+<!-- ===== 场景导语（白话五问，展开可见） ===== -->
+<div class="banner">
+  <div class="guide" onclick="document.querySelector('.guide-detail').classList.toggle('open')">
+    <span>场景 4 / 5</span><b>给不同的人一份合适的进展材料</b><span class="tag">K18 · X5 · X2 · X3</span>
+    <span style="color:var(--warn);font-size:11px">示例数据 · 设计示意</span>
+    <span class="expand">▼ 白话说明</span>
+  </div>
+  <div class="guide-detail">
+    <p><b>什么时候用：</b>要给团队、朋友、领导看项目进展，或述职、求职整理成果时。</p>
+    <p><b>你点什么：</b>主界面点「分享/导出」，选受众（团队技术版 / 朋友非技术版 / 纯文本）；或进「述职素材」选条目。</p>
+    <p><b>系统替你做什么：</b>按受众生成三档只读材料（技术 MD / 非技术增强 / 纯文本兜底），单向只增、外部是唯一事实源、本地只留已发出日志；述职素材把自述数字与可核验证据分栏、待核标注、导出默认排除待核；毕业=人工声明+洁净度勾选+回潮自动摘标；失败项目中性归档（个人可改进/外部原因双栏，锚点缺失不开归因栏）。</p>
+    <p><b>你看到什么结果：</b>导出预览（带受众/范围/排除待核 N 条）；已发出列表（只读日志）；「标记毕业」勾选清单；失败教训库双栏条目。</p>
+    <p><b>和现在有何不同：</b>以前整理分享材料靠手工拼、范围难控；现在一键按受众出只读材料，且明确不是双向同步。</p>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="cols">
+
+    <!-- ===== 左1 功能导航（真实 dsh） ===== -->
+    <nav class="nav1" onclick="navHint(event)">
+      <div class="brand"><span class="logo"></span>DSH本地构建</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">＋</span>新会话</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◧</span>插件</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">↻</span>自动化任务</div>
+      <div class="nav-item active" onclick="navHint()"><span class="ic">▦</span>项目管理</div>
+      <div class="nav-group">工作区</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▫</span>默认工作区</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">＋</span>新会话</div>
+      <div class="nav-spacer"></div>
+      <div class="nav-item bottom" onclick="navHint()"><span class="ic">⚙</span>设置</div>
+    </nav>
+
+    <!-- ===== 左2 PM工作台导航（真实 pm-tool） ===== -->
+    <nav class="nav2" onclick="navHint(event)">
+      <div class="plug-brand">PM工作台</div>
+      <div class="plug-sub">DeepSeek Harness</div>
+      <div class="plug-search">搜索导航…</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>跨项目<span class="cnt"></span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">◫</span>总览看板</div>
+      <div class="nav-group">当前项目 · G3验收项目</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◎</span>项目概览</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◫</span>计划与排期</div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">☐</span>全部任务<span class="cnt">5</span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">▤</span>甘特排期</div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">◇</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">⚠</span>风险与问题<span class="cnt">1</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◧</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>会议纪要<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>进度汇报<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>交付物<span class="cnt">1</span></div>
+      <div style="margin-top:auto"><div class="nav-item" onclick="navHint()"><span class="ic">⚙</span>口径设置</div></div>
+    </nav>
+
+    <!-- ===== 右主区 ===== -->
+    <main class="main">
+      <div class="topbar">
+        <span class="crumb">项目工作台 <b>›</b> <b>G3验收项目</b> <b>›</b> 分享 / 导出</span>
+        <div class="acts">
+          <button class="btn" onclick="alert('新建项目：设计示意，示例数据')">＋ 新建项目</button>
+          <button class="btn" onclick="alert('AI助手：只读材料按受众生成，示例数据')">AI助手</button>
+          <button class="btn" onclick="alert('AI副驾：代起草内容需你确认后生效（示例数据）')">AI副驾</button>
+          <button class="btn" onclick="alert('…更多：更多操作菜单，示例数据')">…更多</button>
+          <button class="btn theme" onclick="toggleTheme()">◐</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <!-- 页签 -->
+        <div class="tabbar" role="tablist">
+          <button class="tab active" data-panel="p-share" onclick="switchTab(this)">对外材料（K18）</button>
+          <button class="tab" data-panel="p-x5" onclick="switchTab(this)">述职素材（X5）</button>
+          <button class="tab" data-panel="p-x2x3" onclick="switchTab(this)">毕业与归档（X2·X3）</button>
+        </div>
+
+        <!-- ===== 面板 A：K18 分受众只读分发 ===== -->
+        <section class="panel active" id="p-share" aria-label="对外材料">
+          <div class="card">
+            <div class="card-h"><span class="t">选择受众，生成只读材料</span><span class="s">一次性导出 · 单向只增</span></div>
+            <div class="card-b">
+              <div class="aud-seg">
+                <button class="aud sel" data-aud="0" onclick="selectAudience(this)"><span class="a-t">团队技术版</span><span class="a-s">Markdown · 带任务编号与材料链接</span></button>
+                <button class="aud" data-aud="1" onclick="selectAudience(this)"><span class="a-t">朋友非技术版</span><span class="a-s">增强说明 · 少术语讲清进展</span></button>
+                <button class="aud" data-aud="2" onclick="selectAudience(this)"><span class="a-t">纯文本兜底</span><span class="a-s">离线可用 · 无格式依赖</span></button>
+              </div>
+              <div class="scope-row">
+                <label><input type="checkbox" checked onchange="refreshPreview()"> 已完成任务</label>
+                <label><input type="checkbox" checked onchange="refreshPreview()"> 里程碑</label>
+                <label><input type="checkbox" onchange="refreshPreview()"> 风险处理记录</label>
+                <label><input type="checkbox" checked onchange="refreshPreview()"> 述职素材（仅已核）</label>
+              </div>
+
+              <div class="preview">
+                <div class="pv-meta">
+                  <span>受众：<b id="pvAud">团队技术版（Markdown）</b></span>
+                  <span>范围：<b id="pvScope">已完成任务 · 里程碑 · 述职素材（仅已核）</b></span>
+                  <span>排除待核：<b class="num">2</b> 条</span>
+                </div>
+                <div class="pv-body" id="pvBody"></div>
+                <div class="pv-platform">目标平台：<b>待确认</b>（不预设飞书/Jira/GitHub；发出后外部为唯一事实源）</div>
+                <div class="pv-acts">
+                  <button class="mini-btn" onclick="refreshPreview()">重新生成预览</button>
+                  <button class="mini-btn primary" onclick="alert('导出只读文件：本次只生成静态副本，不回写外部平台（示例数据）')">导出只读文件</button>
+                  <button class="mini-btn" onclick="logSent()">记录到「已发出」日志</button>
+                </div>
+              </div>
+
+              <div class="note-line"><b>只读分发 · 单向：</b>本页只把材料一次性发出去，<b>不是飞书/Jira 双向同步</b>，不级联、不镜像；本地只留一条「已发出」只读日志，外部改动不会回写本地。</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><span class="t">已发出</span><span class="s">只读日志 · 只增不回写</span></div>
+            <div>
+              <div class="log-row">
+                <span class="when num">10-16 15:02</span>
+                <span class="who">团队技术版</span>
+                <span class="scope">已完成任务 · 里程碑</span>
+                <span class="file">G3进展-技术版.md</span>
+                <span class="readonly-tag">只读</span>
+              </div>
+              <div class="log-row">
+                <span class="when num">10-12 11:40</span>
+                <span class="who">纯文本</span>
+                <span class="scope">里程碑</span>
+                <span class="file">G3进展.txt</span>
+                <span class="readonly-tag">只读</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== 面板 B：X5 述职素材 ===== -->
+        <section class="panel" id="p-x5" aria-label="述职素材">
+          <div class="card">
+            <div class="card-h"><span class="t">述职素材库 · 成就备忘录</span><span class="s">自述数字与可核验证据分栏 · 待核不导出</span></div>
+            <div class="card-b" style="padding:0">
+              <table class="x5-table">
+                <colgroup><col style="width:30%"><col style="width:20%"><col style="width:36%"><col style="width:14%"></colgroup>
+                <thead><tr><th>条目</th><th>自述数字</th><th>可核验证据</th><th>状态</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Beta 版覆盖 4/5 项任务，联调顺延下一版</td>
+                    <td class="x5-num">4 / 5</td>
+                    <td>任务清单完成记录（本地台账，T-102/T-098 等）</td>
+                    <td><span class="st-pill st-ok">已核</span></td>
+                  </tr>
+                  <tr>
+                    <td>提前 3 天达到可验收状态</td>
+                    <td class="x5-num">提前 3 天</td>
+                    <td>缺时间凭证，暂无可核验来源</td>
+                    <td><span class="st-pill st-warn">待核</span></td>
+                  </tr>
+                  <tr>
+                    <td>修复 20+ 缺陷</td>
+                    <td class="x5-num">20+</td>
+                    <td>无缺陷记录锚点，暂不可核验</td>
+                    <td><span class="st-pill st-warn">待核</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pv-acts">
+              <button class="mini-btn primary" onclick="alert('导出仅含「已核」条目，待核 2 条默认排除（示例数据）')">导出已核条目（走 K18）</button>
+              <button class="mini-btn" onclick="alert('补证据：挂可核验来源后可转为已核，需你确认（示例数据）')">为待核条目补证据</button>
+            </div>
+            <div class="note-line">本库是成就备忘录，<b>不提供信用证明</b>，也不是完整贡献记录；对外出示走 K18 只读分发，待核条目不进对外素材。</div>
+          </div>
+        </section>
+
+        <!-- ===== 面板 C：X2 毕业 + X3 失败教训 ===== -->
+        <section class="panel" id="p-x2x3" aria-label="毕业与归档">
+          <div class="card">
+            <div class="card-h"><span class="t">标记毕业（X2）</span><span class="s">人工声明 + 洁净度勾选 · 回潮自动摘标</span></div>
+            <div class="card-b">
+              <div class="claim-box">项目「官网改版 2024」已长期不再变动，由<b>你本人声明</b>毕业；系统不做「N 周未打开即成功」的自动判定。</div>
+              <div class="grad-list">
+                <label><input type="checkbox" onchange="refreshGrad()"> 我声明该项目毕业（人工声明入口）</label>
+                <label><input type="checkbox" onchange="refreshGrad()"> 无未完成项残留</label>
+                <label><input type="checkbox" onchange="refreshGrad()"> 无回潮承诺（重新拾起的承诺会自动摘掉毕业标）</label>
+                <label><input type="checkbox" onchange="refreshGrad()"> 材料已归档（档案可读即可）</label>
+              </div>
+              <div class="pv-acts">
+                <button class="mini-btn primary" id="gradBtn" disabled style="opacity:.6" onclick="graduate()">声明毕业</button>
+                <button class="mini-btn" onclick="alert('出现未完成项或回潮承诺时，毕业标自动摘除（示例数据）')">回潮摘标规则</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><span class="t">失败教训库（X3）</span><span class="s">中性归档 · 双栏只在有锚点时开放</span></div>
+            <div class="card-b">
+              <div class="x3-entry">
+                <div class="x3-head">小程序试点（已停）<span class="st-pill st-ok">有锚点 · 双栏开放</span></div>
+                <div class="x3-cols">
+                  <div class="x3-col"><h5>个人可改进</h5>需求确认阶段应先排优先级，避免后期反复改范围。</div>
+                  <div class="x3-col"><h5>外部原因</h5>依赖的第三方接口在中途提前下线，被迫收缩范围。</div>
+                </div>
+              </div>
+              <div class="x3-entry">
+                <div class="x3-head">线下活动报名工具 <span class="st-pill st-warn">锚点缺失 · 只存事实</span></div>
+                <div class="x3-fact"><h5>仅存事实</h5>2025-03 停止维护；无锚点材料，<b>不开主观归因栏</b>，不推测成败原因。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 右侧栏 -->
+      <aside class="queue">
+        <div class="qhead">本次导出摘要</div>
+        <div class="qsub">只读 · 单向 · 外部为事实源</div>
+        <div class="st-block">
+          <h4>受众 / 范围</h4>
+          <div class="st-line"><span class="k">受众：</span><span id="rAud">团队技术版</span></div>
+          <div class="st-line"><span class="k">待核排除：</span><span class="num">2</span> 条（默认不导出）</div>
+          <div class="st-line"><span class="k">已发出日志：</span><span class="num">2</span> 条</div>
+        </div>
+        <div class="st-block">
+          <h4>本页边界</h4>
+          <div class="st-line">· 只读分发，非双向同步</div>
+          <div class="st-line">· 目标平台待确认，不预设</div>
+          <div class="st-line">· 述职素材非信用证明</div>
+          <div class="st-line">· 毕业靠人工声明，不自动判定</div>
+        </div>
+        <div class="qmore">
+          <a onclick="alert('已发出日志为只读只增流（示例数据）')">已发出日志</a>
+          <a onclick="alert('本场景不做双向同步/自动毕业判定（设计示意）')">边界说明</a>
+        </div>
+      </aside>
+
+      <!-- 移动端摘要（桌面隐藏） -->
+      <div class="mobq">
+        <div class="st-block"><h4>本次导出摘要</h4>
+          <div class="st-line"><span class="k">受众：</span>团队技术版</div>
+          <div class="st-line"><span class="k">待核排除：</span>2 条</div>
+          <div class="st-line"><span class="k">已发出日志：</span>2 条</div>
+        </div>
+      </div>
+
+      <!-- 输入框 -->
+      <div class="composer">
+        <div class="box"><div class="ph">描述你想要构建的内容, / 调用指令, @ 文件或对话</div></div>
+        <div class="tools">
+          <span class="mode">工作区内修改</span>
+          <span class="spacer"></span>
+          <span class="model">请选择模型 ▾</span>
+          <button class="send" onclick="alert('发送消息：示例数据')">➤</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="footnote">
+  <div class="box">场景 4「给不同的人一份合适的进展材料」· 覆盖 K18 分受众只读分发（技术 MD / 非技术增强 / 纯文本兜底；单向只增、外部为唯一事实源、本地只留已发出日志；<b>非飞书/Jira 双向同步</b>，目标平台待确认）/ X5 述职素材（自述数字与证据分栏、待核标注、导出默认排除待核；非信用证明、非完整贡献记录）/ X2 毕业（人工声明+洁净度勾选+回潮自动摘标；不做「N 周未打开即成功」自动判定）/ X3 失败教训（个人可改进/外部原因双栏，锚点缺失只存事实不开归因栏，中性归档）。页面内全部为<b>虚构示例数据</b>（G3验收项目及旧项目均为示意）。设计为方案设想，不代表已上线。</div>
+</div>
+
+<script>
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark' ? 'light' : 'dark');
+}
+function navHint(ev){
+  var el = ev.target.closest('.nav-item');
+  if(!el) return;
+  var t = el.textContent.trim().slice(0,20);
+  alert('导航「'+t+'」：设计示意，示例数据');
+}
+/* ===== K18 三档只读材料 ===== */
+var AUDIENCES = [
+  {name:'团队技术版（Markdown）', short:'团队技术版', body:'# G3验收项目 · 进展快照（技术版）\n## 已完成\n- T-102 原型设计：初稿已交付，附 2 张设计稿截图\n- T-098 需求梳理：完成\n## 进行中\n- T-103 联调：顺延至下一版\n## 风险\n- R-07 视觉验收：待关闭\n（只读快照，不随本地台账更新）'},
+  {name:'朋友非技术版（增强说明）', short:'朋友非技术版', body:'这个项目目前做完了大半：原型设计的初稿已经交出去，需求梳理也完成了；剩下的联调放到下一版再做。还有一个视觉验收的小问题待处理。这是一份当时的情况说明，不会随后续进展自动更新。'},
+  {name:'纯文本兜底（离线）', short:'纯文本', body:'G3验收项目进展：已完成原型设计初稿、需求梳理；联调顺延下一版；视觉验收风险待关闭。只读快照。'}
+];
+var curAud = 0;
+function selectAudience(btn){
+  document.querySelectorAll('.aud').forEach(function(a){a.classList.remove('sel')});
+  btn.classList.add('sel');
+  curAud = parseInt(btn.dataset.aud,10);
+  refreshPreview();
+}
+function selectedScopes(){
+  var labels = [];
+  document.querySelectorAll('#p-share .scope-row input').forEach(function(cb,i){
+    if(cb.checked){ labels.push(['已完成任务','里程碑','风险处理记录','述职素材（仅已核）'][i]); }
+  });
+  return labels.length ? labels.join(' · ') : '（未选范围）';
+}
+function refreshPreview(){
+  var a = AUDIENCES[curAud];
+  document.getElementById('pvAud').textContent = a.name;
+  document.getElementById('pvScope').textContent = selectedScopes();
+  document.getElementById('pvBody').textContent = a.body;
+  document.getElementById('rAud').textContent = a.short;
+}
+function logSent(){
+  alert('已向「已发出」只读日志追加一条记录：单向只增，不回写外部（示例数据）');
+}
+/* ===== X2 毕业勾选 ===== */
+function refreshGrad(){
+  var boxes = document.querySelectorAll('#p-x2x3 .grad-list input');
+  var all = true;
+  boxes.forEach(function(b){ if(!b.checked) all=false; });
+  var btn = document.getElementById('gradBtn');
+  btn.disabled = !all;
+  btn.style.opacity = all ? '1' : '.6';
+}
+function graduate(){
+  var btn = document.getElementById('gradBtn');
+  btn.textContent = '已声明毕业';
+  btn.disabled = true;
+  btn.style.opacity = '.6';
+  alert('你已人工声明毕业；出现未完成项或回潮承诺时毕业标自动摘除（示例数据）');
+}
+/* ===== 页签切换 ===== */
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+  tab.classList.add('active');
+  document.getElementById(tab.dataset.panel).classList.add('active');
+}
+refreshPreview();
+</script>
+</body>
+</html>

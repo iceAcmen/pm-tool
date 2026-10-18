@@ -1,0 +1,272 @@
+{
+  "src": "s1-morning-queue_dark.html",
+  "url": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/s1-morning-queue_dark.html",
+  "outdir": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "screenshot": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/_shots/s1-morning-queue_dark_desktop.jpg",
+      "screenshotBytes": 64712,
+      "truncated": false,
+      "structure": {
+        "title": "早上打开，先看到要处理的（K11·K1·K12·K13）— 场景S1种子",
+        "firstH1": "",
+        "viewport": {
+          "w": 1440,
+          "h": 761
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 1007
+        },
+        "counts": {
+          "section": 0,
+          "h1": 0,
+          "h2": 0,
+          "img": 0,
+          "canvas": 0,
+          "svg": 0,
+          "links": 3,
+          "buttons": 11
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "misalignedBlocks": [
+        {
+          "tag": "div.topbar",
+          "text": "项目工作台 › G3验收项目\n        \n          ＋ 新建项目\n          AI助手\n    ",
+          "rect": [
+            471,
+            70,
+            908,
+            53
+          ],
+          "widthDeltaVsGrid": 300,
+          "gridWidth": 608,
+          "containerWidth": 908,
+          "containerTag": "main"
+        },
+        {
+          "tag": "div.composer",
+          "text": "描述你想要构建的内容, / 调用指令, @ 文件或对话\n        \n          工作区内修改\n      ",
+          "rect": [
+            471,
+            818,
+            908,
+            104
+          ],
+          "widthDeltaVsGrid": 300,
+          "gridWidth": 608,
+          "containerWidth": 908,
+          "containerTag": "main"
+        }
+      ],
+      "misalignedBlocksHint": "含义：section/main/article 直接子级里，个别元素撑到父容器全宽、其他兄弟明显更窄。widthDeltaVsGrid=比栅格宽多少 px、gridWidth=正常栅格宽度、containerWidth=父容器宽度。最常见根因：HTML 标签闭合错位（<p> 忘了 </p> 等）导致元素跳出 .wrap/.container 层级，浏览器容错解析、不报 console 错但布局层级已被打乱。 | 修法：从 containerTag 定位到出问题的 section，逐行检查该 section 内前面的 HTML 标签闭合。 | 豁免：(1) **full-bleed / breakout 布局**——故意做全宽 hero、全宽 gradient divider、文章里跳出正文栏的大图/引用块（杂志排版）。看截图确认是设计意图后忽略；(2) sticky/absolute 顶栏错放在 section 直接子级下（罕见）。",
+      "emojiUsageWarning": [
+        {
+          "tag": "span",
+          "chars": "⚙",
+          "contextText": "⚙"
+        },
+        {
+          "tag": "span",
+          "chars": "☐",
+          "contextText": "☐"
+        },
+        {
+          "tag": "span",
+          "chars": "⚠",
+          "contextText": "⚠"
+        },
+        {
+          "tag": "span",
+          "chars": "⚙",
+          "contextText": "⚙"
+        },
+        {
+          "tag": "button",
+          "chars": "➤",
+          "contextText": "➤"
+        }
+      ],
+      "emojiUsageHint": "warning · 含义：页面正文里检出 emoji 字符（U+1F300–U+1FAFF 或 U+2600–U+27BF 平面）。SKILL.md 视觉设计段明确禁用 emoji——不作图标、不作装饰、不放进数据。 | 修法：换成内联 SVG 图标（<svg viewBox=\"0 0 24 24\">）建立风格连贯的图标语言。 | 豁免：(1) **用户品牌资产明确包含 emoji**（罕见，但如即时通讯、社交媒体主题的产物合理）；(2) 主题本身就是关于 emoji 的（emoji 历史 / 表情包研究 / Unicode 演进）；(3) 引用某条真实文本原文（如推文截图的文字版），emoji 是内容而非装饰——保留原文可接受，但仍应权衡；(4) 装饰性 dingbat（如 U+2713 勾选符 ✓、U+2192 箭头 →、U+2605 星 ★）落入 U+2600–U+27BF 平面被误报的，如确认是符号非 emoji 可忽略。",
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "elapsedSec": 3.53,
+  "schemaVersion": 2,
+  "status": "warning",
+  "engineInfo": {
+    "name": "chrome_cli",
+    "degraded": true,
+    "degradedReasons": [
+      "playwright 未装"
+    ]
+  },
+  "input": {
+    "original": "s1-morning-queue_dark.html",
+    "resolvedPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/s1-morning-queue_dark.html",
+    "baseUrl": "file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/s1-morning-queue_dark.html",
+    "protocol": "file",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/_shots/s1-morning-queue_dark_desktop.jpg",
+        "size": 64712,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 0,
+    "warning": 7,
+    "info": 0
+  },
+  "findings": [
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "kind": "layout",
+      "viewport": "desktop",
+      "selector": "div.topbar",
+      "evidence": {
+        "tag": "div.topbar",
+        "text": "项目工作台 › G3验收项目\n        \n          ＋ 新建项目\n          AI助手\n    ",
+        "rect": [
+          471,
+          70,
+          908,
+          53
+        ],
+        "widthDeltaVsGrid": 300,
+        "gridWidth": 608,
+        "containerWidth": 908,
+        "containerTag": "main"
+      },
+      "dedupeKey": "misalignedBlocks|desktop|div.topbar|0"
+    },
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "kind": "layout",
+      "viewport": "desktop",
+      "selector": "div.composer",
+      "evidence": {
+        "tag": "div.composer",
+        "text": "描述你想要构建的内容, / 调用指令, @ 文件或对话\n        \n          工作区内修改\n      ",
+        "rect": [
+          471,
+          818,
+          908,
+          104
+        ],
+        "widthDeltaVsGrid": 300,
+        "gridWidth": 608,
+        "containerWidth": 908,
+        "containerTag": "main"
+      },
+      "dedupeKey": "misalignedBlocks|desktop|div.composer|1"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "⚙",
+        "contextText": "⚙"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|0"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "☐",
+        "contextText": "☐"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|1"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "⚠",
+        "contextText": "⚠"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|2"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "⚙",
+        "contextText": "⚙"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|3"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "button",
+      "evidence": {
+        "tag": "button",
+        "chars": "➤",
+        "contextText": "➤"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|button|4"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "ruleId": "misalignedBlocks",
+      "severity": "warning",
+      "viewport": "desktop",
+      "selector": "div.topbar"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "viewport": "desktop",
+      "selector": "span"
+    }
+  ],
+  "reportPath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/design/deep-integration-v2-designs-rework/scenes/s1-morning-queue/_shots/report.json"
+}

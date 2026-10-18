@@ -173,9 +173,12 @@ assert.match(
 )
 
 // ---- 真实 taskStatus 键序驱动分组序列（钉住 R8/R3 的真实状态枚举，不允许再凭印象写顺序）----
-const tsMatch = /const taskStatus: Record<string, string> = \{([^}]*)\}/.exec(tasksSrc)
-assert.ok(tsMatch, 'tasks.tsx 应含 taskStatus 字面量')
-const realStatusOrder = [...tsMatch[1].matchAll(/^\s*(\w+):/gm)].map(m => m[1])
+// f2109a5 起 tasks.tsx 单一来源引用 core/status.ts 的 taskStatusLabels，不再写内联字面量；
+// 键序断言改从 status.js 导入，意图（todo→in_progress→blocked→done 分组渲染序）不变。
+import { taskStatusLabels } from '../lib/core/status.js'
+const tsMatch = /const taskStatus = taskStatusLabels as Record<string, string>/.exec(tasksSrc)
+assert.ok(tsMatch, 'tasks.tsx 应引用 taskStatusLabels（单一来源）')
+const realStatusOrder = Object.keys(taskStatusLabels)
 assert.deepEqual(realStatusOrder, ['todo', 'in_progress', 'blocked', 'done'], '真实 taskStatus 键序即为分组渲染序')
 const realGrouped = [
   { id: 'a', status: 'blocked', code: '2' },

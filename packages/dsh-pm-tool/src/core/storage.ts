@@ -22,6 +22,39 @@ export const settingRecordSchema = z.object({
   updatedAt: z.string(),
 }).passthrough()
 
+/** K9 会话结存：任务 ↔ 会话绑定 + 结存摘要（单向结存，非镜像）。 */
+export const sessionRecordSchema = z.object({
+  id: z.string().regex(/^session-[a-zA-Z0-9_-]+$/, '会话绑定 ID 只能包含字母、数字、下划线和连字符'),
+  projectId: z.string(),
+  taskId: z.string(),
+  sessionId: z.string(),
+  note: z.string().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+export type SessionRecord = z.infer<typeof sessionRecordSchema>
+
+/** X6-L1 即时复盘草稿：克制文本，句级已核/待核/留白，无积分/连胜/徽章。 */
+export const reflectionRecordSchema = z.object({
+  id: z.string().regex(/^ref-[a-zA-Z0-9_-]+$/, '复盘 ID 只能包含字母、数字、下划线和连字符'),
+  projectId: z.string(),
+  taskId: z.string(),
+  status: z.enum(['draft', 'final']),
+  sourceEvent: z.enum(['task-done']),
+  draft: z.object({
+    title: z.string(),
+    at: z.iso.datetime(),
+    lines: z.array(z.object({
+      text: z.string(),
+      mark: z.enum(['known', 'pending', 'blank']),
+    })),
+    gaps: z.array(z.string()),
+  }),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+export type ReflectionRecord = z.infer<typeof reflectionRecordSchema>
+
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
   // v0.6.0 schema v2：本版读 v1 时代记录（compatibleVersions 含 1），写入一律打 v2 信封。
@@ -40,6 +73,8 @@ export const pmDomainSpec = defineDomain({
     meetings: domainTable(meetingRecordSchema),
     reports: domainTable(progressReportRecordSchema),
     deliverables: domainTable(deliverableRecordSchema),
+    sessions: domainTable(sessionRecordSchema),
+    reflections: domainTable(reflectionRecordSchema),
   },
 })
 

@@ -35,6 +35,11 @@ import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
 import { handleAskUndoCommand } from './commands/ask.js'
 import { handleAskProvenanceCommand, handleAskRecheckCommand } from './commands/ask.js'
+import { handleCaptureCommand, captureHelp } from './commands/capture.js'
+import { handleSessionCommand, sessionHelp } from './commands/session.js'
+import { handleReflectCommand, reflectHelp } from './commands/reflect.js'
+import { handleCheckCommand, checkHelp } from './commands/check.js'
+import { handleMetricCommand, metricHelp } from './commands/metric.js'
 
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
@@ -90,6 +95,16 @@ function renderHelp(): CommandResult {
       dashboardHelp,
       '',
       settingsHelp,
+      '',
+      captureHelp,
+      '',
+      sessionHelp,
+      '',
+      reflectHelp,
+      '',
+      checkHelp,
+      '',
+      metricHelp,
     ].join('\n'),
   }
 }
@@ -193,6 +208,22 @@ export async function apply(ctx: Context): Promise<void> {
       if (askUndoMatch) return await handleAskUndoCommand(askUndoMatch[1] ?? '', domain)
       const askMatch = /^ask(?:\s+([\s\S]*))?$/i.exec(raw)
       if (askMatch) return handleAskCommand(askMatch[1] ?? '', domain, optionalLlm())
+      const captureApplyMatch = /^capture-apply(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (captureApplyMatch) return await handleCaptureCommand(`capture-apply ${captureApplyMatch[1] ?? ''}`.trim(), domain, optionalLlm())
+      const captureMatch = /^capture(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (captureMatch) return handleCaptureCommand(captureMatch[1] ?? '', domain, optionalLlm())
+      const attachEvidenceMatch = /^attach-evidence(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (attachEvidenceMatch) return handleCaptureCommand(`attach-evidence ${attachEvidenceMatch[1] ?? ''}`.trim(), domain, optionalLlm())
+      const sessionMatch = /^session(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (sessionMatch) return handleSessionCommand(sessionMatch[1] ?? '', domain)
+      const reflectListMatch = /^reflect-list(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (reflectListMatch) return handleReflectCommand(`list ${reflectListMatch[1] ?? ''}`.trim(), domain)
+      const reflectMatch = /^reflect(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (reflectMatch) return handleReflectCommand(reflectMatch[1] ?? '', domain)
+      const checkMatch = /^check(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (checkMatch) return handleCheckCommand(checkMatch[1] ?? '', domain)
+      const metricMatch = /^metric(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (metricMatch) return handleMetricCommand(metricMatch[1] ?? '', domain)
       const sub = raw.toLowerCase()
 
       if (sub === 'ping') {

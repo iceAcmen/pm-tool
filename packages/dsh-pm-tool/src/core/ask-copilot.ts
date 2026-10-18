@@ -12,7 +12,7 @@ export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数�
 - stepId 用 s1/s2…唯一编号；needs 填依赖的前置 stepId（无依赖填 []）；同一步要改同一任务的多个字段就合并成一步，不要拆成两步。
 - 整份计划不超过 8 步、不超过 10 条不同任务；做不到就少给几步。
 - 允许的写操作与字段（模型只产出草稿，PM 确认后才落库）：
-  - task.update：改任务；patch 仅 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，start 不得晚于 due)。
+  - task.update：改任务；patch 仅 assignee(字符串)/status(todo|in_progress|blocked|done)/progress(0-100整数)/dueDate/startDate(合法 YYYY-MM-DD，start 不得晚于 due)/description(纯文本备注，≤2000字)/evidenceUrl(http(s)://链接或相对路径，≤2048)/repoUrl(同 evidenceUrl 形状，≤2048)/branch(字符串，≤128)。不得改 title/priority/effortHours/manualProgress/checklist 等其余字段。
   - milestone.create / milestone.update：里程碑；create 必填 title、targetDate(YYYY-MM-DD)，可选 status(planned|at_risk|achieved|missed)/achievedDate/description；update 可改 title/targetDate/status/achievedDate/description。achieved 必须给 achievedDate，非 achieved 必须 achievedDate=null。
   - risk.create / risk.update：风险/问题；create 必填 type(risk|issue)、title、impact(low|medium|high|critical)，可选 description/owner/dueDate/status(open|monitoring|closed)/probability(low|medium|high)/responsePlan/solution；risk 必须给 probability 且不填 solution，issue 的 probability 必须为 null 且不填 responsePlan。
   - deliverable.create / deliverable.update：交付物；create 必填 name，可选 version/owner/status(planned|in_progress|submitted|accepted)/location/description/dueDate/repoUrl/branch。
@@ -24,7 +24,16 @@ export const COPILOT_SYSTEM = `你是项目经理副驾。基于给定项目数�
 export interface AskContext {
   projectName: string
   today: string // YYYY-MM-DD（本地日零点日期，由调用方注入，便于离线测试）
-  tasks: { id: string, title: string, status: string, progress: number, assignee?: string, dueDate?: string, startDate?: string }[]
+  tasks: {
+    id: string, title: string, status: string, progress: number,
+    assignee?: string, dueDate?: string, startDate?: string,
+    /** P0 K1：任务客观备注原文（有则在上下文行截断展示，无则标注「无」，不编造）。 */
+    description?: string,
+    /** P0 K1：是否已挂客观佐证链接（evidenceUrl 非空即 true，由调用方判定）。 */
+    hasEvidence?: boolean,
+    /** P0 K1：关联交付物 ID，无关联为 null/缺省。 */
+    deliverableId?: string | null,
+  }[]
   risks: { id: string, title: string, status?: string, severity?: string, probability?: string, impact?: string }[]
   milestones: { id: string, title: string, targetDate?: string, status: string }[]
   meetings?: { id: string, title: string, date?: string, actions?: MeetingAction[] }[]
@@ -37,13 +46,32 @@ function joinOrNote(label: string, items: string[]): string {
   return items.length ? `${label}（${items.length}）：` + items.join('；') : `${label}：暂无`
 }
 
+/** P0 K1：备注折叠空白为单空格并截断 40 字供单行上下文；空/缺省返回 null（调用方标注「无」）。 */
+function briefDescription(text: string | undefined): string | null {
+  const t = (text ?? '').replace(/\s+/g, ' ').trim()
+  if (!t) return null
+  return t.length > 40 ? `${t.slice(0, 40)}…` : t
+}
+
+/** P0 K1：任务行尾如实追加 备注/证据/交付物 三态，缺则标注「无」，不替模型推断。 */
+function taskLine(t: AskContext['tasks'][number]): string {
+  const note = briefDescription(t.description)
+  return `${t.id} ${t.title}[${t.status} ${t.progress}%`
+    + `${t.assignee ? ` 负责人=${t.assignee}` : ''}`
+    + `${t.startDate ? ` 起=${t.startDate}` : ''}`
+    + `${t.dueDate ? ` 截止=${t.dueDate}` : ''}`
+    + `${note ? ` 备注=${note}` : ' 备注=无'}`
+    + `${t.hasEvidence ? ' 证据=有' : ' 证据=无'}`
+    + `${t.deliverableId ? ` 交付物=${t.deliverableId}` : ' 交付物=无'}`
+    + ']'
+}
+
 export function buildAskContext(c: AskContext): string {
   const lines: string[] = [
     `项目：${c.projectName}`,
     `今天（本地日期）：${c.today}。请以此为唯一日历锚点判断逾期/临期。`,
   ]
-  lines.push(joinOrNote('任务', c.tasks.map(t =>
-    `${t.id} ${t.title}[${t.status} ${t.progress}%${t.assignee ? ` 负责人=${t.assignee}` : ''}${t.startDate ? ` 起=${t.startDate}` : ''}${t.dueDate ? ` 截止=${t.dueDate}` : ''}]`)))
+  lines.push(joinOrNote('任务', c.tasks.map(taskLine)))
   lines.push(joinOrNote('里程碑', c.milestones.map(m =>
     `${m.id} ${m.title}[${m.status}${m.targetDate ? ` ${m.targetDate}` : ''}]`)))
   lines.push(joinOrNote('风险/问题', c.risks.map(r =>

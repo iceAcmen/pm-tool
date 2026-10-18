@@ -2,6 +2,7 @@
 import { z } from 'zod'
 import { projectIdSchema } from './project.js'
 import { milestoneIdSchema } from './milestone.js'
+import { deliverableIdSchema } from './deliverable.js'
 import { TASK_STATUSES, taskStatusLabels } from './status.js'
 import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRelation } from './repo.js'
 
@@ -49,6 +50,8 @@ const taskFields = {
   completedDate: optionalCompletedDateSchema,
   progress: z.number().int().min(0).max(100),
   milestoneId: milestoneIdSchema.nullable(),
+  // X6 连接：任务 → 交付物（本期补，供复盘草稿判断交付/里程碑级别）；可选，缺省即无。
+  deliverableId: deliverableIdSchema.nullable().optional(),
   // PROD-11 前置依赖：optional，缺省即无前缀（v1 旧记录无此键按 [] 处理）。
   // 写业务层负责存在/同项目/自指/DAG 成环校验；空数组在落盘前归一化为缺键。
   predecessorIds: z.array(taskIdSchema).optional(),
@@ -104,6 +107,7 @@ export const taskCreateSchema = z.strictObject({
   dueDate: optionalDateSchema,
   progress: taskFields.progress.default(0),
   milestoneId: milestoneIdSchema.nullable().default(null),
+  deliverableId: taskFields.deliverableId,
   predecessorIds: taskFields.predecessorIds,
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
@@ -125,6 +129,7 @@ export const taskUpdateSchema = z.strictObject({
   completedDate: clearableCompletedDateSchema,
   progress: taskFields.progress.optional(),
   milestoneId: milestoneIdSchema.nullable().optional(),
+  deliverableId: taskFields.deliverableId,
   predecessorIds: taskFields.predecessorIds,
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
@@ -152,6 +157,7 @@ export function describeTaskValidation(error: z.ZodError): string {
     completedDate: '完成日期（有效 YYYY-MM-DD，传 null 清除）',
     progress: '进度（0 到 100 的整数）',
     milestoneId: '里程碑 ID 或 null',
+    deliverableId: '关联交付物 ID 或 null',
     predecessorIds: '前置依赖任务 ID 数组（须同项目、存在、不自指、不成环）',
     effortHours: '实际投入工时（小时，≥0，可缺省）',
     evidenceUrl: '客观佐证链接（可缺省）',

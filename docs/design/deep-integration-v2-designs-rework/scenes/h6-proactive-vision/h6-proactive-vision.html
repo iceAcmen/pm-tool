@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>想要的主动触达（H6 · 目标体验示意 · 当前未实现）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%234f7cff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --panel2:#f2f4f7; --line:#e5e7eb; --line2:#d0d5dd;
+  --fg:#1f2329; --fg2:#5b6472; --fg3:#8a93a0;
+  --acc:#4f7cff; --acc-bg:#eef2ff;
+  --ok:#168a5a; --ok-bg:#e8f6ef; --warn:#b7791f; --warn-bg:#fdf3e0; --bad:#c9404a; --bad-bg:#fdecef;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a; --line2:#3a4150;
+  --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484;
+  --acc:#6f9cff; --acc-bg:#1c2740;
+  --ok:#4cc08a; --ok-bg:#153226; --warn:#d9a13f; --warn-bg:#33291a; --bad:#e07a70; --bad-bg:#3a2025;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:var(--acc);text-decoration:none;cursor:pointer}
+
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px;position:relative;z-index:1}
+
+/* 顶部未实现横幅（页面视觉的一部分，非附加注释） */
+.h6-banner{display:flex;gap:12px;align-items:flex-start;background:var(--warn-bg);border:1.5px dashed var(--warn);border-radius:10px;padding:14px 16px;margin-bottom:18px}
+.h6-banner .badge-ic{width:26px;height:26px;flex:none;border-radius:7px;background:var(--warn);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.h6-banner b{color:var(--fg);font-size:15px}
+.h6-banner .sub{font-size:12.5px;color:var(--fg2);margin-top:3px}
+
+.page-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.page-head .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4f7cff,#7c5cff);flex:none}
+.page-head h1{font-size:21px;font-weight:650;letter-spacing:-.01em}
+.page-head .sub{color:var(--fg2);font-size:13px;margin-top:5px}
+.theme-btn{margin-left:auto;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg2);font-size:15px;cursor:pointer;flex:none}
+
+h2{font-size:15px;font-weight:600;margin:26px 0 12px}
+h2 .n{font-family:var(--mono);font-size:12px;color:var(--acc);margin-right:6px}
+
+/* 示意水印 */
+.wm{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.wm span{position:absolute;font-size:88px;font-weight:800;color:var(--line);transform:rotate(-24deg);white-space:nowrap;opacity:.5}
+
+/* 展示栅格 */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.card .ct{font-size:13.5px;font-weight:600;margin-bottom:4px}
+.card .cd{font-size:12.5px;color:var(--fg2);margin-bottom:12px}
+
+/* 桌面横幅 mockup */
+.desk-banner{margin:10px auto 0;max-width:380px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow)}
+.desk-banner .db-top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--fg3)}
+.desk-banner .db-ic{width:28px;height:28px;border-radius:7px;background:var(--acc-bg);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.desk-banner .db-title{font-size:13.5px;font-weight:600;margin:6px 0 2px}
+.desk-banner .db-body{font-size:12.5px;color:var(--fg2)}
+.desk-banner .db-acts{display:flex;gap:8px;margin-top:10px}
+.mini-btn{padding:6px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);min-height:34px;display:inline-flex;align-items:center}
+.mini-btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+
+/* 手机 mockup */
+.phone{margin:10px auto 0;max-width:300px;background:var(--panel2);border:1px solid var(--line);border-radius:22px;padding:14px 12px;box-shadow:var(--shadow)}
+.phone .pn-time{text-align:center;font-size:11px;color:var(--fg3);font-family:var(--mono);margin-bottom:10px}
+.pn-row{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px}
+.pn-row .db-ic{width:26px;height:26px;border-radius:7px;background:var(--warn-bg);color:var(--warn);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;font-size:13px}
+.pn-row .pn-title{font-size:13px;font-weight:600}
+.pn-row .pn-body{font-size:12px;color:var(--fg2);margin-top:2px}
+
+/* 托盘角标 mockup */
+.tray-demo{display:flex;align-items:center;gap:14px;justify-content:center;padding:18px 10px}
+.tray{position:relative;width:40px;height:40px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--fg2)}
+.tray .dot{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:10.5px;font-family:var(--mono);display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--panel)}
+.tray-note{font-size:12.5px;color:var(--fg2);max-width:220px}
+
+/* 对比 */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.cmp .col{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--panel)}
+.cmp .col h3{font-size:13.5px;font-weight:600;margin-bottom:6px}
+.cmp .col p{font-size:12.5px;color:var(--fg2)}
+.cmp .col.now{border-color:var(--ok);background:var(--ok-bg)}
+.cmp .col.want{border-color:var(--warn);background:var(--warn-bg)}
+
+.note{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--fg2);margin-top:18px}
+.note b{color:var(--fg)}
+
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  .wrap{padding:18px 14px 40px}
+}
+</style>
+</head>
+<body>
+
+<!-- 示意水印（装饰，不读屏） -->
+<div class="wm" aria-hidden="true">
+  <span style="top:18%;left:-5%">示意</span>
+  <span style="top:48%;left:30%">示意</span>
+  <span style="top:76%;left:-2%">示意</span>
+</div>
+
+<div class="wrap">
+  <div class="page-head">
+    <div class="logo"></div>
+    <div>
+      <h1>想要的主动触达：不用打开也能被提醒到</h1>
+      <div class="sub">目标体验示意 · 画的是期望形态，不是现状，更不是已上线功能。</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="切换深浅主题">◐</button>
+  </div>
+
+  <!-- 未实现横幅（页面视觉主体的一部分） -->
+  <div class="h6-banner" role="alert">
+    <div class="badge-ic">!</div>
+    <div>
+      <b>目标体验示意 · 依赖宿主通知能力，当前未实现</b>
+      <div class="sub">H6 常驻主动推送是尚未补齐的真缺口；本页不把它画成已上线功能。K11 只改善「打开 dsh 之后」的提醒整理，不承担系统级常驻推送。</div>
+    </div>
+  </div>
+
+  <h2><span class="n">形态</span>期望的主动触达长什么样</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="ct">桌面通知横幅（期望示意）</div>
+      <div class="cd">不用打开 dsh，临期/到期也能在桌面弹出一条提醒。</div>
+      <div class="desk-banner">
+        <div class="db-top"><span class="db-ic">P</span>PM工作台 · 示例数据</div>
+        <div class="db-title">T-102 原型设计 · 临期 1 天</div>
+        <div class="db-body">你承诺 10-19 交初稿，明天到期；R-07 风险已挂 2 天未动。</div>
+        <div class="db-acts">
+          <button class="mini-btn primary" onclick="toast('示意：打开 T-102（示例数据）')">打开</button>
+          <button class="mini-btn" onclick="toast('示意：稍后提醒（示例数据）')">稍后</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">手机通知（期望示意）</div>
+      <div class="cd">外出时，承诺到期/临期也能推到手机通知中心。</div>
+      <div class="phone">
+        <div class="pn-time">9:12 · 示例数据</div>
+        <div class="pn-row">
+          <span class="db-ic">!</span>
+          <div>
+            <div class="pn-title">G3验收项目 · 承诺到期</div>
+            <div class="pn-body">T-102 原型设计初稿今天到期，点此查看。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">托盘角标（期望示意）</div>
+      <div class="cd">即使没打开窗口，托盘上也能看到有待处理事项。</div>
+      <div class="tray-demo">
+        <div class="tray" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="dot num">2</span>
+        </div>
+        <div class="tray-note">角标数字 = 待处理条目数（临期/逾期）；仅为形态示意，当前无此通道。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">这一页为什么只是示意</div>
+      <div class="cd">主动触达依赖宿主级通知能力，当前不具备：</div>
+      <div style="font-size:12.5px;color:var(--fg2);display:flex;flex-direction:column;gap:8px">
+        <div>· 宿主当前没有外部通知渠道：不发邮件、不发短信、不做系统推送，错过也不补发；</div>
+        <div>· 工具自身不引入常驻后台进程，无法自己常驻叫醒你；</div>
+        <div>· 是否解除该约束、主动触达由谁承担，属于待拍板项，本页不替产品承诺。</div>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="n">区别</span>现在能做的（K11）vs 这里想要的（H6）</h2>
+  <div class="cmp">
+    <div class="col now">
+      <h3>现在：打开之后整理（K11，已在主线）</h3>
+      <p>你打开 dsh 后，系统把上次以来到期未达的条目整理成队列，迟到标注、可静音；只改善打开视图，不主动找人。</p>
+    </div>
+    <div class="col want">
+      <h3>想要：不用打开也被提醒（H6，未实现）</h3>
+      <p>临期、逾期、承诺到期时主动弹出通知到桌面/手机；这是宿主级通知能力问题，本期不承诺、不伪装成已上线。</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>边界说明：</b>本页全部为<b>虚构示例数据</b>，通知内容、项目、任务均为示意；H6 为悬置缺口，是否实现、由谁承担取决于宿主通知能力与拍板结论。设计为方案设想，不代表已上线，不修改任何产品源码/配置/依赖。
+  </div>
+</div>
+
+<script>
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark'?'light':'dark');
+}
+function toast(msg){ alert(msg); }
+</script>
+</body>
+</html>

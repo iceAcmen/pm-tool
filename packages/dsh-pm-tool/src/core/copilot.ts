@@ -50,6 +50,34 @@ const nullableEnum = (set: Set<string>): FieldCheck => v =>
 const enumField = (set: Set<string>): FieldCheck => v =>
   set.has(String(v)) ? '' : `须为 ${[...set].join('/')}`
 
+// ===== P0 K2：task.update 受限直写窄集新增四字段前置闸（最终口径仍以 task.ts zod 落库校验为准） =====
+// description：纯文本备注，≤2000 字；不做语义改写，模型只能补写客观说明。
+const DESCRIPTION_MAX = 2000
+const descriptionField: FieldCheck = v => {
+  if (!isStr(v)) return '须为字符串'
+  if (v.length > DESCRIPTION_MAX) return `长度不得超过 ${DESCRIPTION_MAX} 字`
+  return ''
+}
+// http(s):// 链接，或相对路径形状（/绝对、./、../、含 / 的相对路径段）；禁空白，≤2048。
+// 不联网探测、不校验可达性；非法形状（如裸词 "abc"）直接拒。
+const HTTP_URL = /^https?:\/\/[^\s]+$/i
+const REL_PATH = /^(\.{1,2}\/|\/)[^\s]*$|^[A-Za-z0-9._-]+\/[^\s]*$/
+const URLISH_MAX = 2048
+const urlishField: FieldCheck = v => {
+  if (!isStr(v)) return '须为字符串'
+  if (v.length > URLISH_MAX) return `长度不得超过 ${URLISH_MAX} 字符`
+  const t = v.trim()
+  if (HTTP_URL.test(t) || REL_PATH.test(t)) return ''
+  return '须为 http(s):// 链接或相对路径'
+}
+// branch：纯字符串 ≤128（落库 zod 另有更严的分支名白名单，此处仅做窄集前置闸）。
+const BRANCH_MAX = 128
+const branchField: FieldCheck = v => {
+  if (!isStr(v)) return '须为字符串'
+  if (v.length > BRANCH_MAX) return `长度不得超过 ${BRANCH_MAX} 字符`
+  return ''
+}
+
 /**
  * 校验 patch 的字段白名单。allowed: 字段名 -> 校验器；required: 创建时必填字段。
  * 返回首个错误原因，'' 表示全部合法；未知字段直接拒绝（白名单外不得透传到 repo）。
@@ -154,6 +182,10 @@ export function validateActions(
         else if (k === 'progress') { const n = Number(v); if (!Number.isInteger(n) || n < 0 || n > 100) bad = '进度须 0-100 整数' }
         else if (k === 'dueDate' || k === 'startDate') { if (!isValidDateStr(v)) bad = '日期须合法 YYYY-MM-DD' }
         else if (k === 'assignee') { if (typeof v !== 'string') bad = '负责人须为字符串' }
+        // P0 K2 窄集新增：仅客观备注/证据链接/仓库链接/分支名可直写；标题/优先级/工时/清单等仍拒。
+        else if (k === 'description') { const f = descriptionField(v); if (f) bad = `description：${f}` }
+        else if (k === 'evidenceUrl' || k === 'repoUrl') { const f = urlishField(v); if (f) bad = `${k}：${f}` }
+        else if (k === 'branch') { const f = branchField(v); if (f) bad = `branch：${f}` }
         else { bad = `未知字段 ${k}` }
         if (bad) break
       }

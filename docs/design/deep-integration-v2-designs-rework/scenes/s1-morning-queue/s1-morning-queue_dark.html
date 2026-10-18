@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>早上打开，先看到要处理的（K11·K1·K12·K13）— 场景S1种子</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%234f7cff'/%3E%3C/svg%3E">
+<style>
+/* ============ dsh 壳 token（浅深两态，沿用宿主真实界面） ============ */
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --panel2:#f2f4f7; --line:#e5e7eb; --line2:#d0d5dd;
+  --fg:#1f2329; --fg2:#5b6472; --fg3:#8a93a0;
+  --acc:#4f7cff; --acc-bg:#eef2ff;
+  --ok:#168a5a; --ok-bg:#e8f6ef; --warn:#b7791f; --warn-bg:#fdf3e0; --bad:#c9404a; --bad-bg:#fdecef;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a; --line2:#3a4150;
+  --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484;
+  --acc:#6f9cff; --acc-bg:#1c2740;
+  --ok:#4cc08a; --ok-bg:#153226; --warn:#d9a13f; --warn-bg:#33291a; --bad:#e07a70; --bad-bg:#3a2025;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--acc);text-decoration:none;cursor:pointer}
+a:hover{text-decoration:underline}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ============ 场景导语条 ============ */
+.banner{max-width:1320px;margin:0 auto;padding:14px 20px 0}
+.guide{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--fg2)}
+.guide b{color:var(--fg)}
+.guide .tag{font-size:11px;color:var(--fg3);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:8px;white-space:nowrap}
+.guide .expand{margin-left:auto;color:var(--acc);font-size:12px}
+.guide-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--fg2)}
+.guide-detail.open{display:block}
+.guide-detail p{margin:4px 0}
+
+/* ============ dsh 三栏壳 ============ */
+.shell{max-width:1320px;margin:12px auto 24px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.cols{display:grid;grid-template-columns:200px 210px 1fr;min-height:760px}
+/* 左1 功能导航 */
+.nav1{background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.brand .logo{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#4f7cff,#7c5cff);flex:none}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:13px;color:var(--fg2);cursor:pointer}
+.nav-item:hover{background:var(--panel2)}
+.nav-item.active{background:var(--acc-bg);color:var(--acc);font-weight:500}
+.nav-item .ic{width:14px;height:14px;flex:none;opacity:.75}
+.nav-group{padding:12px 8px 4px;font-size:11px;color:var(--fg3);letter-spacing:.04em}
+.nav-spacer{flex:1}
+.nav-item.bottom{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
+/* 左2 插件导航 */
+.nav2{background:var(--panel2);border-right:1px solid var(--line);padding:14px 10px}
+.plug-brand{font-weight:600;font-size:13px;padding:2px 8px 2px}
+.plug-sub{font-size:11px;color:var(--fg3);padding:0 8px 8px}
+.plug-search{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--fg3);background:var(--panel);margin:4px 0 10px}
+.nav2 .nav-item{font-size:12.5px}
+.nav2 .nav-item .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--fg3)}
+.nav2 .nav-item.active .cnt{color:var(--acc)}
+.nav2 .sub{padding-left:24px;font-size:12px}
+/* 右主区 */
+.main{background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto minmax(560px,1fr) auto;min-width:0}
+.main .topbar{grid-column:1/3;grid-row:1}
+.main .chat{grid-column:1;grid-row:2}
+.main .queue{grid-column:2;grid-row:2;width:auto}
+.main .composer{grid-column:1/3;grid-row:3}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+.crumb{font-size:12.5px;color:var(--fg3)}
+.crumb b{color:var(--fg)}
+.topbar .acts{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);background:var(--panel)}
+.btn:hover{border-color:var(--line2);color:var(--fg)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.primary:hover{opacity:.92}
+.btn.theme{width:30px;height:28px;padding:0;justify-content:center;font-size:13px}
+
+/* ============ 对话区 ============ */
+.chat{flex:1;overflow:auto;padding:16px 24px 8px;display:flex;flex-direction:column;gap:12px;min-height:560px}
+.day-mark{font-size:11.5px;color:var(--fg3);text-align:center;font-family:var(--mono)}
+.msg{max-width:86%}
+.msg.user{align-self:flex-end;background:var(--acc-bg);color:var(--fg);border:1px solid var(--line);border-radius:10px 10px 2px 10px;padding:8px 12px;font-size:13.5px}
+.msg.agent{align-self:flex-start;display:flex;flex-direction:column;gap:8px;max-width:94%}
+.agent-body{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13.5px;box-shadow:var(--shadow)}
+.agent-body .src{font-size:12px;color:var(--fg3);margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.agent-body .src .s{display:inline-flex;align-items:center;gap:4px}
+.agent-body .src .s::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);flex:none}
+.agent-body .src .s.pending::before{background:var(--warn)}
+/* K13 对话内任务卡投影 */
+.task-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;max-width:340px;box-shadow:var(--shadow)}
+.task-card .head{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg3)}
+.task-card .id{font-family:var(--mono);font-size:11px}
+.task-card .title{font-weight:600;font-size:13.5px;margin:4px 0 2px}
+.task-card .meta{font-size:12px;color:var(--fg2);display:flex;gap:10px;flex-wrap:wrap}
+.task-card .row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.st-pill{font-size:11px;border-radius:4px;padding:1px 6px;font-weight:500}
+.st-in{background:var(--acc-bg);color:var(--acc)}
+.st-ok{background:var(--ok-bg);color:var(--ok)}
+.st-warn{background:var(--warn-bg);color:var(--warn)}
+.st-bad{background:var(--bad-bg);color:var(--bad)}
+.task-card.stale{opacity:.55;filter:grayscale(.6);pointer-events:none}
+.task-card .why{font-size:11.5px;color:var(--fg3);margin-top:6px}
+.task-card .acts{margin-left:auto;display:flex;gap:6px}
+.mini-btn{padding:4px 10px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--fg2)}
+.mini-btn:hover{border-color:var(--line2);color:var(--fg)}
+.mini-btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+/* K12 变更可见行 */
+.k12line{font-size:12px;color:var(--fg3);background:var(--panel);border:1px dashed var(--line);border-radius:6px;padding:5px 10px;align-self:flex-start;display:inline-flex;gap:6px;align-items:center}
+.k12line a{color:var(--acc)}
+
+/* ============ K11 补记队列面板 ============ */
+.queue{width:300px;background:var(--panel2);border-left:1px solid var(--line);padding:14px;overflow:auto;flex:none}
+.qhead{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.qsub{font-size:11.5px;color:var(--fg3);margin-bottom:10px}
+.qsum{display:flex;gap:8px;margin-bottom:10px}
+.qchip{flex:1;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:5px 8px;font-size:11px;color:var(--fg3)}
+.qchip b{display:block;font-size:14px;color:var(--fg)}
+.qchip.late{border-color:var(--warn)}
+.qchip.late b{color:var(--warn)}
+.qitem{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 11px;margin-bottom:8px;box-shadow:var(--shadow)}
+.qitem .t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500}
+.qitem .t .id{font-family:var(--mono);font-size:11px;color:var(--fg3)}
+.qitem .m{font-size:11.5px;color:var(--fg2);margin-top:3px}
+.qitem .r{margin-top:6px;display:flex;align-items:center;gap:8px}
+.qitem .late{font-size:11px;color:var(--warn);background:var(--warn-bg);border-radius:4px;padding:0 6px}
+.qitem .late.bad{color:var(--bad);background:var(--bad-bg)}
+.qitem .act{margin-left:auto}
+.qitem.snoozed{opacity:.6}
+.qitem.snoozed .m{color:var(--fg3)}
+.qmore{margin-top:10px;display:flex;gap:8px}
+.qmore a{font-size:12px}
+.snooze-tag{font-size:11px;color:var(--fg3);border:1px dashed var(--line);border-radius:4px;padding:0 6px}
+
+/* ============ 输入框（dsh 真实样式） ============ */
+.composer{border-top:1px solid var(--line);background:var(--panel);padding:10px 16px}
+.composer .box{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel)}
+.composer .ph{color:var(--fg3);font-size:13px}
+.composer .tools{display:flex;align-items:center;gap:8px;margin-top:8px}
+.composer .tools .mode{font-size:12px;color:var(--fg2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.composer .tools .spacer{flex:1}
+.composer .tools .model{font-size:12px;color:var(--fg2)}
+.composer .send{width:34px;height:34px;border-radius:8px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+
+/* ============ 移动端 ============ */
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr;min-height:0}
+  .nav1,.nav2,.queue{display:none}
+  .chat{min-height:430px;padding:12px 14px 6px}
+  .msg{max-width:92%}
+  .banner{padding:8px 10px 0}
+  .guide{font-size:12px;flex-wrap:wrap;row-gap:4px}
+  .mobq{display:block;margin:10px 12px 0;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+  .mobq .qhead{font-size:12.5px}
+  .mobq .qitem{margin-bottom:6px}
+  /* R3：移动端顶栏操作组紧凑，只留新建项目与深浅切换 */
+  .topbar{flex-wrap:wrap;row-gap:6px;padding:8px 12px}
+  .topbar .crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .topbar .acts{gap:6px}
+  .topbar .acts .btn:not(.primary):not(.theme){display:none}
+  /* R2：移动端任务卡「打开任务」改全宽次按钮 */
+  .task-card .row{flex-wrap:wrap}
+  .task-card .row .acts{width:100%}
+  .task-card .row .mini-btn{width:100%;text-align:center}
+  /* R4：K12 变更行移动端紧凑两行 */
+  .k12line{flex-wrap:wrap;line-height:1.5}
+}
+.mobq{display:none}
+
+/* ============ 附注 ============ */
+.footnote{max-width:1320px;margin:0 auto 30px;padding:0 20px;font-size:12px;color:var(--fg3)}
+.footnote .box{background:var(--panel);border:1px dashed var(--line);border-radius:8px;padding:10px 14px}
+</style>
+</head>
+<body>
+
+<!-- ===== 场景导语（白话五问，展开可见） ===== -->
+<div class="banner">
+  <div class="guide" onclick="document.querySelector('.guide-detail').classList.toggle('open')">
+    <span>场景 1 / 5</span><b>早上打开，先看到要处理的</b><span class="tag">K11 · K1 · K12 · K13</span>
+    <span style="color:var(--warn);font-size:11px">示例数据 · 设计示意</span>
+    <span class="expand">▼ 白话说明</span>
+  </div>
+  <div class="guide-detail">
+    <p><b>什么时候用：</b>早上打开 dsh 开始一天工作时。</p>
+    <p><b>你点什么：</b>什么都不用点——打开后右侧自动出现「今早待处理」；也可以直接在对话里问「G3验收项目有什么要处理的」。</p>
+    <p><b>系统替你做什么：</b>把上次打开以来到期未达的条目整理成队列（含迟到标注与静音）；回答你问题时按需读取台账并注明依据；AI 对台账的改动可回看。</p>
+    <p><b>你看到什么结果：</b>临期任务、逾期风险一眼可见；对话里嵌着任务卡片（可打开、过期置灰）；最近 AI 改动与采纳数一行可见。</p>
+    <p><b>和现在有何不同：</b>现在要自己翻多个页面才能拼出「今天该做什么」；以后打开即见，回答可溯源。</p>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="cols">
+
+    <!-- ===== 左1 功能导航（真实 dsh） ===== -->
+    <nav class="nav1" onclick="navHint(event)">
+      <div class="brand"><span class="logo"></span>DSH本地构建</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">＋</span>新会话</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">◧</span>插件</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">↻</span>自动化任务</div>
+      <div class="nav-item active" onclick="navHint()">><span class="ic">▦</span>项目管理</div>
+      <div class="nav-group">工作区</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">▫</span>默认工作区</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">＋</span>新会话</div>
+      <div class="nav-spacer"></div>
+      <div class="nav-item bottom" onclick="navHint()">><span class="ic">⚙</span>设置</div>
+    </nav>
+
+    <!-- ===== 左2 PM工作台导航（真实 pm-tool） ===== -->
+    <nav class="nav2" onclick="navHint(event)">
+      <div class="plug-brand">PM工作台</div>
+      <div class="plug-sub">DeepSeek Harness</div>
+      <div class="plug-search">搜索导航…</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">▤</span>跨项目<span class="cnt"></span></div>
+      <div class="nav-item sub" onclick="navHint()">><span class="ic">◫</span>总览看板</div>
+      <div class="nav-group">当前项目 · G3验收项目</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">◎</span>项目概览</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">◫</span>计划与排期</div>
+      <div class="nav-item sub" onclick="navHint()">><span class="ic">☐</span>全部任务<span class="cnt">5</span></div>
+      <div class="nav-item sub" onclick="navHint()">><span class="ic">▤</span>甘特排期</div>
+      <div class="nav-item sub active" onclick="navHint()">><span class="ic">◇</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item sub" onclick="navHint()">><span class="ic">⚠</span>风险与问题<span class="cnt">1</span></div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">◧</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">▤</span>会议纪要<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">▤</span>进度汇报<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()">><span class="ic">▤</span>交付物<span class="cnt">1</span></div>
+      <div style="margin-top:auto"><div class="nav-item" onclick="navHint()">><span class="ic">⚙</span>口径设置</div></div>
+    </nav>
+
+    <!-- ===== 右主区 ===== -->
+    <main class="main">
+      <div class="topbar">
+        <span class="crumb">项目工作台 <b>›</b> <b>G3验收项目</b></span>
+        <div class="acts">
+          <button class="btn" onclick="alert('新建项目：设计示意，示例数据')">＋ 新建项目</button>
+          <button class="btn" onclick="alert('AI助手：回答将引用台账依据（K1），示例数据')">AI助手</button>
+          <button class="btn" onclick="alert('AI副驾：代起草/代写均需你确认后生效，示例数据')">AI副驾</button>
+          <button class="btn" onclick="alert('…更多：更多操作菜单，示例数据')">…更多</button>
+          <button class="btn theme" onclick="toggleTheme()">◐</button>
+        </div>
+      </div>
+
+      <div class="chat">
+        <div class="day-mark">今天 · 09:12 · 默认工作区</div>
+
+        <!-- 用户提问 -->
+        <div class="msg user">G3验收项目最近有什么要处理的？</div>
+
+        <!-- 系统回答（K1 按需读取，回答带依据锚点） -->
+        <div class="msg agent">
+          <div class="agent-body">
+            <div>早上的情况是：<b>临期 1 项，逾期 0 项</b>。最要紧的是 <b>T-102 原型设计</b>——你承诺 10-19 交初稿，还有 1 天；R-07 视觉验收风险挂了 2 天没动。需要的话我可以把这两条放进「今早待处理」置顶。</div>
+            <div class="src">
+              <span class="s">依据 · 全部任务（5）</span>
+              <span class="s">T-102 到期 10-19</span>
+              <span class="s pending">R-07 逾期 2 天</span>
+              <span class="s">台账更新 09:12</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- K13 对话内任务卡片投影：可用卡 -->
+        <div class="task-card">
+          <div class="head"><span class="id">T-102</span><span class="st-pill st-in">进行中</span><span class="st-pill st-warn">临期 1 天</span></div>
+          <div class="title">原型设计</div>
+          <div class="meta"><span>负责人 我</span><span class="num">到期 10-19</span><span>里程碑 m-g3 Beta交付</span></div>
+          <div class="row">
+            <span class="why">对话卡片为本地台账投影，单动作回写</span>
+            <span class="acts"><button class="mini-btn" onclick="alert('打开任务：真实跳转到任务视图，示例数据')">打开任务</button></span>
+          </div>
+        </div>
+
+        <!-- K13 过期卡置灰 -->
+        <div class="task-card stale">
+          <div class="head"><span class="id">T-098</span><span class="st-pill st-ok">已完成</span></div>
+          <div class="title">需求梳理</div>
+          <div class="meta"><span>状态昨日已更新</span></div>
+          <div class="why">此卡片已过期，以任务视图为准</div>
+        </div>
+
+        <!-- K12 变更可见行 -->
+        <div class="k12line">最近 7 天 AI 助手对台账的改动：<span class="num">5</span> 处，你采纳 <span class="num">4</span> 处 · <a onclick="alert('变更记录：只增日志+可删除，示例数据')">查看记录</a></div>
+
+        <!-- 用户点确认（K2 风格：直写前展示关键变化） -->
+        <div class="msg user">把 R-07 的说明补一下：「视觉验收需要浏览器截图凭证」</div>
+        <div class="msg agent">
+          <div class="agent-body">
+            <div>好的，以下改动将直接写入备注（限备注字段，可撤销）：</div>
+            <div class="src"><span class="s">R-07 备注 + 1 行说明</span><span class="s pending">等待你确认</span></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:2px">
+            <button class="mini-btn primary" onclick="alert('已写入备注并记录变更，可撤销（示例数据）')">确认写入</button>
+            <button class="mini-btn" onclick="alert('已取消，未写入（示例数据）')">取消</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- K11 补记队列 -->
+      <aside class="queue">
+        <div class="qhead">今早待处理</div>
+        <div class="qsub">上次打开：昨天 18:20 · 补记</div>
+        <div class="qsum">
+          <div class="qchip"><b class="num">3</b>积压条目</div>
+          <div class="qchip late"><b class="num">2</b>已迟到</div>
+        </div>
+        <div class="qitem">
+          <div class="t"><span class="id">T-102</span>原型设计</div>
+          <div class="m">承诺 10-19 交初稿，到期未动</div>
+          <div class="r"><span class="late">临期 1 天</span><button class="act mini-btn" onclick="alert('标记开始处理（示例数据）')">处理</button></div>
+        </div>
+        <div class="qitem">
+          <div class="t"><span class="id">R-07</span>视觉验收风险</div>
+          <div class="m">依赖浏览器截图凭证，逾期未处理</div>
+          <div class="r"><span class="late bad">逾期 2 天</span><button class="act mini-btn" onclick="alert('打开风险详情（示例数据）')">打开</button></div>
+        </div>
+        <div class="qitem snoozed">
+          <div class="t"><span class="id">M-02</span>周会纪要待认领</div>
+          <div class="m">已静音至周五 · 打开后仍可见</div>
+          <div class="r"><span class="snooze-tag">静音中</span></div>
+        </div>
+        <div class="qmore">
+          <a onclick="alert('静音设置：压主动投递，不隐藏打开视图（示例数据）')">静音设置</a>
+          <a onclick="alert('展开全部条目（示例数据）')">展开全部</a>
+        </div>
+      </aside>
+
+      <!-- 移动端补记队列（桌面隐藏） -->
+      <div class="mobq">
+        <div class="qhead">今早待处理 · 积压 3 · 迟到 2</div>
+        <div class="qitem"><div class="t"><span class="id">T-102</span>原型设计</div><div class="m">承诺 10-19 交初稿，到期未动</div><div class="r"><span class="late">临期 1 天</span></div></div>
+        <div class="qitem"><div class="t"><span class="id">R-07</span>视觉验收风险</div><div class="m">逾期未处理</div><div class="r"><span class="late bad">逾期 2 天</span></div></div>
+      </div>
+
+      <!-- 输入框 -->
+      <div class="composer">
+        <div class="box"><div class="ph">描述你想要构建的内容, / 调用指令, @ 文件或对话</div></div>
+        <div class="tools">
+          <span class="mode">工作区内修改</span>
+          <span class="spacer"></span>
+          <span class="model">请选择模型 ▾</span>
+          <button class="send" onclick="alert('发送消息：示例数据')">➤</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="footnote">
+  <div class="box">场景 1「早上打开，先看到要处理的」· 覆盖 K11 补记队列与静音 / K1 按需读取带依据 / K12 变更与采纳可见 / K13 对话内任务卡片投影。页面内全部为<b>虚构示例数据</b>（项目 G3验收项目、任务、风险、会话均为示意）；对话卡片为本地台账只读投影；系统级常驻主动推送（H6）不在本场景承诺内——本场景只呈现打开后的整理。设计为方案设想，不代表已上线。</div>
+</div>
+
+<script>
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark' ? 'light' : 'dark');
+}
+function navHint(ev){
+  var el = ev.target.closest('.nav-item');
+  if(!el) return;
+  var t = el.textContent.trim().slice(0,20);
+  alert('导航「'+t+'」：设计示意，示例数据');
+}
+</script>
+</body>
+</html>

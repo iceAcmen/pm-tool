@@ -28,7 +28,7 @@ export const PROVENANCE_SCHEMA_VERSION = 1
 /** undo 句柄 TTL 与上限沿用 ask 既有真实限制（10min / 最多 3 条 / 一次性 / 重启失效），不在此造新时限。 */
 export const PROVENANCE_UNDO_TTL_MS = 10 * 60 * 1000
 
-export type ProvenanceKind = 'ask-apply' | 'wbs-import' | 'report-narrate' | 'meeting-summarize'
+export type ProvenanceKind = 'ask-apply' | 'capture' | 'wbs-import' | 'report-narrate' | 'meeting-summarize'
 
 export interface ProvenanceUndoMeta {
   handle: string

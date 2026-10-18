@@ -88,7 +88,14 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
   const ctxText = buildAskContext({
     projectName: project.name ?? projectId,
     today: localToday(),
-    tasks: tasks.map((t: any) => ({ id: t.id, title: t.title, status: t.status, progress: t.progress ?? 0, assignee: t.assignee, dueDate: t.dueDate, startDate: t.startDate })),
+    tasks: tasks.map((t: any) => ({
+      id: t.id, title: t.title, status: t.status, progress: t.progress ?? 0,
+      assignee: t.assignee, dueDate: t.dueDate, startDate: t.startDate,
+      // P0 K1：透传客观备注/证据挂接状态/交付物连接，供上下文如实标注（不编造）。
+      description: typeof t.description === 'string' ? t.description : undefined,
+      hasEvidence: !!(t.evidenceUrl && String(t.evidenceUrl).trim()),
+      deliverableId: typeof t.deliverableId === 'string' ? t.deliverableId : null,
+    })),
     risks: risks.map((r: any) => ({ id: r.id, title: r.title, status: r.status, severity: r.severity, probability: r.probability, impact: r.impact })),
     milestones: milestones.map((m: any) => ({ id: m.id, title: m.title, targetDate: m.targetDate, status: m.status })),
     meetings: meetings.map((m: any) => ({ id: m.id, title: m.title, date: m.meetingDate, actions: m.actions ?? [] })),

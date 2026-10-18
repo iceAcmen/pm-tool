@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM工作台 × dsh 深度融合 · 一天工作场景总览（返工版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%234f7cff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f8fa; --panel:#fff; --panel2:#f2f4f7; --line:#e5e7eb; --line2:#d0d5dd;
+  --fg:#1f2329; --fg2:#5b6472; --fg3:#8a93a0;
+  --acc:#4f7cff; --acc-bg:#eef2ff; --ok:#168a5a; --ok-bg:#e8f6ef; --warn:#b7791f; --warn-bg:#fdf3e0; --bad:#c9404a; --bad-bg:#fdecef;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a; --line2:#3a4150;
+  --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484; --acc:#6f9cff; --acc-bg:#1c2740;
+  --ok:#4cc08a; --ok-bg:#153226; --warn:#d9a13f; --warn-bg:#33291a; --bad:#e07a70; --bad-bg:#3a2025;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased;padding:28px 20px 80px}
+a{color:var(--acc);text-decoration:none} a:hover{text-decoration:underline}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto}
+header{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:26px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4f7cff,#7c5cff);flex:none}
+h1{font-size:22px;font-weight:650;letter-spacing:-.01em}
+.sub{color:var(--fg2);font-size:13px;margin-top:6px}
+.badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.badge{font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--fg2)}
+.badge.warn{color:var(--warn);border-color:rgba(183,121,31,.45);background:var(--warn-bg)}
+.theme-btn{margin-left:auto;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg2);font-size:15px;cursor:pointer}
+h2{font-size:15px;font-weight:600;margin:34px 0 12px;display:flex;align-items:center;gap:8px}
+h2 .n{font-family:var(--mono);font-size:12px;color:var(--acc)}
+.day{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+.day-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.day-ic{width:30px;height:30px;border-radius:8px;background:var(--acc-bg);color:var(--acc);display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.day-title{font-weight:600;font-size:15px}
+.day-time{font-size:12px;color:var(--fg3);font-family:var(--mono)}
+.scenes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.scene{border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden}
+.scene img{width:100%;display:block;border-bottom:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;background:var(--panel2)}
+.scene .body{padding:10px 12px 12px}
+.scene .t{font-size:13.5px;font-weight:600}
+.scene .t .id{font-family:var(--mono);font-size:11px;color:var(--fg3);font-weight:400;margin-left:6px}
+.scene .d{font-size:12px;color:var(--fg2);margin-top:4px}
+.scene .open{display:inline-block;margin-top:8px;font-size:12px}
+.note{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--fg2);margin-top:14px}
+.note b{color:var(--fg)}
+.path{font-family:var(--mono);font-size:11.5px;color:var(--fg3);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+.order{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13px;margin-top:14px}
+.order ol{margin:8px 0 0 18px;color:var(--fg2)}
+.order li{margin:3px 0}
+.order b{color:var(--fg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo"></div>
+  <div>
+    <h1>PM工作台 × dsh 深度融合 · 一天工作场景</h1>
+    <div class="sub">按「早上打开 → 白天干活 → 完成大事 → 对外汇报 → 长期沉淀」的推荐组合主线，重出的面向用户效果图（返工版）。</div>
+    <div class="badges">
+      <span class="badge">示例数据 · 设计示意</span>
+      <span class="badge">嵌入现有 dsh 界面形态</span>
+      <span class="badge warn">含未实现项标注（见附录）</span>
+    </div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()">◐</button>
+</header>
+
+<div class="day">
+  <div class="day-head"><div class="day-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 2v1.5M3.2 5.2l1 1M1 10h1.5M13.5 10H15M11.8 6.2l1-1M11 10a3 3 0 1 0-6 0"/><path d="M2.5 13.5h11"/></svg></div><div><div class="day-title">早上打开工作台</div><div class="day-time">09:00 · 打开 dsh</div></div></div>
+  <div class="scenes">
+    <div class="scene">
+      <img src="scenes/s1-morning-queue/_shots/s1-morning-queue_desktop.jpg" alt="S1 早上打开，先看到要处理的">
+      <div class="body">
+        <div class="t">早上打开，先看到要处理的<span class="id">K11 · K1 · K12 · K13</span></div>
+        <div class="d">打开即见「今早待处理」队列（迟到标注/静音）；问一句项目状态，回答带台账依据；对话里嵌任务卡片。</div>
+        <a class="open" href="scenes/s1-morning-queue/s1-morning-queue.html">打开场景 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="day">
+  <div class="day-head"><div class="day-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v5A1.5 1.5 0 0 1 12.5 11H8l-3 2.5V11H3.5A1.5 1.5 0 0 1 2 9.5z"/></svg></div><div><div class="day-title">白天在对话里推进项目</div><div class="day-time">10:00–17:00 · 边聊边干</div></div></div>
+  <div class="scenes">
+    <div class="scene">
+      <img src="scenes/s2-dialog-work/_shots/s2-dialog-work_desktop.jpg" alt="S2 对话里推进项目">
+      <div class="body">
+        <div class="t">对话里推进项目，说完即沉淀<span class="id">K4 · K2 · K9 · K3</span></div>
+        <div class="d">聊天中出现的承诺自动整理成待办建议；补备注/挂证据说一句即可（确认+可撤销）；会话绑定任务，工作痕迹收成证据。</div>
+        <a class="open" href="scenes/s2-dialog-work/s2-dialog-work.html">打开场景 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="day">
+  <div class="day-head"><div class="day-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 5"/></svg></div><div><div class="day-title">完成大事</div><div class="day-time">里程碑达成 · 交付前</div></div></div>
+  <div class="scenes">
+    <div class="scene">
+      <img src="scenes/s3-completion/_shots/s3-completion_desktop.jpg" alt="S3 完成大事">
+      <div class="body">
+        <div class="t">交付前查缺口，完成后留复盘草稿<span class="id">K6 · X6</span></div>
+        <div class="d">宣布完成前系统帮你核对承诺与材料缺口（不替你验收）；重要任务完成后自动生成粗糙即时复盘草稿，补材料后定稿。</div>
+        <a class="open" href="scenes/s3-completion/s3-completion.html">打开场景 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="day">
+  <div class="day-head"><div class="day-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V2.5M5 5l3-3 3 3"/><path d="M2.5 10v2A1.5 1.5 0 0 0 4 13.5h8a1.5 1.5 0 0 0 1.5-1.5v-2"/></svg></div><div><div class="day-title">对外汇报分享</div><div class="day-time">周报/述职 · 给别人看</div></div></div>
+  <div class="scenes">
+    <div class="scene">
+      <img src="scenes/s4-outbound-share/_shots/s4-outbound-share_desktop.jpg" alt="S4 对外汇报分享">
+      <div class="body">
+        <div class="t">给不同的人一份合适的进展材料<span class="id">K18 · X5 · X2 · X3</span></div>
+        <div class="d">按受众生成只读材料（技术版/非技术版/纯文本）；述职素材待核标注；真正收尾的项目标记毕业；失败项目中性归档。</div>
+        <a class="open" href="scenes/s4-outbound-share/s4-outbound-share.html">打开场景 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="day">
+  <div class="day-head"><div class="day-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 4.5A1.5 1.5 0 0 1 4 3h3l1.5 2h3.5A1.5 1.5 0 0 1 13.5 6.5v4A1.5 1.5 0 0 1 12 12H4a1.5 1.5 0 0 1-1.5-1.5z"/></svg></div><div><div class="day-title">长期沉淀</div><div class="day-time">结项之后 · 目标之上</div></div></div>
+  <div class="scenes">
+    <div class="scene">
+      <img src="scenes/s5-archive-goal/_shots/s5-archive-goal_desktop.jpg" alt="S5 长期档案与目标">
+      <div class="body">
+        <div class="t">档案多年可读，目标上下连通<span class="id">K16 · X7 · K12</span></div>
+        <div class="d">结项档案用通用格式保存、多年后仍可打开；愿景 → 年度目标 → 项目归属，AI 代起草归属由你确认；AI 改动可回看可删除。</div>
+        <a class="open" href="scenes/s5-archive-goal/s5-archive-goal.html">打开场景 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2><span class="n">H6</span>常驻主动推送 · 目标体验示意（当前未实现）</h2>
+<div class="scenes" style="max-width:360px">
+  <div class="scene">
+    <img src="scenes/h6-proactive-vision/_shots/h6-proactive-vision_desktop.jpg" alt="H6 目标体验示意">
+    <div class="body">
+      <div class="t">想要的主动触达<span class="id">H6</span></div>
+      <div class="d">你期望的形态：不用打开也能被提醒。此图为目标体验示意，依赖宿主通知能力，当前未实现。</div>
+      <a class="open" href="scenes/h6-proactive-vision/h6-proactive-vision.html">打开示意 →</a>
+    </div>
+  </div>
+</div>
+
+<h2><span class="n">附录</span>能力边界与未实现项</h2>
+<div class="scenes">
+  <div class="scene">
+    <img src="appendix/_shots/appendix_desktop.jpg" alt="附录">
+    <div class="body">
+      <div class="t">诚实清单：没做的、并入的、暂不建议的<span class="id">全部 30 项定位</span></div>
+      <div class="d">H6 常驻推送未实现；K18 非双向同步；自主签约不做；合并方向并入何处；后续/暂不建议方向各一行定位与理由。</div>
+      <a class="open" href="appendix/appendix.html">打开附录 →</a>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <b>总览说明：</b>本目录是「PM工作台 × DeepSeek Harness 深度融合」推荐组合主线的<b>面向用户效果图</b>，嵌入现有 dsh 界面形态（三栏：功能导航 / PM工作台 / 主内容区）。页面内全部为<b>虚构示例数据</b>（项目 G3验收项目 等），设计为方案设想，不代表已上线；能力边界与未实现项见附录。不修改任何产品源码/配置/依赖。
+</div>
+
+<div class="order">
+  <b>推荐浏览顺序：</b>
+  <ol>
+    <li>先看 <b>S1 早上打开</b>（先看到要处理的）与 <b>S2 对话推进</b>（说完即沉淀）——两个最高频场景；</li>
+    <li>再看 <b>S3 完成大事</b>（查缺口+复盘草稿）与 <b>S4 对外汇报</b>（分受众材料）；</li>
+    <li>最后看 <b>S5 长期沉淀</b> 与 <b>H6 目标体验示意</b>（含未实现标注），收尾看附录。</li>
+  </ol>
+</div>
+
+</div>
+<script>
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

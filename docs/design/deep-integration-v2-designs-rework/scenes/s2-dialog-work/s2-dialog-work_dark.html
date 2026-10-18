@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>对话里推进项目，说完即沉淀（K4·K2·K9·K3）— 场景S2</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%234f7cff'/%3E%3C/svg%3E">
+<style>
+/* ============ dsh 壳 token（浅深两态，沿用宿主真实界面，不改色板） ============ */
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --panel2:#f2f4f7; --line:#e5e7eb; --line2:#d0d5dd;
+  --fg:#1f2329; --fg2:#5b6472; --fg3:#8a93a0;
+  --acc:#4f7cff; --acc-bg:#eef2ff;
+  --ok:#168a5a; --ok-bg:#e8f6ef; --warn:#b7791f; --warn-bg:#fdf3e0; --bad:#c9404a; --bad-bg:#fdecef;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a20; --panel2:#1d2129; --line:#2a2f3a; --line2:#3a4150;
+  --fg:#d7dce3; --fg2:#9aa3b2; --fg3:#6b7484;
+  --acc:#6f9cff; --acc-bg:#1c2740;
+  --ok:#4cc08a; --ok-bg:#153226; --warn:#d9a13f; --warn-bg:#33291a; --bad:#e07a70; --bad-bg:#3a2025;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"PingFang SC","Helvetica Neue",system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--acc);text-decoration:none;cursor:pointer}
+a:hover{text-decoration:underline}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+
+/* ============ 场景导语条 ============ */
+.banner{max-width:1320px;margin:0 auto;padding:14px 20px 0}
+.guide{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--fg2)}
+.guide b{color:var(--fg)}
+.guide .tag{font-size:11px;color:var(--fg3);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:8px;white-space:nowrap}
+.guide .expand{margin-left:auto;color:var(--acc);font-size:12px}
+.guide-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--fg2)}
+.guide-detail.open{display:block}
+.guide-detail p{margin:4px 0}
+
+/* ============ dsh 三栏壳 ============ */
+.shell{max-width:1320px;margin:12px auto 24px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.cols{display:grid;grid-template-columns:200px 210px 1fr;min-height:760px}
+/* 左1 功能导航 */
+.nav1{background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.brand .logo{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#4f7cff,#7c5cff);flex:none}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:13px;color:var(--fg2);cursor:pointer}
+.nav-item:hover{background:var(--panel2)}
+.nav-item.active{background:var(--acc-bg);color:var(--acc);font-weight:500}
+.nav-item .ic{width:14px;height:14px;flex:none;opacity:.75}
+.nav-group{padding:12px 8px 4px;font-size:11px;color:var(--fg3);letter-spacing:.04em}
+.nav-spacer{flex:1}
+.nav-item.bottom{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
+/* 左2 插件导航 */
+.nav2{background:var(--panel2);border-right:1px solid var(--line);padding:14px 10px}
+.plug-brand{font-weight:600;font-size:13px;padding:2px 8px 2px}
+.plug-sub{font-size:11px;color:var(--fg3);padding:0 8px 8px}
+.plug-search{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;color:var(--fg3);background:var(--panel);margin:4px 0 10px}
+.nav2 .nav-item{font-size:12.5px}
+.nav2 .nav-item .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--fg3)}
+.nav2 .nav-item.active .cnt{color:var(--acc)}
+.nav2 .sub{padding-left:24px;font-size:12px}
+/* 右主区 */
+.main{background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto minmax(560px,1fr) auto;min-width:0}
+.main .topbar{grid-column:1/3;grid-row:1}
+.main .chat{grid-column:1;grid-row:2}
+.main .queue{grid-column:2;grid-row:2;width:auto}
+.main .composer{grid-column:1/3;grid-row:3}
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+.crumb{font-size:12.5px;color:var(--fg3)}
+.crumb b{color:var(--fg)}
+.topbar .acts{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);background:var(--panel)}
+.btn:hover{border-color:var(--line2);color:var(--fg)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.primary:hover{opacity:.92}
+.btn.theme{width:30px;height:28px;padding:0;justify-content:center;font-size:13px}
+
+/* ============ 对话区 ============ */
+.chat{flex:1;overflow:auto;padding:16px 24px 8px;display:flex;flex-direction:column;gap:12px;min-height:560px}
+.day-mark{font-size:11.5px;color:var(--fg3);text-align:center;font-family:var(--mono)}
+.msg{max-width:86%}
+.msg.user{align-self:flex-end;background:var(--acc-bg);color:var(--fg);border:1px solid var(--line);border-radius:10px 10px 2px 10px;padding:8px 12px;font-size:13.5px}
+.msg.agent{align-self:flex-start;display:flex;flex-direction:column;gap:8px;max-width:94%}
+.agent-body{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13.5px;box-shadow:var(--shadow)}
+.agent-body .src{font-size:12px;color:var(--fg3);margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.agent-body .src .s{display:inline-flex;align-items:center;gap:4px}
+.agent-body .src .s::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);flex:none}
+.agent-body .src .s.pending::before{background:var(--warn)}
+
+/* ============ K2 受限直写：变化预览卡 ============ */
+.k2card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:8px;padding:12px 14px;max-width:460px;box-shadow:var(--shadow)}
+.k2card .k2h{font-size:12px;color:var(--warn);font-weight:600;display:flex;gap:6px;align-items:center}
+.k2card .k2t{font-size:13px;font-weight:600;margin:6px 0 8px}
+.diff{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.diff .row{padding:6px 10px;display:flex;gap:8px}
+.diff .row.old{color:var(--fg3);text-decoration:line-through;background:var(--panel2)}
+.diff .row.new{color:var(--ok);background:var(--ok-bg)}
+.diff .row .sign{flex:none;width:12px}
+.k2card .scope{font-size:11.5px;color:var(--fg2);margin-top:8px}
+.k2card .scope b{color:var(--fg)}
+.k2acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.mini-btn{padding:6px 12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--fg2);background:var(--panel)}
+.mini-btn:hover{border-color:var(--line2);color:var(--fg)}
+.mini-btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.mini-btn.ghost{border-color:transparent;color:var(--fg3)}
+.k2done{background:var(--ok-bg);border:1px solid var(--ok);border-radius:8px;padding:10px 14px;max-width:460px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.k2done .ok-ic{color:var(--ok);font-weight:700}
+
+/* ============ K4 承诺建议卡（观察模式） ============ */
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:480px;box-shadow:var(--shadow)}
+.pcard .ph{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.pcard .psub{font-size:11.5px;color:var(--fg3);margin:2px 0 10px}
+.proposal{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.proposal .phead{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--fg3);font-family:var(--mono)}
+.pill{font-size:10.5px;border-radius:4px;padding:0 6px;font-weight:500;font-family:Inter,sans-serif}
+.pill.hi{background:var(--acc-bg);color:var(--acc)}
+.pill.mid{background:var(--warn-bg);color:var(--warn)}
+.proposal .pt{font-size:13.5px;font-weight:600;margin:6px 0 2px}
+.proposal .pd{font-size:12px;color:var(--fg2)}
+.proposal .pd .due{color:var(--warn);border:1px dashed var(--line2);border-radius:4px;padding:0 6px;margin-left:4px}
+.proposal .pacts{display:flex;gap:8px;margin-top:8px}
+.thirdparty{border:1px dashed var(--line);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--fg2);background:var(--panel2)}
+.thirdparty .tag3{font-size:10.5px;color:var(--fg3);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px}
+.proposal.done{opacity:.75;background:var(--ok-bg)}
+.proposal.done .pt::after{content:" · 已采纳进待办";color:var(--ok);font-weight:500;font-size:11.5px}
+.proposal.ignored{opacity:.5}
+.proposal.ignored .pt::after{content:" · 已忽略";color:var(--fg3);font-weight:500;font-size:11.5px}
+
+/* ============ K9 会话结存卡 ============ */
+.bindcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:480px;box-shadow:var(--shadow)}
+.bindcard .bh{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.bindrow{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px}
+.bindrow .bid{font-family:var(--mono);font-size:11px;color:var(--fg3);flex:none;margin-top:2px}
+.bindrow .bt{font-size:13px;font-weight:600}
+.bindrow .bm{font-size:12px;color:var(--fg2);margin-top:2px}
+.bindrow .bacts{margin-left:auto;display:flex;gap:6px;flex:none}
+.bindrow>div:not(.bacts){min-width:0}
+.ev>.eacts{flex:none}
+.ev>div:not(.eacts){min-width:0}
+.bindrow.auto{border-left:3px solid var(--ok)}
+.bindrow.low{border-left:3px solid var(--warn)}
+.bound-note{font-size:11.5px;color:var(--fg2);margin-top:8px}
+.bound-note b{color:var(--fg)}
+
+/* ============ K3 证据候选卡 ============ */
+.evcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:480px;box-shadow:var(--shadow)}
+.evcard .eh{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.evcard .esub{font-size:11.5px;color:var(--fg3);margin:2px 0 10px}
+.ev{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.ev .fic{width:28px;height:28px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;color:var(--fg2)}
+.ev .et{font-size:13px;font-weight:600}
+.ev .em{font-size:12px;color:var(--fg2);margin-top:2px}
+.ev .eacts{margin-left:auto;display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.ev.done{background:var(--ok-bg);border-color:var(--ok)}
+.ev.done .et::after{content:" · 已归属";color:var(--ok);font-weight:500;font-size:11.5px}
+
+/* ============ 右侧待裁决面板 ============ */
+.queue{width:300px;background:var(--panel2);border-left:1px solid var(--line);padding:14px;overflow:auto;flex:none}
+.qhead{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.qsub{font-size:11.5px;color:var(--fg3);margin-bottom:10px}
+.qsum{display:flex;gap:8px;margin-bottom:12px}
+.qchip{flex:1;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:5px 8px;font-size:11px;color:var(--fg3)}
+.qchip b{display:block;font-size:14px;color:var(--fg)}
+.qchip.warn{border-color:var(--warn)}
+.qchip.warn b{color:var(--warn)}
+.qsec{font-size:11px;color:var(--fg3);letter-spacing:.04em;margin:10px 0 6px}
+.qitem{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 11px;margin-bottom:8px;box-shadow:var(--shadow);font-size:12.5px}
+.qitem .t{font-weight:500;display:flex;gap:6px;align-items:center}
+.qitem .t .id{font-family:var(--mono);font-size:11px;color:var(--fg3)}
+.qitem .m{font-size:11.5px;color:var(--fg2);margin-top:3px}
+.qitem .r{margin-top:6px;display:flex;align-items:center;gap:8px}
+.qitem .act{margin-left:auto}
+.qitem.done{opacity:.6}
+.qitem.done .m{color:var(--ok)}
+.qmore{margin-top:10px;font-size:12px}
+
+/* ============ 输入框（dsh 真实样式） ============ */
+.composer{border-top:1px solid var(--line);background:var(--panel);padding:10px 16px}
+.composer .box{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel)}
+.composer .ph{color:var(--fg3);font-size:13px}
+.composer .tools{display:flex;align-items:center;gap:8px;margin-top:8px}
+.composer .tools .mode{font-size:12px;color:var(--fg2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.composer .tools .spacer{flex:1}
+.composer .tools .model{font-size:12px;color:var(--fg2)}
+.composer .send{width:34px;height:34px;border-radius:8px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+
+/* ============ 移动端 ============ */
+.mobq{display:none}
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr;min-height:0}
+  .nav1,.nav2,.queue{display:none}
+  .main{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .main .topbar{grid-column:1;grid-row:auto;flex-wrap:wrap;row-gap:6px;padding:8px 12px}
+  .topbar .crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+  .topbar .acts{gap:6px}
+  .topbar .acts .btn{display:none}
+  .topbar .acts .btn:first-child,.topbar .acts .btn.theme{display:inline-flex}
+  .main .chat{grid-column:1;grid-row:auto;min-height:430px;padding:12px 14px 6px}
+  .main .composer{grid-column:1;grid-row:auto}
+  .msg,.k2card,.pcard,.bindcard,.evcard,.k2done{max-width:100%}
+  .bindrow>div,.ev>div,.proposal{min-width:0}
+  .banner{padding:8px 10px 0}
+  .guide{font-size:12px}
+  .mini-btn{min-height:40px;padding:8px 12px}
+  .mobq{display:block;grid-column:1;margin:10px 12px 0;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+  .mobq .qhead{font-size:12.5px}
+  .mobq .qitem{margin-bottom:6px}
+}
+
+/* ============ 附注 ============ */
+.footnote{max-width:1320px;margin:0 auto 30px;padding:0 20px;font-size:12px;color:var(--fg3)}
+.footnote .box{background:var(--panel);border:1px dashed var(--line);border-radius:8px;padding:10px 14px}
+</style>
+</head>
+<body>
+
+<!-- ===== 场景导语（白话五问，展开可见） ===== -->
+<div class="banner">
+  <div class="guide" onclick="document.querySelector('.guide-detail').classList.toggle('open')">
+    <span>场景 2 / 5</span><b>对话里推进项目，说完即沉淀</b><span class="tag">K4 · K2 · K9 · K3</span>
+    <span style="color:var(--warn);font-size:11px">示例数据 · 设计示意</span>
+    <span class="expand">▼ 白话说明</span>
+  </div>
+  <div class="guide-detail">
+    <p><b>什么时候用：</b>白天在 dsh 里围绕 G3验收项目边聊边推进、说着话就把该记的事记下来时。</p>
+    <p><b>你点什么：</b>①在对话里说「帮我把这段说明补到 R-07 备注里」；②聊天中自然带出「我周三前给评审版」「这周要补截图凭证」这类承诺；③说「这个会话先挂到 T-102 上，待会儿接着做」；④会话里贴了附件、发生了文件改动。</p>
+    <p><b>系统替你做什么：</b>K2 把要写进备注/证据链接的变化先展示成预览，你确认后才写入、可撤销；K4 把聊天里的承诺整理成待办建议（观察模式，不自动进箱），你逐条确认才进待办；K9 把会话单向结存到任务上，高置信自动挂、可撤销，低置信你一键采纳；K3 把会话内的文件与改动收成证据候选，你点归属才落盘。</p>
+    <p><b>你看到什么结果：</b>对话里出现「待确认的承诺建议卡」（预填标题+到期占位）、「将写入备注」的变化预览卡（确认/取消）、会话挂上任务后的回显、证据候选的归属确认。</p>
+    <p><b>和现在有何不同：</b>以前承诺散在聊天里找不到、备注要自己切到任务页手改；现在说一句即可沉淀，关键变更先给你核对，写错可撤销。</p>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="cols">
+
+    <!-- ===== 左1 功能导航（真实 dsh） ===== -->
+    <nav class="nav1" onclick="navHint(event)">
+      <div class="brand"><span class="logo"></span>DSH本地构建</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">＋</span>新会话</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◧</span>插件</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">↻</span>自动化任务</div>
+      <div class="nav-item active" onclick="navHint()"><span class="ic">▦</span>项目管理</div>
+      <div class="nav-group">工作区</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▫</span>默认工作区</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">＋</span>新会话</div>
+      <div class="nav-spacer"></div>
+      <div class="nav-item bottom" onclick="navHint()"><span class="ic">⚙</span>设置</div>
+    </nav>
+
+    <!-- ===== 左2 PM工作台导航（真实 pm-tool） ===== -->
+    <nav class="nav2" onclick="navHint(event)">
+      <div class="plug-brand">PM工作台</div>
+      <div class="plug-sub">DeepSeek Harness</div>
+      <div class="plug-search">搜索导航…</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>跨项目<span class="cnt"></span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">◫</span>总览看板</div>
+      <div class="nav-group">当前项目 · G3验收项目</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◎</span>项目概览</div>
+      <div class="nav-item active" onclick="navHint()"><span class="ic">◫</span>计划与排期</div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">☐</span>全部任务<span class="cnt">5</span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">▤</span>甘特排期</div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">◇</span>里程碑<span class="cnt">1</span></div>
+      <div class="nav-item sub" onclick="navHint()"><span class="ic">⚠</span>风险与问题<span class="cnt">1</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">◧</span>人员负载</div>
+      <div class="nav-group">协作与记录</div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>会议纪要<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>进度汇报<span class="cnt">0</span></div>
+      <div class="nav-item" onclick="navHint()"><span class="ic">▤</span>交付物<span class="cnt">1</span></div>
+      <div style="margin-top:auto"><div class="nav-item" onclick="navHint()"><span class="ic">⚙</span>口径设置</div></div>
+    </nav>
+
+    <!-- ===== 右主区 ===== -->
+    <main class="main">
+      <div class="topbar">
+        <span class="crumb">项目工作台 <b>›</b> <b>G3验收项目</b> › 会话 s-0411「G3 视觉验收对稿」</span>
+        <div class="acts">
+          <button class="btn" onclick="alert('新建项目：设计示意，示例数据')">＋ 新建项目</button>
+          <button class="btn" onclick="alert('AI助手：回答将引用台账依据（K1），示例数据')">AI助手</button>
+          <button class="btn" onclick="alert('AI副驾：代起草/代写均需你确认后生效，示例数据')">AI副驾</button>
+          <button class="btn" onclick="alert('…更多：更多操作菜单，示例数据')">…更多</button>
+          <button class="btn theme" onclick="toggleTheme()" aria-label="切换深浅主题">◐</button>
+        </div>
+      </div>
+
+      <div class="chat">
+        <div class="day-mark">今天 · 10:24 · 默认工作区 · 会话 s-0411「G3 视觉验收对稿」</div>
+
+        <!-- ① K2 受限直写：用户说一句，先给变化预览 -->
+        <div class="msg user">帮我把这段说明补到 R-07 备注里：视觉验收需要浏览器截图凭证。</div>
+        <div class="msg agent">
+          <div class="k2card pend" data-kind="note" id="noteCard">
+            <div class="k2h">待你确认 · 将写入 R-07「视觉验收风险」备注</div>
+            <div class="k2t">变化预览（只动备注字段）</div>
+            <div class="diff">
+              <div class="row old"><span class="sign">−</span><span>原备注：等视觉验收排期</span></div>
+              <div class="row new"><span class="sign">＋</span><span>视觉验收需要浏览器截图凭证</span></div>
+            </div>
+            <div class="scope"><b>边界：</b>仅写入备注字段，<b>不改动状态、负责人、到期时间</b>；写入后可撤销。</div>
+            <div class="k2acts">
+              <button class="mini-btn primary" onclick="confirmNote(this)">确认写入</button>
+              <button class="mini-btn" onclick="cancelNote(this)">取消</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ② K4 承诺浮出：观察模式建议，逐条确认 -->
+        <div class="msg user">我周三前给评审版，这周要补截图凭证。</div>
+        <div class="msg agent">
+          <div class="pcard" id="commitCard">
+            <div class="ph">从你刚说的话里整理出 2 条承诺建议</div>
+            <div class="psub">观察模式：建议先放在这里，<b>未进待办箱、未落库</b>，你逐条确认后才进入。</div>
+
+            <div class="proposal pend" data-kind="commit" id="c1">
+              <div class="phead"><span class="pill hi">高置信</span><span>来源 · 你 10:32 的发言</span></div>
+              <div class="pt">T-103 评审材料 · 周三前出评审版</div>
+              <div class="pd">预填标题如上 · 到期 <span class="due">周三（日期待你确认）</span></div>
+              <div class="pacts">
+                <button class="mini-btn primary" onclick="adoptCommit(this)">采纳进待办</button>
+                <button class="mini-btn" onclick="ignoreCommit(this)">忽略</button>
+              </div>
+            </div>
+
+            <div class="proposal pend" data-kind="commit" id="c2">
+              <div class="phead"><span class="pill mid">中置信</span><span>来源 · 你 10:32 的发言</span></div>
+              <div class="pt">R-07 · 本周内补齐浏览器截图凭证</div>
+              <div class="pd">预填标题如上 · 到期 <span class="due">本周内（日期待你确认）</span></div>
+              <div class="pacts">
+                <button class="mini-btn primary" onclick="adoptCommit(this)">采纳进待办</button>
+                <button class="mini-btn" onclick="ignoreCommit(this)">忽略</button>
+              </div>
+            </div>
+
+            <div class="thirdparty">
+              <span class="tag3">他人承诺</span>测试同学说「周四前回反馈」——仅在本会话留痕，<b>不进待办、不跟进、不催办</b>。
+              <button class="mini-btn ghost" onclick="alert('已知悉；他人承诺仅会话内留痕（示例数据）')">知道了</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ③ K9 会话结存：单向绑定任务 -->
+        <div class="msg user">这个会话先挂到 T-102 上，待会儿接着做。</div>
+        <div class="msg agent">
+          <div class="bindcard" id="bindCard">
+            <div class="bh">会话结存 · 会话 → 任务（单向，不回写）</div>
+            <div class="bindrow auto" id="b1">
+              <span class="bid">T-102</span>
+              <div>
+                <div class="bt">原型设计</div>
+                <div class="bm">高置信：本会话主题与 T-102 直接相关，已自动挂上，可撤销。</div>
+              </div>
+              <div class="bacts"><button class="mini-btn" onclick="unbindSession(this)">撤销绑定</button></div>
+            </div>
+            <div class="bindrow low pend" data-kind="bind" id="b2">
+              <span class="bid">m-g3</span>
+              <div>
+                <div class="bt">Beta交付 里程碑记录</div>
+                <div class="bm">低置信建议：把本会话结存到里程碑记录，由你决定。</div>
+              </div>
+              <div class="bacts">
+                <button class="mini-btn primary" onclick="adoptBind(this)">采纳</button>
+                <button class="mini-btn" onclick="dismissBind(this)">忽略</button>
+              </div>
+            </div>
+            <div class="bound-note"><b>边界：</b>单向结存（会话→台账），不是双向镜像；只沉淀记录，<b>不改动任务状态</b>。</div>
+          </div>
+        </div>
+
+        <!-- ④ K3 证据闭环：会话内痕迹收成候选，人点归属 -->
+        <div class="evcard" id="evCard">
+          <div class="eh">会话内工作痕迹 · 2 条证据候选</div>
+          <div class="esub">只收本会话内出现的文件与改动；公司系统里的动作仍需你人工粘贴链接。归属由你确认后才落盘。</div>
+          <div class="ev pend" data-kind="evidence" data-ev="e1">
+            <span class="fic">图</span>
+            <div>
+              <div class="et">评审稿-v2.png（你 10:28 贴入的截图）</div>
+              <div class="em">会话附件 · 可作为 R-07 视觉验收凭证候选</div>
+            </div>
+            <div class="eacts">
+              <button class="mini-btn primary" onclick="assignEvidence(this,'R-07 截图凭证')">归属 R-07</button>
+              <button class="mini-btn" onclick="skipEvidence(this)">暂不归属</button>
+            </div>
+          </div>
+          <div class="ev pend" data-kind="evidence" data-ev="e2">
+            <span class="fic">改</span>
+            <div>
+              <div class="et">原型-首页线框（本会话内本地保存记录）</div>
+              <div class="em">会话内改动痕迹 · 可作为 T-102 工作记录候选</div>
+            </div>
+            <div class="eacts">
+              <button class="mini-btn primary" onclick="assignEvidence(this,'T-102 工作记录')">归属 T-102</button>
+              <button class="mini-btn" onclick="skipEvidence(this)">暂不归属</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧待裁决汇总 -->
+      <aside class="queue">
+        <div class="qhead">本会话待你确认</div>
+        <div class="qsub">AI 只提建议，落笔由你点</div>
+        <div class="qsum">
+          <div class="qchip warn"><b class="num" id="pendingN">6</b>待裁决</div>
+          <div class="qchip"><b class="num" id="doneN">0</b>已处理</div>
+        </div>
+
+        <div class="qsec">K2 · 待写入备注（1）</div>
+        <div class="qitem pend" data-kind="note">
+          <div class="t"><span class="id">R-07</span>视觉验收风险 · 备注追加</div>
+          <div class="m">变化已预览，等你确认写入，可撤销</div>
+          <div class="r"><button class="act mini-btn" onclick="confirmNote(document.querySelector('#noteCard .mini-btn.primary'))">去确认</button></div>
+        </div>
+
+        <div class="qsec">K4 · 承诺建议（2 · 观察模式）</div>
+        <div class="qitem pend" data-kind="commit">
+          <div class="t"><span class="id">建议1</span>周三前出评审版</div>
+          <div class="m">高置信 · 到期占位待你填</div>
+          <div class="r"><button class="act mini-btn" onclick="adoptCommit(document.querySelector('#c1 .mini-btn.primary'))">采纳</button></div>
+        </div>
+        <div class="qitem pend" data-kind="commit">
+          <div class="t"><span class="id">建议2</span>本周补截图凭证</div>
+          <div class="m">中置信 · 到期占位待你填</div>
+          <div class="r"><button class="act mini-btn" onclick="adoptCommit(document.querySelector('#c2 .mini-btn.primary'))">采纳</button></div>
+        </div>
+
+        <div class="qsec">K9 · 会话结存（1 条低置信建议）</div>
+        <div class="qitem pend" data-kind="bind">
+          <div class="t"><span class="id">m-g3</span>结存到里程碑记录</div>
+          <div class="m">T-102 已自动挂上（可撤销）；本条等你决定</div>
+          <div class="r"><button class="act mini-btn" onclick="adoptBind(document.querySelector('#b2 .bacts .mini-btn.primary'))">采纳</button></div>
+        </div>
+
+        <div class="qsec">K3 · 证据候选（2）</div>
+        <div class="qitem pend" data-kind="evidence">
+          <div class="t"><span class="id">附件</span>评审稿-v2.png</div>
+          <div class="m">归属 R-07 或暂不归属</div>
+          <div class="r"><button class="act mini-btn" onclick="assignEvidence(document.querySelector('#evCard .ev[data-ev=e1] .mini-btn.primary'),'R-07 截图凭证')">归属</button></div>
+        </div>
+        <div class="qitem pend" data-kind="evidence">
+          <div class="t"><span class="id">改动</span>原型-首页线框</div>
+          <div class="m">归属 T-102 或暂不归属</div>
+          <div class="r"><button class="act mini-btn" onclick="assignEvidence(document.querySelector('#evCard .ev[data-ev=e2] .mini-btn.primary'),'T-102 工作记录')">归属</button></div>
+        </div>
+
+        <div class="qmore"><a onclick="alert('本页全部为示例数据与设计示意（示例数据）')">说明：观察模式不自动落库</a></div>
+      </aside>
+
+      <!-- 移动端待裁决汇总（桌面隐藏） -->
+      <div class="mobq">
+        <div class="qhead">本会话待你确认 · 待裁决 <span class="num" id="pendingNm">6</span> · 已处理 <span class="num" id="doneNm">0</span></div>
+        <div class="qitem"><div class="t"><span class="id">R-07</span>备注追加待确认</div><div class="m">变化已预览，可撤销</div></div>
+        <div class="qitem"><div class="t"><span class="id">建议1</span>周三前出评审版（观察模式）</div><div class="m">逐条确认才进待办</div></div>
+        <div class="qitem"><div class="t"><span class="id">建议2</span>本周补截图凭证（观察模式）</div><div class="m">逐条确认才进待办</div></div>
+        <div class="qitem"><div class="t"><span class="id">证据</span>评审稿-v2.png · 原型线框改动</div><div class="m">归属由你确认</div></div>
+      </div>
+
+      <!-- 输入框 -->
+      <div class="composer">
+        <div class="box"><div class="ph">描述你想要构建的内容, / 调用指令, @ 文件或对话</div></div>
+        <div class="tools">
+          <span class="mode">工作区内修改</span>
+          <span class="spacer"></span>
+          <span class="model">请选择模型 ▾</span>
+          <button class="send" onclick="alert('发送消息：示例数据')" aria-label="发送">➤</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="footnote">
+  <div class="box">场景 2「对话里推进项目，说完即沉淀」· 覆盖 K4 承诺浮出（观察模式，逐条确认才进箱）/ K2 受限直写（仅备注与证据链接字段，先预览、确认写入、可撤销）/ K9 单向结存（会话→任务，非双向镜像，不改状态）/ K3 证据闭环（只收会话内痕迹，人确认归属）。页面内全部为<b>虚构示例数据</b>（项目 G3验收项目、任务 T-102/T-103、风险 R-07、里程碑 m-g3、会话 s-0411 均为示意）；本场景不自动改状态/负责人/排期，不覆盖公司系统动作。设计为方案设想，不代表已上线。</div>
+</div>
+
+<script>
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark' ? 'light' : 'dark');
+}
+function navHint(ev){
+  var el = ev.target.closest('.nav-item');
+  if(!el) return;
+  var t = el.textContent.trim().slice(0,20);
+  alert('导航「'+t+'」：设计示意，示例数据');
+}
+
+/* ===== K2 受限直写：确认写入 / 取消 / 撤销 ===== */
+function confirmNote(btn){
+  var card = btn.closest('#noteCard') || document.getElementById('noteCard');
+  card.style.display='none';
+  var done = document.createElement('div');
+  done.className='k2done';
+  done.innerHTML='<span class="ok-ic">✓</span><span>已写入 R-07 备注（仅备注字段，未动状态/负责人/到期）。<a onclick="undoNote(this)">撤销写入</a></span>';
+  card.after(done);
+  markDone(card);
+}
+function cancelNote(btn){
+  var card = btn.closest('#noteCard');
+  card.style.display='none';
+  var info = document.createElement('div');
+  info.className='k2done';
+  info.style.background='var(--panel2)';info.style.borderColor='var(--line)';
+  info.innerHTML='<span style="color:var(--fg3)">已取消，未写入 R-07 备注。</span>';
+  card.after(info);
+  markDone(card);
+}
+function undoNote(a){
+  alert('已撤销本次备注写入，回到原状（示例数据）');
+}
+
+/* ===== K4 承诺建议：采纳 / 忽略（观察模式，逐条） ===== */
+function adoptCommit(btn){
+  var p = btn.closest('.proposal');
+  p.classList.add('done');
+  p.querySelector('.pacts').innerHTML='<span style="font-size:12px;color:var(--ok)">已采纳进待办，可在待办箱查看</span>';
+  markDone(p);
+}
+function ignoreCommit(btn){
+  var p = btn.closest('.proposal');
+  p.classList.add('ignored');
+  p.querySelector('.pacts').innerHTML='<span style="font-size:12px;color:var(--fg3)">已忽略，不进待办</span>';
+  markDone(p);
+}
+
+/* ===== K9 会话结存 ===== */
+function unbindSession(btn){
+  var row = btn.closest('.bindrow');
+  row.querySelector('.bm').textContent='已撤销自动绑定，会话未挂到 T-102。';
+  btn.closest('.bacts').innerHTML='<span style="font-size:12px;color:var(--fg3)">已撤销</span>';
+  markDone(row);
+}
+function adoptBind(btn){
+  var row = btn.closest('.bindrow');
+  row.classList.add('auto');
+  row.querySelector('.bm').textContent='已采纳：本会话结存到 m-g3 里程碑记录（单向，可撤销）。';
+  btn.closest('.bacts').innerHTML='<button class="mini-btn" onclick="alert(\'已撤销该结存建议（示例数据）\')">撤销</button>';
+  markDone(row);
+}
+function dismissBind(btn){
+  var row = btn.closest('.bindrow');
+  row.style.opacity='.55';
+  row.querySelector('.bm').textContent='已忽略该结存建议。';
+  btn.closest('.bacts').innerHTML='<span style="font-size:12px;color:var(--fg3)">已忽略</span>';
+  markDone(row);
+}
+
+/* ===== K3 证据归属 ===== */
+function assignEvidence(btn, label){
+  var ev = btn.closest('.ev');
+  ev.classList.add('done');
+  ev.querySelector('.eacts').innerHTML='<span style="font-size:12px;color:var(--ok)">已归属：'+label+'</span>';
+  markDone(ev);
+}
+function skipEvidence(btn){
+  var ev = btn.closest('.ev');
+  ev.style.opacity='.55';
+  ev.querySelector('.eacts').innerHTML='<span style="font-size:12px;color:var(--fg3)">暂不归属</span>';
+  markDone(ev);
+}
+
+/* ===== 计数联动 ===== */
+function markDone(el){
+  var kind = el.getAttribute('data-kind');
+  if(kind){
+    var order = Array.prototype.slice.call(document.querySelectorAll('.chat .pend[data-kind="'+kind+'"]'));
+    var pos = order.indexOf(el);
+    el.classList.add('done');
+    el.classList.remove('pend');
+    var items = document.querySelectorAll('.queue .qitem.pend[data-kind="'+kind+'"]');
+    if(items[pos]){
+      items[pos].classList.add('done');
+      items[pos].classList.remove('pend');
+      var r = items[pos].querySelector('.r');
+      if(r) r.innerHTML='<span style="font-size:12px;color:var(--ok)">已处理</span>';
+    }
+  } else {
+    el.classList.add('done');
+  }
+  updateCounts();
+}
+function updateCounts(){
+  var pend = document.querySelectorAll('.queue .qitem.pend').length;
+  var done = document.querySelectorAll('.queue .qitem.done').length;
+  var p = document.getElementById('pendingN'), d = document.getElementById('doneN');
+  if(p) p.textContent = pend;
+  if(d) d.textContent = done;
+  var pm = document.getElementById('pendingNm'), dm = document.getElementById('doneNm');
+  if(pm) pm.textContent = pend;
+  if(dm) dm.textContent = done;
+}
+</script>
+</body>
+</html>

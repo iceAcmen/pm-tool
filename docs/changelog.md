@@ -8,6 +8,26 @@
 
 ---
 
+## P0 深度融合：底座+采集闭环（K1/K2 窄集/K4/K3/K9/K12/X6-L1/K6）（已 push main，2026-10-18，平台：doubao-work）
+
+> 用户已对「PM工作台 × DeepSeek Harness 深度融合」推荐组合主线拍板「按推荐执行」，进入真实开发阶段。P0 = 第 0 层底座 + 第 1 层采集闭环，对应返工效果图 S1/S2；规格与验证记录见 `docs/design/deep-integration-v2-p0-dev.md`、`docs/design/deep-integration-v2-p0-verify.md`；证据 `docs/verification/p0-20261018/`。
+
+- **范围**（8 项能力，文件级互斥三分片并行 + 组织者契约层）：
+  - **K1 上下文读取增强**：`ask` 上下文补 description/证据有无/交付物连接三字段透传；`buildAskContext` 任务行如实标注备注/证据/交付物（无则标「无」不编造）。
+  - **K2 受限直写窄集**：`core/copilot.ts` task.update 白名单由 5 字段扩为 9——新增 `description`（≤2000）、`evidenceUrl`/`repoUrl`（http(s)/相对路径、≤2048）、`branch`（≤128），类型闸+未知字段拒绝纪律不变；title/priority 等仍拒；COPILOT_SYSTEM 同步口径。不扩状态/排期类（用户拍板第 3 项+H5 扩界本期不开通）。
+  - **K4 对话补档**：新命令 `capture`（观察模式：LLM 提待办候选，只展示不落库，无 key 中文降级）/ `capture-apply`（人确认后逐条 addTask 落库 + 证据挂接 + provenance kind=capture）/ E2E 缝 `capture-fixture`。
+  - **K3 证据闭环**：`attach-evidence <任务ID> <url>` 单条轻确认直挂 evidenceUrl（仅更新该字段，明示不改状态/排期）。
+  - **K9 会话结存**：新表 `sessions`（taskId↔sessionId 绑定 + 结存 note，重复 bind 合并刷新）；`session bind/list/notes`。
+  - **K12 自我计量**：`metric <项目ID>` 只读汇总（total/byKind/undoOutcomes/appliedSteps/pendingCount），小样本不下结论。
+  - **X6-L1 即时复盘草稿**：task 加 `deliverableId` 连接字段；新表 `reflections`；`updateTask` done 钩子 best-effort 自动建轻量草稿（句级已核/待核/留白，证据不足留白不编造，无积分/徽章）；`reflect 查看/final 人定稿/edit 补材料/reflect-list`。
+  - **K6 交付检查**：`check <任务ID|项目ID>` 五类规则（逾期未动/临期未动/完成有未勾清单/完成缺材料/满进度未收尾），复用 reminders 口径，只读、文案含「未覆盖≠未完成，最终验收由人判断」。
+- **改动文件**：改 `src/core/copilot.ts`、`src/core/ask-copilot.ts`、`src/commands/ask.ts`、`src/core/tasks.ts`（done 钩子）、`src/core/task.ts`（deliverableId 字段）、`src/core/storage.ts`（sessions/reflections 表）、`src/core/provenance-store.ts`（kind 加 capture）、`src/index.ts`（6 个新命令路由：capture/capture-apply/attach-evidence/session/reflect(-list)/check/metric）、`scripts/verify-ui-feedback.mjs`（修正 f2109a5 后陈旧的 taskStatus 字面量断言，改从 status.js 校验键序，非业务回归）；新建 `src/core/capture.ts`/`evidence.ts`/`session-bind.ts`/`reflect.ts`/`check.ts`/`metric.ts` + 对应 `commands/*.ts` + 测试文件（capture/evidence/session-bind/reflect/check/metric/copilot-task-fields/ask-context）+ `scripts/verify-reflect.mjs`、`scripts/verify-p0-integration.mjs`。
+- **验证**：`pnpm build`=0；`pnpm test` **26 文件 / 282 用例全绿**；`verify-isolation.mjs` **77 脚本 / 77 通过 / 失败 0 / 污染 0**（176 资产 before=after）；`verify-p0-integration.mjs` **28/28**（真实命令 + 真实 JSON 落盘 + 溯源 confirmed，临时根，未碰 3172/正式 data）；`verify-reflect.mjs` PASS（真实 FS done 钩子）。
+- **能力边界（未夸大）**：K2 仅备注/证据链接类受限直写+草稿确认+ask-undo 可撤销；K6 只提示不下完成裁决；X6 草稿≠定稿、业务完成≠复盘定稿、证据不足留白；K9 单向结存非双向同步；capture 观察模式不自动建任务；H6 常驻推送 P3 立项本期不实现；未改前端视图（P1：K11/K13）、未改上游宿主。
+- **遗留/下一步**：P1 补 K11/K13 前端呈现层（数据基础已就绪）+ deliverableId 存在性校验；K2 窄集跑通后用户复核再扩界；真实 LLM 草稿质量留待用户真实实例复核。已 commit+push main（提交信息标 `[doubao-work]`）。
+
+---
+
 ## P2-2 Token 2.0 视觉基准（候选进行中 · 未提交 · 未放行，2026-10-17，平台：doubao-work）
 
 > 状态：**进行中候选，非发布、未 commit/push/部署**。本条目只记录当前候选状态，待独立测试 PASS + 协调人放行后再补正式登记。
