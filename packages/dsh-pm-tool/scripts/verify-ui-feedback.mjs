@@ -241,6 +241,22 @@ assert.match(panelSrc, /<TaskForm[\s\S]*?onSaved=\{\(\) => setDrawer\(undefined\
 assert.doesNotMatch(css, /\.pm-result-card__summary\s*\{[^}]*overflow(-y)?:\s*auto/, '摘要条不得内部滚动')
 assert.match(css, /\.pm-result-card__detail\s*\{[^}]*overflow-y:\s*auto/, '完整字段限高滚动应在详情卡内')
 
+// ---- G1 CTA §2.1：深态 action token 固定近黑 ink，实心 CTA 一律 --pm-action-ink，hover 不降级对比 ----
+{
+  const darkBlock = /body\[data-ds-dark-theme\] \.pm-shell\s*\{([\s\S]*?)\n\}/.exec(css)
+  assert.ok(darkBlock, '应存在深色 .pm-shell 覆写块')
+  assert.match(darkBlock[1], /--pm-action-fill:\s*rgb\(122, 170, 255\)/, '深态 fill 固定 deepseek-400')
+  assert.match(darkBlock[1], /--pm-action-ink:\s*rgb\(28, 28, 30\)/, '深态 ink 固定近黑，不得引用会翻成浅字的 label-primary 别名')
+  assert.doesNotMatch(darkBlock[1], /--pm-action-ink:\s*var\(--dsw-alias-label-primary/, '深态 ink 禁止宿主 label-primary 别名（深色下翻浅字致 2.11）')
+  // 实心文本 CTA 字色只引 canonical ink，不裸白/不硬编码。
+  for (const sel of ['.pm-button-primary', '.pm-result-action', '.pm-ai-seg button.is-on']) {
+    const rule = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{[^}]*color:\\s*var\\(--pm-action-ink\\)')
+    assert.match(css, rule, `${sel} 实心 CTA 须 color:var(--pm-action-ink)`)
+  }
+  assert.doesNotMatch(css, /\.pm-view-cta:hover[^{]*\{[^}]*background:\s*var\(--pm-accent-soft\)/, '描边 CTA hover 不得切实色 tertiary 底（深色 4.39<4.5）')
+  assert.match(css, /\.pm-view-cta:hover[^{]*\{[^}]*background:\s*var\(--pm-tint-accent-hover\)/, '描边 CTA hover 保持半透明 tint 保对比')
+}
+
 // ---- OKR 命令构造：strict okrCreateSchema/okrUpdateSchema 拒绝未知字段 ----
 {
   // add：projectId 由命令位置参数注入，body 不得嵌 projectId/id/createdAt。

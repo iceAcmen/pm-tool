@@ -122,6 +122,8 @@
 
   /* 选中/悬停浅底 tint（语义化，替代各组件手写 color-mix 百分比） */
   --pm-tint-accent: color-mix(in srgb, var(--pm-accent) 12%, transparent);
+  /* 描边/链接型 CTA hover：仍保持半透明 tint，避免切到实色 tertiary 底把链接字对比拉到 <4.5。 */
+  --pm-tint-accent-hover: color-mix(in srgb, var(--pm-accent) 18%, transparent);
   --pm-tint-success: color-mix(in srgb, var(--pm-success) 12%, transparent);
   --pm-tint-warning: color-mix(in srgb, var(--pm-warning) 12%, transparent);
   --pm-tint-danger: color-mix(in srgb, var(--pm-danger) 10%, transparent);
@@ -181,10 +183,11 @@ body[data-ds-dark-theme] .pm-shell {
   /* P2-2：暗色浮层阴影加深、抬升差加大（非机械反色） */
   --pm-shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.5);
   --pm-shadow-modal: 0 2px 8px rgba(0, 0, 0, 0.5), 0 22px 50px rgba(0, 0, 0, 0.65);
-  /* §2.1 深态 action：deepseek-400 对 ink 8.12:1，hover 白 6%；字色用 ink（label-primary）。 */
+  /* §2.1 深态 action：deepseek-400 rgb(122,170,255) 对固定近黑 ink 8.12:1，hover 白 6%。
+     ink 必须固定近黑：宿主 label-primary 别名在深色下翻成浅字，会造成浅蓝底浅字 2.11 不达 AA，故不引用该别名。 */
   --pm-action-fill: rgb(122, 170, 255);
   --pm-action-fill-hover: color-mix(in srgb, white 6%, var(--pm-action-fill));
-  --pm-action-ink: var(--dsw-alias-label-primary, rgb(28, 28, 30));
+  --pm-action-ink: rgb(28, 28, 30);
   --pm-action-hover: var(--pm-action-fill-hover);
   --pm-action-on: var(--pm-action-ink);
 }
@@ -407,7 +410,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 }
 .pm-view-cta:hover:not(:disabled) {
   border-color: var(--pm-accent);
-  background: var(--pm-accent-soft);
+  background: var(--pm-tint-accent-hover);
   color: var(--pm-link);
 }
 .pm-button-danger { margin-right: auto; border-color: transparent; color: var(--pm-danger); }
@@ -3016,7 +3019,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   border: 1px solid transparent;
   border-radius: var(--r-sm);
   background: var(--pm-action-fill);
-  color: var(--pm-action-on);
+  color: var(--pm-action-ink);
   font-size: 14px;
   line-height: 22px;
   gap: 6px;
@@ -3025,7 +3028,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-button-primary:hover:not(:disabled) {
   background: var(--pm-action-hover);
   border-color: transparent;
-  color: var(--pm-action-on);
+  color: var(--pm-action-ink);
 }
 .pm-button-primary:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -3108,7 +3111,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-result-action {
   display: inline-flex; align-items: center; gap: 6px;
   min-height: 36px; padding: 0 14px; border-radius: var(--r-sm);
-  background: var(--pm-action-fill); color: var(--pm-action-on);
+  background: var(--pm-action-fill); color: var(--pm-action-ink);
   border: 1px solid transparent; font-size: 14px; white-space: nowrap; cursor: pointer;
 }
 .pm-result-action:hover:not(:disabled) { background: var(--pm-action-hover); }
@@ -3154,7 +3157,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   padding: 4px 10px; border-radius: 6px; font-size: 11.5px; background: transparent; color: var(--pm-muted);
   white-space: nowrap;
 }
-.pm-ai-seg button.is-on { background: var(--pm-action-fill); color: var(--pm-action-on); }
+.pm-ai-seg button.is-on { background: var(--pm-action-fill); color: var(--pm-action-ink); }
 
 /* §1 共享空态卡（真空/过滤/待接入由调用方传文案，壳不伪造零） */
 .pm-empty-card {
