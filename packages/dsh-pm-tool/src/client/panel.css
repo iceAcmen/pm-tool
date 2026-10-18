@@ -201,6 +201,9 @@ body:not([data-ds-dark-theme]) .pm-shell {
      宿主 link 别名实测落到 #4176e6（4.23:1<AA，§5.2 禁作文字色）故在此纠偏。
      --pm-accent 保留选中/焦点环等非文字用途，与链接语义分离；深色 link 7.83:1 达标，不在此覆盖。 */
   --pm-link: rgb(72, 104, 178);
+  /* R6：描边/链接型 CTA 在 tint 底上需比纯链接更深一档，normal 6.40 / hover 5.91（≥4.7 余量）；
+     仅浅态定义，深态回退 --pm-link（实测 5.7 PASS），不影响实心 action CTA。 */
+  --pm-cta-link: rgb(51, 82, 158);
 }
 
 .pm-shell *, .pm-shell *::before, .pm-shell *::after { box-sizing: border-box; }
@@ -405,13 +408,13 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-view-cta {
   border-color: var(--pm-accent);
   background: var(--pm-tint-accent);
-  color: var(--pm-link);
+  color: var(--pm-cta-link, var(--pm-link));
   font-weight: 550;
 }
 .pm-view-cta:hover:not(:disabled) {
   border-color: var(--pm-accent);
   background: var(--pm-tint-accent-hover);
-  color: var(--pm-link);
+  color: var(--pm-cta-link, var(--pm-link));
 }
 .pm-button-danger { margin-right: auto; border-color: transparent; color: var(--pm-danger); }
 .pm-button-danger:hover:not(:disabled) { border-color: transparent; background: var(--dsw-alias-interactive-bg-hover-danger); }

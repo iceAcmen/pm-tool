@@ -255,6 +255,12 @@ assert.match(css, /\.pm-result-card__detail\s*\{[^}]*overflow-y:\s*auto/, '完�
   }
   assert.doesNotMatch(css, /\.pm-view-cta:hover[^{]*\{[^}]*background:\s*var\(--pm-accent-soft\)/, '描边 CTA hover 不得切实色 tertiary 底（深色 4.39<4.5）')
   assert.match(css, /\.pm-view-cta:hover[^{]*\{[^}]*background:\s*var\(--pm-tint-accent-hover\)/, '描边 CTA hover 保持半透明 tint 保对比')
+  // R6 浅态：描边 CTA 专用更深链接字 token，normal/hover 均 ≥4.7 余量；深态不覆盖（回退 --pm-link）。
+  const lightBlock = /body:not\(\[data-ds-dark-theme\]\) \.pm-shell\s*\{([\s\S]*?)\n\}/.exec(css)
+  assert.ok(lightBlock, '应存在浅色 .pm-shell 覆写块')
+  assert.match(lightBlock[1], /--pm-cta-link:\s*rgb\(51, 82, 158\)/, '浅态描边 CTA 须用更深 --pm-cta-link（tint 底上 6.40/5.91）')
+  assert.doesNotMatch(darkBlock[1], /--pm-cta-link/, '深态不得覆盖 --pm-cta-link（回退 --pm-link，实测 5.7）')
+  assert.match(css, /\.pm-view-cta\s*\{[^}]*color:\s*var\(--pm-cta-link, var\(--pm-link\)\)/, '描边 CTA 字色走 --pm-cta-link 回退 --pm-link')
 }
 
 // ---- OKR 命令构造：strict okrCreateSchema/okrUpdateSchema 拒绝未知字段 ----
