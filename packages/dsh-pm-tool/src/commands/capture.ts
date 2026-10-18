@@ -29,6 +29,7 @@ import {
   extractJsonBlock,
   normalizeCaptureDraft,
   validateCaptureDraft,
+  classifyCapturePayload,
   CaptureDraftParseError,
   type CaptureCandidate,
 } from '../core/capture.js'
@@ -36,7 +37,8 @@ import { normalizeEvidenceUrl, EvidenceUrlInvalidError } from '../core/evidence.
 
 export const captureHelp = [
   '  /pm capture <项目ID> "<会话文本>"          将会话中的待办整理成草稿（观察模式，不落库）',
-  '  /pm capture-apply <项目ID> "<json草稿>"     确认草稿后逐条落库（任务+证据链接）',
+  '  /pm capture-apply <项目ID> <draftId>      一键确认最近草稿落库（免复述 JSON）',
+  '  /pm capture-apply <项目ID> "<json草稿>"   高级路径：确认 JSON 草稿后逐条落库（任务+证据链接）',
   '  /pm attach-evidence <任务ID> <url>          轻确认后补挂证据链接到任务（不改状态/排期）',
   'capture 只产出草稿，确认后才落库；撤销已建任务用 /pm task delete <id>（溯源账本留痕）。',
 ].join('\n')
@@ -44,6 +46,45 @@ export const captureHelp = [
 interface CommandResult {
   kind: 'success' | 'error'
   text: string
+}
+
+// ===== R-P1 稳定 draftId 句柄（进程内会话暂存，10 分钟 TTL，与撤销句柄同口径）=====
+// §9.4 Open Decision：先内存 10 分钟；不写正式 data，重启后草稿失效（合同允许）。
+interface StoredDraft {
+  projectId: string
+  candidates: CaptureCandidate[]
+  note?: string
+  createdAt: number
+}
+const DRAFT_TTL_MS = 10 * 60 * 1000
+const draftStore = new Map<string, StoredDraft>()
+let draftSeq = 0
+
+function purgeExpiredDrafts(): void {
+  const now = Date.now()
+  for (const [id, d] of draftStore) {
+    if (now - d.createdAt > DRAFT_TTL_MS) draftStore.delete(id)
+  }
+}
+
+/** 分配稳定 draftId 并暂存；返回句柄。 */
+function stashDraft(projectId: string, candidates: CaptureCandidate[], note?: string): string {
+  purgeExpiredDrafts()
+  const draftId = `draft-${Date.now().toString(36)}-${++draftSeq}`
+  draftStore.set(draftId, { projectId, candidates, note, createdAt: Date.now() })
+  return draftId
+}
+
+/** 取仍在 TTL 内的草稿；过期/不存在返回 null。 */
+function takeDraft(draftId: string, projectId: string): StoredDraft | null {
+  purgeExpiredDrafts()
+  const d = draftStore.get(draftId)
+  if (!d || d.projectId !== projectId) return null
+  if (Date.now() - d.createdAt > DRAFT_TTL_MS) {
+    draftStore.delete(draftId)
+    return null
+  }
+  return d
 }
 
 /** 入口分发：capture-apply / attach-evidence / 默认 capture 观察模式。 */
@@ -93,7 +134,8 @@ async function handleCaptureDraft(
       ],
       note: '观察模式：仅展示未落库；确认后经 /pm capture-apply 落库',
     }
-    return renderDraft(projectId, fixture.candidates, fixture.note)
+    const draftId = stashDraft(projectId, fixture.candidates, fixture.note)
+    return renderDraft(projectId, draftId, fixture.candidates, fixture.note)
   }
 
   let raw: string
@@ -126,11 +168,12 @@ async function handleCaptureDraft(
     }
     throw error
   }
-  return renderDraft(projectId, draft.candidates, draft.note)
+  const draftId = stashDraft(projectId, draft.candidates, draft.note)
+  return renderDraft(projectId, draftId, draft.candidates, draft.note)
 }
 
-/** 观察模式渲染：人读清单 + 可直接复述给 capture-apply 的 JSON 草稿（全程不落库）。 */
-function renderDraft(projectId: string, candidates: CaptureCandidate[], note?: string): CommandResult {
+/** 观察模式渲染：人读清单 + 稳定 draftId（一键确认免复述）；附可复制 JSON 作为高级路径，全程不落库。 */
+function renderDraft(projectId: string, draftId: string, candidates: CaptureCandidate[], note?: string): CommandResult {
   const json = JSON.stringify(
     { candidates, note: note ?? '观察模式：仅展示未落库；确认后经 /pm capture-apply 落库' },
     null,
@@ -138,6 +181,7 @@ function renderDraft(projectId: string, candidates: CaptureCandidate[], note?: s
   )
   const lines = [
     '【对话补档草稿 · 观察模式（未写入）】',
+    `草稿编号：${draftId}（10 分钟内有效，关闭/最小化副驾后仍可用）`,
     candidates.length
       ? candidates.map((c, i) => {
           const meta = [
@@ -149,7 +193,8 @@ function renderDraft(projectId: string, candidates: CaptureCandidate[], note?: s
         }).join('\n')
       : '  （未从对话中提取到待办）',
     '',
-    '确认落库：把下面整段 JSON 复述给 /pm capture-apply ' + projectId + ' "<json草稿>"',
+    `一键确认：/pm capture-apply ${projectId} ${draftId}（点「确认落库」等价于此，免复述 JSON）`,
+    '高级路径（复制整段 JSON）：',
     '```json',
     json,
     '```',
@@ -157,32 +202,81 @@ function renderDraft(projectId: string, candidates: CaptureCandidate[], note?: s
   return { kind: 'success', text: lines.join('\n') }
 }
 
-// ===== K4 capture-apply：人确认后逐条落库 =====
+// ===== K4 capture-apply：人确认后逐条落库（R-P1 draftId 一键确认 / R-P3 plan 定向恢复 / 整批原子）=====
+
+/** §7.2 固定恢复文案（误贴副驾 plan 块，零写前置声明；可润色不得改变指路）。 */
+const PLAN_MISPASTE_TEXT = [
+  '未写入任何任务（零写入）。',
+  '你贴的是 AI 的计划块（plan），不是「对话补档草稿」。capture-apply 需要含 candidates 数组的补档草稿。',
+  '正确做法二选一：',
+  '1. 回到 /pm capture 输出的【对话补档草稿 · 观察模式（未写入）】块，复制其中含 candidates 的整段 JSON；',
+  '2. 直接点草稿卡上的「确认落库」（免复述，或用 /pm capture-apply <项目> <draftId>）。',
+  '若这是你想要的多步计划，请改用 ask-apply 对应入口，不要贴进 capture-apply。',
+].join('\n')
 
 async function handleCaptureApply(projectIdArg: string, domain: PmDomain | undefined): Promise<CommandResult> {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
   const m = /^(\S+)\s+([\s\S]+)$/.exec(projectIdArg)
-  if (!m) return { kind: 'error', text: '用法：/pm capture-apply <项目ID> "<json草稿>"' }
+  if (!m) return { kind: 'error', text: '用法：/pm capture-apply <项目ID> <draftId | "<json草稿>">' }
   const projectId = m[1]
-  const body = m[2].trim()
+  const rest = m[2].trim()
   if (!domain.table('projects').get(projectId)) return { kind: 'error', text: `未找到项目 ${projectId}` }
 
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(body)
-  } catch {
-    return { kind: 'error', text: '草稿 JSON 无法解析，请复述 capture 输出的完整 JSON 块。' }
+  let accepted: CaptureCandidate[]
+
+  // R-P1：draftId 句柄路径——直接取暂存草稿，免复述 JSON；过期/不存在给重试指路（R-P4 草稿保留）。
+  if (/^draft-[A-Za-z0-9-]+$/.test(rest)) {
+    const stored = takeDraft(rest, projectId)
+    if (!stored) {
+      return {
+        kind: 'error',
+        text: `草稿 ${rest} 不存在或已超过 10 分钟有效期：请重新 /pm capture <项目> "<会话文本>" 生成新草稿，再用其草稿编号确认。`,
+      }
+    }
+    const v = validateCaptureDraft({ candidates: stored.candidates })
+    if (v.errors.length) {
+      // R-P4：校验失败不清草稿（draftId 仍在），逐条列错，零写入。
+      return { kind: 'error', text: `草稿校验未通过，未写入任何任务：\n  - ${v.errors.join('\n  - ')}` }
+    }
+    accepted = v.accepted
+  } else {
+    // 高级路径：内联 JSON。先解析，再按形态分流（plan 误贴 / 空 / 补档草稿），全部零写入前置。
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(rest)
+    } catch {
+      return {
+        kind: 'error',
+        text: '草稿 JSON 无法解析：请复制 capture 输出的完整 ```json 块（含首尾花括号）；上一份草稿未丢失，可点重试。',
+      }
+    }
+    const kind = classifyCapturePayload(parsed)
+    if (kind === 'copilot-plan') {
+      return { kind: 'error', text: PLAN_MISPASTE_TEXT }
+    }
+    if (kind === 'empty') {
+      return { kind: 'error', text: '草稿里没有可落库的候选（candidates 为空）：回 capture 重新整理，或手工 /pm task add。' }
+    }
+    const v = validateCaptureDraft(parsed)
+    if (v.errors.length) {
+      return { kind: 'error', text: `草稿校验未通过，未写入任何任务：\n  - ${v.errors.join('\n  - ')}` }
+    }
+    accepted = v.accepted
   }
 
-  // 全量预校验：任一候选有问题即整批拒绝、零写入，避免半套落库。
-  const { accepted, errors } = validateCaptureDraft(parsed)
-  if (errors.length) {
-    return { kind: 'error', text: `草稿校验未通过，未写入任何任务：\n  - ${errors.join('\n  - ')}` }
-  }
   if (!accepted.length) {
-    return { kind: 'error', text: '草稿里没有可落库的候选（candidates 为空）。' }
+    return { kind: 'error', text: '草稿里没有可落库的候选（candidates 为空）：回 capture 重新整理，或手工 /pm task add。' }
   }
 
+  return persistCandidates(domain, projectId, accepted)
+}
+
+/** 整批落库：预校验通过后逐条写；部分失败不回滚已建项（沿用既有口径），返回结果文本。 */
+async function persistCandidates(
+  domain: PmDomain,
+  projectId: string,
+  accepted: CaptureCandidate[],
+): Promise<CommandResult> {
   const created: { id: string, title: string }[] = []
   const evidenceAttached: string[] = []
   const extraEvidence: string[] = []

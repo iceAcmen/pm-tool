@@ -139,7 +139,7 @@ try {
 
     const createdAt = getTask(domain, 't-0004').createdAt
     await new Promise(resolve => setTimeout(resolve, 2))
-    assert.match(await run('task update t-0004 {"title":"阶段二（更新）","status":"done","progress":100}'), /任务已更新并保存/)
+    assert.match(await run('task update t-0004 {"title":"阶段二（更新）","status":"done","progress":100}'), /任务已更新｜t-0004/)
     assert.match(await run('task get t-0004'), /标题：阶段二（更新）[\s\S]*状态：已完成[\s\S]*进度：100%/)
     assert.equal(getTask(domain, 't-0004').createdAt, createdAt)
     assert.notEqual(getTask(domain, 't-0004').updatedAt, createdAt)

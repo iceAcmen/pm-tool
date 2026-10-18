@@ -786,6 +786,11 @@ export const WIDGET_CATALOG: WidgetCatalogEntry[] =
     requiredSources: d.requiredSources, defaultConfig: d.defaultConfig,
   }))
 
+/** 已知类型集合（registry 同源）：直接迭代 Map.keys，禁止 Object.keys(Map)（恒为 []）。 */
+export function knownWidgetTypeSet(): Set<string> {
+  return new Set(WIDGET_REGISTRY.keys())
+}
+
 /** 卡片库抽屉分组顺序。 */
 export const DRAWER_GROUPS: Array<{ key: 'overview' | 'list' | 'kpi' | 'progress' | 'text'; label: string }> = [
   { key: 'overview', label: '概览' },

@@ -7,6 +7,74 @@
  * 严格的逐卡片 configSchema 闸门（zod）在编辑器异步块内做。
  */
 import type { DashboardLayout, WidgetInstance, WidgetScope } from './types.js'
+import { GRID } from './types.js'
+
+/* ===== R-B3/R-B11 布局安全纯逻辑（内联于主包，避免跨 chunk 共享拆分）===== */
+
+/** 两卡 bbox 是否相交（同网格坐标矩形，非严格相邻）。 */
+export function bboxOverlap(a: WidgetInstance['layout'], b: WidgetInstance['layout']): boolean {
+  const xOverlap = a.x < b.x + b.w && b.x < a.x + a.w
+  const yOverlap = a.y < b.y + b.h && b.y < a.y + a.h
+  return xOverlap && yOverlap
+}
+
+/** 返回所有相交卡对（i,i）；无碰撞返回空。 */
+export function findCollisions(widgets: WidgetInstance[]): Array<[string, string]> {
+  const out: Array<[string, string]> = []
+  for (let i = 0; i < widgets.length; i++) {
+    for (let j = i + 1; j < widgets.length; j++) {
+      if (bboxOverlap(widgets[i].layout, widgets[j].layout)) out.push([widgets[i].layout.i, widgets[j].layout.i])
+    }
+  }
+  return out
+}
+
+/** 夹紧单卡到 [0, cols]，记录自愈提示。 */
+function clampOne(inst: WidgetInstance, cols: number, warnings: string[]): WidgetInstance {
+  const L = inst.layout
+  const minW = L.minW ?? 1
+  const minH = L.minH ?? 1
+  let x = Math.floor(Number.isFinite(L.x) ? L.x : 0)
+  let y = Math.floor(Number.isFinite(L.y) ? L.y : 0)
+  let w = Math.floor(Number.isFinite(L.w) ? L.w : minW)
+  let h = Math.floor(Number.isFinite(L.h) ? L.h : minH)
+  const before = { x, y, w, h }
+  w = Math.max(minW, Math.min(w, cols))
+  x = Math.max(0, Math.min(x, cols - w))
+  h = Math.max(minH, h)
+  y = Math.max(0, y)
+  if (x !== before.x || y !== before.y || w !== before.w || h !== before.h) {
+    warnings.push(`卡片 ${L.i}：坐标/尺寸越界已夹紧到网格（${before.x},${before.y} ${before.w}×${before.h} → ${x},${y} ${w}×${h}）`)
+  }
+  return { ...inst, layout: { ...L, i: L.i, x, y, w, h, minW: L.minW, minH: L.minH } }
+}
+
+/** 未知类型跳过并列名、越界夹紧、碰撞向下一空行下沉（vertical compact），不静默覆盖/重置。 */
+export function sanitizeLayout(raw: DashboardLayout, cols: number, knownTypes: Set<string>): {
+  widgets: WidgetInstance[]; skipped: string[]; warnings: string[]
+} {
+  const skipped: string[] = []
+  const warnings: string[] = []
+  const kept: WidgetInstance[] = []
+  for (const w of raw.widgets) {
+    if (!knownTypes.has(w.type)) { skipped.push(`${w.type}（${w.layout.i}）`); continue }
+    kept.push(clampOne(w, cols, warnings))
+  }
+  const placed: WidgetInstance[] = []
+  for (const cand of kept) {
+    let y = cand.layout.y
+    for (;;) {
+      const trial = { ...cand, layout: { ...cand.layout, y } }
+      const hit = placed.some(p => bboxOverlap(p.layout, trial.layout))
+      if (!hit) break
+      y += 1
+      if (y > 5000) break
+    }
+    if (y !== cand.layout.y) warnings.push(`卡片 ${cand.layout.i}：与邻卡碰撞，已下沉到 y=${y}（原 y=${cand.layout.y}）`)
+    placed.push({ ...cand, layout: { ...cand.layout, y } })
+  }
+  return { widgets: placed, skipped, warnings }
+}
 
 export const LAYOUT_VERSION = 1
 
@@ -94,9 +162,41 @@ export function parseLayout(raw: unknown): DashboardLayout | null {
   return layout
 }
 
-/** 三层回退：user > project > fallback(内置默认)。 */
-export function resolveDashboard(rawUser: unknown, rawProject: unknown, fallback: DashboardLayout): DashboardLayout {
-  return parseLayout(rawUser) ?? parseLayout(rawProject) ?? fallback
+/** 三层回退：user > project > fallback(内置默认)；每档都过 R-B11 夹紧/未知跳过/碰撞下沉。
+ *  knownTypes 显式传入，避免首屏在 registerKnownWidgetTypes 副作用前拿到空集合而误删全部卡。 */
+export function resolveDashboard(
+  rawUser: unknown,
+  rawProject: unknown,
+  fallback: DashboardLayout,
+  knownTypes?: Set<string>,
+): DashboardLayout {
+  const types = knownTypes ?? KNOWN_TYPES
+  return loadDashboard(rawUser, types)?.layout
+    ?? loadDashboard(rawProject, types)?.layout
+    ?? fallback
+}
+
+/** 注册表已知类型（由 widgets.tsx 注入，避免 persist 反向 import 渲染块）。 */
+let KNOWN_TYPES = new Set<string>()
+export function registerKnownWidgetTypes(types: Iterable<string>): void {
+  KNOWN_TYPES = new Set(types)
+}
+
+export interface LoadedDashboard {
+  layout: DashboardLayout
+  warnings: string[]
+  skipped: string[]
+}
+
+/**
+ * 解析 + R-B11 安全归一：未知类型跳过并列名、越界夹紧、碰撞下沉；
+ * 返回 null 表示结构不可解析（调用方回退下一档/默认），绝不整份重置白屏。
+ */
+export function loadDashboard(raw: unknown, knownTypes: Set<string>): LoadedDashboard | null {
+  const parsed = parseLayout(raw)
+  if (!parsed) return null
+  const { widgets, skipped, warnings } = sanitizeLayout(parsed, GRID.cols, knownTypes)
+  return { layout: { ...parsed, widgets }, skipped, warnings }
 }
 
 export type { WidgetScope }

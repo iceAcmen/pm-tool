@@ -303,6 +303,33 @@
 
 ---
 
+## 13. 2026-10-18 追加：P0–P3 体验修复长期门禁增补（不改 §1–§12 冻结数值）
+
+> 本节为 `docs/design/p0-p3-experience-repair-contract-20261018.md`（角色 A 设计合同）回写的长期门禁增补，只加门禁要求，不重算冻结 token/字阶/三档数值。合同为实现细节权威，本节为长期门框架。
+
+### 13.1 G3 视口矩阵扩为四档 + 200% 缩放
+- 原 §8 采证档 1440/768/390 保留；G3 新增 **1024** 档，四档为 **1440 / 1024 / 768 / 390**；每档 × 浅/深 × 100% 与 **200% 文本缩放**。
+- 200% 下：标签换行不裁切、控件与全标签不断裂、无外壳二维横滚（§12 #10 由待验证升级为 G3 必测项）。
+- 视口是测试点不是 CSS 断点；实现断点按内容定（§8.1 口径不变）。
+
+### 13.2 组件契约六状态为必填
+- 任何新反馈/卡片/面板组件，契约必须覆盖 **empty / typical / dense / long / error / loading** 六态（disabled/read-only 另轴）；每态有 fixture、可见行为与失败验收，happy-path 不得作为实现要求（合同 §5）。
+- 反馈六分型独立成组件：toast / banner / confirm / result / card / chat，变体与状态分离，禁止一个万能组件（design-system-review）。
+
+### 13.3 签字与独立验收（三权分离细化，沿用 §11.1）
+- 设计专家对每条组件契约签字（Purpose/Anatomy/States/Responsive/Behavior/验收），未签字不进实现；
+- 开发按契约实现并绑定 SHA+指纹；**独立测试专家**按 Given/When/Then 与矩阵独立 PASS/FAIL/BLOCKED，不复用实现者自测；
+- 关键旅程（含 recovery/失败恢复/撤销/重试）逐路实测，纯键盘可完成核心流程，长内容（长标题/长 JSON/多记录）有内滚/折叠处理。
+
+### 13.4 自动探针（G3 的辅助，不替代 G3）
+- 新增只读探针（contract §8.2）：外壳 `scrollWidth≤clientWidth`、卡体 `scrollHeight` 可内滚不裁切、同层卡 bbox 相交=0、200% 标签不截断、焦点环/焦点归还；
+- **自动绿 ≠ GUI**：G1 build/test/verify 与 G2 token 静态全绿只是前置，不构成 G3 GUI 通过；DOM 断言、计算色值、mockup、截图单独均不得代替独立目视（§11.1/§11.5 口径重申）。
+
+### 13.5 对应合同
+- 完整可执行条款、Given/When/Then 验收、B/C/D handoff 接口：`docs/design/p0-p3-experience-repair-contract-20261018.md`。
+
+---
+
 ## 附：本规范成文边界
 - 未重算/推翻 P2-2 冻结数值；未把设计约束升级为实测结论。
 - 未运行浏览器、未改产品代码、未 commit。

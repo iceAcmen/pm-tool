@@ -203,6 +203,36 @@ export function validateCaptureCandidate(raw: unknown, index: number): { candida
   return { candidate, errors: [] }
 }
 
+// ---- 形态识别：区分「补档草稿」与误贴的「副驾计划块」（R-P3，S5 事故）----
+
+/** capture-apply 入参的形态分类（命令层据此走定向恢复文案，零写入）。 */
+export type CapturePayloadKind =
+  | 'candidates'      // 含 candidates 数组（补档草稿，继续逐条校验）
+  | 'copilot-plan'   // 含 plan 键、无 candidates（误贴副驾计划块，定向恢复）
+  | 'empty'          // candidates 为空数组
+  | 'unrecognized'   // 既非补档草稿也非计划块
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
+}
+
+/**
+ * R-P3：识别用户贴进 capture-apply 的对象形态。
+ * - 顶层有 candidates 数组 → candidates（空数组另归 empty）；
+ * - 无 candidates 但有 plan 键（数组或对象，副驾 ask 计划块）→ copilot-plan；
+ * - 其余 → unrecognized。
+ * 纯函数、不改入参，供命令层在严格校验前先定向分流。
+ */
+export function classifyCapturePayload(parsed: unknown): CapturePayloadKind {
+  if (Array.isArray(parsed)) return parsed.length ? 'candidates' : 'empty'
+  if (!isRecord(parsed)) return 'unrecognized'
+  if (Array.isArray(parsed.candidates)) {
+    return parsed.candidates.length > 0 ? 'candidates' : 'empty'
+  }
+  if ('plan' in parsed) return 'copilot-plan'
+  return 'unrecognized'
+}
+
 /**
  * 校验整份 apply 草稿：顶层须为含 candidates 数组的对象；逐条校验。
  * 返回全部通过的干净候选与全部问题；命令层在 errors 非空时整批拒绝（不落库）。

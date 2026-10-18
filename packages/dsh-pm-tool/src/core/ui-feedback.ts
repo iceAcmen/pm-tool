@@ -14,6 +14,82 @@ export function formatNoticeLines(message: string): string[] {
 }
 
 /**
+ * 反馈分型（§5/J5）：命令层成功动作用稳定信封把「短摘要」与「完整字段」分开，
+ * 客户端只把摘要喂给自动消失的成功提示，完整字段进独立可展开详情卡，绝不进 toast。
+ *  - `[pm:summary]` 前缀行：成功短摘要（≤2 行，无 HTML/Markdown/完整实体）。
+ *  - `[pm:detail]` 标记行之后：完整字段（详情卡内容，不进提示条）。
+ * 无信封的既有命令原样回退（structured=false），不被吞、不改写。
+ */
+export const PM_SUMMARY_PREFIX = '[pm:summary]'
+export const PM_DETAIL_MARKER = '[pm:detail]'
+/** 成功提示自动消失时长（合同 §5：success 3s；错误持久）。 */
+export const FEEDBACK_SUCCESS_TTL_MS = 3000
+
+export interface ParsedFeedback {
+  /** 是否为命令层结构化信封（否则走原样回退）。 */
+  structured: boolean
+  /** 成功短摘要行（已去前缀、trim）。 */
+  summary: string[]
+  /** 完整字段详情（可展开卡）；无则 null。 */
+  detail: string | null
+}
+
+export function parseFeedback(text: string): ParsedFeedback {
+  const lines = text.split('\n')
+  const hasSummary = lines.some(l => l.trimStart().startsWith(PM_SUMMARY_PREFIX))
+  if (!hasSummary) {
+    return { structured: false, summary: formatNoticeLines(text), detail: null }
+  }
+  const summary: string[] = []
+  const detail: string[] = []
+  let inDetail = false
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (line === PM_DETAIL_MARKER) { inDetail = true; continue }
+    if (inDetail) { detail.push(raw); continue }
+    if (line.startsWith(PM_SUMMARY_PREFIX)) {
+      const s = line.slice(PM_SUMMARY_PREFIX.length).trim()
+      if (s) summary.push(s)
+    }
+  }
+  return { structured: true, summary, detail: detail.join('\n').trim() || null }
+}
+
+/** 错误判定（集中一处）：命中即持久单处提示，不自动消失。 */
+export function feedbackIsError(text: string): boolean {
+  return /失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/i.test(text)
+}
+
+export interface ClassifiedFeedback {
+  /** 错误态：持久、单处、role=alert。 */
+  isError: boolean
+  /** 是否命令层结构化信封（否则原样回退）。 */
+  structured: boolean
+  /** 成功短摘要行（≤2 行）。 */
+  summary: string[]
+  /** 完整字段详情（独立展开卡）；无则 null。 */
+  detail: string | null
+  /** 成功结构化提示自动消失时长；错误/非结构化返回 null（持久）。 */
+  autoDismissMs: number | null
+}
+
+/**
+ * panel run → Notice 共用的反馈映射（生产唯一实现，测试复用，不复制策略）：
+ * 分型 → 错误判定 → TTL。成功结构化提示 3s 自动消失；错误与无信封原样回退均持久。
+ */
+export function classifyFeedback(message: string): ClassifiedFeedback {
+  const parsed = parseFeedback(message)
+  const isError = feedbackIsError(message)
+  return {
+    isError,
+    structured: parsed.structured,
+    summary: parsed.summary,
+    detail: parsed.detail,
+    autoDismissMs: !isError && parsed.structured ? FEEDBACK_SUCCESS_TTL_MS : null,
+  }
+}
+
+/**
  * 解析 `model status` 输出里的「当前模型车道」。
  * 只认两种信号：① 带 ▶ 标记的当前车道行（▶ [poc]/▶ [prod]）；② 首行「当前车道：PoC/生产」。
  * 绝不靠 contains('[prod]')——status 会把两条车道都列出来，均含 [poc]/[prod]。

@@ -8,9 +8,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import type { Snapshot } from '../panel.js'
 import { GRID, type DashboardLayout, type FilterRule, type LinkageDim, type LinkageState, type WidgetActions, type WidgetEntity, type WidgetScope } from './types.js'
-import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor } from './widgets.js'
+import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor, knownWidgetTypeSet } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
-import { resolveDashboard, parseLayout } from './persist.js'
+import { resolveDashboard, loadDashboard, parseLayout, registerKnownWidgetTypes } from './persist.js'
 import { appendQueueCard } from './layout-append.js'
 import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
@@ -28,14 +28,34 @@ export function BoardBento({ data, actions, persistence }: {
   actions: WidgetActions
   persistence: BoardPersistence
 }) {
+  // R-B11：knownTypes 取 registry 同源 helper（直接迭代 Map.keys；Object.keys(Map) 恒为 []，
+  // 会导致同步传入空 Set、11 类全被误判未知跳过）。
+  const knownTypes = useMemo(() => knownWidgetTypeSet(), [])
+  useEffect(() => { registerKnownWidgetTypes(knownTypes) }, [knownTypes])
+  // R-B11：首屏即显式传入 knownTypes（不依赖 registerKnownWidgetTypes 副作用），避免空集合误删全部卡。
   const [layout, setLayout] = useState<DashboardLayout>(() =>
-    resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT))
+    resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes))
   const [editing, setEditing] = useState(false)
   const [editorLoading, setEditorLoading] = useState(false)
   const [editorError, setEditorError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [adopting, setAdopting] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
+
+  // R-B11：旧布局经安全归一（未知类型跳过并列名、越界夹紧、碰撞下沉）后，迁移提示走 banner，不静默改写/重置。
+  useEffect(() => {
+    const u = loadDashboard(data.dashboards?.user, knownTypes)
+    const p = u ?? loadDashboard(data.dashboards?.project, knownTypes)
+    if (!p) return
+    const notes = [...p.warnings]
+    // 未知类型合并为单条非阻断摘要（不每卡一条巨大提示）；仅列类型，其余卡原样保留。
+    if (p.skipped.length) {
+      const types = [...new Set(p.skipped.map(s => s.split('（')[0]))]
+      notes.push(`跳过 ${p.skipped.length} 个未知卡片类型（${types.join('、')}），其余卡片原样保留，未整份重置。`)
+    }
+    if (notes.length) setBanner(`布局迁移：${notes.join('；')}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [knownTypes])
   /** 已存布局是否已含补记队列卡；缺省时在头部给显式新增入口（不静默改布局、不重排旧卡）。 */
   const hasQueueCard = layout.widgets.some(w => w.type === 'queueCard')
 
@@ -192,19 +212,24 @@ export function BoardBento({ data, actions, persistence }: {
           onExit={() => setEditing(false)}
           onSave={async (scope, final) => {
             setSaving(true)
+            // R-B8 两步保存：先落盘，再确认快照刷新成功，才 setLayout + 成功提示；任一步失败不给成功假态。
             try {
               await persistence.onSave(scope, final)
+              if (typeof actions.refreshBoard !== 'function') throw new Error('缺少看板快照刷新通道')
+              await refreshAndConfirm(actions.refreshBoard)
               setLayout(final)
-              setBanner(null)
+              setBanner('布局已保存并刷新。')
             } catch (e) {
               setBanner('保存失败，未落盘：' + (e instanceof Error ? e.message : String(e)))
               throw e
             } finally { setSaving(false) }
           }}
           onReset={async (scope) => {
+            // R-B9：重置同样走刷新闸门；失败不本地回退成「假成功」。
             await persistence.onReset(scope)
-            // 重置后回退到内置默认（后端该作用域清空，重取 snapshot 前先本地回退）。
-            setLayout(resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT))
+            if (typeof actions.refreshBoard === 'function') await refreshAndConfirm(actions.refreshBoard)
+            setLayout(resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes))
+            setBanner('已恢复默认布局。')
           }}
         />
       : <div className="pm-bento-grid pm-bento-grid-static">

@@ -8,6 +8,18 @@ import RGL, { type Layout } from 'react-grid-layout'
 import { z } from 'zod'
 import type { Snapshot } from '../panel.js'
 import type { DashboardLayout, FilterRule, WidgetActions, WidgetInstance, WidgetScope } from './types.js'
+
+/** R-B3：编辑器内本地 bbox 碰撞检测（避免跨 chunk 共享 persist）。 */
+function bboxOverlap(a: WidgetInstance['layout'], b: WidgetInstance['layout']): boolean {
+  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+}
+function findCollisions(widgets: WidgetInstance[]): Array<[string, string]> {
+  const out: Array<[string, string]> = []
+  for (let i = 0; i < widgets.length; i++)
+    for (let j = i + 1; j < widgets.length; j++)
+      if (bboxOverlap(widgets[i].layout, widgets[j].layout)) out.push([widgets[i].layout.i, widgets[j].layout.i])
+  return out
+}
 import type { WidgetCatalogEntry } from './widgets.js'
 
 /**
@@ -112,6 +124,36 @@ export function BoardEditor(props: BoardEditorProps) {
   const [query, setQuery] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
   const [resetting, setResetting] = useState(false)
+  // R-B7：撤销栈 ≤20 步（仅离散动作入栈；拖拽/缩放帧不逐帧入栈，避免淹没历史）。
+  const historyRef = useRef<DashboardLayout[]>([])
+  const [canUndo, setCanUndo] = useState(false)
+  const pushHistory = () => {
+    historyRef.current.push(structuredClone(draft))
+    if (historyRef.current.length > 20) historyRef.current.shift()
+    setCanUndo(true)
+  }
+  const undo = () => {
+    const prev = historyRef.current.pop()
+    setCanUndo(historyRef.current.length > 0)
+    if (prev) setDraft(prev)
+  }
+  // R-B1：响应式断点列数 12/8/4/单列（≥1200=12，≥996=8，≥768=4，<768=1），替代固定 cols=12。
+  const [activeCols, setActiveCols] = useState(grid.cols)
+  const stageRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const el = stageRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const measure = () => {
+      const wpx = el.clientWidth
+      setActiveCols(wpx >= 1200 ? 12 : wpx >= 996 ? 8 : wpx >= 768 ? 4 : 1)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  // R-B9：重置二次确认（破坏性，先点「恢复默认」出现确认态，再点才执行）。
+  const [resetArmed, setResetArmed] = useState(false)
 
   const live = draft
 
@@ -135,6 +177,12 @@ export function BoardEditor(props: BoardEditorProps) {
       setValidationError(`配置校验未通过，未保存：\n${bad.join('；')}`)
       return
     }
+    // R-B3：持久化前 bbox 碰撞检测；重叠即整批拒绝、零写入，提示具体卡对。
+    const collisions = findCollisions(draft.widgets)
+    if (collisions.length) {
+      setValidationError(`存在卡片重叠，未保存：${collisions.map(([a, b]) => `${a} ↔ ${b}`).join('，')}。请先分开或下沉。`)
+      return
+    }
     const final: DashboardLayout = { ...draft, scope, version: 1 }
     try {
       await onSave(scope, final)
@@ -146,6 +194,9 @@ export function BoardEditor(props: BoardEditorProps) {
   }
 
   const doReset = async () => {
+    // R-B9：破坏性重置二次确认；未武装时只武装并展示确切作用域，不执行。
+    if (!resetArmed) { setResetArmed(true); return }
+    setResetArmed(false)
     setResetting(true)
     try { await onReset(scope) } catch { /* 提示由 banner 处理 */ } finally { setResetting(false) }
   }
@@ -174,6 +225,7 @@ export function BoardEditor(props: BoardEditorProps) {
           if (!r.success) { setValidationError(`导入失败：widgets[${i}](${w.type}) 配置不合规`); return }
         }
       }
+      pushHistory()
       setDraft(parsed.layout)
     }
     reader.readAsText(f)
@@ -184,6 +236,7 @@ export function BoardEditor(props: BoardEditorProps) {
     const desc = catalog.find(c => c.type === type)
     if (!desc || desc.disabled) return
     if (draft.widgets.some(w => w.type === type)) return
+    pushHistory()
     const i = nextId()
     const y = Math.max(0, ...draft.widgets.map(w => w.layout.y + w.layout.h))
     setDraft({ ...draft, widgets: [...draft.widgets, {
@@ -199,9 +252,10 @@ export function BoardEditor(props: BoardEditorProps) {
     if (!desc || desc.disabled) return
     // 单实例卡：已存在则不重复加
     if (draft.widgets.some(w => w.type === type)) return
+    pushHistory()
     const i = nextId()
-    // 约束到栅格内
-    const cx = Math.max(0, Math.min(x, grid.cols - desc.defaultW))
+    // 约束到栅格内（按当前断点列数夹紧）
+    const cx = Math.max(0, Math.min(x, activeCols - desc.defaultW))
     const cy = Math.max(0, y)
     setDraft({ ...draft, widgets: [...draft.widgets, {
       i, type, config: structuredClone(desc.defaultConfig),
@@ -211,11 +265,13 @@ export function BoardEditor(props: BoardEditorProps) {
   }
 
   const removeWidget = (i: string) => {
+    pushHistory()
     setDraft({ ...draft, widgets: draft.widgets.filter(w => w.layout.i !== i) })
     if (selectedId === i) setSelectedId(null)
   }
 
   const updateConfig = (i: string, patch: Partial<WidgetInstance['config']>) => {
+    pushHistory()
     setDraft({
       ...draft,
       widgets: draft.widgets.map(w => w.layout.i === i ? { ...w, config: { ...w.config, ...patch } } : w),
@@ -224,6 +280,7 @@ export function BoardEditor(props: BoardEditorProps) {
 
   /** I7：布局补丁（坐标/尺寸的非指针编辑路径，供配置面板数字输入）。 */
   const updateLayout = (i: string, patch: Partial<WidgetInstance['layout']>) => {
+    pushHistory()
     setDraft(d => ({
       ...d,
       widgets: d.widgets.map(w => w.layout.i === i
@@ -238,12 +295,13 @@ export function BoardEditor(props: BoardEditorProps) {
    * 纯 draft 状态改写，不干预 RGL 鼠标拖拽链路。
    */
   const nudgeWidget = (i: string, dx: number, dy: number) => {
+    pushHistory()
     setDraft(d => {
       const widgets = d.widgets.map(w => ({ ...w, layout: { ...w.layout } }))
       const cur = widgets.find(w => w.layout.i === i)
       if (!cur) return d
       const L = cur.layout
-      const nx = Math.max(0, Math.min(L.x + dx, grid.cols - L.w))
+      const nx = Math.max(0, Math.min(L.x + dx, activeCols - L.w))
       const ny = Math.max(0, L.y + dy)
       const hit = widgets.find(o => o.layout.i !== i
         && nx < o.layout.x + o.layout.w && nx + L.w > o.layout.x
@@ -278,18 +336,26 @@ export function BoardEditor(props: BoardEditorProps) {
       <button type="button" className="pm-bento-toolbtn" onClick={exportLayout}>导出</button>
       <button type="button" className="pm-bento-toolbtn" onClick={() => fileRef.current?.click()}>导入</button>
       <input ref={fileRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={importLayout}/>
-      <button type="button" className="pm-bento-toolbtn" onClick={() => void doReset()} disabled={resetting}>{resetting ? '重置中…' : '恢复默认'}</button>
+      <button type="button" className="pm-bento-toolbtn" onClick={undo} disabled={!canUndo} title="撤销上一步（最多 20 步）">↶ 撤销</button>
+      <button
+        type="button"
+        className={`pm-bento-toolbtn${resetArmed ? ' pm-bento-danger' : ''}`}
+        onClick={() => void doReset()}
+        disabled={resetting}
+        title={`将${scope === 'user' ? '个人' : scope === 'project' ? '项目' : '内置'}布局恢复默认（此操作不可撤销，需二次确认）`}
+      >{resetting ? '重置中…' : resetArmed ? `确认重置${scope === 'user' ? '个人' : scope === 'project' ? '项目' : '内置'}布局？` : '恢复默认'}</button>
+      {resetArmed && <button type="button" className="pm-bento-toolbtn" onClick={() => setResetArmed(false)}>取消重置</button>}
       <button type="button" className="pm-bento-toolbtn" onClick={onExit}>取消</button>
       <button type="button" className="pm-button-primary" onClick={() => void saveEdit()}>保存</button>
     </div>
 
-    <div className="pm-bento-stage">
+    <div className="pm-bento-stage" ref={stageRef}>
       {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget}/>}
       <div className="pm-bento-grid pm-rgl-editing">
         <GridLayout
           className="pm-rgl"
           layout={rglLayout}
-          cols={grid.cols}
+          cols={activeCols}
           rowHeight={grid.rowHeight}
           margin={grid.margin}
           isDraggable
@@ -304,7 +370,7 @@ export function BoardEditor(props: BoardEditorProps) {
             if (x === undefined || y === undefined) {
               const gridEl = e.currentTarget as HTMLElement
               const rect = gridEl.getBoundingClientRect()
-              const colW = (rect.width - grid.margin[0]) / grid.cols
+              const colW = (rect.width - grid.margin[0]) / activeCols
               x = Math.max(0, Math.floor((e.clientX - rect.left) / (colW + grid.margin[0])))
               y = Math.max(0, Math.floor((e.clientY - rect.top) / (grid.rowHeight + grid.margin[1])))
             }

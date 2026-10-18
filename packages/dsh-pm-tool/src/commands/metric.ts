@@ -6,7 +6,7 @@
  */
 import type { PmDomain } from '../core/storage.js'
 import { listProvenance, PROVENANCE_PENDING_ROW } from '../core/provenance-store.js'
-import { summarizeProvenance } from '../core/metric.js'
+import { summarizeProvenance, renderMetricSummary } from '../core/metric.js'
 
 export const metricHelp = '  /pm metric <项目ID>   只读汇总该项目 AI 操作留痕（按类型/撤销结果/采纳步数），小样本不下结论'
 
@@ -25,5 +25,8 @@ export function handleMetricCommand(
     ?.value?.entries ?? []
   const entries = listProvenance(domain, projectId)
   const metric = summarizeProvenance(projectId, entries, pendingRows.length)
-  return { kind: 'success', text: JSON.stringify(metric) }
+  // R-C4/§6.2：裸 JSON 对象（机器可直接 JSON.parse，兼容既有 verify），人读摘要置于 summary 字段，
+  // 原始计数字段全部保留；不再首屏平铺或把 JSON 塞进 prose。
+  const summary = renderMetricSummary(metric)
+  return { kind: 'success', text: JSON.stringify({ ...metric, summary }) }
 }

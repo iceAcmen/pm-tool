@@ -46,6 +46,16 @@ async function run(rawInput, expected = 'success') {
 }
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+// 钩子为写队列外 fire-and-forget（void ensureReflection…），固定 sleep(80) 在门控负载下会竞态漏检；
+// 改为轮询直到条件成立（超时即失败，不掩盖钩子缺失）。
+async function waitFor(predicate, { timeoutMs = 3000, intervalMs = 20 } = {}) {
+  const deadline = Date.now() + timeoutMs
+  while (Date.now() < deadline) {
+    if (predicate()) return true
+    await sleep(intervalMs)
+  }
+  return predicate()
+}
 const results = []
 const check = (k, ok, detail = '') => { results.push({ k, ok: !!ok, detail: String(detail) }); console.log(`[${ok ? 'OK' : 'XX'}] ${k} :: ${detail}`) }
 
@@ -113,7 +123,8 @@ try {
     milestoneId: ms.id,
   })
   await updateMilestone(domain, ms.id, { status: 'achieved', achievedDate: '2026-10-18' })
-  await sleep(80) // best-effort 钩子写盘
+  await waitFor(() => [...domain.table('reflections').entries()]
+    .some(([, r]) => r.milestoneId === ms.id && r.sourceEvent === 'milestone-achieved'))
 
   const msRefl = [...domain.table('reflections').entries()]
     .map(([, r]) => r)
@@ -129,7 +140,8 @@ try {
 
   // 幂等：再次 achieved 不重复建
   await updateMilestone(domain, ms.id, { status: 'achieved', achievedDate: '2026-10-18' })
-  await sleep(80)
+  await waitFor(() => [...domain.table('reflections').entries()]
+    .filter(([, r]) => r.milestoneId === ms.id).length === 1)
   const msReflAfter = [...domain.table('reflections').entries()]
     .map(([, r]) => r)
     .filter(r => r.milestoneId === ms.id)
@@ -137,7 +149,8 @@ try {
 
   // ===== 2) X6-L2：deliverable accepted 钩子真实落盘 =====
   await updateDeliverable(domain, dlvP.id, { status: 'accepted', version: 'v1.0', changeNote: '客户验收', operator: 'Ice' })
-  await sleep(80)
+  await waitFor(() => [...domain.table('reflections').entries()]
+    .some(([, r]) => r.deliverableId === dlvP.id && r.sourceEvent === 'deliverable-accepted'))
   const dlvRefl = [...domain.table('reflections').entries()]
     .map(([, r]) => r)
     .filter(r => r.deliverableId === dlvP.id)
@@ -149,7 +162,8 @@ try {
   check('dlv.knownStatus', dlvDraft?.lines.some(l => l.text.includes('验收状态：accepted')), '验收状态 known 行')
 
   await updateDeliverable(domain, dlvP.id, { status: 'accepted' })
-  await sleep(80)
+  await waitFor(() => [...domain.table('reflections').entries()]
+    .filter(([, r]) => r.deliverableId === dlvP.id).length === 1)
   const dlvReflAfter = [...domain.table('reflections').entries()]
     .map(([, r]) => r)
     .filter(r => r.deliverableId === dlvP.id)

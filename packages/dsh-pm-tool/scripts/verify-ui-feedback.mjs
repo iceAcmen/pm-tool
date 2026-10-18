@@ -219,4 +219,19 @@ assert.match(narrow, /\.pm-top-actions \.pm-button \{[^}]*width:\s*auto/, '窄�
 assert.match(narrow, /\.pm-top-actions \{ flex-wrap: wrap; \}/, '窄窗按钮组允许换行')
 assert.match(narrow, /\.pm-top-secondary \{ display: none; \}/, '次级按钮让位，保主按钮在 390px 可读')
 
+// ---- J5 反馈分型：成功短摘要/独立详情卡/3s 自动消失/错误持久 ----
+const taskSrc = readFileSync(join(here, '..', 'src', 'commands', 'task.ts'), 'utf8')
+assert.match(taskSrc, /PM_SUMMARY_PREFIX/, 'task update 成功须走结构化信封短摘要')
+assert.match(taskSrc, /PM_DETAIL_MARKER/, '完整字段须经 detail 标记分离，不进 toast')
+assert.doesNotMatch(taskSrc, /<details><summary>完整字段<\/summary>/, '命令层不得再把 <details> 塞进成功文本')
+assert.match(panelSrc, /classifyFeedback\(message\)/, 'Notice 须经 classifyFeedback 分型，不整体平铺')
+assert.match(panelSrc, /pm-notice-detail/, '完整字段须进独立可展开详情卡')
+assert.match(panelSrc, /autoDismissMs/, '成功提示须按 TTL 自动消失')
+assert.match(panelSrc, /classifyFeedback/, '错误集中判定并持久单处展示')
+// 保存完成回调关闭抽屉（TaskForm onSaved → setDrawer(undefined)），不卡「提交中」。
+assert.match(panelSrc, /<TaskForm[\s\S]*?onSaved=\{\(\) => setDrawer\(undefined\)\}/, '任务抽屉保存成功须关闭（onSaved 关抽屉）')
+// 摘要条本身不滚动、不出 HTML/MD；限高滚动只允许在详情 pre。
+assert.doesNotMatch(css, /\.pm-notice-lines\s*\{[^}]*overflow:\s*auto/, '摘要条不得内部滚动')
+assert.match(css, /\.pm-notice-detail pre\s*\{[^}]*overflow:\s*auto/, '完整字段限高滚动应在详情卡内')
+
 console.log('verify-ui-feedback OK')

@@ -6,6 +6,7 @@ import {
   normalizeCaptureDraft,
   validateCaptureCandidate,
   validateCaptureDraft,
+  classifyCapturePayload,
   buildCaptureUserPrompt,
   CaptureDraftParseError,
 } from './capture.js'
@@ -147,5 +148,28 @@ describe('buildCaptureUserPrompt：装配项目名/今天/原文', () => {
     expect(text).toContain('验收项目')
     expect(text).toContain('2026-10-18')
     expect(text).toContain('张三说周五前交报告')
+  })
+})
+
+describe('classifyCapturePayload：区分补档草稿与误贴副驾 plan（R-P3）', () => {
+  it('含非空 candidates 数组 → candidates（顶层对象/裸数组都认）', () => {
+    expect(classifyCapturePayload({ candidates: [{ title: 'a' }] })).toBe('candidates')
+    expect(classifyCapturePayload([{ title: 'a' }])).toBe('candidates')
+  })
+  it('无 candidates 但有 plan 键（ask 计划块）→ copilot-plan', () => {
+    expect(classifyCapturePayload({ plan: [{ stepId: 's1', action: { op: 'risk.create' } }] })).toBe('copilot-plan')
+    expect(classifyCapturePayload({ plan: [], other: 1 })).toBe('copilot-plan')
+  })
+  it('空 candidates 数组 → empty（与误贴 plan 分开）', () => {
+    expect(classifyCapturePayload({ candidates: [] })).toBe('empty')
+    expect(classifyCapturePayload([])).toBe('empty')
+  })
+  it('既非草稿也非计划块 → unrecognized', () => {
+    expect(classifyCapturePayload({ note: 'x' })).toBe('unrecognized')
+    expect(classifyCapturePayload('hello')).toBe('unrecognized')
+    expect(classifyCapturePayload(null)).toBe('unrecognized')
+  })
+  it('plan 与 candidates 同时出现：以 candidates 为准（不误判）', () => {
+    expect(classifyCapturePayload({ plan: [{ stepId: 's1' }], candidates: [{ title: 'a' }] })).toBe('candidates')
   })
 })

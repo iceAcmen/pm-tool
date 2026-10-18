@@ -53,6 +53,7 @@ import { recordProvenance } from '../core/provenance-store.js'
 import { getModelMode, resolveModelRoute, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { describeTaskValidation, taskStatusLabels, type Task } from '../core/task.js'
+import { PM_SUMMARY_PREFIX, PM_DETAIL_MARKER } from '../core/ui-feedback.js'
 import { formatRepoRef, repoFieldHelpPhrase } from '../core/repo-format.js'
 import type { PmDomain } from '../core/storage.js'
 
@@ -113,6 +114,28 @@ function renderTask(task: Task): string {
     `更新时间：${task.updatedAt}`,
     ...renderChecklistLines(task),
   ].join('\n')
+}
+
+/** 更新成功短摘要：对比传入 patch 与更新前后，列出变更字段（R-C4，不全字段 dump）。 */
+const FIELD_LABELS: Record<string, string> = {
+  title: '标题', description: '说明', assignee: '负责人', status: '状态',
+  priority: '优先级', startDate: '开始日期', dueDate: '截止日期', completedDate: '完成日期',
+  progress: '进度', milestoneId: '里程碑',
+}
+function summarizeTaskUpdate(before: Task | undefined, after: Task, patch: Record<string, unknown>): string[] {
+  const out: string[] = []
+  for (const [key, to] of Object.entries(patch)) {
+    const label = FIELD_LABELS[key]
+    if (!label) continue
+    const from = before ? (before as Record<string, unknown>)[key] : undefined
+    if (from === to) continue
+    const fromText = key === 'status' && from ? taskStatusLabels[from as keyof typeof taskStatusLabels] : String(from ?? '空')
+    const toText = key === 'status' ? taskStatusLabels[to as keyof typeof taskStatusLabels]
+      : key === 'progress' ? `${to}%`
+      : String(to ?? '空')
+    out.push(`${label}：${fromText} → ${toText}`)
+  }
+  return out
 }
 
 /** 清单只读渲染：itemId 是后续 toggle/rename/remove 必须回传的稳定 id。 */
@@ -269,13 +292,30 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
       if (fields === undefined) {
         return { kind: 'error', text: '更新参数须为合法 JSON 对象，请使用英文双引号。' }
       }
+      const before = getTask(domain, updateMatch[1])
       const task = await updateTask(domain, updateMatch[1], fields)
       if (!task) return { kind: 'error', text: `未找到任务：${updateMatch[1]}。` }
       // X2：人显式收尾（wrapped）转换成功后，文案明示「已收尾 ≠ 正式完成」，不越界裁决成败。
       const wrappedNote = task.status === 'wrapped'
-        ? '\n注意：已收尾（wrapped）≠ 正式完成（done）；该任务未计入完成，不催办、不计入 open 负载。'
+        ? '注意：已收尾（wrapped）≠ 正式完成（done）；该任务未计入完成，不催办、不计入 open 负载。'
         : ''
-      return { kind: 'success', text: `任务已更新并保存。${wrappedNote}\n${renderTask(task)}` }
+      // R-C4/§6.2/J5：成功只用信封短摘要（≤2 行，无完整实体/HTML/MD），完整字段进 detail 供独立展开卡，
+      // 绝不塞进 toast message；客户端 parseFeedback 分型，无信封的其他命令原样回退。
+      const changes = summarizeTaskUpdate(before, task, fields as Record<string, unknown>)
+      const summaryLines = [
+        `任务已更新｜${task.id} ${task.title}`,
+        ...(changes.length ? [`已修改：${changes.join('；')}`] : []),
+        ...(wrappedNote ? [wrappedNote] : []),
+      ]
+      const detail = '```\n' + renderTask(task) + '\n```'
+      return {
+        kind: 'success',
+        text: [
+          ...summaryLines.map(l => `${PM_SUMMARY_PREFIX}${l}`),
+          PM_DETAIL_MARKER,
+          detail,
+        ].join('\n'),
+      }
     }
     if (action === 'delete') {
       const deleteMatch = /^(\S+)(?:\s+(cascade))?(?:\s+(confirm))?$/i.exec(argument)

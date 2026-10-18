@@ -431,8 +431,23 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   word-break: break-all;
   font-size: 12px;
   line-height: 1.45;
-  max-height: 240px;
+}
+/* J5：完整字段进独立可展开卡，自带限高滚动；摘要条本身不滚动、不出 HTML/MD。 */
+.pm-notice-detail {
+  flex-basis: 100%;
+  margin-top: 6px;
+  font-size: 12px;
+}
+.pm-notice-detail summary { cursor: pointer; color: var(--pm-blue); }
+.pm-notice-detail pre {
+  margin: 6px 0 0;
+  max-height: 180px;
   overflow: auto;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--pm-hover, rgb(31 35 41 / 6%));
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 .pm-notice-copy { flex: 0 0 auto; min-height: 26px; padding: 2px 8px; font-size: 12px; }
 
@@ -1953,6 +1968,12 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-bento-tools .pm-button-primary { padding: 5px 12px; font-size: 12px; }
 .pm-bento-tools .pm-plain-icon { padding: 5px 10px; font-size: 12px; }
 .pm-rgl-item-wrap > .pm-bento-card { height: 100%; box-sizing: border-box; }
+/* R-B10：卡体 min-height:0 + 内部滚动，长内容不再溢出/裁切邻卡（RGL 高度由栅格给定）。 */
+.pm-rgl-item-wrap, .pm-bento-grid-static > div { min-height: 0; }
+.pm-bento-card { min-height: 0; }
+.pm-bento-card > *:not(.pm-bento-label):not(.pm-bento-head) { min-height: 0; overflow-y: auto; }
+/* R-B9：重置二次确认的武装态（破坏性）。 */
+.pm-bento-toolbtn.pm-bento-danger { border-color: var(--pm-danger); color: var(--pm-danger); background: color-mix(in srgb, var(--pm-danger) 8%, transparent); }
 .pm-bento-card {
   background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 14px;
   padding: 14px 16px; display: flex; flex-direction: column; overflow: hidden;
@@ -2184,19 +2205,52 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
    P1-7 副驾内嵌建议层（替代全屏抽屉）
    ============================================================ */
 
-/* 主视图 + 右侧建议层 的横向布局 */
-.pm-suggest-split { display: flex; align-items: stretch; gap: 14px; min-width: 0; }
-.pm-suggest-split > .pm-view { flex: 1 1 auto; min-width: 0; }
+/* R-S：主视图不再与副驾并排 flex；副驾是 fixed Portal，开关不改变主列宽（回归：开关前后 main box 宽相同）。 */
+.pm-suggest-split { display: block; min-width: 0; }
+.pm-suggest-split > .pm-view { min-width: 0; }
 
-/* 右侧建议层（内嵌面板） */
-.pm-suggest-layer {
-  flex: 0 0 340px; width: 340px; max-width: 340px;
-  align-self: flex-start; position: sticky; top: 12px;
-  max-height: calc(100vh - 110px); overflow-y: auto;
+/* ===== R-S AI 副驾 Portal 浮层（非 modal，role=region，内部滚动）===== */
+.pm-sidecar {
+  position: fixed; top: 72px; right: 12px; bottom: 12px;
+  width: 480px; max-width: calc(100vw - 24px);
+  display: flex; flex-direction: column; z-index: 60;
   border: 1px solid var(--pm-line); border-radius: 14px;
-  padding: 14px; background: var(--pm-surface);
-  box-shadow: var(--shadow-1);
+  background: var(--pm-surface); box-shadow: var(--shadow-1);
+  overflow: hidden;
 }
+.pm-sidecar-chrome {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-bottom: 1px solid var(--pm-line-soft); flex: 0 0 auto;
+}
+.pm-sidecar-title { font-size: 13px; font-weight: 650; color: var(--pm-ink); flex: 1; min-width: 0; }
+.pm-sidecar-actions { display: inline-flex; gap: 4px; }
+.pm-sidecar-iconbtn {
+  appearance: none; border: none; cursor: pointer; background: transparent;
+  width: 26px; height: 26px; border-radius: 7px; font-size: 16px; line-height: 1;
+  color: var(--pm-muted); display: inline-flex; align-items: center; justify-content: center;
+}
+.pm-sidecar-iconbtn:hover { background: var(--pm-hover); color: var(--pm-ink); }
+.pm-sidecar-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 12px; }
+/* 浮层内由 body 承担滚动：取消内嵌 280px 固定高，长答复在侧栏内部滚动。 */
+.pm-sidecar-body .pm-copilot[data-embedded] .pm-copilot-messages { max-height: none; }
+/* 右缘调宽手柄：可视 8px、热区 12px（R-S3）。 */
+.pm-sidecar-handle {
+  position: absolute; left: -6px; top: 0; bottom: 0; width: 12px; cursor: col-resize; z-index: 1;
+}
+.pm-sidecar-handle::after {
+  content: ''; position: absolute; left: 2px; top: 12px; bottom: 12px; width: 8px;
+  border-radius: 6px; background: transparent; transition: background 120ms ease;
+}
+.pm-sidecar-handle:hover::after, .pm-sidecar-handle:active::after { background: var(--pm-line); }
+/* 最小化 40px 竖 tab（R-S2），保留上下文不卸载。 */
+.pm-sidecar-tab {
+  position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 60;
+  width: 40px; padding: 10px 0; border: 1px solid var(--pm-line); border-radius: 12px;
+  background: var(--pm-surface); box-shadow: var(--shadow-1); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: var(--pm-accent); font-size: 11px; writing-mode: vertical-rl;
+}
+.pm-sidecar-tab:hover { background: var(--pm-hover); }
 
 /* 内嵌头部：标题 + 模式 + 车道 */
 .pm-copilot-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -2302,12 +2356,18 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   background: color-mix(in srgb, var(--pm-accent) 8%, transparent);
 }
 
-/* 窄屏（≤980）：建议层转为顶部全宽，不挤压表格 */
-@media (max-width: 980px) {
-  .pm-suggest-split { flex-direction: column; }
-  .pm-suggest-layer {
-    position: static; flex: none; width: 100%; max-width: none;
-    max-height: none; order: -1;
+/* R-S4 响应式：560–979 底部 sheet（max 45vh）；<560 全屏 sheet；≥980 右侧浮层（上方规则）。 */
+@media (max-width: 979px) {
+  .pm-sidecar {
+    top: auto; left: 12px; right: 12px; bottom: 12px;
+    width: auto !important; max-width: none; max-height: 45vh;
+  }
+  .pm-sidecar-handle { display: none; }
+}
+@media (max-width: 559px) {
+  .pm-sidecar {
+    left: 0; right: 0; top: 0; bottom: 0; max-height: none;
+    border-radius: 0; width: auto !important;
   }
 }
 
@@ -2870,3 +2930,31 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   font-size: 11px; color: var(--pm-muted); padding: 2px 8px; border-radius: 999px;
   background: color-mix(in srgb, var(--pm-line) 30%, transparent);
 }
+
+/* P0-04 对话补档草稿卡：观察草稿 + 一键确认落库（R-P1/R-P2/R-P4） */
+.pm-capture-card { margin: 8px 14px 0; border: 1px solid var(--pm-line); border-radius: 10px; background: var(--pm-surface); }
+.pm-capture-toggle { width: 100%; text-align: left; padding: 9px 12px; background: none; border: 0; cursor: pointer; font-size: 13px; color: var(--pm-text); border-radius: 10px; }
+.pm-capture-body { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 8px; }
+.pm-capture-text { width: 100%; resize: vertical; min-height: 56px; padding: 8px; border: 1px solid var(--pm-line); border-radius: 8px; background: var(--pm-surface); color: var(--pm-text); font: inherit; box-sizing: border-box; }
+.pm-capture-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pm-capture-actions button { padding: 6px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--pm-line); background: var(--pm-surface); color: var(--pm-text); cursor: pointer; min-height: 32px; }
+.pm-capture-actions button:disabled { opacity: .5; cursor: default; }
+.pm-capture-draft { margin-top: 4px; padding: 10px; border: 1px solid var(--pm-line); border-radius: 8px; background: color-mix(in srgb, var(--pm-surface) 70%, transparent); }
+.pm-capture-error { font-size: 12px; color: var(--pm-danger); }
+.pm-capture-draft-head { margin: 0 0 6px; font-size: 12px; color: var(--pm-muted); }
+.pm-capture-result { margin-top: 8px; padding: 10px; border: 1px solid var(--pm-line); border-radius: 8px; }
+.pm-capture-undo { margin: 6px 0 0; font-size: 12px; color: var(--pm-muted); }
+.pm-capture-undo code { font-family: ui-monospace, monospace; }
+
+/* §5.3 Confirm：自定义阻断确认（替代原生 window.confirm） */
+.pm-confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.42); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
+.pm-confirm-dialog { width: min(420px, 100%); background: var(--pm-surface); border: 1px solid var(--pm-line); border-radius: 14px; padding: 18px; box-shadow: 0 18px 48px rgba(0,0,0,.35); }
+.pm-confirm-title { margin: 0 0 12px; font-size: 15px; }
+.pm-confirm-meta { margin: 0 0 8px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.pm-confirm-meta li { display: flex; gap: 8px; }
+.pm-confirm-meta li span { color: var(--pm-muted); min-width: 64px; }
+.pm-confirm-impact { margin: 8px 0; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--pm-danger); background: color-mix(in srgb, var(--pm-danger) 10%, transparent); }
+.pm-confirm-neutral .pm-confirm-impact { color: var(--pm-text); background: color-mix(in srgb, var(--pm-line) 30%, transparent); }
+.pm-confirm-msg { margin: 6px 0; font-size: 13px; color: var(--pm-muted); }
+.pm-confirm-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+.pm-confirm-actions .pm-button { min-height: 36px; padding: 6px 14px; font-size: 13px; }

@@ -8,6 +8,7 @@ import { taskStatusLabels } from '../../core/labels.js'
 import { evaluateChecks, type CheckFinding, type CheckableTask } from '../../core/check.js'
 import { tasksToCsv, tasksToMarkdown, tasksToJson, buildTaskSnapshotHtml, type TaskExportCtx } from '../../core/task-export.js'
 import { downloadText } from '../download.js'
+import { confirmDanger } from '../confirm-dialog.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
 import type { DiagnosisBubble } from '../../core/suggestion-engine.js'
@@ -427,10 +428,19 @@ export function TaskTable(props: {
 
   const handleSetDefault = (id: string) => commitStore(setDefaultTaskView(viewsStore, id))
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const target = findTaskView(viewsStore, id)
     if (!target || target.builtin) return
-    if (!window.confirm(`删除视图「${target.name}」？此操作只移除保存，不影响任务数据。`)) return
+    const ok = await confirmDanger({
+      neutral: true,
+      title: '删除已保存视图？',
+      objectType: '视图',
+      objectTitle: target.name,
+      objectId: id,
+      impact: '只移除该保存的视图配置，不影响任何任务数据。',
+      confirmLabel: '确认删除视图',
+    })
+    if (!ok) return
     commitStore(deleteTaskView(viewsStore, id))
     if (activeViewId === id) setActiveViewId(null)
   }
@@ -568,14 +578,17 @@ export function TaskTable(props: {
   }, [effectiveActiveId])
 
   const batchIds = [...selected].join(',')
-  const confirmBatchDelete = () => {
+  const confirmBatchDelete = async () => {
     if (!selected.size) return
-    void run(`task batch delete ${batchIds}`).then(() => {
-      if (window.confirm(`将级联删除所选 ${selected.size} 个任务及其全部后代（旁支保留），确定继续吗？`)) {
-        void run(`task batch delete ${batchIds} confirm`).then(ok => {
-          if (ok) { setSelected(new Set()); onSaved() }
-        })
-      }
+    const ok = await confirmDanger({
+      title: '级联删除所选任务？',
+      objectType: '任务',
+      impact: `将级联删除所选 ${selected.size} 个任务及其全部后代（旁支任务保留），此操作不可撤销。`,
+      confirmLabel: '确认级联删除',
+    })
+    if (!ok) return
+    void run(`task batch delete ${batchIds} confirm`).then(ok2 => {
+      if (ok2) { setSelected(new Set()); onSaved() }
     })
   }
 

@@ -2,6 +2,7 @@ import { flattenVisible as flattenTaskTree } from '../core/task-tree.js'
 import { resolveRecordLocation, findRecord } from '../core/record-location.js'
 import { VIEW_LABELS, buildNarrowSwitcher } from '../core/nav.js'
 import { NavRail } from './nav-rail.js'
+import { confirmDanger, ConfirmHost } from './confirm-dialog.js'
 import { clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
 import { localTodayIso, isTaskOverdue } from '../core/derived.js'
@@ -15,7 +16,7 @@ import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverab
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, refreshSucceeded, type AppliedBatch } from '../core/ask-projection.js'
-import { formatNoticeLines, extractBackupPath, parseActiveModelLane } from '../core/ui-feedback.js'
+import { extractBackupPath, parseActiveModelLane, classifyFeedback } from '../core/ui-feedback.js'
 import { buildDiagnosis, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
@@ -703,8 +704,51 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [message, setMessage] = useState('')
   const [dashOpen, setDashOpen] = useState(false)
   const [topMenuOpen, setTopMenuOpen] = useState(false)
-  // P1-7 副驾内嵌建议层（替代全屏抽屉）。
+  // P1-7 副驾内嵌建议层（替代全屏抽屉）。R-S：改为 Portal fixed 浮层，不再作为 flex 兄弟挤压主列。
   const [copilotLayer, setCopilotLayer] = useState(false)
+  // R-S2：最小化（40px 竖 tab，保留上下文）；R-S3：可调宽 420–560，默认 480，持久化到 localStorage。
+  const [copilotMin, setCopilotMin] = useState(false)
+  const [copilotWidth, setCopilotWidth] = useState<number>(() => {
+    try {
+      const v = Number(localStorage.getItem('pm.sidecar.width'))
+      return Number.isFinite(v) && v >= 420 && v <= 560 ? v : 480
+    } catch { return 480 }
+  })
+  const copilotWidthRef = useRef(copilotWidth)
+  const copilotOpenBtnRef = useRef<HTMLButtonElement | null>(null)
+  // R-S5：ESC 关闭并把焦点归还开关按钮（非 modal，不做全局焦点陷阱）。
+  const closeSidecar = () => {
+    setCopilotLayer(false)
+    setCopilotMin(false)
+    copilotOpenBtnRef.current?.focus()
+  }
+  useEffect(() => {
+    if (!copilotLayer) return
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopPropagation(); closeSidecar() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [copilotLayer])
+  // R-S3：右缘拖动手柄，clamp 420–560 并持久化。
+  const startSidecarResize = (e: { clientX: number, preventDefault: () => void }) => {
+    e.preventDefault()
+    const startX = e.clientX
+    const startW = copilotWidthRef.current
+    const track = (ev: globalThis.PointerEvent) => {
+      const next = Math.max(420, Math.min(560, startW + (startX - ev.clientX)))
+      copilotWidthRef.current = next
+      setCopilotWidth(next)
+    }
+    const onUp = () => {
+      window.removeEventListener('pointermove', track)
+      window.removeEventListener('pointerup', onUp)
+      try { localStorage.setItem('pm.sidecar.width', String(copilotWidthRef.current)) } catch { /* ignore */ }
+    }
+    window.addEventListener('pointermove', track)
+    window.addEventListener('pointerup', onUp)
+  }
   // 右侧面板模式：只读诊断 / 草稿待确认。
   const [copilotMode, setCopilotMode] = useState<'diagnosis' | 'draft'>('diagnosis')
   // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
@@ -851,6 +895,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
 
   return <>
     <style>{styles}</style>
+    <ConfirmHost/>
     <main
       className="pm-shell"
       data-density={density}
@@ -961,18 +1006,20 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             <Sparkles size={15}/>AI 助手
           </button>
           <button
+            ref={copilotOpenBtnRef}
             className="pm-button pm-top-secondary pm-copilot-open"
             data-active={copilotLayer || undefined}
             disabled={!project}
             aria-pressed={copilotLayer}
-            title="PM 插件内副驾：只读诊断气泡附着记录 + 操作草稿卡（确认才落库）；非宿主全局聊天"
+            title="PM 插件内副驾：Portal 浮层（非 modal），只读诊断气泡附着记录 + 操作草稿卡（确认才落库）；非宿主全局聊天"
             onClick={() => {
               // 副驾层挂在项目视图分支：总览看板下先退出全局看板回到当前项目，再切换副驾，避免点了无面板。
               if (dashOpen) setDashOpen(false)
               setCopilotLayer(v => !v)
+              setCopilotMin(false)
             }}
           >
-            <MessageSquare size={15}/>{copilotLayer ? 'AI 副驾 · 内嵌' : 'AI 副驾'}
+            <MessageSquare size={15}/>{copilotLayer ? 'AI 副驾 · 浮层' : 'AI 副驾'}
           </button>
           <div className="pm-top-more-wrap">
           <button
@@ -1003,7 +1050,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             disabled={!project}
             onClick={() => { setTopMenuOpen(false); setDashOpen(false); setCopilotLayer(true) }}
           >
-            <MessageSquare size={15}/>AI 副驾 · 内嵌
+            <MessageSquare size={15}/>AI 副驾 · 侧边
           </button>
           <button
             className="pm-button pm-menu-item"
@@ -1018,7 +1065,14 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             disabled={busy}
             title="一键备份 pmtool 七类实体到内置 packages/backups/（恢复请用 /pm restore <文件> confirm）"
             onClick={async () => {
-              if (!window.confirm('将把当前七类实体备份到内置 packages/backups/（带时间戳 JSON，成功后显示完整路径）。开始？')) return
+              const ok = await confirmDanger({
+                neutral: true,
+                title: '开始备份？',
+                objectType: '七类实体',
+                impact: '将把当前七类实体备份到内置 packages/backups/（带时间戳 JSON，成功后显示完整路径），不改动现有数据。',
+                confirmLabel: '开始备份',
+              })
+              if (!ok) return
               const text = await execute('backup')
               setMessage(`备份完成：${text}`)
               void refresh()
@@ -1240,28 +1294,53 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 onSaved={refresh}
               />}
             </section>
-            {copilotLayer && project && <aside className="pm-suggest-layer" aria-label="AI 副驾建议层">
-              <CopilotPanel
-                projectId={project.id}
-                tasks={tasks}
-                milestones={milestones}
-                riskIssues={riskIssues}
-                deliverables={deliverables}
-                meetings={meetings}
-                baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
-                execute={execute}
-                executeRaw={executeRaw}
-                disabled={busy}
-                onSaved={refresh}
-                onOpenRecord={openRecord}
-                embedded
-                diagnosis={diagnosis}
-                onDismissDiagnosis={dismissDiagnosis}
-                mode={copilotMode}
-                onModeChange={setCopilotMode}
-              />
-            </aside>}
             </div>
+            {/* R-S：Portal fixed 浮层，脱离 flex 流；开关前后主列宽完全一致（非 modal，role=region）。 */}
+            {copilotLayer && project && (
+              copilotMin ? (
+                <button type="button" className="pm-sidecar-tab" onClick={() => setCopilotMin(false)} aria-label="展开 AI 副驾，保留此前上下文">
+                  <MessageSquare size={15}/><span>副驾</span>
+                </button>
+              ) : (
+                <aside className="pm-sidecar" role="region" aria-label="AI 副驾" style={{ width: `${copilotWidth}px` }}>
+                  <div
+                    className="pm-sidecar-handle"
+                    role="separator"
+                    aria-orientation="vertical"
+                    aria-label="拖拽调整副驾宽度（420–560px）"
+                    onPointerDown={startSidecarResize}
+                  />
+                  <div className="pm-sidecar-chrome">
+                    <span className="pm-sidecar-title">AI 副驾</span>
+                    <span className="pm-sidecar-actions">
+                      <button type="button" className="pm-sidecar-iconbtn" onClick={() => setCopilotMin(true)} aria-label="最小化为侧边标签（保留上下文）">—</button>
+                      <button type="button" className="pm-sidecar-iconbtn" onClick={closeSidecar} aria-label="关闭副驾（ESC）">×</button>
+                    </span>
+                  </div>
+                  <div className="pm-sidecar-body">
+                    <CopilotPanel
+                      projectId={project.id}
+                      tasks={tasks}
+                      milestones={milestones}
+                      riskIssues={riskIssues}
+                      deliverables={deliverables}
+                      meetings={meetings}
+                      baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
+                      execute={execute}
+                      executeRaw={executeRaw}
+                      disabled={busy}
+                      onSaved={refresh}
+                      onOpenRecord={openRecord}
+                      embedded
+                      diagnosis={diagnosis}
+                      onDismissDiagnosis={dismissDiagnosis}
+                      mode={copilotMode}
+                      onModeChange={setCopilotMode}
+                    />
+                  </div>
+                </aside>
+              )
+            )}
           </>}
       </div>
 
@@ -2083,9 +2162,15 @@ function downloadText(filename: string, text: string, mime: string) {  try {
 }
 
 function Notice({ message, onClose }: { message: string, onClose: () => void }) {
-  const lines = formatNoticeLines(message)
-  const isError = /失败|错误|拒绝|不可用|无法处理/i.test(message)
+  const fb = classifyFeedback(message)
+  const isError = fb.isError
   const path = extractBackupPath(message)
+  // J5：成功结构化提示按 autoDismissMs(3s) 自动消失；错误/无信封持久且单处。
+  useEffect(() => {
+    if (!fb.autoDismissMs) return
+    const timer = setTimeout(onClose, fb.autoDismissMs)
+    return () => clearTimeout(timer)
+  }, [fb.autoDismissMs, onClose])
   // F9：成功反馈 role=status + aria-live=polite（可编程、不抢焦点）；
   // 错误变体按 §7 用 role=alert + aria-live=assertive。组件从不 focus()，两种变体均不抢焦点。
   return <div
@@ -2095,8 +2180,14 @@ function Notice({ message, onClose }: { message: string, onClose: () => void }) 
   >
     {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
     <div className="pm-notice-lines">
-      {lines.map((line, i) => <div key={i}>{line}</div>)}
+      {fb.summary.map((line, i) => <div key={i}>{line}</div>)}
     </div>
+    {fb.detail && (
+      <details className="pm-notice-detail">
+        <summary>查看完整字段</summary>
+        <pre>{fb.detail}</pre>
+      </details>
+    )}
     {path && (
       <button
         className="pm-button pm-notice-copy"
@@ -2318,6 +2409,43 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
   const [lane, setLane] = useState<'poc' | 'prod'>('poc')
   // 最近落库的撤销句柄（10 分钟内有效）；最多保留 3 条，新的在前。
   const [undoIds, setUndoIds] = useState<{ id: string, label: string, at: number }[]>([])
+  // P0-04 R-P1/R-P2：对话补档草稿卡——服务端 draftId 句柄 + 一键「确认落库」，免手抄 JSON/命令。
+  const [captureDraft, setCaptureDraft] = useState<{ draftId: string; raw: string } | null>(null)
+  const [captureResult, setCaptureResult] = useState<string | null>(null)
+  const [captureBusy, setCaptureBusy] = useState(false)
+  const [captureError, setCaptureError] = useState<string | null>(null)
+  const [captureText, setCaptureText] = useState('')
+  const [captureOpen, setCaptureOpen] = useState(false)
+
+  /** R-P2：点「确认落库」等价 capture-apply <项目> <draftId>；失败保留草稿可重试（R-P4）。 */
+  const runCapture = async () => {
+    const text = captureText.trim()
+    if (!text || captureBusy) return
+    setCaptureBusy(true); setCaptureError(null)
+    try {
+      const res = await executeRaw(`capture ${projectId} ${JSON.stringify(text)}`)
+      const m = /草稿编号：(draft-[A-Za-z0-9-]+)/.exec(res.text) ?? /capture-apply \S+ (draft-[A-Za-z0-9-]+)/.exec(res.text)
+      setCaptureDraft(m ? { draftId: m[1], raw: res.text } : null)
+      setCaptureResult(null)
+      setMsgs(mm => [...mm, { role: 'sys', text: res.text }])
+      if (!m) setCaptureError('未取得草稿编号，请重试或改用命令行。')
+    } catch (e) {
+      setCaptureError('生成草稿失败：' + (e instanceof Error ? e.message : String(e)))
+    } finally { setCaptureBusy(false) }
+  }
+  const applyCaptureDraft = async () => {
+    if (!captureDraft || captureBusy) return
+    setCaptureBusy(true); setCaptureError(null)
+    try {
+      const res = await executeRaw(`capture-apply ${projectId} ${captureDraft.draftId}`)
+      setMsgs(mm => [...mm, { role: 'sys', text: res.text }])
+      if (res.kind === 'success') {
+        setCaptureDraft(null); setCaptureText(''); setCaptureResult(res.text); onSaved()
+      } else setCaptureError(res.text) // R-P4：失败保留草稿，不清除，可重试/放弃
+    } catch (e) {
+      setCaptureError('落库失败：' + (e instanceof Error ? e.message : String(e)))
+    } finally { setCaptureBusy(false) }
+  }
   // K13 投影：最近一次 ask-apply 处理结果（只读，来自 ask-provenance 台账，best-effort）。
   const [applied, setApplied] = useState<AppliedBatch[]>([])
   // K13 防过时：投影「数据截至」本地时钟；最新快照到达或手动刷新时重盖，不使用 ask 发起时刻。
@@ -2569,6 +2697,51 @@ function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliverables, 
               </div>
             ))
           : <div className="pm-copilot-diag-empty">当前口径下没有阻塞、逾期、过载或未指派任务，保持。</div>}
+      </div>
+    )}
+
+    {/* P0-04 R-P1/R-P2：对话补档草稿卡（仅内嵌副驾）——draftId 句柄 + 一键「确认落库」，免手抄 JSON。 */}
+    {embedded && (
+      <div className="pm-capture-card">
+        <button type="button" className="pm-capture-toggle" aria-expanded={captureOpen} onClick={() => setCaptureOpen(o => !o)}>
+          {captureOpen ? '收起 对话补档' : '＋ 对话补档（观察草稿，不落库）'}
+        </button>
+        {captureOpen && (
+          <div className="pm-capture-body">
+            <textarea
+              className="pm-capture-text"
+              value={captureText}
+              rows={3}
+              onChange={e => setCaptureText(e.target.value)}
+              placeholder="口述/粘贴会话里提到的待办，例如：史冰冰 10/25 前补验收说明；研发跟进接口限流；材料 https://…"
+            />
+            <div className="pm-capture-actions">
+              <button type="button" disabled={captureBusy || !captureText.trim()} onClick={() => void runCapture()}>
+                {captureBusy ? '生成草稿…' : '生成草稿'}
+              </button>
+            </div>
+            {captureDraft && (
+              <div className="pm-capture-draft" role="region" aria-label="补档草稿（未写入，可一键确认落库）">
+                <p className="pm-capture-draft-head">观察草稿（未写入）· 候选预览如下，确认后才落库</p>
+                <MarkdownView text={captureDraft.raw}/>
+                <div className="pm-capture-actions">
+                  <button type="button" className="pm-button-primary" disabled={captureBusy} onClick={() => void applyCaptureDraft()}>
+                    {captureBusy ? '落库中…' : '确认落库'}
+                  </button>
+                  <button type="button" disabled={captureBusy} onClick={() => { setCaptureDraft(null); setCaptureError(null) }}>放弃草稿</button>
+                </div>
+              </div>
+            )}
+            {captureResult && (
+              <div className="pm-capture-result" role="status">
+                <p className="pm-capture-draft-head">已确认落库（成功结果）</p>
+                <MarkdownView text={captureResult}/>
+                <p className="pm-capture-undo">如需撤回：按输出中的任务 ID 用 <code>/pm task delete &lt;id&gt;</code> 溯源删除（沿用既有撤销，不建第二套 undo）。</p>
+              </div>
+            )}
+            {captureError && <div className="pm-capture-error" role="alert">{captureError}</div>}
+          </div>
+        )}
       </div>
     )}
 
@@ -3181,10 +3354,16 @@ function ProjectForm({
         className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
-        onClick={() => {
-          if (window.confirm(`删除项目 ${project.name}？`)) {
-            void run(`project delete ${project.id} confirm`).then(success => success && onSaved())
-          }
+        onClick={async () => {
+          const ok = await confirmDanger({
+            title: '删除项目？',
+            objectType: '项目',
+            objectTitle: project.name,
+            objectId: project.id,
+            impact: '将删除该项目及其全部台账（任务/里程碑/风险/会议/汇报/交付物），此操作不可撤销。',
+            confirmLabel: '确认删除项目',
+          })
+          if (ok) void run(`project delete ${project.id} confirm`).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
@@ -3586,7 +3765,7 @@ function TaskForm({
         className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
-        onClick={() => {
+        onClick={async () => {
           // 计算该任务的整棵子树大小（含自身），用于决定普通删除还是级联删除。
           const byParent = new Map<string, string[]>()
           for (const item of tasks) {
@@ -3599,19 +3778,25 @@ function TaskForm({
           let subtree = 1
           const queue = [task.id]
           while (queue.length) {
-            const current = queue.shift()!
-            for (const child of byParent.get(current) ?? []) { subtree += 1; queue.push(child) }
+            const cur = queue.shift()!
+            for (const child of byParent.get(cur) ?? []) { subtree += 1; queue.push(child) }
           }
           const hasChildren = subtree > 1
-          const message = hasChildren
-            ? `任务「${task.title}」含 ${subtree - 1} 个子任务。确定删除该任务及其全部 ${subtree - 1} 个子任务吗？旁支任务不受影响，此操作不可撤销。`
-            : `删除任务 ${task.title}？`
-          if (window.confirm(message)) {
-            const line = hasChildren
-              ? `task delete ${task.id} cascade confirm`
-              : `task delete ${task.id} confirm`
-            void run(line).then(success => success && onSaved())
-          }
+          const ok = await confirmDanger({
+            title: hasChildren ? '级联删除任务？' : '删除任务？',
+            objectType: '任务',
+            objectTitle: task.title,
+            objectId: task.id,
+            impact: hasChildren
+              ? `将级联删除该任务及其全部 ${subtree - 1} 个子任务（共 ${subtree} 项；旁支任务保留），此操作不可撤销。`
+              : '将删除该任务，此操作不可撤销。',
+            confirmLabel: hasChildren ? '确认级联删除' : '确认删除',
+          })
+          if (!ok) return
+          const line = hasChildren
+            ? `task delete ${task.id} cascade confirm`
+            : `task delete ${task.id} confirm`
+          void run(line).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
@@ -3718,10 +3903,16 @@ function MilestoneForm({
         className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
-        onClick={() => {
-          if (window.confirm(`删除里程碑 ${milestone.title}？`)) {
-            void run(`milestone delete ${milestone.id} confirm`).then(success => success && onSaved())
-          }
+        onClick={async () => {
+          const ok = await confirmDanger({
+            title: '删除里程碑？',
+            objectType: '里程碑',
+            objectTitle: milestone.title,
+            objectId: milestone.id,
+            impact: '将删除该里程碑；其下任务保留但将失去里程碑归属。此操作不可撤销。',
+            confirmLabel: '确认删除里程碑',
+          })
+          if (ok) void run(`milestone delete ${milestone.id} confirm`).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
@@ -3850,10 +4041,16 @@ function RiskIssueForm({
         className="pm-button pm-button-danger pm-actions-left"
         type="button"
         disabled={disabled}
-        onClick={() => {
-          if (window.confirm(`删除${riskIssueType[record.type]} ${record.title}？`)) {
-            void run(`risk-issue delete ${record.id} confirm`).then(success => success && onSaved())
-          }
+        onClick={async () => {
+          const ok = await confirmDanger({
+            title: '删除风险/问题？',
+            objectType: riskIssueType[record.type],
+            objectTitle: record.title,
+            objectId: record.id,
+            impact: '将删除该风险/问题记录，此操作不可撤销。',
+            confirmLabel: '确认删除',
+          })
+          if (ok) void run(`risk-issue delete ${record.id} confirm`).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
       <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
@@ -4004,10 +4201,16 @@ function MeetingForm({
           className="pm-button pm-button-danger pm-actions-left"
           type="button"
           disabled={disabled}
-          onClick={() => {
-            if (window.confirm(`删除会议 ${meeting.title}？`)) {
-              void run(`meeting delete ${meeting.id} confirm`).then(success => success && onSaved())
-            }
+          onClick={async () => {
+            const ok = await confirmDanger({
+              title: '删除会议？',
+              objectType: '会议',
+              objectTitle: meeting.title,
+              objectId: meeting.id,
+              impact: '将删除该会议及其行动项记录，此操作不可撤销。',
+              confirmLabel: '确认删除会议',
+            })
+            if (ok) void run(`meeting delete ${meeting.id} confirm`).then(success => success && onSaved())
           }}
         ><Trash2 size={15}/>删除会议</button>}
         <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
@@ -4107,10 +4310,17 @@ function MeetingActions({
               disabled={disabled}
               title="把行动项转为项目任务（已转后此处显示「已转」，重复点击不会再建任务）"
               aria-label={`转任务 ${action.title}`}
-              onClick={() => {
-                if (window.confirm(`把行动项「${action.title}」转为项目任务？（负责人/截止日一并带入）`)) {
-                  void run(`meeting action promote ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
-                }
+              onClick={async () => {
+                const ok = await confirmDanger({
+                  neutral: true,
+                  title: '把行动项转为项目任务？',
+                  objectType: '行动项',
+                  objectTitle: action.title,
+                  objectId: action.id,
+                  impact: '负责人/截止日一并带入，转后此处显示「已转」，重复点击不会再建任务。',
+                  confirmLabel: '确认转任务',
+                })
+                if (ok) void run(`meeting action promote ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
               }}
             >转任务</button>}
       <button
@@ -4118,10 +4328,16 @@ function MeetingActions({
         type="button"
         disabled={disabled}
         aria-label={`删除 ${action.title}`}
-        onClick={() => {
-          if (window.confirm(`删除行动项 ${action.title}？`)) {
-            void run(`meeting action delete ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
-          }
+        onClick={async () => {
+          const ok = await confirmDanger({
+            title: '删除行动项？',
+            objectType: '行动项',
+            objectTitle: action.title,
+            objectId: action.id,
+            impact: '将删除该会议下的行动项，此操作不可撤销。',
+            confirmLabel: '确认删除',
+          })
+          if (ok) void run(`meeting action delete ${meeting.id} ${action.id} confirm`).then(success => success && onSaved())
         }}
       ><Trash2 size={14}/></button>
     </form>)}
@@ -4248,10 +4464,16 @@ function ProgressReportForm({
             className="pm-button pm-button-danger pm-actions-left"
             type="button"
             disabled={disabled}
-            onClick={() => {
-              if (window.confirm(`删除进度汇报 ${report.title}？`)) {
-                void run(`report delete ${report.id} confirm`).then(success => success && onSaved())
-              }
+            onClick={async () => {
+              const ok = await confirmDanger({
+                title: '删除进度汇报？',
+                objectType: '进度汇报',
+                objectTitle: report.title,
+                objectId: report.id,
+                impact: '将删除该进度汇报记录，此操作不可撤销。',
+                confirmLabel: '确认删除',
+              })
+              if (ok) void run(`report delete ${report.id} confirm`).then(success => success && onSaved())
             }}
           ><Trash2 size={15}/>删除</button>
           <button className="pm-button" type="button" disabled={disabled} onClick={() => void run(`report export ${report.id}`)}>
@@ -4417,10 +4639,16 @@ function DeliverableForm({
           className="pm-button pm-button-danger pm-actions-left"
           type="button"
           disabled={disabled}
-          onClick={() => {
-            if (window.confirm(`删除交付物 ${deliverable.name}？`)) {
-              void run(`deliverable delete ${deliverable.id} confirm`).then(success => success && onSaved())
-            }
+          onClick={async () => {
+            const ok = await confirmDanger({
+              title: '删除交付物？',
+              objectType: '交付物',
+              objectTitle: deliverable.name,
+              objectId: deliverable.id,
+              impact: '将删除该交付物登记（不删除本地文件），此操作不可撤销。',
+              confirmLabel: '确认删除',
+            })
+            if (ok) void run(`deliverable delete ${deliverable.id} confirm`).then(success => success && onSaved())
           }}
         ><Trash2 size={15}/>删除</button>}
         <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
