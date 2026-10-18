@@ -15,6 +15,7 @@ import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
 import css from './reports.css?raw'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { splitLegacyCommandNote } from '../shared/legacy-note.js'
 import type { ProgressReport } from './types.js'
 
 type PeriodType = 'w' | 'm' | 'c'
@@ -188,9 +189,28 @@ export function ReportsView(props: {
                 </span>
                 <button type="button" className="rp-edit" onClick={() => onEdit(current)}>编辑</button>
               </div>
-              {current.executiveSummary.trim()
-                ? <MarkdownView source={current.executiveSummary} density="detail" className="rp-summary-md"/>
-                : <p className="rp-summary">（暂无执行摘要）</p>}
+              {(() => {
+                // R8：旧持久正文里独立成行的确认命令尾注只在显示层隔离，不改动存储对象。
+                const legacy = splitLegacyCommandNote(current.executiveSummary)
+                return (
+                  <>
+                    {legacy.body
+                      ? <MarkdownView source={legacy.body} density="detail" className="rp-summary-md"/>
+                      : <p className="rp-summary">（暂无执行摘要）</p>}
+                    {legacy.legacyCommands.length > 0 && (
+                      <details className="rp-legacy-note">
+                        <summary>历史操作信息（旧记录兼容 · 不可操作）</summary>
+                        <p className="rp-legacy-hint">
+                          以下为旧版本随正文保存的原始命令留痕，仅作历史查看，不会执行，也不提供操作按钮。
+                        </p>
+                        {legacy.legacyCommands.map((cmd, i) => (
+                          <code className="rp-legacy-cmd" key={i}>{cmd}</code>
+                        ))}
+                      </details>
+                    )}
+                  </>
+                )
+              })()}
               <div className="rp-meta">
                 <span>快照于 {current.snapshotAt.slice(0, 10)}</span>
               </div>

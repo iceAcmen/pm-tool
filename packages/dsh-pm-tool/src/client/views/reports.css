@@ -129,6 +129,18 @@
 }
 .pm-rp-root .rp-summary { margin: var(--sp-3) 0 0; font-size: var(--t-13); line-height: 1.65; color: var(--ink-2); }
 .pm-rp-root .rp-summary-md { margin: var(--sp-3) 0 0; color: var(--ink-2); }
+/* R8 历史操作信息：次级折叠留痕，非正文、无操作按钮、不可执行。 */
+.pm-rp-root .rp-legacy-note {
+  margin-top: var(--sp-3); padding: 8px 12px; border: 1px solid var(--pm-line);
+  border-radius: var(--r-sm); background: var(--surface-2, transparent); font-size: var(--t-12); color: var(--faint);
+}
+.pm-rp-root .rp-legacy-note summary { cursor: pointer; color: var(--ink-2); user-select: none; }
+.pm-rp-root .rp-legacy-hint { margin: 6px 0; line-height: 1.6; }
+.pm-rp-root .rp-legacy-cmd {
+  display: block; margin-top: 6px; padding: 6px 8px; border-radius: 6px;
+  background: var(--field-bg, transparent); font-family: var(--pm-font-mono, ui-monospace, monospace);
+  font-size: var(--t-11); color: var(--ink-2); white-space: pre-wrap; word-break: break-all;
+}
 .pm-rp-root .rp-meta { margin-top: var(--sp-3); display: flex; gap: var(--sp-4); font-size: var(--t-11); color: var(--faint); }
 
 /* 快照条 */
