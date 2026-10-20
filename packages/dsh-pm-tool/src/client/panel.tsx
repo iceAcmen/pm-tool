@@ -1514,7 +1514,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           key={drawer.record ? `okr-${drawer.record.id}` : 'okr-new'}
           projectId={project.id}
           record={drawer.record}
-          objectives={okrs.filter(o => o.kind === 'objective')}
+          objectives={okrs}
           disabled={busy}
           run={run}
           onSaved={() => setDrawer(undefined)}
@@ -3074,8 +3074,13 @@ function OkrForm({
 }) {
   // B7：UI 交给外部受控 ExtOkrForm；这里只保留命令通道（okr add/update）与提交守卫。
   const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
+  // D-12 软关联允许实体范围 = 本项目全部 OKR（objective + key-result，后端只校验存在/同项目/非自指，
+  // 不限定 kind）；故已知集 objectiveIds 取全量，避免只取 objective 误把合法 KR 软关联判为未知。
+  // 父主归属列表 primaryOptions 仍只列 objective（KR 不能作父），父选择 UX 不变。
   const objectiveIds = new Set(objectives.map(o => o.id))
-  const primaryOptions = objectives.map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
+  const primaryOptions = objectives
+    .filter(o => o.kind === 'objective')
+    .map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
   const handleSubmit = async (values: OkrFormValues) => {
     if (!beginSubmit()) return
     const related = parseIdList(values.relatedOkrIds)
