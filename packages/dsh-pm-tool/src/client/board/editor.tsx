@@ -12,6 +12,7 @@ import type { ProjectionApi, BreakpointCols } from './projection.js'
 import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntry } from './history.js'
 import {
   nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
+  applyWidgetGeometry, arrangeWidgetLayout,
   type FormulaBuildInput, type FormulaCondition, type FormulaCaliber,
 } from './editor-ops.js'
 
@@ -140,21 +141,9 @@ export function BoardEditor(props: BoardEditorProps) {
     setCanUndo(historyRef.current.length > 0)
     if (prev) setDraft(prev)
   }
-  // R-B1：响应式断点列数 12/8/4/单列（≥1200=12，≥996=8，≥768=4，<768=1），替代固定 cols=12。
-  const [activeCols, setActiveCols] = useState<BreakpointCols>(grid.cols as BreakpointCols)
+  // 编辑始终使用 canonical 12 列画布；配置面板与屏幕宽度变化只改变视口，不回写草稿。
+  const activeCols = grid.cols as BreakpointCols
   const stageRef = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    const el = stageRef.current
-    if (!el || typeof ResizeObserver === 'undefined') return
-    const measure = () => {
-      const wpx = el.clientWidth
-      setActiveCols(projection.breakpointForWidth(wpx))
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
   // R-B9：重置二次确认（破坏性，先点「恢复默认」出现确认态，再点才执行）。
   const [resetArmed, setResetArmed] = useState(false)
 
@@ -316,12 +305,7 @@ export function BoardEditor(props: BoardEditorProps) {
   /** I7：布局补丁（坐标/尺寸的非指针编辑路径，供配置面板数字输入）。 */
   const updateLayout = (i: string, patch: Partial<WidgetInstance['layout']>) => {
     pushHistory()
-    setDraft(d => ({
-      ...d,
-      widgets: d.widgets.map(w => w.layout.i === i
-        ? { ...w, layout: { ...w.layout, ...patch } }
-        : w),
-    }))
+    setDraft(d => ({ ...d, widgets: applyWidgetGeometry(d.widgets, i, patch, grid.cols) }))
   }
 
   /**
@@ -346,7 +330,7 @@ export function BoardEditor(props: BoardEditorProps) {
     <header className="pm-edit-head">
       <div>
         <h2 className="pm-edit-title">看板编辑</h2>
-        <p className="pm-edit-sub">本地草稿仅在保存后经 dsh-storage 落盘；不自动重置旧布局，卡片位置、尺寸与个性化原样保留。</p>
+        <p className="pm-edit-sub">拖动卡片调整位置，拖动右下角改变尺寸。自动排版可撤销，保存后生效。</p>
       </div>
     </header>
 
@@ -359,6 +343,7 @@ export function BoardEditor(props: BoardEditorProps) {
           <option value="global">内置默认</option>
         </select>
       </label>
+      <button type="button" className="pm-button" onClick={() => { pushHistory(); setDraft(d => ({ ...d, widgets: arrangeWidgetLayout(d.widgets, grid.cols) })); setValidationError(null) }}>自动排版</button>
       <button type="button" className="pm-button" onClick={() => setDrawerOpen(o => !o)}>＋ 卡片库</button>
       <button type="button" className="pm-button" onClick={() => { setImportOpen(o => !o); setExportOpen(false) }}>导入布局</button>
       <button type="button" className="pm-button" onClick={() => { setExportOpen(o => !o); setImportOpen(false) }}>导出布局</button>
@@ -370,7 +355,7 @@ export function BoardEditor(props: BoardEditorProps) {
       <button type="button" className="pm-button" onClick={undo} disabled={!canUndo} title="撤销上一步（最多 20 步）">↶ 撤销</button>
       <button type="button" className="pm-button"
         title={`本作用域已保存的历史版本（最多 5 版，localStorage 持久，跨 reload/重启保留）；预览后需再点保存`}
-        onClick={() => setHistOpen(o => !o)}>🕘 历史版本（{hist.length}）</button>
+        onClick={() => setHistOpen(o => !o)}>历史版本（{hist.length}）</button>
       <button
         type="button"
         className={`pm-button${resetArmed ? ' pm-button-danger' : ''}`}
@@ -449,13 +434,11 @@ export function BoardEditor(props: BoardEditorProps) {
             }
             addWidgetAt(type, x, y)
           }}
-          compactType="vertical"
-          onLayoutChange={(next: Layout[]) => {
-            setDraft(d => ({
-              ...d,
-              widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols),
-            }))
-          }}
+          compactType={null}
+          onDragStart={pushHistory}
+          onResizeStart={pushHistory}
+          onDragStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols) }))}
+          onResizeStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols) }))}
         >
           {live.widgets.map(w => {
             const sel = selectedId === w.layout.i
@@ -479,7 +462,7 @@ export function BoardEditor(props: BoardEditorProps) {
               nudgeWidget(w.layout.i, d[0], d[1])
             }
             return <div key={w.layout.i}
-              className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`}
+              className={`pm-rgl-item-wrap ${sel ? 'pm-rgl-sel' : ''}`} data-widget-id={w.layout.i}
               tabIndex={0} role="group"
               aria-label={`${label}卡片；Enter 打开配置，方向键移动位置`}
               onClick={(e) => { e.stopPropagation(); select() }}
@@ -490,7 +473,7 @@ export function BoardEditor(props: BoardEditorProps) {
           })}
         </GridLayout>
       </div>
-      {selected && <ConfigPanel inst={selected} data={data} fieldWhitelist={fieldWhitelist} cols={grid.cols}
+      {selected && <ConfigPanel key={selected.layout.i} inst={selected} data={data} fieldWhitelist={fieldWhitelist} cols={grid.cols}
         onTrial={onTrial} onPatch={(p) => updateConfig(selected.layout.i, p)}
         onLayout={(p) => updateLayout(selected.layout.i, p)} onClose={() => setSelectedId(null)}/>}
     </div>
@@ -544,6 +527,19 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
   onTrial: (formula: string, entity: string, projectScope: string, filters: FilterRule[]) => string
 }) {
   const cfg = inst.config
+  const [geometry, setGeometry] = useState(() => ({ x: String(inst.layout.x), y: String(inst.layout.y), w: String(inst.layout.w), h: String(inst.layout.h) }))
+  const [geometryError, setGeometryError] = useState('')
+  useEffect(() => { setGeometry({ x: String(inst.layout.x), y: String(inst.layout.y), w: String(inst.layout.w), h: String(inst.layout.h) }) }, [inst.layout.x, inst.layout.y, inst.layout.w, inst.layout.h])
+  const applyGeometry = () => {
+    const vals = Object.fromEntries(Object.entries(geometry).map(([k, v]) => [k, Number(v)]))
+    if (Object.values(geometry).some(v => v.trim() === '') || Object.values(vals).some(v => !Number.isInteger(v))) {
+      setGeometryError('请填写完整的整数位置与尺寸'); return
+    }
+    if (vals.w < (inst.layout.minW ?? 1) || vals.w > cols || vals.h < (inst.layout.minH ?? 1) || vals.h > 200 || vals.x < 0 || vals.x + vals.w > cols || vals.y < 0 || vals.y > 10000) {
+      setGeometryError(`宽度 ${inst.layout.minW ?? 1}–${cols} 列，高度 ${inst.layout.minH ?? 1}–200 行；列位置不能超出画布`); return
+    }
+    onLayout({ x: vals.x, y: vals.y, w: vals.w, h: vals.h }); setGeometryError('')
+  }
   const [tab, setTab] = useState<'data' | 'filter' | 'sort' | 'formula' | 'show' | 'look'>('data')
   const hasEntity = inst.type !== 'divider'
   const isFormula = inst.type === 'formulaCard' || inst.type === 'kpiMetric'
@@ -583,28 +579,20 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
         </button>)}
     </div>
 
-    {/* I7：位置与尺寸数字输入（拖拽位移/缩放的非指针编辑路径，键盘可完成移动与改尺寸）。 */}
+    {/* 输入期间保留完整字符串；点击应用才更新画布，避免逐键夹紧/自动回弹。 */}
     <div className="pm-cfg-fld">
-      <label className="pm-cfg-label">位置与尺寸（栅格列/行/宽/高，可键盘输入）</label>
+      <label className="pm-cfg-label">位置与尺寸</label>
       <div className="pm-cfg-grid4">
-        <label className="pm-cfg-num">列 X
-          <input className="pm-cfg-sel" type="number" min={0} max={Math.max(0, cols - inst.layout.w)}
-            value={inst.layout.x}
-            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ x: Math.max(0, Math.min(v, cols - inst.layout.w)) }) }}/>
-        </label>
-        <label className="pm-cfg-num">行 Y
-          <input className="pm-cfg-sel" type="number" min={0} value={inst.layout.y}
-            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ y: Math.max(0, v) }) }}/>
-        </label>
-        <label className="pm-cfg-num">宽 W
-          <input className="pm-cfg-sel" type="number" min={inst.layout.minW ?? 1} max={cols} value={inst.layout.w}
-            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ w: Math.max(inst.layout.minW ?? 1, Math.min(v, cols)) }) }}/>
-        </label>
-        <label className="pm-cfg-num">高 H
-          <input className="pm-cfg-sel" type="number" min={inst.layout.minH ?? 1} value={inst.layout.h}
-            onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ h: Math.max(inst.layout.minH ?? 1, v) }) }}/>
-        </label>
+        {([['x', '列位置'], ['y', '行位置'], ['w', '宽度（列）'], ['h', '高度（行）']] as const).map(([k, label]) => (
+          <label key={k} className="pm-cfg-num">{label}
+            <input className="pm-cfg-sel" type="number" step={1} aria-label={label} value={geometry[k]}
+              onChange={e => setGeometry(g => ({ ...g, [k]: e.target.value }))}/>
+          </label>
+        ))}
       </div>
+      <p className="pm-cfg-help">画布共 {cols} 列，1 行约 48px。应用后冲突卡片会下移，可撤销。</p>
+      {geometryError && <p className="pm-cfg-geometry-error" role="alert">{geometryError}</p>}
+      <button type="button" className="pm-button pm-button-primary" onClick={applyGeometry}>应用位置与尺寸</button>
     </div>
 
     {tab === 'formula' && isFormula && <div className="pm-cfg-fld">

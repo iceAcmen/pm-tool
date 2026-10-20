@@ -46,6 +46,51 @@ export function nudgeWidgetLayout(
   return next
 }
 
+/* ---------- 位置与尺寸：只有明确操作才更新 canonical 草稿 ---------- */
+export function applyWidgetGeometry(widgets: WidgetInstance[], id: string, patch: Partial<WidgetInstance['layout']>, cols: number): WidgetInstance[] {
+  const target = widgets.find(w => w.layout.i === id)
+  if (!target) return widgets
+  const width = Math.max(target.layout.minW ?? 1, Math.min(cols, Math.round(patch.w ?? target.layout.w)))
+  const height = Math.max(target.layout.minH ?? 1, Math.round(patch.h ?? target.layout.h))
+  const fixed = { ...target, layout: { ...target.layout, w: width, h: height,
+    x: Math.max(0, Math.min(cols - width, Math.round(patch.x ?? target.layout.x))),
+    y: Math.max(0, Math.round(patch.y ?? target.layout.y)) } }
+  const placed = [fixed.layout]
+  const others = widgets.filter(w => w.layout.i !== id).map(w => {
+    const l = { ...w.layout }
+    let hit = placed.find(p => p.x < l.x + l.w && l.x < p.x + p.w && p.y < l.y + l.h && l.y < p.y + p.h)
+    while (hit) {
+      l.y = hit.y + hit.h
+      hit = placed.find(p => p.x < l.x + l.w && l.x < p.x + p.w && p.y < l.y + l.h && l.y < p.y + p.h)
+    }
+    placed.push(l)
+    return { ...w, layout: l }
+  })
+  const next = new Map(others.map(w => [w.layout.i, w]))
+  next.set(id, fixed)
+  return widgets.map(w => next.get(w.layout.i)!)
+}
+
+/** 显式推荐排版：按现有阅读顺序填充多列，只改位置尺寸；配置与卡片实例全部保留。 */
+export function arrangeWidgetLayout(widgets: WidgetInstance[], cols: number): WidgetInstance[] {
+  const placed: WidgetInstance['layout'][] = []
+  return widgets.map(w => {
+    const tall = ['completionHero', 'projectScale', 'recordList', 'queueCard'].includes(w.type)
+    const wide = ['milestoneDeliverable', 'peopleLoad', 'weeklyPlan', 'completionTrend'].includes(w.type)
+    const width = Math.min(cols, Math.max(w.layout.minW ?? 1, wide ? 8 : 4))
+    const height = Math.max(w.layout.minH ?? 1, tall ? 7 : wide ? 5 : 4)
+    let x = 0, y = 0
+    search: for (; y < 10000; y++) {
+      for (x = 0; x <= cols - width; x++) {
+        if (!placed.some(p => p.x < x + width && x < p.x + p.w && p.y < y + height && y < p.y + p.h)) break search
+      }
+    }
+    const layout = { ...w.layout, x, y, w: width, h: height }
+    placed.push(layout)
+    return { ...w, layout }
+  })
+}
+
 /* ---------- 公式卡：白名单口径构建 + 红错误清单（设计 §7，无自由表达式） ---------- */
 
 /** 白名单统计口径（与 formula-expr.ts 注册函数一一对应；不暴露任意文本求值）。 */

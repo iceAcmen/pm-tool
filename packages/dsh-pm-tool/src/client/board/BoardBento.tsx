@@ -16,7 +16,7 @@ import { PROJECT_DEFAULT_LAYOUT } from './project-default-layout.js'
 import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
-import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions, compactDisplayCollisions } from './projection.js'
+import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions, compactDisplayCollisions, boardBreakpointForWidth } from './projection.js'
 import { buildMigrationSummary, migrationSignature, isMigrationRead, markMigrationRead, parseMigrationReadMap, type MigrationReadMap } from './migration-banner.js'
 import boardCss from './board.css?raw'
 // type-only：编辑器块不被静态打包，仅取类型。
@@ -86,7 +86,7 @@ export function BoardBento({ data, actions, persistence, projectId }: {
   useEffect(() => {
     const el = rootRef.current
     if (!el || typeof ResizeObserver === 'undefined') return
-    const measure = () => setViewCols(breakpointForWidth(el.clientWidth))
+    const measure = () => setViewCols(boardBreakpointForWidth(el.clientWidth))
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
@@ -152,6 +152,7 @@ export function BoardBento({ data, actions, persistence, projectId }: {
   const evaluateFormula = getFormulaEngine() ?? undefined
 
   const startEdit = async () => {
+    setBanner(null)
     setEditorError(null)
     setEditorLoading(true)
     try {

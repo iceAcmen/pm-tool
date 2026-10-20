@@ -10,6 +10,13 @@ import { GRID } from './types.js'
 
 export type BreakpointCols = 12 | 8 | 4 | 1
 
+/** PM 工作区按实际内容宽度适配，而不是把宿主两侧导航也算进宽屏预算。 */
+export function boardBreakpointForWidth(wpx: number): BreakpointCols {
+  if (wpx >= 720) return 12
+  if (wpx >= 600) return 8
+  return 1
+}
+
 /** 由容器像素宽取断点列数（与 editor.tsx 既有阈值一致：1200/996/768）。 */
 export function breakpointForWidth(wpx: number): BreakpointCols {
   if (wpx >= GRID.breakpoints.lg) return 12

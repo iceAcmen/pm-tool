@@ -54,7 +54,17 @@
 }
 
 /* 卡体内部自适应：min-width:0 链路 + 长文本可断，禁横向溢出（不靠 overflow:hidden 裁切）。 */
-.pm-bento .pm-bento-card { min-width: 0; }
+.pm-bento .pm-bento-card { min-width: 0; container-type: inline-size; }
+@container (max-width: 360px) {
+  .pm-bento .pm-attn { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 4px 8px; }
+  .pm-bento .pm-attn > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pm-bento .pm-attn > .pm-bento-faint { grid-column: 2; grid-row: 2; }
+  .pm-bento .pm-attn > .pm-attn-arr { grid-column: 3; grid-row: 1; }
+  .pm-bento .pm-board-project { flex-wrap: wrap; gap: 4px; }
+  .pm-bento .pm-board-project-name { flex: 1 1 100%; }
+  .pm-bento .pm-board-project-meta { width: 100%; }
+}
+
 .pm-bento .pm-attn,
 .pm-bento .pm-obj-row,
 .pm-bento .pm-rec,
@@ -204,4 +214,25 @@
 .pm-bento .pm-cfg-apply { width: 100%; margin-top: var(--sp-2); }
 .pm-bento .pm-cfg-footer { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--pm-line); }
 .pm-bento .pm-cfg-footer .pm-button { width: 100%; }
+
+/* 看板工作面：配置浮在右侧，不参与flex宽度计算；窄窗平移画布而非压扁12列。 */
+.pm-bento .pm-bento-editing { display: block; }
+.pm-bento .pm-bento-stage { display: block; width: 100%; overflow-x: auto; padding: 8px 4px 20px; }
+.pm-bento .pm-bento-stage .pm-bento-grid { min-width: 960px; width: 100%; }
+.pm-bento .pm-bento-stage .pm-cfg,
+.pm-bento .pm-bento-stage .pm-drawer {
+  position: fixed; top: 88px; right: 20px; width: 320px; max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 112px); z-index: 45; margin: 0;
+  border: 1px solid var(--pm-line); border-radius: 14px; padding: 20px;
+  background: var(--pm-surface); box-shadow: var(--pm-shadow-menu); overflow-y: auto;
+}
+.pm-bento .pm-cfg-num input { min-height: 36px; width: 100%; font-size: 13px; }
+.pm-bento .pm-cfg-help { font-size: 12px; color: var(--pm-muted); line-height: 1.6; }
+.pm-bento .pm-cfg-geometry-error { font-size: 12px; color: var(--pm-danger); }
+.pm-bento .pm-edit-tools { padding: 12px; background: var(--pm-hover); border: 1px solid var(--pm-line); border-radius: 12px; }
+.pm-bento .pm-rgl-item-wrap > .pm-bento-card { max-height: 100%; overflow-y: auto; }
+.pm-bento .pm-rgl-item-wrap > .pm-bento-card > * { flex: 0 0 auto; overflow-y: visible; }
+@media (max-width: 560px) {
+  .pm-bento .pm-bento-stage .pm-cfg, .pm-bento .pm-bento-stage .pm-drawer { top: 16px; right: 12px; max-height: calc(100vh - 32px); }
+}
 

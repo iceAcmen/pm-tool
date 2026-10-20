@@ -8,6 +8,8 @@
 
 ## 0. 移交说明（给接手方：TRAE 或其他 IDE / Agent / 同事）
 
+- **最新限定专项（2026-10-20，doubao-work）**：仅总览宽高/拖缩保存和多列排版，基线7f44c46，源码冻结于五个board文件+一份测试。114文件/1025例、build、94隔离脚本通过；正式3172代表6/10→拖缩7/11→保存/reload/重启保持，canvas960，位置1/1与撤销取消已采证。当前11卡config完整、推荐多列已通过UI保存，原布局备份可导入。八场景实际card碰撞/slot越界0；独立代码审查及GUI原始证据专项审证PASS，无阻断项。请只接续本专项并等待所有者验证，不继续旧全系统迁移；主交付目录`看板宽高与排版修复-20261020/`含全部原始证据和说明。
+
 > 接手第一步：项目所有者把 **`docs/onboarding-prompt.md`** 的「标准启动提示词」整段发给新 Agent；Agent 先读该文件（含文末「当前交接快照」）与仓库根 **`AGENTS.md`**（入职说明与强制准则），再按 `docs/collaboration.md` 完成「新平台首次接入自检」并登记平台标识；本节为其补充。
 
 - **进行中候选（2026-10-17 doubao-work，未提交 / 未放行，勿当作已发布基线）**：**P2-2 Token 2.0 视觉基准**。交付冻结视觉规范 `docs/design/p2-2-visual-token-baseline-20261017.md`（唯一视觉真源）与迁移映射 `docs/design/p2-2-token-migration-map.md`；新增单层语义 token 层并对已实现的 P2-1 左导航、P2-5 命名视图/复合过滤/导出/只读快照做视觉校准；不另造功能、不改名、不全局粗替换；**P2-6 AI 溯源治理未启动、零实现**（仅预留 AI 槽位 token，不启用）。开发侧自测：build=0、vitest 164/164、coverage 退出 0、`pnpm e2e` PASS（console errors=0）、verify-isolation **73/73 通过、失败 0、污染 0**（before=after=169）。独立测试 G2 静态/受影响 G4 通过、G1 七项阻塞；开发不改生产业务行为，仅按当前契约修正 7 个 verify 脚本的陈旧断言（移除已删除的 progressRatio/nextStatus 导入与断言、commitDates quiet 落库、prepareCall reasoningEffort 与 stream 透传一致性、prod 确定性路由/候选链、hex 有限语义白名单），并补边界/反例（progressFill 旁字段不伪造、0≠null、超界钳制、parseProgressInput 非法/空白/NaN/Infinity、路由档位链顺序）。真实浏览器目视门（浅/深 × 1440/768/390）当前执行通道无法采集视觉证据，判 BLOCKED，静态计算不替代目视 PASS，未发布。未 commit/push/部署；changelog/ADL/发布登记待独立 PASS + 协调人放行后补写。
