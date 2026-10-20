@@ -12,11 +12,11 @@
 | 启动器包目录（绝对路径） | `/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADW57/worktrees/pm-launcher/launcher` |
 | 分支 | `feat/pm-local-launcher` |
 | 基线 | `ee52d9e`（= origin/main） |
-| 本批 commit | `e7c5238`「feat(launcher): 本地PM启动器 core+loopback+control页（路径B，七态）」 |
+| 本批 commit | `e7c5238`（feat core+loopback+control页，路径B七态）；`244f197`（docs 实施报告）；`3f9cbda`（fix P1：cancel 回收未就绪 owned 子进程 + STARTUP_ABORTED 保持 S0） |
 | 推送 | **未 push**；无 force；历史未改写 |
 | 已读产品合同（绝对路径） | `/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADfXc/artifacts/本地启动器-形态状态合同-20261020.md` |
 
-## 2. 范围标清（Path B / 23 tests）
+## 2. 范围标清（Path B / 29 tests）
 
 **本批实现（在授权范围内）**
 - 七态状态机 S0 idle / S1 running / S2 starting / S3 opened待鉴权 / S4 authenticated / S5 auth-required / S6 failure（+ closed）。
@@ -33,7 +33,7 @@
 - S3（已投递待鉴权）**禁止**宣称「已打开/成功」；发送 open 命令不计为认证成功。
 - S5 只由**用户反馈**看到登录/认证错误触发；服务探测 GET（无 cookie）的 401 是身份匹配的鉴权墙，**不得**据此判定某浏览器未登录。
 - owned 一次性令牌仅内存、首投一次即弃、**不跨 profile/新浏览器重放**；不读/注入 cookie、不代填、不禁 auth、不读凭证。
-- 取消仅放弃尚未完成的在途启动，不误杀已启动 PM；关闭 control tab 不停服务；不争 3172；不 kill 占用进程。
+- 取消仅回收「自己拉起、尚未就绪(ready)」的 owned 子进程（SIGTERM+有界等待）；已就绪服务、现网、未知 PID 一律不杀；关闭 control tab 不停服务；不争 3172；不 kill 占用进程。
 
 ## 3. 测试 / 验证证据（真实命令，非 module-missing）
 
@@ -41,18 +41,18 @@
 
 ```bash
 cd .../pm-launcher/launcher
-npm test        # node --test 四个测试文件
+npm test        # node --test 五个测试文件（含 cancel 竞态）
 npm run verify  # node scripts/verify-launcher.mjs（隔离假监听者）
 ```
 
 | 检查 | 结果 |
 |---|---|
-| `npm test` | **23 tests / 23 pass / 0 fail** |
+| `npm test` | **29 tests / 29 pass / 0 fail**（原 23 + P1 返修 6 竞态例） |
 | `npm run verify` | **PASS**（隔离假监听者；未碰 3172、未读 cookie、未读凭证） |
 | 全部源码/脚本/入口 `node --check` | 语法通过 |
-| verifier-hub `rubric check-file-format`（README.md） | passed（text size=4874） |
+| verifier-hub `rubric check-file-format`（README.md） | passed |
 
-测试覆盖（23 例）：七态状态机转移、探测分类（200 / 识别出的 401 鉴权墙 / conflict）、决策（open-existing/start/safe-failure）、S3 待鉴权不宣称成功、S4 用户自确认、S5 用户反馈、S6 安全失败不 kill、浏览器发现/回退、控制器内存捕获/即弃/拒绝 stop、loopback GET/POST 行为、control HTML 浅深 token/脱敏/转义。
+测试覆盖（29 例）：七态状态机转移、探测分类（200 / 识别出的 401 鉴权墙 / conflict）、决策（open-existing/start/safe-failure）、S3 待鉴权不宣称成功、S4 用户自确认、S5 用户反馈、S6 安全失败不 kill、浏览器发现/回退、控制器内存捕获/即弃/拒绝 stop、loopback GET/POST 行为、control HTML 浅深 token/脱敏/转义；**P1 竞态 6 例**：cancel(ready前) SIGTERM 回收未就绪 owned 子进程、ready 后 cancel 不杀已就绪服务、重复 cancel 幂等只回收一次、启动失败(超时)后 cancel 为 no-op、编排 STARTUP_ABORTED 保持 S0 不转 S6 不投递浏览器、隔离真实假子进程 SIGTERM 后真实退出。
 
 原始测试证据日志（绝对路径）：
 `/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADW57/worktrees/pm-launcher/launcher/evidence/green-run-20261020.log`
@@ -60,6 +60,15 @@ npm run verify  # node scripts/verify-launcher.mjs（隔离假监听者）
 ### 红 → 绿记录
 - 红：先写合同红用例，实跑 `ERR_MODULE_NOT_FOUND: src/launcher-core.mjs`（合同已立、实现缺失）。
 - 绿：实现 core / 控制器 / 编排 / loopback / control HTML 后，23 例全绿 + 隔离自检 PASS。早期红证据日志已在转绿后移除。
+
+### P1 独立设计审查返修（commit `3f9cbda`）红 → 绿
+- **红（修前实跑）**：
+  1. cancel(ready 前) 仅置 aborted 标志，留下自己尚未就绪的 spawn 子进程，无 SIGTERM、最终等待超时；
+  2. 编排 catch 把 `STARTUP_ABORTED` 也转 S6，异步覆盖取消——实测 `expected S0 actual S6`，且误投递风险。
+- **绿修复（精确所有权 + ready 守卫）**：
+  1. 控制器仅对「自己拉起 && 未就绪」的 owned 子进程 SIGTERM + 有界等待；ready 后/现网/未知 PID 不杀；重复 cancel 幂等只回收一次；就绪轮询节拍固定 macrotask，避免微任务 sleep 饥饿外部 cancel；就绪判定与取消并发时已取消按未就绪回收、不置 ready。
+  2. 编排 catch 识别 `err.code === 'STARTUP_ABORTED'` 直接返回，保持 cancel 已置的 S0，不转 S6、不投递浏览器。
+- **测试**：新增 `test/cancel.race.test.mjs` 6 例真实控制器 + 真实编排竞态（非 stub 状态机）；隔离真实假子进程为自拉起瞬时 node，SIGTERM 后真实退出，不碰 3172、不启正式 DSH。修后全量 29/29、verify PASS。
 
 ## 4. 已读合同要点（采纳）
 
@@ -90,19 +99,19 @@ npm run verify  # node scripts/verify-launcher.mjs（隔离假监听者）
 | 端口争端 | 无；未在 3172 起新服务 |
 | 禁止项 | 无 force、无 token/密钥/cookie/数据缓存入库、未关闭 auth、未共享 cookie、未乱杀端口 |
 
-## 8. 文件清单（绝对路径，commit e7c5238）
+## 8. 文件清单（feat e7c5238 + fix 3f9cbda）
 
 - `.../launcher/bin/pm-launcher.mjs`（可执行入口）
 - `.../launcher/src/launcher-core.mjs`（探测/决策/令牌解析脱敏/spawn 参数/七态状态机）
 - `.../launcher/src/probe.mjs`（无 cookie 探测，缝可注入）
-- `.../launcher/src/dsh-controller.mjs`（owned 内存捕获/即弃/cancel 仅放弃/stop 拒绝）
+- `.../launcher/src/dsh-controller.mjs`（owned 内存捕获/即弃；cancel 仅回收未就绪 owned 子进程 SIGTERM+有界等待，ready/现网/未知 PID 不杀；stop 拒绝）
 - `.../launcher/src/browsers.mjs`（发现/回退）
 - `.../launcher/src/panel-model.mjs`（状态→视图模型）
 - `.../launcher/src/control-html.mjs`（自包含 control HTML）
 - `.../launcher/src/loopback.mjs`（127 临时端口 control 服务）
-- `.../launcher/src/launcher-app.mjs`（编排，token 不进状态）
+- `.../launcher/src/launcher-app.mjs`（编排；STARTUP_ABORTED 保持 S0，token 不进状态）
 - `.../launcher/scripts/verify-launcher.mjs`（隔离自检）
-- `.../launcher/test/`（4 个测试文件，23 例）
+- `.../launcher/test/`（5 个测试文件，29 例；含 `cancel.race.test.mjs` 6 竞态例）
 - `.../launcher/README.md`（使用说明）、`.../launcher/IMPLEMENTATION-REPORT.md`（本记录）
 
 ## 9. 唯一阻塞（路径 B 单列，不隐藏）
