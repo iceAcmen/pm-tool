@@ -13,9 +13,9 @@ import CircleCheck from 'lucide-react/dist/esm/icons/circle-check.mjs'
 import CircleAlert from 'lucide-react/dist/esm/icons/circle-alert.mjs'
 import CircleX from 'lucide-react/dist/esm/icons/circle-x.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
-import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import { localTodayIso, isMilestoneMissed } from '../../core/derived.js'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState, PmButton } from '../shared/ui/index.js'
 import css from './milestones.css?raw'
 import type { Milestone, Task, Run, View } from './types.js'
 
@@ -86,12 +86,14 @@ export function Milestones(props: MilestonesProps) {
 
       {total === 0 ? (
         /* 空态 */
-        <div className="ms-empty pm-card">
-          <div className="ms-empty-ico"><Inbox size={22}/></div>
-          <h3>暂无里程碑</h3>
-          <p>里程碑是项目阶段的仪式性节点。创建第一个里程碑，开始追踪项目旅程。</p>
-          {!disabled && <button type="button" className="ms-btn-primary" onClick={onCreate}><Plus size={14}/> 新增里程碑</button>}
-        </div>
+        <EmptyState
+          variant="vacuum"
+          title="暂无里程碑"
+          description="里程碑是项目阶段的仪式性节点。创建第一个里程碑，开始追踪项目旅程。"
+          action={!disabled ? (
+            <PmButton variant="primary" onClick={onCreate}><Plus size={14}/> 新增里程碑</PmButton>
+          ) : undefined}
+        />
       ) : (
         <>
           {/* 紧凑达成率总览带 */}

@@ -14,10 +14,11 @@
  */
 import { Fragment, useMemo, useState, type KeyboardEvent } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
-import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert.mjs'
 import css from './risk-issues.css?raw'
 import { localTodayIso } from '../../core/derived.js'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState, PmButton } from '../shared/ui/index.js'
+import { severityOf, risksForMatrix } from './risk-model.js'
 import type { RiskIssue } from './types.js'
 
 const STATUS_LABEL: Record<RiskIssue['status'], string> = {
@@ -28,20 +29,7 @@ const STATUS_LABEL: Record<RiskIssue['status'], string> = {
 const PROB_LABEL: Record<string, string> = { low: '低', medium: '中', high: '高' }
 const IMPACT_LABEL: Record<string, string> = { low: '低', medium: '中', high: '高', critical: '严重' }
 
-type Severity = 'low' | 'mid' | 'high'
-
-/** 概率权重：空值按最低计；影响权重：critical=4。 */
-const PROB_W = { low: 1, medium: 2, high: 3 } as const
-const IMPACT_W = { low: 1, medium: 2, high: 3, critical: 4 } as const
-
-/** 得分 ≤2 低危（绿）；3~4 中危（琥珀）；≥6 高危（红）。 */
-function severityOf(r: Pick<RiskIssue, 'probability' | 'impact'>): Severity {
-  const p = r.probability ? PROB_W[r.probability] : 1
-  const score = p * IMPACT_W[r.impact]
-  if (score <= 2) return 'low'
-  if (score <= 4) return 'mid'
-  return 'high'
-}
+import type { Severity } from './risk-model.js'
 
 const SEV_WEIGHT: Record<Severity, number> = { low: 1, mid: 2, high: 3 }
 const SEV_LABEL: Record<Severity, string> = { low: '低', mid: '中', high: '高' }
@@ -60,7 +48,7 @@ export function RiskIssuesView(props: {
   const today = localTodayIso()
   const [tab, setTab] = useState<'risk' | 'issue'>('risk')
 
-  const risks = useMemo(() => records.filter(r => r.type === 'risk'), [records])
+  const risks = useMemo(() => risksForMatrix(records), [records])
   const issues = useMemo(() => records.filter(r => r.type === 'issue'), [records])
 
   const openCount = records.filter(r => r.status === 'open').length
@@ -104,16 +92,16 @@ export function RiskIssuesView(props: {
             <p className="ri-sub">登记项目推进中识别出的风险与已暴露的问题，并跟踪应对闭环。</p>
           </div>
         </header>
-        <section className="ri-card ri-empty-card">
-          <div className="ri-empty">
-            <div className="ri-ico"><ShieldAlert size={20}/></div>
-            <h4>尚未登记任何风险或问题</h4>
-            <p>项目当前没有已识别的风险与问题。评审、测试与上线过程中发现的不确定项，建议第一时间登记，便于跟踪应对与闭环。</p>
-            <button type="button" className="ri-btn-primary" disabled={disabled} onClick={onCreate}>
+        <EmptyState
+          variant="vacuum"
+          title="尚未登记任何风险或问题"
+          description="项目当前没有已识别的风险与问题。评审、测试与上线过程中发现的不确定项，建议第一时间登记，便于跟踪应对与闭环。"
+          action={(
+            <PmButton variant="primary" disabled={disabled} onClick={onCreate}>
               <Plus size={14}/> 登记风险/问题
-            </button>
-          </div>
-        </section>
+            </PmButton>
+          )}
+        />
       </div>
     )
   }
@@ -180,8 +168,7 @@ export function RiskIssuesView(props: {
                   <div className="rowh">概率<small>{PROB_LABEL[pr]}</small></div>
                   {IMPACT_COLS.map(im => {
                     const cell = matrix.get(`${pr}|${im}`) ?? []
-                    const score = PROB_W[pr] * IMPACT_W[im]
-                    const sev: Severity = score <= 2 ? 'low' : score <= 4 ? 'mid' : 'high'
+                    const sev = severityOf({ probability: pr, impact: im })
                     return (
                       <div className={`ri-mcell is-${sev}`} key={im}>
                         {cell.map(r => (

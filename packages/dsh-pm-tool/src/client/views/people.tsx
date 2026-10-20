@@ -15,6 +15,7 @@ import CircleHelp from 'lucide-react/dist/esm/icons/circle-help.mjs'
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.mjs'
 import Users from 'lucide-react/dist/esm/icons/users.mjs'
 import css from './people.css?raw'
+import { loadScale } from './people-scale.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../../core/people-load.js'
 // K19 保护面：直接消费分片C core/load-stance 纯函数（单一真源，前端不另造规则/不重复派生）。
 import {
@@ -186,13 +187,8 @@ export function PeopleView(props: {
   const unassignedValue = report.unassigned ? report.unassigned.openTotal : 0
   const openSum = peopleValues.reduce((a, v) => a + v, 0) + unassignedValue
 
-  // X 轴上限自适应：阈值、所有已分配人员 open、未分配桶 open 取最大值，向上取整到 2 的倍数再 +2 留余量，至少 8。
-  const rawMax = Math.max(overloadThreshold, ...peopleValues, unassignedValue, 1)
-  const maxX = Math.max(8, (Math.ceil((rawMax + 2) / 2) * 2))
-
-  // 刻度按 maxX 自适应：0,2,4,…,maxX。
-  const ticks: number[] = []
-  for (let t = 0; t <= maxX; t += 2) ticks.push(t)
+  // 同刻度：阈值 / 全部已分配 open / 未分配桶 open 取最大值，向上取整到 2 倍数 +2，至少 8；过滤不缩尺。
+  const { maxX, ticks } = loadScale(peopleValues, unassignedValue, overloadThreshold)
 
   // 中位/均值仅已分配人员。
   const sortedVals = [...peopleValues].sort((a, b) => a - b)
