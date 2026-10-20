@@ -124,3 +124,71 @@
   color: var(--pm-text-2); min-width: 0;
 }
 .pm-bento .pm-ppl-unassigned .pm-ppl-name { font-weight: 600; color: var(--pm-ink); }
+
+/* ===== G-E 看板编辑器视觉迁移：工具条 / 面板 / 公式白名单表单（token-only，深浅跟随） ===== */
+
+/* 编辑头 */
+.pm-bento .pm-edit-head { margin: 0 0 var(--sp-3); }
+.pm-bento .pm-edit-title { margin: 0; font-size: var(--t-14); font-weight: 700; color: var(--pm-ink); }
+.pm-bento .pm-edit-sub { margin: 2px 0 0; font-size: var(--t-11); color: var(--pm-muted); line-height: 1.5; }
+
+/* 工具条：chips 一行排布，主 CTA 靠右 */
+.pm-bento .pm-edit-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.pm-bento .pm-edit-tools-spacer { flex: 1 1 auto; min-width: 8px; }
+.pm-bento .pm-edit-scope { display: inline-flex; align-items: center; gap: 6px; font-size: var(--t-11); color: var(--pm-muted); }
+.pm-bento .pm-edit-scope select {
+  appearance: none; padding: 5px var(--sp-3); border: 1px solid var(--pm-line); border-radius: var(--r-sm);
+  background: var(--pm-surface); color: var(--pm-ink); font-size: var(--t-12); cursor: pointer;
+}
+.pm-bento .pm-edit-scope select:hover { background: var(--pm-hover); }
+
+/* 浮层面板（历史 / 导出预览 / 导入投放） */
+.pm-bento .pm-edit-panel {
+  margin-bottom: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--pm-line);
+  border-radius: var(--r-lg); background: var(--pm-surface); display: flex; flex-direction: column; gap: var(--sp-2);
+}
+.pm-bento .pm-edit-panel-title { margin: 0; font-size: var(--t-13); font-weight: 700; color: var(--pm-ink); }
+.pm-bento .pm-edit-panel-note { margin: 0; font-size: var(--t-11); color: var(--pm-muted); line-height: 1.5; }
+.pm-bento .pm-edit-export-meta {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3);
+  background: color-mix(in srgb, var(--pm-accent) 8%, transparent); border-radius: var(--r-sm);
+  font-size: var(--t-12); color: var(--pm-ink);
+}
+.pm-bento .pm-edit-export-meta code { font-variant-numeric: tabular-nums; }
+
+/* 卡片库：字形 tile + 名称 + 状态 */
+.pm-bento .pm-drawer-glyph {
+  width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm); background: color-mix(in srgb, var(--pm-accent) 12%, transparent);
+  color: var(--pm-accent); font-size: var(--t-12); font-weight: 700; font-style: normal;
+}
+.pm-bento .pm-drawer-name { flex: 1 1 auto; min-width: 0; text-align: left; }
+
+/* 配置面板：副标 / 位置网格 / 规则行 / 表达式预览 / 错误清单 / 底部 */
+.pm-bento .pm-cfg-sub { margin: 2px 0 var(--sp-2); font-size: var(--t-11); color: var(--pm-muted); }
+.pm-bento .pm-cfg-grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pm-bento .pm-cfg-num { display: flex; flex-direction: column; gap: 2px; font-size: var(--t-11); color: var(--pm-muted); }
+.pm-bento .pm-cfg-tabs button {
+  background: none; border: 0; cursor: pointer; font: inherit; padding: 4px 8px;
+  border-radius: var(--r-sm); color: var(--pm-muted);
+}
+.pm-bento .pm-cfg-tabs button.on { background: color-mix(in srgb, var(--pm-accent) 12%, transparent); color: var(--pm-accent); font-weight: 600; }
+/* 复用宿主 .pm-cfg-rule 边框盒；仅把字段撑满、删除按钮去边框。 */
+.pm-bento .pm-cfg-rule select, .pm-bento .pm-cfg-rule input { flex: 1 1 0; min-width: 0; }
+.pm-bento .pm-cfg-rule button { flex-shrink: 0; background: none; border: 0; cursor: pointer; color: var(--pm-muted); padding: 2px 4px; }
+.pm-bento .pm-cfg-expr {
+  display: block; padding: var(--sp-2) var(--sp-3); border: 1px dashed var(--pm-line); border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--pm-muted) 6%, transparent); color: var(--pm-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--t-11); line-height: 1.5;
+  white-space: pre-wrap; word-break: break-all;
+}
+.pm-bento .pm-cfg-errors {
+  margin: 6px 0; padding: var(--sp-2) var(--sp-3); border: 1px solid color-mix(in srgb, var(--pm-danger) 30%, transparent);
+  background: color-mix(in srgb, var(--pm-danger) 8%, transparent); border-radius: var(--r-sm); color: var(--pm-danger);
+}
+.pm-bento .pm-cfg-errors-title { font-weight: 700; font-size: var(--t-12); margin-bottom: 2px; }
+.pm-bento .pm-cfg-errors ul { margin: 0; padding-left: 18px; font-size: var(--t-11); line-height: 1.6; }
+.pm-bento .pm-cfg-apply { width: 100%; margin-top: var(--sp-2); }
+.pm-bento .pm-cfg-footer { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--pm-line); }
+.pm-bento .pm-cfg-footer .pm-button { width: 100%; }
+

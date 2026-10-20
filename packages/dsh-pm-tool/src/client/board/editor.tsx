@@ -10,6 +10,10 @@ import type { Snapshot } from '../panel.js'
 import type { DashboardLayout, FilterRule, WidgetActions, WidgetInstance, WidgetScope } from './types.js'
 import type { ProjectionApi, BreakpointCols } from './projection.js'
 import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntry } from './history.js'
+import {
+  nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
+  type FormulaBuildInput, type FormulaCondition, type FormulaCaliber,
+} from './editor-ops.js'
 
 import type { WidgetCatalogEntry } from './widgets.js'
 
@@ -159,6 +163,9 @@ export function BoardEditor(props: BoardEditorProps) {
   const safeStorage = (): Storage | null => (typeof localStorage !== 'undefined' ? localStorage : null)
   const [hist, setHist] = useState<LayoutHistoryEntry[]>([])
   const [histOpen, setHistOpen] = useState(false)
+  // 导出预览 / 导入投放面板（设计 66/67）：本地预览，不落盘。
+  const [exportOpen, setExportOpen] = useState(false)
+  const [importOpen, setImportOpen] = useState(false)
   useEffect(() => {
     const s = safeStorage()
     setHist(s ? readHistory(s, scope, parseLayout) : [])
@@ -221,12 +228,20 @@ export function BoardEditor(props: BoardEditorProps) {
   }
 
   const fileRef = useRef<HTMLInputElement>(null)
-  const exportLayout = () => {
-    const blob = new Blob([JSON.stringify({ ...draft, scope }, null, 2)], { type: 'application/json' })
+  const exportJson = serializeDashboardExport(draft, scope)
+  const downloadExport = () => {
+    const blob = new Blob([exportJson], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url; a.download = `dashboard-${scope}.json`; a.click()
     URL.revokeObjectURL(url)
+  }
+  /** 会话内「恢复上次保存」：仅载入预览，必须再点保存才落盘（不自动写回）。 */
+  const restoreSaved = () => {
+    if (!savedLayout) return
+    pushHistory()
+    setDraft(structuredClone(savedLayout))
+    setValidationError(null)
   }
   const importLayout = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
@@ -312,29 +327,11 @@ export function BoardEditor(props: BoardEditorProps) {
   /**
    * I7：键盘方向键移动卡片（拖拽的非指针替代）。按 dx/dy 步进一格；
    * 落入他卡占用格时与该卡交换坐标（不产生重叠），边界按 cols 夹紧。
-   * 纯 draft 状态改写，不干预 RGL 鼠标拖拽链路。
+   * 纯逻辑在 editor-ops.ts（可单测）；这里只入撤销栈 + 写 draft，不干预 RGL 鼠标拖拽链路。
    */
   const nudgeWidget = (i: string, dx: number, dy: number) => {
     pushHistory()
-    setDraft(d => {
-      const widgets = d.widgets.map(w => ({ ...w, layout: { ...w.layout } }))
-      const cur = widgets.find(w => w.layout.i === i)
-      if (!cur) return d
-      const L = cur.layout
-      const nx = Math.max(0, Math.min(L.x + dx, grid.cols - L.w))
-      const ny = Math.max(0, L.y + dy)
-      const hit = widgets.find(o => o.layout.i !== i
-        && nx < o.layout.x + o.layout.w && nx + L.w > o.layout.x
-        && ny < o.layout.y + o.layout.h && ny + L.h > o.layout.y)
-      if (hit) {
-        const hx = hit.layout.x, hy = hit.layout.y
-        hit.layout.x = L.x; hit.layout.y = L.y
-        cur.layout.x = hx; cur.layout.y = hy
-      } else {
-        cur.layout.x = nx; cur.layout.y = ny
-      }
-      return { ...d, widgets }
-    })
+    setDraft(d => ({ ...d, widgets: nudgeWidgetLayout(d.widgets, i, dx, dy, grid.cols) }))
   }
 
   const selected = selectedId ? live.widgets.find(w => w.layout.i === selectedId) : null
@@ -346,36 +343,47 @@ export function BoardEditor(props: BoardEditorProps) {
         <button type="button" className="pm-bento-validation-x" onClick={() => setValidationError(null)} aria-label="关闭">×</button>
       </div>
     )}
-    <div className="pm-bento-tools" style={{ marginBottom: 12 }}>
-      <select className="pm-bento-scope" value={scope} onChange={e => setScope(e.target.value as WidgetScope)} title="保存到哪个作用域">
-        <option value="user">我的（个人）</option>
-        <option value="project">项目（团队模板）</option>
-        <option value="global">内置默认</option>
-      </select>
-      <button type="button" className="pm-bento-toolbtn" onClick={() => setDrawerOpen(o => !o)}>＋ 卡片库</button>
-      <button type="button" className="pm-bento-toolbtn" onClick={exportLayout}>导出</button>
-      <button type="button" className="pm-bento-toolbtn" onClick={() => fileRef.current?.click()}>导入</button>
-      <input ref={fileRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={importLayout}/>
-      <button type="button" className="pm-bento-toolbtn" onClick={undo} disabled={!canUndo} title="撤销上一步（最多 20 步）">↶ 撤销</button>
+    <header className="pm-edit-head">
+      <div>
+        <h2 className="pm-edit-title">看板编辑</h2>
+        <p className="pm-edit-sub">本地草稿仅在保存后经 dsh-storage 落盘；不自动重置旧布局，卡片位置、尺寸与个性化原样保留。</p>
+      </div>
+    </header>
+
+    <div className="pm-bento-tools pm-edit-tools">
+      <label className="pm-edit-scope" title="保存到哪个作用域（落盘由宿主按当前项目/个人路由决定）">
+        <span>作用域</span>
+        <select value={scope} onChange={e => setScope(e.target.value as WidgetScope)}>
+          <option value="user">我的（个人）</option>
+          <option value="project">项目（团队模板）</option>
+          <option value="global">内置默认</option>
+        </select>
+      </label>
+      <button type="button" className="pm-button" onClick={() => setDrawerOpen(o => !o)}>＋ 卡片库</button>
+      <button type="button" className="pm-button" onClick={() => { setImportOpen(o => !o); setExportOpen(false) }}>导入布局</button>
+      <button type="button" className="pm-button" onClick={() => { setExportOpen(o => !o); setImportOpen(false) }}>导出布局</button>
       {savedLayout && (
-        <button type="button" className="pm-bento-toolbtn"
+        <button type="button" className="pm-button"
           title="恢复上次成功保存的布局（本会话预览，需再点保存才落盘）"
-          onClick={() => { pushHistory(); setDraft(structuredClone(savedLayout)) }}>↺ 恢复上次保存</button>
+          onClick={restoreSaved}>↺ 恢复上次保存</button>
       )}
-      <button type="button" className="pm-bento-toolbtn"
-        title={`本作用域已保存的历史版本（最多 ${5} 版，localStorage 持久，跨 reload/重启保留）；预览后需再点保存`}
+      <button type="button" className="pm-button" onClick={undo} disabled={!canUndo} title="撤销上一步（最多 20 步）">↶ 撤销</button>
+      <button type="button" className="pm-button"
+        title={`本作用域已保存的历史版本（最多 5 版，localStorage 持久，跨 reload/重启保留）；预览后需再点保存`}
         onClick={() => setHistOpen(o => !o)}>🕘 历史版本（{hist.length}）</button>
       <button
         type="button"
-        className={`pm-bento-toolbtn${resetArmed ? ' pm-bento-danger' : ''}`}
+        className={`pm-button${resetArmed ? ' pm-button-danger' : ''}`}
         onClick={() => void doReset()}
         disabled={resetting}
         title={`将${scope === 'user' ? '个人' : scope === 'project' ? '项目' : '内置'}布局恢复默认（此操作不可撤销，需二次确认）`}
       >{resetting ? '重置中…' : resetArmed ? `确认重置${scope === 'user' ? '个人' : scope === 'project' ? '项目' : '内置'}布局？` : '恢复默认'}</button>
-      {resetArmed && <button type="button" className="pm-bento-toolbtn" onClick={() => setResetArmed(false)}>取消重置</button>}
-      <button type="button" className="pm-bento-toolbtn" onClick={onExit}>取消</button>
-      <button type="button" className="pm-button-primary" onClick={() => void saveEdit()}>保存</button>
+      {resetArmed && <button type="button" className="pm-button" onClick={() => setResetArmed(false)}>取消重置</button>}
+      <span className="pm-edit-tools-spacer"/>
+      <button type="button" className="pm-button" onClick={onExit}>取消</button>
+      <button type="button" className="pm-button pm-button-primary" onClick={() => void saveEdit()}>保存布局</button>
     </div>
+    <input ref={fileRef} type="file" accept="application/json" hidden onChange={importLayout}/>
 
     {histOpen && (
       <div className="pm-bento-history" role="region" aria-label="历史版本">
@@ -388,9 +396,29 @@ export function BoardEditor(props: BoardEditorProps) {
             <span className="pm-bento-history-meta">
               {idx === 0 ? '最新' : `第 ${idx + 1} 版`} · {new Date(entry.ts).toLocaleString()} · {entry.layout.widgets.length} 张卡
             </span>
-            <button type="button" className="pm-bento-toolbtn" onClick={() => restoreSnapshot(entry)}>预览</button>
+            <button type="button" className="pm-button" onClick={() => restoreSnapshot(entry)}>预览</button>
           </div>
         ))}
+      </div>
+    )}
+
+    {exportOpen && (
+      <div className="pm-edit-panel" role="region" aria-label="导出布局">
+        <h3 className="pm-edit-panel-title">导出布局（本地预览）</h3>
+        <p className="pm-edit-panel-note">紧凑 JSON，结构与 dsh-storage 落盘一致；下载只写本地文件，不改后端。</p>
+        <div className="pm-edit-export-meta">
+          <span>文件：<code>dashboard-{scope}.json</code></span>
+          <span>大小：{(new Blob([exportJson]).size).toLocaleString()} 字节 · {draft.widgets.length} 张卡</span>
+        </div>
+        <button type="button" className="pm-button pm-button-primary" onClick={downloadExport}>下载 JSON</button>
+      </div>
+    )}
+
+    {importOpen && (
+      <div className="pm-edit-panel" role="region" aria-label="导入布局">
+        <h3 className="pm-edit-panel-title">导入布局（本地回写草稿）</h3>
+        <p className="pm-edit-panel-note">选择 .json 布局文件：结构 + 目录校验通过后载入画布，必须再点「保存布局」才落盘；不删除现有卡片。</p>
+        <button type="button" className="pm-button" onClick={() => fileRef.current?.click()}>选择 JSON 文件</button>
       </div>
     )}
 
@@ -492,14 +520,14 @@ function CardDrawer({ live, catalog, query, setQuery, onAdd }: {
             draggable={!has && !d.disabled}
             onDragStart={(e) => e.dataTransfer.setData('widget-type', d.type)}
             onClick={() => onAdd(d.type)}>
-            <i className="pm-drawer-ic"/>
-            <span>{d.name}</span>
-            <span className="pm-drawer-plus">{has ? '已添加' : d.disabled ? '③' : '＋'}</span>
+            <i className="pm-drawer-glyph" aria-hidden>{d.name.trim().charAt(0)}</i>
+            <span className="pm-drawer-name">{d.name}</span>
+            <span className="pm-drawer-plus">{has ? '已添加' : d.disabled ? '不可加' : '＋'}</span>
           </button>
         })}
       </div>
     })}
-    <div className="pm-drawer-tip">点 ＋ 添加到看板；选中卡片后在右侧配置。</div>
+    <div className="pm-drawer-tip">点 ＋ 添加到看板，或拖到画布；选中卡片后在右侧配置。</div>
   </aside>
 }
 
@@ -521,37 +549,58 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
   const isFormula = inst.type === 'formulaCard' || inst.type === 'kpiMetric'
   const whitelist = hasEntity ? fieldWhitelist[cfg.entity ?? 'tasks'] ?? [] : []
   const tabs = (['data', 'filter', 'sort', ...(isFormula ? ['formula' as const] : []), 'show', 'look'] as const)
+
+  /* 公式白名单口径构建（设计 §7：无自由表达式；口径 + 条件 → 只读表达式预览；红错误清单禁用应用）。 */
+  const [caliber, setCaliber] = useState<FormulaCaliber | ''>('')
+  const [builderField, setBuilderField] = useState('')
+  const [conditions, setConditions] = useState<FormulaCondition[]>([])
+  const builder: FormulaBuildInput = { caliber, field: builderField, conditions }
+  const expr = buildFormulaExpression(builder)
+  const errors = validateFormulaConfig(builder)
+  const legacyFormula = typeof cfg.formula === 'string' && cfg.formula.trim()
   const [trial, setTrial] = useState<string>('')
-  const doTrial = () => {
-    setTrial(onTrial(String(cfg.formula ?? ''), String(cfg.entity ?? 'tasks'), String(cfg.projectScope ?? 'all'), cfg.filters ?? []))
+  const applyFormula = () => {
+    const entity = cfg.entity ?? 'tasks'
+    const scope = String(cfg.projectScope ?? 'all')
+    const filters = cfg.filters ?? []
+    onPatch({ formula: expr, entity, projectScope: scope, filters, numberFormat: cfg.numberFormat ?? 'int' })
+    setTrial(onTrial(expr, String(entity), scope, filters))
   }
+  const setCondition = (i: number, patch: Partial<FormulaCondition>) => {
+    setConditions(prev => prev.map((c, j) => j === i ? { ...c, ...patch } : c))
+  }
+
   return <aside className="pm-cfg">
-    <h3>配置 · {inst.type}<button type="button" className="pm-cfg-x" onClick={onClose}>×</button></h3>
+    <h3>
+      <span className="pm-cfg-title">选中卡片配置（本地回写）</span>
+      <button type="button" className="pm-cfg-x" onClick={onClose} aria-label="关闭配置">×</button>
+    </h3>
+    <div className="pm-cfg-sub">{inst.type} · 改动只写本地草稿，保存后才落盘</div>
     <div className="pm-cfg-tabs">
       {tabs.map(t =>
-        <span key={t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
+        <button key={t} type="button" className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
           {{ data: '数据源', filter: '筛选', sort: '排序', formula: '公式', show: '显示元素', look: '外观' }[t]}
-        </span>)}
+        </button>)}
     </div>
 
     {/* I7：位置与尺寸数字输入（拖拽位移/缩放的非指针编辑路径，键盘可完成移动与改尺寸）。 */}
     <div className="pm-cfg-fld">
-      <label>位置与尺寸（栅格列/行/宽/高，可键盘输入）</label>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-        <label style={{ fontSize: 11, opacity: 0.85 }}>列 X
+      <label className="pm-cfg-label">位置与尺寸（栅格列/行/宽/高，可键盘输入）</label>
+      <div className="pm-cfg-grid4">
+        <label className="pm-cfg-num">列 X
           <input className="pm-cfg-sel" type="number" min={0} max={Math.max(0, cols - inst.layout.w)}
             value={inst.layout.x}
             onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ x: Math.max(0, Math.min(v, cols - inst.layout.w)) }) }}/>
         </label>
-        <label style={{ fontSize: 11, opacity: 0.85 }}>行 Y
+        <label className="pm-cfg-num">行 Y
           <input className="pm-cfg-sel" type="number" min={0} value={inst.layout.y}
             onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ y: Math.max(0, v) }) }}/>
         </label>
-        <label style={{ fontSize: 11, opacity: 0.85 }}>宽 W
+        <label className="pm-cfg-num">宽 W
           <input className="pm-cfg-sel" type="number" min={inst.layout.minW ?? 1} max={cols} value={inst.layout.w}
             onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ w: Math.max(inst.layout.minW ?? 1, Math.min(v, cols)) }) }}/>
         </label>
-        <label style={{ fontSize: 11, opacity: 0.85 }}>高 H
+        <label className="pm-cfg-num">高 H
           <input className="pm-cfg-sel" type="number" min={inst.layout.minH ?? 1} value={inst.layout.h}
             onChange={e => { const v = Number(e.target.value); if (Number.isFinite(v)) onLayout({ h: Math.max(inst.layout.minH ?? 1, v) }) }}/>
         </label>
@@ -559,12 +608,60 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
     </div>
 
     {tab === 'formula' && isFormula && <div className="pm-cfg-fld">
-      <label>公式（≤200 字，rows=筛选后行）</label>
-      <textarea className="pm-cfg-sel" rows={3} maxLength={200} value={String(cfg.formula ?? '')}
-        onChange={e => onPatch({ formula: e.target.value })}/>
-      <div className="pm-cfg-help">变量：rows、today；函数：count/sum/avg/rowMin/rowMax/countIf/pct</div>
-      <button type="button" className="pm-cfg-add" onClick={doTrial}>试算</button>
-      {trial && <div className="pm-cfg-trial">{trial}</div>}
+      <label className="pm-cfg-label">统计口径（白名单聚合，无可选自由表达式）</label>
+      <select className="pm-cfg-sel" value={caliber} onChange={e => setCaliber(e.target.value as FormulaCaliber | '')}>
+        <option value="">未选择口径</option>
+        <option value="count">计数 · count(rows)</option>
+        <option value="sum">求和 · sum(rows, 字段)</option>
+        <option value="avg">平均 · avg(rows, 字段)</option>
+        <option value="rowMin">最小值 · rowMin(rows, 字段)</option>
+        <option value="rowMax">最大值 · rowMax(rows, 字段)</option>
+        <option value="countIf">条件计数 · countIf(rows, 字段, 值)</option>
+        <option value="pct">占比 · pct(countIf, count)</option>
+      </select>
+      {caliber !== 'count' && (
+        <label className="pm-cfg-label">目标字段（{cfg.entity ?? 'tasks'} 白名单）
+          <select className="pm-cfg-sel" value={builderField} onChange={e => setBuilderField(e.target.value)}>
+            <option value="">选择字段</option>
+            {whitelist.map(fd => <option key={fd} value={fd}>{fd}</option>)}
+          </select>
+        </label>
+      )}
+
+      <label className="pm-cfg-label">组合条件（AND，最多 3 行）</label>
+      {conditions.map((c, i) => (
+        <div key={i} className="pm-cfg-rule">
+          <select value="AND" disabled aria-label="连接词">
+            <option>AND</option>
+          </select>
+          <select value={c.field} onChange={e => setCondition(i, { field: e.target.value })}>
+            <option value="">字段</option>
+            {whitelist.map(fd => <option key={fd} value={fd}>{fd}</option>)}
+          </select>
+          <select value={c.op} onChange={e => setCondition(i, { op: e.target.value as FilterOp })}>
+            {['eq', 'ne', 'in', 'gte', 'lte', 'contains', 'isEmpty'].map(op => <option key={op} value={op}>{op}</option>)}
+          </select>
+          <input value={c.value} placeholder="值" onChange={e => setCondition(i, { value: e.target.value })}/>
+          <button type="button" aria-label="删除条件" onClick={() => setConditions(prev => prev.filter((_, j) => j !== i))}>✕</button>
+        </div>
+      ))}
+      <button type="button" className="pm-cfg-add" disabled={conditions.length >= 3}
+        onClick={() => setConditions(prev => [...prev, { connector: 'AND', field: whitelist[0] ?? 'status', op: 'eq', value: '' }])}>＋ 添加条件行</button>
+
+      <label className="pm-cfg-label">表达式预览（只读）</label>
+      <code className="pm-cfg-expr">{expr || '（待构建：先选统计口径）'}</code>
+
+      {legacyFormula && caliber === '' && (
+        <div className="pm-cfg-help">现有表达式由旧版安全求值器保留；选择口径并应用后将以白名单口径重建。</div>
+      )}
+      {errors.length > 0 && (
+        <div className="pm-cfg-errors" role="alert">
+          <div className="pm-cfg-errors-title">表单校验未通过（未求值）</div>
+          <ul>{errors.map((err, i) => <li key={i}>{err}</li>)}</ul>
+        </div>
+      )}
+      <button type="button" className="pm-button pm-button-primary pm-cfg-apply" disabled={errors.length > 0} onClick={applyFormula}>应用公式</button>
+      {trial && <div className="pm-cfg-trial" aria-live="polite">试算：{trial}</div>}
     </div>}
 
     {tab === 'data' && <>
@@ -694,6 +791,10 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
         <textarea className="pm-cfg-sel" rows={5} value={cfg.body ?? ''} onChange={e => onPatch({ body: e.target.value })}/>
       </>}
     </div>}
+
+    <div className="pm-cfg-footer">
+      <button type="button" className="pm-button pm-button-primary" onClick={onClose}>完成</button>
+    </div>
   </aside>
 }
 
