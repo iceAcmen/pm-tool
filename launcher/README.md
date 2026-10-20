@@ -26,6 +26,7 @@
 - owned 实例的 authenticatedURL（含一次性令牌）**仅内存**：首投所选浏览器一次后即弃，**不跨 profile/新浏览器重放**，不落盘、不写日志、不入仓。
 - 服务探测 GET 不带 cookie；探测到的 401 是「身份匹配的鉴权墙」，**不得**据此判定某浏览器未登录；S5 只由用户反馈触发。
 - 不 kill 占用进程、不争 3172；取消仅回收「自己拉起、尚未就绪」的 owned 子进程（SIGTERM+有界等待），已就绪服务/现网/未知 PID 一律不杀。
+- control loopback 加固：Host 白名单仅 `127.0.0.1:<port>`/`localhost:<port>`（防 DNS rebinding）；POST `/api/action` 须 same Origin + `application/json`，无 Origin（CLI）须带受控内存 nonce；不开 CORS、不放行 preflight；GET 只读；nonce 仅内存、与 DSH token 分离。
 
 ## 3. 唯一阻塞（路径 B 单列，不隐藏）
 
@@ -36,7 +37,7 @@
 
 ```bash
 cd launcher
-npm test          # 29 例单元/集成（假探测/假 open/假控制器 + cancel 竞态，临时端口）
+npm test          # 36 例单元/集成（假探测/假 open/假控制器 + cancel 竞态 + loopback CSRF 加固，临时端口）
 npm run verify    # 隔离假监听者自检
 npm start         # 启动 loopback control 页并在所选浏览器打开（PM_PORT 默认 3172）
 ```

@@ -55,7 +55,7 @@ async function main() {
   const server = createControlServer({
     getState: () => app.getState(),
     handleAction: (p) => app.handleAction(p),
-    renderHtml: (st) => renderControlHtml(app.view(), { initialState: st }),
+    renderHtml: (st, ctx) => renderControlHtml(app.view(), { initialState: st, nonce: ctx?.nonce }),
   })
   const { port, close } = await server.listen()
 

@@ -45,7 +45,8 @@ function esc(s) {
  * @param {{initialState?:object}} [ctx] 服务端初始状态（不含 token）
  */
 export function renderControlHtml(viewModel, ctx = {}) {
-  const initial = JSON.stringify(ctx.initialState ?? viewModel).replace(/</g, '\\u003c')
+  const base = ctx.initialState ?? viewModel
+  const initial = JSON.stringify({ ...base, csrfNonce: ctx.nonce ?? '' }).replace(/</g, '\\u003c')
   return `<!doctype html>
 <html lang="zh-CN" data-theme="${esc(viewModel.theme)}">
 <head>
@@ -67,7 +68,7 @@ export function renderControlHtml(viewModel, ctx = {}) {
 <script>
 const INIT=${initial};
 let state=INIT; let menuOpen=false; let detailOpen=false;
-async function act(payload){ try{ const r=await fetch('/api/action',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)}); const j=await r.json(); if(j.state) state=j.state; render(); }catch(e){ /* 离线时保持当前态 */ } }
+async function act(payload){ try{ const r=await fetch('/api/action',{method:'POST',headers:{'content-type':'application/json','x-csrf-nonce':state.csrfNonce||''},body:JSON.stringify(payload)}); const j=await r.json(); if(j.state) state=j.state; render(); }catch(e){ /* 离线时保持当前态 */ } }
 async function refresh(){ try{ const r=await fetch('/api/state'); const j=await r.json(); state=j.state; render(); }catch(e){} }
 function chrome(){ return state.browser||'系统默认浏览器' }
 function actionsRow(actions){ return '<div class="row">'+actions.map(a=>'<button class="'+(a.kind==='primary'?'primary':a.kind==='secondary'?'secondary':'text-btn')+'" data-act="'+esc(a.id)+'">'+esc(a.label)+'</button>').join('')+'</div>' }

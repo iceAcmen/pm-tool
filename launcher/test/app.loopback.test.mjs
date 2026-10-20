@@ -116,7 +116,7 @@ test('loopback：GET / 渲染标题；GET /api/state；POST /api/action；响应
     handleAction: (p) => app.handleAction(p),
     renderHtml: (st) => renderControlHtml(app.view(), { initialState: st }),
   })
-  const { port, close } = await server.listen()
+  const { port, close, nonce } = await server.listen()
   try {
     const root = await fetch(`http://127.0.0.1:${port}/`)
     const html = await root.text()
@@ -130,6 +130,7 @@ test('loopback：GET / 渲染标题；GET /api/state；POST /api/action；响应
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ type: 'confirm-entered' }),
+      headers: { 'content-type': 'application/json', 'x-csrf-nonce': nonce },
     })
     const body = await act.json()
     assert.equal(body.state.status, 'S4')
