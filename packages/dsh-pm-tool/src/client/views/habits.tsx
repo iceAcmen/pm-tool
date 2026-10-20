@@ -14,11 +14,11 @@
  * 样式类名前缀 .pm-habit-* 定义在 panel.css（只追加区块，浅深双态 token 自适应）。
  */
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
-import Repeat from 'lucide-react/dist/esm/icons/repeat.mjs'
 import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState } from '../shared/ui/index.js'
 import {
   habitStatusLabel,
   streakArchiveText,
@@ -129,18 +129,12 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
       {/* 习惯卡片：streak 文本档案 + 打卡记录 + 命令通道打卡入口。 */}
       <section className="pm-habit-list" aria-label="习惯记录">
         {mine.length === 0 ? (
-          <div className="pm-habit-empty pm-card">
-            <Repeat size={22}/>
-            <h3>暂无习惯记录</h3>
-            <p>
-              由人录入或经收件区确认后在此呈现；前端不自动创建、不自动定稿。
-            </p>
-            {onCreate && (
-              <button type="button" className="pm-habit-btn pm-habit-btn-primary" onClick={onCreate}>
-                <Plus size={14}/>新建首个习惯
-              </button>
-            )}
-          </div>
+          /* 真空态复用 S0 EmptyState；新建入口只留在页头，避免双 CTA / 重复文案。 */
+          <EmptyState
+            variant="vacuum"
+            title="暂无习惯记录"
+            description="由人录入或经收件区确认后在此呈现；前端不自动创建、不自动定稿。"
+          />
         ) : (
           mine.map(h => {
             const checkIns = h.checkIns

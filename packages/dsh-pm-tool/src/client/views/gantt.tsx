@@ -17,8 +17,9 @@ import {
 import { deriveProgressMap, checklistFraction, type TaskProgress } from '../../core/progress-derivation.js'
 import { sampleGanttTicks } from '../../core/ui-feedback.js'
 
-const ROW_H = 28
-const BAR_H = 16
+// 行高对齐设计基线（pl-g-row min-height 48）：容纳「标题 + 负责人·状态·进度」两行，避免副文本被挤到截断。
+const ROW_H = 44
+const BAR_H = 20
 const DAY_MS = 86400000
 /** 6px 左右 resize 热区（与 CSS .pm-gantt-handle 宽度一致）；命中即调工期，否则中部为移动。 */
 const HANDLE_PX = 6
@@ -455,6 +456,9 @@ export function GanttView(props: {
             {ticks.map(tk => (
               <span key={tk.date} className="pm-gantt-tick" style={{ left: `${tk.leftDays * PX}px` }}>{tk.label}</span>
             ))}
+            {todayOff >= 0 && todayOff <= axisDays && (
+              <span className="pm-gantt-today-tag" style={{ left: `${todayOff * PX + PX / 2 + 4}px` }}>今天</span>
+            )}
           </div>
           <div className="pm-gantt-plot">
             {weekends.map((w, i) => (
@@ -484,10 +488,9 @@ export function GanttView(props: {
                 )
               })}
             </div>
-            {todayOff >= 0 && todayOff <= axisDays && <>
+            {todayOff >= 0 && todayOff <= axisDays && (
               <div className="pm-gantt-today" style={{ left: `${todayOff * PX + PX / 2}px` }} />
-              <span className="pm-gantt-today-tag" style={{ left: `${todayOff * PX + PX / 2 + 4}px` }}>今天</span>
-            </>}
+            )}
             {showDeps && edgeRoutes.length > 0 && (
               <svg className="pm-gantt-links" width={axisDays * PX} height={totalRows * ROW_H} aria-label="任务间前置依赖连线">
                 <defs>

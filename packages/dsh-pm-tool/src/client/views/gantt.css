@@ -68,7 +68,8 @@
   background: var(--surface); box-shadow: var(--shadow-2); overflow: hidden;
 }
 .pm-gantt-root .pm-gantt-labels {
-  width: 220px; flex: 0 0 auto;
+  /* 对齐基线 pl-g-label 250px：给「标题 + 负责人·状态·进度」两行留足宽度，避免副文本省略号截断。 */
+  width: 250px; flex: 0 0 auto;
   border-right: 1px solid var(--line); background: var(--surface);
   overflow: hidden;
 }
@@ -87,7 +88,7 @@
 .pm-gantt-root .pm-gantt-label-code { font-size: var(--t-11); color: var(--faint); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
 .pm-gantt-root .pm-gantt-label-main { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 1px; }
 .pm-gantt-root .pm-gantt-label-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pm-gantt-root .pm-gantt-label-sub { font-size: var(--t-10); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pm-gantt-root .pm-gantt-label-sub { font-size: var(--t-11); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-gantt-root .pm-gantt-label-frac { margin-left: auto; font-size: var(--t-10); color: var(--muted); flex: 0 0 auto; }
 .pm-gantt-root .pm-gantt-unscheduled {
   flex: 0 0 auto; font-size: var(--t-10); color: var(--faint);
@@ -129,15 +130,16 @@
 
 /* 今日线（dsh 下干净细红线 + 小标签） */
 .pm-gantt-root .pm-gantt-today { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--c-late); opacity: .85; z-index: 6; pointer-events: none; }
+/* 「今天」标签固定在顶部日期轴的刻度行内，不再压到任务条上造成标签遮挡。 */
 .pm-gantt-root .pm-gantt-today-tag {
-  position: absolute; top: 4px; font-size: var(--t-10); font-weight: 700;
+  position: absolute; top: 23px; font-size: var(--t-10); font-weight: 700;
   color: var(--dsw-alias-label-primary-foreground); background: var(--c-late);
   padding: 2px 6px; border-radius: var(--r-xs); z-index: 6; pointer-events: none;
 }
 
 /* ---------------- 任务条（done 绿 / prog 蓝 / todo 灰；blocked/late 仅克制描边） ---------------- */
 .pm-gantt-root .pm-gantt-bar {
-  position: absolute; height: 16px; box-sizing: border-box;
+  position: absolute; height: 20px; box-sizing: border-box;
   border-radius: 999px; border: 1px solid;
   font-size: var(--t-10); padding: 0 8px; white-space: nowrap;
   overflow: visible; cursor: grab; user-select: none; touch-action: none; z-index: 4;
@@ -161,7 +163,7 @@
 }
 /* 父条：细条范围带，不拖拽 */
 .pm-gantt-root .pm-gantt-bar--parent {
-  height: 10px; top: 9px; cursor: pointer;
+  height: 10px; top: 17px; cursor: pointer;
   background: color-mix(in srgb, var(--ink) 6%, transparent);
   border: 1px solid var(--line-2);
 }
@@ -203,12 +205,12 @@
 .pm-gantt-root .pm-gantt-bar.st-todo .pm-gantt-bar-dates,
 .pm-gantt-root .pm-gantt-bar.st-todo .pm-gantt-bar-pct { color: var(--muted); }
 .pm-gantt-root .pm-gantt-bar-side {
-  position: absolute; top: 0; font-size: var(--t-10); line-height: 16px;
+  position: absolute; top: 0; font-size: var(--t-10); line-height: 20px;
   color: var(--muted); white-space: nowrap; max-width: 140px;
   overflow: hidden; text-overflow: ellipsis;
 }
 .pm-gantt-root .pm-gantt-ghost {
-  position: absolute; top: 20px; font-size: var(--t-10); color: var(--ink);
+  position: absolute; top: 12px; font-size: var(--t-10); color: var(--ink);
   background: var(--surface-2); border: 1px solid var(--line-2);
   border-radius: var(--r-xs); padding: 0 6px; white-space: nowrap; z-index: 2;
 }
@@ -249,7 +251,7 @@
 
 /* ---------------- 里程碑菱形 ---------------- */
 .pm-gantt-root .pm-gantt-milestone {
-  position: absolute; top: 9px; width: 10px; height: 10px;
+  position: absolute; top: 17px; width: 10px; height: 10px;
   transform: translateX(-50%) rotate(45deg); background: var(--c-prog);
 }
 .pm-gantt-root .pm-gantt-milestone-done { background: var(--c-done); }

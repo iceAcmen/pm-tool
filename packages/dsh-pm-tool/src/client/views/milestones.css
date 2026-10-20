@@ -84,10 +84,11 @@
   line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.pm-ms-root .ms-ov-rate-cell { flex: 0 0 180px; }
+/* 达成率格与其它统计格同权伸缩，不再锁死 180px 被推到统计带最右外侧游离。 */
+.pm-ms-root .ms-ov-rate-cell { flex: 1 1 160px; min-width: 150px; }
 .pm-ms-root .ms-ov-rate-track {
   height: 6px; border-radius: 99px; background: var(--field-bg);
-  display: flex; overflow: hidden; margin-top: 6px;
+  display: flex; overflow: hidden; margin-top: 8px; align-self: stretch;
 }
 .pm-ms-root .ms-ov-rate-track i { display: block; height: 100%; }
 

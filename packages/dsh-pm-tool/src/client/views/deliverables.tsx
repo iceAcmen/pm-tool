@@ -206,7 +206,11 @@ export function Deliverables(props: DeliverablesProps) {
               onClear={() => { setQuery(''); setFilter('all') }}
             />
           ) : (
-            visibleGroups.map(g => (
+            visibleGroups
+              // 「全部」视图下不渲染空状态分组，避免多个空组重复同一句空文案；
+              // 仅当用户显式筛选到某空状态时，才显示该组的空提示。
+              .filter(g => g.items.length > 0 || filter === g.status)
+              .map(g => (
               <section className="dv-group" key={g.status}>
                 <div className="dv-g-head">
                   <span className="dv-g-dot" data-tone={g.status}/>
@@ -215,7 +219,7 @@ export function Deliverables(props: DeliverablesProps) {
                   <span className="dv-g-line"/>
                 </div>
                 {g.items.length === 0 ? (
-                  <div className="dv-group-empty">暂无此状态交付物</div>
+                  <div className="dv-group-empty">该状态下暂无交付物</div>
                 ) : (
                   <div className="dv-g-grid">
                     {g.items.map(d => {

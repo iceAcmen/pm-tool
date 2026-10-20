@@ -70,7 +70,11 @@
   grid-template-rows: 26px repeat(3, 1fr);
   gap: 6px; flex: 1; min-height: 320px;
 }
-.pm-ri-root .ri-mtx .corner {}
+/* 角格：只标一次纵轴「概率」，与 colh/rowh 同色居中，避免每行重复「概率」前缀。 */
+.pm-ri-root .ri-mtx .corner {
+  font-size: var(--t-11); color: var(--muted); font-weight: 600;
+  display: grid; place-items: center; white-space: nowrap;
+}
 .pm-ri-root .ri-mtx .colh, .pm-ri-root .ri-mtx .rowh {
   /* D8：深档 raised 卡片上 --faint 仅 4.24:1，改 --muted（浅/深均 ≥4.5）。 */
   font-size: var(--t-11); color: var(--muted); font-weight: 600;

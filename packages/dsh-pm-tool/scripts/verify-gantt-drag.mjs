@@ -3,7 +3,7 @@
  *
  * v2 落地后：run 仍在 panel.tsx；GanttView 组件与样式搬到 src/client/views/gantt.tsx / gantt.css。
  * 覆盖（全部静态源契约 + 纯函数复核，无需浏览器；真实浏览器 GUI 项由测试专家另判）：
- *  A. 外壳稳定契约：.pm-gantt 为 flex 容器（nowrap），labels 固定 220px，scroll flex:1+min-width:0；
+ *  A. 外壳稳定契约：.pm-gantt 为 flex 容器（nowrap），labels 固定 250px，scroll flex:1+min-width:0；
  *     状态行(hint)独立于 .pm-gantt 之外（不再用 flex-basis:100% 挤入，故无「挤没画布」问题）。
  *  B. 成功 quiet：拖拽走 run(..., { quiet: true })；run 签名支持 options；quiet 成功分支
  *     不 setMessage 全字段大 Notice；run 内 refresh 恰好一次；GanttView 无 onSaved 二次刷新。
@@ -55,7 +55,8 @@ assert.match(ganttRoot, /flex-wrap:\s*nowrap/,
   '.pm-gantt 为 nowrap——标签列与画布始终同行；状态行已独立到容器之外，不再需要 wrap')
 
 const labelsBlock = extractBlock(ganttCss, '.pm-gantt-root .pm-gantt-labels {')
-assert.match(labelsBlock, /width:\s*220px/, '.pm-gantt-labels 固定 220px')
+// 非 P0 返修：身份列由 220px 加宽到 250px，容纳「标题 + 负责人·状态·进度」两行不截断。
+assert.match(labelsBlock, /width:\s*250px/, '.pm-gantt-labels 固定 250px（加宽以容纳副行）')
 
 const scrollBlock = extractBlock(ganttCss, '.pm-gantt-root .pm-gantt-scroll {')
 assert.match(scrollBlock, /flex:\s*1/, '.pm-gantt-scroll flex:1 吃满剩余宽')

@@ -142,8 +142,9 @@
 
 /* C · 分布点图 + 预警 */
 .pm-pp-root .pp-dist { display: flex; flex-direction: column; }
-.pm-pp-root .pp-dist-body { padding: var(--sp-2) var(--sp-4) 0; display: flex; flex-direction: column; flex: 1; }
-.pm-pp-root .pp-dplot { position: relative; height: 130px; margin-top: 22px; }
+.pm-pp-root .pp-dist-body { padding: var(--sp-2) var(--sp-4) var(--sp-3); display: flex; flex-direction: column; flex: 1; }
+/* 底部预留刻度/统计行空间，避免 x 轴刻度与「中位/均值/阈值/open 合计」被卡片裁切。 */
+.pm-pp-root .pp-dplot { position: relative; height: 124px; margin-top: 22px; padding-bottom: 18px; }
 .pm-pp-root .pp-daxis { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
 .pm-pp-root .pp-dline { position: absolute; top: 0; bottom: 0; width: 1px; }
 .pm-pp-root .pp-dline span { position: absolute; top: -18px; white-space: nowrap; font-size: var(--t-10); font-weight: 650; }

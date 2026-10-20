@@ -9,7 +9,6 @@
  * 样式类名前缀 .pm-okr-* 定义在 panel.css（只追加区块，浅深双态 token 自适应）。
  */
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
-import Target from 'lucide-react/dist/esm/icons/target.mjs'
 import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
@@ -22,6 +21,7 @@ import {
   type OkrViewRecord,
 } from './okr-model.js'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState } from '../shared/ui/index.js'
 import type { Run } from './types.js'
 
 export interface OkrsViewProps {
@@ -71,16 +71,12 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, 
       {/* 树形：objective 根 → KR 子节点；软关联行单独标注「关联」。 */}
       <section className="pm-okr-tree" aria-label="目标归属树">
         {tree.roots.length === 0 && tree.orphans.length === 0 ? (
-          <div className="pm-okr-empty pm-card">
-            <Target size={22}/>
-            <h3>暂无 OKR 记录</h3>
-            <p>由人录入或经收件区确认归属后在此呈现；前端不自动创建、不自动定稿。</p>
-            {onCreate && (
-              <button type="button" className="pm-okr-btn pm-okr-btn-primary" onClick={onCreate}>
-                <Plus size={14}/>新建首个 OKR
-              </button>
-            )}
-          </div>
+          /* 真空态复用 S0 EmptyState；新建入口只留在页头，避免双 CTA / 重复文案。 */
+          <EmptyState
+            variant="vacuum"
+            title="暂无 OKR 记录"
+            description="由人录入或经收件区确认归属后在此呈现；前端不自动创建、不自动定稿。"
+          />
         ) : (
           tree.roots.map(root => (
             <div className="pm-okr-node pm-card" key={root.record.id} data-kind={root.record.kind}>

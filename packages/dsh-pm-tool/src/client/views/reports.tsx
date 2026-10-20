@@ -280,7 +280,9 @@ export function ReportsView(props: {
                   {/* averageProgress=null 表示样本不足，显式「证据不足」，不得当 0%。 */}
                   <div className="rp-cell">
                     <span className="rp-k">平均进度</span>
-                    <span className="rp-v">{snap.tasks.averageProgress == null ? '证据不足' : `${Math.round(snap.tasks.averageProgress)}%`}</span>
+                    <span className={snap.tasks.averageProgress == null ? 'rp-v rp-v--text' : 'rp-v'}>
+                      {snap.tasks.averageProgress == null ? '证据不足' : `${Math.round(snap.tasks.averageProgress)}%`}
+                    </span>
                   </div>
                   <div className="rp-cell"><span className="rp-k">里程碑</span><span className="rp-v">{snap.milestones.achieved}<small> / {snap.milestones.total}</small></span></div>
                   <div className="rp-cell"><span className="rp-k">会议</span><span className="rp-v">{snap.meetings.inPeriod}<small> 次 · 决议 {snap.meetings.decisions}</small></span></div>

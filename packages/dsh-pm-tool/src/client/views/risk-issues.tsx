@@ -161,11 +161,12 @@ export function RiskIssuesView(props: {
               <span className="more">点圆点定位列表</span>
             </div>
             <div className="ri-mtx">
-              <div className="corner"/>
+              {/* 角格只标一次「概率」纵轴，各行不再重复「概率 高/中/低」前缀。 */}
+              <div className="corner">概率</div>
               {IMPACT_COLS.map(im => <div className="colh" key={im}>影响 {IMPACT_LABEL[im]}</div>)}
               {PROB_ROWS.map(pr => (
                 <Fragment key={pr}>
-                  <div className="rowh">概率<small>{PROB_LABEL[pr]}</small></div>
+                  <div className="rowh"><small>{PROB_LABEL[pr]}</small></div>
                   {IMPACT_COLS.map(im => {
                     const cell = matrix.get(`${pr}|${im}`) ?? []
                     const sev = severityOf({ probability: pr, impact: im })
