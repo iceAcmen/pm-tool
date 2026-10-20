@@ -90,6 +90,8 @@ import { HabitsView, type HabitViewRecord, type HabitInboxSuggestion } from './v
 import type { OkrViewRecord, OkrInboxSuggestion } from './views/okr-model.js'
 import { MarkdownView } from './shared/markdown-view.js'
 import { PageShell } from './shared/page-shell.js'
+// S0 共享闸门：Field/FormSection/useSubmitGuard 由共享合同层提供（原本地实现已提升，行为零变更）。
+import { Field, FormSection, useSubmitGuard } from './shared/ui/index.js'
 import { collectFormSnapshot, shouldConfirmDiscard, type FormSnapshot } from './shared/form-dirty.js'
 import { stageUploadGate, downloadGate } from './shared/staged-lifecycle.js'
 import {
@@ -3383,56 +3385,6 @@ function DrawerPanel({ title, onClose, beforeClose, children }: {
       <div className="pm-drawer-body">{children}</div>
     </aside>
   </div>
-}
-
-/** E10：表单本地提交防重态。begin() 在途时重复调用返回 false（二次提交直接忽略）；
- *  end() 释放。配合父级 inflightRef 与 busy 禁用，pending 期间按钮 disabled + 「提交中…」加载态。 */
-function useSubmitGuard(): [boolean, () => boolean, () => void] {
-  const [submitting, setSubmitting] = useState(false)
-  const inFlight = useRef(false)
-  const begin = () => {
-    if (inFlight.current) return false
-    inFlight.current = true
-    setSubmitting(true)
-    return true
-  }
-  const end = () => {
-    inFlight.current = false
-    setSubmitting(false)
-  }
-  return [submitting, begin, end]
-}
-
-/** R3-UX-001：Field 增加可选 required（必填星号）与 error（受控中文内联错误）。
- *  不传时渲染与旧版完全一致，其他实体表单不受影响。 */
-function Field({ label, children, wide, required, error, errorId }: {
-  label: string
-  children: ReactNode
-  wide?: boolean
-  required?: boolean
-  error?: string
-  errorId?: string
-}) {
-  return <label className="pm-field" data-wide={wide || undefined} data-invalid={error ? true : undefined}>
-    <span>
-      {label}
-      {required && <span className="pm-field-required" aria-hidden="true"> *</span>}
-    </span>
-    {children}
-    {error && <span className="pm-field-error" id={errorId} role="alert">{error}</span>}
-  </label>
-}
-
-/** P1-5：抽屉分区（01 基础信息 / 02 排期与进度 / 03 关联与仓库）。
- *  组标题 = eyebrow 序号 + 650 标题 + 弱分隔线；组内自带两列栅格，≤560 塌一列。 */
-function FormSection({ index, title, children }: { index: string, title: string, children: ReactNode }) {
-  return <section className="pm-form-section">
-    <div className="pm-form-section-h">
-      <span className="pm-form-section-n" aria-hidden="true">{index}</span>
-      <span className="pm-form-section-title">{title}</span>
-    </div>
-    <div className="pm-form-section-grid">{children}</div>
-  </section>
 }
 
 function ProjectForm({

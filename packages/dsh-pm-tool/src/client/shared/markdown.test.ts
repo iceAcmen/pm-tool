@@ -13,6 +13,27 @@ describe('safeHref 协议白名单（T5 XSS）', () => {
   })
 })
 
+describe('safeHref S0 协议拦截补充（控制字符 / 伪装 / 大小写）', () => {
+  it('大小写 http/https 均放行，首尾空白修剪', () => {
+    expect(safeHref('  HTTPS://Example.com/A  ')).toBe('HTTPS://Example.com/A')
+    expect(safeHref('Http://a.io')).toBe('Http://a.io')
+  })
+
+  it('vbscript:/mailto:/tel: 与协议省略/反斜杠伪装一律拒绝', () => {
+    expect(safeHref('vbscript:msgbox(1)')).toBeNull()
+    expect(safeHref('mailto:a@b.com')).toBeNull()
+    expect(safeHref('tel:+86100')).toBeNull()
+    expect(safeHref('//evil.com')).toBeNull()
+    expect(safeHref('https:\\\\evil.com')).toBeNull()
+  })
+
+  it('控制字符（tab/换行/反斜杠夹带）拒绝，不进 href', () => {
+    expect(safeHref('https://ok.com/a\tb')).toBeNull()
+    expect(safeHref('https://ok.com/a\nb')).toBeNull()
+    expect(safeHref('')).toBeNull()
+  })
+})
+
 describe('parseInline 行内子集', () => {
   it('加粗 / 行内 code / 链接 / 删除线 / 斜体', () => {
     const nodes = parseInline('**重点** `code` [官方](https://x.com) ~~旧~~ *斜*')

@@ -163,6 +163,16 @@
   --pm-ai-edge: var(--pm-line);
   --pm-ai-mark: var(--pm-text-2);
 
+  /* ===== S0 共享闸门 · 加性语义别名（映射既有 token/宿主别名，不改视觉、不做独立主题持久化）=====
+     主题仍跟随宿主 body[data-ds-dark-theme]；此处只给共享控件合同一个稳定语义名，
+     页面/组件禁止再写裸 hex，统一取这些别名。深态由宿主别名自动提亮，不在此机械反色。 */
+  --pm-surface-raised: var(--surface-2);
+  --pm-sunken: var(--surface-3);
+  --pm-sem-success: var(--c-done);
+  --pm-sem-warning: var(--c-block);
+  --pm-sem-danger: var(--c-late);
+  --pm-sem-info: var(--c-prog);
+
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
@@ -3313,3 +3323,57 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-prog-rev { display: flex; flex-direction: column; gap: 4px; }
 .pm-prog-entry--deleted { opacity: .7; }
 .pm-prog-deleted { display: flex; flex-direction: column; gap: 6px; }
+
+/* ===== S0 共享闸门 · 加性基座样式（只补结构，消费既有 token；主题跟随宿主，不写裸 hex）===== */
+/* 紧凑按钮：次要/工具条动作，高度略降、padding 收紧。 */
+.pm-button-sm { padding: 4px 10px; font-size: var(--t-12); }
+
+/* 成功回执：绿边绿底，结果 + 下一步（非假 toast）。 */
+.pm-receipt {
+  border: 1px solid var(--pm-sem-success);
+  background: var(--pm-tint-success);
+  border-radius: var(--r-sm);
+  padding: var(--sp-3) var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-1);
+}
+.pm-receipt__result { font-weight: 600; color: var(--pm-text); }
+.pm-receipt__detail { margin: 0; font-size: var(--t-12); color: var(--pm-text-2); }
+.pm-receipt__next { margin-top: var(--sp-1); }
+
+/* 错误块：发生了什么/为什么/怎么修，就近可重试；不卸载调用方表单（保输入由调用方维持）。 */
+.pm-error-block {
+  border: 1px solid var(--pm-sem-danger);
+  background: var(--pm-tint-danger);
+  border-radius: var(--r-sm);
+  padding: var(--sp-3) var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-1);
+}
+.pm-error-block__title { margin: 0; font-size: var(--t-14); font-weight: 600; color: var(--pm-text); }
+.pm-error-block__what { margin: 0; font-size: var(--t-13); color: var(--pm-text); }
+.pm-error-block__why, .pm-error-block__fix { margin: 0; font-size: var(--t-12); color: var(--pm-text-2); }
+.pm-error-block__actions { margin-top: var(--sp-1); }
+
+/* 弹出菜单基座：白底强边框 + 阴影；分组标题/选中/禁用。 */
+.pm-menu-pop {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--pm-shadow-menu);
+  padding: var(--sp-1);
+  min-width: 180px;
+}
+.pm-menu-group { padding: var(--sp-1) 0; }
+.pm-menu-caption { padding: var(--sp-1) var(--sp-2); font-size: var(--t-11); color: var(--muted); }
+.pm-menu-item {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  width: 100%; padding: var(--sp-2) var(--sp-3); border: 0; background: transparent;
+  border-radius: var(--r-xs); font-size: var(--t-13); color: var(--ink); cursor: pointer; text-align: left;
+}
+.pm-menu-item:hover:not(:disabled) { background: var(--hover-bg); }
+.pm-menu-item--on { color: var(--pm-sem-info); font-weight: 600; }
+.pm-menu-item--disabled { color: var(--faint); cursor: not-allowed; }
+.pm-menu-item__hint { font-size: var(--t-11); color: var(--faint); }
+
+/* 空态变体修饰：noResult 说明 + 清除；blocked 置灰说明（不改真空卡本体）。 */
+.pm-empty-card--noResult .pm-empty-card__desc,
+.pm-empty-card--blocked .pm-empty-card__desc { color: var(--pm-text-2); }
