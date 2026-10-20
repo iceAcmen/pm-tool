@@ -8,6 +8,13 @@
 
 ---
 
+## SH-1 D-01 移除可逆反馈 + 编辑态压实（2026-10-20，平台：doubao-work）
+
+- 改文件：`src/client/board/editor-ops.ts`（新增 `compactVertical`/`removeWidgetAndCompact` 纯函数）、`src/client/board/editor.tsx`（删除走压实+1.5s 轻反馈条「已移除·撤销」进既有20步栈；dragStop/resizeStop/几何应用后稳定压实；RGL `draggableHandle`+`cancel` 排除按钮/输入，不再靠逐处 stopPropagation）、`board.css`（反馈条样式）、新增 `editor-compact.test.ts`。
+- 为什么：原 × 仅 filter 删除、`compactType=null` 留空行；无删除反馈；整卡 mousedown 均可起拖拽，×/控件易被拖拽捕获。
+- 影响：仅 board 编辑态；被动宽度/断点变化不压实写 canonical；16 类注册表、旧 layout、config 数据、storage schema 零改动。
+- 验证：board 150 单测绿，tsc --noEmit 0；live 401 未目视，记 R 未验。
+
 ## 总览宽高编辑与多列排版专项（2026-10-20，平台：doubao-work）
 
 - 仅修改 `src/client/board/` 五个源码文件，新增 `editor-geometry.test.ts`：字符串尺寸草稿+显式应用、canonical 12 列固定编辑画布（最小960px）、配置/卡库浮层、不再被动 onLayoutChange 回写、拖缩结束才保存草稿、显式可撤销自动排版、按实际工作区宽度使用12/8/1列、窄卡内容分行。

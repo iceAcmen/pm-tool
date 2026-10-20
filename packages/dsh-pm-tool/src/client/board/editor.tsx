@@ -12,7 +12,7 @@ import type { ProjectionApi, BreakpointCols } from './projection.js'
 import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntry } from './history.js'
 import {
   nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
-  applyWidgetGeometry, arrangeWidgetLayout,
+  applyWidgetGeometry, arrangeWidgetLayout, compactVertical, removeWidgetAndCompact,
   type FormulaBuildInput, type FormulaCondition, type FormulaCaliber,
 } from './editor-ops.js'
 
@@ -131,12 +131,21 @@ export function BoardEditor(props: BoardEditorProps) {
   // R-B7：撤销栈 ≤20 步（仅离散动作入栈；拖拽/缩放帧不逐帧入栈，避免淹没历史）。
   const historyRef = useRef<DashboardLayout[]>([])
   const [canUndo, setCanUndo] = useState(false)
+  // D-01：删除后 1.5s 单行轻反馈（success 条 + 撤销），不弹原生 confirm；撤销进既有 20 步栈。
+  const [notice, setNotice] = useState<{ label: string } | null>(null)
+  const noticeTimer = useRef<number | null>(null)
+  const clearNotice = () => {
+    if (noticeTimer.current !== null) { window.clearTimeout(noticeTimer.current); noticeTimer.current = null }
+    setNotice(null)
+  }
+  useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current) }, [])
   const pushHistory = () => {
     historyRef.current.push(structuredClone(draft))
     if (historyRef.current.length > 20) historyRef.current.shift()
     setCanUndo(true)
   }
   const undo = () => {
+    clearNotice()
     const prev = historyRef.current.pop()
     setCanUndo(historyRef.current.length > 0)
     if (prev) setDraft(prev)
@@ -289,9 +298,14 @@ export function BoardEditor(props: BoardEditorProps) {
   }
 
   const removeWidget = (i: string) => {
+    const target = draft.widgets.find(w => w.layout.i === i)
+    const label = target ? (catalog.find(c => c.type === target.type)?.name ?? target.type) : '卡片'
     pushHistory()
-    setDraft({ ...draft, widgets: draft.widgets.filter(w => w.layout.i !== i) })
+    clearNotice()
+    setDraft(d => ({ ...d, widgets: removeWidgetAndCompact(d.widgets, i, grid.cols) }))
     if (selectedId === i) setSelectedId(null)
+    setNotice({ label })
+    noticeTimer.current = window.setTimeout(() => setNotice(null), 1500)
   }
 
   const updateConfig = (i: string, patch: Partial<WidgetInstance['config']>) => {
@@ -305,7 +319,8 @@ export function BoardEditor(props: BoardEditorProps) {
   /** I7：布局补丁（坐标/尺寸的非指针编辑路径，供配置面板数字输入）。 */
   const updateLayout = (i: string, patch: Partial<WidgetInstance['layout']>) => {
     pushHistory()
-    setDraft(d => ({ ...d, widgets: applyWidgetGeometry(d.widgets, i, patch, grid.cols) }))
+    // D-01：显式几何应用后稳定压实填洞；被动宽度/断点变化不走这里。
+    setDraft(d => ({ ...d, widgets: compactVertical(applyWidgetGeometry(d.widgets, i, patch, grid.cols), grid.cols) }))
   }
 
   /**
@@ -325,6 +340,12 @@ export function BoardEditor(props: BoardEditorProps) {
       <div className="pm-bento-validation" role="alert">
         <span>{validationError}</span>
         <button type="button" className="pm-bento-validation-x" onClick={() => setValidationError(null)} aria-label="关闭">×</button>
+      </div>
+    )}
+    {notice && (
+      <div className="pm-remove-notice" role="status" aria-live="polite">
+        <span>已移除「{notice.label}」卡片</span>
+        <button type="button" className="pm-remove-notice-undo" onClick={undo}>撤销</button>
       </div>
     )}
     <header className="pm-edit-head">
@@ -437,8 +458,10 @@ export function BoardEditor(props: BoardEditorProps) {
           compactType={null}
           onDragStart={pushHistory}
           onResizeStart={pushHistory}
-          onDragStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols) }))}
-          onResizeStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: projection.reverseFromBreakpoint(d.widgets, next, activeCols) }))}
+          onDragStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
+          onResizeStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
+          draggableHandle=".pm-rgl-item-wrap"
+          cancel=".pm-rgl-x, button, input, select, textarea, a, [data-nodrag]"
         >
           {live.widgets.map(w => {
             const sel = selectedId === w.layout.i

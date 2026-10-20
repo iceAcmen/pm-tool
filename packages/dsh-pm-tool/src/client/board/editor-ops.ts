@@ -91,6 +91,56 @@ export function arrangeWidgetLayout(widgets: WidgetInstance[], cols: number): Wi
   })
 }
 
+/* ---------- D-01 编辑态垂直压实（显式草稿动作后填洞，不改入参） ---------- */
+
+/** 两卡 bbox 二维相交（网格矩形非严格相邻）。 */
+function compactOverlap(a: WidgetInstance['layout'], b: WidgetInstance['layout']): boolean {
+  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+}
+
+/**
+ * 编辑态 vertical compact（gravity up）：按原 y 顺序逐张找到其 x 列带内最小的不相交 y，
+ * 把删除/拖拽/尺寸应用后留下的空行填掉；x/w/h/config/type 原样保留，不改入参。
+ * 只在显式草稿动作（remove / dragStop / resizeStop / geometry 应用 / 自动排版）后由组件调用，
+ * 不在被动宽度/断点变化时压实写 canonical。已紧凑布局结果恒等。
+ */
+export function compactVertical(widgets: WidgetInstance[], _cols: number): WidgetInstance[] {
+  if (widgets.length <= 1) return widgets.map(w => ({ ...w, layout: { ...w.layout } }))
+  const placed: WidgetInstance['layout'][] = []
+  const byId = new Map<string, WidgetInstance>()
+  // 按原 y 升序放置（稳定），输出仍按原数组顺序返回，避免 UI 顺序漂移。
+  const ordered = [...widgets].sort((p, q) => p.layout.y - q.layout.y)
+  for (const cand of ordered) {
+    let y = Math.max(0, cand.layout.y)
+    // 从 0 向上找首个不相交位置（gravity up 填洞）；起点先压到 0 再扫描。
+    for (let trial = 0; trial <= cand.layout.y; trial++) {
+      const hit = placed.some(p => compactOverlap(p, { ...cand.layout, y: trial }))
+      if (!hit) { y = trial; break }
+      y = trial + 1
+    }
+    // 若从 0 起全部被占，继续向下兜底扫描（防死循环 5000 行）。
+    for (let guard = 0; guard < 5000; guard++) {
+      const hit = placed.some(p => compactOverlap(p, { ...cand.layout, y }))
+      if (!hit) break
+      y += 1
+    }
+    const next = { ...cand, layout: { ...cand.layout, y } }
+    placed.push(next.layout)
+    byId.set(next.layout.i, next)
+  }
+  return widgets.map(w => byId.get(w.layout.i)!)
+}
+
+/**
+ * 显式删除：过滤目标卡后立即垂直压实填洞；未知 i 原样返回。
+ * 返回新数组，不改入参；type/config 与其余卡坐标尺寸保留。
+ */
+export function removeWidgetAndCompact(widgets: WidgetInstance[], id: string, cols: number): WidgetInstance[] {
+  const removed = widgets.filter(w => w.layout.i !== id)
+  if (removed.length === widgets.length) return widgets
+  return compactVertical(removed, cols)
+}
+
 /* ---------- 公式卡：白名单口径构建 + 红错误清单（设计 §7，无自由表达式） ---------- */
 
 /** 白名单统计口径（与 formula-expr.ts 注册函数一一对应；不暴露任意文本求值）。 */
