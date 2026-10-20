@@ -188,6 +188,34 @@
 .pm-dv-root .dv-due { font-variant-numeric: tabular-nums; }
 .pm-dv-root .dv-due b { color: var(--ink-2); font-weight: 600; }
 
+/* D-11/C-10：交付物侧反查关联任务（只读）。句柄等宽、状态次级、标题主；可跳转时显链接 affordance。 */
+.pm-dv-root .dv-d-tasks { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.pm-dv-root .dv-d-tasks-label {
+  font-size: var(--t-11); color: var(--faint); letter-spacing: .02em;
+}
+.pm-dv-root .dv-d-task-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+.pm-dv-root .dv-d-task-list li { min-width: 0; }
+.pm-dv-root .dv-d-task-link,
+.pm-dv-root .dv-d-task-static {
+  display: flex; align-items: center; gap: 6px; width: 100%; min-width: 0;
+  padding: 3px 6px; border-radius: 6px; font-size: var(--t-12);
+}
+.pm-dv-root .dv-d-task-link {
+  background: none; border: 1px solid transparent; text-align: left; cursor: pointer; color: var(--ink-2);
+}
+.pm-dv-root .dv-d-task-link:hover { border-color: var(--line-2); background: var(--surface-3); }
+.pm-dv-root .dv-d-task-link:focus-visible { outline: 2px solid var(--c-prog); outline-offset: 1px; }
+.pm-dv-root .dv-d-task-handle {
+  font-family: var(--pm-font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--t-11); color: var(--muted); flex: 0 0 auto;
+}
+.pm-dv-root .dv-d-task-status {
+  flex: 0 0 auto; font-size: var(--t-11); color: var(--faint);
+  padding: 1px 6px; border-radius: 99px; background: var(--field-bg);
+}
+.pm-dv-root .dv-d-task-title { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-dv-root .dv-d-task-none { font-size: var(--t-11); color: var(--faint); }
+
 .pm-dv-root .dv-d-loc {
   display: flex; align-items: center; gap: 5px;
   font-size: var(--t-11); color: var(--faint);

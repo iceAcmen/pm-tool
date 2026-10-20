@@ -34,6 +34,7 @@ import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
 import X from 'lucide-react/dist/esm/icons/x.mjs'
 import Download from 'lucide-react/dist/esm/icons/download.mjs'
 import Share2 from 'lucide-react/dist/esm/icons/share-2.mjs'
+import Copy from 'lucide-react/dist/esm/icons/copy.mjs'
 import {
   DEFAULT_VIEW_STATE,
   VIEW_CHIP_OPTIONS,
@@ -279,6 +280,20 @@ export function TaskTable(props: {
   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
   const [activeId, setActiveId] = useState<string | null>(null)
   const activeRef = useRef<HTMLDivElement | null>(null)
+  // D-05（C-07 稳定句柄列）：编号格恒显 code 或短 ID，点击复制到剪贴板并给「已复制」瞬时反馈；
+  // 不回写、不改任务编号，仅本地剪贴板与 1.2s 反馈态。
+  const [copiedHandleId, setCopiedHandleId] = useState<string | null>(null)
+  const copyHandleTimer = useRef<number | null>(null)
+  const copyHandle = (taskId: string, value: string) => {
+    if (!value) return
+    void navigator.clipboard?.writeText(value).catch(() => {})
+    setCopiedHandleId(taskId)
+    if (copyHandleTimer.current !== null) window.clearTimeout(copyHandleTimer.current)
+    copyHandleTimer.current = window.setTimeout(() => {
+      setCopiedHandleId(cur => (cur === taskId ? null : cur))
+      copyHandleTimer.current = null
+    }, 1200)
+  }
 
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
   const childMap = useMemo(() => indexChildren(tasks), [tasks])
@@ -644,10 +659,28 @@ export function TaskTable(props: {
             onClick={() => setMovePickerFor(t)}
           ><GripVertical size={15} /></button>
         </div>
+        {/* D-05/C-07：句柄恒显——有 WBS code 显 code（等宽），无 code 的存量记录显短 ID（弱化），
+            禁止空白；点击复制 code/短 ID 到剪贴板并反馈「已复制」。列宽由 grid 固定，不挤压任务名。 */}
         <div className="pt-cell pt-code">
-          {t.code && t.code.trim()
-            ? t.code
-            : <span className="pt-code-missing" title="存量记录缺编号，按约定不重新编号，显示短 ID">{t.id}</span>}
+          {(() => {
+            const wbs = (t.code ?? '').trim()
+            const handle = wbs || t.id
+            const copied = copiedHandleId === t.id
+            return (
+              <button
+                type="button"
+                className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}`}
+                title={wbs
+                  ? `复制编号 ${wbs}`
+                  : '存量记录缺 WBS 编号，按约定不重新编号，显示短 ID；点击复制'}
+                aria-label={copied ? '已复制' : `复制编号 ${handle}`}
+                onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
+              >
+                <span className="pt-code-val">{copied ? '已复制' : handle}</span>
+                <Copy size={11} className="pt-code-ic" aria-hidden="true" />
+              </button>
+            )
+          })()}
         </div>
         <div className="pt-cell pt-task">
           {row.hasChildren && (
@@ -925,8 +958,10 @@ export function TaskTable(props: {
             />
           </div>
         </div>
+        {/* D-04/C-05/C-06：工具条四段视觉分组（视图切换→视图持久化→组织→数据），密度收末端次要位。
+            DOM 顺序即 Tab 顺序：视图→筛选→持久化→组织→数据→全局偏好，无焦点陷阱。 */}
         <div className="pt-toolbar">
-          <div className="pt-viewleft">
+          <div className="pt-viewleft pt-seg pt-seg-view">
             {/* P2-5：命名视图切换器（内置 + 自定义，默认标记，点击外部/Escape 关闭，不依赖 hover）。 */}
             <div className="pt-viewswitch" ref={switcherRef}>
               <button
@@ -985,6 +1020,8 @@ export function TaskTable(props: {
             </div>
           </div>
           <div className="pt-tools">
+            {/* ② 视图持久化段：保存视图 / 另存为（C-06）。 */}
+            <div className="pt-seg pt-seg-persist">
             {/* P2-5：当前为自定义视图 → 覆盖更新；否则另存为命名视图。 */}
             {activeView && !activeView.builtin ? (
               <button
@@ -1001,6 +1038,9 @@ export function TaskTable(props: {
                 onClick={() => setSaveModal(activeView?.name ?? '')}
               ><BookmarkPlus size={14} />保存视图</button>
             )}
+            </div>
+            {/* ③ 组织段：按状态分组 / 按 WBS 编号排序。 */}
+            <div className="pt-seg pt-seg-org">
             <button
               className="pt-ghost pm-group-toggle" aria-pressed={grouped}
               title="按任务状态扁平分组（替代阶段树）"
@@ -1014,6 +1054,9 @@ export function TaskTable(props: {
                 {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </label>
+            </div>
+            {/* ④ 数据段：模板 / 导入 / 导出 / 分享。 */}
+            <div className="pt-seg pt-seg-data">
             <button
               type="button" className="pt-ghost pm-import-template"
               title="下载 CSV 导入模板（仅本地下载，不写盘；字段以导入预览为准）"
@@ -1091,20 +1134,24 @@ export function TaskTable(props: {
               title="生成只读 HTML 快照（本地静态文件，可自行转发，不联网）"
               onClick={shareSnapshot}
             ><Share2 size={14} />分享</button>
-            {/* P1-6：密度为全局持久偏好（localStorage pm-density，shell 根 data-density 下发，各视图生效）。 */}
-            <div className="pt-density" title="全局偏好：切换后即时生效并持久保存，各视图统一应用">
-              <span className="pt-density-label">密度（全局偏好）</span>
-              <div className="pt-density-seg" role="group" aria-label="全局密度偏好">
-                <button
-                  type="button" className={density === 'comfortable' ? 'active' : ''}
-                  onClick={() => onDensityChange?.('comfortable')}
-                >舒适</button>
-                <button
-                  type="button" className={density === 'compact' ? 'active' : ''}
-                  onClick={() => onDensityChange?.('compact')}
-                >紧凑</button>
+            </div>
+            {/* 末端次要位：密度是全局持久偏好（localStorage pm-density，shell 根 data-density 下发，各视图生效），
+                不与视图切换/本地操作等权竞争，单独成段并标注「全局偏好」。 */}
+            <div className="pt-seg pt-seg-density">
+              <div className="pt-density" title="全局偏好：切换后即时生效并持久保存，各视图统一应用">
+                <span className="pt-density-label">密度（全局偏好）</span>
+                <div className="pt-density-seg" role="group" aria-label="全局密度偏好">
+                  <button
+                    type="button" className={density === 'comfortable' ? 'active' : ''}
+                    onClick={() => onDensityChange?.('comfortable')}
+                  >舒适</button>
+                  <button
+                    type="button" className={density === 'compact' ? 'active' : ''}
+                    onClick={() => onDensityChange?.('compact')}
+                  >紧凑</button>
+                </div>
+                <span className="pt-density-chip">全部视图生效 · 持久保存</span>
               </div>
-              <span className="pt-density-chip">全部视图生效 · 持久保存</span>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@
  * 视觉基准：artifacts/redesign/deliverables/index.html；主题 token 由 panel.css .pm-shell
  * 统一重映射为 dsh --dsw-* 别名。样式见 deliverables.css，全部 scope 在 .pm-dv-root 下。
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import MapPin from 'lucide-react/dist/esm/icons/map-pin.mjs'
@@ -19,6 +19,17 @@ import { EmptyState, PmButton } from '../shared/ui/index.js'
 import type { Deliverable, Milestone, Task } from './types.js'
 import type { DeliverableCallbacks } from '../shared/records-props.js'
 import { RecordsOverlay, RecordsDeliverableForm } from './records/index.js'
+import { collectTaskMaterials, type MirrorTask } from '../shared/task-materials-mirror.js'
+import { taskStatusLabels } from '../../core/labels.js'
+
+/** D-11/C-10：交付物侧只读反查得到的关联任务（零 schema、不回写）。 */
+interface LinkedTaskRef {
+  id: string
+  title: string
+  status: string
+  /** WBS code 优先，缺省回退短 ID（t-xxxx），用于句柄展示。 */
+  handle: string
+}
 
 /** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
 export interface DeliverablesRecordsSlot {
@@ -56,10 +67,12 @@ interface DeliverablesProps {
   records?: DeliverablesRecordsSlot
   /** 页头主 CTA 触发计数；统一打开带里程碑与备注字段的 records 表单。 */
   createRequest?: number
+  /** D-11 接缝（SH-3 panel 接线）：点击关联任务直达任务抽屉；未接线时卡片静态展示，不报错。 */
+  onGotoTask?: (taskId: string) => void
 }
 
 export function Deliverables(props: DeliverablesProps) {
-  const { deliverables, milestones, onCreate, onEdit, records, createRequest = 0 } = props
+  const { deliverables, milestones, tasks, onCreate, onEdit, records, createRequest = 0, onGotoTask } = props
   const [filter, setFilter] = useState<'all' | StatusGroup>('all')
   const [query, setQuery] = useState('')
   const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', d: Deliverable } | null>(null)
@@ -72,6 +85,28 @@ export function Deliverables(props: DeliverablesProps) {
     if (records) setForm({ mode: 'edit', d })
     else onEdit(d)
   }
+
+  // D-11/C-10：经任务 materials 的 deliverableId 只读反查关联任务（legacy deliverableId + attachments），
+  // 零 schema、不回写；解除关联后两侧随数据自然一致。运行时记录携带 attachments/deliverableId，
+  // 视图类型未声明这些字段，按 MirrorTask 只读喂给 collectTaskMaterials。
+  const linkedByDeliverable = useMemo(() => {
+    const m = new Map<string, LinkedTaskRef[]>()
+    for (const t of tasks ?? []) {
+      for (const mat of collectTaskMaterials(t as unknown as MirrorTask)) {
+        if (mat.kind !== 'deliverable' || !mat.refId) continue
+        const ref: LinkedTaskRef = {
+          id: t.id,
+          title: t.title,
+          status: t.status,
+          handle: (t.code ?? '').trim() || t.id,
+        }
+        const arr = m.get(mat.refId) ?? []
+        if (!arr.some(x => x.id === ref.id)) arr.push(ref)
+        m.set(mat.refId, arr)
+      }
+    }
+    return m
+  }, [tasks])
   const closeForm = () => setForm(null)
   useEffect(() => {
     if (createRequest > 0) openCreate()
@@ -224,6 +259,7 @@ export function Deliverables(props: DeliverablesProps) {
                   <div className="dv-g-grid">
                     {g.items.map(d => {
                       const pct = progressOf(d.status)
+                      const linked = linkedByDeliverable.get(d.id) ?? []
                       return (
                         <div className="dv-dcard pm-card" data-status={d.status} key={d.id}
                           onClick={() => openEdit(d)} role="button" tabIndex={0}>
@@ -247,6 +283,44 @@ export function Deliverables(props: DeliverablesProps) {
                             )}
                             {d.dueDate && (
                               <span className="dv-due">交付 <b>{d.dueDate.slice(5)}</b></span>
+                            )}
+                          </div>
+                          {/* D-11/C-10：交付物侧经任务 materials.deliverableId 只读反查关联任务，
+                              零 schema、不回写；有则列句柄+状态+标题，SH-3 接线 onGotoTask 后可直达，
+                              无关联诚实显示「暂无关联任务」，不冒充零值空态。 */}
+                          <div className="dv-d-tasks">
+                            <span className="dv-d-tasks-label">
+                              {linked.length > 0 ? `关联任务（${linked.length}）` : '关联任务'}
+                            </span>
+                            {linked.length > 0 ? (
+                              <ul className="dv-d-task-list">
+                                {linked.map(lt => {
+                                  const statusLabel = taskStatusLabels[lt.status] ?? lt.status
+                                  const inner = (
+                                    <>
+                                      <span className="dv-d-task-handle">{lt.handle}</span>
+                                      <span className="dv-d-task-status">{statusLabel}</span>
+                                      <span className="dv-d-task-title">{lt.title}</span>
+                                    </>
+                                  )
+                                  return (
+                                    <li key={lt.id}>
+                                      {onGotoTask ? (
+                                        <button
+                                          type="button"
+                                          className="dv-d-task-link"
+                                          onClick={() => onGotoTask(lt.id)}
+                                          title={`打开任务 ${lt.handle}`}
+                                        >{inner}</button>
+                                      ) : (
+                                        <span className="dv-d-task-static">{inner}</span>
+                                      )}
+                                    </li>
+                                  )
+                                })}
+                              </ul>
+                            ) : (
+                              <span className="dv-d-task-none">暂无关联任务</span>
                             )}
                           </div>
                           {d.location && (
