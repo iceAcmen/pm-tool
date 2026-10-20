@@ -11,12 +11,11 @@ import { useEffect, useState } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import MapPin from 'lucide-react/dist/esm/icons/map-pin.mjs'
-import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import Upload from 'lucide-react/dist/esm/icons/upload.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
-import SearchX from 'lucide-react/dist/esm/icons/search-x.mjs'
 import css from './deliverables.css?raw'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState, PmButton } from '../shared/ui/index.js'
 import type { Deliverable, Milestone, Task } from './types.js'
 import type { DeliverableCallbacks } from '../shared/records-props.js'
 import { RecordsOverlay, RecordsDeliverableForm } from './records/index.js'
@@ -125,13 +124,13 @@ export function Deliverables(props: DeliverablesProps) {
       </div>
 
       {total === 0 ? (
-        /* 空态 */
-        <div className="dv-empty pm-card">
-          <div className="dv-empty-ico"><Inbox size={22}/></div>
-          <h3>暂无交付物</h3>
-          <p>交付物是项目阶段产出的正式文档、原型、脚本等。创建第一项交付物，开始追踪验收进度。</p>
-          <button type="button" className="dv-btn-primary" onClick={openCreate}><Plus size={14}/> 新增交付物</button>
-        </div>
+        /* 真空：复用 S0 EmptyState（vacuum），诚实空 + 下一步主 CTA */
+        <EmptyState
+          variant="vacuum"
+          title="暂无交付物"
+          description="交付物是项目阶段产出的正式文档、原型、脚本等。创建第一项交付物，开始追踪验收进度。"
+          action={<PmButton variant="primary" onClick={openCreate}><Plus size={14}/> 新增交付物</PmButton>}
+        />
       ) : (
         <>
           {/* 总览带 */}
@@ -197,11 +196,15 @@ export function Deliverables(props: DeliverablesProps) {
 
           {/* 分组列表 */}
           {!anyMatch ? (
-            <div className="dv-nomatch pm-card">
-              <div className="dv-nomatch-ico"><SearchX size={20}/></div>
-              <h3>无匹配记录</h3>
-              <p>未找到与「{query.trim()}」匹配的交付物。尝试更换关键词或清除筛选。</p>
-            </div>
+            /* 无结果：复用 S0 EmptyState（noResult），说明 + 清除条件入口；搜索不改 scope */
+            <EmptyState
+              variant="noResult"
+              title="无匹配记录"
+              description={query.trim()
+                ? `未找到与「${query.trim()}」匹配的交付物。尝试更换关键词或清除筛选。`
+                : '当前状态筛选下没有交付物。清除筛选条件后即可查看全部。'}
+              onClear={() => { setQuery(''); setFilter('all') }}
+            />
           ) : (
             visibleGroups.map(g => (
               <section className="dv-group" key={g.status}>

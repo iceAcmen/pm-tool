@@ -15,10 +15,10 @@ import { useEffect, useMemo, useState } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
-import CalendarClock from 'lucide-react/dist/esm/icons/calendar-clock.mjs'
 import css from './meetings.css?raw'
 import { localTodayIso } from '../../core/derived.js'
 import { MarkdownView } from '../shared/markdown-view.js'
+import { EmptyState, PmButton } from '../shared/ui/index.js'
 import type { Meeting } from './types.js'
 import type { MeetingCallbacks } from '../shared/records-props.js'
 import { RecordsOverlay, RecordsMeetingForm } from './records/index.js'
@@ -118,14 +118,12 @@ export function MeetingsView(props: {
           </div>
         </header>
         <section className="mt-card mt-empty-card">
-          <div className="mt-empty">
-            <div className="mt-ico"><CalendarClock size={20}/></div>
-            <h4>尚无会议纪要</h4>
-            <p>项目还没有记录过会议。评审会、例会的结论与待办建议在这里留档，行动项可直接关联任务与风险。</p>
-            <button type="button" className="mt-btn-primary" onClick={openCreate}>
-              <Plus size={14}/> 新增会议
-            </button>
-          </div>
+          <EmptyState
+            variant="vacuum"
+            title="尚无会议纪要"
+            description="项目还没有记录过会议。评审会、例会的结论与待办建议在这里留档，行动项可直接关联任务与风险。"
+            action={<PmButton variant="primary" onClick={openCreate}><Plus size={14}/> 新增会议</PmButton>}
+          />
         </section>
         {form && records && (
           <RecordsOverlay eyebrow="会议纪要" title="新增会议纪要" onClose={closeForm}>
@@ -180,7 +178,12 @@ export function MeetingsView(props: {
           </div>
 
           {filtered.length === 0 && (
-            <div className="mt-list-empty">没有匹配的会议记录</div>
+            <EmptyState
+              variant="noResult"
+              title="没有匹配的会议记录"
+              description="当前搜索词或状态筛选没有匹配的会议。清除条件后即可恢复查看。"
+              onClear={() => { setQuery(''); setStatusFilter('all') }}
+            />
           )}
 
           {filtered.map(m => (
@@ -208,11 +211,12 @@ export function MeetingsView(props: {
         {/* 右：详情（过滤无匹配时显示空态，不残留上一条） */}
         {filtered.length === 0 ? (
           <section className="mt-detail mt-detail-empty">
-            <div className="mt-empty">
-              <div className="mt-ico"><Search size={20}/></div>
-              <h4>无匹配的会议</h4>
-              <p>当前搜索词或状态筛选没有匹配的会议。清除条件后即可恢复查看。</p>
-            </div>
+            <EmptyState
+              variant="noResult"
+              title="无匹配的会议"
+              description="当前搜索词或状态筛选没有匹配的会议。清除条件后即可恢复查看。"
+              onClear={() => { setQuery(''); setStatusFilter('all') }}
+            />
           </section>
         ) : selected && (
           <section className="mt-detail">
