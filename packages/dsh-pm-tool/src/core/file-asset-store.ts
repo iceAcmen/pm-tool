@@ -564,7 +564,8 @@ export async function gcOrphanAssets(
       if (!st.isFile()) continue
       if (!CONTENT_ADDR_RE.test(rel)) continue
       // 宽限：新落盘但元数据尚未提交的字节（写入与登记之间）不回收。
-      if (st.mtimeMs > cutoff) continue
+      // graceMs=0 表示显式关闭宽限（测试/立即回收），此时按年龄一律不再跳过。
+      if (graceMs > 0 && st.mtimeMs > cutoff) continue
       if (!referenced.has(rel)) orphans.push(rel)
     }
   }
