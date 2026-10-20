@@ -13,6 +13,9 @@
  *
  * 样式类名前缀 .pm-habit-* 定义在 panel.css（只追加区块，浅深双态 token 自适应）。
  */
+import { useState } from 'react'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.mjs'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.mjs'
 import Inbox from 'lucide-react/dist/esm/icons/inbox.mjs'
 import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
@@ -24,6 +27,7 @@ import {
   streakArchiveText,
   resolveHabitOkrTitle,
   countPendingHabitInbox,
+  groupCheckInsByRecency,
   type HabitStreak,
   type HabitOkrRef,
 } from './habit-model.js'
@@ -103,6 +107,17 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
   const suggestions = inbox?.filter(s => s.projectId === projectId) ?? []
   const pending = countPendingHabitInbox(inbox, projectId)
 
+  // D-13 长日志：更早月份默认折叠，按「习惯 ID → 展开月份 key 集」本地记忆，零写。
+  const [openMonths, setOpenMonths] = useState<Record<string, Set<string>>>({})
+  const toggleMonth = (habitId: string, monthKey: string) => {
+    setOpenMonths(prev => {
+      const next = new Set(prev[habitId] ?? [])
+      if (next.has(monthKey)) next.delete(monthKey)
+      else next.add(monthKey)
+      return { ...prev, [habitId]: next }
+    })
+  }
+
   const act = async (command: string) => {
     if (!run) return
     const ok = await run(command)
@@ -137,9 +152,8 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
           />
         ) : (
           mine.map(h => {
-            const checkIns = h.checkIns
-              .slice()
-              .sort((a, b) => b.at.localeCompare(a.at))
+            // D-13：近期 14 天平铺，更早按月折叠；同日旧重复仅展示去重，不删历史记录。
+            const { recent, months } = groupCheckInsByRecency(h.checkIns, localOffsetIso(0))
             const okrTitle = resolveHabitOkrTitle(h.okrId, okrs)
             return (
               <div className="pm-habit-card pm-card" key={h.id} data-status={h.status}>
@@ -169,18 +183,48 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
                 <p className="pm-habit-streak">{streakArchiveText(h.streak)}</p>
 
                 <ul className="pm-habit-checkins">
-                  {checkIns.length === 0 ? (
+                  {recent.length === 0 && months.length === 0 ? (
                     <li className="pm-habit-checkin pm-habit-checkin--empty">
                       暂无打卡记录；空日如实留空，不自动补记。
                     </li>
                   ) : (
-                    checkIns.map(c => (
-                      <li className="pm-habit-checkin" key={c.at}>
-                        <span className="pm-habit-checkin-date">{c.at.slice(0, 10)}</span>
-                        {c.backfilled && <span className="pm-habit-backfilled">补记</span>}
-                        {c.note && <span className="pm-habit-checkin-note">{c.note}</span>}
-                      </li>
-                    ))
+                    <>
+                      {recent.map(c => (
+                        <li className="pm-habit-checkin" key={c.at}>
+                          <span className="pm-habit-checkin-date">{c.at.slice(0, 10)}</span>
+                          {c.backfilled && <span className="pm-habit-backfilled">补记</span>}
+                          {c.note && <span className="pm-habit-checkin-note">{c.note}</span>}
+                        </li>
+                      ))}
+                      {months.map(m => {
+                        const open = openMonths[h.id]?.has(m.key) ?? false
+                        return (
+                          <li className="pm-habit-checkin" key={m.key}>
+                            <button
+                              type="button"
+                              className="pm-habit-btn pm-habit-btn-ghost"
+                              aria-expanded={open}
+                              aria-controls={`${h.id}-${m.key}`}
+                              onClick={() => toggleMonth(h.id, m.key)}
+                            >
+                              {open ? <ChevronDown size={12}/> : <ChevronRight size={12}/>}
+                              {m.label}（{m.entries.length} 条 · {open ? '收起' : '展开'}）
+                            </button>
+                            {open && (
+                              <ul className="pm-habit-checkins" id={`${h.id}-${m.key}`}>
+                                {m.entries.map(c => (
+                                  <li className="pm-habit-checkin" key={c.at}>
+                                    <span className="pm-habit-checkin-date">{c.at.slice(0, 10)}</span>
+                                    {c.backfilled && <span className="pm-habit-backfilled">补记</span>}
+                                    {c.note && <span className="pm-habit-checkin-note">{c.note}</span>}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        )
+                      })}
+                    </>
                   )}
                 </ul>
 

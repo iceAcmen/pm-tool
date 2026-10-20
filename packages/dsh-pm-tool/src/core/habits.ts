@@ -323,15 +323,33 @@ export function updateHabit(
 }
 
 /**
+ * 打卡结果（D-13 同日幂等）：
+ * - checked-in：本次新增一条打卡；
+ * - already-exists：该日期已打卡，不追加、不覆盖、零写库；
+ * - note-updated：该日期已打卡且原本无备注，本次仅就地补备注，仍只有一条。
+ */
+export type HabitCheckinOutcome = 'checked-in' | 'already-exists' | 'note-updated'
+
+export interface HabitCheckinResult {
+  record: HabitRecord
+  outcome: HabitCheckinOutcome
+  /** 实际命中/写入的打卡日期（YYYY-MM-DD）。 */
+  date: string
+  backfilled: boolean
+}
+
+/**
  * 打卡：缺省今天；只允许今天 + 过去 2 天回填（backfilled:true），超窗/未来中文拒绝。
- * 打卡后按全量 checkIns 重算 streak 落库（断签超窗 current 重置 0，longest/totalDays 永久保留）。
+ * D-13 同日幂等：同一习惯同一日期已有打卡时不再追加重复条；已补记日期再点给已存在结果，
+ * 仅在原本无备注且本次带备注时就地补备注。streak 按去重日期重算（断签超窗 current 重置 0，
+ * longest/totalDays 永久保留）。旧重复记录不在此批量删除（用户数据不动）。
  */
 export function checkinHabit(
   domain: PmDomain,
   id: string,
   dateIso?: string,
   note?: string,
-): Promise<HabitRecord> {
+): Promise<HabitCheckinResult> {
   const todayIso = localTodayIso()
   const requested = (dateIso ?? '').trim()
   const trimmedNote = note?.trim()
@@ -355,6 +373,27 @@ export function checkinHabit(
     const table = domain.table('habits')
     const current = table.get(id) as HabitRecord | undefined
     if (!current) throw new HabitNotFoundError(`未找到习惯：${id}`)
+
+    // D-13 业务键 = 习惯 ID + 打卡日期；已存在则幂等返回，不追加、不覆盖、零写。
+    const existingIdx = current.checkIns.findIndex(c => c.at === date)
+    if (existingIdx >= 0) {
+      const existing = current.checkIns[existingIdx]
+      // 原本无备注且本次带备注：仅就地补备注（仍一条），否则原样返回零写。
+      if (trimmedNote && !existing.note) {
+        const nextCheckIns = current.checkIns.slice()
+        nextCheckIns[existingIdx] = { ...existing, note: trimmedNote }
+        const next = habitRecordSchema.parse({
+          ...current,
+          checkIns: nextCheckIns,
+          streak: deriveHabitStreak({ checkIns: nextCheckIns }, todayIso),
+          updatedAt: new Date().toISOString(),
+        })
+        await table.put(id, next)
+        return { record: structuredClone(next), outcome: 'note-updated' as const, date, backfilled: existing.backfilled }
+      }
+      return { record: structuredClone(current), outcome: 'already-exists' as const, date, backfilled: existing.backfilled }
+    }
+
     const nextCheckIns = [
       ...current.checkIns,
       { at: date, backfilled, ...(trimmedNote ? { note: trimmedNote } : {}) },
@@ -366,7 +405,7 @@ export function checkinHabit(
       updatedAt: new Date().toISOString(),
     })
     await table.put(id, next)
-    return structuredClone(next)
+    return { record: structuredClone(next), outcome: 'checked-in' as const, date, backfilled }
   })
 }
 

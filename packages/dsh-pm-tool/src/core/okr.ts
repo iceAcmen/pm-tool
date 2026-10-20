@@ -160,8 +160,29 @@ export function validateOkrRelations(
     seen.add(id)
     if (selfId && id === selfId) throw new OkrSelfReferenceError('不能把自己列入软关联')
     const target = domain.table('okrs').get(id)
-    if (!target) throw new OkrRelatedNotFoundError(`未找到关联目标：${id}`)
-    if (target.projectId !== projectId) throw new OkrRelatedProjectMismatchError('关联目标不属于指定项目')
+    // D-12 / C-11 错误层级：标题 → 对象 ID → 白话原因 → 影响（不影响主归属）→ 修复动作 → 折叠技术原文。
+    if (!target) {
+      throw new OkrRelatedNotFoundError(
+        [
+          `未找到关联目标（软关联）｜对象 ID：${id}`,
+          `原因：该 ID 在本项目目标库中不存在或已被删除。`,
+          `影响：本条软关联不生效（不计权重、不参与进度裁决），不影响已设置的主归属。`,
+          `修复：从列表选择一个存在的目标，或移除该 ID。`,
+          `技术原文：未找到关联目标：${id}`,
+        ].join('\n'),
+      )
+    }
+    if (target.projectId !== projectId) {
+      throw new OkrRelatedProjectMismatchError(
+        [
+          `关联目标不属于本项目｜对象 ID：${id}`,
+          `原因：该目标属于其它项目，软关联不能跨项目引用。`,
+          `影响：本条软关联不生效（不计权重、不参与进度裁决），不影响已设置的主归属。`,
+          `修复：改选本项目目标，或移除该 ID。`,
+          `技术原文：关联目标不属于指定项目`,
+        ].join('\n'),
+      )
+    }
     normalized.push(id)
   }
   return normalized

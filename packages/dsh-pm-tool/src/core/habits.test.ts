@@ -144,25 +144,66 @@ describe('deriveHabitStreak：连续段派生（断签超窗重置当前，累�
 // ===== 2. checkin：2 天补记窗 / 超窗拒绝 / backfilled 标注 / 未来拒绝 =====
 
 describe('checkinHabit：只允许今天+过去 2 天，超窗中文拒绝，回填标 backfilled', () => {
-  it('今天打卡：backfilled=false，streak current=1', async () => {
+  it('今天打卡：backfilled=false，streak current=1，outcome=checked-in', async () => {
     const { domain } = buildFakeDomain()
     const created = await addHabit(domain, 'p-0001', { title: '晨走' })
-    const checked = await checkinHabit(domain, created.id)
-    const last = checked.checkIns.at(-1)!
+    const { record, outcome } = await checkinHabit(domain, created.id)
+    expect(outcome).toBe('checked-in')
+    const last = record.checkIns.at(-1)!
     expect(last.backfilled).toBe(false)
     expect(last.at).toBe(localTodayIso())
-    expect(checked.streak.current).toBe(1)
+    expect(record.streak.current).toBe(1)
   })
 
-  it('昨天补记：backfilled=true，计入连续', async () => {
+  it('昨天补记：backfilled=true，计入连续，outcome=checked-in', async () => {
     const { domain } = buildFakeDomain()
     const created = await addHabit(domain, 'p-0001', { title: '晨走' })
     const yesterday = dayOffset(localTodayIso(), -1)
-    const checked = await checkinHabit(domain, created.id, yesterday, '昨天漏了补记')
-    const last = checked.checkIns.at(-1)!
+    const { record, outcome } = await checkinHabit(domain, created.id, yesterday, '昨天漏了补记')
+    expect(outcome).toBe('checked-in')
+    const last = record.checkIns.at(-1)!
     expect(last.backfilled).toBe(true)
     expect(last.note).toBe('昨天漏了补记')
-    expect(checked.streak.current).toBe(1)
+    expect(record.streak.current).toBe(1)
+  })
+
+  it('D-13 同日重复回填不追加第二条：第二次 outcome=already-exists，库内仅一条，streak 不重复累计', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '每日晨跑五公里' })
+    const yesterday = dayOffset(localTodayIso(), -1)
+    const first = await checkinHabit(domain, created.id, yesterday)
+    expect(first.outcome).toBe('checked-in')
+    const second = await checkinHabit(domain, created.id, yesterday)
+    expect(second.outcome).toBe('already-exists')
+    const stored = domain.table('habits').get(created.id) as HabitRecord
+    expect(stored.checkIns.filter(c => c.at === yesterday)).toHaveLength(1)
+    expect(second.record.streak.totalDays).toBe(1)
+    expect(second.record.streak.current).toBe(1)
+  })
+
+  it('D-13 已补记日期再带备注：仅就地补备注（note-updated），仍只有一条，不新增记录', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走' })
+    const yesterday = dayOffset(localTodayIso(), -1)
+    await checkinHabit(domain, created.id, yesterday)
+    const updated = await checkinHabit(domain, created.id, yesterday, '补充：雨中跑完 5km')
+    expect(updated.outcome).toBe('note-updated')
+    const stored = domain.table('habits').get(created.id) as HabitRecord
+    expect(stored.checkIns).toHaveLength(1)
+    expect(stored.checkIns[0].note).toBe('补充：雨中跑完 5km')
+    expect(stored.checkIns[0].backfilled).toBe(true)
+  })
+
+  it('D-13 已补记且已有备注，再点不覆盖、不追加：already-exists 零写', async () => {
+    const { domain } = buildFakeDomain()
+    const created = await addHabit(domain, 'p-0001', { title: '晨走' })
+    const yesterday = dayOffset(localTodayIso(), -1)
+    await checkinHabit(domain, created.id, yesterday, '原备注')
+    const second = await checkinHabit(domain, created.id, yesterday, '新备注')
+    expect(second.outcome).toBe('already-exists')
+    const stored = domain.table('habits').get(created.id) as HabitRecord
+    expect(stored.checkIns).toHaveLength(1)
+    expect(stored.checkIns[0].note).toBe('原备注')
   })
 
   it('3 天前超窗：中文报错「超出补记窗」，不写库', async () => {

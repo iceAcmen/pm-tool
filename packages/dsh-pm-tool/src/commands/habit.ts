@@ -179,11 +179,22 @@ export async function handleHabitCommand(
           note = tail
         }
       }
-      const record = await checkinHabit(domain, habitId, dateIso, note)
-      const backfilled = record.checkIns.at(-1)?.backfilled === true
-      const at = record.checkIns.at(-1)?.at ?? ''
-      const summary = [`已打卡｜${record.id} ${at}`]
-      if (backfilled) summary.push('补记已标 backfilled')
+      // D-13 同日幂等：already-exists 只给轻提示，不再重复发「已打卡」成功摘要、不重复累计。
+      const result = await checkinHabit(domain, habitId, dateIso, note)
+      const { record, outcome, date, backfilled } = result
+      if (outcome === 'already-exists') {
+        return {
+          kind: 'success',
+          text: buildSuccessEnvelope(
+            [`${date} 已打卡${backfilled ? '（补记）' : ''}，未重复追加；如需补充备注可再次带上备注（不会新增第二条）`],
+            renderHabitDetail(record, localTodayIso()),
+          ),
+        }
+      }
+      const summary = outcome === 'note-updated'
+        ? [`已补充备注｜${record.id} ${date}（未新增打卡记录）`]
+        : [`已打卡｜${record.id} ${date}`]
+      if (outcome === 'checked-in' && backfilled) summary.push('补记已标 backfilled')
       return {
         kind: 'success',
         text: buildSuccessEnvelope(

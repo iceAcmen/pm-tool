@@ -19,6 +19,7 @@ import {
   type OkrFormValues,
   type FormFieldErrors,
 } from '../form-validation.js'
+import { validateRelatedOkrIds } from './okr-model.js'
 import type { RecordOption } from './records/records-options.js'
 import type { OkrFormComponentProps } from './growth-form-props.js'
 
@@ -42,12 +43,24 @@ export function OkrForm({
 
   const statusOpts = statusOptions ?? DEFAULT_STATUS_OPTS
   const localErrors = validateOkrForm(draft, objectiveIds ?? new Set())
+
+  // D-12 / C-13 软关联保存前内联校验：已知集 = 注入目标集 ∪ 父目标选项；
+  // 格式错阻塞提交，未知 ID 就近说明（后端仍复核），不让错误落到页面横幅。
+  const knownIds = new Set<string>([
+    ...(objectiveIds ?? []),
+    ...(primaryOptions ?? []).map(o => o.value),
+  ])
+  const relatedCheck = validateRelatedOkrIds(draft.relatedOkrIds, knownIds)
+  // 仅格式错进阻塞错误集；未知 ID 为就近 advisory（不锁按钮，后端复核）。
+  if (relatedCheck.blocking.length > 0) localErrors.relatedOkrIds = relatedCheck.message
+
   const errors: FormFieldErrors = { ...localErrors, ...(externalErrors ?? {}) }
   const invalid = touched && Object.keys(errors).length > 0
 
   const submit = () => {
     setTouched(true)
     if (Object.keys(validateOkrForm(draft, objectiveIds ?? new Set())).length > 0) return
+    if (relatedCheck.blocking.length > 0) return
     void onSubmit(draft)
   }
 
@@ -107,12 +120,18 @@ export function OkrForm({
               <input id="gf-okr-primary" className="gf-input" value={draft.primaryOkrId ?? ''} disabled={disabled}
                 onChange={e => set('primaryOkrId', e.target.value)} placeholder="objective ID" />
             )}
+            <p className="gf-hint">主归属：计入权重的唯一父目标（单选），决定这条 KR 归属哪个目标。</p>
             {errors.primaryOkrId && <span className="gf-error" role="alert">{errors.primaryOkrId}</span>}
           </div>
-          <div className="gf-field">
-            <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID）</label>
+          <div className="gf-field" data-invalid={!!errors.relatedOkrIds}>
+            <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
             <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
-              onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，不计权重" />
+              onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
+            <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
+            {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
+            {!errors.relatedOkrIds && relatedCheck.advisory.length > 0 && (
+              <span className="gf-error" role="alert">{relatedCheck.message}</span>
+            )}
           </div>
         </div>
       )}

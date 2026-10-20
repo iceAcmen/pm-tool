@@ -111,15 +111,41 @@ describe('validateOkrRelations：父目标/软关联存在性与同项目校验'
     expect(() => validateOkrRelations(domain, 'p-0001', 'okr-x')).toThrow(OkrPrimaryProjectMismatchError)
   })
 
-  it('反例：软关联不存在 → 未找到关联目标', () => {
+  it('反例：软关联不存在 → 未找到关联目标，错误分层含对象 ID/原因/影响/修复/技术原文（C-11）', () => {
     const { domain } = buildFakeDomain()
-    expect(() => validateOkrRelations(domain, 'p-0001', null, ['okr-nope'])).toThrow(OkrRelatedNotFoundError)
+    let caught: unknown
+    expect(() => {
+      try {
+        validateOkrRelations(domain, 'p-0001', null, ['okr-nope'])
+      } catch (e) {
+        caught = e
+        throw e
+      }
+    }).toThrow(OkrRelatedNotFoundError)
+    const msg = (caught as Error).message
+    expect(msg).toContain('okr-nope')
+    expect(msg).toContain('原因')
+    expect(msg).toContain('影响')
+    expect(msg).toContain('修复')
+    expect(msg).toContain('未找到关联目标：okr-nope')
   })
 
-  it('反例：软关联跨项目 → 关联目标不属于指定项目', () => {
+  it('反例：软关联跨项目 → 关联目标不属于指定项目，同样分层呈现', () => {
     const { domain } = buildFakeDomain()
     domain.table('okrs').put('okr-y', okrRow({ id: 'okr-y', title: '乙项目目标', kind: 'objective', projectId: 'p-0002' }))
-    expect(() => validateOkrRelations(domain, 'p-0001', null, ['okr-y'])).toThrow(OkrRelatedProjectMismatchError)
+    let caught: unknown
+    expect(() => {
+      try {
+        validateOkrRelations(domain, 'p-0001', null, ['okr-y'])
+      } catch (e) {
+        caught = e
+        throw e
+      }
+    }).toThrow(OkrRelatedProjectMismatchError)
+    const msg = (caught as Error).message
+    expect(msg).toContain('okr-y')
+    expect(msg).toContain('本项目')
+    expect(msg).toContain('修复')
   })
 
   it('反例：自指父目标 / 自指软关联拒绝', () => {
