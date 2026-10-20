@@ -227,9 +227,9 @@
 .pm-tasks-root .pt-code-btn-missing { color: var(--muted); font-weight: 500; }
 .pm-tasks-root .pt-code-btn-missing .pt-code-val { color: var(--muted); }
 .pm-tasks-root .pt-code-btn.copied { color: var(--c-done); }
-/* Minor 返修：复制被拒/无剪贴板时温和提示，不假成功；句柄仍可见供手动选择。 */
-.pm-tasks-root .pt-code-btn.failed { color: var(--c-block, #b45309); border-color: color-mix(in srgb, var(--c-block, #b45309) 35%, transparent); }
-.pm-tasks-root .pt-code-btn.failed .pt-code-val { color: var(--c-block, #b45309); }
+/* Minor 返修：复制被拒/无剪贴板时温和提示，不假成功；句柄仍可见供手动选择。仅消费已定义 token，不写 hex。 */
+.pm-tasks-root .pt-code-btn.failed { color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 35%, transparent); }
+.pm-tasks-root .pt-code-btn.failed .pt-code-val { color: var(--c-block); }
 
 /* 任务名 + 状态点 */
 .pm-tasks-root .pt-task { display: flex; align-items: center; gap: 10px; min-width: 0; }
