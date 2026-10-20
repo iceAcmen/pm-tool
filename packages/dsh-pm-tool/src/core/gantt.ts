@@ -125,6 +125,49 @@ export function milestoneOffset(m: { targetDate?: string }, axisStart: string): 
   return daysFrom(m.targetDate, axisStart)
 }
 
+// ---------- D-08：任务↔里程碑「现字段 milestoneId」只读投影（零 schema、零写库） ----------
+
+/** 关联任务的结构子集（视图 Task 即可适配），不引入新存储字段。 */
+export interface MilestoneLinkedTask {
+  id: string
+  title: string
+  code?: string
+  status?: string
+  assignee?: string
+  milestoneId?: string | null
+}
+
+/**
+ * 按现有 milestoneId 把任务分组到里程碑（milestones 视图卡片关联任务清单用）。
+ * 剔除 null/空串关联；保持输入顺序；纯函数，不回写任务。无关联任务 → 空 Map，
+ * 由视图诚实显示「暂无关联任务」，不得伪造。
+ */
+export function tasksByMilestone<T extends MilestoneLinkedTask>(tasks: T[]): Map<string, T[]> {
+  const map = new Map<string, T[]>()
+  for (const task of tasks) {
+    const mid = task.milestoneId?.trim()
+    if (!mid) continue
+    const arr = map.get(mid)
+    if (arr) arr.push(task)
+    else map.set(mid, [task])
+  }
+  return map
+}
+
+/**
+ * 甘特侧：由任务现有 milestoneId 解析里程碑标题用于条体/标签展示。
+ * 无关联或里程碑不存在返回 null（视图省略 chip），绝不伪造名称。
+ */
+export function milestoneTitleForTask(
+  task: Pick<MilestoneLinkedTask, 'milestoneId'>,
+  milestones: { id: string, title: string }[],
+): string | null {
+  const mid = task.milestoneId?.trim()
+  if (!mid) return null
+  const hit = milestones.find(m => m.id === mid)
+  return hit ? hit.title : null
+}
+
 // ---------- 依赖边（Finish-to-Start，只读派生） ----------
 
 export interface GanttDepTask extends GanttTask {

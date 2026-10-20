@@ -171,6 +171,19 @@
 .pm-gantt-root .pm-gantt-bar.is-overdue { border-color: color-mix(in srgb, var(--c-late) 55%, transparent); }
 .pm-gantt-root .pm-gantt-bar.is-blocked { border-color: color-mix(in srgb, var(--c-block) 55%, transparent); }
 .pm-gantt-root .pm-gantt-bar:focus-visible { outline: 2px solid var(--c-prog); outline-offset: 1px; }
+/* D-07：单击选中态（非焦点也可见的强调环，与键盘 focus 环区分；不改状态填充） */
+.pm-gantt-root .pm-gantt-bar.is-selected {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-prog) 70%, transparent);
+}
+.pm-gantt-root .pm-gantt-label-row.is-selected { background: color-mix(in srgb, var(--c-prog) 9%, transparent); }
+/* D-08：任务现有关联里程碑 chip（身份列副行，只读展示，零 schema） */
+.pm-gantt-root .pm-gantt-ms-chip {
+  display: inline-flex; align-items: center; gap: 3px; align-self: flex-start;
+  font-size: var(--t-10); font-weight: 600; color: var(--c-prog);
+  border: 1px solid color-mix(in srgb, var(--c-prog) 40%, transparent);
+  border-radius: var(--r-xs); padding: 0 5px; margin-top: 2px; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 /* P0-8 / S3-7：任务条 hover 提亮一档（同色底 14%→22%、边 45%→70%），浅深一致；
    overdue/blocked 语义边不被 hover 覆盖；键盘 focus 环保留。 */
@@ -249,10 +262,19 @@
 }
 .pm-gantt-root .pm-gantt-kbdbar-note { margin-left: auto; font-size: var(--t-11); color: var(--muted); max-width: 420px; }
 
-/* ---------------- 里程碑菱形 ---------------- */
+/* ---------------- 里程碑菱形（D-07：只读可聚焦入口，不拖不调期） ---------------- */
 .pm-gantt-root .pm-gantt-milestone {
   position: absolute; top: 17px; width: 10px; height: 10px;
   transform: translateX(-50%) rotate(45deg); background: var(--c-prog);
+  cursor: pointer; outline: none;
+}
+/* 透明热区扩到 ~24px 便于点按/聚焦，视觉菱形仍 10px（伪元素不旋转、不占位变形） */
+.pm-gantt-root .pm-gantt-milestone::before {
+  content: ''; position: absolute; inset: -7px; transform: rotate(-45deg);
+  background: transparent;
+}
+.pm-gantt-root .pm-gantt-milestone:focus-visible {
+  outline: 2px solid var(--c-prog); outline-offset: 3px; border-radius: 2px;
 }
 .pm-gantt-root .pm-gantt-milestone-done { background: var(--c-done); }
 .pm-gantt-root .pm-gantt-milestone-risk { background: var(--c-late); }

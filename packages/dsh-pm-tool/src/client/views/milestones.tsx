@@ -14,6 +14,7 @@ import CircleAlert from 'lucide-react/dist/esm/icons/circle-alert.mjs'
 import CircleX from 'lucide-react/dist/esm/icons/circle-x.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import { localTodayIso, isMilestoneMissed } from '../../core/derived.js'
+import { tasksByMilestone as groupTasksByMilestone } from '../../core/gantt.js'
 import { MarkdownView } from '../shared/markdown-view.js'
 import { EmptyState, PmButton } from '../shared/ui/index.js'
 import { MILESTONE_STATE } from './planning-presenter.js'
@@ -54,14 +55,8 @@ export function Milestones(props: MilestonesProps) {
     (a, b) => (a.targetDate || '').localeCompare(b.targetDate || ''),
   )
 
-  // 聚合：每个里程碑关联的任务 → 负责人去重
-  const tasksByMilestone = new Map<string, Task[]>()
-  for (const t of tasks) {
-    if (!t.milestoneId) continue
-    const arr = tasksByMilestone.get(t.milestoneId) ?? []
-    arr.push(t)
-    tasksByMilestone.set(t.milestoneId, arr)
-  }
+  // D-08：按现有 milestoneId 聚合关联任务（纯函数 tasksByMilestone，零 schema、零写库）。
+  const tasksByMilestone = groupTasksByMilestone(tasks)
 
   // 统计：延期统一走 isMilestoneMissed 纯谓词（与卡片同口径），其余状态互斥不重复计数。
   const total = sorted.length
@@ -194,30 +189,36 @@ export function Milestones(props: MilestonesProps) {
                         <span className="ms-late-note">已过 {-days} 天</span>
                       )}
                     </div>
-                    {(owners.length > 0 || linkedTasks.length > 0) && (
-                      <div className="ms-c-row3">
-                        {owners.length > 0 && (
-                          <span className="ms-owners">
-                            <span className="ms-lab">负责</span>
-                            {owners.map(o => (
-                              <span className="ms-ow" key={o}>
-                                <span className="ms-av2">{o.slice(0, 1)}</span>{o}
-                              </span>
-                            ))}
+                    <div className="ms-c-row3">
+                      {owners.length > 0 && (
+                        <span className="ms-owners">
+                          <span className="ms-lab">负责</span>
+                          {owners.map(o => (
+                            <span className="ms-ow" key={o}>
+                              <span className="ms-av2">{o.slice(0, 1)}</span>{o}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                      <span className="ms-deliv">
+                        <span className="ms-lab">关联任务{linkedTasks.length > 0 ? `（${linkedTasks.length}）` : ''}</span>
+                        {linkedTasks.length > 0 ? linkedTasks.map(t => (
+                          <span
+                            key={t.id}
+                            className="ms-chip-deliv"
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`打开任务 ${t.title}（${t.code}）`}
+                            onClick={() => props.onOpenTask?.(t)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); props.onOpenTask?.(t) }
+                            }}
+                          >
+                            {t.title} <span className="ms-v">{t.code}</span>
                           </span>
-                        )}
-                        {linkedTasks.length > 0 && (
-                          <span className="ms-deliv">
-                            {linkedTasks.map(t => (
-                              <span className="ms-chip-deliv" key={t.id}
-                                onClick={() => props.onOpenTask?.(t)}>
-                                {t.title} <span className="ms-v">{t.code}</span>
-                              </span>
-                            ))}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                        )) : <span className="ms-empty-link">暂无关联任务</span>}
+                      </span>
+                    </div>
                     {m.description?.trim() && (
                       <MarkdownView source={m.description} density="detail" className="ms-c-desc"/>
                     )}

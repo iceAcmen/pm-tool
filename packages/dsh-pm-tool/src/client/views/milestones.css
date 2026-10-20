@@ -203,6 +203,12 @@
   cursor: pointer;
 }
 .pm-ms-root .ms-chip-deliv:hover { background: var(--hover-bg); }
+.pm-ms-root .ms-chip-deliv:focus-visible {
+  outline: 2px solid var(--c-prog); outline-offset: 1px;
+}
+.pm-ms-root .ms-empty-link {
+  font-size: var(--t-11); color: var(--faint); font-style: normal;
+}
 .pm-ms-root .ms-v { color: var(--faint); font-variant-numeric: tabular-nums; }
 
 .pm-ms-root .ms-c-desc { font-size: var(--t-12); color: var(--ink-2); line-height: 1.4; }

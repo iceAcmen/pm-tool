@@ -12,7 +12,7 @@ import { localTodayIso, isTaskOverdue } from '../../core/derived.js'
 import {
   dateRange, todayOffset, daysFrom, shiftDatesByDrag, progressFill,
   barLabelPolicy, shortDate, dependencyEdges, parentBarRange, milestoneOffset,
-  taskDurationDays, routeEdge, criticalPath,
+  taskDurationDays, routeEdge, criticalPath, milestoneTitleForTask,
 } from '../../core/gantt.js'
 import { deriveProgressMap, checklistFraction, type TaskProgress } from '../../core/progress-derivation.js'
 import { sampleGanttTicks } from '../../core/ui-feedback.js'
@@ -57,14 +57,21 @@ export function GanttView(props: {
   onCreate: () => void
   disabled?: boolean
   onGotoView: (v: View) => void
+  /**
+   * D-07 接缝（可选）：里程碑菱形「查看详情」。由公共负责人在 panel 接线打开里程碑抽屉；
+   * 未接线时兜底导航到里程碑视图，本视图不直接操作抽屉、不改 panel。
+   */
+  onOpenMilestone?: (m: Milestone) => void
 }) {
-  const { tasks, milestones, run, onEdit, disabled } = props
+  const { tasks, milestones, run, onEdit, disabled, onOpenMilestone } = props
   const axis = dateRange([...tasks, ...milestones])
   const today = localTodayIso() // 本地日期，避免 UTC 偏移把今天画到昨天
   // aria-live 状态行：成功『已更新：起 ~ 止』数秒自清除；失败『更新失败，请重试』。
   const [statusMsg, setStatusMsg] = useState('')
   // inflight：保存中同任务/甘特拖拽禁用，防并发连拖覆盖；结束后解锁。
   const [saving, setSaving] = useState(false)
+  // D-07：单击（轻点）只选中聚焦，不立即弹抽屉；详情走双击或 Enter/Space。
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   // 拖拽预览：move=整体平移天数；start/end=调工期后的候选起止（ghost 标签展示）。
   const [preview, setPreview] = useState<{
     id: string, mode: DragMode, shiftDays?: number, startDate?: string, dueDate?: string
@@ -205,7 +212,11 @@ export function GanttView(props: {
     setPreview(null) // 立即清 ghost 预览：失败时条体保持原坐标，无残影
     if (!cur || cur.cancelled) return
     const deltaPx = e.clientX - cur.startX
-    if (Math.abs(deltaPx) < 4) return // 轻点 = 点击，交给 click 开抽屉（手柄轻点已在 handleGestureRef 抑制）
+    if (Math.abs(deltaPx) < 4) {
+      // D-07：轻点只选中聚焦，不立即开抽屉；详情由双击或 Enter/Space 触发。
+      setSelectedId(cur.id)
+      return
+    }
     draggedRef.current = true
     if (cur.mode === 'move') {
       // 整体平移：startDate/dueDate 同向平移相同天数。
@@ -229,13 +240,18 @@ export function GanttView(props: {
     // 拖拽改期 / 手柄轻点后不触发打开抽屉，避免误开。
     if (draggedRef.current) { draggedRef.current = false; return }
     if (handleGestureRef.current) { handleGestureRef.current = false; return }
+    setSelectedId(task.id)
     onEdit(task)
+  }
+  // D-07：里程碑菱形「查看详情」——优先走公共负责人接线的 onOpenMilestone；未接线兜底导航里程碑视图。
+  const openMilestone = (m: Milestone) => {
+    if (onOpenMilestone) onOpenMilestone(m)
+    else props.onGotoView('milestones')
   }
   const onKeyDownBar = async (e: React.KeyboardEvent, task: Task) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
-      draggedRef.current = false
-      onEdit(task)
+      openBar(task)
       return
     }
     // Esc：取消进行中的指针拖拽（不落库）。
@@ -325,7 +341,8 @@ export function GanttView(props: {
         : t.status === 'blocked' ? '阻塞' : '待办'
     const preNames = (t.predecessorIds ?? [])
       .map(pid => byId.get(pid)?.title).filter(Boolean).join('、')
-    const aria = `任务 ${t.title}，${range.start} ~ ${range.end}，${widthDays} 天，${statusText}，进度 ${pct}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。回车打开详情；←/→ 移动 1 天，Shift+←/→ 调整工期。`
+    const msTitle = milestoneTitleForTask(t, milestones)
+    const aria = `任务 ${t.title}，${range.start} ~ ${range.end}，${widthDays} 天，${statusText}，进度 ${pct}${msTitle ? `，关联里程碑 ${msTitle}` : ''}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。单击选中；双击或回车打开详情；←/→ 移动 1 天，Shift+←/→ 调整工期。`
     // ghost 预览：move=整体平移；start/end=resize 候选起止（仅标签预览，条体待回读刷新归位）。
     const ghost = preview && preview.id === t.id
       ? preview.mode === 'move'
@@ -340,6 +357,7 @@ export function GanttView(props: {
       isCritical ? 'pm-gantt-bar--critical' : '',
       overdue ? 'is-overdue' : '',
       blocked ? 'is-blocked' : '',
+      selectedId === t.id ? 'is-selected' : '',
     ].filter(Boolean).join(' ')
     return <div
       className={cls}
@@ -348,8 +366,8 @@ export function GanttView(props: {
       role="button"
       aria-label={aria}
       style={{ left: `${leftDays * PX}px`, width: `${widthDays * PX}px`, top: `${(ROW_H - BAR_H) / 2}px` }}
-      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}${isCritical ? ' · 关键路径（总时差 0 天）' : ''}`}
-      onClick={() => openBar(t)}
+      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${msTitle ? ` · 关联里程碑 ${msTitle}` : ''}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}${isCritical ? ' · 关键路径（总时差 0 天）' : ''}${range.derived ? '' : ' · 双击或回车打开详情'}`}
+      onDoubleClick={() => openBar(t)}
       onKeyDown={(e) => onKeyDownBar(e, t)}
       onPointerDown={(e) => { if (!range.derived) onPointerDownBar(e, t) }}
       onPointerMove={(e) => { if (!range.derived) onPointerMoveBar(e) }}
@@ -420,8 +438,9 @@ export function GanttView(props: {
           const frac = checklistFraction(tprog ?? emptyProgress)
           const done = t.status === 'done'
           const crit = !!er && criticalIds.has(t.id)
+          const msTitle = milestoneTitleForTask(t, milestones)
           return (
-            <div key={t.id} className={`pm-gantt-label-row ${done ? 'is-done' : ''} ${t.parentId ? '' : 'is-parent'} ${crit ? 'is-critical' : ''}`}
+            <div key={t.id} className={`pm-gantt-label-row ${done ? 'is-done' : ''} ${t.parentId ? '' : 'is-parent'} ${crit ? 'is-critical' : ''} ${selectedId === t.id ? 'is-selected' : ''}`}
               style={{ height: `${ROW_H}px`, paddingLeft: `${10 + depth * 12}px` }}>
               <span className="pm-gantt-label-code">{t.code}</span>
               <span className="pm-gantt-label-main">
@@ -430,6 +449,7 @@ export function GanttView(props: {
                   负责人 {t.assignee?.trim() || '未分配'} · {ganttStatusText(t.status)}
                   {t.progress != null && t.progress > 0 ? ` · 进度 ${t.progress}%` : ''}
                 </span>
+                {msTitle && <span className="pm-gantt-ms-chip" title={`关联里程碑：${msTitle}`}>◆ {msTitle}</span>}
               </span>
               {crit && <span className="pm-gantt-critical-tag">关键</span>}
               {frac && <span className="pm-gantt-label-frac">{frac}</span>}
@@ -482,8 +502,19 @@ export function GanttView(props: {
                 if (off === null) return <div key={`m-${m.id}`} className="pm-gantt-row" style={{ height: `${ROW_H}px` }} />
                 return (
                   <div key={`m-${m.id}`} className="pm-gantt-row" style={{ height: `${ROW_H}px` }}>
-                    <div className={`pm-gantt-milestone ${m.status === 'achieved' ? 'pm-gantt-milestone-done' : m.status === 'at_risk' ? 'pm-gantt-milestone-risk' : ''}`}
-                      data-milestone-id={m.id} style={{ left: `${off * PX + PX / 2}px` }} />
+                    <div
+                      className={`pm-gantt-milestone ${m.status === 'achieved' ? 'pm-gantt-milestone-done' : m.status === 'at_risk' ? 'pm-gantt-milestone-risk' : ''}`}
+                      data-milestone-id={m.id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`里程碑 ${m.title}（${m.targetDate || '未定日期'}），查看详情`}
+                      title={`里程碑 ${m.title} · ${m.targetDate || '未定日期'}；回车查看详情`}
+                      style={{ left: `${off * PX + PX / 2}px` }}
+                      onClick={() => openMilestone(m)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMilestone(m) }
+                      }}
+                    />
                   </div>
                 )
               })}
@@ -525,9 +556,11 @@ export function GanttView(props: {
       <span className="pm-gantt-kbdbar-title">键盘微调</span>
       <span className="pm-gantt-kbd"><kbd>←</kbd><kbd>→</kbd><span>移动 1 天</span></span>
       <span className="pm-gantt-kbd"><kbd>Shift</kbd><kbd>←</kbd><kbd>→</kbd><span>调整 1 天工期</span></span>
-      <span className="pm-gantt-kbd"><kbd>Enter</kbd><span>打开抽屉改期</span></span>
+      <span className="pm-gantt-kbd"><kbd>单击</kbd><span>选中条体（不弹抽屉）</span></span>
+      <span className="pm-gantt-kbd"><kbd>双击</kbd><span>打开详情</span></span>
+      <span className="pm-gantt-kbd"><kbd>Enter</kbd><span>打开详情</span></span>
       <span className="pm-gantt-kbd"><kbd>Esc</kbd><span>取消拖拽</span></span>
-      <span className="pm-gantt-kbdbar-note">边缘手柄拖拽调工期，条体拖拽改期；落库仅写 startDate / dueDate。</span>
+      <span className="pm-gantt-kbdbar-note">边缘手柄拖拽调工期，条体拖拽改期；单击仅选中，双击/Enter 打开详情；落库仅写 startDate / dueDate。</span>
     </div>
 
     {statusMsg && <p className="pm-gantt-hint" role="status" aria-live="polite">{statusMsg}</p>}
