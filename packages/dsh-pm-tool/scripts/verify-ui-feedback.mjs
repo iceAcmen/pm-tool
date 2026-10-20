@@ -197,17 +197,19 @@ const realSeq = realStatusOrder.flatMap(s => realSorted.filter(t => t.status ===
 assert.deepEqual(realSeq, ['b', 'd', 'c', 'a'], '分组序=真实状态键序（todo→in_progress→blocked→done），组内=WBS code 数字序')
 
 // ---- Copilot aria-live/aria-busy 状态机契约（R7-01 无障碍强化）----
-// CopilotPanel 仍在 panel.tsx；bundle 正则只能证属性「存在」，这里钉住状态机：发送中 true、结束/失败 finally 必复位 false。
+// CopilotPanel 已由 panel.tsx 抽离到 shared/drawers/sidecar-portal.tsx；
+// bundle 正则只能证属性「存在」，这里在抽离落点钉住状态机：发送中 true、结束/失败 finally 必复位 false。
 const panelSrc = readFileSync(join(here, '..', 'src', 'client', 'panel.tsx'), 'utf8')
+const sidecarSrc = readFileSync(join(here, '..', 'src', 'client', 'shared', 'drawers', 'sidecar-portal.tsx'), 'utf8')
 assert.match(
-  panelSrc,
+  sidecarSrc,
   /<div className="pm-copilot-messages" role="log" aria-live="polite" aria-busy=\{sending\}>/,
   '副驾消息区须 role=log + aria-live=polite + aria-busy 绑定 sending 状态',
 )
-assert.match(panelSrc, /const \[sending, setSending\] = useState\(false\)/)
-assert.match(panelSrc, /setSending\(true\)/, '发起请求时必须置 busy')
-assert.match(panelSrc, /\} finally \{ setSending\(false\) \}/, 'finally 复位 busy：成功/失败/抛错都不得卡在 aria-busy=true')
-assert.match(panelSrc, /if \(!q \|\| disabled \|\| sending\) return/, '发送中须禁连发')
+assert.match(sidecarSrc, /const \[sending, setSending\] = useState\(false\)/)
+assert.match(sidecarSrc, /setSending\(true\)/, '发起请求时必须置 busy')
+assert.match(sidecarSrc, /\} finally \{ setSending\(false\) \}/, 'finally 复位 busy：成功/失败/抛错都不得卡在 aria-busy=true')
+assert.match(sidecarSrc, /if \(!q \|\| disabled \|\| sending\) return/, '发送中须禁连发')
 
 // ---- 390px 窄窗「保留文字」CSS 契约（R4-01）----
 // 旧缺陷：窄窗把顶栏按钮裁成 32px 纯图标（color:transparent 文字消失）。

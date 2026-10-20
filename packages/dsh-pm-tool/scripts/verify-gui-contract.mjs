@@ -92,10 +92,13 @@ const settingsCore = readFileSync(join(dir, 'src/core/settings.ts'), 'utf8')
 const overviewView2 = overviewView
 const peopleView = readFileSync(join(dir, 'src/client/views/people.tsx'), 'utf8')
 assert.match(index, /settings:\s*readProjectSettings\(domain\)/, 'web snapshot 应透传归一化 settings')
+// 抽离后 SettingsPanel 组件/命令留在 shared/drawers/settings-drawer.tsx，
+// panel 仅注册 drawer 与菜单入口；静态断言跟随事实落点。
+const settingsDrawer = readFileSync(join(dir, 'src/client/shared/drawers/settings-drawer.tsx'), 'utf8')
 assert.match(panel, /kind: 'settings'/, 'panel 应注册口径设置 drawer')
-assert.match(panel, /function SettingsPanel/, 'panel 应定义 SettingsPanel 组件')
-assert.match(panel, /settings put /, 'SettingsPanel 应经 settings put 保存口径')
-assert.match(panel, /settings reset/, 'SettingsPanel 应提供 settings reset 恢复默认')
+assert.match(settingsDrawer, /function SettingsPanel/, 'settings-drawer 应定义 SettingsPanel 组件')
+assert.match(settingsDrawer, /settings put /, 'SettingsPanel 应经 settings put 保存口径')
+assert.match(settingsDrawer, /settings reset/, 'SettingsPanel 应提供 settings reset 恢复默认')
 assert.match(panel, /口径设置/, '应有「口径设置」入口文案')
 assert.match(overviewView2, /settings\?: ProjectSettings/, 'Overview 应接收 settings prop')
 assert.match(peopleView, /settings\?: ProjectSettings/, 'PeopleView 应接收 settings prop')
