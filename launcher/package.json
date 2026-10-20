@@ -8,7 +8,7 @@
     "pm-launcher": "bin/pm-launcher.mjs"
   },
   "scripts": {
-    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs",
+    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs",
     "verify": "node scripts/verify-launcher.mjs",
     "start": "node bin/pm-launcher.mjs"
   },

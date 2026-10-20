@@ -72,6 +72,10 @@ export function createLauncherApp({ port = 3172, probeService, openBrowser, cont
       controller.forgetAuthenticatedUrl(entry.pid) // 投递后即弃内存 token
       state.transition({ type: 'delivered', browser: selectedBrowser })
     } catch (err) {
+      if (err?.code === 'STARTUP_ABORTED') {
+        // 取消已由 cancel action 把状态置回 S0；不得异步转 S6 覆盖取消。
+        return
+      }
       state.transition({
         type: 'failure',
         detail: {

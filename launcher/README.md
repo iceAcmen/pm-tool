@@ -25,7 +25,7 @@
 - 启动器**不**自造/复刻签名、**不**关闭 auth、**不**读/复制/注入浏览器 cookie、**不**代填令牌、**不**读取凭证库。
 - owned 实例的 authenticatedURL（含一次性令牌）**仅内存**：首投所选浏览器一次后即弃，**不跨 profile/新浏览器重放**，不落盘、不写日志、不入仓。
 - 服务探测 GET 不带 cookie；探测到的 401 是「身份匹配的鉴权墙」，**不得**据此判定某浏览器未登录；S5 只由用户反馈触发。
-- 不 kill 占用进程、不争 3172；取消只放弃尚未完成的在途启动，不误杀已启动 PM。
+- 不 kill 占用进程、不争 3172；取消仅回收「自己拉起、尚未就绪」的 owned 子进程（SIGTERM+有界等待），已就绪服务/现网/未知 PID 一律不杀。
 
 ## 3. 唯一阻塞（路径 B 单列，不隐藏）
 
@@ -36,7 +36,7 @@
 
 ```bash
 cd launcher
-npm test          # 23 例单元/集成（假探测/假 open/假控制器，临时端口）
+npm test          # 29 例单元/集成（假探测/假 open/假控制器 + cancel 竞态，临时端口）
 npm run verify    # 隔离假监听者自检
 npm start         # 启动 loopback control 页并在所选浏览器打开（PM_PORT 默认 3172）
 ```
@@ -49,7 +49,7 @@ npm start         # 启动 loopback control 页并在所选浏览器打开（PM_
 
 - `src/launcher-core.mjs`：探测分类、决策、令牌解析/脱敏、open 参数、正式 spawn 参数、七态状态机（纯）。
 - `src/probe.mjs`：无 cookie 的 TCP+GET 探测（connect/fetch 可注入）。
-- `src/dsh-controller.mjs`：owned 实例内存捕获、即弃、cancel 仅放弃、stop 拒绝。
+- `src/dsh-controller.mjs`：owned 实例内存捕获、即弃；cancel 仅回收未就绪 owned 子进程（SIGTERM+有界等待），ready/现网/未知 PID 不杀；stop 拒绝。
 - `src/browsers.mjs`：本机浏览器发现 / 选择回退。
 - `src/panel-model.mjs`：状态 → 面板视图模型（纯）。
 - `src/control-html.mjs`：自包含 control HTML（浅深 token、reduced-motion、Esc、44px 热区、装饰灯 aria-hidden、隐私脚注）。

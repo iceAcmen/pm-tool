@@ -83,7 +83,8 @@ async function main() {
   assert.match(redactUrl('http://127.0.0.1:3172/?token=OneShot'), /token=REDACTED/)
   assert.deepEqual(openBrowserArgs('Safari', 'http://x/').argv, ['open', '-a', 'Safari', 'http://x/'])
 
-  // 7) 控制器：fake spawn 内存捕获、打开后即弃；cancel 仅放弃；stop 拒绝。
+  // 7) 控制器：fake spawn 内存捕获、打开后即弃；cancel 仅回收尚未就绪的 owned 子进程，
+  //    已就绪/现网/未知 PID 一律不杀；stop 拒绝。
   const fakeChild = {
     pid: 8888,
     stdout: { on(_e, fn) { queueMicrotask(() => fn('dsh web: http://127.0.0.1:0/?token=MemToken\n')) } },
