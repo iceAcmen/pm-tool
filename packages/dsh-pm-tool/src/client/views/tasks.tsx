@@ -4,6 +4,7 @@ import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
 import { clampProgress } from '../../core/progress-derivation.js'
 import { tallyTasksByStatus, donePercent } from './tasks-tally.js'
+import { copyHandleToClipboard } from './tasks-clipboard.js'
 import { taskStatusLabels } from '../../core/labels.js'
 // K6 交付检查：复用 P0 纯函数 evaluateChecks（只读规则提示，不下完成裁决），前端不另造规则。
 import { evaluateChecks, type CheckFinding, type CheckableTask } from '../../core/check.js'
@@ -280,19 +281,29 @@ export function TaskTable(props: {
   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
   const [activeId, setActiveId] = useState<string | null>(null)
   const activeRef = useRef<HTMLDivElement | null>(null)
-  // D-05（C-07 稳定句柄列）：编号格恒显 code 或短 ID，点击复制到剪贴板并给「已复制」瞬时反馈；
+  // D-05（C-07 稳定句柄列）：编号格恒显 code 或短 ID，点击复制到剪贴板并给瞬时反馈；
   // 不回写、不改任务编号，仅本地剪贴板与 1.2s 反馈态。
+  // Minor 返修：仅 writeText resolve 才报「已复制」；reject/缺失显示温和失败提示，不假成功。
   const [copiedHandleId, setCopiedHandleId] = useState<string | null>(null)
+  const [failedHandleId, setFailedHandleId] = useState<string | null>(null)
   const copyHandleTimer = useRef<number | null>(null)
   const copyHandle = (taskId: string, value: string) => {
     if (!value) return
-    void navigator.clipboard?.writeText(value).catch(() => {})
-    setCopiedHandleId(taskId)
     if (copyHandleTimer.current !== null) window.clearTimeout(copyHandleTimer.current)
-    copyHandleTimer.current = window.setTimeout(() => {
-      setCopiedHandleId(cur => (cur === taskId ? null : cur))
-      copyHandleTimer.current = null
-    }, 1200)
+    void copyHandleToClipboard(value).then(ok => {
+      if (ok) {
+        setFailedHandleId(null)
+        setCopiedHandleId(taskId)
+      } else {
+        setCopiedHandleId(null)
+        setFailedHandleId(taskId)
+      }
+      copyHandleTimer.current = window.setTimeout(() => {
+        setCopiedHandleId(cur => (cur === taskId ? null : cur))
+        setFailedHandleId(cur => (cur === taskId ? null : cur))
+        copyHandleTimer.current = null
+      }, 1600)
+    })
   }
 
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
@@ -666,17 +677,20 @@ export function TaskTable(props: {
             const wbs = (t.code ?? '').trim()
             const handle = wbs || t.id
             const copied = copiedHandleId === t.id
+            const failed = failedHandleId === t.id
             return (
               <button
                 type="button"
-                className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}`}
-                title={wbs
-                  ? `复制编号 ${wbs}`
-                  : '存量记录缺 WBS 编号，按约定不重新编号，显示短 ID；点击复制'}
-                aria-label={copied ? '已复制' : `复制编号 ${handle}`}
+                className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}${failed ? ' failed' : ''}`}
+                title={failed
+                  ? '复制失败，可长按或手动选中编号复制'
+                  : wbs
+                    ? `复制编号 ${wbs}`
+                    : '存量记录缺 WBS 编号，按约定不重新编号，显示短 ID；点击复制'}
+                aria-label={copied ? '已复制' : failed ? '复制失败，可手动选择复制' : `复制编号 ${handle}`}
                 onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
               >
-                <span className="pt-code-val">{copied ? '已复制' : handle}</span>
+                <span className="pt-code-val">{copied ? '已复制' : failed ? '复制失败' : handle}</span>
                 <Copy size={11} className="pt-code-ic" aria-hidden="true" />
               </button>
             )

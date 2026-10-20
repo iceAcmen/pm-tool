@@ -55,8 +55,8 @@ describe('D-05 编号列恒显稳定句柄（code/短 ID），可点击复制并
     expect(tasksTsx).toContain('const handle = wbs || t.id')
   })
 
-  it('复制到剪贴板 + 瞬时「已复制」反馈，不回写任务编号', () => {
-    expect(tasksTsx).toContain('navigator.clipboard?.writeText(value)')
+  it('复制到剪贴板（经 copyHandleToClipboard）+ 瞬时「已复制」反馈，不回写任务编号', () => {
+    expect(tasksTsx).toContain('copyHandleToClipboard')
     expect(tasksTsx).toContain('copyHandle')
     expect(tasksTsx).toContain('已复制')
     expect(tasksTsx).toContain('pt-code-btn')
@@ -74,6 +74,13 @@ describe('D-05 编号列恒显稳定句柄（code/短 ID），可点击复制并
 
   it('既有编号列宽固定，不挤压任务名（grid 62px 列保留）', () => {
     expect(tasksCss).toMatch(/grid-template-columns:[^;]*62px/)
+  })
+
+  it('【Minor 返修】writeText reject/缺失不得假成功：仅 resolve 才报已复制，失败给温和手动复制提示', () => {
+    expect(tasksTsx).toContain('copyHandleToClipboard')
+    expect(tasksTsx).toContain('复制失败')
+    // 不再无条件在调用前 setCopiedHandleId；成功态由 Promise resolve 后设置。
+    expect(tasksTsx).not.toContain('navigator.clipboard?.writeText(value).catch(() => {})')
   })
 })
 
@@ -107,5 +114,15 @@ describe('D-11 交付物侧只读反查关联任务（零 schema、不回写）'
   it('零 schema：不新增交付物字段、不回写任务（视图只读取 tasks，无 setTasks/写盘调用）', () => {
     expect(dvTsx).not.toContain('setTasks(')
     expect(dvTsx).not.toContain('deliverableId:')
+  })
+
+  it('【Minor 返修】关联任务按钮点击必须阻止冒泡，仅开任务抽屉、不触发卡片 openEdit（事件契约）', () => {
+    // 卡片级 openEdit 保持在卡片 div 上。
+    expect(dvTsx).toContain('onClick={() => openEdit(d)}')
+    // 内联任务跳转按钮先 stopPropagation 再 onGotoTask，且键盘事件同样止泡。
+    const btnBlock = dvTsx.slice(dvTsx.indexOf('dv-d-task-link'))
+    expect(btnBlock).toContain('e.stopPropagation()')
+    expect(btnBlock).toContain('onGotoTask(lt.id)')
+    expect(btnBlock).toContain('onKeyDown')
   })
 })

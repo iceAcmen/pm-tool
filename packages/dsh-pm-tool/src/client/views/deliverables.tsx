@@ -309,7 +309,9 @@ export function Deliverables(props: DeliverablesProps) {
                                         <button
                                           type="button"
                                           className="dv-d-task-link"
-                                          onClick={() => onGotoTask(lt.id)}
+                                          // Minor 返修：阻止冒泡到卡片 openEdit，仅开任务抽屉，不弹交付物编辑；键盘同样止泡。
+                                          onClick={e => { e.stopPropagation(); onGotoTask(lt.id) }}
+                                          onKeyDown={e => e.stopPropagation()}
                                           title={`打开任务 ${lt.handle}`}
                                         >{inner}</button>
                                       ) : (
