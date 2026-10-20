@@ -13,6 +13,7 @@ import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntr
 import {
   nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
   applyWidgetGeometry, arrangeWidgetLayout, compactVertical, removeWidgetAndCompact,
+  filterCatalogItems, locateWidgetByType,
   type FormulaBuildInput, type FormulaCondition, type FormulaCaliber,
 } from './editor-ops.js'
 
@@ -335,6 +336,26 @@ export function BoardEditor(props: BoardEditorProps) {
 
   const selected = selectedId ? live.widgets.find(w => w.layout.i === selectedId) : null
 
+  // D-02：单 panel 状态——卡库抽屉与配置面板互斥，不同时叠放。
+  const openDrawer = () => { setSelectedId(null); setDrawerOpen(true) }
+  const closePanel = () => { setDrawerOpen(false); setSelectedId(null) }
+  useEffect(() => {
+    if (!drawerOpen && !selectedId) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closePanel() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [drawerOpen, selectedId])
+
+  // D-02：「已在画布 · 定位」按类型找到实例，滚动居中并短暂高亮（不改坐标/配置）。
+  const locateByType = (type: string) => {
+    const inst = locateWidgetByType(live.widgets, type)
+    if (!inst) return
+    const el = document.querySelector(`[data-widget-id="${inst.layout.i}"]`)
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+    el?.classList.add('pm-located')
+    window.setTimeout(() => el?.classList.remove('pm-located'), 1200)
+  }
+
   return <div className="pm-bento-body pm-bento-editing">
     {validationError && (
       <div className="pm-bento-validation" role="alert">
@@ -365,7 +386,7 @@ export function BoardEditor(props: BoardEditorProps) {
         </select>
       </label>
       <button type="button" className="pm-button" onClick={() => { pushHistory(); setDraft(d => ({ ...d, widgets: arrangeWidgetLayout(d.widgets, grid.cols) })); setValidationError(null) }}>自动排版</button>
-      <button type="button" className="pm-button" onClick={() => setDrawerOpen(o => !o)}>＋ 卡片库</button>
+      <button type="button" className="pm-button" onClick={() => (drawerOpen ? setDrawerOpen(false) : openDrawer())}>{drawerOpen ? '× 卡片库' : '＋ 卡片库'}</button>
       <button type="button" className="pm-button" onClick={() => { setImportOpen(o => !o); setExportOpen(false) }}>导入布局</button>
       <button type="button" className="pm-button" onClick={() => { setExportOpen(o => !o); setImportOpen(false) }}>导出布局</button>
       {savedLayout && (
@@ -429,7 +450,8 @@ export function BoardEditor(props: BoardEditorProps) {
     )}
 
     <div className="pm-bento-stage" ref={stageRef}>
-      {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget}/>}
+      {(drawerOpen || selected) && <div className="pm-panel-scrim" onClick={closePanel} aria-hidden="true"/>}
+      {drawerOpen && <CardDrawer live={live} catalog={catalog} query={query} setQuery={setQuery} onAdd={addWidget} onLocate={locateByType}/>}
       <div className="pm-bento-grid pm-rgl-editing">
         <GridLayout
           className="pm-rgl"
@@ -504,15 +526,18 @@ export function BoardEditor(props: BoardEditorProps) {
 }
 
 /* ---------- 卡片库抽屉 ---------- */
-function CardDrawer({ live, catalog, query, setQuery, onAdd }: {
-  live: DashboardLayout, catalog: WidgetCatalogEntry[], query: string, setQuery: (s: string) => void, onAdd: (type: string) => void
+function CardDrawer({ live, catalog, query, setQuery, onAdd, onLocate }: {
+  live: DashboardLayout, catalog: WidgetCatalogEntry[], query: string, setQuery: (s: string) => void,
+  onAdd: (type: string) => void, onLocate: (type: string) => void,
 }) {
   const added = new Set(live.widgets.map(w => w.type))
-  const items = catalog.filter(d =>
-    (d.name.toLowerCase().includes(query.toLowerCase()) || d.type.includes(query.toLowerCase())))
+  const items = filterCatalogItems(catalog, query)
   return <aside className="pm-drawer">
     <h3>卡片库</h3>
     <input className="pm-drawer-search" placeholder="搜索卡片…" value={query} onChange={e => setQuery(e.target.value)}/>
+    {items.length === 0 && (
+      <div className="pm-drawer-empty" role="status">无匹配卡片，换个关键词试试。</div>
+    )}
     {DRAWER_GROUPS.map(g => {
       const list = items.filter(d => d.category === g.key)
       if (!list.length) return null
@@ -522,18 +547,18 @@ function CardDrawer({ live, catalog, query, setQuery, onAdd }: {
           const has = added.has(d.type)
           return <button key={d.type} type="button"
             className={`pm-drawer-item ${has ? 'added' : ''}`}
-            disabled={has || d.disabled}
+            disabled={!has && d.disabled}
             draggable={!has && !d.disabled}
             onDragStart={(e) => e.dataTransfer.setData('widget-type', d.type)}
-            onClick={() => onAdd(d.type)}>
+            onClick={() => (has ? onLocate(d.type) : onAdd(d.type))}>
             <i className="pm-drawer-glyph" aria-hidden>{d.name.trim().charAt(0)}</i>
             <span className="pm-drawer-name">{d.name}</span>
-            <span className="pm-drawer-plus">{has ? '已添加' : d.disabled ? '不可加' : '＋'}</span>
+            <span className="pm-drawer-plus">{has ? '已在画布 · 定位' : d.disabled ? '不可加' : '＋'}</span>
           </button>
         })}
       </div>
     })}
-    <div className="pm-drawer-tip">点 ＋ 添加到看板，或拖到画布；选中卡片后在右侧配置。</div>
+    <div className="pm-drawer-tip">点 ＋ 添加到看板，或拖到画布；已在画布的卡片可点「定位」滚动到该卡。</div>
   </aside>
 }
 
@@ -550,6 +575,9 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
   onTrial: (formula: string, entity: string, projectScope: string, filters: FilterRule[]) => string
 }) {
   const cfg = inst.config
+  // D-02：面板标题标记本地未保存改动（挂载快照与当前 config 比对，保存布局前一直可见）。
+  const [initialConfig] = useState(() => JSON.stringify(inst.config))
+  const dirty = JSON.stringify(inst.config) !== initialConfig
   const [geometry, setGeometry] = useState(() => ({ x: String(inst.layout.x), y: String(inst.layout.y), w: String(inst.layout.w), h: String(inst.layout.h) }))
   const [geometryError, setGeometryError] = useState('')
   useEffect(() => { setGeometry({ x: String(inst.layout.x), y: String(inst.layout.y), w: String(inst.layout.w), h: String(inst.layout.h) }) }, [inst.layout.x, inst.layout.y, inst.layout.w, inst.layout.h])
@@ -591,7 +619,7 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
 
   return <aside className="pm-cfg">
     <h3>
-      <span className="pm-cfg-title">选中卡片配置（本地回写）</span>
+      <span className="pm-cfg-title">选中卡片配置{dirty && <span className="pm-cfg-dirty">· 未保存改动</span>}</span>
       <button type="button" className="pm-cfg-x" onClick={onClose} aria-label="关闭配置">×</button>
     </h3>
     <div className="pm-cfg-sub">{inst.type} · 改动只写本地草稿，保存后才落盘</div>
@@ -615,7 +643,7 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
       </div>
       <p className="pm-cfg-help">画布共 {cols} 列，1 行约 48px。应用后冲突卡片会下移，可撤销。</p>
       {geometryError && <p className="pm-cfg-geometry-error" role="alert">{geometryError}</p>}
-      <button type="button" className="pm-button pm-button-primary" onClick={applyGeometry}>应用位置与尺寸</button>
+      <button type="button" className="pm-button" onClick={applyGeometry}>应用位置与尺寸</button>
     </div>
 
     {tab === 'formula' && isFormula && <div className="pm-cfg-fld">
@@ -671,7 +699,7 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
           <ul>{errors.map((err, i) => <li key={i}>{err}</li>)}</ul>
         </div>
       )}
-      <button type="button" className="pm-button pm-button-primary pm-cfg-apply" disabled={errors.length > 0} onClick={applyFormula}>应用公式</button>
+      <button type="button" className="pm-button pm-cfg-apply" disabled={errors.length > 0} onClick={applyFormula}>应用公式</button>
       {trial && <div className="pm-cfg-trial" aria-live="polite">试算：{trial}</div>}
     </div>}
 
@@ -802,10 +830,6 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
         <textarea className="pm-cfg-sel" rows={5} value={cfg.body ?? ''} onChange={e => onPatch({ body: e.target.value })}/>
       </>}
     </div>}
-
-    <div className="pm-cfg-footer">
-      <button type="button" className="pm-button pm-button-primary" onClick={onClose}>完成</button>
-    </div>
   </aside>
 }
 

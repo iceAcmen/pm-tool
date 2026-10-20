@@ -141,6 +141,20 @@ export function removeWidgetAndCompact(widgets: WidgetInstance[], id: string, co
   return compactVertical(removed, cols)
 }
 
+/* ---------- D-02 卡片库：搜索过滤（空态）与已添加定位（纯函数，供单测） ---------- */
+
+/** 按名称/类型大小写不敏感过滤卡片库；空匹配由组件渲染「无匹配卡片」空态。 */
+export function filterCatalogItems<T extends { name: string, type: string }>(catalog: T[], query: string): T[] {
+  const q = query.trim().toLowerCase()
+  if (!q) return catalog
+  return catalog.filter(d => d.name.toLowerCase().includes(q) || d.type.toLowerCase().includes(q))
+}
+
+/** 按类型定位画布上首个实例（已在画布·定位）；找不到返回 undefined，不改入参。 */
+export function locateWidgetByType(widgets: WidgetInstance[], type: string): WidgetInstance | undefined {
+  return widgets.find(w => w.type === type)
+}
+
 /* ---------- 公式卡：白名单口径构建 + 红错误清单（设计 §7，无自由表达式） ---------- */
 
 /** 白名单统计口径（与 formula-expr.ts 注册函数一一对应；不暴露任意文本求值）。 */

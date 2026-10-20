@@ -8,6 +8,14 @@
 
 ---
 
+## SH-1 D-02 单面板互斥/让位/按钮层级 + D-03 顶条留白（2026-10-20，平台：doubao-work）
+
+- D-02 改文件：`editor.tsx`（卡库抽屉与配置面板单态互斥；≥1024 侧轨让位、<1024 sheet+scrim+Esc；「应用位置与尺寸/应用公式」降为次按钮，删除双主「完成」大按钮；「已添加」改「已在画布·定位」滚动定位+高亮；空搜索「无匹配卡片」；面板标题「·未保存改动」）、`editor-ops.ts`（`filterCatalogItems`/`locateWidgetByType` 纯函数）、`board.css`（scrim/侧轨/定位高亮/空态样式，全走 token 无裸色值）、新增 `panel-library.test.ts`。
+- D-03 改文件：`board.css`（`.pm-bento-head` margin-bottom 16px 覆盖 panel.css 12px；≤768 工具条允许换行）、新增 `head-spacing.test.ts`。
+- 为什么：原两 fixed 浮层同坐标叠放无 scrim；双等权主 CTA；已添加禁用无定位出口；搜索无空态；顶条与卡群贴压。
+- 影响：仅 board 作用域；不改 panel.css/global shared、16 类注册表、旧 11 layout、全部 config、storage schema；canonical 12 列与外层横滚保留。
+- 验证：全包 117 文件 1037 单测绿，tsc 0，build 成功；live 401 未目视，记 R 未验。
+
 ## SH-1 D-01 移除可逆反馈 + 编辑态压实（2026-10-20，平台：doubao-work）
 
 - 改文件：`src/client/board/editor-ops.ts`（新增 `compactVertical`/`removeWidgetAndCompact` 纯函数）、`src/client/board/editor.tsx`（删除走压实+1.5s 轻反馈条「已移除·撤销」进既有20步栈；dragStop/resizeStop/几何应用后稳定压实；RGL `draggableHandle`+`cancel` 排除按钮/输入，不再靠逐处 stopPropagation）、`board.css`（反馈条样式）、新增 `editor-compact.test.ts`。
