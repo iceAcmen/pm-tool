@@ -45,14 +45,24 @@ export function OkrForm({
   const localErrors = validateOkrForm(draft, objectiveIds ?? new Set())
 
   // D-12 / C-13 软关联保存前内联校验：已知集 = 注入目标集 ∪ 父目标选项；
-  // 格式错阻塞提交，未知 ID 就近说明（后端仍复核），不让错误落到页面横幅。
+  // 格式错与未知 ID 都阻塞提交（保存前就近标红、零写保输入），不让错误落到页面横幅。
   const knownIds = new Set<string>([
     ...(objectiveIds ?? []),
     ...(primaryOptions ?? []).map(o => o.value),
   ])
   const relatedCheck = validateRelatedOkrIds(draft.relatedOkrIds, knownIds)
-  // 仅格式错进阻塞错误集；未知 ID 为就近 advisory（不锁按钮，后端复核）。
   if (relatedCheck.blocking.length > 0) localErrors.relatedOkrIds = relatedCheck.message
+
+  // 从现有目标清单选择追加软关联（可选择 UI，零新 schema；选项由 panel 注入）。
+  const [relatedPick, setRelatedPick] = useState<string | null>(null)
+  const appendRelated = (id: string) => {
+    const current = draft.relatedOkrIds
+      ? draft.relatedOkrIds.split(/[,，]/).map(s => s.trim()).filter(Boolean)
+      : []
+    if (!current.includes(id)) current.push(id)
+    set('relatedOkrIds', current.join(', '))
+    setRelatedPick(null)
+  }
 
   const errors: FormFieldErrors = { ...localErrors, ...(externalErrors ?? {}) }
   const invalid = touched && Object.keys(errors).length > 0
@@ -127,11 +137,14 @@ export function OkrForm({
             <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
             <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
               onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
+            {primaryOptions && primaryOptions.length > 0 && (
+              <RecordsListbox id="gf-okr-related-pick" ariaLabel="从目标清单添加软关联" searchable
+                value={relatedPick} options={primaryOptions} disabled={disabled}
+                placeholder="从目标清单选择添加（可选）"
+                onChange={appendRelated} />
+            )}
             <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
             {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
-            {!errors.relatedOkrIds && relatedCheck.advisory.length > 0 && (
-              <span className="gf-error" role="alert">{relatedCheck.message}</span>
-            )}
           </div>
         </div>
       )}

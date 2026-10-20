@@ -111,35 +111,34 @@ describe('收件区纯函数', () => {
   })
 })
 
-// ===== D-12 软关联保存前内联校验（C-13）：格式错拦截，未知 ID 就近说明，不落页面横幅 =====
+// ===== D-12 软关联保存前内联校验（C-13）：格式错 / 未知 ID 均阻塞提交，就近标红，不落页面横幅 =====
 
-describe('validateRelatedOkrIds 保存前内联校验', () => {
+describe('validateRelatedOkrIds 保存前内联校验（未知 ID 阻塞）', () => {
   const known = new Set(['okr-a', 'okr-b'])
   it('空/仅空白通过，不报错', () => {
     const v = validateRelatedOkrIds('', known)
     expect(v.ok).toBe(true)
     expect(v.blocking).toEqual([])
-    expect(v.advisory).toEqual([])
   })
   it('逗号/中文逗号拆分去重；命中已知集通过', () => {
     const v = validateRelatedOkrIds('okr-a，okr-b, okr-a', known)
     expect(v.ok).toBe(true)
     expect(v.blocking).toEqual([])
   })
-  it('格式非法（含空格/中文/特殊字符）进 blocking，给修复动作', () => {
+  it('格式非法（含空格/中文/特殊字符）进 blocking 拦截提交，给修复动作', () => {
     const v = validateRelatedOkrIds('okr-a, 1 2, okr-中文', known)
     expect(v.ok).toBe(false)
     expect(v.blocking).toEqual(['1 2', 'okr-中文'])
     expect(v.message).toContain('格式非法')
     expect(v.message).toContain('移除该 ID')
   })
-  it('格式合法但不在已知集进 advisory（不阻塞提交，后端仍复核），说明不计权重/不影响主归属', () => {
+  it('格式合法但不在已知集 → 同样 blocking 拦截提交（保存前标红，零写保输入，不靠后端再拒）', () => {
     const v = validateRelatedOkrIds('okr-a, okr-ghost', known)
-    expect(v.ok).toBe(true)
-    expect(v.blocking).toEqual([])
-    expect(v.advisory).toEqual(['okr-ghost'])
+    expect(v.ok).toBe(false)
+    expect(v.blocking).toEqual(['okr-ghost'])
     expect(v.message).toContain('未在本项目目标列表中找到')
     expect(v.message).toContain('不计权重')
     expect(v.message).toContain('不影响主归属')
+    expect(v.message).toContain('移除该 ID')
   })
 })

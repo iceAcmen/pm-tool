@@ -112,44 +112,44 @@ export function okrStatusLabel(status: OkrViewRecord['status']): string {
   return status === 'confirmed' ? '已定稿' : '草稿'
 }
 
-// ===== D-12 / C-13 软关联保存前内联校验（格式拦截 + 未知 ID 就近说明，不落页面横幅） =====
+// ===== D-12 / C-13 软关联保存前内联校验：格式错 / 未知 ID 均保存前阻塞，就近标红，不落页面横幅 =====
 
 /** 软关联 ID 合法格式：字母/数字/-/_（与后端 OKR ID 口径一致）。 */
 const RELATED_ID_RE = /^[A-Za-z0-9_-]+$/
 
 export interface RelatedIdsValidation {
-  /** 无格式错（advisory 未知 ID 不阻塞，由后端复核）。 */
+  /** 无阻塞项才可提交（格式错与未知 ID 都阻塞）。 */
   ok: boolean
-  /** 格式非法、必须修掉才能提交的 ID（阻塞提交）。 */
+  /** 必须修掉才能提交的 ID：格式非法 ∪ 不在注入目标清单（阻塞提交、零写保输入）。 */
   blocking: string[]
-  /** 格式合法但不在注入已知集内的 ID（就近说明，后端仍复核存在性）。 */
-  advisory: string[]
   /** 单处呈现的内联错误文案（原因 + 影响声明 + 修复动作）；通过为空串。 */
   message: string
 }
 
 /**
  * 软关联 ID 保存前内联校验：逗号/中文逗号拆分去重；
- * - 格式非法 → blocking（拦截提交，不让错误落到页面横幅）；
- * - 不在注入已知集 → advisory（就近说明，前端不伪造存在性，后端仍复核）。
- * 说明口径固定：软关联仅展示引用、不计权重、不影响主归属。
+ * - 格式非法 → 阻塞（ID 仅含字母/数字/-/_）；
+ * - 格式合法但不在注入目标清单 → 同样阻塞（保存前标红，零写保输入，不靠后端再拒绝）。
+ * 说明口径固定：软关联仅展示引用、不计权重、不参与进度裁决、不影响主归属。
+ * 后端仍对并发已删目标给结构化错误（兜底，不替代前端阻塞）。
  */
 export function validateRelatedOkrIds(
   raw: string | undefined,
   knownIds: ReadonlySet<string>,
 ): RelatedIdsValidation {
   const tokens = parseIdList(raw)
-  const blocking: string[] = []
-  const advisory: string[] = []
+  const malformed: string[] = []
+  const unknown: string[] = []
   for (const token of tokens) {
-    if (!RELATED_ID_RE.test(token)) blocking.push(token)
-    else if (!knownIds.has(token)) advisory.push(token)
+    if (!RELATED_ID_RE.test(token)) malformed.push(token)
+    else if (!knownIds.has(token)) unknown.push(token)
   }
+  const blocking = [...malformed, ...unknown]
   const parts: string[] = []
-  if (blocking.length) parts.push(`格式非法：${blocking.join('、')}（ID 仅含字母/数字/-/_）`)
-  if (advisory.length) parts.push(`未在本项目目标列表中找到：${advisory.join('、')}`)
+  if (malformed.length) parts.push(`格式非法：${malformed.join('、')}（ID 仅含字母/数字/-/_）`)
+  if (unknown.length) parts.push(`未在本项目目标列表中找到：${unknown.join('、')}`)
   const message = parts.length
-    ? `${parts.join('；')}。软关联仅展示引用、不计权重、不参与进度裁决，也不影响主归属；请从列表选择或移除该 ID，保存前后端仍会复核。`
+    ? `${parts.join('；')}。软关联仅展示引用、不计权重、不参与进度裁决，也不影响主归属；请从列表选择存在的目标或移除该 ID。`
     : ''
-  return { ok: blocking.length === 0, blocking, advisory, message }
+  return { ok: blocking.length === 0, blocking, message }
 }
