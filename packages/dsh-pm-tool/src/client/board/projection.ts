@@ -125,6 +125,30 @@ export function sinkCanonicalCollisions(widgets: WidgetInstance[]): {
 }
 
 /**
+ * 浏览态展示去碰撞（纯展示，不落盘、不改 canonical）。
+ * 断点投影按比例缩放 x/w 后经四舍五入，可能让两卡落入同列（cols=8 宽档已复现 scale/obj 相交），
+ * 静态 CSS 网格会把两卡叠到同一格造成纵向叠压/覆盖。这里按输入顺序垂直下沉到首个无碰撞行，
+ * 保留 x/w/h 与原顺序，仅把真正相交的卡向下平移；非相交卡坐标原样不动。
+ */
+export function compactDisplayCollisions(
+  items: Array<{ i: string, x: number, y: number, w: number, h: number }>,
+): Array<{ i: string, x: number, y: number, w: number, h: number }> {
+  const placed: Array<{ x: number, y: number, w: number, h: number }> = []
+  return items.map(cand => {
+    let y = Math.max(0, Math.floor(cand.y))
+    for (let guard = 0; ; guard++) {
+      const hit = placed.some(p =>
+        p.x < cand.x + cand.w && cand.x < p.x + p.w && p.y < y + cand.h && y < p.y + p.h,
+      )
+      if (!hit || guard > 5000) break
+      y += 1
+    }
+    placed.push({ x: cand.x, y, w: cand.w, h: cand.h })
+    return { ...cand, y }
+  })
+}
+
+/**
  * 编辑器异步块经 props 注入的投影 API（类型-only，编译后擦除，不产生运行时 chunk 依赖）。
  * 投影纯函数实体留在 entry 主包，避免被 rolldown 拆成宿主模块表未注册的共享 chunk。
  */

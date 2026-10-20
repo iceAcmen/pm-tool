@@ -16,7 +16,7 @@ import { PROJECT_DEFAULT_LAYOUT } from './project-default-layout.js'
 import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
-import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions } from './projection.js'
+import { projectToBreakpoint, breakpointForWidth, reverseFromBreakpoint, findCanonicalCollisions, compactDisplayCollisions } from './projection.js'
 import { buildMigrationSummary, migrationSignature, isMigrationRead, markMigrationRead, parseMigrationReadMap, type MigrationReadMap } from './migration-banner.js'
 import boardCss from './board.css?raw'
 // type-only：编辑器块不被静态打包，仅取类型。
@@ -92,8 +92,9 @@ export function BoardBento({ data, actions, persistence, projectId }: {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+  // 浏览态展示坐标：先做 canonical→断点投影，再做纯展示去碰撞（仅平移真正相交的卡，不落盘、不改 canonical）。
   const projected = useMemo(
-    () => projectToBreakpoint(layout.widgets, viewCols as 12 | 8 | 4 | 1),
+    () => compactDisplayCollisions(projectToBreakpoint(layout.widgets, viewCols as 12 | 8 | 4 | 1)),
     [layout, viewCols],
   )
   /** 已存布局是否已含补记队列卡；缺省时在头部给显式新增入口（不静默改布局、不重排旧卡）。 */

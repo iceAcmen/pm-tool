@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   breakpointForWidth, projectToBreakpoint, reverseFromBreakpoint,
-  findCanonicalCollisions, sinkCanonicalCollisions,
+  findCanonicalCollisions, sinkCanonicalCollisions, compactDisplayCollisions,
 } from './projection.js'
 import type { WidgetInstance } from './types.js'
 
@@ -81,5 +81,53 @@ describe('findCanonicalCollisions / sinkCanonicalCollisions', () => {
     const { widgets, sunk } = sinkCanonicalCollisions(l)
     expect(sunk.map(s => s.i)).toEqual(['b'])
     expect(findCanonicalCollisions(widgets)).toEqual([])
+  })
+})
+
+describe('compactDisplayCollisions（浏览态纯展示去碰撞）', () => {
+  it('非相交卡 x/y/w/h 原样保留，不改动', () => {
+    const items = [
+      { i: 'a', x: 0, y: 0, w: 4, h: 6 },
+      { i: 'b', x: 4, y: 0, w: 8, h: 3 },
+      { i: 'c', x: 4, y: 3, w: 4, h: 4 },
+    ]
+    expect(compactDisplayCollisions(items)).toEqual(items)
+  })
+
+  it('相交的第二卡垂直下沉到首个无碰撞行，首卡不动，x/w/h 不变', () => {
+    const items = [
+      { i: 'a', x: 0, y: 0, w: 4, h: 3 },
+      { i: 'b', x: 0, y: 0, w: 4, h: 3 },
+      { i: 'c', x: 8, y: 0, w: 4, h: 3 },
+    ]
+    const out = compactDisplayCollisions(items)
+    expect(out[0]).toMatchObject({ x: 0, y: 0, w: 4, h: 3 })
+    expect(out[1]).toMatchObject({ x: 0, w: 4, h: 3, y: 3 })
+    expect(out[2]).toMatchObject({ x: 8, y: 0, w: 4, h: 3 })
+  })
+
+  it('cols=8 投影后的默认/旧11布局经去碰撞后零 bbox 相交', () => {
+    const def = [
+      { layout: { i: 'hero', x: 0, y: 0, w: 4, h: 10 } },
+      { layout: { i: 'ms', x: 4, y: 0, w: 8, h: 3 } },
+      { layout: { i: 'scale', x: 4, y: 3, w: 4, h: 4 } },
+      { layout: { i: 'obj', x: 8, y: 3, w: 4, h: 4 } },
+      { layout: { i: 'load', x: 4, y: 7, w: 8, h: 3 } },
+      { layout: { i: 'risk', x: 0, y: 10, w: 4, h: 4 } },
+      { layout: { i: 'week', x: 4, y: 10, w: 8, h: 4 } },
+      { layout: { i: 'queue', x: 0, y: 14, w: 4, h: 5 } },
+    ]
+    for (const cols of [12, 8, 4, 1] as const) {
+      const projected = projectToBreakpoint(def, cols)
+      const out = compactDisplayCollisions(projected)
+      for (let i = 0; i < out.length; i++) {
+        for (let j = i + 1; j < out.length; j++) {
+          const a = out[i], b = out[j]
+          const xHit = a.x < b.x + b.w && b.x < a.x + a.w
+          const yHit = a.y < b.y + b.h && b.y < a.y + a.h
+          expect(xHit && yHit).toBe(false)
+        }
+      }
+    }
   })
 })
