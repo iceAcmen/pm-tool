@@ -102,7 +102,7 @@ export type Meeting = {
   updatedAt: string
 }
 
-export type DeliverableStatus = 'planned' | 'in_progress' | 'submitted' | 'accepted'
+export type DeliverableStatus = 'planned' | 'in_progress' | 'submitted' | 'accepted' | 'wrapped'
 
 export type DeliverableChange = {
   at: string
@@ -126,6 +126,8 @@ export type Deliverable = {
   repoUrl?: string
   branch?: string
   milestoneId?: string | null
+  /** U5：备注（区别于 description），可选。 */
+  note?: string
   history: DeliverableChange[]
   createdAt: string
   updatedAt: string
@@ -173,7 +175,18 @@ export type ProgressReport = {
   blockers: string[]
   snapshotAt: string
   snapshot: ProgressSnapshot
-  sourceType?: 'manual'
+  excerpts?: {
+    id: string
+    taskId: string
+    sourceKind: 'progress'
+    entryId: string
+    revisionId: string
+    contentSnapshot: string
+    author: string
+    date: string
+    capturedAt: string
+  }[]
+  sourceType?: 'manual' | 'session'
   sourceSessionId?: string | null
   createdAt?: string
   updatedAt?: string

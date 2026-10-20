@@ -683,3 +683,14 @@
     width: 100%; max-width: 100%; row-gap: var(--sp-2);
   }
 }
+
+/* B3 新版界面试用（pm-b1-pilot，默认 off）：仅 [data-pilot="on"] 生效，off 旧页样式原样。
+   只做 token 统一的视觉收口（卡片化表体/行分隔线），不改字段、排序、筛选与任何逻辑。 */
+[data-pilot="on"] .pm-tasks-root .pt-scroll {
+  border: 1px solid var(--pm-line);
+  border-radius: var(--r);
+  background: var(--pm-surface);
+}
+[data-pilot="on"] .pm-tasks-root .pt-row {
+  border-bottom: 1px solid var(--pm-line-soft);
+}

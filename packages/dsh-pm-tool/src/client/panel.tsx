@@ -16,7 +16,7 @@ import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverab
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress, isProgressOutOfRange } from '../core/progress-derivation.js'
 import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../core/copilot.js'
 import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, refreshSucceeded, type AppliedBatch } from '../core/ask-projection.js'
-import { extractBackupPath, parseActiveModelLane, classifyFeedback } from '../core/ui-feedback.js'
+import { extractBackupPath, parseActiveModelLane, classifyFeedback, commandAccepted } from '../core/ui-feedback.js'
 import { buildDiagnosis, type DiagnosisBubble } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
@@ -67,7 +67,7 @@ import {
 import {
   validateProjectForm, validateMilestoneForm, validateTaskForm, validateRiskIssueForm,
   validateMeetingForm, validateReportForm, validateDeliverableForm,
-  validateOkrForm, validateHabitForm, parseIdList, OKR_KINDS, OKR_STATUSES,
+  parseIdList,
   repoFieldsForUpdate, repoFieldsForCreate, firstInvalidField,
   type FormFieldErrors, type ProjectFormValues, type MilestoneFormValues,
   type TaskFormValues, type RiskIssueFormValues, type MeetingFormValues,
@@ -75,6 +75,7 @@ import {
   type OkrFormValues, type HabitFormValues,
 } from './form-validation.js'
 import { BoardBento } from './board/BoardBento.js'
+import { scopeSnapshot } from './board/scope-snapshot.js'
 import { TaskTable } from './views/tasks.js'
 import { Overview } from './views/overview.js'
 import { GanttView } from './views/gantt.js'
@@ -89,6 +90,26 @@ import { HabitsView, type HabitViewRecord, type HabitInboxSuggestion } from './v
 import type { OkrViewRecord, OkrInboxSuggestion } from './views/okr-model.js'
 import { MarkdownView } from './shared/markdown-view.js'
 import { PageShell } from './shared/page-shell.js'
+import { collectFormSnapshot, shouldConfirmDiscard, type FormSnapshot } from './shared/form-dirty.js'
+import { stageUploadGate, downloadGate } from './shared/staged-lifecycle.js'
+import {
+  collectTaskMaterials,
+  attachmentDisplay,
+  visibleProgressLog,
+  currentRevision,
+  effectiveAt,
+  type MirrorTask,
+} from './shared/task-materials-mirror.js'
+import { TaskDraftMaterials } from './shared/task-draft-materials.js'
+import type { TaskDraftOps } from './shared/b2-ops.js'
+import { OkrForm as ExtOkrForm } from './views/okr-form.js'
+import { HabitForm as ExtHabitForm } from './views/habit-form.js'
+import { prefillOkrForm, prefillHabitForm } from './views/growth-form-props.js'
+import {
+  createMeetingCallbacks,
+  createReportCallbacks,
+  createDeliverableCallbacks,
+} from './shared/records-callbacks.js'
 import { ProvenancePanel } from './provenance-panel.js'
 import styles from './panel.css?raw'
 
@@ -234,6 +255,9 @@ type ProgressReport = {
   nextPlans: string[]
   blockers: string[]
   snapshotAt: string
+  /** U5：报告来源类型（manual 手工 / session 会话）/ 来源会话 id（后端可选携带，前端只读展示用）。 */
+  sourceType?: 'manual' | 'session'
+  sourceSessionId?: string | null
   snapshot: {
     tasks: { total: number, todo: number, inProgress: number, done: number, blocked: number, averageProgress: number | null, calcVersion?: number }
     milestones: { total: number, achieved: number, atRisk: number, missed: number }
@@ -267,7 +291,7 @@ export type Deliverable = {
   name: string
   version: string
   owner: string
-  status: 'planned' | 'in_progress' | 'submitted' | 'accepted'
+  status: 'planned' | 'in_progress' | 'submitted' | 'accepted' | 'wrapped'
   location: string
   description: string
   dueDate: string | null
@@ -276,6 +300,9 @@ export type Deliverable = {
   updatedAt: string
   repoUrl?: string
   branch?: string
+  /** U5：关联里程碑 id / 备注（后端可选携带，前端只读展示用）。 */
+  milestoneId?: string | null
+  note?: string
 }
 
 /** 后端 okr 收件区原始条目（status 口径）；前端视图用 state:'ignored'，此处做映射。 */
@@ -306,10 +333,25 @@ export type Snapshot = {
   habits?: HabitViewRecord[]
   /** P3 收件区 pmHabitInbox：snapshot.habitInbox 透传；未携带（undefined）时视图只显示命令提示，不伪造建议。 */
   habitInbox?: HabitInboxSuggestion[]
-  /** 看板布局（dsh-storage 透明存取）：user > project；读不到为 null。 */
-  dashboards?: { user: unknown, project: unknown }
+  /** 看板布局（dsh-storage 透明存取）：user > project(旧全局只读)；byProject 为项目级 project:<id>。 */
+  dashboards?: { user: unknown, project: unknown, byProject?: Record<string, unknown> }
+  /**
+   * B3 文件资产表（upload 路由就绪前可选/缺省）：fileId -> 元数据（fileName/size/hash）。
+   * 只读展示，前端不伪造上传；attachmentOps 不含 addFile，路由原子挂载。字段以 data 快照为准，此处宽松可选。
+   */
+  fileAssets?: Record<string, { id: string, fileName?: string, size?: number, hash?: string, kind?: string, uploadedAt?: string }>
   /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
   settings?: unknown
+  /** 宿主 HTTP 能力探测（webServer+connection）：httpAvailable/previewApi 齐备才提供权威预览，否则 CLI-only。 */
+  capabilities?: {
+    httpAvailable?: boolean
+    previewApi?: boolean
+    assetUpload?: boolean
+    assetDownload?: boolean
+    /** B3 暂存路由已注册（stage upload + DELETE cancel）；主草稿文件上传门控。 */
+    stageCancel?: boolean
+    limits?: { previewBodyBytes?: number, assetMaxBytes?: number }
+  }
 }
 type View = 'tasks' | 'milestones' | 'risk-issues' | 'meetings' | 'reports' | 'deliverables' | 'overview' | 'gantt' | 'people' | 'okrs' | 'habits'
 type Drawer =
@@ -620,6 +662,15 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     setDensityRaw(next)
     try { localStorage.setItem('pm-density', next) } catch { /* ignore */ }
   }
+  // B1-B1：新版界面试用（pm-b1-pilot）仅 UI 偏好，localStorage 持久、默认 OFF；
+  // off 保留旧 tasks 行为与样式、旧实现不删；壳根 data-pilot 门控试点视觉层，不污染 off 旧页。
+  const [pilot, setPilotRaw] = useState<boolean>(() => {
+    try { return localStorage.getItem('pm-b1-pilot') === 'on' } catch { return false }
+  })
+  const setPilot = (next: boolean) => {
+    setPilotRaw(next)
+    try { localStorage.setItem('pm-b1-pilot', next ? 'on' : 'off') } catch { /* ignore */ }
+  }
   // P1-8：≤560 视图标签折叠为下拉（与各视图 390 档同一媒体断点）。
   const [narrow, setNarrow] = useState<boolean>(() =>
     typeof window !== 'undefined' && window.matchMedia('(max-width: 560px)').matches)
@@ -653,11 +704,18 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     if (drawer) setDrawer(drawer)
   }
   const [drawer, setDrawer] = useState<Drawer>()
+  const [reportCreateRequest, setReportCreateRequest] = useState(0)
+  const [meetingCreateRequest, setMeetingCreateRequest] = useState(0)
+  const [deliverableCreateRequest, setDeliverableCreateRequest] = useState(0)
   const [busy, setBusy] = useState(false)
   // E10：在途命令并发守卫。同一时刻只允许一条命令执行；第二次并发调用直接返回 false，
   // 不重复落库（双击 / 回车连发 / pending 期间二次点击都被挡）。
   const inflightRef = useRef(false)
   const [message, setMessage] = useState('')
+  // B1-C2：读取失败保留旧数据（不清空、不伪装最新），标陈旧并提供本地重试。
+  const [stale, setStale] = useState(false)
+  // O4：当前抽屉注册的关闭守卫（dirty 确认）；无注册时直接关闭。
+  const closeGuardRef = useRef<(() => boolean) | null>(null)
   const [dashOpen, setDashOpen] = useState(false)
   const [topMenuOpen, setTopMenuOpen] = useState(false)
   // P1-7 副驾内嵌建议层（替代全屏抽屉）。R-S：改为 Portal fixed 浮层，不再作为 flex 兄弟挤压主列。
@@ -716,6 +774,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     try {
       const next = JSON.parse(await execute('web snapshot')) as Snapshot
       setData(next)
+      setStale(false)
       // OPT-03：刷新后回填记住的项目；已删除则回退到当前首个项目，不留脏值。
       const ids = next.projects.map(p => p.id)
       let stored = ''
@@ -723,6 +782,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
       return true
     } catch (error) {
+      // B1-C2：失败不清空已有数据（保留旧内容），仅标陈旧；错误原文进 ResultCard，不静默合并。
+      setStale(true)
       setMessage(error instanceof Error ? error.message : String(error))
       return false
     } finally {
@@ -756,8 +817,10 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     try {
       const response = await execute(line)
       await refresh()
+      // O3：业务拒绝（错误文本未 throw）不算成功，返回 false → 表单不 onSaved 关层，错误就近/全局可见。
+      const accepted = commandAccepted(response)
       if (!options?.quiet) setMessage(response)
-      return true
+      return accepted
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error))
       setBusy(false)
@@ -792,6 +855,31 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     .filter(item => item.projectId === selected)
     .sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })),
   [data.deliverables, selected])
+  // B6 策略A：records 视图回调走真实命令（成功刷新全量快照；run false 原样上抛，表单保输入不关层）。
+  // onPreviewPeriod 仅在 snapshot.capabilities.httpAvailable && previewApi 时提供（HTTP JSON 权威预览）；
+  // 否则 omit，表单显示 unavailable，绝不回退解析 CLI 文本。
+  // memoize：按 project/capability 稳定回调实例，保留预览 AbortController 链，避免每次渲染重建丢 stale 中止。
+  const previewAvailable = Boolean(data.capabilities?.httpAvailable && data.capabilities?.previewApi)
+  const recordsDeps = useMemo(() => project
+    ? {
+      projectId: project.id,
+      run,
+      refresh: () => void refresh(),
+      confirm: (o: { title: string, message?: string, confirmLabel?: string }) => confirmDanger(o),
+      previewAvailable,
+    }
+    : null,
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [project?.id, previewAvailable])
+  const meetingRecords = useMemo(() => recordsDeps
+    ? { projectId: recordsDeps.projectId, callbacks: createMeetingCallbacks(recordsDeps) }
+    : undefined, [recordsDeps])
+  const reportRecords = useMemo(() => recordsDeps
+    ? { projectId: recordsDeps.projectId, callbacks: createReportCallbacks(recordsDeps) }
+    : undefined, [recordsDeps])
+  const deliverableRecords = useMemo(() => recordsDeps
+    ? { projectId: recordsDeps.projectId, callbacks: createDeliverableCallbacks(recordsDeps) }
+    : undefined, [recordsDeps])
   const okrs = useMemo(() => (data.okrs ?? [])
     .filter(item => item.projectId === selected),
   [data.okrs, selected])
@@ -855,10 +943,20 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     <main
       className="pm-shell"
       data-density={density}
+      data-pilot={pilot ? 'on' : 'off'}
+      aria-busy={busy || undefined}
       onPointerDownCapture={recordDrawerOpener}
       onClickCapture={recordDrawerOpener}
     >
+      {busy && <div className="pm-busy-indicator" aria-hidden="true"/>}
       <FeedbackToast message={message}/>
+
+      {stale && !busy && (
+        <div className="pm-stale-banner" role="status">
+          <span className="pm-stale-banner__text">当前为上次读取的旧数据，最新内容暂未加载成功。</span>
+          <button type="button" className="pm-stale-banner__retry" onClick={() => { void refresh() }}>重试</button>
+        </div>
+      )}
 
       {restorePreview && (
         <div className="pm-restore-preview">
@@ -944,13 +1042,13 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 cta = { label: '登记风险/问题', action: () => setDrawer({ kind: 'risk-issue' }) }
                 break
               case 'meetings':
-                cta = { label: '新增会议', action: () => setDrawer({ kind: 'meeting' }) }
+                cta = { label: '新增会议', action: () => setMeetingCreateRequest(n => n + 1) }
                 break
               case 'reports':
-                cta = { label: '生成快照', action: () => setDrawer({ kind: 'report' }) }
+                cta = { label: '生成快照', action: () => setReportCreateRequest(n => n + 1) }
                 break
               case 'deliverables':
-                cta = { label: '新增交付物', action: () => setDrawer({ kind: 'deliverable' }) }
+                cta = { label: '新增交付物', action: () => setDeliverableCreateRequest(n => n + 1) }
                 break
               default:
                 cta = null
@@ -1029,6 +1127,19 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             onClick={() => { setTopMenuOpen(false); setDrawer({ kind: 'settings' }) }}
           >
             <SlidersHorizontal size={15}/>口径设置
+          </button>
+          <div className="pm-menu-divider"/>
+          <div className="pm-menu-caption">外观试验</div>
+          <button
+            type="button"
+            className="pm-button pm-menu-item"
+            role="menuitemcheckbox"
+            aria-pressed={pilot}
+            onClick={() => setPilot(!pilot)}
+            title="仅本地 UI 偏好，默认关闭；开启后任务页试用新视觉，关闭立即回到旧版"
+          >
+            <span className="pm-view-menu-check">{pilot && <Check size={15}/>}</span>
+            新版界面试用
           </button>
           <div className="pm-menu-divider"/>
           <div className="pm-menu-caption">数据管理</div>
@@ -1237,11 +1348,15 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 meetings={meetings}
                 onCreate={() => setDrawer({ kind: 'meeting' })}
                 onEdit={meeting => setDrawer({ kind: 'meeting', meeting })}
+                records={meetingRecords}
+                createRequest={meetingCreateRequest}
               />}
               {view === 'reports' && <ProgressReportTable
                 reports={reports}
                 onCreate={() => setDrawer({ kind: 'report' })}
                 onEdit={report => setDrawer({ kind: 'report', report })}
+                records={reportRecords}
+                createRequest={reportCreateRequest}
               />}
               {view === 'deliverables' && <DeliverableTable
                 deliverables={deliverables}
@@ -1249,8 +1364,32 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 tasks={tasks}
                 onCreate={() => setDrawer({ kind: 'deliverable' })}
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
+                records={deliverableRecords}
+                createRequest={deliverableCreateRequest}
               />}
-              {view === 'overview' && <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues} meetingsCount={meetings.length} reportsCount={reports.length} deliverablesCount={deliverables.length} settings={settings} onEditProject={() => setDrawer({ kind: 'project-edit', project })}/>}
+              {view === 'overview' && (
+                <>
+                  <Overview project={project} tasks={tasks} milestones={milestones} riskIssues={riskIssues} meetingsCount={meetings.length} reportsCount={reports.length} deliverablesCount={deliverables.length} settings={settings} onEditProject={() => setDrawer({ kind: 'project-edit', project })}/>
+                  <BoardBento
+                    data={scopeSnapshot(data, project.id)}
+                    projectId={project.id}
+                    actions={{
+                      openRecord,
+                      pickProject: (id) => setSelected(id),
+                      runCommand: (line) => run(line),
+                      refreshBoard: () => refresh(),
+                    }}
+                    persistence={{
+                      onSave: async (scope, layout) => {
+                        await execute(`dashboard put ${scope} ${JSON.stringify(layout)}`)
+                      },
+                      onReset: async (scope) => {
+                        await execute(`dashboard reset ${scope}`)
+                      },
+                    }}
+                  />
+                </>
+              )}
               {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
               {view === 'people' && <PeopleView
                 project={project}
@@ -1331,7 +1470,11 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           </>}
       </div>
 
-      {drawer && <DrawerPanel title={drawerTitle(drawer)} onClose={() => setDrawer(undefined)}>
+      {drawer && <DrawerPanel
+        title={drawerTitle(drawer)}
+        onClose={() => { closeGuardRef.current = null; setDrawer(undefined) }}
+        beforeClose={() => (closeGuardRef.current ? closeGuardRef.current() : true)}
+      >
         {drawer.kind === 'project-create' && <ProjectForm
           disabled={busy}
           run={run}
@@ -1354,10 +1497,17 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           meetings={data.meetings}
           assigneeCandidates={assigneeCandidates}
           disabled={busy}
+          stale={stale}
           run={run}
           onSaved={() => setDrawer(undefined)}
           onCancel={() => setDrawer(undefined)}
+          registerGuard={fn => { closeGuardRef.current = fn }}
           onOpenMeeting={(meetingId, meetingProjectId) => openRecord(meetingProjectId ?? project.id, 'meeting', meetingId)}
+          deliverableOptions={deliverables.map(d => ({ id: d.id, name: d.name, version: d.version }))}
+          stageEnabled={stageUploadGate(data.capabilities)}
+          downloadEnabled={downloadGate(data.capabilities?.assetDownload)}
+          onChanged={() => void refresh()}
+          onError={setMessage}
         />}
         {drawer.kind === 'milestone' && project && <MilestoneForm
           projectId={project.id}
@@ -2201,6 +2351,9 @@ function ResultCard({ message, onClose, onAction }: {
   const isError = fb.isError
   // 非结构化回退：原样全量进卡体（不强行折叠、不改写）；结构化成功：摘要常显、详情折叠。
   const showInlineRaw = !fb.structured
+  // B1-C3：permission-denied 给通用错误种类标签（权限不足），原始 command 错误原因原样保留，
+  // 不静默合并、不改写、不吞；其余错误种类仍走通用 error 呈现。
+  const isPermissionDenied = isError && /权限|denied|permission|无权|not allowed/i.test(message)
   return (
     <div className={`pm-result-card${isError ? ' pm-result-card--error' : ''}`}
       role={isError ? 'alert' : 'status'}
@@ -2209,6 +2362,7 @@ function ResultCard({ message, onClose, onAction }: {
       <div className="pm-result-card__bar">
         {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
         <div className="pm-result-card__summary">
+          {isPermissionDenied && <div className="pm-result-card__kind">权限不足</div>}
           {showInlineRaw ? message : fb.summary.join('\n')}
         </div>
         <button className="pm-plain-icon" aria-label="关闭结果卡" onClick={onClose}><X size={14}/></button>
@@ -3156,7 +3310,18 @@ function GlobalBoard({ data, execute, onPickProject, onOpenRecord, onClose, runC
   </div>
 }
 
-function DrawerPanel({ title, onClose, children }: { title: string, onClose: () => void, children: ReactNode }) {
+function DrawerPanel({ title, onClose, beforeClose, children }: {
+  title: string
+  onClose: () => void
+  /** O4：关闭前守卫；返回 false 中止关闭（如未保存草稿待确认），缺省直接关闭。 */
+  beforeClose?: () => boolean
+  children: ReactNode
+}) {
+  // O4：统一关闭入口，ESC/scrim/X 都先过守卫，避免任一路径绕过 dirty 确认。
+  const requestClose = () => {
+    if (beforeClose && beforeClose() === false) return
+    onClose()
+  }
   // R3-OBS-002：mount 时快照「打开动作发生那一刻」记录的 opener，
   // 绝不在 mount 后读 document.activeElement（已被表单 autoFocus 抢成抽屉内 input）。
   const openerRef = useRef<OpenerSpec>({ kind: 'none' })
@@ -3172,7 +3337,7 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
   }, [])
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') { ev.stopPropagation(); onClose(); return }
+      if (ev.key === 'Escape') { ev.stopPropagation(); requestClose(); return }
       // I4 焦点陷阱：模态抽屉内 Tab/Shift+Tab 循环回绕，不逃逸到宿主应用、也不困死。
       if (ev.key !== 'Tab' || !asideRef.current) return
       const root = asideRef.current
@@ -3192,7 +3357,7 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
-  }, [onClose])
+  }, [requestClose])
   // E11：卸载（保存成功 / 取消关闭）时把列表滚动位还原到打开前快照。
   useEffect(() => () => {
     const snap = scrollSnapRef.current
@@ -3209,11 +3374,11 @@ function DrawerPanel({ title, onClose, children }: { title: string, onClose: () 
     })
   }, [])
   return <div className="pm-drawer-layer">
-    <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={onClose}/>
+    <button className="pm-drawer-scrim" aria-label="关闭编辑抽屉" onClick={requestClose}/>
     <aside ref={asideRef} className="pm-drawer" role="dialog" aria-modal="true" aria-label={title}>
       <header>
         <div><span>项目记录</span><h2>{title}</h2></div>
-        <button className="pm-icon-button" aria-label="关闭抽屉" onClick={onClose}><X size={17}/></button>
+        <button className="pm-icon-button" aria-label="关闭抽屉" onClick={requestClose}><X size={17}/></button>
       </header>
       <div className="pm-drawer-body">{children}</div>
     </aside>
@@ -3430,10 +3595,17 @@ function TaskForm({
   meetings,
   assigneeCandidates,
   disabled,
+  stale,
   run,
   onSaved,
   onCancel,
   onOpenMeeting,
+  registerGuard,
+  deliverableOptions,
+  onChanged,
+  onError,
+  stageEnabled,
+  downloadEnabled,
 }: {
   projectId: string
   task?: Task
@@ -3443,10 +3615,24 @@ function TaskForm({
   /** T8：执行人候选（跨项目全量派生，仅建议；不限制/不改写输入值）。 */
   assigneeCandidates: string[]
   disabled: boolean
+  /** O5：外层读取失败处于陈旧快照时，客观进度只读值附弱陈旧标注，不参与提交。 */
+  stale?: boolean
   run: (line: string) => Promise<boolean>
   onSaved: () => void
   onCancel: () => void
   onOpenMeeting: (meetingId: string, projectId?: string) => void
+  /** O4：向抽屉注册关闭守卫（dirty 确认）；卸载注销。 */
+  registerGuard?: (guard: (() => boolean) | null) => void
+  /** B2：可选交付物选项（id/name/version），供关联交付物下拉。 */
+  deliverableOptions?: { id: string, name: string, version?: string }[]
+  /** B3：暂存路由已注册（capabilities.stageCancel），才显示文件暂存输入。 */
+  stageEnabled?: boolean
+  /** B3：capabilities.assetDownload 为真，已存文件才渲染下载链接。 */
+  downloadEnabled?: boolean
+  /** B2：单项写成功后刷新任务快照（不关抽屉）。 */
+  onChanged?: () => void
+  /** B2：命令失败就近/全局展示错误文本，保留输入。 */
+  onError?: (text: string) => void
 }) {
   // #23：客观进度真源（清单 checked/total）；人工设定与之并存且明确区分，客观值不被人工污染。
   const objectiveMap = useMemo(() => deriveProgressMap(tasks), [tasks])
@@ -3458,6 +3644,31 @@ function TaskForm({
   // PROD-10：任务由会议行动项 promote/关联而来时，抽屉顶部展示只读来源链接（前端反查全量 meetings，不落库）。
   const sources = task ? findMeetingSources(meetings, task.id) : []
   const primary = pickPrimarySource(sources)
+  // O4：打开瞬间采集初始快照（含非控 description）；关闭前比对，dirty 才弹放弃确认，干净直接关。
+  const formRef = useRef<HTMLFormElement>(null)
+  const initialSnap = useRef<FormSnapshot | null>(null)
+  const tryClose = (): boolean => {
+    const form = formRef.current
+    const mustConfirm = shouldConfirmDiscard(
+      initialSnap.current,
+      form ? collectFormSnapshot(form) : null,
+      draftDirtyRef.current,
+    )
+    if (!mustConfirm) return true
+    void confirmDanger({
+      title: '放弃未保存修改？',
+      message: '当前表单有未保存改动（含资料/进展草稿），关闭将丢弃这些内容。',
+      confirmLabel: '放弃修改',
+    }).then(ok => { if (ok) onCancel() })
+    return false
+  }
+  useLayoutEffect(() => {
+    if (formRef.current) initialSnap.current = collectFormSnapshot(formRef.current)
+    registerGuard?.(tryClose)
+    return () => registerGuard?.(null)
+    // 仅注册一次（key 按 task 重挂载）；onCancel/registerGuard 稳定。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // T7：可选 repoUrl/branch 受控（复用三级共享 form-validation 中文校验），编辑预填；
   // 清空传空串，由 core omitEmptyRepoKeys 落盘删键（不写空串）。
   // P1-5：repo 错误并入统一 errors（validateTaskForm），不再独立 repoErrors。
@@ -3481,6 +3692,19 @@ function TaskForm({
   const [evidenceUrl, setEvidenceUrl] = useState<string>(task?.evidenceUrl ?? '')
   const [manualProgress, setManualProgress] = useState<string>(task?.manualProgress != null ? String(task.manualProgress) : '')
   const [manualNote, setManualNote] = useState<string>(task?.manualProgressNote ?? '')
+  // B2 ops 草稿信封：draft 面板本地追加 attachmentOps/progressOps，提交时随单条命令合并；
+  // 无改动为 null（不发 draft 键）；draftErrors 非空则拦截提交、保留输入不关层。
+  const [draftEnvelope, setDraftEnvelope] = useState<{ draft: TaskDraftOps } | null>(null)
+  const [draftErrors, setDraftErrors] = useState<string[]>([])
+  // dirty 守卫读 ref（tryClose 仅注册一次，避免闭包捕获旧 state）。
+  const draftDirtyRef = useRef(false)
+  // B3：命令成功同步置 true，供 draft 面板卸载决策跳过已消费暂存的 DELETE（后端已 finalize）。
+  const submissionRef = useRef(false)
+  const handleDraft = (envelope: { draft: TaskDraftOps } | null, errors: string[]) => {
+    draftDirtyRef.current = envelope != null
+    setDraftEnvelope(envelope)
+    setDraftErrors(errors)
+  }
   const collectTaskValues = (patch: Partial<TaskFormValues> = {}): TaskFormValues => ({
     ...values, ...patch,
     effortHours, evidenceUrl, manualProgress,
@@ -3529,6 +3753,12 @@ function TaskForm({
       endSubmit()
       return
     }
+    // B2 ops 草稿校验：存在非法项则拦截提交、保留输入不关层（零写）。
+    if (draftErrors.length > 0) {
+      onError?.(draftErrors.join('\n'))
+      endSubmit()
+      return
+    }
     const form = new FormData(event.currentTarget)
     const parentId = String(form.get('parentId') ?? '')
     const milestoneId = String(form.get('milestoneId') ?? '')
@@ -3561,6 +3791,8 @@ function TaskForm({
       // 更新语义：空 → null（清除人工设定，回落客观）；非空复用写路径 clampProgress。
       manualProgress: manualProgress.trim() === '' ? null : writeClampProgress(manualProgress),
       ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
+      // B2：ops 信封随单条 task update 原子提交（无改动则无 draft 键）。
+      ...(draftEnvelope?.draft ? { draft: draftEnvelope.draft } : {}),
     }
     const createPayload = {
       projectId,
@@ -3582,6 +3814,8 @@ function TaskForm({
       // 新建语义：空 → 整个键省略；非空用 parseProgressInput（非法 → undefined 不写）。
       ...(manualProgress.trim() !== '' ? { manualProgress: parseProgressInput(manualProgress) } : {}),
       ...(manualNote.trim() !== '' ? { manualProgressNote: manualNote.trim() } : {}),
+      // B2：create 同样走 ops 信封（clientId 别名可被 progress refs 前向引用）。
+      ...(draftEnvelope?.draft ? { draft: draftEnvelope.draft } : {}),
     }
     let success = false
     try {
@@ -3591,9 +3825,12 @@ function TaskForm({
     } finally {
       endSubmit()
     }
-    if (success) onSaved()
+    if (success) {
+      submissionRef.current = true
+      onSaved()
+    }
   }
-  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
+  return <form ref={formRef} className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
     {primary && (
       <div className="pm-source-link" data-tip="由会议行动项转为任务，点击打开来源会议">
         <MessageSquare size={13}/>
@@ -3676,6 +3913,7 @@ function TaskForm({
           <span className="pm-meta-value">
             {derivedObjective?.value != null ? `${derivedObjective.value}%` : '证据不足'}
             {derivedObjective?.checklist && <span className="pm-muted">（{checklistFraction(derivedObjective)}）</span>}
+            {stale && <span className="pm-muted pm-meta-stale">（数据陈旧，重试后更新）</span>}
           </span>
         </div>
         {task?.completedDate && (
@@ -3808,6 +4046,17 @@ function TaskForm({
       })()}
     </Field>
     </FormSection>
+    {/* B2：新建/编辑统一走本地 ops 草稿（attachmentOps/progressOps），提交随单条 task add/update 原子落库；
+        面板只追加 op 不写盘，cancel 零写；既有条目只读 + 暂存徽标，未提及项后端原样保留。 */}
+    <TaskDraftMaterials
+      task={task as unknown as MirrorTask | undefined}
+      deliverableOptions={deliverableOptions ?? []}
+      stageEnabled={stageEnabled}
+      taskId={task?.id}
+      downloadEnabled={downloadEnabled}
+      submissionRef={submissionRef}
+      onDraft={handleDraft}
+    />
     <div className="pm-drawer-actions">
       {task && <button
         className="pm-button pm-button-danger pm-actions-left"
@@ -3847,7 +4096,7 @@ function TaskForm({
           void run(line).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
-      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
+      <button className="pm-button" type="button" disabled={disabled} onClick={() => { tryClose() }}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
         {submitting ? '提交中…' : task ? '保存更改' : '添加任务'}
       </button>
@@ -3993,61 +4242,31 @@ function OkrForm({
   onSaved: () => void
   onCancel: () => void
 }) {
-  const [values, setValues] = useState<OkrFormValues>({
-    title: record?.title ?? '',
-    kind: record?.kind ?? 'objective',
-    owner: record?.owner ?? '',
-    targetDate: record?.targetDate ?? '',
-    primaryOkrId: record?.primaryOkrId ?? '',
-    relatedOkrIds: (record?.relatedOkrIds ?? []).join(', '),
-    status: record?.status ?? 'draft',
-    description: record?.description ?? '',
-  })
-  const [errors, setErrors] = useState<FormFieldErrors>({})
+  // B7：UI 交给外部受控 ExtOkrForm；这里只保留命令通道（okr add/update）与提交守卫。
   const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
   const objectiveIds = new Set(objectives.map(o => o.id))
-  const setField = (field: keyof OkrFormValues, value: string) => {
-    setValues(prev => {
-      const next = { ...prev, [field]: value }
-      setErrors(validateOkrForm(next, objectiveIds))
-      return next
-    })
-  }
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const primaryOptions = objectives.map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
+  const handleSubmit = async (values: OkrFormValues) => {
     if (!beginSubmit()) return
-    const nextErrors = validateOkrForm(values, objectiveIds)
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) {
-      const first = firstInvalidField(['title', 'kind', 'targetDate', 'primaryOkrId', 'status'], nextErrors)
-      if (first) {
-        const el = event.currentTarget.elements.namedItem(first)
-        if (el instanceof HTMLElement) el.focus()
-      }
-      endSubmit()
-      return
-    }
     const related = parseIdList(values.relatedOkrIds)
-    const description = values.description?.trim()
-    const owner = values.owner?.trim()
-    const targetDate = values.targetDate?.trim()
+    const owner = values.owner?.trim() || null
+    const targetDate = values.targetDate?.trim() || null
+    const description = values.description?.trim() || null
     let success = false
     try {
       if (record) {
-        // update 为 patch：可清空字段显式传 null；kind/status 随表单值提交。
         const patch: Record<string, unknown> = {
           title: values.title.trim(),
           kind: values.kind,
-          owner: owner || null,
-          targetDate: targetDate || null,
-          description: description || null,
+          owner,
+          targetDate,
+          description,
           status: values.status,
           primaryOkrId: values.kind === 'key-result' ? (values.primaryOkrId?.trim() || null) : null,
           relatedOkrIds: related,
         }
         success = await run(`okr update ${record.id} ${JSON.stringify(patch)}`)
       } else {
-        // strict okrCreateSchema：projectId 由命令位置参数注入，body 绝不嵌 projectId/id/createdAt。
         const payload: Record<string, unknown> = {
           title: values.title.trim(),
           kind: values.kind,
@@ -4065,82 +4284,19 @@ function OkrForm({
     }
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
-    <FormSection index="01" title="基础信息">
-      <Field label="类型" required error={errors.kind} errorId="okr-kind-error">
-        <select
-          name="kind" value={values.kind}
-          onChange={e => setField('kind', e.currentTarget.value)}
-          aria-required="true"
-          aria-invalid={errors.kind ? true : undefined}
-          aria-describedby={errors.kind ? 'okr-kind-error' : undefined}
-        >
-          {OKR_KINDS.map(k => <option key={k} value={k}>{k === 'objective' ? '目标 O' : '关键结果 KR'}</option>)}
-        </select>
-      </Field>
-      <Field label="标题" wide required error={errors.title} errorId="okr-title-error">
-        <input
-          name="title" value={values.title} autoFocus
-          onChange={e => setField('title', e.currentTarget.value)}
-          aria-required="true"
-          aria-invalid={errors.title ? true : undefined}
-          aria-describedby={errors.title ? 'okr-title-error' : undefined}
-        />
-      </Field>
-      <Field label="负责人">
-        <input name="owner" value={values.owner ?? ''} onChange={e => setField('owner', e.currentTarget.value)}/>
-      </Field>
-      <Field label="目标日期" error={errors.targetDate} errorId="okr-target-error">
-        <input
-          name="targetDate" type="date" value={values.targetDate ?? ''}
-          onChange={e => setField('targetDate', e.currentTarget.value)}
-          aria-invalid={errors.targetDate ? true : undefined}
-          aria-describedby={errors.targetDate ? 'okr-target-error' : undefined}
-        />
-      </Field>
-      <Field label="状态" error={errors.status} errorId="okr-status-error">
-        <select
-          name="status" value={values.status}
-          onChange={e => setField('status', e.currentTarget.value)}
-          aria-invalid={errors.status ? true : undefined}
-          aria-describedby={errors.status ? 'okr-status-error' : undefined}
-        >
-          {OKR_STATUSES.map(s => <option key={s} value={s}>{s === 'confirmed' ? '已定稿' : '草稿'}</option>)}
-        </select>
-      </Field>
-    </FormSection>
-    <FormSection index="02" title="归属与关联">
-      {values.kind === 'key-result' && (
-        <Field label="父目标（主归属）" wide error={errors.primaryOkrId} errorId="okr-primary-error">
-          <select
-            name="primaryOkrId" value={values.primaryOkrId ?? ''}
-            onChange={e => setField('primaryOkrId', e.currentTarget.value)}
-            aria-invalid={errors.primaryOkrId ? true : undefined}
-            aria-describedby={errors.primaryOkrId ? 'okr-primary-error' : undefined}
-          >
-            <option value="">（未指定，可后补）</option>
-            {objectives.map(o => <option key={o.id} value={o.id}>{o.title}（{o.id}）</option>)}
-          </select>
-        </Field>
-      )}
-      <Field label="软关联 OKR（逗号分隔，不计权重）" wide>
-        <input
-          name="relatedOkrIds" value={values.relatedOkrIds ?? ''}
-          onChange={e => setField('relatedOkrIds', e.currentTarget.value)}
-          placeholder="如 okr-a, okr-b"
-        />
-      </Field>
-      <Field label="说明 / 补充描述（多行，安全 Markdown）" wide>
-        <textarea name="description" rows={5} value={values.description ?? ''} onChange={e => setField('description', e.currentTarget.value)}/>
-      </Field>
-    </FormSection>
-    <div className="pm-drawer-actions">
-      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
-        {submitting ? '提交中…' : record ? '保存更改' : '添加 OKR'}
-      </button>
-    </div>
-  </form>
+  return (
+    <ExtOkrForm
+      initial={record
+        ? prefillOkrForm(record)
+        : { title: '', kind: 'objective', owner: '', targetDate: '', primaryOkrId: '', relatedOkrIds: '', status: 'draft', description: '' }}
+      objectiveIds={objectiveIds}
+      primaryOptions={primaryOptions}
+      busy={submitting}
+      disabled={disabled}
+      onCancel={onCancel}
+      onSubmit={v => void handleSubmit(v)}
+    />
+  )
 }
 
 /**
@@ -4165,49 +4321,23 @@ function HabitForm({
   onSaved: () => void
   onCancel: () => void
 }) {
-  const [values, setValues] = useState<HabitFormValues>({
-    title: record?.title ?? '',
-    goal: record?.goal ?? '',
-    frequency: record?.frequency ?? '',
-    notes: record?.notes ?? '',
-    okrId: record?.okrId ?? '',
-  })
-  const [errors, setErrors] = useState<FormFieldErrors>({})
+  // B7：UI 交给外部受控 ExtHabitForm；这里只保留命令通道（habit add/update）与提交守卫。
   const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
-  const setField = (field: keyof HabitFormValues, value: string) => {
-    setValues(prev => {
-      const next = { ...prev, [field]: value }
-      setErrors(validateHabitForm(next))
-      return next
-    })
-  }
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const okrOptions = okrs.map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
+  const handleSubmit = async (values: HabitFormValues) => {
     if (!beginSubmit()) return
-    const nextErrors = validateHabitForm(values)
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) {
-      const first = firstInvalidField(['title', 'goal', 'frequency', 'notes', 'okrId'], nextErrors)
-      if (first) {
-        const el = event.currentTarget.elements.namedItem(first)
-        if (el instanceof HTMLElement) el.focus()
-      }
-      endSubmit()
-      return
-    }
-    const goal = values.goal?.trim()
-    const frequency = values.frequency?.trim()
-    const notes = values.notes?.trim()
-    const okrId = values.okrId?.trim()
+    const goal = values.goal?.trim() || null
+    const frequency = values.frequency?.trim() || null
+    const notes = values.notes?.trim() || null
+    const okrId = values.okrId?.trim() || null
     let success = false
     try {
       if (record) {
-        // update patch：空文本显式 null 清空；okrId 空 → null 解绑；strict 非空对象。
         const patch: Record<string, unknown> = { title: values.title.trim() }
-        patch.goal = goal || null
-        patch.frequency = frequency || null
-        patch.notes = notes || null
-        patch.okrId = okrId || null
+        patch.goal = goal
+        patch.frequency = frequency
+        patch.notes = notes
+        patch.okrId = okrId
         success = await run(`habit update ${record.id} ${JSON.stringify(patch)}`)
       } else {
         const payload: Record<string, unknown> = { title: values.title.trim() }
@@ -4222,60 +4352,18 @@ function HabitForm({
     }
     if (success) onSaved()
   }
-  return <form className="pm-drawer-form" noValidate onSubmit={event => void submit(event)}>
-    <FormSection index="01" title="基础信息">
-      <Field label="习惯名称" wide required error={errors.title} errorId="habit-title-error">
-        <input
-          name="title" value={values.title} autoFocus
-          onChange={e => setField('title', e.currentTarget.value)}
-          aria-required="true"
-          aria-invalid={errors.title ? true : undefined}
-          aria-describedby={errors.title ? 'habit-title-error' : undefined}
-        />
-      </Field>
-      <Field label="频率（自由文本：每天 / 工作日 / 每周一…）" wide error={errors.frequency} errorId="habit-frequency-error">
-        <input
-          name="frequency" value={values.frequency ?? ''}
-          onChange={e => setField('frequency', e.currentTarget.value)}
-          aria-invalid={errors.frequency ? true : undefined}
-          aria-describedby={errors.frequency ? 'habit-frequency-error' : undefined}
-        />
-      </Field>
-      <Field label="目标 / 期望结果" wide error={errors.goal} errorId="habit-goal-error">
-        <textarea
-          name="goal" rows={3} value={values.goal ?? ''}
-          onChange={e => setField('goal', e.currentTarget.value)}
-          aria-invalid={errors.goal ? true : undefined}
-          aria-describedby={errors.goal ? 'habit-goal-error' : undefined}
-        />
-      </Field>
-      <Field label="备注（多行，安全 Markdown）" wide error={errors.notes} errorId="habit-notes-error">
-        <textarea
-          name="notes" rows={4} value={values.notes ?? ''}
-          onChange={e => setField('notes', e.currentTarget.value)}
-          aria-invalid={errors.notes ? true : undefined}
-          aria-describedby={errors.notes ? 'habit-notes-error' : undefined}
-        />
-      </Field>
-      <Field label="关联 OKR（可选）" wide error={errors.okrId} errorId="habit-okr-error">
-        <select
-          name="okrId" value={values.okrId ?? ''}
-          onChange={e => setField('okrId', e.currentTarget.value)}
-          aria-invalid={errors.okrId ? true : undefined}
-          aria-describedby={errors.okrId ? 'habit-okr-error' : undefined}
-        >
-          <option value="">（不关联）</option>
-          {okrs.map(o => <option key={o.id} value={o.id}>{o.title}（{o.id}）</option>)}
-        </select>
-      </Field>
-    </FormSection>
-    <div className="pm-drawer-actions">
-      <button className="pm-button" type="button" disabled={disabled} onClick={onCancel}>取消</button>
-      <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
-        {submitting ? '提交中…' : record ? '保存更改' : '添加习惯'}
-      </button>
-    </div>
-  </form>
+  return (
+    <ExtHabitForm
+      initial={record
+        ? prefillHabitForm(record)
+        : { title: '', goal: '', frequency: '', notes: '', okrId: '' }}
+      okrOptions={okrOptions}
+      busy={submitting}
+      disabled={disabled}
+      onCancel={onCancel}
+      onSubmit={v => void handleSubmit(v)}
+    />
+  )
 }
 
 function RiskIssueForm({

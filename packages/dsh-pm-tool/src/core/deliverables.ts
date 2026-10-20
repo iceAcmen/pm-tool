@@ -16,6 +16,16 @@ import { ensureReflectionOnDeliverable } from './reflect.js'
 import type { PmDomain } from './storage.js'
 
 export class DeliverableProjectNotFoundError extends Error {}
+export class DeliverableMilestoneNotFoundError extends Error {}
+
+/** U5：milestoneId 非空时校验目标里程碑存在且同项目；null/undefined 表示不关联。 */
+function assertMilestoneInProject(domain: PmDomain, projectId: string, milestoneId: string | null | undefined): void {
+  if (!milestoneId) return
+  const row = domain.table('milestones').get(milestoneId) as { projectId?: string } | undefined
+  if (!row || row.projectId !== projectId) {
+    throw new DeliverableMilestoneNotFoundError(`里程碑不存在或不属于本项目：${milestoneId}`)
+  }
+}
 
 export function addDeliverable(domain: PmDomain, input: unknown): Promise<Deliverable> {
   const fields = deliverableCreateSchema.parse(input)
@@ -23,6 +33,7 @@ export function addDeliverable(domain: PmDomain, input: unknown): Promise<Delive
     if (!domain.table('projects').get(fields.projectId)) {
       throw new DeliverableProjectNotFoundError(`未找到项目：${fields.projectId}`)
     }
+    assertMilestoneInProject(domain, fields.projectId, fields.milestoneId)
     const table = domain.table('deliverables')
     let max = 0n
     for (const key of table.keys()) {
@@ -50,6 +61,8 @@ export function addDeliverable(domain: PmDomain, input: unknown): Promise<Delive
       dueDate: fields.dueDate,
       repoUrl: fields.repoUrl,
       branch: fields.branch,
+      milestoneId: fields.milestoneId,
+      note: fields.note,
       history,
       id,
       createdAt: at,
@@ -99,6 +112,7 @@ export function updateDeliverable(
     const table = domain.table('deliverables')
     const current = table.get(id)
     if (!current) return undefined
+    assertMilestoneInProject(domain, current.projectId, fields.milestoneId)
     becameAccepted = current.status !== 'accepted' && fields.status === 'accepted'
     const at = new Date().toISOString()
     const history = [...current.history]
@@ -128,6 +142,8 @@ export function updateDeliverable(
       // 仓库链接可独立更新；仅改这两键不追加 history[]（留痕只跟 status/version）。
       repoUrl: fields.repoUrl ?? current.repoUrl,
       branch: fields.branch ?? current.branch,
+      milestoneId: fields.milestoneId !== undefined ? fields.milestoneId : (current.milestoneId ?? null),
+      note: fields.note ?? current.note ?? '',
       history,
       id: current.id,
       projectId: current.projectId,

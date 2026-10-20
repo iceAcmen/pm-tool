@@ -11,7 +11,7 @@
  * props 签名（DESIGN-SPEC §6）：{ meetings, onCreate, onEdit }。
  * 样式见 meetings.css，全部选择器 scope 在 .pm-mt-root 下。
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Search from 'lucide-react/dist/esm/icons/search.mjs'
@@ -20,6 +20,14 @@ import css from './meetings.css?raw'
 import { localTodayIso } from '../../core/derived.js'
 import { MarkdownView } from '../shared/markdown-view.js'
 import type { Meeting } from './types.js'
+import type { MeetingCallbacks } from '../shared/records-props.js'
+import { RecordsOverlay, RecordsMeetingForm } from './records/index.js'
+
+/** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
+export interface MeetingsRecordsSlot {
+  projectId: string
+  callbacks: MeetingCallbacks
+}
 
 const MEETING_STATUS_LABEL: Record<Meeting['status'], string> = {
   draft: '草稿',
@@ -47,9 +55,27 @@ export function MeetingsView(props: {
   meetings: Meeting[]
   onCreate: () => void
   onEdit: (m: Meeting) => void
+  records?: MeetingsRecordsSlot
+  /** 页头主 CTA 触发计数；统一打开 records 会议表单。 */
+  createRequest?: number
 }) {
-  const { meetings, onCreate, onEdit } = props
+  const { meetings, onCreate, onEdit, records, createRequest = 0 } = props
   const today = localTodayIso()
+  const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', meeting: Meeting } | null>(null)
+
+  const openCreate = () => {
+    if (records) setForm({ mode: 'create' })
+    else onCreate()
+  }
+  const openEdit = (m: Meeting) => {
+    if (records) setForm({ mode: 'edit', meeting: m })
+    else onEdit(m)
+  }
+  const closeForm = () => setForm(null)
+  useEffect(() => {
+    if (createRequest > 0) openCreate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createRequest])
 
   const sorted = useMemo(() =>
     meetings.slice().sort((a, b) =>
@@ -96,11 +122,20 @@ export function MeetingsView(props: {
             <div className="mt-ico"><CalendarClock size={20}/></div>
             <h4>尚无会议纪要</h4>
             <p>项目还没有记录过会议。评审会、例会的结论与待办建议在这里留档，行动项可直接关联任务与风险。</p>
-            <button type="button" className="mt-btn-primary" onClick={onCreate}>
+            <button type="button" className="mt-btn-primary" onClick={openCreate}>
               <Plus size={14}/> 新增会议
             </button>
           </div>
         </section>
+        {form && records && (
+          <RecordsOverlay eyebrow="会议纪要" title="新增会议纪要" onClose={closeForm}>
+            <RecordsMeetingForm
+              projectId={records.projectId}
+              callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+              onCancel={closeForm}
+            />
+          </RecordsOverlay>
+        )}
       </div>
     )
   }
@@ -185,7 +220,7 @@ export function MeetingsView(props: {
               <h2>{selected.title || selected.id}</h2>
               <span className={`mt-chip ${selected.status}`}><i/>{MEETING_STATUS_LABEL[selected.status]}</span>
               <span className="mt-item-sp"/>
-              <button type="button" className="mt-ico-btn" aria-label="编辑会议" onClick={() => onEdit(selected)}>
+              <button type="button" className="mt-ico-btn" aria-label="编辑会议" onClick={() => openEdit(selected)}>
                 <Pencil size={14}/>
               </button>
             </div>
@@ -269,6 +304,21 @@ export function MeetingsView(props: {
           </section>
         )}
       </div>
+
+      {form && records && (
+        <RecordsOverlay
+          eyebrow="会议纪要"
+          title={form.mode === 'edit' ? '编辑会议纪要' : '新增会议纪要'}
+          onClose={closeForm}
+        >
+          <RecordsMeetingForm
+            projectId={records.projectId}
+            meeting={form.mode === 'edit' ? form.meeting : undefined}
+            callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+            onCancel={closeForm}
+          />
+        </RecordsOverlay>
+      )}
     </div>
   )
 }

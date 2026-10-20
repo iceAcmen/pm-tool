@@ -11,9 +11,9 @@
  * - web 档自包含单文件：内联 CSS、无外链字体/图片/脚本、浅深双态（prefers-color-scheme）、
  *   空数据「暂无数据」占位，不嵌入虚构示例数据。
  */
-import { link, mkdir, rename, unlink, writeFile } from 'node:fs/promises'
+import { link, lstat, mkdir, rename, unlink, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
-import { isAbsolute, resolve } from 'node:path'
+import { isAbsolute, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { PmDomain } from './storage.js'
 import { collectProjectReport, renderProjectMarkdown } from './report.js'
@@ -46,6 +46,47 @@ function expandDirectory(directory: string | undefined): string {
       ? resolve(homedir(), directory.slice(2))
       : directory
   return isAbsolute(expanded) ? resolve(expanded) : resolve(defaultExportDirectory, '..', expanded)
+}
+
+/**
+ * 候选隔离开关：仅当显式设置 DSH_PM_ISOLATED_ROOT 时生效（正常生产未设置，语义完全不变）。
+ * 设置后所有文件导出收敛到 <root>/exports，用户给的绝对路径 / ~ / ../ 一律拒绝，fail-closed。
+ */
+export const ISOLATED_ROOT_ENV = 'DSH_PM_ISOLATED_ROOT'
+
+export class ExportIsolationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'ExportIsolationError'
+  }
+}
+
+export function isolatedExportBase(): string | undefined {
+  const value = process.env[ISOLATED_ROOT_ENV]?.trim()
+  return value ? resolve(value) : undefined
+}
+
+/**
+ * 解析导出目录：
+ *  - 未设隔离 env：走 legacy expandDirectory（生产默认语义，绝对/~/相对均允许）。
+ *  - 已设隔离 env：默认落 <root>/exports；仅允许相对子目录，绝对、~、~/、越界 ..、symlink 全部拒绝且零写。
+ */
+export async function resolveIsolatedExportDirectory(directory: string | undefined): Promise<string> {
+  const base = isolatedExportBase()
+  if (!base) return expandDirectory(directory)
+  const root = resolve(base, 'exports')
+  const rel = directory?.trim()
+  if (!rel) return root
+  if (rel === '~' || rel.startsWith('~/') || isAbsolute(rel)) {
+    throw new ExportIsolationError('候选隔离模式下仅允许相对导出子目录，拒绝绝对路径与主目录（~）。')
+  }
+  const abs = resolve(root, rel)
+  if (abs !== root && !abs.startsWith(root + sep)) {
+    throw new ExportIsolationError('导出路径越界，已拒绝（不得逃出隔离 root）。')
+  }
+  const stat = await lstat(abs).catch(() => undefined)
+  if (stat?.isSymbolicLink()) throw new ExportIsolationError('拒绝符号链接导出目标。')
+  return abs
 }
 
 export async function writeExportFile(
@@ -227,6 +268,7 @@ interface ExportBundle {
   reflections: ReflectionRecord[]
   deliverableById: Map<string, Deliverable>
   reflectionByTask: Map<string, ReflectionRecord>
+  fileAssetById: Map<string, { fileName: string; size: number; sha256: string }>
 }
 
 function collectExportBundle(domain: PmDomain, projectId: string): ExportBundle {
@@ -234,6 +276,11 @@ function collectExportBundle(domain: PmDomain, projectId: string): ExportBundle 
   const deliverables = listDeliverables(domain, projectId)
   const reflections = listReflections(domain, projectId)
   const deliverableById = new Map(deliverables.map(d => [d.id, d]))
+  const fileAssetById = new Map<string, { fileName: string; size: number; sha256: string }>()
+  for (const [, row] of domain.table('file_assets').entries() as IterableIterator<[string, unknown]>) {
+    const r = row as { id: string; fileName: string; size: number; sha256: string }
+    fileAssetById.set(r.id, { fileName: r.fileName, size: r.size, sha256: r.sha256 })
+  }
   const reflectionByTask = new Map<string, ReflectionRecord>()
   for (const reflection of reflections) {
     if (reflection.taskId && !reflectionByTask.has(reflection.taskId)) {
@@ -248,6 +295,7 @@ function collectExportBundle(domain: PmDomain, projectId: string): ExportBundle 
     reflections,
     deliverableById,
     reflectionByTask,
+    fileAssetById,
   }
 }
 
@@ -255,12 +303,19 @@ function collectExportBundle(domain: PmDomain, projectId: string): ExportBundle 
 
 function mdInline(value: string | undefined | null, fallback = '未填写'): string {
   const s = (value ?? '').trim()
-  return s ? s.replaceAll('\\', '\\\\').replaceAll('|', '\\|').replace(/\r?\n/g, '<br>') : fallback
+  return s
+    ? s
+      .replaceAll('\\', '\\\\')
+      .replaceAll('|', '\\|')
+      .replace(/\r?\n/g, '<br>')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+    : fallback
 }
 
 /** 技术 MD 引用附录：任务级佐证/交付物/复盘行 + 交付物台账 + 复盘记录清单。 */
 function buildMarkdownReferenceAppendix(bundle: ExportBundle): string {
-  const { tasks, deliverables, reflections, deliverableById, reflectionByTask } = bundle
+  const { tasks, deliverables, reflections, deliverableById, reflectionByTask, fileAssetById } = bundle
   const lines: string[] = ['## 证据 · 交付物 · 复盘引用', '']
   const taskRefs = tasks.map(task => {
     const refs: string[] = []
@@ -270,6 +325,22 @@ function buildMarkdownReferenceAppendix(bundle: ExportBundle): string {
       refs.push(dlv
         ? `关联交付物：\`${dlv.id}\`「${mdInline(dlv.name)}」（${deliverableStatusLabels[dlv.status] ?? dlv.status}）`
         : `关联交付物：\`${task.deliverableId}\`（台账中未找到）`)
+    }
+    // B2：资料区 link / deliverable 软引用进 MD 引用附录。
+    for (const att of task.attachments ?? []) {
+      if (att.kind === 'link') {
+        refs.push(att.title ? `资料链接：${mdInline(att.title)}（${att.url}）` : `资料链接：${att.url}`)
+      } else if (att.kind === 'deliverable') {
+        const dlv = deliverableById.get(att.deliverableId)
+        refs.push(dlv
+          ? `资料交付物：\`${att.deliverableId}\`「${mdInline(dlv.name)}」（冻结版本 ${mdInline(att.frozenVersion, '未填')}）`
+          : `资料交付物：\`${att.deliverableId}\`（台账中未找到）`)
+      } else if (att.kind === 'file') {
+        const fa = fileAssetById.get(att.assetId)
+        refs.push(fa
+          ? `资料文件：\`${att.assetId}\`「${mdInline(fa.fileName)}」（${fa.size} 字节 · sha256:${fa.sha256.slice(0, 8)}）`
+          : `资料文件：\`${att.assetId}\`（资产记录未找到）`)
+      }
     }
     const reflection = reflectionByTask.get(task.id)
     if (reflection) {
@@ -294,10 +365,10 @@ function buildMarkdownReferenceAppendix(bundle: ExportBundle): string {
 
   if (deliverables.length) {
     lines.push('### 交付物台账', '')
-    lines.push('| ID | 名称 | 版本 | 状态 | 位置 |')
-    lines.push('| --- | --- | --- | --- | --- |')
+    lines.push('| ID | 名称 | 版本 | 状态 | 位置 | 关联里程碑 | 备注 |')
+    lines.push('| --- | --- | --- | --- | --- | --- | --- |')
     for (const dlv of deliverables) {
-      lines.push(`| \`${dlv.id}\` | ${mdInline(dlv.name)} | ${mdInline(dlv.version, '未填写')} | ${deliverableStatusLabels[dlv.status] ?? dlv.status} | ${mdInline(dlv.location)} |`)
+      lines.push(`| \`${dlv.id}\` | ${mdInline(dlv.name)} | ${mdInline(dlv.version, '未填写')} | ${deliverableStatusLabels[dlv.status] ?? dlv.status} | ${mdInline(dlv.location)} | ${mdInline(dlv.milestoneId, '未关联')} | ${mdInline(dlv.note, '未填写')} |`)
     }
     lines.push('')
   }
@@ -357,6 +428,22 @@ function taskReferenceTextLines(bundle: ExportBundle, task: Task): string[] {
     refs.push(dlv
       ? `关联交付物：${dlv.name}（${deliverableStatusLabels[dlv.status] ?? dlv.status}）`
       : `关联交付物：${task.deliverableId}（台账中未找到）`)
+  }
+  // B2：资料区 link 项与 deliverable 软引用一并纳入导出引用。
+  for (const att of task.attachments ?? []) {
+    if (att.kind === 'link') {
+      refs.push(att.title ? `资料链接：${att.title}（${att.url}）` : `资料链接：${att.url}`)
+    } else if (att.kind === 'deliverable') {
+      const dlv = bundle.deliverableById.get(att.deliverableId)
+      refs.push(dlv
+        ? `资料交付物：\`${att.deliverableId}\`「${dlv.name}」（冻结版本 ${att.frozenVersion || '未填'}）`
+        : `资料交付物：\`${att.deliverableId}\`（台账中未找到）`)
+    } else if (att.kind === 'file') {
+      const fa = bundle.fileAssetById.get(att.assetId)
+      refs.push(fa
+        ? `资料文件：\`${att.assetId}\`「${fa.fileName}」（${fa.size} 字节 · sha256:${fa.sha256.slice(0, 8)}）`
+        : `资料文件：\`${att.assetId}\`（资产记录未找到）`)
+    }
   }
   const reflection = bundle.reflectionByTask.get(task.id)
   if (reflection) refs.push(`复盘记录（${reflection.status === 'final' ? '定稿' : '草稿'}）：${reflection.draft.title}`)
@@ -421,7 +508,7 @@ export function renderProjectWebHtml(bundle: ExportBundle, generatedAt: string):
       <div class="item">
         <div class="item-head"><span class="item-title">${escapeHtml(dlv.name)}</span>
         <span class="chip">${escapeHtml(deliverableStatusLabels[dlv.status] ?? dlv.status)}</span></div>
-        <div class="item-meta">版本：${escapeHtml(dlv.version || '未填写')} · 负责人：${escapeHtml(dlv.owner || '未填写')} · 位置：${escapeHtml(dlv.location || '未填写')}</div>
+        <div class="item-meta">版本：${escapeHtml(dlv.version || '未填写')} · 负责人：${escapeHtml(dlv.owner || '未填写')} · 位置：${escapeHtml(dlv.location || '未填写')} · 关联里程碑：${escapeHtml(dlv.milestoneId || '未关联')} · 备注：${escapeHtml(dlv.note || '未填写')}</div>
       </div>`).join('')
 
   const reflectionRows = reflections.length === 0
@@ -541,6 +628,11 @@ function plainLine(label: string, value: string | undefined | null): string {
   return value && value.trim() ? `${label}：${value.trim()}` : `${label}：未填写`
 }
 
+function plainSafeNote(value: string | undefined | null): string {
+  const safe = (value ?? '').trim().replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+  return safe || '未填写'
+}
+
 /** 纯文本：不含 markdown 符号（井号标题、星号强调、竖线表格、反引号等）；空项「暂无数据」；含生成时间戳。 */
 export function renderProjectPlain(bundle: ExportBundle, generatedAt: string): string {
   const { project, tasks, milestones, deliverables, reflections } = bundle
@@ -600,7 +692,7 @@ export function renderProjectPlain(bundle: ExportBundle, generatedAt: string): s
   } else {
     deliverables.forEach((d, i) => {
       out.push(`${i + 1}. ${d.name}（${deliverableStatusLabels[d.status] ?? d.status}）`)
-      out.push(`   版本：${d.version || '未填写'}；负责人：${d.owner || '未填写'}；位置：${d.location || '未填写'}`)
+      out.push(`   版本：${d.version || '未填写'}；负责人：${d.owner || '未填写'}；位置：${d.location || '未填写'}；关联里程碑：${d.milestoneId || '未关联'}；备注：${plainSafeNote(d.note)}`)
     })
   }
   out.push('')
@@ -641,7 +733,7 @@ async function writeProjectExport(
   generatedAt: string,
   itemCount: number,
 ): Promise<ProjectExportOutcome> {
-  const outputDirectory = expandDirectory(directory)
+  const outputDirectory = await resolveIsolatedExportDirectory(directory)
   const target = resolve(outputDirectory, fileName)
   await writeExportFile(target, content, overwrite)
   const logs = await recordExportOutbound(domain, {
@@ -713,7 +805,7 @@ export async function exportProgressReportMarkdown(
   const report = getProgressReport(domain, reportId)
   if (!report) throw new Error(`未找到进度汇报：${reportId}`)
   const content = renderProgressReportMarkdown(report)
-  const target = resolve(expandDirectory(directory), `${report.id}-progress.md`)
+  const target = resolve(await resolveIsolatedExportDirectory(directory), `${report.id}-progress.md`)
   await writeExportFile(target, content, overwrite)
   return { path: target, content }
 }

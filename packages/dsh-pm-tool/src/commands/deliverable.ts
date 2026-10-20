@@ -5,6 +5,7 @@ import {
   addDeliverable,
   deleteDeliverable,
   DeliverableProjectNotFoundError,
+  DeliverableMilestoneNotFoundError,
   getDeliverable,
   listDeliverables,
   updateDeliverable,
@@ -21,14 +22,14 @@ import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 
 export const deliverableHelp = [
   '交付物台账命令（离线，无需 API Key）：',
-  '  /pm deliverable add {"projectId":"p-0001","name":"需求说明书","version":"v1.0","owner":"Ice","status":"in_progress","location":"exports/需求说明书.md","dueDate":"2026-11-15"}',
+  '  /pm deliverable add {"projectId":"p-0001","name":"需求说明书","version":"v1.0","owner":"Ice","status":"in_progress","location":"exports/需求说明书.md","dueDate":"2026-11-15","milestoneId":"m-ok","note":"验收备注"}',
   '  /pm deliverable list p-0001 [all|planned|in_progress|submitted|accepted]',
   '  /pm deliverable get dlv-0001',
-  '  /pm deliverable update dlv-0001 {"status":"submitted","version":"v1.1","changeNote":"提交评审","operator":"Ice"}',
+  '  /pm deliverable update dlv-0001 {"status":"submitted","version":"v1.1","milestoneId":"m-ok","note":"提交评审","changeNote":"提交评审","operator":"Ice"}',
   '  /pm deliverable delete dlv-0001 confirm',
   '状态支持 planned（计划中）/ in_progress（制作中）/ submitted（已提交）/ accepted（已验收）；wrapped（已收尾）为人显式收尾，≠正式验收，AI 不得代写。',
   '版本或状态变化会自动追加一条变更留痕；删除不带 confirm 只显示提示。',
-  '项目归属、ID、变更历史和时间戳创建后不可直接修改。',
+  '项目归属、ID、变更历史和时间戳创建后不可直接修改；milestoneId 非空必须存在且同项目，null 清空关联，note 为自由备注。',
   // 共享句式与 project/task 同真源；deliverable 保留 history 专属后缀（只改 repo 不追加留痕）。
   repoFieldHelpPhrase.replace('全程离线不探测。', '只改这两项不追加留痕；全程离线不探测。'),
 ].join('\n')
@@ -44,6 +45,8 @@ function renderDeliverable(record: Deliverable): string {
     `计划交付日期：${record.dueDate ?? '未填写'}`,
     `位置：${record.location || '未填写'}`,
     `说明：${record.description || '未填写'}`,
+    `关联里程碑：${record.milestoneId ?? '未关联'}`,
+    `备注：${record.note || '未填写'}`,
     `仓库：${formatRepoRef(record) || '未填写'}`,
     `创建时间：${record.createdAt}`,
     `更新时间：${record.updatedAt}`,
@@ -78,6 +81,8 @@ function describeDeliverableChanges(input: Record<string, unknown>): string {
   if (input.dueDate !== undefined) labels.push('计划交付日期')
   if (input.repoUrl !== undefined) labels.push('仓库链接')
   if (input.branch !== undefined) labels.push('分支')
+  if (input.milestoneId !== undefined) labels.push('关联里程碑')
+  if (input.note !== undefined) labels.push('备注')
   return labels.length ? `已修改：${labels.join('、')}` : '已更新'
 }
 
@@ -202,6 +207,9 @@ export async function handleDeliverableCommand(rawInput: string, domain?: PmDoma
       return { kind: 'error', text: `交付物参数不正确：${describeDeliverableValidation(error)}。` }
     }
     if (error instanceof DeliverableProjectNotFoundError) {
+      return { kind: 'error', text: error.message }
+    }
+    if (error instanceof DeliverableMilestoneNotFoundError) {
       return { kind: 'error', text: error.message }
     }
     console.error('[pm-tool] 交付物操作失败：', error)

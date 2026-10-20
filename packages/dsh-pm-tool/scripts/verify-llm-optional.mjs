@@ -50,6 +50,13 @@ async function assembleContext({ provideLlm }) {
       return () => {}
     },
   })
+  // Web 工作台真实必需服务的最小安全桩：路由只登记不执行，connection 拒绝所有请求。
+  ctx.provide('webServer', {
+    register() { return () => {} },
+  })
+  ctx.provide('connection', {
+    requestRejection() { return 401 },
+  })
 
   if (provideLlm) {
     // 记录每次 prepareCall 入参；对任意模型都回固定文本（契约：不真打网络）。

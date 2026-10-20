@@ -7,7 +7,7 @@
  * 视觉基准：artifacts/redesign/deliverables/index.html；主题 token 由 panel.css .pm-shell
  * 统一重映射为 dsh --dsw-* 别名。样式见 deliverables.css，全部 scope 在 .pm-dv-root 下。
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import MapPin from 'lucide-react/dist/esm/icons/map-pin.mjs'
@@ -18,15 +18,24 @@ import SearchX from 'lucide-react/dist/esm/icons/search-x.mjs'
 import css from './deliverables.css?raw'
 import { MarkdownView } from '../shared/markdown-view.js'
 import type { Deliverable, Milestone, Task } from './types.js'
+import type { DeliverableCallbacks } from '../shared/records-props.js'
+import { RecordsOverlay, RecordsDeliverableForm } from './records/index.js'
+
+/** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
+export interface DeliverablesRecordsSlot {
+  projectId: string
+  callbacks: DeliverableCallbacks
+}
 
 const STATUS_LABEL: Record<string, string> = {
   planned: '待开始',
   in_progress: '进行中',
   submitted: '已提交',
   accepted: '已验收',
+  wrapped: '已收尾',
 }
 
-/** 验收进度条宽度（按状态近似，展示用）。 */
+/** 验收进度条宽度（按状态近似，展示用）；wrapped 已收尾不计验收进度。 */
 function progressOf(status: string): number {
   switch (status) {
     case 'accepted': return 100
@@ -36,7 +45,7 @@ function progressOf(status: string): number {
   }
 }
 
-const STATUS_ORDER = ['accepted', 'submitted', 'in_progress', 'planned'] as const
+const STATUS_ORDER = ['accepted', 'submitted', 'in_progress', 'planned', 'wrapped'] as const
 type StatusGroup = typeof STATUS_ORDER[number]
 
 interface DeliverablesProps {
@@ -45,12 +54,31 @@ interface DeliverablesProps {
   tasks?: Task[]
   onCreate: () => void
   onEdit: (d: Deliverable) => void
+  records?: DeliverablesRecordsSlot
+  /** 页头主 CTA 触发计数；统一打开带里程碑与备注字段的 records 表单。 */
+  createRequest?: number
 }
 
 export function Deliverables(props: DeliverablesProps) {
-  const { deliverables, milestones, onCreate, onEdit } = props
+  const { deliverables, milestones, onCreate, onEdit, records, createRequest = 0 } = props
   const [filter, setFilter] = useState<'all' | StatusGroup>('all')
   const [query, setQuery] = useState('')
+  const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', d: Deliverable } | null>(null)
+
+  const openCreate = () => {
+    if (records) setForm({ mode: 'create' })
+    else onCreate()
+  }
+  const openEdit = (d: Deliverable) => {
+    if (records) setForm({ mode: 'edit', d })
+    else onEdit(d)
+  }
+  const closeForm = () => setForm(null)
+  useEffect(() => {
+    if (createRequest > 0) openCreate()
+    // createRequest 是顶栏用户动作信号，统一复用页内新版表单。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createRequest])
 
   // 统计
   const total = deliverables.length
@@ -69,7 +97,8 @@ export function Deliverables(props: DeliverablesProps) {
   const matches = (d: Deliverable): boolean => {
     if (!q) return true
     const msTitle = d.milestoneId ? msById.get(d.milestoneId) ?? '' : ''
-    const haystack = `${d.name} ${d.version} ${d.owner} ${d.location} ${d.description} ${msTitle}`.toLowerCase()
+    const note = d.note ?? ''
+    const haystack = `${d.name} ${d.version} ${d.owner} ${d.location} ${d.description} ${msTitle} ${d.milestoneId ?? ''} ${note}`.toLowerCase()
     return haystack.includes(q)
   }
 
@@ -101,7 +130,7 @@ export function Deliverables(props: DeliverablesProps) {
           <div className="dv-empty-ico"><Inbox size={22}/></div>
           <h3>暂无交付物</h3>
           <p>交付物是项目阶段产出的正式文档、原型、脚本等。创建第一项交付物，开始追踪验收进度。</p>
-          <button type="button" className="dv-btn-primary" onClick={onCreate}><Plus size={14}/> 新增交付物</button>
+          <button type="button" className="dv-btn-primary" onClick={openCreate}><Plus size={14}/> 新增交付物</button>
         </div>
       ) : (
         <>
@@ -190,7 +219,7 @@ export function Deliverables(props: DeliverablesProps) {
                       const pct = progressOf(d.status)
                       return (
                         <div className="dv-dcard pm-card" data-status={d.status} key={d.id}
-                          onClick={() => onEdit(d)} role="button" tabIndex={0}>
+                          onClick={() => openEdit(d)} role="button" tabIndex={0}>
                           <div className="dv-d-top">
                             <div className="dv-d-name">
                               <div className="dv-d-ico">
@@ -207,7 +236,7 @@ export function Deliverables(props: DeliverablesProps) {
                               </span>
                             )}
                             {d.milestoneId && msById.has(d.milestoneId) && (
-                              <span className="dv-ms">关联 {msById.get(d.milestoneId)}</span>
+                              <span className="dv-ms">关联 {msById.get(d.milestoneId)} <span className="dv-ms-id">({d.milestoneId})</span></span>
                             )}
                             {d.dueDate && (
                               <span className="dv-due">交付 <b>{d.dueDate.slice(5)}</b></span>
@@ -221,6 +250,10 @@ export function Deliverables(props: DeliverablesProps) {
                           {/* 多行描述五环节：卡面以安全 Markdown 可见，不只在抽屉表单里编辑。 */}
                           {d.description?.trim() && (
                             <MarkdownView source={d.description} density="compact" className="dv-d-desc"/>
+                          )}
+                          {/* U5 备注：独立于 description，短文本安全渲染。 */}
+                          {(d.note ?? '').trim() && (
+                            <MarkdownView source={d.note ?? ''} density="compact" className="dv-d-note"/>
                           )}
                           <div className="dv-d-prog">
                             <span className="dv-track">
@@ -243,6 +276,22 @@ export function Deliverables(props: DeliverablesProps) {
             ))
           )}
         </>
+      )}
+
+      {form && records && (
+        <RecordsOverlay
+          eyebrow="交付物"
+          title={form.mode === 'edit' ? '编辑交付物' : '新增交付物'}
+          onClose={closeForm}
+        >
+          <RecordsDeliverableForm
+            projectId={records.projectId}
+            deliverable={form.mode === 'edit' ? form.d : undefined}
+            milestones={milestones ?? []}
+            callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+            onCancel={closeForm}
+          />
+        </RecordsOverlay>
       )}
     </div>
   )

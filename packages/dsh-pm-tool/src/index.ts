@@ -11,6 +11,12 @@ import type { Context } from '@deepseek-ai/cordis'
 import { CommandDefinitionId } from '@deepseek-ai/dsh-commands/brand'
 import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
 import { openPmDomain, type PmDomain } from './core/storage.js'
+import { registerPreviewRoute, type PreviewWebServer, type PreviewAuthGate } from './core/http/preview-route.js'
+import { registerAssetRoute, type AssetWebServer } from './core/http/asset-route.js'
+import { sweepExpiredStages } from './core/file-staging.js'
+import { describeFileRoot } from './core/file-asset-store.js'
+import { normalizeProgressReportRecord } from './core/progress-report.js'
+import { PREVIEW_MAX_BODY_BYTES, ASSET_MAX_BYTES } from './core/http/limits.js'
 import { sweepPending } from './core/provenance-store.js'
 import { formatDomainOpenError } from './core/domain-error.js'
 import { handleProjectCommand, projectHelp } from './commands/project.js'
@@ -21,6 +27,8 @@ import { handleRiskIssueCommand, riskIssueHelp } from './commands/risk-issue.js'
 import { handleMeetingCommand, meetingHelp } from './commands/meeting.js'
 import { handleProgressReportCommand, progressReportHelp } from './commands/progress-report.js'
 import { handleDeliverableCommand, deliverableHelp } from './commands/deliverable.js'
+import { handleProgressCommand, progressHelp } from './commands/progress.js'
+import { handleMaterialCommand, materialHelp } from './commands/material.js'
 import { handleSearchCommand, searchHelp } from './commands/search.js'
 import type { LlmGateway } from './core/ai-client.js'
 import { handleStatsCommand, statsHelp } from './commands/stats.js'
@@ -29,7 +37,7 @@ import { handleDoctorCommand, doctorHelp } from './commands/doctor.js'
 import { dueHelp, handleDueCommand } from './commands/due.js'
 import { backupHelp, handleBackupCommand } from './commands/backup.js'
 import { handleModelCommand } from './commands/model.js'
-import { dashboardHelp, handleDashboardCommand, readDashboard } from './commands/dashboard.js'
+import { dashboardHelp, handleDashboardCommand, readDashboard, readProjectDashboards } from './commands/dashboard.js'
 import { settingsHelp, handleSettingsCommand, readProjectSettings } from './commands/settings.js'
 import { handleAskCommand } from './commands/ask.js'
 import { handleAskApplyCommand } from './commands/ask.js'
@@ -51,17 +59,24 @@ import { localTodayIso } from './core/derived.js'
 import { readOkrInbox } from './core/okr.js'
 import { readHabitInbox } from './core/habits.js'
 
+// PM 包只依赖本地最小接口，避免为类型扩展引入 DSH 宿主实现包；运行时由明确 inject 保证服务存在。
+declare module '@deepseek-ai/cordis' {
+  interface Context {
+    webServer: PreviewWebServer
+    connection: PreviewAuthGate
+  }
+}
+
 /** Cordis 插件名（注册、日志、配置 id 均以此为准）。 */
 export const name = 'pm-tool'
 
 /**
  * 依赖的宿主服务（Cordis 4.0.5-alpha.1 真实语义）：
- *   inject 里的每个名字都是「必需依赖」——任一缺失 fiber 即停在 INACTIVE、apply 不执行。
- *   本版本没有可选后缀语法，故 llm 不列入 inject：缺 llm 的 profile 仍激活本插件，
- *   运行期用 ctx.reflect.get('llm', false) 安全读取（缺失返回 undefined），
- *   命令层 generateDraft 据此抛中文 NO_LLM 降级。
+ *   commands/storageDomain/webServer/connection 是 Web 工作台真实运行所需依赖；缺一则插件保持 INACTIVE，
+ *   避免表面激活却永久关闭 B3 上传与 B6 结构化预览。当前目标宿主就是 DSH Web，四项均由基座提供。
+ *   llm 仍不列入 inject：缺 llm 的 profile 仍激活本插件，运行期安全读取并中文降级。
  */
-export const inject = ['commands', 'storageDomain'] as const
+export const inject = ['commands', 'storageDomain', 'webServer', 'connection'] as const
 
 /** `/pm` 帮助文本。 */
 function renderHelp(): CommandResult {
@@ -87,6 +102,10 @@ function renderHelp(): CommandResult {
       progressReportHelp,
       '',
       deliverableHelp,
+      '',
+      progressHelp,
+      '',
+      materialHelp,
       '',
       searchHelp,
       '',
@@ -153,6 +172,38 @@ export async function apply(ctx: Context): Promise<void> {
     console.warn('[pm-tool] 存储领域打开失败：', formatDomainOpenError(error))
   }
 
+  // webServer / connection 已列为 Web 工作台必需依赖；直接读取声明注入的服务，确保 B3/B6 路由实际注册。
+  const webServer = ctx.webServer as PreviewWebServer
+  const connection = ctx.connection as PreviewAuthGate
+  // 能力以「注册成功」为准（初始 false）：仅服务存在但 register 抛冲突/未返回 disposer 仍报不可用。
+  let previewRegistered = false
+  if (webServer) {
+    ctx.effect(() => {
+      const result = registerPreviewRoute(webServer, connection, () => domain)
+      previewRegistered = result.ok
+      return () => result.dispose?.()
+    })
+  }
+  // B3 资产路由：upload/download 分别以注册成功为准，缺失/冲突各自降级，不阻断 preview/CLI。
+  let assetUploadRegistered = false
+  let assetDownloadRegistered = false
+  let assetStageRegistered = false
+  // F2：启动即判定文件根可用性；生产 unavailable 时不注册 upload/download/stage（fail-closed）。
+  const fileRootAtBoot = await describeFileRoot()
+  const fileRootAvailable = fileRootAtBoot.source !== 'unavailable' && !!fileRootAtBoot.dir
+
+  if (webServer && fileRootAvailable) {
+    ctx.effect(() => {
+      const result = registerAssetRoute(webServer as AssetWebServer, connection, () => domain)
+      assetUploadRegistered = result.uploadOk
+      assetDownloadRegistered = result.downloadOk
+      assetStageRegistered = result.stageOk
+      return () => result.dispose?.()
+    })
+  }
+  // 崩溃恢复：启动 best-effort 清扫过期暂存，失败不阻断启动。
+  void sweepExpiredStages().catch(() => {})
+
   ctx.commands.register({
     definitionId: CommandDefinitionId('dsh-pm-tool'),
     name: 'pm',
@@ -167,6 +218,8 @@ export async function apply(ctx: Context): Promise<void> {
         // 供前端打开视图直接消费 {top, rest, quietMode, openedAt}；新增键不破坏既有字段。
         const snapNow = new Date()
         const snapHhmm = `${String(snapNow.getHours()).padStart(2, '0')}:${String(snapNow.getMinutes()).padStart(2, '0')}`
+        // F2：root 不可用时即使路由已注册，upload/stage 能力也置 false（fail-closed 投影）。
+        const rootAvailable = fileRootAvailable
         const queue = Object.fromEntries(
           [...domain.table('projects').entries()].map(([pid]) => [
             pid,
@@ -181,22 +234,37 @@ export async function apply(ctx: Context): Promise<void> {
             milestones: [...domain.table('milestones').entries()].map(([, value]) => value),
             riskIssues: [...domain.table('risk_issues').entries()].map(([, value]) => value),
             meetings: [...domain.table('meetings').entries()].map(([, value]) => value),
-            reports: [...domain.table('reports').entries()].map(([, value]) => value),
+            reports: [...domain.table('reports').entries()].map(([, value]) => normalizeProgressReportRecord(value)),
             deliverables: [...domain.table('deliverables').entries()].map(([, value]) => value),
             okrs: [...domain.table('okrs').entries()].map(([, value]) => value),
             lessons: [...domain.table('lessons').entries()].map(([, value]) => value),
             habits: [...domain.table('habits').entries()].map(([, value]) => value),
+            // B3 文件资产：仅投影 UI 所需元数据，不下发内部 relPath（字节走授权 download 路由）。
+            fileAssets: [...domain.table('file_assets').entries()].map(([, v]) => {
+              const r = v as { id: string; projectId: string; fileName: string; mediaType: string; size: number; sha256: string; addedAt: string }
+              return { id: r.id, projectId: r.projectId, fileName: r.fileName, mediaType: r.mediaType, size: r.size, sha256: r.sha256, addedAt: r.addedAt }
+            }),
             // X7 收件区（settings 固定行，只读透传；前端按项目过滤，未确认不生效）。
             okrInbox: readOkrInbox(domain),
             habitInbox: readHabitInbox(domain),
             dashboards: {
-              user: readDashboard(domain, 'user'),
-              project: readDashboard(domain, 'project'),
+              user: readDashboard(domain, { kind: 'user' }),
+              project: readDashboard(domain, { kind: 'legacyProject' }),
+              byProject: readProjectDashboards(domain),
             },
             // #21 口径设置：归一化后的生效口径（缺省=默认），供 Web 设置 UI 与派生视图直接消费。
             settings: readProjectSettings(domain),
             // K11：按项目派生的补记队列（读时派生、零写）。
             queue,
+            // 宿主 HTTP 能力探测：以「路由注册成功」为准；缺失/冲突 CLI-only，前端据此显示 unavailable。
+            capabilities: {
+              httpAvailable: previewRegistered || assetUploadRegistered || assetDownloadRegistered || assetStageRegistered,
+              previewApi: previewRegistered,
+              assetUpload: assetUploadRegistered && rootAvailable,
+              assetDownload: assetDownloadRegistered && rootAvailable,
+              stageCancel: assetStageRegistered && rootAvailable,
+              limits: { previewBodyBytes: PREVIEW_MAX_BODY_BYTES, assetMaxBytes: ASSET_MAX_BYTES },
+            },
           }),
         }
       }
@@ -214,6 +282,10 @@ export async function apply(ctx: Context): Promise<void> {
       if (reportMatch) return handleProgressReportCommand(reportMatch[1] ?? '', domain, optionalLlm())
       const deliverableMatch = /^deliverable(?:\s+([\s\S]*))?$/i.exec(raw)
       if (deliverableMatch) return handleDeliverableCommand(deliverableMatch[1] ?? '', domain)
+      const progressMatch = /^progress(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (progressMatch) return handleProgressCommand(progressMatch[1] ?? '', domain)
+      const materialMatch = /^material(?:\s+([\s\S]*))?$/i.exec(raw)
+      if (materialMatch) return handleMaterialCommand(materialMatch[1] ?? '', domain)
       const searchMatch = /^search(?:\s+([\s\S]*))?$/i.exec(raw)
       if (searchMatch) return handleSearchCommand(searchMatch[1] ?? '', domain)
       const statsMatch = /^stats(?:\s+([\s\S]*))?$/i.exec(raw)

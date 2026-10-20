@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 3,
+  "purpose": "Selective, self-contained vendoring of the pure-doc OilOil UI/UX Guide consultation skill (design/guide/review modes) for offline reference. Only the locked skills/oiloil-ui-ux-guide subtree plus the Apache-2.0 LICENSE.txt are copied byte-for-byte; no upstream installer/setup is run, no home/global write, no network fetch during use.",
+  "source": {
+    "repo": "https://github.com/oil-oil/ui-ux-guide",
+    "branch": "main",
+    "commit": "f32bc2bd210a6693f86841816a531ab511b258b4",
+    "authorName": "Zhihuang Lin",
+    "commitDate": "2026-09-10T12:48:14Z",
+    "commitSubject": "明确 Skill 功能、首次使用与执行边界 (#1)",
+    "fetchedAtUtc": "2026-10-19T18:42:02Z",
+    "fetchedAtLocal": "2026-10-20 02:42:02 CST (+0800)",
+    "fetchMethod": "Public read-only codeload tarball of the locked commit (https://codeload.github.com/oil-oil/ui-ux-guide/tar.gz/f32bc2bd210a6693f86841816a531ab511b258b4) extracted to .tmp; only the allowed subtree and LICENSE.txt copied into vendor. No git remote added, no fork, no write/push to upstream, no npx/skills CLI, no home clone."
+  },
+  "entrySkillIds": [
+    "oiloil-ui-ux-guide"
+  ],
+  "declaredDependencies": [],
+  "license": {
+    "spdx": "Apache-2.0",
+    "copyright": "Apache License 2.0 standard text; upstream author Zhihuang Lin (commit f32bc2b); no NOTICE file present at the locked commit.",
+    "file": "LICENSE.txt",
+    "verified": "Root LICENSE.txt read and confirmed Apache License Version 2.0 (11358 bytes); copied verbatim. Note: the current static verifier only whitelists MIT and the exact basename LICENSE; Apache-2.0/LICENSE.txt is a known verifier gap reported to the parent, not a license mismatch."
+  },
+  "policy": {
+    "projectRulesPrecedence": true,
+    "noInstallerRun": true,
+    "noHomeOrGlobalWrites": true
+  },
+  "projectRulesPriority": {
+    "statement": "Project AGENTS.md, docs/collaboration.md and docs/external-skills.md are authoritative and override any vendored OilOil guidance whenever they conflict.",
+    "upstreamSkillsDoNotGrant": [
+      "running the upstream npx `skills add oil-oil/ui-ux-guide` installer or any global/home clone",
+      "writing $HOME, global, IDE or shell config",
+      "imposing a style family (e.g. modern-minimal) or a font ban as a global hard rule on this project",
+      "self-issuing PASS or replacing the independent test gate (ADL-045)",
+      "modifying upstream deepseek-harness, data/, or pushing to a remote",
+      "treating OilOil review conclusions as acceptance; P0/P1/P2 findings are candidate defects only"
+    ],
+    "conflictResolution": "Where the vendored playbook suggests behavior the project forbids (installer, home/global write, style-family imposition, self-certified PASS, network fetch to align upstream), project rules win and the playbook is reference only."
+  },
+  "skills": [
+    {
+      "id": "oiloil-ui-ux-guide",
+      "kind": "entry",
+      "reviewStatus": "imported-self-audited; independent-security-audit-pending",
+      "name": "oiloil-ui-ux-guide",
+      "upstreamPath": "skills/oiloil-ui-ux-guide",
+      "vendoredPath": "skills/oiloil-ui-ux-guide",
+      "riskNotes": [
+        "references/design-preview-template.html contains inline client-side demo JS and loads a Google Fonts CSS URL only when a webfont family is chosen inside a local Phase 4a preview; it references an agent-generated /tmp/design-config.js that is NOT vendored. No credential, no installer, no exfiltration; the template is opened locally for exploration only and is not executed by the vendoring process.",
+        "evals/evals.json is static upstream behavioral test data; it is not executed by this project.",
+        "SKILL.md Phase 0 instructs scanning project files (package.json, tailwind.config, theme.ts, globals.css, design-spec.md/DESIGN.md/AGENT.md); these are external project files read-only, not vendored dependencies.",
+        "references/business-mockup-contract.md suggests writing a session temp preview under /tmp and `open`-ing it on macOS; /tmp is session scratch, not home/global; output location remains governed by project rules.",
+        "Per-family '禁止/推荐' lists inside style-families/*.md are scoped to that chosen family only; they are never global UX rules and must not be quoted against a project that picked a different family."
+      ],
+      "externalProjectReferences": [
+        {
+          "path": "package.json",
+          "kind": "project-root-doc",
+          "optional": true,
+          "note": "Phase 0 framework scan input; project file, not vendored. Absence permitted."
+        },
+        {
+          "path": "tailwind.config / theme.ts / globals.css",
+          "kind": "project-token-files",
+          "optional": true,
+          "note": "Phase 0 token scan inputs; project files, not vendored."
+        },
+        {
+          "path": "design-spec.md / DESIGN.md / AGENT.md",
+          "kind": "project-root-doc",
+          "optional": true,
+          "note": "Phase 0 reads existing design docs if present; project files, not vendored. design-spec.md/design-spec-components.md are also agent-generated Phase 5 outputs, not upstream files."
+        }
+      ],
+      "note": "Single self-contained entry; all co-located reference files are its own files (no separate dependency skill). Relative refs inside the subtree resolve under skills/oiloil-ui-ux-guide/. Non-vendored items: generated outputs (design-spec.md, design-spec-components.md, business-mockup-N.html), agent-generated /tmp/design-config.js, and project input files listed in externalProjectReferences.",
+      "reviewNotes": "Importer self-audit: no installer/npx/setup/clone/curl language in the vendored subtree; no force-push/sudo/rm-rf/home-write/hardcoded-secret; no executable script/binary/shebang/exec-bit/symlink. Independent security/red-line double audit (different owner) still pending per docs/external-skills.md 8.2 before regular use.",
+      "files": [
+        {
+          "path": "skills/oiloil-ui-ux-guide/SKILL.md",
+          "sha256": "19a5435b9f1cd0c6832f536a8e509a63f2947c1f862d3910b59ecf90d63ad88b",
+          "bytes": 14968
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/evals/evals.json",
+          "sha256": "404af752e6cd35c2b742e629180e6cbbf6f6be4d3b7caf04f349436c9ef77dd2",
+          "bytes": 13583
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/business-mockup-contract.md",
+          "sha256": "3cfe00efbb9e21af09c5246daf85665c7e7adc2f5623c761f6e43d0237cb9f4a",
+          "bytes": 9082
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/checklists.md",
+          "sha256": "7177c0a6445d582ab64f884a73b06f558d9196843e0525cb47b50d966ea38312",
+          "bytes": 4638
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/design-interview.md",
+          "sha256": "121dbd0ca469e80b8fc6c800435284d6d054db9abd804c64c8901c2f85f8ca5b",
+          "bytes": 21559
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/design-preview-template.html",
+          "sha256": "e9d4e2605b7d690faf08986cb5b3f0eaec1ebb880b654d80cef406dc86c6f6fb",
+          "bytes": 105864
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/design-psych.md",
+          "sha256": "62945c76991627ec682072a09369f192b29c3b7d1c034fe8e3e18c42b33023eb",
+          "bytes": 3716
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/design-spec-template.md",
+          "sha256": "a83a78f6aec7befeaf18e69e453458b2bec50832f0fbbd23bd5c09fb72694bc8",
+          "bytes": 6635
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/extended-dimensions.md",
+          "sha256": "aa49da32e163dbda2b76f19b06f6f6e0e778b913ae14865772bdc57cd1d9271c",
+          "bytes": 10529
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/icons.md",
+          "sha256": "825a1c4d5fce67eccb99b6d700ff330fb6a5000c7273e8dda605a2de740a0108",
+          "bytes": 1630
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/interaction-psychology.md",
+          "sha256": "7f69bb8fc0f4c0d3b9098970c57f6696e68b1b711f53c0f6e80ed308436bc89f",
+          "bytes": 7811
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/review-template.md",
+          "sha256": "7062e3d594761cce9065e1e9b56a5d51bea46fdac2bf4a3b462a99d7f9108543",
+          "bytes": 1855
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/brand-driven.md",
+          "sha256": "fb1a2c5d16697eed32f0cb7f17bd0150b7c58eaa82bb5fdf0f241c520b8d0423",
+          "bytes": 3885
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/brutal.md",
+          "sha256": "fc4c119d696c3299e46b6cf37acec6bed9844151871d615ea035755316847949",
+          "bytes": 2437
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/editorial.md",
+          "sha256": "48c74ac167faead1d65c3e01315035a46ee4c31aa12ddd615ac7a7eced61cfdb",
+          "bytes": 2337
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/index.md",
+          "sha256": "a6e7ef9505533376b17fbbdbf43ede9ae713b1e5f27c4d33a00a966ed63e3aff",
+          "bytes": 3136
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/modern-minimal.md",
+          "sha256": "a4b4abe1fc1f0b9b06ce6441df2923e725b35565d0f54b150be18c0c8182350c",
+          "bytes": 2556
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/playful.md",
+          "sha256": "d9b8acbda8e79e1bc4fe589edfb3e8193c2131df9dd11bbb0c0a293b1793a937",
+          "bytes": 2676
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/premium-luxury.md",
+          "sha256": "c8c7dca0b739cf6dec736e04dad01edadc77861fa7df06b4401d7535558a17e3",
+          "bytes": 2739
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/tech-cyberpunk.md",
+          "sha256": "8dc7261a39978779cba2ea79692dae1862fde1fdd398baa71a31148611d3e2e7",
+          "bytes": 2958
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/style-families/warm-content.md",
+          "sha256": "b4594c87e5547c0d1584482758e9adaee8b290ba8a0bc8930945affe582fb5c2",
+          "bytes": 2349
+        },
+        {
+          "path": "skills/oiloil-ui-ux-guide/references/system-principles.md",
+          "sha256": "80c84881c5f903da2d82eceb3e4ff9d7d89926278986bcde7188759f1f6f5162",
+          "bytes": 5332
+        }
+      ]
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358
+    }
+  ],
+  "excludedArtifacts": [
+    "Upstream root AGENTS.md, CLAUDE.md, README.md, index.html, agents/, .cursor/ — bridge/intro pages outside the allowed subtree, not copied.",
+    "Upstream installers: `npx skills add oil-oil/ui-ux-guide` (global/multi-agent) and git clone to ~/.codex/skills (home write) — not run, not copied.",
+    "references/design-preview-template.html's sibling design-config.js — agent-generated local preview config, never vendored.",
+    "Agent-generated Phase 5 outputs design-spec.md and optional design-spec-components.md; session-temp business-mockup-N.html under /tmp.",
+    "All other upstream packages/mirrors (davepoon/buildwithclaude, opendcai, agskills.dev, claudskills, lobehub, agent-skills.jp, happycapy) — third-party mirrors, never used as source.",
+    ".git/ metadata, any package.json/lockfile, scripts, binaries, archives."
+  ],
+  "negativeAudit": {
+    "checked": "Regex-scanned all 22 vendored subtree files for: git force push, sudo, rm -rf, curl|sh, $HOME/~/ home writes, hardcoded API-key/secret/token/password literals, installer/npx/setup/postinstall, executable extensions, shebang, symlink, exec bit, outbound fetch/XHR/exfiltration.",
+    "result": "None found. Subtree contains only markdown, one static evals.json and one config-driven local HTML preview; no executable script, no installer, no credential, no home/global write, no network fetch during use. Google Fonts preconnect/dynamic URL appears only inside the local preview template behind a chosen webfont."
+  },
+  "integrity": {
+    "byteIdentity": "Every vendored file verified diff -q identical to the locked-commit upstream tarball (empty diff).",
+    "hashSelfCheck": "SHA256/bytes in this manifest recomputed from on-disk files; zero mismatch, zero extra, zero missing.",
+    "vendoredFileCount": 23,
+    "vendoredFileBreakdown": "1 root LICENSE.txt + 22 skill files (SKILL.md 1, evals/evals.json 1, references/*.md 10, references/design-preview-template.html 1, references/style-families/*.md 9). manifest.json is the registry itself and is not counted among vendored upstream files.",
+    "entrySkillCount": 1,
+    "dependencySkillCount": 0
+  }
+}

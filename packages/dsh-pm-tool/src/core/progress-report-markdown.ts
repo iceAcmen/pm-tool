@@ -1,5 +1,5 @@
 /** 固定快照进度汇报的精简 Markdown：默认只含摘要、周期事件和异常项。 */
-import { progressReportStatusLabels, type ProgressReport } from './progress-report.js'
+import { progressReportSourceTypeLabels, progressReportStatusLabels, type ProgressReport } from './progress-report.js'
 
 function inline(value: string): string {
   return value.replaceAll('\\', '\\\\').replaceAll('|', '\\|').replace(/\r?\n/g, '<br>')
@@ -19,7 +19,8 @@ export function renderProgressReportMarkdown(report: ProgressReport): string {
     `> 项目：${inline(snapshot.project.name)}（\`${report.projectId}\`）  `,
     `> 周期：${report.periodStart} 至 ${report.periodEnd}  `,
     `> 快照时间：${report.snapshotAt}  `,
-    `> 状态：${progressReportStatusLabels[report.status]}`,
+    `> 状态：${progressReportStatusLabels[report.status]}  `,
+    `> 来源：${progressReportSourceTypeLabels[report.sourceType]}${report.sourceSessionId ? `（${inline(report.sourceSessionId)}）` : ''}`,
     '',
     '## 管理摘要',
     '',

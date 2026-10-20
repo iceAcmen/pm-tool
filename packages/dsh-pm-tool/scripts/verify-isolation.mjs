@@ -62,13 +62,22 @@ export const WATCH = [
   join(REPO, 'packages', 'backups'),
   join(REPO, 'packages', 'backup'),
   join(REPO, 'exports'),
+  // F2 builtin-dev 回退根（仅 test/dev 信号可达）；测试不得把内容寻址字节落进仓库。
+  join(REPO, 'assets'),
 ]
 
 // --- 子进程 env scrub：禁止任何「正式目录覆盖」变量穿透到被守护脚本 ---
 // 安全：只打印被剔除的变量名，绝不打印其值（可能含 secret 路径 / token）。
 function scrubbedEnv() {
   const env = { ...process.env }
-  for (const k of ['PM_DATA_ROOT', 'DSH_PM_BACKUP_DIR']) {
+  for (const k of [
+    'PM_DATA_ROOT',
+    'DSH_PM_BACKUP_DIR',
+    'DSH_PM_FILE_ROOT',
+    'DSH_PM_ISOLATED_ROOT',
+    'DSH_HOME',
+    'DSH_DEV',
+  ]) {
     if (k in env) {
       console.log(`[guard] 子进程 env 已剔除 ${k}（防止误指正式目录；不打印其值）`)
       delete env[k]

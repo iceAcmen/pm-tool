@@ -117,6 +117,17 @@ export function feedbackIsError(text: string): boolean {
   return /失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/i.test(text)
 }
 
+/**
+ * O3 写命令是否被接受（决定是否关抽屉）：
+ *  - 复用既有 feedbackIsError 集中判定，不另造中文正则；
+ *  - 命中错误 → false（调用方保留抽屉、就近展示错误，不 onSaved 关层）；
+ *  - 结构化成功信封、无信封的既有成功文本、只读预览（不含错误词）→ true。
+ * 只读预览文本（如「只读预览 / 尚未写入」）不含错误词，不得被误判为失败。
+ */
+export function commandAccepted(response: string): boolean {
+  return !feedbackIsError(response)
+}
+
 export interface ClassifiedFeedback {
   /** 错误态：持久、单处、role=alert。 */
   isError: boolean

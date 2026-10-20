@@ -31,15 +31,8 @@ import { localTodayIso, isTaskOverdue } from '../../core/derived.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import type { Project, Task, RiskIssue, View } from './types.js'
 
-/** 角色映射仅用于展示（真实成员模型未接入）；未命中显示「团队成员」。 */
-const ROLES: Record<string, string> = {
-  '史冰冰': '项目负责人 · PM',
-  '张三': '需求 / 产品经理',
-  '李梦': 'UI 设计师',
-  'ice': '前端开发',
-  '王磊': '后端开发',
-  '陈静': '测试工程师',
-}
+// 角色：生产成员模型未接入 role 字段，不硬编码虚构名册；assigned 行只展示事实姓名，
+// 真实角色待成员域接入后由后端注入（不新增域、不造示例）。
 
 interface Seg { late: number, soon: number, prog: number, todo: number }
 
@@ -290,7 +283,7 @@ export function PeopleView(props: {
                       </span>
                       <span className="pp-who-txt">
                         <span className="pp-name">{row.display}</span>
-                        <span className="pp-role">{isUnassigned ? '无负责人 · 需派工' : (ROLES[row.display] ?? '团队成员')}</span>
+                        {isUnassigned && <span className="pp-role">无负责人 · 需派工</span>}
                       </span>
                     </div>
                     <span className="pp-bar" role="img" aria-label={`open ${row.openTotal}：逾期 ${row.overdue}，临期 ${row.dueSoon}，进行中 ${row.inProgress}`}>

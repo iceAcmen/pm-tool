@@ -25,13 +25,16 @@ export interface QueryRow {
   status: string
   date: string | null
   assignee?: string
+  /** U4：任务优先级/里程碑，供多排序实际比较（QueryRow 实填充，不依赖未投影字段）。 */
+  priority?: string
+  milestoneId?: string | null
 }
 
 /** 把某实体拍平成统一行（字段取值来自真实 schema，不杜撰）。 */
 export function selectEntity(data: Snapshot, entity: WidgetEntity): QueryRow[] {
   switch (entity) {
     case 'tasks':
-      return data.tasks.map(t => ({ projectId: t.projectId, recordType: 'task', id: t.id, title: `${t.code} ${t.title}`, status: t.status, date: t.dueDate ?? null, assignee: t.assignee }))
+      return data.tasks.map(t => ({ projectId: t.projectId, recordType: 'task', id: t.id, title: `${t.code} ${t.title}`, status: t.status, date: t.dueDate ?? null, assignee: t.assignee, priority: t.priority, milestoneId: t.milestoneId ?? null }))
     case 'milestones':
       return data.milestones.map(m => ({ projectId: m.projectId, recordType: 'milestone', id: m.id, title: m.title, status: m.status, date: m.targetDate ?? null }))
     case 'riskIssues':
@@ -88,12 +91,35 @@ export function applyFilter(
   return out
 }
 
-export function applySort(rows: QueryRow[], sort: SortRule | null | undefined): QueryRow[] {
-  if (!sort) return rows
+function sortValue(row: QueryRow, field: string): string {
+  if (field === 'date') return row.date ?? ''
+  const v = row[field as keyof QueryRow]
+  return v == null ? '' : String(v)
+}
+
+/**
+ * 排序：sorts 非空时按规则数组优先级链式比较（首条非零决定，并列落到下一条，Array.sort 稳定兜底）；
+ * 否则回退 legacy 单规则 sort（dualread，旧布局零迁移、零重置）。
+ */
+export function applySort(
+  rows: QueryRow[],
+  sort: SortRule | null | undefined,
+  sorts?: SortRule[] | null,
+): QueryRow[] {
+  const chain = sorts && sorts.length > 0 ? sorts.slice(0, 3) : undefined
+  if (!chain && !sort) return rows
   const arr = [...rows]
   arr.sort((a, b) => {
-    const av = sort.field === 'date' ? (a.date ?? '') : a[sort.field as keyof QueryRow] == null ? '' : String(a[sort.field as keyof QueryRow])
-    const bv = sort.field === 'date' ? (b.date ?? '') : b[sort.field as keyof QueryRow] == null ? '' : String(b[sort.field as keyof QueryRow])
+    if (chain) {
+      for (const rule of chain) {
+        const cmp = sortValue(a, rule.field).localeCompare(sortValue(b, rule.field))
+        if (cmp !== 0) return rule.dir === 'asc' ? cmp : -cmp
+      }
+      return 0
+    }
+    if (!sort) return 0
+    const av = sortValue(a, sort.field)
+    const bv = sortValue(b, sort.field)
     return sort.dir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
   })
   return arr

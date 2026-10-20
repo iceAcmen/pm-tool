@@ -176,6 +176,29 @@ export function resolveDashboard(
     ?? fallback
 }
 
+/** 项目级作用域持久化 scope 串：有 projectId → `project:<p-id>`，否则个人 `user`。 */
+export function dashboardScopeFor(projectId?: string): string {
+  return projectId ? `project:${projectId}` : 'user'
+}
+
+/**
+ * 项目概览解析：byProject[projectId] 优先；缺省只读回退旧全局 project（绝不写/重置它）；
+ * 再缺省回退内置默认。不读个人 user 布局，避免项目串个人配置。
+ */
+export function resolveProjectDashboard(
+  byProject: Record<string, unknown> | undefined,
+  projectId: string | undefined,
+  legacyProject: unknown,
+  fallback: DashboardLayout,
+  knownTypes?: Set<string>,
+): DashboardLayout {
+  const types = knownTypes ?? KNOWN_TYPES
+  const scoped = projectId ? byProject?.[projectId] : undefined
+  return loadDashboard(scoped, types)?.layout
+    ?? loadDashboard(legacyProject, types)?.layout
+    ?? fallback
+}
+
 /** 注册表已知类型（由 widgets.tsx 注入，避免 persist 反向 import 渲染块）。 */
 let KNOWN_TYPES = new Set<string>()
 export function registerKnownWidgetTypes(types: Iterable<string>): void {

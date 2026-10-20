@@ -75,7 +75,13 @@ assert.match(runBlock, /if \(!options\?\.quiet\) setMessage\(response\)/,
   'quiet 成功分支不得 setMessage 全字段大 Notice；非 quiet 语义不变')
 assert.equal((runBlock.match(/await refresh\(\)/g) ?? []).length, 1,
   'run 体内 refresh() 恰好一次（避免 run + onSaved 双刷新）')
-assert.match(runBlock, /return true/, 'run 成功返回 true')
+// O3：成功与否由 commandAccepted(response) 判定并返回 accepted 布尔；
+// 旧的「成功即字面返回 true」假设已失效（业务拒绝走 accepted=false），这里按行为契约断言，不绑定字面量。
+assert.match(runBlock, /const accepted = commandAccepted\(response\)/,
+  'run 成功判定走 commandAccepted(response)（业务拒绝/错误文本未 throw 不算成功）')
+assert.match(runBlock, /return accepted/, 'run 返回 accepted 布尔（被接受=true，被拒=false）')
+assert.match(runBlock, /catch \(error\)[\s\S]*return false/,
+  'run catch 必须 return false——失败不得冒充成功（配合 setMessage 就近/全局可见）')
 
 // 当前落库契约：统一走 commitDates(id, payload, okText) → run(`task update ${id} ${JSON.stringify(payload)}`, { quiet: true })
 const commitBlock = extractBlock(ganttSrc, 'const commitDates = async (id: string, payload: { startDate?: string, dueDate?: string }, okText: string) => {')

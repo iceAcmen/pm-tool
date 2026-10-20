@@ -137,6 +137,22 @@ export const habitRecordSchema = z.object({
 })
 export type HabitRecord = z.infer<typeof habitRecordSchema>
 
+/**
+ * B3 文件资产元数据表：字节以内容寻址落盘在受控 root，本表只存元数据（不内嵌字节）。
+ * id=fa-N；relPath 为 root 内相对内容寻址路径；sha256 去重幂等。
+ */
+export const fileAssetRecordSchema = z.object({
+  id: z.string().regex(/^fa-\d+$/, '文件资产 ID 格式应为 fa-数字'),
+  projectId: z.string(),
+  fileName: z.string().trim().min(1, '文件名不能为空').max(200),
+  mediaType: z.string().trim().min(1, '媒体类型不能为空').max(120),
+  size: z.number().int().nonnegative('文件大小不能为负'),
+  sha256: z.string().regex(/^[0-9a-f]{64}$/, 'sha256 应为 64 位小写十六进制'),
+  relPath: z.string().trim().min(1, '相对路径不能为空'),
+  addedAt: z.iso.datetime(),
+})
+export type FileAssetRecord = z.infer<typeof fileAssetRecordSchema>
+
 export const pmDomainSpec = defineDomain({
   name: 'pmtool',
   // v0.6.0 schema v2：本版读 v1 时代记录（compatibleVersions 含 1），写入一律打 v2 信封。
@@ -160,6 +176,7 @@ export const pmDomainSpec = defineDomain({
     okrs: domainTable(okrRecordSchema),
     lessons: domainTable(lessonRecordSchema),
     habits: domainTable(habitRecordSchema),
+    file_assets: domainTable(fileAssetRecordSchema),
   },
 })
 

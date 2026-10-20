@@ -50,7 +50,11 @@ try {
   await run('report generate p-0001 2026-10-01 2026-10-31 {"title":"十月进度汇报"}')
   await run('deliverable add {"projectId":"p-0001","name":"交付物一","version":"v1.0","owner":"Ice","status":"in_progress"}')
 
-  // 1) 备份含七类实体
+  // #41 extra 业务表：先写一条口径设置（project_settings），证明 settings/okrs/lessons/habits/reflections
+  // 全部进备份 extra 且可往返，不再只备七张 typed 表。
+  await run('settings put {"loadOverloadThreshold":6,"reminderWithinDays":14}')
+
+  // 1) 备份含七类实体 + extra 五张业务表键齐全
   const b = await createBackup(domain, backupDir)
   assert.ok(existsSync(b.path), '备份文件应写出')
   const parsed = await readBackupFile(b.path)
@@ -62,6 +66,13 @@ try {
   assert.equal(parsed.reports.length, 1)
   assert.equal(parsed.deliverables.length, 1)
   assert.ok(!('checks' in parsed), '备份不得含 checks/自检表')
+  // #41：extra 必须覆盖全部五张额外业务表（键齐全，空表也是 []），settings 含 project_settings。
+  for (const extraTable of ['settings', 'reflections', 'okrs', 'lessons', 'habits', 'file_assets']) {
+    assert.ok(Array.isArray(parsed.extra?.[extraTable]), `extra 必须含 ${extraTable} 键（legacy 缺省按空，新备必备）`)
+  }
+  const seededSetting = parsed.extra.settings.find(([k]) => k === 'project_settings')
+  assert.ok(seededSetting, 'settings 表 project_settings 应进 extra')
+  assert.equal(seededSetting[1].value.loadOverloadThreshold, 6, '口径设置值随 extra 备份')
 
   // 2) 往库里再加点东西（模拟漂移）
   await run('task add {"projectId":"p-0001","title":"任务二"}')
@@ -78,6 +89,14 @@ try {
   assert.ok(existsSync(result.safetySnapshot), '安全快照文件应已写出')
   assert.equal([...domain.table('tasks').entries()].length, 1, '恢复后任务数应回到备份时的 1')
   assert.equal([...domain.table('projects').entries()].length, 1)
+  // #41：漂移口径后 restore，settings extra 应回到备份值（非只清七表）。
+  await run('settings put {"loadOverloadThreshold":99}')
+  await restoreBackup(domain, b.path, backupDir)
+  const restoredSetting = domain.table('settings').get('project_settings')
+  assert.equal(restoredSetting.value.loadOverloadThreshold, 6, 'restore 应回滚 extra settings 到备份值')
+  for (const extraTable of ['reflections', 'okrs', 'lessons', 'habits']) {
+    assert.ok(domain.table(extraTable), `恢复后 ${extraTable} 表仍存在（空表已被替换为空）`)
+  }
 
   // T-DEF-010 env 覆盖
 process.env.DSH_PM_BACKUP_DIR = join(ROOT_BASE, 'env backup dir with space')
@@ -166,6 +185,9 @@ assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backu
   const r7a = await applyBackup(domain, emptyBackup, backupDir)
   assert.ok(r7a.safetySnapshot, 'T7a 恢复前有数据，应生成安全快照')
   assert.equal(tasksOf().length, 0, 'T7a 空备份后任务应为空')
+  // T7a legacy 无 extra 保留了 settings；显式 extra.settings=[] 清空它，使库真正为空再测 T7b。
+  await applyBackup(domain, { ...emptyBackup, extra: { settings: [] } }, backupDir)
+  assert.equal([...domain.table('settings').entries()].length, 0, 'T7a 显式空 settings 后库应为空')
   const r7b = await applyBackup(domain, targetBackup, backupDir)
   assert.equal(r7b.safetySnapshot, undefined, 'T7b 当前库为空，不应生成安全快照')
 
@@ -182,11 +204,28 @@ assert.deepEqual(hashSet(defaultBackupDirectory), before, '默认 packages/backu
   const after8 = collectBackup(domain)
   assert.equal(after8.tasks.length, 1, 'T8 v1 旧备份应往返')
   assert.equal(after8.tasks[0].title, oldTask.title, 'T8 v1 旧备份内容应一致')
+  // T8 legacy 无 extra：必须保留当前新表（settings=6 不得被旧备份清空），违反「不清新键」即失败。
+  const legacySetting = domain.table('settings').get('project_settings')
+  assert.equal(legacySetting.value.loadOverloadThreshold, 6, 'T8 legacy 无 extra 应保留当前 settings，不得清空新表')
   const withExtra = structuredClone(v1old)
   withExtra.tasks[0].futureField = 'v2-new-field'
   let t8err = null
   try { await applyBackup(domain, withExtra, backupDir) } catch (e) { t8err = e }
   assert.ok(t8err, 'T8 未知新字段应被 strict schema 拒绝（不得静默写入）')
+
+  // T8b：extra 显式提供才生效——显式空数组清空 settings；未列出的 okrs 保持现状；未知表名拒绝零写。
+  const explicitEmpty = structuredClone(v1old)
+  explicitEmpty.extra = { settings: [] }
+  await applyBackup(domain, explicitEmpty, backupDir)
+  assert.equal([...domain.table('settings').entries()].length, 0, 'T8b 显式 extra.settings=[] 才清空 settings')
+  // 恢复 settings 为 6，供后续用例；再测未知表名拒绝且零触碰。
+  await run('settings put {"loadOverloadThreshold":6}')
+  const unknownExtra = structuredClone(v1old)
+  unknownExtra.extra = { evil_namespace: [['x', { a: 1 }]] }
+  let t8berr = null
+  try { await validateBackup(unknownExtra) } catch (e) { t8berr = e }
+  assert.ok(t8berr, 'T8b 白名单外未知 extra 表名必须被拒（不得覆盖宿主/命名空间）')
+  assert.equal(domain.table('settings').get('project_settings').value.loadOverloadThreshold, 6, 'T8b 未知表拒绝后 settings 零触碰')
 
   // T9：备份目录优先级——显式 directory 参数 > DSH_PM_BACKUP_DIR env > 内置 packages/backups（纯函数直测）。
   // 上一段 T-DEF-010 已 delete env，此处从干净 env 态起测。

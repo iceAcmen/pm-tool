@@ -114,6 +114,59 @@ function inlineRuntimeChunkPlugin() {
   }
 }
 
+/**
+ * B8-2 内联【同步共享块】：rolldown 把入口与编辑器共用的 zod（校验 schema）抽成 client.schemas.js，
+ * 入口/编辑器工厂同步 `require('./client.schemas.js')`。宿主模块表只注册入口工厂，无法 materialize
+ * 未注册兄弟块 → missed module table / 插件加载失败。
+ * 做法：把同步被消费者 require 的共享块（schemas）剥离 ModuleLoader 包装，取其 factory body，
+ * 在每个消费者块里把 `const require_x = require('./client.schemas.js')` 替换为自包含 IIFE
+ * `const require_x = (() => { var module={exports:{}}; var exports=module.exports; <body>; return module.exports })()`，
+ * 并删除该共享块及其 sourcemap。异步 editor/formula-expr 的 require.async 保持不变（仍懒拆分）。
+ * 安全：共享块无相对依赖（仅 zod 内部，已内联），body 无状态、纯函数，多份复制无害。
+ */
+function inlineSyncSharedChunkPlugin() {
+  return {
+    name: 'pm-tool-inline-sync-shared-chunk',
+    generateBundle(_outputOptions: unknown, bundle: Record<string, { type: string, code?: string, fileName: string }>) {
+      // 收集：被其它块同步 require 的非入口块（候选共享块）。
+      const chunkFiles = Object.keys(bundle).filter(n => bundle[n].type === 'chunk')
+      const syncRequired = new Set<string>()
+      for (const name of chunkFiles) {
+        const code = bundle[name].code || ''
+        const re = /require\(['"]\.\/(client\.[A-Za-z0-9][A-Za-z0-9._-]*\.js)['"]\)/g
+        let m: RegExpExecArray | null
+        while ((m = re.exec(code))) syncRequired.add(m[1])
+      }
+      for (const sharedName of syncRequired) {
+        const shared = bundle[sharedName]
+        if (!shared || shared.type !== 'chunk' || !shared.code) continue
+        // 剥离 ModuleLoader 外壳：头 `__ModuleLoader__.load({id, chunk, factory:(require)=>{`，尾 `return module.exports; } });`，
+        // 去掉 intro `var module = {exports:{}}; var exports=module.exports;`（IIFE 内重新声明，避免重复）。
+        let inner = shared.code
+          .replace(/^window\.__ModuleLoader__\.load\([^]*?factory: \(require\) => \{\n/, '')
+          .replace(/var module = \{ exports: \{\} \}; var exports = module\.exports;\n?/, '')
+          .replace(/return module\.exports; \} \}\);/, '')
+          .replace(/\/\/# sourceMappingURL=\S+/, '')
+        const iife = `(() => { var module = { exports: {} }; var exports = module.exports;\n${inner.trim()}\nreturn module.exports })()`
+        for (const name of chunkFiles) {
+          if (name === sharedName) continue
+          const out = bundle[name]
+          if (out.type !== 'chunk' || !out.code) continue
+          // 先剥离内嵌在字符串字面量里的死代码样本（避免声明替换误中字符串，破坏字符串/模板）。
+          out.code = out.code.replace(/\\const require_schemas = require\(['"]\.\/client\.schemas\.js['"]\);?/g, '')
+          out.code = out.code.replace(
+            /(?:^|(?<=[;{}\n]))\s*(?:const|var|let)\s+([A-Za-z_$][\w$]*)\s*=\s*require\(['"]\.\/client\.schemas\.js['"]\);?/gm,
+            (_m: string, binding: string) => `const ${binding} = ${iife}`,
+          )
+        }
+        delete bundle[sharedName]
+        const mapName = sharedName + '.map'
+        if (bundle[mapName]) delete bundle[mapName]
+      }
+    },
+  }
+}
+
 const config: UserConfig = {
   entry: { client: 'lib/client/index.js' },
   outDir: 'lib',
@@ -123,7 +176,7 @@ const config: UserConfig = {
   clean: false,
   dts: false,
   sourcemap: true,
-  plugins: [rawCssPlugin, asyncChunkRequirePlugin(), stripDeadEntryRequirePlugin(), inlineRuntimeChunkPlugin()],
+  plugins: [rawCssPlugin, asyncChunkRequirePlugin(), stripDeadEntryRequirePlugin(), inlineRuntimeChunkPlugin(), inlineSyncSharedChunkPlugin()],
   // react-dom / react-dom/client 由 dsh Web 宿主冻结模块表提供（与 react 同列 PLATFORM_MODULES），
   // 必须 external：打进 bundle 会出现第二个 React 渲染器、hooks 崩。
   external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client'],

@@ -5,9 +5,11 @@ import {
   progressReportRecordSchema,
   progressReportStatusSchema,
   progressReportUpdateSchema,
+  normalizeProgressReportRecord,
   type ProgressReport,
   type ProgressReportStatus,
   type ProgressSnapshot,
+  type SelectedRef,
 } from './progress-report.js'
 import { projectIdSchema } from './project.js'
 import { enqueueDomainWrite } from './projects.js'
@@ -16,6 +18,161 @@ import { isTaskOverdue } from './derived.js'
 import type { PmDomain } from './storage.js'
 
 export class ProgressReportProjectNotFoundError extends Error {}
+export class ExcerptReferenceInvalidError extends Error {}
+
+/** B6 只读预览（dry-run）：不写 reports 表，从现有 tasks.progressLog 派生周期内可选进展候选。 */
+export interface PreviewCandidate {
+  taskId: string
+  entryId: string
+  revisionId: string
+  author: string
+  date: string
+  content: string
+  refs: string[]
+}
+
+export interface ReportPreviewInput {
+  projectId: string
+  periodStart: string
+  periodEnd: string
+  /** 复合选择器：taskId+entryId(+revisionId)；pl-N 每任务局部序号，禁止裸 entryId 跨任务匹配。 */
+  selectedRefs?: SelectedRef[]
+}
+
+export function previewProgressReport(domain: PmDomain, input: ReportPreviewInput): {
+  projectId: string
+  periodStart: string
+  periodEnd: string
+  candidates: PreviewCandidate[]
+} {
+  const project = domain.table('projects').get(input.projectId)
+  if (!project) throw new ProgressReportProjectNotFoundError(`未找到项目：${input.projectId}`)
+  if (input.periodEnd < input.periodStart) {
+    throw new ExcerptReferenceInvalidError('周期结束日期不能早于开始日期')
+  }
+  // 复合选择：按 taskId+entryId 匹配；带 revisionId 时进一步精确到该修订版，避免 pl-N 跨任务撞号。
+  const selected = input.selectedRefs ?? null
+  const candidates: PreviewCandidate[] = []
+  for (const [, task] of domain.table('tasks').entries()) {
+    if (task.projectId !== input.projectId) continue
+    for (const entry of task.progressLog ?? []) {
+      if (entry.deletedAt) continue
+      if (entry.date < input.periodStart || entry.date > input.periodEnd) continue
+      if (selected && !selected.some(ref =>
+        ref.taskId === task.id
+        && ref.entryId === entry.id
+        && (!ref.revisionId || entry.revisions[entry.revisions.length - 1]?.id === ref.revisionId),
+      )) continue
+      const current = entry.revisions[entry.revisions.length - 1]
+      candidates.push({
+        taskId: task.id,
+        entryId: entry.id,
+        revisionId: current.id,
+        author: current.author,
+        date: current.date,
+        content: current.content,
+        refs: current.refs ?? entry.refs ?? [],
+      })
+    }
+  }
+  candidates.sort((a, b) => a.date.localeCompare(b.date) || a.entryId.localeCompare(b.entryId, 'en', { numeric: true }))
+  return { projectId: input.projectId, periodStart: input.periodStart, periodEnd: input.periodEnd, candidates }
+}
+
+/**
+ * 写前复核冻结摘录（excerpts 直路径）：
+ *  - 任务必须存在且 projectId 与本报告一致（拒跨项目真实条目）；
+ *  - 条目存在且未软删（deletedAt 缺省，拒 soft-deleted）；
+ *  - 修订版存在，contentSnapshot/author/date 与该修订版真实值一致（拒伪造来源）。
+ * sourceKind 字面量、excerpt id 唯一、shape 由 frozenExcerptSchema 在 schema 层先拒；此处任何不符即零写。
+ */
+function validateExcerptReferences(domain: PmDomain, projectId: string, excerpts: unknown): void {
+  if (!Array.isArray(excerpts) || excerpts.length === 0) return
+  for (const ex of excerpts) {
+    const task = domain.table('tasks').get(ex.taskId)
+    if (!task || task.projectId !== projectId) {
+      throw new ExcerptReferenceInvalidError(`摘录任务不存在或不属于本报告项目（${projectId}）：${ex.taskId}`)
+    }
+    const entry = (task.progressLog ?? []).find((e: { id: string; deletedAt?: string }) => e.id === ex.entryId)
+    if (!entry || entry.deletedAt) {
+      throw new ExcerptReferenceInvalidError(`摘录条目不存在或已软删：${ex.taskId}/${ex.entryId}`)
+    }
+    const revision = entry.revisions.find((r: { id: string }) => r.id === ex.revisionId)
+    if (!revision) {
+      throw new ExcerptReferenceInvalidError(`冻结摘录引用不存在：${ex.taskId}/${ex.entryId}/${ex.revisionId}`)
+    }
+    if (revision.content !== ex.contentSnapshot) {
+      throw new ExcerptReferenceInvalidError(`摘录正文与所选修订版不符（${ex.taskId}/${ex.entryId}/${ex.revisionId}），拒绝伪造来源`)
+    }
+    if (revision.author !== ex.author) {
+      throw new ExcerptReferenceInvalidError(`摘录作者与修订版作者不符（${ex.taskId}/${ex.entryId}），拒绝伪造来源`)
+    }
+    // P3 effective 日期以所选修订版自身 date 为准（编辑可另带日期），不与 entry.date 混用。
+    if (revision.date !== ex.date) {
+      throw new ExcerptReferenceInvalidError(`摘录日期与所选修订版日期不符（${ex.taskId}/${ex.entryId}/${ex.revisionId}），拒绝伪造来源`)
+    }
+  }
+}
+
+interface FreezeProgressEntry {
+  id: string
+  date: string
+  deletedAt?: string
+  revisions: { id: string; author: string; content: string }[]
+}
+
+/**
+ * B6：按复合选择器（taskId+entryId+可选 revisionId）在同项目内精确冻结指定修订版快照。
+ * - 定位到 taskId（项目内）→ entryId → revisionId；缺 revisionId 取当前最新。
+ * - 显式带 revisionId 但该版已非最新（预览后源被 edit/append）→ 冲突报错，要求重新预览，绝不静默抓最新。
+ * - 冻结后日志再 append 新 revision 不回改本快照；任务/条目不存在、跨项目、已软抛即拒绝零写。
+ */
+function freezeSelectedEntries(
+  domain: PmDomain,
+  projectId: string,
+  selectedRefs: SelectedRef[],
+  capturedAt: string,
+): unknown[] {
+  const out: unknown[] = []
+  const seen = new Set<string>()
+  for (const ref of selectedRefs) {
+    const key = `${ref.taskId}/${ref.entryId}/${ref.revisionId ?? 'latest'}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    const task = domain.table('tasks').get(ref.taskId)
+    if (!task || task.projectId !== projectId) {
+      throw new ExcerptReferenceInvalidError(`选中任务不存在或不属于本项目：${ref.taskId}`)
+    }
+    const entry = (task.progressLog ?? []).find((e: FreezeProgressEntry) => e.id === ref.entryId)
+    if (!entry || entry.deletedAt) {
+      throw new ExcerptReferenceInvalidError(`选中的进展条目不存在或已删除：${ref.taskId}/${ref.entryId}`)
+    }
+    const latest = entry.revisions[entry.revisions.length - 1]
+    let revision = latest
+    if (ref.revisionId) {
+      const picked = entry.revisions.find(r => r.id === ref.revisionId)
+      if (!picked) {
+        throw new ExcerptReferenceInvalidError(`选中的修订版不存在：${ref.taskId}/${ref.entryId}/${ref.revisionId}`)
+      }
+      if (picked.id !== latest.id) {
+        throw new ExcerptReferenceInvalidError(`源已更新（${ref.taskId}/${ref.entryId} 现最新为 ${latest.id}），请重新预览后再生成`)
+      }
+      revision = picked
+    }
+    out.push({
+      id: `ex-${out.length + 1}`,
+      taskId: task.id,
+      sourceKind: 'progress' as const,
+      entryId: entry.id,
+      revisionId: revision.id,
+      contentSnapshot: revision.content,
+      author: revision.author,
+      date: revision.date,
+      capturedAt,
+    })
+  }
+  return out
+}
 
 function inRange(value: string, start: string, end: string): boolean {
   return value >= start && value <= end
@@ -144,23 +301,34 @@ export function generateProgressReport(domain: PmDomain, input: unknown): Promis
     if (!domain.table('projects').get(fields.projectId)) {
       throw new ProgressReportProjectNotFoundError(`未找到项目：${fields.projectId}`)
     }
+    validateExcerptReferences(domain, fields.projectId, fields.excerpts)
     const table = domain.table('reports')
+    const at = new Date().toISOString()
+    const excerpts = fields.excerpts
+      ?? (fields.selectedRefs?.length ? freezeSelectedEntries(domain, fields.projectId, fields.selectedRefs, at) : undefined)
     let max = 0n
     for (const key of table.keys()) {
       const match = /^rpt-(\d+)$/.exec(key)
       if (match && BigInt(match[1]) > max) max = BigInt(match[1])
     }
     const id = `rpt-${String(max + 1n).padStart(4, '0')}`
-    const at = new Date().toISOString()
     const project = domain.table('projects').get(fields.projectId)!
     const record = progressReportRecordSchema.parse({
-      ...fields,
+      projectId: fields.projectId,
+      periodStart: fields.periodStart,
+      periodEnd: fields.periodEnd,
       title: fields.title ?? `${project.name} ${fields.periodStart} 至 ${fields.periodEnd} 进度汇报`,
+      status: fields.status,
+      executiveSummary: fields.executiveSummary,
+      completedWork: fields.completedWork,
+      nextPlans: fields.nextPlans,
+      blockers: fields.blockers,
+      ...(excerpts ? { excerpts } : {}),
       id,
       snapshotAt: at,
       snapshot: collectSnapshot(domain, fields.projectId, fields.periodStart, fields.periodEnd, at),
-      sourceType: 'manual',
-      sourceSessionId: null,
+      sourceType: fields.sourceType,
+      sourceSessionId: fields.sourceType === 'session' ? fields.sourceSessionId : null,
       createdAt: at,
       updatedAt: at,
     })
@@ -182,13 +350,13 @@ export function listProgressReports(
   return [...domain.table('reports').entries()].map(([, value]) => value)
     .filter(item => item.projectId === projectId && (!status || item.status === status))
     .sort((a, b) => b.periodEnd.localeCompare(a.periodEnd) || b.id.localeCompare(a.id))
-    .map(item => structuredClone(item))
+    .map(item => structuredClone(normalizeProgressReportRecord(item)))
 }
 
 export function getProgressReport(domain: PmDomain, id: string): ProgressReport | undefined {
   progressReportIdSchema.parse(id)
   const record = domain.table('reports').get(id)
-  return record ? structuredClone(record) : undefined
+  return record ? structuredClone(normalizeProgressReportRecord(record)) : undefined
 }
 
 export function updateProgressReport(domain: PmDomain, id: string, input: unknown): Promise<ProgressReport | undefined> {
@@ -198,18 +366,20 @@ export function updateProgressReport(domain: PmDomain, id: string, input: unknow
     const table = domain.table('reports')
     const current = table.get(id)
     if (!current) return undefined
+    const normalizedCurrent = normalizeProgressReportRecord(current)
+    validateExcerptReferences(domain, normalizedCurrent.projectId, fields.excerpts)
     const next = progressReportRecordSchema.parse({
-      ...current,
+      ...normalizedCurrent,
       ...fields,
-      id: current.id,
-      projectId: current.projectId,
-      periodStart: current.periodStart,
-      periodEnd: current.periodEnd,
-      snapshotAt: current.snapshotAt,
-      snapshot: current.snapshot,
-      sourceType: current.sourceType,
-      sourceSessionId: current.sourceSessionId,
-      createdAt: current.createdAt,
+      id: normalizedCurrent.id,
+      projectId: normalizedCurrent.projectId,
+      periodStart: normalizedCurrent.periodStart,
+      periodEnd: normalizedCurrent.periodEnd,
+      snapshotAt: normalizedCurrent.snapshotAt,
+      snapshot: normalizedCurrent.snapshot,
+      sourceType: normalizedCurrent.sourceType,
+      sourceSessionId: normalizedCurrent.sourceSessionId,
+      createdAt: normalizedCurrent.createdAt,
       updatedAt: new Date().toISOString(),
     })
     await table.put(id, next)

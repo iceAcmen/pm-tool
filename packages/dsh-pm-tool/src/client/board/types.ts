@@ -54,7 +54,10 @@ export interface WidgetConfig {
   /** 项目范围：'all' 或具体 projectId。 */
   projectScope?: 'all' | string
   filters?: FilterRule[]
+  /** legacy 单规则排序（保留 dualread，旧布局零迁移）。 */
   sort?: SortRule | null
+  /** U4 多规则排序：非空时按数组优先级链式比较，优先于 legacy sort；缺省回退 sort。 */
+  sorts?: SortRule[]
   /** 显示元素开关（按卡片自定义 key）。 */
   show?: Record<string, boolean>
   numberFormat?: 'pct' | 'int'

@@ -2,7 +2,7 @@ import type { PmDomain } from '../core/storage.js'
 import type { LlmGateway } from '../core/ai-client.js'
 import { generateDraft, AiDraftError } from '../core/ai-client.js'
 import { resolveModelRoute, getModelMode, PROD_KEY_MISSING_TEXT } from '../core/model-route.js'
-import { buildAskContext, localToday, COPILOT_SYSTEM } from '../core/ask-copilot.js'
+import { buildAskContext, localToday, COPILOT_SYSTEM, trimAskAttachments, trimAskProgressLog, projectAskReport, projectAskDeliverable } from '../core/ask-copilot.js'
 import { capturePostimage, classifyUndoTarget, buildSourceRefs, evaluateStale, CURRENT_SNAPSHOT_VERSION, CURRENT_RULE_REVISION, type Postimage, type SourceRecord } from '../core/provenance.js'
 import { recordProvenance, PROVENANCE_UNDO_TTL_MS, recordUndoOutcome, listProvenance, sweepPending, recordRecheck, PROVENANCE_PENDING_ROW } from '../core/provenance-store.js'
 
@@ -85,6 +85,13 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
   const reports = list('reports')
   const deliverables = list('deliverables')
 
+  // B7：file_assets 只读映射（只取 fileName/mediaType，供 file 资料项补 basename/domain）。
+  const assetById = new Map<string, { fileName?: string, mediaType?: string }>()
+  for (const [, row] of (domain.table('file_assets') as { entries(): IterableIterator<[string, unknown]> }).entries()) {
+    const r = row as { id: string, projectId?: string, fileName?: string, mediaType?: string }
+    if (r.projectId === projectId) assetById.set(r.id, { fileName: r.fileName, mediaType: r.mediaType })
+  }
+
   const ctxText = buildAskContext({
     projectName: project.name ?? projectId,
     today: localToday(),
@@ -95,12 +102,15 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
       description: typeof t.description === 'string' ? t.description : undefined,
       hasEvidence: !!(t.evidenceUrl && String(t.evidenceUrl).trim()),
       deliverableId: typeof t.deliverableId === 'string' ? t.deliverableId : null,
+      // B7 只读投影：裁白名单字段，不向模型暴露 url/assetId/note/内部 refs。
+      readAttachments: trimAskAttachments(t.attachments, id => assetById.get(id)),
+      readProgress: trimAskProgressLog(t.progressLog),
     })),
     risks: risks.map((r: any) => ({ id: r.id, title: r.title, status: r.status, severity: r.severity, probability: r.probability, impact: r.impact })),
     milestones: milestones.map((m: any) => ({ id: m.id, title: m.title, targetDate: m.targetDate, status: m.status })),
     meetings: meetings.map((m: any) => ({ id: m.id, title: m.title, date: m.meetingDate, actions: m.actions ?? [] })),
-    reports: reports.map((r: any) => ({ id: r.id, title: r.title ?? r.kind ?? r.id, date: r.date })),
-    deliverables: deliverables.map((d: any) => ({ id: d.id, title: d.title, status: d.status, dueDate: d.dueDate })),
+    reports: reports.map(projectAskReport),
+    deliverables: deliverables.map(projectAskDeliverable),
   })
 
   const route = resolveModelRoute(getModelMode(domain), 'copilot')

@@ -68,6 +68,8 @@ export interface ReviewInputTask {
   completedDate?: string | null
   updatedAt?: string
   evidenceUrl?: string | null
+  /** B2 双读：资料区 link 项，供 evidence 回退展示。 */
+  attachments?: { kind: string, url?: string }[] | null
 }
 
 export interface ReviewInputMilestone {
@@ -137,7 +139,8 @@ export function buildReviewMaterials(input: BuildReviewInput): ReviewMaterials {
       kind: t.status === 'done' ? 'done' : 'wrapped',
       progress: t.progress ?? 0,
       dueDate: t.dueDate ?? null,
-      evidence: t.evidenceUrl ?? null,
+      // B2 双读：evidenceUrl 缺省时回退到资料区第一条 link。
+      evidence: t.evidenceUrl ?? t.attachments?.find(a => a.kind === 'link' && a.url)?.url ?? null,
     }))
 
   const milestones: ReviewMilestoneItem[] = input.milestones

@@ -85,7 +85,9 @@
 .pm-gantt-root .pm-gantt-label-row.is-parent { font-weight: 700; color: var(--ink); }
 .pm-gantt-root .pm-gantt-label-row.is-done { color: var(--c-done); }
 .pm-gantt-root .pm-gantt-label-code { font-size: var(--t-11); color: var(--faint); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
-.pm-gantt-root .pm-gantt-label-title { overflow: hidden; text-overflow: ellipsis; }
+.pm-gantt-root .pm-gantt-label-main { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 1px; }
+.pm-gantt-root .pm-gantt-label-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-gantt-root .pm-gantt-label-sub { font-size: var(--t-10); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-gantt-root .pm-gantt-label-frac { margin-left: auto; font-size: var(--t-10); color: var(--muted); flex: 0 0 auto; }
 .pm-gantt-root .pm-gantt-unscheduled {
   flex: 0 0 auto; font-size: var(--t-10); color: var(--faint);

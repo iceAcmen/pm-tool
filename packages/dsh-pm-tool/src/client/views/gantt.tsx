@@ -32,6 +32,12 @@ const clampStart = (start: string, due: string) => (start > due ? due : start)
 /** 钳制：截止不得早于开始。 */
 const clampDue = (due: string, start: string) => (due < start ? start : due)
 
+/** 身份列副行状态文案（只读派生，与条内口径一致；不回写 status）。 */
+const ganttStatusText = (s: Task['status']) =>
+  s === 'done' ? '已完成'
+    : s === 'in_progress' ? '进行中'
+      : s === 'blocked' ? '阻塞' : '待办'
+
 type DragMode = 'move' | 'start' | 'end'
 
 /** 空清单信号占位（与 core 口径一致：value=null=证据不足，不画实心、不显百分比）。 */
@@ -417,7 +423,13 @@ export function GanttView(props: {
             <div key={t.id} className={`pm-gantt-label-row ${done ? 'is-done' : ''} ${t.parentId ? '' : 'is-parent'} ${crit ? 'is-critical' : ''}`}
               style={{ height: `${ROW_H}px`, paddingLeft: `${10 + depth * 12}px` }}>
               <span className="pm-gantt-label-code">{t.code}</span>
-              <span className="pm-gantt-label-title">{t.title}</span>
+              <span className="pm-gantt-label-main">
+                <span className="pm-gantt-label-title">{t.title}</span>
+                <span className="pm-gantt-label-sub">
+                  负责人 {t.assignee?.trim() || '未分配'} · {ganttStatusText(t.status)}
+                  {t.progress != null && t.progress > 0 ? ` · 进度 ${t.progress}%` : ''}
+                </span>
+              </span>
               {crit && <span className="pm-gantt-critical-tag">关键</span>}
               {frac && <span className="pm-gantt-label-frac">{frac}</span>}
               {!er && <span className="pm-gantt-unscheduled">未排期</span>}

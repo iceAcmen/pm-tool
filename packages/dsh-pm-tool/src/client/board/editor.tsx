@@ -65,13 +65,15 @@ const filterShape = z.object({
   op: z.enum(['eq','ne','in','gte','lte','contains','isEmpty']),
   value: z.string(),
 })
+const sortShape = z.object({ field: z.string(), dir: z.enum(['asc','desc']) })
 const recordListSchema = z.object({
   entity: entityEnum, projectScope: z.string(), filters: z.array(filterShape),
-  sort: z.object({ field: z.string(), dir: z.enum(['asc','desc']) }), numberFormat: z.enum(['int','pct']),
+  sort: sortShape, sorts: z.array(sortShape).max(3, '排序规则最多 3 条').optional(), numberFormat: z.enum(['int','pct']),
 }).loose()
 const overdueSoonSchema = z.object({ projectScope: z.string() }).loose()
 const kpiSchema = z.object({
   entity: entityEnum, projectScope: z.string(), filters: z.array(filterShape),
+  sort: sortShape.optional(), sorts: z.array(sortShape).max(3, '排序规则最多 3 条').optional(),
   numberFormat: z.enum(['int','pct']).optional(), formula: z.string().max(200).optional(),
   title: z.string().optional(), subtitle: z.string().optional(),
 }).loose()
@@ -609,17 +611,54 @@ function ConfigPanel({ inst, data, fieldWhitelist, cols, onPatch, onLayout, onCl
     </div>}
 
     {tab === 'sort' && <div className="pm-cfg-fld">
-      <label>排序字段</label>
+      <label>主排序（旧单规则，兼容旧布局）</label>
       <select className="pm-cfg-sel" value={cfg.sort?.field ?? 'date'} onChange={e => onPatch({ sort: { field: e.target.value, dir: cfg.sort?.dir ?? 'asc' } })}>
         <option value="date">日期</option>
-        <option value="title">标题</option>
-        <option value="status">状态</option>
+        {(whitelist.length ? whitelist : ['status', 'assignee']).map(fd => <option key={fd} value={fd}>{fd}</option>)}
       </select>
       <label>方向</label>
       <select className="pm-cfg-sel" value={cfg.sort?.dir ?? 'asc'} onChange={e => onPatch({ sort: { field: cfg.sort?.field ?? 'date', dir: e.target.value as 'asc' | 'desc' } })}>
         <option value="asc">升序</option>
         <option value="desc">降序</option>
       </select>
+
+      <label style={{ marginTop: 12 }}>多规则排序（{cfg.sorts?.length ?? 0}/3，从上到下优先级）</label>
+      {(cfg.sorts ?? []).map((rule, i) => (
+        <div key={i} className="pm-cfg-rule">
+          <select value={rule.field} onChange={e => {
+            const next = [...(cfg.sorts ?? [])]
+            next[i] = { ...rule, field: e.target.value }
+            onPatch({ sorts: next })
+          }}>
+            {(whitelist.length ? whitelist : ['date', 'title', 'status', 'assignee']).map(fd => <option key={fd} value={fd}>{fd}</option>)}
+          </select>
+          <select value={rule.dir} onChange={e => {
+            const next = [...(cfg.sorts ?? [])]
+            next[i] = { ...rule, dir: e.target.value as 'asc' | 'desc' }
+            onPatch({ sorts: next })
+          }}>
+            <option value="asc">升序</option>
+            <option value="desc">降序</option>
+          </select>
+          <button type="button" disabled={i === 0} title="上移" onClick={() => {
+            const next = [...(cfg.sorts ?? [])]
+            ;[next[i - 1], next[i]] = [next[i], next[i - 1]]
+            onPatch({ sorts: next })
+          }}>↑</button>
+          <button type="button" disabled={i === (cfg.sorts ?? []).length - 1} title="下移" onClick={() => {
+            const next = [...(cfg.sorts ?? [])]
+            ;[next[i + 1], next[i]] = [next[i], next[i + 1]]
+            onPatch({ sorts: next })
+          }}>↓</button>
+          <button type="button" onClick={() => onPatch({ sorts: (cfg.sorts ?? []).filter((_, j) => j !== i) })}>✕</button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="pm-cfg-add"
+        disabled={(cfg.sorts ?? []).length >= 3}
+        onClick={() => onPatch({ sorts: [...(cfg.sorts ?? []), { field: whitelist[0] ?? 'date', dir: 'asc' as const }] })}
+      >＋ 添加排序规则（最多 3 条）</button>
     </div>}
 
     {tab === 'show' && <div className="pm-cfg-fld">

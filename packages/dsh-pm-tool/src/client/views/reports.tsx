@@ -8,7 +8,7 @@
  * 不编造历史趋势：跨期对比一律不画曲线，只展示选中期的真实快照。
  * 样式见 reports.css，全部 scope 在 .pm-rp-root 下。
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
@@ -17,6 +17,19 @@ import css from './reports.css?raw'
 import { MarkdownView } from '../shared/markdown-view.js'
 import { splitLegacyCommandNote } from '../shared/legacy-note.js'
 import type { ProgressReport } from './types.js'
+import type { ReportCallbacks } from '../shared/records-props.js'
+import type { LocalPreviewInput } from './records/records-preview.js'
+import { RecordsOverlay, RecordsReportForm } from './records/index.js'
+
+/** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
+export interface ReportsRecordsSlot {
+  projectId: string
+  callbacks: ReportCallbacks
+  /** 本地只读预览原始 revision（data 权威 dry-run 已就绪；authoritative 缺失时回退派生）。 */
+  previewSource?: Omit<LocalPreviewInput, 'periodStart' | 'periodEnd'>
+  /** 权威 dry-run 候选回调（data report preview，零写）；缺省取 callbacks.onPreviewPeriod。 */
+  onPreviewPeriod?: ReportCallbacks['onPreviewPeriod']
+}
 
 type PeriodType = 'w' | 'm' | 'c'
 type StatusFilter = 'all' | 'final' | 'draft'
@@ -39,12 +52,38 @@ function shortDay(iso: string): string {
   return iso.slice(5)
 }
 
+/** U5 来源展示：session 显示「会话生成 · id」，其余（含缺省）显示手动撰写。 */
+function reportSourceLabel(src: Pick<ProgressReport, 'sourceType' | 'sourceSessionId'>): string {
+  if (src.sourceType === 'session') {
+    return src.sourceSessionId ? `会话生成 · ${src.sourceSessionId}` : '会话生成'
+  }
+  return '手动撰写'
+}
+
 export function ReportsView(props: {
   reports: ProgressReport[]
   onCreate: () => void
   onEdit: (report: ProgressReport) => void
+  records?: ReportsRecordsSlot
+  /** 页头主 CTA 触发计数；每次递增都打开与页面空态相同的新版周期预览表单。 */
+  createRequest?: number
 }) {
-  const { reports, onCreate, onEdit } = props
+  const { reports, onCreate, onEdit, records, createRequest = 0 } = props
+  const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', report: ProgressReport } | null>(null)
+  const openCreate = () => {
+    if (records) setForm({ mode: 'create' })
+    else onCreate()
+  }
+  const openEdit = (r: ProgressReport) => {
+    if (records) setForm({ mode: 'edit', report: r })
+    else onEdit(r)
+  }
+  const closeForm = () => setForm(null)
+  useEffect(() => {
+    if (createRequest > 0) openCreate()
+    // createRequest 是单调递增的用户动作信号；openCreate 只依赖当前 records/onCreate。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createRequest])
   // 列表按 periodEnd 降序（core listProgressReports 已排，这里再保险一次）。
   const sorted = useMemo(
     () => [...reports].sort((a, b) => b.periodEnd.localeCompare(a.periodEnd) || b.id.localeCompare(a.id)),
@@ -86,7 +125,7 @@ export function ReportsView(props: {
         <div className="rp-card rp-empty-card">
           <FileText size={28} />
           <p>暂无进度汇报。基于当前任务 / 里程碑 / 会议快照生成第一份周期汇报。</p>
-          <button type="button" className="rp-btn" onClick={onCreate}><Plus size={14} />生成快照</button>
+          <button type="button" className="rp-btn" onClick={openCreate}><Plus size={14} />生成快照</button>
         </div>
       </div>
     )
@@ -187,7 +226,10 @@ export function ReportsView(props: {
                   <CalendarDays size={12} />
                   {shortDay(current.periodStart)} → {shortDay(current.periodEnd)}
                 </span>
-                <button type="button" className="rp-edit" onClick={() => onEdit(current)}>编辑</button>
+                <span className="rp-chip-date rp-source">
+                  {reportSourceLabel(current)}
+                </span>
+                <button type="button" className="rp-edit" onClick={() => openEdit(current)}>编辑</button>
               </div>
               {(() => {
                 // R8：旧持久正文里独立成行的确认命令尾注只在显示层隔离，不改动存储对象。
@@ -265,6 +307,24 @@ export function ReportsView(props: {
               </div>
             </div>
 
+            {(current.excerpts?.length ?? 0) > 0 && (
+              <div className="rp-card rp-excerpts">
+                <div className="rp-eyebrow">冻结进展摘录 · Frozen progress</div>
+                <p className="rp-excerpts-note">以下内容按生成时的修订版本保存；任务进展后续编辑不会改写本汇报。</p>
+                <div className="rp-excerpts-list">
+                  {current.excerpts!.map(excerpt => (
+                    <article className="rp-excerpt" key={excerpt.id}>
+                      <div className="rp-excerpt-meta">
+                        <span>{excerpt.date} · {excerpt.author}</span>
+                        <code>{excerpt.taskId}/{excerpt.entryId}/{excerpt.revisionId}</code>
+                      </div>
+                      <MarkdownView source={excerpt.contentSnapshot} />
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {snap && snap.exceptions.length > 0 && (
               <div className="rp-card">
                 <div className="rp-eyebrow">例外 / 风险提示 · Exceptions</div>
@@ -283,6 +343,23 @@ export function ReportsView(props: {
           </section>
         )}
       </div>
+
+      {form && records && (
+        <RecordsOverlay
+          eyebrow="进度汇报"
+          title={form.mode === 'edit' ? '编辑进度汇报' : '生成进度汇报'}
+          onClose={closeForm}
+        >
+          <RecordsReportForm
+            projectId={records.projectId}
+            report={form.mode === 'edit' ? form.report : undefined}
+            callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+            previewSource={records.previewSource}
+            onPreviewPeriod={records.onPreviewPeriod ?? records.callbacks.onPreviewPeriod}
+            onCancel={closeForm}
+          />
+        </RecordsOverlay>
+      )}
     </div>
   )
 }

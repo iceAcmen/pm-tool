@@ -17,6 +17,7 @@ import type { Milestone } from './milestone.js'
 import type { Deliverable } from './deliverable.js'
 import { localTodayIso } from './derived.js'
 import { isWrappedStatus } from './status.js'
+import { taskHasMaterials } from './task-materials.js'
 
 export class ReflectionNotFoundError extends Error {}
 
@@ -76,7 +77,7 @@ export function parseDraftMarkdown(markdown: string): {
  * - 无证据链接、无清单、无交付物 ID 时，gap 留白「待补：交付验收材料与证据链接」。
  */
 export function buildReflectionDraft(
-  task: Pick<Task, 'title' | 'description' | 'completedDate' | 'evidenceUrl' | 'checklist' | 'deliverableId'>,
+  task: Pick<Task, 'title' | 'description' | 'completedDate' | 'evidenceUrl' | 'checklist' | 'deliverableId' | 'attachments'>,
   at: string,
 ): ReflectionRecord['draft'] {
   // 缺 completedDate 时，完成时刻取传入 at 的本地日历日（可注入稳定时间，不读墙钟）。
@@ -93,9 +94,16 @@ export function buildReflectionDraft(
   if (task.deliverableId) {
     lines.push({ text: `关联交付物 ${task.deliverableId}（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）`, mark: 'known' })
   }
+  if (Array.isArray(task.attachments) && task.attachments.length > 0) {
+    const links = task.attachments.filter(a => a.kind === 'link').length
+    const dlvs = task.attachments.filter(a => a.kind === 'deliverable').length
+    const parts: string[] = []
+    if (links) parts.push(`${links} 条链接`)
+    if (dlvs) parts.push(`${dlvs} 项交付物`)
+    lines.push({ text: `资料区已登记：${parts.join('、')}（质量由人复核）`, mark: 'known' })
+  }
   const gaps: string[] = []
-  const hasChecklist = Array.isArray(task.checklist) && task.checklist.length > 0
-  if (!task.evidenceUrl && !hasChecklist && !task.deliverableId) {
+  if (!taskHasMaterials(task)) {
     gaps.push('待补：交付验收材料与证据链接')
   }
   return {

@@ -4,6 +4,7 @@ import {
   classifyFeedback,
   parseActionLine,
   feedbackIsError,
+  commandAccepted,
   formatNoticeLines,
   buildSuccessEnvelope,
   buildActionLine,
@@ -112,5 +113,25 @@ describe('action 分离与信封构造（AI 草稿 content/action）', () => {
     expect(fb.isError).toBe(false)
     expect(fb.structured).toBe(true)
     expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
+  })
+})
+
+describe('commandAccepted（O3 失败不关抽屉）', () => {
+  it('业务拒绝文本 → false（保留抽屉，不 onSaved 关层）', () => {
+    expect(commandAccepted('未找到任务：t-9999')).toBe(false)
+    expect(commandAccepted('任务操作失败，未返回成功结果')).toBe(false)
+    expect(commandAccepted('权限不足：拒绝执行该命令')).toBe(false)
+  })
+
+  it('结构化成功信封 → true', () => {
+    expect(commandAccepted(buildSuccessEnvelope(['任务已更新｜t-1 收尾']))).toBe(true)
+  })
+
+  it('无信封既有成功文本 → true（不另造成功正则，仅排除错误词）', () => {
+    expect(commandAccepted('任务已新增并保存。\n标题示例')).toBe(true)
+  })
+
+  it('只读预览文本不含错误词 → true，不误判为失败', () => {
+    expect(commandAccepted('只读预览：基于确定性数字生成，尚未写入。')).toBe(true)
   })
 })

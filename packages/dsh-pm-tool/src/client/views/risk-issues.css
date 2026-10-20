@@ -147,8 +147,8 @@
 .pm-ri-root .ri-owner { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .pm-ri-root .ri-ava {
   width: 18px; height: 18px; border-radius: 50%; flex: 0 0 auto;
-  display: grid; place-items: center; font-size: var(--t-10); font-weight: 700; color: rgb(255, 255, 255);
-  /* D7：深档白字落亮蓝 2.33:1、浅档 4.23:1；底色用 --c-prog-d 深一档品牌蓝，白字两态 ≥4.5。 */
+  display: grid; place-items: center; font-size: var(--t-10); font-weight: 700; color: var(--pm-action-ink);
+  /* D7：深档白字落亮蓝 2.33:1、浅档 4.23:1；底色用 --c-prog-d 深一档品牌蓝，字色走 --pm-action-ink（label-primary-foreground）两态 ≥4.5。 */
   background: var(--c-prog-d);
 }
 .pm-ri-root .ri-ava.off { background: var(--c-todo); color: var(--ink-2); }

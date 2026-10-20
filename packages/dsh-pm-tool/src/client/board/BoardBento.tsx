@@ -10,8 +10,9 @@ import type { Snapshot } from '../panel.js'
 import { GRID, type DashboardLayout, type FilterRule, type LinkageDim, type LinkageState, type WidgetActions, type WidgetEntity, type WidgetScope } from './types.js'
 import { WIDGET_REGISTRY, WIDGET_CATALOG, DEFAULT_LAYOUT, FIELD_WHITELIST, todayIso, rawListFor, knownWidgetTypeSet } from './widgets.js'
 import { CrossProjectPeople } from '../panel.js'
-import { resolveDashboard, loadDashboard, parseLayout, registerKnownWidgetTypes } from './persist.js'
+import { resolveDashboard, resolveProjectDashboard, dashboardScopeFor, loadDashboard, parseLayout, registerKnownWidgetTypes } from './persist.js'
 import { appendQueueCard } from './layout-append.js'
+import { PROJECT_DEFAULT_LAYOUT } from './project-default-layout.js'
 import { refreshAndConfirm } from './refresh-confirm.js'
 import { selectEntity, applyFilter } from './query.js'
 import { getFormulaEngine, loadFormulaEngine, type FormulaResult } from './formula.js'
@@ -22,22 +23,27 @@ import boardCss from './board.css?raw'
 import type { BoardEditorProps } from './editor.js'
 
 export interface BoardPersistence {
-  onSave: (scope: WidgetScope, layout: DashboardLayout) => Promise<void>
-  onReset: (scope: WidgetScope) => Promise<void>
+  onSave: (scope: string, layout: DashboardLayout) => Promise<void>
+  onReset: (scope: string) => Promise<void>
 }
 
-export function BoardBento({ data, actions, persistence }: {
+export function BoardBento({ data, actions, persistence, projectId }: {
   data: Snapshot
   actions: WidgetActions
   persistence: BoardPersistence
+  /** 项目概览传入当前项目 id：持久化走 project:<id>，初始读 byProject[projectId]，不写旧全局。 */
+  projectId?: string
 }) {
   // R-B11：knownTypes 取 registry 同源 helper（直接迭代 Map.keys；Object.keys(Map) 恒为 []，
   // 会导致同步传入空 Set、11 类全被误判未知跳过）。
   const knownTypes = useMemo(() => knownWidgetTypeSet(), [])
   useEffect(() => { registerKnownWidgetTypes(knownTypes) }, [knownTypes])
+  // 项目级持久化 scope：projectId → `project:<id>`，全局总览 → `user`。
+  const activeScope = useMemo(() => dashboardScopeFor(projectId), [projectId])
   // R-B11：首屏即显式传入 knownTypes（不依赖 registerKnownWidgetTypes 副作用），避免空集合误删全部卡。
-  const [layout, setLayout] = useState<DashboardLayout>(() =>
-    resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes))
+  const [layout, setLayout] = useState<DashboardLayout>(() => projectId
+    ? resolveProjectDashboard(data.dashboards?.byProject, projectId, data.dashboards?.project, PROJECT_DEFAULT_LAYOUT, knownTypes)
+    : resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes))
   const [editing, setEditing] = useState(false)
   const [editorLoading, setEditorLoading] = useState(false)
   const [editorError, setEditorError] = useState<string | null>(null)
@@ -62,8 +68,10 @@ export function BoardBento({ data, actions, persistence }: {
 
   // R-B11：旧布局经安全归一（未知类型跳过并列名、越界夹紧、碰撞下沉）后，迁移提示走中性 banner，不静默改写/重置。
   useEffect(() => {
-    const u = loadDashboard(data.dashboards?.user, knownTypes)
-    const p = u ?? loadDashboard(data.dashboards?.project, knownTypes)
+    const raw = projectId
+      ? (data.dashboards?.byProject?.[projectId] ?? data.dashboards?.project)
+      : (data.dashboards?.user ?? data.dashboards?.project)
+    const p = loadDashboard(raw, knownTypes)
     if (!p) return
     // 仅保存技术明细（夹紧/下沉/未知类型），白话摘要由 buildMigrationSummary 现算，不回显坐标/ID。
     if (p.warnings.length || p.skipped.length) {
@@ -97,7 +105,7 @@ export function BoardBento({ data, actions, persistence }: {
       const next = appendQueueCard(layout)
       // 先落盘（executeRaw 遇 command.kind=error 会 throw）；成功后刷新父快照。
       // 仅当落盘 + 快照刷新都成功，才 setLayout 并给成功提示，避免「成功假态、重进丢失」。
-      await persistence.onSave('user', next)
+      await persistence.onSave(activeScope, next)
       // 缺失/undefined 刷新通道即抛错：不 setLayout、不给成功 banner（合同完整，即便现网恒注入）。
       if (typeof actions.refreshBoard !== 'function') {
         throw new Error('缺少看板快照刷新通道')
@@ -286,7 +294,7 @@ export function BoardBento({ data, actions, persistence }: {
             setSaving(true)
             // R-B8 两步保存：先落盘，再确认快照刷新成功，才 setLayout + 成功提示；任一步失败不给成功假态。
             try {
-              await persistence.onSave(scope, final)
+              await persistence.onSave(activeScope, final)
               if (typeof actions.refreshBoard !== 'function') throw new Error('缺少看板快照刷新通道')
               await refreshAndConfirm(actions.refreshBoard)
               setLayout(final)
@@ -297,11 +305,13 @@ export function BoardBento({ data, actions, persistence }: {
               throw e
             } finally { setSaving(false) }
           }}
-          onReset={async (scope) => {
-            // R-B9：重置同样走刷新闸门；失败不本地回退成「假成功」。
-            await persistence.onReset(scope)
+          onReset={async () => {
+            // R-B9：重置同样走刷新闸门；失败不本地回退成「假成功」。项目级只重置 project:<id>，不碰旧全局。
+            await persistence.onReset(activeScope)
             if (typeof actions.refreshBoard === 'function') await refreshAndConfirm(actions.refreshBoard)
-            const resolved = resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes)
+            const resolved = projectId
+              ? resolveProjectDashboard(data.dashboards?.byProject, projectId, data.dashboards?.project, PROJECT_DEFAULT_LAYOUT, knownTypes)
+              : resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes)
             setLayout(resolved)
             setSavedLayout(structuredClone(resolved))
             setBanner('已恢复默认布局。')

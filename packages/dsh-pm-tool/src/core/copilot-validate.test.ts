@@ -104,9 +104,11 @@ describe('deliverable / meeting', () => {
       op({ op: 'deliverable.create', patch: {} }),
       op({ op: 'deliverable.update', id: 'dlv-1', patch: { status: 'accepted' } }),
       op({ op: 'deliverable.update', id: 'ghost', patch: { name: 'x' } }),
+      op({ op: 'deliverable.create', patch: { name: 'D2', milestoneId: 'm-1', note: 'AI 备注' } }),
+      op({ op: 'deliverable.update', id: 'dlv-1', patch: { milestoneId: 'm-1', note: 'AI 备注' } }),
     ], snapshot)
     expect(accepted).toHaveLength(2)
-    expect(rejected).toHaveLength(2)
+    expect(rejected).toHaveLength(4)
   })
 
   it('meeting.create 必填 title+meetingDate；时长 1-1440、participants 字符串数组；update 目标存在', () => {

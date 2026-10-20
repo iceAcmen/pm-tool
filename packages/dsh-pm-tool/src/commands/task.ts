@@ -128,7 +128,9 @@ function summarizeTaskUpdate(before: Task | undefined, after: Task, patch: Recor
     const label = FIELD_LABELS[key]
     if (!label) continue
     const from = before ? (before as Record<string, unknown>)[key] : undefined
-    if (from === to) continue
+    // 表单空日期会以 null 提交，而旧记录通常为 undefined；二者同属“空”，不应制造空→空噪音。
+    const same = from === to || (from == null && to == null)
+    if (same) continue
     const fromText = key === 'status' && from ? taskStatusLabels[from as keyof typeof taskStatusLabels] : String(from ?? '空')
     const toText = key === 'status' ? taskStatusLabels[to as keyof typeof taskStatusLabels]
       : key === 'progress' ? `${to}%`

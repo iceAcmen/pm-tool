@@ -1,0 +1,100 @@
+/* ============================================================================
+   B7 growth 受控表单（OKR / Habit）独立组件样式，供 panel 抽屉导入。
+   - 选择器全部 scope 在 .gf-root 下；颜色/间距/圆角只消费 .pm-shell token，
+     不内联 hex/rgb，深浅跟随；组件自身不发命令、不重造域。
+   ============================================================================ */
+
+.gf-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4, 12px);
+}
+
+.gf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4, 12px);
+}
+
+@media (max-width: 560px) {
+  .gf-row { grid-template-columns: 1fr; }
+}
+
+.gf-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1, 4px);
+}
+
+.gf-label {
+  font-size: var(--t-12, 13px);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.gf-required { color: var(--pm-danger); margin-left: 2px; }
+
+.gf-input,
+.gf-select,
+.gf-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  font-size: var(--t-13, 14px);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm, 8px);
+}
+
+.gf-textarea { resize: vertical; min-height: 72px; }
+
+.gf-input:focus-visible,
+.gf-select:focus-visible,
+.gf-textarea:focus-visible {
+  outline: 2px solid var(--pm-accent);
+  outline-offset: 1px;
+  border-color: var(--pm-accent);
+}
+
+.gf-field[data-invalid="true"] .gf-input,
+.gf-field[data-invalid="true"] .gf-select,
+.gf-field[data-invalid="true"] .gf-textarea {
+  border-color: var(--pm-danger);
+}
+
+.gf-error {
+  font-size: var(--t-10, 12px);
+  color: var(--pm-danger);
+}
+
+.gf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3, 8px);
+  margin-top: var(--sp-2, 6px);
+}
+
+.gf-btn {
+  padding: 7px 14px;
+  border-radius: var(--r-sm, 8px);
+  font-size: var(--t-12, 13px);
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+}
+
+.gf-btn--primary {
+  background: var(--pm-accent);
+  border-color: var(--pm-accent);
+  color: var(--pm-action-ink);
+  font-weight: 600;
+}
+
+.gf-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.gf-hint {
+  font-size: var(--t-10, 12px);
+  color: var(--muted);
+}

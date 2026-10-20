@@ -11,6 +11,7 @@
  */
 import { addDaysIso, localTodayIso } from './derived.js'
 import { isWrappedStatus } from './status.js'
+import { taskHasMaterials } from './task-materials.js'
 import type { PmDomain } from './storage.js'
 
 /** 检查规则编号（与命令输出 JSON 的 rule 字段一一对应）。 */
@@ -41,6 +42,8 @@ export interface CheckableTask {
   evidenceUrl?: string | null
   deliverableId?: string | null
   checklist?: { done: boolean }[] | null
+  /** B2：新资料区（link/deliverable），双读口径计入完成材料。 */
+  attachments?: unknown[] | null
 }
 
 /** 临期窗口（天）：与规格固定 2 天一致，不读项目设置（本命令只做固定提示）。 */
@@ -93,14 +96,14 @@ export function evaluateChecks(tasks: CheckableTask[], today: string): CheckFind
       })
     }
 
-    // d) 完成但缺材料：done 且无 evidenceUrl、无清单、无 deliverableId。
-    if (isDone && !task.evidenceUrl && !(Array.isArray(task.checklist) && task.checklist.length > 0) && !task.deliverableId) {
+    // d) 完成但缺材料：done 且无 evidenceUrl、无清单、无 deliverableId、无新资料项（双读）。
+    if (isDone && !taskHasMaterials(task)) {
       findings.push({
         rule: 'done-missing-materials',
         taskId: task.id,
         title: task.title,
-        reason: '状态为 done，但未登记证据链接、无客观清单、也未关联交付物。',
-        suggestion: '缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单或关联交付物 ID。',
+        reason: '状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。',
+        suggestion: '缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。',
       })
     }
 

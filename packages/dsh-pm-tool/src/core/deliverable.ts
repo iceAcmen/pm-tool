@@ -1,6 +1,7 @@
 /** 交付物台账字段及运行时校验；字段来源：requirements R10。 */
 import { z } from 'zod'
 import { projectIdSchema } from './project.js'
+import { milestoneIdSchema } from './milestone.js'
 import { branchFieldSchema, repoFieldLabels, repoUrlFieldSchema, validateRepoRelation } from './repo.js'
 
 export const deliverableIdSchema = z.string().regex(
@@ -44,6 +45,9 @@ export const deliverableRecordSchema = z.strictObject({
   id: deliverableIdSchema,
   projectId: projectIdSchema,
   ...deliverableFields,
+  // 旧记录缺这两键照常读取（缺键进、缺键出），不回填。
+  milestoneId: milestoneIdSchema.nullable().optional(),
+  note: z.string().optional(),
   history: z.array(deliverableChangeSchema),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
@@ -61,6 +65,8 @@ export const deliverableCreateSchema = z.strictObject({
   dueDate: dateSchema.nullable().default(null),
   repoUrl: deliverableFields.repoUrl,
   branch: deliverableFields.branch,
+  milestoneId: milestoneIdSchema.nullable().default(null),
+  note: z.string().default(''),
   operator: z.string().default(''),
   changeNote: z.string().default(''),
 }).superRefine(validateRepoRelation)
@@ -75,6 +81,8 @@ export const deliverableUpdateSchema = z.strictObject({
   dueDate: dateSchema.nullable().optional(),
   repoUrl: deliverableFields.repoUrl,
   branch: deliverableFields.branch,
+  milestoneId: milestoneIdSchema.nullable().optional(),
+  note: z.string().optional(),
   operator: z.string().optional(),
   changeNote: z.string().optional(),
 }).superRefine(validateRepoRelation).refine(value => {

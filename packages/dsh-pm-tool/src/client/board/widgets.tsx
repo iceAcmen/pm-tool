@@ -9,7 +9,7 @@ import { groupOpenTasksByAssignee } from '../../core/people-load.js'
 import { deriveProgressMap, clampProgress } from '../../core/progress-derivation.js'
 import { isTaskOverdue } from '../../core/derived.js'
 import { groupRiskMatrix } from '../../core/war-room.js'
-import { projectStatusLabels, taskStatusLabels } from '../../core/labels.js'
+import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../../core/labels.js'
 import { buildCompletionHistory } from '../../core/completion-history.js'
 import { MarkdownView } from '../shared/markdown-view.js'
 import type { DashboardLayout, WidgetDescriptor, WidgetInstance, WidgetConfig, WidgetEntity } from './types.js'
@@ -28,6 +28,7 @@ const TONE = {
   overdue: 'var(--pm-st-overdue)',
   todo: 'var(--pm-st-todo)',
   due: 'var(--pm-st-due)',
+  wrapped: 'var(--pm-secondary)',
 } as const
 
 /**
@@ -55,14 +56,17 @@ const completionHero: WidgetDescriptor = {
     const inProgress = data.tasks.filter(t => t.status === 'in_progress').length
     const blocked = data.tasks.filter(t => t.status === 'blocked').length
     const todo = data.tasks.filter(t => t.status === 'todo').length
+    const wrapped = data.tasks.filter(t => t.status === 'wrapped').length
     const rate = total ? Math.round(done / total * 100) : 0
     const circ = 2 * Math.PI * 56
     const offset = circ * (1 - rate / 100)
+    // 五态互斥分布条：完成 / 进行 / 待办 / 受阻 / 收尾（wrapped 中性灰，不计入完成率环）。
     const buckets: Array<[string, number, string, string]> = [
-      ['进行', inProgress, TONE.progress, 'in_progress'],
       ['完成', done, TONE.done, 'done'],
+      ['进行', inProgress, TONE.progress, 'in_progress'],
       ['待办', todo, TONE.todo, 'todo'],
-      ['阻塞', blocked, TONE.blocked, 'blocked'],
+      ['受阻', blocked, TONE.blocked, 'blocked'],
+      ['收尾', wrapped, TONE.wrapped, 'wrapped'],
     ]
     // 需要关注：逾期(按日期升序) > 阻塞 > 临期(7 天内，按日期升序)，最多 4 条。
     // 逾期统一走 derived.isTaskOverdue（status!=='done' 且 progress<100 且 dueDate<today）。
@@ -129,7 +133,16 @@ function addDays(iso: string, days: number): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-/* ---------- 2. milestoneDeliverable 里程碑·交付物 ---------- */
+/* ---------- 2. milestoneDeliverable 里程碑·交付物（时间线 + 下一节点） ---------- */
+const msDot = (status: string): string =>
+  status === 'achieved' ? TONE.done
+    : status === 'at_risk' ? TONE.blocked
+    : status === 'missed' ? TONE.overdue
+    : TONE.todo
+
+const shortDate = (iso?: string | null): string =>
+  iso ? `${Number(iso.slice(5, 7))}/${iso.slice(8, 10)}` : '待定'
+
 const milestoneDeliverable: WidgetDescriptor = {
   type: 'milestoneDeliverable',
   name: '里程碑 · 交付物',
@@ -138,34 +151,43 @@ const milestoneDeliverable: WidgetDescriptor = {
   requiredSources: ['milestones', 'deliverables'],
   defaultConfig: {},
   render({ data }) {
-    const ms = data.milestones
-    const msAch = ms.filter(m => m.status === 'achieved').length
-    const msRisk = ms.filter(m => m.status === 'at_risk').length
-    const msPlan = ms.length - msAch - msRisk
-    const dlv = data.deliverables
-    const dlvAcc = dlv.filter(d => d.status === 'accepted').length
-    const dlvProg = dlv.filter(d => d.status === 'in_progress').length
-    const dlvPlan = dlv.length - dlvAcc - dlvProg
+    const today = todayIso()
+    const ms = [...data.milestones].sort((a, b) => (a.targetDate || '9999').localeCompare(b.targetDate || '9999'))
+    const nextNode = ms.find(m => m.status !== 'achieved' && m.status !== 'missed' && m.targetDate >= today)
+    const dlv = [...data.deliverables].sort((a, b) => (a.dueDate || '9999').localeCompare(b.dueDate || '9999'))
+    const dlvDot = (s: string): string =>
+      s === 'accepted' ? TONE.done : s === 'in_progress' ? TONE.progress : TONE.todo
     return <div className="pm-bento-card">
-      <div className="pm-bento-label">里程碑 · 交付物</div>
-      <div className="pm-md-stack">
-        <SegRow label="里程碑" segs={[[msAch, TONE.done], [msRisk, TONE.blocked], [Math.max(msPlan, 0), TONE.todo]]} total={ms.length}/>
-        <SegRow label="交付物" segs={[[dlvAcc, TONE.done], [dlvProg, TONE.progress], [Math.max(dlvPlan, 0), TONE.todo]]} total={dlv.length}/>
+      <div className="pm-bento-label">里程碑 · 交付物
+        <span className="pm-bento-m">按时间排列 · 进度与下一节点</span>
+      </div>
+      <div className="pm-tl">
+        {ms.length === 0 && dlv.length === 0 && <div className="pm-bento-faint">暂无里程碑与交付物。</div>}
+        {ms.map(m => (
+          <div key={m.id} className={`pm-tl-row ${nextNode?.id === m.id ? 'pm-tl-next' : ''}`}>
+            <i className="pm-tl-dot" style={{ background: msDot(m.status) }}/>
+            <span className="pm-tl-title">{m.title}</span>
+            <span className="pm-tl-date">{shortDate(m.targetDate)}</span>
+            <span className={`pm-ms-pill pm-ms-pill-${m.status}`}>{milestoneStatusLabels[m.status] ?? m.status}</span>
+          </div>
+        ))}
+        {nextNode && (
+          <div className="pm-ms-next" role="status">
+            下一节点 · {nextNode.title}（{shortDate(nextNode.targetDate)}{nextNode.status === 'at_risk' ? '，有风险，需优先跟进外部依赖' : ''}）
+          </div>
+        )}
+        {ms.length > 0 && dlv.length > 0 && <div className="pm-tl-divider"/>}
+        {dlv.map(d => (
+          <div key={d.id} className="pm-tl-row">
+            <i className="pm-tl-dot" style={{ background: dlvDot(d.status) }}/>
+            <span className="pm-tl-title">{d.name}</span>
+            <span className="pm-tl-date">{shortDate(d.dueDate)}</span>
+            <span className={`pm-ms-pill pm-ms-pill-dlv-${d.status}`}>{deliverableStatusLabels[d.status] ?? d.status}</span>
+          </div>
+        ))}
       </div>
     </div>
   },
-}
-
-function SegRow({ label, segs, total }: { label: string, segs: Array<[number, string]>, total: number }) {
-  return <div>
-    <div className="pm-md-row">
-      <span className="pm-bento-muted">{label}</span>
-      <div className="pm-progress-bar">
-        {segs.map(([n, c], i) => <i key={i} style={{ width: `${total ? n / total * 100 : 0}%`, background: c }}/>)}
-      </div>
-      <span className="pm-bento-m">{total}</span>
-    </div>
-  </div>
 }
 
 /* ---------- 3. projectScale 项目状态·规模（逐项目明细） ---------- */
@@ -185,6 +207,8 @@ const projectScale: WidgetDescriptor = {
       <div className="pm-board-projects">
         {data.projects.map(p => {
           const tasks = data.tasks.filter(t => t.projectId === p.id)
+          const doneTasks = tasks.filter(t => t.status === 'done').length
+          const rate = tasks.length ? Math.round(doneTasks / tasks.length * 100) : 0
           const ms = data.milestones.filter(m => m.projectId === p.id)
           const risks = data.riskIssues.filter(r => r.projectId === p.id && r.status !== 'closed').length
           return <button key={p.id} type="button" className="pm-board-project" data-pick-project={p.id}
@@ -192,7 +216,10 @@ const projectScale: WidgetDescriptor = {
             <span className="pm-board-project-name"><span className="pm-board-project-text" title={p.name}>{p.name}</span>
               <span className={`pm-bento-pill pm-bento-pill-st-${p.status}`}>{projectStatusLabel(p.status)}</span>
             </span>
-            <span className="pm-bento-m pm-bento-right">任务 {tasks.length} · 里程 {ms.length} · 风险 {risks}</span>
+            <span className="pm-board-project-meta">
+              <span className="pm-board-project-rate">完成率 {rate}%</span>
+              <span className="pm-bento-m">任务 {tasks.length} · 里程 {ms.length} · 风险 {risks}</span>
+            </span>
           </button>
         })}
         {data.projects.length === 0 && <div className="pm-bento-faint">暂无项目数据。</div>}
@@ -264,6 +291,8 @@ const peopleLoad: WidgetDescriptor = {
     }
     const people = [...rows.values()].sort((a, b) => (b.done + b.progress + b.blocked + b.todo) - (a.done + a.progress + a.blocked + a.todo)).slice(0, 6)
     const max = Math.max(1, ...people.map(p => p.done + p.progress + p.blocked + p.todo))
+    // 未分配单列：不计入成员堆叠刻度，单独列出开放任务数，避免并入某人。
+    const unassignedOpen = data.tasks.filter(t => t.status !== 'done' && t.status !== 'wrapped' && !(t.assignee ?? '').trim()).length
     return <div className="pm-bento-card">
       <div className="pm-bento-label">成员负载<span className="pm-bento-m">同刻度 MAX {max}</span></div>
       <div className="pm-ppl-grid">
@@ -289,6 +318,12 @@ const peopleLoad: WidgetDescriptor = {
         })}
         {people.length === 0 && <div className="pm-bento-faint">目前所有人都没有任务。</div>}
       </div>
+      {unassignedOpen > 0 && (
+        <div className="pm-ppl-unassigned">
+          <span className="pm-ppl-name">未分配</span>
+          <span className="pm-bento-m">{unassignedOpen} 项开放任务待派工</span>
+        </div>
+      )}
       <div className="pm-bento-legend">
         <span><i style={{ background: TONE.done }}/>完成</span>
         <span><i style={{ background: TONE.progress }}/>进行</span>
@@ -308,19 +343,21 @@ const riskMatrix: WidgetDescriptor = {
   requiredSources: ['riskIssues'],
   defaultConfig: {},
   render({ data, actions }) {
-    const risks = data.riskIssues.filter(r => r.type === 'risk' && r.status !== 'closed')
-    // 3x3：行=影响（高在顶），列=概率（低在左）
+    // 仅未关闭 risk 进 3×3；归格/closed 排除/critical→high 全交 core.groupRiskMatrix，不手算。
+    const cells = groupRiskMatrix(data.riskIssues.filter(r => r.type === 'risk'))
+    // 3x3：行=影响（高在顶），列=概率（低在左）；core key = `${prob}/${impact}`。
     const probs = ['low', 'medium', 'high']
     const impacts = ['high', 'medium', 'low']
+    const openCount = Object.values(cells).flat().length
     return <div className="pm-bento-card">
-      <div className="pm-bento-label">风险矩阵<span className="pm-bento-m">只 risk</span></div>
+      <div className="pm-bento-label">风险矩阵<span className="pm-bento-m">未关闭 {openCount}</span></div>
       <div className="pm-matrix">
         <span/>{probs.map(p => <span key={p} className="pm-ax">{({ low: '低', medium: '中', high: '高' } as Record<string,string>)[p]}</span>)}
         {impacts.map(imp => (
           <React.Fragment key={imp}>
             <span className="pm-ax">{({ high: '高', medium: '中', low: '低' } as Record<string,string>)[imp]}</span>
             {probs.map(pr => {
-              const cell = risks.filter(r => r.probability === pr && r.impact === imp)
+              const cell = cells[`${pr}/${imp}`] ?? []
               const heat = heatLevel(pr, imp)
               return <div key={pr} className="pm-mcell" style={{ background: `color-mix(in srgb, var(--pm-st-progress) ${Math.round(heat * 100)}%, transparent)` }}>
                 {cell[0] && <button type="button" className="pm-mdot" data-open-record data-open-type="risk" data-open-id={cell[0].id}
@@ -330,6 +367,7 @@ const riskMatrix: WidgetDescriptor = {
           </React.Fragment>
         ))}
       </div>
+      {openCount === 0 && <div className="pm-bento-faint">暂无未关闭风险。</div>}
     </div>
   },
 }
@@ -379,6 +417,7 @@ const weeklyPlan: WidgetDescriptor = {
           </g>
         })}
       </svg>
+      {buckets.every(n => n === 0) && <div className="pm-bento-faint">未来 7 周无待截止的任务、里程碑或交付物。</div>}
     </div>
   },
 }
@@ -409,7 +448,7 @@ const recordList: WidgetDescriptor<WidgetConfig> = {
         .map(r => String(r.id)),
     ) : null
     const linked = linkageIds ? filtered.filter(r => linkageIds.has(r.id)) : filtered
-    const sorted = applySort(linked, config.sort)
+    const sorted = applySort(linked, config.sort, config.sorts)
     const title = config.title ?? ENTITY_LABEL[entity]
     const showPill = config.show?.pill !== false
     const showDate = config.show?.date !== false
@@ -478,6 +517,7 @@ const overdueSoon: WidgetDescriptor<WidgetConfig> = {
             onClick={() => actions.openRecord(t.projectId, 'task', t.id)}>
             <i style={{ background: tone ?? TONE.due }}/>
             <span><b className={taskCodeLabel(t).missing ? 'pm-bento-code-missing' : ''}>{taskCodeLabel(t).text}</b> · {t.title}</span>
+            <span className="pm-bento-pill">{taskStatusLabels[t.status as keyof typeof taskStatusLabels] ?? t.status}</span>
             <span className="pm-bento-faint">{t.assignee || '未分配'}</span>
             <span className="pm-attn-arr" title={t.dueDate}>应 {t.dueDate} ›</span>
           </button>
@@ -598,12 +638,15 @@ const statusRing: WidgetDescriptor<WidgetConfig> = {
       ['阻塞', data.tasks.filter(t => t.status === 'blocked').length, TONE.blocked],
       ['待办', data.tasks.filter(t => t.status === 'todo').length, TONE.todo],
     ]
-    const total = Math.max(1, order.reduce((s, [, n]) => s + n, 0))
+    const rawTotal = order.reduce((s, [, n]) => s + n, 0)
+    const total = Math.max(1, rawTotal)
     let acc = 0
     const R = 46, C = 2 * Math.PI * R
     return <div className="pm-bento-card">
-      <div className="pm-bento-label">任务状态环</div>
-      <div className="pm-ring-wrap">
+      <div className="pm-bento-label">任务状态环<span className="pm-bento-m">不含收尾</span></div>
+      {rawTotal === 0
+        ? <div className="pm-bento-faint">暂无任务。</div>
+        : <div className="pm-ring-wrap">
         <svg width="110" height="110" viewBox="0 0 120 120" aria-hidden>
           <circle cx="60" cy="60" r={R} fill="none" stroke="var(--pm-line)" strokeWidth="11"/>
           {order.map(([label, n, color]) => {
@@ -618,7 +661,7 @@ const statusRing: WidgetDescriptor<WidgetConfig> = {
         <div className="pm-ring-legend">
           {order.map(([label, n, color]) => <div key={label} className="pm-ring-leg"><i style={{ background: color }}/>{label} <b>{n}</b></div>)}
         </div>
-      </div>
+        </div>}
     </div>
   },
 }

@@ -11,6 +11,8 @@ coverage/
 logs/
 tmp/
 .tmp/
+# 本地独立验证器原始 JSON；决定性结论摘要进 docs/testing，原始日志不入库
+**/.verify-logs/
 # 子代理产出目录（决定性截图证据复制到 docs/verification/ 后入库）
 artifacts/
 **/artifacts/

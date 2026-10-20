@@ -11,7 +11,7 @@
  */
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { defaultExportDirectory } from './export.js'
+import { defaultExportDirectory, isolatedExportBase, resolveIsolatedExportDirectory } from './export.js'
 import type { PmDomain } from './storage.js'
 
 export class ArchiveProjectNotFoundError extends Error {}
@@ -57,6 +57,8 @@ function pickTask(t: Record<string, unknown>): Record<string, unknown> {
     deliverableId: t.deliverableId ?? null,
     milestoneId: t.milestoneId ?? null,
     description: t.description ?? '',
+    // B2：资料区随任务进档案包（软引用/链接原样保留，不复制交付物台账正文）。
+    attachments: Array.isArray(t.attachments) ? t.attachments : [],
   }
 }
 
@@ -148,6 +150,10 @@ export function buildArchiveSnapshot(
   for (const t of tasks) {
     pushEvidence('task-evidence', t.id, t.evidenceUrl)
     pushEvidence('task-repo', t.id, t.repoUrl)
+    // B2：资料区 link 项的 url 同样纳入证据去重集合。
+    for (const att of Array.isArray(t.attachments) ? t.attachments : []) {
+      if (att && att.kind === 'link') pushEvidence('task-evidence', t.id, att.url)
+    }
   }
   for (const d of deliverables) pushEvidence('deliverable-repo', d.id, d.repoUrl)
 
@@ -214,7 +220,13 @@ export async function writeArchivePackage(
   targetDir: string,
   options: { confirm?: boolean } = {},
 ): Promise<string> {
-  const absolute = path.isAbsolute(targetDir) ? targetDir : path.join(defaultExportDirectory, targetDir)
+  // 候选隔离模式（DSH_PM_ISOLATED_ROOT）：导出目标一律收敛到 root/exports，绝对/~/越界/symlink 拒绝；
+  // 未设 env 时保持原有生产解析语义不变。
+  const absolute = isolatedExportBase()
+    ? await resolveIsolatedExportDirectory(targetDir)
+    : path.isAbsolute(targetDir)
+      ? targetDir
+      : path.join(defaultExportDirectory, targetDir)
   let exists = false
   try {
     await access(absolute)

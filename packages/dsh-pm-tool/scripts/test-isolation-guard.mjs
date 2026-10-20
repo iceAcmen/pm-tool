@@ -49,6 +49,7 @@ check(WATCH.includes(expectedExports), `WATCH 包含仓库 exports 默认输出�
 check(WATCH.some(r => r.endsWith('/data')), 'WATCH 仍包含仓库 data/')
 check(WATCH.some(r => r.endsWith('/packages/backups')), 'WATCH 仍包含 packages/backups/')
 check(WATCH.some(r => r.endsWith('/packages/backup')), 'WATCH 仍包含兼容历史 packages/backup/')
+check(WATCH.some(r => r.endsWith('/assets')), 'WATCH 守护 F2 builtin-dev 仓库 assets/ 根')
 // 真实 exports 的存在与否仅作提示，不作为断言（存在/缺失都不影响 PASS/FAIL）。
 const realExportsExists = existsSync(expectedExports)
 console.log(`  note - 真实 exports/ 当前${realExportsExists ? '存在' : '不存在（缺目录视为空，兼容态）'}：${expectedExports}（只读提示，不参与断言）`)

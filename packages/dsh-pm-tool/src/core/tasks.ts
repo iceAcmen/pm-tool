@@ -9,10 +9,24 @@ import {
   taskWriteSchema,
   type Task,
   type TaskUpdate,
+  type AttachmentItem,
+  type ProgressEntry,
 } from './task.js'
 import { assertParentHasNoChecklist } from './task-checklist.js'
+import {
+  normalizeTaskDraft,
+  applyTaskDraftOps,
+  rejectRawAndOpsMixed,
+  TaskOpsError,
+  type TaskDraft,
+} from './task-materials.js'
 import { localTodayIso } from './derived.js'
 import { ensureReflectionOnDone } from './reflect.js'
+import {
+  prepareFilePromotion,
+  rollbackNewAssets,
+  finalizePreparedStages,
+} from './file-asset-store.js'
 import type { PmDomain } from './storage.js'
 
 export class TaskProjectNotFoundError extends Error {}
@@ -105,7 +119,12 @@ function assertNoPredecessorReferences(domain: PmDomain, id: string): void {
 }
 
 export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
-  const fields = taskCreateSchema.parse(input)
+  // draft 是新建任务时随表单一并提交的资料/日志两区（原子合并），不属于 taskCreateSchema 字段，
+  // 先剥离再 strict 解析，避免顶层数组被拒；draft 在同一临界区归一化+校验，失败零写。
+  const raw = input && typeof input === 'object' && !Array.isArray(input) ? (input as Record<string, unknown>) : {}
+  const draft = raw.draft as TaskDraft | undefined
+  const { draft: _drop, ...fieldsRaw } = raw
+  const fields = taskCreateSchema.parse(fieldsRaw)
   return enqueueDomainWrite(domain, async () => {
     if (!domain.table('projects').get(fields.projectId)) {
       throw new TaskProjectNotFoundError(`未找到项目：${fields.projectId}`)
@@ -144,10 +163,55 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
       createdAt: at,
       updatedAt: at,
     }
+    // 新建 draft 原子合并：raw 数组或 ops 信封二选一，同一临界区校验，任一失败在 put 前抛出，任务不落库。
+    let fileState: Awaited<ReturnType<typeof prepareFilePromotion>> | undefined
+    if (draft) {
+      rejectRawAndOpsMixed(draft)
+      const fileOps = (draft.attachmentOps ?? []).filter(o => o.op === 'addFile')
+      const pureAttachmentOps = (draft.attachmentOps ?? []).filter(o => o.op !== 'addFile')
+      const hasOps = draft.attachmentOps || draft.progressOps
+      let nd
+      if (fileOps.length) {
+        const promoted = await prepareFilePromotion(domain, fields.projectId, fileOps, at)
+        fileState = promoted
+        nd = applyTaskDraftOps(domain, fields.projectId, {}, { attachmentOps: pureAttachmentOps, progressOps: draft.progressOps }, at)
+        for (const p of promoted.prepared) {
+          if (nd.attachments.some(a => a.kind === 'file' && a.assetId === p.assetId)) continue
+          let maxAtt = 0
+          for (const a of nd.attachments) {
+            const m = /^at-(\d+)$/.exec(a.id)
+            if (m) maxAtt = Math.max(maxAtt, Number(m[1]))
+          }
+          const item: AttachmentItem = {
+            id: `at-${maxAtt + 1}`,
+            kind: 'file',
+            assetId: p.assetId,
+            addedAt: at,
+          }
+          if (p.note?.trim()) item.note = p.note.trim()
+          nd.attachments.push(item)
+        }
+      } else if (hasOps) {
+        nd = applyTaskDraftOps(domain, fields.projectId, {}, draft, at)
+      } else {
+        nd = normalizeTaskDraft(domain, fields.projectId, draft, at)
+      }
+      recordInput.attachments = nd.attachments
+      recordInput.progressLog = nd.progressLog
+    }
     // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
     omitEmptyRepoKeys(recordInput)
     const record = taskWriteSchema.parse(recordInput)
-    await table.put(id, record)
+    try {
+      if (fileState) {
+        for (const row of fileState.newRows) await domain.table('file_assets').put(row.id, row)
+      }
+      await table.put(id, record)
+    } catch (err) {
+      if (fileState) await rollbackNewAssets(domain, fileState.newRows, fileState.prepared)
+      throw err
+    }
+    if (fileState) await finalizePreparedStages(fileState.prepared)
     return structuredClone(record)
   })
 }
@@ -210,7 +274,20 @@ export function getTask(domain: PmDomain, id: string): Task | undefined {
 
 export function updateTask(domain: PmDomain, id: string, input: unknown): Promise<Task | undefined> {
   taskIdSchema.parse(id)
-  const fields: TaskUpdate = taskUpdateSchema.parse(input)
+  // P0：编辑表单可在同一请求携带 draft（资料/进展两区），与基本字段在同一临界区原子落库；
+  // 先剥离 draft 再 strict 解析基本字段，draft 非法则整体零写、基本字段保持原值，杜绝两请求半写。
+  const rawObj = input && typeof input === 'object' && !Array.isArray(input)
+    ? (input as Record<string, unknown>)
+    : {}
+  const draft = rawObj.draft as TaskDraft | undefined
+  const { draft: _drop, ...fieldsRaw } = rawObj
+  // 仅携带 draft（表单只保存资料/进展区）时基本字段为空对象，不应被「至少一个更新字段」refine 拒绝；
+  // 有基本字段时仍走 strict，未知键/空对象照常拦截。
+  const fields: TaskUpdate = Object.keys(fieldsRaw).length > 0
+    ? taskUpdateSchema.parse(fieldsRaw)
+    : draft
+      ? ({} as TaskUpdate)
+      : taskUpdateSchema.parse(fieldsRaw)
   // X6-L1：是否本次由非 done 转入 done（在写队列外记录，供落库成功后 best-effort 挂复盘草稿钩子）。
   let becameDone = false
   return enqueueDomainWrite(domain, async () => {
@@ -223,6 +300,26 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     if (fields.deliverableId !== undefined) {
       validateDeliverableRelation(domain, current.projectId, fields.deliverableId)
     }
+    // P0：同事务应用 draft；raw 数组为 create-only，编辑仅接受 ops 信封（保稳定 ID/P3 历史）。
+    // 任一校验失败在此抛出，后续 put 不执行，基本字段保持原值，杜绝两请求半写。
+    let draftAttachments: AttachmentItem[] | undefined
+    let draftProgressLog: ProgressEntry[] | undefined
+    if (draft) {
+      rejectRawAndOpsMixed(draft)
+      if (draft.attachments !== undefined || draft.progressLog !== undefined) {
+        throw new TaskOpsError('task update 的 draft 仅接受 attachmentOps/progressOps；raw 数组为 create-only')
+      }
+      const at = new Date().toISOString()
+      const applied = applyTaskDraftOps(
+        domain,
+        current.projectId,
+        { attachments: current.attachments, progressLog: current.progressLog },
+        draft,
+        at,
+      )
+      draftAttachments = applied.attachments
+      draftProgressLog = applied.progressLog
+    }
     const nextInput: Record<string, unknown> = {
       ...current,
       ...fields,
@@ -234,6 +331,8 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
       createdAt: current.createdAt,
       updatedAt: new Date().toISOString(),
     }
+    if (draftAttachments) nextInput.attachments = draftAttachments
+    if (draftProgressLog) nextInput.progressLog = draftProgressLog
     if (fields.startDate === null) delete nextInput.startDate
     if (fields.dueDate === null) delete nextInput.dueDate
     // 完成日期随状态流转自动维护（batchUpdateTasks 逐条走 updateTask，口径自动一致）：

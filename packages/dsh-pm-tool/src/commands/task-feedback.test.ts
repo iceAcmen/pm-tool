@@ -62,6 +62,20 @@ describe('J5 真实链：task update 成功 CommandResult → classifyFeedback �
     expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
   })
 
+  it('空日期 null 与旧值 undefined 等价，不产生“空 → 空”伪变更', async () => {
+    const domain = memoryDomain()
+    const project = await addProject(domain, { name: 'J5 空值项目', startDate: '2026-10-10', targetDate: '2026-12-31' })
+    const task = await addTask(domain, { projectId: project.id, title: '空日期任务' })
+
+    const res = await handleTaskCommand(
+      `update ${task.id} ${JSON.stringify({ startDate: null, dueDate: null })}`,
+      domain,
+    )
+    const fb = classifyFeedback(res.text)
+    expect(fb.summary.join('\n')).not.toContain('空 → 空')
+    expect(fb.summary.join('\n')).not.toContain('已修改：')
+  })
+
   it('错误：持久（不自动消失）、单处、走回退文本', async () => {
     const domain = memoryDomain()
     await addProject(domain, { name: 'J5 错误项目', startDate: '2026-10-10', targetDate: '2026-12-31' })

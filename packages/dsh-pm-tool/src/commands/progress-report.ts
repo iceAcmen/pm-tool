@@ -7,14 +7,18 @@ import {
   generateProgressReport,
   getProgressReport,
   listProgressReports,
+  previewProgressReport,
   ProgressReportProjectNotFoundError,
   updateProgressReport,
 } from '../core/progress-reports.js'
 import {
   describeProgressReportValidation,
   progressReportStatusLabels,
+  progressReportSourceTypeLabels,
+  selectedRefSchema,
   type ProgressReport,
   type ProgressReportStatus,
+  type SelectedRef,
 } from '../core/progress-report.js'
 import { AiDraftError, type LlmGateway } from '../core/ai-client.js'
 import { buildBrief, defaultPeriod, generateNarrative, rememberNarrative, recallNarrative } from '../core/report-narrate.js'
@@ -27,9 +31,10 @@ import { buildActionLine, buildSuccessEnvelope } from '../core/ui-feedback.js'
 export const progressReportHelp = [
   '进度汇报命令（离线固定快照，无需 API Key）：',
   '  /pm report generate p-0001 2026-10-01 2026-10-31 {"title":"十月进度汇报"}',
+  '  /pm report generate p-0001 2026-10-01 2026-10-31 {"sourceType":"session","sourceSessionId":"sess-123"}',
   '  /pm report list p-0001 [all|draft|final]',
   '  /pm report get rpt-0001',
-  '  /pm report update rpt-0001 {"status":"final","executiveSummary":"总体按计划"}',
+  '  /pm report update rpt-0001 {"status":"final","executiveSummary":"总体按计划"}（sourceType/sourceSessionId 生成后不可改）',
   '  /pm report export rpt-0001 [目录] [confirm]',
   '  /pm report delete rpt-0001 confirm',
   '  /pm report narrate p-0001            基于确定性数据，AI 写本周进展/风险/下周计划叙述（预览，不落盘）',
@@ -45,6 +50,7 @@ function render(report: ProgressReport): string {
     `标题：${report.title}`,
     `周期：${report.periodStart} 至 ${report.periodEnd}`,
     `状态：${progressReportStatusLabels[report.status]}`,
+    `来源：${progressReportSourceTypeLabels[report.sourceType]}${report.sourceSessionId ? `（${report.sourceSessionId}）` : ''}`,
     `快照时间：${report.snapshotAt}`,
     `任务：${report.snapshot.tasks.done}/${report.snapshot.tasks.total} 完成，平均进度 ${report.snapshot.tasks.averageProgress === null ? '证据不足' : `${report.snapshot.tasks.averageProgress}%`}`,
     `里程碑：${report.snapshot.milestones.achieved}/${report.snapshot.milestones.total} 达成`,
@@ -182,6 +188,42 @@ export async function handleProgressReportCommand(rawInput: string, domain?: PmD
           [`已按编辑后叙述生成进度快照｜${report.id}`, '不再调用模型；确定性数字采集'],
           render(report),
         ),
+      }
+    }
+    // B6 只读预览：按周期从现有进展日志派生候选，不落盘、不写 reports 表。
+    const previewMatch = /^preview\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)
+    if (previewMatch) {
+      const options = parseJson(previewMatch[4]) ?? {}
+      if (typeof options !== 'object' || Array.isArray(options)) {
+        return { kind: 'error', text: '可选参数须为 JSON 对象，如 {"selectedRefs":[{"taskId":"t-0001","entryId":"pl-1","revisionId":"rv-1"}]}。' }
+      }
+      const rawRefs = (options as { selectedRefs?: unknown }).selectedRefs
+      let selectedRefs: SelectedRef[] | undefined
+      if (rawRefs !== undefined) {
+        const parsed = selectedRefSchema.array().safeParse(rawRefs)
+        if (!parsed.success) {
+          return { kind: 'error', text: 'selectedRefs 须为 [{taskId,entryId,revisionId?}] 复合选择器（pl-N 每任务局部序号，禁止裸 entryId）。' }
+        }
+        selectedRefs = parsed.data
+      }
+      try {
+        const result = previewProgressReport(domain, {
+          projectId: previewMatch[1],
+          periodStart: previewMatch[2],
+          periodEnd: previewMatch[3],
+          selectedRefs,
+        })
+        const lines = [
+          `周期预览（只读，未写入）｜${result.projectId} ${result.periodStart} 至 ${result.periodEnd}｜候选 ${result.candidates.length} 条`,
+          ...result.candidates.map(c =>
+            `${c.taskId}/${c.entryId}/${c.revisionId}｜${c.date}｜${c.author}｜${c.content}`,
+          ),
+          '确认生成时用 generate 传 selectedRefs（taskId+entryId+revisionId）冻结所选修订版，本预览不改动任何汇报。',
+        ]
+        return { kind: 'success', text: lines.join('\n') }
+      } catch (error) {
+        if (error instanceof ProgressReportProjectNotFoundError) return { kind: 'error', text: error.message }
+        throw error
       }
     }
     const generateMatch = /^generate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+([\s\S]+))?$/i.exec(input)

@@ -24,11 +24,15 @@ const ctx = { window: win, console, process: { env: {} } }
 vm.createContext(ctx)
 vm.runInContext(src, ctx, { filename: 'client.js' })
 assert.equal(typeof captured, 'function', '宿主 ModuleLoader 应收到 factory')
+
+// B8-2：单包内联（inlineDynamicImports:true）后，入口工厂仅依赖宿主平台模块（react 系），
+// 不得预加载任何兄弟块，也不得同步 require 未注册相对块（这正是 host missed module table 根因）。
 const mod = { exports: {} }
-const exports_ = captured((id) => {
+const requireMap = (id) => {
   if (!(id in provide)) throw new Error('client bundle 引用了宿主未提供的模块: ' + id)
   return provide[id]
-}, mod)
+}
+const exports_ = captured(requireMap, mod)
 const out = exports_ && typeof exports_ === 'object' ? exports_ : mod.exports
 assert.equal(typeof out.apply, 'function', '应导出 apply 安装函数')
 // 最小 mock ctx
@@ -47,19 +51,12 @@ out.apply(mockCtx)
 assert.deepEqual(new Set(registeredNames), new Set(['main', 'sidebar.panellist']),
   'apply 应注册 main 与 sidebar.panellist')
 
-// P0 浏览态拆分：异步块 client.editor.js / client.formula-expr.js 也必须自包含，
-// 其外部 require 同样只能解析 react 系（RGL/zod/expr 已内联，不得 require 宿主答不出的名字）。
-for (const chunkFile of ['client.editor.js', 'client.formula-expr.js']) {
-  let capturedChunk = null
-  const chunkCtx = { window: { __ModuleLoader__: { load: ({ factory }) => { capturedChunk = factory } } }, console, process: { env: {} } }
-  vm.createContext(chunkCtx)
-  vm.runInContext(readFileSync(new URL(`../lib/${chunkFile}`, import.meta.url), 'utf8'), chunkCtx, { filename: chunkFile })
-  assert.equal(typeof capturedChunk, 'function', `${chunkFile} 应注册 factory`)
-  capturedChunk((id) => {
-    if (!(id in provide)) throw new Error(`${chunkFile} 引用了宿主未提供的模块: ` + id)
-    return provide[id]
-  }, { exports: {} })
-}
+// B8-2：单包内联后不应再产出兄弟块；若未来恢复异步块，入口也只允许 require.async，
+// 不得出现同步相对 require('./client.*.js')。这里静态扫描入口，防止回归到 missed module table。
+const entrySrc = readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8')
+assert.doesNotMatch(entrySrc, /require\(\s*['"]\.\/client\.[A-Za-z0-9][A-Za-z0-9._-]*\.js['"]\s*\)/,
+  '入口不得同步 require 相对兄弟块（宿主模块表无法 materialize）')
+
 // DEF-B1：从【真实构建产物 lib/client/board】加载页面同一份 registry 与 persist 链，
 // 不另从 src 喂 knownTypes。断言 knownTypes 取到全部 registry key，默认布局 kept=全、skipped=0；
 // 未来未知类型仅跳过且单列，已知卡原样。回归到“全跳过”时这里必须红。
@@ -133,4 +130,4 @@ console.log(`[board-runtime] default kept=${def.layout.widgets.length} skipped=$
 console.log(`[board-runtime] old-layout11 kept=${oldLoaded.layout.widgets.length} skipped=${oldLoaded.skipped.length}`)
 console.log(`[board-runtime] mixed futureUnknown skipped=${mixedLoaded.skipped.length} kept=${mixedLoaded.layout.widgets.length}`)
 
-console.log('PASS verify-client-bundle: factory 激活, apply 注册 main/sidebar, editor/formula 块自包含, 仅 react 外部依赖, board registry 运行时全保留')
+console.log('PASS verify-client-bundle: 单包内联, factory 激活, apply 注册 main/sidebar, 入口无同步相对块 require, 仅 react 外部依赖, board registry 运行时全保留')

@@ -128,7 +128,7 @@ const { handleBackupCommand } = await import('../lib/commands/backup.js')
   assert.equal(readdirSync(BAKDIR).length, filesBefore, '坏备份后 backups 文件集合不变')
 }
 
-function norm(b){ const c=JSON.parse(JSON.stringify(b)); delete c.exportedAt; return c }
+function norm(b){ const c=JSON.parse(JSON.stringify(b)); delete c.exportedAt; delete c.fileBundleId; return c }
 
 // ===== 5) 自动 spawn 子进程 reopen 同一 root =====
 {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { bboxOverlap, findCollisions, sanitizeLayout, loadDashboard, resolveDashboard, parseLayout } from './persist.js'
+import { bboxOverlap, findCollisions, sanitizeLayout, loadDashboard, resolveDashboard, resolveProjectDashboard, dashboardScopeFor, parseLayout } from './persist.js'
 import type { DashboardLayout, WidgetInstance } from './types.js'
 
 const w = (i: string, x: number, y: number, w: number, h: number, type = 'recordList'): WidgetInstance => ({
@@ -102,5 +102,30 @@ describe('旧布局 fixture 回归（11 类不丢/不重叠/不静默重置）',
     const out = resolveDashboard(fixture(), null, fb, KNOWN11)
     expect(out.widgets).toHaveLength(11)
     expect(out.widgets.every(x => KNOWN11.has(x.type))).toBe(true)
+  })
+})
+
+describe('项目级看板 scope 与解析（project:<id>）', () => {
+  it('dashboardScopeFor：projectId → project:<id>，缺省 → user', () => {
+    expect(dashboardScopeFor('p-0001')).toBe('project:p-0001')
+    expect(dashboardScopeFor(undefined)).toBe('user')
+  })
+
+  const valid = (tag: string) => ({ version: 1, scope: `project:${tag}`, widgets: [] })
+  const fb = { widgets: [] } as unknown as DashboardLayout
+
+  it('byProject[projectId] 可解析即胜出；scoped 缺/非法时落到 legacy project（只读回退，不写）', () => {
+    const scopedOk = resolveProjectDashboard({ 'p-0001': valid('scoped') }, 'p-0001', valid('legacy'), fb, new Set())
+    expect(scopedOk).toBeDefined()
+    const legacyFall = resolveProjectDashboard({}, 'p-0001', valid('legacy'), fb, new Set())
+    expect(legacyFall).toBeDefined()
+  })
+
+  it('scoped 与 legacy 都缺/非法 → 回退默认布局；项目解析绝不读取个人 user 布局', () => {
+    const viaFallback = resolveProjectDashboard(undefined, 'p-0001', null, fb, new Set())
+    expect(viaFallback).toBe(fb)
+    // 传入个人 user 合法布局也不被消费（项目/个人配置隔离）
+    const out = resolveProjectDashboard({}, 'p-0001', null, fb, new Set())
+    expect(out).toBe(fb)
   })
 })
