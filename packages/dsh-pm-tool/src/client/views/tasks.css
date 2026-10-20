@@ -586,6 +586,14 @@
   /* 移动手柄窄窗隐藏（桌面可用），不占卡片空间 */
   .pm-tasks-root .pt-gutter { display: none; }
 
+  /* P2-5 窄窗：视图切换器占满一行，管理行纵向堆叠（仅窄窗，不得泄漏到桌面） */
+  .pm-tasks-root .pt-viewleft { width: 100%; }
+  .pm-tasks-root .pt-viewswitch { width: 100%; }
+  .pm-tasks-root .pt-viewswitch-btn { max-width: none; width: 100%; justify-content: flex-start; }
+  .pm-tasks-root .pt-vmenu { width: 100%; }
+  .pm-tasks-root .pt-vm-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .pm-tasks-root .pt-vm-acts { justify-content: flex-end; }
+
   /* 勾选框窄窗常显（无 hover 也可见） */
   .pm-tasks-root .pt-sel input { opacity: 1; }
 
@@ -618,14 +626,6 @@
   .pm-tasks-root .pt-group .pt-acts,
   .pm-tasks-root .pt-group > .pt-cell:not(.pt-gutter):not(.pt-gname) { display: none; }
 }
-
-  /* P2-5 窄窗：视图切换器占满一行，管理行纵向堆叠 */
-  .pm-tasks-root .pt-viewleft { width: 100%; }
-  .pm-tasks-root .pt-viewswitch { width: 100%; }
-  .pm-tasks-root .pt-viewswitch-btn { max-width: none; width: 100%; justify-content: flex-start; }
-  .pm-tasks-root .pt-vmenu { width: 100%; }
-  .pm-tasks-root .pt-vm-row { flex-direction: column; align-items: stretch; gap: 8px; }
-  .pm-tasks-root .pt-vm-acts { justify-content: flex-end; }
 
 /* ===== 契约补丁（B 组，全部 scope 在 .pm-tasks-root，不改 panel.css 共享块） ===== */
 /* 编号占位：缺 code 的存量记录显短 ID，弱化等宽，不重新编号（§7）。 */
@@ -721,4 +721,68 @@
   .pm-tasks-root .pt-batch > * { flex: 1 1 auto; }
   .pm-tasks-root .pt-head { flex-direction: column; gap: var(--sp-2); }
   .pm-tasks-root .pt-search { width: 100%; }
+}
+
+/* ============================================================================
+   P0 返修（2026-10-20）：宿主嵌入顶部安全间距 + 任务工具条分组/优先级/折叠/响应式。
+   仅本页局部 CSS，消费既有 token，不改全局 token / core / board；不改任何交互逻辑。
+   问题（正式 3172 01-current-light.png）：窄屏规则泄漏到桌面致视图切换器独占整行，
+   动作簇散成 5–6 行；标题贴顶被宿主视口裁切。目标：宽屏筛选区一行、嵌入中宽整齐两行、390 收纳。
+   ============================================================================ */
+
+/* 顶部安全呼吸：pm-view 已有横向 padding，这里只补顶部间距，避免 h1 贴宿主上沿被裁 */
+.pm-tasks-root .pt-head { padding-top: var(--sp-2); }
+.pm-tasks-root .pt-row1 { align-items: center; }
+
+/* 溢出防护：工具条与各簇不得被 nowrap 子项顶出父宽（390 不产生横向滚动） */
+.pm-tasks-root .pt-toolbar,
+.pm-tasks-root .pt-viewleft,
+.pm-tasks-root .pt-tools { max-width: 100%; min-width: 0; }
+.pm-tasks-root .pt-search { min-width: 0; }
+
+/* 宽屏（≥1080，整窗 1440）：视图切换+chips 居左、动作簇居右，优先一行，必要时才换行 */
+@media (min-width: 1080px) {
+  .pm-tasks-root .pt-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--sp-3); flex-wrap: wrap;
+  }
+  .pm-tasks-root .pt-viewleft { flex-wrap: nowrap; min-width: 0; gap: var(--sp-2); }
+  .pm-tasks-root .pt-tools { flex-wrap: wrap; justify-content: flex-end; gap: var(--sp-2); }
+  .pm-tasks-root .pt-search { width: 300px; flex: 0 0 auto; }
+}
+
+/* 宿主嵌入中宽（561–1079，截图实宽约 620）：整齐两行——视图+chips 一行，动作簇一行；
+   不再让视图切换器/导出/密度各自独占整行。密度解释长 chip 收起（seg 与 title 仍在，语义不丢）。 */
+@media (min-width: 561px) and (max-width: 1079px) {
+  .pm-tasks-root .pt-toolbar {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: var(--sp-2); flex-wrap: nowrap;
+  }
+  .pm-tasks-root .pt-viewleft { width: 100%; flex-wrap: wrap; gap: var(--sp-2); min-width: 0; }
+  .pm-tasks-root .pt-tools { width: 100%; flex-wrap: wrap; justify-content: flex-start; gap: var(--sp-2); }
+  .pm-tasks-root .pt-search { width: 220px; }
+  .pm-tasks-root .pt-density { gap: 6px; flex-wrap: nowrap; }
+  .pm-tasks-root .pt-density-chip { display: none; }
+  .pm-tasks-root .pt-ghost { height: 34px; padding: 0 12px; }
+}
+
+/* 窄屏 ≤560：chips 横向滚动单行不堆列，动作簇紧凑换行，密度解释 chip 收起、seg 拉伸 */
+@media (max-width: 560px) {
+  .pm-tasks-root .pt-head { padding-top: var(--sp-2); }
+  .pm-tasks-root .pt-viewleft,
+  .pm-tasks-root .pt-tools { width: 100%; max-width: 100%; min-width: 0; }
+  .pm-tasks-root .pt-chips {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch; width: 100%;
+  }
+  .pm-tasks-root .pt-chip { flex: 0 0 auto; }
+  .pm-tasks-root .pt-tools { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .pm-tasks-root .pt-density-chip { display: none; }
+  .pm-tasks-root .pt-density { width: 100%; justify-content: flex-start; }
+}
+
+/* 390：动作簇两行内收纳，密度 seg 均分，避免顶出 */
+@media (max-width: 390px) {
+  .pm-tasks-root .pt-tools { row-gap: var(--sp-2); }
+  .pm-tasks-root .pt-density-seg { flex: 1 1 auto; justify-content: center; }
 }
