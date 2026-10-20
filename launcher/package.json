@@ -1,0 +1,16 @@
+{
+  "name": "pm-local-launcher",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "PM 工作台本地启动器（路径 B：用户自确认；普通浏览器 tab + 127 loopback control 页）",
+  "bin": {
+    "pm-launcher": "bin/pm-launcher.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs",
+    "verify": "node scripts/verify-launcher.mjs",
+    "start": "node bin/pm-launcher.mjs"
+  },
+  "license": "MIT"
+}
