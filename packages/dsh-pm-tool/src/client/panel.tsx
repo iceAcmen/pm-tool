@@ -5,6 +5,7 @@ import { NavRail } from './nav-rail.js'
 import { confirmDanger, ConfirmHost } from './confirm-dialog.js'
 import { clampProgress as writeClampProgress, parseProgressInput } from '../core/task-inline.js'
 import { findMeetingSources, pickPrimarySource } from '../core/meeting-source.js'
+import { resolveLinkedMilestone, resolveLinkedDeliverables } from './shared/task-relation-projection.js'
 import { localTodayIso, isTaskOverdue } from '../core/derived.js'
 import { groupOpenTasksByAssignee, normalizePerson, type PersonRow } from '../core/people-load.js'
 import { listAssigneeCandidates } from '../core/people-candidates.js'
@@ -17,7 +18,7 @@ import { AiAssistant } from './shared/drawers/ai-assistant.js'
 import { CopilotPanel } from './shared/drawers/sidecar-portal.js'
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
-import { extractBackupPath, classifyFeedback, commandAccepted } from '../core/ui-feedback.js'
+import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard } from '../core/ui-feedback.js'
 import { buildDiagnosis } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
@@ -78,7 +79,8 @@ import { PeopleView } from './views/people.js'
 import { OkrsView } from './views/okrs.js'
 import { HabitsView, type HabitViewRecord, type HabitInboxSuggestion } from './views/habits.js'
 import type { OkrViewRecord, OkrInboxSuggestion } from './views/okr-model.js'
-import { MarkdownView } from './shared/markdown-view.js'
+import { MarkdownView, MarkdownEditor } from './shared/markdown-view.js'
+import { sanitizeMarkdownDraft } from './shared/markdown.js'
 import { PageShell } from './shared/page-shell.js'
 // S0 共享闸门：Field/FormSection/useSubmitGuard 由共享合同层提供（原本地实现已提升，行为零变更）。
 import { Field, FormSection, useSubmitGuard } from './shared/ui/index.js'
@@ -637,6 +639,25 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       }
     })()
     if (drawer) setDrawer(drawer)
+  }
+  // D-11：交付物视图反查到的任务直达；find 失败诚实反馈（不打开、不 task undefined）。
+  const gotoTaskFromDeliverable = (taskId: string) => {
+    const found = findRecord(data, 'task', taskId)
+    if (!found) {
+      setMessage(`未找到任务 ${taskId}：可能已删除或不在当前项目，未打开抽屉。`)
+      return
+    }
+    openRecord(selected, 'task', taskId)
+  }
+  // D-07/D-08：甘特里程碑双击/Enter 详情；复用既有 setDrawer({kind:'milestone'}) 语义，
+  // find 失败诚实反馈，绝不打开 undefined 抽屉。
+  const openMilestoneFromGantt = (m: { id: string }) => {
+    const found = findRecord(data, 'milestone', m.id)
+    if (!found) {
+      setMessage(`未找到里程碑 ${m.id}：可能已删除或不在当前项目，未打开抽屉。`)
+      return
+    }
+    openRecord(selected, 'milestone', m.id)
   }
   const [drawer, setDrawer] = useState<Drawer>()
   const [reportCreateRequest, setReportCreateRequest] = useState(0)
@@ -1301,6 +1322,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 onEdit={deliverable => setDrawer({ kind: 'deliverable', deliverable })}
                 records={deliverableRecords}
                 createRequest={deliverableCreateRequest}
+                onGotoTask={gotoTaskFromDeliverable}
               />}
               {view === 'overview' && (
                 <>
@@ -1325,7 +1347,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   />
                 </>
               )}
-              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView}/>}
+              {view === 'gantt' && <GanttView tasks={tasks} milestones={milestones} run={run} onEdit={task => setDrawer({ kind: 'task', task })} onCreate={() => setDrawer({ kind: 'task' })} disabled={busy} onGotoView={changeView} onOpenMilestone={openMilestoneFromGantt}/>}
               {view === 'people' && <PeopleView
                 project={project}
                 tasks={tasks}
@@ -1438,6 +1460,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           onCancel={() => setDrawer(undefined)}
           registerGuard={fn => { closeGuardRef.current = fn }}
           onOpenMeeting={(meetingId, meetingProjectId) => openRecord(meetingProjectId ?? project.id, 'meeting', meetingId)}
+          onOpenMilestone={milestoneId => openRecord(project.id, 'milestone', milestoneId)}
           deliverableOptions={deliverables.map(d => ({ id: d.id, name: d.name, version: d.version }))}
           stageEnabled={stageUploadGate(data.capabilities)}
           downloadEnabled={downloadGate(data.capabilities?.assetDownload)}
@@ -1936,6 +1959,9 @@ function ResultCard({ message, onClose, onAction }: {
   const [detailOpen, setDetailOpen] = useState(false)
   const path = extractBackupPath(message)
   const isError = fb.isError
+  // D-09/C-11：纯结构化成功短摘要只进 3s toast，不开常驻大卡（消除 toast+大卡双发、离页残留）；
+  // 仅错误/非结构化/带 action/带备份路径才常驻本卡。
+  if (!shouldPersistResultCard(fb, path)) return null
   // 非结构化回退：原样全量进卡体（不强行折叠、不改写）；结构化成功：摘要常显、详情折叠。
   const showInlineRaw = !fb.structured
   // B1-C3：permission-denied 给通用错误种类标签（权限不足），原始 command 错误原因原样保留，
@@ -2373,6 +2399,7 @@ function TaskForm({
   onSaved,
   onCancel,
   onOpenMeeting,
+  onOpenMilestone,
   registerGuard,
   deliverableOptions,
   onChanged,
@@ -2394,6 +2421,8 @@ function TaskForm({
   onSaved: () => void
   onCancel: () => void
   onOpenMeeting: (meetingId: string, projectId?: string) => void
+  /** D-08：只读关联里程碑直达（关闭抽屉并切到里程碑视图）；可选，缺省只展示不可点。 */
+  onOpenMilestone?: (milestoneId: string) => void
   /** O4：向抽屉注册关闭守卫（dirty 确认）；卸载注销。 */
   registerGuard?: (guard: (() => boolean) | null) => void
   /** B2：可选交付物选项（id/name/version），供关联交付物下拉。 */
@@ -2417,6 +2446,9 @@ function TaskForm({
   // PROD-10：任务由会议行动项 promote/关联而来时，抽屉顶部展示只读来源链接（前端反查全量 meetings，不落库）。
   const sources = task ? findMeetingSources(meetings, task.id) : []
   const primary = pickPrimarySource(sources)
+  // D-08/D-11：抽屉侧只读关联投影（零 schema、不回写）；当前已保存里程碑 + 已关联交付物。
+  const linkedMilestone = task ? resolveLinkedMilestone(task.milestoneId, milestones) : null
+  const linkedDeliverables = task ? resolveLinkedDeliverables(task, deliverableOptions ?? []) : []
   // O4：打开瞬间采集初始快照（含非控 description）；关闭前比对，dirty 才弹放弃确认，干净直接关。
   const formRef = useRef<HTMLFormElement>(null)
   const initialSnap = useRef<FormSnapshot | null>(null)
@@ -2740,6 +2772,31 @@ function TaskForm({
         <option value="">不关联</option>
         {milestones.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
       </select></Field>
+      {/* D-08/D-11 当前已保存关联只读投影（不回写）；无关联诚实空态。 */}
+      <div className="pm-rel-projection" aria-label="当前关联只读信息">
+        <span className="pm-rel-projection__label">当前关联</span>
+        {!linkedMilestone && linkedDeliverables.length === 0 && (
+          <span className="pm-muted pm-rel-projection__empty">暂无已保存的里程碑或交付物关联。</span>
+        )}
+        {linkedMilestone && (
+          <span className="pm-rel-chip" data-kind="milestone">
+            <MilestoneIcon size={13} aria-hidden="true"/>
+            {onOpenMilestone ? (
+              <button type="button" className="pm-rel-chip__go" onClick={() => onOpenMilestone(linkedMilestone.id)}>
+                {linkedMilestone.title} <span className="pm-rel-chip__id">{linkedMilestone.id}</span>
+              </button>
+            ) : (
+              <span>{linkedMilestone.title} <span className="pm-rel-chip__id">{linkedMilestone.id}</span></span>
+            )}
+          </span>
+        )}
+        {linkedDeliverables.map(dv => (
+          <span key={dv.deliverableId} className="pm-rel-chip" data-kind="deliverable">
+            <Package size={13} aria-hidden="true"/>
+            <span>{dv.name}{dv.version ? `（${dv.version}）` : ''} <span className="pm-rel-chip__id">{dv.deliverableId}</span></span>
+          </span>
+        ))}
+      </div>
     {/* T7：两个可选仓库输入（复用项目级中文校验，role=alert / aria-invalid）。 */}
     <Field label="仓库地址（可选）" error={errors.repoUrl} errorId="task-repo-error">
       <input
@@ -3596,6 +3653,9 @@ function ProgressReportForm({
     periodStart: report?.periodStart ?? '',
     periodEnd: report?.periodEnd ?? '',
   })
+  // D-10：管理摘要统一走 SH-6 MarkdownEditor（源码/即时预览/格式辅助）；本地受控，
+  // 定稿快照语义不变，保存时按记录 form 口径 sanitize，不双清源/预览。
+  const [summary, setSummary] = useState(report?.executiveSummary ?? '')
   const [errors, setErrors] = useState<FormFieldErrors>({})
   // E10：本地提交防重（pending 禁用 + 加载态 + 二次提交忽略）。
   const [submitting, beginSubmit, endSubmit] = useSubmitGuard()
@@ -3625,7 +3685,7 @@ function ProgressReportForm({
     const payload = {
       ...(title ? { title } : {}),
       status: form.get('status'),
-      executiveSummary: form.get('executiveSummary'),
+      executiveSummary: sanitizeMarkdownDraft(summary),
       completedWork: textList(form.get('completedWork')),
       nextPlans: textList(form.get('nextPlans')),
       blockers: textList(form.get('blockers')),
@@ -3649,7 +3709,15 @@ function ProgressReportForm({
         <Field label="状态" wide><select name="status" defaultValue={report?.status ?? 'draft'}>
           {Object.entries(progressReportStatus).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select></Field>
-        <Field label="管理摘要" wide><textarea name="executiveSummary" rows={4} defaultValue={report?.executiveSummary}/></Field>
+        <Field label="管理摘要（Markdown：源码编辑 + 即时预览，支持标题/加粗/列表/链接）" wide>
+          <MarkdownEditor
+            value={summary}
+            onChange={setSummary}
+            minRows={6}
+            ariaLabel="管理摘要 Markdown"
+            density="compact"
+          />
+        </Field>
         <Field label="已完成事项（每行一项）" wide><textarea name="completedWork" rows={4} defaultValue={report?.completedWork.join('\n')}/></Field>
         <Field label="下期计划（每行一项）" wide><textarea name="nextPlans" rows={4} defaultValue={report?.nextPlans.join('\n')}/></Field>
         <Field label="阻塞说明（每行一项）" wide><textarea name="blockers" rows={3} defaultValue={report?.blockers.join('\n')}/></Field>

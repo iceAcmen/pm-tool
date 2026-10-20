@@ -8,6 +8,7 @@ import {
   formatNoticeLines,
   buildSuccessEnvelope,
   buildActionLine,
+  shouldPersistResultCard,
   PM_SUMMARY_PREFIX,
   PM_DETAIL_MARKER,
   PM_ACTION_MARKER,
@@ -133,5 +134,34 @@ describe('commandAccepted（O3 失败不关抽屉）', () => {
 
   it('只读预览文本不含错误词 → true，不误判为失败', () => {
     expect(commandAccepted('只读预览：基于确定性数字生成，尚未写入。')).toBe(true)
+  })
+})
+
+describe('D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）', () => {
+  it('纯结构化成功信封（无 action/无备份路径）→ 不持久化 ResultCard，交给 3s toast', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['任务已更新｜t-0025', '已修改：里程碑：空 → m-0002'], '完整字段…'))
+    expect(shouldPersistResultCard(fb, null)).toBe(false)
+  })
+
+  it('错误 → 持久化（role=alert 单处）', () => {
+    const fb = classifyFeedback('更新失败：未找到任务 t-9999')
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('非结构化原样回退 → 持久化（不吞不改写）', () => {
+    const fb = classifyFeedback('这是一行普通返回，没有任何信封标记')
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('带 [pm:action] 独立确认动作 → 持久化（动作按钮须常驻可点）', () => {
+    const fb = classifyFeedback([
+      buildActionLine('确认入库', 'report narrate p-1 confirm'),
+    ].join('\n'))
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('结构化成功但携带备份路径 → 持久化（复制路径位需常驻）', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['备份已生成'], null))
+    expect(shouldPersistResultCard(fb, '/tmp/pmtool-backup-x.json')).toBe(true)
   })
 })

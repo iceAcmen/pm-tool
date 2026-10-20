@@ -161,6 +161,19 @@ export function classifyFeedback(message: string): ClassifiedFeedback {
 }
 
 /**
+ * D-09 / C-11：是否需要常驻 ResultCard（持久单处卡）。
+ * 纯结构化成功短摘要只进 3s toast，不另开常驻大卡（消除 toast+大卡双发、离页残留）；
+ * 错误、非结构化原样回退、带 [pm:action] 独立动作、带备份路径（需常驻复制位）才持久化。
+ */
+export function shouldPersistResultCard(fb: ClassifiedFeedback, backupPath: string | null): boolean {
+  if (fb.isError) return true
+  if (!fb.structured) return true
+  if (fb.action) return true
+  if (backupPath) return true
+  return false
+}
+
+/**
  * 解析 `model status` 输出里的「当前模型车道」。
  * 只认两种信号：① 带 ▶ 标记的当前车道行（▶ [poc]/▶ [prod]）；② 首行「当前车道：PoC/生产」。
  * 绝不靠 contains('[prod]')——status 会把两条车道都列出来，均含 [poc]/[prod]。

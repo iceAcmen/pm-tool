@@ -282,23 +282,38 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
           </ul>
         )}
         <div className="pm-mat-form">
-          <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.currentTarget.value)}
-            placeholder="https://… 资料链接" aria-label="资料链接地址"/>
-          <input type="text" value={linkTitle} onChange={e => setLinkTitle(e.currentTarget.value)}
-            placeholder="标题（可选）" aria-label="链接标题"/>
-          <input type="text" value={linkNote} onChange={e => setLinkNote(e.currentTarget.value)}
-            placeholder="备注（可选）" aria-label="链接备注"/>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">资料链接</span>
+            <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.currentTarget.value)}
+              placeholder="https://…" aria-label="资料链接地址"/>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">标题（可选）</span>
+            <input type="text" value={linkTitle} onChange={e => setLinkTitle(e.currentTarget.value)}
+              placeholder="链接标题" aria-label="链接标题"/>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">备注（可选）</span>
+            <input type="text" value={linkNote} onChange={e => setLinkNote(e.currentTarget.value)}
+              placeholder="链接备注" aria-label="链接备注"/>
+          </label>
           <button type="button" className="pm-button" onClick={addLink}>加链接</button>
         </div>
         <div className="pm-mat-form">
-          <select value={dlvId} onChange={e => setDlvId(e.currentTarget.value)} aria-label="选择交付物">
-            <option value="">选择交付物（可选）</option>
-            {deliverableOptions.map(d => (
-              <option key={d.id} value={d.id}>{d.name}{d.version ? `（${d.version}）` : ''}</option>
-            ))}
-          </select>
-          <input type="text" value={dlvNote} onChange={e => setDlvNote(e.currentTarget.value)}
-            placeholder="备注（可选）" aria-label="交付物备注"/>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">交付物</span>
+            <select value={dlvId} onChange={e => setDlvId(e.currentTarget.value)} aria-label="选择交付物">
+              <option value="">选择交付物（可选）</option>
+              {deliverableOptions.map(d => (
+                <option key={d.id} value={d.id}>{d.name}{d.version ? `（${d.version}）` : ''}</option>
+              ))}
+            </select>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">备注（可选）</span>
+            <input type="text" value={dlvNote} onChange={e => setDlvNote(e.currentTarget.value)}
+              placeholder="交付物备注" aria-label="交付物备注"/>
+          </label>
           <button type="button" className="pm-button" onClick={addDeliverable}>关联交付物</button>
         </div>
 
@@ -360,7 +375,7 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
                     <textarea rows={3} value={editContent} onChange={e => setEditContent(e.currentTarget.value)}
                       placeholder="修订正文（追加新版本，不改写旧版）"/>
                     <div className="pm-prog-edit-actions">
-                      <button type="button" className="pm-button pm-button-primary" onClick={saveEdit}>保存修订</button>
+                      <button type="button" className="pm-button" onClick={saveEdit}>保存修订</button>
                       <button type="button" className="pm-button" onClick={() => setEditId(null)}>取消</button>
                     </div>
                   </div>
@@ -402,7 +417,7 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
               ))}
             </div>
           )}
-          <button type="button" className="pm-button pm-button-primary" onClick={addProgress}>追加进展（草稿）</button>
+          <button type="button" className="pm-button" onClick={addProgress}>追加进展（草稿）</button>
         </div>
 
         {deletedLog.length > 0 && (

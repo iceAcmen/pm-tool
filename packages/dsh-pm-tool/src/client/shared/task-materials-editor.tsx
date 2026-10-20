@@ -177,23 +177,38 @@ export function TaskMaterialsEditor({
           </ul>
         )}
         <div className="pm-mat-form">
-          <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.currentTarget.value)}
-            placeholder="https://… 资料链接" aria-label="资料链接地址"/>
-          <input type="text" value={linkTitle} onChange={e => setLinkTitle(e.currentTarget.value)}
-            placeholder="标题（可选）" aria-label="链接标题"/>
-          <input type="text" value={linkNote} onChange={e => setLinkNote(e.currentTarget.value)}
-            placeholder="备注（可选）" aria-label="链接备注"/>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">资料链接</span>
+            <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.currentTarget.value)}
+              placeholder="https://…" aria-label="资料链接地址"/>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">标题（可选）</span>
+            <input type="text" value={linkTitle} onChange={e => setLinkTitle(e.currentTarget.value)}
+              placeholder="链接标题" aria-label="链接标题"/>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">备注（可选）</span>
+            <input type="text" value={linkNote} onChange={e => setLinkNote(e.currentTarget.value)}
+              placeholder="链接备注" aria-label="链接备注"/>
+          </label>
           <button type="button" className="pm-button" disabled={disabled} onClick={submitLink}>加链接</button>
         </div>
         <div className="pm-mat-form">
-          <select value={dlvId} onChange={e => setDlvId(e.currentTarget.value)} aria-label="选择交付物">
-            <option value="">选择交付物（可选）</option>
-            {deliverableOptions.map(d => (
-              <option key={d.id} value={d.id}>{d.name}{d.version ? `（${d.version}）` : ''}</option>
-            ))}
-          </select>
-          <input type="text" value={dlvNote} onChange={e => setDlvNote(e.currentTarget.value)}
-            placeholder="备注（可选）" aria-label="交付物备注"/>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">交付物</span>
+            <select value={dlvId} onChange={e => setDlvId(e.currentTarget.value)} aria-label="选择交付物">
+              <option value="">选择交付物（可选）</option>
+              {deliverableOptions.map(d => (
+                <option key={d.id} value={d.id}>{d.name}{d.version ? `（${d.version}）` : ''}</option>
+              ))}
+            </select>
+          </label>
+          <label className="pm-mat-field">
+            <span className="pm-mat-label">备注（可选）</span>
+            <input type="text" value={dlvNote} onChange={e => setDlvNote(e.currentTarget.value)}
+              placeholder="交付物备注" aria-label="交付物备注"/>
+          </label>
           <button type="button" className="pm-button" disabled={disabled} onClick={submitDeliverable}>关联交付物</button>
         </div>
       </section>
@@ -227,7 +242,7 @@ export function TaskMaterialsEditor({
                     <textarea rows={3} value={editContent} onChange={e => setEditContent(e.currentTarget.value)}
                       placeholder="修订正文（追加新版本，不改写旧版）"/>
                     <div className="pm-prog-edit-actions">
-                      <button type="button" className="pm-button pm-button-primary" disabled={disabled}
+                      <button type="button" className="pm-button" disabled={disabled}
                         onClick={() => submitEdit(entry.id)}>保存修订</button>
                       <button type="button" className="pm-button" disabled={disabled}
                         onClick={() => setEditId(null)}>取消</button>
@@ -260,7 +275,7 @@ export function TaskMaterialsEditor({
           <input type="date" value={pDate} onChange={e => setPDate(e.currentTarget.value)} aria-label="进展日期"/>
           <textarea rows={2} value={pContent} onChange={e => setPContent(e.currentTarget.value)}
             placeholder="记录本次进展（Markdown）" aria-label="进展正文"/>
-          <button type="button" className="pm-button pm-button-primary" disabled={disabled} onClick={submitProgressAdd}>追加进展</button>
+          <button type="button" className="pm-button" disabled={disabled} onClick={submitProgressAdd}>追加进展</button>
         </div>
 
         {deletedLog.length > 0 && (
