@@ -205,3 +205,11 @@
   .pm-pp-root .pp-chev { order: 7; }
   .pm-pp-root .pp-g-who { flex: 0 0 84px; }
 }
+
+/* §9 390 档：成员卡纵向堆叠、负载条全宽、明细不溢出；深色仅提升表面对比，不新增令牌。 */
+@media (max-width: 390px) {
+  .pp-root .pp-member { flex-direction: column; gap: var(--sp-2); }
+  .pp-root .pp-bar { width: 100%; }
+  .pp-root .pp-task-row { flex-wrap: wrap; gap: var(--sp-1); }
+}
+[data-ds-dark-theme] .pp-root .pp-member { border-color: var(--line-2); }

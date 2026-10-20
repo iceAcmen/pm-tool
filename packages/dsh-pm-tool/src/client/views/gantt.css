@@ -329,3 +329,13 @@
   .pm-gantt-root .pm-gantt-kbdbar { margin: var(--sp-3) 0 0; gap: var(--sp-2); }
   .pm-gantt-root .pm-gantt-kbdbar-note { margin-left: 0; max-width: none; }
 }
+
+/* §9 390 档：工具栏纵向换行、控件全宽，外壳不横向溢出；深色仅提升表面对比，不新增令牌。 */
+@media (max-width: 390px) {
+  .pm-gantt-root .pm-gantt-toolbar { flex-wrap: wrap; }
+  .pm-gantt-root .pm-gantt-seg { width: 100%; justify-content: stretch; }
+  .pm-gantt-root .pm-gantt-seg button { flex: 1; }
+  .pm-gantt-root .pm-gantt-legend,
+  .pm-gantt-root .pm-gantt-warn { font-size: var(--t-11); }
+}
+[data-ds-dark-theme] .pm-gantt-root .pm-gantt-label-row.is-done { opacity: .62; }

@@ -239,3 +239,27 @@
   .pm-ms-root .ms-ov-rate-cell { flex: 1 1 100%; }
   .pm-ms-root .ms-empty { padding: var(--sp-6) var(--sp-3); }
 }
+
+/* §9 390 档：页题独占首行、元信息次行、CTA 全宽；深色仅提升表面对比，不新增令牌。 */
+@media (max-width: 390px) {
+  .pm-ms-root .ms-pagehead { flex-direction: column; align-items: flex-start; gap: var(--sp-2); }
+  .pm-ms-root .ms-ov-row { flex-direction: column; }
+  .pm-ms-root .ms-ov-cell { border-left: 0 !important; padding: var(--sp-2) 0; }
+  .pm-ms-root .ms-node { gap: var(--sp-2); }
+}
+[data-ds-dark-theme] .pm-ms-root .ms-mcard { border-color: var(--line-2); }
+
+/* 状态图例：四态点 + 文案，横向排布，窄屏自动换行 */
+.pm-ms-root .ms-legend {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3);
+  padding: 0 var(--sp-1);
+}
+.pm-ms-root .ms-legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--t-12); color: var(--muted);
+}
+.pm-ms-root .ms-legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.pm-ms-root .ms-legend-dot--done { background: var(--c-done); }
+.pm-ms-root .ms-legend-dot--prog { background: var(--c-prog); }
+.pm-ms-root .ms-legend-dot--block { background: var(--c-block); }
+.pm-ms-root .ms-legend-dot--late { background: var(--c-late); }

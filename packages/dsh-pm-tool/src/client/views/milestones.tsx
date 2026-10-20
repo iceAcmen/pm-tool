@@ -16,6 +16,7 @@ import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import { localTodayIso, isMilestoneMissed } from '../../core/derived.js'
 import { MarkdownView } from '../shared/markdown-view.js'
 import { EmptyState, PmButton } from '../shared/ui/index.js'
+import { MILESTONE_STATE } from './planning-presenter.js'
 import css from './milestones.css?raw'
 import type { Milestone, Task, Run, View } from './types.js'
 
@@ -138,6 +139,15 @@ export function Milestones(props: MilestonesProps) {
               </div>
             </div>
           </section>
+
+          {/* 状态图例：四态点 + 文案，与时间轴 chip 同源 */}
+          <div className="ms-legend" aria-label="里程碑状态图例">
+            {Object.values(MILESTONE_STATE).map(s => (
+              <span className="ms-legend-item" key={s.tone}>
+                <i className={`ms-legend-dot ms-legend-dot--${s.tone}`}/>{s.label}
+              </span>
+            ))}
+          </div>
 
           {/* 竖向时间轴 */}
           <div className="ms-tl">

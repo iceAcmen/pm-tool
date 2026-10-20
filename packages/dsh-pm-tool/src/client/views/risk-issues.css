@@ -193,3 +193,12 @@
   .pm-ri-root .ri-row-l2 { flex-wrap: wrap; row-gap: 4px; }
   .pm-ri-root .ri-plan { flex: 1 1 100%; }
 }
+
+/* §9 390 档：tab 全宽、矩阵格紧凑、清单元信息换行；深色仅提升表面对比，不新增令牌。 */
+@media (max-width: 390px) {
+  .pm-ri-root .ri-seg { width: 100%; }
+  .pm-ri-root .ri-seg button { flex: 1; }
+  .pm-ri-root .ri-row-l2 { flex-wrap: wrap; gap: var(--sp-2); }
+  .pm-ri-root .ri-mtx { font-size: var(--t-11); }
+}
+[data-ds-dark-theme] .pm-ri-root .ri-row { border-color: var(--line-2); }
