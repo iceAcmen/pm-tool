@@ -10,6 +10,7 @@ import { evaluateChecks, type CheckFinding, type CheckableTask } from '../../cor
 import { tasksToCsv, tasksToMarkdown, tasksToJson, buildTaskSnapshotHtml, type TaskExportCtx } from '../../core/task-export.js'
 import { downloadText } from '../download.js'
 import { confirmDanger } from '../confirm-dialog.js'
+import { EmptyState, PmButton } from '../shared/ui/index.js'
 import { shouldHandleGlobalKbd, nextRowId } from '../../core/ui-feedback.js'
 import { panelKeyboard, fromKeyboardEvent } from '../../core/panel-kbd.js'
 import type { DiagnosisBubble } from '../../core/suggestion-engine.js'
@@ -21,7 +22,6 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.mjs'
 import ListFilter from 'lucide-react/dist/esm/icons/list-filter.mjs'
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles.mjs'
 import FileText from 'lucide-react/dist/esm/icons/file-text.mjs'
-import ListTree from 'lucide-react/dist/esm/icons/list-tree.mjs'
 import ListChecks from 'lucide-react/dist/esm/icons/list-checks.mjs'
 import Flag from 'lucide-react/dist/esm/icons/flag.mjs'
 import Bookmark from 'lucide-react/dist/esm/icons/bookmark.mjs'
@@ -1222,17 +1222,25 @@ export function TaskTable(props: {
               ])
             : treeRows.map(row => row.depth === 0 ? groupRow(row) : leafRow(row))}
 
-          {!renderedIds.length && (
-            <div className="pt-empty">
-              <ListTree size={30} />
-              <span>{tasks.length ? '没有符合筛选条件的任务' : '暂无任务记录'}</span>
-              {onGenWbs && (
-                <button className="pt-primary pt-empty-cta" onClick={onGenWbs}>
-                  <Sparkles size={14} />用 AI 一键生成 WBS
-                </button>
-              )}
-            </div>
-          )}
+          {!renderedIds.length && tasks.length === 0 ? (
+            /* 真空：无任何任务记录；复用 S0 EmptyState(vacuum)，保留 AI 生成 WBS 下一步 CTA */
+            <EmptyState
+              variant="vacuum"
+              title="暂无任务记录"
+              description="项目还没有任务。先建任务，或用 AI 按里程碑一键拆解 WBS。"
+              action={onGenWbs ? (
+                <PmButton variant="primary" onClick={onGenWbs}><Sparkles size={14}/>用 AI 一键生成 WBS</PmButton>
+              ) : undefined}
+            />
+          ) : !renderedIds.length ? (
+            /* 无结果：搜索词或快捷筛选未命中；复用 S0 EmptyState(noResult)，清除条件恢复全量，搜索不改 scope */
+            <EmptyState
+              variant="noResult"
+              title="没有符合筛选条件的任务"
+              description="当前搜索词或快捷筛选没有命中任务。清除筛选条件后即可查看全部任务。"
+              onClear={() => { setQuery(''); setChip('all') }}
+            />
+          ) : null}
         </div>
         <div className="pt-statusbar pm-kbd-help">
           <span>
