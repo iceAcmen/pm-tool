@@ -8,6 +8,14 @@
 
 ---
 
+## 总览卡片覆盖邻卡专项修复（2026-10-20，平台：doubao-work）
+
+- 范围仅看板：`BoardBento.tsx` 明确浏览态格子高度；`board.css` 闭合卡体高度链、超长内容内滚、成员条弹性列；`panel.css` 删除旧窄屏两列 auto/important 覆盖；新增 `board/static-size.test.ts` 3 项红绿回归。
+- 根因：正式卡体自然高度超过栅格预留高度（首卡 276→392.48px，规模卡 180→398.41px）；此前仅检查网格坐标不足以证明真实无叠压。
+- 验证：113 文件 / 1020 单测通过、TypeScript / build 通过、isolation 94/94，228 个正式文件 hash+mtime 零变化。正式 3172 四档宽度×浅深 8 场景，11 卡实际二维碰撞/四边越界均为 0；取消前后原布局 SHA 相同。
+- 独立审查：Standards / Spec PASS，仅“卡体覆盖邻卡”专项收口。真实 resize 保存和刷新前后逐卡坐标未覆盖，不声称全系统或全部看板交互通过；未重置/重排原 x=0 布局。
+- 原始证据与运行截图：主交付目录 `总览卡片专项修复-20261020/`，包含 raw-bbox / raw-scroll / raw-editor / raw-cancel-sha / 候选指纹。
+
 ## 可达性修复：OKR/习惯导航与页面、两收件区、K13 副驾（2026-10-18，平台：doubao-work，3172 真实 GUI PASS · 675×745，未 commit/push）
 
 > 状态：**主端 3172 真实实例 GUI 全 PASS（窗口 675×745）**；自动化门（build=0、vitest 41 文件 / 458 全绿、verify-p1b-adopt、verify-web、isolation 87/87）为代码层证据。个人看板布局为用户明确触发的可逆写，正式业务数据未改、不入 git；H6 常驻推送仍暂停（未实现）。

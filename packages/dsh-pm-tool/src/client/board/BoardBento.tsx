@@ -322,10 +322,10 @@ export function BoardBento({ data, actions, persistence, projectId }: {
           {projected.map(p => {
             const w = layout.widgets.find(x => x.layout.i === p.i)
             if (!w) return null
-            return <div key={p.i} style={{
+            return <div key={p.i} className="pm-bento-static-slot" data-widget-id={p.i} style={{
               gridColumn: `${p.x + 1} / span ${p.w}`,
               gridRow: `${p.y + 1} / span ${p.h}`,
-              minHeight: (p.h * GRID.rowHeight) + ((p.h - 1) * GRID.margin[1]),
+              height: (p.h * GRID.rowHeight) + ((p.h - 1) * GRID.margin[1]),
             }}>
               {renderCard(w, false)}
             </div>
