@@ -2049,6 +2049,13 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-attn > span:nth-child(2) { flex: 1; }
 .pm-attn b { color: var(--pm-ink); }
 .pm-attn-arr { color: var(--pm-muted); }
+/* 窄屏（≤560）：负责人下沉次行，避免灰字贴标题末端；日期仍留在首行右端，宽屏不受影响 */
+@media (max-width: 560px) {
+  .pm-attn { flex-wrap: wrap; row-gap: 2px; }
+  .pm-attn > span:nth-child(2) { flex: 1 1 auto; min-width: 0; }
+  .pm-attn .pm-bento-faint { flex: 1 1 100%; order: 3; padding-left: 16px; font-size: 10px; }
+  .pm-attn-arr { flex: 0 0 auto; }
+}
 
 /* 里程碑/交付物分段 */
 .pm-seg-two { display: flex; flex-direction: column; gap: 12px; justify-content: center; flex: 1; }
