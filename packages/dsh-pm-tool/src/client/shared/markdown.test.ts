@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { parseMarkdownBlocks, parseInline, safeHref } from './markdown.js'
+import {
+  parseMarkdownBlocks, parseInline, safeHref,
+  lintMarkdownDraft, sanitizeMarkdownDraft, applyMarkdownFormat,
+} from './markdown.js'
 
 describe('safeHref 协议白名单（T5 XSS）', () => {
   it('放行 http/https，拦截 javascript:/data:/file:/相对协议', () => {
@@ -105,5 +108,82 @@ describe('parseMarkdownBlocks 块级往返（T7 不丢内容）', () => {
   it('空输入返回空块数组，不伪造内容', () => {
     expect(parseMarkdownBlocks('')).toEqual([])
     expect(parseMarkdownBlocks('   \n  ')).toEqual([])
+  })
+})
+
+describe('C-12 lintMarkdownDraft 就近温和语法提示（不阻断）', () => {
+  it('完整语法无提示', () => {
+    const src = '## 进展\n**已完成**原型\n- 甲\n[官网](https://example.com)'
+    expect(lintMarkdownDraft(src)).toEqual([])
+  })
+
+  it('奇数加粗 / 反引号 / 未闭合围栏分别给出 kind 提示', () => {
+    expect(lintMarkdownDraft('**未闭合加粗')).toContainEqual(expect.objectContaining({ kind: 'bold' }))
+    expect(lintMarkdownDraft('行内 `代码 未闭合')).toContainEqual(expect.objectContaining({ kind: 'code' }))
+    expect(lintMarkdownDraft('```ts\nconst a = 1')).toContainEqual(expect.objectContaining({ kind: 'fence' }))
+  })
+
+  it('非 http(s) 链接与缺右括号链接给 link 提示，合法链接不报', () => {
+    expect(lintMarkdownDraft('[x](javascript:alert(1))')).toContainEqual(expect.objectContaining({ kind: 'link' }))
+    expect(lintMarkdownDraft('[未完成](https://a.com/b')).toContainEqual(expect.objectContaining({ kind: 'link' }))
+    expect(lintMarkdownDraft('[ok](https://a.com)')).toEqual([])
+  })
+})
+
+describe('C-12 sanitizeMarkdownDraft 落盘清洗（防 XSS 不丢 Markdown）', () => {
+  it('剥离原始 HTML 标签并保留内部文字，Markdown 语法原样保留', () => {
+    const src = '## 标题\n**加粗** <script>alert(1)</script>正文 <img src=x onerror=alert(1)>\n- 列表项'
+    const out = sanitizeMarkdownDraft(src)
+    expect(out).not.toContain('<script>')
+    expect(out).not.toContain('onerror')
+    expect(out).toContain('## 标题')
+    expect(out).toContain('**加粗**')
+    expect(out).toContain('- 列表项')
+    expect(out).toContain('正文')
+  })
+
+  it('去除 AI 尾注 / 确认命令 / [pm:action] 行，连续空行收敛', () => {
+    const src = '正文\nAI 归纳草稿\n确认命令：report x\n[pm:action] 按钮\n以上为草稿仅供参考\n\n\n\n收尾'
+    const out = sanitizeMarkdownDraft(src)
+    expect(out).not.toContain('AI 归纳草稿')
+    expect(out).not.toContain('确认命令：')
+    expect(out).not.toContain('[pm:action]')
+    expect(out).not.toContain('以上为草稿')
+    expect(out).toContain('正文')
+    expect(out).toContain('收尾')
+    expect(out).not.toMatch(/\n{3,}/)
+  })
+
+  it('正常 Markdown 叙述清洗后保持不变', () => {
+    const prose = '本周进展：完成原型设计。风险：联调可能延期。下周计划：启动开发。'
+    expect(sanitizeMarkdownDraft(prose)).toBe(prose)
+  })
+})
+
+describe('C-12 applyMarkdownFormat 工具条插入语法', () => {
+  it('标题在当前行首插入 ## ，已有标题不重复加', () => {
+    const r = applyMarkdownFormat('第一段\n第二段', 6, 6, 'heading')
+    expect(r.text).toBe('第一段\n## 第二段')
+    expect(applyMarkdownFormat('## 已有标题', 4, 4, 'heading').text).toBe('## 已有标题')
+  })
+
+  it('加粗包裹选区，空选区给占位并选中内部', () => {
+    const r = applyMarkdownFormat('重点文字', 0, 2, 'bold')
+    expect(r.text).toBe('**重点**文字')
+    const empty = applyMarkdownFormat('', 0, 0, 'bold')
+    expect(empty.text).toBe('**加粗**')
+    expect(empty.end - empty.start).toBe(2)
+  })
+
+  it('列表逐行加 - 前缀，已有列表项不重复', () => {
+    const r = applyMarkdownFormat('甲\n乙', 0, 4, 'bullet')
+    expect(r.text).toBe('- 甲\n- 乙')
+    expect(applyMarkdownFormat('- 已有', 0, 5, 'bullet').text).toBe('- 已有')
+  })
+
+  it('链接插入 [文字](https://) 且光标落在 URL 处', () => {
+    const r = applyMarkdownFormat('官网', 0, 2, 'link')
+    expect(r.text).toBe('[官网](https://)')
+    expect(r.start).toBe('[官网]('.length)
   })
 })

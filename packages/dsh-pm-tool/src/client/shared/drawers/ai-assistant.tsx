@@ -17,7 +17,8 @@ import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
 import Eye from 'lucide-react/dist/esm/icons/eye.mjs'
 import Code2 from 'lucide-react/dist/esm/icons/code-2.mjs'
 import Check from 'lucide-react/dist/esm/icons/check.mjs'
-import { MarkdownView } from '../markdown-view.js'
+import { MarkdownView, MarkdownEditor } from '../markdown-view.js'
+import { sanitizeMarkdownDraft } from '../markdown.js'
 import { ProvenancePanel } from '../../provenance-panel.js'
 import { ErrorBlock, Receipt } from '../ui/index.js'
 import { LaneSwitcher } from './model-lane.js'
@@ -102,7 +103,8 @@ export function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenR
     if (mode === 'narrate') {
       // OPT-08：预览可编辑，确认按编辑后文本落盘（report narrateuse，不再调模型）。
       // 落盘前清洗尾注/action 行，避免草稿说明与确认命令被写进 executiveSummary（旧记录非破坏）。
-      return { preview: `report narrate ${projectId}`, confirm: `report narrateuse ${projectId} ${JSON.stringify(cleanAiPreview(preview))}` }
+      // C-12：清洗尾注/命令行后再做落盘 sanitize（去原始 HTML、收敛空行），Markdown 语法保留。
+      return { preview: `report narrate ${projectId}`, confirm: `report narrateuse ${projectId} ${JSON.stringify(sanitizeMarkdownDraft(cleanAiPreview(preview)))}` }
     }
     if (mode === 'wbs') {
       const goal = text.trim()
@@ -110,7 +112,7 @@ export function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenR
       return { preview: `task wbs ${projectId} ${goal} --raw`, confirm: `task importmd ${projectId} ${JSON.stringify(preview)} confirm` }
     }
     const transcript = text.trim()
-    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(cleanAiPreview(preview))}` }
+    return { preview: `meeting summarize ${projectId} ${transcript}`, confirm: `meeting summarize ${projectId} ${transcript} confirm ${JSON.stringify(sanitizeMarkdownDraft(cleanAiPreview(preview)))}` }
   }
 
   const pickCapability = (next: 'wbs' | 'narrate' | 'summarize') => {
@@ -268,13 +270,24 @@ export function AiAssistant({ projectId, execute, disabled, onConfirmed, onOpenR
             mode === 'wbs'
               ? <WbsTreeView markdown={preview}/>
               : <MarkdownView source={cleanAiPreview(preview)}/>
-          ) : (
+          ) : mode === 'wbs' ? (
             <textarea
-              className={'pm-ai-input pm-ai-markdown' + (mode === 'wbs' ? ' pm-ai-wbs-raw' : ' pm-ai-raw')}
-              rows={mode === 'wbs' ? 12 : 9}
+              className="pm-ai-input pm-ai-markdown pm-ai-wbs-raw"
+              rows={12}
               value={preview}
               disabled={working}
               onChange={event => setPreview(event.currentTarget.value)}
+            />
+          ) : (
+            // C-12：narrate/summarize 草稿为 Markdown，源码编辑 + 即时预览 + 格式辅助；
+            // 切预览即时反映同一 preview state，确认按编辑后文本落盘。
+            <MarkdownEditor
+              value={preview}
+              onChange={setPreview}
+              minRows={9}
+              ariaLabel="草稿正文 Markdown"
+              density="compact"
+              className="pm-ai-raw pm-ai-markdown"
             />
           )}
           <div className="pm-ai-result-actions pm-ai-actions">

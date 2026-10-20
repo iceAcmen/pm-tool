@@ -16,6 +16,8 @@ import type { ProgressReport } from '../types.js'
 import type { ReportCallbacks, ReportPayload, ReportPreviewCandidate } from '../../shared/records-props.js'
 import { normalizeReportPayload } from './records-payloads.js'
 import { RecordsListbox } from './records-listbox.js'
+import { MarkdownEditor } from '../../shared/markdown-view.js'
+import { sanitizeMarkdownDraft } from '../../shared/markdown.js'
 import { REPORT_STATUS_OPTIONS, REPORT_SOURCE_OPTIONS } from './records-options.js'
 import { periodPresets, validatePeriod, PERIOD_KIND_LABEL } from './records-period.js'
 import {
@@ -60,13 +62,15 @@ export interface RecordsReportFormProps {
 export function RecordsReportForm(props: RecordsReportFormProps) {
   const { projectId, report, callbacks, disabled = false, onCancel, previewSource, onPreviewPeriod } = props
   const editMode = Boolean(report)
+  // C-12：已定稿汇报进入编辑即作为新草稿（status 默认 draft），原冻结快照/摘录由 core 保留不动。
+  const editingFinal = editMode && report?.status === 'final'
 
   const [presetKey, setPresetKey] = useState<'thisWeek' | 'lastWeek' | 'custom'>('thisWeek')
   const [periodStart, setPeriodStart] = useState(report?.periodStart ?? '')
   const [periodEnd, setPeriodEnd] = useState(report?.periodEnd ?? '')
   const [values, setValues] = useState({
     title: report?.title ?? '',
-    status: report?.status ?? 'draft',
+    status: editingFinal ? 'draft' : (report?.status ?? 'draft'),
     executiveSummary: report?.executiveSummary ?? '',
     completedWork: report?.completedWork.join('\n') ?? '',
     nextPlans: report?.nextPlans.join('\n') ?? '',
@@ -186,7 +190,11 @@ export function RecordsReportForm(props: RecordsReportFormProps) {
     }
     setSubmitting(true)
     try {
-      const base = normalizeReportPayload(values)
+      // C-12：落盘前清洗执行摘要（去 AI 尾注/命令行/原始 HTML 标签，保留 Markdown 语法），不丢正文。
+      const base = normalizeReportPayload({
+        ...values,
+        executiveSummary: sanitizeMarkdownDraft(values.executiveSummary),
+      })
       let payload: ReportPayload
       if (editMode) {
         // U5：来源不可改，update 剥离 sourceType/sourceSessionId。
@@ -251,9 +259,21 @@ export function RecordsReportForm(props: RecordsReportFormProps) {
               {errors.sourceSessionId && <em className="pm-field-error">{errors.sourceSessionId}</em>}
             </label>
           )}
-          <label className="pm-field" data-wide><span>管理摘要</span>
-            <textarea rows={4} value={values.executiveSummary}
-              onChange={e => setField('executiveSummary', e.currentTarget.value)} /></label>
+          <div className="pm-field" data-wide>
+            <span>管理摘要（Markdown：源码编辑 + 即时预览，支持标题/加粗/列表/链接）</span>
+            {editingFinal && (
+              <p className="rb-warn" role="note">
+                正在基于已定稿版本编辑，保存后为新草稿；原冻结快照与摘录保持不变，不会被覆盖。
+              </p>
+            )}
+            <MarkdownEditor
+              value={values.executiveSummary}
+              onChange={v => setField('executiveSummary', v)}
+              minRows={6}
+              ariaLabel="管理摘要 Markdown"
+              density="compact"
+            />
+          </div>
           <label className="pm-field" data-wide><span>已完成事项（每行一项）</span>
             <textarea rows={4} value={values.completedWork}
               onChange={e => setField('completedWork', e.currentTarget.value)} /></label>

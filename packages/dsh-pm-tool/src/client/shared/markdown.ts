@@ -84,6 +84,113 @@ export function parseInline(src: string): MdInline[] {
   return out
 }
 
+// ---------- C-12：草稿就近温和校验 / 落盘清洗 / 格式工具条插入（纯函数，无 DOM） ----------
+
+export interface MarkdownIssue {
+  kind: 'fence' | 'code' | 'bold' | 'link'
+  message: string
+}
+
+/**
+ * 就近温和语法提示：只报告未闭合围栏 / 行内代码 / 加粗、链接协议或括号问题；
+ * 不阻断生成、不清空输入，渲染层对不完整语法本就降级为纯文本。
+ */
+export function lintMarkdownDraft(src: string): MarkdownIssue[] {
+  const issues: MarkdownIssue[] = []
+  const lines = src.split('\n')
+  const fenceCount = lines.filter(l => /^\s*```/.test(l)).length
+  if (fenceCount % 2 === 1) {
+    issues.push({ kind: 'fence', message: '代码围栏 ``` 未闭合，预览可能少一段代码。' })
+  }
+  const body = lines.filter(l => !/^\s*```/.test(l)).join('\n')
+  const ticks = (body.match(/`/g) ?? []).length
+  if (ticks % 2 === 1) {
+    issues.push({ kind: 'code', message: '行内代码 ` 数量为奇数，可能未闭合。' })
+  }
+  const bolds = (body.match(/\*\*/g) ?? []).length
+  if (bolds % 2 === 1) {
+    issues.push({ kind: 'bold', message: '加粗 ** 数量为奇数，可能未闭合。' })
+  }
+  const linkRe = /\[([^\]]*)\]\(([^)]*)\)/g
+  let m: RegExpExecArray | null
+  while ((m = linkRe.exec(body))) {
+    if (!safeHref(m[2])) {
+      issues.push({ kind: 'link', message: `链接「${m[1] || '未命名'}」仅支持 http/https，当前不会变成可点链接。` })
+    }
+  }
+  if (/\[[^\]]*\]\([^)]*$/.test(body)) {
+    issues.push({ kind: 'link', message: '链接格式不完整，应为 [文字](https://网址)。' })
+  }
+  return issues
+}
+
+/**
+ * 落盘清洗（防 XSS 且不丢 Markdown）：
+ * - 去掉 AI 草稿尾注 / 确认命令行 / [pm:action] 协议行（与 cleanAiPreview 同族）；
+ * - 剥离原始 HTML 标签（渲染器不支持 HTML，标签内文字保留），React 文本节点仍自动转义；
+ * - 行尾空白修剪、连续空行收敛为一个空行；Markdown 语法标记（# * - ` []()）原样保留。
+ */
+export function sanitizeMarkdownDraft(src: string): string {
+  return src
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .filter(l => !/^(AI 归纳草稿|确认命令：|以上为草稿|\[pm:action\])/.test(l.trim()))
+    .map(l => l
+      .replace(/<\/?[a-zA-Z][^>]*>/g, '')
+      .replace(/[ \t]+$/, ''))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
+export type MarkdownFormatAction = 'heading' | 'bold' | 'bullet' | 'link'
+
+/**
+ * 格式工具条插入：按当前选区在源码里插入 Markdown 语法，返回新文本与新选区。
+ * 纯函数，可在 Node 单测；不做 WYSIWYG，只插入语法标记。
+ */
+export function applyMarkdownFormat(
+  src: string,
+  start: number,
+  end: number,
+  action: MarkdownFormatAction,
+): { text: string; start: number; end: number } {
+  const s = Math.max(0, Math.min(start, src.length))
+  const e = Math.max(s, Math.min(end, src.length))
+  const selected = src.slice(s, e)
+  const before = src.slice(0, s)
+  const after = src.slice(e)
+
+  switch (action) {
+    case 'heading': {
+      const lineStart = before.lastIndexOf('\n') + 1
+      const lineText = src.slice(lineStart, e)
+      if (/^\s*#{1,4}\s/.test(lineText)) return { text: src, start: s, end: e }
+      const text = src.slice(0, lineStart) + '## ' + src.slice(lineStart)
+      return { text, start: s + 3, end: e + 3 }
+    }
+    case 'bold': {
+      const inner = selected || '加粗'
+      const text = before + `**${inner}**` + after
+      return { text, start: s + 2, end: s + 2 + inner.length }
+    }
+    case 'bullet': {
+      const block = selected || '列表项'
+      const lines = block.split('\n').map(l => (/^[-*]\s+/.test(l) ? l : `- ${l}`)).join('\n')
+      const text = before + lines + after
+      return { text, start: s, end: s + lines.length }
+    }
+    case 'link': {
+      const label = selected || '链接文字'
+      const text = before + `[${label}](https://)` + after
+      const cursor = s + label.length + 3
+      return { text, start: cursor, end: cursor }
+    }
+    default:
+      return { text: src, start: s, end: e }
+  }
+}
+
 /** 表格行拆分：| a | b | → ['a','b']；首尾空竖线忽略。 */
 function splitTableRow(line: string): string[] {
   return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|')
