@@ -230,3 +230,21 @@
   .pm-dv-root .dv-ov-cell:first-child { padding-left: var(--sp-2); }
   .pm-dv-root .dv-ov-sub { white-space: normal; }
 }
+
+/* ==== 1A visible layer：状态 chip 激活层级、概览条数字对齐、focus 环、390 档 ==== */
+.pm-dv-root .dv-chip:focus-visible,
+.pm-dv-root .dv-filters button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--c-prog) 55%, transparent);
+  outline-offset: 2px;
+}
+.pm-dv-root .dv-chip.active {
+  border-color: color-mix(in srgb, var(--c-prog) 40%, transparent);
+  background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+}
+.pm-dv-root .dv-ov-val { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 390px) {
+  .pm-dv-root .dv-ov-row { flex-direction: column; row-gap: var(--sp-2); }
+  .pm-dv-root .dv-ov-cell { flex: 1 1 100%; padding: 2px 0; }
+  .pm-dv-root .dv-chip { max-width: 100%; }
+}

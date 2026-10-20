@@ -694,3 +694,31 @@
 [data-pilot="on"] .pm-tasks-root .pt-row {
   border-bottom: 1px solid var(--pm-line-soft);
 }
+
+/* ==== 1A visible layer：筛选 chip 激活层级、批量条按钮层级、focus 环、390 档 ==== */
+.pm-tasks-root .pt-chip:focus-visible,
+.pm-tasks-root .pt-batch button:focus-visible,
+.pm-tasks-root .pt-batch select:focus-visible,
+.pm-tasks-root .pt-batch input:focus-visible,
+.pm-tasks-root .pt-search input:focus-visible,
+.pm-tasks-root .pt-status select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--c-prog) 55%, transparent);
+  outline-offset: 2px;
+}
+.pm-tasks-root .pt-chip.active {
+  background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+  border-color: color-mix(in srgb, var(--c-prog) 40%, transparent);
+}
+/* 批量条：删除为唯一危险动作，主操作（标为完成）视觉最重，其余为中性次按钮 */
+.pm-tasks-root .pt-batch .pt-danger {
+  border-color: color-mix(in srgb, var(--c-late) 35%, transparent);
+  background: color-mix(in srgb, var(--c-late) 8%, transparent);
+}
+.pm-tasks-root .pt-head .pt-sub b { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 390px) {
+  .pm-tasks-root .pt-batch { flex-wrap: wrap; row-gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); }
+  .pm-tasks-root .pt-batch > * { flex: 1 1 auto; }
+  .pm-tasks-root .pt-head { flex-direction: column; gap: var(--sp-2); }
+  .pm-tasks-root .pt-search { width: 100%; }
+}

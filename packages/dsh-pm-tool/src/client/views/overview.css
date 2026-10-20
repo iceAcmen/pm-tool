@@ -381,3 +381,22 @@
 .pm-ov-root .ov-rem-group[data-tone='block'] .ov-rem-group-title { color: var(--c-block); }
 .pm-ov-root .ov-rem-group[data-tone='prog'] .ov-rem-group-title { color: var(--c-prog); }
 .pm-ov-root .ov-rem-group[data-tone='done'] .ov-rem-group-title { color: var(--c-done); }
+
+/* ==== 1A visible layer：按钮层级/状态 chip/提醒行 focus 环、390 档 ==== */
+.pm-ov-root .ov-btn:focus-visible,
+.pm-ov-root .ov-hero-edit:focus-visible,
+.pm-ov-root .ov-rem-row:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--c-prog) 55%, transparent);
+  outline-offset: 2px;
+}
+.pm-ov-root .ov-btn.primary { font-weight: 650; }
+.pm-ov-root .ov-chip { font-variant-numeric: tabular-nums; }
+.pm-ov-root .ov-rem-row { transition: background var(--pm-motion-fast, 120ms) ease; }
+.pm-ov-root .ov-rem-row:hover { background: var(--surface-3); }
+
+@media (max-width: 390px) {
+  .pm-ov-root .ov-hero { padding: var(--sp-3); }
+  .pm-ov-root .ov-hero-title-row { gap: var(--sp-2); }
+  .pm-ov-root .ov-repo-btns { flex-direction: column; align-items: stretch; }
+  .pm-ov-root .ov-card { padding: var(--sp-3); }
+}

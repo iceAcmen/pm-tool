@@ -240,3 +240,36 @@
   .pm-mt-root .mt-act-owner,
   .pm-mt-root .mt-act-due { flex-direction: row; align-items: center; }
 }
+
+/* ==== 1A visible layer：工具条/分段层级、状态 chip、摘要条密度、focus 环、390 档 ==== */
+/* 分段控件：激活项用主色软底 + 深字，未激活保持中性，示能性与层级对齐基线 */
+.pm-mt-root .mt-seg button:focus-visible,
+.pm-mt-root .mt-search input:focus-visible,
+.pm-mt-root .mt-ico-btn:focus-visible,
+.pm-mt-root .mt-item:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--c-prog) 55%, transparent);
+  outline-offset: 2px;
+}
+.pm-mt-root .mt-seg button.is-on {
+  background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+  color: var(--ink);
+  box-shadow: none;
+}
+/* 状态 chip：draft 中性描边，final 绿软底，保持非颜色唯一信号（带圆点） */
+.pm-mt-root .mt-chip.draft { color: var(--muted); }
+.pm-mt-root .mt-chip.final { font-weight: 700; }
+/* 摘要条：数字层级收紧，逾期卡用主色软描边而非整面红 */
+.pm-mt-root .mt-stat.urgent { border-color: color-mix(in srgb, var(--c-late) 32%, transparent); }
+.pm-mt-root .mt-stat .num { font-size: var(--t-20); }
+.pm-mt-root .mt-head .mt-sub b { font-variant-numeric: tabular-nums; }
+
+/* 390 档：单列紧凑，分段全宽，详情内边距与行动项表压缩 */
+@media (max-width: 390px) {
+  .pm-mt-root .mt-stats { grid-template-columns: 1fr; gap: var(--sp-2); }
+  .pm-mt-root .mt-stat { padding: var(--sp-2) var(--sp-3); }
+  .pm-mt-root .mt-head { flex-direction: column; gap: var(--sp-2); }
+  .pm-mt-root .mt-seg { display: flex; width: 100%; }
+  .pm-mt-root .mt-seg button { flex: 1; }
+  .pm-mt-root .mt-detail { padding: var(--sp-3) var(--sp-3); }
+  .pm-mt-root .mt-info { grid-template-columns: 1fr 1fr; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); }
+}

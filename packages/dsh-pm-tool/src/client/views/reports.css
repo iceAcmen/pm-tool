@@ -199,3 +199,24 @@
   .pm-rp-root .rp-snap { grid-template-columns: repeat(3, 1fr); }
   .pm-rp-root .rp-meta { flex-wrap: wrap; gap: var(--sp-2); }
 }
+
+/* ==== 1A visible layer：分段层级、快照条密度、focus 环、390 档 ==== */
+.pm-rp-root .rp-seg-btn:focus-visible,
+.pm-rp-root .rp-search input:focus-visible,
+.pm-rp-root .rp-row:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--c-prog) 55%, transparent);
+  outline-offset: 2px;
+}
+.pm-rp-root .rp-seg-btn.is-on {
+  background: color-mix(in srgb, var(--c-prog) 12%, transparent);
+  color: var(--ink);
+  box-shadow: none;
+}
+.pm-rp-root .rp-chip-date { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 390px) {
+  .pm-rp-root .rp-snap { grid-template-columns: repeat(2, 1fr); }
+  .pm-rp-root .rp-seg { display: flex; flex-wrap: wrap; }
+  .pm-rp-root .rp-head { flex-direction: column; gap: var(--sp-2); }
+  .pm-rp-root .rp-meta { gap: var(--sp-1); }
+}
