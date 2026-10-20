@@ -2869,7 +2869,7 @@ function TaskForm({
           void run(line).then(success => success && onSaved())
         }}
       ><Trash2 size={15}/>删除</button>}
-      <button className="pm-button" type="button" disabled={disabled} onClick={() => { tryClose() }}>取消</button>
+      <button className="pm-button" type="button" disabled={disabled} onClick={() => { if (tryClose()) onCancel() }}>取消</button>
       <button className="pm-button pm-button-primary" disabled={disabled || submitting} aria-busy={submitting || undefined}>
         {submitting ? '提交中…' : task ? '保存更改' : '添加任务'}
       </button>
