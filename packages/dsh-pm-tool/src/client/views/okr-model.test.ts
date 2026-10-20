@@ -60,6 +60,28 @@ describe('buildOkrTree 单父归属与软关联', () => {
     expect(tree.orphans.map(o => o.record.id)).toEqual(['kr-orphan', 'kr-other'])
     expect(tree.total).toBe(2)
   })
+
+  it('单父计权：软关联（relatedOkrIds）不进入任何 children，权重只认 primaryOkrId', () => {
+    const okrs = [
+      obj('o-1'),
+      obj('o-2', { relatedOkrIds: ['o-1'] }),
+      // kr-2 软挂 o-2，但主归属仍是 o-1；o-2 的 children 必须为空。
+      kr('kr-2', 'o-1', { relatedOkrIds: ['o-2'] }),
+    ]
+    const tree = buildOkrTree(okrs, 'p-1')
+    const o1 = tree.roots.find(n => n.record.id === 'o-1')!
+    const o2 = tree.roots.find(n => n.record.id === 'o-2')!
+    expect(o1.children.map(c => c.record.id)).toEqual(['kr-2'])
+    expect(o2.children).toEqual([])
+    expect(o2.related.map(r => r.id)).toEqual(['o-1'])
+  })
+
+  it('primaryOkrId 指向缺失目标 → 孤儿单列（存在性由后端校验，前端不伪造归属）', () => {
+    const okrs = [kr('kr-missing-parent', 'o-deleted')]
+    const tree = buildOkrTree(okrs, 'p-1')
+    expect(tree.roots).toEqual([])
+    expect(tree.orphans.map(o => o.record.id)).toEqual(['kr-missing-parent'])
+  })
 })
 
 describe('收件区纯函数', () => {

@@ -9,6 +9,7 @@
  */
 import { useState } from 'react'
 import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw.mjs'
+import { Receipt } from '../ui/index.js'
 import {
   DEFAULT_PROJECT_SETTINGS,
   SETTING_FIELDS,
@@ -55,6 +56,8 @@ export function SettingsPanel({ settings, execute, disabled, onSaved, notify }: 
   )
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({})
   const [busy, setBusy] = useState(false)
+  // 成功回执：保存/恢复默认成功后展示绿边 Receipt；再次编辑即清除（失败不清输入、不置回执）。
+  const [saved, setSaved] = useState<string | null>(null)
 
   const isDefault = sameSettings(settings, DEFAULT_PROJECT_SETTINGS)
   const groups: Array<SettingFieldMetaGroup> = ['健康分', '临期窗口', '人员负载']
@@ -82,6 +85,7 @@ export function SettingsPanel({ settings, execute, disabled, onSaved, notify }: 
       const resp = await execute(`settings put ${payload}`)
       if (/失败|错误|未通过|非法|需为|不得低于/.test(resp)) { notify(resp); return }
       notify('已保存口径设置。')
+      setSaved('口径已保存')
       onSaved()
     } catch (e) {
       notify(`保存失败：${e instanceof Error ? e.message : String(e)}`)
@@ -97,6 +101,7 @@ export function SettingsPanel({ settings, execute, disabled, onSaved, notify }: 
       const resp = await execute('settings reset')
       if (/失败|错误/.test(resp)) { notify(resp); return }
       notify('已恢复全部默认口径。')
+      setSaved('已恢复全部默认口径')
       onSaved()
     } catch (e) {
       notify(`恢复默认失败：${e instanceof Error ? e.message : String(e)}`)
@@ -107,6 +112,9 @@ export function SettingsPanel({ settings, execute, disabled, onSaved, notify }: 
 
   return (
     <div className="pm-settings-root">
+      {saved && (
+        <Receipt result={saved} detail="改动已即时作用于健康分、临期提醒、人员负载与作战室。" />
+      )}
       <p className="pm-settings-note">
         {isDefault ? '当前为默认口径（与配置化前逐值一致）。' : '当前为自定义口径；改动即时作用于健康分、临期提醒、人员负载与作战室。'}
       </p>
@@ -130,7 +138,7 @@ export function SettingsPanel({ settings, execute, disabled, onSaved, notify }: 
                     step={f.step}
                     value={v}
                     aria-label={f.label}
-                    onChange={(e) => setValues(prev => ({ ...prev, [f.key]: e.target.value }))}
+                    onChange={(e) => { setSaved(null); setValues(prev => ({ ...prev, [f.key]: e.target.value })) }}
                   />
                   <small className="pm-settings-hint">{f.hint}（{f.min}~{f.max}{f.unit}）</small>
                   {err && <span className="pm-field-error">{err}</span>}

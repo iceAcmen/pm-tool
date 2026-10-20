@@ -108,7 +108,7 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, 
                     <li className="pm-okr-kr" key={kr.record.id}>
                       <span className="pm-okr-kind pm-okr-kind--kr">{KIND_LABEL[kr.record.kind]}</span>
                       <span className="pm-okr-kr-title">{kr.record.title}</span>
-                      <span className="pm-okr-own-note">主归属：{root.record.id}</span>
+                      <span className="pm-okr-own-note">主归属：{root.record.title}</span>
                       <span className={`pm-okr-status pm-okr-status--${kr.record.status}`}>
                         {okrStatusLabel(kr.record.status)}
                       </span>

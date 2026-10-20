@@ -19,6 +19,14 @@ import Link2 from 'lucide-react/dist/esm/icons/link-2.mjs'
 import Pencil from 'lucide-react/dist/esm/icons/pencil.mjs'
 import Plus from 'lucide-react/dist/esm/icons/plus.mjs'
 import { MarkdownView } from '../shared/markdown-view.js'
+import {
+  habitStatusLabel,
+  streakArchiveText,
+  resolveHabitOkrTitle,
+  countPendingHabitInbox,
+  type HabitStreak,
+  type HabitOkrRef,
+} from './habit-model.js'
 import type { Run } from './types.js'
 
 /** 与 core/storage.ts habitRecordSchema.checkIns 对齐的前端本地镜像（不 zod、不依赖存储层）。 */
@@ -28,13 +36,8 @@ export interface HabitCheckIn {
   note?: string
 }
 
-/** 与 habitRecordSchema.streak 对齐；纯数字档案，前端不重算连续段。 */
-export interface HabitStreak {
-  current: number
-  lastDate?: string
-  longest: number
-  totalDays: number
-}
+/** streak 类型复用纯模型 habit-model（纯数字档案，前端不重算连续段）。 */
+export type { HabitStreak }
 
 export interface HabitViewRecord {
   id: string
@@ -63,11 +66,8 @@ export interface HabitInboxSuggestion {
   status: 'pending' | 'confirmed' | 'ignored'
 }
 
-/** 可选：面板注入的 OKR 最小清单，仅用于把 okrId 解析成标题；缺失时直接显示 ID。 */
-export interface HabitOkrRef {
-  id: string
-  title: string
-}
+/** OKR 最小清单类型复用纯模型（标题解析用，只读）。 */
+export type { HabitOkrRef }
 
 export interface HabitsViewProps {
   projectId: string
@@ -83,18 +83,6 @@ export interface HabitsViewProps {
   onCreate?: () => void
   /** 打开编辑抽屉（record 为快照全量记录，goal/frequency/notes 兼容位一并回显）。 */
   onEdit?: (record: HabitViewRecord) => void
-}
-
-/** 状态徽章文案：draft=草稿（建议/录入），confirmed=已确认（人轻确认），final=已定稿（人定稿）；前端不定稿。 */
-function habitStatusLabel(status: HabitViewRecord['status']): string {
-  if (status === 'final') return '已定稿'
-  if (status === 'confirmed') return '已确认'
-  return '草稿'
-}
-
-/** streak 纯文本档案：「当前连续 N 天 · 历史最长 M 天 · 累计 X 天」，无徽章、无动效。 */
-function streakArchiveText(streak: HabitStreak): string {
-  return `当前连续 ${streak.current} 天 · 历史最长 ${streak.longest} 天 · 累计 ${streak.totalDays} 天`
 }
 
 /** 点击时刻取本地 YYYY-MM-DD（仅用于回填命令参数；不在渲染期读墙钟伪造数据）。 */
@@ -113,9 +101,7 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
     .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '') || a.id.localeCompare(b.id))
 
   const suggestions = inbox?.filter(s => s.projectId === projectId) ?? []
-  const pending = suggestions.filter(s => s.status === 'pending').length
-
-  const okrTitleById = new Map((okrs ?? []).map(o => [o.id, o.title]))
+  const pending = countPendingHabitInbox(inbox, projectId)
 
   const act = async (command: string) => {
     if (!run) return
@@ -160,7 +146,7 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
             const checkIns = h.checkIns
               .slice()
               .sort((a, b) => b.at.localeCompare(a.at))
-            const okrTitle = h.okrId ? okrTitleById.get(h.okrId) : undefined
+            const okrTitle = resolveHabitOkrTitle(h.okrId, okrs)
             return (
               <div className="pm-habit-card pm-card" key={h.id} data-status={h.status}>
                 <div className="pm-habit-card-top">
@@ -174,18 +160,15 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
                     </button>
                   )}
                 </div>
-                <div className="pm-habit-meta">ID：{h.id}</div>
-
-                {h.okrId && (
-                  <div className="pm-habit-okr">
-                    <Link2 size={11}/>
-                    {okrTitle ? <>关联 OKR：{okrTitle}（{h.okrId} · 只展示）</> : <>关联 OKR：{h.okrId}（只展示）</>}
-                  </div>
-                )}
-
                 {/* goal / frequency / notes 为 update 兼容字段，回显不留空（缺键 undefined 时整行省略）。 */}
                 {h.frequency?.trim() && <div className="pm-habit-field"><span className="pm-habit-field-lab">频率</span>{h.frequency}</div>}
                 {h.goal?.trim() && <div className="pm-habit-field"><span className="pm-habit-field-lab">目标</span>{h.goal}</div>}
+                {h.okrId && okrTitle && (
+                  <div className="pm-habit-okr">
+                    <Link2 size={11}/>
+                    关联 OKR：{okrTitle}（只展示，不参与裁决）
+                  </div>
+                )}
                 {h.notes?.trim() && <MarkdownView source={h.notes} density="compact" className="pm-habit-notes"/>}
 
                 {/* streak 纯文本档案：不套徽章、不加动效。 */}
