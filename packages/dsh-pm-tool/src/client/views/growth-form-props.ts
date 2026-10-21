@@ -68,8 +68,10 @@ export interface OkrFormComponentProps extends GrowthFormShellProps {
   objectiveIds?: ReadonlySet<string>
   /** 负责人应用内 listbox 选项（成员名册由 panel 注入）；缺失退回文本输入。 */
   ownerOptions?: readonly RecordOption[]
-  /** KR 父目标（主归属）listbox 选项；缺失退回文本/空。 */
+  /** KR 父目标（主归属）listbox 选项；缺失退回文本/空。仅列 objective（KR 不能作父）。 */
   primaryOptions?: readonly RecordOption[]
+  /** 软关联 listbox 选项：本项目全量 OKR（objective + key-result，后端不限 kind）；缺失退回文本 ID 输入。 */
+  relatedOptions?: readonly RecordOption[]
   /** 状态 listbox 选项（draft/confirmed）；缺失用内置默认。 */
   statusOptions?: readonly RecordOption[]
   /** 提交值（已通过 validateOkrForm）交回 panel，由 panel 发 `okr add|update`。 */

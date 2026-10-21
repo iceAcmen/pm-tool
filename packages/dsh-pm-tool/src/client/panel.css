@@ -3203,6 +3203,12 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   padding: 4px 10px; font-size: 12.5px; color: var(--pm-secondary); cursor: pointer; white-space: nowrap;
 }
 .pm-result-card__copy:hover { background: var(--pm-hover); color: var(--pm-text); }
+.pm-result-card__copy-state {
+  align-self: center;
+  font-size: 12.5px;
+  color: var(--pm-success);
+}
+.pm-result-card__copy-state--failed { color: var(--pm-danger); }
 /* [pm:action] 独立确认按钮：命令不进保存正文、不与草稿混排 */
 .pm-result-action {
   display: inline-flex; align-items: center; gap: 6px;

@@ -32,7 +32,7 @@ const DEFAULT_STATUS_OPTS: readonly RecordOption[] = OKR_STATUSES.map(s =>
 )
 
 export function OkrForm({
-  initial, objectiveIds, ownerOptions, primaryOptions, statusOptions,
+  initial, objectiveIds, ownerOptions, primaryOptions, relatedOptions, statusOptions,
   busy, disabled, errors: externalErrors, onSubmit, onCancel,
 }: OkrFormComponentProps) {
   const [draft, setDraft] = useState<OkrFormValues>({ ...initial })
@@ -44,11 +44,12 @@ export function OkrForm({
   const statusOpts = statusOptions ?? DEFAULT_STATUS_OPTS
   const localErrors = validateOkrForm(draft, objectiveIds ?? new Set())
 
-  // D-12 / C-13 软关联保存前内联校验：已知集 = 注入目标集 ∪ 父目标选项；
+  // D-12 / C-13 软关联保存前内联校验：已知集 = 注入全量目标集 ∪ 父目标选项 ∪ 软关联选项；
   // 格式错与未知 ID 都阻塞提交（保存前就近标红、零写保输入），不让错误落到页面横幅。
   const knownIds = new Set<string>([
     ...(objectiveIds ?? []),
     ...(primaryOptions ?? []).map(o => o.value),
+    ...(relatedOptions ?? []).map(o => o.value),
   ])
   const relatedCheck = validateRelatedOkrIds(draft.relatedOkrIds, knownIds)
   if (relatedCheck.blocking.length > 0) localErrors.relatedOkrIds = relatedCheck.message
@@ -117,6 +118,9 @@ export function OkrForm({
         </div>
       </div>
 
+      {/* P1-2：父主归属（计入权重的唯一父目标）仅 KR 需要，保持 KR-only；
+          软关联对 objective/KR 都可见可编辑（后端 validateOkrRelations 不限 kind、
+          buildOkrTree 渲染全部软关联），与主归属解耦。 */}
       {draft.kind === 'key-result' && (
         <div className="gf-row">
           <div className="gf-field" data-invalid={!!errors.primaryOkrId}>
@@ -133,21 +137,24 @@ export function OkrForm({
             <p className="gf-hint">主归属：计入权重的唯一父目标（单选），决定这条 KR 归属哪个目标。</p>
             {errors.primaryOkrId && <span className="gf-error" role="alert">{errors.primaryOkrId}</span>}
           </div>
-          <div className="gf-field" data-invalid={!!errors.relatedOkrIds}>
-            <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
-            <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
-              onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
-            {primaryOptions && primaryOptions.length > 0 && (
-              <RecordsListbox id="gf-okr-related-pick" ariaLabel="从目标清单添加软关联" searchable
-                value={relatedPick} options={primaryOptions} disabled={disabled}
-                placeholder="从目标清单选择添加（可选）"
-                onChange={appendRelated} />
-            )}
-            <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
-            {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
-          </div>
         </div>
       )}
+
+      <div className="gf-row">
+        <div className="gf-field" data-invalid={!!errors.relatedOkrIds}>
+          <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
+          <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
+            onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
+          {relatedOptions && relatedOptions.length > 0 && (
+            <RecordsListbox id="gf-okr-related-pick" ariaLabel="从目标清单添加软关联" searchable
+              value={relatedPick} options={relatedOptions} disabled={disabled}
+              placeholder="从目标清单选择添加（可选）"
+              onChange={appendRelated} />
+          )}
+          <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
+          {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
+        </div>
+      </div>
 
       <div className="gf-row">
         <div className="gf-field" data-invalid={!!errors.status}>

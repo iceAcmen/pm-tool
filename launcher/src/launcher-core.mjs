@@ -5,9 +5,13 @@
  *  - 不伪造/不复刻 dsh HMAC 签名，不关闭 auth，不读取/共享/注入浏览器 cookie，不代填令牌。
  *  - 服务探测 GET 无 browser cookie，其 401 属「身份匹配的鉴权墙」，不得据此判定某浏览器未登录；
  *    S5（未登录）只由用户在标签页看到登录/认证错误后主动反馈触发。
- *  - S4 authenticated 只由用户自确认「我已进入工作台」到达，启动器不做程序化已认证自判。
- *  - owned 实例 authenticatedURL（含一次性令牌）仅存内存、投递一次，不跨 profile/新浏览器重放，
- *    不落盘、不写日志、不入仓；对非本启动器拉起的现网实例不得宣称 owned。
+ *  - S4 authenticated 只由受认证工作台 /api/entered 有效 nonce 回告到达，非用户按钮、非程序化自判。
+ *  - owned 实例 authenticatedURL（含进程启动令牌 launch token）仅存内存、首投即弃，
+ *    不跨 profile/新浏览器重放，不落盘、不写日志、不入仓；对非本启动器拉起的现网实例不得宣称 owned。
+ *  - 认证模型（上游 browser-auth.ts 实测）：launch token 是「每进程」内存令牌（非单次作废、
+ *    不绑定浏览器/会话）；首访带 token 的 `/` 由服务端 303 种出 HMAC 签名、HttpOnly、
+ *    SameSite=Strict、按 authority 绑定的持久 cookie，之后浏览器只认自己的 cookie。
+ *    启动器读不到浏览器 cookie，也无法取到已运行进程内存中的 token，故无法程序化判定已认证。
  *  - 不 kill 占用进程、不争 3172；取消只放弃尚未完成的 owned 启动流程，不误杀已启动 PM。
  */
 
@@ -24,7 +28,7 @@ export const Status = Object.freeze({
   S1: 'S1', // running / 端口可达（≠成功）
   S2: 'S2', // starting / 启动中
   S3: 'S3', // opened / 已投递待鉴权
-  S4: 'S4', // authenticated / 用户确认已进入
+  S4: 'S4', // authenticated / 权威 nonce 回告进入
   S5: 'S5', // auth-required / 用户反馈未登录
   S6: 'S6', // failure / 启动失败
   Closed: 'closed',
@@ -34,13 +38,18 @@ export const Status = Object.freeze({
 const AUTH_WALL_RE = /dsh web authentication required/i
 
 /**
- * 分类本地服务探测。
+ * 分类本地服务探测（探测恒无 cookie）。
+ *
+ * 上游 `browser-auth.authorizeIndex`：无 token 且无签名 cookie 时，`/` 恒回 401
+ * 鉴权墙（已对本机正式实例实测）。因此无 cookie 的 GET 永远拿不到 dsh 的 200：
+ *  - 401 且正文为 dsh 鉴权墙 → 身份匹配的已运行实例（Running，S1，≠成功）；
+ *  - 其余任何状态码（含 200）/身份不明 → Conflict（安全失败，不误开未知本地服务、不启动）。
+ *
  * @param {{tcpOpen:boolean, httpStatus:number|undefined, authRequiredBody?:string}} probe
  * @returns {keyof typeof Probe}
  */
 export function classifyProbe({ tcpOpen, httpStatus, authRequiredBody = '' }) {
   if (!tcpOpen) return Probe.NotRunning
-  if (httpStatus === 200) return Probe.Running
   if (httpStatus === 401 && AUTH_WALL_RE.test(authRequiredBody)) return Probe.Running
   return Probe.Conflict
 }
@@ -83,7 +92,7 @@ export function decideAction(probe, preferences = {}) {
 }
 
 /**
- * 解析 `dsh web: <base>/?token=<t>`；url 为含一次性令牌的完整首投 URL（仅内存），
+ * 解析 `dsh web: <base>/?token=<t>`；url 为含每进程 launch token 的完整首投 URL（仅内存），
  * baseUrl 为去令牌干净 URL，token 单独保留。均不持久化。
  * @param {string} line
  * @returns {{url:string, baseUrl:string, token:string}|null}
@@ -113,12 +122,22 @@ export function redactUrl(url) {
 
 /**
  * 构造浏览器打开命令参数（macOS open / open -a）。
+ *
+ * 真实本地 app 入口：Chrome / Edge 用 `--app=<url>` 打开无边框专用窗口（独立窗口形态，
+ * 仍使用该浏览器自身 cookie jar，启动器不复制 cookie、不关 auth）；Safari / Firefox /
+ * 系统默认浏览器不支持 app 参数，诚实回退普通 tab。
  * @param {string} choice
  * @param {string} url
+ * @param {{appWindow?:boolean}} [opts]
+ * @returns {{argv:string[], mode:'app'|'tab', fallback:boolean}}
  */
-export function openBrowserArgs(choice, url) {
-  if (choice === '系统默认浏览器') return { argv: ['open', url], fallback: false }
-  return { argv: ['open', '-a', choice, url], fallback: false }
+const APP_WINDOW_BROWSERS = new Set(['Chrome', 'Microsoft Edge'])
+export function openBrowserArgs(choice, url, { appWindow = true } = {}) {
+  if (choice === '系统默认浏览器') return { argv: ['open', url], mode: 'tab', fallback: false }
+  if (appWindow && APP_WINDOW_BROWSERS.has(choice)) {
+    return { argv: ['open', '-a', choice, '--args', `--app=${url}`], mode: 'app', fallback: false }
+  }
+  return { argv: ['open', '-a', choice, url], mode: 'tab', fallback: false }
 }
 
 /**
@@ -181,8 +200,8 @@ export function createLauncherState() {
         s.status = Status.S3
         s.browser = event.browser ?? s.browser
         break
-      case 'confirm-entered':
-        // 用户自确认才到 S4；启动器不做程序化已认证自判。
+      case 'entered':
+        // 唯一权威到达 S4：受认证 PM 工作台 mount 后回告有效 nonce；非用户按钮、非自动判定。
         s.status = Status.S4
         s.confirmed = true
         break

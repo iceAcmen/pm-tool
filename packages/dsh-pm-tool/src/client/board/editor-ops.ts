@@ -6,8 +6,38 @@
  * 「导出布局序列化」可在不挂载 React 的单测中断言；组件只负责调用与渲染，行为零变更。
  */
 import type { DashboardLayout, FilterRule, WidgetInstance } from './types.js'
+import type { BreakpointCols } from './projection.js'
 
 export type FilterOp = FilterRule['op']
+
+type GeometryItem = { i: string, x: number, y: number, w: number, h: number }
+
+type GeometryProjection = {
+  projectToBreakpoint: (widgets: WidgetInstance[], cols: BreakpointCols) => GeometryItem[]
+  reverseFromBreakpoint: (
+    prev: WidgetInstance[],
+    next: GeometryItem[],
+    cols: BreakpointCols,
+  ) => WidgetInstance[]
+}
+
+/**
+ * RGL 可能在 onDragStart/onResizeStart 前已更新其内部 layout。用回调提供的 oldItem
+ * 覆盖目标卡当前投影坐标，重建真正的操作前 canonical 快照，保证连续操作逐步可撤销。
+ */
+export function snapshotBeforeGeometryChange(
+  layout: DashboardLayout,
+  oldItem: GeometryItem,
+  cols: BreakpointCols,
+  projection: GeometryProjection,
+): DashboardLayout {
+  const before = projection.projectToBreakpoint(layout.widgets, cols)
+    .map(item => item.i === oldItem.i ? { ...item, ...oldItem } : item)
+  return {
+    ...structuredClone(layout),
+    widgets: projection.reverseFromBreakpoint(layout.widgets, before, cols),
+  }
+}
 
 /* ---------- 键盘微调（拖拽的非指针替代） ---------- */
 

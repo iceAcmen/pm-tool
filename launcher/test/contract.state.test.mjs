@@ -1,6 +1,6 @@
 /**
- * 七态合同（S0–S6）红/绿用例 · 路径 B（无官方回调；S4 需用户自确认）。
- * 安全：S3 不得当 success；401→S5；不重放一次性令牌；不读/注入 cookie；不 kill；不争端口。
+ * 七态合同（S0–S6）：S4 仅由受认证工作台权威回告到达，非用户按钮。
+ * 安全：S3 不得当 success；401→S5；不重放进程启动令牌；不读/注入 cookie；不 kill；不争端口。
  */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
@@ -28,14 +28,12 @@ test('探测：端口拒绝 → not-running → 决策 start（S0）', () => {
   assert.equal(d.reuse, undefined)
 })
 
-test('探测：200 身份匹配 → running(S1)，open-existing 复用但不是 success、不 spawn、不带 token', () => {
+test('探测：无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict → 安全失败，不误开未知服务', () => {
   const p = classifyProbe({ tcpOpen: true, httpStatus: 200, authRequiredBody: '' })
-  assert.equal(p, 'running')
+  assert.equal(p, 'conflict')
   const d = decideAction(p, { browser: 'Chrome' })
-  assert.equal(d.action, 'open-existing')
-  assert.equal(d.reuse, true)
-  assert.equal(d.targetKind, 'clean-url')
-  assert.equal(d.success, undefined)
+  assert.equal(d.action, 'safe-failure')
+  assert.equal(d.reuse, undefined)
   assert.equal(d.spawn, undefined)
   assert.equal(d.token, undefined)
 })
@@ -71,7 +69,7 @@ test('状态机：S1 直接投递 → S3（待鉴权），未经确认不得到 
   assert.notEqual(m.snapshot().status, 'S4')
 })
 
-test('状态机：S0 需启动 → S2 → 完成 → S3；S3 确认 → S4', () => {
+test('状态机：S0 需启动 → S2 → 完成 → S3；权威 entered 回告 → S4（非按钮）', () => {
   const m = createLauncherState()
   m.transition({ type: 'detect', probe: 'not-running' })
   assert.equal(m.snapshot().status, 'S0')
@@ -80,7 +78,7 @@ test('状态机：S0 需启动 → S2 → 完成 → S3；S3 确认 → S4', () 
   m.transition({ type: 'step', index: 1 })
   m.transition({ type: 'delivered', browser: 'Chrome' })
   assert.equal(m.snapshot().status, 'S3')
-  m.transition({ type: 'confirm-entered' })
+  m.transition({ type: 'entered' })
   assert.equal(m.snapshot().status, 'S4')
   assert.equal(m.snapshot().browser, 'Chrome')
 })
@@ -116,18 +114,18 @@ test('状态机：S2 取消 → S0；S6 返回 → S0；关闭 → closed（均�
 })
 
 // ---------------- 面板视图（路径B） ----------------
-test('S3 面板：等待确认 +「我已进入工作台（用户确认已进入）」+「看到登录/认证错误」，禁止已打开/成功措辞', () => {
+test('S3 面板：等待已进入回告；无「我已进入」假成功按钮；仅「看到登录/认证错误」+更换浏览器；禁止已打开/成功措辞', () => {
   const vm = buildPanelViewModel({ status: 'S3', browser: 'Chrome', step: 0 }, {})
   assert.equal(vm.view, 'S3')
-  assert.match(vm.subtitle, /确认|登录/i)
+  assert.match(vm.subtitle, /回告|登录/i)
   const labels = vm.actions.map((a) => a.label).join(' ')
-  assert.match(labels, /我已进入工作台（用户确认已进入）/)
+  assert.ok(!/我已进入|用户确认/.test(labels))
   assert.ok(vm.actions.some((a) => /看到登录 \/ 认证错误|认证错误/.test(a.label)))
   assert.ok(!/已打开|成功/.test(vm.title))
 })
 
 test('S5 面板：已打开但未登录；在标签页完成登录 / 换用已登录浏览器；折叠诊断含 401/跨profile（用户反馈触发）', () => {
-  const detail = { code: 401, detection: '一次性令牌绑定原浏览器，新浏览器无 cookie', outcome: '未注入会话、未重放令牌', suggestion: '在已登录浏览器打开' }
+  const detail = { code: 401, detection: '该浏览器无本机服务签发的签名 cookie，新浏览器无登录态', outcome: '未注入会话、未重放进程启动令牌', suggestion: '在已登录浏览器打开' }
   const vm = buildPanelViewModel({ status: 'S5', detail, step: 0 }, {})
   assert.equal(vm.view, 'S5')
   assert.match(vm.title, /未登录/)
@@ -144,7 +142,7 @@ test('S6 面板：白话原因 +「没有停止任何程序」+ 重新尝试/查
   assert.deepEqual(vm.actions.map((a) => a.id), ['retry', 'toggle-detail', 'back'])
 })
 
-test('S4 面板：确认后才显示「工作台已打开」+ 再次打开/更换浏览器', () => {
+test('S4 面板：权威回告后显示「工作台已打开」+ 再次打开/更换浏览器', () => {
   const vm = buildPanelViewModel({ status: 'S4', browser: 'Chrome', step: 0 }, {})
   assert.equal(vm.view, 'S4')
   assert.match(vm.title, /工作台已打开/)

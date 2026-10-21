@@ -1,0 +1,150 @@
+{
+  "scope": "historical_research_document_audit_not_product_acceptance",
+  "environment": "macOS; system Python3; local Git; no pnpm/Node runtime invoked",
+  "head": "06a131cd5fdc4486dd74afe89cc4c5630f0a4c98",
+  "facts": 164,
+  "additional_fact": "P-ADD-01",
+  "hypotheses": 73,
+  "additional_hypothesis": "H-ADD-01",
+  "main_quotes": 360,
+  "additional_quotes": 60,
+  "markdown_files": 25,
+  "local_links_checked": 97,
+  "role_artifacts": 13,
+  "untouched_testing_fingerprints": [
+    {
+      "path": "docs/testing/acceptance-report-round1.md",
+      "same": true
+    },
+    {
+      "path": "docs/testing/reverification-round2.md",
+      "same": true
+    },
+    {
+      "path": "docs/testing/round3-gui-execution.md",
+      "same": true
+    },
+    {
+      "path": "docs/testing/b2-p3-destructive-draft-qa-20261020.md",
+      "same": true
+    },
+    {
+      "path": "docs/testing/b8-packaging-fail-20261020.md",
+      "same": true
+    },
+    {
+      "path": "docs/testing/independent-acceptance-r4-firstfindings-20261021.md",
+      "same": true
+    }
+  ],
+  "diff_check_exit": 0,
+  "errors": [],
+  "product_tests": "NOT_RUN; no product PASS issued",
+  "limitations": [
+    "TRAE raw-history export incomplete; one normalized JSON line unparsed",
+    "not all original images, traces, build PIDs, or approval events available",
+    "source archive quotes redact secrets and omit all process export assignments"
+  ],
+  "artifact_sha256": [
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/00-report.md",
+      "sha256": "d420c474eb59f46b458374369b031369f5fd0c93d3c7e1d68f38b686ecd331d4"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/01-facts.md",
+      "sha256": "c9b16e59fc0c7a85c6024e3fe079ac970a2961aafb8173a29cd04151193cba32"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/02-dialogue-evidence.md",
+      "sha256": "497ee9bafe4e40edaccf1f1aef32f8c75584bbfdf8443fde747e6c7c3d2a32b9"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/02b-additional-evidence.md",
+      "sha256": "0b32b360800503bb4a9b23bcdcb89487e573b85738e7ab0d2644a72fa08287f8"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/03-coverage.md",
+      "sha256": "992578b65e73a493b27b54c1db470439dd9c8394dcb9b3bc02216c06580d396f"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/04-debate.md",
+      "sha256": "c50ca89add864b9e46194c143a8e004921fa41496471f9ef3a778594ae1ee3ab"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/05-hypothesis-validation.md",
+      "sha256": "4bc502047d5cb87a98205b8068ef2a038f8fc81b89d507b87044d4d3bf8451fa"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/06-actions.md",
+      "sha256": "300220ab1e14190397d75eff192d54ea0ddef2a59dff02d1b51209a5000dbb98"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/07-validation.md",
+      "sha256": "952eee3c20410be2dc610d98fa5e4b8d07a0a21818157f573a5bc1a01b1ab6a1"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/08-late-boundary-evidence.md",
+      "sha256": "0aeb5adc0893bc2514a4c3d864b9e9dfbf77b142582270241c445a8cf9aa6907"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/09-final-review.md",
+      "sha256": "b32f26e542659b3eb06824f91c40dd56744272192eb36d4384a90316385db884"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/10-final-audit-source.md",
+      "sha256": "9beccf05c2420871252adfd59427b2798e348ba4c8229f67d38efe870d94890c"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/late-upstream-boundary.md",
+      "sha256": "252618c218459102d9a7d1f844c271cbe31314c9a8ee255d4da6f22cc5021654"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-agent-r1.md",
+      "sha256": "febd79b52fed4745d92ef2ac42d48323bf9ceba8af12211d2b6e2992f6a72822"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-agent-r2.md",
+      "sha256": "6bba6104d406b563fb8c486890aecfe9fb1c8680d7f2d7436dc1dec2a54bad82"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-developer-r1.md",
+      "sha256": "b078f89700256ae105484bd9fa7693f559b81f7683c5a75b43286fde13d2665c"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-developer-r2.md",
+      "sha256": "031f65e087bfba3a971633612c0235988cacddde784b8d8b0f55d18b3dd8d5bf"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-operations-r1.md",
+      "sha256": "b91e30e891beffbd9aca9cf88790b24b00f9db53bace8a3ebaa35fcbc86f02e6"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-operations-r2.md",
+      "sha256": "05fba600cdaaf711f723a3c8c8c742b929447adfa3535beddd5797e3794d5837"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-product-r1.md",
+      "sha256": "562af538aba3b3ce282f2b9cf241e5c77a67d0963c96d572643b52226f3f14f4"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-product-r2.md",
+      "sha256": "e6860d238a228b6e97f3a2ebd0992889298d6d5d8878a1737c43970828abdd4d"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-tester-r1.md",
+      "sha256": "3a6c272f7c9b8607d84869a367b0c2d321d660322ec791d0dd29d25db2fc4cf7"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/role-tester-r2.md",
+      "sha256": "96c3de94fbc625a107a169d8fcdf4469c6effa9421007bb7abbdf433c49e3c80"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/third-contract-adjudication.md",
+      "sha256": "ca76b2a8cb352b63eb034d676960015bcba45f2045fc618e9e05bbe59388d8e8"
+    },
+    {
+      "path": "docs/retrospectives/2026-10-21-deep/roles/third-scope-adjudication.md",
+      "sha256": "4fcecb85a13806db654cb08f804e2fd77442a43e0b4cab2a831625608344dc41"
+    }
+  ]
+}

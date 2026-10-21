@@ -3,11 +3,11 @@
  * PM 工作台本地启动器 · 可执行入口（路径 B）。
  *
  * 行为：
- *  - 探测 127.0.0.1:PM_PORT（默认 3172）：已运行尽力开干净 URL（S3 待确认）；未运行才 owned 启动。
- *  - control 页经 127 loopback 在所选普通浏览器 tab 打开；S4 仅用户自确认到达。
- *  - 不读 cookie、不代填令牌、不重放一次性令牌、不 kill 进程、不争端口；关闭 tab 不停服务。
+ *  - 探测 127.0.0.1:PM_PORT（默认 3172）：已运行尽力开干净 URL（S3 等待权威回告）；未运行才 owned 启动。
+ *  - control 页经 127 loopback 在所选普通浏览器 tab 打开；S4 仅由受认证工作台 /api/entered 有效 nonce 回告到达。
+ *  - 不读 cookie、不代填令牌、不重放进程启动令牌、不 kill 进程、不争端口；关闭 tab 不停服务。
  *
- * 环境：PM_PORT（默认 3172）、DSH_CWD（owned 启动的上游 deepseek-harness 目录）。
+ * 环境：PM_HOST（默认 127.0.0.1）、PM_PORT（默认 3172）、DSH_CWD（owned 启动的上游 deepseek-harness 目录）。
  */
 import { spawn } from 'node:child_process'
 import { probeService } from '../src/probe.mjs'
@@ -17,6 +17,7 @@ import { createControlServer } from '../src/loopback.mjs'
 import { renderControlHtml } from '../src/control-html.mjs'
 import { discoverBrowsers } from '../src/browsers.mjs'
 
+const HOST = process.env.PM_HOST || '127.0.0.1'
 const PORT = Number(process.env.PM_PORT || 3172)
 const DSH_CWD = process.env.DSH_CWD || '/Users/bytedance/Projects/dsh-pm/deepseek-harness'
 
@@ -41,6 +42,7 @@ async function main() {
   const browsers = discoverBrowsers().map((b) => b.label)
   const controller = createDshController({ isReady: isReadyFactory(PORT) })
   const app = createLauncherApp({
+    host: HOST,
     port: PORT,
     probeService,
     openBrowser,
@@ -56,8 +58,12 @@ async function main() {
     getState: () => app.getState(),
     handleAction: (p) => app.handleAction(p),
     renderHtml: (st, ctx) => renderControlHtml(app.view(), { initialState: st, nonce: ctx?.nonce }),
+    expectedOrigin: `http://${HOST}:${PORT}`,
+    verifyEntered: (nonce) => app.verifyEntered(nonce),
+    onEntered: (nonce) => app.onEntered(nonce),
   })
   const { port, close } = await server.listen()
+  app.setLoopbackPort(port)
 
   // 在所选浏览器打开 control 页（仅 loopback 地址，不含 token）。
   openBrowser(['open', `http://127.0.0.1:${port}/`])

@@ -4,12 +4,12 @@
 import { existsSync } from 'node:fs'
 import { openBrowserArgs } from './launcher-core.mjs'
 
-/** 原型下拉选项；仅在本机实测存在时列出。 */
+/** 原型下拉选项；仅在本机实测存在时列出。appWindow=true 表示支持 --app= 专用窗口入口。 */
 const KNOWN = [
-  { id: 'chrome', app: 'Google Chrome.app', label: 'Chrome' },
-  { id: 'safari', app: 'Safari.app', label: 'Safari' },
-  { id: 'firefox', app: 'Firefox.app', label: 'Firefox' },
-  { id: 'edge', app: 'Microsoft Edge.app', label: 'Microsoft Edge' },
+  { id: 'chrome', app: 'Google Chrome.app', label: 'Chrome', appWindow: true },
+  { id: 'safari', app: 'Safari.app', label: 'Safari', appWindow: false },
+  { id: 'firefox', app: 'Firefox.app', label: 'Firefox', appWindow: false },
+  { id: 'edge', app: 'Microsoft Edge.app', label: 'Microsoft Edge', appWindow: true },
 ]
 
 /**

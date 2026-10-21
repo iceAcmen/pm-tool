@@ -4,8 +4,9 @@
  * 安全合同：
  *  - 只按正式参数拉起；绝不提供 kill/stop，不停止任何现有进程（含现网 3172）。
  *  - cancelStartup 仅回收「自己拉起、且尚未就绪(ready)」的在途 owned 子进程：
- *    SIGTERM + 有界等待；一旦已就绪/已绑定，或对象非 owned，绝不终止。
- *  - owned authenticatedURL（含一次性令牌）仅内存：投递所选浏览器后即弃，不落盘、不写日志、不入仓；
+ *    SIGTERM + 有界等待；就绪前失败（等待超时 / 未捕获 URL）同样回收未就绪子进程；
+ *    一旦已就绪/已绑定，或对象非 owned，绝不终止。
+ *  - owned authenticatedURL（含每进程 launch token）仅内存：投递所选浏览器后即弃，不落盘、不写日志、不入仓；
  *    不跨 profile/新浏览器重放。
  *  - 不读取浏览器 cookie，不读取/请求任何凭证。
  */
@@ -93,6 +94,11 @@ export function createDshController(seams = {}) {
       const entry = { pid: f.pid, authenticatedUrl: f.captured.url, token: f.captured.token }
       owned.set(f.pid, entry)
       return entry
+    } catch (err) {
+      // 就绪前失败（等待超时 / 未捕获 URL）：回收自己尚未就绪的 owned 子进程，
+      // 避免孤儿 dsh 占用端口；已就绪不杀；已取消由 cancelStartup 回收，不重复终止。
+      if (!f.ready && !f.aborted) reclaim(f)
+      throw err
     } finally {
       if (flight === f) flight = null
     }

@@ -53,6 +53,7 @@ describe('D-05 编号列恒显稳定句柄（code/短 ID），可点击复制并
   it('句柄恒显：WBS code 优先，缺省回退短 ID（t.id），禁止空白', () => {
     expect(tasksTsx).toContain('const wbs = (t.code ?? \'\').trim()')
     expect(tasksTsx).toContain('const handle = wbs || t.id')
+    expect(tasksTsx.match(/\{taskHandleButton\(t\)\}/g)).toHaveLength(2)
   })
 
   it('复制到剪贴板（经 copyHandleToClipboard）+ 瞬时「已复制」反馈，不回写任务编号', () => {

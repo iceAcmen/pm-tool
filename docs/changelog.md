@@ -8,6 +8,55 @@
 
 ---
 
+## 候选提交与推送准备（2026-10-21，平台：trae，待专家审签）
+
+- **授权**：所有者明确“提交代码并推送，准备进入专家审签流程”。本次冻结并推送审查候选，不是发布或独立 PASS；取代本批此前“未获 commit/push 授权”的状态，不修改长期测试门。
+- **文件/范围**：现有 13 类体验及 launcher 收口代码、测试、同期复盘和交接文档；新增 `reports/batch1-expert-signoff-20261021.md`、候选源码指纹与 97 项退出码清单；专家原稿只原样纳入 Git，不修改正文。`.preview/` 临时产物不纳入。
+- **验证**：上一轮插件 1130/1130、build exit0、97/97 verify、launcher 44/44+verify；本轮核原始 97 项退出码、vendor 指纹与差异空白。未改产品行为，未重复调用真实模型。
+- **自查与风险**：code-review 两轴发现 App 路径单引号转义、旧 nonce 旅程绑定、ResultCard 新消息复制状态三个待核问题；最终 GUI 磁盘原证不足和 TTL 120 秒/10 分钟差异已明确交专家核定。自动化绿不扩大为 GUI PASS。
+- **接续**：专家按推送后候选及审签包核计划/证据、开缺陷或补采；正式 3172/PID44388 未变化，不正式部署、不打 tag。
+
+## 修复/验收 · 第一批现有候选遗留四项修复与最终复验（2026-10-21，平台：trae，待独立专家判定）
+
+- **文件**：在此前编号、路径和控制页修复基础上，补 `launch-handshake.ts/panel.tsx` 成功后清 hash 与失败补试、`editor-ops.ts/editor.tsx` 基于 RGL `oldItem` 记录真实操作前快照、`ui-feedback.ts` 单次前缀、`result-card-copy.ts` 可验证复制结果；同步测试、launcher nonce 10 分钟边界、原始证据和 living docs。
+- **原因/影响**：收口 Finder S4、连续拖动撤销缺态、错误前缀重复和复制值未核四项。正式 3172/PID 44388、正式数据、profile 软链和上游源码未动；临时 3199 由 Finder 启动器自拉起。无 commit/push。
+- **GUI 原始结果**：Finder 真实双击后 S0→S2→首次配置→PM snapshot→S4，地址栏 `pm-launch` 已清；三次真实拖动后三次撤销严格逆序且末态按钮禁用；非法备份只显示一个“恢复失败：”；注入 `writeText` 捕获值与错误卡原文逐字一致并显示“已复制”。这些是 Main 采证，不代替独立专家结论。
+- **验证**：launcher 44/44 + verify PASS；插件 Vitest 124 文件/1130 项、build exit0；最终全部 97 个 verify 97/97 exit0（历史真实模型首轮失败仍保留）；`git diff --check` exit0。原始索引见 `reports/batch1-closure-raw-evidence-20261021.md`。
+
+## 文档 · 复盘后分批工作规划（2026-10-21，平台：trae，建议/未实施产品改动）
+
+- **文件**：新增 `docs/plans/2026-10-21-post-retrospective-roadmap.md`，同步progress/handoff/onboarding链接，保留其他执行者在途内容。
+- **内容/原因**：回应负责人“下一步工作与规划”，依据复盘06-actions及最新R4/R5独立报告排序：当前13类/launcher验收收口→同期接续/授权/宿主来源对齐→确认共性工程缺口→完整旅程设计落实→真实使用与新能力选择；微信已部署试点按原授权单列。
+- **影响**：只规划与交接；历史问题不全当当前缺陷，子项通过不扩大整项，不自动重开暂停功能或修改上游。未build/verify/GUI、未改产品或正式服务、未commit/push。
+- **验证**：本机Python核计划中路径/链接与行尾空白，`git diff --check` 检查上述交接文档退出0；没有新产品验收结论。
+
+## 本机部署 · 微信 Mac 桌面采集试点（2026-10-21，平台：trae，未提交/推送）
+
+- **授权**：所有者明确“我已确认方案，请开始部署 Mac 桌面采集试点”；本批是独立本地工具，不是现有 pm-tool 新功能发布。
+- **文件**：新增 `docs/plans/2026-10-21-wechat-desktop-pilot.md`、`reports/wechat-pilot-20261021/部署说明.md` 与双击终端入口；同步 progress/handoff/onboarding。本机运行代码在 `~/.local/share/wechat-project-pilot/app/`、venv 独立，读取库 0.3.1 锁提交 `c6c600ae…0164`；配置与真实数据仅在已忽略 `data/wechat-pilot/`。
+- **行为/影响**：群白名单默认空；只读窗口采集、群标题核对、连续窗口对齐/缺口记录、本地规则动态草稿与原文索引。未导入发送/加好友/朋友圈入口、不调用云模型、不自动写正式台账、不配置登录自启。现有产品代码/lib/profile/正式服务/他人在途未动。
+- **验证**：Python 3.12.15 与读取库/四模块指纹核对；20/20 开发自验（临时数据、非独立验收）；两入口 `bash -n` exit0；Git 忽略确认。`doctor` exit2：辅助功能 false、屏幕录制 false、微信运行 true、锁屏 false、AX=-25211，无法读取窗口。
+- **状态/接续**：本机工具部署已完成，真实采集与定时运行未启用；本人需开启实际运行应用的系统权限并指定完整群名，之后执行端继续采证。没有独立验收 PASS，不改变其他产品候选的门状态。
+
+## 文档 · 从立项至今的开放式深度复盘与跨平台执行合同（2026-10-21，平台：trae，未提交/推送）
+
+- **改动文件**：新增 `docs/retrospectives/2026-10-21-deep/`（总报告、164现象、360主消息+60追加、来源覆盖/指纹、五角色R1/R2与两份R3裁决、73假设交叉校验、整改和文档验证）；更新AGENTS、collaboration §11、KB-039/既有诊断边界、ISS-028～032/ISS-022事务边界、ADL-057、progress/handoff/onboarding入口。旧简版复盘保留，分析口径以新稿为准。
+- **原因**：负责人反馈原复盘过简，要求原始事实先行、多角色相互质疑、逐假设反证与负责人侧客观反馈，并保存所有Agent可用的规则。本轮找到豆包真实轨迹与可访问TRAE历史；覆盖不是全部聊天完整证明。
+- **影响**：仅研究与规范文档；修订旧确认/历史生成能力口径，细化原句转译、共享资源、dirty候选、合法fixture、证据失效、分层完成与权限。既有代码/launcher/testing在途成果保留，不修改testing、不新签产品PASS、不升格待表决设计矩阵、不切服务。
+- **收尾补审**：只读发现本机上游UI提交 `1142fb74f2`，与只读入口的实际依赖描述需对齐；新增08-late-boundary-evidence.md与独立研究稿，P-ADD-01/H-ADD-01单列，不混首轮冻结。明确首页需求与直接修改路径许可分别核，未回退/清理上游。
+- **验证**：本机macOS/Python3/Git只读与文档一致性检查；ID/来源/链接/角色原稿/脱敏/差异空白检查及命令退出码见 `docs/retrospectives/2026-10-21-deep/07-validation.md`。本轮未install/build/verify/GUI、未commit/push；当前产品未测项仍按独立报告。
+
+## 修复 · 13 类体验修复候选（P1-1 反馈双轨 / P1-2 OKR 语义对齐 / launcher ready bridge）（2026-10-21，平台：doubao-work，未提交 / 未放行 / 非独立 GUI PASS）
+
+- 改文件（共 9 = 基线 7 + D-10 新增 2，跨 core/client，未提交；HEAD `06a131c`，本地领先 origin/main 17）：
+  - P1-1：`packages/dsh-pm-tool/src/core/ui-feedback.ts`（`classifyFeedback` 结构化成功信封直接判 `isError=false`，中文错误关键词正则只兜底非结构化裸返回，消除「已修复错误清单/失败项已清零」等成功串被误判红）+ `core/ui-feedback.test.ts`；`client/panel.tsx` 恢复成功、备份摘要、导出 MD、导出 JSON 四处本地成功改走 `buildSuccessEnvelope`，错误站点不动，备份路径常驻复制位。
+  - P1-2：`client/views/growth-form-props.ts`（新增 `relatedOptions` 全量 OKR）、`client/views/okr-form.tsx`（父主归属 KR-only 计入权重单选；软关联块全 kind 恒显、仅展示不计权重）、`client/panel.tsx`（构造并注入 `relatedOptions`，objective 主归属置 null）。不砍 kind、不加 schema、不动权重/进度裁决。
+  - bridge：新增 `client/launch-handshake.ts`(+test)，仅 PM 面板挂载且首次 web snapshot 成功后解析 `#pm-launch=<port>.<nonce>`（port 1..65535、nonce 非空、拒畸形串）、replaceState 清参数保业务 hash、POST `http://127.0.0.1:<port>/api/entered` JSON{nonce}、credentials omit（无 cookie/token）、2xx 即止、无参静默、失败不假成功不重试；index apply 注册不算就绪。launcher receiver 由 launcher 执行者另写，本批不碰。
+  - D-10：`client/views/reports.tsx`（空态提前 return 前提取 formOverlay，空/非空分支共用 RecordsOverlay/RecordsReportForm）+ `client/views/reports-entry-guard.test.ts`（静态合同）。
+- 为什么：成功反馈被中文错误关键词误判红；OKR 软关联被 kind 过滤致目标不可见且与权重归属混淆；启动器「已进入」按钮被误当 mounted+snapshot ready 成功。
+- 影响：跨 core/client（core/ui-feedback + client）；不改 schema、真实 data、11 张个人卡、全部配置、3172 进程；上游只读。
+- 验证（开发自验 + 独立 R4 子用例 + D-10 manual 子项，均非全量 GUI PASS）：作者主根 vitest 1118/1118 exit0、build0、verify-isolation 95/95/污染0 exit0（作者主根 guard）；独立 R4 bridge 14/14、verify-ui-feedback OK、p2b-okr 26/26、form-validation 通过、build0、records 域 61/61；launcher 候选（执行者另写）42/42、verify0。13 项 GUI（R4/R5 窄视口 675×745 浅主题，权威 §7 见 `docs/testing/independent-acceptance-r4-firstfindings-20261021.md` sha `986d190d…1e726f`；子项 PASS≠整项，宽视口/深主题未测）：D-01 PASS 子项（看板卡点×移除→↶撤销、自动排版压实可撤销）/NOT_RUN 连续拖卡（旧删任务 t-0001 误判已撤回，不新增任务撤销）；D-02 PASS 子项（配置模态仅1 primary、卡片库分组渐进、备份菜单0 primary）/NOT_RUN 宽档互斥；D-03 PASS 子项（概览 header static 不压卡）/NOT_RUN sticky 叠层；D-04 PASS（工具条四组分组+新建 primary）；D-05 PARTIAL（编号格待宽视口）；D-06 PASS 子项（唯一 primary）/NOT_RUN 危险确认级联；D-07 PASS 子项（←→平移1天持久化、Shift→延长工期持久化、里程碑可达、单击选中）/NOT_RUN 点按阈值；D-08 PASS（T1↔M1 双向闭环）；D-09 PARTIAL（短 advisory）/NOT_RUN 分级色/顶层横幅；D-10 PASS 子项（R5 manual 源编辑/预览/探针转义/rpt0001 重开留存，无 AI/key，独立重建 lib/client.js sha `1b3f05d7…02733`）/未测 AI session+宽深；D-11 PASS（草稿 select→「关联交付物」→保存，任务 chip+D1 反查双向；即时写路径未单独复测，旧 select-only 误判已撤回）；D-12 PASS 子项（软关联通俗解释+伪造 ID 内联拒绝）/NOT_RUN 顶层横幅；D-13 PASS 子项（同日幂等）/BLOCKED 长历史折叠（后端仅2天回填窗、不绕校验，非BUG）。运行：新隔离 3199=PID 66544 iso3（旧 33859 已 TERM），正式 3172=PID 44388 未动；Finder 双击 E2E BLOCKED 待 Main 采证。launcher 已交付两 bundle 在 `/Users/bytedance/Documents/dsh-pm-tool/本地启动器候选-20261021/`（`PM工作台.app` 默认 3172、`PM工作台-隔离验收.app` 烤 3199），最终根 `/Users/bytedance/Documents/dsh-pm-tool/PM工作台.app` 未放仅因独立未过；隔离 worktree verify-export 目录名正则、verify-settings 子进程 `--reopen` cwd/空格路径阻塞（非缺树），主根 95/95 已过、独立规范 cwd 待复验。未 commit/push。
+
 ## SH-1 D-02 单面板互斥/让位/按钮层级 + D-03 顶条留白（2026-10-20，平台：doubao-work）
 
 - D-02 改文件：`editor.tsx`（卡库抽屉与配置面板单态互斥；≥1024 侧轨让位、<1024 sheet+scrim+Esc；「应用位置与尺寸/应用公式」降为次按钮，删除双主「完成」大按钮；「已添加」改「已在画布·定位」滚动定位+高亮；空搜索「无匹配卡片」；面板标题「·未保存改动」）、`editor-ops.ts`（`filterCatalogItems`/`locateWidgetByType` 纯函数）、`board.css`（scrim/侧轨/定位高亮/空态样式，全走 token 无裸色值）、新增 `panel-library.test.ts`。

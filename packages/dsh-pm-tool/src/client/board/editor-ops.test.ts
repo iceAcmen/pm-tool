@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import {
   nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
+  snapshotBeforeGeometryChange,
 } from './editor-ops.js'
 import type { DashboardLayout, WidgetInstance } from './types.js'
+import { projectToBreakpoint, reverseFromBreakpoint } from './projection.js'
 
 const w = (i: string, x: number, y: number, w: number, h: number): WidgetInstance => ({
   i, type: 'recordList', config: {}, layout: { i, x, y, w, h, minW: 2, minH: 2 },
@@ -39,6 +41,56 @@ describe('nudgeWidgetLayout（I7 键盘微调：夹紧 + 碰撞交换，不改�
   it('未知 i 原样返回（不抛错）', () => {
     const widgets = [w('a', 0, 0, 2, 2)]
     expect(nudgeWidgetLayout(widgets, 'nope', 1, 0, 12)).toBe(widgets)
+  })
+})
+
+describe('snapshotBeforeGeometryChange（连续拖拽保留真实操作前状态）', () => {
+  it('即使当前 draft 已是拖后坐标，也用 RGL oldItem 重建拖前快照', () => {
+    const afterDrag: DashboardLayout = {
+      version: 1,
+      scope: 'user',
+      updatedAt: '2026-10-21',
+      revision: 1,
+      widgets: [w('a', 6, 4, 2, 2), w('b', 8, 0, 2, 2)],
+    }
+    const snapshot = snapshotBeforeGeometryChange(
+      afterDrag,
+      { i: 'a', x: 2, y: 1, w: 2, h: 2 },
+      12,
+      { projectToBreakpoint, reverseFromBreakpoint },
+    )
+    expect(snapshot.widgets.find(x => x.i === 'a')?.layout).toMatchObject({ x: 2, y: 1, w: 2, h: 2 })
+    expect(snapshot.widgets.find(x => x.i === 'b')?.layout).toMatchObject({ x: 8, y: 0 })
+    expect(afterDrag.widgets[0].layout).toMatchObject({ x: 6, y: 4 })
+  })
+
+  it('三次连续变化分别生成三个不同操作前快照，可严格逆序恢复', () => {
+    const base: DashboardLayout = {
+      version: 1,
+      scope: 'user',
+      updatedAt: '2026-10-21',
+      revision: 1,
+      widgets: [w('a', 0, 0, 2, 2)],
+    }
+    const states = [base, 2, 4, 6].reduce<DashboardLayout[]>((acc, x) => {
+      if (typeof x !== 'number') return [x]
+      const prev = acc.at(-1)!
+      acc.push({ ...prev, widgets: prev.widgets.map(item => ({
+        ...item,
+        layout: { ...item.layout, x },
+      })) })
+      return acc
+    }, [])
+    const snapshots = states.slice(1).map((current, index) =>
+      snapshotBeforeGeometryChange(
+        current,
+        states[index].widgets[0].layout,
+        12,
+        { projectToBreakpoint, reverseFromBreakpoint },
+      ),
+    )
+    expect(snapshots.map(s => s.widgets[0].layout.x)).toEqual([0, 2, 4])
+    expect([...snapshots].reverse().map(s => s.widgets[0].layout.x)).toEqual([4, 2, 0])
   })
 })
 

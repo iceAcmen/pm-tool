@@ -1,6 +1,74 @@
 # 工作进度流水账 progress.md
 
-> 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
+> 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者/迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
+
+## 当前接续：候选提交与推送获准，准备专家审签（2026-10-21，trae）
+
+- 所有者原句：“提交代码并推送，准备进入专家审签流程”。本批按授权冻结 Git 候选，不等独立 PASS/发布；此前未授权 Git 状态为历史。
+- 审签入口：[`reports/batch1-expert-signoff-20261021.md`](../reports/batch1-expert-signoff-20261021.md)。其中有当前源码指纹、97 项原始退出码、服务快照、自查发现和证据不足项。
+- code-review 发现三个待专家核定的实现边界：App 单引号路径、旧 nonce 绑定、ResultCard 新消息复制状态。最终 GUI 归档原证与 TTL 合同也有缺口，不据旧摘要直接签 PASS。
+- 下一步由独立测试专家核候选、维护测试合同和缺陷/补采要求；Main 只按既定步骤采证。未放行前不开新功能、不切正式服务、不发布。
+
+## 第一批现有候选验收收口（2026-10-21，trae，四项遗留已修复复验/待独立判定）
+
+- 原始证据索引：[`reports/batch1-closure-raw-evidence-20261021.md`](../reports/batch1-closure-raw-evidence-20261021.md)；证据根 `/private/tmp/pm-batch1-closure-20261021/`。Main 只记录现象，不给整批 PASS。
+- 已采：看板连续三拖/撤销/保存/取消、1440 编号和复制成功/失败、真实深色与 OKR/备份错误、schema 合法长历史与超窗零写、Finder 指针双击、路径 P0-P3 配对。
+- 已修确证缺陷：宽屏根分组行编号空白；两项路径设施；launcher 控制页空白；Finder 回告失败补试与成功清 hash；连续拖动撤销操作前快照；恢复错误单前缀；复制成功/失败可见且可注入核值。
+- 最终 GUI：Finder 启动器自拉起 3199，真实 snapshot 后 S4 且地址栏无 `pm-launch`；三拖三撤销严格逆序回初态；非法备份单前缀；复制显示“已复制”，捕获参数与原文一致。均待独立专家审证，不自判 PASS。
+- 回归：launcher 44/44、verify PASS；插件 124 文件/1130 项、build exit0；最终 97 个 verify 97/97 exit0。历史 `verify-real-model` 首轮波动仍保留。正式 3172/PID44388 未变化。无 commit/push。
+- 下一步：把更新后的原始证据交独立测试专家逐项审签；在结论前不开始新功能、不发布、不提交。
+
+## 复盘后工作规划（2026-10-21，trae，建议已落盘，未开始产品改动）
+
+- [下一步分批计划](plans/2026-10-21-post-retrospective-roadmap.md)：第一批收口13类体验/launcher候选；同期对齐接续、授权与插件/宿主来源；随后核共性工程缺口、按完整旅程兑现既有设计，再根据真实使用安排新功能。各批按独立门推进，不按历史现象数量估修复量。
+- 当前独立报告仍有宽深/连续拖动/错误层级/长历史/Finder等未测项及两项隔离路径问题；已通过子项按同候选和影响范围保留，不写全量PASS。微信是独立已部署试点，待本人权限/白名单后采证，不自动写正式台账。
+- 本轮仅只读状态与写规划/交接文档，未build/verify/GUI、未改产品/服务、未commit/push；由当前协调者确认本批范围和执行owner后，测试专家制定/确认剩余用例，有能力者采证，开发只修确证缺陷。
+
+## 本机独立试点：微信 Mac 桌面采集（2026-10-21，trae，已部署/未启动真实采集）
+
+- 所有者已明确批准部署；独立本地工具与现有产品候选分开。环境 macOS15.6.1 arm64/微信4.1.15/Python3.12.15，WeChat-MCP0.3.1 锁提交 `c6c600ae…0164`；运行根 `~/.local/share/wechat-project-pilot/`，数据根 `data/wechat-pilot/`（Git 忽略）。
+- 20/20 开发自验、读取模块指纹核对、shell语法和Git忽略检查符合预期；不等独立验收。只读、空群白名单、15分钟间隔、本地规则动态草稿，未发消息/调用云模型/写正式台账/启用登录自启，未改产品或正式服务。
+- 实际权限诊断 `doctor` exit2：辅助功能=false、屏幕录制=false、微信已运行、桌面未锁、AX=-25211。**真实群采集与定时运行尚未启用**；下一步本人开启 Terminal 的辅助功能/屏幕录制并提供完整群名，执行端继续真实采证。说明与入口见 `reports/wechat-pilot-20261021/`；本批未commit/push。
+
+## 最新知识沉淀：开放式深度复盘（2026-10-21，trae，文档已落盘，未提交/推送）
+
+- **成果**：[全报告](retrospectives/2026-10-21-deep/00-report.md)、164项现象、360条主摘录+60条补充、73假设逐项校验、五角色两轮对抗与第三轮独立裁决、来源覆盖/指纹与整改清单。TRAE可访问历史不完整，不宣称全对话无遗漏；重复来源不算独立证据。
+- **规范同步**：ADL-057、collaboration §11、AGENTS入口、KB-039与ISS-028～032；修订旧授权/历史生成能力及诊断/事务表述。仅文档研究，不改代码/testing，不运行build/verify/GUI，不切正式服务；产品验收结论仍以下方独立报告为准。
+- **收尾新增事实**：本机上游 `1142fb74f2` UI提交与只读入口不一致，P-ADD-01/H-ADD-01另作 [边界补审](retrospectives/2026-10-21-deep/08-late-boundary-evidence.md)，实际批准例外与正式宿主版本待协调者核清；不据Git作者身份定责，不自动回退。
+- **下一步/由谁继续**：当前开发owner与Main采证者继续下方13类/launcher候选，独立测试专家按既定用例审证；复盘整改涉及代码/测试设施的项先另定计划，不借知识归档开新功能。验证明细见 [文档检查](retrospectives/2026-10-21-deep/07-validation.md)。
+
+## 最新接续：13 类体验修复候选（2026-10-21，doubao-work，未提交 / 未放行 / 非独立 GUI PASS）
+
+> 口径：源码闭合与作者/独立子用例自验 ≠ GUI PASS；独立 13 项 GUI 尚未跑完，未跑项一律 NOT_RUN，不提前判通过。本批未 commit/push，最终 Git 由组织者统一安排。
+
+- **基线**：HEAD `06a131cd5fdc4486dd74afe89cc4c5630f0a4c98`（短 `06a131c`），本地领先 `origin/main` 17 个提交；本批 client 候选与 launcher 候选均在工作树未提交。正式 3172 进程未改，真实 data / 11 张个人卡 / 全部配置保留。
+- **候选（未提交，共 9 文件 = 基线 7 + D-10 新增 2；跨 core/client，非仅 client 域）**：
+  - P1-1 反馈层级双轨：`core/ui-feedback.ts`（结构化成功信封直接判成功，中文错误关键词仅兜底非结构化裸返回，避免「已修复错误清单/失败项已清零」类成功串误判红）+ `core/ui-feedback.test.ts`；`client/panel.tsx` 恢复/备份/导出 MD/导出 JSON 四处本地成功改走成功信封，错误站点不动。
+  - P1-2 OKR 语义对齐：父主归属保持 KR-only（计入权重唯一父目标，primaryOptions 仅 objective）；软关联块全 kind 恒显，新增 `relatedOptions`（全量 OKR，标注目标/KR）由 panel 注入；不砍 kind、不加 schema、不动权重/进度裁决。文件 `client/views/growth-form-props.ts`、`client/views/okr-form.tsx`、`client/panel.tsx`。
+  - 就绪回告 bridge：新增纯模块 `client/launch-handshake.ts`(+test)，仅面板挂载且 snapshot 成功后解析 `#pm-launch=<port>.<nonce>`、清参数保业务 hash、POST `127.0.0.1:<port>/api/entered {nonce}`（credentials omit，无 cookie/token，2xx 即止，失败不假成功不重试）；index 注册不算就绪。launcher receiver 由 launcher 执行者写，本 slice 不碰。
+  - D-10 空态接线（R5 新增 2 文件）：`client/views/reports.tsx`（空态提前 return 前提取 formOverlay，空/非空分支共用覆盖层）+ `client/views/reports-entry-guard.test.ts`（静态合同）。
+- **独立已测（R4 检查点 + D-10 manual 子项，子用例/静态，非全量 GUI）**：bridge 14/14；verify-ui-feedback OK；verify-p2b-okr 26/26；verify-form-validation 通过（ARIA/内联错误留 GUI）；records 域独立 61/61；`pnpm run build` exit0。launcher 候选（执行者另写，未提交）独立单测 42/42、verify exit0。
+- **作者主根复跑（开发自验，非独立门）**：`pnpm test` 1118 passed (123 files) exit0；`pnpm run build` exit0；`node scripts/verify-isolation.mjs` 聚合 95/95、失败 0、正式资产 before=after=232 污染 0 exit0（作者主根 guard，非独立门）。
+- **13 类 GUI 状态（R4 窄视口 675×745 浅主题；宽视口/深主题未测；子项 PASS ≠ 完整矩阵）**：
+  - 权威来源：独立 R4/R5 报告 `docs/testing/independent-acceptance-r4-firstfindings-20261021.md`（sha `986d190d…1e726f`）§7 收口矩阵 + R5.3；下列 PASS 均为窄视口 675×745 浅主题实测子项，宽视口/深主题/dense/自由画布拖拽/危险确认级联/sticky/点按阈值未测，**子项 PASS ≠ 整项 PASS**。
+  - D-01 **PASS 子项**：看板卡点 ×移除→↶撤销恢复、自动排版压实且可撤销无模态；**NOT_RUN** 连续拖卡远推空白（675px 虚拟化画布坐标不可靠，不判 FAIL）。旧「删任务 t-0001 缺 undo」为对象误判，已撤回，不新增任务撤销。
+  - D-02 **PASS 子项**：配置模态仅 1 个 primary「应用位置与尺寸」、卡片库按概览/进度/列表/指标/内容分组渐进、备份/恢复/导出菜单 0 primary；**NOT_RUN** 宽档互斥细节。
+  - D-03 **PASS 子项**：概览 header `static/auto` 不压卡；**NOT_RUN** sticky 滚动叠层。
+  - D-04 **PASS**：任务工具条四组（筛选/视图/密度/导出）分组，「新建任务」为 header primary 主位。
+  - D-05 **PARTIAL**：窄视口不渲染表格 `.pt-code`；编号格+复制按钮待宽视口（CDP 不可用）NOT_RUN。
+  - D-06 **PASS 子项**：新增抽屉仅「添加任务」primary、编辑抽屉仅「保存更改」primary（删除为 danger 非 primary）；**NOT_RUN** 任务删除危险确认级联。
+  - D-07 **PASS 子项**：ArrowRight 整体平移 1 天持久化、Shift+→延长 1 天工期持久化（落库 start/due）、里程碑可达、单击选中不弹抽屉；**NOT_RUN** 点按像素阈值。
+  - D-08 **PASS**：T1↔M1 里程碑双向关联持久化 + M1 卡回显「关联任务(1)」闭环。
+  - D-09 **PARTIAL**：交付核对短 advisory 只读不下完成裁决；**NOT_RUN** 分级配色/顶层错误横幅。
+  - D-10 **PASS 子项（R5 manual，非整项）**：空态 form 挂载、source/preview、script/img-onerror/jsHref 探针转义无活元素；manual 10-15~10-21 保存 `rpt-0001`→重开留存、安全渲染，无 AI/key（独立重建 `lib/client.js` sha `1b3f05d7…02733`）；**未测** AI session 来源、宽视口、深主题。
+  - D-11 **PASS（草稿路径双向落盘，独立 GUI 双证）**：T1 草稿 select 选 D1→点独立「关联交付物」（待提交 0→1）→主「保存更改」；重开任务 chip 落盘、D1 卡只读反查 T1，零 schema 不回写；即时写 `materialDeliverableCmd` 路径未单独复测。旧 select-only 误判 FAIL 已撤回，误判直连补丁已回退、零代码改动。
+  - D-12 **PASS 子项**：软关联通俗解释（仅展示引用/不计权重/不参与裁决）、伪造 `okr-zzz-notexist` 内联拒绝；**NOT_RUN** 错误是否顶层横幅。
+  - D-13 **PASS 子项**：同日两次打卡幂等（累计/连续/最长=1，单条）；**BLOCKED** 长历史折叠（后端仅 2 天回填窗，不绕校验，待真实多日或合法 fixture，非产品 BUG）。
+  - 运行实例：新隔离 3199 = PID 66544（iso3，旧 33859 已 tester 核 TERM）；正式 3172 = PID 44388 全程只读未动。
+- **BLOCKED（环境能力，非产品缺陷）**：B-L1 真实 Finder 双击 E2E——子代理 cu 桌面只能由 Main 操作，不得用终端 `open`/exec 冒充点击，待 Main 采桌面证据交独立判；B-L2 3172 未加载 client bridge（receiver 在 launcher 进程内），不期待 S4，不得把「3172 无回告」当产品 FAIL。
+- **app stable 候选（作者已交付，非仓内构建目标）**：两 bundle 均在主交付候选目录 `/Users/bytedance/Documents/dsh-pm-tool/本地启动器候选-20261021/`：`PM工作台.app`（不烤端口，走启动器默认 3172；烤稳定 nvm v22.23.3 node + 仓内 `launcher/bin/pm-launcher.mjs` 绝对路径，identifier `local.dev.pm-launcher`，不写全局/不复制凭据）、`PM工作台-隔离验收.app`（烤 `PM_HOST=127.0.0.1`/`PM_PORT=3199`）。最终根 `/Users/bytedance/Documents/dsh-pm-tool/PM工作台.app` 尚未放置，仅因独立验收未过；`launcher/dist` 只是 make-app 默认输出目录，不是当前 artifact。
+- **隔离 worktree 两项 exit1（只读确认，非候选回归，未改测试）**：verify-export 硬编码 `/pm-tool/exports/` 目录名正则；verify-settings 为隔离运行路径/子进程入口（`--reopen` cwd 含空格路径）阻塞，非缺文件（冻结树 `src/index.ts` 实际存在、与主仓同，21091B）。主根 95/95 已绿，独立规范 cwd 待复验，不猜缺树、不删改测试，测试移植性如需修另行界定、不优先展开。
+- **下一步**：Main 采集 Finder 双击/控制窗/3199 mounted snapshot ready/有效 nonce S4 与各拒绝例桌面证据 → 独立判；13 项 GUI 跑完据实更新，剩余实证缺陷由 client 统一机制补修（不逐 case CSS、不改数据/11 卡/配置）；docs/progress/handoff/onboarding/changelog 待独立结果后再补「通过」结论。
 
 ## 最新限定专项：总览宽高与排版（2026-10-20，doubao-work）
 

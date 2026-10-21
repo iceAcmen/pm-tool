@@ -41,12 +41,14 @@ async function main() {
   assert.equal(d401.token, undefined)
   a.server.close()
 
-  // 2) 200 → running 尽力复用，非 success、不 spawn、不带 token。
+  // 2) 无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict 安全失败，
+  //    不误开未知本地服务、不 spawn、不带 token。
   const b = await listenFake(200)
   const p200 = classifyProbe({ tcpOpen: true, httpStatus: 200, authRequiredBody: '' })
-  assert.equal(p200, 'running')
+  assert.equal(p200, 'conflict')
   const d200 = decideAction(p200, { browser: '系统默认浏览器' })
-  assert.equal(d200.action, 'open-existing')
+  assert.equal(d200.action, 'safe-failure')
+  assert.equal(d200.spawn, undefined)
   b.server.close()
 
   // 3) 关闭端口 → not-running → start。

@@ -18,7 +18,9 @@ import { AiAssistant } from './shared/drawers/ai-assistant.js'
 import { CopilotPanel } from './shared/drawers/sidecar-portal.js'
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
-import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard } from '../core/ui-feedback.js'
+import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard, buildSuccessEnvelope, prefixFeedbackOnce } from '../core/ui-feedback.js'
+import { buildLaunchHistoryUrl, createLaunchHandshakeRetrier } from './launch-handshake.js'
+import { copyResultText } from './result-card-copy.js'
 import { buildDiagnosis } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
@@ -723,6 +725,17 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [copilotMode, setCopilotMode] = useState<'diagnosis' | 'draft'>('diagnosis')
   // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
   const [dismissedDiagnosis, setDismissedDiagnosis] = useState<ReadonlySet<string>>(new Set())
+  const launchHandshakeRef = useRef<ReturnType<typeof createLaunchHandshakeRetrier> | null>(null)
+  if (!launchHandshakeRef.current && typeof window !== 'undefined') {
+    launchHandshakeRef.current = createLaunchHandshakeRetrier({
+      getHash: () => window.location.hash,
+      replaceState: (cleaned) => window.history.replaceState(
+        null,
+        '',
+        buildLaunchHistoryUrl(window.location.pathname, window.location.search, cleaned),
+      ),
+    })
+  }
 
   /** 重读 web snapshot；返回是否成功（失败仅置消息并返回 false，不抛，兼容既有 void 调用方）。 */
   const refresh = async (): Promise<boolean> => {
@@ -736,6 +749,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       let stored = ''
       try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }
       setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
+      // 首次读取失败不永久错过 Finder 启动回告；后续任一成功刷新都会补试，成功后幂等。
+      void launchHandshakeRef.current?.reportReady()
       return true
     } catch (error) {
       // B1-C2：失败不清空已有数据（保留旧内容），仅标陈旧；错误原文进 ResultCard，不静默合并。
@@ -747,7 +762,10 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     }
   }
 
-  useEffect(() => { void refresh() }, [])
+  useEffect(() => {
+    // 面板挂载后读取；权威回告由 refresh 的成功分支统一处理。
+    void refresh()
+  }, [])
 
   // 「更多」菜单：Escape 关闭并把焦点还给触发按钮。
   useEffect(() => {
@@ -933,11 +951,12 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               const enc = JSON.stringify(restorePreview.content)
               try {
                 const r = await execute(`restore-content ${enc} confirm`)
-                setMessage(String(r ?? '已恢复'))
+                // P1-1：本地成功走统一成功信封 → 3s toast，不再裸文本常驻大卡；错误仍由 catch 走 alert。
+                setMessage(buildSuccessEnvelope([String(r ?? '已恢复（七类实体已替换）')]))
                 setRestorePreview(null)
                 void refresh()
               } catch (e) {
-                setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`)
+                setMessage(prefixFeedbackOnce('恢复失败', e))
               }
             }}
           >确认恢复</button>
@@ -1113,7 +1132,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               })
               if (!ok) return
               const text = await execute('backup')
-              setMessage(`备份完成：${text}`)
+              // P1-1：备份成功走成功信封（摘要进 toast，原始输出含完整路径进 detail，
+              // 由 extractBackupPath 抽取后常驻复制位，不丢路径）。
+              setMessage(buildSuccessEnvelope(['备份完成'], String(text ?? '')))
               void refresh()
             }}
           >
@@ -1139,7 +1160,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                       if (/失败|错误|不支持|无法/.test(text)) { setMessage(text); return }
                       setRestorePreview({ fileName: file.name, content, text })
                     })
-                    .catch((e) => setMessage(`恢复失败：${e instanceof Error ? e.message : String(e)}`))
+                    .catch((e) => setMessage(prefixFeedbackOnce('恢复失败', e)))
                 }
                 reader.readAsText(file)
                 e.currentTarget.value = ''
@@ -1160,7 +1181,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 const tasks = (snap.tasks ?? [] as { title: string, assignee?: string, progress?: number, dueDate?: string }[])
                 if (tasks.length) { rows.push('## 任务', ''); for (const t of tasks) rows.push(`- [ ] ${t.title}${t.assignee ? `（负责人：${t.assignee}）` : ''}${typeof t.progress === 'number' ? ` ${clampProgress(t.progress)}%` : ''}${t.dueDate ? ` 截止 ${t.dueDate}` : ''}`) }
                 downloadText(`pmtool-${pname}-${ts}.md`, rows.join('\n'), 'text/markdown')
-                setMessage(`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`)
+                // P1-1：导出成功走成功信封 → 3s toast，不常驻大卡。
+                setMessage(buildSuccessEnvelope([`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`]))
               } catch (error) {
                 setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
               }
@@ -1179,7 +1201,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   .toISOString().replace(/[-:T]/g, '').slice(0, 12)
                 downloadText(`pmtool-snapshot-${ts}.json`, snapshot, 'application/json')
                 const count = (() => { try { const s = JSON.parse(snapshot); return Object.values(s).reduce((n: number, t) => n + (Array.isArray(t) ? t.length : 0), 0) } catch { return 0 } })()
-                setMessage(`已导出整库 JSON${count ? `（约 ${count} 条记录）` : ''}。`)
+                setMessage(buildSuccessEnvelope([`已导出整库 JSON${count ? `（约 ${count} 条记录）` : ''}。`]))
               } catch (error) {
                 setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
               }
@@ -1957,6 +1979,7 @@ function ResultCard({ message, onClose, onAction }: {
 }) {
   const fb = classifyFeedback(message)
   const [detailOpen, setDetailOpen] = useState(false)
+  const [copyState, setCopyState] = useState<'copied' | 'failed' | null>(null)
   const path = extractBackupPath(message)
   const isError = fb.isError
   // D-09/C-11：纯结构化成功短摘要只进 3s toast，不开常驻大卡（消除 toast+大卡双发、离页残留）；
@@ -1967,6 +1990,9 @@ function ResultCard({ message, onClose, onAction }: {
   // B1-C3：permission-denied 给通用错误种类标签（权限不足），原始 command 错误原因原样保留，
   // 不静默合并、不改写、不吞；其余错误种类仍走通用 error 呈现。
   const isPermissionDenied = isError && /权限|denied|permission|无权|not allowed/i.test(message)
+  const copy = async (value: string) => {
+    setCopyState(await copyResultText(value) ? 'copied' : 'failed')
+  }
   return (
     <div className={`pm-result-card${isError ? ' pm-result-card--error' : ''}`}
       role={isError ? 'alert' : 'status'}
@@ -2000,13 +2026,18 @@ function ResultCard({ message, onClose, onAction }: {
       <div className="pm-result-card__actions">
         <button
           className="pm-result-card__copy"
-          onClick={() => { void navigator.clipboard?.writeText(message).catch(() => {}) }}
+          onClick={() => { void copy(message) }}
         >复制原文</button>
         {path && (
           <button
             className="pm-result-card__copy"
-            onClick={() => { void navigator.clipboard?.writeText(path).catch(() => {}) }}
+            onClick={() => { void copy(path) }}
           >复制路径</button>
+        )}
+        {copyState && (
+          <span className={`pm-result-card__copy-state pm-result-card__copy-state--${copyState}`} role="status">
+            {copyState === 'copied' ? '已复制' : '复制失败，请手动复制'}
+          </span>
         )}
       </div>
     </div>
@@ -3081,6 +3112,12 @@ function OkrForm({
   const primaryOptions = objectives
     .filter(o => o.kind === 'objective')
     .map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
+  // P1-2：软关联选项 = 本项目全量 OKR（objective + KR，后端不限 kind），标注类型便于区分；
+  // 父主归属列表仍只列 objective（KR 不能作父），两条口径分开。
+  const relatedOptions = objectives.map(o => ({
+    value: o.id,
+    label: `${o.title}（${o.kind === 'objective' ? '目标' : 'KR'} · ${o.id}）`,
+  }))
   const handleSubmit = async (values: OkrFormValues) => {
     if (!beginSubmit()) return
     const related = parseIdList(values.relatedOkrIds)
@@ -3126,6 +3163,7 @@ function OkrForm({
         : { title: '', kind: 'objective', owner: '', targetDate: '', primaryOkrId: '', relatedOkrIds: '', status: 'draft', description: '' }}
       objectiveIds={objectiveIds}
       primaryOptions={primaryOptions}
+      relatedOptions={relatedOptions}
       busy={submitting}
       disabled={disabled}
       onCancel={onCancel}

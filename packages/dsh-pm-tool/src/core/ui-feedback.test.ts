@@ -9,6 +9,7 @@ import {
   buildSuccessEnvelope,
   buildActionLine,
   shouldPersistResultCard,
+  prefixFeedbackOnce,
   PM_SUMMARY_PREFIX,
   PM_DETAIL_MARKER,
   PM_ACTION_MARKER,
@@ -115,6 +116,20 @@ describe('action 分离与信封构造（AI 草稿 content/action）', () => {
     expect(fb.structured).toBe(true)
     expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
   })
+
+  it('P1-1：结构化成功摘要含「错误/失败」字样（如已修复错误清单）仍判成功，不被中文关键词误红', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['已修复错误清单｜t-1', '失败项已清零'], '完整字段…'))
+    expect(fb.isError).toBe(false)
+    expect(fb.structured).toBe(true)
+    expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
+  })
+
+  it('P1-1：非结构化裸返回命中错误关键词仍判 error（关键词只兜底无信封文本）', () => {
+    const fb = classifyFeedback('更新失败：未找到任务 t-9999')
+    expect(fb.isError).toBe(true)
+    expect(fb.structured).toBe(false)
+    expect(fb.autoDismissMs).toBeNull()
+  })
 })
 
 describe('commandAccepted（O3 失败不关抽屉）', () => {
@@ -134,6 +149,21 @@ describe('commandAccepted（O3 失败不关抽屉）', () => {
 
   it('只读预览文本不含错误词 → true，不误判为失败', () => {
     expect(commandAccepted('只读预览：基于确定性数字生成，尚未写入。')).toBe(true)
+  })
+})
+
+describe('prefixFeedbackOnce（场景错误前缀不重复）', () => {
+  it('底层错误已带“恢复失败”时原样保留', () => {
+    expect(prefixFeedbackOnce('恢复失败', '恢复失败：备份文件格式不认识')).toBe('恢复失败：备份文件格式不认识')
+  })
+
+  it('底层错误没有场景前缀时补一次中文冒号', () => {
+    expect(prefixFeedbackOnce('恢复失败', '备份文件格式不认识')).toBe('恢复失败：备份文件格式不认识')
+  })
+
+  it('兼容 Error 与全角冒号，不把相似正文误判为前缀', () => {
+    expect(prefixFeedbackOnce('恢复失败', new Error('恢复失败：权限不足'))).toBe('恢复失败：权限不足')
+    expect(prefixFeedbackOnce('恢复失败', '自动恢复失败后已回滚')).toBe('恢复失败：自动恢复失败后已回滚')
   })
 })
 

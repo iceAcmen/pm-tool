@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "PM 工作台本地启动器（路径 B：用户自确认；普通浏览器 tab + 127 loopback control 页）",
+  "description": "PM 工作台本地启动器：普通浏览器 tab + 127 loopback control 页；S4 仅由受认证工作台权威 nonce 回告到达",
   "bin": {
     "pm-launcher": "bin/pm-launcher.mjs"
   },
   "scripts": {
-    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs test/loopback-security.test.mjs",
+    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs test/loopback-security.test.mjs test/local-app.test.mjs",
     "verify": "node scripts/verify-launcher.mjs",
+    "make-app": "node scripts/make-app.mjs",
     "start": "node bin/pm-launcher.mjs"
   },
   "license": "MIT"

@@ -110,6 +110,24 @@ export function ReportsView(props: {
 
   const current = filtered.find(r => r.id === selectedId) ?? filtered[0] ?? null
 
+  // D-10：覆盖层必须在空态提前 return 之前构造，否则空态点「生成快照」setForm 后无处渲染。
+  const formOverlay = form && records ? (
+    <RecordsOverlay
+      eyebrow="进度汇报"
+      title={form.mode === 'edit' ? '编辑进度汇报' : '生成进度汇报'}
+      onClose={closeForm}
+    >
+      <RecordsReportForm
+        projectId={records.projectId}
+        report={form.mode === 'edit' ? form.report : undefined}
+        callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+        previewSource={records.previewSource}
+        onPreviewPeriod={records.onPreviewPeriod ?? records.callbacks.onPreviewPeriod}
+        onCancel={closeForm}
+      />
+    </RecordsOverlay>
+  ) : null
+
   if (sorted.length === 0) {
     return (
       <div className="pm-rp-root">
@@ -130,6 +148,7 @@ export function ReportsView(props: {
             action={<PmButton variant="primary" onClick={openCreate}><Plus size={14} />生成快照</PmButton>}
           />
         </div>
+        {formOverlay}
       </div>
     )
   }
@@ -354,22 +373,7 @@ export function ReportsView(props: {
         )}
       </div>
 
-      {form && records && (
-        <RecordsOverlay
-          eyebrow="进度汇报"
-          title={form.mode === 'edit' ? '编辑进度汇报' : '生成进度汇报'}
-          onClose={closeForm}
-        >
-          <RecordsReportForm
-            projectId={records.projectId}
-            report={form.mode === 'edit' ? form.report : undefined}
-            callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
-            previewSource={records.previewSource}
-            onPreviewPeriod={records.onPreviewPeriod ?? records.callbacks.onPreviewPeriod}
-            onCancel={closeForm}
-          />
-        </RecordsOverlay>
-      )}
+      {formOverlay}
     </div>
   )
 }

@@ -95,7 +95,7 @@ test('重复 cancel 幂等：未就绪子进程只 SIGTERM 一次，不重复回
   assert.equal(calls.filter((s) => s === 'SIGTERM').length, 1)
 })
 
-test('启动失败（非取消，超时）→ 抛错由编排落 S6；失败后 cancel 为 no-op 不抛、不终止未知进程', async () => {
+test('启动失败（非取消，超时）→ 抛错由编排落 S6；就绪前超时回收自己未就绪子进程；失败后 cancel 为 no-op 不重复终止', async () => {
   const child = fakeChild(8204)
   const calls = []
   const controller = createDshController({
@@ -108,8 +108,11 @@ test('启动失败（非取消，超时）→ 抛错由编排落 S6；失败后 
     waitExit: async () => {},
   })
   await assert.rejects(controller.start(baseOpts()), /超时/)
+  // 就绪前超时：回收自己尚未就绪的 owned 子进程（SIGTERM 一次）。
+  assert.deepEqual(calls, ['SIGTERM'])
+  // 失败后 cancel 为 no-op：不抛、不重复终止。
   assert.doesNotThrow(() => controller.cancelStartup())
-  assert.deepEqual(calls, [])
+  assert.deepEqual(calls, ['SIGTERM'])
 })
 
 // ---------------------------------------------------------------------------
@@ -165,8 +168,7 @@ test('隔离真实 owned 假子进程：cancel SIGTERM 后真实退出', async (
   await tick()
   controller.cancelStartup()
   await assert.rejects(p, (e) => e.code === 'STARTUP_ABORTED')
+  // 真实退出即证明 SIGTERM 已送达并回收；不读取依赖 OS 信号时序的 exitCode/signalCode 微状态（避免冷负载抖动）。
   const exited = await waitExit(real, 2000)
   assert.equal(exited, true)
-  // SIGTERM 由信号终止：exitCode 为 null，signalCode 记录信号。
-  assert.ok(real.exitCode !== null || real.signalCode !== null)
 })

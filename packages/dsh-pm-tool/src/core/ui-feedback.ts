@@ -128,6 +128,16 @@ export function commandAccepted(response: string): boolean {
   return !feedbackIsError(response)
 }
 
+/**
+ * 给本地异常补场景前缀，但若下层命令已返回同一前缀则原样保留，避免
+ * “恢复失败：恢复失败：…”这类重复文案。
+ */
+export function prefixFeedbackOnce(prefix: string, error: unknown): string {
+  const raw = error instanceof Error ? error.message : String(error)
+  if (raw === prefix || raw.startsWith(`${prefix}：`) || raw.startsWith(`${prefix}:`)) return raw
+  return `${prefix}：${raw}`
+}
+
 export interface ClassifiedFeedback {
   /** 错误态：持久、单处、role=alert。 */
   isError: boolean
@@ -149,7 +159,10 @@ export interface ClassifiedFeedback {
  */
 export function classifyFeedback(message: string): ClassifiedFeedback {
   const parsed = parseFeedback(message)
-  const isError = feedbackIsError(message)
+  // P1-1：结构化成功信封本身即成功（buildSuccessEnvelope 只由成功路径构造），
+  // 不再对摘要正文跑中文错误关键词，避免「已修复错误清单」这类成功串被误判为 error alert；
+  // 关键词正则只兜底非结构化原样回退文本（命令层裸返回，无信封标记）。
+  const isError = parsed.structured ? false : feedbackIsError(message)
   return {
     isError,
     structured: parsed.structured,

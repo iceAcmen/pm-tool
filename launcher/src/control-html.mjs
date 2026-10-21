@@ -67,7 +67,10 @@ export function renderControlHtml(viewModel, ctx = {}) {
 </section>
 <script>
 const INIT=${initial};
+const ICONS=${JSON.stringify(ICONS)};
 let state=INIT; let menuOpen=false; let detailOpen=false;
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function svg(name){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[name]+'</svg>'; }
 async function act(payload){ try{ const r=await fetch('/api/action',{method:'POST',headers:{'content-type':'application/json','x-csrf-nonce':state.csrfNonce||''},body:JSON.stringify(payload)}); const j=await r.json(); if(j.state) state=j.state; render(); }catch(e){ /* 离线时保持当前态 */ } }
 async function refresh(){ try{ const r=await fetch('/api/state'); const j=await r.json(); state=j.state; render(); }catch(e){} }
 function chrome(){ return state.browser||'系统默认浏览器' }
@@ -76,23 +79,24 @@ function body(){
   const v=state.view||state.status;
   if(v==='S2'){ const steps=['检查本地服务','准备工作台','打开浏览器'].map((t,i)=>'<li class="'+(i<state.step?'done':i===state.step?'active':'')+'"><span class="step-icon">'+(i<state.step?svg('check'):i===state.step?'<span class="spin"></span>':String(i+1))+'</span>'+t+'</li>').join('');
     return '<div class="state-main"><h2>正在打开工作台</h2><p>完成后将在所选浏览器打开；取消不会停止已有服务。</p></div><ol class="steps">'+steps+'</ol><div class="progress-track" aria-label="启动进度"><div class="progress-fill" style="width:'+([24,63,88][state.step]||0)+'%"></div></div>'+actionsRow([{id:'cancel',label:'取消打开',kind:'secondary'}]); }
-  if(v==='S3'){ return '<div class="state-main"><div class="state-icon">'+svg('arrow')+'</div><h2>已在浏览器投递，等待确认</h2><p>正在确认登录状态；启动器不自动判定已登录，也不重放一次性令牌。</p></div>'+actionsRow([{id:'confirm-entered',label:'我已进入工作台（用户确认已进入）',kind:'primary'},{id:'report-auth-error',label:'看到登录 / 认证错误',kind:'secondary'},{id:'switch-browser',label:'更换浏览器',kind:'text'}]); }
-  if(v==='S4'){ return '<div class="state-main"><div class="state-icon">'+svg('check')+'</div><h2>工作台已打开</h2><p>已由你确认进入'+(state.browser?'（'+esc(state.browser)+'）':'')+'，可以开始工作了。</p></div>'+actionsRow([{id:'reopen',label:'再次打开',kind:'primary'},{id:'switch-browser',label:'更换浏览器',kind:'text'}]); }
-  if(v==='S5'){ return '<div class="state-main"><div class="state-icon" style="color:var(--danger)">'+svg('error')+'</div><h2>已打开，但当前浏览器未登录</h2><p>一次性令牌绑定原浏览器/会话，当前浏览器无登录态；启动器不注入会话、不重放令牌。</p></div>'+actionsRow([{id:'finish-login',label:'在该标签页完成登录',kind:'primary'},{id:'switch-browser',label:'换用已登录的浏览器',kind:'secondary'},{id:'toggle-detail',label:'查看详情',kind:'text'}])+(detailOpen&&state.detail?'<div class="details" role="region">'+esc(JSON.stringify(state.detail))+'</div>':''); }
-  if(v==='S6'){ return '<div class="state-main"><div class="state-icon" style="color:var(--danger)">'+svg('error')+'</div><h2>暂时无法打开</h2><p>'+esc(state.detail?.detection||'本地服务暂不可用。')+'</p></div><div class="safe-line">没有停止任何程序，项目数据和现有服务保持不变。</div>'+actionsRow([{id:'retry',label:'重新尝试',kind:'primary'},{id:'toggle-detail',label:'查看详情',kind:'secondary'},{id:'back',label:'返回启动入口',kind:'text'}])+(detailOpen&&state.detail?'<div class="details" role="region">访问地址：127.0.0.1:3172<br>检测结果：'+esc(state.detail.detection||'')+'<br>处理结果：'+esc(state.detail.outcome||'')+'<br>建议：'+esc(state.detail.suggestion||'')+'</div>':''); }
+  if(v==='S3'){ return '<div class="state-main"><div class="state-icon">'+svg('arrow')+'</div><h2>已在浏览器投递，等待已进入回告</h2><p>等待受认证工作台 mount 后回告；启动器不自动判定已登录、不以按钮冒充成功，也不重放进程启动令牌。</p></div>'+actionsRow([{id:'report-auth-error',label:'看到登录 / 认证错误',kind:'secondary'},{id:'switch-browser',label:'更换浏览器',kind:'text'}]); }
+  if(v==='S4'){ return '<div class="state-main"><div class="state-icon">'+svg('check')+'</div><h2>工作台已打开</h2><p>已由受认证工作台回告进入'+(state.browser?'（'+esc(state.browser)+'）':'')+'，可以开始工作了。</p></div>'+actionsRow([{id:'reopen',label:'再次打开',kind:'primary'},{id:'switch-browser',label:'更换浏览器',kind:'text'}]); }
+  if(v==='S5'){ return '<div class="state-main"><div class="state-icon" style="color:var(--danger)">'+svg('error')+'</div><h2>已打开，但当前浏览器未登录</h2><p>该浏览器没有本机服务签发的签名 cookie；启动器不重放进程启动令牌、不注入会话。请在该标签页完成登录，或换用已有登录态的浏览器。</p></div>'+actionsRow([{id:'finish-login',label:'在该标签页完成登录',kind:'primary'},{id:'switch-browser',label:'换用已登录的浏览器',kind:'secondary'},{id:'toggle-detail',label:'查看详情',kind:'text'}])+(detailOpen&&state.detail?'<div class="details" role="region">'+esc(JSON.stringify(state.detail))+'</div>':''); }
+  if(v==='S6'){ const target=(state.host||'127.0.0.1')+':'+(state.port||3172); return '<div class="state-main"><div class="state-icon" style="color:var(--danger)">'+svg('error')+'</div><h2>暂时无法打开</h2><p>'+esc(state.detail?.detection||'本地服务暂不可用。')+'</p></div><div class="safe-line">没有停止任何程序，项目数据和现有服务保持不变。</div>'+actionsRow([{id:'retry',label:'重新尝试',kind:'primary'},{id:'toggle-detail',label:'查看详情',kind:'secondary'},{id:'back',label:'返回启动入口',kind:'text'}])+(detailOpen&&state.detail?'<div class="details" role="region">访问地址：'+esc(target)+'<br>检测结果：'+esc(state.detail.detection||'')+'<br>处理结果：'+esc(state.detail.outcome||'')+'<br>建议：'+esc(state.detail.suggestion||'')+'</div>':''); }
   // S0 / S1
   const running=v==='S1';
-  const options=(state.browsers||['系统默认浏览器']).map(b=>'<button role="option" aria-selected="'+(state.browser===b)+'" data-browser="'+esc(b)+'"><span class="browser-mark">'+(b==='系统默认浏览器'?'↗':esc(b.charAt(0)))+'</span>'+esc(b)+(state.browser===b?'<span class="selected">'+svg('check')+'</span>':'')+'</button>').join('');
+  const currentBrowser=state.selectedBrowser||state.browser||'系统默认浏览器';
+  const options=(state.browsers||['系统默认浏览器']).map(b=>'<button role="option" aria-selected="'+(currentBrowser===b)+'" data-browser="'+esc(b)+'"><span class="browser-mark">'+(b==='系统默认浏览器'?'↗':esc(b.charAt(0)))+'</span>'+esc(b)+(currentBrowser===b?'<span class="selected">'+svg('check')+'</span>':'')+'</button>').join('');
   return '<div class="brand"><div class="app-icon">'+svg('app')+'</div><div><h2>PM 工作台</h2><p>DeepSeek Harness · 本地入口</p></div></div>'
     +'<div class="status-line"><span class="status-dot '+(running?'':'off')+'"></span>'+(running?'工作台已在运行':'工作台尚未启动')+'</div><p class="sub">'+(running?'将打开现有服务，不重复启动；复用依赖该浏览器既有登录态。':'点击打开后，自动启动本地服务。')+'</p>'
-    +'<div class="form-label" id="browser-label">打开方式</div><div class="browser-field"><button class="browser-select" id="browser-toggle" aria-labelledby="browser-label" aria-haspopup="listbox" aria-expanded="'+menuOpen+'"><span class="browser-current"><span class="browser-mark">'+(state.browser==='系统默认浏览器'?'↗':esc((state.browser||'').charAt(0)))+'</span>'+esc(state.browser||'系统默认浏览器')+'</span>'+svg('chevron')+'</button>'+(menuOpen?'<div class="menu" role="listbox" aria-label="选择浏览器">'+options+'</div>':'')+'</div>'
+    +'<div class="form-label" id="browser-label">打开方式</div><div class="browser-field"><button class="browser-select" id="browser-toggle" aria-labelledby="browser-label" aria-haspopup="listbox" aria-expanded="'+menuOpen+'"><span class="browser-current"><span class="browser-mark">'+(currentBrowser==='系统默认浏览器'?'↗':esc(currentBrowser.charAt(0)))+'</span>'+esc(currentBrowser)+'</span>'+svg('chevron')+'</button>'+(menuOpen?'<div class="menu" role="listbox" aria-label="选择浏览器">'+options+'</div>':'')+'</div>'
     +actionsRow([{id:'open',label:'打开 PM 工作台',kind:'primary'}]);
 }
 function render(){
   document.body.dataset.theme=state.theme||'light';
   document.getElementById('root').innerHTML=body();
-  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{ const id=b.dataset.act; if(id==='toggle-detail'){detailOpen=!detailOpen;render();return;} if(id==='browser-toggle'){menuOpen=!menuOpen;render();return;} act({type:id,browser:state.browser}); });
-  document.querySelectorAll('[data-browser]').forEach(b=>b.onclick=()=>{ state.browser=b.dataset.browser; menuOpen=false; act({type:'select-browser',browser:state.browser}); });
+  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{ const id=b.dataset.act; if(id==='toggle-detail'){detailOpen=!detailOpen;render();return;} if(id==='browser-toggle'){menuOpen=!menuOpen;render();return;} act({type:id,browser:state.selectedBrowser||state.browser}); });
+  document.querySelectorAll('[data-browser]').forEach(b=>b.onclick=()=>{ state.selectedBrowser=b.dataset.browser; state.browser=b.dataset.browser; menuOpen=false; act({type:'select-browser',browser:state.selectedBrowser}); });
   const t=document.getElementById('theme-toggle'); if(t)t.onclick=()=>{ state.theme=state.theme==='dark'?'light':'dark'; render(); };
   const c=document.getElementById('close'); if(c)c.onclick=()=>{ document.querySelector('.window').remove(); };
 }

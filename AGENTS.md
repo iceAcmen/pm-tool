@@ -17,6 +17,8 @@
 2. **去中心化、多平台平等**：TRAE、豆包工作、Cursor、任何 IDE/Agent 地位平等，均可读写本仓库。任何平台 clone 本仓库后，都应能仅凭仓库内容无缝接续，**无需任何人口头重新交代背景**。
 3. 任何平台内部的对话、草稿、缓存都**不是权威依据**。若仓库文档与你的平台记忆冲突，**以仓库最新状态为准**。
 
+> **复盘后的接续入口（2026-10-21，ADL-057）**：[深度复盘](docs/retrospectives/2026-10-21-deep/00-report.md)、[逐假设证据校验](docs/retrospectives/2026-10-21-deep/05-hypothesis-validation.md)、[执行合同](docs/collaboration.md#十一深度复盘后的执行合同与证据规则adl-0572026-10-21)。下面第 3 节保留早期阶段历史，不代表当前完整功能或放行状态；**当前候选看 `progress.md` 顶部、`handoff.md` 与 `onboarding-prompt.md` 的最新接续条目**。历史快照、通用默认和新明确授权须按平台、动作、范围与生效时间辨别；不以“更严格”把未生效提议追溯为硬规则。
+
 ## 3. 当前进展快照（细节以 `docs/progress.md`、`docs/handoff.md` 为准）
 
 - 阶段 1 环境搭建：✅ 完成并推送。
@@ -70,6 +72,7 @@
 | `docs/changelog.md` | 变更记录（文件/内容/原因/影响/日期/**平台**） | **每次改动必写** |
 | `docs/knowledge-base.md` | 架构认知/API 用法/有效模式/约定/经验 | 一旦总结出可复用知识立即写 |
 | `docs/issues-and-solutions.md` | 踩坑：现象/根因/解法/避坑（ISS-xxx） | 一踩坑立即写 |
+| `docs/retrospectives/2026-10-21-deep/` | 开放式深度复盘：现象、脱敏消息、真实角色对抗、反证、规则与整改 | 接手时读总报告与执行合同；新证据追加纠正，不覆盖旧论点 |
 | `docs/test-cases.md` | MVP 自动化覆盖矩阵与手动验收用例 | 阶段 4 执行和发布前回归 |
 | `docs/delivery.md` | 安装、启动、演示、备份、限制与排错 | 阶段 4 交付和迁移 |
 | `docs/releases/` | 各版本发布说明、验收证据和已知限制 | 创建 Git tag 时同步 |
@@ -84,7 +87,7 @@
 - **上游只读**：绝不修改 `~/Projects/dsh-pm/deepseek-harness/` 内任何文件；所有功能在本仓库 `packages/` 下以外挂插件实现。
 - **密钥不入库**：`DEEPSEEK_API_KEY` 等一律走环境变量或本地未跟踪配置；`.gitignore` 已覆盖密钥、`data/`、`node_modules/`、构建产物 `lib/`。
 - **业务数据 `data/` 不纳入 git**（ADL-009），由存储后端首次写入时自动创建。
-- **离线优先**：核心增删改查走 `ctx.commands`（无 API Key 可用）；会议纪要/智能 WBS/周报等生成型能力一期**仅预留接口、不实现**。
+- **离线优先**：核心增删改查走 `ctx.commands`（无 API Key 可用）；“生成型能力仅预留、不实现”是早期一期边界，后续生成能力按 ADL-036 及其后有效需求/模型规则执行，不能用此历史表述否认已批准后续功能。
 - **里程碑到期提醒（R11）第一版不做**。
 - **数据落人类可读 JSON**：`storage-domain` + `storage-json`，root 指向 `pm-tool/data`；Markdown 报告由 JSON 渲染导出。
 - **不破坏 dsh 原有能力**；命名规范、关键逻辑加注释、不引入明显安全问题。
@@ -97,6 +100,7 @@
 - **进程/端口红线（ISS-027，2026-10-14 起长期硬规则）**：正式与隔离 dsh 命令行相同（仅 `--port` 不同、cwd 都在上游 `~/Projects/dsh-pm/deepseek-harness`），**禁止**按 `--profile pm`/`dsh`/CLI 路径等共有子串做 `pkill -f`、`killall`。停隔离/临时进程只能：`lsof -nP -iTCP:<port> -sTCP:LISTEN` 取 PID → 核 cwd/argv/端口确认非正式（正式当前 3080/3091）→ `kill -TERM <单PID>` → 等待退出 → 必要时对**同一 PID** `kill -KILL`；启动隔离进程即记录精确 PID。
 - **正式服务恢复须版本隔离（ISS-027）**：从 git tag 建 detached worktree、在隔离树内 build 后再起服；**主工作树的未提交候选不得直接承载正式服务**。
 - **pm profile 插件软链即「版本归属」（ISS-027）**：`~/.dsh/profiles/pm/node_modules/dsh-pm-tool` 是绝对软链，指向当前正式应由哪个 worktree 的包；`lib/` 已被 `packages/dsh-pm-tool/.gitignore` 忽略、bundle 不入库且不同 worktree 构建哈希不可复现，**版本身份以 git tag + `package.json` version 为准，不以 bundle 哈希为准**；发布/回滚切换清单见 `docs/collaboration.md` 第十节。
+- **任务/候选/证据范围（ADL-057）**：父派单保留负责人原句、对象、授权范围与停止条件；整包构建必须唯一写者或隔离输出。未提交候选用基线提交 + tracked diff + 新文件清单/指纹认领，再绑定产物、运行实例与开关；HEAD、version、源码存在、装载、默认可见、子项 PASS、整项 PASS 不互相替代。完整字段和证据失效/继承规则见 `docs/collaboration.md` 第十一节；不得为“清树”删除在途成果或提前发布。
 - 沟通与文档一律**简体中文 + 通用 Markdown**；命令/配置/代码片段完整可复制并注明运行环境（macOS + nvm Node 22 + pnpm 11.28.5）。
 
 ## 6A. 独立测试门控（ADL-045，长期硬规则）

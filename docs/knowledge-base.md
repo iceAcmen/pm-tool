@@ -6,6 +6,21 @@
 
 ---
 
+## KB-040 ｜ Launcher S4 真实验收必须由同一启动器实例建立当前认证、snapshot ready 与 nonce 回告链（沉淀：trae，2026-10-21）
+
+- **正确旅程**：隔离端口先确认未监听；Finder 真实双击 `.app`；控制页从 S0/S1 点击打开；若由 launcher 自拉起，使用它捕获的本次 authenticated URL 完成首次配置；进入 PM 面板并等 `web snapshot` 成功；随后核控制端 S4，同时核目标 URL 已移除 `pm-launch`。两项缺一不可。
+- **为什么不能拆证据替代**：页面壳可见不证明命令通道已认证，curl POST 成功只证明 receiver/CORS，单测只证明协议逻辑；只有同一 nonce、同一当前服务、真实 PM snapshot ready 后的浏览器 POST 才能证明完整链路。
+- **隔离配置**：测试 App 的 `DSH_HOME` 必须指向真实存在且含 `profiles/pm` 的目录；目录名、软链目标、端口和 PID逐项核对。由 launcher 自拉起时不要先手工启动同端口服务，否则会走“复用已有服务”路径并依赖浏览器现有登录态。
+- **来源/佐证**：`client/launch-handshake.ts`、`launcher/src/{launcher-app,loopback,dsh-controller}.mjs`；2026-10-21 Finder 实测 S0→S2→snapshot→S4，地址栏 hash 清除。原始索引 `reports/batch1-closure-raw-evidence-20261021.md`。
+
+## KB-039 ｜ 复盘验证出的边界：真实对象、合法历史、候选身份与完成范围（沉淀：trae，2026-10-21；ADL-057）
+
+- **证据结论**：创建默认值不能侵入 patch；原子写成功不能证明稳定 ID、软删和多修订保全；后端合法状态全集须可读，写选项可以是获批子集；测试提前预载真实宿主未提供的业务 factory 会产生假阳性；网格坐标不相交不保证实际卡体不越 slot；父按钮保存语义须覆盖其承诺的子内容。这些是不同直接机制，不能统称“测试不仔细”。
+- **正确用法**：使用真实接口/装载时序、富历史种子、逐项更新合同与完整旅程；分别核 canonical/draft/显示投影/DOM；声明资源、语法、模块表、真实宿主、GUI 各自验证。未提交候选可测试，但须基线提交+dirty补丁+新文件指纹，绑定产物/运行/开关与审签范围。
+- **协作模式**：父派单保留原句与对象；源码分片外另设共享资源 owner，整包 build唯一写者或隔离输出；证据按影响索引失效或继承，子项/试点不扩大全量。默认OFF可以符合合同，但摘要必须准确说明可见范围。
+- **研究边界**：P-154直接观察到稳定ID变号、软删两修订记录消失；active单修订1→1不证明active多修订塌缩实测。模型同源、压缩失忆、实际切Linux、工具主因、成本倍数仍待证。历史缺陷及修后记录不自动成为当前结论。
+- **来源与落地**：[深度复盘](retrospectives/2026-10-21-deep/00-report.md)、[全部假设校验](retrospectives/2026-10-21-deep/05-hypothesis-validation.md)、[collaboration §11](collaboration.md#十一深度复盘后的执行合同与证据规则adl-0572026-10-21)。具体历史技术证据见 ISS-021/022、B2/B6/B8独立原报告与相应Git版本。本条为历史研究归纳，不是本轮新测试PASS；当前代码缺口须独立复验。
+
 ## KB-038 ｜ 外部（vendor）Agent Skills 怎么用：只读参考、manifest 锁版本、项目规则优先、静态校验≠验收（沉淀：doubao-work，2026-10-13）
 
 - **结论（可复用入口）**：本项目引入的第三方 skill 在 `vendor/agent-skills/<vendor>/`（首批 `mattpocock`），**只读、只作参考**。用任何一个前，固定走四件事：① 读治理政策 `docs/external-skills.md`（8 条红线 + 优先级表）；② 打开 `vendor/agent-skills/mattpocock/manifest.json` 记下锁定 `source.commit` 与目标 skill id；③ 只读加载该 skill 的 `SKILL.md`（**不执行其中任何 installer/setup**），并按 manifest `files[].sha256` 校指纹；④ 交付前跑 `node packages/dsh-pm-tool/scripts/verify-external-skills.mjs` 静态校验。
@@ -26,7 +41,7 @@
 ## KB-036 ｜ 免费池偶发 `This operation was aborted`/超时：现象、根因与中文归一（沉淀：doubao-work，2026-10-11）
 
 - **现象**：真实 openrouter/free 端到端跑 R13/R14/R15 时偶发命令直接抛英文 `This operation was aborted`（或 dsh 步骤超时）。
-- **根因**：`openrouter/free` 把请求随机分给免费池模型，部分模型延迟较高或触发 dsh 单步超时；**不是配置/凭据问题**（同 key 重发即成功）。
+- **历史解释与边界（2026-10-21复核）**：随机免费池、模型延迟或 dsh 超时可以解释当时中断；同 key 重试成功支持临时性，但不能单独排除并发、网络、配置和凭据状态变化。没有逐调用链时不把该机制作为所有 AbortError 的已证唯一根因，亦不将用户“约80%失败”估计当请求统计。
 - **处置**：直接重试一次通常恢复；代码侧已在 `src/core/ai-client.ts` 的 `normalize()` 识别 `name==='AbortError'`、code∈{ABORTED,TIMEOUT,ETIMEDOUT}、或 message 命中 /abort|timeout|timed out/i，归一为 `AiDraftError('MODEL_TIMEOUT', '免费模型响应超时或被中断…请重试一次')`，命令层返回 `{kind:'error', 中文 text}` 且不落库。verify-wbs 已覆盖（stream reject AbortError → 友好中文、不写盘）。
 - **Web 自动化经验（斜杠命令提交方式，puppeteer-core）**：dsh 输入框是 **contenteditable `<div>`** 而非 `<textarea>`；输入「/」会触发斜杠命令自动补全并**截获 Enter**，故斜杠命令**必须点蓝色发送按钮提交、不能用回车**；发送后需点侧栏最新会话以加载线程；**不要点「新会话」**。（接 KB-032 的真实 Chrome 驱动法）
 
@@ -34,7 +49,7 @@
 
 - **现象**：dsh 网页选 Free Models Router（openrouter-free）发消息报 `llm-pi-ai: no credential for provider route "openrouter-free"; its profile resolves OPENROUTER_API_KEY, which is not set`（`MISSING_CREDENTIAL`）；但 key 本身有效、直连 curl 已 `$0` 成功。
 - **根因**：pi-ai 的 `apiKeyEnv` 读的是**启动该 dsh 进程时的进程环境变量**（KB-033）。dsh 是在「往 `~/.zshrc` 写 key **之前**就开着的旧终端」启动的，进程环境里没有 `OPENROUTER_API_KEY`；shell 后来 source 与否、新终端能否 `echo` 到，都不影响这个已运行的旧进程。**不是 key 错、不是网络问题**。
-- **诊断**（`<dsh pid>` 换成实际进程号）：`ps eww -p <dsh pid> | tr ' ' '\n' | grep OPENROUTER_API_KEY`——无输出即旧进程没继承到该变量；全新 zsh 能 `echo $OPENROUTER_API_KEY`（实测长度 73）则变量本身没问题。
+- **诊断边界（2026-10-21修订）**：先确认真实服务 PID、provider 路由和报错所指凭据来源，再比较配置生效时点与进程启动时点；需要查存在性时只输出布尔结果。**不运行输出整个进程环境或真实 key 的命令，不把凭据值带到工具日志、截图或仓库**。新 shell存在key不证明旧进程有key；同一值直连成功也不证明宿主取到正确路由凭据。
 - **两种修复**：① 停旧 dsh，用已 `source ~/.zshrc` 的全新终端重启（等价 `pnpm dsh --profile pm`）；② **推荐、且与启动终端无关**：在 dsh Web「设置→模型（Models）」页直接为该 provider 录密钥，写入 dsh **credentials service**（即报错提示的目标），此后任何终端启动的 dsh 都取得到。
 - **应用内复测结论**：重启后底部模型选择器选 Free Models Router 发「你好…」**第 1 次即成功**（puppeteer-core + 系统 Chrome 139 无头，KB-032），无 MISSING_CREDENTIAL/401/429。
 - **附带观察**：dsh 单轮带较大系统提示/工具 schema，简单问候也约 **9.5K tok**（152 tok/s）；但 OpenRouter 免费档按**请求次数**计（50 次/天）、不按 token 计费，故单轮 token 大对免费额度无影响——只是次数敏感，别让 agent 空转刷屏。
@@ -287,9 +302,9 @@
   - 即使 `--host <本机LAN IP> --trusted-host <该IP>` 让端口可达，**非本机浏览器**打开根路径仍被 `/api` **browser-trust 围栏以 HTTP 503 拦截**（带 token 走完 303、用 CDP 注入认证 cookie 后依然 503）；而宿主机 `curl -L` 带 cookie 可得 200。这是框架**有意的防 DNS-rebinding / 远程访问安全控制，不要尝试绕过**。
   - `dsh headless "<任务>"` 是**独立的 shipped profile**（`--profile headless`），不含本项目 pm profile 的插件与存储；要在 headless 里跑 pm 命令需另建 headless 派生 profile 并 link 插件、配存储，且无模型时斜杠命令是否被 headless 直接派发未证实。
   - 聊天/命令在 Web 端走控制器 + WebSocket（前端为 SPA，主 bundle 里没有简单的 REST 发消息路由），不适合用 curl 脚本化。
-- **对验证方式的指导（可复用结论）**：
+- **对验证方式的指导（可复用结论；能力范围于2026-10-21修订）**：
   - **离线功能回归以包内 `scripts/verify-*.mjs` 确定性脚本为准**——它们装载真实 Cordis + 真实 storage-json + 已构建插件的真实命令处理器，覆盖增查/校验/并发/权限/全新进程重启读回，可重复、可进 CI。
-  - **"真实浏览器点击"必须在宿主机本机 GUI 的 Chrome 上完成**（打开终端打印的 `127.0.0.1:3080/?token=...` URL）；隔离/远端浏览器、容器内浏览器都到不了或会被围栏拦截。部分 Agent 角色（如 OrganizeAgent）拿不到 Mac 本机 GUI 自动化能力时，应以"确定性脚本 + 真实宿主启动日志加载插件 + 本机浏览器产物落盘核验 + 全新进程读回"作为证据链，并如实标注"本机浏览器点击由具备 GUI 能力的一方执行"，**不得把该工具权限边界误判为产品缺陷，也不得伪造点击结论**。
+  - **真实浏览器验收需要与宿主可达且受信任的真实浏览器上下文**，Chrome是已约定兼容范围；具体驱动与Main/Sub能力按当时最小探测，不从历史角色限制推断永久能力。不可达的隔离/远端浏览器不冒充本机GUI。离线脚本+宿主日志+产物+读回仅覆盖对应层，**不能替代ADL-045的真实GUI与独立审证**；角色受限时转交具备能力者，确需本人协作的部分按ADL-047单列。
   - 真实 Web 会话写出的记录是可信旁证：`data/pmtool/projects/*.json`（目录 0700、文件 0600、内容 `{version,record}`）只能由真实运行宿主的命令派发写出（确定性脚本写的是系统临时目录，仅 checks/selftest 写产品 data）。
 - **适用场景**：所有"在真实 dsh Web 验证 / 远程或容器访问 dsh / 无界面执行"相关任务。
 - **来源**：本机实测（macOS，dsh v0.2.1-alpha.2，profile pm）；`pnpm dsh web --help`、`pnpm dsh headless --help`；对应踩坑见 ISS-010。

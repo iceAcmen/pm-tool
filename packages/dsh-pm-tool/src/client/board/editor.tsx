@@ -13,7 +13,7 @@ import { readHistory, recordSnapshot, snapshotForPreview, type LayoutHistoryEntr
 import {
   nudgeWidgetLayout, buildFormulaExpression, validateFormulaConfig, serializeDashboardExport,
   applyWidgetGeometry, arrangeWidgetLayout, compactVertical, removeWidgetAndCompact,
-  filterCatalogItems, locateWidgetByType,
+  filterCatalogItems, locateWidgetByType, snapshotBeforeGeometryChange,
   type FormulaBuildInput, type FormulaCondition, type FormulaCaliber,
 } from './editor-ops.js'
 
@@ -140,8 +140,8 @@ export function BoardEditor(props: BoardEditorProps) {
     setNotice(null)
   }
   useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current) }, [])
-  const pushHistory = () => {
-    historyRef.current.push(structuredClone(draft))
+  const pushHistory = (snapshot: DashboardLayout = draft) => {
+    historyRef.current.push(structuredClone(snapshot))
     if (historyRef.current.length > 20) historyRef.current.shift()
     setCanUndo(true)
   }
@@ -478,8 +478,12 @@ export function BoardEditor(props: BoardEditorProps) {
             addWidgetAt(type, x, y)
           }}
           compactType={null}
-          onDragStart={pushHistory}
-          onResizeStart={pushHistory}
+          onDragStart={(_layout: Layout[], oldItem: Layout) => {
+            pushHistory(snapshotBeforeGeometryChange(draft, oldItem, activeCols, projection))
+          }}
+          onResizeStart={(_layout: Layout[], oldItem: Layout) => {
+            pushHistory(snapshotBeforeGeometryChange(draft, oldItem, activeCols, projection))
+          }}
           onDragStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
           onResizeStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
           draggableHandle=".pm-rgl-item-wrap"

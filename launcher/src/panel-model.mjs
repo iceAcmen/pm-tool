@@ -1,6 +1,6 @@
 /**
  * 面板视图模型（纯，路径 B）：状态机快照 → 可渲染视图，与容器解耦。
- * S3 不宣称成功；S4 仅用户自确认；S5 由用户反馈触发；S6 安全失败层级。
+ * S3 不宣称成功；S4 仅由受认证工作台权威 nonce 回告到达；S5 由用户反馈触发；S6 安全失败层级。
  */
 
 /**
@@ -29,10 +29,9 @@ export function buildPanelViewModel(state, ctx = {}) {
     case 'S3':
       return {
         ...base,
-        title: '已在浏览器投递，等待确认',
-        subtitle: '正在确认登录状态；启动器不会自动判定已登录，也不重放一次性令牌。',
+        title: '已在浏览器投递，等待已进入回告',
+        subtitle: '等待受认证工作台 mount 后回告；启动器不自动判定已登录、不以按钮冒充成功，也不重放进程启动令牌。',
         actions: [
-          { id: 'confirm-entered', label: '我已进入工作台（用户确认已进入）', kind: 'primary' },
           { id: 'report-auth-error', label: '看到登录 / 认证错误', kind: 'secondary' },
           { id: 'switch-browser', label: '更换浏览器', kind: 'text' },
         ],
@@ -41,7 +40,7 @@ export function buildPanelViewModel(state, ctx = {}) {
       return {
         ...base,
         title: '工作台已打开',
-        subtitle: `已由你确认进入${state.browser ? `（${state.browser}）` : ''}，可以开始工作了。`,
+        subtitle: `已由受认证工作台回告进入${state.browser ? `（${state.browser}）` : ''}，可以开始工作了。`,
         confirmed: true,
         actions: [
           { id: 'reopen', label: '再次打开', kind: 'primary' },
@@ -52,7 +51,7 @@ export function buildPanelViewModel(state, ctx = {}) {
       return {
         ...base,
         title: '已打开，但当前浏览器未登录',
-        subtitle: '一次性令牌绑定原浏览器/会话，当前浏览器无登录态；启动器不注入会话、不重放令牌。',
+        subtitle: '该浏览器没有本机服务签发的签名 cookie；启动器不重放进程启动令牌、不注入会话。',
         detail: state.detail ?? null,
         actions: [
           { id: 'finish-login', label: '在该标签页完成登录', kind: 'primary' },

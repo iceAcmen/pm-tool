@@ -5,6 +5,7 @@ import assert from 'node:assert/strict'
 import { existsSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { Context } from '@deepseek-ai/cordis'
 import Storage from '@deepseek-ai/dsh-storage'
 import { JsonStorageBackend } from '@deepseek-ai/dsh-storage-json'
@@ -42,7 +43,8 @@ try {
   await apply(ctx)
   const domain = facility.get('pmtool')
   assert.ok(domain)
-  assert.match(defaultExportDirectory, /\/pm-tool\/exports\/?$/)
+  const expectedDefaultExportDirectory = fileURLToPath(new URL('../../../exports/', import.meta.url))
+  assert.equal(defaultExportDirectory, expectedDefaultExportDirectory)
 
   const project = await addProject(domain, {
     name: 'Alpha | 发布报告',

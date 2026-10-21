@@ -305,6 +305,28 @@ export function TaskTable(props: {
       }, 1600)
     })
   }
+  const taskHandleButton = (t: Task) => {
+    const wbs = (t.code ?? '').trim()
+    const handle = wbs || t.id
+    const copied = copiedHandleId === t.id
+    const failed = failedHandleId === t.id
+    return (
+      <button
+        type="button"
+        className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}${failed ? ' failed' : ''}`}
+        title={failed
+          ? '复制失败，可长按或手动选中编号复制'
+          : wbs
+            ? `复制编号 ${wbs}`
+            : '存量记录缺 WBS 编号，按约定不重新编号，显示短 ID；点击复制'}
+        aria-label={copied ? '已复制' : failed ? '复制失败，可手动选择复制' : `复制编号 ${handle}`}
+        onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
+      >
+        <span className="pt-code-val">{copied ? '已复制' : failed ? '复制失败' : handle}</span>
+        <Copy size={11} className="pt-code-ic" aria-hidden="true" />
+      </button>
+    )
+  }
 
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
   const childMap = useMemo(() => indexChildren(tasks), [tasks])
@@ -673,28 +695,7 @@ export function TaskTable(props: {
         {/* D-05/C-07：句柄恒显——有 WBS code 显 code（等宽），无 code 的存量记录显短 ID（弱化），
             禁止空白；点击复制 code/短 ID 到剪贴板并反馈「已复制」。列宽由 grid 固定，不挤压任务名。 */}
         <div className="pt-cell pt-code">
-          {(() => {
-            const wbs = (t.code ?? '').trim()
-            const handle = wbs || t.id
-            const copied = copiedHandleId === t.id
-            const failed = failedHandleId === t.id
-            return (
-              <button
-                type="button"
-                className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}${failed ? ' failed' : ''}`}
-                title={failed
-                  ? '复制失败，可长按或手动选中编号复制'
-                  : wbs
-                    ? `复制编号 ${wbs}`
-                    : '存量记录缺 WBS 编号，按约定不重新编号，显示短 ID；点击复制'}
-                aria-label={copied ? '已复制' : failed ? '复制失败，可手动选择复制' : `复制编号 ${handle}`}
-                onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
-              >
-                <span className="pt-code-val">{copied ? '已复制' : failed ? '复制失败' : handle}</span>
-                <Copy size={11} className="pt-code-ic" aria-hidden="true" />
-              </button>
-            )
-          })()}
+          {taskHandleButton(t)}
         </div>
         <div className="pt-cell pt-task">
           {row.hasChildren && (
@@ -817,7 +818,9 @@ export function TaskTable(props: {
               </button>
             : null}
         </div>
-        <div className="pt-cell" />
+        <div className="pt-cell pt-code">
+          {taskHandleButton(t)}
+        </div>
         <div className="pt-cell pt-gname">
           <button className="pt-name" style={{ cursor: 'pointer' }} onClick={() => onEdit(t)}>
             {t.title}

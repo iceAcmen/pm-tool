@@ -222,7 +222,8 @@ try {
   }
 
   // ---------- E. UI 契约（静态） ----------
-  const read = (p) => readFileSync(join(new URL('..', import.meta.url).pathname, p), 'utf8')
+  const sourceRoot = fileURLToPath(new URL('..', import.meta.url))
+  const read = (p) => readFileSync(join(sourceRoot, p), 'utf8')
   const indexTs = read('src/index.ts')
   assert.ok(indexTs.includes('settings: readProjectSettings(domain)'), 'index.ts snapshot 应透传 settings')
   const panel = read('src/client/panel.tsx')
