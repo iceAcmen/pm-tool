@@ -1,0 +1,1857 @@
+{
+  "at": "2026-10-23T18:30:15.148Z",
+  "mainCheckpoint": "daedefc76fcd70e4768e4036cb9f533fe1514a16",
+  "scope": "HISTORICAL_WORKTREE_ARCHIVE_NOT_CURRENT_PRODUCT_CHANGE",
+  "stats": {
+    "registeredWorktrees": 21,
+    "beforeTracked": 58,
+    "beforeUntracked": 128,
+    "ignoredDependencyLinks": 18,
+    "afterTracked": 58,
+    "afterUntracked": 110,
+    "sameContentAsMain": 98,
+    "uniqueSnapshots": 70,
+    "afterHistoricalTotal": 168
+  },
+  "objects": [
+    {
+      "group": "all-closure-20261021",
+      "path": "/private/tmp/pmtool-all-closure-20261021",
+      "head": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "files": [
+        {
+          "path": "launcher/README.md",
+          "bytes": 9412,
+          "sha256": "8f51a97367848c2d5bb56f1cd4763fb4ce2e1c7a87c9a3e8410785cda3a04483",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/README.md"
+        },
+        {
+          "path": "launcher/bin/pm-launcher.mjs",
+          "bytes": 3047,
+          "sha256": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/bin/pm-launcher.mjs"
+        },
+        {
+          "path": "launcher/package.json",
+          "bytes": 830,
+          "sha256": "b8d2e0b0530d0725d64d3e7235c10ff86468580a9ce11b62e23568a8261e8e40",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/package.json"
+        },
+        {
+          "path": "launcher/src/control-html.mjs",
+          "bytes": 19721,
+          "sha256": "6994cdd109d7258f14b0283a8e2f0b1d55e6cacc34b80ed5d39736c6dd90a205",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/src/control-html.mjs"
+        },
+        {
+          "path": "launcher/src/launcher-app.mjs",
+          "bytes": 10435,
+          "sha256": "840d59383d68267c7454bb76e566a1ba8335c49cc12bda9daa8cf2d6b8fe3b47",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/src/launcher-app.mjs"
+        },
+        {
+          "path": "launcher/src/launcher-core.mjs",
+          "bytes": 9587,
+          "sha256": "34563cdf8a787f48b4ba3220cb27801d5551a1890922d85ae06d8999ce3b5c2b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/src/launcher-core.mjs"
+        },
+        {
+          "path": "launcher/src/local-app.mjs",
+          "bytes": 5064,
+          "sha256": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/src/local-app.mjs"
+        },
+        {
+          "path": "launcher/test/app.loopback.test.mjs",
+          "bytes": 10833,
+          "sha256": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/app.loopback.test.mjs"
+        },
+        {
+          "path": "launcher/test/browsers.controller.test.mjs",
+          "bytes": 3323,
+          "sha256": "4a1eb14dfef27852f4aef101b1b0a516c73d78cdcc79eff1bf5103caceb1659b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/browsers.controller.test.mjs"
+        },
+        {
+          "path": "launcher/test/control-html.test.mjs",
+          "bytes": 3814,
+          "sha256": "00398c2b2a35e2cc79d6011ea9543ff039a243b9477fa0b049b3c9f35b26084f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/control-html.test.mjs"
+        },
+        {
+          "path": "launcher/test/local-app.test.mjs",
+          "bytes": 5114,
+          "sha256": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/local-app.test.mjs"
+        },
+        {
+          "path": "packages/dsh-pm-tool/package.json",
+          "bytes": 3109,
+          "sha256": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/package.json"
+        },
+        {
+          "path": "packages/dsh-pm-tool/pnpm-lock.yaml",
+          "bytes": 201524,
+          "sha256": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/pnpm-lock.yaml"
+        },
+        {
+          "path": "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs",
+          "bytes": 25674,
+          "sha256": "492f4cb47083e98360acdf7e08df92d36cec3b4db2743fd93f3f4c7dc076d110",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/board/BoardBento.tsx",
+          "bytes": 19271,
+          "sha256": "43d4bc943867e78226eb861a2e6875717d42c519687027bc58c21617e8a786d6",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/board/BoardBento.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/board/board.css",
+          "bytes": 17786,
+          "sha256": "646ab1916c506e0bd890a2052f157cc550ba18d871114483b0e21cb36013e280",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/board/board.css"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/board/editor.tsx",
+          "bytes": 46456,
+          "sha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/board/editor.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+          "bytes": 9079,
+          "sha256": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/launch-handshake.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/launch-handshake.ts",
+          "bytes": 4958,
+          "sha256": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/launch-handshake.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel.css",
+          "bytes": 325752,
+          "sha256": "42f1222456948542464e22de87340c64dd443089183602a6d6a9baf9f25e2063",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/panel.css"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+          "bytes": 189611,
+          "sha256": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/panel.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+          "bytes": 6953,
+          "sha256": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx",
+          "bytes": 22420,
+          "sha256": "66af8221d089a2ad65fa4d831be218c4a78d3299c23239cfaf750497c4edc2ae",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/gantt.tsx",
+          "bytes": 30901,
+          "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/gantt.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/meetings.tsx",
+          "bytes": 16221,
+          "sha256": "19a6af2eff6c42a290b9f6102e5a88c0e080703a564b3f30ca89fef3633147c4",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/meetings.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/overview.tsx",
+          "bytes": 24056,
+          "sha256": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/overview.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/records.css",
+          "bytes": 6842,
+          "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/records.css"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx",
+          "bytes": 18126,
+          "sha256": "d88c9bee1d2571f7ada3551bc8b7b5f1e7c98d7c2417f78a80a06f4766bb9388",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/tasks.css",
+          "bytes": 42828,
+          "sha256": "101a5f01bbd77dd8f234bbe2145df143cbc35682841f8317f5f18d8247d961b4",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks.css"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+          "bytes": 66935,
+          "sha256": "9789e5811ab09dcbc1c561ccec463e905795b34da1eb7f996bab73d8d21ef91e",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/commands/ask.ts",
+          "bytes": 34928,
+          "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/commands/ask.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/commands/backup.ts",
+          "bytes": 7316,
+          "sha256": "48369dafe70023bce1ebdf5a82d7b2475627ea6d6b58036187c8845491cf8cdd",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/commands/backup.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/backup.ts",
+          "bytes": 26049,
+          "sha256": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/backup.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/csv-import.ts",
+          "bytes": 10787,
+          "sha256": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/csv-import.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/file-asset-store.ts",
+          "bytes": 21633,
+          "sha256": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/file-asset-store.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/file-assets.test.ts",
+          "bytes": 6685,
+          "sha256": "fab5eb2578ba022997229264bdedbb75af2f5895c70e5c7fb1af3a7916980510",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/file-assets.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/file-assets.ts",
+          "bytes": 10012,
+          "sha256": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/file-assets.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/file-root.test.ts",
+          "bytes": 3701,
+          "sha256": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/file-root.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+          "bytes": 10855,
+          "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/provenance-store.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/queue.ts",
+          "bytes": 13563,
+          "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/queue.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/task-materials.ts",
+          "bytes": 32638,
+          "sha256": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/task-materials.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/task.ts",
+          "bytes": 13669,
+          "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/task.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/tasks.ts",
+          "bytes": 33273,
+          "sha256": "c3e0d8a379b5dbbe41331ba42df265711c90a12dbcb8a47955ee70c4d4723fe3",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/tasks.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+          "bytes": 9779,
+          "sha256": "a5e7ff8b13cecb6d0fcbcb6f8f214a61c5aec0ea54152af91af4dc1490a5c805",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/ui-feedback.ts",
+          "bytes": 13365,
+          "sha256": "3808eef79e34595754ea9d8970d62c5c5da87feb1f42722eba593a061f1bbde7",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/vitest.config.ts",
+          "bytes": 1072,
+          "sha256": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/vitest.config.ts"
+        },
+        {
+          "path": "docs/testing/board-fixture-clarification-20261021-fixture.json",
+          "bytes": 1121,
+          "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/board-fixture-clarification-20261021-fixture.json"
+        },
+        {
+          "path": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/source/docs/testing/board-fixture-clarification-20261021-fixture.json",
+          "bytes": 1121,
+          "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/board-fullwidth-independent-retest-20261021-evidence/source/docs/testing/board-fixture-clarification-20261021-fixture.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/backup.json",
+          "bytes": 6662,
+          "sha256": "7c28e49e68fb9c6197c9b9ac11b793e7f1deb0b17514417d568386f48de20c56",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/backup.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/expected.json",
+          "bytes": 8632,
+          "sha256": "3fbc9398fb3e03cd27a5378b42a34813ac3df6b68de2eaac700459f6768fc47e",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/expected.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/ids.json",
+          "bytes": 229,
+          "sha256": "0844aa23fd9748f837a749961f93fe128a7396ab00e769eb1d3d96d1d50c761a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/ids.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/pmtool-backup-2026-10-21T13-44-52-909Z.json",
+          "bytes": 6662,
+          "sha256": "7c28e49e68fb9c6197c9b9ac11b793e7f1deb0b17514417d568386f48de20c56",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/pmtool-backup-2026-10-21T13-44-52-909Z.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json",
+          "bytes": 14830,
+          "sha256": "8f9bf659a59077af3753900b9fec43dbca752673e59516d025f649a1982f8b4c",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+          "bytes": 22,
+          "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+          "bytes": 22,
+          "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/manifest.json",
+          "bytes": 598,
+          "sha256": "239d947c7124fcf3286a666f57d729f0b3ebbd54618a433021a6f01378a5ad04",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/manifest.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/expected.json",
+          "bytes": 17921,
+          "sha256": "b2af85cd52e9a6c773d5418dfd7891d392b4c40883600cc57e52c08581055bb6",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/expected.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/ids.json",
+          "bytes": 769,
+          "sha256": "5e4c5d1576fd69d5c1c8d0070115bf4d086fd0959884db068263becf4ff4ecea",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/ids.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json",
+          "bytes": 14830,
+          "sha256": "8f9bf659a59077af3753900b9fec43dbca752673e59516d025f649a1982f8b4c",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+          "bytes": 22,
+          "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+          "bytes": 22,
+          "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md"
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/manifest.json",
+          "bytes": 598,
+          "sha256": "239d947c7124fcf3286a666f57d729f0b3ebbd54618a433021a6f01378a5ad04",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/manifest.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "8175cde22e0b275193b3a86c85a41b5ee3cf980758e278f324f7dbadc301f3f0",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2.json",
+          "bytes": 11037,
+          "sha256": "ed3b44ef0b613b47d42935f8e0fab74e7370f3d5fb94a28ce9abeb87e4844a6f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "cf66c955930e5fce2837b0c930209ebb3a3fc710f1d7864d35e6daf3469e6c83",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2.json",
+          "bytes": 11037,
+          "sha256": "82468bedf2f3bb71339896ac9fd8152d559d44f1b517298c7e7c48e9aed1c790",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "c280dd81def587b38e1ce3efc974e5befc8c07970ce455f63e797634e63729b1",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2.json",
+          "bytes": 11037,
+          "sha256": "17e7574387bd4cbd3940d072afb4ea1278b042981ae11656fdeeddc1e2bf71d0",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "bytes": 6961,
+          "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json"
+        },
+        {
+          "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "bytes": 11037,
+          "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json"
+        },
+        {
+          "path": "launcher/src/browser-open.mjs",
+          "bytes": 1392,
+          "sha256": "4d0355b4c6cf02feae295fa8ed4ff2a30fb77070fe436b16ce78c4a80183a0d6",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/src/browser-open.mjs"
+        },
+        {
+          "path": "launcher/test/browser-open.test.mjs",
+          "bytes": 7262,
+          "sha256": "0efa2fd0dab266115c3636f611ea09b99555f5d4d7014f0d5e2934c95c074819",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/browser-open.test.mjs"
+        },
+        {
+          "path": "launcher/test/control-html-sync.test.mjs",
+          "bytes": 10485,
+          "sha256": "739e79616cf6caba764b6fcd90c57648400e7145d2c0d2d92b41b1ea3566d6a3",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/control-html-sync.test.mjs"
+        },
+        {
+          "path": "launcher/test/fc-a2-additional.test.mjs",
+          "bytes": 13413,
+          "sha256": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/launcher/test/fc-a2-additional.test.mjs"
+        },
+        {
+          "path": "launcher/test/fc-a2-followup.test.mjs",
+          "bytes": 14850,
+          "sha256": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/launcher/test/fc-a2-followup.test.mjs"
+        },
+        {
+          "path": "launcher/test/fc-a3-probes.test.mjs",
+          "bytes": 19267,
+          "sha256": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/launcher/test/fc-a3-probes.test.mjs"
+        },
+        {
+          "path": "launcher/test/fc-a4-probes.test.mjs",
+          "bytes": 19686,
+          "sha256": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/launcher/test/fc-a4-probes.test.mjs"
+        },
+        {
+          "path": "launcher/test/fc-independent-probes.test.mjs",
+          "bytes": 9595,
+          "sha256": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/launcher/test/fc-independent-probes.test.mjs"
+        },
+        {
+          "path": "launcher/test/journey-race.test.mjs",
+          "bytes": 3782,
+          "sha256": "fa9ae8e1ad5201bb8f870e5ed7fe6d6554e96bd9d6cd4315dbe2c82ef023c37a",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:launcher/test/journey-race.test.mjs"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+          "bytes": 6338,
+          "sha256": "57ba3f107a0e43e6f7ca9c42cc88935856988bb9ba2f707bef8ae346208a5797",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+          "bytes": 10541,
+          "sha256": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+          "bytes": 3811,
+          "sha256": "986a92ff011f4e0e47d287cffdd625e44a8832ec004f0a6304e4d0b9f7dc73c6",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+          "bytes": 5420,
+          "sha256": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+          "bytes": 6501,
+          "sha256": "eb8375b9aea341baf5b9c46efc1fc5de655e95c5465c437066bb5271afc48d45",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/panel-restore-path.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/result-card.test.ts",
+          "bytes": 2770,
+          "sha256": "4e815421f70ab285343aa6d1ba2feaf4c0472ae167a9109d48d43fe83deda32a",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/result-card.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/result-card.tsx",
+          "bytes": 3328,
+          "sha256": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/result-card.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+          "bytes": 7474,
+          "sha256": "95992aef68f8a97f92137a5574b215fcad760246495317c2f383c52907b7b7a8",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+          "bytes": 12028,
+          "sha256": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+          "bytes": 8466,
+          "sha256": "8ed1ca262d6f9ccf586636da39515e6acef59fe235d05a5bb51d1471005d06a7",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+          "bytes": 17993,
+          "sha256": "fea8f4f164d1d1b174f28aa03e6c1f692d2a2abbfa5bc18de4068ad0d436254d",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+          "bytes": 9242,
+          "sha256": "6c7a15bc744675af0fda91dcb289366a41491e0f8107bef8c4f7d0ffd6f00344",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+          "bytes": 12312,
+          "sha256": "eeb6e71ec5f7908119a05a6fb7f92c34f92c9f49117da335210041bcb8f88539",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+          "bytes": 4952,
+          "sha256": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+          "bytes": 15447,
+          "sha256": "8d7a71f2b89d1414649caad8e541e350c203cc043816cc91bde89279a50cd7be",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/commands/ask-governance.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+          "bytes": 16339,
+          "sha256": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/commands/backup-web.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/csv-import.test.ts",
+          "bytes": 9302,
+          "sha256": "d31c5587c590aa01cab2efc550384c9c97b1577175861d7b5e05a98176d95d92",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/csv-import.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+          "bytes": 6171,
+          "sha256": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+          "bytes": 15522,
+          "sha256": "5fb5b3cddd15cd6f32da923649eedbe8f55b466226462feb376474042cfc8591",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "untracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts"
+        }
+      ],
+      "patch": "all-closure-20261021.patch",
+      "patchSha256": "6e09d16e991120ec21a3e88bf26bd4a3e93e6d432e5c1941e53c79ce9d5312fd"
+    },
+    {
+      "group": "doubao-freeze-06a131c",
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38447212582650882/agents/s_000ElkeZqJ2/freeze/wt-06a131c",
+      "head": "06a131cd5fdc4486dd74afe89cc4c5630f0a4c98",
+      "files": [
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+          "bytes": 186847,
+          "sha256": "ff284377adc2c3ce72bb348d5eccc2bfcba32fa5d1d8009b94b27f8af52199d8",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/panel.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/growth-form-props.ts",
+          "bytes": 4276,
+          "sha256": "0e07ee09757ad74b75076b5007b43b4c5781f2de9a3f2e01529db6c03a54a8e4",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/growth-form-props.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/okr-form.tsx",
+          "bytes": 9759,
+          "sha256": "0b9bd1b13abf89b6eeb53fd7cec0eabe5aeeca9df538b28de0862fbedc3b6092",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/okr-form.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts",
+          "bytes": 2007,
+          "sha256": "8bbea28a5275ef22007227ff3d755503fecfcd129948f120fd00d6ab0bac64f8",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/views/reports.tsx",
+          "bytes": 18320,
+          "sha256": "6a6bae4c4e5c59a9212605e00cb9a4f5c3530b2e35436ceb8608c4fbf6beb79b",
+          "presentInMain": true,
+          "sameAsMain": true,
+          "kind": "tracked",
+          "archivedReference": "already present at main daedefc76fcd70e4768e4036cb9f533fe1514a16:packages/dsh-pm-tool/src/client/views/reports.tsx"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+          "bytes": 8129,
+          "sha256": "c5eea9acca37121bd478a00842c7f5fb09cd43705761a67b4aacc8ecc284e648",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/core/ui-feedback.ts",
+          "bytes": 12459,
+          "sha256": "02fd446aa9a956ce32c3004cb8e79225d711a8f20fcc974306fb8aa6599db8c7",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+          "bytes": 3880,
+          "sha256": "4fe25dc158771c652d326b35369ce7951a86fddc8d7bc49f0f6cb5e669123ca2",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.test.ts"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/launch-handshake.ts",
+          "bytes": 3127,
+          "sha256": "1b6aa212b8647f7f3ec99c680696ad5847ba9fb136452a77f5302d61b88a5b9a",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.ts"
+        }
+      ],
+      "patch": "doubao-freeze-06a131c.patch",
+      "patchSha256": "d4558c19abf95b8e9420bdf1b6171721c3ec6c41b6e224e6fc610403a2cd24d1"
+    },
+    {
+      "group": "ui-impeccable",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/ui-impeccable",
+      "head": "740c1e85ebb2354ddccce62ca0b5dcf1b57a4efd",
+      "files": [
+        {
+          "path": "docs/changelog.md",
+          "bytes": 129934,
+          "sha256": "37cee1219989842ba57b23c33ff1a630936813d349647b1db9ca8edc4f91290c",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/changelog.md"
+        },
+        {
+          "path": "docs/issues-and-solutions.md",
+          "bytes": 31808,
+          "sha256": "0ce19bed8266c5c49b4b74e68048b9da87c47d8101e085c20fa05b23cce1f285",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/issues-and-solutions.md"
+        },
+        {
+          "path": "docs/progress.md",
+          "bytes": 49960,
+          "sha256": "1ba8d2ab5135d3f39f36ff1df5d8de49116520456c0e17e10513c9875db42c2b",
+          "presentInMain": true,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/progress.md"
+        },
+        {
+          "path": "docs/reports/impeccable-site-ui-optimization.md",
+          "bytes": 38891,
+          "sha256": "1b7b31d3633eea64efee6e1230e4ebc527e2c9ac085be239c4f6f2d2ac28b616",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/reports/impeccable-site-ui-optimization.md"
+        },
+        {
+          "path": "docs/testing/impeccable-ui-acceptance.md",
+          "bytes": 35974,
+          "sha256": "b99f9f40785fefcd60ed7a5c9e2b0c13f88b49128ecf50981072615eb0580851",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "tracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/testing/impeccable-ui-acceptance.md"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after-evidence-report.md",
+          "bytes": 11699,
+          "sha256": "4ac56cbccd44d53ac6e02b72e3868ed5a4d90e897790663b2f101a2f63d17887",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after-evidence-report.md"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/01-tasks.png",
+          "bytes": 104451,
+          "sha256": "d72b9e136025af9fccd4a7a970dc9ec2e79b1ff54db7c3372efc5017fc0abafa",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/01-tasks.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/02-milestones.png",
+          "bytes": 90795,
+          "sha256": "41c48a52cf1cc1fe32e6a1b1b9cea4ff59a35eb87f047049506f98f5f2ed6051",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/02-milestones.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/03-risk-issues.png",
+          "bytes": 90927,
+          "sha256": "e088a74290e81d05f9a147ed733e19a2e6ca2e82fb063b6fcea52acc95683de6",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/03-risk-issues.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/04-meetings.png",
+          "bytes": 86397,
+          "sha256": "6e20b803593bab2009ee547ca2619b8c36b0e9ae191df3a7d517425bcc0046df",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/04-meetings.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/05-reports.png",
+          "bytes": 86369,
+          "sha256": "739a8ad6a78791e8164c9260a0bb56c14a844e628a26ff51e5319a0dde0a7d21",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/05-reports.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/06-deliverables.png",
+          "bytes": 101648,
+          "sha256": "d361d846da80e49ae5fea13dc0385bb86d2ad096c97c81300b511dc77dac37dc",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/06-deliverables.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/07-overview.png",
+          "bytes": 82475,
+          "sha256": "c063d8e1a5f37d05fb0058a072f366d744b3828a8a392285de760a82c43a8c75",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/07-overview.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/08-gantt.png",
+          "bytes": 101134,
+          "sha256": "5fe8752ecdf1ac81ad8ceb87c3a2d5a7d01fc3da8661ce2d747f33a80485bc27",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/08-gantt.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/09-people.png",
+          "bytes": 103723,
+          "sha256": "45c8839cd1667d060e380984a84e1972102abd03a616744a971d0c4a7665eac6",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/09-people.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/10-global-board.png",
+          "bytes": 100083,
+          "sha256": "856b36823aea5aedaf8a92d191cdd3c756734404b246f07dfc397c7221c282cd",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/10-global-board.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/11-drawer-project-edit.png",
+          "bytes": 69031,
+          "sha256": "977c6b51c1e96e9b349deb7a7156b950e7d1cb56269087f48fde07323e58af89",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/11-drawer-project-edit.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/12-drawer-task-create.png",
+          "bytes": 68754,
+          "sha256": "9cea9b64b3d095c378fad62ecd280ebd969696c0700a07d2dbadba0122528816",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/12-drawer-task-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/13-drawer-task-edit.png",
+          "bytes": 76461,
+          "sha256": "8a4a58d0216a5aed6f8999eb94c0acca4aa964d1f94adc38d3b2bb61e97372de",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/13-drawer-task-edit.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/14-move-picker.png",
+          "bytes": 82482,
+          "sha256": "e5c26a3d2c4281d0344323a924ed884aa48a1102414f16a82fb5803bf144f071",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/14-move-picker.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/15-drawer-milestone-create.png",
+          "bytes": 54675,
+          "sha256": "25f8165bf9b4cd463004f71042d142b92d6962a43ff843795f0d05b202c22ff9",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/15-drawer-milestone-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/16-drawer-meeting-create.png",
+          "bytes": 56188,
+          "sha256": "f026d540a37ad770d17d40b588618859d939d04271b885d9e7d4d20b173cf926",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/16-drawer-meeting-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/17-drawer-report-create.png",
+          "bytes": 56733,
+          "sha256": "20433a2abc9ff17cacf2cbafca002b59c6f8892b722af57860aaefacf7875033",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/17-drawer-report-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/18-drawer-deliverable-create.png",
+          "bytes": 69376,
+          "sha256": "c22b153f235c0b26a09bd92bfdde668a62c0a2cea7e2dc43caae386deca42b4c",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/18-drawer-deliverable-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/19-empty-project.png",
+          "bytes": 88777,
+          "sha256": "bd6955ddf0e12af11a1e0e8b7bee120ec396c4e6b4e0bfac9eaefde2dfbbdaca",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/19-empty-project.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/21-theme-dark-tasks.png",
+          "bytes": 106967,
+          "sha256": "ca8fc9e3d5781f0d53ccf0c816fe037655f6b0d242700541b331ce49385c27c1",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/21-theme-dark-tasks.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/21-theme-dark.png",
+          "bytes": 83944,
+          "sha256": "b52abf81c8f345ef979ecb46c206148beb02a2857932fe57e142ba9986b567bf",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/21-theme-dark.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/after-measurements.json",
+          "bytes": 19697,
+          "sha256": "65b5c59f4c6b8dfa62c95e787fdfc73d0e7ab277984e2edff81f010e2fbf3e47",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/after-measurements.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/dark-host-real-overview.png",
+          "bytes": 106329,
+          "sha256": "60f53e5a7b33372103a0ac2161126251b29a8f29218072794e87dfa06eab567e",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/dark-host-real-overview.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/dark-host-real-tasks.png",
+          "bytes": 106329,
+          "sha256": "60f53e5a7b33372103a0ac2161126251b29a8f29218072794e87dfa06eab567e",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/dark-host-real-tasks.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/data-hash-after.txt",
+          "bytes": 2709,
+          "sha256": "d3deb362d212f0e81354b5d02a3d497720c27601decccb2c423f8ae79d688e3a",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-after.txt"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/data-hash-before.txt",
+          "bytes": 2709,
+          "sha256": "818875726c87ded617ffe48a7fad5acd176b7f44173d2fa81a99c1649096f31d",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-before.txt"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/detect-after.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/detect-after.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/independent-390-drawer.json",
+          "bytes": 258,
+          "sha256": "5234474640b3ef8a3370f19dda313b46e9897f0fd82497d3334f71e03d60011a",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-390-drawer.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/independent-390-probe.json",
+          "bytes": 2600,
+          "sha256": "cac7fe180ea5169c2b948d77e5e223e809ea8a8116db42699fc777b917df7534",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-390-probe.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/independent-dark-probe.json",
+          "bytes": 1719,
+          "sha256": "f2bac9a6c226ea0f494bedcba194488414d2652d681a82b1b29da34bf3a2aba4",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-dark-probe.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/independent-keyboard-probe.json",
+          "bytes": 577,
+          "sha256": "ffe960b01bf27ff1e5877ee86ef59a1912cc3ca44a160b69455987c5252c3bbf",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-keyboard-probe.json"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/int-after-create.png",
+          "bytes": 186106,
+          "sha256": "705e8f8623994652306d6bb477da211f4e8116f8261a0e811c7ac12f2ad6180e",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-after-create.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/int-dbg-01-list.png",
+          "bytes": 169654,
+          "sha256": "67f7882f8818ad1024ad8f2d34039062918b2dfdf96fbbe618e9811c690d3ee3",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-01-list.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/int-dbg-02-afteradd.png",
+          "bytes": 161325,
+          "sha256": "c5384e6465c89052d5b0e5190575de38c6338cacf0a8a89edb0fa784e30ab1c3",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-02-afteradd.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/width-1440-tasks.png",
+          "bytes": 182787,
+          "sha256": "e1705a5b0e08efbebb69434429a1e022a6b073837e197c375d41886f4d29c54f",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-1440-tasks.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/width-390-drawer-independent.png",
+          "bytes": 29062,
+          "sha256": "f402c8a2a6a9d4e07bbc90dfbb3d61ae7e8bf8a8061877ea34eff90386b45ad2",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-drawer-independent.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/width-390-tasks-independent.png",
+          "bytes": 78128,
+          "sha256": "2c5467e47b62fec8a67c739242eeea2b72f3d5458821086ba4d17c845ccbf5ec",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-tasks-independent.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/width-390-tasks.png",
+          "bytes": 78214,
+          "sha256": "dea0c8c8efa014b9ac6fb7db1b8d3a446646d1b426883ffb3718bd8d415fe390",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-tasks.png"
+        },
+        {
+          "path": "docs/verification/impeccable-ui/after/width-768-tasks.png",
+          "bytes": 138445,
+          "sha256": "e542f277f83d6b8539effcfe4f89210a6f14650b864ed9d085e2aa354f5b24ba",
+          "presentInMain": false,
+          "sameAsMain": false,
+          "kind": "untracked",
+          "archivedAs": "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-768-tasks.png"
+        }
+      ],
+      "patch": "ui-impeccable.patch",
+      "patchSha256": "cda0e4d27d5ee341b4ffd61d33326932b22a4576c637d1bae68cc61654d50c23"
+    }
+  ],
+  "statusAfterLocalDependencyIgnore": [
+    {
+      "path": "/private/tmp/pmtool-all-closure-20261021",
+      "head": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "tracked": [
+        " M launcher/README.md",
+        " M launcher/bin/pm-launcher.mjs",
+        " M launcher/package.json",
+        " M launcher/src/control-html.mjs",
+        " M launcher/src/launcher-app.mjs",
+        " M launcher/src/launcher-core.mjs",
+        " M launcher/src/local-app.mjs",
+        " M launcher/test/app.loopback.test.mjs",
+        " M launcher/test/browsers.controller.test.mjs",
+        " M launcher/test/control-html.test.mjs",
+        " M launcher/test/local-app.test.mjs",
+        " M packages/dsh-pm-tool/package.json",
+        " M packages/dsh-pm-tool/pnpm-lock.yaml",
+        " M packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs",
+        " M packages/dsh-pm-tool/src/client/board/BoardBento.tsx",
+        " M packages/dsh-pm-tool/src/client/board/board.css",
+        " M packages/dsh-pm-tool/src/client/board/editor.tsx",
+        " M packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+        " M packages/dsh-pm-tool/src/client/launch-handshake.ts",
+        " M packages/dsh-pm-tool/src/client/panel.css",
+        " M packages/dsh-pm-tool/src/client/panel.tsx",
+        " M packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+        " M packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx",
+        " M packages/dsh-pm-tool/src/client/views/gantt.tsx",
+        " M packages/dsh-pm-tool/src/client/views/meetings.tsx",
+        " M packages/dsh-pm-tool/src/client/views/overview.tsx",
+        " M packages/dsh-pm-tool/src/client/views/records.css",
+        " M packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx",
+        " M packages/dsh-pm-tool/src/client/views/tasks.css",
+        " M packages/dsh-pm-tool/src/client/views/tasks.tsx",
+        " M packages/dsh-pm-tool/src/commands/ask.ts",
+        " M packages/dsh-pm-tool/src/commands/backup.ts",
+        " M packages/dsh-pm-tool/src/core/backup.ts",
+        " M packages/dsh-pm-tool/src/core/csv-import.ts",
+        " M packages/dsh-pm-tool/src/core/file-asset-store.ts",
+        " M packages/dsh-pm-tool/src/core/file-assets.test.ts",
+        " M packages/dsh-pm-tool/src/core/file-assets.ts",
+        " M packages/dsh-pm-tool/src/core/file-root.test.ts",
+        " M packages/dsh-pm-tool/src/core/provenance-store.ts",
+        " M packages/dsh-pm-tool/src/core/queue.ts",
+        " M packages/dsh-pm-tool/src/core/task-materials.ts",
+        " M packages/dsh-pm-tool/src/core/task.ts",
+        " M packages/dsh-pm-tool/src/core/tasks.ts",
+        " M packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+        " M packages/dsh-pm-tool/src/core/ui-feedback.ts",
+        " M packages/dsh-pm-tool/vitest.config.ts"
+      ],
+      "untracked": [
+        "docs/testing/board-fixture-clarification-20261021-fixture.json",
+        "docs/testing/board-fullwidth-independent-retest-20261021-evidence/source/docs/testing/board-fixture-clarification-20261021-fixture.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/backup.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/expected.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/ids.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/pmtool-backup-2026-10-21T13-44-52-909Z.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/manifest.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/expected.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/ids.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/manifest.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2-backup.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2-backup.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2-backup.json",
+        "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+        "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+        "launcher/src/browser-open.mjs",
+        "launcher/test/browser-open.test.mjs",
+        "launcher/test/control-html-sync.test.mjs",
+        "launcher/test/fc-a2-additional.test.mjs",
+        "launcher/test/fc-a2-followup.test.mjs",
+        "launcher/test/fc-a3-probes.test.mjs",
+        "launcher/test/fc-a4-probes.test.mjs",
+        "launcher/test/fc-independent-probes.test.mjs",
+        "launcher/test/journey-race.test.mjs",
+        "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+        "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+        "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+        "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+        "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+        "packages/dsh-pm-tool/src/client/result-card.test.ts",
+        "packages/dsh-pm-tool/src/client/result-card.tsx",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+        "packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+        "packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+        "packages/dsh-pm-tool/src/core/csv-import.test.ts",
+        "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+        "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts"
+      ]
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVAD6ex/verify-wt",
+      "head": "f9b85c725ed6bc3ee3ce03429865c4e2c05c1d65",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADfXc/worktrees/sh4-gantt-milestone",
+      "head": "4b925a68b1da3eada9ba41ff9296cce2a8c9cb70",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADW57/worktrees/pm-launcher",
+      "head": "428ed47c25dd2d695bad2ffbd332b08f47ad10d1",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsAUo/worktrees/sh2-sh7",
+      "head": "b361e47c25bda84d3b14a3ebad0822dd847f9157",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsAUo/worktrees/sh6-d10",
+      "head": "5fd8b1a22cc0f06bd76c8b6ad38d7d2cc9be4d90",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/it-wt/ux-launcher-batch",
+      "head": "06a131cd5fdc4486dd74afe89cc4c5630f0a4c98",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/worktrees/d03-d06-d09-d08-d11",
+      "head": "e5296886a8175d6576338099f7a503bf6d4cd36a",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/worktrees/non-p0",
+      "head": "c1cee31bbb8780ed3b59b335df78406475d6450d",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/pm-e-board",
+      "head": "07fd3c664e090fd5317719b1efd0d1db3f6d7c2b",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/pm-e-board-p0",
+      "head": "962f2aacfbe9abafc3985361730b7f207fc46a88",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/sh1-board",
+      "head": "c14d041743e1d5326849b6d8440aa22438b57ee8",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38447212582650882/agents/s_000ElkeZqJ2/freeze/wt-06a131c",
+      "head": "06a131cd5fdc4486dd74afe89cc4c5630f0a4c98",
+      "tracked": [
+        " M packages/dsh-pm-tool/src/client/panel.tsx",
+        " M packages/dsh-pm-tool/src/client/views/growth-form-props.ts",
+        " M packages/dsh-pm-tool/src/client/views/okr-form.tsx",
+        " M packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts",
+        " M packages/dsh-pm-tool/src/client/views/reports.tsx",
+        " M packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+        " M packages/dsh-pm-tool/src/core/ui-feedback.ts"
+      ],
+      "untracked": [
+        "packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+        "packages/dsh-pm-tool/src/client/launch-handshake.ts"
+      ]
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1a",
+      "head": "90fe55be546c51655d6912c9b618ab8a61572148",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1b",
+      "head": "617f48d7c82a4a398d05e0407fdf99b785982f00",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1d-gd",
+      "head": "32e10d0d9067c5da87b8685fd6ff86471fd841b8",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/p0-tasks",
+      "head": "351952864e25bd01e7808e93f6dd70a1821e0b49",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/sh8-sh9-d12-d13",
+      "head": "2f89515b521cfc3b040987c456431cf55f62ea26",
+      "tracked": [],
+      "untracked": []
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/ui-impeccable",
+      "head": "740c1e85ebb2354ddccce62ca0b5dcf1b57a4efd",
+      "tracked": [
+        " M docs/changelog.md",
+        " M docs/issues-and-solutions.md",
+        " M docs/progress.md",
+        " M docs/reports/impeccable-site-ui-optimization.md",
+        " M docs/testing/impeccable-ui-acceptance.md"
+      ],
+      "untracked": [
+        "docs/verification/impeccable-ui/after-evidence-report.md",
+        "docs/verification/impeccable-ui/after/01-tasks.png",
+        "docs/verification/impeccable-ui/after/02-milestones.png",
+        "docs/verification/impeccable-ui/after/03-risk-issues.png",
+        "docs/verification/impeccable-ui/after/04-meetings.png",
+        "docs/verification/impeccable-ui/after/05-reports.png",
+        "docs/verification/impeccable-ui/after/06-deliverables.png",
+        "docs/verification/impeccable-ui/after/07-overview.png",
+        "docs/verification/impeccable-ui/after/08-gantt.png",
+        "docs/verification/impeccable-ui/after/09-people.png",
+        "docs/verification/impeccable-ui/after/10-global-board.png",
+        "docs/verification/impeccable-ui/after/11-drawer-project-edit.png",
+        "docs/verification/impeccable-ui/after/12-drawer-task-create.png",
+        "docs/verification/impeccable-ui/after/13-drawer-task-edit.png",
+        "docs/verification/impeccable-ui/after/14-move-picker.png",
+        "docs/verification/impeccable-ui/after/15-drawer-milestone-create.png",
+        "docs/verification/impeccable-ui/after/16-drawer-meeting-create.png",
+        "docs/verification/impeccable-ui/after/17-drawer-report-create.png",
+        "docs/verification/impeccable-ui/after/18-drawer-deliverable-create.png",
+        "docs/verification/impeccable-ui/after/19-empty-project.png",
+        "docs/verification/impeccable-ui/after/21-theme-dark-tasks.png",
+        "docs/verification/impeccable-ui/after/21-theme-dark.png",
+        "docs/verification/impeccable-ui/after/after-measurements.json",
+        "docs/verification/impeccable-ui/after/dark-host-real-overview.png",
+        "docs/verification/impeccable-ui/after/dark-host-real-tasks.png",
+        "docs/verification/impeccable-ui/after/data-hash-after.txt",
+        "docs/verification/impeccable-ui/after/data-hash-before.txt",
+        "docs/verification/impeccable-ui/after/detect-after.json",
+        "docs/verification/impeccable-ui/after/independent-390-drawer.json",
+        "docs/verification/impeccable-ui/after/independent-390-probe.json",
+        "docs/verification/impeccable-ui/after/independent-dark-probe.json",
+        "docs/verification/impeccable-ui/after/independent-keyboard-probe.json",
+        "docs/verification/impeccable-ui/after/int-after-create.png",
+        "docs/verification/impeccable-ui/after/int-dbg-01-list.png",
+        "docs/verification/impeccable-ui/after/int-dbg-02-afteradd.png",
+        "docs/verification/impeccable-ui/after/width-1440-tasks.png",
+        "docs/verification/impeccable-ui/after/width-390-drawer-independent.png",
+        "docs/verification/impeccable-ui/after/width-390-tasks-independent.png",
+        "docs/verification/impeccable-ui/after/width-390-tasks.png",
+        "docs/verification/impeccable-ui/after/width-768-tasks.png"
+      ]
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/v0.7.1-restore",
+      "head": "02f42d1483a2fc9ea93bfaf7081aae5bb68c860b",
+      "tracked": [],
+      "untracked": []
+    }
+  ],
+  "exclusion": "node_modules soft links excluded locally by common .git/info/exclude; no originals deleted or reset",
+  "authorization": "补齐负责人前一轮已授权的项目状态存档提交推送；不合并旧产品源码，不改全局设置",
+  "acceptance": "historical documents and probes are not newly signed product PASS",
+  "note": "本目录新生成的存档文件不计入历史工作树计数；主工作树提交前暂有本轮文档，提交后须重新核零改动。"
+}

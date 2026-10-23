@@ -1,0 +1,795 @@
+{
+  "capturedAt": "2026-10-15T01:01:41.143Z",
+  "viewport": {
+    "width": 675,
+    "height": 745,
+    "deviceScaleFactor": 1
+  },
+  "host": "http://127.0.0.1:3211",
+  "contrast": {
+    "method": "真实渲染色采样（元素 computed color vs 最近非透明祖先背景），WCAG2.1 ratio；含正文/次级/弱文字/青绿强调/主按钮/tab/危险/警告/状态标签",
+    "light": [
+      {
+        "name": "正文 h1",
+        "sel": ".pm-project-title",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(15, 17, 21)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 18.9,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "次级 项目事实",
+        "sel": ".pm-project-facts",
+        "text": "史冰冰",
+        "color": "rgb(97, 102, 107)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 5.8,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "弱文字 表格页脚",
+        "sel": ".pm-table-footer",
+        "text": "9 条记录",
+        "color": "rgb(129, 133, 140)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 3.71,
+        "pass45": false,
+        "pass30": true
+      },
+      {
+        "name": "青绿 提醒项目链接",
+        "sel": ".pm-reminder-project",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(47, 111, 102)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 5.86,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "主按钮 文字",
+        "sel": ".pm-add-button",
+        "text": "添加记录",
+        "color": "rgb(250, 248, 243)",
+        "bg": "rgb(47, 111, 102)",
+        "ratio": 5.52,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 未激活",
+        "sel": ".pm-view-tab:not([aria-selected=\"true\"])",
+        "text": "里程碑3",
+        "color": "rgb(97, 102, 107)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 5.8,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 激活",
+        "sel": ".pm-view-tab[aria-selected=\"true\"]",
+        "text": "全部任务9",
+        "color": "rgb(15, 17, 21)",
+        "bg": "rgb(255, 255, 255)",
+        "ratio": 18.9,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "危险 逾期徽章",
+        "sel": ".pm-reminders-overdue",
+        "text": "逾期 1",
+        "color": "rgb(178, 64, 44)",
+        "bg": "color(srgb 0.698039 0.25098 0.172549 / 0.1)",
+        "ratio": 4.95,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(247,235,233)",
+        "note_bg": "软底 = 原色0.1 alpha 叠在 canvas (255, 255, 255) 上（recorded）"
+      },
+      {
+        "name": "警告 临期徽章",
+        "sel": ".pm-reminders-soon",
+        "text": "临期 2",
+        "color": "rgb(15, 17, 21)",
+        "bg": "color(srgb 0.184314 0.435294 0.4 / 0.12)",
+        "ratio": 16.0,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(230,237,236)",
+        "note_bg": "软底 = 原色0.12 alpha 叠在 canvas (255, 255, 255) 上（recorded）"
+      },
+      {
+        "name": "状态标签",
+        "sel": ".pm-tag[data-value=active]",
+        "text": "进行中",
+        "color": "rgb(47, 111, 102)",
+        "bg": "color(srgb 0.184314 0.435294 0.4 / 0.12)",
+        "ratio": 4.96,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(230,237,236)",
+        "note_bg": "软底 = 原色0.12 alpha 叠在 canvas (255, 255, 255) 上（recorded）"
+      }
+    ],
+    "dark": [
+      {
+        "name": "正文 h1",
+        "sel": ".pm-project-title",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(249, 250, 251)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 17.45,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "次级 项目事实",
+        "sel": ".pm-project-facts",
+        "text": "史冰冰",
+        "color": "rgb(207, 211, 214)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 12.11,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "弱文字 表格页脚",
+        "sel": ".pm-table-footer",
+        "text": "9 条记录",
+        "color": "rgb(173, 178, 184)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 8.54,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "青绿 提醒项目链接",
+        "sel": ".pm-reminder-project",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(121, 192, 180)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 8.69,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "主按钮 文字",
+        "sel": ".pm-add-button",
+        "text": "添加记录",
+        "color": "rgb(31, 45, 41)",
+        "bg": "rgb(121, 192, 180)",
+        "ratio": 6.83,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 未激活",
+        "sel": ".pm-view-tab:not([aria-selected=\"true\"])",
+        "text": "里程碑3",
+        "color": "rgb(207, 211, 214)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 12.11,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 激活",
+        "sel": ".pm-view-tab[aria-selected=\"true\"]",
+        "text": "全部任务9",
+        "color": "rgb(249, 250, 251)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 17.45,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "危险 逾期徽章",
+        "sel": ".pm-reminders-overdue",
+        "text": "逾期 1",
+        "color": "rgb(224, 122, 102)",
+        "bg": "color(srgb 0.878431 0.478431 0.4 / 0.1)",
+        "ratio": 5.44,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(41,31,30)",
+        "note_bg": "软底 = 原色0.1 alpha 叠在 canvas (21, 21, 23) 上（recorded）"
+      },
+      {
+        "name": "警告 临期徽章",
+        "sel": ".pm-reminders-soon",
+        "text": "临期 2",
+        "color": "rgb(249, 250, 251)",
+        "bg": "color(srgb 0.47451 0.752941 0.705882 / 0.12)",
+        "ratio": 14.13,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(33,41,41)",
+        "note_bg": "软底 = 原色0.12 alpha 叠在 canvas (21, 21, 23) 上（recorded）"
+      },
+      {
+        "name": "状态标签",
+        "sel": ".pm-tag[data-value=active]",
+        "text": "进行中",
+        "color": "rgb(121, 192, 180)",
+        "bg": "color(srgb 0.47451 0.752941 0.705882 / 0.12)",
+        "ratio": 7.04,
+        "pass45": true,
+        "pass30": true,
+        "bg_effective": "rgb(33,41,41)",
+        "note_bg": "软底 = 原色0.12 alpha 叠在 canvas (21, 21, 23) 上（recorded）"
+      }
+    ],
+    "dark_hostOnly": [
+      {
+        "name": "正文 h1",
+        "sel": ".pm-project-title",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(249, 250, 251)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 17.45,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "次级 项目事实",
+        "sel": ".pm-project-facts",
+        "text": "史冰冰",
+        "color": "rgb(207, 211, 214)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 12.11,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "弱文字 表格页脚",
+        "sel": ".pm-table-footer",
+        "text": "9 条记录",
+        "color": "rgb(173, 178, 184)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 8.54,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "青绿 提醒项目链接",
+        "sel": ".pm-reminder-project",
+        "text": "PM 工作台基线演示",
+        "color": "rgb(47, 111, 102)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 3.11,
+        "pass45": false,
+        "pass30": true
+      },
+      {
+        "name": "主按钮 文字",
+        "sel": ".pm-add-button",
+        "text": "添加记录",
+        "color": "rgb(250, 248, 243)",
+        "bg": "rgb(47, 111, 102)",
+        "ratio": 5.52,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 未激活",
+        "sel": ".pm-view-tab:not([aria-selected=\"true\"])",
+        "text": "里程碑3",
+        "color": "rgb(207, 211, 214)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 12.11,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "tab 激活",
+        "sel": ".pm-view-tab[aria-selected=\"true\"]",
+        "text": "全部任务9",
+        "color": "rgb(249, 250, 251)",
+        "bg": "rgb(21, 21, 23)",
+        "ratio": 17.45,
+        "pass45": true,
+        "pass30": true
+      },
+      {
+        "name": "危险 逾期徽章",
+        "sel": ".pm-reminders-overdue",
+        "text": "逾期 1",
+        "color": "rgb(178, 64, 44)",
+        "bg": "color(srgb 0.698039 0.25098 0.172549 / 0.1)",
+        "ratio": null,
+        "pass45": null,
+        "pass30": null
+      },
+      {
+        "name": "警告 临期徽章",
+        "sel": ".pm-reminders-soon",
+        "text": "临期 2",
+        "color": "rgb(249, 250, 251)",
+        "bg": "color(srgb 0.184314 0.435294 0.4 / 0.12)",
+        "ratio": null,
+        "pass45": null,
+        "pass30": null
+      },
+      {
+        "name": "状态标签",
+        "sel": ".pm-tag[data-value=active]",
+        "text": "进行中",
+        "color": "rgb(47, 111, 102)",
+        "bg": "color(srgb 0.184314 0.435294 0.4 / 0.12)",
+        "ratio": null,
+        "pass45": null,
+        "pass30": null
+      }
+    ]
+  },
+  "smallFonts": {
+    "light": [
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "王",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "赵",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "王",
+        "cls": "SPAN"
+      }
+    ],
+    "dark": [
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "李",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "王",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "赵",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "张",
+        "cls": "SPAN"
+      },
+      {
+        "fs": 10,
+        "text": "王",
+        "cls": "SPAN"
+      }
+    ]
+  },
+  "clickTargets": {
+    "light": {
+      "viewTabs": [
+        {
+          "w": 132.1,
+          "h": 46,
+          "label": "全部任务9"
+        },
+        {
+          "w": 117.8,
+          "h": 46,
+          "label": "里程碑3"
+        },
+        {
+          "w": 146.4,
+          "h": 46,
+          "label": "风险与问题2"
+        },
+        {
+          "w": 132.1,
+          "h": 46,
+          "label": "会议纪要1"
+        },
+        {
+          "w": 132.1,
+          "h": 46,
+          "label": "进度汇报1"
+        },
+        {
+          "w": 117.8,
+          "h": 46,
+          "label": "交付物3"
+        },
+        {
+          "w": 107.1,
+          "h": 46,
+          "label": "项目概览"
+        },
+        {
+          "w": 107.1,
+          "h": 46,
+          "label": "甘特排期"
+        },
+        {
+          "w": 107.1,
+          "h": 46,
+          "label": "人员负载"
+        }
+      ],
+      "drawerClose": [],
+      "iconButtons": [
+        {
+          "w": 32,
+          "h": 32,
+          "label": "刷新数据"
+        }
+      ],
+      "projectSelect": [
+        {
+          "w": 343.2,
+          "h": 24.6,
+          "label": "PM 工作台基线演示空项目（无任何实体）"
+        }
+      ],
+      "topMore": [
+        {
+          "w": 73.6,
+          "h": 32.3,
+          "label": "更多"
+        }
+      ],
+      "addButtons": [
+        {
+          "w": 73.9,
+          "h": 50.6,
+          "label": "添加记录"
+        },
+        {
+          "w": 619,
+          "h": 38,
+          "label": "添加记录"
+        }
+      ],
+      "rowButtons": [
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 需求与设计"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 需求与设计"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 用户调研访谈"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 用户调研访谈"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 产品原型评审"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 产品原型评审"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 前端开发"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 前端开发"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 工作台框架"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 工作台框架"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 甘特图视图"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 甘特图视图"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 长标题压力测试任务——用于验证超长"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 长标题压力测试任务——用于验证超长"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 逾期未完成（应触发到期提醒）"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 逾期未完成（应触发到期提醒）"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "移动 被外部依赖阻塞"
+        },
+        {
+          "w": 28,
+          "h": 28,
+          "label": "编辑 被外部依赖阻塞"
+        }
+      ]
+    }
+  },
+  "topbar": {
+    "light": {
+      "primaryCount": 1,
+      "buttons": [
+        {
+          "cls": "pm-button pm-button-primary",
+          "text": "新建项目",
+          "primary": true
+        },
+        {
+          "cls": "pm-button pm-top-more",
+          "text": "更多",
+          "primary": false
+        },
+        {
+          "cls": "pm-icon-button",
+          "text": "",
+          "primary": false
+        }
+      ],
+      "flexWrap": "nowrap"
+    }
+  },
+  "keyboard": {
+    "tabList": [
+      {
+        "id": "pm-tab-tasks",
+        "selected": "true",
+        "tabIndex": 0,
+        "controls": "pm-panel-tasks"
+      },
+      {
+        "id": "pm-tab-milestones",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-milestones"
+      },
+      {
+        "id": "pm-tab-risk-issues",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-risk-issues"
+      },
+      {
+        "id": "pm-tab-meetings",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-meetings"
+      },
+      {
+        "id": "pm-tab-reports",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-reports"
+      },
+      {
+        "id": "pm-tab-deliverables",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-deliverables"
+      },
+      {
+        "id": "pm-tab-overview",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-overview"
+      },
+      {
+        "id": "pm-tab-gantt",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-gantt"
+      },
+      {
+        "id": "pm-tab-people",
+        "selected": "false",
+        "tabIndex": -1,
+        "controls": "pm-panel-people"
+      }
+    ],
+    "focusTrapCount": 0,
+    "roving": [
+      {
+        "key": "ArrowRight",
+        "id": "pm-tab-milestones",
+        "ariaSelected": "true",
+        "view": "milestones"
+      },
+      {
+        "key": "ArrowLeft",
+        "id": "pm-tab-tasks",
+        "ariaSelected": "true",
+        "view": "tasks"
+      },
+      {
+        "key": "Home",
+        "id": "pm-tab-tasks",
+        "ariaSelected": "true",
+        "view": "tasks"
+      },
+      {
+        "key": "End",
+        "id": "pm-tab-people",
+        "ariaSelected": "true",
+        "view": "people"
+      }
+    ],
+    "drawerTrap": {
+      "focusables": 23,
+      "activeInside": true,
+      "activeTag": "INPUT",
+      "afterTabTwice": {
+        "inside": true,
+        "tag": "SELECT"
+      },
+      "afterShiftTab": {
+        "inside": true,
+        "tag": "TEXTAREA"
+      },
+      "escClosed": true
+    },
+    "moveTrap": {
+      "focusables": 8,
+      "activeFirstOption": true,
+      "activeTag": "根层级",
+      "afterTabInside": true
+    },
+    "focusTrapsWithDrawerOpen": 1
+  },
+  "reducedMotion": {
+    "transitionProperty": "all",
+    "transitionDuration": "1e-05s",
+    "animationName": "pm-drawer-in",
+    "animationDuration": "1e-05s",
+    "note": "reduce 下 transitionDuration≈0；动画名仍 pm-drawer-in，animationDuration 见上"
+  },
+  "darkVerification": {
+    "accent": "light-dark(#2f6f66, #79c0b4)",
+    "canvas": "rgb(255, 255, 255)",
+    "flipped": false
+  },
+  "responsive": {
+    "390": {
+      "shellClientWidth": 334,
+      "tabsScroll": 1132,
+      "tabsClient": 334,
+      "tabsHorizontalOverflow": true,
+      "factsRowCount": 3,
+      "tableScrollWidth": 1200,
+      "tableClientWidth": 334,
+      "tableHorizontalOverflow": true,
+      "topbarFlexWrap": "nowrap"
+    },
+    "768": {
+      "shellClientWidth": 712,
+      "tabsScroll": 1132,
+      "tabsClient": 712,
+      "tabsHorizontalOverflow": true,
+      "factsRowCount": 2,
+      "tableScrollWidth": 1200,
+      "tableClientWidth": 712,
+      "tableHorizontalOverflow": true,
+      "topbarFlexWrap": "nowrap"
+    },
+    "1440": {
+      "shellClientWidth": 1160,
+      "tabsScroll": 1160,
+      "tabsClient": 1160,
+      "tabsHorizontalOverflow": false,
+      "factsRowCount": 1,
+      "tableScrollWidth": 1200,
+      "tableClientWidth": 1160,
+      "tableHorizontalOverflow": true,
+      "topbarFlexWrap": "nowrap"
+    }
+  },
+  "pageErrors": [],
+  "darkThemeVerification": {
+    "hostDarkCanvasBg": "rgb(21,21,23)（html[data-ds-theme-source]=dark）",
+    "accentColor_hostDarkOnly": "rgb(47, 111, 102)",
+    "accentColor_hostDark_plusMediaDark": "rgb(121, 192, 180)",
+    "note": "host 设置切深色翻转宿主别名 token（canvas/surface/ink）；但 light-dark() 的青绿/语义色仅在 prefers-color-scheme=dark 时才翻到 #79c0b4 系。仅 host 深色时 accent 仍为 #2f6f66（rgb(47,111,102)）。最终深色截图采用 host-dark + media-dark 组合。",
+    "screenshots": [
+      "21-theme-dark.png",
+      "21-theme-dark-tasks.png"
+    ],
+    "settingsPanelClosedAtShot": true,
+    "restoredTo": {
+      "dsTheme": "light",
+      "canvas": "rgb(255, 255, 255)"
+    }
+  }
+}

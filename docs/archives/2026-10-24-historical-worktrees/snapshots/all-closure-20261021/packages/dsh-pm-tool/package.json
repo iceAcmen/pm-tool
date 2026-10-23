@@ -1,0 +1,88 @@
+{
+  "name": "dsh-pm-tool",
+  "version": "0.7.4",
+  "private": true,
+  "description": "面向项目经理的 dsh 项目管理工具（项目计划 / WBS / 里程碑 / 可读文件存储）",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "lib/**",
+    "locale/*.json",
+    "cordis.patch.yml"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && mkdir -p lib/client/board && cp src/client/board/*.css lib/client/board/ && rm -f lib/client.*.js lib/client.*.js.map && tsdown --config tsdown.config.ts",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "e2e": "node scripts/e2e.mjs",
+    "setup-keys": "node scripts/setup-keys.mjs",
+    "verify": "pnpm run build && node scripts/verify-isolation.mjs",
+    "verify:isolation-only": "pnpm run build && node scripts/verify-isolation.mjs scripts/verify-command.mjs scripts/verify-storage.mjs"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "platform": "web"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5-alpha.1",
+    "@deepseek-ai/dsh-commands": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-llm": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-storage": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-storage-domain": "0.2.1-alpha.2"
+  },
+  "dependencies": {
+    "expr-eval": "2.0.2",
+    "lucide-react": "1.55.0",
+    "react-grid-layout": "1.4.4",
+    "xlsx": "0.18.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5-alpha.1",
+    "@deepseek-ai/dsh-api-remotes": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-api-session-controller": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-client-ui-layout": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-client-ui-sidebar": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-client-ui-slots": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-commands": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-llm": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-session": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-storage": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-storage-domain": "0.2.1-alpha.2",
+    "@deepseek-ai/dsh-storage-json": "0.2.1-alpha.2",
+    "@types/node": "^22.10.0",
+    "@types/react": "18.3.20",
+    "@types/react-test-renderer": "18.3.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "puppeteer-core": "^23.11.1",
+    "react": "18.3.1",
+    "react-test-renderer": "18.3.1",
+    "tsdown": "0.15.10",
+    "typescript": "^5.9.0",
+    "vitest": "^2.1.9"
+  }
+}

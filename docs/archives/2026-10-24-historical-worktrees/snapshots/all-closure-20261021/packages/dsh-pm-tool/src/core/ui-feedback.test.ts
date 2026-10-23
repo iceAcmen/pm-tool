@@ -1,0 +1,209 @@
+import { describe, it, expect } from 'vitest'
+import {
+  parseFeedback,
+  classifyFeedback,
+  parseActionLine,
+  feedbackIsError,
+  commandAccepted,
+  formatNoticeLines,
+  buildSuccessEnvelope,
+  buildActionLine,
+  shouldPersistResultCard,
+  prefixFeedbackOnce,
+  PM_SUMMARY_PREFIX,
+  PM_DETAIL_MARKER,
+  PM_ACTION_MARKER,
+  FEEDBACK_SUCCESS_TTL_MS,
+} from './ui-feedback.js'
+
+describe('parseFeedback 反馈分型（J5）', () => {
+  it('结构化信封：短摘要与完整字段分离，摘要无 HTML/MD/完整实体', () => {
+    const text = [
+      `${PM_SUMMARY_PREFIX}任务已更新｜t-0026 补充验收说明`,
+      `${PM_SUMMARY_PREFIX}已修改：说明`,
+      PM_DETAIL_MARKER,
+      '```\n任务ID：t-0026\n标题：补充验收说明\n```',
+    ].join('\n')
+    const f = parseFeedback(text)
+    expect(f.structured).toBe(true)
+    expect(f.summary).toEqual(['任务已更新｜t-0026 补充验收说明', '已修改：说明'])
+    // 摘要 ≤2 行、无 <details>、无「任务 ID：」、无代码围栏。
+    expect(f.summary.length).toBeLessThanOrEqual(2)
+    expect(f.summary.join('\n')).not.toContain('<details>')
+    expect(f.summary.join('\n')).not.toContain('任务 ID：')
+    expect(f.summary.join('\n')).not.toContain('```')
+    // 完整字段只进 detail，不进摘要。
+    expect(f.detail).toContain('任务ID：t-0026')
+    expect(f.summary.join('\n')).not.toContain('任务ID：t-0026')
+  })
+
+  it('wrapped 提示进摘要（含 ≠），完整字段仍分离', () => {
+    const text = [
+      `${PM_SUMMARY_PREFIX}任务已更新｜t-1 收尾任务`,
+      `${PM_SUMMARY_PREFIX}注意：已收尾（wrapped）≠ 正式完成（done）；该任务未计入完成，不催办、不计入 open 负载。`,
+      PM_DETAIL_MARKER,
+      '```\n全字段\n```',
+    ].join('\n')
+    const f = parseFeedback(text)
+    expect(f.summary).toHaveLength(2)
+    expect(f.summary[1]).toContain('已收尾')
+    expect(f.summary[1]).toContain('≠')
+  })
+
+  it('无信封的既有命令原样回退，不被吞、不强行分型', () => {
+    const plain = formatNoticeLines('任务已新增并保存。\n标题示例')
+    const f = parseFeedback('任务已新增并保存。\n标题示例')
+    expect(f.structured).toBe(false)
+    expect(f.summary).toEqual(plain)
+    expect(f.detail).toBeNull()
+  })
+
+  it('错误持久且单处：feedbackIsError 命中即错误态', () => {
+    expect(feedbackIsError('未找到任务：t-9999')).toBe(true)
+    expect(feedbackIsError('任务操作失败，未返回成功结果')).toBe(true)
+    expect(feedbackIsError('任务已更新｜t-0026 补充验收说明')).toBe(false)
+  })
+
+  it('成功自动消失时长固定 3s（错误持久，不走该 TTL）', () => {
+    expect(FEEDBACK_SUCCESS_TTL_MS).toBe(3000)
+  })
+})
+
+describe('action 分离与信封构造（AI 草稿 content/action）', () => {
+  it('parseActionLine：`[pm:action]文案：命令` 拆出 label/command；格式不符返回 null', () => {
+    expect(parseActionLine(`${PM_ACTION_MARKER}确认入库：/pm report narrate p-0001 confirm`))
+      .toEqual({ label: '确认入库', command: '/pm report narrate p-0001 confirm' })
+    expect(parseActionLine(`${PM_ACTION_MARKER}无分隔符`)).toBeNull()
+    expect(parseActionLine(`${PM_ACTION_MARKER}：`)).toBeNull()
+  })
+
+  it('非结构化草稿预览：content 原样进 summary，action 独立抽出，不混进正文', () => {
+    const text = [
+      'AI 进度叙述草稿（项目 p-0001）：',
+      '本周进展：完成原型设计。',
+      '以上为草稿（基于确定性数字生成），尚未写入。',
+      buildActionLine('确认入库', '/pm report narrate p-0001 confirm'),
+    ].join('\n')
+    const f = parseFeedback(text)
+    expect(f.structured).toBe(false)
+    expect(f.action).toEqual({ label: '确认入库', command: '/pm report narrate p-0001 confirm' })
+    expect(f.summary.join('\n')).toContain('本周进展：完成原型设计')
+    expect(f.summary.join('\n')).not.toContain(PM_ACTION_MARKER)
+    // 预览非结构化 → 持久（不自动消失）。
+    expect(FEEDBACK_SUCCESS_TTL_MS).toBe(3000)
+  })
+
+  it('buildSuccessEnvelope：≤2 行短摘要加前缀，完整字段进 detail；空行被过滤', () => {
+    const env = buildSuccessEnvelope(
+      ['习惯已更新｜habit-x 读书', '已修改：标题、备注', ''],
+      '完整字段卡',
+    )
+    const f = parseFeedback(env)
+    expect(f.structured).toBe(true)
+    expect(f.summary).toEqual(['习惯已更新｜habit-x 读书', '已修改：标题、备注'])
+    expect(f.summary.length).toBeLessThanOrEqual(2)
+    expect(f.detail).toBe('完整字段卡')
+    expect(f.action).toBeNull()
+  })
+
+  it('结构化成功信封 → classifyFeedback 3s 自动消失；action 透传', () => {
+    const env = buildSuccessEnvelope(
+      ['任务已更新｜t-1 收尾', '已修改：状态'],
+      '详情卡',
+    )
+    const fb = classifyFeedback(env)
+    expect(fb.isError).toBe(false)
+    expect(fb.structured).toBe(true)
+    expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
+  })
+
+  it('P1-1：结构化成功摘要含「错误/失败」字样（如已修复错误清单）仍判成功，不被中文关键词误红', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['已修复错误清单｜t-1', '失败项已清零'], '完整字段…'))
+    expect(fb.isError).toBe(false)
+    expect(fb.structured).toBe(true)
+    expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
+  })
+
+  it('P1-1：非结构化裸返回命中错误关键词仍判 error（关键词只兜底无信封文本）', () => {
+    const fb = classifyFeedback('更新失败：未找到任务 t-9999')
+    expect(fb.isError).toBe(true)
+    expect(fb.structured).toBe(false)
+    expect(fb.autoDismissMs).toBeNull()
+  })
+})
+
+describe('commandAccepted（O3 失败不关抽屉）', () => {
+  it('业务拒绝文本 → false（保留抽屉，不 onSaved 关层）', () => {
+    expect(commandAccepted('未找到任务：t-9999')).toBe(false)
+    expect(commandAccepted('任务操作失败，未返回成功结果')).toBe(false)
+    expect(commandAccepted('权限不足：拒绝执行该命令')).toBe(false)
+  })
+
+  it('结构化成功信封 → true', () => {
+    expect(commandAccepted(buildSuccessEnvelope(['任务已更新｜t-1 收尾']))).toBe(true)
+  })
+
+  it.each(['失败待重试一', '错误修复任务', '未找到原因的调查'])('结构化成功保合法标题%s，不让正文覆盖信封语义', title => {
+    expect(commandAccepted(buildSuccessEnvelope([`行动项已更新｜ai-001 ${title}`]))).toBe(true)
+    expect(commandAccepted(`操作失败：${title}`)).toBe(false)
+  })
+
+  it('无信封既有成功文本 → true（不另造成功正则，仅排除错误词）', () => {
+    expect(commandAccepted('任务已新增并保存。\n标题示例')).toBe(true)
+  })
+
+  it('只读预览文本不含错误词 → true，不误判为失败', () => {
+    expect(commandAccepted('只读预览：基于确定性数字生成，尚未写入。')).toBe(true)
+  })
+})
+
+describe('prefixFeedbackOnce（场景错误前缀不重复）', () => {
+  it.each(['：', ':'])('恢复场景保留明确备份/恢复组合前缀%s和完整多行原因', colon => {
+    const raw = `备份/恢复失败${colon}文件缺失\n原因正文：另一处恢复失败仍应保留`
+    expect(prefixFeedbackOnce('恢复失败', new Error(raw))).toBe(raw)
+    expect(prefixFeedbackOnce('备份失败', raw)).toBe(raw)
+    expect(prefixFeedbackOnce('其他失败', raw)).toBe(`其他失败：${raw}`)
+  })
+
+  it('底层错误已带“恢复失败”时原样保留', () => {
+    expect(prefixFeedbackOnce('恢复失败', '恢复失败：备份文件格式不认识')).toBe('恢复失败：备份文件格式不认识')
+  })
+
+  it('底层错误没有场景前缀时补一次中文冒号', () => {
+    expect(prefixFeedbackOnce('恢复失败', '备份文件格式不认识')).toBe('恢复失败：备份文件格式不认识')
+  })
+
+  it('兼容 Error 与全角冒号，不把相似正文误判为前缀', () => {
+    expect(prefixFeedbackOnce('恢复失败', new Error('恢复失败：权限不足'))).toBe('恢复失败：权限不足')
+    expect(prefixFeedbackOnce('恢复失败', '自动恢复失败后已回滚')).toBe('恢复失败：自动恢复失败后已回滚')
+  })
+})
+
+describe('D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）', () => {
+  it('纯结构化成功信封（无 action/无备份路径）→ 不持久化 ResultCard，交给 3s toast', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['任务已更新｜t-0025', '已修改：里程碑：空 → m-0002'], '完整字段…'))
+    expect(shouldPersistResultCard(fb, null)).toBe(false)
+  })
+
+  it('错误 → 持久化（role=alert 单处）', () => {
+    const fb = classifyFeedback('更新失败：未找到任务 t-9999')
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('非结构化原样回退 → 持久化（不吞不改写）', () => {
+    const fb = classifyFeedback('这是一行普通返回，没有任何信封标记')
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('带 [pm:action] 独立确认动作 → 持久化（动作按钮须常驻可点）', () => {
+    const fb = classifyFeedback([
+      buildActionLine('确认入库', 'report narrate p-1 confirm'),
+    ].join('\n'))
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+
+  it('结构化成功但携带备份路径 → 持久化（复制路径位需常驻）', () => {
+    const fb = classifyFeedback(buildSuccessEnvelope(['备份已生成'], null))
+    expect(shouldPersistResultCard(fb, '/tmp/pmtool-backup-x.json')).toBe(true)
+  })
+})

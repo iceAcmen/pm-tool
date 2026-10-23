@@ -1,0 +1,312 @@
+diff --git a/packages/dsh-pm-tool/src/client/panel.tsx b/packages/dsh-pm-tool/src/client/panel.tsx
+index d9a1435..cae6746 100644
+--- a/packages/dsh-pm-tool/src/client/panel.tsx
++++ b/packages/dsh-pm-tool/src/client/panel.tsx
+@@ -18,7 +18,8 @@ import { AiAssistant } from './shared/drawers/ai-assistant.js'
+ import { CopilotPanel } from './shared/drawers/sidecar-portal.js'
+ import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
+ import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
+-import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard } from '../core/ui-feedback.js'
++import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard, buildSuccessEnvelope } from '../core/ui-feedback.js'
++import { armLaunchHandshake } from './launch-handshake.js'
+ import { buildDiagnosis } from '../core/suggestion-engine.js'
+ import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
+ import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
+@@ -747,7 +748,19 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+     }
+   }
+ 
+-  useEffect(() => { void refresh() }, [])
++  useEffect(() => {
++    let cancelled = false
++    void (async () => {
++      // 就绪回告桥接：仅在面板挂载且首次 web snapshot 读取成功后触发；
++      // index apply 的全局注册不是成功，不在那边发；无 pm-launch 参数则静默不发。
++      const ok = await refresh()
++      if (!cancelled && ok) void armLaunchHandshake({
++        getHash: () => window.location.hash,
++        replaceState: (cleaned) => window.history.replaceState(null, '', cleaned),
++      })
++    })()
++    return () => { cancelled = true }
++  }, [])
+ 
+   // 「更多」菜单：Escape 关闭并把焦点还给触发按钮。
+   useEffect(() => {
+@@ -933,7 +946,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+               const enc = JSON.stringify(restorePreview.content)
+               try {
+                 const r = await execute(`restore-content ${enc} confirm`)
+-                setMessage(String(r ?? '已恢复'))
++                // P1-1：本地成功走统一成功信封 → 3s toast，不再裸文本常驻大卡；错误仍由 catch 走 alert。
++                setMessage(buildSuccessEnvelope([String(r ?? '已恢复（七类实体已替换）')]))
+                 setRestorePreview(null)
+                 void refresh()
+               } catch (e) {
+@@ -1113,7 +1127,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+               })
+               if (!ok) return
+               const text = await execute('backup')
+-              setMessage(`备份完成：${text}`)
++              // P1-1：备份成功走成功信封（摘要进 toast，原始输出含完整路径进 detail，
++              // 由 extractBackupPath 抽取后常驻复制位，不丢路径）。
++              setMessage(buildSuccessEnvelope(['备份完成'], String(text ?? '')))
+               void refresh()
+             }}
+           >
+@@ -1160,7 +1176,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+                 const tasks = (snap.tasks ?? [] as { title: string, assignee?: string, progress?: number, dueDate?: string }[])
+                 if (tasks.length) { rows.push('## 任务', ''); for (const t of tasks) rows.push(`- [ ] ${t.title}${t.assignee ? `（负责人：${t.assignee}）` : ''}${typeof t.progress === 'number' ? ` ${clampProgress(t.progress)}%` : ''}${t.dueDate ? ` 截止 ${t.dueDate}` : ''}`) }
+                 downloadText(`pmtool-${pname}-${ts}.md`, rows.join('\n'), 'text/markdown')
+-                setMessage(`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`)
++                // P1-1：导出成功走成功信封 → 3s toast，不常驻大卡。
++                setMessage(buildSuccessEnvelope([`已导出 Markdown（约 ${tasks.length} 个任务）并开始下载。`]))
+               } catch (error) {
+                 setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+               }
+@@ -1179,7 +1196,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+                   .toISOString().replace(/[-:T]/g, '').slice(0, 12)
+                 downloadText(`pmtool-snapshot-${ts}.json`, snapshot, 'application/json')
+                 const count = (() => { try { const s = JSON.parse(snapshot); return Object.values(s).reduce((n: number, t) => n + (Array.isArray(t) ? t.length : 0), 0) } catch { return 0 } })()
+-                setMessage(`已导出整库 JSON${count ? `（约 ${count} 条记录）` : ''}。`)
++                setMessage(buildSuccessEnvelope([`已导出整库 JSON${count ? `（约 ${count} 条记录）` : ''}。`]))
+               } catch (error) {
+                 setMessage(`导出失败：${error instanceof Error ? error.message : String(error)}`)
+               }
+@@ -3081,6 +3098,12 @@ function OkrForm({
+   const primaryOptions = objectives
+     .filter(o => o.kind === 'objective')
+     .map(o => ({ value: o.id, label: `${o.title}（${o.id}）` }))
++  // P1-2：软关联选项 = 本项目全量 OKR（objective + KR，后端不限 kind），标注类型便于区分；
++  // 父主归属列表仍只列 objective（KR 不能作父），两条口径分开。
++  const relatedOptions = objectives.map(o => ({
++    value: o.id,
++    label: `${o.title}（${o.kind === 'objective' ? '目标' : 'KR'} · ${o.id}）`,
++  }))
+   const handleSubmit = async (values: OkrFormValues) => {
+     if (!beginSubmit()) return
+     const related = parseIdList(values.relatedOkrIds)
+@@ -3126,6 +3149,7 @@ function OkrForm({
+         : { title: '', kind: 'objective', owner: '', targetDate: '', primaryOkrId: '', relatedOkrIds: '', status: 'draft', description: '' }}
+       objectiveIds={objectiveIds}
+       primaryOptions={primaryOptions}
++      relatedOptions={relatedOptions}
+       busy={submitting}
+       disabled={disabled}
+       onCancel={onCancel}
+diff --git a/packages/dsh-pm-tool/src/client/views/growth-form-props.ts b/packages/dsh-pm-tool/src/client/views/growth-form-props.ts
+index adf1461..6865a0b 100644
+--- a/packages/dsh-pm-tool/src/client/views/growth-form-props.ts
++++ b/packages/dsh-pm-tool/src/client/views/growth-form-props.ts
+@@ -68,8 +68,10 @@ export interface OkrFormComponentProps extends GrowthFormShellProps {
+   objectiveIds?: ReadonlySet<string>
+   /** 负责人应用内 listbox 选项（成员名册由 panel 注入）；缺失退回文本输入。 */
+   ownerOptions?: readonly RecordOption[]
+-  /** KR 父目标（主归属）listbox 选项；缺失退回文本/空。 */
++  /** KR 父目标（主归属）listbox 选项；缺失退回文本/空。仅列 objective（KR 不能作父）。 */
+   primaryOptions?: readonly RecordOption[]
++  /** 软关联 listbox 选项：本项目全量 OKR（objective + key-result，后端不限 kind）；缺失退回文本 ID 输入。 */
++  relatedOptions?: readonly RecordOption[]
+   /** 状态 listbox 选项（draft/confirmed）；缺失用内置默认。 */
+   statusOptions?: readonly RecordOption[]
+   /** 提交值（已通过 validateOkrForm）交回 panel，由 panel 发 `okr add|update`。 */
+diff --git a/packages/dsh-pm-tool/src/client/views/okr-form.tsx b/packages/dsh-pm-tool/src/client/views/okr-form.tsx
+index 1043af3..9b616e3 100644
+--- a/packages/dsh-pm-tool/src/client/views/okr-form.tsx
++++ b/packages/dsh-pm-tool/src/client/views/okr-form.tsx
+@@ -32,7 +32,7 @@ const DEFAULT_STATUS_OPTS: readonly RecordOption[] = OKR_STATUSES.map(s =>
+ )
+ 
+ export function OkrForm({
+-  initial, objectiveIds, ownerOptions, primaryOptions, statusOptions,
++  initial, objectiveIds, ownerOptions, primaryOptions, relatedOptions, statusOptions,
+   busy, disabled, errors: externalErrors, onSubmit, onCancel,
+ }: OkrFormComponentProps) {
+   const [draft, setDraft] = useState<OkrFormValues>({ ...initial })
+@@ -44,11 +44,12 @@ export function OkrForm({
+   const statusOpts = statusOptions ?? DEFAULT_STATUS_OPTS
+   const localErrors = validateOkrForm(draft, objectiveIds ?? new Set())
+ 
+-  // D-12 / C-13 软关联保存前内联校验：已知集 = 注入目标集 ∪ 父目标选项；
++  // D-12 / C-13 软关联保存前内联校验：已知集 = 注入全量目标集 ∪ 父目标选项 ∪ 软关联选项；
+   // 格式错与未知 ID 都阻塞提交（保存前就近标红、零写保输入），不让错误落到页面横幅。
+   const knownIds = new Set<string>([
+     ...(objectiveIds ?? []),
+     ...(primaryOptions ?? []).map(o => o.value),
++    ...(relatedOptions ?? []).map(o => o.value),
+   ])
+   const relatedCheck = validateRelatedOkrIds(draft.relatedOkrIds, knownIds)
+   if (relatedCheck.blocking.length > 0) localErrors.relatedOkrIds = relatedCheck.message
+@@ -117,6 +118,9 @@ export function OkrForm({
+         </div>
+       </div>
+ 
++      {/* P1-2：父主归属（计入权重的唯一父目标）仅 KR 需要，保持 KR-only；
++          软关联对 objective/KR 都可见可编辑（后端 validateOkrRelations 不限 kind、
++          buildOkrTree 渲染全部软关联），与主归属解耦。 */}
+       {draft.kind === 'key-result' && (
+         <div className="gf-row">
+           <div className="gf-field" data-invalid={!!errors.primaryOkrId}>
+@@ -133,22 +137,25 @@ export function OkrForm({
+             <p className="gf-hint">主归属：计入权重的唯一父目标（单选），决定这条 KR 归属哪个目标。</p>
+             {errors.primaryOkrId && <span className="gf-error" role="alert">{errors.primaryOkrId}</span>}
+           </div>
+-          <div className="gf-field" data-invalid={!!errors.relatedOkrIds}>
+-            <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
+-            <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
+-              onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
+-            {primaryOptions && primaryOptions.length > 0 && (
+-              <RecordsListbox id="gf-okr-related-pick" ariaLabel="从目标清单添加软关联" searchable
+-                value={relatedPick} options={primaryOptions} disabled={disabled}
+-                placeholder="从目标清单选择添加（可选）"
+-                onChange={appendRelated} />
+-            )}
+-            <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
+-            {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
+-          </div>
+         </div>
+       )}
+ 
++      <div className="gf-row">
++        <div className="gf-field" data-invalid={!!errors.relatedOkrIds}>
++          <label className="gf-label" htmlFor="gf-okr-related">软关联目标（逗号分隔 ID，可多个）</label>
++          <input id="gf-okr-related" className="gf-input" value={draft.relatedOkrIds ?? ''} disabled={disabled}
++            onChange={e => set('relatedOkrIds', e.target.value)} placeholder="选填，如 okr-a, okr-b" />
++          {relatedOptions && relatedOptions.length > 0 && (
++            <RecordsListbox id="gf-okr-related-pick" ariaLabel="从目标清单添加软关联" searchable
++              value={relatedPick} options={relatedOptions} disabled={disabled}
++              placeholder="从目标清单选择添加（可选）"
++              onChange={appendRelated} />
++          )}
++          <p className="gf-hint">软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。</p>
++          {errors.relatedOkrIds && <span className="gf-error" role="alert">{errors.relatedOkrIds}</span>}
++        </div>
++      </div>
++
+       <div className="gf-row">
+         <div className="gf-field" data-invalid={!!errors.status}>
+           <label className="gf-label" id="gf-okr-status-label">状态</label>
+diff --git a/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts b/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts
+index b1c718a..c9c151b 100644
+--- a/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts
++++ b/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts
+@@ -19,6 +19,17 @@ describe('B6 汇报创建入口统一接线', () => {
+     expect(reports).toContain("if (createRequest > 0) openCreate()")
+   })
+ 
++  it('D-10：空态提前 return 前构造 formOverlay，空态与列表分支都渲染覆盖层', () => {
++    const overlayDef = reports.indexOf('const formOverlay = form && records ?')
++    const emptyReturn = reports.indexOf('if (sorted.length === 0)')
++    expect(overlayDef).toBeGreaterThan(-1)
++    expect(emptyReturn).toBeGreaterThan(overlayDef)
++    // 空态分支内必须挂出覆盖层，避免 setForm 后无处渲染。
++    const emptyBlock = reports.slice(emptyReturn, reports.indexOf('const snap = current?.snapshot'))
++    expect(emptyBlock).toContain('{formOverlay}')
++    expect(reports).toContain('{formOverlay}')
++  })
++
+   it('详情页展示冻结摘录正文和复合版本来源', () => {
+     expect(reports).toContain('冻结进展摘录 · Frozen progress')
+     expect(reports).toContain('source={excerpt.contentSnapshot}')
+diff --git a/packages/dsh-pm-tool/src/client/views/reports.tsx b/packages/dsh-pm-tool/src/client/views/reports.tsx
+index 53236d8..a2bba1f 100644
+--- a/packages/dsh-pm-tool/src/client/views/reports.tsx
++++ b/packages/dsh-pm-tool/src/client/views/reports.tsx
+@@ -110,6 +110,24 @@ export function ReportsView(props: {
+ 
+   const current = filtered.find(r => r.id === selectedId) ?? filtered[0] ?? null
+ 
++  // D-10：覆盖层必须在空态提前 return 之前构造，否则空态点「生成快照」setForm 后无处渲染。
++  const formOverlay = form && records ? (
++    <RecordsOverlay
++      eyebrow="进度汇报"
++      title={form.mode === 'edit' ? '编辑进度汇报' : '生成进度汇报'}
++      onClose={closeForm}
++    >
++      <RecordsReportForm
++        projectId={records.projectId}
++        report={form.mode === 'edit' ? form.report : undefined}
++        callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
++        previewSource={records.previewSource}
++        onPreviewPeriod={records.onPreviewPeriod ?? records.callbacks.onPreviewPeriod}
++        onCancel={closeForm}
++      />
++    </RecordsOverlay>
++  ) : null
++
+   if (sorted.length === 0) {
+     return (
+       <div className="pm-rp-root">
+@@ -130,6 +148,7 @@ export function ReportsView(props: {
+             action={<PmButton variant="primary" onClick={openCreate}><Plus size={14} />生成快照</PmButton>}
+           />
+         </div>
++        {formOverlay}
+       </div>
+     )
+   }
+@@ -354,22 +373,7 @@ export function ReportsView(props: {
+         )}
+       </div>
+ 
+-      {form && records && (
+-        <RecordsOverlay
+-          eyebrow="进度汇报"
+-          title={form.mode === 'edit' ? '编辑进度汇报' : '生成进度汇报'}
+-          onClose={closeForm}
+-        >
+-          <RecordsReportForm
+-            projectId={records.projectId}
+-            report={form.mode === 'edit' ? form.report : undefined}
+-            callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+-            previewSource={records.previewSource}
+-            onPreviewPeriod={records.onPreviewPeriod ?? records.callbacks.onPreviewPeriod}
+-            onCancel={closeForm}
+-          />
+-        </RecordsOverlay>
+-      )}
++      {formOverlay}
+     </div>
+   )
+ }
+diff --git a/packages/dsh-pm-tool/src/core/ui-feedback.test.ts b/packages/dsh-pm-tool/src/core/ui-feedback.test.ts
+index e059985..a639acc 100644
+--- a/packages/dsh-pm-tool/src/core/ui-feedback.test.ts
++++ b/packages/dsh-pm-tool/src/core/ui-feedback.test.ts
+@@ -115,6 +115,20 @@ describe('action 分离与信封构造（AI 草稿 content/action）', () => {
+     expect(fb.structured).toBe(true)
+     expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
+   })
++
++  it('P1-1：结构化成功摘要含「错误/失败」字样（如已修复错误清单）仍判成功，不被中文关键词误红', () => {
++    const fb = classifyFeedback(buildSuccessEnvelope(['已修复错误清单｜t-1', '失败项已清零'], '完整字段…'))
++    expect(fb.isError).toBe(false)
++    expect(fb.structured).toBe(true)
++    expect(fb.autoDismissMs).toBe(FEEDBACK_SUCCESS_TTL_MS)
++  })
++
++  it('P1-1：非结构化裸返回命中错误关键词仍判 error（关键词只兜底无信封文本）', () => {
++    const fb = classifyFeedback('更新失败：未找到任务 t-9999')
++    expect(fb.isError).toBe(true)
++    expect(fb.structured).toBe(false)
++    expect(fb.autoDismissMs).toBeNull()
++  })
+ })
+ 
+ describe('commandAccepted（O3 失败不关抽屉）', () => {
+diff --git a/packages/dsh-pm-tool/src/core/ui-feedback.ts b/packages/dsh-pm-tool/src/core/ui-feedback.ts
+index 6a7322f..3f6edfa 100644
+--- a/packages/dsh-pm-tool/src/core/ui-feedback.ts
++++ b/packages/dsh-pm-tool/src/core/ui-feedback.ts
+@@ -149,7 +149,10 @@ export interface ClassifiedFeedback {
+  */
+ export function classifyFeedback(message: string): ClassifiedFeedback {
+   const parsed = parseFeedback(message)
+-  const isError = feedbackIsError(message)
++  // P1-1：结构化成功信封本身即成功（buildSuccessEnvelope 只由成功路径构造），
++  // 不再对摘要正文跑中文错误关键词，避免「已修复错误清单」这类成功串被误判为 error alert；
++  // 关键词正则只兜底非结构化原样回退文本（命令层裸返回，无信封标记）。
++  const isError = parsed.structured ? false : feedbackIsError(message)
+   return {
+     isError,
+     structured: parsed.structured,

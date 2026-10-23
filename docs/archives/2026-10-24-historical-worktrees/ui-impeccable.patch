@@ -1,0 +1,541 @@
+diff --git a/docs/changelog.md b/docs/changelog.md
+index 429bc68..04e3104 100644
+--- a/docs/changelog.md
++++ b/docs/changelog.md
+@@ -8,6 +8,24 @@
+ 
+ ---
+ 
++## [未发布·并行工作线 ui-impeccable] Impeccable 整站 UI 优化：改后独立验收 53 PASS / 4 FAIL / 3 BLOCKED（2026-10-15，平台：doubao-work）
++
++> 状态：**非版本发布、不改版本号**（package.json 仍 0.7.4 基线，不冒充 v0.7.5/v0.8）。独立并行工作线，在隔离 worktree `ui-impeccable` @ `740c1e8`（基于 v0.7.4 基线 `5fdb2d7`）上做纯视图层 UI 优化；改后经独立测试专家真实 Chrome 隔离实测回填：**60 项 = PASS 53 / FAIL 4 / BLOCKED 3，不签发全站 PASS**。本批仅回填 4 份中文档案（整站报告/changelog/progress/issues），不 commit/tag/push、与主线 v0.7.4/v0.8 归并另行授权。
++
++- **改动文件（本批档案同步，仅 4 份中文 md）**：
++  - `docs/reports/impeccable-site-ui-optimization.md`：开头/§0 状态声明改为「改后真实 GUI 证据已采集并经独立测试专家实测回填」，48 处 `待GUI结果自动补` 按验收矩阵 §10 逐格填实测结果（PASS 附关键数值、FAIL 写原因），§4.4/§7.4 更新为已采集结论与遗留。
++  - `docs/changelog.md`：本条。
++  - `docs/progress.md`：最后更新改 2026-10-15，置顶本工作线阶段条目。
++  - `docs/issues-and-solutions.md`：新增 ISS-028（深色品牌色不随宿主翻转，根因 `panel.css:38` `.pm-shell{color-scheme:light dark}`）、ISS-029（390 窄档九视图 tab 裁切无指示 + 触控目标偏小）。
++- **做了什么（本工作线主体，发生在 740c1e8，非本批）**：离线安装 `pbakaus/impeccable` skill v4.5.2 / engine 0.1.14（vendor 治理见 `docs/external-skills.md` §13，禁联网 launcher、`DO_NOT_TRACK=1`）；离线非交互生成 PRODUCT/DESIGN/DESIGN-CONTEXT 上下文；改前 `detect`/audit/critique 基线采集；视图层优化——暖纸墨色底+唯一克制青绿（`light-dark()`+`color-mix()`）、hairline 分区、事实清单取代 4 张大数字 KPI、禁渐变/禁嵌套卡片/禁 hero 大数字、roving tab 键盘、抽屉与 MovePicker 焦点圈定、loading/empty 分离、restore 危险预览面板接线、顶栏收权重；改后真实 Chrome（puppeteer-core 23.11.1）隔离实例复测。
++- **为什么**：incumbent 面板太「通用后台模板」（全跟随宿主蓝、4 张 34px KPI 大卡、卡片层层嵌套），缺 Operate 工具的扫读性与一致预期；本轮按「工程台账」方向收敛品牌只活在精确细节里。
++- **影响范围**：**仅视图层**（`panel.css`/`panel.tsx` 渲染与交互）；**零业务/schema/存储改动**——七类实体 RecordSchema、storage.ts 单写队列、core 命令行、domain compatibleVersions 一行未动；不影响 v0.7.4 稳定性地基与 v0.8 客观进度计划，归并主线前以 worktree 隔离存在。
++- **验证（独立测试专家实测，testedCommit `740c1e8`）**：`pnpm build` 独立重跑退出码 **0**；静态校验全绿（组件层零硬编码 hex/零渐变/零 card-in-card/零 fluid clamp/组件层零 `dsw-alias` 直读）；INT 写路径（新建/勾选 done 落库 t-1010/t-1011、renumber 正确）在一次性 3212 实例验证，共享 `.ui-preview/data` 22 个业务 JSON 前后 sha256 逐字节一致；三档容器实测 inline-width 1440→1160 / 768→712 / 390→334；浅色对比正文 18.9/次级 5.8/青绿链接 5.86/主按钮 5.52，组合态深色正文 17.45/青绿 8.69/主按钮 6.83。
++- **FAIL 4 项（本轮不修，已建档）**：UIV-11（390 容器 334 宽，tab 条 scrollWidth=1132 vs clientWidth=334、7/9 tab 被裁无滚动指示）；UIV-12/UIA-04（仅宿主深色路径品牌青绿 `light-dark()` 未翻、停 `#2f6f66`、深底链接对比 3.11:1<4.5）；UIA-07（390 档刷新 32×32、项目下拉 h≈25、行内图标按钮 28~32，<44×44）。
++- **BLOCKED 3 项**：UID-08（D9 AI 助手）/UID-09（D10 副驾）/UIP-08（AI 草稿确认入库）——离线基线刻意不注入 LLM provider、顶栏「请选择模型」，UI 契约（先预览、显式确认才落库）在代码中存在，待有模型后复测。
++- **证据位置**：权威判定矩阵 `docs/testing/impeccable-ui-acceptance.md` §9/§10；原始证据 `docs/verification/impeccable-ui/after/`（01–19 配对图、21 深色、width-1440/768/390、dark-host-real-*、independent-*.json、after-measurements.json）。
++- **状态**：本批仅回写 4 份档案；未改产品 src、未改 package.json/version、未 commit/tag/push。
++
+ ## [v0.7.4] 最终可发布：稳定性地基 S4 + war-room「进行中」KPI 热修（零 schema）（2026-10-14，平台：doubao-work）
+ 
+ > 状态：**S4 稳定性批次 19/19 PASS（独立测试专家实测）+ war-room KPI 热修真实 Chrome 隔离实例 PASS，本补丁可发布**。暂不 commit/tag/push，待用户最终通知执行最终提交并打 tag（注解 tag 指向最终 release commit）。历史 tag `v0.1.0`–`v0.7.3` 不移动。
+diff --git a/docs/issues-and-solutions.md b/docs/issues-and-solutions.md
+index db27630..6470774 100644
+--- a/docs/issues-and-solutions.md
++++ b/docs/issues-and-solutions.md
+@@ -6,6 +6,21 @@
+ 
+ ---
+ 
++## ISS-028 ｜ 深色模式品牌/语义色不随宿主翻转：`.pm-shell{color-scheme:light dark}` 覆盖宿主 used color-scheme（2026-10-15，doubao-work）
++
++- **现象**：仅点宿主「深色」（**不**叠加 OS `prefers-color-scheme: dark`）时，面板中性面/文字/描边经 `--dsw-alias-*` 正常翻深，但品牌青绿 accent 仍停在浅色 `#2f6f66`（rgb(47,111,102)），深底 `rgb(21,21,23)` 上青绿链接对比仅 **3.11:1**（<4.5 AA 正文线）。只有「宿主深色 + OS 也深色」组合态才正确（青绿翻 `#79c0b4`、对比 8.69:1）。对应验收矩阵 FAIL：UIV-12 / UIA-04（证据 `docs/verification/impeccable-ui/after/independent-dark-probe.json`、`after/dark-host-real-overview.png`）。
++- **根因**：`panel.css:38` `.pm-shell{color-scheme: light dark;}` 显式声明双方案，**覆盖**了从 `<html>` 继承来的宿主 dark used color-scheme，使 `light-dark()`（`panel.css:40-57` 品牌/语义色）回退到 UA/OS 偏好（headless Chrome = light）。中性色走宿主 `--dsw-alias-*` 别名、随宿主翻；品牌/语义色走 `light-dark()`、因此没翻——两条取值路径在深色单宿主态下分裂。
++- **建议修复方向（本轮只记录、不修）**：移除或改写该 `color-scheme` 声明，使 `.pm-shell` 继承宿主 used color-scheme（或由宿主主题态显式给 `.pm-shell` 设 `light`/`dark`），再让 `light-dark()` 跟随宿主。不要在组件层另造 dark class。
++- **验证建议**：修后按三态对比回归——①仅宿主浅色、②仅宿主深色（不叠 OS）、③宿主+OS 深色组合态；抽正文/次级/青绿链接/主按钮对比度，要求正文 ≥4.5、大文本/焦点 ≥3。
++- **状态**：已记录、本轮未修（并行工作线只回填档案）。
++
++## ISS-029 ｜ 390 窄档九视图 tab 条裁切无滚动指示 + 主要触控目标 <44×44（2026-10-15，doubao-work）
++
++- **现象**：外层 viewport=390 时面板容器实测 inline-width=334，九视图 tab 条 scrollWidth=1132 vs clientWidth=334，**7/9 tab 被裁**（仅 tasks/milestones 可见、risk 半截），且**无滚动渐隐/分组指示**，用户感知不到还有两个视图。同档触控目标：刷新图标按钮 32×32、项目下拉触发器 h≈25、行内图标按钮 28~32，均 <44×44（仅 tab h=46、新建项目 h=46 达标）。对应验收矩阵 FAIL：UIV-11 / UIA-07（证据 `after/independent-390-probe.json`、`after/width-390-tasks-independent.png`）。
++- **根因/设计现状**：tab 条 `white-space:nowrap` 固定横滚但缺两端渐隐遮罩或「更多视图」分组下拉；桌面图标按钮按紧凑行距设计（28~32），未在窄档放大。
++- **建议修复方向（本轮只记录、不修）**：tab 条加滚动渐隐遮罩（横滚可滚侧加 hairline fade）或把超出 tab 收进「更多视图」下拉；主要触控目标（刷新、项目下拉、行内高频图标按钮）在 ≤540 容器断点放大到 ≥44×44。
++- **状态**：已记录、本轮未修（并行工作线只回填档案）。
++
+ ## ISS-027 ｜ 隔离 GUI 收尾用 `pkill -f` 模糊匹配，误杀正式 `--profile pm` 的 3080/3091（2026-10-14，doubao-work）
+ 
+ - **现象**：为停掉隔离 GUI 验收起的临时 dsh 进程，按命令行子串做了 `pkill -f`（命中 `--profile pm` / CLI 路径），结果把**正式在跑的两个 dsh 实例一并杀掉**——`127.0.0.1:3080` 与 `127.0.0.1:3091` 同时掉线，Web 工作台打不开。
+diff --git a/docs/progress.md b/docs/progress.md
+index f15302f..5b412d6 100644
+--- a/docs/progress.md
++++ b/docs/progress.md
+@@ -2,9 +2,20 @@
+ 
+ > 本文件记录项目「每个阶段已完成、进行中、待办」的最新状态；给维护者与迁移者快速判断进度使用。每次有进展即更新，最新内容置顶。
+ 
+-最后更新：2026-10-14（doubao-work **稳定性地基 S4 批次 19/19 PASS（独立测试专家实测）+ war-room「进行中」KPI 热修真实 Chrome 隔离端口 3122 PASS**：A1 fs-atomic 钉死 rename 前失败只清 tmp 不碰目标、tmpNameFactory 仅测试缝生产默认不变；A2 llm 不 inject、懒读 `ctx.reflect.get('llm',false)` 真实 Context，缺 provider 中文 NO_LLM 降级核心离线；A3 verify runner 跑完全部 62 专项并聚合失败、timeout 单独分类、正式资产 before/after manifest 零污染；war-room `doing`→`in_progress` KPI 热修（修复前进行中恒 0）。**零 schema**、domain 仍 v1；S4 本轮 guard **160** 资产零污染、war-room 真实 Chrome **159** 资产零污染（跨轮 session/cache 自然轮转、各轮 before==after，如实分开）；client sha256 已实测锁定 `9d0b118c…`（332510 B）。当前 HEAD `eb41b30`(v0.7.3 已发布，tag `v0.7.3`)，S4+war-room 候选在未提交工作树，待用户授权最终提交打 tag。先前一批：v0.7.3 甘特拖拽热修 22 项全绿+回归 7/7 PASS）
++最后更新：2026-10-15（doubao-work **Impeccable 整站 UI 优化并行工作线改后独立验收：60 项 = PASS 53 / FAIL 4 / BLOCKED 3，不签发全站 PASS**；testedCommit `740c1e8`，隔离 worktree `.tmp/ui-impeccable`，基于 v0.7.4 基线 `5fdb2d7`；仅视图层改动、零业务/schema/存储变化、共享数据零污染；4 FAIL（UIV-11 390 tab 裁切 / UIV-12+UIA-04 宿主单深色品牌色不翻 / UIA-07 触控目标偏小）与 3 BLOCKED（AI 三项无 LLM provider）已建档 ISS-028/029。先前主线：v0.7.4 稳定性地基 S4 19/19 PASS + war-room KPI 热修真实 Chrome 端口 3122 PASS，client sha256 `9d0b118c…`，待用户授权最终提交打 tag）
+ 
+-## 当前阶段：稳定性地基 S4 + war-room KPI 热修 v0.7.4·19/19 PASS + 真实 Chrome PASS（2026-10-14，doubao-work）
++## 当前阶段：Impeccable 整站 UI 优化·改后独立验收 53 PASS / 4 FAIL / 3 BLOCKED（2026-10-15，doubao-work）
++
++- **背景**：独立并行工作线，在隔离 worktree `ui-impeccable` @ `740c1e8`（基于正式 v0.7.4 基线 `5fdb2d7`）上对既有 PM 工作台面板做**纯视图层** UI 优化——不碰主 worktree、不改业务真源；改后由独立测试专家真实 Chrome（puppeteer-core 23.11.1）隔离实例复测，不照单全收采集者证据。
++- **视觉落地（工程台账方向）**：暖纸墨色底 + 单一克制青绿（品牌色只指「当前/可操作」，≤10% 屏占）；1px hairline 分区、无嵌套卡片；概览 4 张大数字 KPI → 页边注式事实清单（`pm-fact-list`）；禁渐变/禁 card-in-card/禁 hero 大数字；tablist roving 键盘（方向键/Home/End/aria-selected）、抽屉与 MovePicker 焦点圈定+Esc、loading/empty 分离（`LoadingPanel` role=status）、restore 危险预览面板接线、顶栏收权重（唯一 primary「新建项目」+「更多」下拉）。
++- **验收（独立测试专家实测，testedCommit `740c1e8`）**：**60 项 = PASS 53 / FAIL 4 / BLOCKED 3**，不签发全站 PASS。关键实测——三档容器 shell inline-width 1440→1160 / 768→712 / 390→334；浅色对比正文 18.9 / 次级 5.8 / 弱文字 3.71（≥3）/ 青绿链接 5.86 / 主按钮 5.52；正确深色（宿主+OS 组合态）正文 17.45 / 青绿 8.69 / 主按钮 6.83；roving/焦点圈定/Esc 正常；`pnpm build` 独立重跑退出 0；组件层零硬编码 hex/零渐变/零 card-in-card/零 fluid clamp/组件层零 dsw-alias 直读。
++- **FAIL 4 项（本轮不修，已建档）**：**UIV-11**——390 容器 334 宽，九视图 tab 条 scrollWidth=1132 vs clientWidth=334、7/9 tab 被裁（仅 tasks/milestones 可见、risk 半截）、无滚动指示；**UIV-12 / UIA-04**——仅点宿主深色（不叠 OS prefers-color-scheme）时品牌青绿 `light-dark()` 未翻（停 `#2f6f66`），深底 `rgb(21,21,23)` 上链接对比 3.11:1<4.5（根因 `panel.css:38` `.pm-shell{color-scheme:light dark}` 覆盖宿主继承，见 ISS-028）；**UIA-07**——390 档刷新 32×32、项目下拉 h≈25、行内图标按钮 28~32，均 <44×44（tab h=46、新建项目 h=46 达标）。
++- **BLOCKED 3 项**：UID-08（D9 AI 助手）/ UID-09（D10 副驾）/ UIP-08（AI 草稿确认入库）——离线基线刻意不注入 LLM provider、顶栏「请选择模型」，无法真生成；「生成草稿→预览→显式确认入库」UI 契约在代码与抽屉中确认存在。
++- **隔离与零污染**：一切 GUI 证据来自一次性隔离实例（独立 `DSH_HOME` + 独立端口 data-int/home-int，已 kill 并删除）；共享 `.ui-preview/data` 22 个业务 JSON INT 前后 sha256 逐字节一致；正式 3080/3091 与 `data/ backups/ exports/` 未触。
++- **状态**：本批仅回填 4 份中文档案（整站报告/changelog/progress/issues）；未改产品 src、未改 package.json/version、未 commit/tag/push；与主线归并另行授权。
++- **下一步**：修 4 项 FAIL（ISS-028 移除/改写 `color-scheme` 声明使 `.pm-shell` 继承宿主 used color-scheme；ISS-029 加 tab 滚动渐隐/分组下拉、主要触控目标放大至 ≥44）；AI 三项待注入 LLM provider 后复测；自托管 woff2 字体运行时接线（panel.tsx import fonts.css + build 拷贝）；与主线 v0.7.4/v0.8 归并。
++
++## 历史阶段：稳定性地基 S4 + war-room KPI 热修 v0.7.4·19/19 PASS + 真实 Chrome PASS（2026-10-14，doubao-work）
+ 
+ - **背景**：v0.7.3（`eb41b30`）之后的稳定性补丁——不含新业务功能，只做地基加固与一处真实 KPI bug 热修。**全程零 schema**（domain 仍 v1、表集合未变，`taskStatusSchema=z.enum([todo,in_progress,blocked,done])` 拒收 `doing`）。
+ - **A1 fs-atomic 契约（`src/core/fs-atomic.ts`）**：`atomicWriteFile` 发布协议「同目录 tmp `.{basename}.{uuid}.tmp` → `open(tmp,'wx',0o600)` 排他 → write → fsync → close → `rename` POSIX 原子覆盖 → fsyncDirectory」；rename 前 open/write/sync/close/rename 任一失败，`finally` 仅在 rename 未发生时 `rm(tmp,{force:true})`，**目标文件逐字节不变、tmp 不残留**；rename 后目标即新内容、tmp 已消失。新增可选 `options.tmpNameFactory` **仅测试注入**（制造确定性 tmp 名/真实 EEXIST），生产不传时仍默认 `randomUUID`、对外行为完全不变。专项 `verify-fs-atomic.mjs` 退出 0（含 wx EEXIST 排他闭环 A1-02）。
+diff --git a/docs/reports/impeccable-site-ui-optimization.md b/docs/reports/impeccable-site-ui-optimization.md
+index fa94225..20b591e 100644
+--- a/docs/reports/impeccable-site-ui-optimization.md
++++ b/docs/reports/impeccable-site-ui-optimization.md
+@@ -3,19 +3,22 @@
+ > 报告性质：本轮「既有 Operate 应用 UI 视觉优化」的工程台账式复盘。
+ > 被测对象：`packages/dsh-pm-tool/src/client/panel.tsx` + `panel.css`（`.pm-shell` 面板内部）；**dsh 宿主外壳 excluded**。
+ > Worktree：`ui-impeccable`；改前基线 commit `5fdb2d7`（= 正式 v0.7.4）。
+-> 成文时点：2026-10-15。**改后真实 GUI 截图/对比度/深色实测正在另一执行者处采集，本报告先固化主体；凡 after 视觉未齐处一律标 `待GUI结果自动补`，不杜撰。**
++> 成文时点：2026-10-15。**改后真实 GUI 证据已采集，并经独立测试专家实测回填（testedCommit `740c1e8`，分支 `ui-impeccable`，隔离 worktree `.tmp/ui-impeccable`）**：总计 **60 项 = PASS 53 / FAIL 4 / BLOCKED 3**，不签发全站 PASS。证据根目录 [`docs/verification/impeccable-ui/after/`](../verification/impeccable-ui/after/)；权威逐条判定见验收矩阵 [`docs/testing/impeccable-ui-acceptance.md` §10](../testing/impeccable-ui-acceptance.md)。本报告 §3/§4 各表「视觉实测/after 视觉」列已按该矩阵逐格回填，FAIL 不软化。
+ 
+ ---
+ 
+ ## 0. 状态声明（先读，避免误读）
+ 
+-- **本报告不签发「全站 PASS」。** 独立验收矩阵 `docs/testing/impeccable-ui-acceptance.md` 在冻结时全部用例为 `NOT_RUN`，PASS/FAIL/BLOCKED 只能由独立测试专家真实执行后回填；本文只陈述**已实跑的静态/确定性证据**与**代码 diff 事实**，不替测试门下结论。
++- **本报告不签发「全站 PASS」。** 独立验收矩阵 `docs/testing/impeccable-ui-acceptance.md` 已由独立测试专家真实执行后回填（testedCommit `740c1e8`）：**60 项 = PASS 53 / FAIL 4 / BLOCKED 3**。本文据此陈述视觉实测结论；判定权与原始证据以矩阵 §9/§10 与 `after/` 目录为准。
+ - **已绿（本轮亲自复跑，退出码 0）**：
+   - `node packages/dsh-pm-tool/scripts/verify-impeccable-ui-static.mjs` → PASSED（1 条非阻塞 warn，见 §7）。
+   - `node packages/dsh-pm-tool/scripts/verify-impeccable-integrity.mjs` → PASS（vendor 62+2 文件指纹、engine 0.1.14 sha256/mode）。
+   - `node packages/dsh-pm-tool/scripts/verify-ui-fonts.mjs` → PASSED（离线、本地、预算内）。
+   - detector：`detect-after.json` = `[]`（0 finding），对照 `detect-before.json` = 3 条 side-tab warning。
+-- **未证（诚实缺证，不伪造）**：after 逐页截图配对、深色主题实测对比度、三档容器宽度（1440/768/390）实测 inline-width、交互级键盘/焦点实测、`pnpm build=0` 与业务 JSON before==after 的 INT 校验——均在独立测试专家矩阵内，状态以矩阵为准。
++  - 独立重跑 `pnpm build` 退出码 **0**（矩阵 UIP-10 复跑确认）。
++- **GUI 实测已采（2026-10-15，独立测试专家，证据 `docs/verification/impeccable-ui/after/`）**：三档容器 shell 实测 inline-width **1440→1160 / 768→712 / 390→334**；浅色对比正文 18.9 / 次级 5.8 / 弱文字 3.71（辅助页脚 ≥3）/ 青绿链接 5.86 / 主按钮 5.52；正确深色态（宿主+OS 深色组合）正文 17.45 / 青绿 8.69 / 主按钮 6.83；roving 方向键/Home/End、抽屉与 MovePicker 焦点圈定/Esc 均正常；INT 写路径（新建/勾选 done 落库 t-1010/t-1011、renumber 正确）在一次性 3212 实例验证，共享 `.ui-preview/data` 22 个业务 JSON INT 前后 sha256 逐字节一致。
++- **FAIL（4，不软化，详见 §3/§4 与矩阵 §10）**：**UIV-11**（390 容器 334 宽，九视图 tab 条 scrollWidth=1132 vs clientWidth=334，7/9 tab 被裁、无滚动指示）；**UIV-12 / UIA-04**（仅点宿主深色、不叠 OS 偏好时，品牌青绿 `light-dark()` 未翻，停在浅色 `#2f6f66`，深底上链接对比仅 3.11:1 <4.5）；**UIA-07**（390 档刷新 32×32、项目下拉 h≈25、行内图标按钮 28~32，均 <44×44）。
++- **BLOCKED（3）**：UID-08（D9 AI 助手）/ UID-09（D10 副驾）/ UIP-08（AI 草稿确认）——离线基线刻意不注入 LLM provider，顶栏显示「请选择模型」，AI 无法真生成；其「生成草稿→预览→显式确认入库」UI 契约在代码与抽屉中存在。
+ - 本报告**未改** PRODUCT/DESIGN/CONTEXT、未改验收矩阵任何用例、未改 version/manifest、未 `git commit`。
+ 
+ ---
+@@ -79,84 +82,85 @@
+ 
+ ## 3. 初始问题 P1–P3：来源与已修/未修状态
+ 
+-问题全量字段在 [`issues-before.json`](../verification/impeccable-ui/issues-before.json)（P0×0 / P1×6 / P2×8 / P3×4），审计叙事见 [`audit-before.md`](../verification/impeccable-ui/audit-before.md) 与 [`critique-before.md`](../verification/impeccable-ui/critique-before.md)。下表「已修/未修」依据**本轮复跑的静态校验 + grep + diff**判定；**视觉是否真的变好仍待 after GUI 配对截图**（标 `待GUI结果自动补`）。
++问题全量字段在 [`issues-before.json`](../verification/impeccable-ui/issues-before.json)（P0×0 / P1×6 / P2×8 / P3×4），审计叙事见 [`audit-before.md`](../verification/impeccable-ui/audit-before.md) 与 [`critique-before.md`](../verification/impeccable-ui/critique-before.md)。下表「已修/未修」依据**本轮复跑的静态校验 + grep + diff**判定；「视觉实测」列已按独立验收矩阵 §10（testedCommit `740c1e8`）逐格回填，PASS 附关键实测值，FAIL 如实写原因。
+ 
+ | ID | 级 | 问题（来源） | 代码层状态（本轮证据） | 视觉实测 |
+ |---|---|---|---|---|
+-| UI-01 | P1 | 14 处引用从未定义的 `--pm-border/--pm-text/--pm-bg`，无 fallback（panel.css:860+ 尾部方言） | **已修**：`grep 'var(--pm-border\|var(--pm-text\|var(--pm-bg' panel.css` = **0**；静态校验「悬空 = 0」 | 待GUI结果自动补 |
+-| UI-02 | P1 | restore 恢复预览 5 个 class 零 CSS 规则（危险操作裸文本） | **已修**：`.pm-restore-preview` 已有面板规则（`panel.css:1019`，danger 边框/居中浮层/`pre` 限高滚动）；markup 在 `panel.tsx:453` | 待GUI结果自动补（before 未触发 restore，见 §4） |
+-| UI-03 | P1 | 顶栏 6 控件压成两行等高按钮墙，主操作无权重 | **已修**：「新建项目」唯一 `pm-button-primary`（`panel.tsx:504`）；次级收进「更多」下拉（`topMenuOpen`/`aria-expanded` `panel.tsx:510`）；`.pm-top-actions` 加 `flex-wrap:wrap`（`panel.css:162`），窄档 `.pm-top-secondary{display:none}`（`panel.css:913`） | 待GUI结果自动补 |
+-| UI-04 | P1 | 无 loading 态 + 首屏空态误闪 | **已修**：新增 `loaded` 态（`panel.tsx:350`），分支 `!loaded→<LoadingPanel/>` 先于 `!project→EmptyWorkspace`（`panel.tsx:651`）；`LoadingPanel` 带 `role=status aria-live=polite` + spinner（`panel.tsx:1419`） | 待GUI结果自动补（before loading 态 BLOCKED 未采） |
+-| UI-05 | P1 | 9 视图 tab 横滚溢出无指示/分组 | **部分修**：roving 键盘（见 UI-06）已落地；窄档顶栏/工具条已响应化。**滚动渐隐遮罩/分组下拉未见明确实现**——待 after 视觉确认 | 待GUI结果自动补 |
+-| UI-06 | P1 | tablist 无 roving tabindex / 方向键 / aria-controls | **已修**：`tabIndex={active?0:-1}`（`panel.tsx:1490`）；方向键/Home/End 循环 + 焦点移到新 tab（`panel.tsx:308-324`）；`aria-selected`/`aria-controls`（`panel.tsx:1487`） | 待GUI结果自动补 |
+-| UI-07 | P2 | 表格单元格横竖全网格 + 6 条横边堆叠 | **方向已修**：token 层 hairline 化、去嵌套；具体竖线去除程度待 after 对比 | 待GUI结果自动补 |
+-| UI-08 | P2 | 统计四处重复（ProjectBar/提醒条/Overview 卡/KPI chip） | **已修**：静态校验「无 34px 大数字模板 KPI」；Overview 改页边注式事实清单（`.pm-fact-list` `panel.tsx:2536`）；ProjectBar 事实栏 `.pm-project-facts`（`panel.tsx:1455`） | 待GUI结果自动补 |
+-| UI-09 | P2 | 表格固定 min-width 窄壳右列裁切 | 未单独确认；container query 断点 760/540 在 token 层存在（`container-type:inline-size` `panel.css:80`） | 待GUI结果自动补 |
+-| UI-10 | P2 | 微字 9–10px 低于舒适线 | 字阶固定 px（无 clamp）；gantt/meta 字号是否上收到 ≥11px 待 after 量测 | 待GUI结果自动补 |
+-| UI-11 | P2 | 点击目标过小（25/17/15px） | 未在本轮静态项单独断言；触控目标 ≥44px 属矩阵 UIA-07 GUI 量测 | 待GUI结果自动补 |
+-| UI-12 | P2 | 提醒条可点 li 纯鼠标 | 静态类对账覆盖；是否补 `role=button/tabIndex/Enter` 待 after/a11y 实测 | 待GUI结果自动补 |
+-| UI-13 | P2 | 抽屉无焦点圈禁（Tab 走出 dialog） | **已修**：新增 `useFocusTrap` hook（`panel.tsx:3206`），DrawerPanel（`panel.tsx:3246`）+ MovePicker（`panel.tsx:1518`）各一处；静态校验 `data-pm-focus-trap` 恰好 2 处 | 待GUI结果自动补 |
+-| UI-14 | P2 | 深色模式未验证 + 未定义变量深色必破 | UI-01 已修；**深色实测仍缺证**——before 仅 21-theme-dark，after 深色配对待补 | 待GUI结果自动补 |
+-| UI-15 | P3 | side-tab 厚左边条 ×3（detector slop） | **已修**：`grep 'border-left: 3/4px' panel.css` = 0；`detect-after.json` = `[]` | 待GUI结果自动补 |
+-| UI-16 | P3 | 死 class（pm-war-room / pm-copilot-confirm） | **部分**：静态对账 285 个 pm-* 类均有规则或 test-hook；但 D 段仍 warn 7 个「CSS 定义而 TSX 未直接引用」类（含 `pm-kpi`/`pm-row-active` 等，多为动态/后代选择器目标，**保留待人工确认，未删**） | 待GUI结果自动补 |
+-| UI-17 | P3 | 错误 Notice 用 `role=status`（应 alert） | **已修**：静态校验「Notice role 分级：失败 alert / 成功 status；aria-live assertive / polite」 | 待GUI结果自动补 |
++| UI-01 | P1 | 14 处引用从未定义的 `--pm-border/--pm-text/--pm-bg`，无 fallback（panel.css:860+ 尾部方言） | **已修**：`grep 'var(--pm-border\|var(--pm-text\|var(--pm-bg' panel.css` = **0**；静态校验「悬空 = 0」 | **PASS（UIG-06）**：两主题下每个 `--pm-*` 别名均解析到具体色值、无 undefined/transparent（证据 `after/independent-dark-probe.json`） |
++| UI-02 | P1 | restore 恢复预览 5 个 class 零 CSS 规则（危险操作裸文本） | **已修**：`.pm-restore-preview` 已有面板规则（`panel.css:1019`，danger 边框/居中浮层/`pre` 限高滚动）；markup 在 `panel.tsx:453` | **PASS（UIP-07）**：restorePreview 危险预览 UI（危险文案+文件名+确认/取消+自动安全快照）在代码中确认；一次性 INT 环境与 before 均未真执行恢复，故无恢复后读回实测 |
++| UI-03 | P1 | 顶栏 6 控件压成两行等高按钮墙，主操作无权重 | **已修**：「新建项目」唯一 `pm-button-primary`（`panel.tsx:504`）；次级收进「更多」下拉（`topMenuOpen`/`aria-expanded` `panel.tsx:510`）；`.pm-top-actions` 加 `flex-wrap:wrap`（`panel.css:162`），窄档 `.pm-top-secondary{display:none}`（`panel.css:913`） | **PASS（UIN-04/UIN-05）**：after 实测「新建项目」唯一 primary h=46（390 达标），次级收进「更多」下拉（`aria-expanded` 正确、键盘可操作），无项目时 AI 入口不可点（证据 `after/10-global-board.png`） |
++| UI-04 | P1 | 无 loading 态 + 首屏空态误闪 | **已修**：新增 `loaded` 态（`panel.tsx:350`），分支 `!loaded→<LoadingPanel/>` 先于 `!project→EmptyWorkspace`（`panel.tsx:651`）；`LoadingPanel` 带 `role=status aria-live=polite` + spinner（`panel.tsx:1419`） | **PASS（UIS-05）**：loading 用内联指示（非居中大 spinner），代码契约+静态校验确认；before/after 均无自然 loading 停留可截图（无自然入口） |
++| UI-05 | P1 | 9 视图 tab 横滚溢出无指示/分组 | **部分修**：roving 键盘（见 UI-06）已落地；窄档顶栏/工具条已响应化。**滚动渐隐遮罩/分组下拉未见明确实现**——待 after 视觉确认 | **FAIL（矩阵 UIV-11）**：390 容器 inline-width=334，九视图 tab 条 scrollWidth=1132 vs clientWidth=334，7/9 tab 被裁（仅 tasks/milestones 可见、risk 半截），**无滚动渐隐/分组指示**；证据 `after/independent-390-probe.json`、`after/width-390-tasks-independent.png` |
++| UI-06 | P1 | tablist 无 roving tabindex / 方向键 / aria-controls | **已修**：`tabIndex={active?0:-1}`（`panel.tsx:1490`）；方向键/Home/End 循环 + 焦点移到新 tab（`panel.tsx:308-324`）；`aria-selected`/`aria-controls`（`panel.tsx:1487`） | **PASS（UIN-01/UIA-01）**：roving 方向键/Home/End 循环切换、`aria-selected/aria-controls` 正确（证据 `after/independent-keyboard-probe.json`）；390 视觉裁切另见 UI-05（UIV-11 FAIL） |
++| UI-07 | P2 | 表格单元格横竖全网格 + 6 条横边堆叠 | **方向已修**：token 层 hairline 化、去嵌套；具体竖线去除程度待 after 对比 | **PASS（UIG-03/UIG-05）**：after 九视图截图表格为 hairline 分区、无带边框+阴影嵌套卡片，全站 `.pm-button/.pm-input/.pm-tag` 形状一致（证据 `after/01-tasks.png` 等） |
++| UI-08 | P2 | 统计四处重复（ProjectBar/提醒条/Overview 卡/KPI chip） | **已修**：静态校验「无 34px 大数字模板 KPI」；Overview 改页边注式事实清单（`.pm-fact-list` `panel.tsx:2536`）；ProjectBar 事实栏 `.pm-project-facts`（`panel.tsx:1455`） | **PASS（UIG-04/UIV-08）**：overview 为工程台账式事实清单（总任务 9/已完成 2(22%)/进行 4/延期 1…），无 hero 大数字 KPI（证据 `after/07-overview.png`、`after/dark-host-real-overview.png`） |
++| UI-09 | P2 | 表格固定 min-width 窄壳右列裁切 | 未单独确认；container query 断点 760/540 在 token 层存在（`container-type:inline-size` `panel.css:80`） | **表格 PASS、tab 条 FAIL**：三档容器实测 inline-width 1440→1160 / 768→712 / 390→334，表格横滚在容器内不溢出 shell（UIV-01 PASS，`after/width-390-tasks-independent.png`）；但 tab 条裁切见 UI-05（UIV-11 FAIL） |
++| UI-10 | P2 | 微字 9–10px 低于舒适线 | 字阶固定 px（无 clamp）；gantt/meta 字号是否上收到 ≥11px 待 after 量测 | **PASS（实测）**：字阶固定 px（无 clamp）；实测仅头像首字 10px×9（装饰性首字），正文/表格/meta 未发现其他低于舒适线的小字（矩阵无对应 FAIL） |
++| UI-11 | P2 | 点击目标过小（25/17/15px） | 未在本轮静态项单独断言；触控目标 ≥44px 属矩阵 UIA-07 GUI 量测 | **FAIL（矩阵 UIA-07）**：390 档刷新图标按钮 32×32、项目下拉触发器 h≈25、行内图标按钮 28~32，均 <44×44（tab h=46、新建项目 h=46 达标）；证据 `after/independent-390-probe.json` |
++| UI-12 | P2 | 提醒条可点 li 纯鼠标 | 静态类对账覆盖；是否补 `role=button/tabIndex/Enter` 待 after/a11y 实测 | **PASS（UIA-01）**：键盘可达整体绿——tab/按钮/抽屉/模态/表格行可 Tab 到达、无键盘陷阱（证据 `after/independent-keyboard-probe.json`）；提醒条 li 未单独造触发，无回归证据 |
++| UI-13 | P2 | 抽屉无焦点圈禁（Tab 走出 dialog） | **已修**：新增 `useFocusTrap` hook（`panel.tsx:3206`），DrawerPanel（`panel.tsx:3246`）+ MovePicker（`panel.tsx:1518`）各一处；静态校验 `data-pm-focus-trap` 恰好 2 处 | **PASS（UID-10）**：抽屉与 MovePicker 焦点圈定（青绿聚焦环进入首个输入框）、Esc 关闭、关闭后焦点归还触发元素（证据 `after/independent-keyboard-probe.json`、`after/width-390-drawer-independent.png`） |
++| UI-14 | P2 | 深色模式未验证 + 未定义变量深色必破 | UI-01 已修；**深色实测仍缺证**——before 仅 21-theme-dark，after 深色配对待补 | **部分 FAIL（矩阵 UIV-12/UIA-04）**：正确深色态（宿主深色+OS 深色组合）正文 17.45 / 青绿 8.69 / 主按钮 6.83 达标；但**仅点宿主深色、不叠 OS `prefers-color-scheme`** 时品牌青绿 `light-dark()` 未翻（停 `#2f6f66`），深底 `rgb(21,21,23)` 上链接对比仅 **3.11:1 <4.5**。根因 `panel.css:38` `.pm-shell{color-scheme:light dark}`，见 ISS-028 |
++| UI-15 | P3 | side-tab 厚左边条 ×3（detector slop） | **已修**：`grep 'border-left: 3/4px' panel.css` = 0；`detect-after.json` = `[]` | **PASS**：detector 0 finding（对照 before 3 条 side-tab warning），after 截图无厚左边条（证据 `after/detect-after.json`） |
++| UI-16 | P3 | 死 class（pm-war-room / pm-copilot-confirm） | **部分**：静态对账 285 个 pm-* 类均有规则或 test-hook；但 D 段仍 warn 7 个「CSS 定义而 TSX 未直接引用」类（含 `pm-kpi`/`pm-row-active` 等，多为动态/后代选择器目标，**保留待人工确认，未删**） | **PASS（视觉无回归）**：静态对账 285 个 `pm-*` 类均有规则或 test-hook；7 个「CSS 定义而 TSX 未直接引用」类（`pm-kpi`/`pm-row-active` 等，多为动态/后代选择器目标）保留待人工确认，after 视觉未见破版 |
++| UI-17 | P3 | 错误 Notice 用 `role=status`（应 alert） | **已修**：静态校验「Notice role 分级：失败 alert / 成功 status；aria-live assertive / polite」 | **PASS（UIS-03/UIS-04）**：成功走安静内联 `role=status`（~3.5s 自隐）、非覆盖式深色大卡；失败内联+红 toast 不吞错、不泄 stack/Key |
+ | UI-18 | P3 | `window.confirm/alert` 与宿主 UI 不一致 | **未在本轮移除**：保留为保护回归项（矩阵 UIP-06 明确要求备份前 `window.confirm` 确认）。属有意保留，非遗漏 | 不适用（保护回归） |
+ 
+-> 说明：UI-09/10/11/12 这类「量尺寸/对比度/窄壳」问题**本就是 GUI 断言**，静态 grep 无法证明其完成；诚实标 `待GUI结果自动补`，等独立测试专家矩阵回填，不预写 PASS。
++> 说明：UI-09/10/11/12 这类「量尺寸/对比度/窄壳」问题**本就是 GUI 断言**，静态 grep 无法证明其完成；现已由独立测试专家真实 Chrome 实测回填（矩阵 §10），其中 **UI-05/UIV-11（tab 裁切）与 UI-11/UIA-07（触控目标）FAIL、UI-14/UIV-12+UIA-04（宿主单深色品牌色不翻）部分 FAIL**，不预写 PASS。
+ 
+ ---
+ 
+ ## 4. 九页 / 导航 / 表单 / 抽屉 / 弹层 优化前后对比
+ 
+-before 基线：[`before/`](../verification/impeccable-ui/before/)（21 张真实浏览器像素，捕获视口 675×745 窄，隔离宿主 127.0.0.1:3211，fixture 冻结）。**after/ 目录尚未生成**——下表 after 列凡视觉处均为 `待GUI结果自动补`；「代码层改动」列是有 diff/校验支撑的事实，不等同于视觉结论。
++before 基线：[`before/`](../verification/impeccable-ui/before/)（21 张真实浏览器像素，捕获视口 675×745 窄，隔离宿主 127.0.0.1:3211，fixture 冻结）。**after/ 已采集**（[`after/`](../verification/impeccable-ui/after/)：01–19 配对视图/抽屉、21 深色、width-1440/768/390、dark-host-real-*、independent-*.json、after-measurements.json）。下表 after 列已按矩阵 §10 实测回填；「代码层改动」列是有 diff/校验支撑的事实，不等同于视觉结论。
+ 
+ ### 4.1 九视图
+ 
+ | 视图 | before 证据 | 代码层改动（本轮 diff） | after 视觉 |
+ |---|---|---|---|
+-| V1 tasks 任务表 | `before/01-tasks.png` ✅ | 表格 token 化、sticky 表头、行高 39px 契约；roving 键盘不动 j/k | 待GUI结果自动补 |
+-| V2 milestones 里程碑 | `before/02-milestones.png` ✅ | 语义标签 `color-mix` 12% 柔底 | 待GUI结果自动补 |
+-| V3 risk-issues 风险问题 | `before/03-risk-issues.png` ⚠️（捕获时活宿主缓存空表，实际应 2 条） | 等级色只作辅助、附文字 | 待GUI结果自动补 |
+-| V4 meetings 会议 | `before/04-meetings.png` ✅ | 行动项区同词表 | 待GUI结果自动补 |
+-| V5 reports 进度汇报 | `before/05-reports.png` ✅ | `DeltaBadge` 正负零三态带文字箭头 | 待GUI结果自动补 |
+-| V6 deliverables 交付物 | `before/06-deliverables.png` ✅ | 版本只增留痕样式 | 待GUI结果自动补 |
+-| V7 overview 总览 | `before/07-overview.png` ✅（旧：4 张大数字 KPI） | **KPI 大卡 → 页边注式 `.pm-fact-list`**（`panel.tsx:2536`）；静态校验无 34px 大数字 | 待GUI结果自动补 |
+-| V8 gantt 甘特 | `before/08-gantt.png` ✅ | 几何不变量守住：左标签列 230px、行高 24px、条 top3/高18、今日线、`pm-gantt-hint role=status`（静态 G 段全 ok） | 待GUI结果自动补 |
+-| V9 people 人员负载 | `before/09-people.png` ✅ | 未分配置顶、逾期/临期排序 | 待GUI结果自动补 |
++| V1 tasks 任务表 | `before/01-tasks.png` ✅ | 表格 token 化、sticky 表头、行高 39px 契约；roving 键盘不动 j/k | **PASS（UIV-01/02）**：after/01-tasks.png WBS 缩进 1/1.1/1.2 保留、行可开抽屉、checkbox↔正文间距合规；390 下表格横滚不溢出 shell（`after/width-390-tasks-independent.png`）；j/k、空格勾选、Enter 热键不劫持输入框 |
++| V2 milestones 里程碑 | `before/02-milestones.png` ✅ | 语义标签 `color-mix` 12% 柔底 | **PASS（UIV-03）**：after/02-milestones.png 列可读，目标日期/状态标签在 390 不截断/不溢出 |
++| V3 risk-issues 风险问题 | `before/03-risk-issues.png` ⚠️（捕获时活宿主缓存空表，实际应 2 条） | 等级色只作辅助、附文字 | **PASS（UIV-04）**：after/03-risk-issues.png 风险等级/状态附文字（待处理/高、跟进中/中），不只靠颜色区分 |
++| V4 meetings 会议 | `before/04-meetings.png` ✅ | 行动项区同词表 | **PASS（UIV-05）**：after/04-meetings.png 会议列表+行动项区可读，「转为任务」文字入口在 |
++| V5 reports 进度汇报 | `before/05-reports.png` ✅ | `DeltaBadge` 正负零三态带文字箭头 | **PASS（UIV-06）**：after/05-reports.png DeltaBadge 正/负/持平三态带文字箭头，非仅颜色 |
++| V6 deliverables 交付物 | `before/06-deliverables.png` ✅ | 版本只增留痕样式 | **PASS（UIV-07）**：after/06-deliverables.png 列表可读；repoUrl/branch 可选字段不溢出 |
++| V7 overview 总览 | `before/07-overview.png` ✅（旧：4 张大数字 KPI） | **KPI 大卡 → 页边注式 `.pm-fact-list`**（`panel.tsx:2536`）；静态校验无 34px 大数字 | **PASS（UIG-04/UIV-08）**：after/07-overview.png Summary 行对齐网格、间距一致，2 列网格在窄容器正确堆叠，无 hero 大数字 KPI |
++| V8 gantt 甘特 | `before/08-gantt.png` ✅ | 几何不变量守住：左标签列 230px、行高 24px、条 top3/高18、今日线、`pm-gantt-hint role=status`（静态 G 段全 ok） | **PASS（UIV-09/UIS-06）**：after/08-gantt.png 甘特条/今日线/依赖线两主题可读、条可点；`.pm-gantt-hint` 渲染宽度 >0 |
++| V9 people 人员负载 | `before/09-people.png` ✅ | 未分配置顶、逾期/临期排序 | **PASS（UIV-10）**：after/09-people.png 人员卡片、未分配置顶、逾期/临期（7 天边界）排序可读；「没有匹配负责人」空态文案在 |
+ 
+ ### 4.2 导航 / 弹层 / 状态
+ 
+ | 元素 | before 证据 | 代码层改动 | after 视觉 |
+ |---|---|---|---|
+-| N1 视图 tab 行（9 tab） | 截图 04–06 实证横滚无指示 | roving tabindex + 方向键/Home/End + `aria-selected/controls`（UI-06） | 待GUI结果自动补 |
+-| N2 项目条 ProjectBar | — | `.pm-project-facts` 事实栏收敛（UI-08） | 待GUI结果自动补 |
+-| N3 顶栏动作 | before 01–06 全为两行按钮墙 | 唯一 primary「新建项目」+「更多」下拉 + flex-wrap（UI-03） | 待GUI结果自动补 |
+-| N4 提醒条 ReminderStrip | — | li 键盘可达性待 a11y 实测（UI-12） | 待GUI结果自动补 |
+-| N5 MovePicker 移动选择 | `before/14-move-picker.png` ✅ | 加 `useFocusTrap`（`panel.tsx:1518`） | 待GUI结果自动补 |
+-| N6 GlobalBoard 总览看板 | `before/10-global-board.png` ✅ | 不写业务数据（保护回归 UIN-03） | 待GUI结果自动补 |
+-| N7 「更多」下拉 | before 未展开 | `aria-expanded` 正确、键盘可操作（待 GUI） | 待GUI结果自动补 |
+-| N8 restore 确认内联面板 | **before 未执行**（仅取消，未 restore） | `.pm-restore-preview` 危险面板已实现（UI-02） | 待GUI结果自动补 |
+-| N9 批量操作条 | — | 类对账覆盖 | 待GUI结果自动补 |
+-| S1–S7 状态（empty/loading/error） | `before/19-empty-project.png` ✅；**loading/error BLOCKED 未采** | `LoadingPanel`（UI-04）；Notice role 分级（UI-17） | 待GUI结果自动补 |
++| N1 视图 tab 行（9 tab） | 截图 04–06 实证横滚无指示 | roving tabindex + 方向键/Home/End + `aria-selected/controls`（UI-06） | **键盘 PASS（UIN-01）/ 窄档视觉 FAIL（UIV-11）**：9 tab 计数徽标正确、roving 方向键/Home/End 与 `aria-selected` 正常（`after/independent-keyboard-probe.json`）；390 下 tab 条 scrollWidth=1132 vs clientWidth=334、7/9 tab 被裁无滚动指示（`after/width-390-tasks-independent.png`） |
++| N2 项目条 ProjectBar | — | `.pm-project-facts` 事实栏收敛（UI-08） | **PASS**：after/01-tasks.png 项目条事实栏与概览事实清单同源、无重复 KPI 卡 |
++| N3 顶栏动作 | before 01–06 全为两行按钮墙 | 唯一 primary「新建项目」+「更多」下拉 + flex-wrap（UI-03） | **PASS（UIN-04/UIN-05）**：顶栏不再两行按钮墙；「新建项目」唯一 primary（h=46，390 达标）；无项目时 AI 入口收进「更多」且不可点 |
++| N4 提醒条 ReminderStrip | — | li 键盘可达性待 a11y 实测（UI-12） | **PASS（UIA-01）**：键盘可达整体绿（无键盘陷阱）；提醒条 li 未单独造触发，无回归证据 |
++| N5 MovePicker 移动选择 | `before/14-move-picker.png` ✅ | 加 `useFocusTrap`（`panel.tsx:1518`） | **PASS（UIN-02/UID-10）**：after/14-move-picker.png 候选树排除自身与后代；焦点圈定/Esc 正常；移动=改父+整项目 renumber 走同一 storage-json 单写队列（INT 已证创建/更新落库） |
++| N6 GlobalBoard 总览看板 | `before/10-global-board.png` ✅ | 不写业务数据（保护回归 UIN-03） | **PASS（UIN-03）**：after/10-global-board.png 总览看板经「更多」打开，只读不写业务数据、项目切换只读 |
++| N7 「更多」下拉 | before 未展开 | `aria-expanded` 正确、键盘可操作（待 GUI） | **PASS（UIN-04）**：after/10-global-board.png 菜单项（备份/恢复/导出/看板）顺序可读、`aria-expanded` 正确、键盘可操作 |
++| N8 restore 确认内联面板 | **before 未执行**（仅取消，未 restore） | `.pm-restore-preview` 危险面板已实现（UI-02） | **PASS（UIP-07，代码契约级）**：restorePreview 危险预览（危险文案+文件名+确认/取消）与恢复前自动安全快照在代码中确认；一次性环境与 before 均未真执行恢复，无恢复后读回实测 |
++| N9 批量操作条 | — | 类对账覆盖 | **PASS**：after 截图无破版；批量操作条控件词表与全站一致（UIG-05） |
++| S1–S7 状态（empty/loading/error） | `before/19-empty-project.png` ✅；**loading/error BLOCKED 未采** | `LoadingPanel`（UI-04）；Notice role 分级（UI-17） | **S1/S2/S3 PASS（UIS-01/02/03/04/05/06）；loading/error 自然触发仍 BLOCKED**：after/19-empty-project.png 空工作区有「暂无任务记录+用 AI 一键生成 WBS」引导、表格空态文案+行动按钮表头不断裂；成功安静内联 role=status、失败内联不吞错、loading 内联指示、甘特提示 role=status 渲染宽>0；无自然 loading/error 入口故未造触发截图 |
+ 
+ ### 4.3 十抽屉 / 表单
+ 
+ | 抽屉 | before 证据 | after 视觉 |
+ |---|---|---|
+-| D2 project-edit | `before/11-drawer-project-edit.png` ✅ | 待GUI结果自动补 |
+-| D3 task-create / D3 task-edit | `before/12-…` `13-…` ✅（13 含前置依赖勾选） | 待GUI结果自动补 |
+-| D4 milestone-create | `before/15-…` ✅ | 待GUI结果自动补 |
+-| D6 meeting-create | `before/16-…` ✅ | 待GUI结果自动补 |
+-| D7 report-create | `before/17-…` ✅ | 待GUI结果自动补 |
+-| D8 deliverable-create | `before/18-…` ✅ | 待GUI结果自动补 |
+-| D1 project-create / D5 risk-issue / D9 ai / D10 copilot | **未单独截**（D5 活宿主风险表空、表单未开） | 待GUI结果自动补 |
+-
+-### 4.4 before 覆盖诚实缺口（来自 `before/README.md`）
+-
+-- 捕获视口固定 675×745 窄；**真 390 窄窗与宽屏视口 BLOCKED**（公共 BU API 不支持改视口，项目既定 MANUAL_PENDING）。
+-- **restore 未真正触发**（只生成非破坏性备份 JSON，22 条 fixtures 完好）；loading/error 态无自然入口、未造数据，BLOCKED。
+-- 深色仅 `before/21-theme-dark.png` / `21-theme-dark-tasks.png` 两张。
+-- 风险视图 before 截图显示 0 条是「活宿主启动时缓存空表」所致，非真 0。
++| D2 project-edit | `before/11-drawer-project-edit.png` ✅ | **PASS（UID-01）**：after/11-drawer-project-edit.png 项目表单字段（项目名称*/开始日期*/目标日期*/仓库地址可选/分支可选）、required 标记、错误文案可见 |
++| D3 task-create / D3 task-edit | `before/12-…` `13-…` ✅（13 含前置依赖勾选） | **PASS（UID-02/UID-12）**：after/12/13 + `after/width-390-drawer-independent.png`——任务表单（标题*/状态/优先级/执行人/起止/进度/前置依赖）布局一致、label 关联；390 抽屉近全宽(359)、内部可滚动、字段不截断、关闭 X 可达、body 无横滚 |
++| D4 milestone-create | `before/15-…` ✅ | **PASS（UID-03）**：after/15-milestone.png targetDate 等字段一致，日期控件不溢出抽屉 |
++| D6 meeting-create | `before/16-…` ✅ | **PASS（UID-05）**：after/17-meeting.png 会议表单+MeetingActions 行动项区布局一致 |
++| D7 report-create | `before/17-…` ✅ | **PASS（UID-06）**：after/18-report.png 汇报表单/生成流程一致 |
++| D8 deliverable-create | `before/18-…` ✅ | **PASS（UID-07）**：交付物 repoUrl/branch 可选字段一致、不溢出 |
++| D1 project-create / D5 risk-issue / D9 ai / D10 copilot | **未单独截**（D5 活宿主风险表空、表单未开） | **D1/D5 PASS（UID-01/04）；D9/D10 BLOCKED（UID-08/09/UIP-08）**：项目创建/风险表单字段与 required 标记在（与 D2 同词表）；AI 助手「生成草稿→预览→显式确认入库才落库」与副驾只读诊断+确认卡 UI 契约在代码与抽屉中，但离线基线刻意未注入 LLM provider、顶栏显示「请选择模型」，无法真生成 |
++
++### 4.4 before 覆盖诚实缺口（来自 `before/README.md`），与改后回填对照
++
++- **三档宽度：before 时 BLOCKED → after 已真实采集（成功）**：外层 viewport 1440/768/390 实测面板容器 inline-width = **1160 / 712 / 334**（证据 `after/width-1440-tasks.png`、`width-768-tasks.png`、`width-390-tasks-independent.png`、`after/independent-390-probe.json`）；表格横滚不溢出 shell，但 **390 下九视图 tab 条 7/9 被裁（UIV-11 FAIL）**。
++- **restore 未真正触发**（只生成非破坏性备份 JSON，22 条 fixtures 完好）；loading/error 态无自然入口、未造数据，**after 仍 BLOCKED**（判定依据代码契约+静态校验，非截图实测）。
++- **深色：before 仅两张 → after 已采但部分 FAIL**：`after/21-theme-dark*.png`、`after/dark-host-real-overview.png`、`after/dark-host-real-tasks.png`、`after/independent-dark-probe.json`。正确深色态（宿主+OS 深色组合）对比达标（正文 17.45/青绿 8.69）；**仅宿主深色路径 FAIL**（品牌青绿 `light-dark()` 未翻、链接 3.11:1，见 UIV-12/UIA-04、ISS-028）。
++- 风险视图 before 截图显示 0 条是「活宿主启动时缓存空表」所致，非真 0（after/03-risk-issues.png 已见 2 条）。
++- **AI 三态 BLOCKED**：UID-08/UID-09/UIP-08——离线基线未注入 LLM provider，顶栏「请选择模型」，草稿确认链路无法真生成（UI 契约在代码中存在）。
+ 
+ ---
+ 
+@@ -263,11 +267,13 @@ CSS 定义但 TSX 未**直接**引用的 7 个类：`pm-kpi, pm-kpi-row, pm-row-
+ - 后果（`fonts/NOTES-BUILD.md` 自述）：`@font-face` 已声明但 woff2 运行时可能 404，浏览器自动回落系统字体（`font-display: swap`），**不报错、不阻塞渲染**；中文本就走系统黑体，故中文排版不受影响，仅拉丁/数字临时用系统无衬线/等宽。
+ - 待构建/TSX 侧补：`import './fonts.css?raw'` + 拷贝 woff2 到运行时相对位置（或注入时重写 base URL）。本任务按边界未改 `package.json` / `tsdown.config.ts`。
+ 
+-### 7.4 遗留（移交独立测试专家）
++### 7.4 遗留（已按独立验收矩阵 §10 回填，testedCommit `740c1e8`）
+ 
+-- **P2 待 GUI 量化**：UI-09 窄壳列裁切、UI-10 微字 ≥11px、UI-11 触控目标 ≥44px、UI-12 提醒条 li 键盘、UI-14 深色对比度——全部 NOT_RUN，等矩阵 §4/§6.3 回填。
+-- **P3 保留**：UI-16 七个「疑似死类」待人工确认；UI-18 `window.confirm` 为**有意保留**（保护回归 UIP-06）。
+-- after 配对截图、三档宽度容器 inline-width 实测、INT 数据写路径回归（UIP-01~10）、`pnpm build=0`、正式 `data/backups/exports` sha256 before==after——**均未在本报告签发**。
++- **已实测签发（PASS 53）**：三档容器 inline-width（1160/712/334）、浅/组合态深色对比度、roving 键盘与焦点圈定/Esc、INT 写路径（t-1010/t-1011 新建/勾选 done 落库、renumber 正确）、`pnpm build` 独立重跑退出 0、共享 `.ui-preview/data` 22 个业务 JSON INT 前后 sha256 逐字节一致。
++- **FAIL 4 项（本轮不修，已建档 ISS-028/ISS-029）**：UIV-11（390 tab 条 7/9 被裁无滚动指示）、UIV-12+UIA-04（仅宿主深色品牌色 `light-dark()` 未翻、链接 3.11:1；根因 `panel.css:38` `.pm-shell{color-scheme:light dark}` 覆盖宿主继承）、UIA-07（390 档图标按钮 28~32、项目下拉 h≈25 <44×44）。
++- **BLOCKED 3 项**：UID-08/UID-09/UIP-08（AI 草稿/副驾/确认入库——无 LLM provider 可测，UI 契约在代码中存在）。
++- **仍缺证**：loading/error 自然触发截图（无自然入口）；restore 真执行后的读回（一次性环境未造）。
++- **P3 保留**：UI-16 七个「疑似死类」待人工确认；UI-18 `window.confirm` 为**有意保留**（保护回归 UIP-06）；字体运行时接线（§7.3）未做。
+ 
+ ---
+ 
+@@ -300,9 +306,9 @@ packages/dsh-pm-tool/src/client/panel.tsx               (310 行变更：focus t
+ 
+ ---
+ 
+-### 待补清单（after GUI 结果到齐后由父级通知补齐，非占位杜撰）
++### 收尾状态（2026-10-15，独立测试专家回填后）
+ 
+-1. `after/NN-*.png` 与 before 一一配对（9 视图 + 抽屉/弹层/状态，含深色、三档宽度）。
+-2. 对照表 §4 各 `待GUI结果自动补` 单元格：填实测容器 inline-width、对比度、触控目标量测。
+-3. 独立验收矩阵 `impeccable-ui-acceptance.md` 的 PASS/FAIL/BLOCKED 回填（仅测试专家可签）。
+-4. 字体运行时接线完成后，删除 §7.3「未接线」标注。
++1. ✅ `after/` 已采集：9 视图 + 抽屉/弹层/状态配对图（01–19）、深色（21-theme-dark*、dark-host-real-*）、三档宽度（width-1440/768/390）、independent-*.json 探针与 after-measurements.json。
++2. ✅ 本报告 §3/§4 各视觉单元格已按矩阵 §10 回填（容器 inline-width、对比度、触控目标量测均在）。
++3. ✅ 独立验收矩阵 `docs/testing/impeccable-ui-acceptance.md` §9/§10 已由测试专家签发：**53 PASS / 4 FAIL / 3 BLOCKED**（testedCommit `740c1e8`），不签发全站 PASS。
++4. ⏳ 剩余：修 4 项 FAIL（ISS-028 深色 color-scheme、ISS-029 390 tab 裁切/触控目标）；AI 三项待注入 LLM provider 后复测；字体运行时接线完成后删除 §7.3「未接线」标注。
+diff --git a/docs/testing/impeccable-ui-acceptance.md b/docs/testing/impeccable-ui-acceptance.md
+index 2f767f6..99de0df 100644
+--- a/docs/testing/impeccable-ui-acceptance.md
++++ b/docs/testing/impeccable-ui-acceptance.md
+@@ -114,14 +114,14 @@ engine 在独立安全审查放行前 NOT RUN；本矩阵在 engine 未动一行
+ 
+ | ID | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|
+-| UIG-01 | **组件层**样式取值只经 `--pm-*` 别名；`panel.tsx` 内联 style 与组件 CSS 中**零硬编码 hex/rgb/hsl 取色**（grep `#[0-9a-fA-F]{3,6}\|rgb(\|rgba(\|hsl(` 于 src/client；命中即 FAIL 的判定**排除统一局部语义 token 定义层**——即 `.pm-shell` 别名块内以 OKLCH/`var()` 混色定义品牌/状态色的正经 token 定义，以及注释；不得把设计系统的 token 定义误判为违规） | AUTO grep | NOT_RUN |
+-| UIG-02 | 不新增 `linear-gradient(/radial-gradient(/conic-gradient(` 蓝紫系装饰渐变（grep 命中新增即 FAIL） | AUTO grep | NOT_RUN |
+-| UIG-03 | 不出现 card-in-card：抽屉/面板内不新增带边框+阴影的嵌套卡片容器；分组改用分隔线/小标题/留白 | GUI 逐视图查 | NOT_RUN |
+-| UIG-04 | 概览统计为工程台账式紧凑 `Summary`，无营销 hero 巨大 display 数字块；数值字阶属于数据字阶而非展示字阶 | GUI | NOT_RUN |
+-| UIG-05 | 全站按钮形状、表单控件（input/select/textarea）、图标风格、状态色一致；同语义按钮在任意视图/抽屉形状一致 | GUI 逐视图比对 | NOT_RUN |
+-| UIG-06 | 所有 `--pm-*` 别名在浅/深主题下均解析到宿主 token，无别名悬空（某主题下计算值 undefined/transparent） | GUI 两主题量 computed | NOT_RUN |
+-| UIG-07 | 不绕开别名层直接在组件里读 `--dsw-alias-*`（grep src/client 组件层 `dsw-alias` 命中即 FAIL，别名层 `.pm-shell` 除外） | AUTO grep | NOT_RUN |
+-| UIG-08 | 字阶走固定 rem/px 刻度（1.125–1.2 间比），不为 product UI 引入 fluid clamp() 标题 | AUTO css 检查 | NOT_RUN |
++| UIG-01 | **组件层**样式取值只经 `--pm-*` 别名；`panel.tsx` 内联 style 与组件 CSS 中**零硬编码 hex/rgb/hsl 取色**（grep `#[0-9a-fA-F]{3,6}\|rgb(\|rgba(\|hsl(` 于 src/client；命中即 FAIL 的判定**排除统一局部语义 token 定义层**——即 `.pm-shell` 别名块内以 OKLCH/`var()` 混色定义品牌/状态色的正经 token 定义，以及注释；不得把设计系统的 token 定义误判为违规） | AUTO grep | PASS |
++| UIG-02 | 不新增 `linear-gradient(/radial-gradient(/conic-gradient(` 蓝紫系装饰渐变（grep 命中新增即 FAIL） | AUTO grep | PASS |
++| UIG-03 | 不出现 card-in-card：抽屉/面板内不新增带边框+阴影的嵌套卡片容器；分组改用分隔线/小标题/留白 | GUI 逐视图查 | PASS |
++| UIG-04 | 概览统计为工程台账式紧凑 `Summary`，无营销 hero 巨大 display 数字块；数值字阶属于数据字阶而非展示字阶 | GUI | PASS |
++| UIG-05 | 全站按钮形状、表单控件（input/select/textarea）、图标风格、状态色一致；同语义按钮在任意视图/抽屉形状一致 | GUI 逐视图比对 | PASS |
++| UIG-06 | 所有 `--pm-*` 别名在浅/深主题下均解析到宿主 token，无别名悬空（某主题下计算值 undefined/transparent） | GUI 两主题量 computed | PASS |
++| UIG-07 | 不绕开别名层直接在组件里读 `--dsw-alias-*`（grep src/client 组件层 `dsw-alias` 命中即 FAIL，别名层 `.pm-shell` 除外） | AUTO grep | PASS |
++| UIG-08 | 字阶走固定 rem/px 刻度（1.125–1.2 间比），不为 product UI 引入 fluid clamp() 标题 | AUTO css 检查 | PASS |
+ 
+ ## 4. 九视图逐视图验收（UIV）
+ 
+@@ -129,35 +129,35 @@ engine 在独立安全审查放行前 NOT RUN；本矩阵在 engine 未动一行
+ 
+ | ID | 视图 | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|---|
+-| UIV-01 | V1 tasks | 任务树缩进层级（WBS code 缩进）保留；checkbox↔正文间距 4–8px；整行可点开抽屉；父行 max-height 内滚动；390 实测容器宽下不横向溢出 | GUI | NOT_RUN |
+-| UIV-02 | V1 tasks | 行移动 j/k 不破坏 active 高亮；Space 门控焦点行；输入框聚焦时不劫持全局热键 | GUI | NOT_RUN |
+-| UIV-03 | V2 milestones | 里程碑列可读、目标日期/状态标签在 390 不截断/不溢出 | GUI | NOT_RUN |
+-| UIV-04 | V3 risk-issues | 风险等级/状态语义色正确（warning/error），不只靠颜色区分（附文字/图标） | GUI | NOT_RUN |
+-| UIV-05 | V4 meetings | 会议列表 + 行动项区可读；「转为任务」文字入口可见；MeetingActions 转任务链路不静默 | GUI | NOT_RUN |
+-| UIV-06 | V5 reports | `DeltaBadge` 正负零三态（正/负/持平 0）有文字箭头而非仅颜色；相邻快照确定 diff | GUI | NOT_RUN |
+-| UIV-07 | V6 deliverables | 交付物列表 + 可选 repoUrl/branch 字段可读不溢出 | GUI | NOT_RUN |
+-| UIV-08 | V7 overview | 概览各 `Summary` 行对齐网格、间距一致；无 hero 大数字；2 列网格在 ≤760 容器宽正确堆叠 | GUI | NOT_RUN |
+-| UIV-09 | V8 gantt | 甘特条/依赖线/今日线/横滚对齐在两主题可读；条可点；窄条外置标签不外溢 | GUI | NOT_RUN |
+-| UIV-10 | V9 people | 人员卡片、未分配置顶、逾期/临期（7 天边界）排序可读；「没有匹配负责人」空态文案存在 | GUI | NOT_RUN |
+-| UIV-11 | 全部 | 三档宽度下无横向滚动条溢出（外层 390 时面板容器宽实测记录，内容不超出容器） | GUI 量宽 | NOT_RUN |
+-| UIV-12 | 全部 | 两主题下文字/背景对比度不依赖单一亮度假设（正文 ≥4.5:1，大文本 ≥3:1，抽样关键路径） | GUI 量对比度 | NOT_RUN |
++| UIV-01 | V1 tasks | 任务树缩进层级（WBS code 缩进）保留；checkbox↔正文间距 4–8px；整行可点开抽屉；父行 max-height 内滚动；390 实测容器宽下不横向溢出 | GUI | PASS |
++| UIV-02 | V1 tasks | 行移动 j/k 不破坏 active 高亮；Space 门控焦点行；输入框聚焦时不劫持全局热键 | GUI | PASS |
++| UIV-03 | V2 milestones | 里程碑列可读、目标日期/状态标签在 390 不截断/不溢出 | GUI | PASS |
++| UIV-04 | V3 risk-issues | 风险等级/状态语义色正确（warning/error），不只靠颜色区分（附文字/图标） | GUI | PASS |
++| UIV-05 | V4 meetings | 会议列表 + 行动项区可读；「转为任务」文字入口可见；MeetingActions 转任务链路不静默 | GUI | PASS |
++| UIV-06 | V5 reports | `DeltaBadge` 正负零三态（正/负/持平 0）有文字箭头而非仅颜色；相邻快照确定 diff | GUI | PASS |
++| UIV-07 | V6 deliverables | 交付物列表 + 可选 repoUrl/branch 字段可读不溢出 | GUI | PASS |
++| UIV-08 | V7 overview | 概览各 `Summary` 行对齐网格、间距一致；无 hero 大数字；2 列网格在 ≤760 容器宽正确堆叠 | GUI | PASS |
++| UIV-09 | V8 gantt | 甘特条/依赖线/今日线/横滚对齐在两主题可读；条可点；窄条外置标签不外溢 | GUI | PASS |
++| UIV-10 | V9 people | 人员卡片、未分配置顶、逾期/临期（7 天边界）排序可读；「没有匹配负责人」空态文案存在 | GUI | PASS |
++| UIV-11 | 全部 | 三档宽度下无横向滚动条溢出（外层 390 时面板容器宽实测记录，内容不超出容器） | GUI 量宽 | FAIL |
++| UIV-12 | 全部 | 两主题下文字/背景对比度不依赖单一亮度假设（正文 ≥4.5:1，大文本 ≥3:1，抽样关键路径） | GUI 量对比度 | FAIL |
+ 
+ ## 5. 十抽屉 + 表单（UID）
+ 
+ | ID | 抽屉 | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|---|
+-| UID-01 | D1/D2 project | 项目表单字段、required 标记、错误文案（非仅红色）可见；`repoUrl/branch` 格式校验沿用既有 | GUI | NOT_RUN |
+-| UID-02 | D3 task | 任务表单：标题 required、状态/优先级/负责人/起止/progress 字段布局一致；错误指向具体字段（errorId aria 关联） | GUI | NOT_RUN |
+-| UID-03 | D4 milestone | 里程碑表单 targetDate 等字段一致；日期控件不溢出抽屉 | GUI | NOT_RUN |
+-| UID-04 | D5 risk-issue | 风险表单字段/严重度语义一致 | GUI | NOT_RUN |
+-| UID-05 | D6 meeting | 会议表单 + MeetingActions 行动项区布局一致 | GUI | NOT_RUN |
+-| UID-06 | D7 report | 汇报表单/生成流程一致 | GUI | NOT_RUN |
+-| UID-07 | D8 deliverable | 交付物表单 repoUrl/branch 字段一致 | GUI | NOT_RUN |
+-| UID-08 | D9 ai | AI 助手：「生成草稿」先预览、显式「确认入库」才落库；不自动持久化；loading 态存在 | GUI | NOT_RUN |
+-| UID-09 | D10 copilot | 副驾：只读诊断 + 操作草稿卡，确认按钮才落库；拒绝行/软风险可见；计划不写 settings/不新表 | GUI | NOT_RUN |
+-| UID-10 | 全部抽屉 | `<DrawerPanel>` 正确 escape 容器（不被父 `overflow` 裁剪）；Esc 关闭；焦点进入抽屉、关闭后归还触发元素 | GUI | NOT_RUN |
+-| UID-11 | 全部抽屉 | 表单控件词表全站一致（同一种 input/select/button 形状）；label 与控件关联（`<label htmlFor>` 或 aria-label） | GUI | NOT_RUN |
+-| UID-12 | 全部抽屉 | 390 实测容器宽下抽屉不溢出、表单可滚动不截断、确认按钮可达 | GUI | NOT_RUN |
++| UID-01 | D1/D2 project | 项目表单字段、required 标记、错误文案（非仅红色）可见；`repoUrl/branch` 格式校验沿用既有 | GUI | PASS |
++| UID-02 | D3 task | 任务表单：标题 required、状态/优先级/负责人/起止/progress 字段布局一致；错误指向具体字段（errorId aria 关联） | GUI | PASS |
++| UID-03 | D4 milestone | 里程碑表单 targetDate 等字段一致；日期控件不溢出抽屉 | GUI | PASS |
++| UID-04 | D5 risk-issue | 风险表单字段/严重度语义一致 | GUI | PASS |
++| UID-05 | D6 meeting | 会议表单 + MeetingActions 行动项区布局一致 | GUI | PASS |
++| UID-06 | D7 report | 汇报表单/生成流程一致 | GUI | PASS |
++| UID-07 | D8 deliverable | 交付物表单 repoUrl/branch 字段一致 | GUI | PASS |
++| UID-08 | D9 ai | AI 助手：「生成草稿」先预览、显式「确认入库」才落库；不自动持久化；loading 态存在 | GUI | BLOCKED |
++| UID-09 | D10 copilot | 副驾：只读诊断 + 操作草稿卡，确认按钮才落库；拒绝行/软风险可见；计划不写 settings/不新表 | GUI | BLOCKED |
++| UID-10 | 全部抽屉 | `<DrawerPanel>` 正确 escape 容器（不被父 `overflow` 裁剪）；Esc 关闭；焦点进入抽屉、关闭后归还触发元素 | GUI | PASS |
++| UID-11 | 全部抽屉 | 表单控件词表全站一致（同一种 input/select/button 形状）；label 与控件关联（`<label htmlFor>` 或 aria-label） | GUI | PASS |
++| UID-12 | 全部抽屉 | 390 实测容器宽下抽屉不溢出、表单可滚动不截断、确认按钮可达 | GUI | PASS |
+ 
+ ## 6. 导航 / 弹层 / 状态 / a11y / 保护回归（UIN/UIS/UIA/UIP）
+ 
+@@ -165,49 +165,49 @@ engine 在独立安全审查放行前 NOT RUN；本矩阵在 engine 未动一行
+ 
+ | ID | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|
+-| UIN-01 | 9 个 `ViewTab` 计数徽标正确；当前 tab 有 `active` 样式且可键盘 Tab 到达；`aria-current`/选中态明确 | GUI | NOT_RUN |
+-| UIN-02 | `MovePickerModal` 候选列表排除自身与后代；移动=改父+整项目 renumber 原子；取消零写；确认后重启读回一致 | GUI+INT | NOT_RUN |
+-| UIN-03 | `GlobalBoard` 总览看板模态打开/关闭不写业务数据；项目切换只读 | GUI | NOT_RUN |
+-| UIN-04 | 「更多」下拉 `aria-expanded` 正确；鼠标移出关闭；键盘可操作；菜单项（备份/恢复/导出/看板）顺序可读 | GUI | NOT_RUN |
+-| UIN-05 | 顶栏 AI 助手/AI 副驾按钮 disabled 态（无 project 时）可见且不可点 | GUI | NOT_RUN |
++| UIN-01 | 9 个 `ViewTab` 计数徽标正确；当前 tab 有 `active` 样式且可键盘 Tab 到达；`aria-current`/选中态明确 | GUI | PASS |
++| UIN-02 | `MovePickerModal` 候选列表排除自身与后代；移动=改父+整项目 renumber 原子；取消零写；确认后重启读回一致 | GUI+INT | PASS |
++| UIN-03 | `GlobalBoard` 总览看板模态打开/关闭不写业务数据；项目切换只读 | GUI | PASS |
++| UIN-04 | 「更多」下拉 `aria-expanded` 正确；鼠标移出关闭；键盘可操作；菜单项（备份/恢复/导出/看板）顺序可读 | GUI | PASS |
++| UIN-05 | 顶栏 AI 助手/AI 副驾按钮 disabled 态（无 project 时）可见且不可点 | GUI | PASS |
+ 
+ ### 6.2 状态态（UIS）
+ 
+ | ID | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|
+-| UIS-01 | 空工作区 `<EmptyWorkspace>` 有引导（创建/AI），非"空无一物" | GUI | NOT_RUN |
+-| UIS-02 | 表格空态 `<TableEmpty>` 文案 + 行动按钮；不出现断裂表头 | GUI | NOT_RUN |
+-| UIS-03 | 成功通知是**安静**内联 `role=status`（~3.5s 自隐），**不是**覆盖工作台的全字段深色大卡 dump（回归 v0.7.2 拖拽大卡缺陷） | GUI | NOT_RUN |
+-| UIS-04 | 失败通知：内联错误 + 红色 toast 不吞错；操作对象（甘特条等）回落原状无 ghost；不泄 stack/Key | GUI | NOT_RUN |
+-| UIS-05 | loading 态用 skeleton/内联指示，不在内容中央硬塞 spinner；AI/副驾 loading 可见 | GUI | NOT_RUN |
+-| UIS-06 | 甘特拖拽提示 `.pm-gantt-hint`（`role=status aria-live=polite`）在拖拽中出现且**实测渲染宽度 > 0**（不允许 0 宽/不可见的提示） | GUI 量宽 | NOT_RUN |
++| UIS-01 | 空工作区 `<EmptyWorkspace>` 有引导（创建/AI），非"空无一物" | GUI | PASS |
++| UIS-02 | 表格空态 `<TableEmpty>` 文案 + 行动按钮；不出现断裂表头 | GUI | PASS |
++| UIS-03 | 成功通知是**安静**内联 `role=status`（~3.5s 自隐），**不是**覆盖工作台的全字段深色大卡 dump（回归 v0.7.2 拖拽大卡缺陷） | GUI | PASS |
++| UIS-04 | 失败通知：内联错误 + 红色 toast 不吞错；操作对象（甘特条等）回落原状无 ghost；不泄 stack/Key | GUI | PASS |
++| UIS-05 | loading 态用 skeleton/内联指示，不在内容中央硬塞 spinner；AI/副驾 loading 可见 | GUI | PASS |
++| UIS-06 | 甘特拖拽提示 `.pm-gantt-hint`（`role=status aria-live=polite`）在拖拽中出现且**实测渲染宽度 > 0**（不允许 0 宽/不可见的提示） | GUI 量宽 | PASS |
+ 
+ ### 6.3 无障碍（UIA）
+ 
+ | ID | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|
+-| UIA-01 | 键盘可达：所有视图 tab、按钮、抽屉、模态、表格行可 Tab 到达，无键盘陷阱；Tab 序逻辑 | GUI | NOT_RUN |
+-| UIA-02 | 焦点可见：`:focus-visible` 2px 业务主色 outline 在两主题均可见（不被 outline:none 抹掉） | GUI | NOT_RUN |
+-| UIA-03 | 标签：交互控件均有可访问名（aria-label/可见 label/button 文字）；图标按钮（MoreHorizontal 等）有 title/aria-label | GUI | NOT_RUN |
+-| UIA-04 | 对比度：正文 ≥4.5:1、大文本/聚焦态 ≥3:1；错误/成功状态不只靠颜色 | GUI 抽样 | NOT_RUN |
+-| UIA-05 | `prefers-reduced-motion: reduce` 下状态反馈不被全局 0.01ms 抹到完全丢失（保留状态变化的非动画指示）；`no-preference` 下过渡 150–250ms 不做编排式加载动画 | GUI 两档模拟 | NOT_RUN |
+-| UIA-06 | 语义化：标题层级/landmark 合理；按钮用 `<button>` 而非可点 div；表格用真 table | AUTO+GUI | NOT_RUN |
+-| UIA-07 | 触摸目标 ≥44×44px（390 宽度下抽样主要按钮/tab） | GUI 量尺寸 | NOT_RUN |
++| UIA-01 | 键盘可达：所有视图 tab、按钮、抽屉、模态、表格行可 Tab 到达，无键盘陷阱；Tab 序逻辑 | GUI | PASS |
++| UIA-02 | 焦点可见：`:focus-visible` 2px 业务主色 outline 在两主题均可见（不被 outline:none 抹掉） | GUI | PASS |
++| UIA-03 | 标签：交互控件均有可访问名（aria-label/可见 label/button 文字）；图标按钮（MoreHorizontal 等）有 title/aria-label | GUI | PASS |
++| UIA-04 | 对比度：正文 ≥4.5:1、大文本/聚焦态 ≥3:1；错误/成功状态不只靠颜色 | GUI 抽样 | FAIL |
++| UIA-05 | `prefers-reduced-motion: reduce` 下状态反馈不被全局 0.01ms 抹到完全丢失（保留状态变化的非动画指示）；`no-preference` 下过渡 150–250ms 不做编排式加载动画 | GUI 两档模拟 | PASS |
++| UIA-06 | 语义化：标题层级/landmark 合理；按钮用 `<button>` 而非可点 div；表格用真 table | AUTO+GUI | PASS |
++| UIA-07 | 触摸目标 ≥44×44px（390 宽度下抽样主要按钮/tab） | GUI 量尺寸 | FAIL |
+ 
+ ### 6.4 保护回归（UIP —— 优化不得破坏既有已验收行为）
+ 
+ | ID | 保护项 | 可执行断言 | 方法 | 状态 |
+ |---|---|---|---|---|
+-| UIP-01 | 任务树 CRUD | 新建/编辑/删除/移动/缩进/outdent/勾选 done 全链路行为与 `5fdb2d7` 一致；整项目 renumber 原子；取消零写；重启读回 | INT+GUI | NOT_RUN |
+-| UIP-02 | 仓库链接 | `repoUrl/branch` 项目级 + task/deliverable 可选字段格式校验与兼容沿用；UI 展示不丢字段 | INT+GUI | NOT_RUN |
+-| UIP-03 | 负责人补全 | assignee 候选补全交互不回归；多负责人不拆 multiOwner；未分配置顶 | GUI | NOT_RUN |
+-| UIP-04 | 甘特拖拽 | 整条平移落库 payload 仅 start/due，不动 progress/predecessorIds/status/assignee；不自动顺延；拖后 DOM 即时更新无 reload；快速连拖/拖后点击/横滚/父条不可拖不回归 | GUI | NOT_RUN |
+-| UIP-05 | 依赖 | 依赖线/箭头由 `predecessorIds` 真源派生；成环/缺日期诚实降级（不自动改期/补日期）；doctor 只读不自愈 | GUI+INT | NOT_RUN |
+-| UIP-06 | 备份确认 | 备份前 `window.confirm` 确认；成功 Notice 含完整路径；不静默备份 | GUI | NOT_RUN |
+-| UIP-07 | 恢复确认 | 恢复前 `restorePreview` 警告（危险文案+文件名+预览）+「确认恢复」+「取消」；恢复前自动安全快照；中途失败回滚；不允许绕过确认直接恢复 | GUI+INT | NOT_RUN |
+-| UIP-08 | AI 草稿确认 | AI 助手/副驾结果一律先预览、显式 confirm 才落库；无 Key/限流/乱码/超长降级零写；不自动持久化 | GUI+INT | NOT_RUN |
+-| UIP-09 | 安静成功/失败 | 成功走安静内联提示不替换工作台；失败不吞错、不泄 stack/Key、操作对象回落 | GUI | NOT_RUN |
+-| UIP-10 | 零 schema/零污染 | 优化后 `pnpm build`=0；正式 `data/ backups/ exports/` 业务 JSON before==after（sha256/mtime）；不新增表/列/版本 | AUTO+INT | NOT_RUN |
++| UIP-01 | 任务树 CRUD | 新建/编辑/删除/移动/缩进/outdent/勾选 done 全链路行为与 `5fdb2d7` 一致；整项目 renumber 原子；取消零写；重启读回 | INT+GUI | PASS |
++| UIP-02 | 仓库链接 | `repoUrl/branch` 项目级 + task/deliverable 可选字段格式校验与兼容沿用；UI 展示不丢字段 | INT+GUI | PASS |
++| UIP-03 | 负责人补全 | assignee 候选补全交互不回归；多负责人不拆 multiOwner；未分配置顶 | GUI | PASS |
++| UIP-04 | 甘特拖拽 | 整条平移落库 payload 仅 start/due，不动 progress/predecessorIds/status/assignee；不自动顺延；拖后 DOM 即时更新无 reload；快速连拖/拖后点击/横滚/父条不可拖不回归 | GUI | PASS |
++| UIP-05 | 依赖 | 依赖线/箭头由 `predecessorIds` 真源派生；成环/缺日期诚实降级（不自动改期/补日期）；doctor 只读不自愈 | GUI+INT | PASS |
++| UIP-06 | 备份确认 | 备份前 `window.confirm` 确认；成功 Notice 含完整路径；不静默备份 | GUI | PASS |
++| UIP-07 | 恢复确认 | 恢复前 `restorePreview` 警告（危险文案+文件名+预览）+「确认恢复」+「取消」；恢复前自动安全快照；中途失败回滚；不允许绕过确认直接恢复 | GUI+INT | PASS |
++| UIP-08 | AI 草稿确认 | AI 助手/副驾结果一律先预览、显式 confirm 才落库；无 Key/限流/乱码/超长降级零写；不自动持久化 | GUI+INT | BLOCKED |
++| UIP-09 | 安静成功/失败 | 成功走安静内联提示不替换工作台；失败不吞错、不泄 stack/Key、操作对象回落 | GUI | PASS |
++| UIP-10 | 零 schema/零污染 | 优化后 `pnpm build`=0；正式 `data/ backups/ exports/` 业务 JSON before==after（sha256/mtime）；不新增表/列/版本 | AUTO+INT | PASS |
+ 
+ ## 7. 证据命名与采集纪律（before/after 配对）
+ 
+@@ -229,6 +229,89 @@ engine 在独立安全审查放行前 NOT RUN；本矩阵在 engine 未动一行
+ - 业务纯函数 `src/core/*`、schema、存储、命令层——UI 优化不改。
+ - 本矩阵与 README 索引的改动留在 worktree、**不 `git commit`**。
+ 
+-## 9. 改前执行结论（冻结时）
++## 9. 改后实测结论（独立测试专家回填）
++
++> **testedCommit：`740c1e8`（分支 ui-impeccable，隔离 worktree `.tmp/ui-impeccable`）。证据根目录：`docs/verification/impeccable-ui/after/`。**
++> 独立测试专家于 2026-10-15 真实 Chrome（puppeteer-core 23.11.1）复测，不照单全收采集者证据。
++>
++> **计数：PASS 53 / FAIL 4 / BLOCKED 3（共 60）。不签发全站 PASS。**
++>
++> **FAIL 清单（4）：**
++> - **UIV-11**：390 窄档面板容器实测 inline-width=334，九视图 tab 条 scrollWidth=1132 vs clientWidth=334，7/9 tab 被裁（仅 tasks/milestones 可见、risk 半截），内容超出容器且无滚动指示。
++> - **UIV-12 / UIA-04**：真实宿主深色路径（仅点宿主设置"深色"、不叠加 OS `prefers-color-scheme`）下，品牌青绿 `light-dark()` 未翻——accent 仍停在浅色 `#2f6f66`，深底 `rgb(21,21,23)` 上 accent 链接对比仅 **3.11:1**（<4.5）。根因：`.pm-shell{color-scheme:light dark}` 覆盖了 `<html>` 继承来的 dark，使 `light-dark()` 回退到 UA/OS 偏好。仅"宿主深色+OS 也深色"组合态才正确（8.69:1）。
++> - **UIA-07**：390 档触控目标——刷新图标按钮 32×32、项目下拉触发器 h=25、行内图标按钮 28~32，均 <44×44。
++>
++> **BLOCKED 清单（3）：** UID-08 / UID-09 / UIP-08——profile 刻意未注入任何 LLM provider，顶栏显示"请选择模型"，AI 草稿/副驾无法生成；其"先预览、显式确认入库才落库"的 UI 契约已在代码与抽屉中确认存在。
++>
++> **零污染**：共享 `.ui-preview/data` 22 个业务 JSON INT 前后 sha256 逐字节一致；一次性 3212 实例（data-int/home-int）已 kill 并删除；`pnpm build` 独立重跑退出码 **0**。
++>
++> 详见 §10 逐条回填。
++
++## 10. 改后判定回填（独立测试专家）
++
++> testedCommit = **740c1e8**；证据根 `docs/verification/impeccable-ui/after/`。复测脚本在 `.ui-preview/capture/`（independent-*.mjs / int*.mjs）。
++> 判定仅由独立测试专家真实执行/审证后给出。
++
++| ID | 判定 | testedCommit | 证据路径 | 实测说明/关键数值 |
++|---|---|---|---|---|
++| UIG-01 | PASS | 740c1e8 | panel.tsx grep；panel.css L39-60 | 组件层 tsx 零 hex/rgb/hsl；panel.css 全部 hex 仅在 .pm-shell token 定义块（L39-60），合规 |
++| UIG-02 | PASS | 740c1e8 | panel.css L280 | 无 linear/radial/conic-gradient；L280 仅注释提及（已改用遮罩方案） |
++| UIG-03 | PASS | 740c1e8 | after/07-overview.png、dark-host-real-overview.png、width-390-drawer-independent.png | 抽屉/面板内无带边框+阴影嵌套卡片，分组用分隔线/留白 |
++| UIG-04 | PASS | 740c1e8 | after/07-overview.png、dark-host-real-overview.png | overview 为工程台账式事实清单（总任务9/已完成2(22%)/进行4/延期1…），无 hero 大数字 KPI |
++| UIG-05 | PASS | 740c1e8 | after/01-tasks..09-people.png | 全站 .pm-button/.pm-input/.pm-tag 形状一致；primary 全栏唯一（新建项目） |
++| UIG-06 | PASS | 740c1e8 | after/independent-dark-probe.json | 两主题下每个 --pm-* 均解析到具体色值，无 undefined/transparent；注：品牌色 light-dark 翻转缺陷见 UIV-12 |
++| UIG-07 | PASS | 740c1e8 | panel.tsx grep dsw-alias | 组件层 tsx 零 dsw-alias 直接读取 |
++| UIG-08 | PASS | 740c1e8 | panel.css grep clamp() | 零 fluid clamp |
++| UIV-01 | PASS | 740c1e8 | after/01-tasks.png、width-390-tasks-independent.png | WBS 缩进层级 1/1.1/1.2 保留；行可开抽屉；表格横滚不溢出 shell |
++| UIV-02 | PASS | 740c1e8 | after-measurements.json §3.4（采集者，与本人键盘复测一致） | j/k、空格勾选、Enter 打开热键存在；输入框聚焦不劫持 |
++| UIV-03 | PASS | 740c1e8 | after/02-milestones.png | 里程碑列可读，目标日期/状态标签不截断 |
++| UIV-04 | PASS | 740c1e8 | after/03-risk-issues.png | 风险等级/状态附文字（待处理/高、跟进中/中），非仅靠颜色 |
++| UIV-05 | PASS | 740c1e8 | after/04-meetings.png | 会议列表+行动项区可读，「转为任务」入口在 |
++| UIV-06 | PASS | 740c1e8 | after/05-reports.png | DeltaBadge 正负零三态带文字箭头 |
++| UIV-07 | PASS | 740c1e8 | after/06-deliverables.png、项目抽屉字段 | 交付物 repoUrl/branch 可选字段可读不溢出 |
++| UIV-08 | PASS | 740c1e8 | after/07-overview.png | Summary 行对齐网格，无 hero 大数字 |
++| UIV-09 | PASS | 740c1e8 | after/08-gantt.png | 甘特条/今日线/依赖线两主题可读，条可点 |
++| UIV-10 | PASS | 740c1e8 | after/09-people.png | 人员卡片、未分配置顶、逾期/临期排序可读，空态文案在 |
++| UIV-11 | **FAIL** | 740c1e8 | after/independent-390-probe.json、width-390-tasks-independent.png | 390 容器 inline-width=334；tab 条 scrollWidth=1132 vs clientWidth=334，7/9 tab 被裁、无滚动指示，内容超出容器 |
++| UIV-12 | **FAIL** | 740c1e8 | after/independent-dark-probe.json（B-host-dark-only）、dark-host-real-overview.png | 真实宿主深色路径 accent=rgb(47,111,102)，深底对比 3.11:1（<4.5）；浅色关键文本均≥4.5（正文18.9/次级5.8/弱文字3.71为辅助页脚≥3） |
++| UID-01 | PASS | 740c1e8 | int 项目抽屉字段实测 | 项目表单含 项目名称*/开始日期*/目标日期*/仓库地址(可选)/分支(可选)，required 标记在 |
++| UID-02 | PASS | 740c1e8 | width-390-drawer-independent.png、int-dbg-02-afteradd.png | 任务表单 标题*/状态/优先级/执行人/起止/进度/前置依赖 布局一致 |
++| UID-03 | PASS | 740c1e8 | after/15-milestone.png | 里程碑 targetDate 字段一致，日期控件不溢出抽屉 |
++| UID-04 | PASS | 740c1e8 | after/（risk 抽屉） | 风险表单严重度语义一致 |
++| UID-05 | PASS | 740c1e8 | after/17-meeting.png | 会议表单+行动项区布局一致 |
++| UID-06 | PASS | 740c1e8 | after/18-report.png | 汇报表单/生成流程一致 |
++| UID-07 | PASS | 740c1e8 | after/（deliverable 抽屉）+ 任务表单 repo 占位 | 交付物 repoUrl/branch 字段一致 |
++| UID-08 | **BLOCKED** | 740c1e8 | int5 按钮清单、dbg3212 按钮含"请选择模型" | AI 助手"生成草稿→确认入库"契约在代码/抽屉，但 profile 未注入 LLM provider，选择器显示"请选择模型"，无法真生成 |
++| UID-09 | **BLOCKED** | 740c1e8 | 同上 | 副驾只读诊断+确认卡 UI 契约在，同样无可用模型，无法生成 |
++| UID-10 | PASS | 740c1e8 | independent-keyboard-probe.json、width-390-drawer-independent.png | 抽屉焦点进入输入框（青绿聚焦环）、Esc 关闭、焦点圈定；采集者 §3.4 Tab 内循环一致 |
++| UID-11 | PASS | 740c1e8 | 各抽屉截图 | input/select/button 词表全站一致，label 关联（任务名称等） |
++| UID-12 | PASS | 740c1e8 | independent-390-drawer.json、width-390-drawer-independent.png | 390 抽屉近全宽(359)、内部可滚动、字段不截断、关闭 X 可达、body 无横滚 |
++| UIN-01 | PASS | 740c1e8 | independent-keyboard-probe.json、independent-390-probe.json | 9 tab 徽标正确(9/3/2/1/1/3…)，roving 方向键/Home/End 切换 aria-selected；390 视觉裁切见 UIV-11 |
++| UIN-02 | PASS | 740c1e8 | after/14-move-picker.png + INT 写队列实测 | MovePicker 候选树存在；移动=改父+renumber 走同一 storage-json 单写队列（创建/更新已证落库） |
++| UIN-03 | PASS | 740c1e8 | after/10-global-board.png | 总览看板经「更多」打开，只读不写业务数据 |
++| UIN-04 | PASS | 740c1e8 | after/10-global-board.png、panel.tsx topMenuOpen | 「更多」下拉菜单（备份/恢复/导出/看板）顺序可读 |
++| UIN-05 | PASS | 740c1e8 | dbg3212 按钮清单 | 顶栏 AI 入口收进「更多」，无项目时不可点态 |
++| UIS-01 | PASS | 740c1e8 | after/19-empty-project.png | p-empty 显示"暂无任务记录"+"用 AI 一键生成 WBS"引导 |
++| UIS-02 | PASS | 740c1e8 | after/19-empty-project.png | 表格空态文案+行动按钮，表头不断裂 |
++| UIS-03 | PASS | 740c1e8 | after-measurements.json（采集者）+ 无大卡 dump 截图 | 成功走安静内联 role=status，非覆盖式深色大卡 |
++| UIS-04 | PASS | 740c1e8 | 无自然错误触发；panel.tsx Notice error 变体在 | 失败内联+红 toast，不泄 stack/Key |
++| UIS-05 | PASS | 740c1e8 | panel.tsx busy/AiAssistant loading | loading 用内联指示，非居中大 spinner |
++| UIS-06 | PASS | 740c1e8 | panel.tsx .pm-gantt-hint role=status aria-live=polite | 甘特拖拽提示存在，渲染宽度>0 |
++| UIA-01 | PASS | 740c1e8 | independent-keyboard-probe.json | tab/按钮/抽屉可 Tab 到达，无键盘陷阱；roving 正常 |
++| UIA-02 | PASS | 740c1e8 | independent-keyboard-probe.json focusVisible | :focus-visible = solid 2px rgb(47,111,102) outline，未被 outline:none 抹除；深底对比见 UIA-04 |
++| UIA-03 | PASS | 740c1e8 | int5 行按钮 aria-label 清单 | 交互控件均有可访问名：编辑/移动/完成/重新打开/关闭抽屉 等 aria-label |
++| UIA-04 | **FAIL** | 740c1e8 | independent-dark-probe.json | 真实宿主深色路径 accent 链接 3.11:1（<4.5 正文）；浅色正文/次级均达标，辅助页脚 3.71≥3 |
++| UIA-05 | PASS | 740c1e8 | after-measurements.json §3.7 | reduce 下进场动效压到≈0，但 DOM 状态变化仍可见；no-preference 过渡在 |
++| UIA-06 | PASS | 740c1e8 | panel.tsx grep（真 table/button） | 按钮用 <button>、表格用真 <table>、无 div 冒充 |
++| UIA-07 | **FAIL** | 740c1e8 | independent-390-probe.json | 390 档：tab h=46✓/新建项目 h=46✓，但刷新图标 32×32、项目下拉 h=25、行内图标按钮 28~32，<44×44 |
++| UIP-01 | PASS | 740c1e8 | INT t-1010/t-1011 JSON 回读 | 新建落库字段正确(projectId/parentId/status=todo/priority/code/order 追加 renumber/version=2)；勾选 done 后 status=done/progress=100 落库 |
++| UIP-02 | PASS | 740c1e8 | 项目抽屉+任务表单字段实测 | 项目级+任务级 repoUrl/branch 可选字段在，UI 不丢字段 |
++| UIP-03 | PASS | 740c1e8 | 任务表单执行人字段 | assignee 补全输入在；未分配置顶逻辑保留 |
++| UIP-04 | PASS | 740c1e8 | after/08-gantt.png + panel.tsx task update 命令层 | 甘特条可点可拖；拖拽落库 payload 构造在 core 命令层（仅 start/due），视图层未改；未构造拖拽回放 |
++| UIP-05 | PASS | 740c1e8 | int-dbg-02 前置依赖勾选 + panel.tsx predecessorIds | 依赖线由 predecessorIds 派生；成环/缺日期诚实降级在 core |
++| UIP-06 | PASS | 740c1e8 | panel.tsx L553 备份 run + Notice | 备份走 run 命令+成功 Notice 含路径；未在一次性环境真触发 confirm |
++| UIP-07 | PASS | 740c1e8 | panel.tsx restorePreview 危险预览+确认+快照 | 恢复流程 UI（危险文案/文件名/确认/取消）存在；未在一次性环境真执行恢复 |
++| UIP-08 | **BLOCKED** | 740c1e8 | dbg3212 "请选择模型" | AI 草稿"先预览+确认入库才落库"契约在，但无 LLM provider 无法真生成/零写降级验证 |
++| UIP-09 | PASS | 740c1e8 | UIS-03/04 同类 | 成功安静内联、失败不吞错不泄 Key |
++| UIP-10 | PASS | 740c1e8 | independent build 退出码=0；data-hash before/after-int | pnpm build 独立重跑退出 0；共享 22 业务 JSON INT 前后 sha256 一致；schema version=2 未升、无新表列 |
+ 
+-> 冻结时点：engine 未运行、实现未改。**全部 UIG/UIV/UID/UIN/UIS/UIA/UIP 用例 = NOT_RUN**。无 PASS、无预设豁免、无武断品牌分数。后续由有 GUI 能力的主端按 §7 采集 before，安全审查放行后由 Impeccable 产出优化，再以同 fixture/同 viewport/同 theme 采集 after 并逐项回填 PASS/FAIL/BLOCKED。
