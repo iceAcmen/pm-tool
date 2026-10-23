@@ -1,0 +1,39 @@
+{
+  "provenance": "开发角色转录实际工具终码和结果；不是独立PASS。此收据是seal之后新增的外层回执，不冒称已在seal.artifacts内。",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/plans/2026-10-23-p2004-kr-related-runner.mjs seal",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "exit": 0,
+  "satisfied": true,
+  "seal": {
+    "path": "docs/plans/2026-10-23-p2004-kr-related-seal.json",
+    "sha256": "dfb92a47d290d390e9eb8e4c2f30bd6a0d689e76605c211761ad5494f894d67a",
+    "shaCommand": "shasum -a 256 docs/plans/2026-10-23-p2004-kr-related-seal.json",
+    "shaCommandExit": 0
+  },
+  "artifactReadback": {
+    "method": "Node fs/readFileSync + crypto SHA256 + assert：逐读seal.artifacts及两产品",
+    "exit": 0,
+    "artifacts": 32,
+    "products": 2,
+    "bytesAndShaMatch": true,
+    "nonOwnedChanges": 0
+  },
+  "finalChecks": [
+    {
+      "command": "git diff --check -- packages/dsh-pm-tool/src/client/views/okrs.tsx packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx",
+      "exit": 0
+    },
+    {
+      "command": "ps -p 98173,98175 -o pid,ppid,etime,args",
+      "exit": 1,
+      "meaning": "首capture父shell及node均不在；原executionID终码仍NOT_COLLECTED"
+    }
+  ],
+  "locksReleased": [
+    "packages/dsh-pm-tool/src/client/views/okrs.tsx",
+    "packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx"
+  ],
+  "state": "STOP；开发子单交付，不停止父任务",
+  "notRun": ["fullbuild", "full-regression", "GUI", "service", "Git-add", "Git-commit", "Git-push", "release"],
+  "nextOwners": "另一独立SOURCE/AUTO；Main唯一builder/GUI的新freeze/fullregression/newhost复验；不同审证专家定向关门"
+}

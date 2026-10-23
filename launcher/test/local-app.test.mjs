@@ -11,6 +11,25 @@ import { execFileSync } from 'node:child_process'
 
 import { buildLocalAppBundle } from '../src/local-app.mjs'
 
+test('local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'pm-app-quoting-'))
+  try {
+    for (const suffix of ['plain', 'space path', '中文路径', "single'quote", "qa'; :; #"]) {
+      const launcherBin = join(dir, suffix, 'main.mjs')
+      const nodePath = join(dir, suffix, 'node')
+      const bundle = buildLocalAppBundle({ outDir: join(dir, suffix), launcherBin, nodePath })
+      const launch = join(bundle, 'Contents', 'MacOS', 'launch')
+      execFileSync('/bin/sh', ['-n', launch])
+      const header = readFileSync(launch, 'utf8').split('LOG_DIR=')[0]
+      // 仅执行变量赋值和打印；不执行启动器主体、任何输入命令或服务。
+      const parsed = execFileSync('/bin/sh', ['-c', `${header}\nprintf '%s\\n%s' "$LAUNCHER_BIN" "$BAKED_NODE"`], { encoding: 'utf8' })
+      assert.equal(parsed, `${launcherBin}\n${nodePath}`)
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径', () => {
   const dir = mkdtempSync(join(tmpdir(), 'pm-app-'))
   try {

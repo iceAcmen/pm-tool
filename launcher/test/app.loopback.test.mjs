@@ -53,6 +53,27 @@ function makeApp(probeResult, controller) {
   return { app, calls }
 }
 
+test('回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4', async () => {
+  for (const action of ['open', 'reopen', 'retry', 'switch-browser', 'cancel', 'back']) {
+    const { app, calls } = makeApp({ tcpOpen: true, httpStatus: 401, authRequiredBody: AUTH_WALL }, makeController())
+    app.setLoopbackPort(3999)
+    await app.detect()
+    await app.handleAction({ type: 'open' })
+    const old = calls[0].join(' ').match(/pm-launch=3999\.([a-f0-9]+)/)[1]
+    await app.handleAction({ type: action, browser: 'Safari' })
+    assert.equal(app.verifyEntered(old), false, `${action} 后旧回告拒绝`)
+    const before = app.getState().status
+    app.onEntered(old)
+    assert.equal(app.getState().status, before, '未经当前有效校验不得进入S4')
+    if (['open', 'reopen', 'retry'].includes(action)) {
+      const fresh = calls.at(-1).join(' ').match(/pm-launch=3999\.([a-f0-9]+)/)[1]
+      assert.equal(app.verifyEntered(fresh), true)
+      assert.equal(app.onEntered(fresh).status, 'S4')
+      assert.equal(app.verifyEntered(fresh), false)
+    }
+  }
+})
+
 test('running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token', async () => {
   const controller = makeController()
   const { app, calls } = makeApp({ tcpOpen: true, httpStatus: 401, authRequiredBody: AUTH_WALL }, controller)

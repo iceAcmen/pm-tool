@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-23",
+  "role": "trae独立组合SOURCE/AUTO审证",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-combined-regression-review-20261023-r2-seal.mjs"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.2461,
+  "actualToolStatus": "Process exited with code 0",
+  "actualToolStdout": "独立报告/审计/实际命令/原失败原件封存完成；seal=33f939f7f235db80d6475333243ed1c4915a75d5eb4a96bf2fba01507d6ea40b",
+  "origin": "seal执行后观察到exec_command真实终码；不是seal自填预计成功",
+  "pid": null,
+  "pidBoundary": "同步工具结果未提供PID，不补造",
+  "seal": {
+    "file": "docs/testing/f02-combined-regression-review-20261023-r2-seal.json",
+    "sha256": "33f939f7f235db80d6475333243ed1c4915a75d5eb4a96bf2fba01507d6ea40b"
+  },
+  "excludedFromSeal": true,
+  "exclusionReason": "seal自身及之后真实工具收据不循环自指纹",
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "resources": "released / STOP；未持有builder/GUI/端口/profile/数据锁/服务"
+}

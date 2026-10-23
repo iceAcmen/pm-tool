@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-22T21:12:56.783Z",
+  "role": "independent binding; not P1005 acceptance",
+  "protectedCount": 483,
+  "unchangedCount": 481,
+  "concurrentSourceDrift": [
+    {
+      "path": "src/client/views/records/records-listbox.tsx",
+      "tested": {
+        "bytes": 4737,
+        "sha256": "790533aed66fa35a6258e8a37c345058b8204d9d91cb86684e48453218f9cf7d"
+      },
+      "current": {
+        "bytes": 4886,
+        "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+      },
+      "command": [
+        "/usr/bin/diff",
+        "-u",
+        "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/client/views/records/records-listbox.tsx",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx"
+      ],
+      "exit": 1,
+      "output": "source-binding-close-listbox-delta.patch",
+      "inheritance": "none to the changed combined candidate; isolated P1004 result retained"
+    },
+    {
+      "path": "src/commands/reflect.ts",
+      "tested": {
+        "bytes": 6015,
+        "sha256": "69be050f31870274fcb831e935dd791f1903b031f20b1d0917c2665bda62f07c"
+      },
+      "current": {
+        "bytes": 7461,
+        "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+      },
+      "command": [
+        "/usr/bin/diff",
+        "-u",
+        "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/commands/reflect.ts",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/commands/reflect.ts"
+      ],
+      "exit": 1,
+      "output": "source-binding-close-reflect-delta.patch",
+      "inheritance": "none to the changed combined candidate; isolated P1004 result retained"
+    }
+  ],
+  "copies": [
+    {
+      "mode": "dom",
+      "root": "/tmp/pmtool-p1004-independent-source-auto-eTiFFN",
+      "count": 407,
+      "drift": []
+    },
+    {
+      "mode": "affected",
+      "root": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc",
+      "count": 407,
+      "drift": []
+    }
+  ],
+  "activeListboxMarkup": 0,
+  "reflectCalls": 0,
+  "note": "listbox is imported via OKR/habit forms but not rendered in this task fixture; reflect backend is not executed",
+  "originalScopeConclusion": "PASS only for unchanged isolated tested inputs; no P1005 or combined-current PASS"
+}

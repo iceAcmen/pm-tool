@@ -79,8 +79,8 @@ export interface HabitsViewProps {
   habits?: HabitViewRecord[]
   /** settings 收件区 pmHabitInbox；snapshot 未携带时为 undefined（只显示命令提示）。 */
   inbox?: HabitInboxSuggestion[]
-  /** 可选 OKR 清单（标题解析用，只读）。 */
-  okrs?: HabitOkrRef[]
+  /** 可选 OKR 清单（只读）；兼容父层已按项目过滤的最小 refs，完整记录保留项目归属。 */
+  okrs?: (HabitOkrRef & { projectId?: string })[]
   run?: Run
   onSaved?: () => void
   /** 打开新建习惯抽屉。 */
@@ -173,8 +173,10 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
                 {h.goal?.trim() && <div className="pm-habit-field"><span className="pm-habit-field-lab">目标</span>{h.goal}</div>}
                 {h.okrId && okrTitle && (
                   <div className="pm-habit-okr">
-                    <Link2 size={11}/>
-                    关联 OKR：{okrTitle}（只展示，不参与裁决）
+                    <Link2 size={11} style={{ flexShrink: 0 }}/>
+                    <span className="pm-habit-okr-text">
+                      关联 OKR：{okrTitle}（只展示，不参与裁决）
+                    </span>
                   </div>
                 )}
                 {h.notes?.trim() && <MarkdownView source={h.notes} density="compact" className="pm-habit-notes"/>}
@@ -272,7 +274,11 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
           </p>
         ) : (
           <ul className="pm-habit-suggestions">
-            {suggestions.map(s => (
+            {suggestions.map(s => {
+              // 最小 refs 已由父层按项目过滤；完整记录仍须排除外项目，不能借同 ID 目标。
+              const okrTitle = resolveHabitOkrTitle(s.okrId,
+                okrs?.filter(o => o.projectId === undefined || o.projectId === s.projectId))
+              return (
               <li className="pm-habit-suggestion" key={s.id} data-state={s.status}>
                 <div className="pm-habit-suggestion-main">
                   <span className="pm-habit-suggestion-id">{s.id}</span>
@@ -280,6 +286,14 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
                   <span className="pm-habit-suggestion-at">{s.at.slice(0, 16).replace('T', ' ')}</span>
                 </div>
                 {s.rationale && <p className="pm-habit-suggestion-rationale">{s.rationale}</p>}
+                {s.okrId && (
+                  <p
+                    className="pm-habit-suggestion-okr pm-habit-suggestion-rationale"
+                    style={{ minWidth: 0, maxWidth: '100%', overflowWrap: 'anywhere' }}
+                  >
+                    关联 OKR：{okrTitle === s.okrId ? s.okrId : `${okrTitle}（${s.okrId}）`}
+                  </p>
+                )}
                 <div className="pm-habit-suggestion-actions">
                   {s.status === 'pending' ? (
                     <>
@@ -303,7 +317,8 @@ export function HabitsView({ projectId, habits = [], inbox, okrs, run, onSaved, 
                   )}
                 </div>
               </li>
-            ))}
+              )
+            })}
           </ul>
         )}
       </section>

@@ -1,0 +1,17 @@
+{
+  "type": "observed_tool_receipt",
+  "tool": "functions.exec_command",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/acceptance-percent-baseline-20261023-r1-reader.mjs seal",
+  "exitCode": 0,
+  "processId": 51627,
+  "toolWallSeconds": 0.2697,
+  "readerDurationMs": 61.352,
+  "observedResult": {
+    "mode": "seal",
+    "reportStatus": "BASELINE_NOT_FINAL",
+    "inputDrift": 0,
+    "checkedIds": 5
+  },
+  "meaning": "Actual outer exit observed after execution, not an expected result or product PASS.",
+  "timingSource": "Reader start/end in acceptance-percent-baseline-20261023-r1-timing.jsonl; outer duration from returned tool receipt."
+}

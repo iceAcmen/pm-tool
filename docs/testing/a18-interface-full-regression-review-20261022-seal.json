@@ -1,0 +1,129 @@
+{
+  "at": "2026-10-22T01:19:59.888Z",
+  "verdict": "有限 AUTO PASS，固定保护根零漂移，审证已释放",
+  "protectedRoots": 226,
+  "protectedEntries": 34892,
+  "immutableDrift": [],
+  "authorizedParallelReferenceChanges": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a18-feedback-controls-gui-review-20261022-plan.md",
+      "before": {
+        "bytes": 3329,
+        "mtimeNs": "1792631137088825095",
+        "inode": "54644666",
+        "dev": "16777229",
+        "kind": "file",
+        "sha256": "18194d7739209149b31a9ef6f467fc0f4600db61d1f228b67cddda8465c8e0fa"
+      },
+      "after": {
+        "bytes": 3559,
+        "mtimeNs": "1792631585946231596",
+        "inode": "54644666",
+        "dev": "16777229",
+        "kind": "file",
+        "sha256": "b81d749d51734892ea6d79642b56f4f326d47130076bd40443d91e4d5f23e767"
+      }
+    }
+  ],
+  "supplementalEntries": 2,
+  "supplementalDrift": [],
+  "dependencySupplementEntries": 64,
+  "dependencySupplementDrift": [],
+  "inputManifestSHA256": "5aa87c2c6e48b52e3ad512760895baf4a99f1b1c483d7c6795f0e071a8fd2995",
+  "mainFutureImmutable": false,
+  "ownFiles": [
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-attempts.json",
+      "bytes": 5724,
+      "mtimeNs": "1792631947797562757",
+      "inode": "54675943",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "96e6f8806f6c0d6a332210e999233282f7ab379bb7f36cd1b4706704137bcb97"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-audit.json",
+      "bytes": 255308,
+      "mtimeNs": "1792631820734306274",
+      "inode": "54683524",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "ae627ae56657bf6b80887a0555c23e66a0961e1e19f92f8250f8fffd5b429e8b"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-audit.mjs",
+      "bytes": 28369,
+      "mtimeNs": "1792631755133924362",
+      "inode": "54673628",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "b65d93ce297cee51f87ab9cd26d4e9af300298bd571d244881e85c7b3ed61340"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-before.json",
+      "bytes": 13743145,
+      "mtimeNs": "1792631451736570290",
+      "inode": "54674587",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "5aa87c2c6e48b52e3ad512760895baf4a99f1b1c483d7c6795f0e071a8fd2995"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-dependency-supplement-before.json",
+      "bytes": 23543,
+      "mtimeNs": "1792631680229809446",
+      "inode": "54680925",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "02c5b93cb1bb5acb37ad4d9f2542730b8bc58bf0abd859ff61de9032c5ef6f82"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-main-at-freeze.json",
+      "bytes": 66128,
+      "mtimeNs": "1792631437562721248",
+      "inode": "54674249",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "4a80af10feb6bd7ba727b8597010d1fd420b2baf37c52f4320fa1fc633a1da7b"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-plan.md",
+      "bytes": 4661,
+      "mtimeNs": "1792631852325910480",
+      "inode": "54653760",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "efe44e5c9cb71d95866737c6e741f7c718761ebbb1af8125234be73fe8b39c0e"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-reference-update.json",
+      "bytes": 1271,
+      "mtimeNs": "1792631781029181088",
+      "inode": "54682860",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "2a89bc7ae4dbde561c05aa194bea060caac0101a12d35cb07fb9b93a0749fe73"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022-supplement-before.json",
+      "bytes": 1286,
+      "mtimeNs": "1792631515554809072",
+      "inode": "54676144",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "bbc162b28b9cdaf9b4130c63c0c1ff758fffb1e0dbfb2017bf6bc1e38da25eed"
+    },
+    {
+      "path": "docs/testing/a18-interface-full-regression-review-20261022.md",
+      "bytes": 12696,
+      "mtimeNs": "1792631908076188176",
+      "inode": "54685231",
+      "dev": "16777229",
+      "kind": "file",
+      "sha256": "9423349a066f75cd1fcbc20dd66c7c33adeb5975202fd1b7f6a79935c29d20e7"
+    }
+  ],
+  "noSpawnedChildren": true,
+  "noBuildGuiServiceOwnership": true,
+  "released": true
+}

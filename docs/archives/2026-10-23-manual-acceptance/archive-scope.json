@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-23T15:41:12.246Z",
+  "type": "IN_PROGRESS_CHECKPOINT_NOT_RELEASE",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "approval": "负责人明确要求先存档当前进展和状态并提交推送；不宣称验收完成",
+  "originalUntrackedFiles": 138715,
+  "originalUntrackedSizeMiBApprox": 7217.57,
+  "largeDirectFilesKeptLocal": [
+    {
+      "path": "docs/plans/2026-10-23-p1004-sidecar-handoff-green-observations.json",
+      "bytes": 1247783
+    },
+    {
+      "path": "docs/plans/2026-10-23-p1004-sidecar-handoff-green-r2-observations.json",
+      "bytes": 1247783
+    },
+    {
+      "path": "docs/plans/2026-10-23-p1004-sidecar-handoff-red-r3-observations.json",
+      "bytes": 1094985
+    },
+    {
+      "path": "docs/plans/2026-10-23-p1004-sidecar-handoff-red-r4-observations.json",
+      "bytes": 1094985
+    },
+    {
+      "path": "docs/plans/2026-10-23-p1005-event-reflect-entry-evidence.json",
+      "bytes": 3414412
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-baseline.json",
+      "bytes": 66032624
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-green-final-output.json",
+      "bytes": 2100806
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-green-output.json",
+      "bytes": 1385044
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-red-final-output.json",
+      "bytes": 2031562
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-red-r7-output.json",
+      "bytes": 1462111
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-red-r8-output.json",
+      "bytes": 1538348
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2002-outbound-slot-seal.json",
+      "bytes": 2280209
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2004-kr-related-affected-inputs.json",
+      "bytes": 2550783
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2004-kr-related-git-baseline-receipt.json",
+      "bytes": 15786622
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2004-kr-related-green-inputs.json",
+      "bytes": 2549373
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2004-kr-related-red-inputs.json",
+      "bytes": 2548513
+    },
+    {
+      "path": "docs/plans/2026-10-23-p2004-kr-related-seal.json",
+      "bytes": 16280326
+    }
+  ],
+  "currentlyOtherUntracked": [],
+  "localRawPolicy": "原件不删除。大运行树、依赖和截图序列不入Git；.gitignore按本批目录屏蔽。",
+  "selection": "源码/启动器、计划正文及小型结构记录、全部独立审证直接正文与结构记录、必要验收矩阵、顶层报告摘要、本存档。运行树、截图序列及大型计划观察日志本机留存。",
+  "secretScan": {
+    "changedFilesScanned": 2041,
+    "newFindings": 0,
+    "unchangedHistoricalFilesExcludedFromStagingScan": true
+  },
+  "candidateMatch": {
+    "completeInputs": 528,
+    "mismatches": 0
+  },
+  "launcherTests": {
+    "passed": 56,
+    "failed": 0
+  },
+  "gui": "OWNER_MANUAL_ACCEPTANCE_PENDING_NOT_PASS",
+  "publication": "NO_TAG_NO_RELEASE_NO_FORMAL_SWITCH",
+  "stagedCheckpointFiles": 2041
+}

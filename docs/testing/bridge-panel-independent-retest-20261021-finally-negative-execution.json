@@ -1,0 +1,355 @@
+{
+  "kind": "wrong-finally",
+  "label": "finally-negative",
+  "started": "2026-10-21T13:20:21.485Z",
+  "ended": "2026-10-21T13:20:30.878Z",
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+    "run",
+    "src/client/launch-handshake.test.ts",
+    "src/client/panel-launch-handshake.test.tsx",
+    "src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+    "--config",
+    "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/independent.vitest.config.mjs",
+    "--maxWorkers=1",
+    "--minWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile",
+    "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/vitest-result.json"
+  ],
+  "cwd": "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "arch": "arm64",
+    "os": "24.6.0"
+  },
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    "HOME": "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/home",
+    "TMPDIR": "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/tmp",
+    "NO_COLOR": "1",
+    "FORCE_COLOR": "0",
+    "CI": "1"
+  },
+  "exit": 1,
+  "signal": null,
+  "stdout": {
+    "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/bridge-panel-independent-retest-20261021-finally-negative-stdout.txt",
+    "sha256": "a34344faeaeed5a383e262f1fb96bf0b41599c969f845570c12dc04021dafa31"
+  },
+  "stderr": {
+    "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/bridge-panel-independent-retest-20261021-finally-negative-stderr.txt",
+    "sha256": "7b1e60dcccc29edce65a835025add3e8ae91e693444704625342ce8c04c7efa4"
+  },
+  "config": {
+    "file": "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/independent.vitest.config.mjs",
+    "sha256": "cd80edd4d1d800b0313a62f38ba79b82b896e216b85e39a1e49a3d95c78f68c3"
+  },
+  "additional": {
+    "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/bridge-panel-independent-retest-20261021-additional.test.tsx",
+    "sha256": "ae539b0d4a4da20ea5e9203d574879e913fa070e33acd6191761db9abe2f535d"
+  },
+  "before": {
+    "src/client/launch-handshake.ts": "da9fa4553dfb7b567a9cfd12954ea5063db5820f9bce8c0e2f26333fc2a9e478",
+    "src/client/panel.tsx": "eebdc234b339f52012f0ec2cf7bd0f947332570418658b41d95a34423b689af9",
+    "src/client/index.tsx": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+    "src/client/launch-handshake.test.ts": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+    "src/client/panel-launch-handshake.test.tsx": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+    "vitest.config.ts": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+    "package.json": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+    "pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+    "tsconfig.json": "e8fa51cfcd802516e7bf75f5bb8bdd109391d7b13917346576fb23740d9785d6"
+  },
+  "after": {
+    "src/client/launch-handshake.ts": "da9fa4553dfb7b567a9cfd12954ea5063db5820f9bce8c0e2f26333fc2a9e478",
+    "src/client/panel.tsx": "eebdc234b339f52012f0ec2cf7bd0f947332570418658b41d95a34423b689af9",
+    "src/client/index.tsx": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+    "src/client/launch-handshake.test.ts": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+    "src/client/panel-launch-handshake.test.tsx": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+    "vitest.config.ts": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+    "package.json": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+    "pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+    "tsconfig.json": "e8fa51cfcd802516e7bf75f5bb8bdd109391d7b13917346576fb23740d9785d6"
+  },
+  "changes": [
+    {
+      "file": "src/client/launch-handshake.ts",
+      "oldText": "inflight.delete(key)",
+      "newText": "inflight.clear()",
+      "sha256": "da9fa4553dfb7b567a9cfd12954ea5063db5820f9bce8c0e2f26333fc2a9e478"
+    }
+  ],
+  "sourceDrift": [],
+  "totals": {
+    "total": 42,
+    "passed": 40,
+    "failed": 2,
+    "pending": 0
+  },
+  "tests": [
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent bridge ownership B01 same-token shares flight; failed token retries independently after another success",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent bridge ownership B03 old finally cannot remove new token flight; reverse completion preserves business hash",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected Promise{…} to be Promise{…} // Object.is equality\n\nIf it should pass with deep equality, replace \"toBe\" with \"toStrictEqual\"\n\nExpected: Promise{…}\nReceived: serializes to the same string\n\n    at /private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:118:29\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)"
+      ]
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent bridge ownership B04 in-flight success must not erase a newer plain business route",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent bridge ownership B02 completed same token is not reposted; equal nonce on another port is distinct",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P01 pending snapshot sees no POST; latest token waits for successful actual execute",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P03 successful panel closes ready during next read; N2 sends only after success",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P03 malformed snapshot JSON fails ready; real retry processes current token",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P02 hash-only new nonce and same-nonce new port report without second snapshot",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P04 plain/invalid/repeated business hashes do not POST or read snapshot",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P04 POST failure preserves token; repeated hash retries then completed-token events dedupe",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P05 old snapshot resolves while new actual mount is pending: no false N2 readiness",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P05 N2 completes before old N1; unmount removes listener without new POST",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration P06 actual index apply only registers actual PmPanel, not snapshot/global ready",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/bridge-panel-independent-retest-20261021-additional.test.tsx",
+      "name": "Independent real PmPanel integration S01/S02 request contract preserved; token never written to storage/log/query/cookie",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "parseLaunchToken：hash 令牌解析与校验 合法 port.nonce 解析成功",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "parseLaunchToken：hash 令牌解析与校验 无参数 → null（不发请求）",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "parseLaunchToken：hash 令牌解析与校验 端口越界/非整数 → null",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "parseLaunchToken：hash 令牌解析与校验 缺 nonce → null",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "stripLaunchHash：清参数但保留业务 hash 独立令牌 hash 清成空",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "stripLaunchHash：清参数但保留业务 hash 业务路由在前、令牌在后（& 拼接）→ 保留路由",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "stripLaunchHash：清参数但保留业务 hash 业务路由在前、# 拼接令牌 → 保留路由",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "stripLaunchHash：清参数但保留业务 hash 无令牌原样返回",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "buildLaunchHistoryUrl：空 hash 也真正改写当前 URL 独立令牌被清除后回到当前 pathname/search，不把空串当“不改 URL”",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "buildLaunchHistoryUrl：空 hash 也真正改写当前 URL 保留清理后的业务 hash",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "reportEntered：仅 2xx 成功，失败不假成功 200 → true；credentials omit、body 仅 nonce",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "reportEntered：仅 2xx 成功，失败不假成功 非 2xx（403/500）→ false",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "reportEntered：仅 2xx 成功，失败不假成功 网络异常 reject → false，不抛出",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "armLaunchHandshake：解析→清参数→POST，无令牌不发 有令牌：replaceState 清参数并 POST 一次",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "armLaunchHandshake：解析→清参数→POST，无令牌不发 无令牌：不 replaceState、不发请求",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "armLaunchHandshake：解析→清参数→POST，无令牌不发 POST 失败 → false，不假成功且保留 hash 供后续成功刷新重试",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "createLaunchHandshakeRetrier：首次就绪失败不永久错过 S4 第一次 POST 失败、下一次工作台刷新成功 → 重试并仅在成功后清 hash",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "createLaunchHandshakeRetrier：首次就绪失败不永久错过 S4 成功后重复刷新不重复 POST",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "跨旅程回告：令牌成功与在途分别归属 R05/R06：N1成功后新令牌18345.N2独立回告",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "跨旅程回告：令牌成功与在途分别归属 R05/R06：N1成功后新令牌18346.N1独立回告",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "跨旅程回告：令牌成功与在途分别归属 R07：旧N1成功不能清新N2 hash",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "跨旅程回告：令牌成功与在途分别归属 R08：旧请求在途不能合并新N2，新finally不丢同token并发守卫",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected Promise{…} to be Promise{…} // Object.is equality\n\nIf it should pass with deep equality, replace \"toBe\" with \"toStrictEqual\"\n\nExpected: Promise{…}\nReceived: serializes to the same string\n\n    at /private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts:212:35\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)"
+      ]
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/launch-handshake.test.ts",
+      "name": "跨旅程回告：令牌成功与在途分别归属 同token并发合并、失败可再试，普通业务hash不发",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/panel-launch-handshake.test.tsx",
+      "name": "真实PmPanel就绪与hashchange回告门 成功snapshot后同一挂载收到N2，直接回告新旅程；业务hash不发",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/panel-launch-handshake.test.tsx",
+      "name": "真实PmPanel就绪与hashchange回告门 未成功snapshot不回告，失败后真实重试成功才处理当前N2",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/panel-launch-handshake.test.tsx",
+      "name": "真实PmPanel就绪与hashchange回告门 成功读取后若刷新失败，新hash仍保留到后续成功重读",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/panel-launch-handshake.test.tsx",
+      "name": "真实PmPanel就绪与hashchange回告门 旧N1在途换N2不吞新请求，旧成功不清新hash，重复事件合并",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "/private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/src/client/panel-launch-handshake.test.tsx",
+      "name": "真实PmPanel就绪与hashchange回告门 卸载移除监听；卸载后迟到snapshot也不回告，重新真实挂载可处理N2",
+      "status": "passed",
+      "failureMessages": []
+    }
+  ],
+  "result": {
+    "file": "/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/finally-negative/vitest-result.json",
+    "sha256": "22a8127d549edf16adaf3221b3691d886f38cbc29fa7c70bf2976d3e257807e1"
+  }
+}

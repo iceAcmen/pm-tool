@@ -1,0 +1,179 @@
+{
+  "role": "independent SOURCE/AUTO execution",
+  "mode": "affected",
+  "startedAt": "2026-10-22T21:06:49.048Z",
+  "endedAt": "2026-10-22T21:06:55.387Z",
+  "node": "v22.23.3",
+  "cwd": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc",
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/independent-vitest.config.mjs"
+  ],
+  "config": {
+    "bytes": 1028,
+    "sha256": "4a5547529f2c83e70859810470d6a638e1753e8a72f497c155d774eceaaeda84"
+  },
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "inputDrift": [],
+  "copyDrift": [],
+  "include": [
+    "src/client/sidecar-minimize-retention.test.tsx",
+    "src/client/copilot-error-prefix.test.tsx",
+    "src/client/panel-cancel-close.test.ts"
+  ],
+  "sourceCount": 407,
+  "react": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/react@18.3.1/node_modules/react",
+  "lucideInline": true,
+  "credentialsEnvironmentNotInherited": true,
+  "tests": {
+    "total": 22,
+    "passed": 22,
+    "failed": 0,
+    "pending": 0,
+    "files": [
+      {
+        "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/sidecar-minimize-retention.test.tsx",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 同一aside/子组件反复最小化不重挂载，独立竖标签可达，零自动请求",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） hidden规则覆盖display:flex；几何和滚动仍由原fixed/body规则承担",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 未确认消息/勾选/编辑/输入保留，隐藏期间最新tasks/baseline实时刷新且保留openedAt警告",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 副驾取消仅清计划；最小化不自动确认或重生成",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 明确apply失败后保编辑草稿/错误；再最小化不会重试或捞句柄",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 补档展开/未发送文本/生成后未确认draft保留，零自动capture-apply",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 四次明确确认后仅保最近三条本地句柄，隐藏/展开不查询历史或执行撤销",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 主表单干净取消仍可达/真正关闭，副驾撤销及未发送内容保持",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 主保存失败不关闭表单或丢副驾；主保存成功实时props及历史数组保留",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 快照失败/重试保持同一副驾与草稿，不伪造最新投影",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 明确关闭/ESC仍真正卸载并归还开关焦点，再开不重建fresh撤销",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 切项目沿用既有projectId/props切换语义，隐藏不锁旧任务也不恢复历史句柄",
+            "status": "passed",
+            "failureMessages": []
+          }
+        ]
+      },
+      {
+        "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/copilot-error-prefix.test.tsx",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "P-AUTH 真实组件保完整原因且同场景前缀仅一次",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P-RATE-PREFIX 真实组件保完整原因且同场景前缀仅一次",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "C-RAW 真实组件保完整原因且同场景前缀仅一次",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "C-COLON 真实组件保完整原因且同场景前缀仅一次",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "C-SUCCESS 真实组件保完整原因且同场景前缀仅一次",
+            "status": "passed",
+            "failureMessages": []
+          }
+        ]
+      },
+      {
+        "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/panel-cancel-close.test.ts",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "任务抽屉取消关闭合同（panel.tsx） footer 取消：tryClose() 返回 true（干净）时调用 onCancel() 关闭，不再丢弃返回值",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "任务抽屉取消关闭合同（panel.tsx） dirty 守卫：mustConfirm 时仍弹「放弃未保存修改？」，确认后才 onCancel",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "任务抽屉取消关闭合同（panel.tsx） 干净分支：非 mustConfirm 直接放行返回 true（由调用方/守卫关闭）",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "任务抽屉取消关闭合同（panel.tsx） 关闭守卫仍向抽屉壳注册，ESC/X/scrim 不绕过 dirty 确认",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "任务抽屉取消关闭合同（panel.tsx） 回归：提交/删除/AI 确认入库能力保留，未被取消返修改动",
+            "status": "passed",
+            "failureMessages": []
+          }
+        ]
+      }
+    ]
+  },
+  "notRun": [
+    "build",
+    "noEmit",
+    "install",
+    "service",
+    "GUI",
+    "Git",
+    "developer run.mjs",
+    "full suite"
+  ]
+}

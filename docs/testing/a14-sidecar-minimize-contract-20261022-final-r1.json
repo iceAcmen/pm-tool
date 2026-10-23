@@ -1,0 +1,173 @@
+{
+  "at": "2026-10-21T21:46:50.147Z",
+  "role": "独立限定审证",
+  "checks": [
+    {
+      "name": "A12-512-source-453-artifact-unchanged",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "r3-inputs-unchanged",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "main-relevant-source-still-matches-A12",
+      "ok": true,
+      "details": [
+        {
+          "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+          "a12": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+          "main": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+          "matches": true,
+          "current": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506"
+        },
+        {
+          "path": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+          "a12": "a3a5e70e459fd74b3454757bcd419e7a2e44b8adce41685dc522dcc494c0ab5d",
+          "main": "a3a5e70e459fd74b3454757bcd419e7a2e44b8adce41685dc522dcc494c0ab5d",
+          "matches": true,
+          "current": "a3a5e70e459fd74b3454757bcd419e7a2e44b8adce41685dc522dcc494c0ab5d"
+        }
+      ]
+    },
+    {
+      "name": "original-198-files-unchanged-no-additions",
+      "ok": true,
+      "details": {
+        "evidenceDrift": [],
+        "addedEvidence": [],
+        "files": 198
+      }
+    },
+    {
+      "name": "r3-all-nine-watched-drift-lists-empty",
+      "ok": true,
+      "details": {
+        "a12DeclaredDrift": [],
+        "frozenSourceDrift": [],
+        "originalEvidenceDrift": [],
+        "inputDrift": [],
+        "mainRelevantDrift": [],
+        "dependencyDrift": [],
+        "a12LibDrift": [],
+        "mainLibDrift": [],
+        "publicCacheDrift": [],
+        "boundary": "仅所列A12输入/产物、原证、相关主源码、4依赖与公共lib/cache；非全机零污染声明"
+      }
+    },
+    {
+      "name": "base-green-three-contract-red-original-exits",
+      "ok": true,
+      "details": {
+        "base": 0,
+        "undo-red": 1,
+        "form-red": 1,
+        "draft-red": 1
+      }
+    },
+    {
+      "name": "real-TaskForm-payload-equals-original-GUI-payload",
+      "ok": true,
+      "details": {
+        "title": "同名来源核验",
+        "description": "确认后描述",
+        "assignee": "外部人工改派保留",
+        "status": "in_progress",
+        "priority": "P1",
+        "startDate": null,
+        "dueDate": "2026-10-20",
+        "progress": 73,
+        "milestoneId": null,
+        "predecessorIds": [],
+        "repoUrl": "",
+        "branch": "",
+        "manualProgress": null
+      }
+    },
+    {
+      "name": "self-tests-never-executed-undo",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "before-mixed-uncached-full-unique-client-binding",
+      "ok": true,
+      "details": {
+        "loadedAt": "2026-10-21T21:07:51.285Z",
+        "responseSha256": "e10bf9b3fd69e2c0a8d744c146362a2e1c235e38a0cb5d6059f74cc692c76cda",
+        "responseBytes": 2581368,
+        "clientSha256": "3bc4a1723f10e8f0393eceb48841007e52e9ebafdc4b37f98dc0a970151bc3b7",
+        "segmentSha256": "c19c1aa9cf11593f9daa10606e37f1401ada2e636f609b50b50f06b6274b5083",
+        "segmentBytes": 1702536,
+        "target": "1BBF621A62D3BD5C2F6DA939DFDC7B64",
+        "timeOrigin": 1792616867623,
+        "boundary": "只认领本轮mixed前原下发；不倒推更早clean首页面或长期存活"
+      }
+    },
+    {
+      "name": "markdown-docs/testing/a14-sidecar-minimize-contract-20261022-plan.md",
+      "ok": true,
+      "details": {
+        "links": 6,
+        "missing": [],
+        "trailingLines": []
+      }
+    },
+    {
+      "name": "markdown-docs/testing/a14-sidecar-minimize-contract-20261022.md",
+      "ok": true,
+      "details": {
+        "links": 15,
+        "missing": [],
+        "trailingLines": []
+      }
+    }
+  ],
+  "ownHashes": {
+    "a14-sidecar-minimize-contract-20261022-plan.md": "2c515eac8501fbeb143a6f64f00b31a39b795bb890127ade540d3e514676c164",
+    "a14-sidecar-minimize-contract-20261022-cases.test.tsx": "5c6a6b9df5a00b42a1ee9e8ebf1a8e004065822783fd2faccad6a9418b115821",
+    "a14-sidecar-minimize-contract-20261022-run.mjs": "31ffc10bcd6c31be1f176826472ddfce456ffc6f8f3a447aa21e8006a8fea0b3",
+    "a14-sidecar-minimize-contract-20261022.md": "69f1d55e6378ee2ed0e326a7da1d623817d16c631ddb17dbc09fa1ef354dd352",
+    "a14-sidecar-minimize-contract-20261022-finalize.mjs": "15e38d2f04ea44db3aa0f22ca562be8f27e9d023972869b6b5b8e3b50a0486c2"
+  },
+  "originalExits": {
+    "apply-exit.json": {
+      "at": "2026-10-21T21:30:49.541Z",
+      "exit": 0,
+      "boundary": "A12 actual production gateway, fresh3step plan applied by visible batch control; pending normal external update and fresh handle undo"
+    },
+    "undo-exit.json": {
+      "at": "2026-10-21T21:31:51.928Z",
+      "exit": 1,
+      "error": "Error: visible target missing: 保存"
+    },
+    "undo-r2/undo-exit.json": {
+      "at": "2026-10-21T21:33:03.395Z",
+      "exit": 1,
+      "error": "TimeoutError: Waiting for selector `input[name=\"title\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    "undo-r3/exit.json": {
+      "at": "2026-10-21T21:35:35.967Z",
+      "exit": 1,
+      "error": "TimeoutError: Waiting failed: 30000ms exceeded"
+    },
+    "finish/exit.json": {
+      "at": "2026-10-21T21:36:50.691Z",
+      "exit": 1,
+      "error": "Error: fresh undo missing after minimize"
+    }
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "trackedPatchSha": "29d9a389ef1f7f178dba50f5cff813672f0ea7c5ebf6dc7ad74aebd38269a596",
+    "manifestSha256": "001e8ae335901e819647199b7c35582663be46f8966206ba4b46521a6569f5d8"
+  },
+  "released": true,
+  "noGuiBuildInstallServiceCredentialsUndoCommit": true,
+  "completeRAAI04Signed": false,
+  "productDefect": "SM-01 FAIL",
+  "originalRunnerExit": 1,
+  "finalAuditExit": 0
+}

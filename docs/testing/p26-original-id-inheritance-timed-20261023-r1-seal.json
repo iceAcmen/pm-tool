@@ -1,0 +1,73 @@
+{
+  "sealedUtc": "2026-10-23T03:19:48.895Z",
+  "result": {
+    "checkedOriginalIds": 26,
+    "completeCandidates": 20,
+    "unclosed": 6,
+    "applicable": 1435,
+    "explicitInputsChecked": 140,
+    "inputDrift": [],
+    "parentPass": false,
+    "commitAdmission": false
+  },
+  "outputs": [
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-report.md",
+      "bytes": 9007,
+      "sha256": "0e001ca0a8e23965bf05abaf8ce8709f871582ab1fdc678a921e7e349f9d07ae"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-table.json",
+      "bytes": 246147,
+      "sha256": "ec3ddb38fe48d39e842023c66e40a83580985fc5462bf74505690cd0b57f1542"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-table.md",
+      "bytes": 4613,
+      "sha256": "fa020602e56986a557731644933df56804e38700f627cba5d17336f95709af05"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-audit.json",
+      "bytes": 36209,
+      "sha256": "601295ccccd2d116449f5d02c97df0327325f4f98a8cddd4d89c1f6da27c2f34"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-original-table-extract.json",
+      "bytes": 487971,
+      "sha256": "ad408d739aebb929ea92a95fb79d9da72e7c9fdaf332d5ba4647128063e8e911"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seams.json",
+      "bytes": 40743,
+      "sha256": "0b53b2b3d3b3c5531179fddb90d2f3c7607dbf305393250cb2e96ed029386c35"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-panel-analysis.json",
+      "bytes": 2911,
+      "sha256": "dd08a650205b216f5ac5b0ffbdc603e687a95e0a91653cc9af1e00e638cbcfa9"
+    },
+    {
+      "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-source-signature-vet.json",
+      "bytes": 110329,
+      "sha256": "0bd7319870612c3616d3f0ec4756a436b55125a6e1b4a32ebbbea212ca6e3871"
+    }
+  ],
+  "reader": {
+    "path": "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+    "bytes": 30649,
+    "sha256": "9dadb93af93495d8864b6f6e8136b1c86ca52b1e79607f3d3f7f30101d72a23f"
+  },
+  "ownMap": {
+    "path": "/tmp/p26-original-id-inheritance-timed-20261023-r1-map.json",
+    "bytes": 15905,
+    "sha256": "4de9c0a97c4096937295d5d6198a02b2831daa08b108135e67a11f7cb31fe115"
+  },
+  "scope": "Only explicit audit inputs and own outputs; no mass archived evidence member rehash.",
+  "excludedMutable": [
+    "timing.jsonl",
+    "seal itself",
+    "subsequent receipts/readback/released"
+  ],
+  "actualChildStep": "seal-child",
+  "outerStatusNotYetObserved": true
+}

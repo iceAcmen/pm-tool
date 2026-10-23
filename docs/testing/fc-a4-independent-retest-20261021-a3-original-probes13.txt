@@ -1,0 +1,99 @@
+TAP version 13
+# {"event":"browser","pid":11062,"version":"Chrome/139.0.7258.155"}
+# Subtest: A3-P01：discover label经生产app/core映射；普通URL/显式app能力、未知回退边界
+ok 1 - A3-P01：discover label经生产app/core映射；普通URL/显式app能力、未知回退边界
+  ---
+  duration_ms: 1383.025458
+  type: 'test'
+  ...
+# Subtest: A3-P02：生产模块同步throw/异步error/非零/信号安全拒绝；迟到error/exit不重抛或重复完成
+ok 2 - A3-P02：生产模块同步throw/异步error/非零/信号安全拒绝；迟到error/exit不重抛或重复完成
+  ---
+  duration_ms: 10.486417
+  type: 'test'
+  ...
+# {"event":"real-open-timeout","elapsed":5003,"status":"S6","forgotten":[7654321]}
+# Subtest: A3-P03：owned生产open默认真实5秒超时→S6、finally弃URL、nonce撤销、迟到无污染
+ok 3 - A3-P03：owned生产open默认真实5秒超时→S6、finally弃URL、nonce撤销、迟到无污染
+  ---
+  duration_ms: 5003.099
+  type: 'test'
+  ...
+# Subtest: A3-P04：existing/owned/reopen消费生产error与非零；失败nonce撤销、无复投、状态/HTML不含秘密
+ok 4 - A3-P04：existing/owned/reopen消费生产error与非零；失败nonce撤销、无复投、状态/HTML不含秘密
+  ---
+  duration_ms: 2.348458
+  type: 'test'
+  ...
+# Subtest: A3-P05：existing/owned/reopen取消后迟到成功/失败不覆盖；owned丢一次URL
+ok 5 - A3-P05：existing/owned/reopen取消后迟到成功/失败不覆盖；owned丢一次URL
+  ---
+  duration_ms: 1.448125
+  type: 'test'
+  ...
+# Subtest: A3-P06：existing/owned/reopen早到有效回告保持S4；替换后旧OS失败不覆盖新S4
+ok 6 - A3-P06：existing/owned/reopen早到有效回告保持S4；替换后旧OS失败不覆盖新S4
+  ---
+  duration_ms: 0.704208
+  type: 'test'
+  ...
+# Subtest: A3-P07：生产loopback安全负例、失败撤销旧回告、成功单次nonce与拒replay
+ok 7 - A3-P07：生产loopback安全负例、失败撤销旧回告、成功单次nonce与拒replay
+  ---
+  duration_ms: 41.633125
+  type: 'test'
+  ...
+# {"event":"dom-cleanup","test":"A3-P08：两次偏好503/directopen只重试一次并alert；无open/无限写、用户重选恢复","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"},{"type":"open","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585803477,"closed":1792585803478},{"type":"select-browser","browser":"Chrome","start":1792585803526,"closed":1792585803526},{"type":"select-browser","browser":"Safari","start":1792585804675,"closed":1792585804675},{"type":"open","browser":"Safari","start":1792585804724,"closed":1792585804724}],"reads":3,"openedCount":1,"errors":[]}
+# Subtest: A3-P08：两次偏好503/directopen只重试一次并alert；无open/无限写、用户重选恢复
+ok 8 - A3-P08：两次偏好503/directopen只重试一次并alert；无open/无限写、用户重选恢复
+  ---
+  duration_ms: 1537.138042
+  type: 'test'
+  ...
+# {"event":"dom-cleanup","test":"A3-P09：偏好网络断开后直接open落实Chrome到生产argv；不只看payload","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585804943,"closed":1792585804943},{"type":"select-browser","browser":"Chrome","start":1792585804944,"closed":1792585804944},{"type":"select-browser","browser":"Chrome","start":1792585804992,"closed":1792585804992},{"type":"open","browser":"Chrome","start":1792585805006,"closed":1792585805006}],"reads":1,"openedCount":1,"errors":[]}
+# Subtest: A3-P09：偏好网络断开后直接open落实Chrome到生产argv；不只看payload
+ok 9 - A3-P09：偏好网络断开后直接open落实Chrome到生产argv；不只看payload
+  ---
+  duration_ms: 267.937541
+  type: 'test'
+  ...
+# {"event":"real-preference-timeout","elapsed":35001,"reads":70}
+# {"event":"dom-cleanup","test":"A3-P10：真实35s偏好超时后directopen保存latest再投递；未替换时钟","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585805209,"closed":1792585840210},{"type":"select-browser","browser":"Chrome","start":1792585840241,"closed":1792585840241},{"type":"open","browser":"Chrome","start":1792585840255,"closed":1792585840256}],"reads":70,"openedCount":1,"errors":[]}
+# Subtest: A3-P10：真实35s偏好超时后directopen保存latest再投递；未替换时钟
+ok 10 - A3-P10：真实35s偏好超时后directopen保存latest再投递；未替换时钟
+  ---
+  duration_ms: 35250.443542
+  type: 'test'
+  ...
+# {"event":"inflight-select-attribution","actualApp":"Google Chrome","state":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"validNonce":true}
+# Subtest: A3-P11：OS等待中select-browser不得改写已投递归属或使当前有效nonce失效
+ok 11 - A3-P11：OS等待中select-browser不得改写已投递归属或使当前有效nonce失效
+  ---
+  duration_ms: 1.080667
+  type: 'test'
+  ...
+# {"event":"dom-inflight-select-attribution","observed":{"app":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S3","browser":"Chrome","selectedBrowser":"Safari"},"actualApp":"Google Chrome","nonceValid":true}}
+# {"event":"dom-cleanup","test":"A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"},{"type":"select-browser","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585840638,"closed":1792585840645},{"type":"open","browser":"Chrome","start":1792585840812,"closed":1792585840943},{"type":"select-browser","browser":"Safari","start":1792585840916,"closed":1792585840916}],"reads":1,"openedCount":1,"errors":[]}
+# {"event":"reopen-without-new-callback","resultWithoutNewCallback":{"status":"S3","step":0,"browser":"系统默认浏览器","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"cleanUrl":true,"freshNonce":true}
+# Subtest: A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器
+ok 12 - A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器
+  ---
+  duration_ms: 688.85975
+  type: 'test'
+  ...
+# Subtest: A3-P13：旧S4开始reopen，无本轮回告不能沿用S4当新页成功
+ok 13 - A3-P13：旧S4开始reopen，无本轮回告不能沿用S4当新页成功
+  ---
+  duration_ms: 1.631958
+  type: 'test'
+  ...
+# {"event":"browser-closed","pid":11062,"exitCode":0}
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44856.310458

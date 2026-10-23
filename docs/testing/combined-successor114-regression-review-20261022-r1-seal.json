@@ -1,0 +1,243 @@
+{
+  "at": "2026-10-22T15:21:25.345Z",
+  "verdict": "PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE",
+  "released": true,
+  "stop": true,
+  "signed": "Exact successor114 build/product-noEmit/full/DOM/special/default95/guard/evidence protection and actual exits only",
+  "notSigned": [
+    "GUI",
+    "style",
+    "UX",
+    "B8",
+    "parent total",
+    "ordinarycommit",
+    "release",
+    "formal service"
+  ],
+  "productExecutions": 0,
+  "gitWrites": 0,
+  "preparationReadOnlyGitStatus": 1,
+  "ownedFiles": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-reader.mjs": {
+      "bytes": 26214,
+      "sha256": "e3b5136662b6501d6d1b79291a0534c8752ea132533bad95b8d01caace02f9d0"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-preflight.json": {
+      "bytes": 31260,
+      "sha256": "a1f1b80401c4a0dd450389d90d09bdda8e3db17825f9f21732ca93c830ed7b4e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-final.json": {
+      "bytes": 66507,
+      "sha256": "50833f38232d06981603536fe25cf436c981f3c5bc7f000ca8bdd9aac952fa67"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-final-r2.json": {
+      "bytes": 461278,
+      "sha256": "9cc302fbcba07a779389d1f8487af60ccb92efcb997fd7f0832798ab9998c5cc"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-report.md": {
+      "bytes": 14931,
+      "sha256": "77e53e431bd7862dc63899f090fb3ac79162d56e361752c1cc10ae99fd97a96e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-seal.mjs": {
+      "bytes": 4361,
+      "sha256": "76026a8d2739524034dac606ea910fa0a836a28958d36b93f65041f610f30a13"
+    }
+  },
+  "readerReceipts": {
+    "preflight": {
+      "id": "87822b565090831d62205c0063cba488",
+      "metadata": {
+        "version": 2,
+        "executionId": "87822b565090831d62205c0063cba488",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "3149cdcde643354f4404437007b4b405c67430e23f14c8a7ea54abebdfdfd79d",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 11798,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 1,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792682070454,
+        "startedAtMs": 1792682070477,
+        "finishedAtMs": 1792682117962
+      },
+      "files": {
+        "execution.json": {
+          "bytes": 530,
+          "sha256": "4fc27f89967f1b4d777f5818b74f2e07290bd9a4335c13d3077fc7d1c894e071"
+        },
+        "output.log": {
+          "bytes": 5516,
+          "sha256": "2eee65857bee7351dbdf3ed101df1a81a9f1f166c8fd7a40debb5223aa79e705"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "output": "READ_ERROR candidate_and_exact_delta: EINVAL: invalid argument, readlink '/private/tmp/pmtool-combined-successor114-20261022-r1/launcher/README.md'\nREAD_OK source_config_lib_and_prior_protection\nREAD_OK dependency_full_bytes_inodes_links\nREAD_ERROR original_facilities_not_product_rewrites: vitest-full.config.mjs\n+ actual - expected\n\n+ \"import fs from 'node:fs';\\n\" +\n+   'import base from \"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool/vitest.config.ts\";\\n' +\n+   'export default {...base, root:\"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool\",cacheDir:\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/runtime/cache/full\",\\n' +\n+   'test:{...base.test,...{\"environment\":\"node\",\"pool\":\"forks\",\"poolOptions\":{\"forks\":{\"singleFork\":true}},\"minWorkers\":1,\"maxWorkers\":1,\"fileParallelism\":false,\"testTimeout\":15000,\"hookTimeout\":15000},exclude:[\"src/client/shared/task-draft-materials-refs-dom.test.tsx\",\"src/client/task-predecessor-refs-dom.test.tsx\",\"src/client/task-predecessor-hidden-submit-dom.test.tsx\"],setupFiles:[\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/browser-scheduler-setup.mjs\"]},\\n' +\n+   `plugins:[{name:'document-fixture-only',enforce:'pre',transform(code,id){if(id!==\"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx\")return null;return {code:fs.readFileSync(\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/checklist-fixture.test.tsx\",'utf8'),map:null}}}]};\\n`\n- 'import base from \"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/vitest-full.config.mjs\";\\n' +\n-   'export default {...base,cacheDir:\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/runtime/cache/full\"};\\n'\n\nREAD_OK results_deduplicated_files_and_assertions\nREAD_OK coverage_original_scope_and_thresholds\nREAD_ERROR commands_stdout_stderr_default95_watch: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    'scripts/verify-ai-client.mjs',\n    'scripts/verify-ask-apply.mjs',\n    'scripts/verify-ask-idempotency-integration.mjs',\n    'scripts/verify-b2-materials.mjs',\n...\n    'scripts/verify-r12.mjs',\n-   'scripts/verify-real-model.mjs',\n    'scripts/verify-record-location.mjs',\n    'scripts/verify-reflect.mjs',\n    'scripts/verify-reminders.mjs',\n    'scripts/verify-repo-format.mjs',\n    'scripts/verify-report-ai.mjs',\n\nREAD_OK final_receipts_index_gate\nREAD_OK reader_before_after_bytes_protection\n{\"mode\":\"preflight\",\"audit\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-preflight.json\",\"readGroups\":6,\"errors\":[{\"group\":\"candidate_and_exact_delta\",\"message\":\"EINVAL: invalid argument, readlink '/private/tmp/pmtool-combined-successor114-20261022-r1/launcher/README.md'\"},{\"group\":\"original_facilities_not_product_rewrites\",\"message\":\"vitest-full.config.mjs\\n+ actual - expected\\n\\n+ \\\"import fs from 'node:fs';\\\\n\\\" +\\n+   'import base from \\\"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool/vitest.config.ts\\\";\\\\n' +\\n+   'export default {...base, root:\\\"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool\\\",cacheDir:\\\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/runtime/cache/full\\\",\\\\n' +\\n+   'test:{...base.test,...{\\\"environment\\\":\\\"node\\\",\\\"pool\\\":\\\"forks\\\",\\\"poolOptions\\\":{\\\"forks\\\":{\\\"singleFork\\\":true}},\\\"minWorkers\\\":1,\\\"maxWorkers\\\":1,\\\"fileParallelism\\\":false,\\\"testTimeout\\\":15000,\\\"hookTimeout\\\":15000},exclude:[\\\"src/client/shared/task-draft-materials-refs-dom.test.tsx\\\",\\\"src/client/task-predecessor-refs-dom.test.tsx\\\",\\\"src/client/task-predecessor-hidden-submit-dom.test.tsx\\\"],setupFiles:[\\\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/browser-scheduler-setup.mjs\\\"]},\\\\n' +\\n+   `plugins:[{name:'document-fixture-only',enforce:'pre',transform(code,id){if(id!==\\\"/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx\\\")return null;return {code:fs.readFileSync(\\\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/checklist-fixture.test.tsx\\\",'utf8'),map:null}}}]};\\\\n`\\n- 'import base from \\\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/vitest-full.config.mjs\\\";\\\\n' +\\n-   'export default {...base,cacheDir:\\\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor114R1/runtime/cache/full\\\"};\\\\n'\\n\"},{\"group\":\"commands_stdout_stderr_default95_watch\",\"message\":\"Expected values to be strictly deep-equal:\\n+ actual - expected\\n... Skipped lines\\n\\n  [\\n    'scripts/verify-ai-client.mjs',\\n    'scripts/verify-ask-apply.mjs',\\n    'scripts/verify-ask-idempotency-integration.mjs',\\n    'scripts/verify-b2-materials.mjs',\\n...\\n    'scripts/verify-r12.mjs',\\n-   'scripts/verify-real-model.mjs',\\n    'scripts/verify-record-location.mjs',\\n    'scripts/verify-reflect.mjs',\\n    'scripts/verify-reminders.mjs',\\n    'scripts/verify-repo-format.mjs',\\n    'scripts/verify-report-ai.mjs',\\n\"}],\"productExecutions\":0}\n"
+    },
+    "first_final": {
+      "id": "6faf174f020ae194a5d957f5d9b940e9",
+      "metadata": {
+        "version": 2,
+        "executionId": "6faf174f020ae194a5d957f5d9b940e9",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "7436c157efd9415087a2a5e4037d11c131eec028397aa343a639f1ac9b2c72e7",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 12306,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 1,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792682200726,
+        "startedAtMs": 1792682200743,
+        "finishedAtMs": 1792682252562
+      },
+      "files": {
+        "execution.json": {
+          "bytes": 530,
+          "sha256": "c288c1b38aed802962f03798299c243007ee4ff8e7e5e373fa89d122193440d1"
+        },
+        "output.log": {
+          "bytes": 2442,
+          "sha256": "938296b72cb9f11699e20316b649794f23f2c49f319984e1f0ab083aab6088fd"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "output": "READ_ERROR candidate_and_exact_delta: Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  '/**\\n' +\n    ' * G-D AI 副驾 Portal 覆盖层（只读诊断 / 草稿待确认）：人确认才落库，非全局聊天。\\n' +\n    ' * 从 panel.tsx 按实体抽离，行为零变更：\\n' +\n    ' *  - 只读诊断：ask 提问，回答正文 + 相关任务只读投影（状态按最新快照现取）；\\n' +\n    ' *  - 草稿待确认：validatePlan 校验多步计划，勾选/行内编辑，整批 ask-apply 或逐步执行，非法行禁用确认；\\n' +\n...\n    '  const assignees = new Set(tasks.map(t => t.assignee).filter(Boolean))\\n' +\n+   '  const milestoneById = new M'... 30432 more characters\n-   '  const milestoneById = new M'... 30455 more characters\n\nREAD_OK source_config_lib_and_prior_protection\nREAD_OK dependency_full_bytes_inodes_links\nREAD_OK original_facilities_not_product_rewrites\nREAD_OK results_deduplicated_files_and_assertions\nREAD_OK coverage_original_scope_and_thresholds\nREAD_OK commands_stdout_stderr_default95_watch\nREAD_ERROR final_receipts_index_gate: The expression evaluated to a falsy value:\n\n  assert(stdout.includes('inputs: 521, declarations: 114'))\n\nREAD_OK reader_before_after_bytes_protection\n{\"mode\":\"final\",\"audit\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-final.json\",\"readGroups\":7,\"errors\":[{\"group\":\"candidate_and_exact_delta\",\"message\":\"Expected values to be strictly equal:\\n+ actual - expected\\n... Skipped lines\\n\\n  '/**\\\\n' +\\n    ' * G-D AI 副驾 Portal 覆盖层（只读诊断 / 草稿待确认）：人确认才落库，非全局聊天。\\\\n' +\\n    ' * 从 panel.tsx 按实体抽离，行为零变更：\\\\n' +\\n    ' *  - 只读诊断：ask 提问，回答正文 + 相关任务只读投影（状态按最新快照现取）；\\\\n' +\\n    ' *  - 草稿待确认：validatePlan 校验多步计划，勾选/行内编辑，整批 ask-apply 或逐步执行，非法行禁用确认；\\\\n' +\\n...\\n    '  const assignees = new Set(tasks.map(t => t.assignee).filter(Boolean))\\\\n' +\\n+   '  const milestoneById = new M'... 30432 more characters\\n-   '  const milestoneById = new M'... 30455 more characters\\n\"},{\"group\":\"final_receipts_index_gate\",\"message\":\"The expression evaluated to a falsy value:\\n\\n  assert(stdout.includes('inputs: 521, declarations: 114'))\\n\"}],\"productExecutions\":0}\n"
+    },
+    "final_r2": {
+      "id": "232c57bea1810a27a8f078a6171cebb1",
+      "metadata": {
+        "version": 2,
+        "executionId": "232c57bea1810a27a8f078a6171cebb1",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "58bdc2e16ede33543c18b57dfed6ecb3e318c5992fade9f03d8dc685f9f281ee",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 12706,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792682317569,
+        "startedAtMs": 1792682317585,
+        "finishedAtMs": 1792682366451
+      },
+      "files": {
+        "execution.json": {
+          "bytes": 530,
+          "sha256": "38d96b5c96884b7a3463a6ac0eb14320d5bc8e1b71a796c2d058b31cdfac6697"
+        },
+        "output.log": {
+          "bytes": 601,
+          "sha256": "bf41edd416998843ae8f3f8d79029eacf6895ad20e5fd5a290e62be9546a9e36"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "output": "READ_OK candidate_and_exact_delta\nREAD_OK source_config_lib_and_prior_protection\nREAD_OK dependency_full_bytes_inodes_links\nREAD_OK original_facilities_not_product_rewrites\nREAD_OK results_deduplicated_files_and_assertions\nREAD_OK coverage_original_scope_and_thresholds\nREAD_OK commands_stdout_stderr_default95_watch\nREAD_OK final_receipts_index_gate\nREAD_OK reader_before_after_bytes_protection\n{\"mode\":\"final-r2\",\"audit\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-final-r2.json\",\"readGroups\":9,\"errors\":[],\"productExecutions\":0}\n"
+    },
+    "wait_final_metadata": {
+      "id": "bf0c39a8a053fc33d7d05136eca0cc32",
+      "metadata": {
+        "version": 2,
+        "executionId": "bf0c39a8a053fc33d7d05136eca0cc32",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "7c5581363fd3b5e7bf050a7c626175f08d5546fc5b04a7ad12f16f1529e1148a",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 12818,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792682363517,
+        "startedAtMs": 1792682363532,
+        "finishedAtMs": 1792682366749
+      },
+      "files": {
+        "execution.json": {
+          "bytes": 530,
+          "sha256": "35477bc102b8aabffcf7c4a6f5a71abd51b893828713485d169d5a3ce9a42738"
+        },
+        "output.log": {
+          "bytes": 1133,
+          "sha256": "ed9d23054ab5b2f13d4d4c2ec9fc23a8373ed1f61ace780357fadd0fb3c9c590"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "output": "{\"version\":2,\"executionId\":\"232c57bea1810a27a8f078a6171cebb1\",\"ownerHash\":\"2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81\",\"requestDigest\":\"58bdc2e16ede33543c18b57dfed6ecb3e318c5992fade9f03d8dc685f9f281ee\",\"stdinMode\":\"piped\",\"captureStderr\":false,\"target\":\"host\",\"status\":\"exited\",\"pid\":12706,\"cwd\":\"/Users/bytedance/Projects/dsh-pm/pm-tool\",\"exitCode\":0,\"terminalReason\":\"process_exited\",\"outputComplete\":true,\"sandbox\":null,\"createdAtMs\":1792682317569,\"startedAtMs\":1792682317585,\"finishedAtMs\":1792682366451}\nREAD_OK candidate_and_exact_delta\nREAD_OK source_config_lib_and_prior_protection\nREAD_OK dependency_full_bytes_inodes_links\nREAD_OK original_facilities_not_product_rewrites\nREAD_OK results_deduplicated_files_and_assertions\nREAD_OK coverage_original_scope_and_thresholds\nREAD_OK commands_stdout_stderr_default95_watch\nREAD_OK final_receipts_index_gate\nREAD_OK reader_before_after_bytes_protection\n{\"mode\":\"final-r2\",\"audit\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor114-regression-review-20261022-r1-audit-final-r2.json\",\"readGroups\":9,\"errors\":[],\"productExecutions\":0}\n\n"
+    }
+  },
+  "mainIndex": {
+    "bytes": 337721,
+    "sha256": "b4db6b908ad9320122d635c923979554793eefe173bcc75ae258ff553b91b460"
+  },
+  "sourceCount": 114,
+  "productInputCount": 521,
+  "evidenceEntries": 1687,
+  "preservedReaderFailures": [
+    "preflight exit1",
+    "first final exit1"
+  ],
+  "preservedMainArchiveFailure": {
+    "id": "12965595262ca7a27b594856c6f77f6a",
+    "metadata": {
+      "version": 2,
+      "executionId": "12965595262ca7a27b594856c6f77f6a",
+      "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+      "requestDigest": "f348e28d979b87d9f0ba3872fc6a5c23d0263556065ff0a87c860e4eca1f8683",
+      "stdinMode": "piped",
+      "captureStderr": false,
+      "target": "host",
+      "status": "exited",
+      "pid": 11739,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 1,
+      "terminalReason": "process_exited",
+      "outputComplete": true,
+      "sandbox": null,
+      "createdAtMs": 1792682020274,
+      "startedAtMs": 1792682020316,
+      "finishedAtMs": 1792682021067
+    },
+    "stdout": {
+      "bytes": 900,
+      "sha256": "243a149957239291401fd79693b46c1f9bb5c90ec0b97839602bab54a78a1d59"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "output": "node:fs:736\n  return binding.read(fd, buffer, offset, length, position);\n                 ^\n\nError: EISDIR: illegal operation on a directory, read\n    at Object.readSync (node:fs:736:18)\n    at tryReadSync (node:fs:416:20)\n    at Object.readFileSync (node:fs:470:19)\n    at walk (file:///private/tmp/pmtool-successor114-regression-seal-r1.mjs:39:46)\n    at walk (file:///private/tmp/pmtool-successor114-regression-seal-r1.mjs:39:22)\n    at walk (file:///private/tmp/pmtool-successor114-regression-seal-r1.mjs:39:22)\n    at walk (file:///private/tmp/pmtool-successor114-regression-seal-r1.mjs:39:22)\n    at file:///private/tmp/pmtool-successor114-regression-seal-r1.mjs:40:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26) {\n  errno: -21,\n  code: 'EISDIR',\n  syscall: 'read'\n}\n\nNode.js v22.23.3\n",
+    "execution": {
+      "bytes": 530,
+      "sha256": "49dcb8e16f677def57c2a22385c291005fe6663e366c4ef22f340d55429237b8"
+    }
+  },
+  "protection": "Final index bytes/symlink fields and previously read evidence rechecked; other experts/livingdocs not locked"
+}

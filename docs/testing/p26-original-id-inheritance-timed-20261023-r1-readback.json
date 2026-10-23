@@ -1,0 +1,50 @@
+{
+  "readbackUtc": "2026-10-23T03:19:54.617Z",
+  "actualSealChildExit": 0,
+  "actualCheckChildExit": 0,
+  "result": {
+    "checkedOriginalIds": 26,
+    "completeCandidates": 20,
+    "unclosed": 6,
+    "applicable": 1435,
+    "explicitInputsChecked": 140,
+    "inputDrift": [],
+    "parentPass": false,
+    "commitAdmission": false
+  },
+  "sealPin": {
+    "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seal.json",
+    "bytes": 2649,
+    "sha256": "5ee24106d86f2943d9cd28095a6637520dd400a2c60153807f4b1a5e6a015d9e"
+  },
+  "outputPinsChecked": 8,
+  "stdoutReadback": {
+    "seal": {
+      "checkedOriginalIds": 26,
+      "completeCandidates": 20,
+      "unclosed": 6,
+      "applicable": 1435,
+      "explicitInputsChecked": 140,
+      "inputDrift": [],
+      "parentPass": false,
+      "commitAdmission": false,
+      "seal": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seal.json",
+      "ownOutputs": 8
+    },
+    "check": {
+      "checkedOriginalIds": 26,
+      "completeCandidates": 20,
+      "unclosed": 6,
+      "applicable": 1435,
+      "explicitInputsChecked": 140,
+      "inputDrift": [],
+      "parentPass": false,
+      "commitAdmission": false
+    }
+  },
+  "observedArgvExitReceipts": [
+    "check-tool-receipt.json",
+    "seal-tool-receipt.json"
+  ],
+  "releaseStillPending": "Actual readback-child exit and own outer receipt must be checked next."
+}

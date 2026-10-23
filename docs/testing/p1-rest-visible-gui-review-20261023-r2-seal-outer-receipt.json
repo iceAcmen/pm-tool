@@ -1,0 +1,20 @@
+{
+  "tool": "functions.exec_command",
+  "receiptType": "真实exec工具终码及stdout转录；没有调用child_process/spawn",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/p1-rest-visible-gui-review-20261023-r2-reader.mjs seal",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "exitCode": 0,
+  "wallTimeSeconds": 0.2352,
+  "stdout": "{\"mode\":\"seal\",\"inputCount\":724,\"drift\":0,\"outputCount\":5,\"stopped\":true,\"released\":true}\n",
+  "sealRecordedAt": "2026-10-23T00:48:47.672Z",
+  "readerPid": 35593,
+  "readerParentPid": 35591,
+  "seal": {
+    "bytes": 1692,
+    "sha256": "50a8e2e3c1d8acbabface103984fc605172f7d827960ea8560fa8232d7367b9a"
+  },
+  "selfExcludedFromSealOutputs": true,
+  "readbackRequired": true,
+  "productExecution": "NOT_RUN",
+  "guiExecution": "NOT_RUN"
+}

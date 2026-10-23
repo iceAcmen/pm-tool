@@ -1,0 +1,83 @@
+diff --git a/private/tmp/pmtool-a9-import-BAqXTS/src/client/views/tasks.tsx b/private/tmp/pmtool-a9-import-2XiKkw/src/client/views/tasks.tsx
+index f6de88f..2ecd04d 100644
+--- a/private/tmp/pmtool-a9-import-BAqXTS/src/client/views/tasks.tsx
++++ b/private/tmp/pmtool-a9-import-2XiKkw/src/client/views/tasks.tsx
+@@ -282,6 +282,26 @@ export function TaskTable(props: {
+   const [selected, setSelected] = useState<Set<string>>(new Set())
+   const [movePickerFor, setMovePickerFor] = useState<Task | null>(null)
+   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
++  const [importBusy, setImportBusy] = useState(false)
++  const [importError, setImportError] = useState('')
++  const importInFlight = useRef(false)
++  const confirmImport = async () => {
++    if (disabled || importInFlight.current || !importPreview?.confirm) return
++    // ref 同步挡住同一帧连点，state 只负责在途控件呈现。
++    importInFlight.current = true
++    setImportBusy(true)
++    setImportError('')
++    try {
++      const ok = await run(importPreview.confirm)
++      if (ok) { setImportPreview(null); onSaved() }
++      else setImportError('导入失败，预览已保留，请重试。')
++    } catch {
++      setImportError('导入失败，预览已保留，请重试。')
++    } finally {
++      importInFlight.current = false
++      setImportBusy(false)
++    }
++  }
+   const [activeId, setActiveId] = useState<string | null>(null)
+   const activeRef = useRef<HTMLDivElement | null>(null)
+   // D-05（C-07 稳定句柄列）：编号格恒显 code 或短 ID，点击复制到剪贴板并给瞬时反馈；
+@@ -1110,12 +1130,13 @@ export function TaskTable(props: {
+             <label className="pt-ghost pm-import-dropzone" title="导入 .csv / .xlsx 任务表（先预览，确认后才落盘）">
+               <FileText size={14} />导入
+               <input
+-                type="file" accept=".csv,.xlsx" hidden className="pm-import-file"
++                type="file" accept=".csv,.xlsx" hidden className="pm-import-file" disabled={disabled || importBusy}
+                 onChange={e => {
+                   const file = e.currentTarget.files?.[0]
+                   const pid = projectId
+                   e.currentTarget.value = ''
+-                  if (!file) return
++                  if (!file || disabled || importInFlight.current) return
++                  setImportError('')
+                   if (!pid) { setImportPreview({ text: '请先在顶部选择项目，再上传任务表。', confirm: '' }); return }
+                   const isCsv = /\.csv$/i.test(file.name)
+                   const reader = new FileReader()
+@@ -1125,7 +1146,7 @@ export function TaskTable(props: {
+                     try {
+                       const text = await execute(`task import-content ${pid} ${file.name} ${enc}`)
+                       if (/失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/.test(text)) { setImportPreview({ text, confirm: '' }); return }
+-                      setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc}` })
++                      setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc} confirm` })
+                     } catch (err) {
+                       setImportPreview({ text: `解析失败：${err instanceof Error ? err.message : String(err)}`, confirm: '' })
+                     }
+@@ -1245,17 +1266,20 @@ export function TaskTable(props: {
+       </section>
+ 
+       {importPreview && (
+-        <div className="pt-import">
++        <div className="pt-import" aria-busy={importBusy}>
+           <pre>{importPreview.text}</pre>
++          {importError && <p role="alert">{importError}</p>}
+           {importPreview.confirm && (
+             <button
+-              className="pt-primary pm-import-confirm" disabled={disabled}
+-              onClick={() => void run(importPreview.confirm).then(ok => {
+-                if (ok) { setImportPreview(null); onSaved() }
+-              })}
++              className="pt-primary pm-import-confirm" disabled={disabled || importBusy}
++              onClick={confirmImport}
+             >确认落盘</button>
+           )}
+-          <button className="pt-ghost" onClick={() => setImportPreview(null)}>取消</button>
++          <button className="pt-ghost" disabled={importBusy} onClick={() => {
++            if (importInFlight.current) return
++            setImportPreview(null)
++            setImportError('')
++          }}>取消</button>
+         </div>
+       )}
+ 

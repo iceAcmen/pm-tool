@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/usr/bin/patch",
+    "--batch",
+    "--reverse",
+    "-p1",
+    "-i",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-p2004-kr-related-source-delta.patch"
+  ],
+  "cwd": "/tmp/pm-p2004-source-auto-r1-hY4mqH/red/inputs",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/pm-p2004-source-auto-r1-hY4mqH/red-reconstruct/home",
+    "TMPDIR": "/tmp/pm-p2004-source-auto-r1-hY4mqH/red-reconstruct/tmp",
+    "XDG_CACHE_HOME": "/tmp/pm-p2004-source-auto-r1-hY4mqH/red-reconstruct/cache",
+    "TZ": "Asia/Shanghai",
+    "DSH_PM_E2E": "0",
+    "P2004_DOM_EVIDENCE": "/tmp/pm-p2004-source-auto-r1-hY4mqH/red-reconstruct/output/dom"
+  },
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "startedAt": "2026-10-22T22:11:46.064Z",
+  "finishedAt": "2026-10-22T22:11:46.145Z",
+  "exit": 0,
+  "signal": null,
+  "error": null
+}

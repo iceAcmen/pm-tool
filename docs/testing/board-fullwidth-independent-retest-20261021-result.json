@@ -1,0 +1,299 @@
+{
+  "at": "2026-10-21T13:33:36.834Z",
+  "role": "independent-testing-expert",
+  "candidate": "board-FW-independent-source-20261021",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "sourceSha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+  "testSha256": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79",
+  "conclusions": {
+    "SOURCE": "LIMITED_PASS",
+    "FW-T01": "AUTO_PASS",
+    "FW-T02": "AUTO_PASS",
+    "FW-T03": "AUTO_PASS",
+    "FW-T04": "NOT_RUN",
+    "FW-T05": "NOT_RUN",
+    "wholeGate": "NOT_SIGNED_PASS",
+    "wholeDirtyTree": "NOT_ASSESSED"
+  },
+  "mainActions": "New build/loaded identity and original GUI/persistence/protection evidence still required",
+  "oldFinalTests": {
+    "exit": 1,
+    "summary": "5 failed | 31 passed",
+    "editorSha256": "5ddf057cf5bb0eab59dbb31233b59c586959705f452b56f59bc88d8a885cf6f8",
+    "outputSha256": "567a2225319c6d259a8b44d25ab4ca61876591dc04634f40446ccbe2a62853da"
+  },
+  "newFinalTests": {
+    "exit": 0,
+    "summary": "36 passed",
+    "editorSha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+    "outputSha256": "bdff058d260082743719b2ece6d6fb88e2bf4e5f4730142ae7e1070cdb2b231e"
+  },
+  "additional": {
+    "tests": 9,
+    "exit": 0,
+    "fixtureFailurePreserved": "independent-additional.txt"
+  },
+  "driftAt": "2026-10-21T13:32:39.252Z",
+  "drift": false,
+  "commands": [
+    {
+      "label": "final-editor-diff",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--",
+        "packages/dsh-pm-tool/src/client/board/editor.tsx"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:32:39.205Z",
+      "endedAt": "2026-10-21T13:32:39.252Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/final-editor-diff.txt",
+      "outputSha256": "6253c7aed451a7ce54d779525167768f6a3e300c178c6d5552b0d4a0a707ac5c"
+    },
+    {
+      "label": "final-head",
+      "executable": "git",
+      "args": [
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:32:39.110Z",
+      "endedAt": "2026-10-21T13:32:39.200Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/final-head.txt",
+      "outputSha256": "ed2938ac3539ef570b791c5318211f5f73886cd91d64e6b052945a7913b86be1"
+    },
+    {
+      "label": "final-own-diff-check",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--check",
+        "--",
+        "docs/testing/board-fullwidth-independent-retest-20261021*"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:33:27.488Z",
+      "endedAt": "2026-10-21T13:33:27.567Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/final-own-diff-check.txt",
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "freeze-board-diff-stat",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--stat",
+        "--",
+        "packages/dsh-pm-tool/src/client/board"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:27:20.120Z",
+      "endedAt": "2026-10-21T13:27:20.221Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze-board-diff-stat.txt",
+      "outputSha256": "c4f17a51a072bf17774e6cecf0cc81bf828be8a93501fe04f749469b397bd410"
+    },
+    {
+      "label": "freeze-board-status",
+      "executable": "git",
+      "args": [
+        "status",
+        "--short",
+        "--",
+        "packages/dsh-pm-tool/src/client/board",
+        "packages/dsh-pm-tool/vitest.config.ts"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:27:19.970Z",
+      "endedAt": "2026-10-21T13:27:20.120Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze-board-status.txt",
+      "outputSha256": "a507a2ab519e4ffd7c9e5c30a3e83709df506ac127141c1beace859e5390f05d"
+    },
+    {
+      "label": "freeze-editor-diff",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--",
+        "packages/dsh-pm-tool/src/client/board/editor.tsx"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:27:19.844Z",
+      "endedAt": "2026-10-21T13:27:19.968Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze-editor-diff.txt",
+      "outputSha256": "6253c7aed451a7ce54d779525167768f6a3e300c178c6d5552b0d4a0a707ac5c"
+    },
+    {
+      "label": "freeze-head",
+      "executable": "git",
+      "args": [
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:27:19.777Z",
+      "endedAt": "2026-10-21T13:27:19.844Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze-head.txt",
+      "outputSha256": "ed2938ac3539ef570b791c5318211f5f73886cd91d64e6b052945a7913b86be1"
+    },
+    {
+      "label": "freeze-old-editor",
+      "executable": "git",
+      "args": [
+        "show",
+        "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd:packages/dsh-pm-tool/src/client/board/editor.tsx"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:27:20.222Z",
+      "endedAt": "2026-10-21T13:27:20.409Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze-old-editor.txt",
+      "outputSha256": "5ddf057cf5bb0eab59dbb31233b59c586959705f452b56f59bc88d8a885cf6f8"
+    },
+    {
+      "label": "independent-additional",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/vitest.additional.config.mjs",
+        "--reporter",
+        "verbose"
+      ],
+      "cwd": "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool",
+      "startedAt": "2026-10-21T13:29:01.430Z",
+      "endedAt": "2026-10-21T13:29:04.032Z",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/independent-additional.txt",
+      "outputSha256": "c6fc0b7050df6c8c668b6a2e241e25093759ca59c099485557bc38fd669e3b0a"
+    },
+    {
+      "label": "independent-additional-r2",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/vitest.additional.config.mjs",
+        "--reporter",
+        "verbose"
+      ],
+      "cwd": "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool",
+      "startedAt": "2026-10-21T13:29:24.097Z",
+      "endedAt": "2026-10-21T13:29:26.469Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/independent-additional-r2.txt",
+      "outputSha256": "4c78b0b8dcecb4ef7260f357b5b3c5c5881a1937ecb28fa3b48299638b8628ed"
+    },
+    {
+      "label": "independent-new-final-tests",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/vitest.config.mjs",
+        "--reporter",
+        "verbose"
+      ],
+      "cwd": "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool",
+      "startedAt": "2026-10-21T13:27:53.958Z",
+      "endedAt": "2026-10-21T13:27:56.766Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/independent-new-final-tests.txt",
+      "outputSha256": "bdff058d260082743719b2ece6d6fb88e2bf4e5f4730142ae7e1070cdb2b231e"
+    },
+    {
+      "label": "independent-old-final-tests",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/vitest.config.mjs",
+        "--reporter",
+        "verbose"
+      ],
+      "cwd": "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y/packages/dsh-pm-tool",
+      "startedAt": "2026-10-21T13:27:49.590Z",
+      "endedAt": "2026-10-21T13:27:53.945Z",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/independent-old-final-tests.txt",
+      "outputSha256": "567a2225319c6d259a8b44d25ab4ca61876591dc04634f40446ccbe2a62853da"
+    },
+    {
+      "label": "readonly-vendor-integrity",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "packages/dsh-pm-tool/scripts/verify-external-skills.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "startedAt": "2026-10-21T13:30:15.578Z",
+      "endedAt": "2026-10-21T13:30:15.739Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "output": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/readonly-vendor-integrity.txt",
+      "outputSha256": "00d47bb4bda8590e724928045023acee3ea0f03f0e987d7d1858710cb2560c10"
+    }
+  ],
+  "outerFreezeExit": "NOT_CAPTURED; five inner git exits recorded; freeze revalidated by drift",
+  "archiveFilesVerified": 45,
+  "writeRoots": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/board-fullwidth-independent-retest-20261021-evidence",
+    "/private/tmp/pmtool-fw-independent-retest-20261021-7ry62y",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/board-fullwidth-independent-retest-20261021.md",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/board-fullwidth-independent-retest-20261021-check.mjs",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/board-fullwidth-independent-retest-20261021-result.json"
+  ],
+  "artifacts": {
+    "report": {
+      "path": "docs/testing/board-fullwidth-independent-retest-20261021.md",
+      "sha256": "60dd1897a86e374cf9cc405944de4743907de8c8ea75836a9c3f4d9d9b341c70"
+    },
+    "checker": {
+      "path": "docs/testing/board-fullwidth-independent-retest-20261021-check.mjs",
+      "sha256": "e64f154b6bf581a440fdcb910c3a2ce98037ab32ec8e6b633fe12aa7276de3e7"
+    },
+    "freeze": {
+      "path": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/freeze.json",
+      "sha256": "ee19c6e0e6189382055a9b65ee7d557bfa2fd497fc3dcebc9853a89bfb4f420d"
+    },
+    "archive": {
+      "path": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/archive.json",
+      "sha256": "58b1b00b10bd9c03bced4fb2608910d501c8d2665568fb1ec84f7e9e0257aa5f"
+    }
+  }
+}

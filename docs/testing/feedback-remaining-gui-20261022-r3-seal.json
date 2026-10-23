@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "role": "trae 独立 GUI 审证专家，非开发、非 GUI 执行端",
+  "scope": "只封本角色 R3 报告与只读文件审计脚本，不封或修改 Main 原证",
+  "files": {
+    "docs/testing/feedback-remaining-gui-20261022-r3.md": {
+      "bytes": 23633,
+      "sha256": "0b894bf622fc36cdee8912f12b14b680d05e549b5f12be865dbae3571cebc00e"
+    },
+    "docs/testing/feedback-remaining-gui-20261022-r3-audit.mjs": {
+      "bytes": 10421,
+      "sha256": "d32edb73b8423ed0464b8b5564faf56b3bb02cb326c9bafd2a86f732bb1fcb97"
+    }
+  },
+  "fileAudit": {
+    "at": "2026-10-22T10:41:38.367Z",
+    "environment": "macOS/bash，Node v22.23.3；没有调用 pnpm",
+    "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/feedback-remaining-gui-20261022-r3-audit.mjs",
+    "exitCode": 0,
+    "evidenceFiles": 230,
+    "evidenceIssues": [],
+    "unlistedEvidenceFiles": [],
+    "sourceFiles": 102,
+    "sourceDrift": [],
+    "executions": 27,
+    "retainedExit1": 6,
+    "observations": 49,
+    "independentlyViewedOriginalPngs": 33,
+    "linksCheckedBeforeSeal": "报告链接存在；当时待新建本 seal 的链接单列，建后再核",
+    "trailingWhitespace": [],
+    "fields41to42Equal": true,
+    "fields42to43Equal": true
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "frozenRoot": "/private/tmp/pmtool-u4-closure-20261022-r2",
+    "launcherFrozenOwner": "/private/tmp/pmtool-a20v3-closure-20261022-r1",
+    "runtimeRoot": "/private/tmp/pmtool-u4-runtime-20261022-r2",
+    "recordedPort": 3257,
+    "recordedPid": 88698,
+    "liveServiceProbed": false,
+    "spaceId": 13,
+    "mainPage": "p1",
+    "authorityPage": "p2",
+    "mainTargetIdAtFinalBinding": "31B8437E488BC66089B89FE88199928C",
+    "mainTimeOrigins": [
+      1792663660887.6,
+      1792664607721.4
+    ],
+    "viewedPngSize": [1470, 746],
+    "theme": "深色",
+    "textScale": "100%；DPR2不是200%文字缩放",
+    "loadedBytes": 2597521,
+    "loadedSha256": "7d4312dae04a9e979246a6cd241fc51e2312c4b15b8ed3361ff2212e67d8b0e1",
+    "clientSha256": "51234141fa6b34182492dbd294b60cb62320aa68aa8004111d6e5b12a6eee055",
+    "completeSegmentBytes": 1718689,
+    "completeSegmentSha256": "a0e29f76337ed9c509134e520e436bd866848f320ccc5cedd0fe6a4ec84d62c7",
+    "completeSegmentOffset": 875361,
+    "completeSegmentSecondOffset": -1
+  },
+  "referencedOriginalFingerprints": {
+    "reports/all-pending-evidence-20261021/FeedbackRemainingR1/index.json": {
+      "bytes": 35127,
+      "sha256": "c3bedc14c65cf627432a7055a682ae2dbd074db906fe881c32bdde7fc18afc23"
+    },
+    "reports/all-pending-evidence-20261021/FeedbackRemainingR1/source-binding.json": {
+      "bytes": 12980,
+      "sha256": "91f2e1f2f46c6c100898054e39fbb2734031f546684d5554ac26a185a6cbff4b"
+    },
+    "docs/testing/feedback-remaining-gui-20261022-r1-plan.md": {
+      "bytes": 5292,
+      "sha256": "5eb3104077cb5adbe5e292c48e2e30b6ade8a0d740eddedd139e00e30cda249d"
+    },
+    "docs/testing/feedback-remaining-gui-20261022-r1.md": {
+      "bytes": 22641,
+      "sha256": "2e864ca7639c368b968e1d7d87e1e1ddd12a93bd8de6c4bf3d35b3da9a50b820"
+    },
+    "docs/testing/feedback-remaining-gui-20261022-r2-method.md": {
+      "bytes": 13719,
+      "sha256": "655dc648723f65b7e10f58280d1a1d01ae7e2935c3f0184f95082d444e8aeec1"
+    },
+    "docs/testing/a18-feedback-context-independent-retest-20261022-cases.test.tsx": {
+      "bytes": 13594,
+      "sha256": "4d33b7a59a6f524af7602d7fa5bbf70f15eda22e997828310c7d3ce21ba75b81"
+    },
+    "docs/testing/a17-transport-feedback-independent-retest-20261022-cases.test.tsx": {
+      "bytes": 11523,
+      "sha256": "81aa3fc67b117824572039f33c1e4c0f8727b1869a24cb6bf5a55580f19b4bf1"
+    }
+  },
+  "clipboard": {
+    "source": "Main 已存 13-native-clipboard.txt，非本角色读取系统剪贴板",
+    "bytes": 235,
+    "sha256": "af456680d7845d3321d11320547a093511f988943512fd2cfe25fd1cbc0d58ab",
+    "equalsExactMarkedMessage": true
+  },
+  "durationsMs": {
+    "ordinaryExact08to10": 70167,
+    "ordinaryMarked11to15": 71005,
+    "quietResolve18toNext21": 24901,
+    "quietReject22toCurrentCopy24": 43382,
+    "quiet60SecondFullChain": "未证明；不拼接不同通知或普通时段"
+  },
+  "judgment": {
+    "limitedPass": [
+      "普通精确 catch 原文保真、错误 DOM、持久及保稿，仅实际切片",
+      "X02 普通 marker/TAB/尾部与 235byte 系统复制、71.005秒持久，仅实际切片",
+      "X04 quiet 同值新通知隔离迟到 copy resolve/reject，当前复制状态",
+      "实际可达关闭卡，不含模态背后穿透或草稿穿越卸载",
+      "O4 干净 ESC/X/scrim、description-only 按钮取消和明确放弃",
+      "O3 真实拒后保稿与解除关系后显式重试，不含原因质量或完整可见性",
+      "O5 权威 S0/S1 陈旧只读与明确 retry 更新，不含刷新错误分类"
+    ],
+    "retainedNotPass": [
+      "六个原 exit1",
+      "02..06 未命中故障，发生实际正常写入",
+      "27 无 PM，不是业务拒绝成功",
+      "35 确认 ESC 后确认仍在；不以36a按钮成功洗绿",
+      "原 A18 样本20仍19绿1红",
+      "O3 原因泛化及权限误导门未闭，交既有 cycle-feedback-reason 角色"
+    ],
+    "missingOrUnclosed": [
+      "错误全文完整屏内可见",
+      "quiet X02 独立60秒与quiet无action精确raw完整链",
+      "X06同完整真实success完整第二轮TTL",
+      "X08真实quiet success/refresh完整链",
+      "X09当前copy拒绝及明确retry",
+      "X10同世界真实卸载/重挂旧Promise晚到",
+      "O4焦点全链、Enter、多选顺序/内容增减、dirty scrim、物理click/Space"
+    ],
+    "methodLevels": {
+      "X03": "当前task update精确M GUI支链N/A；原mock全链AUTO-only，非GUI PASS",
+      "X05": "当前task update精确M GUI支链N/A；真实可达close仅有限签",
+      "X07": "人为旧timer callback为AUTO-only；不追加fake-success或fake-timer GUI要求",
+      "approvedSources": [
+        "docs/plans/2026-10-22-feedback-error-context-closure.md",
+        "docs/testing/a18-feedback-context-independent-retest-20261022-plan.md",
+        "docs/testing/a18-feedback-context-independent-retest-20261022-cases.test.tsx",
+        "docs/testing/feedback-remaining-gui-20261022-r2-method.md"
+      ]
+    },
+    "wholeFeedbackApproved": false,
+    "wholeParentGoalApproved": false,
+    "commitApproved": false,
+    "releaseApproved": false
+  },
+  "operations": {
+    "productTestsRun": false,
+    "buildOrInstallRun": false,
+    "guiExecutionRun": false,
+    "rawExecutorOrSealRun": false,
+    "browserOrServicesOperated": false,
+    "credentialsAccessed": false,
+    "gitOperationsRun": false,
+    "originalEvidenceModified": false,
+    "productOrOtherTestingOrLivingDocsModified": false,
+    "ownRunningChildren": [],
+    "released": true,
+    "next": "交回 Main，父goal继续；未闭门沿原合同/原owner处理，候选变动另绑定重审"
+  }
+}

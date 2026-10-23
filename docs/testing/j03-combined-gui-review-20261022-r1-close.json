@@ -1,0 +1,3186 @@
+{
+  "at": "2026-10-22T12:35:18.607Z",
+  "mode": "READ_ONLY_EVIDENCE_AUDIT_NOT_PRODUCT_TEST",
+  "index": {
+    "bytes": 81249,
+    "sha256": "e4833192fa8429b89d6a121eb9de1a1b1621f4b67e3b645c2ad77c3e5f455535"
+  },
+  "declaredCount": 468,
+  "integrity": {
+    "00-empty-host-roots.json": {
+      "bytes": 327,
+      "sha256": "573edec7167969fbecf2d845c1c51a917e382df6eb4e02b85d832f743615de8f"
+    },
+    "00-empty-host.json": {
+      "bytes": 372,
+      "sha256": "18e24b81123a9c23b0099e305bc72fb6d68f03fd3d7bc393bf14a2bb1684ae59"
+    },
+    "00-empty-host.png": {
+      "bytes": 45833,
+      "sha256": "d53a2ecfc9b23523e20068465769bd738928e94c7c217560378739fa208d9cee"
+    },
+    "01-f5-precheck-command.json": {
+      "bytes": 3510,
+      "sha256": "ac903bc7628a595c40f34dd2463c7570b673a78d8c49f49efbfaec1f0e7e5a0d"
+    },
+    "01-f5-precheck-drain-0-events.json": {
+      "bytes": 3125,
+      "sha256": "922d6af4240cedba109a87c51c4fd5f5b43c9ae2f7633568bdf3485497a22ddc"
+    },
+    "01-f5-prechecked-roots.json": {
+      "bytes": 327,
+      "sha256": "573edec7167969fbecf2d845c1c51a917e382df6eb4e02b85d832f743615de8f"
+    },
+    "01-f5-prechecked.json": {
+      "bytes": 372,
+      "sha256": "8e6701b5b83988bb9269366c79b0be275025e345293429b83127de6c03267ac0"
+    },
+    "01-f5-prechecked.png": {
+      "bytes": 93495,
+      "sha256": "5d01540807c0226a4e83a4eeb8343cb7cf09ad72c10efca24a2dacac590e479e"
+    },
+    "02-f5-confirm-command.json": {
+      "bytes": 3618,
+      "sha256": "419d90b7763575f4494bffd860c6a6d860567bcafc9c003a506086a6e5923382"
+    },
+    "02-f5-confirm-drain-0-events.json": {
+      "bytes": 2046,
+      "sha256": "340e3563f8228454088f727fb458d7119cd24817fea800c982622022d19a7b14"
+    },
+    "02-f5-confirm-drain-1-events.json": {
+      "bytes": 1151,
+      "sha256": "1244a14b50e8dba24fcef7d74a274675f31104adc84c66936cc88d9396ebd33c"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "02-f5-restored-ui-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "02-f5-restored-ui-roots.json": {
+      "bytes": 3525,
+      "sha256": "5fa16045e183d9aa89dad62c9e1c28f207afca8137e27c375b31778a564cfb85"
+    },
+    "02-f5-restored-ui.json": {
+      "bytes": 2822,
+      "sha256": "d361e1c851e2118f45f840be79d20f31a01601b10d7b698d152299235583446f"
+    },
+    "02-f5-restored-ui.png": {
+      "bytes": 167070,
+      "sha256": "1e53dbd6a5a78562260a1cb33607d0414d58a25329bb93a155a1c5fd814a566c"
+    },
+    "03-j03-new-draft-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "03-j03-new-draft-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "03-j03-new-draft-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "03-j03-new-draft-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "03-j03-new-draft-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "03-j03-new-draft-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "03-j03-new-draft-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "03-j03-new-draft-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "03-j03-new-draft-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "03-j03-new-draft-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "03-j03-new-draft-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "03-j03-new-draft-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "03-j03-new-draft-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "03-j03-new-draft-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "03-j03-new-draft-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "03-j03-new-draft-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "03-j03-new-draft-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "03-j03-new-draft-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "03-j03-new-draft-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "03-j03-new-draft-roots.json": {
+      "bytes": 3525,
+      "sha256": "bd6be3808f85ecd38206a201e5458d1cf4f5d7a1f258954df4f371176497112e"
+    },
+    "03-j03-new-draft.json": {
+      "bytes": 8861,
+      "sha256": "723d5a0253e2c0761cbbf98c8e468a45b675b580b3d32db28a5aba94acdc1fc3"
+    },
+    "03-j03-new-draft.png": {
+      "bytes": 137720,
+      "sha256": "66fc3c74ae740d0fd894f95e56a01391939d293d213a1bff75cb8ac485a2a73e"
+    },
+    "04-j03-links-events.json": {
+      "bytes": 1319,
+      "sha256": "9a38896ea3185563d38c7281d1671bd52dfec3322f0f26ea17fd2a287c80ae69"
+    },
+    "04-j03-two-links-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "04-j03-two-links-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "04-j03-two-links-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "04-j03-two-links-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "04-j03-two-links-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "04-j03-two-links-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "04-j03-two-links-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "04-j03-two-links-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "04-j03-two-links-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "04-j03-two-links-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "04-j03-two-links-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "04-j03-two-links-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "04-j03-two-links-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "04-j03-two-links-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "04-j03-two-links-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "04-j03-two-links-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "04-j03-two-links-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "04-j03-two-links-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "04-j03-two-links-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "04-j03-two-links-roots.json": {
+      "bytes": 3525,
+      "sha256": "bd6be3808f85ecd38206a201e5458d1cf4f5d7a1f258954df4f371176497112e"
+    },
+    "04-j03-two-links.json": {
+      "bytes": 9491,
+      "sha256": "d2ebc46936514af6d3d2f9d6e762b256382796b1fb5909d679f5fa2717561b45"
+    },
+    "04-j03-two-links.png": {
+      "bytes": 177918,
+      "sha256": "e8ecff28a97aa04464fce06503fa341e0f261849c622f2da773fa2b1067de1c2"
+    },
+    "05-j03-before-c2-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "05-j03-before-c2-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "05-j03-before-c2-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "05-j03-before-c2-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "05-j03-before-c2-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "05-j03-before-c2-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "05-j03-before-c2-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "05-j03-before-c2-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "05-j03-before-c2-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "05-j03-before-c2-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "05-j03-before-c2-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "05-j03-before-c2-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "05-j03-before-c2-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "05-j03-before-c2-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "05-j03-before-c2-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "05-j03-before-c2-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "05-j03-before-c2-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "05-j03-before-c2-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "05-j03-before-c2-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "05-j03-before-c2-roots.json": {
+      "bytes": 3525,
+      "sha256": "bd6be3808f85ecd38206a201e5458d1cf4f5d7a1f258954df4f371176497112e"
+    },
+    "05-j03-before-c2.json": {
+      "bytes": 9498,
+      "sha256": "b814b7e35d540fe233fad62ca7c0c44bd852d05bd15dd4aed27dea804787cbea"
+    },
+    "05-j03-before-c2.png": {
+      "bytes": 178969,
+      "sha256": "e44ebe0aaa910022ed002cc7d9951ce4ead3f2a0adacb0ebf60ec3f54a895a1b"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "06r2-j03-c2-checked-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "06r2-j03-c2-checked-roots.json": {
+      "bytes": 3525,
+      "sha256": "bd6be3808f85ecd38206a201e5458d1cf4f5d7a1f258954df4f371176497112e"
+    },
+    "06r2-j03-c2-checked.json": {
+      "bytes": 9477,
+      "sha256": "1cf07a7afdc92996588b65ae4f706d285925869adcb1805bab52f583bd79807d"
+    },
+    "06r2-j03-c2-checked.png": {
+      "bytes": 167821,
+      "sha256": "726397ebaa12847454e8280aa05f069b8ced3b53b0b31a281ebf49423d2d5b2d"
+    },
+    "06r2-j03-c2-click-events.json": {
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "07-j03-file-picked-events.json": {
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "07-j03-file-ready-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "07-j03-file-ready-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "07-j03-file-ready-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "07-j03-file-ready-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "07-j03-file-ready-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "07-j03-file-ready-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "07-j03-file-ready-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "07-j03-file-ready-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "07-j03-file-ready-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "07-j03-file-ready-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "07-j03-file-ready-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "07-j03-file-ready-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "07-j03-file-ready-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "07-j03-file-ready-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "07-j03-file-ready-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "07-j03-file-ready-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "07-j03-file-ready-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "07-j03-file-ready-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "07-j03-file-ready-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "07-j03-file-ready-roots.json": {
+      "bytes": 3849,
+      "sha256": "ec944b0c1490c7f093f65b0d31eafd74ab81dbf13115f30959490cf8a162edf4"
+    },
+    "07-j03-file-ready.json": {
+      "bytes": 9787,
+      "sha256": "ee00c8b6e3e85169ee2d676beabe255cd36d14f43ac104ac8d46cb089acfd981"
+    },
+    "07-j03-file-ready.png": {
+      "bytes": 174231,
+      "sha256": "b6e3decdcd68059a57edf6bf17a62a92966ccfa2b6ac47cbd0cf56bcd6658d27"
+    },
+    "08-j03-progress-events.json": {
+      "bytes": 1326,
+      "sha256": "e9e70a1359962e244ad50b7ca829693d217e5fcca510ae2268245fee23b33a80"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "08-j03-progress-staged-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "08-j03-progress-staged-roots.json": {
+      "bytes": 3849,
+      "sha256": "ec944b0c1490c7f093f65b0d31eafd74ab81dbf13115f30959490cf8a162edf4"
+    },
+    "08-j03-progress-staged.json": {
+      "bytes": 9724,
+      "sha256": "8a2d27f4278878b961e51100dc30d91bf89a4837c1af8b75afd4a0ee15883ef5"
+    },
+    "08-j03-progress-staged.png": {
+      "bytes": 169752,
+      "sha256": "9d639f5008bd0dfb2185ccb6142349fdc4326dda8c3e7766626723c299cc51c5"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "09r2-j03-cancel-confirm-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "09r2-j03-cancel-confirm-roots.json": {
+      "bytes": 3849,
+      "sha256": "ec944b0c1490c7f093f65b0d31eafd74ab81dbf13115f30959490cf8a162edf4"
+    },
+    "09r2-j03-cancel-confirm.json": {
+      "bytes": 10120,
+      "sha256": "50c1a759b82d18487c52797a318cf22ef61cd0ee3818525463f1bd1f00462a20"
+    },
+    "09r2-j03-cancel-confirm.png": {
+      "bytes": 167375,
+      "sha256": "b5325c4bf94811ff73ce4ac4f3896e13947eba4b4a585063130318b271afd9cc"
+    },
+    "10r3-j03-kept-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "10r3-j03-kept-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "10r3-j03-kept-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "10r3-j03-kept-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "10r3-j03-kept-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "10r3-j03-kept-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "10r3-j03-kept-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "10r3-j03-kept-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "10r3-j03-kept-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "10r3-j03-kept-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "10r3-j03-kept-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "10r3-j03-kept-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "10r3-j03-kept-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "10r3-j03-kept-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "10r3-j03-kept-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "10r3-j03-kept-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "10r3-j03-kept-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "10r3-j03-kept-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "10r3-j03-kept-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "10r3-j03-kept-roots.json": {
+      "bytes": 3849,
+      "sha256": "ec944b0c1490c7f093f65b0d31eafd74ab81dbf13115f30959490cf8a162edf4"
+    },
+    "10r3-j03-kept.json": {
+      "bytes": 9724,
+      "sha256": "d8f7e11b2474a0f1806451aff67933cce20b268a6f5bc3ddc4b47177f825ccd2"
+    },
+    "10r3-j03-kept.png": {
+      "bytes": 162267,
+      "sha256": "5d92d52090ff5a61ebfd359064f8f72e7ee1a463f4d2c17c98d8476ea52e8394"
+    },
+    "11r3-j03-discard-events.json": {
+      "bytes": 887,
+      "sha256": "66d96ffe40d889ec3ea0338cad58dcd414a3a1a3bef275554fc2d0e3c5bf7896"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "11r3-j03-discarded-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "11r3-j03-discarded-roots.json": {
+      "bytes": 3525,
+      "sha256": "bd6be3808f85ecd38206a201e5458d1cf4f5d7a1f258954df4f371176497112e"
+    },
+    "11r3-j03-discarded.json": {
+      "bytes": 2812,
+      "sha256": "b71715d2d47f9b8b93183c895ed7f2d03884c2e50ad5e56c6c70b4c966edda24"
+    },
+    "11r3-j03-discarded.png": {
+      "bytes": 166753,
+      "sha256": "adf4f97e60af639225a463696487ed1a055abf79e52a44e5817e5fb01235a25e"
+    },
+    "12-j03-rebuild-events.json": {
+      "bytes": 1324,
+      "sha256": "0250878c73b3280fbf710fd0737241505a4d05ff26f1c6eebf240b6c8ab760e0"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "12-j03-rebuilt-before-save-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "12-j03-rebuilt-before-save-roots.json": {
+      "bytes": 3849,
+      "sha256": "9b65e5e88c4271e779cd573d96bf33b4bcb174fe22a2db544d412ad191eb6d7c"
+    },
+    "12-j03-rebuilt-before-save.json": {
+      "bytes": 9724,
+      "sha256": "0ac021416f30a3ab40e6bb00ac41112f317ff25b3a3399abe680d1baa8c36a0f"
+    },
+    "12-j03-rebuilt-before-save.png": {
+      "bytes": 162359,
+      "sha256": "d69350aa37511c135105dd0ea7960b2c8f1ca40b30bf172940f660a11ed7f340"
+    },
+    "13-j03-main-save-events.json": {
+      "bytes": 18219,
+      "sha256": "b4c350ca0a3844b500275419babe18b054e23abf1fe264c497943c3f06ca3b22"
+    },
+    "13-j03-saved-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "13-j03-saved-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "13-j03-saved-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "13-j03-saved-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "13-j03-saved-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "13-j03-saved-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "13-j03-saved-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "13-j03-saved-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "13-j03-saved-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "13-j03-saved-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "13-j03-saved-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "13-j03-saved-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "13-j03-saved-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "13-j03-saved-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "13-j03-saved-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "13-j03-saved-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "13-j03-saved-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "13-j03-saved-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "13-j03-saved-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "13-j03-saved-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "13-j03-saved-roots.json": {
+      "bytes": 3667,
+      "sha256": "7d1dd521c523d3192fd922019a942e4f35ae7556c0cec3717201553d3a63e5eb"
+    },
+    "13-j03-saved.json": {
+      "bytes": 3320,
+      "sha256": "6d81b10a9d349f9c265545e8a757ad2fc3657578f92615d7dcf6d2b74a3c844a"
+    },
+    "13-j03-saved.png": {
+      "bytes": 168787,
+      "sha256": "b6df02f25d7cc94e72b71d5ec58fde52e5f4ae3bbe332b4a1ddb57413392157f"
+    },
+    "14-j03-reopened-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "14-j03-reopened-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "14-j03-reopened-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "14-j03-reopened-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "14-j03-reopened-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "14-j03-reopened-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "14-j03-reopened-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "14-j03-reopened-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "14-j03-reopened-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "14-j03-reopened-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "14-j03-reopened-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "14-j03-reopened-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "14-j03-reopened-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "14-j03-reopened-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "14-j03-reopened-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "14-j03-reopened-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "14-j03-reopened-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "14-j03-reopened-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "14-j03-reopened-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "14-j03-reopened-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "14-j03-reopened-roots.json": {
+      "bytes": 3667,
+      "sha256": "7d1dd521c523d3192fd922019a942e4f35ae7556c0cec3717201553d3a63e5eb"
+    },
+    "14-j03-reopened.json": {
+      "bytes": 10253,
+      "sha256": "27d13315d7cf196452fdd3102941135868732c196cfd05b9c1b3582ba438f341"
+    },
+    "14-j03-reopened.png": {
+      "bytes": 153437,
+      "sha256": "567b0dc079d28906bd82055a4d20f3a0904d55f6f5062824ef4a89258fecf650"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "15-j03-reopen-materials-visible-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "15-j03-reopen-materials-visible-roots.json": {
+      "bytes": 3667,
+      "sha256": "7d1dd521c523d3192fd922019a942e4f35ae7556c0cec3717201553d3a63e5eb"
+    },
+    "15-j03-reopen-materials-visible.json": {
+      "bytes": 10210,
+      "sha256": "a2184da10b9c8dfd4018459052f49620c516e9db19d9218b09d400863530c10b"
+    },
+    "15-j03-reopen-materials-visible.png": {
+      "bytes": 175089,
+      "sha256": "62e2bb299a625fc68fbbd0bcb5813dadcb2bda82405209175d5ffaf4fe5af326"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "16-j03-reopen-progress-visible-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "16-j03-reopen-progress-visible-roots.json": {
+      "bytes": 3667,
+      "sha256": "9404298cd06dafc6427935b25c52c9234a9bb8bb7db1fcde1e5d2c24e43fb468"
+    },
+    "16-j03-reopen-progress-visible.json": {
+      "bytes": 9808,
+      "sha256": "d23a2cf93974e7eec8fff8bc2fe66d6e7f92d207311b191490d2a2b179e2e17a"
+    },
+    "16-j03-reopen-progress-visible.png": {
+      "bytes": 169598,
+      "sha256": "7e4757d47497b267d669cbc4e4287f192369e8d60ebcb45115600efca4a2d517"
+    },
+    "17-j03-downloaded-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "17-j03-downloaded-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "17-j03-downloaded-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "17-j03-downloaded-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "17-j03-downloaded-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "17-j03-downloaded-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "17-j03-downloaded-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "17-j03-downloaded-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "17-j03-downloaded-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "17-j03-downloaded-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "17-j03-downloaded-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "17-j03-downloaded-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "17-j03-downloaded-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "17-j03-downloaded-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "17-j03-downloaded-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "17-j03-downloaded-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "17-j03-downloaded-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "17-j03-downloaded-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "17-j03-downloaded-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "17-j03-downloaded-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "17-j03-downloaded-roots.json": {
+      "bytes": 3667,
+      "sha256": "9404298cd06dafc6427935b25c52c9234a9bb8bb7db1fcde1e5d2c24e43fb468"
+    },
+    "17-j03-downloaded.json": {
+      "bytes": 9794,
+      "sha256": "a25d8cad92a082c93918af2d81f9752118e5ffb9c04db51fdd388bce2dc03f24"
+    },
+    "17-j03-downloaded.md": {
+      "bytes": 22,
+      "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a"
+    },
+    "17-j03-downloaded.png": {
+      "bytes": 169512,
+      "sha256": "bd8761b450174127ce6fe7051c33e45082778706bb6121c1411463aa754298b0"
+    },
+    "18-j03-clean-close-raw/data/pmtool/deliverables/dlv-0001.json": {
+      "bytes": 596,
+      "sha256": "9e517c66e71717f62a565fe260c128eda14366f1cd71c7ac07a9c878687d1842"
+    },
+    "18-j03-clean-close-raw/data/pmtool/deliverables/dlv-0002.json": {
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    "18-j03-clean-close-raw/data/pmtool/file_assets/fa-0001.json": {
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    "18-j03-clean-close-raw/data/pmtool/file_assets/fa-0002.json": {
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    "18-j03-clean-close-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+      "bytes": 377,
+      "sha256": "34c859ffd9757783d4c12ab448f1475a5e7b7d928ff6c61e5235e136b68f3697"
+    },
+    "18-j03-clean-close-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    "18-j03-clean-close-raw/data/pmtool/meetings/mtg-0001.json": {
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    "18-j03-clean-close-raw/data/pmtool/milestones/m-0001.json": {
+      "bytes": 308,
+      "sha256": "9bdaaab3ab7f8bdccce4f2cf8a25c7e3222eac425c91ec83ebf93081c5dcf9ca"
+    },
+    "18-j03-clean-close-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    "18-j03-clean-close-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    "18-j03-clean-close-raw/data/pmtool/projects/p-0002.json": {
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    "18-j03-clean-close-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    "18-j03-clean-close-raw/data/pmtool/reports/rpt-0001.json": {
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    "18-j03-clean-close-raw/data/pmtool/risk_issues/ri-0001.json": {
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    "18-j03-clean-close-raw/data/pmtool/settings/pmExportAudit.json": {
+      "bytes": 383,
+      "sha256": "7f8355e37201fd27e585fc5a1b02482f0efbed5adbb0f360cabf49c277d4c3d5"
+    },
+    "18-j03-clean-close-raw/data/pmtool/settings/pmExportSent.json": {
+      "bytes": 359,
+      "sha256": "fdb84df5c85937b9131e294c45066525d6ef2f5635ba81202e5f5f96df93a195"
+    },
+    "18-j03-clean-close-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 3368,
+      "sha256": "ce1565dc6a39d5e3236448f58feb3319f90d2ac4c16b865b4a0490edf477fae9"
+    },
+    "18-j03-clean-close-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    "18-j03-clean-close-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    "18-j03-clean-close-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    "18-j03-clean-close-roots.json": {
+      "bytes": 3667,
+      "sha256": "9404298cd06dafc6427935b25c52c9234a9bb8bb7db1fcde1e5d2c24e43fb468"
+    },
+    "18-j03-clean-close.json": {
+      "bytes": 2959,
+      "sha256": "5f7480e8493658c8ce56e4e4966b64b37a2b9476f74417831007908a3bc07bcf"
+    },
+    "18-j03-clean-close.png": {
+      "bytes": 164038,
+      "sha256": "1462f1298b1ae40c2e56b2a4b391cd703bdb5393f16ae42ea39d6983e32a50c6"
+    },
+    "executor-gateway.mjs": {
+      "bytes": 2945,
+      "sha256": "eec02e1af4cb97387f3b1607c40b04219c65a38c0907672a1a48aa05b4e3d2e7"
+    },
+    "executor-helper.mjs": {
+      "bytes": 4945,
+      "sha256": "ac9a4f83e24c3f84bfe4d181e0410edcc9396fd4bcb10abbf46290eec1021fae"
+    },
+    "executor-j03-seal.mjs": {
+      "bytes": 5020,
+      "sha256": "630138958c46f5a7d88d9ff163a93ff397961d8cb81498009a4f91ed6f585a44"
+    },
+    "executor-setup.mjs": {
+      "bytes": 5680,
+      "sha256": "521501aa77418af22541e8a7eedc00746dc3def9d26e52539c584f2cf2e03e4b"
+    },
+    "frames/01-f5-precheck-drain-0-1-1792671258414.jpg": {
+      "bytes": 25186,
+      "sha256": "cd7dcf157ece300a8f90bf014a4c533dcb4a4540afa9078cb3550aec0ce15bc9"
+    },
+    "frames/01-f5-precheck-drain-0-1-1792671258491.jpg": {
+      "bytes": 25206,
+      "sha256": "cabf4fc9643b2556091e95d39e1920f6f9e7b1a3ede5efa82b38c755d99408db"
+    },
+    "frames/01-f5-precheck-drain-0-1-1792671258558.jpg": {
+      "bytes": 33850,
+      "sha256": "e7de1a6ad58422f50fdf814177ef4364d4ffcd1e487c114bf583a68968b44a7b"
+    },
+    "frames/02-f5-confirm-drain-0-1-1792671285650.jpg": {
+      "bytes": 45907,
+      "sha256": "7c44814ef84835dfe5d1514c4a79984320863212bbcea0a35fb05abfee914828"
+    },
+    "frames/02-f5-confirm-drain-0-1-1792671285685.jpg": {
+      "bytes": 45963,
+      "sha256": "92fdb7ae7c7d56ddb37867351ff3b2c1ebac1389c697085c5054ae71358dc3fc"
+    },
+    "frames/02-f5-confirm-drain-0-1-1792671285722.jpg": {
+      "bytes": 54962,
+      "sha256": "5e50d48f034b74005dab6f6a300ceec7fddc58a7bcb1a51c82aae4b0dadaf058"
+    },
+    "frames/02-f5-confirm-drain-1-1-1792671285917.jpg": {
+      "bytes": 34646,
+      "sha256": "75047f89416baf22ad9d8ae0f4459ef6bef23bf4e182a600325145e3b2752015"
+    },
+    "frames/04-j03-links-1-1792671426166.jpg": {
+      "bytes": 61459,
+      "sha256": "1f60c995940638354e4c037bad78814100a59a4dd609b1faf8abdb6473441cf1"
+    },
+    "frames/04-j03-links-1-1792671426239.jpg": {
+      "bytes": 61496,
+      "sha256": "25955361e262cbe6edc68bec0025f602ec03021b052d0831e21096efb399c372"
+    },
+    "frames/04-j03-links-1-1792671426320.jpg": {
+      "bytes": 61566,
+      "sha256": "e6f322712e7fc881e1eb582e9d4235f957d517eaa9955f4f1988c9e642e9d2a3"
+    },
+    "frames/08-j03-progress-1-1792671616499.jpg": {
+      "bytes": 67765,
+      "sha256": "1099b37bc40f2092563a5ed4cbc82903483d8b741fbd57117f9df0f2f8aa4910"
+    },
+    "frames/08-j03-progress-1-1792671616570.jpg": {
+      "bytes": 67789,
+      "sha256": "da805eecfad1a0ce3c1ef9400e4b3b588a04eae2f8811e8c105237ffdef37af0"
+    },
+    "frames/08-j03-progress-1-1792671616623.jpg": {
+      "bytes": 67852,
+      "sha256": "01019bf9f9b2c108f062c36baa032ee228f22355625adc2c3dbb9bc8877191a2"
+    },
+    "frames/11r3-j03-discard-1-1792671715010.jpg": {
+      "bytes": 53861,
+      "sha256": "a3040f7b2f34c7c23ca736e0d35232069295199c6c7ce6ed75fd319882501b83"
+    },
+    "frames/11r3-j03-discard-1-1792671715049.jpg": {
+      "bytes": 77084,
+      "sha256": "7702023797f2a053676747246ba1ea631dc603af565bdaaa67dec826a74aca20"
+    },
+    "frames/12-j03-rebuild-1-1792671748182.jpg": {
+      "bytes": 66495,
+      "sha256": "f48d04138fb32ee14d6fceafc109c0bf0d84e3e62864c8baf0fb5607ad5a0a39"
+    },
+    "frames/12-j03-rebuild-1-1792671748240.jpg": {
+      "bytes": 67080,
+      "sha256": "f26193a739c345d9ca49e95692231a8835135c126767838bdfee0b84b7ea1a49"
+    },
+    "frames/12-j03-rebuild-1-1792671748306.jpg": {
+      "bytes": 67092,
+      "sha256": "b9da6f6dda3211d941216074048f600b20efba3e9b4e0bfefa85d0e1a5b79cf6"
+    },
+    "frames/13-j03-main-save-1-1792671773372.jpg": {
+      "bytes": 63996,
+      "sha256": "c78a3132f76f160544cc71518c9eebc0818c994fb3844dbc2319026cdba43080"
+    },
+    "frames/13-j03-main-save-1-1792671773473.jpg": {
+      "bytes": 63996,
+      "sha256": "c78a3132f76f160544cc71518c9eebc0818c994fb3844dbc2319026cdba43080"
+    },
+    "frames/13-j03-main-save-1-1792671773564.jpg": {
+      "bytes": 63744,
+      "sha256": "b17af1b459265f04df6e39ba15ee795683193eafa3989e9d46f6d372e947a8d9"
+    },
+    "gateway-start.json": {
+      "bytes": 333,
+      "sha256": "f28525e455c7d294289e4bc80bdb9782b360ed37be810a1722f35c1be5f6621f"
+    },
+    "gateway.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gateway.stdout.txt": {
+      "bytes": 71,
+      "sha256": "0883eb6efdb4b5ab0c82ac13e66af0bb6002d761902eb7046e8dcb9bc4897bd5"
+    },
+    "host-ready.json": {
+      "bytes": 70,
+      "sha256": "6b4ea2731bca36cb7cef18ce3b861f48a5f339bea259ca208eaebee20628682e"
+    },
+    "host-start.json": {
+      "bytes": 1019,
+      "sha256": "e56d9508cb46154a5cc02098ca6ca44057bde06266b510e8557a97b7d5a0ba7a"
+    },
+    "isolated-profile.yml": {
+      "bytes": 1203,
+      "sha256": "60f5c766b53b6c27b66de10390d1eb8e1090a7ad7cdc69ae3f608a06512a833b"
+    },
+    "j03-executions/04639e73bbe63e946dbf1b846f9a0db9.json": {
+      "bytes": 530,
+      "sha256": "0d8a8dbfd4dd1ea631760c0b1a705c918e32a2d598004c4d3436a0708a690bcd"
+    },
+    "j03-executions/04639e73bbe63e946dbf1b846f9a0db9.log": {
+      "bytes": 11131,
+      "sha256": "528d40ef9e6101c2e88f094b6cda5123d523ca942c87d1ca1269d71063a702be"
+    },
+    "j03-executions/0720cece3891261c26466712f07ab15d.json": {
+      "bytes": 530,
+      "sha256": "98f1f11b38ef4b7999a0b36e50b04bec4407caffb898c45d8e836dce687eca77"
+    },
+    "j03-executions/0720cece3891261c26466712f07ab15d.log": {
+      "bytes": 4793,
+      "sha256": "68977b1c80035984fa185ffa0bc954e29fe768308d2fab8457c88a17285d5313"
+    },
+    "j03-executions/149b1d8fb365880a89b6e3c35be53c4e.json": {
+      "bytes": 530,
+      "sha256": "32d14f0e011fd454ef38a57eddc664f3c5091f3abf7fce3f3fe428388b6aadbc"
+    },
+    "j03-executions/149b1d8fb365880a89b6e3c35be53c4e.log": {
+      "bytes": 758,
+      "sha256": "faefb320393ff433d754960f11cd698f766bc5761978b25e9d7179b344a250d3"
+    },
+    "j03-executions/168768fed1ac99140909561e81660468.json": {
+      "bytes": 530,
+      "sha256": "db3088d3c7db21cfd79894507e6b7a20868f53b4f29a76351b6b23c333a0e967"
+    },
+    "j03-executions/168768fed1ac99140909561e81660468.log": {
+      "bytes": 332,
+      "sha256": "cdb0067692f510e80420b5d58dc2d0909413bedce6a58ec9055961bdfda33b8e"
+    },
+    "j03-executions/269e2d3d5406d28a623bf7ee90eaa2ef.json": {
+      "bytes": 530,
+      "sha256": "e4ea481e6cbab150c8b0a6222bb6ed71551a2f6b5676d719c1312f945c631844"
+    },
+    "j03-executions/269e2d3d5406d28a623bf7ee90eaa2ef.log": {
+      "bytes": 201,
+      "sha256": "2b4cf72bb1c69d3196729ab31968ea607eb2a936601674fbae04c683446645d1"
+    },
+    "j03-executions/4bd3904dcf9e1e48a3ef2b7263e03e9e.json": {
+      "bytes": 530,
+      "sha256": "f33bf3fed9c5d67a77861c6b82a02ddbcc692befbe1461dda54d3752814428b9"
+    },
+    "j03-executions/4bd3904dcf9e1e48a3ef2b7263e03e9e.log": {
+      "bytes": 282,
+      "sha256": "9f0a1d0c3d5ac17edfda0e2c96f3d94d4bcf6e5f517fa6b1f29e225dccb678e0"
+    },
+    "j03-executions/609954a3adcaead0101fc3d08a5111b2.json": {
+      "bytes": 530,
+      "sha256": "7dd3f2088d0ab8e4a44e0e97d5735b8eea8e61c6b3c5ed13f05ac1a382255392"
+    },
+    "j03-executions/609954a3adcaead0101fc3d08a5111b2.log": {
+      "bytes": 578,
+      "sha256": "97ab3ee0b535487ecf2f9c8ea3c4251639769d80d890d387124fea86064c0789"
+    },
+    "j03-executions/6c6c89ac4fe2e31af00aa111e30f1bec.json": {
+      "bytes": 530,
+      "sha256": "a18df609868d00dd3bad6bc7e5d0faba8f00424b359768d32a27024fca139a8f"
+    },
+    "j03-executions/6c6c89ac4fe2e31af00aa111e30f1bec.log": {
+      "bytes": 20976,
+      "sha256": "7340344cfe33f8288c193935b339b076089427841e9264920629740683e6442d"
+    },
+    "j03-executions/76ecb7de9b26e5f2e247c3a9c9d906fa.json": {
+      "bytes": 530,
+      "sha256": "5712a4876f76e6609e6f8915872626b14a9a28e415bbdd8b8e09f76f1fddcd92"
+    },
+    "j03-executions/76ecb7de9b26e5f2e247c3a9c9d906fa.log": {
+      "bytes": 320,
+      "sha256": "750bbeea3af30149ede6426f76ea0d9d45c765b9d605f105f462d0edaab926b3"
+    },
+    "j03-executions/7bdf3833bbe346fd7fe7d29adb83c64e.json": {
+      "bytes": 530,
+      "sha256": "eda073a076e2d750a859dcfc451e27fa673d86c8de8240f905460acdf42758e2"
+    },
+    "j03-executions/7bdf3833bbe346fd7fe7d29adb83c64e.log": {
+      "bytes": 243,
+      "sha256": "9130cf2c862c41d7b762a1de591e28ed44e1caf76cd0d76686274e1a56c1f1e3"
+    },
+    "j03-executions/85a2cb28f23b12a32ca00be1f7ee7a11.json": {
+      "bytes": 530,
+      "sha256": "ed7d8ed56d177bd3969a1f51fa064ad239cedfc2a1a4877fde2e96136df97106"
+    },
+    "j03-executions/85a2cb28f23b12a32ca00be1f7ee7a11.log": {
+      "bytes": 4283,
+      "sha256": "41f50ce20bc4af0fba5849d96884f2b19c4fe4ba93d71ecc3d0aeca316baca2a"
+    },
+    "j03-executions/a33762de965abc17b4de6bc814623bf3.json": {
+      "bytes": 530,
+      "sha256": "e312ca3b20f0814369acc0caeb0811f9bd9298522ef254edcdfcdaf8b5821ba4"
+    },
+    "j03-executions/a33762de965abc17b4de6bc814623bf3.log": {
+      "bytes": 14220,
+      "sha256": "a841c655e7074febaf79fb0a6d0f9222411cbfc77cb0f870409e57627600c9d6"
+    },
+    "j03-executions/b9ea11c5d3c6ff16ae5b4b42e361e7bf.json": {
+      "bytes": 530,
+      "sha256": "376d9abb3046bb202ac8faa8344e8677a9ecd34e23fd8415f9e140a8a9daee50"
+    },
+    "j03-executions/b9ea11c5d3c6ff16ae5b4b42e361e7bf.log": {
+      "bytes": 13164,
+      "sha256": "c5f2d1876f00fef5c5abdd4f0dd71c255a4dc4161bb2c8b8a54250d0b74cbac8"
+    },
+    "j03-executions/bb8fc06e8b827af98768d355f9fcf036.json": {
+      "bytes": 530,
+      "sha256": "35b5649cf90a6507d31f07e1dcbec2810a24b7e2098e182d24931c7770958bd4"
+    },
+    "j03-executions/bb8fc06e8b827af98768d355f9fcf036.log": {
+      "bytes": 359,
+      "sha256": "67bad40f051a8243cfbe0306aff25798b5fdc666061a810e78f9c2dc2783688b"
+    },
+    "j03-executions/d256558e25e9418b33ec4ff623226da1.json": {
+      "bytes": 530,
+      "sha256": "f28c882d30f551fe7a324fe01a51a709f1073872b49fa680f8d4bb6c7cc9c3ed"
+    },
+    "j03-executions/d256558e25e9418b33ec4ff623226da1.log": {
+      "bytes": 14924,
+      "sha256": "9eac127a5dea582fa210b70ab90aa67ad52951e0ce3661ed9e33d2351d468ac8"
+    },
+    "j03-executions/e88e02eed6864df9a3a786d90d76764d.json": {
+      "bytes": 530,
+      "sha256": "6d5fea19be9a420850d38186b71d919aaa4fdaf7536d1a3ea484db4ba8381879"
+    },
+    "j03-executions/e88e02eed6864df9a3a786d90d76764d.log": {
+      "bytes": 14608,
+      "sha256": "e6f639410087fc1286cc92c937a87124617767020d7b715c9fdee81e87f65ca7"
+    },
+    "j03-executions/ff377b706df5e3cb9c51f1cf1fa4c0ae.json": {
+      "bytes": 530,
+      "sha256": "0c6b758f2712add423aefb3259d983e3efa4685128867aa9e11b158e99515d5d"
+    },
+    "j03-executions/ff377b706df5e3cb9c51f1cf1fa4c0ae.log": {
+      "bytes": 10713,
+      "sha256": "7adbb04e717edd54c91fa8545971e506cc75480c50743913c8a9ad30832ceeed"
+    },
+    "j03-observation.json": {
+      "bytes": 4650,
+      "sha256": "0b98f7d639623a5ed99f02f0678e725a30d7a4293e12765b3ac65cb784373ea9"
+    },
+    "j03-source-binding.json": {
+      "bytes": 13972,
+      "sha256": "398e9b2dbf171639d3b58405e36682594ea0fb0e4b9a1628e00b3174bccbba2c"
+    },
+    "loaded-binding.json": {
+      "bytes": 516,
+      "sha256": "7c39111ba726ee8614969a989cc44ee18ec6f296f0a9cce8e4ab987751614fbc"
+    },
+    "loaded-complete.js": {
+      "bytes": 2597854,
+      "sha256": "14414cd388b1c638a4c75863ea1f26972eab88d48f696b3d330d6b48785516f1"
+    }
+  },
+  "binding": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "sourceCount": 107,
+    "frozenPackageSourcesChecked": 92,
+    "launcherCountRecordOnly": 15,
+    "completeInputsChecked": 515,
+    "sourceChecks": {
+      "packages/dsh-pm-tool/package.json": "8098dfa788025596ee1e4664969e4ffd4a69dee664950931313ac0d648cd55a9",
+      "packages/dsh-pm-tool/pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+      "packages/dsh-pm-tool/scripts/feedback-context-contract.mjs": "27b834a2786ea6b71615bf6d24dc67888f79321b4bb10160a392e97f225d4e03",
+      "packages/dsh-pm-tool/scripts/verify-client-bundle.mjs": "ec7f95e9a5ca87589e9c281ed28e8ab49c54bf7fe7f73e2816508e8b986bfb1a",
+      "packages/dsh-pm-tool/scripts/verify-gantt-drag.mjs": "153cf607a7a3b07de3314b66f25871be3e99ecc91baee6981337164b08a74eb4",
+      "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": "3694be0b1a53a886968a8de83ca76ed3a8169c9aacd6e84589b8af3eb54dd056",
+      "packages/dsh-pm-tool/scripts/verify-web.mjs": "c230b4f96460c4a0b86f4e5623a461e4ac57a34af881464aef8fac124d150c75",
+      "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx": "57ba3f107a0e43e6f7ca9c42cc88935856988bb9ba2f707bef8ae346208a5797",
+      "packages/dsh-pm-tool/src/client/board/BoardBento.tsx": "43d4bc943867e78226eb861a2e6875717d42c519687027bc58c21617e8a786d6",
+      "packages/dsh-pm-tool/src/client/board/board.css": "646ab1916c506e0bd890a2052f157cc550ba18d871114483b0e21cb36013e280",
+      "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79",
+      "packages/dsh-pm-tool/src/client/board/editor.tsx": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+      "packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx": "cef2f64f80a47f46be29a74357937547c783cb326d2aa14dc44f4e88ad74298e",
+      "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx": "9c43bf4655e302eb235fd3b736e2b9397c35ec6f1df9ddbf7c8682faa10257af",
+      "packages/dsh-pm-tool/src/client/index.tsx": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a",
+      "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+      "packages/dsh-pm-tool/src/client/launch-handshake.ts": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+      "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx": "986a92ff011f4e0e47d287cffdd625e44a8832ec004f0a6304e4d0b9f7dc73c6",
+      "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+      "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts": "eb8375b9aea341baf5b9c46efc1fc5de655e95c5465c437066bb5271afc48d45",
+      "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx": "b6c4b78e9fc86012134b1dda9e6ce78b2fc8dd9eef487362681bcf0d1976862a",
+      "packages/dsh-pm-tool/src/client/panel.css": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b",
+      "packages/dsh-pm-tool/src/client/panel.tsx": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+      "packages/dsh-pm-tool/src/client/provenance-panel.test.tsx": "5c484781fe1609360e34359ccecb667f98101de458ddc267141671f488ac8584",
+      "packages/dsh-pm-tool/src/client/provenance-panel.tsx": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b",
+      "packages/dsh-pm-tool/src/client/result-card.test.ts": "cde00f00437f802fefaf542d880f54abf9202eae9c45a3f07ca75d270ae85566",
+      "packages/dsh-pm-tool/src/client/result-card.tsx": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf",
+      "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+      "packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx": "26c214236164b60b11a795cfa675f64ae886ec7003de1bb01d337439b8118041",
+      "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269",
+      "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts": "dc6b7424e588afba3dc4c05c9dd29c7f19fd14e17d1b7d2ebd7fce05725d50d7",
+      "packages/dsh-pm-tool/src/client/shared/stage-client.ts": "3d47b8fb194cb221b7518c4f121aea93dc650b3bc1bdc1aaa8749b11b954b5d1",
+      "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx": "95992aef68f8a97f92137a5574b215fcad760246495317c2f383c52907b7b7a8",
+      "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx": "b7ecc42640705c61a8aa38630ce773c178674cf20b09477f0f5267422e2cf90c",
+      "packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx": "95e4396e2be961e58aaca045299e45ed339e9b883063479d0066e3953e9eee61",
+      "packages/dsh-pm-tool/src/client/views/gantt.tsx": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+      "packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx": "071c2b0488e88078d15f6436c1798cced495706c15bf8ecbfcf435c343459d0d",
+      "packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx": "8d7220cff8f01ed9d43dd00d1e59584936f4aa7ed68612aa40b56f00ca7cc709",
+      "packages/dsh-pm-tool/src/client/views/habits.tsx": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964",
+      "packages/dsh-pm-tool/src/client/views/meetings.tsx": "19a6af2eff6c42a290b9f6102e5a88c0e080703a564b3f30ca89fef3633147c4",
+      "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48",
+      "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx": "8ed1ca262d6f9ccf586636da39515e6acef59fe235d05a5bb51d1471005d06a7",
+      "packages/dsh-pm-tool/src/client/views/overview.tsx": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d",
+      "packages/dsh-pm-tool/src/client/views/records.css": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6",
+      "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx": "fea8f4f164d1d1b174f28aa03e6c1f692d2a2abbfa5bc18de4068ad0d436254d",
+      "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx": "d88c9bee1d2571f7ada3551bc8b7b5f1e7c98d7c2417f78a80a06f4766bb9388",
+      "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx": "6c7a15bc744675af0fda91dcb289366a41491e0f8107bef8c4f7d0ffd6f00344",
+      "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00",
+      "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f",
+      "packages/dsh-pm-tool/src/client/views/tasks.css": "369019753cdb985016afa17c21c5bc96dd5f1ae19b7bca3a2641246c117d2583",
+      "packages/dsh-pm-tool/src/client/views/tasks.tsx": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec",
+      "packages/dsh-pm-tool/src/commands/ask-governance.test.ts": "8d7a71f2b89d1414649caad8e541e350c203cc043816cc91bde89279a50cd7be",
+      "packages/dsh-pm-tool/src/commands/ask.ts": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+      "packages/dsh-pm-tool/src/commands/backup-web.test.ts": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce",
+      "packages/dsh-pm-tool/src/commands/backup.ts": "48369dafe70023bce1ebdf5a82d7b2475627ea6d6b58036187c8845491cf8cdd",
+      "packages/dsh-pm-tool/src/commands/task-import-filename.test.ts": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7",
+      "packages/dsh-pm-tool/src/commands/task.ts": "1af8ac22df8d5876c4738e5c44fe8ec019d34678a3868e5c90c37197bc88863b",
+      "packages/dsh-pm-tool/src/core/backup.ts": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295",
+      "packages/dsh-pm-tool/src/core/csv-import.test.ts": "d31c5587c590aa01cab2efc550384c9c97b1577175861d7b5e05a98176d95d92",
+      "packages/dsh-pm-tool/src/core/csv-import.ts": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+      "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1",
+      "packages/dsh-pm-tool/src/core/file-assets.test.ts": "fab5eb2578ba022997229264bdedbb75af2f5895c70e5c7fb1af3a7916980510",
+      "packages/dsh-pm-tool/src/core/file-assets.ts": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+      "packages/dsh-pm-tool/src/core/file-root.test.ts": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d",
+      "packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts": "3e48dedb7f9dec655cbfd9e7e00edc488a971f4b0a6182a56681212a79209f26",
+      "packages/dsh-pm-tool/src/core/file-staging.ts": "3c643d5a47beeccad22908bb2c57a0d9d415b72243a169540ffa9638dc6f8e81",
+      "packages/dsh-pm-tool/src/core/http/asset-route.test.ts": "c0d623ed9884cff1def7c508d588fd970c6c490aecc69b211de0875ebe4ef01e",
+      "packages/dsh-pm-tool/src/core/http/asset-route.ts": "bac973650943798090c148f6245121781c2e7a080cb5b30f108b0ac793e1da80",
+      "packages/dsh-pm-tool/src/core/provenance-store.ts": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+      "packages/dsh-pm-tool/src/core/queue.ts": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144",
+      "packages/dsh-pm-tool/src/core/reflect-file-count.test.ts": "059a67a3dbeda0ab72284564fc627b52b3ca57bb57e7f405d489b09c4f9da16a",
+      "packages/dsh-pm-tool/src/core/reflect.ts": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b",
+      "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35",
+      "packages/dsh-pm-tool/src/core/task-materials.ts": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2",
+      "packages/dsh-pm-tool/src/core/task.ts": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+      "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts": "5fb5b3cddd15cd6f32da923649eedbe8f55b466226462feb376474042cfc8591",
+      "packages/dsh-pm-tool/src/core/tasks.ts": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29",
+      "packages/dsh-pm-tool/src/core/ui-feedback.test.ts": "5687ee7ecefa3680c8794a5e167f6ff1f041da71266fbbc6f8ab8f221094fac0",
+      "packages/dsh-pm-tool/src/core/ui-feedback.ts": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7",
+      "packages/dsh-pm-tool/vitest.config.ts": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+      "packages/dsh-pm-tool/src/core/task-views.ts": "6d1bdefbafe74f19a3446cbd0633727f1bdd40504af68948384e73f07dbc940c",
+      "packages/dsh-pm-tool/src/core/task-views.test.ts": "86b8bcaf4866bf22057c7673f48a55a18a901693d2ba9298f75ddea36c4c18ce",
+      "packages/dsh-pm-tool/src/core/task-tree.ts": "0d63b259129597098dfb3e8142fa5722c303a7a23f22eece59a60a0d47af0932",
+      "packages/dsh-pm-tool/src/core/task-tree-u4.test.ts": "2f8f9f2561ca51df273b1d0d7d9918ebdf7f49efcce9dd5e4766290260ae0d7c",
+      "packages/dsh-pm-tool/src/client/views/task-views-persist.ts": "a3b7fc0ed0fadec1832319d75b3a58e4ebb4ca7f78986da3f99521ae3b05ae90",
+      "packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx": "ebd8739299f3135d2d993dadd955dada8488cf3097381d98e7a1ab85d638876d",
+      "packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts": "51fe0e1e521c0993107894561d952c4ff7382f7d3faec65c9429ba31bcad68bd",
+      "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts": "cc7bab8b673c3cbbf6e58fa3ab68f47343aaba98c2c883e6c476bed6332ed792",
+      "packages/dsh-pm-tool/src/client/result-card-permission.test.ts": "ff32f9024d4896b2a18fee8ff5e28b87d2e87fac81a51388db8e9086329ae4a9",
+      "packages/dsh-pm-tool/src/core/ai-client.ts": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448",
+      "packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts": "3403fbf72e5db73dd788d94f64a42bad386a4092711dfd7abce511507f14ceed",
+      "packages/dsh-pm-tool/src/client/shared/task-draft-materials-refs-dom.test.tsx": "73f5d1abc30d92e80b4e12156bbdbd99d422bfb0890b8cbd02b69148b4735a98"
+    },
+    "candidate": {
+      "bytes": 685,
+      "sha256": "1c1ba767cd365dc5eea42c31381ffb64b2f8b799238c42934c095997d7fa8156"
+    },
+    "parentSource": {
+      "bytes": 13624,
+      "sha256": "13a7eeb283f983b215551c57b6f610d7a769ff09e1e0f53571064801bf2f5393"
+    },
+    "relativePatch": {
+      "bytes": 337103,
+      "sha256": "7f0953f8ee6d8552dc6eb4405d9a7d642dbd9844c1b5971155890435be56d2a9"
+    },
+    "newFiles": {
+      "bytes": 2492,
+      "sha256": "c694ffc5f3acd80522cb8e5963c410436969daffa261e7c0d5c62462a6752a46"
+    },
+    "sourceBinding": {
+      "bytes": 13972,
+      "sha256": "398e9b2dbf171639d3b58405e36682594ea0fb0e4b9a1628e00b3174bccbba2c"
+    },
+    "observation": {
+      "bytes": 4650,
+      "sha256": "0b98f7d639623a5ed99f02f0678e725a30d7a4293e12765b3ac65cb784373ea9"
+    },
+    "runtime": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1",
+    "profileLink": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+    "profile": {
+      "bytes": 1203,
+      "sha256": "60f5c766b53b6c27b66de10390d1eb8e1090a7ad7cdc69ae3f608a06512a833b"
+    },
+    "host": {
+      "at": "2026-10-22T12:11:46.577Z",
+      "pid": 60387,
+      "port": 3260,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--import",
+        "tsx/esm",
+        "apps/cli/src/bin.ts",
+        "--profile",
+        "pm",
+        "--no-open",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3260"
+      ],
+      "envNames": [
+        "PATH",
+        "HOME",
+        "DSH_HOME",
+        "TMPDIR",
+        "DSH_PM_ISOLATED_ROOT",
+        "DSH_PM_FILE_ROOT",
+        "DSH_PM_BACKUP_DIR",
+        "DSH_PM_LOCAL_GATEWAY_KEY",
+        "DSH_PM_E2E"
+      ],
+      "bundle": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+      "bundleSha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db",
+      "candidateSha256": "1c1ba767cd365dc5eea42c31381ffb64b2f8b799238c42934c095997d7fa8156",
+      "sourceSha256": "13a7eeb283f983b215551c57b6f610d7a769ff09e1e0f53571064801bf2f5393",
+      "flags": {
+        "DSH_PM_E2E": "0",
+        "pilot": "default OFF; browser storage separately recorded"
+      }
+    },
+    "ready": {
+      "at": "2026-10-22T12:11:59.118Z",
+      "pid": 60387,
+      "port": 3260
+    },
+    "loaded": {
+      "at": "2026-10-22T12:16:08.195Z",
+      "origin": "http://127.0.0.1:3260",
+      "resources": [
+        {
+          "name": "/plugins/",
+          "decodedBodySize": 2597854,
+          "deliveryType": "",
+          "transferSize": 830278
+        }
+      ],
+      "loadedBytes": 2597854,
+      "loadedSha256": "14414cd388b1c638a4c75863ea1f26972eab88d48f696b3d330d6b48785516f1",
+      "compiledBytes": 1719054,
+      "compiledSha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db",
+      "segmentBytes": 1719019,
+      "offset": 875361,
+      "second": -1
+    },
+    "segmentSha256": "a2dccdb9733c4df76f10ef8b6f792e0ad1aa42980f1458ffb8b14e99a16e3da5",
+    "frozenCompiled": {
+      "bytes": 1719054,
+      "sha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db"
+    },
+    "declaredServed": {
+      "bytes": 2597854,
+      "sha256": "14414cd388b1c638a4c75863ea1f26972eab88d48f696b3d330d6b48785516f1"
+    },
+    "independentMaterialRefMatches": {
+      "src/client/shared/task-draft-materials.tsx": "b7ecc42640705c61a8aa38630ce773c178674cf20b09477f0f5267422e2cf90c",
+      "src/client/shared/task-draft-materials-refs-dom.test.tsx": "73f5d1abc30d92e80b4e12156bbdbd99d422bfb0890b8cbd02b69148b4735a98"
+    },
+    "boundary": "No live probe; package freeze only. Launcher source record not Main lock. Host commit and complete network history not supplied by this packet."
+  },
+  "rawChecks": {
+    "00-empty-host": {
+      "rootsCount": 2,
+      "pmtoolRawCount": 0
+    },
+    "01-f5-prechecked": {
+      "rootsCount": 2,
+      "pmtoolRawCount": 0
+    },
+    "02-f5-restored-ui": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "03-j03-new-draft": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "04-j03-two-links": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "05-j03-before-c2": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "06r2-j03-c2-checked": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "07-j03-file-ready": {
+      "rootsCount": 25,
+      "pmtoolRawCount": 19
+    },
+    "08-j03-progress-staged": {
+      "rootsCount": 25,
+      "pmtoolRawCount": 19
+    },
+    "09r2-j03-cancel-confirm": {
+      "rootsCount": 25,
+      "pmtoolRawCount": 19
+    },
+    "10r3-j03-kept": {
+      "rootsCount": 25,
+      "pmtoolRawCount": 19
+    },
+    "11r3-j03-discarded": {
+      "rootsCount": 23,
+      "pmtoolRawCount": 19
+    },
+    "12-j03-rebuilt-before-save": {
+      "rootsCount": 25,
+      "pmtoolRawCount": 19
+    },
+    "13-j03-saved": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    },
+    "14-j03-reopened": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    },
+    "15-j03-reopen-materials-visible": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    },
+    "16-j03-reopen-progress-visible": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    },
+    "17-j03-downloaded": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    },
+    "18-j03-clean-close": {
+      "rootsCount": 24,
+      "pmtoolRawCount": 20
+    }
+  },
+  "ui": {
+    "00-empty-host": {
+      "at": "2026-10-22T12:14:16.006Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    },
+    "01-f5-prechecked": {
+      "at": "2026-10-22T12:14:18.877Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    },
+    "02-f5-restored-ui": {
+      "at": "2026-10-22T12:14:46.384Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    },
+    "03-j03-new-draft": {
+      "at": "2026-10-22T12:16:08.579Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898.2576904296875,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458.2576904296875,
+            "bottom": 734,
+            "left": 898.2576904296875
+          }
+        }
+      ]
+    },
+    "04-j03-two-links": {
+      "at": "2026-10-22T12:17:06.015Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "05-j03-before-c2": {
+      "at": "2026-10-22T12:17:49.215Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "06r2-j03-c2-checked": {
+      "at": "2026-10-22T12:18:01.847Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "07-j03-file-ready": {
+      "at": "2026-10-22T12:19:48.703Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "08-j03-progress-staged": {
+      "at": "2026-10-22T12:20:16.355Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "09r2-j03-cancel-confirm": {
+      "at": "2026-10-22T12:20:48.969Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": null,
+          "bbox": {
+            "x": 501,
+            "y": 294.25,
+            "width": 456,
+            "height": 145.5,
+            "top": 294.25,
+            "right": 957,
+            "bottom": 439.75,
+            "left": 501
+          }
+        },
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "10r3-j03-kept": {
+      "at": "2026-10-22T12:21:52.859Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "11r3-j03-discarded": {
+      "at": "2026-10-22T12:21:54.912Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    },
+    "12-j03-rebuilt-before-save": {
+      "at": "2026-10-22T12:22:27.997Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "新增任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "13-j03-saved": {
+      "at": "2026-10-22T12:22:53.277Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    },
+    "14-j03-reopened": {
+      "at": "2026-10-22T12:22:53.946Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "编辑任务",
+          "bbox": {
+            "x": 902.2514038085938,
+            "y": 0,
+            "width": 560.0000610351562,
+            "height": 734,
+            "top": 0,
+            "right": 1462.25146484375,
+            "bottom": 734,
+            "left": 902.2514038085938
+          }
+        }
+      ]
+    },
+    "15-j03-reopen-materials-visible": {
+      "at": "2026-10-22T12:22:54.392Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "编辑任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "16-j03-reopen-progress-visible": {
+      "at": "2026-10-22T12:23:17.582Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "编辑任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "17-j03-downloaded": {
+      "at": "2026-10-22T12:23:19.196Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": [
+        {
+          "label": "编辑任务",
+          "bbox": {
+            "x": 898,
+            "y": 0,
+            "width": 560,
+            "height": 734,
+            "top": 0,
+            "right": 1458,
+            "bottom": 734,
+            "left": 898
+          }
+        }
+      ]
+    },
+    "18-j03-clean-close": {
+      "at": "2026-10-22T12:24:43.262Z",
+      "origin": "http://127.0.0.1:3260",
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "timeOrigin": 1792671157440.7,
+      "pilot": {},
+      "dialogs": []
+    }
+  },
+  "transitions": [
+    {
+      "before": "03-j03-new-draft",
+      "after": "06r2-j03-c2-checked",
+      "changed": []
+    },
+    {
+      "before": "06r2-j03-c2-checked",
+      "after": "07-j03-file-ready",
+      "changed": [
+        "files/staging/0f83954c163c325cd7d215ce924b128a.bin",
+        "files/staging/0f83954c163c325cd7d215ce924b128a.json"
+      ]
+    },
+    {
+      "before": "07-j03-file-ready",
+      "after": "08-j03-progress-staged",
+      "changed": []
+    },
+    {
+      "before": "08-j03-progress-staged",
+      "after": "09r2-j03-cancel-confirm",
+      "changed": []
+    },
+    {
+      "before": "09r2-j03-cancel-confirm",
+      "after": "10r3-j03-kept",
+      "changed": []
+    },
+    {
+      "before": "10r3-j03-kept",
+      "after": "11r3-j03-discarded",
+      "changed": [
+        "files/staging/0f83954c163c325cd7d215ce924b128a.bin",
+        "files/staging/0f83954c163c325cd7d215ce924b128a.json"
+      ]
+    },
+    {
+      "before": "03-j03-new-draft",
+      "after": "11r3-j03-discarded",
+      "changed": []
+    },
+    {
+      "before": "11r3-j03-discarded",
+      "after": "12-j03-rebuilt-before-save",
+      "changed": [
+        "files/staging/c56960437386ebf8b4b8e1870e7cceea.bin",
+        "files/staging/c56960437386ebf8b4b8e1870e7cceea.json"
+      ]
+    },
+    {
+      "before": "12-j03-rebuilt-before-save",
+      "after": "13-j03-saved",
+      "changed": [
+        "data/pmtool/tasks/t-0004.json",
+        "files/staging/c56960437386ebf8b4b8e1870e7cceea.bin",
+        "files/staging/c56960437386ebf8b4b8e1870e7cceea.json"
+      ]
+    },
+    {
+      "before": "13-j03-saved",
+      "after": "14-j03-reopened",
+      "changed": []
+    },
+    {
+      "before": "13-j03-saved",
+      "after": "18-j03-clean-close",
+      "changed": [
+        "data/session_projcache/sessions/session-be7a8a82-c26f-4292-bcd7-7f023d85c7cb.json"
+      ]
+    }
+  ],
+  "reentryChanges": {
+    "14-j03-reopened": [],
+    "15-j03-reopen-materials-visible": [],
+    "16-j03-reopen-progress-visible": [
+      "data/session_projcache/sessions/session-be7a8a82-c26f-4292-bcd7-7f023d85c7cb.json"
+    ],
+    "17-j03-downloaded": [
+      "data/session_projcache/sessions/session-be7a8a82-c26f-4292-bcd7-7f023d85c7cb.json"
+    ],
+    "18-j03-clean-close": [
+      "data/session_projcache/sessions/session-be7a8a82-c26f-4292-bcd7-7f023d85c7cb.json"
+    ]
+  },
+  "task": {
+    "id": "t-0004",
+    "projectId": "p-0001",
+    "parentId": null,
+    "title": "J03修后三资料原子任务",
+    "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+    "assignee": "",
+    "status": "todo",
+    "priority": "P1",
+    "progress": 0,
+    "milestoneId": null,
+    "attachments": [
+      {
+        "id": "at-1",
+        "kind": "link",
+        "url": "https://example.com/j03/first",
+        "title": "J03资料甲",
+        "addedAt": "2026-10-22T12:22:53.094Z"
+      },
+      {
+        "id": "at-2",
+        "kind": "link",
+        "url": "https://example.com/j03/second",
+        "title": "J03资料乙",
+        "addedAt": "2026-10-22T12:22:53.094Z"
+      },
+      {
+        "id": "at-3",
+        "kind": "file",
+        "assetId": "fa-0001",
+        "addedAt": "2026-10-22T12:22:53.094Z"
+      }
+    ],
+    "progressLog": [
+      {
+        "id": "pl-1",
+        "date": "2026-10-21",
+        "author": "修后验收作者",
+        "createdAt": "2026-10-22T12:22:53.094Z",
+        "revisions": [
+          {
+            "id": "rv-1",
+            "date": "2026-10-21",
+            "author": "修后验收作者",
+            "content": "J03修后进展，引用第二资料与真实文件。",
+            "refs": [
+              "at-2",
+              "at-3"
+            ],
+            "revisedAt": "2026-10-22T12:22:53.094Z"
+          }
+        ],
+        "refs": [
+          "at-2",
+          "at-3"
+        ]
+      }
+    ],
+    "code": "3",
+    "order": 3,
+    "createdAt": "2026-10-22T12:22:53.094Z",
+    "updatedAt": "2026-10-22T12:22:53.094Z"
+  },
+  "payload": {
+    "projectId": "p-0001",
+    "parentId": null,
+    "title": "J03修后三资料原子任务",
+    "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+    "assignee": "",
+    "status": "todo",
+    "priority": "P1",
+    "progress": 0,
+    "milestoneId": null,
+    "draft": {
+      "attachmentOps": [
+        {
+          "op": "addLink",
+          "url": "https://example.com/j03/first",
+          "clientId": "c-1",
+          "title": "J03资料甲"
+        },
+        {
+          "op": "addLink",
+          "url": "https://example.com/j03/second",
+          "clientId": "c-2",
+          "title": "J03资料乙"
+        },
+        {
+          "op": "addFile",
+          "stageId": "c56960437386ebf8b4b8e1870e7cceea",
+          "clientId": "c-3"
+        }
+      ],
+      "progressOps": [
+        {
+          "op": "add",
+          "author": "修后验收作者",
+          "content": "J03修后进展，引用第二资料与真实文件。",
+          "date": "2026-10-21",
+          "refs": [
+            "c-2",
+            "c-3"
+          ]
+        }
+      ]
+    }
+  },
+  "events": {
+    "01-f5-precheck-drain-0-events.json": {
+      "frames": 3,
+      "requests": [
+        {
+          "requestId": "24317.370",
+          "line": "/pm restore \"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json\""
+        }
+      ],
+      "responses": [
+        {
+          "requestId": "24317.370",
+          "status": 200,
+          "rpcId": "bc0749db-c9d3-4673-9862-5e415072ca3b",
+          "kind": "success"
+        }
+      ]
+    },
+    "02-f5-confirm-drain-0-events.json": {
+      "frames": 3,
+      "requests": [
+        {
+          "requestId": "24317.371",
+          "line": "/pm restore \"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json\" confirm"
+        }
+      ],
+      "responses": []
+    },
+    "02-f5-confirm-drain-1-events.json": {
+      "frames": 1,
+      "requests": [],
+      "responses": [
+        {
+          "requestId": "24317.371",
+          "status": 200,
+          "rpcId": "216a5fa7-71b5-4675-9353-3b7b5636a271",
+          "kind": "success"
+        }
+      ]
+    },
+    "04-j03-links-events.json": {
+      "frames": 3,
+      "requests": [],
+      "responses": []
+    },
+    "06r2-j03-c2-click-events.json": {
+      "frames": 0,
+      "requests": [],
+      "responses": []
+    },
+    "07-j03-file-picked-events.json": {
+      "frames": 0,
+      "requests": [],
+      "responses": []
+    },
+    "08-j03-progress-events.json": {
+      "frames": 3,
+      "requests": [],
+      "responses": []
+    },
+    "11r3-j03-discard-events.json": {
+      "frames": 2,
+      "requests": [],
+      "responses": []
+    },
+    "12-j03-rebuild-events.json": {
+      "frames": 3,
+      "requests": [],
+      "responses": []
+    },
+    "13-j03-main-save-events.json": {
+      "frames": 3,
+      "requests": [
+        {
+          "requestId": "24317.380",
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"J03修后三资料原子任务\",\"description\":\"两link+进展c2+真文件；取消保留放弃后重建一次保存\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"draft\":{\"attachmentOps\":[{\"op\":\"addLink\",\"url\":\"https://example.com/j03/first\",\"clientId\":\"c-1\",\"title\":\"J03资料甲\"},{\"op\":\"addLink\",\"url\":\"https://example.com/j03/second\",\"clientId\":\"c-2\",\"title\":\"J03资料乙\"},{\"op\":\"addFile\",\"stageId\":\"c56960437386ebf8b4b8e1870e7cceea\",\"clientId\":\"c-3\"}],\"progressOps\":[{\"op\":\"add\",\"author\":\"修后验收作者\",\"content\":\"J03修后进展，引用第二资料与真实文件。\",\"date\":\"2026-10-21\",\"refs\":[\"c-2\",\"c-3\"]}]}}"
+        },
+        {
+          "requestId": "24317.381",
+          "line": "/pm web snapshot"
+        }
+      ],
+      "responses": [
+        {
+          "requestId": "24317.380",
+          "status": 200,
+          "rpcId": "5d020a4f-03eb-4f5a-a05d-c6449645d0c6",
+          "kind": "success"
+        },
+        {
+          "requestId": "24317.381",
+          "status": 200,
+          "rpcId": "75e91d60-9069-406c-9651-bb344b89f7e2",
+          "kind": "success"
+        }
+      ]
+    }
+  },
+  "exceptions": [],
+  "executions": [
+    {
+      "file": "j03-executions/04639e73bbe63e946dbf1b846f9a0db9.json",
+      "id": "04639e73bbe63e946dbf1b846f9a0db9",
+      "pid": 61154,
+      "exitCode": 0,
+      "startedAtMs": 1792671284896,
+      "finishedAtMs": 1792671287481,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/0720cece3891261c26466712f07ab15d.json",
+      "id": "0720cece3891261c26466712f07ab15d",
+      "pid": 62370,
+      "exitCode": 0,
+      "startedAtMs": 1792671772363,
+      "finishedAtMs": 1792671774702,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/149b1d8fb365880a89b6e3c35be53c4e.json",
+      "id": "149b1d8fb365880a89b6e3c35be53c4e",
+      "pid": 62273,
+      "exitCode": 1,
+      "startedAtMs": 1792671698339,
+      "finishedAtMs": 1792671699356,
+      "outputComplete": true,
+      "error": "ElementResolutionError: Invalid locator: [role=\"dialog\"]:has-text(\"放弃未保存修改？\") button:text-is(\"取消\"). Expected loc=role:<role>[name=\"<exact name>\"], loc=role:<role>[name*=\"<name part>\"], loc=css:<selector>, loc=href:<substring>, text=..., css=..., a terminal :has-text(...) or :text-is(...), or a terminal >> nth=N\n    at parseLocatorOrThrow (file:////[eval1]:11219:15)\n    at resolveElementObjectId (file:////[eval1]:9836:21)\n    at clickInPage (file:////[eval1]:14298:26)\n    at #runAction.actionName (file:////[eval1]:18927:91)\n    at file:////[eval1]:19104:270\n    at #retryElementAction (file:////[eval1]:19141:30)\n    at async file:////[eval1]:19242:29\n    at async file:////[eval1]:16940:28\n\nego's nodejs process exited with code 1.\n"
+    },
+    {
+      "file": "j03-executions/168768fed1ac99140909561e81660468.json",
+      "id": "168768fed1ac99140909561e81660468",
+      "pid": 62278,
+      "exitCode": 0,
+      "startedAtMs": 1792671710983,
+      "finishedAtMs": 1792671715202,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/269e2d3d5406d28a623bf7ee90eaa2ef.json",
+      "id": "269e2d3d5406d28a623bf7ee90eaa2ef",
+      "pid": 60613,
+      "exitCode": 1,
+      "startedAtMs": 1792671152060,
+      "finishedAtMs": 1792671180191,
+      "outputComplete": true,
+      "error": "Error: page.waitForSelector timed out after 20000ms: .pm-shell\n    at waitForSelectorInPage (file:////[eval1]:16399:11)\n    at async file:////[eval1]:16940:28\n\nego's nodejs process exited with code 1.\n"
+    },
+    {
+      "file": "j03-executions/4bd3904dcf9e1e48a3ef2b7263e03e9e.json",
+      "id": "4bd3904dcf9e1e48a3ef2b7263e03e9e",
+      "pid": 61887,
+      "exitCode": 1,
+      "startedAtMs": 1792671568970,
+      "finishedAtMs": 1792671579686,
+      "outputComplete": true,
+      "error": "Error: page.waitForFileChooser timed out after 10000ms\n    at Timeout._onTimeout (file:////[eval1]:8668:27)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7)\n{ date: '2026-10-21' }\n\nego's nodejs process exited with code 1.\n"
+    },
+    {
+      "file": "j03-executions/609954a3adcaead0101fc3d08a5111b2.json",
+      "id": "609954a3adcaead0101fc3d08a5111b2",
+      "pid": 62203,
+      "exitCode": 1,
+      "startedAtMs": 1792671679189,
+      "finishedAtMs": 1792671682631,
+      "outputComplete": true,
+      "error": "ElementResolutionError: page.click timed out after 3000ms: Locator [role=\"dialog\"][aria-label=\"放弃未保存修改？\"] button:text-is(\"取消\") matched 0 elements\n    at #retryElementAction (file:////[eval1]:19158:27)\n    at async file:////[eval1]:19242:29\n    at async file:////[eval1]:16940:28\n[ { role: 'dialog', label: null, buttons: [ '放弃修改', '取消' ] }, { role: 'dialog', label: '新增任务', buttons: [ '', '加链接', '关联交付物', '移除暂存', '追加进展（草稿）', '取消', '添加任务' ] } ]\n\nego's nodejs process exited with code 1.\n"
+    },
+    {
+      "file": "j03-executions/6c6c89ac4fe2e31af00aa111e30f1bec.json",
+      "id": "6c6c89ac4fe2e31af00aa111e30f1bec",
+      "pid": 61905,
+      "exitCode": 0,
+      "startedAtMs": 1792671588038,
+      "finishedAtMs": 1792671591149,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/76ecb7de9b26e5f2e247c3a9c9d906fa.json",
+      "id": "76ecb7de9b26e5f2e247c3a9c9d906fa",
+      "pid": 61977,
+      "exitCode": 1,
+      "startedAtMs": 1792671615430,
+      "finishedAtMs": 1792671620037,
+      "outputComplete": true,
+      "error": "ElementResolutionError: page.click timed out after 3000ms: Locator dialog[aria-label=\"新增任务\"] button:text-is(\"取消\") matched 0 elements\n    at #retryElementAction (file:////[eval1]:19158:27)\n    at async file:////[eval1]:19242:29\n    at async file:////[eval1]:16940:28\n\nego's nodejs process exited with code 1.\n"
+    },
+    {
+      "file": "j03-executions/7bdf3833bbe346fd7fe7d29adb83c64e.json",
+      "id": "7bdf3833bbe346fd7fe7d29adb83c64e",
+      "pid": 62312,
+      "exitCode": 0,
+      "startedAtMs": 1792671741489,
+      "finishedAtMs": 1792671748474,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/85a2cb28f23b12a32ca00be1f7ee7a11.json",
+      "id": "85a2cb28f23b12a32ca00be1f7ee7a11",
+      "pid": 61052,
+      "exitCode": 0,
+      "startedAtMs": 1792671254847,
+      "finishedAtMs": 1792671259140,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/a33762de965abc17b4de6bc814623bf3.json",
+      "id": "a33762de965abc17b4de6bc814623bf3",
+      "pid": 61713,
+      "exitCode": 0,
+      "startedAtMs": 1792671481026,
+      "finishedAtMs": 1792671484060,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/b9ea11c5d3c6ff16ae5b4b42e361e7bf.json",
+      "id": "b9ea11c5d3c6ff16ae5b4b42e361e7bf",
+      "pid": 61451,
+      "exitCode": 0,
+      "startedAtMs": 1792671367264,
+      "finishedAtMs": 1792671368882,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/bb8fc06e8b827af98768d355f9fcf036.json",
+      "id": "bb8fc06e8b827af98768d355f9fcf036",
+      "pid": 62436,
+      "exitCode": 0,
+      "startedAtMs": 1792671797169,
+      "finishedAtMs": 1792671801825,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/d256558e25e9418b33ec4ff623226da1.json",
+      "id": "d256558e25e9418b33ec4ff623226da1",
+      "pid": 62143,
+      "exitCode": 0,
+      "startedAtMs": 1792671648130,
+      "finishedAtMs": 1792671651266,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/e88e02eed6864df9a3a786d90d76764d.json",
+      "id": "e88e02eed6864df9a3a786d90d76764d",
+      "pid": 61550,
+      "exitCode": 0,
+      "startedAtMs": 1792671423751,
+      "finishedAtMs": 1792671426574,
+      "outputComplete": true,
+      "error": null
+    },
+    {
+      "file": "j03-executions/ff377b706df5e3cb9c51f1cf1fa4c0ae.json",
+      "id": "ff377b706df5e3cb9c51f1cf1fa4c0ae",
+      "pid": 62636,
+      "exitCode": 0,
+      "startedAtMs": 1792671882300,
+      "finishedAtMs": 1792671885339,
+      "outputComplete": true,
+      "error": null
+    }
+  ],
+  "download": {
+    "bytes": 22,
+    "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+    "source": {
+      "bytes": 22,
+      "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a"
+    },
+    "asset": {
+      "id": "fa-0001",
+      "projectId": "p-0001",
+      "fileName": "QA 中文 文件.md",
+      "mediaType": "text/markdown",
+      "size": 22,
+      "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+      "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+      "addedAt": "2026-10-21T13:44:55.146Z"
+    }
+  },
+  "visualOriginals": [
+    "00-empty-host.png",
+    "01-f5-prechecked.png",
+    "02-f5-restored-ui.png",
+    "03-j03-new-draft.png",
+    "04-j03-two-links.png",
+    "05-j03-before-c2.png",
+    "06r2-j03-c2-checked.png",
+    "07-j03-file-ready.png",
+    "08-j03-progress-staged.png",
+    "09r2-j03-cancel-confirm.png",
+    "10r3-j03-kept.png",
+    "11r3-j03-discarded.png",
+    "12-j03-rebuilt-before-save.png",
+    "13-j03-saved.png",
+    "14-j03-reopened.png",
+    "15-j03-reopen-materials-visible.png",
+    "16-j03-reopen-progress-visible.png",
+    "17-j03-downloaded.png",
+    "18-j03-clean-close.png",
+    "frames/01-f5-precheck-drain-0-1-1792671258414.jpg",
+    "frames/01-f5-precheck-drain-0-1-1792671258491.jpg",
+    "frames/01-f5-precheck-drain-0-1-1792671258558.jpg",
+    "frames/02-f5-confirm-drain-0-1-1792671285650.jpg",
+    "frames/02-f5-confirm-drain-0-1-1792671285685.jpg",
+    "frames/02-f5-confirm-drain-0-1-1792671285722.jpg",
+    "frames/02-f5-confirm-drain-1-1-1792671285917.jpg",
+    "frames/04-j03-links-1-1792671426166.jpg",
+    "frames/04-j03-links-1-1792671426239.jpg",
+    "frames/04-j03-links-1-1792671426320.jpg",
+    "frames/08-j03-progress-1-1792671616499.jpg",
+    "frames/08-j03-progress-1-1792671616570.jpg",
+    "frames/08-j03-progress-1-1792671616623.jpg",
+    "frames/11r3-j03-discard-1-1792671715010.jpg",
+    "frames/11r3-j03-discard-1-1792671715049.jpg",
+    "frames/12-j03-rebuild-1-1792671748182.jpg",
+    "frames/12-j03-rebuild-1-1792671748240.jpg",
+    "frames/12-j03-rebuild-1-1792671748306.jpg",
+    "frames/13-j03-main-save-1-1792671773372.jpg",
+    "frames/13-j03-main-save-1-1792671773473.jpg",
+    "frames/13-j03-main-save-1-1792671773564.jpg"
+  ],
+  "boundary": "Audit exit0 is not GUI PASS. Host/files bytes only manifests except downloaded/source file. Events are bounded command-only drains, not all network/console coverage.",
+  "own-audit.mjs": {
+    "bytes": 14801,
+    "sha256": "1cd3be1c7383314e24256b47f317a65b92408badb22ccb4cd45ca5077565678e"
+  },
+  "own-audit.json": {
+    "bytes": 128561,
+    "sha256": "364dba3ec6cdbf5216af8fb08d91df82da491cef4847aa8c7d112ea5e41bba3a"
+  },
+  "own.md": {
+    "bytes": 17527,
+    "sha256": "3574251bee5f815d0f3dce452f5513a97427e5f622e2753727e28ba6ea344b0e"
+  }
+}

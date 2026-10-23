@@ -1,0 +1,130 @@
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -58,6 +58,7 @@
+ import { localTodayIso } from './core/derived.js'
+ import { readOkrInbox } from './core/okr.js'
+ import { readHabitInbox } from './core/habits.js'
++import { readExportAudit, type ExportAuditEntry } from './core/export.js'
+ 
+ // PM 包只依赖本地最小接口，避免为类型扩展引入 DSH 宿主实现包；运行时由明确 inject 保证服务存在。
+ declare module '@deepseek-ai/cordis' {
+@@ -226,6 +227,18 @@
+             buildQueueForProject(domain, pid, { today: localTodayIso(), nowHhmm: snapHhmm }),
+           ]),
+         )
++        // P2002：只读审计的项目最近时刻，不依赖追加顺序、不触发已发日志 TTL 或回写。
++        const latestExports = new Map<string, Pick<ExportAuditEntry, 'at' | 'format'> | null>(
++          [...domain.table('projects').entries()].map(([pid]) => [pid, null]),
++        )
++        for (const entry of readExportAudit(domain)) {
++          const timestamp = Date.parse(entry.at)
++          if (!latestExports.has(entry.projectId) || !Number.isFinite(timestamp)) continue
++          const previous = latestExports.get(entry.projectId)
++          if (!previous || timestamp > Date.parse(previous.at)) {
++            latestExports.set(entry.projectId, { at: entry.at, format: entry.format })
++          }
++        }
+         return {
+           kind: 'success',
+           text: JSON.stringify({
+@@ -254,6 +267,7 @@
+             },
+             // #21 口径设置：归一化后的生效口径（缺省=默认），供 Web 设置 UI 与派生视图直接消费。
+             settings: readProjectSettings(domain),
++            latestExports: Object.fromEntries(latestExports),
+             // K11：按项目派生的补记队列（读时派生、零写）。
+             queue,
+             // 宿主 HTTP 能力探测：以「路由注册成功」为准；缺失/冲突 CLI-only，前端据此显示 unavailable。
+--- a/src/client/panel.tsx
++++ b/src/client/panel.tsx
+@@ -338,6 +338,8 @@
+   fileAssets?: Record<string, { id: string, fileName?: string, size?: number, hash?: string, kind?: string, uploadedAt?: string }>
+   /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
+   settings?: unknown
++  /** P2002：审计只读项目投影，不携带完整日志或目标路径；旧快照缺字段回落未导出。 */
++  latestExports?: Record<string, { at: string, format: 'markdown' | 'web' | 'plain' } | null>
+   /** 宿主 HTTP 能力探测（webServer+connection）：httpAvailable/previewApi 齐备才提供权威预览，否则 CLI-only。 */
+   capabilities?: {
+     httpAvailable?: boolean
+@@ -1369,6 +1371,7 @@
+                 execute={execute}
+                 projectId={project.id}
+                 projectName={project.name}
++                latestExport={data.latestExports?.[project.id] ?? null}
+                 density={density}
+                 onDensityChange={setDensity}
+                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
+--- a/src/client/views/tasks.tsx
++++ b/src/client/views/tasks.tsx
+@@ -265,6 +265,22 @@
+     onGenWbs, onSaved, run, execute, projectId, projectName = '', density = 'comfortable', onDensityChange, overlayOpen,
+     diagnosis = [], onDismissDiagnosis, latestExport = null,
+   } = props
++
++  // 与实际顶层/子层/状态分组行共用，独占标题格一行，长文本不挤占编辑操作格。
++  const exportSlot = (
++    <span
++      className={`pm-export-slot pm-export-slot--${latestExport?.at ? 'done' : 'none'}`}
++      style={{ flexBasis: '100%', minWidth: 0, maxWidth: '100%', whiteSpace: 'normal',
++        overflowWrap: 'anywhere', fontSize: 'var(--t-11)', fontWeight: 400, color: 'var(--muted)' }}
++      title={latestExport?.at
++        ? '已导出：外部文件为唯一事实源，工具不做后续同步/镜像'
++        : '暂无导出记录'}
++    >
++      {latestExport?.at
++        ? <>已导出 · 最近 <time dateTime={latestExport.at} title={latestExport.at}>{hhmm(latestExport.at)}</time> · 外部为唯一事实源</>
++        : '未导出'}
++    </span>
++  )
+ 
+   // P2-5：命名视图。首挂载按项目默认视图恢复四态；boot 只取一次，后续切换由 effect 驱动。
+   const [boot] = useState(() => {
+@@ -873,7 +889,7 @@
+         <div className="pt-cell pt-code">
+           {taskHandleButton(t)}
+         </div>
+-        <div className="pt-cell pt-task">
++        <div className="pt-cell pt-task" style={{ flexWrap: 'wrap' }}>
+           {row.hasChildren && (
+             <button
+               className={`pt-tri pm-task-toggle${collapsed.has(t.id) ? '' : ' open'}`}
+@@ -921,6 +937,7 @@
+               <Flag size={11} strokeWidth={2.2}/>{milestone.title}
+             </span>
+           )}
++          {exportSlot}
+         </div>
+         {columnVisible('assignee') && <div className="pt-cell pt-assignee">
+           {t.assignee
+@@ -944,17 +961,6 @@
+         </div>}
+         {columnVisible('progress') && renderProgress(t)}
+         <div className="pt-cell pt-acts">
+-          {/* K18 任务卡静态出站关联位：只显示不回写；审计未就绪/无记录时「未导出」占位，不伪造。 */}
+-          {latestExport?.at ? (
+-            <span
+-              className="pm-export-slot pm-export-slot--done"
+-              title="已导出：外部文件为唯一事实源，工具不做后续同步/镜像"
+-            >
+-              已导出 · 最近 {hhmm(latestExport.at)} · 外部为唯一事实源
+-            </span>
+-          ) : (
+-            <span className="pm-export-slot pm-export-slot--none" title="暂无导出记录">未导出</span>
+-          )}
+           <button className="pt-iconbtn" title="编辑" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
+             <Pencil size={15} />
+           </button>
+@@ -984,11 +990,12 @@
+         <div className="pt-cell pt-code">
+           {taskHandleButton(t)}
+         </div>
+-        <div className="pt-cell pt-gname">
++        <div className="pt-cell pt-gname" style={{ flexWrap: 'wrap' }}>
+           <button className="pt-name" style={{ cursor: 'pointer' }} onClick={() => onEdit(t)}>
+             {t.title}
+           </button>
+           <span className={`pt-gcount ${countCls}`}>{total === 0 ? '无子任务' : `${done}/${total} 完成`}</span>
++          {exportSlot}
+         </div>
+         {columnVisible('assignee') && <div className="pt-cell pt-assignee">
+           {t.assignee

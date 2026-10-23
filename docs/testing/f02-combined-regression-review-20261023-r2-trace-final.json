@@ -1,0 +1,408 @@
+{
+  "at": "2026-10-22T23:41:11.373Z",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-combined-regression-review-20261023-r2-trace-reconcile.mjs"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "prior": {
+    "bytes": 11631,
+    "sha256": "690c9282bca18277f57e5627a0c2d030ba06ef307d5ff3ebd1013afbf1cd7eee"
+  },
+  "correction": "原helper错把calls对象当数组；只补OKR calls字段核验，旧原件/脚本不改，已绿来源链/产物/目录继承",
+  "fixtureProducer": {
+    "source": {
+      "bytes": 16703,
+      "sha256": "c777b88dc003414f483a0c2f4360b845483d0a662710d9a43f351405027bbe8a"
+    },
+    "suite": "/private/tmp/pmtool-combined-f02-repair-20261023-r2/packages/dsh-pm-tool/src/core/report-export-excerpts.test.ts",
+    "cases": [
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C01 真实 JSON 固定两条 current，源两条改作者/日期/正文并软删后报告全字节不变",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C02 manual 来源在 render 中保留且输入不变",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C02 session 来源在 render 中保留且输入不变",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C03 旧报告 excerpts=missing 可导出且不回填来源/快照/摘录",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C03 旧报告 excerpts=empty 可导出且不回填来源/快照/摘录",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C04 真实 export 默认拒覆盖、confirm 覆盖同字节/权限，领域记录零改写",
+      "EXPORT-EXCERPTS CONTROL：合法冻结、既有来源/兼容/文件保护 C05 真实命令拒绝绝对/~ /越界目录，不创建 exports，不改报告 JSON",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R01 render 第 0 条冻结 task/entry/rev、作者/日期/正文必须完整",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R01 render 第 1 条冻结 task/entry/rev、作者/日期/正文必须完整",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R02 manual 真实 export：源修改/软删后两条旧冻结摘录均完整",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R02 session 真实 export：源修改/软删后两条旧冻结摘录均完整",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R03 render 复杂冻结 Markdown 保正文且安全 AST 不生成危险协议链接",
+      "EXPORT-EXCERPTS RED：生产 render / 真实 export 不得遗漏冻结正文和来源 R03 command 复杂冻结 Markdown 保正文且安全 AST 不生成危险协议链接"
+    ],
+    "envRoot": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedF02RepairR2/runtime/tmp/report-export"
+  },
+  "rawReportBindings": [
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-BuypEX/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5082,
+        "sha256": "c502ba9f0d9622032fefa4731cf5db176193291fb9dcc35eb07e3ea78a2bd708"
+      },
+      "rawSha256": "63f75c268e7d7cd6a6c413748e91f2c5ed7160cdd0944ab0dbe448047f045ab9",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.530Z",
+      "sourceType": "manual",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-CARV9J/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5082,
+        "sha256": "74615ec69caa8dc586d59919d24a7e4f79443493721c1101612c2f4993d36fa5"
+      },
+      "rawSha256": "d70e314de2f7486ef98a7fcae5e8f758591926ba8e518c49c646ca35ebaa7229",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.278Z",
+      "sourceType": "manual",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-JOLrpp/frozen-before.json",
+      "fingerprint": {
+        "bytes": 6049,
+        "sha256": "300ce82f5a2ece558b9e633627acfd100416729967f9905f28d4b2294d27f9be"
+      },
+      "rawSha256": "f0cfc4e9ac36c7176411f8d7f0f3548dc48e145ca5ac658307ca88e501c7f1bf",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:57.264Z",
+      "sourceType": "session",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-VMWJS8/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5124,
+        "sha256": "c52cdd44904a443ac8b4c3d80728b74e839d5ad4cef4fc201b678884f418e9ae"
+      },
+      "rawSha256": "1d9c06254dd3e224c8f6cf9ba9d18eed3685bc3c11edb42494185bfd9809085e",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:57.097Z",
+      "sourceType": "session",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-WU176d/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5082,
+        "sha256": "5874d44f208c3e3b1be4237ab8dee74be4bc15fc6c5c94c860cc9d847191ba84"
+      },
+      "rawSha256": "502b0582ea5a04caba6049f0289bf324ea6f5c57706dbcfd8fdb1833c37287b8",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.955Z",
+      "sourceType": "manual",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-akAhJq/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5124,
+        "sha256": "56f50d9de58efb0b1d31de8b6cc3c6a691dcd25dc9f9492b49cc0c267c5dda18"
+      },
+      "rawSha256": "296b31a986981cf6885af9711b5d99224797a3ea3750fd550fb503805afe6343",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.680Z",
+      "sourceType": "session",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-s2q19y/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5082,
+        "sha256": "af6340c7f79a7abcf9000c05b93ae8ef4062163c27f900d5a86d6b217710c447"
+      },
+      "rawSha256": "5adcecd6547f8d56a640046fe3057b4176f5090da75f1e2ee569d049a062522e",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.427Z",
+      "sourceType": "manual",
+      "initialRevisionEntries": 3
+    },
+    {
+      "file": "runtime/tmp/report-export/report-export-excerpts-spOKy2/frozen-before.json",
+      "fingerprint": {
+        "bytes": 5082,
+        "sha256": "e7e049bfd6b633a239f0d0b38e5874506a0a810b6fe6cbc564ac21a33f2f3b3a"
+      },
+      "rawSha256": "ff31a3df6305200a93c0b1af0a69d2d1ebb8bcb82776a9674c37773f02fd61cd",
+      "version": 2,
+      "rawRecordEqualsFixed": true,
+      "snapshotAt": "2026-10-22T23:33:56.848Z",
+      "sourceType": "manual",
+      "initialRevisionEntries": 3
+    }
+  ],
+  "artifactSourceBinding": {
+    "source": {
+      "bytes": 5059,
+      "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+    },
+    "emitted": {
+      "bytes": 4699,
+      "sha256": "11a84b5d5d183ce9f88bb51f62dc3aeb8ea350f0281c408595dba403b8e1abbe"
+    },
+    "bundle": {
+      "bytes": 1720393,
+      "sha256": "3be9d4a0bbc595bb0038e50787d33d38d47120237f7ab93fba40d1dc624f8159"
+    },
+    "sourceMap": {
+      "bytes": 2257029,
+      "sha256": "db826a35139a1e81ccbe6b935ed682cd196431da35274e8c47981c43356578de"
+    },
+    "sourceMapEmittedByteEqual": true,
+    "runtimeLoaded": false
+  },
+  "domDirectoryReceipt": [
+    {
+      "directory": "1-C01",
+      "files": [
+        "dom-observations/1-C01/observations.json"
+      ]
+    },
+    {
+      "directory": "1-HPS-C01",
+      "files": [
+        "dom-observations/1-HPS-C01/observations.json"
+      ]
+    },
+    {
+      "directory": "2-C02",
+      "files": [
+        "dom-observations/2-C02/observations.json"
+      ]
+    },
+    {
+      "directory": "2-HPS-C02",
+      "files": [
+        "dom-observations/2-HPS-C02/observations.json"
+      ]
+    },
+    {
+      "directory": "3-C03",
+      "files": [
+        "dom-observations/3-C03/observations.json"
+      ]
+    },
+    {
+      "directory": "3-HPS-C03",
+      "files": [
+        "dom-observations/3-HPS-C03/observations.json"
+      ]
+    },
+    {
+      "directory": "4-HPS-N01",
+      "files": [
+        "dom-observations/4-HPS-N01/observations.json"
+      ]
+    },
+    {
+      "directory": "4-N01",
+      "files": [
+        "dom-observations/4-N01/observations.json"
+      ]
+    },
+    {
+      "directory": "5-HPS-N02",
+      "files": [
+        "dom-observations/5-HPS-N02/observations.json"
+      ]
+    },
+    {
+      "directory": "5-N02",
+      "files": [
+        "dom-observations/5-N02/observations.json"
+      ]
+    },
+    {
+      "directory": "6-N03",
+      "files": [
+        "dom-observations/6-N03/observations.json"
+      ]
+    },
+    {
+      "directory": "7-N04",
+      "files": [
+        "dom-observations/7-N04/observations.json"
+      ]
+    }
+  ],
+  "handoff": {
+    "fingerprint": {
+      "bytes": 1255959,
+      "sha256": "352583059cbc5256dbde0e0292d827d422c5f41ad6a9962025d8b939118df9f4"
+    },
+    "records": 28,
+    "firstOpen": [
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      },
+      {
+        "sidecarHidden": true,
+        "keys": [
+          "label",
+          "calls",
+          "sidecarHidden",
+          "sidecarDisplay",
+          "focus",
+          "snapshot"
+        ]
+      }
+    ]
+  },
+  "productExecutions": 0,
+  "okr": [
+    {
+      "name": "1-draft.json",
+      "fingerprint": {
+        "bytes": 10775,
+        "sha256": "7c35e17290bb55971688a36a2b40fe8b9e81895dc15f74301004128cf81dff0a"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "2-confirmed.json",
+      "fingerprint": {
+        "bytes": 10793,
+        "sha256": "6519ea7dad4aefce4dddbdbffbe911a6706ec86c926d0b743d6c901e21315731"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "3-RERENDER.json",
+      "fingerprint": {
+        "bytes": 21474,
+        "sha256": "84790f5de49598f6b8ce746f6907793bb4e930005c00134c3c11013af49c4c27"
+      },
+      "observations": 4,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "4-ROOT.json",
+      "fingerprint": {
+        "bytes": 10755,
+        "sha256": "89b60f27597d34dece285383ce922f0aa212a8d0b756b0194634d811c94a1875"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "5-SIBLING.json",
+      "fingerprint": {
+        "bytes": 12675,
+        "sha256": "dae4b4aa808dd113de13f25bdbf07d5e40b197ebe165d76fc40ee03f4036f81a"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "6-ORPHAN.json",
+      "fingerprint": {
+        "bytes": 10804,
+        "sha256": "cc928f8ae26a3b327668e8ad588ca49f2c034edbd81782a0a17955df70b3d6a0"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "7-REORDER.json",
+      "fingerprint": {
+        "bytes": 16535,
+        "sha256": "e4cb88ed94f1a57440970c13b748d21298d03e2e01008dddc8916c8e4ac8eafb"
+      },
+      "observations": 3,
+      "calls": 0,
+      "fetchCalls": 0
+    },
+    {
+      "name": "8-TEXT.json",
+      "fingerprint": {
+        "bytes": 10993,
+        "sha256": "1f3d408f8eee6e663a90a5ccb0808cfe7c391332f5fed81d45cdf9012f322a9c"
+      },
+      "observations": 2,
+      "calls": 0,
+      "fetchCalls": 0
+    }
+  ],
+  "ok": true,
+  "expectedExit": 0,
+  "ended": "2026-10-22T23:41:11.377Z"
+}

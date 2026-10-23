@@ -1,0 +1,487 @@
+{
+  "root": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU",
+  "sources": [
+    {
+      "path": "packages/dsh-pm-tool/src/core/ai-client.ts",
+      "bytes": 8933,
+      "sha256": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/archive.test.ts",
+      "bytes": 12831,
+      "sha256": "c53a8bbaf5ad49d84478d667ea3279c1c6be23cc00592254ecc58767e71e730b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/archive.ts",
+      "bytes": 9339,
+      "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/ask-copilot.ts",
+      "bytes": 13245,
+      "sha256": "57f7c622719e972e0ca2871ffb77e9ec2fca3a9a244a56d38c73698f6b785072"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/ask-projection.ts",
+      "bytes": 4465,
+      "sha256": "046804306b2006a5d5a29e1fa110270551b409cb94009dac791fb853d6269283"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/backup.ts",
+      "bytes": 26049,
+      "sha256": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/capture.ts",
+      "bytes": 12990,
+      "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/check.ts",
+      "bytes": 6393,
+      "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/completion-history.ts",
+      "bytes": 3974,
+      "sha256": "0d490e5d87b2c07ff9b6fb8d10dbba00d859985c89717fb6f945153c4a3c4317"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/copilot.ts",
+      "bytes": 24137,
+      "sha256": "9059ab4de0c46398c180f24a9928f4b2de670fee5a2cdc5d317ea26e5a389c25"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/csv-import.ts",
+      "bytes": 10787,
+      "sha256": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/cycle-hooks.ts",
+      "bytes": 1384,
+      "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/deliverable.ts",
+      "bytes": 4863,
+      "sha256": "1a27fd47b7f6f406e38057cb3f165ff0bc3ea3c6c662b127fe9d082ce7b2b5b6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/deliverables.ts",
+      "bytes": 7192,
+      "sha256": "933de43583f6924347c439f62ce81c5dfdd530cb4c14b78d199ffc83d4a0a219"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/derived.ts",
+      "bytes": 7721,
+      "sha256": "424a42289f65fc51bd804a0c62b2611e70f62deaa69f5f9d50923e9b572f6c78"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/design-tokens.ts",
+      "bytes": 5235,
+      "sha256": "b8983eebe0de3c42b9a84bdd1e4b86051406bcfa359c2692b87dd49ef71e4024"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/doctor.ts",
+      "bytes": 7714,
+      "sha256": "41b3a613579b1e3995cdad7d429cac5ac771f9e9b49d97d3e64a5334b8199dbb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/domain-error.ts",
+      "bytes": 2004,
+      "sha256": "b490ab3491a18f4f6e93464cc53044b797524e2d00cc5169886f9d156cb54c9a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/drawer-focus.ts",
+      "bytes": 3725,
+      "sha256": "381f634d77950b364befbf1b96ff943cbe3351f27f365a0704b6cb12084e20ef"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/evidence.ts",
+      "bytes": 1793,
+      "sha256": "a27364261892f59bbff3b72682e39c38333ff95cbcbd2d4b7a790595292c07bb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/export-isolation.test.ts",
+      "bytes": 3172,
+      "sha256": "f798531db7d02c616e677a16f740a2498150de47e48438c5ba54214f10812cc0"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/export-outbound.test.ts",
+      "bytes": 12165,
+      "sha256": "ee61778cc426b543906a0f1c1f45fbe2cd88d2a8de9416d79c1be1293c31d7b6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/export.ts",
+      "bytes": 36942,
+      "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/external-skill-router.ts",
+      "bytes": 12109,
+      "sha256": "0b67608de2b545c35acf59ccdc200919de18d7f76edd4040864277e379122064"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/file-asset-store.ts",
+      "bytes": 21633,
+      "sha256": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/file-assets.ts",
+      "bytes": 10012,
+      "sha256": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/file-backup.ts",
+      "bytes": 9496,
+      "sha256": "1e85be8005e79a7f35b937c913ca0020d158742d4daa93d4ace467cca56f49dd"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/file-staging.ts",
+      "bytes": 9146,
+      "sha256": "3c643d5a47beeccad22908bb2c57a0d9d415b72243a169540ffa9638dc6f8e81"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/fs-atomic.ts",
+      "bytes": 3222,
+      "sha256": "15f88e27665286ba5061b874562e10a29afe101cdceb0a671686a88ea6eea5a8"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/gantt.ts",
+      "bytes": 29170,
+      "sha256": "c5084fcb00b9cb2a9a2bf65cff184ac945778654e934d60fa6afa6b076c6bf6c"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/habits.ts",
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/health.ts",
+      "bytes": 1893,
+      "sha256": "21097e7618ea4d302a2ab952274caf3ea6f8687652d5d8911af56e805bbadcb6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/http/asset-route.ts",
+      "bytes": 17035,
+      "sha256": "bac973650943798090c148f6245121781c2e7a080cb5b30f108b0ac793e1da80"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/http/limits.ts",
+      "bytes": 376,
+      "sha256": "3d03ff0e123ddd4b390886be78dca2293f7ff303c89e2cd659d42d7a6c0a99cf"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/http/preview-route.ts",
+      "bytes": 7293,
+      "sha256": "64e39828bf804a455f9bbd73de192577faba05e9d807312819f64c0bc7be5d20"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/idempotency.ts",
+      "bytes": 5689,
+      "sha256": "eefc9b40021acefb42c238c4100ea14a691826b26a99aa359bf751cdf9537a01"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/labels.ts",
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/lessons.ts",
+      "bytes": 6780,
+      "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/load-stance.ts",
+      "bytes": 8270,
+      "sha256": "ea3fd0aae076621dca045c64e784bf0c02b11ff87437dd210f853861ad58131c"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/meeting-source.ts",
+      "bytes": 2054,
+      "sha256": "e4c07299450fb526dd67596de7f9a6bee56a5454113675e25852987ce6c80da7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/meeting-summarize.ts",
+      "bytes": 4222,
+      "sha256": "9a0a243864e513a567def600921f5d507ea845733b07b028b662cc0f3f49b144"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/meeting.ts",
+      "bytes": 5277,
+      "sha256": "6df510dd7f648c6196ce00bd9e8a7f30ae64573196a880fa0e4017b54892ec45"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/meetings.ts",
+      "bytes": 9720,
+      "sha256": "8f4325bef25ea00420eec7502566719e2f6d31dcacaa082c56d2620f6e915c8d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/metric.ts",
+      "bytes": 4385,
+      "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/milestone.ts",
+      "bytes": 3223,
+      "sha256": "e6c1ef3980527820d5a818a1b76f5ff9a600135a1fe7fe8505f235b0dc646ea4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/milestones.ts",
+      "bytes": 4250,
+      "sha256": "74ae5576a05b76e54eadd88dfc07305e1585fc0f8810239c36d06bb268791176"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/model-route.ts",
+      "bytes": 9933,
+      "sha256": "493073e180c2d8e883e1c1347384cc6cb210624bae1b32187a0c5dfbd01ccac9"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/nav.ts",
+      "bytes": 6909,
+      "sha256": "299ff0a15baad5270f4e5c72933c896aeebe985fc60629364745d7660d0cabd0"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/okr.ts",
+      "bytes": 22248,
+      "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/panel-kbd.ts",
+      "bytes": 1972,
+      "sha256": "78176d98b69c6ffdeadbac1b8bfc5ec10edde379d16b46feb287c974293cd87a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/people-candidates.ts",
+      "bytes": 4085,
+      "sha256": "8544fd9c2d0e6f52aba764aa46b13506dee2b0a166964e88562e41a5222cfd0b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/people-load.ts",
+      "bytes": 8915,
+      "sha256": "758bbddf2c4e49bbdc9923542ce614fae226b19db10a7b8e378562911971cdd2"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/progress-derivation.ts",
+      "bytes": 17727,
+      "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/progress-report-markdown.ts",
+      "bytes": 4510,
+      "sha256": "94290aaf54764628161e84f11d1bd495f7cb965c4178ea155d52b2d28ac99fbf"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/progress-report.ts",
+      "bytes": 9494,
+      "sha256": "ad08a165dc503f2c0ad0398da736887467cd109c07ae41b07009dd1ecd5d9c12"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/progress-reports.ts",
+      "bytes": 17521,
+      "sha256": "279b6ca7a41b4ccabe88a59340a631751a53d864726c47eafd81e1b759813d0b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/project.ts",
+      "bytes": 3758,
+      "sha256": "37d25f439d68639d7ecf279f1c45d58543dffc141adc0b905ec49aca2d706993"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/projects.ts",
+      "bytes": 6356,
+      "sha256": "ed89fd16c9f0b499ccac7d572acf0583bc873e15a18311ffe8a8a9a712c01453"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "bytes": 10855,
+      "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-view.ts",
+      "bytes": 6377,
+      "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance.ts",
+      "bytes": 17058,
+      "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/queue.ts",
+      "bytes": 13563,
+      "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/record-location.ts",
+      "bytes": 1708,
+      "sha256": "b9546b4a460ea8458bb5b4ef3a0febecff5258c06769e1d41c85f748ea91efc5"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/reflect.ts",
+      "bytes": 17084,
+      "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/reminders.ts",
+      "bytes": 5822,
+      "sha256": "afccb9ea1d6c1a1fd1ecd51c46b40d22db3c036720895142970bf7ae9f6d89c9"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/repo-format.ts",
+      "bytes": 3962,
+      "sha256": "0db54e8a42638dec3da9ffd824cf6efa84c620ee4f8d3a9c751c45c083bee0ac"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/repo.ts",
+      "bytes": 1661,
+      "sha256": "98cfab58dd0a1aae557861b6e8a764826bb64e527c32148dd114ae1f50699591"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/report-diff.ts",
+      "bytes": 3046,
+      "sha256": "3dde948a75a7b5ee9610f7bcae60ea9bd02abce74bf6229b823d8c81a8e485c0"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/report-narrate.ts",
+      "bytes": 3705,
+      "sha256": "237230d31e727bf7930134996db4c33771415a54b64640413178a3d6f631b523"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/report.ts",
+      "bytes": 4010,
+      "sha256": "f96f446effbe7e6d5c799181d4701de16369cca119d207d62d53280f39c5aab2"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/review-materials.test.ts",
+      "bytes": 8225,
+      "sha256": "1b2db1b43a8a8f9ed8779fa12b47d1e67e212ac196d51e8e5326e4ade88fed5f"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/review-materials.ts",
+      "bytes": 9381,
+      "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/risk-issue.ts",
+      "bytes": 5011,
+      "sha256": "4e122d5cbba585906cc5f96de8370c811214cfd2356084c57ed55578d462a23a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/risk-issues.ts",
+      "bytes": 3810,
+      "sha256": "70325fbb489560e0df4b9435f177b93fecaf419c17ba5ae58160f55a1a8e9356"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/search.ts",
+      "bytes": 5328,
+      "sha256": "588f00a417ddef0f64f4ac4e03fd7de1ae6a64d9c3c62dc3e0a91f07399f9cc1"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/session-bind.ts",
+      "bytes": 5905,
+      "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/settings.ts",
+      "bytes": 7983,
+      "sha256": "f017816e653906662cdae7fb6ab8e0dfdb29e1c9c64b1913af2840b361da7bcb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/stale-placeholder.ts",
+      "bytes": 3857,
+      "sha256": "e50264a4790df243a638237d324eb21463f0dbe8f733521a1108bcc634677aef"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/stats.ts",
+      "bytes": 6929,
+      "sha256": "a8b62791f29bb3a83077190a5a96ca855c42c452c5c3e6630afdca24d8151089"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/status.ts",
+      "bytes": 1150,
+      "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/storage.ts",
+      "bytes": 8840,
+      "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/suggestion-engine.ts",
+      "bytes": 5931,
+      "sha256": "662f8939f4fcd69d9360cb9574770cf23c64f71c1560bd0a4379745f61ce395b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-checklist.ts",
+      "bytes": 8216,
+      "sha256": "76cae4a935cba7a1f2e879d79543aa52e9d2404b11cfc29dea92930046a49146"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-export.ts",
+      "bytes": 12587,
+      "sha256": "4743a9dd9dd84898aa233406a9508bc9fa455b00629eef0e36661c659e23078a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-import.ts",
+      "bytes": 4702,
+      "sha256": "4129bc943a09fda79c358719fd4780d8a300be8d5b85807de6603889337c0100"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-inline.ts",
+      "bytes": 2277,
+      "sha256": "a80dce6c85c7ba8830769a51a35bf8b66c61902f29f28fcc05f604fea269ac04"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-materials.ts",
+      "bytes": 32638,
+      "sha256": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-tree.ts",
+      "bytes": 2660,
+      "sha256": "0d63b259129597098dfb3e8142fa5722c303a7a23f22eece59a60a0d47af0932"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task-views.ts",
+      "bytes": 14915,
+      "sha256": "6d1bdefbafe74f19a3446cbd0633727f1bdd40504af68948384e73f07dbc940c"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task.ts",
+      "bytes": 13669,
+      "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/tasks.ts",
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/ui-feedback.ts",
+      "bytes": 13794,
+      "sha256": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/war-room.ts",
+      "bytes": 4495,
+      "sha256": "9fd95d54e68aed0b25463a66cbee879f389b705768269912df80aaa23dd16db2"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/wbs-ai.ts",
+      "bytes": 2780,
+      "sha256": "55b317262d7a8e3dc7d7d034752841445b7c4fe018220a7e3e23a81034196e2c"
+    }
+  ],
+  "tests": [
+    "src/core/archive.test.ts",
+    "src/core/review-materials.test.ts",
+    "src/core/export-isolation.test.ts",
+    "src/core/export-outbound.test.ts"
+  ],
+  "config": {
+    "bytes": 574,
+    "sha256": "5aed5468cc8312a355711143473444cf034be1097671cb90d16592e8d53bc78b"
+  },
+  "nodeModulesLink": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules",
+  "writes": "自有root与本前缀新收据"
+}

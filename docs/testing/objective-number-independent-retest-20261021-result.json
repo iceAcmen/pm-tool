@@ -1,0 +1,133 @@
+{
+  "at": "2026-10-21T13:46:04.851Z",
+  "candidate": {
+    "at": "2026-10-21T13:45:12.053Z",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "productBase": "2a7603023bc54ef13d788e50069ee3fde4671bf3",
+    "actualHead": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "version": "0.7.4",
+    "products": {
+      "src/client/views/tasks.tsx": {
+        "sha256": "c6b84a4ab5a711addc06c0de38b9d0d7af1f40df162d3462a04079b98e92c5e2",
+        "size": 65928,
+        "mtimeMs": 1792589119985.579
+      },
+      "src/client/views/tasks.css": {
+        "sha256": "35f1123e41ae0cce98c00f6ab5eb64f05ddf86fa491603b6cb8f7c17ad5be161",
+        "size": 42738,
+        "mtimeMs": 1792589206035.229
+      },
+      "src/client/views/overview.tsx": {
+        "sha256": "17391f8a308926b0d559a1a346b9e4946f7c2054ba251458ffeb0c44b5c4c67e",
+        "size": 23974,
+        "mtimeMs": 1792588699377.6167
+      },
+      "src/client/views/gantt.tsx": {
+        "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+        "size": 30901,
+        "mtimeMs": 1792588729243.3538
+      },
+      "src/core/task.ts": {
+        "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+        "size": 13669,
+        "mtimeMs": 1792588564902.3333
+      }
+    },
+    "newTests": {
+      "src/client/views/objective-consumers.test.tsx": {
+        "sha256": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48",
+        "size": 12028,
+        "mtimeMs": 1792588784559.0452
+      },
+      "src/core/task-evidence-protocol.test.ts": {
+        "sha256": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35",
+        "size": 6171,
+        "mtimeMs": 1792588531738.9143
+      },
+      "src/client/views/tasks-number-feedback.test.tsx": {
+        "sha256": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f",
+        "size": 4952,
+        "mtimeMs": 1792589093085.0928
+      }
+    },
+    "configs": {
+      "package.json": {
+        "sha256": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+        "size": 3109,
+        "mtimeMs": 1792567733239.3215
+      },
+      "pnpm-lock.yaml": {
+        "sha256": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+        "size": 201524,
+        "mtimeMs": 1792567743783.3733
+      },
+      "vitest.config.ts": {
+        "sha256": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+        "size": 1072,
+        "mtimeMs": 1792588331281.1414
+      },
+      "tsconfig.json": {
+        "sha256": "e8fa51cfcd802516e7bf75f5bb8bdd109391d7b13917346576fb23740d9785d6",
+        "size": 659,
+        "mtimeMs": 1792174328598.4546
+      }
+    },
+    "patchSha256": "e0395ce1bb2807440ed36d1cc4e08b9cf516a4317e4d39f45d8b4c134f14ee73",
+    "dependencyRoot": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules",
+    "dependencyEntries": 14611,
+    "dependencySnapshotSha256": "71faff01c641f2a05be2d944f3d2741ec3f551482518e1c2d66e27e8ac82bf43",
+    "scope": "八文件候选；其余只作实际相关依赖，不认领整棵dirty树，不含panel/产物/实例/GUI"
+  },
+  "results": {
+    "current-developer-15": {
+      "passed": 114,
+      "failed": 0,
+      "pending": 0,
+      "total": 114,
+      "success": true
+    },
+    "old-same-new-tests": {
+      "passed": 6,
+      "failed": 24,
+      "pending": 0,
+      "total": 30,
+      "success": false
+    },
+    "current-independent-boundary": {
+      "passed": 17,
+      "failed": 0,
+      "pending": 0,
+      "total": 17,
+      "success": true
+    }
+  },
+  "oldByFile": {
+    "task-evidence-protocol.test.ts": {
+      "failed": 6,
+      "passed": 3
+    },
+    "objective-consumers.test.tsx": {
+      "failed": 13
+    },
+    "tasks-clipboard.test.ts": {
+      "passed": 3
+    },
+    "tasks-number-feedback.test.tsx": {
+      "failed": 5
+    }
+  },
+  "sourceInputCount": 93,
+  "frozenChanges": [],
+  "currentInputChanges": [],
+  "sourceCurrent": [],
+  "driftIdentities": {},
+  "dependencyEntries": 14611,
+  "currentDependencyChanges": [],
+  "compileExit": 0,
+  "compileOutputs": 122,
+  "writeOperations": 1527,
+  "rejectedOutsideOwn": 0,
+  "assertions": 161,
+  "caseRows": 64,
+  "verdict": "当前冻结SOURCE/AUTO有限PASS；GNHD视觉FAIL_OPEN，原GUI缺证，不签整门"
+}

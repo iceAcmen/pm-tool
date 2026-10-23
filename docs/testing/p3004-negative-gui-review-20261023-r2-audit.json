@@ -1,0 +1,520 @@
+{
+  "scope": "原RA-P3004 missing/B真实失败保稿与连续零写，非全项验收",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "execPath": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "start": "2026-10-22T23:20:45.761Z",
+  "end": "2026-10-22T23:20:46.092Z",
+  "inputPins": {
+    "AGENTS.md": {
+      "bytes": 26011,
+      "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+    },
+    "docs/collaboration.md": {
+      "bytes": 31271,
+      "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+    },
+    "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md": {
+      "bytes": 15291,
+      "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02"
+    },
+    "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md": {
+      "bytes": 22907,
+      "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+    },
+    "docs/testing/op-growth-final-inheritance-20261022-r1.md": {
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    "docs/testing/remaining-governance-cases-20261021.md": {
+      "bytes": 13892,
+      "sha256": "7ed381f0fc5d0807722b9f1197e188b6705f6fa674ea85266d2b98dba989bade"
+    },
+    "docs/plans/2026-10-23-0713-continuation.md": {
+      "bytes": 8672,
+      "sha256": "e8b71bacbb3700588739271f0ab45cfb46e76de87f08c75130cfed41a358a831"
+    }
+  },
+  "reader": {
+    "bytes": 16883,
+    "sha256": "4e32b24de654b81c8d2a63568cfd787ffef92ae00f3e6f86f0ce0f4a10945b2d"
+  },
+  "inventory": {
+    "indexedFiles": 893,
+    "physicalFiles": 896,
+    "indexedBytes": 24242264,
+    "missing": [],
+    "unexpected": [],
+    "shaOrSizeDifferences": [],
+    "symlinks": 0,
+    "index": {
+      "bytes": 159369,
+      "sha256": "e057e74a0bca3f52951bea241b962c862d3073627105c32b3111dbd3116932c9"
+    },
+    "outsideIndex": {
+      "index-r1.json": {
+        "bytes": 159369,
+        "sha256": "e057e74a0bca3f52951bea241b962c862d3073627105c32b3111dbd3116932c9"
+      },
+      "seal-outer-receipt.json": {
+        "bytes": 402,
+        "sha256": "5c3e5f1891c9e77939cf09506b414391abbd46984db1b11ff9c294fb8e78dae1"
+      },
+      "seal-r1.json": {
+        "bytes": 187,
+        "sha256": "d3998c93bfee9b3dbe01656d131b5541be0a068312f814de17d78b05b0550b63"
+      }
+    },
+    "images": {
+      "png": 16,
+      "jpeg": 182
+    }
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "version": "0.7.4",
+    "changedManifestCount": 124,
+    "completeInputManifestCount": 525,
+    "physicallyCheckedFrozenSourceCount": 7,
+    "sourceChecks": [
+      {
+        "file": "src/client/form-validation.ts",
+        "bytes": 14842,
+        "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4",
+        "completeMatch": true,
+        "changedManifestMatch": "未列为本轮变更"
+      },
+      {
+        "file": "src/client/panel.tsx",
+        "bytes": 191954,
+        "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6",
+        "completeMatch": true,
+        "changedManifestMatch": true
+      },
+      {
+        "file": "src/client/views/growth-form-props.ts",
+        "bytes": 4276,
+        "sha256": "0e07ee09757ad74b75076b5007b43b4c5781f2de9a3f2e01529db6c03a54a8e4",
+        "completeMatch": true,
+        "changedManifestMatch": "未列为本轮变更"
+      },
+      {
+        "file": "src/client/views/habit-form.tsx",
+        "bytes": 4854,
+        "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29",
+        "completeMatch": true,
+        "changedManifestMatch": "未列为本轮变更"
+      },
+      {
+        "file": "src/client/views/records/records-listbox.tsx",
+        "bytes": 4886,
+        "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2",
+        "completeMatch": true,
+        "changedManifestMatch": true
+      },
+      {
+        "file": "src/commands/habit.ts",
+        "bytes": 14064,
+        "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e",
+        "completeMatch": true,
+        "changedManifestMatch": "未列为本轮变更"
+      },
+      {
+        "file": "src/core/habits.ts",
+        "bytes": 23356,
+        "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684",
+        "completeMatch": true,
+        "changedManifestMatch": "未列为本轮变更"
+      }
+    ],
+    "remaining518SourceBytes": "不在本包，未读取私有冻结/当前产品，未声称独立核满525源码"
+  },
+  "browserBinding": {
+    "browser": {
+      "bytes": 2599139,
+      "sha256": "b01f629fe3d174c75a0ddd2e923ba1cb973eeae5baaec6ae77c7b91070290de2"
+    },
+    "offset": 875361,
+    "body": {
+      "bytes": 1720305,
+      "sha256": "2879edeee5c231abba7bf50a900d8ff395fdd7eb024f27c67c1b06b4b77f577a"
+    },
+    "restored": {
+      "bytes": 1720339,
+      "sha256": "ba7e013dfc9094dea4646e36e8f193399861bb02bffa4dbc888c9cb7c0e3aa31"
+    },
+    "uniqueSegment": true,
+    "pid": 9103,
+    "port": 3268,
+    "flag": "0",
+    "instanceReceiptsOnly": true,
+    "liveReprobe": false
+  },
+  "receipts": [
+    {
+      "file": "round20-outer-receipt.json",
+      "start": "2026-10-22T23:01:29.386Z",
+      "end": "2026-10-22T23:01:30.235Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round20.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "fdf158d152bb6ad116ad223261b94d911b2577812baf7005c8a4422e6cd17974"
+    },
+    {
+      "file": "round21-outer-receipt.json",
+      "start": "2026-10-22T23:02:10.051Z",
+      "end": "2026-10-22T23:02:12.827Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round21.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "77c7879cc7afcfdb7ebf832d186ffdba0ef8482aa3c53486999374d67880808e"
+    },
+    {
+      "file": "round22-outer-receipt.json",
+      "start": "2026-10-22T23:04:00.321Z",
+      "end": "2026-10-22T23:04:01.603Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round22.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "91d9e305a7a9d86b78a53f24e64c1ac084bdf503b549b8b4424084621e6eec7b"
+    },
+    {
+      "file": "round23-outer-receipt.json",
+      "start": "2026-10-22T23:05:01.590Z",
+      "end": "2026-10-22T23:05:02.917Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round23.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "e23f5605cb2c956087043de5db453c812914de91f5a857ca274881aecd8520d4"
+    },
+    {
+      "file": "round24-outer-receipt.json",
+      "start": "2026-10-22T23:06:07.017Z",
+      "end": "2026-10-22T23:06:09.611Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round24.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "9338194998caabf142c48b271e65a2fb44827ac616c4772cadcb41d21dc1f553"
+    },
+    {
+      "file": "round25-outer-receipt.json",
+      "start": "2026-10-22T23:07:04.684Z",
+      "end": "2026-10-22T23:07:06.207Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-six-repairs-gui-round25.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "1e3a08e08f4215344a95855f549f082faaba164f622737a28387c72fd6729d38"
+    },
+    {
+      "file": "seal-outer-receipt.json",
+      "start": "2026-10-22T23:08:16.578Z",
+      "end": "2026-10-22T23:08:17.882Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-p3004-negative-gui-seal.mjs",
+        "inner"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "f7ba29a6aee07b131469d73c75cebc8d3b92e5fe259b16fbec6ce9607942922f"
+    },
+    {
+      "file": "activation-binding-r2-outer.json",
+      "start": "2026-10-22T22:48:42.745Z",
+      "end": "2026-10-22T22:48:43.216Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/SixRepairsGuiR1/activation-binding-r2-source.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stderr": "",
+      "stdoutSha256": "546cc02f6e79c1804e45ae184e14992c968a065c798830a7f0e50f78885470b1"
+    }
+  ],
+  "frameCounts": {
+    "20": 4,
+    "21": 85,
+    "22": 17,
+    "23": 18,
+    "24": 38,
+    "25": 20
+  },
+  "fixture": {
+    "scope": "RA-P3004 negative fixture clarification only",
+    "E": {
+      "id": "p-0003",
+      "name": "QA-E-habit-negative-20261023",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-10-23",
+      "targetDate": "2026-11-30",
+      "createdAt": "2026-10-22T23:02:11.787Z",
+      "updatedAt": "2026-10-22T23:02:11.787Z"
+    },
+    "H": {
+      "id": "habit-mvk5br0w-ff4ta7",
+      "projectId": "p-0003",
+      "title": "负例夹具习惯H",
+      "goal": "已存目标原文",
+      "frequency": "每天",
+      "notes": "已存备注原文",
+      "status": "draft",
+      "checkIns": [],
+      "streak": {
+        "current": 0,
+        "longest": 0,
+        "totalDays": 0
+      },
+      "createdAt": "2026-10-22T23:02:12.368Z",
+      "updatedAt": "2026-10-22T23:02:12.368Z"
+    },
+    "cross": {
+      "id": "okr-mvk2mw6p-xiusuv",
+      "projectId": "p-0002",
+      "title": "P2异项目B目标20261023",
+      "kind": "objective",
+      "primaryOkrId": null,
+      "relatedOkrIds": [],
+      "status": "draft",
+      "createdAt": "2026-10-22T21:46:53.425Z",
+      "updatedAt": "2026-10-22T21:46:53.425Z"
+    },
+    "missingId": "okr-not-found-20261023"
+  },
+  "preparation": [
+    {
+      "file": "round21-create-E-command.json",
+      "rpcId": "5a2457d4-e959-42a1-88fd-fe153061fe3a",
+      "line": "/pm project add {\"name\":\"QA-E-habit-negative-20261023\",\"startDate\":\"2026-10-23\",\"targetDate\":\"2026-11-30\"}",
+      "kind": "success"
+    },
+    {
+      "file": "round21-create-H-command.json",
+      "rpcId": "379d25cc-26f5-4a9b-aa7a-412f063f1a90",
+      "line": "/pm habit add p-0003 {\"title\":\"负例夹具习惯H\",\"goal\":\"已存目标原文\",\"frequency\":\"每天\",\"notes\":\"已存备注原文\"}",
+      "kind": "success"
+    }
+  ],
+  "preparationRoots": {
+    "added": [
+      "data/pmtool/habits/habit-mvk5br0w-ff4ta7.json",
+      "data/pmtool/projects/p-0003.json"
+    ],
+    "changedOrRemoved": []
+  },
+  "zeroWrite": {
+    "states": 11,
+    "rootCount": 44,
+    "rawBusinessCopiesChecked": 418,
+    "transitions": [
+      {
+        "state": "round21-after-fixture-preparation",
+        "at": "2026-10-22T23:02:12.559Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round23-E-habit-list",
+        "at": "2026-10-22T23:05:02.383Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round23-original-H-edit-text-fallback",
+        "at": "2026-10-22T23:05:02.665Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round24-before-negative-draft",
+        "at": "2026-10-22T23:06:07.842Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round24-missing-before-save",
+        "at": "2026-10-22T23:06:08.630Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round24-missing-after-rejection",
+        "at": "2026-10-22T23:06:08.943Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round24-cross-before-save",
+        "at": "2026-10-22T23:06:09.164Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round24-cross-after-rejection",
+        "at": "2026-10-22T23:06:09.394Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round25-before-normal-habit-cancel",
+        "at": "2026-10-22T23:07:05.077Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round25-after-normal-habit-cancel",
+        "at": "2026-10-22T23:07:05.252Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      },
+      {
+        "state": "round25-final-after-readonly-snapshot",
+        "at": "2026-10-22T23:07:05.913Z",
+        "rootCount": 44,
+        "rawBusinessFiles": 38,
+        "rootDifferences": [],
+        "hChangedFields": [],
+        "h": {
+          "bytes": 448,
+          "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+        }
+      }
+    ],
+    "snapshotPreparedEqualsFinal": true,
+    "allHFieldsUnchanged": true,
+    "boundary": "封存data/pmtool实际raw复核；files/backups六项沿连续根指纹，原包未附这些root的raw，非全盘零写"
+  },
+  "negatives": [
+    {
+      "label": "missing",
+      "rpcId": "efd4bf21-d77c-4f33-bedd-9abd4fd5bbbe",
+      "commandId": "cmd-06ee808a-28",
+      "status": 200,
+      "businessKind": "error",
+      "error": "未找到关联目标：okr-not-found-20261023",
+      "patch": {
+        "title": "保稿H未提交文字20261023",
+        "goal": "未提交目标原文20261023",
+        "frequency": "工作日",
+        "notes": "未提交备注原文20261023",
+        "okrId": "okr-not-found-20261023"
+      },
+      "fiveFieldsContinuous": true,
+      "dialogStillOpen": true
+    },
+    {
+      "label": "cross",
+      "rpcId": "9d276e12-f2c3-47eb-92e9-4d53cf9fa6ec",
+      "commandId": "cmd-06ee808a-29",
+      "status": 200,
+      "businessKind": "error",
+      "error": "关联目标不属于指定项目",
+      "patch": {
+        "title": "保稿H未提交文字20261023",
+        "goal": "未提交目标原文20261023",
+        "frequency": "工作日",
+        "notes": "未提交备注原文20261023",
+        "okrId": "okr-mvk2mw6p-xiusuv"
+      },
+      "fiveFieldsContinuous": true,
+      "dialogStillOpen": true
+    }
+  ],
+  "semanticAssertions": "均成立；有限GUI裁决由report结合独立原图目视给出，不由reader自判"
+}

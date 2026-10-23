@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-22T13:02:41.127Z",
+  "mode": "audit",
+  "exit": 1,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n307 !== 14\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n307 !== 14\n\n    at audit (file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/atf-combined-runtime-gui-review-20261022-r1-audit.mjs:117:10)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/atf-combined-runtime-gui-review-20261022-r1-audit.mjs:244:20\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)"
+}

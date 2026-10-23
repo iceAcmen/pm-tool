@@ -123,21 +123,22 @@ export function redactUrl(url) {
 /**
  * 构造浏览器打开命令参数（macOS open / open -a）。
  *
- * 真实本地 app 入口：Chrome / Edge 用 `--app=<url>` 打开无边框专用窗口（独立窗口形态，
- * 仍使用该浏览器自身 cookie jar，启动器不复制 cookie、不关 auth）；Safari / Firefox /
- * 系统默认浏览器不支持 app 参数，诚实回退普通 tab。
+ * 默认使用URL事件投递普通tab，覆盖冷启动与已运行浏览器。显示名与OS应用名分离；
+ * 显式appWindow仅保留旧纯函数能力，生产入口不使用该参数。
  * @param {string} choice
  * @param {string} url
  * @param {{appWindow?:boolean}} [opts]
  * @returns {{argv:string[], mode:'app'|'tab', fallback:boolean}}
  */
 const APP_WINDOW_BROWSERS = new Set(['Chrome', 'Microsoft Edge'])
-export function openBrowserArgs(choice, url, { appWindow = true } = {}) {
+const BROWSER_APPS = { Chrome: 'Google Chrome', 'Microsoft Edge': 'Microsoft Edge', Safari: 'Safari', Firefox: 'Firefox' }
+export function openBrowserArgs(choice, url, { appWindow = false } = {}) {
   if (choice === '系统默认浏览器') return { argv: ['open', url], mode: 'tab', fallback: false }
+  const app = BROWSER_APPS[choice] ?? choice
   if (appWindow && APP_WINDOW_BROWSERS.has(choice)) {
-    return { argv: ['open', '-a', choice, '--args', `--app=${url}`], mode: 'app', fallback: false }
+    return { argv: ['open', '-a', app, '--args', `--app=${url}`], mode: 'app', fallback: false }
   }
-  return { argv: ['open', '-a', choice, url], mode: 'tab', fallback: false }
+  return { argv: ['open', '-a', app, url], mode: 'tab', fallback: false }
 }
 
 /**
@@ -178,6 +179,13 @@ export function createLauncherState() {
   function transition(event) {
     if (!event || typeof event !== 'object') return snapshot()
     switch (event.type) {
+      case 'begin-journey':
+        s.status = Status.S0
+        s.step = 0
+        s.confirmed = false
+        s.detail = undefined
+        s.browser = event.browser
+        break
       case 'detect': {
         // 探测结果直接落 S0/S1/S6；401 身份匹配走 S1，不在这里判 S5。
         if (event.probe === Probe.Running) s.status = Status.S1
@@ -225,6 +233,7 @@ export function createLauncherState() {
         break
       case 'failure':
         s.status = Status.S6
+        s.confirmed = false
         s.detail = event.detail
         break
       case 'back':

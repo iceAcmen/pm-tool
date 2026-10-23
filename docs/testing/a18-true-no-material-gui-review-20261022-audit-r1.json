@@ -1,0 +1,3750 @@
+{
+  "at": "2026-10-22T01:16:32.299Z",
+  "environment": {
+    "os": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3"
+  },
+  "ok": false,
+  "assertions": {
+    "allDeclaredFrozenBytesMatch": true,
+    "A18Source520Artifacts453": true,
+    "A18PatchMatches": true,
+    "A18Host3248PID63429": true,
+    "fullLoadedTargetAndTimeOrigin": true,
+    "sealed482NoMissingExtraOrModified": true,
+    "framesCompleteHashOnlyNotAllVisual": true,
+    "tenExitZeroAreCollectionOnly": true,
+    "observationsAllRecomputed": true,
+    "allRawHashesEqualCapturedPostManifest": true,
+    "sameObservedOriginAndTimeOrigin": true,
+    "sevenRealPOSTUserRunDonePairs": true,
+    "newTaskRealAddNoMaterialOrHandwrittenFixture": true,
+    "allTaskSnapshotsTrulyMaterialFree": true,
+    "firstDoneCreatesExactlyNewTaskDoneDraft": true,
+    "newTimestampNotOldReflection": true,
+    "gapHonestKnownOnlyNoInventedAcceptance": true,
+    "ordinaryFieldsPreservedOnDone": true,
+    "repeatDoneOnlyTaskUpdatedAtNotEntireStepZero": true,
+    "reflectionOriginal596BytesUnchangedThroughEnd": true,
+    "twoReflectionReadsIdenticalRawAndOutput": true,
+    "checkExactlyOneActualTargetOnly": true,
+    "checkHumanDecisionAndNoStatusRuling": true,
+    "reflectCheckNavigationOpenCancelAllFourRootsZero": true,
+    "allFilesBackupsExportsUnchanged": true,
+    "oldFileTaskNotRelabelledEmpty": true,
+    "oldReflectionAndOtherDataPreserved": false,
+    "sevenPMTasksSnapshotContainsTrueT8": true,
+    "actualCheckTargetSameTaskTitleStatusAndDates": true,
+    "cancelLeavesNoTaskFormAndSameCheckCard": true,
+    "allNineInterstepBridgesZero": false,
+    "noConsoleErrorsRecorded": true,
+    "heroNotInventedVisibleReflection": true,
+    "protectedBytesAndMtimeUnchanged": true
+  },
+  "candidateChecks": {
+    "A13": {
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+      "tree": "/private/tmp/pmtool-a13-closure-20261022",
+      "manifest": {
+        "bytes": 123543,
+        "sha256": "d70267f974fb9aa8aaf496a4f1d49abef33d26d410b6a453eb4569fadaa9a51f",
+        "mtimeMs": 1792618115134.4773
+      },
+      "sourceCount": 514,
+      "artifactCount": 453,
+      "sourceMismatch": [],
+      "artifactMismatch": [],
+      "scope": "protection only; not retested"
+    },
+    "A14": {
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+      "tree": "/private/tmp/pmtool-a14-closure-20261022",
+      "manifest": {
+        "bytes": 123633,
+        "sha256": "f89160400a28ba78af722303c01fe9caf3f596657b3d9767f4984a3569d85284",
+        "mtimeMs": 1792620881456.1125
+      },
+      "sourceCount": 515,
+      "artifactCount": 453,
+      "sourceMismatch": [],
+      "artifactMismatch": [],
+      "scope": "protection only; not retested"
+    },
+    "A16": {
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+      "tree": "/private/tmp/pmtool-a16-closure-20261022",
+      "manifest": {
+        "bytes": 124152,
+        "sha256": "284dfbf509bcb286a935d60f3d6dc07161c1fbc3dcbfb6e6165f91f29fdadadb",
+        "mtimeMs": 1792625389971.982
+      },
+      "sourceCount": 519,
+      "artifactCount": 453,
+      "sourceMismatch": [],
+      "artifactMismatch": [],
+      "scope": "protection only; not retested"
+    },
+    "A18": {
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+      "tree": "/private/tmp/pmtool-a18-closure-20261022",
+      "manifest": {
+        "bytes": 124336,
+        "sha256": "2d533a1d214c0ae68739b354aac2e0d85b37ca6735c256d3dd3820bce3c191b9",
+        "mtimeMs": 1792629150821.7756
+      },
+      "sourceCount": 520,
+      "artifactCount": 453,
+      "sourceMismatch": [],
+      "artifactMismatch": [],
+      "scope": "tested candidate"
+    }
+  },
+  "loadedChecks": [
+    {
+      "bytes": 2584301,
+      "sha256": "b4a54301e085753ab4193ae1284156ac779064ec097d7e775970a3d6a9e9f708",
+      "first": 875361,
+      "second": -1,
+      "segmentBytes": 1705469,
+      "segmentSha": "21d941ca10d41935a5416b58f6da29f2b5520e8bf93396e850de526a68eea343",
+      "matches": true
+    }
+  ],
+  "identity": {
+    "targetId": "BA817F66FCE81BD58357C4B50BFFDF2C",
+    "origin": "http://127.0.0.1:3248",
+    "timeOrigin": 1792629512672.7,
+    "pid": 63429
+  },
+  "index": {
+    "bytes": 79307,
+    "sha256": "453f3595228bd8b2a77c65e1d22ce2fe74d7c881c4a635c25f4fd9c804652626",
+    "mtimeMs": 1792631546273.5972,
+    "count": 482,
+    "indexMismatches": [],
+    "unlisted": []
+  },
+  "observations": {
+    "bytes": 30394,
+    "sha256": "d7a88c88f4fc09fa5893e2093b0dbafb63926c2f59bca832b37edfd3bc64ace1",
+    "mtimeMs": 1792631545901.1028
+  },
+  "frameCount": 190,
+  "frameChecks": [
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000000.jpg",
+      "at": "2026-10-22T01:11:39.619Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.605083
+      },
+      "matches": true
+    },
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000001.jpg",
+      "at": "2026-10-22T01:11:39.673Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.616477
+      },
+      "matches": true
+    },
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000002.jpg",
+      "at": "2026-10-22T01:11:39.717Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.658047
+      },
+      "matches": true
+    },
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000003.jpg",
+      "at": "2026-10-22T01:11:39.726Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.667647
+      },
+      "matches": true
+    },
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000004.jpg",
+      "at": "2026-10-22T01:11:39.733Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.720115
+      },
+      "matches": true
+    },
+    {
+      "manifest": "task-close-1792631498578/frames/frames.json",
+      "path": "task-close-1792631498578/frames/000005.jpg",
+      "at": "2026-10-22T01:11:39.769Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631499.762704
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000000.jpg",
+      "at": "2026-10-22T01:10:10.966Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631410.925262
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000001.jpg",
+      "at": "2026-10-22T01:10:10.991Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631410.960106
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000002.jpg",
+      "at": "2026-10-22T01:10:10.991Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631410.96772
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000003.jpg",
+      "at": "2026-10-22T01:10:11.248Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.186307
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000004.jpg",
+      "at": "2026-10-22T01:10:11.251Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.217136
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000005.jpg",
+      "at": "2026-10-22T01:10:11.305Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.276371
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000006.jpg",
+      "at": "2026-10-22T01:10:11.348Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.327899
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000007.jpg",
+      "at": "2026-10-22T01:10:11.372Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.339174
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000008.jpg",
+      "at": "2026-10-22T01:10:11.386Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.373148
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000009.jpg",
+      "at": "2026-10-22T01:10:11.417Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.403633
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000010.jpg",
+      "at": "2026-10-22T01:10:11.443Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.436607
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000011.jpg",
+      "at": "2026-10-22T01:10:11.467Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.453673
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000012.jpg",
+      "at": "2026-10-22T01:10:11.485Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.469158
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000013.jpg",
+      "at": "2026-10-22T01:10:11.509Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.500391
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000014.jpg",
+      "at": "2026-10-22T01:10:11.616Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.604497
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000015.jpg",
+      "at": "2026-10-22T01:10:11.687Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.672468
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631409390/frames/frames.json",
+      "path": "command-1792631409390/frames/000016.jpg",
+      "at": "2026-10-22T01:10:11.699Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631411.691287
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000000.jpg",
+      "at": "2026-10-22T01:10:16.779Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631416.768348
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000001.jpg",
+      "at": "2026-10-22T01:10:16.837Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631416.820715
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000002.jpg",
+      "at": "2026-10-22T01:10:16.883Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631416.86553
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000003.jpg",
+      "at": "2026-10-22T01:10:16.888Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631416.875901
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000004.jpg",
+      "at": "2026-10-22T01:10:17.054Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631416.890526
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000005.jpg",
+      "at": "2026-10-22T01:10:17.059Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.034344
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000006.jpg",
+      "at": "2026-10-22T01:10:17.093Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.081929
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000007.jpg",
+      "at": "2026-10-22T01:10:17.118Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.104159
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000008.jpg",
+      "at": "2026-10-22T01:10:17.133Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.120424
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000009.jpg",
+      "at": "2026-10-22T01:10:17.148Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.136139
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000010.jpg",
+      "at": "2026-10-22T01:10:17.170Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.152616
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000011.jpg",
+      "at": "2026-10-22T01:10:17.188Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.171967
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000012.jpg",
+      "at": "2026-10-22T01:10:17.199Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.187197
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000013.jpg",
+      "at": "2026-10-22T01:10:17.221Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.20497
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000014.jpg",
+      "at": "2026-10-22T01:10:17.224Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.216848
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000015.jpg",
+      "at": "2026-10-22T01:10:17.348Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.327715
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000016.jpg",
+      "at": "2026-10-22T01:10:17.438Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.390837
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631415555/frames/frames.json",
+      "path": "command-1792631415555/frames/000017.jpg",
+      "at": "2026-10-22T01:10:17.457Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631417.449514
+      },
+      "matches": true
+    },
+    {
+      "manifest": "host-open-1792631351569/frames/frames.json",
+      "path": "host-open-1792631351569/frames/000000.jpg",
+      "at": "2026-10-22T01:09:13.303Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631353.231186
+      },
+      "matches": true
+    },
+    {
+      "manifest": "host-open-1792631351569/frames/frames.json",
+      "path": "host-open-1792631351569/frames/000001.jpg",
+      "at": "2026-10-22T01:09:13.405Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631353.396254
+      },
+      "matches": true
+    },
+    {
+      "manifest": "host-open-1792631351569/frames/frames.json",
+      "path": "host-open-1792631351569/frames/000002.jpg",
+      "at": "2026-10-22T01:09:13.632Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631353.61034
+      },
+      "matches": true
+    },
+    {
+      "manifest": "host-open-1792631351569/frames/frames.json",
+      "path": "host-open-1792631351569/frames/000003.jpg",
+      "at": "2026-10-22T01:09:13.637Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631353.627049
+      },
+      "matches": true
+    },
+    {
+      "manifest": "host-open-1792631351569/frames/frames.json",
+      "path": "host-open-1792631351569/frames/000004.jpg",
+      "at": "2026-10-22T01:09:13.720Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631353.658728
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000000.jpg",
+      "at": "2026-10-22T01:10:13.787Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631413.770588
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000001.jpg",
+      "at": "2026-10-22T01:10:14.007Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631413.952751
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000002.jpg",
+      "at": "2026-10-22T01:10:14.019Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631413.95795
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000003.jpg",
+      "at": "2026-10-22T01:10:14.303Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.272862
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000004.jpg",
+      "at": "2026-10-22T01:10:14.309Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.293784
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000005.jpg",
+      "at": "2026-10-22T01:10:14.315Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.300683
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000006.jpg",
+      "at": "2026-10-22T01:10:14.332Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.322516
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000007.jpg",
+      "at": "2026-10-22T01:10:14.343Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.336851
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000008.jpg",
+      "at": "2026-10-22T01:10:14.359Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.353484
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000009.jpg",
+      "at": "2026-10-22T01:10:14.375Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.367972
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000010.jpg",
+      "at": "2026-10-22T01:10:14.401Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.389104
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000011.jpg",
+      "at": "2026-10-22T01:10:14.416Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.403844
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000012.jpg",
+      "at": "2026-10-22T01:10:14.433Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.420493
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000013.jpg",
+      "at": "2026-10-22T01:10:14.450Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.436664
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000014.jpg",
+      "at": "2026-10-22T01:10:14.471Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.454486
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000015.jpg",
+      "at": "2026-10-22T01:10:14.482Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.473514
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000016.jpg",
+      "at": "2026-10-22T01:10:14.500Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.489269
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000017.jpg",
+      "at": "2026-10-22T01:10:14.522Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.504997
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000018.jpg",
+      "at": "2026-10-22T01:10:14.536Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.523584
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000019.jpg",
+      "at": "2026-10-22T01:10:14.555Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.537537
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000020.jpg",
+      "at": "2026-10-22T01:10:14.570Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.556728
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000021.jpg",
+      "at": "2026-10-22T01:10:14.576Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.568613
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000022.jpg",
+      "at": "2026-10-22T01:10:14.600Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.586691
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000023.jpg",
+      "at": "2026-10-22T01:10:14.604Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.597041
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000024.jpg",
+      "at": "2026-10-22T01:10:14.723Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.704128
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000025.jpg",
+      "at": "2026-10-22T01:10:14.821Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.78943
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631412477/frames/frames.json",
+      "path": "command-1792631412477/frames/000026.jpg",
+      "at": "2026-10-22T01:10:14.839Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631414.833273
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000000.jpg",
+      "at": "2026-10-22T01:10:37.416Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.397577
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000001.jpg",
+      "at": "2026-10-22T01:10:37.620Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.591723
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000002.jpg",
+      "at": "2026-10-22T01:10:37.622Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.603658
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000003.jpg",
+      "at": "2026-10-22T01:10:37.630Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.608176
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000004.jpg",
+      "at": "2026-10-22T01:10:37.641Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.63138
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000005.jpg",
+      "at": "2026-10-22T01:10:37.666Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.649564
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000006.jpg",
+      "at": "2026-10-22T01:10:37.683Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.665716
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000007.jpg",
+      "at": "2026-10-22T01:10:37.752Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.684218
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000008.jpg",
+      "at": "2026-10-22T01:10:37.779Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.703441
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000009.jpg",
+      "at": "2026-10-22T01:10:37.905Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.885088
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000010.jpg",
+      "at": "2026-10-22T01:10:37.916Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.894902
+      },
+      "matches": true
+    },
+    {
+      "manifest": "pm-nav-1792631435831/frames/frames.json",
+      "path": "pm-nav-1792631435831/frames/000011.jpg",
+      "at": "2026-10-22T01:10:37.934Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631437.918968
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000000.jpg",
+      "at": "2026-10-22T01:09:30.713Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631370.703213
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000001.jpg",
+      "at": "2026-10-22T01:09:30.781Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631370.755777
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000002.jpg",
+      "at": "2026-10-22T01:09:30.783Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631370.767988
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000003.jpg",
+      "at": "2026-10-22T01:09:31.003Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631370.974458
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000004.jpg",
+      "at": "2026-10-22T01:09:31.008Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631370.990261
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000005.jpg",
+      "at": "2026-10-22T01:09:31.023Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.012576
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000006.jpg",
+      "at": "2026-10-22T01:09:31.055Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.042574
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000007.jpg",
+      "at": "2026-10-22T01:09:31.061Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.054019
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000008.jpg",
+      "at": "2026-10-22T01:09:31.090Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.071875
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000009.jpg",
+      "at": "2026-10-22T01:09:31.103Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.091673
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000010.jpg",
+      "at": "2026-10-22T01:09:31.126Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.120953
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000011.jpg",
+      "at": "2026-10-22T01:09:31.144Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.138793
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000012.jpg",
+      "at": "2026-10-22T01:09:31.160Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.155239
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000013.jpg",
+      "at": "2026-10-22T01:09:31.175Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.169939
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000014.jpg",
+      "at": "2026-10-22T01:09:31.195Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.187756
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000015.jpg",
+      "at": "2026-10-22T01:09:31.209Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.204167
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000016.jpg",
+      "at": "2026-10-22T01:09:31.227Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.221155
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000017.jpg",
+      "at": "2026-10-22T01:09:31.243Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.237597
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000018.jpg",
+      "at": "2026-10-22T01:09:31.262Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.25461
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000019.jpg",
+      "at": "2026-10-22T01:09:31.273Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.266539
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000020.jpg",
+      "at": "2026-10-22T01:09:31.293Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.288152
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000021.jpg",
+      "at": "2026-10-22T01:09:31.315Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.305836
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000022.jpg",
+      "at": "2026-10-22T01:09:31.337Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.324322
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000023.jpg",
+      "at": "2026-10-22T01:09:31.350Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.341406
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000024.jpg",
+      "at": "2026-10-22T01:09:31.359Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.353868
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000025.jpg",
+      "at": "2026-10-22T01:09:31.378Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.371178
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000026.jpg",
+      "at": "2026-10-22T01:09:31.394Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.38744
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000027.jpg",
+      "at": "2026-10-22T01:09:31.416Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.407023
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000028.jpg",
+      "at": "2026-10-22T01:09:31.433Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.420833
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000029.jpg",
+      "at": "2026-10-22T01:09:31.449Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.437078
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000030.jpg",
+      "at": "2026-10-22T01:09:31.472Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.454928
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000031.jpg",
+      "at": "2026-10-22T01:09:31.487Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.472221
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000032.jpg",
+      "at": "2026-10-22T01:09:31.502Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.488193
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000033.jpg",
+      "at": "2026-10-22T01:09:31.519Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.504719
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000034.jpg",
+      "at": "2026-10-22T01:09:31.527Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.521402
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000035.jpg",
+      "at": "2026-10-22T01:09:31.543Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.537475
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000036.jpg",
+      "at": "2026-10-22T01:09:31.572Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.556678
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000037.jpg",
+      "at": "2026-10-22T01:09:31.588Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.575419
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000038.jpg",
+      "at": "2026-10-22T01:09:31.599Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.590178
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000039.jpg",
+      "at": "2026-10-22T01:09:31.610Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.603345
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000040.jpg",
+      "at": "2026-10-22T01:09:31.633Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.624044
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000041.jpg",
+      "at": "2026-10-22T01:09:31.652Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.637122
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000042.jpg",
+      "at": "2026-10-22T01:09:31.660Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.654074
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000043.jpg",
+      "at": "2026-10-22T01:09:31.674Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.666574
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000044.jpg",
+      "at": "2026-10-22T01:09:31.791Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.783165
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000045.jpg",
+      "at": "2026-10-22T01:09:31.867Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.856625
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631369987/frames/frames.json",
+      "path": "command-1792631369987/frames/000046.jpg",
+      "at": "2026-10-22T01:09:31.873Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631371.867227
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000000.jpg",
+      "at": "2026-10-22T01:10:20.330Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.317505
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000001.jpg",
+      "at": "2026-10-22T01:10:20.429Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.400524
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000002.jpg",
+      "at": "2026-10-22T01:10:20.441Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.406055
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000003.jpg",
+      "at": "2026-10-22T01:10:20.655Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.466547
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000004.jpg",
+      "at": "2026-10-22T01:10:20.676Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.600394
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000005.jpg",
+      "at": "2026-10-22T01:10:20.682Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.628106
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000006.jpg",
+      "at": "2026-10-22T01:10:20.722Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.704196
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000007.jpg",
+      "at": "2026-10-22T01:10:20.762Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.737018
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000008.jpg",
+      "at": "2026-10-22T01:10:20.773Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.756001
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000009.jpg",
+      "at": "2026-10-22T01:10:20.800Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.788949
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000010.jpg",
+      "at": "2026-10-22T01:10:20.824Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.80452
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000011.jpg",
+      "at": "2026-10-22T01:10:20.886Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.823283
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000012.jpg",
+      "at": "2026-10-22T01:10:20.897Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.861388
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000013.jpg",
+      "at": "2026-10-22T01:10:20.941Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.91951
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000014.jpg",
+      "at": "2026-10-22T01:10:20.962Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.936421
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000015.jpg",
+      "at": "2026-10-22T01:10:20.966Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.953188
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000016.jpg",
+      "at": "2026-10-22T01:10:21.014Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631420.982168
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000017.jpg",
+      "at": "2026-10-22T01:10:21.130Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631421.119916
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000018.jpg",
+      "at": "2026-10-22T01:10:21.209Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631421.202252
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631418625/frames/frames.json",
+      "path": "command-1792631418625/frames/000019.jpg",
+      "at": "2026-10-22T01:10:21.221Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631421.215061
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000000.jpg",
+      "at": "2026-10-22T01:11:22.947Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631482.928979
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000001.jpg",
+      "at": "2026-10-22T01:11:23.356Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631483.298651
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000002.jpg",
+      "at": "2026-10-22T01:11:23.367Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631483.295862
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000003.jpg",
+      "at": "2026-10-22T01:11:23.369Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631483.301669
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000004.jpg",
+      "at": "2026-10-22T01:11:23.428Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631483.413956
+      },
+      "matches": true
+    },
+    {
+      "manifest": "check-target-1792631481031/frames/frames.json",
+      "path": "check-target-1792631481031/frames/000005.jpg",
+      "at": "2026-10-22T01:11:23.854Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631483.598374
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000000.jpg",
+      "at": "2026-10-22T01:10:07.313Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.287057
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000001.jpg",
+      "at": "2026-10-22T01:10:07.420Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.396686
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000002.jpg",
+      "at": "2026-10-22T01:10:07.441Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.432721
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000003.jpg",
+      "at": "2026-10-22T01:10:07.665Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.606977
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000004.jpg",
+      "at": "2026-10-22T01:10:07.676Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.655124
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000005.jpg",
+      "at": "2026-10-22T01:10:07.725Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.696478
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000006.jpg",
+      "at": "2026-10-22T01:10:07.749Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.723959
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000007.jpg",
+      "at": "2026-10-22T01:10:07.774Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.754654
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000008.jpg",
+      "at": "2026-10-22T01:10:07.783Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.772972
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000009.jpg",
+      "at": "2026-10-22T01:10:07.798Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.787052
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000010.jpg",
+      "at": "2026-10-22T01:10:07.823Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.802672
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000011.jpg",
+      "at": "2026-10-22T01:10:07.859Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.820976
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000012.jpg",
+      "at": "2026-10-22T01:10:07.874Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.83921
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000013.jpg",
+      "at": "2026-10-22T01:10:07.900Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.885594
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000014.jpg",
+      "at": "2026-10-22T01:10:07.970Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.923939
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000015.jpg",
+      "at": "2026-10-22T01:10:08.017Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631407.992809
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000016.jpg",
+      "at": "2026-10-22T01:10:08.036Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.019952
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000017.jpg",
+      "at": "2026-10-22T01:10:08.058Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.050176
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000018.jpg",
+      "at": "2026-10-22T01:10:08.085Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.069772
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000019.jpg",
+      "at": "2026-10-22T01:10:08.093Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.085847
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000020.jpg",
+      "at": "2026-10-22T01:10:08.125Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.108126
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000021.jpg",
+      "at": "2026-10-22T01:10:08.133Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.123446
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000022.jpg",
+      "at": "2026-10-22T01:10:08.170Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.15315
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000023.jpg",
+      "at": "2026-10-22T01:10:08.183Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.172106
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000024.jpg",
+      "at": "2026-10-22T01:10:08.198Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.187138
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000025.jpg",
+      "at": "2026-10-22T01:10:08.218Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.204591
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000026.jpg",
+      "at": "2026-10-22T01:10:08.234Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.221797
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000027.jpg",
+      "at": "2026-10-22T01:10:08.248Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.236996
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000028.jpg",
+      "at": "2026-10-22T01:10:08.281Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.268451
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000029.jpg",
+      "at": "2026-10-22T01:10:08.422Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.389432
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000030.jpg",
+      "at": "2026-10-22T01:10:08.550Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.539517
+      },
+      "matches": true
+    },
+    {
+      "manifest": "command-1792631405292/frames/frames.json",
+      "path": "command-1792631405292/frames/000031.jpg",
+      "at": "2026-10-22T01:10:08.575Z",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792631408.56728
+      },
+      "matches": true
+    }
+  ],
+  "stepCount": 10,
+  "pairs": [
+    {
+      "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 真无材料复盘\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\"}",
+      "commandId": "cmd-2b310026-18",
+      "runTime": 1792631371791,
+      "doneTime": 1792631371832,
+      "kind": "success",
+      "text": "[pm:summary]任务已新增｜5｜t-0008 QA 真无材料复盘\n[pm:summary]根层级\n[pm:detail]\n```\n任务 ID：t-0008\nWBS：5\n项目 ID：p-0001\n父任务：无\n标题：QA 真无材料复盘\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：2026-10-22\n截止日期：2026-10-23\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:09:31.815Z\n更新时间：2026-10-22T01:09:31.815Z\n```",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm task update t-0008 {\"status\":\"done\"}",
+      "commandId": "cmd-2b310026-19",
+      "runTime": 1792631408472,
+      "doneTime": 1792631408518,
+      "kind": "success",
+      "text": "[pm:summary]任务已更新｜t-0008 QA 真无材料复盘\n[pm:summary]已修改：状态：未开始 → 已完成\n[pm:detail]\n```\n任务 ID：t-0008\nWBS：5\n项目 ID：p-0001\n父任务：无\n标题：QA 真无材料复盘\n说明：未填写\n负责人：未填写\n状态：已完成\n优先级：P1\n开始日期：2026-10-22\n截止日期：2026-10-23\n完成日期：2026-10-22\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:09:31.815Z\n更新时间：2026-10-22T01:10:08.482Z\n```",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm reflect t-0008",
+      "commandId": "cmd-2b310026-20",
+      "runTime": 1792631411631,
+      "doneTime": 1792631411643,
+      "kind": "success",
+      "text": "复盘 ID：ref-mviugfb6-ybnnwx\n任务 ID：t-0008\n项目 ID：p-0001\n状态：草稿\n标题：QA 真无材料复盘 · 完成即时复盘（草稿）\n生成时刻：2026-10-22T01:10:08.514Z\n\n句级内容：\n· [已核] 完成时刻 2026-10-22\n\n留白（待补，不编造）：\n· 待补：交付验收材料与证据链接\n\n```json\n{\n  \"id\": \"ref-mviugfb6-ybnnwx\",\n  \"projectId\": \"p-0001\",\n  \"taskId\": \"t-0008\",\n  \"status\": \"draft\",\n  \"sourceEvent\": \"task-done\",\n  \"draft\": {\n    \"title\": \"QA 真无材料复盘 · 完成即时复盘（草稿）\",\n    \"at\": \"2026-10-22T01:10:08.514Z\",\n    \"lines\": [\n      {\n        \"text\": \"完成时刻 2026-10-22\",\n        \"mark\": \"known\"\n      }\n    ],\n    \"gaps\": [\n      \"待补：交付验收材料与证据链接\"\n    ]\n  },\n  \"createdAt\": \"2026-10-22T01:10:08.514Z\",\n  \"updatedAt\": \"2026-10-22T01:10:08.514Z\"\n}\n```",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm task update t-0008 {\"status\":\"done\"}",
+      "commandId": "cmd-2b310026-21",
+      "runTime": 1792631414741,
+      "doneTime": 1792631414770,
+      "kind": "success",
+      "text": "[pm:summary]任务已更新｜t-0008 QA 真无材料复盘\n[pm:detail]\n```\n任务 ID：t-0008\nWBS：5\n项目 ID：p-0001\n父任务：无\n标题：QA 真无材料复盘\n说明：未填写\n负责人：未填写\n状态：已完成\n优先级：P1\n开始日期：2026-10-22\n截止日期：2026-10-23\n完成日期：2026-10-22\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:09:31.815Z\n更新时间：2026-10-22T01:10:14.743Z\n```",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm reflect t-0008",
+      "commandId": "cmd-2b310026-22",
+      "runTime": 1792631417346,
+      "doneTime": 1792631417356,
+      "kind": "success",
+      "text": "复盘 ID：ref-mviugfb6-ybnnwx\n任务 ID：t-0008\n项目 ID：p-0001\n状态：草稿\n标题：QA 真无材料复盘 · 完成即时复盘（草稿）\n生成时刻：2026-10-22T01:10:08.514Z\n\n句级内容：\n· [已核] 完成时刻 2026-10-22\n\n留白（待补，不编造）：\n· 待补：交付验收材料与证据链接\n\n```json\n{\n  \"id\": \"ref-mviugfb6-ybnnwx\",\n  \"projectId\": \"p-0001\",\n  \"taskId\": \"t-0008\",\n  \"status\": \"draft\",\n  \"sourceEvent\": \"task-done\",\n  \"draft\": {\n    \"title\": \"QA 真无材料复盘 · 完成即时复盘（草稿）\",\n    \"at\": \"2026-10-22T01:10:08.514Z\",\n    \"lines\": [\n      {\n        \"text\": \"完成时刻 2026-10-22\",\n        \"mark\": \"known\"\n      }\n    ],\n    \"gaps\": [\n      \"待补：交付验收材料与证据链接\"\n    ]\n  },\n  \"createdAt\": \"2026-10-22T01:10:08.514Z\",\n  \"updatedAt\": \"2026-10-22T01:10:08.514Z\"\n}\n```",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm check p-0001",
+      "commandId": "cmd-2b310026-23",
+      "runTime": 1792631421166,
+      "doneTime": 1792631421173,
+      "kind": "success",
+      "text": "交付检查（项目 p-0001）：命中 1 条提示（只读，不下完成裁决）。\n\n```json\n[\n  {\n    \"rule\": \"done-missing-materials\",\n    \"ruleLabel\": \"完成但缺交付/证据材料\",\n    \"taskId\": \"t-0008\",\n    \"title\": \"QA 真无材料复盘\",\n    \"reason\": \"状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\",\n    \"suggestion\": \"缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\"\n  }\n]\n```\n\n逐条：\n· [完成但缺交付/证据材料] t-0008｜QA 真无材料复盘：状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。 建议：缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n\n注：未覆盖≠未完成；以上仅为缺口提示，最终验收由人判断。",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    },
+    {
+      "line": "/pm web snapshot",
+      "commandId": "cmd-2b310026-24",
+      "runTime": 1792631437630,
+      "doneTime": 1792631437673,
+      "kind": "success",
+      "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}",
+      "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+      "valid": true
+    }
+  ],
+  "steps": [
+    {
+      "name": "host-open-1792631351569",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631369987",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/tasks/t-0008.json": "a796c184607bf649f1cca776f9c4934c141d7810956e0ae6411bfedd1f37c62e"
+          },
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631405292",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/reflections/ref-mviugfb6-ybnnwx.json": "e74006988d2e110eb48b9b80fb11e6b77b1928c449472fb4d7dfebbf92d1ebb1"
+          },
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0008.json": {
+              "before": "a796c184607bf649f1cca776f9c4934c141d7810956e0ae6411bfedd1f37c62e",
+              "after": "5a50f21c92b1a6adfb307f58f956634bba2eef6ea875bb19b6be45228682c073"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631409390",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631412477",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0008.json": {
+              "before": "5a50f21c92b1a6adfb307f58f956634bba2eef6ea875bb19b6be45228682c073",
+              "after": "57591574dc6f2ecedbf488363ac664f858547115d0ceb9559c6cf0230a9c56c2"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631415555",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "command-1792631418625",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "pm-nav-1792631435831",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "check-target-1792631481031",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    },
+    {
+      "name": "task-close-1792631498578",
+      "exit": 0,
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "rawMismatches": [],
+      "observationMatches": true
+    }
+  ],
+  "bridges": [
+    {
+      "beforeStep": "host-open-1792631351569",
+      "afterStep": "command-1792631369987",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631369987",
+      "afterStep": "command-1792631405292",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "f4f6464e9c6bec96a5565dafd8fd3c7f8e7376b4b85e0d7bcd7af2cdb11a69bd",
+              "after": "9fa672bd9a9b9eaf88004d4e8d8745e2364ef7713c87bafd9e6cb194a9cc6921"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631405292",
+      "afterStep": "command-1792631409390",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631409390",
+      "afterStep": "command-1792631412477",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "9fa672bd9a9b9eaf88004d4e8d8745e2364ef7713c87bafd9e6cb194a9cc6921",
+              "after": "142f11c0c2d7f8c740de0701921fc48a04a3a2bf895fb6de99ca3d1269d8ce32"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631412477",
+      "afterStep": "command-1792631415555",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631415555",
+      "afterStep": "command-1792631418625",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "142f11c0c2d7f8c740de0701921fc48a04a3a2bf895fb6de99ca3d1269d8ce32",
+              "after": "bcfd3f62767bb9f94c25d8c2b3d54aa4f8c9ea04d036bbede4eb35b5bb5527bc"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "command-1792631418625",
+      "afterStep": "pm-nav-1792631435831",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "bcfd3f62767bb9f94c25d8c2b3d54aa4f8c9ea04d036bbede4eb35b5bb5527bc",
+              "after": "1936bc068978d4e9b7ba0782325154c0310748c08bfe3e0c578160d39231e177"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "pm-nav-1792631435831",
+      "afterStep": "check-target-1792631481031",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "1936bc068978d4e9b7ba0782325154c0310748c08bfe3e0c578160d39231e177",
+              "after": "06c705df995e9c3471817f67ef97b6dd54cde7f385dce245ac3b8f25895027a8"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    },
+    {
+      "beforeStep": "check-target-1792631481031",
+      "afterStep": "task-close-1792631498578",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      }
+    }
+  ],
+  "task": {
+    "id": "t-0008",
+    "projectId": "p-0001",
+    "parentId": null,
+    "title": "QA 真无材料复盘",
+    "description": "",
+    "assignee": "",
+    "status": "todo",
+    "priority": "P1",
+    "startDate": "2026-10-22",
+    "dueDate": "2026-10-23",
+    "progress": 0,
+    "milestoneId": null,
+    "code": "5",
+    "order": 5,
+    "createdAt": "2026-10-22T01:09:31.815Z",
+    "updatedAt": "2026-10-22T01:09:31.815Z"
+  },
+  "draft": {
+    "id": "ref-mviugfb6-ybnnwx",
+    "projectId": "p-0001",
+    "taskId": "t-0008",
+    "status": "draft",
+    "sourceEvent": "task-done",
+    "draft": {
+      "title": "QA 真无材料复盘 · 完成即时复盘（草稿）",
+      "at": "2026-10-22T01:10:08.514Z",
+      "lines": [
+        {
+          "text": "完成时刻 2026-10-22",
+          "mark": "known"
+        }
+      ],
+      "gaps": [
+        "待补：交付验收材料与证据链接"
+      ]
+    },
+    "createdAt": "2026-10-22T01:10:08.514Z",
+    "updatedAt": "2026-10-22T01:10:08.514Z"
+  },
+  "findings": [
+    {
+      "rule": "done-missing-materials",
+      "ruleLabel": "完成但缺交付/证据材料",
+      "taskId": "t-0008",
+      "title": "QA 真无材料复盘",
+      "reason": "状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。",
+      "suggestion": "缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。"
+    }
+  ],
+  "visual": [
+    {
+      "path": "command-1792631369987/before-submit.png",
+      "observation": "Viewed: actual add command, no handwritten material fields.",
+      "bytes": 109724,
+      "sha256": "97ea7290fb67aca817ad27939693446dc70a34fa9d0cff379c31a8aabbaaeaab",
+      "mtimeMs": 1792631371761.3833
+    },
+    {
+      "path": "command-1792631405292/before-submit.png",
+      "observation": "Viewed: actual t8 done input.",
+      "bytes": 97839,
+      "sha256": "b119240517ce17dcea8ea052fce95cade5584aae33e4e0d36c424e933ac89ea8",
+      "mtimeMs": 1792631408372.726
+    },
+    {
+      "path": "command-1792631409390/actual.png",
+      "observation": "Viewed: empty hero after reflect; no reflection output claimed visible.",
+      "bytes": 102538,
+      "sha256": "b4c73b8c16b81005c84cd504f9fd542665f23ad65232987a88fb40464eafe265",
+      "mtimeMs": 1792631411784.063
+    },
+    {
+      "path": "pm-nav-1792631435831/actual.png",
+      "observation": "Viewed: actual check card, one t8 finding, human-decision wording.",
+      "bytes": 387919,
+      "sha256": "5be517784c2c3a84ead45e5b78b43f0900bd135cbc1db5a316054d57170cd21e",
+      "mtimeMs": 1792631438133.8374
+    },
+    {
+      "path": "check-target-1792631481031/actual.png",
+      "observation": "Viewed: same-title done drawer and original dates/progress.",
+      "bytes": 306525,
+      "sha256": "19b421a94e42a419226de80860990066ccd5413f63c5a28faf673edc33783891",
+      "mtimeMs": 1792631483706.1726
+    },
+    {
+      "path": "task-close-1792631498578/actual.png",
+      "observation": "Viewed: drawer gone, original one-finding check card remains.",
+      "bytes": 387919,
+      "sha256": "5be517784c2c3a84ead45e5b78b43f0900bd135cbc1db5a316054d57170cd21e",
+      "mtimeMs": 1792631499902.3687
+    },
+    {
+      "path": "check-target-1792631481031/frames/000000.jpg",
+      "observation": "Viewed: compositor before click, same actual check card.",
+      "bytes": 105418,
+      "sha256": "315a485af404847e636f8d7f8e94721b01f8dd63a80a0bf375cc5ad330b06f98",
+      "mtimeMs": 1792631482947.337
+    },
+    {
+      "path": "check-target-1792631481031/frames/000004.jpg",
+      "observation": "Viewed: compositor after click, same-title done drawer.",
+      "bytes": 78510,
+      "sha256": "f8f3e9ccb7b5072a9abd487bfc07fbff6b280033fde52708660b269e252ef93c",
+      "mtimeMs": 1792631483424.1956
+    },
+    {
+      "path": "task-close-1792631498578/frames/000004.jpg",
+      "observation": "Viewed: compositor after cancel, original card restored.",
+      "bytes": 105418,
+      "sha256": "315a485af404847e636f8d7f8e94721b01f8dd63a80a0bf375cc5ad330b06f98",
+      "mtimeMs": 1792631499732.937
+    }
+  ],
+  "protectedCount": 10139,
+  "drift": {
+    "added": {},
+    "removed": {},
+    "changed": {}
+  },
+  "boundedVerdict": {
+    "noMaterialGapAndRepeatReflection": "PASS (only this new t8 slice)",
+    "singleCheckReadonlyReachableTarget": "PASS (only this one finding)",
+    "fullP0007": "NOT_PASSED",
+    "fullP0008": "NOT_PASSED",
+    "fileCountDefect": "prior FAIL retained; not rerun",
+    "release": "NOT_PASSED"
+  },
+  "excluded": "No final/edit/restart/failure-hook/five-rule or viewport matrix claims; no product execution or Main working-source freeze"
+}

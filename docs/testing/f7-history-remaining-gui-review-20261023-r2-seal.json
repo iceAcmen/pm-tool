@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-22T22:23:30.069Z",
+  "status": "SEALED_STOP",
+  "declaredInputCount": 250,
+  "drift": [],
+  "formatProblems": [],
+  "owned": {
+    "docs/testing/f7-history-remaining-gui-review-20261023-r2-reader.mjs": {
+      "bytes": 12351,
+      "sha256": "3ab8388a55ee4205b37df670d5dc611c9d8500d32878739c8c86190b72133417"
+    },
+    "docs/testing/f7-history-remaining-gui-review-20261023-r2-audit.json": {
+      "bytes": 175094,
+      "sha256": "35ff6a68d890a7f087e3df4ee2b803499a89e7ec12060899f432614e80a8828e"
+    },
+    "docs/testing/f7-history-remaining-gui-review-20261023-r2-audit-r2.json": {
+      "bytes": 181983,
+      "sha256": "38b66858fe019df3c97a2d53c45cf38b328ac56b027a9de355c1a61e641d590a"
+    },
+    "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md": {
+      "bytes": 12429,
+      "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182"
+    },
+    "docs/testing/f7-history-remaining-gui-review-20261023-r2-verdict.json": {
+      "bytes": 6908,
+      "sha256": "c2bc4960f5882c82dbc111a0fc0423f5ed56cefbd766c5e7b16e21314f94a86d"
+    }
+  },
+  "verdictAuthority": "独立专家verdict；seal仅签输入未漂移及自有输出",
+  "commands": [
+    "node --check 本reader: exit0",
+    "首次capture: exit1，错用旧A0索引；第二次capture: exit0，root零项核对无效，原audit保留",
+    "node 本reader capture-r2: exit0，11份三项root逐值全等",
+    "Swift原帧联系表初次终码未收，repeat: exit0，不覆盖首输出",
+    "node 本reader seal: exit0"
+  ],
+  "resources": {
+    "guiOwned": false,
+    "builderOwned": false,
+    "serviceOwned": false,
+    "childProcessesPending": false,
+    "stop": true
+  }
+}

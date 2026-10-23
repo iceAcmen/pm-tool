@@ -1,0 +1,14 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 CSV：预览零写，确认原内容末尾confirm，落库两层树并重开读回字段
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'line')[39m
+[36m [2m❯[22m src/client/views/tasks-import-confirm.test.tsx:[2m106:21[22m[39m
+    [90m104| [39m  [34mexpect[39m(f[33m.[39mcalls[[34m0[39m][33m.[39mline)[33m.[39m[34mtoBe[39m([32m`task import-content [39m[36m${[39mf[33m.[39mproject[33m.[39mid[36m}[39m[32m a9[39m…
+    [90m105| [39m  [35mawait[39m [34mconfirm[39m(f[33m.[39mmounted)
+    [90m106| [39m  [34mexpect[39m(f[33m.[39mcalls[[34m1[39m][33m.[39mline)[33m.[39m[34mtoBe[39m([32m`[39m[36m${[39mf[33m.[39mcalls[[34m0[39m][33m.[39mline[36m}[39m[32m confirm`[39m)
+    [90m   | [39m                    [31m^[39m
+    [90m107| [39m  [34mexpect[39m([34mlistTasks[39m(f[33m.[39mdomain[33m,[39m f[33m.[39mproject[33m.[39mid))[33m.[39m[34mtoHaveLength[39m([34m2[39m)
+    [90m108| [39m  [34mexpect[39m(f[33m.[39monSaved)[33m.[39m[34mtoHaveBeenCalledTimes[39m([34m1[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

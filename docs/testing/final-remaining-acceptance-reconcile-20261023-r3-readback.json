@@ -1,0 +1,93 @@
+{
+  "at": "2026-10-23T01:10:19.516Z",
+  "pid": 41549,
+  "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "seal": {
+    "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-seal.json",
+    "bytes": 18448,
+    "sha256": "38e5f090186581107d843cd517f7491c2049f17c3f298f3e91a7a00fa8ea2107"
+  },
+  "actualSealOuterReceipt": {
+    "schema": "pmtool-final-reconcile-r3-observed-seal-outer-v1",
+    "date": "2026-10-23",
+    "role": "独立总范围/继承对账专家",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-reader.mjs",
+      "seal"
+    ],
+    "status": "exited",
+    "exitCode": 0,
+    "actualToolWallSeconds": 1.0321,
+    "actualToolStatus": "Process exited with code 0",
+    "pid": 41405,
+    "pidBoundary": "来自本次实际stdout。工具未给独立parent/child PID，不补造。",
+    "observedAfterToolReturn": true,
+    "outputComplete": true,
+    "stdout": "{\"mode\":\"seal\",\"pid\":41405,\"checks\":{\"at\":\"2026-10-23T01:09:51.271Z\",\"pid\":41405,\"checkedLinks\":2399,\"missingLinks\":[],\"trailingWhitespace\":[],\"inputDrift\":[],\"inputCount\":77,\"allUniqueIds\":1489,\"newProductPass\":false},\"state\":\"SEALED_WAIT_ACTUAL_OUTER\"}\n",
+    "stderr": "",
+    "sealPath": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-seal.json",
+    "sealBytes": 18448,
+    "sealSha256": "38e5f090186581107d843cd517f7491c2049f17c3f298f3e91a7a00fa8ea2107",
+    "artifacts": 12,
+    "inputs": 77,
+    "origin": "exec_command返回真实exit0后，另一次纯fs读取seal本体指纹，再新增本收据；不是seal预填预计终码。",
+    "priorOwnCommands": {
+      "generate": {
+        "actualExitCode": 0,
+        "pid": 38934
+      },
+      "generateR2": {
+        "actualExitCode": 0,
+        "pid": 39794
+      },
+      "generateR3": {
+        "actualExitCode": 0,
+        "pid": 40730
+      },
+      "syntaxFirst": {
+        "actualExitCode": 1,
+        "error": "SyntaxError: Unexpected token '||'",
+        "correction": "仅自有reader的??与||表达式加括号，不改产品或oracle。"
+      },
+      "syntaxCorrected": {
+        "actualExitCode": 0
+      },
+      "checkFirst": {
+        "actualExitCode": 1,
+        "error": "四个尚未生成的自身seal/readback文件链接不存在",
+        "correction": "报告对这四个将产文件改为同前缀名称；checker不放宽，不预造文件。"
+      },
+      "checkFinal": {
+        "actualExitCode": 0,
+        "pid": 41396,
+        "checkedLinks": 2399,
+        "missingLinks": [],
+        "trailingWhitespace": [],
+        "inputDrift": []
+      }
+    },
+    "prohibitedExecutions": {
+      "product": 0,
+      "tests": 0,
+      "mainScripts": 0,
+      "git": 0,
+      "browserNetworkPortDesktop": 0,
+      "runtimePrivateProfileFormalDataReads": 0
+    },
+    "parentPass": false,
+    "commitAdmission": false,
+    "excludedFromSeal": true,
+    "exclusionReason": "seal自身及其后实际收据不循环自指纹。",
+    "release": "待实际readback及其工具收据后，仅本子单STOP/released；Main父任务继续。"
+  },
+  "artifacts": 12,
+  "inputCount": 77,
+  "artifactAndInputDrift": [],
+  "parentPass": false,
+  "commitAdmission": false,
+  "released": true,
+  "state": "STOP/released",
+  "restriction": "只释放本独立对账子单；Main父任务及在途原专家继续。"
+}

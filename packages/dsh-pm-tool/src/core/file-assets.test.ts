@@ -3,12 +3,14 @@
  * 覆盖：扩展名白名单、声明类型一致、magic sniff、文本安全、大小上限、内容寻址幂等、root 越界/symlink 拒绝。
  */
 import { describe, expect, it } from 'vitest'
-import { mkdtempSync, mkdirSync, symlinkSync, existsSync } from 'node:fs'
+import { mkdtempSync, mkdirSync, symlinkSync, existsSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import {
   validateUploadedFile,
   storeAssetBuffer,
+  readAssetBuffer,
+  contentAddressedRelPath,
   resolveWithinRoot,
   FileAssetRejectedError,
   FILE_ASSET_DEFAULTS,
@@ -81,6 +83,41 @@ describe('storeAssetBuffer 内容寻址幂等 + root 约束', () => {
     mkdirSync(resolve(root, 'ln'), { recursive: true })
     symlinkSync(outside, resolve(root, 'ln/evil'), 'dir')
     await expect(resolveWithinRoot(root, 'ln/evil')).rejects.toThrow(FileAssetRejectedError)
+  })
+
+  it('MFR-F01：拒绝内容寻址祖先symlink，不能写出根；合法重复字节仍可读', async () => {
+    const isolated = mkdtempSync(join(tmpdir(), 'pm-asset-ancestor-'))
+    const outside = mkdtempSync(join(tmpdir(), 'pm-asset-ancestor-out-'))
+    const v = validateUploadedFile({ originalName: 'ancestor.md', bytes: Buffer.from('# ancestor\n') })
+    symlinkSync(outside, join(isolated, v.sha256.slice(0, 2)), 'dir')
+    await expect(storeAssetBuffer(isolated, v)).rejects.toThrow(FileAssetRejectedError)
+    expect(existsSync(join(outside, `${v.sha256}.md`))).toBe(false)
+    await expect(readAssetBuffer(isolated, contentAddressedRelPath(v))).rejects.toThrow(FileAssetRejectedError)
+    const legal = mkdtempSync(join(tmpdir(), 'pm-asset-ancestor-legal-'))
+    const stored = await storeAssetBuffer(legal, v)
+    expect(await readAssetBuffer(legal, stored.relPath)).toEqual(v.bytes)
+    expect(readFileSync(join(legal, stored.relPath))).toEqual(v.bytes)
+    expect((await storeAssetBuffer(legal, v)).createdFile).toBe(false)
+  })
+
+  it('拒绝root自身symlink及嵌套祖先symlink，合法/tmp根父别名可用', async () => {
+    const base = mkdtempSync(join(tmpdir(), 'pm-asset-root-link-'))
+    const outside = mkdtempSync(join(tmpdir(), 'pm-asset-root-out-'))
+    symlinkSync(outside, join(base, 'root'), 'dir')
+    await expect(resolveWithinRoot(join(base, 'root'), 'file.md')).rejects.toThrow(FileAssetRejectedError)
+    mkdirSync(join(base, 'nested'))
+    symlinkSync(outside, join(base, 'nested', 'link'), 'dir')
+    await expect(resolveWithinRoot(base, 'nested/link/file.md')).rejects.toThrow(FileAssetRejectedError)
+    expect(await resolveWithinRoot(base, 'new/sub/file.md')).toBe(resolve(base, 'new/sub/file.md'))
+  })
+
+  it('拒绝配置根祖先symlink，包括根尚不存在的分支', async () => {
+    const base = mkdtempSync(join(tmpdir(), 'pm-asset-config-ancestor-'))
+    const outside = mkdtempSync(join(tmpdir(), 'pm-asset-config-out-'))
+    mkdirSync(join(outside, 'existing'))
+    symlinkSync(outside, join(base, 'link'), 'dir')
+    await expect(resolveWithinRoot(join(base, 'link', 'existing'), 'file.md')).rejects.toThrow(FileAssetRejectedError)
+    await expect(resolveWithinRoot(join(base, 'link', 'missing'), 'file.md')).rejects.toThrow(FileAssetRejectedError)
   })
 })
 

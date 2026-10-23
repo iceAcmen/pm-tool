@@ -1,0 +1,1210 @@
+{
+  "inputs": [
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/complete-inputs.json",
+      "bytes": 75604,
+      "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedSuccessor114R1/complete-inputs.json",
+      "bytes": 74962,
+      "sha256": "f7d918b92b7fa65551d5ba2072b04a8e3273950deeca66dea902790bdcf9871a"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/source-after.json",
+      "bytes": 52242,
+      "sha256": "4e3e6fc713535513c2007c68007a7eff5942e80f67d5a09e242616f4d7821adb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/ask.ts",
+      "bytes": 34931,
+      "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "bytes": 10855,
+      "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/capture.ts",
+      "bytes": 17175,
+      "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/session.ts",
+      "bytes": 4187,
+      "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/metric.ts",
+      "bytes": 1908,
+      "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/metric.ts",
+      "bytes": 4385,
+      "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+      "bytes": 7461,
+      "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task.ts",
+      "bytes": 13669,
+      "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/tasks.ts",
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/check.ts",
+      "bytes": 4051,
+      "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/check.ts",
+      "bytes": 6393,
+      "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/queue.ts",
+      "bytes": 7363,
+      "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/queue.ts",
+      "bytes": 13563,
+      "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/export.ts",
+      "bytes": 9344,
+      "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/export.ts",
+      "bytes": 36942,
+      "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/okr.ts",
+      "bytes": 13750,
+      "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/okr.ts",
+      "bytes": 22248,
+      "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/lesson.ts",
+      "bytes": 6088,
+      "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/lessons.ts",
+      "bytes": 6780,
+      "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/archive.ts",
+      "bytes": 2755,
+      "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/archive.ts",
+      "bytes": 9339,
+      "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/review.ts",
+      "bytes": 3104,
+      "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/review-materials.ts",
+      "bytes": 9381,
+      "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/habit.ts",
+      "bytes": 14064,
+      "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/habits.ts",
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/cycle-hooks.ts",
+      "bytes": 1384,
+      "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/storage.ts",
+      "bytes": 8840,
+      "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/capture.ts",
+      "bytes": 12990,
+      "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/session-bind.ts",
+      "bytes": 5905,
+      "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance.ts",
+      "bytes": 17058,
+      "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-view.ts",
+      "bytes": 6377,
+      "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/reflect.ts",
+      "bytes": 17084,
+      "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/result-card.tsx",
+      "bytes": 3870,
+      "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+      "bytes": 5059,
+      "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habits.tsx",
+      "bytes": 15535,
+      "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habit-model.ts",
+      "bytes": 4956,
+      "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habit-form.tsx",
+      "bytes": 4854,
+      "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/okrs.tsx",
+      "bytes": 9854,
+      "sha256": "122516a490b80da4a2fc9da0da66fb1283062efb3c54827c8a8399e3a28bc128"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/okr-model.ts",
+      "bytes": 6463,
+      "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/board/queue-aggregate.ts",
+      "bytes": 7112,
+      "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/board/queue-card.tsx",
+      "bytes": 9699,
+      "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+      "bytes": 45837,
+      "sha256": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.css",
+      "bytes": 326019,
+      "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/form-validation.ts",
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    }
+  ],
+  "files": [
+    {
+      "name": "commands/ask.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/ask.ts",
+        "bytes": 34931,
+        "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+      },
+      "combined": {
+        "bytes": 34931,
+        "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+      },
+      "old114": {
+        "bytes": 34931,
+        "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+      },
+      "gg": {
+        "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+        "bytes": 34928
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/provenance-store.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+        "bytes": 10855,
+        "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+      },
+      "combined": {
+        "bytes": 10855,
+        "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+      },
+      "old114": {
+        "bytes": 10855,
+        "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+      },
+      "gg": {
+        "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+        "bytes": 10855
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/capture.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/capture.ts",
+        "bytes": 17175,
+        "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6"
+      },
+      "combined": {
+        "bytes": 17175,
+        "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6"
+      },
+      "old114": {
+        "bytes": 17175,
+        "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6"
+      },
+      "gg": {
+        "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6",
+        "bytes": 17175
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/session.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/session.ts",
+        "bytes": 4187,
+        "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7"
+      },
+      "combined": {
+        "bytes": 4187,
+        "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7"
+      },
+      "old114": {
+        "bytes": 4187,
+        "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7"
+      },
+      "gg": {
+        "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7",
+        "bytes": 4187
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/metric.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/metric.ts",
+        "bytes": 1908,
+        "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488"
+      },
+      "combined": {
+        "bytes": 1908,
+        "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488"
+      },
+      "old114": {
+        "bytes": 1908,
+        "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488"
+      },
+      "gg": {
+        "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488",
+        "bytes": 1908
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/metric.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/metric.ts",
+        "bytes": 4385,
+        "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+      },
+      "combined": {
+        "bytes": 4385,
+        "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+      },
+      "old114": {
+        "bytes": 4385,
+        "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+      },
+      "gg": {
+        "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b",
+        "bytes": 4385
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/reflect.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+        "bytes": 7461,
+        "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+      },
+      "combined": {
+        "bytes": 7461,
+        "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+      },
+      "old114": {
+        "bytes": 6015,
+        "sha256": "69be050f31870274fcb831e935dd791f1903b031f20b1d0917c2665bda62f07c"
+      },
+      "gg": {
+        "sha256": "69be050f31870274fcb831e935dd791f1903b031f20b1d0917c2665bda62f07c",
+        "bytes": 6015
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": false
+    },
+    {
+      "name": "core/task.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/task.ts",
+        "bytes": 13669,
+        "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+      },
+      "combined": {
+        "bytes": 13669,
+        "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+      },
+      "old114": {
+        "bytes": 13669,
+        "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+      },
+      "gg": {
+        "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+        "bytes": 13669
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/tasks.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/tasks.ts",
+        "bytes": 33404,
+        "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+      },
+      "combined": {
+        "bytes": 33404,
+        "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+      },
+      "old114": {
+        "bytes": 33404,
+        "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+      },
+      "gg": {
+        "sha256": "c3e0d8a379b5dbbe41331ba42df265711c90a12dbcb8a47955ee70c4d4723fe3",
+        "bytes": 33273
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/check.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/check.ts",
+        "bytes": 4051,
+        "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578"
+      },
+      "combined": {
+        "bytes": 4051,
+        "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578"
+      },
+      "old114": {
+        "bytes": 4051,
+        "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578"
+      },
+      "gg": {
+        "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578",
+        "bytes": 4051
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/check.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/check.ts",
+        "bytes": 6393,
+        "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+      },
+      "combined": {
+        "bytes": 6393,
+        "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+      },
+      "old114": {
+        "bytes": 6393,
+        "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+      },
+      "gg": {
+        "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e",
+        "bytes": 6393
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/queue.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/queue.ts",
+        "bytes": 7363,
+        "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d"
+      },
+      "combined": {
+        "bytes": 7363,
+        "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d"
+      },
+      "old114": {
+        "bytes": 7363,
+        "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d"
+      },
+      "gg": {
+        "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d",
+        "bytes": 7363
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/queue.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/queue.ts",
+        "bytes": 13563,
+        "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+      },
+      "combined": {
+        "bytes": 13563,
+        "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+      },
+      "old114": {
+        "bytes": 13563,
+        "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+      },
+      "gg": {
+        "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144",
+        "bytes": 13563
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/export.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/export.ts",
+        "bytes": 9344,
+        "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f"
+      },
+      "combined": {
+        "bytes": 9344,
+        "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f"
+      },
+      "old114": {
+        "bytes": 9344,
+        "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f"
+      },
+      "gg": {
+        "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f",
+        "bytes": 9344
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/export.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/export.ts",
+        "bytes": 36942,
+        "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+      },
+      "combined": {
+        "bytes": 36942,
+        "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+      },
+      "old114": {
+        "bytes": 36942,
+        "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+      },
+      "gg": {
+        "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d",
+        "bytes": 36942
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/okr.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/okr.ts",
+        "bytes": 13750,
+        "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9"
+      },
+      "combined": {
+        "bytes": 13750,
+        "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9"
+      },
+      "old114": {
+        "bytes": 13750,
+        "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9"
+      },
+      "gg": {
+        "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9",
+        "bytes": 13750
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/okr.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/okr.ts",
+        "bytes": 22248,
+        "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+      },
+      "combined": {
+        "bytes": 22248,
+        "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+      },
+      "old114": {
+        "bytes": 22248,
+        "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+      },
+      "gg": {
+        "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d",
+        "bytes": 22248
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/lesson.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/lesson.ts",
+        "bytes": 6088,
+        "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343"
+      },
+      "combined": {
+        "bytes": 6088,
+        "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343"
+      },
+      "old114": {
+        "bytes": 6088,
+        "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343"
+      },
+      "gg": {
+        "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343",
+        "bytes": 6088
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/lessons.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/lessons.ts",
+        "bytes": 6780,
+        "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+      },
+      "combined": {
+        "bytes": 6780,
+        "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+      },
+      "old114": {
+        "bytes": 6780,
+        "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+      },
+      "gg": {
+        "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc",
+        "bytes": 6780
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/archive.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/archive.ts",
+        "bytes": 2755,
+        "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+      },
+      "combined": {
+        "bytes": 2755,
+        "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+      },
+      "old114": {
+        "bytes": 2755,
+        "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+      },
+      "gg": {
+        "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa",
+        "bytes": 2755
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/archive.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/archive.ts",
+        "bytes": 9339,
+        "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+      },
+      "combined": {
+        "bytes": 9339,
+        "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+      },
+      "old114": {
+        "bytes": 9319,
+        "sha256": "097f1860da2ee67a29b59f7f1047743e538acfab8856b93b344afb9c88badd55"
+      },
+      "gg": {
+        "sha256": "097f1860da2ee67a29b59f7f1047743e538acfab8856b93b344afb9c88badd55",
+        "bytes": 9319
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": false
+    },
+    {
+      "name": "commands/review.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/review.ts",
+        "bytes": 3104,
+        "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+      },
+      "combined": {
+        "bytes": 3104,
+        "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+      },
+      "old114": {
+        "bytes": 3104,
+        "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+      },
+      "gg": {
+        "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21",
+        "bytes": 3104
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/review-materials.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/review-materials.ts",
+        "bytes": 9381,
+        "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+      },
+      "combined": {
+        "bytes": 9381,
+        "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+      },
+      "old114": {
+        "bytes": 9381,
+        "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+      },
+      "gg": {
+        "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4",
+        "bytes": 9381
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "commands/habit.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/commands/habit.ts",
+        "bytes": 14064,
+        "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+      },
+      "combined": {
+        "bytes": 14064,
+        "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+      },
+      "old114": {
+        "bytes": 14064,
+        "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+      },
+      "gg": {
+        "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e",
+        "bytes": 14064
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/habits.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/habits.ts",
+        "bytes": 23356,
+        "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+      },
+      "combined": {
+        "bytes": 23356,
+        "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+      },
+      "old114": {
+        "bytes": 23356,
+        "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+      },
+      "gg": {
+        "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684",
+        "bytes": 23356
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/cycle-hooks.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/cycle-hooks.ts",
+        "bytes": 1384,
+        "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+      },
+      "combined": {
+        "bytes": 1384,
+        "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+      },
+      "old114": {
+        "bytes": 1384,
+        "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+      },
+      "gg": {
+        "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6",
+        "bytes": 1384
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/storage.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/storage.ts",
+        "bytes": 8840,
+        "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+      },
+      "combined": {
+        "bytes": 8840,
+        "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+      },
+      "old114": {
+        "bytes": 8840,
+        "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+      },
+      "gg": {
+        "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e",
+        "bytes": 8840
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/capture.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/capture.ts",
+        "bytes": 12990,
+        "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+      },
+      "combined": {
+        "bytes": 12990,
+        "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+      },
+      "old114": {
+        "bytes": 12990,
+        "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+      },
+      "gg": {
+        "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7",
+        "bytes": 12990
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/session-bind.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/session-bind.ts",
+        "bytes": 5905,
+        "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+      },
+      "combined": {
+        "bytes": 5905,
+        "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+      },
+      "old114": {
+        "bytes": 5905,
+        "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+      },
+      "gg": {
+        "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7",
+        "bytes": 5905
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/provenance.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/provenance.ts",
+        "bytes": 17058,
+        "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+      },
+      "combined": {
+        "bytes": 17058,
+        "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+      },
+      "old114": {
+        "bytes": 17058,
+        "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+      },
+      "gg": {
+        "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d",
+        "bytes": 17058
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/provenance-view.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/provenance-view.ts",
+        "bytes": 6377,
+        "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+      },
+      "combined": {
+        "bytes": 6377,
+        "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+      },
+      "old114": {
+        "bytes": 6377,
+        "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+      },
+      "gg": {
+        "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6",
+        "bytes": 6377
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "core/reflect.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/core/reflect.ts",
+        "bytes": 17084,
+        "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+      },
+      "combined": {
+        "bytes": 17084,
+        "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+      },
+      "old114": {
+        "bytes": 17084,
+        "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+      },
+      "gg": {
+        "sha256": "5ee9a958e33fbd5207ee9851892a291eb3351994e46820aced250b0ae3d97ffd",
+        "bytes": 16846
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/result-card.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/result-card.tsx",
+        "bytes": 3870,
+        "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+      },
+      "combined": {
+        "bytes": 3870,
+        "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+      },
+      "old114": {
+        "bytes": 3870,
+        "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+      },
+      "gg": {
+        "sha256": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+        "bytes": 3328
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/views/records/records-listbox.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+        "bytes": 5059,
+        "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+      },
+      "combined": {
+        "bytes": 5059,
+        "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+      },
+      "old114": {
+        "bytes": 4737,
+        "sha256": "790533aed66fa35a6258e8a37c345058b8204d9d91cb86684e48453218f9cf7d"
+      },
+      "gg": {
+        "sha256": "790533aed66fa35a6258e8a37c345058b8204d9d91cb86684e48453218f9cf7d",
+        "bytes": 4737
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": false
+    },
+    {
+      "name": "client/views/habits.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/habits.tsx",
+        "bytes": 15535,
+        "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+      },
+      "combined": {
+        "bytes": 15535,
+        "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+      },
+      "old114": {
+        "bytes": 15535,
+        "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+      },
+      "gg": {
+        "sha256": "53b7791a183b6d7343ead5e902fd5d1232f25a7a22d9e3f579158ef652e3fe76",
+        "bytes": 14634
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/views/habit-model.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/habit-model.ts",
+        "bytes": 4956,
+        "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+      },
+      "combined": {
+        "bytes": 4956,
+        "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+      },
+      "old114": {
+        "bytes": 4956,
+        "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+      },
+      "gg": {
+        "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a",
+        "bytes": 4956
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/views/habit-form.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/habit-form.tsx",
+        "bytes": 4854,
+        "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+      },
+      "combined": {
+        "bytes": 4854,
+        "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+      },
+      "old114": {
+        "bytes": 4854,
+        "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+      },
+      "gg": {
+        "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29",
+        "bytes": 4854
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/views/okrs.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/okrs.tsx",
+        "bytes": 9854,
+        "sha256": "122516a490b80da4a2fc9da0da66fb1283062efb3c54827c8a8399e3a28bc128"
+      },
+      "combined": {
+        "bytes": 9854,
+        "sha256": "122516a490b80da4a2fc9da0da66fb1283062efb3c54827c8a8399e3a28bc128"
+      },
+      "old114": {
+        "bytes": 9707,
+        "sha256": "2408f42a166060596cd7d72462fe34ffcba5c7a69f2f0233da17a102c4926b8f"
+      },
+      "gg": {
+        "sha256": "2408f42a166060596cd7d72462fe34ffcba5c7a69f2f0233da17a102c4926b8f",
+        "bytes": 9707
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": false
+    },
+    {
+      "name": "client/views/okr-model.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/views/okr-model.ts",
+        "bytes": 6463,
+        "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a"
+      },
+      "combined": {
+        "bytes": 6463,
+        "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a"
+      },
+      "old114": {
+        "bytes": 6463,
+        "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a"
+      },
+      "gg": {
+        "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a",
+        "bytes": 6463
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/board/queue-aggregate.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/board/queue-aggregate.ts",
+        "bytes": 7112,
+        "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef"
+      },
+      "combined": {
+        "bytes": 7112,
+        "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef"
+      },
+      "old114": {
+        "bytes": 7112,
+        "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef"
+      },
+      "gg": {
+        "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef",
+        "bytes": 7112
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/board/queue-card.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/board/queue-card.tsx",
+        "bytes": 9699,
+        "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34"
+      },
+      "combined": {
+        "bytes": 9699,
+        "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34"
+      },
+      "old114": {
+        "bytes": 9699,
+        "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34"
+      },
+      "gg": {
+        "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34",
+        "bytes": 9699
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/shared/drawers/sidecar-portal.tsx",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+        "bytes": 45837,
+        "sha256": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc"
+      },
+      "combined": {
+        "bytes": 45837,
+        "sha256": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc"
+      },
+      "old114": {
+        "bytes": 45837,
+        "sha256": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc"
+      },
+      "gg": {
+        "sha256": "a3a5e70e459fd74b3454757bcd419e7a2e44b8adce41685dc522dcc494c0ab5d",
+        "bytes": 44000
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/panel.css",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/panel.css",
+        "bytes": 326019,
+        "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+      },
+      "combined": {
+        "bytes": 326019,
+        "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+      },
+      "old114": {
+        "bytes": 326019,
+        "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+      },
+      "gg": {
+        "sha256": "05dc2db1cff4fbf075e95b8ecc81829b7a749c5c924b4e7105049704c4391016",
+        "bytes": 324748
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    },
+    {
+      "name": "client/form-validation.ts",
+      "current": {
+        "path": "packages/dsh-pm-tool/src/client/form-validation.ts",
+        "bytes": 14842,
+        "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+      },
+      "combined": {
+        "bytes": 14842,
+        "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+      },
+      "old114": {
+        "bytes": 14842,
+        "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+      },
+      "gg": {
+        "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4",
+        "bytes": 14842
+      },
+      "unchangedFromCombined": true,
+      "old114EqualsCombined": true
+    }
+  ],
+  "note": "Only explicit necessary seams; no people current source or runtime/dependency reads."
+}

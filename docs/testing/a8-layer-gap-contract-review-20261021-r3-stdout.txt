@@ -1,0 +1,19 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/tmp/pmtool-a8-layer-gap-KCkKkV[39m
+
+ [32m✓[39m probes.test.tsx[2m > [22mLG-01 control：真实 records 行内保存保留已存关联和稳定 ID，主保存不提交 action 草稿
+ [31m×[39m probes.test.tsx[2m > [22mLG-01 contract：默认 MeetingsView 编辑真实 records 必须有任务/问题关联及解除入口
+[31m   → 默认生产行动项缺已承诺任务/问题关联入口: expected 0 to be greater than or equal to 2[39m
+ [32m✓[39m probes.test.tsx[2m > [22mLG-02 control：新会议只写会议，编辑后新增行动项走既有分命令，取消零写
+ [32m✓[39m probes.test.tsx[2m > [22mLG-03 control：生产交付物 owner 自由输入/清空不要求候选 popup
+ [31m×[39m probes.test.tsx[2m > [22mLG-04 contract：真实 PmPanel 任务入口到 TaskForm，叶子清单必须可勾选
+[31m   → OP-GUI-01 已承诺抽屉 toggle，不是只读分数: expected 0 to be greater than or equal to 2[39m
+ [31m×[39m probes.test.tsx[2m > [22mLG-05 contract：真实 TaskTable 选择 CSV→预览零写→确认落盘必须创建任务
+[31m   → 真实确认按钮重复 dry-run 未落盘: expected +0 to be 2 // Object.is equality[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 22:47:01
+[2m   Duration [22m 1.34s[2m (transform 692ms, setup 0ms, collect 1.11s, tests 85ms, environment 0ms, prepare 37ms)[22m
+
+JSON report written to /private/tmp/pmtool-a8-layer-gap-KCkKkV/vitest.json

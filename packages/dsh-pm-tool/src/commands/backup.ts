@@ -1,18 +1,46 @@
 /**
  * R18 备份/恢复命令：`/pm backup [目录?]` 写带时间戳备份；`/pm restore <备份文件> confirm` 两步恢复（恢复前自动安全快照）。
- * 只覆盖 pmtool 领域七类实体，不含宿主会话/密钥。
+ * 覆盖 pmtool 七类实体与白名单额外业务表/附件侧车，不含宿主会话/密钥。
  */
 import type { CommandResult } from '@deepseek-ai/dsh-commands'
 import type { PmDomain } from '../core/storage.js'
-import { createBackup, readBackupFile, restoreBackup, restoreBackupFromContent, validateBackup } from '../core/backup.js'
+import { createBackup, precheckBackupContent, precheckBackupFile, restoreBackup, restoreBackupFromContent } from '../core/backup.js'
 
 export const backupHelp = [
-  '备份/恢复命令（离线，仅 pmtool 七类实体，不含宿主会话与密钥）：',
+  '备份/恢复命令（离线，pmtool 七类实体及备份内额外业务表/附件，不含宿主会话与密钥）：',
   '  /pm backup                 备份到内置 packages/backups/（带时间戳；可用 DSH_PM_BACKUP_DIR 覆盖），输出完整路径与各类计数',
   '  /pm backup ~/pm-backups     备份到指定目录',
   '  /pm restore backups/pmtool-backup-xxx.json       演练（只读校验，不落盘）',
   '  /pm restore backups/pmtool-backup-xxx.json confirm  真正恢复（恢复前自动先存一份安全快照）',
 ].join('\n')
+
+/** dsh 命令路径 token，不交给 shell；不支持同时含两种引号或控制字符的路径。 */
+export function quoteBackupPath(path: string): string {
+  if (!path.trim() || /[\u0000-\u001f\u007f]/.test(path)) throw new Error('备份路径不能为空或包含控制字符')
+  if (!path.includes('"')) return `"${path}"`
+  if (!path.includes("'")) return `'${path}'`
+  throw new Error('备份路径不能同时含单双引号，请使用不含这种组合的本机路径')
+}
+
+function pathTokens(argument: string): string[] {
+  const text = argument.trim()
+  if (/[\u0000-\u001f\u007f]/.test(text)) throw new Error('命令参数不能包含控制字符')
+  const pattern = /"([^"]*)"|'([^']*)'|([^\s'"]+)/y
+  const tokens: string[] = []
+  let offset = 0
+  while (offset < text.length) {
+    while (text[offset] === ' ') offset++
+    if (offset >= text.length) break
+    pattern.lastIndex = offset
+    const match = pattern.exec(text)
+    if (!match || (pattern.lastIndex < text.length && text[pattern.lastIndex] !== ' ')) {
+      throw new Error('命令路径参数格式不正确：请将完整路径放在一对引号内，参数之间用空格分隔')
+    }
+    tokens.push(match[1] ?? match[2] ?? match[3])
+    offset = pattern.lastIndex
+  }
+  return tokens
+}
 
 export async function handleBackupCommand(argument: string, domain: PmDomain | undefined): Promise<CommandResult> {
   if (!domain) return { kind: 'error', text: '项目存储未就绪。' }
@@ -31,9 +59,9 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
         return JSON.stringify(outer)
       })()
       if (!isConfirm) {
-        validateBackup(JSON.parse(decoded))
+        await precheckBackupContent(decoded)
         return { kind: 'success', text: [
-          '已读取备份内容（演练，尚未恢复）。确认将用此备份替换当前七类实体（恢复前自动先存安全快照）：',
+          '备份内容结构与关系预检通过（无附件字节需恢复；演练，尚未恢复）。确认将替换七类实体及备份内显式额外业务表（恢复前自动先存安全快照）：',
           '  /pm restore-content "<同上JSON>" confirm',
         ].join('\n') }
       }
@@ -49,29 +77,39 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
       return { kind: 'error', text: `恢复失败：${error instanceof Error ? error.message : String(error)}` }
     }
   }
-  // T-DEF-009：健壮 tokenizer，兼容 "/path with spaces" 引号路径（不 eval/不 shell）
-  const tokens = argument.trim().match(/"[^\"]*"|'[^']*'|\S+/g)?.map(t => t.replace(/^['"]|['"]$/g, '')) ?? []
-  if (tokens[0] === 'restore' || (tokens[0] ?? '').toLowerCase() === 'restore') {
+  let tokens: string[]
+  try { tokens = pathTokens(argument) } catch (error) {
+    return { kind: 'error', text: `备份/恢复失败：${error instanceof Error ? error.message : String(error)}` }
+  }
+  if ((tokens[0] ?? '').toLowerCase() === 'restore') {
     const [, filePath, confirmWord] = tokens
-    if (!filePath) return { kind: 'error', text: '请使用：/pm restore <备份文件> [confirm]' }
+    if (!filePath || tokens.length > 3 || (confirmWord !== undefined && confirmWord.toLowerCase() !== 'confirm')) {
+      return { kind: 'error', text: '恢复参数错误，请使用：/pm restore "<备份完整路径>" [confirm]，不能追加其它参数' }
+    }
     try {
-      const backup = await readBackupFile(filePath)
-      const summary = [
-        '备份文件校验通过（演练，尚未恢复）：',
+      const quotedPath = quoteBackupPath(filePath)
+      const confirmed = confirmWord?.toLowerCase() === 'confirm'
+      const restored = confirmed ? await restoreBackup(domain, filePath) : undefined
+      const backup = restored?.backup ?? await precheckBackupFile(filePath)
+      const counts = [
         `  导出时间：${backup.exportedAt}`,
         `  项目 ${backup.projects.length}｜任务 ${backup.tasks.length}｜里程碑 ${backup.milestones.length}`,
         `  风险问题 ${backup.riskIssues.length}｜会议 ${backup.meetings.length}｜汇报 ${backup.reports.length}｜交付物 ${backup.deliverables.length}`,
-        '确认将用此备份替换当前七类实体（恢复前会自动先存一份安全快照）：',
-        `  /pm restore ${filePath} confirm`,
+        `  额外业务表：${Object.entries(backup.extra ?? {}).map(([name, rows]) => `${name} ${rows.length}`).join('｜') || '旧包未提供，保留当前额外表'}`,
+      ]
+      const summary = [
+        '备份文件完整预检通过（结构、关系及附件侧车字节；演练，尚未恢复）：',
+        ...counts,
+        '确认将替换七类实体及备份内显式额外业务表/附件（恢复前会自动先存一份安全快照）：',
+        `  /pm restore ${quotedPath} confirm`,
       ].join('\n')
-      if (confirmWord?.toLowerCase() !== 'confirm') return { kind: 'success', text: summary }
-      const result = await restoreBackup(domain, filePath)
+      if (!restored) return { kind: 'success', text: summary }
       return {
         kind: 'success',
         text: [
           '已恢复备份。',
-          result.safetySnapshot ? `恢复前自动安全快照：${result.safetySnapshot}` : '当前库为空，未生成安全快照。',
-          summary,
+          restored.safetySnapshot ? `恢复前自动安全快照：${restored.safetySnapshot}` : '当前库为空，未生成安全快照。',
+          ...counts,
         ].join('\n'),
       }
     } catch (error) {
@@ -80,6 +118,7 @@ export async function handleBackupCommand(argument: string, domain: PmDomain | u
   }
 
   // /pm backup [目录?]
+  if (tokens.length > 1) return { kind: 'error', text: '备份参数错误，请使用：/pm backup ["<目录完整路径>"]' }
   const directory = tokens[0] || undefined
   try {
     const result = await createBackup(domain, directory)

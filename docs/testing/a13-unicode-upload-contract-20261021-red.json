@@ -1,0 +1,163 @@
+{
+  "at": "2026-10-21T20:46:55.131Z",
+  "role": "trae / 独立测试专家 A13",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "execution": "Node 原生 TS 源码执行，无输出编译/依赖安装/服务/GUI",
+    "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --experimental-transform-types docs/testing/a13-unicode-upload-contract-20261021-red.mjs"
+  },
+  "candidate": {
+    "head": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "originMainLocalRef": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "scope": [
+      "packages/dsh-pm-tool/src/client/shared/stage-client.ts",
+      "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts",
+      "packages/dsh-pm-tool/src/core/http/asset-route.ts",
+      "packages/dsh-pm-tool/src/core/http/asset-route.test.ts",
+      "packages/dsh-pm-tool/src/core/file-assets.ts",
+      "packages/dsh-pm-tool/src/core/http/limits.ts"
+    ],
+    "trackedDiff": "diff --git a/packages/dsh-pm-tool/src/core/file-assets.ts b/packages/dsh-pm-tool/src/core/file-assets.ts\nindex 4f25889..f519c5a 100644\n--- a/packages/dsh-pm-tool/src/core/file-assets.ts\n+++ b/packages/dsh-pm-tool/src/core/file-assets.ts\n@@ -12,7 +12,7 @@\n  */\n import { createHash } from 'node:crypto'\n import { basename, join, resolve, sep } from 'node:path'\n-import { lstat, mkdir, open, readFile, rename, rm } from 'node:fs/promises'\n+import { lstat, mkdir, open, readFile, rename, rm, realpath } from 'node:fs/promises'\n \n export class FileAssetRejectedError extends Error {\n   constructor(readonly status: 400 | 413 | 415 | 422, message: string) {\n@@ -125,15 +125,49 @@ export function contentAddressedRelPath(validated: ValidatedFile): string {\n   return join(validated.sha256.slice(0, 2), `${validated.sha256}${ext}`)\n }\n \n-/** 防穿越：resolve 后必须仍在 root 内；且不落 symlink。 */\n+/** 防穿越：根、每个现存祖先和目标均不可是 symlink；不存在的后续路径允许创建。 */\n export async function resolveWithinRoot(root: string, rel: string): Promise<string> {\n   const abs = resolve(root, rel)\n   const rootAbs = resolve(root)\n   if (abs !== rootAbs && !abs.startsWith(rootAbs + sep)) {\n     throw new FileAssetRejectedError(400, '路径越界，已拒绝')\n   }\n-  const stat = await lstat(abs).catch(() => undefined)\n-  if (stat?.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')\n+  const inspect = async (path: string) => {\n+    try { return await lstat(path) } catch (error) {\n+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined\n+      throw error\n+    }\n+  }\n+  // 配置根自身可能经更上层软链穿出；只允许macOS固定系统父别名。\n+  let ancestor: string = sep\n+  for (const component of rootAbs.split(sep).filter(Boolean)) {\n+    ancestor = join(ancestor, component)\n+    const stat = await inspect(ancestor)\n+    if (!stat) break\n+    if (stat.isSymbolicLink()) {\n+      const platformAlias = process.platform === 'darwin' && ancestor !== rootAbs\n+        && ['/tmp', '/var', '/etc'].includes(ancestor)\n+        && await realpath(ancestor) === `/private${ancestor}`\n+      if (!platformAlias) throw new FileAssetRejectedError(400, '拒绝符号链接')\n+    }\n+  }\n+  const rootStat = await inspect(rootAbs)\n+  if (rootStat?.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')\n+  // macOS /tmp 的父别名不属于用户根内组件，按真实根比较，不误拒合法临时目录。\n+  const canonicalRoot = rootStat ? await realpath(rootAbs) : undefined\n+  let path = rootAbs\n+  for (const component of abs.slice(rootAbs.length).split(sep).filter(Boolean)) {\n+    path = join(path, component)\n+    const stat = await inspect(path)\n+    if (!stat) break\n+    if (stat.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')\n+    if (canonicalRoot) {\n+      const canonical = await realpath(path)\n+      if (!canonical.startsWith(canonicalRoot + sep)) {\n+        throw new FileAssetRejectedError(400, '路径越界，已拒绝')\n+      }\n+    }\n+  }\n   return abs\n }\n \n@@ -148,6 +182,8 @@ export async function storeAssetBuffer(\n   const relPath = contentAddressedRelPath(validated)\n   const abs = await resolveWithinRoot(root, relPath)\n   await mkdir(resolve(root, validated.sha256.slice(0, 2)), { recursive: true, mode: 0o700 })\n+  // 创建祖先后再验证，不能仅以尚不存在的最终文件作为安全检查。\n+  await resolveWithinRoot(root, relPath)\n   // 幂等：同 hash 已存在直接返回（取消/重试不产生重复字节）。\n   const existing = await lstat(abs).catch(() => undefined)\n   if (existing?.isFile()) return { relPath, sha256: validated.sha256, size: validated.size, alreadyExisted: true, createdFile: false }",
+    "scopedUntrackedFiles": "",
+    "sourceSha256Before": {
+      "packages/dsh-pm-tool/src/client/shared/stage-client.ts": "ce18f59bf3285c05c9727c171efb4b5e455ee019e941c6f7e2ba0f86364e02e6",
+      "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts": "b013d992432d214df52f99701aea5e30f039b8862c8d96b58081c60634a8869c",
+      "packages/dsh-pm-tool/src/core/http/asset-route.ts": "b9058f1b69c1ec23e373f8606da7c0ce669ae8a90c8d28a48c54630282b285af",
+      "packages/dsh-pm-tool/src/core/http/asset-route.test.ts": "24c6bb5833e91befa66dfe4a2692f53c39f7609e1281cf103b10f68e67072dee",
+      "packages/dsh-pm-tool/src/core/file-assets.ts": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+      "packages/dsh-pm-tool/src/core/http/limits.ts": "3d03ff0e123ddd4b390886be78dca2293f7ff303c89e2cd659d42d7a6c0a99cf"
+    },
+    "sourceSha256After": {
+      "packages/dsh-pm-tool/src/client/shared/stage-client.ts": "ce18f59bf3285c05c9727c171efb4b5e455ee019e941c6f7e2ba0f86364e02e6",
+      "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts": "b013d992432d214df52f99701aea5e30f039b8862c8d96b58081c60634a8869c",
+      "packages/dsh-pm-tool/src/core/http/asset-route.ts": "b9058f1b69c1ec23e373f8606da7c0ce669ae8a90c8d28a48c54630282b285af",
+      "packages/dsh-pm-tool/src/core/http/asset-route.test.ts": "24c6bb5833e91befa66dfe4a2692f53c39f7609e1281cf103b10f68e67072dee",
+      "packages/dsh-pm-tool/src/core/file-assets.ts": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+      "packages/dsh-pm-tool/src/core/http/limits.ts": "3d03ff0e123ddd4b390886be78dca2293f7ff303c89e2cd659d42d7a6c0a99cf"
+    },
+    "a11OriginalSha256Before": {
+      "reports/all-pending-evidence-20261021/A11/candidate.json": "37577ab52b1d9561afdf6c952616b2f1810c2d273365a0f8d9015792b376c7fa",
+      "reports/all-pending-evidence-20261021/A11/product-tracked.patch": "6e09d16e991120ec21a3e88bf26bd4a3e93e6d432e5c1941e53c79ce9d5312fd",
+      "reports/all-pending-evidence-20261021/A11/environment.json": "e687a27f36e1aca42a4ff7a76918ecc9b847f272ae3a7be50a74763b39129651",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/chooser-selected.png": "77f9bff65f56d8d24a5a7f08adae06de870bed31fccc4aae95a6f00db1221ee6",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/unicode-upload-failure.json": "c449a1cdacabeff34b8eb43b9d9fb1cb49a18bd380da58b1bbd640669538fba6",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/unicode-upload-failure.png": "89bc764cb5c7292c940af3ed0ca649ed74fbe32fb8fe82ddbffae31d18fcbbc5",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/before-open.json": "6bcd06cbc643db396d9ab6bb71aeb4a110c2a2b25b430ad3a9a70d8547a7f972",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/failure-boundary.json": "d6c2b2fe4c84995cdf80499fdba1f4386f6982a865e186c5a65a7242adc8606a"
+    },
+    "a11OriginalSha256After": {
+      "reports/all-pending-evidence-20261021/A11/candidate.json": "37577ab52b1d9561afdf6c952616b2f1810c2d273365a0f8d9015792b376c7fa",
+      "reports/all-pending-evidence-20261021/A11/product-tracked.patch": "6e09d16e991120ec21a3e88bf26bd4a3e93e6d432e5c1941e53c79ce9d5312fd",
+      "reports/all-pending-evidence-20261021/A11/environment.json": "e687a27f36e1aca42a4ff7a76918ecc9b847f272ae3a7be50a74763b39129651",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/chooser-selected.png": "77f9bff65f56d8d24a5a7f08adae06de870bed31fccc4aae95a6f00db1221ee6",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/unicode-upload-failure.json": "c449a1cdacabeff34b8eb43b9d9fb1cb49a18bd380da58b1bbd640669538fba6",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/unicode-upload-failure.png": "89bc764cb5c7292c940af3ed0ca649ed74fbe32fb8fe82ddbffae31d18fcbbc5",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/before-open.json": "6bcd06cbc643db396d9ab6bb71aeb4a110c2a2b25b430ad3a9a70d8547a7f972",
+      "reports/all-pending-evidence-20261021/A11/materials/native-files/failure-boundary.json": "d6c2b2fe4c84995cdf80499fdba1f4386f6982a865e186c5a65a7242adc8606a"
+    },
+    "note": "HEAD 不代表 dirty 候选；本结果仅绑定所列源码字节及 A11 原证，不认领新 bundle/service。"
+  },
+  "fixture": {
+    "sourceFile": "/private/tmp/pmtool-a11-native-files/QA 文件 原件.md",
+    "fileName": "QA 文件 原件.md",
+    "size": 22,
+    "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+    "a11RecordedRootsEqualAfterLeadingSlashNormalization": true
+  },
+  "safety": {
+    "nativeFetchInvocations": 0,
+    "httpSent": false,
+    "serversStarted": 0,
+    "productWrites": 0,
+    "guiOperations": 0,
+    "fetchRestored": true,
+    "watchScope": "仅相关源码、A11原证指纹；不声称全盘零污染"
+  },
+  "results": [
+    {
+      "id": "A13-RED-H",
+      "expected": "中文 raw header 应可构造 Headers（当前必红）",
+      "result": "FAIL",
+      "scope": "native-constructor-only",
+      "error": {
+        "name": "TypeError",
+        "message": "Cannot convert argument to a ByteString because the character at index 3 has a value of 25991 which is greater than 255."
+      }
+    },
+    {
+      "id": "A13-RED-R",
+      "expected": "中文 raw header 应可构造 Request（当前必红）",
+      "result": "FAIL",
+      "scope": "native-constructor-only",
+      "error": {
+        "name": "TypeError",
+        "message": "Cannot convert argument to a ByteString because the character at index 3 has a value of 25991 which is greater than 255."
+      }
+    },
+    {
+      "id": "A13-CONTROL-ASCII",
+      "expected": "旧 ASCII header 原生 Headers/Request 构造成功",
+      "result": "PASS",
+      "scope": "native-constructor-only"
+    },
+    {
+      "id": "A13-PROTOCOL-FEASIBILITY",
+      "expected": "仅协议可行性，不是产品修复 PASS",
+      "result": "PASS",
+      "scope": "native-constructor-only"
+    },
+    {
+      "id": "A13-RED-PRODUCTION",
+      "expected": "生产 stageAsset 经原生 Headers/Request 构造成功",
+      "result": "FAIL",
+      "scope": "production-client-with-native-constructor-interceptor",
+      "error": {
+        "name": "StageUnavailable",
+        "reason": "network",
+        "message": "暂存上传失败：Cannot convert argument to a ByteString because the character at index 3 has a value of 25991 which is greater than 255."
+      }
+    },
+    {
+      "id": "A13-CONTROL-PRODUCTION-ASCII",
+      "expected": "生产 stageAsset 经原生 Headers/Request 构造成功",
+      "result": "PASS",
+      "scope": "production-client-with-native-constructor-interceptor"
+    }
+  ],
+  "interceptedProductionCalls": [
+    {
+      "route": "/api/pm/v1/assets/upload",
+      "method": "POST",
+      "credentials": "same-origin",
+      "cache": "no-store",
+      "headers": {
+        "content-type": "text/markdown",
+        "x-pm-file-name": "QA 文件 原件.md",
+        "x-pm-media-type": "text/markdown"
+      },
+      "bodyUnchanged": true,
+      "constructorCompleted": false
+    },
+    {
+      "route": "/api/pm/v1/assets/upload",
+      "method": "POST",
+      "credentials": "same-origin",
+      "cache": "no-store",
+      "headers": {
+        "content-type": "text/markdown",
+        "x-pm-file-name": "qa-note.md",
+        "x-pm-media-type": "text/markdown"
+      },
+      "bodyUnchanged": true,
+      "constructorCompleted": true
+    }
+  ],
+  "notRun": [
+    "服务端标记/解码/非法编码测试",
+    "真实 stage/主保存/下载",
+    "新 GUI/宿主认证",
+    "构建/全部 verify/修复后独立复验"
+  ]
+}

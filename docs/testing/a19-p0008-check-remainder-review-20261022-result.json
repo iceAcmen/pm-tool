@@ -1,0 +1,439 @@
+{
+  "at": "2026-10-22T04:16:30.577Z",
+  "checks": [
+    {
+      "name": "index-1107-complete-bytes-sha",
+      "ok": true,
+      "detail": {
+        "listed": 1107,
+        "actual": 1107,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "index-preserves-no-verdict-and-two-failures",
+      "ok": true,
+      "detail": {
+        "noVerdict": true,
+        "retainedFailures": [
+          "command-1792636293343 unsupported top-level progressLog rejected",
+          "command after resume with composer absent failed before request; directory retained if present"
+        ]
+      }
+    },
+    {
+      "name": "a18-candidate-source-artifact-binding",
+      "ok": true,
+      "detail": {
+        "candidateSha": "2d533a1d214c0ae68739b354aac2e0d85b37ca6735c256d3dd3820bce3c191b9",
+        "sourceCount": 520,
+        "artifactCount": 453,
+        "sourceMismatches": [],
+        "artifactMismatches": []
+      }
+    },
+    {
+      "name": "a18-tracked-patch-byte-binding",
+      "ok": true,
+      "detail": {
+        "expected": "1b2becbaa4c910d0d7052ec42127bd3856e57cf49d30c72ec4d3ad55a6921fd4",
+        "actual": "1b2becbaa4c910d0d7052ec42127bd3856e57cf49d30c72ec4d3ad55a6921fd4"
+      }
+    },
+    {
+      "name": "a18-host-loaded-3248-timeorigin-binding",
+      "ok": true,
+      "detail": {
+        "pid": 63429,
+        "origin": "http://127.0.0.1:3248",
+        "timeOrigin": 1792629512672.7,
+        "targetId": "BA817F66FCE81BD58357C4B50BFFDF2C",
+        "responseSha": "b4a54301e085753ab4193ae1284156ac779064ec097d7e775970a3d6a9e9f708",
+        "clientSha": "9ab0c3e0d94751870a53507530d899d4a711bda4fbe5c2b474ebd66127cc06bb",
+        "segmentSha": "21d941ca10d41935a5416b58f6da29f2b5520e8bf93396e850de526a68eea343"
+      }
+    },
+    {
+      "name": "all-archived-actual-same-a18-origin-timeorigin",
+      "ok": true,
+      "detail": [
+        {
+          "name": "host-open-1792636129835",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636226258",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636293343",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636428064",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636455760",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636555834",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636571452",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792636606176",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "task-nav-1792636670129",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "check-open-1792636703785",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "cancel-1792636741031",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "host-open-1792642142175",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792642165251",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        },
+        {
+          "name": "command-1792642202499",
+          "origin": "http://127.0.0.1:3248",
+          "timeOrigin": 1792629512672.7
+        }
+      ]
+    },
+    {
+      "name": "ten-post-run-done-pairs-one-honest-command-error",
+      "ok": true,
+      "detail": [
+        {
+          "step": "command-1792636226258",
+          "line": "/pm check t-0012",
+          "kind": "success",
+          "commandId": "cmd-2b310026-54"
+        },
+        {
+          "step": "command-1792636293343",
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 叙事非材料\",\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-22\",\"author\":\"测试\",\"createdAt\":\"2026-10-22T02:32:00.000Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-22\",\"author\":\"测试\",\"content\":\"已经写完说明，仍需材料复核。\",\"revisedAt\":\"2026-10-22T02:32:00.000Z\"}]}]}",
+          "kind": "error",
+          "commandId": "cmd-2b310026-55"
+        },
+        {
+          "step": "command-1792636428064",
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 叙事非材料\",\"draft\":{\"progressLog\":[{\"date\":\"2026-10-22\",\"author\":\"测试\",\"content\":\"已经写完说明，仍需材料复核。\"}]}}",
+          "kind": "success",
+          "commandId": "cmd-2b310026-56"
+        },
+        {
+          "step": "command-1792636455760",
+          "line": "/pm task update t-0013 {\"status\":\"done\"}",
+          "kind": "success",
+          "commandId": "cmd-2b310026-57"
+        },
+        {
+          "step": "command-1792636555834",
+          "line": "/pm check t-0013",
+          "kind": "success",
+          "commandId": "cmd-2b310026-58"
+        },
+        {
+          "step": "command-1792636571452",
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 已收尾不催办\",\"status\":\"wrapped\",\"progress\":100,\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\"}",
+          "kind": "success",
+          "commandId": "cmd-2b310026-59"
+        },
+        {
+          "step": "command-1792636606176",
+          "line": "/pm check t-0014",
+          "kind": "success",
+          "commandId": "cmd-2b310026-60"
+        },
+        {
+          "step": "task-nav-1792636670129",
+          "line": "/pm web snapshot",
+          "kind": "success",
+          "commandId": "cmd-2b310026-61"
+        },
+        {
+          "step": "command-1792642165251",
+          "line": "/pm task update t-0013 {\"draft\":{\"progressOps\":[{\"op\":\"add\",\"author\":\"测试\",\"content\":\"已经写完说明，仍需材料复核。\",\"date\":\"2026-10-22\"}]}}",
+          "kind": "success",
+          "commandId": "cmd-2b310026-62"
+        },
+        {
+          "step": "command-1792642202499",
+          "line": "/pm check t-0013",
+          "kind": "success",
+          "commandId": "cmd-2b310026-63"
+        }
+      ]
+    },
+    {
+      "name": "all-raw-record-bytes-match-after-root",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "all-original-frame-hashes",
+      "ok": true,
+      "detail": {
+        "frames": 617,
+        "matching": 617,
+        "firstAt": "2026-10-22T02:28:50.778Z",
+        "lastAt": "2026-10-22T04:10:08.306Z"
+      }
+    },
+    {
+      "name": "single-task-entry-exact-one-open-checklist",
+      "ok": true,
+      "detail": {
+        "line": "/pm check t-0012",
+        "status": "done",
+        "checklistDone": 2,
+        "checklistTotal": 5,
+        "businessDelta": {
+          "data": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "files": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "backups": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "exports": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "unsupported-top-level-progresslog-rejection-preserved",
+      "ok": true,
+      "detail": {
+        "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 叙事非材料\",\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-22\",\"author\":\"测试\",\"createdAt\":\"2026-10-22T02:32:00.000Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-22\",\"author\":\"测试\",\"content\":\"已经写完说明，仍需材料复核。\",\"revisedAt\":\"2026-10-22T02:32:00.000Z\"}]}]}",
+        "doneKind": "error",
+        "text": "任务参数不正确：包含不支持的字段；ID、WBS 编号、顺序和时间戳由系统生成。",
+        "businessDelta": {
+          "data": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "files": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "backups": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "exports": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "two-genuine-narratives-remain-non-material",
+      "ok": true,
+      "detail": {
+        "progressLogs": [
+          {
+            "id": "pl-1",
+            "createdAt": "2026-10-22T02:33:52.409Z",
+            "revisionId": "rv-1",
+            "content": "已经写完说明，仍需材料复核。"
+          },
+          {
+            "id": "pl-2",
+            "createdAt": "2026-10-22T04:09:34.475Z",
+            "revisionId": "rv-1",
+            "content": "已经写完说明，仍需材料复核。"
+          }
+        ],
+        "materials": {
+          "attachments": [],
+          "checklist": null,
+          "evidenceUrl": null,
+          "deliverableId": null
+        },
+        "checkLine": "/pm check t-0013",
+        "businessDelta": {
+          "data": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "files": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "backups": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "exports": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "narrative-card-open-cancel-visual-state",
+      "ok": true,
+      "detail": {
+        "navAt": "2026-10-22T02:37:52.963Z",
+        "openAt": "2026-10-22T02:38:25.362Z",
+        "cancelAt": "2026-10-22T02:39:03.470Z",
+        "visualFiles": [
+          "task-nav-1792636670129/actual.png",
+          "check-open-1792636703785/actual.png",
+          "cancel-1792636741031/actual.png"
+        ]
+      }
+    },
+    {
+      "name": "wrapped-mapped-to-no-rule",
+      "ok": true,
+      "detail": {
+        "line": "/pm check t-0014",
+        "task": {
+          "id": "t-0014",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "QA 检查 已收尾不催办",
+          "description": "",
+          "assignee": "",
+          "status": "wrapped",
+          "priority": "P1",
+          "startDate": "2026-10-20",
+          "dueDate": "2026-10-21",
+          "progress": 100,
+          "milestoneId": null,
+          "code": "11",
+          "order": 11,
+          "createdAt": "2026-10-22T02:36:14.705Z",
+          "updatedAt": "2026-10-22T02:36:14.705Z"
+        },
+        "text": "交付检查（任务 t-0014）：未命中任何规则提示。\n说明：这只代表当前未发现明显缺口，不构成完成验收；最终验收由人判断。",
+        "businessDelta": {
+          "data": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "files": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "backups": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          },
+          "exports": {
+            "added": {},
+            "removed": {},
+            "changed": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "composer-absent-failure-preserved-not-promoted",
+      "ok": true,
+      "detail": {
+        "exit": {
+          "exit": 1,
+          "action": "command",
+          "value": "/pm task update t-0013 {\"draft\":{\"progressOps\":[{\"op\":\"add\",\"author\":\"测试\",\"content\":\"已经写完说明，仍需材料复核。\",\"date\":\"2026-10-22\"}]}}",
+          "error": "Error: owned composer missing"
+        },
+        "requests": 0,
+        "events": 0,
+        "verdict": "BLOCKED collection attempt; later successful command is separate evidence and does not rewrite this attempt."
+      }
+    }
+  ],
+  "auditConsistent": true,
+  "verdicts": {
+    "singleTaskEntry": {
+      "verdict": "PASS",
+      "scope": "/pm check t-0012 returns exactly one done-open-checklist result and is business-read-only."
+    },
+    "narrativeNonMaterial": {
+      "verdict": "PASS",
+      "scope": "t-0013 has two genuine progressLog entries, no completion materials, and still returns exactly one done-missing-materials result; archived card opens the same task and cancel is read-only."
+    },
+    "wrappedFirstMapping": {
+      "verdict": "PASS",
+      "scope": "t-0014 is wrapped/progress100/past-due and /pm check t-0014 returns no rule; project card excludes t-0014."
+    },
+    "unsupportedTopLevelProgressLogAttempt": {
+      "verdict": "FAIL_RETAINED",
+      "scope": "Unsupported input was honestly rejected with zero business write; it is not counted as a successful fixture path."
+    },
+    "interruptedComposerAbsentAttempt": {
+      "verdict": "BLOCKED_RETAINED",
+      "scope": "Collector failed before request because its owned composer was absent; later resume evidence does not erase this attempt."
+    }
+  },
+  "raP0008Delta": {
+    "closeRequestedDelta": true,
+    "closedItems": [
+      "task单项入口",
+      "叙事非材料",
+      "wrapped先映射"
+    ],
+    "inheritedWithoutRerun": "A18 five-rule 25-step limited PASS",
+    "notGranted": "Whole RA-P0008, whole P0008, threshold/failure matrix, viewport/theme/zoom/read-screen, release or commit PASS."
+  },
+  "originalIndexSha256": "ea0f1d081a986bd676f769c2ceb356de16cbfbd2edaffc27832d3fd33d1d1b71",
+  "originalIndexedFiles": 1107,
+  "originalFrameCount": 617
+}

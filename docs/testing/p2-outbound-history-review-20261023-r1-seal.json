@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-22T21:35:22.989Z",
+  "protectedInputCount": 1708,
+  "drift": [],
+  "outputs": {
+    "p2-outbound-history-review-20261023-r1.md": {
+      "bytes": 22155,
+      "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238"
+    },
+    "p2-outbound-history-review-20261023-r1-audit.json": {
+      "bytes": 749736,
+      "sha256": "3fb91855628b80cfe62a01f0716ce6c6b63a1c68783f135aab58f486f1f86f83"
+    },
+    "p2-outbound-history-review-20261023-r1-audit-r2.json": {
+      "bytes": 761972,
+      "sha256": "d243dab81d3a3ddeffd9c917e8f848ba7c13b8ab617cb3663c4358010ab97609"
+    }
+  },
+  "unexpectedPhysical": [],
+  "missingPhysical": [],
+  "missingLinks": [],
+  "whitespace": [],
+  "readerConsistencySatisfied": true,
+  "released": true,
+  "state": "STOP",
+  "productVerdicts": {
+    "P2001MaliciousWeb": "PASS limited",
+    "P2002History": "PASS limited",
+    "P2002TaskSlot": "FAIL",
+    "P2007DoneWrappedReviewReentry": "PASS limited",
+    "P2007ArchiveKnownGaps": "original FAIL preserved",
+    "wholeP2": "NOT_GRANTED",
+    "ordinarycommit": "NOT_GRANTED",
+    "push": "NOT_AUTHORIZED",
+    "release": "NOT_AUTHORIZED"
+  },
+  "scope": "No current product/live/private roots, Git, build/install, GUI, services or original evidence writes."
+}

@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-21T21:47:55.122Z",
+  "freezeAt": "2026-10-21T21:14:57.287Z",
+  "before": 3172,
+  "after": 3175,
+  "differences": [
+    {
+      "path": "reports/all-pending-evidence-20261021/A13/gateway/mixed-gateway/start.json",
+      "before": null,
+      "after": "36246ca752f869e52fed7d99ebd75d5fa5cfc96ae298b36e61d77e413524e007"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A13/gateway/mixed-gateway/stderr.txt",
+      "before": null,
+      "after": "a117c28ef5684db9c0bae460c1fe6ecd36a3dee6a98d800ed9ed0f4fee66d6fb"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A13/gateway/mixed-gateway/stdout.txt",
+      "before": null,
+      "after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "missing": [],
+  "boundary": "Only declared input roots; not whole-machine drift, process shutdown or product regression."
+}

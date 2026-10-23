@@ -19,7 +19,7 @@ import {
   FileAssetRejectedError,
 } from './file-assets.js'
 import { enqueueDomainWrite } from './projects.js'
-import { taskWriteSchema, type AttachmentItem } from './task.js'
+import { taskWriteSchema, type AttachmentItem, type Task } from './task.js'
 import type { PmDomain, FileAssetRecord } from './storage.js'
 import { MaterialNotFoundError, applyTaskDraftOps, TaskOpsError, type TaskDraftOps } from './task-materials.js'
 import { prepareStage, finalizeStage } from './file-staging.js'
@@ -296,51 +296,113 @@ export async function prepareFilePromotion(
   const prepared: PreparedFile[] = []
   const seenStage = new Set<string>()
   const seenClient = new Set<string>()
-  for (const o of fileOps) {
-    const stageId = String(o.stageId ?? '')
-    if (!STAGE_ID_RE.test(stageId)) throw new TaskOpsError('addFile 缺少合法 stageId（32 hex）')
-    if (seenStage.has(stageId)) throw new TaskOpsError(`stageId 重复：${stageId}`)
-    seenStage.add(stageId)
-    if (o.clientId !== undefined) {
-      if (!CLIENT_ID_RE.test(o.clientId)) throw new TaskOpsError(`clientId 格式非法：${o.clientId}`)
-      if (seenClient.has(o.clientId)) throw new TaskOpsError(`clientId 重复：${o.clientId}`)
-      seenClient.add(o.clientId)
-    }
-    const { validated } = await prepareStage(stageId, at)
-    const root = await resolveFileRoot()
-    const stored = await storeAssetBuffer(root, validated)
-    let asset = existingRows.find(r => r.sha256 === validated.sha256)
-      ?? newRows.find(r => r.sha256 === validated.sha256)
-    let isNewAsset = false
-    if (!asset) {
-      asset = {
-        id: nextAssetId([...existingRows, ...newRows]),
-        projectId,
+  try {
+    for (const o of fileOps) {
+      const stageId = String(o.stageId ?? '')
+      if (!STAGE_ID_RE.test(stageId)) throw new TaskOpsError('addFile 缺少合法 stageId（32 hex）')
+      if (seenStage.has(stageId)) throw new TaskOpsError(`stageId 重复：${stageId}`)
+      seenStage.add(stageId)
+      if (o.clientId !== undefined) {
+        if (!CLIENT_ID_RE.test(o.clientId)) throw new TaskOpsError(`clientId 格式非法：${o.clientId}`)
+        if (seenClient.has(o.clientId)) throw new TaskOpsError(`clientId 重复：${o.clientId}`)
+        seenClient.add(o.clientId)
+      }
+      const { validated } = await prepareStage(stageId, at)
+      const root = await resolveFileRoot()
+      let asset = existingRows.find(r => r.sha256 === validated.sha256)
+        ?? newRows.find(r => r.sha256 === validated.sha256)
+      // hash 已有身份时沿用其内容寻址扩展名，不因同内容上传为 .txt/.md 多写一份孤儿字节。
+      const stored = await storeAssetBuffer(root, asset ? { ...validated, originalName: asset.relPath } : validated)
+      let isNewAsset = false
+      if (!asset) {
+        asset = {
+          id: nextAssetId([...existingRows, ...newRows]),
+          projectId,
+          fileName: validated.originalName,
+          mediaType: validated.mediaType,
+          size: validated.size,
+          sha256: validated.sha256,
+          relPath: stored.relPath,
+          addedAt: at,
+        }
+        newRows.push(asset)
+        isNewAsset = true
+      }
+      prepared.push({
+        stageId,
+        note: o.note,
+        clientId: o.clientId,
+        assetId: asset.id,
+        isNewAsset,
+        sha256: validated.sha256,
+        relPath: stored.relPath,
+        createdFile: stored.createdFile,
         fileName: validated.originalName,
         mediaType: validated.mediaType,
         size: validated.size,
-        sha256: validated.sha256,
-        relPath: stored.relPath,
-        addedAt: at,
-      }
-      newRows.push(asset)
-      isNewAsset = true
+      })
     }
-    prepared.push({
-      stageId,
-      note: o.note,
-      clientId: o.clientId,
-      assetId: asset.id,
-      isNewAsset,
-      sha256: validated.sha256,
-      relPath: stored.relPath,
-      createdFile: stored.createdFile,
-      fileName: validated.originalName,
-      mediaType: validated.mediaType,
-      size: validated.size,
-    })
+    return { prepared, newRows }
+  } catch (error) {
+    // 调用方拿不到未完成的返回值，部分 prepare 必须在此补偿，保留所有 stage。
+    await rollbackNewAssets(domain, newRows, prepared)
+    throw error
   }
-  return { prepared, newRows }
+}
+
+export type PreparedTaskFiles = Awaited<ReturnType<typeof prepareFilePromotion>>
+
+/** 在同一写队列中调用；先 prepare，再按原附件顺序生成最终 ID，最后解析进展 refs。 */
+export async function prepareTaskDraftWithFiles(
+  domain: PmDomain,
+  projectId: string,
+  base: Parameters<typeof applyTaskDraftOps>[2],
+  ops: TaskDraftOps,
+  at: string,
+): Promise<ReturnType<typeof applyTaskDraftOps> & { fileState: PreparedTaskFiles }> {
+  const fileState = await prepareFilePromotion(
+    domain, projectId, (ops.attachmentOps ?? []).filter(o => o.op === 'addFile'), at,
+  )
+  try {
+    const files = new Map(fileState.prepared.map(p => [p.stageId, { assetId: p.assetId }]))
+    return { ...applyTaskDraftOps(domain, projectId, base, ops, at, files), fileState }
+  } catch (error) {
+    await rollbackNewAssets(domain, fileState.newRows, fileState.prepared)
+    throw error
+  }
+}
+
+/** 元数据与任务一次主提交；异常的任务持久写（含写后抛错）先恢复，再由调用方补偿新资产。 */
+export async function publishPreparedTask(
+  domain: PmDomain,
+  record: Task,
+  fileState: PreparedTaskFiles | undefined,
+  previous?: Task,
+): Promise<void> {
+  const assetTable = domain.table('file_assets')
+  for (const row of fileState?.newRows ?? []) {
+    try {
+      await assetTable.put(row.id, row)
+    } catch (error) {
+      // 后端可能已经持久写入但尚未更新领域内存；不存在的内存键 delete 会短路。
+      // 先恢复领域可见行，让外层补偿确实删除磁盘上的同键，而不是遗留 JSON。
+      if (!assetTable.get(row.id)) await assetTable.put(row.id, row)
+      throw error
+    }
+  }
+  const table = domain.table('tasks')
+  try {
+    await table.put(record.id, record)
+  } catch (error) {
+    if (fileState?.prepared.length) {
+      if (previous) await table.put(previous.id, previous)
+      else {
+        if (!table.get(record.id)) await table.put(record.id, record)
+        await table.delete(record.id)
+      }
+    }
+    throw error
+  }
 }
 
 /** 回滚本次新建资产行（仅当全库无其它任务引用）并删除本次新建且无行引用的字节；保留 stage。 */
@@ -355,6 +417,7 @@ export async function rollbackNewAssets(
       ((t as { attachments?: AttachmentItem[] }).attachments ?? []).some(a => a.kind === 'file' && a.assetId === row.id))
     if (!referenced) await assetTable.delete(row.id).catch(() => {})
   }
+  if (!prepared.some(p => p.createdFile)) return
   const root = await resolveFileRoot()
   for (const p of prepared) {
     if (!p.createdFile) continue
@@ -368,24 +431,9 @@ export async function finalizePreparedStages(prepared: PreparedFile[]): Promise<
   for (const p of prepared) await finalizeStage(p.stageId).catch(() => {})
 }
 
-interface FilePlan {
-  stageId: string
-  note?: string
-  clientId?: string
-  sha256: string
-  relPath: string
-  createdFile: boolean
-  fileName: string
-  mediaType: string
-  size: number
-}
-
 /**
- * 事务边界：addFile 暂存提升 + 其余纯 ops 在同一写临界区完成。
- * 流程：先 prepare 全部 stage（校验，保留字节）→ storeAssetBuffer 内容寻址（共享幂等）→
- * 纯引擎处理 link/deliverable/remove/updateNote/progress → 登记新资产行并挂 at-N →
- * put file_assets → put task；任一步失败回滚（删本次新建且无引用的资产行、删本次新建且无行引用的字节，
- * 保留 stage 供重试，不删共享既有字节）；全部成功后 finalizeStage。
+ * material apply 与主任务保存共用 prepare/纯 ops/发布接缝；
+ * 同一临界区映射最终附件 ID，任一步失败补偿新资产，成功才消费 stage。
  */
 export async function applyTaskOpsWithFiles(
   domain: PmDomain,
@@ -396,98 +444,16 @@ export async function applyTaskOpsWithFiles(
   const at = nowIso ?? new Date().toISOString()
   return enqueueDomainWrite(domain, async () => {
     const taskTable = domain.table('tasks')
-    const assetTable = domain.table('file_assets')
-    const record = taskTable.get(taskId) as Record<string, unknown> | undefined
+    const record = taskTable.get(taskId)
     if (!record) throw new MaterialNotFoundError(`未找到任务：${taskId}`)
-    const projectId = record.projectId as string
-
-    const attachmentOps = ops.attachmentOps ?? []
-    const fileOps = attachmentOps.filter(o => o.op === 'addFile')
-    const pureAttachmentOps = attachmentOps.filter(o => o.op !== 'addFile')
-
-    // 1) 预校验 + prepare 所有 stage（不删），内容寻址落盘（共享字节幂等）。
-    const plans: FilePlan[] = []
-    const seenStage = new Set<string>()
-    const seenClient = new Set<string>()
-    for (const o of fileOps) {
-      const stageId = String(o.stageId ?? '')
-      if (!STAGE_ID_RE.test(stageId)) throw new TaskOpsError('addFile 缺少合法 stageId（32 hex）')
-      if (seenStage.has(stageId)) throw new TaskOpsError(`stageId 重复：${stageId}`)
-      seenStage.add(stageId)
-      if (o.clientId !== undefined) {
-        if (!CLIENT_ID_RE.test(o.clientId)) throw new TaskOpsError(`clientId 格式非法：${o.clientId}`)
-        if (seenClient.has(o.clientId)) throw new TaskOpsError(`clientId 重复：${o.clientId}`)
-        seenClient.add(o.clientId)
-      }
-      const { validated } = await prepareStage(stageId, at)
-      const root = await resolveFileRoot()
-      const stored = await storeAssetBuffer(root, validated)
-      plans.push({
-        stageId,
-        note: o.note,
-        clientId: o.clientId,
-        sha256: validated.sha256,
-        relPath: stored.relPath,
-        createdFile: stored.createdFile,
-        fileName: validated.originalName,
-        mediaType: validated.mediaType,
-        size: validated.size,
-      })
-    }
-
-    // 2) 纯引擎处理非 file ops（失败在任何 DB 写之前抛出，零写，stage 保留）。
-    const applied = applyTaskDraftOps(
+    const applied = await prepareTaskDraftWithFiles(
       domain,
-      projectId,
-      {
-        attachments: record.attachments as AttachmentItem[] | undefined,
-        progressLog: record.progressLog as Parameters<typeof applyTaskDraftOps>[2]['progressLog'],
-      },
-      { attachmentOps: pureAttachmentOps, progressOps: ops.progressOps },
+      record.projectId,
+      { attachments: record.attachments, progressLog: record.progressLog },
+      ops,
       at,
     )
-
-    // 3) 解析/登记资产行并挂接（同 hash 复用，同任务同 assetId 去重）。
-    const existingRows = rowsOf(assetTable)
-    const newRows: FileAssetRecord[] = []
-    const plannedAttachmentIds = new Map<string, string>()
-    for (const plan of plans) {
-      let asset = existingRows.find(r => r.sha256 === plan.sha256)
-        ?? newRows.find(r => r.sha256 === plan.sha256)
-      if (!asset) {
-        asset = {
-          id: nextAssetId([...existingRows, ...newRows]),
-          projectId,
-          fileName: plan.fileName,
-          mediaType: plan.mediaType,
-          size: plan.size,
-          sha256: plan.sha256,
-          relPath: plan.relPath,
-          addedAt: at,
-        }
-        newRows.push(asset)
-      }
-      if (!applied.attachments.some(a => a.kind === 'file' && a.assetId === asset!.id)) {
-        const item: AttachmentItem = {
-          id: nextAttachmentId(applied.attachments),
-          kind: 'file',
-          assetId: asset.id,
-          addedAt: at,
-        }
-        if (plan.note?.trim()) item.note = plan.note.trim()
-        applied.attachments.push(item)
-        if (plan.clientId) plannedAttachmentIds.set(plan.clientId, item.id)
-      }
-    }
-
-    // 4) 写 DB，失败反向补偿。
-    const createdRowIds: string[] = []
-    let next: Record<string, unknown> | undefined
     try {
-      for (const row of newRows) {
-        await assetTable.put(row.id, row)
-        createdRowIds.push(row.id)
-      }
       const nextInput: Record<string, unknown> = {
         ...record,
         attachments: applied.attachments,
@@ -495,30 +461,14 @@ export async function applyTaskOpsWithFiles(
         id: record.id,
         updatedAt: at,
       }
-      next = taskWriteSchema.parse(nextInput as never) as Record<string, unknown>
-      await taskTable.put(taskId, next as never)
+      const next = taskWriteSchema.parse(nextInput)
+      await publishPreparedTask(domain, next, applied.fileState, record)
+      await finalizePreparedStages(applied.fileState.prepared)
+      return structuredClone(next)
     } catch (err) {
-      // 回滚本次新建资产行（仅当全库无其它引用）；删本次新建且无行引用的字节；stage 全部保留。
-      for (const rid of createdRowIds) {
-        const referenced = [...domain.table('tasks').entries()].some(([, t]) =>
-          ((t as { attachments?: AttachmentItem[] }).attachments ?? []).some(a => a.kind === 'file' && a.assetId === rid))
-        if (!referenced) await assetTable.delete(rid).catch(() => {})
-      }
-      const root = await resolveFileRoot()
-      for (const plan of plans) {
-        if (!plan.createdFile) continue
-        const rowStill = rowsOf(assetTable).some(r => r.relPath === plan.relPath)
-        if (!rowStill) await unlink(resolve(root, plan.relPath)).catch(() => {})
-      }
+      await rollbackNewAssets(domain, applied.fileState.newRows, applied.fileState.prepared)
       throw err
     }
-
-    // 5) 全部成功才 finalize stage（finalize 失败仅 warning，不回滚已提交 DB，残留由 sweep 清）。
-    for (const plan of plans) {
-      await finalizeStage(plan.stageId).catch(() => {})
-    }
-    void plannedAttachmentIds
-    return structuredClone(next!)
   })
 }
 

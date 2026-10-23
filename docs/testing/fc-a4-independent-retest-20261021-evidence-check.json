@@ -1,0 +1,444 @@
+{
+  "at": "2026-10-21T12:35:04.125Z",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "candidateSha256": "df94ef965b2d9dfc5d3ecc5d3fae15e975097bdeb550e18735d15ca6df50e87f",
+  "patchSha256": "ec841d28712dadf3b747225f09ecfe1f68db4952a0a4d3eadd88952cf2e3556c",
+  "root": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX",
+  "changedSinceA3": [
+    "launcher/src/launcher-app.mjs",
+    "launcher/src/launcher-core.mjs",
+    "launcher/test/browser-open.test.mjs"
+  ],
+  "commands": [
+    {
+      "label": "launcher55",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/contract.state.test.mjs",
+        "test/browsers.controller.test.mjs",
+        "test/app.loopback.test.mjs",
+        "test/control-html.test.mjs",
+        "test/cancel.race.test.mjs",
+        "test/journey-race.test.mjs",
+        "test/loopback-security.test.mjs",
+        "test/local-app.test.mjs",
+        "test/browser-open.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:26:24.046Z",
+      "finishedAt": "2026-10-21T12:26:24.862Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-initial-launcher55.txt",
+      "sha256": "c1a0df33e54401dd7088743e8dccc72e5475d0b4a2789e7b8efce0e23b91877a"
+    },
+    {
+      "label": "dom7",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/control-html-sync.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:26:24.863Z",
+      "finishedAt": "2026-10-21T12:26:36.966Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-initial-dom7.txt",
+      "sha256": "7373176535b7a18062f6159f726c455f51b9a9dc7f2819e12deddb89f715acdb"
+    },
+    {
+      "label": "original8",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-original-probes.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:26:36.967Z",
+      "finishedAt": "2026-10-21T12:26:55.622Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-initial-original8.txt",
+      "sha256": "310add033255c6f57c45e317c355a8b1a20d3131ac6d176327a40e228e54a891"
+    },
+    {
+      "label": "additional9",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-a2-additional.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:27:56.413Z",
+      "finishedAt": "2026-10-21T12:28:41.841Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-a2-additional9.txt",
+      "sha256": "c3e615833b9fe72be1b944d2f5ec11b6bde3bc9f3b980a2015d162cc5aed35ca"
+    },
+    {
+      "label": "followup10",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-a2-followup.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:28:41.842Z",
+      "finishedAt": "2026-10-21T12:29:28.051Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-a2-followup10.txt",
+      "sha256": "91e241d38dd0dd0becb08f9e8af8f5e707eae52150d7f7713a374311369519ed"
+    },
+    {
+      "label": "original-probes13",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-a3-probes.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:29:56.289Z",
+      "finishedAt": "2026-10-21T12:30:41.213Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 13,
+        "pass": 13,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-a3-original-probes13.txt",
+      "sha256": "1c303ff427fe0f96daeda6bcbca9298e8f6ddc6771f059c1ced4117c80f084a3"
+    },
+    {
+      "label": "additional",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-a4-probes.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:30:41.617Z",
+      "finishedAt": "2026-10-21T12:30:59.015Z",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 25,
+        "pass": 24,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-probes-additional.txt",
+      "sha256": "b534a133a331284a5205ab7fcd6a51df367f3e4ef9ac687963c12e3639df4924"
+    },
+    {
+      "label": "additional",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "test/fc-a4-probes.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher",
+      "startedAt": "2026-10-21T12:33:03.285Z",
+      "finishedAt": "2026-10-21T12:33:24.298Z",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "summary": {
+        "tests": 26,
+        "pass": 24,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/testing/fc-a4-independent-retest-20261021-probes-r2-additional.txt",
+      "sha256": "38ae11b6e6ac98774f14d6a80792aca7bd376fe8377ba129bff801f050246b4d"
+    }
+  ],
+  "originalTests": [
+    {
+      "src": "fc-fix-independent-retest-20261021-probes.test.mjs",
+      "sourceHash": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+      "copyHash": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740"
+    },
+    {
+      "src": "fc-a2-independent-retest-20261021-additional.test.mjs",
+      "sourceHash": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+      "copyHash": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0"
+    },
+    {
+      "src": "fc-a2-independent-retest-20261021-followup.test.mjs",
+      "sourceHash": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+      "copyHash": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8"
+    },
+    {
+      "src": "fc-a3-independent-retest-20261021-probes.test.mjs",
+      "sourceHash": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+      "copyHash": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4"
+    }
+  ],
+  "processChecks": [
+    {
+      "pid": 10614,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "pid": 10763,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "pid": 10842,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "pid": 11062,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "pid": 11177,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "pid": 11879,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "processBoundary": "只核日志明确打印的自有Chrome PID；DOM7未打印PID，不宣称其完整PID列表。所有round finishedAt存在、fixture正常清理。",
+  "author": [
+    {
+      "name": "author-red.json",
+      "sha256": "0dc428f1da18a3fa6e5353b638055f31b8217b7b11d9758d15ee182b64d524a1",
+      "summaries": []
+    },
+    {
+      "name": "author-red.txt",
+      "sha256": "3ec78fb328d0bcfce02d768f960045a867d024dccf6538d6cd5924220cee2823",
+      "summaries": [
+        {
+          "key": "tests",
+          "value": 6
+        },
+        {
+          "key": "pass",
+          "value": 4
+        },
+        {
+          "key": "fail",
+          "value": 2
+        },
+        {
+          "key": "cancelled",
+          "value": 0
+        },
+        {
+          "key": "skipped",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "author-execution.json",
+      "sha256": "79d9291b631aa939d262da62056911c85d66448344b9a0ac3d1158ff06c6d497",
+      "summaries": []
+    },
+    {
+      "name": "author-launcher55.txt",
+      "sha256": "ff709c4f0c2eab457c962b7cded98be08b0c973437edbd599bf42ddc1af72dcd",
+      "summaries": [
+        {
+          "key": "tests",
+          "value": 55
+        },
+        {
+          "key": "pass",
+          "value": 55
+        },
+        {
+          "key": "fail",
+          "value": 0
+        },
+        {
+          "key": "cancelled",
+          "value": 0
+        },
+        {
+          "key": "skipped",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "author-dom-a3.txt",
+      "sha256": "500c7e3959670adcf7124469b7ae6cf2ad77547fb3f5e0087bb7154754e4f3dd",
+      "summaries": [
+        {
+          "key": "tests",
+          "value": 28
+        },
+        {
+          "key": "pass",
+          "value": 28
+        },
+        {
+          "key": "fail",
+          "value": 0
+        },
+        {
+          "key": "cancelled",
+          "value": 0
+        },
+        {
+          "key": "skipped",
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "authorBoundary": "只审作者日志原件，作者red未独立绑定完整红候选，不把作者exit当独立结论。",
+  "evidence": [
+    {
+      "name": "fc-a4-independent-retest-20261021-a2-additional9.txt",
+      "sha256": "c3e615833b9fe72be1b944d2f5ec11b6bde3bc9f3b980a2015d162cc5aed35ca"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-a2-followup10.txt",
+      "sha256": "91e241d38dd0dd0becb08f9e8af8f5e707eae52150d7f7713a374311369519ed"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-a2-result.json",
+      "sha256": "9c862ae55578386c1fdfdf02fe62a8b2d005a0066ae0a93697118791a2302583"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-a3-original-probes13.txt",
+      "sha256": "1c303ff427fe0f96daeda6bcbca9298e8f6ddc6771f059c1ced4117c80f084a3"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-a3-result.json",
+      "sha256": "109cc4dec20787284f86b84afea0269d7a8f28e0f71a2cfbf2273fdb37ac630a"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-evidence-check.mjs",
+      "sha256": "1cdc62a20ba0132f5106426fe9dc5e252c8bf6aad2c9596348113172cd238858"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-final-result.json",
+      "sha256": "9e0c0b4538fc722a8195cd4a3bf98fa807a9bd1b47a6da818577afb133971d71"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-initial-dom7.txt",
+      "sha256": "7373176535b7a18062f6159f726c455f51b9a9dc7f2819e12deddb89f715acdb"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-initial-launcher55.txt",
+      "sha256": "c1a0df33e54401dd7088743e8dccc72e5475d0b4a2789e7b8efce0e23b91877a"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-initial-original8.txt",
+      "sha256": "310add033255c6f57c45e317c355a8b1a20d3131ac6d176327a40e228e54a891"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-initial-result.json",
+      "sha256": "52c3c5a54c07f3d5bb6fe2e7cd0e37fac1f54ea1fd756478081f41306de6b4d6"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-plan.md",
+      "sha256": "0336b276840729b56d53d24f1efee2872a7110db3d522dcee1683ce97fdd1b61"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-probes-additional.txt",
+      "sha256": "b534a133a331284a5205ab7fcd6a51df367f3e4ef9ac687963c12e3639df4924"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-probes-r2-additional.txt",
+      "sha256": "38ae11b6e6ac98774f14d6a80792aca7bd376fe8377ba129bff801f050246b4d"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-probes-r2-result.json",
+      "sha256": "14511ec5d562ba87893e2f849e8b1d68ff027fa2471d4e2f96eced084849d618"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-probes-result.json",
+      "sha256": "12b35e9f97c529777154f19c4a538b91efbda0b80478b803381b3044682d5da6"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-probes.test.mjs",
+      "sha256": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6"
+    },
+    {
+      "name": "fc-a4-independent-retest-20261021-run.mjs",
+      "sha256": "bf6fca5092305a71305e70df036f4aaff77d2d0a5fa318d6e5ed5b598b9390a8"
+    }
+  ],
+  "finiteAutoVerdict": "FAIL",
+  "defect": "FC-A4-01 当前有效回告S4后迟到OS失败覆盖S6且confirmed=true，existing/owned/reopen同根因",
+  "boundary": "无Finder/真实dsh认证/正式服务/插件全量build或verify判定；身份审计exit0不等AUTO通过。"
+}

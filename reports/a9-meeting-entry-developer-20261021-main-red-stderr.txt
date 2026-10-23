@@ -1,0 +1,32 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 主保存两条既有草稿，按 stable ID 保关联、来源与创建历史
+[31m[1mZodError[22m: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "path": [
+      "impact"
+    ],
+    "message": "Invalid option: expected one of \"low\"|\"medium\"|\"high\"|\"critical\""
+  }
+][39m
+[36m [2m❯[22m Module.addRiskIssue src/core/risk-issues.ts:[2m22:40[22m[39m
+    [90m 20| [39m
+    [90m 21| [39m[35mexport[39m [35mfunction[39m [34maddRiskIssue[39m(domain[33m:[39m [33mPmDomain[39m[33m,[39m input[33m:[39m unknown)[33m:[39m [33mPromis[39m…
+    [90m 22| [39m  [35mconst[39m fields [33m=[39m riskIssueCreateSchema[33m.[39m[34mparse[39m(input)
+    [90m   | [39m                                       [31m^[39m
+    [90m 23| [39m  [35mreturn[39m [34menqueueDomainWrite[39m(domain[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m 24| [39m    [35mif[39m ([33m![39mdomain[33m.[39m[34mtable[39m([32m'projects'[39m)[33m.[39m[35mget[39m(fields[33m.[39mprojectId)) {
+[90m [2m❯[22m fixture src/client/views/records/records-meeting-entry.test.tsx:[2m52:23[22m[39m
+[90m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m83:13[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ _zod: { def: [ { code: 'invalid_value', values: [ 'low', 'medium', 'high', 'critical' ], path: [ 'impact' ], message: 'Invalid option: expected one of "low"|"medium"|"high"|"critical"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', size: 2, values: 'Function<values>', keys: 'Function<values>', union: 'Function<union>', intersection: 'Function<intersection>', difference: 'Function<difference>', symmetricDifference: 'Function<symmetricDifference>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>' }, message: '[\n  {\n    "code": "invalid_value",\n    "values": [\n      "low",\n      "medium",\n      "high",\n      "critical"\n    ],\n    "path": [\n      "impact"\n    ],\n    "message": "Invalid option: expected one of \"low\"|\"medium\"|\"high\"|\"critical\""\n  }\n]' }, issues: [ { code: 'invalid_value', values: [ 'low', 'medium', 'high', 'critical' ], path: [ 'impact' ], message: 'Invalid option: expected one of "low"|"medium"|"high"|"critical"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

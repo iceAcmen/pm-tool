@@ -1,0 +1,10 @@
+{
+  "command": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "docs/plans/2026-10-23-p2002-outbound-slot-runner.mjs", "red-r2"],
+  "exit": 1,
+  "error": "MODULE_NOT_FOUND: Cannot find module 'vite/package.json'; createRequire used symlink origin instead of real vitest package location",
+  "classification": "FACILITY_FAIL",
+  "productTestsExecuted": false,
+  "root": "/tmp/pm-p2002-outbound-slot-0BVVIe/red-r2",
+  "action": "preserved; next red-r3 uses realpath existing vitest package.json",
+  "verdict": "NOT_JUDGED"
+}

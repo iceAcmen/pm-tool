@@ -1,0 +1,26 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-nAqncL/packages/dsh-pm-tool[39m
+
+ [31m❯[39m src/core/file-root.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[90m 7[2mms[22m[39m
+[31m   [31m×[31m F2 文件根 precedence / fail-closed[2m > [22mdev/test 信号允许 builtin-dev 回退，生产无信号不回退[90m 2[2mms[22m[31m[39m
+[31m     → Cannot redefine property: mkdir[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 18:09:17
+[2m   Duration [22m 334ms[2m (transform 94ms, setup 0ms, collect 149ms, tests 7ms, environment 0ms, prepare 44ms)[22m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/core/file-root.test.ts[2m > [22mF2 文件根 precedence / fail-closed[2m > [22mdev/test 信号允许 builtin-dev 回退，生产无信号不回退
+[31m[1mTypeError[22m: Cannot redefine property: mkdir[39m
+[36m [2m❯[22m src/core/file-root.test.ts:[2m69:22[22m[39m
+    [90m 67| [39m    [90m// 本格验证默认路径选择与创建参数；隔离拦截唯一mkdir，不在仓库创建[39m…
+    [90m 68| [39m    [90m// 显式/isolated/profile三格仍走真实文件系统，生产fail-closed不变。[39m
+    [90m 69| [39m    [35mconst[39m mkdir [33m=[39m vi[33m.[39m[34mspyOn[39m(fileSystem[33m,[39m [32m'mkdir'[39m)[33m.[39m[34mmockResolvedValue[39m(unde…
+    [90m   | [39m                     [31m^[39m
+    [90m 70| [39m    [35mtry[39m {
+    [90m 71| [39m      process[33m.[39menv[33m.[39m[33mDSH_DEV[39m [33m=[39m [32m'1'[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

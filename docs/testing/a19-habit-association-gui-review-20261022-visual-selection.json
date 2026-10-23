@@ -1,0 +1,30 @@
+{
+  "reviewer": "trae independent A19 GUI evidence reviewer, not collector/developer",
+  "files": [
+    { "path": "final/seed/precheck.png", "observation": "标准 F5 备份预检与首个确认入口；只核合法恢复链，不签恢复组件全样式" },
+    { "path": "final/seed/first-confirm.png", "observation": "正常第二确认层与具体备份对象；不将其样式转成本单验收" },
+    { "path": "final/seed/restored.png", "observation": "真实已恢复提示、F5 项目任务入口" },
+    { "path": "habit-association/nav-1792634874169/actual.png", "observation": "恢复后两有效 pending 建议自身 F5 标题和原 OKR ID 可辨；不是借顶部习惯卡" },
+    { "path": "habit-association/confirm-1792634886688/actual.png", "observation": "新增草稿卡、第一建议已采纳；关联 ID 留在自身建议条目" },
+    { "path": "habit-association/ignore-1792634894762/actual.png", "observation": "第一已采纳、第二已忽略、missing 原 ID、无关联不借目标，理由和状态各归自身" },
+    { "path": "habit-association/reenter-1792634905223/actual.png", "observation": "正常重进习惯页；仍有新 draft 和原 F5 习惯；不称新进程恢复" },
+    { "path": "habit-association/command-1792634807916/before-submit.png", "observation": "可见 composer 输入完整 missing 原 ID，真实合法 suggest，不是手造业务库" },
+    { "path": "habit-association/command-1792634928532/before-submit.png", "observation": "可见 composer 输入完整长标题、HTML 外形普通文本和连续编号" },
+    { "path": "habit-association/suggestion-visible-1792634962691/actual.png", "observation": "1440 深色：确认建议自身当前长标题、原 ID、理由和已采纳全可读；顶部既有卡徽章连续编号被裁切" },
+    { "path": "habit-association/width-1792634972808/actual.png", "observation": "390 深色：顶部两个既有习惯卡长关联徽章右侧裁切；另列旧卡局部缺陷，不归新建议行" },
+    { "path": "habit-association/suggestion-visible-1792634986861/actual.png", "observation": "390：confirmed/ignored 自身长目标行换行，完整标题、HTML 外形字符串、72 连续字符、原 ID 和状态可读" },
+    { "path": "habit-association/suggestion-visible-1792634996320/actual.png", "observation": "390：滚到 missing 建议，自身旧 ID 换行完整，理由及两按钮可见，不借 F5 标题" },
+    { "path": "habit-association/suggestion-visible-1792635005070/actual.png", "observation": "390：滚到无关联建议，无虚构目标行；理由与两个原按钮可见" },
+    { "path": "habit-association/confirm-1792634886688/frames/000002.jpg", "observation": "连续采纳帧起点：pending 自身 F5 目标/ID/理由及原采纳按钮" },
+    { "path": "habit-association/confirm-1792634886688/frames/000003.jpg", "observation": "相邻采纳帧：实际点击前后原建议区，目标未借卡片" },
+    { "path": "habit-association/confirm-1792634886688/frames/000004.jpg", "observation": "相邻采纳帧：原理由、目标及原动作留在同条目；不称这个早帧已完成写入" },
+    { "path": "habit-association/confirm-1792634886688/frames/000019.jpg", "observation": "采纳完成帧：具体建议/新 habit ID 成功提示，新草稿卡和建议已采纳、自身关联仍可见" },
+    { "path": "habit-association/ignore-1792634894762/frames/000002.jpg", "observation": "连续忽略帧起点：第二 pending 建议自身 F5/ID/理由及按钮" },
+    { "path": "habit-association/ignore-1792634894762/frames/000003.jpg", "observation": "相邻忽略帧：忽略按钮真实焦点环，条目目标/理由未丢失" },
+    { "path": "habit-association/ignore-1792634894762/frames/000004.jpg", "observation": "相邻忽略帧：原动作区域仍在；不把早帧当终态" },
+    { "path": "habit-association/ignore-1792634894762/frames/000023.jpg", "observation": "忽略完成帧：具体建议 ID 已忽略且不会创建记录提示，条目已忽略仍保自身目标" },
+    { "path": "habit-association/nav-1792634827620/frames/000012.jpg", "observation": "原失败帧实际仍全部任务；虽习惯按钮焦点可见，不足认定导航产品缺陷或成功" },
+    { "path": "habit-association/suggestion-visible-1792634986861/frames/000003.jpg", "observation": "真实390连续采证末帧确认两 processed 建议长标题/ID换行；顶部旧卡仍裁切" }
+  ],
+  "boundary": "24 original paths individually inspected using view_image; no browser, no image generation, no whole-page or global-matrix sign-off"
+}

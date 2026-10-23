@@ -1,0 +1,167 @@
+diff --git a/packages/dsh-pm-tool/src/client/views/meetings.tsx b/packages/dsh-pm-tool/src/client/views/meetings.tsx
+index 67485ab..2921183 100644
+--- a/packages/dsh-pm-tool/src/client/views/meetings.tsx
++++ b/packages/dsh-pm-tool/src/client/views/meetings.tsx
+@@ -22,6 +22,7 @@ import { EmptyState, PmButton } from '../shared/ui/index.js'
+ import type { Meeting } from './types.js'
+ import type { MeetingCallbacks } from '../shared/records-props.js'
+ import { RecordsOverlay, RecordsMeetingForm } from './records/index.js'
++import type { RecordsMeetingFormProps } from './records/records-meeting-form.js'
+ 
+ /** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
+ export interface MeetingsRecordsSlot {
+@@ -53,13 +54,15 @@ function actionOverdue(a: Meeting['actions'][number], today: string): boolean {
+ 
+ export function MeetingsView(props: {
+   meetings: Meeting[]
++  tasks?: RecordsMeetingFormProps['tasks']
++  riskIssues?: RecordsMeetingFormProps['riskIssues']
+   onCreate: () => void
+   onEdit: (m: Meeting) => void
+   records?: MeetingsRecordsSlot
+   /** 页头主 CTA 触发计数；统一打开 records 会议表单。 */
+   createRequest?: number
+ }) {
+-  const { meetings, onCreate, onEdit, records, createRequest = 0 } = props
++  const { meetings, tasks, riskIssues, onCreate, onEdit, records, createRequest = 0 } = props
+   const today = localTodayIso()
+   const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', meeting: Meeting } | null>(null)
+ 
+@@ -129,6 +132,8 @@ export function MeetingsView(props: {
+           <RecordsOverlay eyebrow="会议纪要" title="新增会议纪要" onClose={closeForm}>
+             <RecordsMeetingForm
+               projectId={records.projectId}
++              tasks={tasks}
++              riskIssues={riskIssues}
+               callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+               onCancel={closeForm}
+             />
+@@ -317,6 +322,8 @@ export function MeetingsView(props: {
+         >
+           <RecordsMeetingForm
+             projectId={records.projectId}
++            tasks={tasks}
++            riskIssues={riskIssues}
+             meeting={form.mode === 'edit' ? form.meeting : undefined}
+             callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
+             onCancel={closeForm}
+diff --git a/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx b/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
+index c447956..687ea93 100644
+--- a/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
++++ b/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
+@@ -12,7 +12,7 @@
+ import { useState } from 'react'
+ import css from '../records.css?raw'
+ import { validateMeetingForm, type FormFieldErrors } from '../../form-validation.js'
+-import type { Meeting, MeetingAction } from '../types.js'
++import type { Meeting, MeetingAction, Task, RiskIssue } from '../types.js'
+ import type { MeetingCallbacks, MeetingPayload, MeetingActionPayload } from '../../shared/records-props.js'
+ import {
+   normalizeMeetingPayload,
+@@ -26,12 +26,15 @@ export interface RecordsMeetingFormProps {
+   projectId: string
+   meeting?: Meeting
+   callbacks: MeetingCallbacks
++  tasks?: readonly Pick<Task, 'id' | 'projectId' | 'code' | 'title'>[]
++  riskIssues?: readonly Pick<RiskIssue, 'id' | 'projectId' | 'type' | 'title'>[]
+   disabled?: boolean
+   onCancel: () => void
+ }
+ 
+ interface ActionDraft {
+   key: string
++  actionId: string | null
+   title: string
+   owner: string
+   dueDate: string
+@@ -40,9 +43,10 @@ interface ActionDraft {
+   riskIssueId: string
+ }
+ 
+-function actionToDraft(action: MeetingAction, index: number): ActionDraft {
++function actionToDraft(action: MeetingAction): ActionDraft {
+   return {
+-    key: action.id || `new-${index}`,
++    key: action.id,
++    actionId: action.id,
+     title: action.title,
+     owner: action.owner,
+     dueDate: action.dueDate ?? '',
+@@ -53,7 +57,10 @@ function actionToDraft(action: MeetingAction, index: number): ActionDraft {
+ }
+ 
+ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+-  const { projectId, meeting, callbacks, disabled = false, onCancel } = props
++  const { projectId, meeting, callbacks, tasks = [], riskIssues = [], disabled = false, onCancel } = props
++  const meetingProjectId = meeting?.projectId ?? projectId
++  const taskOptions = tasks.filter(task => task.projectId === meetingProjectId)
++  const issueOptions = riskIssues.filter(issue => issue.projectId === meetingProjectId && issue.type === 'issue')
+   const [values, setValues] = useState<MeetingFormRaw>({
+     title: meeting?.title ?? '',
+     meetingDate: meeting?.meetingDate ?? '',
+@@ -91,7 +98,15 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+     try {
+       const payload: MeetingPayload = normalizeMeetingPayload(values)
+       const ok = await callbacks.onSaveMeeting(projectId, meeting?.id ?? null, payload)
+-      if (ok) callbacks.onSaved()
++      if (!ok) return
++      if (meeting) {
++        for (const draft of drafts) {
++          const actionPayload = normalizeMeetingActionPayload(draft)
++          if (!draft.actionId && !actionPayload.title) continue
++          if (!await callbacks.onSaveAction(meeting.id, draft.actionId, actionPayload)) return
++        }
++      }
++      callbacks.onSaved()
+     } finally {
+       setSubmitting(false)
+     }
+@@ -198,7 +213,7 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+           </div>
+           <div className="pm-form-section-grid">
+             {drafts.map((draft, idx) => {
+-              const existing = meeting.actions[idx]
++              const existing = meeting.actions.find(action => action.id === draft.actionId)
+               return (
+                 <div className="rb-action-row" key={draft.key}>
+                   <input aria-label="行动项标题" placeholder="行动项标题" value={draft.title}
+@@ -214,6 +229,30 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+                     onChange={v => setDrafts(prev => prev.map((d, i) => i === idx ? { ...d, status: v } : d))}
+                     ariaLabel="行动项状态"
+                   />
++                  <select aria-label="关联任务" value={draft.taskId} disabled={disabled || submitting}
++                    onChange={event => {
++                      const value = event.currentTarget.value
++                      if (value && !taskOptions.some(task => task.id === value)) return
++                      setDrafts(prev => prev.map(d => d.key === draft.key ? { ...d, taskId: value } : d))
++                    }}>
++                    <option value="">不关联任务</option>
++                    {draft.taskId && !taskOptions.some(task => task.id === draft.taskId) && (
++                      <option value={draft.taskId} disabled>已关联任务 {draft.taskId}（候选不可用）</option>
++                    )}
++                    {taskOptions.map(task => <option key={task.id} value={task.id}>{task.code} {task.title}</option>)}
++                  </select>
++                  <select aria-label="关联问题" value={draft.riskIssueId} disabled={disabled || submitting}
++                    onChange={event => {
++                      const value = event.currentTarget.value
++                      if (value && !issueOptions.some(issue => issue.id === value)) return
++                      setDrafts(prev => prev.map(d => d.key === draft.key ? { ...d, riskIssueId: value } : d))
++                    }}>
++                    <option value="">不关联问题</option>
++                    {draft.riskIssueId && !issueOptions.some(issue => issue.id === draft.riskIssueId) && (
++                      <option value={draft.riskIssueId} disabled>已关联问题 {draft.riskIssueId}（候选不可用）</option>
++                    )}
++                    {issueOptions.map(issue => <option key={issue.id} value={issue.id}>{issue.title}</option>)}
++                  </select>
+                   <button type="button" className="pm-button"
+                     onClick={() => void saveAction(draft, existing?.id ?? null)}>保存</button>
+                   {existing && (
+@@ -232,7 +271,7 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+               )
+             })}
+             <button type="button" className="pm-button" onClick={() => setDrafts(prev => [...prev, {
+-              key: `new-${prev.length}`, title: '', owner: '', dueDate: '', status: 'todo', taskId: '', riskIssueId: '',
++              key: `new-${prev.length}`, actionId: null, title: '', owner: '', dueDate: '', status: 'todo', taskId: '', riskIssueId: '',
+             }])}>添加行动项</button>
+           </div>
+         </section>

@@ -75,6 +75,7 @@
 /* D-04/C-05/C-06：工具条四段视觉分组。同段动作聚拢，段间 hairline 留白分隔；
    密度段独立收末端次要位，不与视图/本地操作等权。段容器允许换行，不顶出外壳。 */
 .pm-tasks-root .pt-seg { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; }
+.pm-tasks-root .pt-seg-data { flex-wrap: wrap; max-width: 100%; box-sizing: border-box; }
 .pm-tasks-root .pt-seg-persist,
 .pm-tasks-root .pt-seg-org,
 .pm-tasks-root .pt-seg-data { padding-left: var(--sp-3); border-left: 1px solid var(--line); }
@@ -125,6 +126,63 @@
   border: 0; background: transparent; color: inherit; font: inherit;
   font-size: var(--t-12); cursor: pointer; max-width: 132px;
 }
+.pm-tasks-root .pt-view-settings { position: relative; }
+.pm-tasks-root .pt-view-settings > summary { list-style: none; }
+.pm-tasks-root .pt-view-settings > summary::-webkit-details-marker { display: none; }
+.pm-tasks-root .pt-view-settings[open] > summary {
+  color: var(--ink); background: var(--surface-3); border-color: var(--line-3);
+}
+.pm-tasks-root .pt-view-settings-count {
+  min-width: 18px; height: 18px; padding: 0 5px; display: inline-grid; place-items: center;
+  border-radius: 999px; background: var(--field-bg); color: var(--muted);
+  font-size: var(--t-10); font-variant-numeric: tabular-nums;
+}
+.pm-tasks-root .pt-view-settings-panel {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: var(--z-pop);
+  width: min(420px, calc(100vw - 32px)); max-height: min(70vh, 520px); overflow: auto;
+  padding: var(--sp-3); display: grid; gap: var(--sp-3);
+  border: 1px solid var(--line-2); border-radius: var(--r);
+  background: var(--surface); box-shadow: var(--shadow-3);
+}
+.pm-tasks-root .pt-view-settings-panel section { display: grid; gap: var(--sp-2); min-width: 0; }
+.pm-tasks-root .pt-view-settings-panel header {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  color: var(--ink); font-size: var(--t-12); font-weight: 650;
+}
+.pm-tasks-root .pt-view-settings-panel p {
+  margin: 0; color: var(--muted); font-size: var(--t-11); line-height: 1.5;
+}
+.pm-tasks-root .pt-sort-rules { display: grid; gap: var(--sp-2); }
+.pm-tasks-root .pt-sort-rule {
+  display: grid; grid-template-columns: 20px minmax(96px, 1fr) 76px auto;
+  align-items: center; gap: var(--sp-2); min-width: 0;
+}
+.pm-tasks-root .pt-sort-index {
+  width: 20px; height: 20px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--field-bg); color: var(--muted);
+  font-size: var(--t-10); font-variant-numeric: tabular-nums;
+}
+.pm-tasks-root .pt-sort-rule select {
+  width: 100%; min-width: 0; height: 32px; padding: 0 var(--sp-2);
+  border: 1px solid var(--line); border-radius: var(--r-xs);
+  background: var(--field-bg); color: var(--ink-2); font: inherit; font-size: var(--t-11);
+}
+.pm-tasks-root .pt-sort-rule-actions { display: inline-flex; align-items: center; }
+.pm-tasks-root .pt-iconbtn:disabled { opacity: .38; cursor: not-allowed; }
+.pm-tasks-root .pt-column-options {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-2);
+}
+.pm-tasks-root .pt-column-options label {
+  min-height: 32px; padding: 0 var(--sp-2); display: flex; align-items: center; gap: var(--sp-2);
+  border: 1px solid var(--line); border-radius: var(--r-xs);
+  color: var(--ink-2); background: var(--field-bg); font-size: var(--t-11); cursor: pointer;
+}
+.pm-tasks-root .pt-column-options input { accent-color: var(--c-prog); }
+.pm-tasks-root .pt-view-settings summary:focus-visible,
+.pm-tasks-root .pt-sort-rule select:focus-visible,
+.pm-tasks-root .pt-column-options input:focus-visible {
+  outline: 2px solid var(--c-prog); outline-offset: 2px;
+}
 .pm-tasks-root .pt-primary {
   display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
   /* 契约 §2.1 专用 accessible action token：fill/hover/on 全部走共享 token，模块不硬编码 rgb/白色字值。 */
@@ -151,6 +209,7 @@
 .pm-tasks-root .pt-grid {
   display: grid;
   grid-template-columns: 22px 28px 62px minmax(0, 1fr) 128px 64px 108px 148px 72px;
+  grid-template-columns: var(--pt-grid-columns, 22px 28px 62px minmax(0, 1fr) 128px 64px 108px 148px 72px);
   align-items: center;
 }
 
@@ -209,7 +268,7 @@
 
 /* D-05/C-07：编号列恒显稳定句柄（code 或短 ID），列宽由 grid 固定（62px），不挤压任务名。
    句柄可点击复制，code 等宽中性，存量短 ID 弱化分级；200% 缩放不截断、不叠印。 */
-.pm-tasks-root .pt-code { font-family: var(--pm-font-mono); min-width: 0; }
+.pm-tasks-root .pt-code { font-family: var(--pm-font-mono); min-width: 0; flex-direction: column; align-items: stretch; }
 .pm-tasks-root .pt-code-btn {
   display: inline-flex; align-items: center; gap: 4px; max-width: 100%;
   background: none; border: 1px solid transparent; border-radius: 6px;
@@ -229,7 +288,14 @@
 .pm-tasks-root .pt-code-btn.copied { color: var(--c-done); }
 /* Minor 返修：复制被拒/无剪贴板时温和提示，不假成功；句柄仍可见供手动选择。仅消费已定义 token，不写 hex。 */
 .pm-tasks-root .pt-code-btn.failed { color: var(--c-block); border-color: color-mix(in srgb, var(--c-block) 35%, transparent); }
-.pm-tasks-root .pt-code-btn.failed .pt-code-val { color: var(--c-block); }
+.pm-tasks-root .pt-code-btn.failed .pt-code-val { color: var(--c-block); user-select: text; }
+/* GNHD-01：反馈独立于带图标的按钮，62px列内换行，不省略全文、不覆盖任务列。 */
+.pm-tasks-root .pt-code-feedback {
+  display: block; max-width: 100%; min-width: 0;
+  font-size: var(--t-11); line-height: 1.2;
+  white-space: normal; overflow-wrap: anywhere; color: var(--c-done);
+}
+.pm-tasks-root .pt-code-feedback.failed { color: var(--c-block); }
 
 /* 任务名 + 状态点 */
 .pm-tasks-root .pt-task { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -583,6 +649,15 @@
   .pm-tasks-root .pt-toolbar { gap: var(--sp-2); }
   .pm-tasks-root .pt-tools { flex-wrap: wrap; justify-content: flex-start; gap: var(--sp-2); }
   .pm-tasks-root .pt-sort-wrap select { max-width: none; }
+  .pm-tasks-root .pt-view-settings { width: 100%; }
+  .pm-tasks-root .pt-view-settings > summary { width: 100%; justify-content: flex-start; }
+  .pm-tasks-root .pt-view-settings-panel {
+    position: static; width: 100%; max-height: none; margin-top: var(--sp-2); box-sizing: border-box;
+  }
+  .pm-tasks-root .pt-sort-rule {
+    grid-template-columns: 20px minmax(0, 1fr) 72px;
+  }
+  .pm-tasks-root .pt-sort-rule-actions { grid-column: 2 / -1; justify-content: flex-end; }
   .pm-tasks-root .pt-primary { width: 100%; justify-content: center; }
   .pm-tasks-root .pt-card { margin: 0; }
   .pm-tasks-root .pt-batch { margin: 0; }
@@ -813,6 +888,7 @@
   }
   .pm-tasks-root .pt-chip { flex: 0 0 auto; }
   .pm-tasks-root .pt-tools { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .pm-tasks-root .pt-seg-org { flex-wrap: wrap; max-width: 100%; box-sizing: border-box; }
   .pm-tasks-root .pt-density-chip { display: none; }
   .pm-tasks-root .pt-density { width: 100%; justify-content: flex-start; }
 }

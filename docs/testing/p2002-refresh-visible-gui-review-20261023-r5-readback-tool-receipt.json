@@ -1,0 +1,21 @@
+{
+  "platform": "trae",
+  "role": "本专家自有 outer，仅启动同目录内置 reader",
+  "startedAt": "2026-10-23T02:49:34.721Z",
+  "endedAt": "2026-10-23T02:49:34.846Z",
+  "durationMs": 125,
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p2002-refresh-visible-gui-review-20261023-r5-expert-Pkx64s/reader.mjs",
+    "readback"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "parentPid": 63305,
+  "childPid": 63306,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"mode\":\"readback\",\"file\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json\",\"pid\":63306,\"startedAt\":\"2026-10-23T02:49:34.778Z\",\"endedAt\":\"2026-10-23T02:49:34.835Z\",\"durationMs\":57,\"checkedUniqueFiles\":146,\"inputReads\":148,\"drift\":0,\"verdict\":\"PASS_LIMITED_GUI_REFRESH_VISIBLE\"}\n",
+  "stderr": "",
+  "receiptBasis": "node:child_process.spawnSync 实际 wait 结果，非预填状态；上层 exec_command 另实际观察本 outer 终码"
+}

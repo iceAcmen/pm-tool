@@ -1,0 +1,54 @@
+{
+  "status": 0,
+  "state": "STOP/released",
+  "at": "2026-10-23T02:02:30.578Z",
+  "ownRoot": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM",
+  "readback": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-readback.json",
+    "bytes": 1015,
+    "sha256": "9a364cfc9dcb99c54acdd5800e963ef6c00febf9aae0c7840f99fffec0952feb"
+  },
+  "timing": {
+    "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/timing.jsonl",
+    "bytes": 8212,
+    "sha256": "b52b39618396dc3ae5112e79cf9d94efb855e19766a46c0b802179478b3ef51f"
+  },
+  "toolReceipts": [
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/audit.tool-receipt.json",
+      "bytes": 1165,
+      "sha256": "d28c886b3d4b310904b1426861b5e6957e663615c7da18c9effa32bc1737f896"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/audit-r2.tool-receipt.json",
+      "bytes": 1257,
+      "sha256": "76725ca35aeea78aed8aa25b3278afa4005579f423b7b59f1dc36e9b25726567"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/audit-r3.tool-receipt.json",
+      "bytes": 564,
+      "sha256": "2dae13748a2682d3fafd9c0b2807a317be0da831162487fc79717e6deb21e51a"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/retest.tool-receipt.json",
+      "bytes": 1181,
+      "sha256": "92ac6a1d9c4177904a33ad470e4515613860c315f409e1b121a5eb66bcd6cdae"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/retest-r2.tool-receipt.json",
+      "bytes": 568,
+      "sha256": "6ca063677b2eb45fceac52b5a4971cd664486293d42db79ec18df27a240194dd"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/seal.tool-receipt.json",
+      "bytes": 556,
+      "sha256": "73c965aad09062e0c4e08bd9ee9aa8ceb10185cb5d0fd9039b3b4b4baeb59614"
+    },
+    {
+      "path": "/private/tmp/l8-gantt-source-auto-review-20261023-r7-bqHBkM/readback.tool-receipt.json",
+      "bytes": 564,
+      "sha256": "66e16fda3d2434aab3d58f80127ea078afb620045fa30f036cc8e1ec02ee7ecd"
+    }
+  ],
+  "result": "SOURCE/AUTO limited PASS; no GUI/B8/parent commit signature; no active own child."
+}

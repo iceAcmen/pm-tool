@@ -1,0 +1,75 @@
+[90mstderr[2m | probes.test.tsx[2m > [22m[2mLG-04 contract：真实 PmPanel 任务入口到 TaskForm，叶子清单必须可勾选
+[22m[39mWarning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `TaskTable`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at TaskTable (/private/tmp/pmtool-a8-layer-gap-b0X9LM/src/client/views/tasks.tsx:355:5)
+    at section
+    at div
+    at PageShell (/private/tmp/pmtool-a8-layer-gap-b0X9LM/src/client/shared/page-shell.tsx:3:22)
+    at div
+    at div
+    at main
+    at PmPanel (/private/tmp/pmtool-a8-layer-gap-b0X9LM/src/client/panel.tsx:478:20)
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 4 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m probes.test.tsx[2m > [22mLG-01 contract：默认 MeetingsView 编辑真实 records 必须有任务/问题关联及解除入口
+[31m[1mAssertionError[22m: 默认生产行动项缺已承诺任务/问题关联入口: expected 0 to be greater than or equal to 2[39m
+[36m [2m❯[22m probes.test.tsx:[2m110:54[22m[39m
+    [90m108| [39m    fallbackCalls[33m:[39m fallback[33m.[39mmock[33m.[39mcalls[33m.[39mlength })
+    [90m109| [39m  [35mconst[39m association [33m=[39m controls[33m.[39m[34mfilter[39m(n [33m=>[39m [36m/关联.*(任务|问题)|(任务|问[39m…
+    [90m110| [39m  [34mexpect[39m(association[33m.[39mlength[33m,[39m [32m'默认生产行动项缺已承诺任务/问题关联入口'[39m…
+    [90m   | [39m                                                     [31m^[39m
+    [90m111| [39m})
+    [90m112| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m probes.test.tsx[2m > [22mLG-01b contract：原 test-cases 主保存必须提交已编辑行动项
+[31m[1mAssertionError[22m: 原验收承诺主保存应读回行动项变更: expected 'A8 行动项' to be 'A8 主保存行动项' // Object.is equality[39m
+
+Expected: [32m"A8 [7m主保存[27m行动项"[39m
+Received: [31m"A8 行动项"[39m
+
+[36m [2m❯[22m probes.test.tsx:[2m124:54[22m[39m
+    [90m122| [39m  [35mconst[39m saved [33m=[39m [34mgetMeeting[39m(f[33m.[39mdomain[33m,[39m f[33m.[39mmeeting[33m.[39mid)[33m![39m
+    [90m123| [39m  [34mrecord[39m([32m'LG-01b'[39m[33m,[39m { lines[33m,[39m saved[33m,[39m expectedActionTitle[33m:[39m [32m'A8 主保存行动[39m…
+    [90m124| [39m  [34mexpect[39m(saved[33m.[39mactions[[34m0[39m][33m.[39mtitle[33m,[39m [32m'原验收承诺主保存应读回行动项变更'[39m)[33m.[39m[34mt[39m…
+    [90m   | [39m                                                     [31m^[39m
+    [90m125| [39m})
+    [90m126| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m probes.test.tsx[2m > [22mLG-04 contract：真实 PmPanel 任务入口到 TaskForm，叶子清单必须可勾选
+[31m[1mAssertionError[22m: OP-GUI-01 已承诺抽屉 toggle，不是只读分数: expected 0 to be greater than or equal to 2[39m
+[36m [2m❯[22m probes.test.tsx:[2m191:57[22m[39m
+    [90m189| [39m  [34mrecord[39m([32m'LG-04'[39m[33m,[39m { form[33m:[39m form[33m.[39mtype[33m.[39mname[33m,[39m text[33m:[39m [34mtext[39m(form)[33m,[39m checkboxes…
+    [90m190| [39m    checklist[33m:[39m snapshot[33m.[39mtasks[[34m0[39m][33m.[39mchecklist[33m,[39m executeCalls[33m:[39m execute[33m.[39mmock…
+    [90m191| [39m  [34mexpect[39m(boxes[33m.[39mlength[33m,[39m [32m'OP-GUI-01 已承诺抽屉 toggle，不是只读分数'[39m)[33m.[39m[34mto[39m…
+    [90m   | [39m                                                        [31m^[39m
+    [90m192| [39m})
+    [90m193| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m probes.test.tsx[2m > [22mLG-05 contract：真实 TaskTable 选择 CSV→预览零写→确认落盘必须创建任务
+[31m[1mAssertionError[22m: 真实确认按钮重复 dry-run 未落盘: expected +0 to be 2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m probes.test.tsx:[2m230:47[22m[39m
+    [90m228| [39m  [34mexpect[39m(controlTasks)[33m.[39m[34mtoHaveLength[39m([34m2[39m)
+    [90m229| [39m  [34mexpect[39m(controlTasks[[34m1[39m][33m.[39mparentId)[33m.[39m[34mtoBe[39m(controlTasks[[34m0[39m][33m.[39mid)
+    [90m230| [39m  [34mexpect[39m(actualCount[33m,[39m [32m'真实确认按钮重复 dry-run 未落盘'[39m)[33m.[39m[34mtoBe[39m([34m2[39m)
+    [90m   | [39m                                              [31m^[39m
+    [90m231| [39m})
+    [90m232| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+

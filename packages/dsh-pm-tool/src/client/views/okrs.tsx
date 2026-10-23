@@ -43,6 +43,19 @@ const KIND_LABEL: Record<OkrViewRecord['kind'], string> = {
   'key-result': '关键结果 KR',
 }
 
+function OkrRelatedRows({ related }: { related: OkrViewRecord[] }) {
+  if (related.length === 0) return null
+  return (
+    <div className="pm-okr-related">
+      {related.map(rel => (
+        <span className="pm-okr-related-row" key={rel.id}>
+          <Link2 size={11}/>关联：{rel.title}（{rel.id} · 只展示，不参与权重）
+        </span>
+      ))}
+    </div>
+  )
+}
+
 export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, onEdit }: OkrsViewProps) {
   const tree = buildOkrTree(okrs, projectId)
   const pending = countPendingInbox(inbox, projectId)
@@ -113,20 +126,13 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, 
                           <Pencil size={12}/>编辑
                         </button>
                       )}
+                      <OkrRelatedRows related={kr.related}/>
                     </li>
                   ))}
                 </ul>
               )}
 
-              {root.related.length > 0 && (
-                <div className="pm-okr-related">
-                  {root.related.map(rel => (
-                    <span className="pm-okr-related-row" key={rel.id}>
-                      <Link2 size={11}/>关联：{rel.title}（{rel.id} · 只展示，不参与权重）
-                    </span>
-                  ))}
-                </div>
-              )}
+              <OkrRelatedRows related={root.related}/>
             </div>
           ))
         )}
@@ -145,6 +151,7 @@ export function OkrsView({ projectId, okrs = [], inbox, run, onSaved, onCreate, 
                     <Pencil size={12}/>编辑
                   </button>
                 )}
+                <OkrRelatedRows related={o.related}/>
               </div>
             ))}
           </div>

@@ -1,0 +1,827 @@
+{
+  "at": "2026-10-21T13:04:38.690Z",
+  "scope": "independent evidence + production pure/dependency ops; NOT GUI or fix acceptance",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "typescript": "5.9.3",
+    "rgl": "1.4.4",
+    "head": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd"
+  },
+  "candidateReference": {
+    "baselineCommit": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "productBase": "2a7603023bc54ef13d788e50069ee3fde4671bf3",
+    "bundles": {
+      "packages/dsh-pm-tool/lib/client.editor.js": "e2e6d96093243df6cbe3e2e06e8316d9650db4cd87b95c192c167b35994b2d57",
+      "packages/dsh-pm-tool/lib/client.formula-expr.js": "89b55b0d853ec8a3ff559c3889694f18df3b969ea445d9cf5aaa7b881df7f798",
+      "packages/dsh-pm-tool/lib/client.js": "5ae7808cb3bcdb3f8e2577c84a587080f6dbd4f87b516a9520266a84872ac9ec"
+    },
+    "artifactManifestEntries": 453,
+    "proofTopLevelKeys": [
+      "argv",
+      "cwd",
+      "exit",
+      "before",
+      "after",
+      "sourceChanges",
+      "artifactChanges"
+    ],
+    "proofSourceMatches": [
+      "src/client/board/editor-ops.ts",
+      "src/client/board/projection.ts",
+      "src/client/board/types.ts",
+      "src/client/board/persist.ts",
+      "src/client/board/editor.tsx",
+      "src/client/board/BoardBento.tsx",
+      "src/client/board/board.css",
+      "src/client/board/widgets.tsx",
+      "src/client/board/editor-compact.test.ts",
+      "src/client/board/editor-ops.test.ts",
+      "src/client/board/editor-geometry.test.ts"
+    ],
+    "archivedSourceEntries": 364,
+    "archivedSourceAndArtifactBeforeAfterEqual": true,
+    "liveServingBytesVerified": false,
+    "privateRuntimeRead": false
+  },
+  "evidence": {
+    "packages/dsh-pm-tool/src/client/board/editor-ops.ts": {
+      "sha256": "ade6c08dd648dc02cb6813c89d159e59116052e0d3701eabd3cef414e7d06601",
+      "bytes": 12588
+    },
+    "packages/dsh-pm-tool/src/client/board/projection.ts": {
+      "sha256": "622977c899038d7c95b36b27673d879051c996d380e12b6a17e6630ac0794555",
+      "bytes": 6646
+    },
+    "packages/dsh-pm-tool/src/client/board/types.ts": {
+      "sha256": "3ed8c9411d2e09408efaea24f40cca81e23445c890a517a820cb6560e59506ca",
+      "bytes": 4660
+    },
+    "packages/dsh-pm-tool/src/client/board/persist.ts": {
+      "sha256": "0a34fdf50f930b2ab794edba65c67ff2ed1448b86495fc3884534d2b06f3ffa5",
+      "bytes": 9383
+    },
+    "docs/testing/board-fixture-clarification-20261021-fixture.json": {
+      "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+      "bytes": 1121
+    },
+    "reports/all-pending-evidence-20261021/A5/board/original-drag-states.json": {
+      "sha256": "0e7076935543cb6b88c31b029fb3ef93a062b99853ad79d6b57330c63925af04",
+      "bytes": 9965
+    },
+    "reports/all-pending-evidence-20261021/A5/board/fixture-import.json": {
+      "sha256": "d0f1b393681a2af07c8a80363f3168c1e71e20d447736a0c7dddeb81615c5c9d",
+      "bytes": 5191
+    },
+    "reports/all-pending-evidence-20261021/A5/board/original-drag0.png": {
+      "sha256": "595270d2c74e4445c1ea49d33ccf0d1d08a0b791d6f5372dadc9b81491dd2bdc",
+      "bytes": 113740
+    },
+    "reports/all-pending-evidence-20261021/A5/board/original-drag1-drop.png": {
+      "sha256": "023055d3ed1c87c7113880b4d0ff7cc5bd894fadf732b29c5e79f85a94df07bd",
+      "bytes": 79021
+    },
+    "reports/all-pending-evidence-20261021/A5/board/original-drag1.png": {
+      "sha256": "eb35a6f35bba13bb1d83ee35dbd05d4e4a259a7d006994792452382b263c9069",
+      "bytes": 78285
+    },
+    "reports/all-pending-evidence-20261021/A5/board/fixture.png": {
+      "sha256": "9b080bd286197ff0284749c1ff34eb9d9ad99cd795eb4fd349092b1e88471875",
+      "bytes": 163169
+    },
+    "packages/dsh-pm-tool/src/client/board/editor.tsx": {
+      "sha256": "5ddf057cf5bb0eab59dbb31233b59c586959705f452b56f59bc88d8a885cf6f8",
+      "bytes": 45196
+    },
+    "packages/dsh-pm-tool/src/client/board/BoardBento.tsx": {
+      "sha256": "53fd597bb305ad3f969fe31b2c28d4abf46e2a39a30c4fc48ff80ce2411721bd",
+      "bytes": 18713
+    },
+    "packages/dsh-pm-tool/src/client/board/board.css": {
+      "sha256": "7be41947c6f3239ebd10eaae4a833279d1fb024f2585f6132b66e50f82e48c63",
+      "bytes": 17477
+    },
+    "packages/dsh-pm-tool/src/client/board/widgets.tsx": {
+      "sha256": "0b4b2a6b85432a705e2f2e39cc97660f8df450cb82ec1abb8776e4c6301ce95a",
+      "bytes": 40248
+    },
+    "packages/dsh-pm-tool/src/client/board/editor-compact.test.ts": {
+      "sha256": "511eb0e74ca1b055c5a348bb9853adb556213152cf84ab814fb776d71ac31cee",
+      "bytes": 2628
+    },
+    "packages/dsh-pm-tool/src/client/board/editor-ops.test.ts": {
+      "sha256": "450b5a62eec641d9e6bbcac3ac30050ed58e62d1e8955f6d6e1f4f0020e2dedc",
+      "bytes": 7532
+    },
+    "packages/dsh-pm-tool/src/client/board/editor-geometry.test.ts": {
+      "sha256": "29489d8b0323bd0182ff8fa23a136e7566b21973ddeff2c0d8684481c4171c07",
+      "bytes": 2352
+    },
+    "reports/all-pending-evidence-20261021/A0/candidate.json": {
+      "sha256": "2b6265bd1953c186f553d4092fa98ff87f2a14480a82e04383cc63255e0de071",
+      "bytes": 4197
+    },
+    "reports/all-pending-evidence-20261021/A0/all-built-files.json": {
+      "sha256": "56c37374011c0d99de96a4bdb8bcc57816c131c4e48a75a8fa2a46391470eea0",
+      "bytes": 57076
+    },
+    "reports/all-pending-evidence-20261021/A0/final-build-proof.json": {
+      "sha256": "333913f85c200fbac7e1863f4da4aca2e3100c7a0fe1a1add545a4d99a962f36",
+      "bytes": 177912
+    }
+  },
+  "dependencyHashes": {
+    "package.json": {
+      "sha256": "a40823ae99ba132388ffcca3e24309ccee7fc5de56cd88d7520776e905f1f17a",
+      "bytes": 3590
+    },
+    "build/utils.js": {
+      "sha256": "03518edc832d2913b4beeb3e38e2b37a496020519618c5813dc5d9c95aae48b2",
+      "bytes": 28977
+    },
+    "build/ReactGridLayout.js": {
+      "sha256": "e2e915cc1957f0c81a3e6bf2f6805e3764c7bbc548dfedb309f3ae348236bf2c",
+      "bytes": 25421
+    },
+    "build/GridItem.js": {
+      "sha256": "703d6c772fd9b9b069f10d6c7efc390050a421b62ad24342f41c8cbf2ecbd14b",
+      "bytes": 21921
+    },
+    "build/calculateUtils.js": {
+      "sha256": "f6930999a6b02a82d52312fd9e6672bd64ad432bd5333d9626a41c0438b33b92",
+      "bytes": 6097
+    }
+  },
+  "mainScript": {
+    "readPath": "/tmp/pmtool-board-original-drag-20261021.mjs",
+    "sha256": "9f30bd0175eb4c6a22ad106188856880efc684df5690e0296ab5c15c1184d30f",
+    "bytes": 4114,
+    "executed": false,
+    "sourceText": "import { connect, clickText } from '/private/tmp/pmtool-gui-lib-20261021.mjs'\nimport { mkdirSync, writeFileSync, readdirSync, readFileSync, statSync } from 'node:fs'\nimport { createHash } from 'node:crypto'\nconst { browser, page } = await connect()\nconst out = '/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A5/board'\nconst records = []\nconst cdp = await page.createCDPSession()\nfunction manifest() {\n  const root = '/private/tmp/pmtool-closure-runtime-20261021/data'\n  const result = {}\n  function walk(dir) {\n    for (const n of readdirSync(dir)) {\n      const p = `${dir}/${n}`\n      if (statSync(p).isDirectory()) walk(p)\n      else result[p.slice(root.length)] = createHash('sha256').update(readFileSync(p)).digest('hex')\n    }\n  }\n  walk(root); return result\n}\nconst before = manifest()\nasync function capture(label, pointer) {\n  const current = await page.evaluate(() => {\n    const stage = document.querySelector('.pm-bento-stage')\n    const grid = document.querySelector('.pm-rgl')\n    const shell = document.querySelector('.pm-shell')\n    const cards = [...document.querySelectorAll('[data-widget-id]')].map(n => ({\n      id: n.dataset.widgetId, bbox: n.getBoundingClientRect().toJSON(), transform: getComputedStyle(n).transform,\n    }))\n    return {\n      at: new Date().toISOString(), viewport: { width: innerWidth, height: innerHeight },\n      cards, placeholder: document.querySelector('.react-grid-placeholder')?.getBoundingClientRect().toJSON(),\n      stage: { bbox: stage.getBoundingClientRect().toJSON(), scrollHeight: stage.scrollHeight, clientHeight: stage.clientHeight, scrollTop: stage.scrollTop },\n      grid: { bbox: grid.getBoundingClientRect().toJSON(), scrollHeight: grid.scrollHeight },\n      shell: { scrollTop: shell.scrollTop, scrollHeight: shell.scrollHeight, scrollWidth: shell.scrollWidth, clientWidth: shell.clientWidth },\n      undo: [...document.querySelectorAll('button')].find(n => n.innerText === '↶ 撤销')?.disabled,\n    }\n  })\n  records.push({ label, pointer, current })\n  writeFileSync(`${out}/original-drag-states.json`, JSON.stringify(records, null, 2))\n  await page.screenshot({ path: `${out}/original-${label}.png` })\n}\nasync function drag(id, destinationRow, label) {\n  const h = await page.$(`[data-widget-id=\"${id}\"]`)\n  await h.scrollIntoView()\n  const box = await h.boundingBox()\n  const start = { x: box.x + 100, y: Math.max(35, box.y + 22) }\n  await page.mouse.move(start.x, start.y)\n  await page.mouse.down()\n  const top = await page.$eval('.pm-rgl', n => n.getBoundingClientRect().top)\n  const destination = { x: start.x, y: top + 12 + destinationRow * 48 + 22 }\n  if (destination.y < 20 || destination.y > 875) throw new Error(`destination out of viewport ${destination.y}`)\n  await page.mouse.move(destination.x, destination.y, { steps: 30 })\n  await capture(`${label}-drop`, { start, destination, buttons: 1, targetRow: destinationRow })\n  await page.mouse.up()\n  await page.waitForFunction(() => !document.querySelector('.react-draggable-dragging'))\n  await new Promise(resolve => setTimeout(resolve, 270))\n  await capture(label, { start, destination, buttons: 0, targetRow: destinationRow })\n}\ntry {\n  await page.bringToFront()\n  await capture('drag0')\n  await drag('w-hero', 12, 'drag1')\n  await drag('w-ms-deliver', 4, 'drag2')\n  await drag('w-hero', 0, 'drag3')\n  // 工具条滚回视口再点，三次撤销不插任何其他布局动作。\n  for (let i = 1; i <= 3; i++) {\n    const undo = await page.evaluateHandle(() => [...document.querySelectorAll('button')].find(n => n.innerText === '↶ 撤销'))\n    await undo.asElement().scrollIntoView()\n    await undo.asElement().click()\n    await new Promise(resolve => setTimeout(resolve, 270))\n    await capture(`undo${i}`)\n  }\n  writeFileSync(`${out}/original-drag-boundary.json`, JSON.stringify({ before, after: manifest(), boundary: 'three original pointer targets then three undo; no save/domain writes; final canonical still needs export' }, null, 2))\n  console.log({ states: records.length, last: records.at(-1).label })\n} finally { browser.disconnect() }\n",
+    "secondDragGuardBeforeMove": true,
+    "interruptedBoundaryExists": false
+  },
+  "fixture": {
+    "initialLegal": true,
+    "knownTypesSource": "production widgets.tsx descriptor AST",
+    "catalogMinimums": {
+      "completionHero": {
+        "minW": 3,
+        "minH": 6,
+        "emptyDefault": true
+      },
+      "milestoneDeliverable": {
+        "minW": 4,
+        "minH": 2,
+        "emptyDefault": true
+      },
+      "projectScale": {
+        "minW": 3,
+        "minH": 2,
+        "emptyDefault": true
+      },
+      "objectiveProgress": {
+        "minW": 3,
+        "minH": 2,
+        "emptyDefault": true
+      },
+      "peopleLoad": {
+        "minW": 4,
+        "minH": 2,
+        "emptyDefault": true
+      },
+      "riskMatrix": {
+        "minW": 3,
+        "minH": 3,
+        "emptyDefault": true
+      }
+    },
+    "initializationManifestEntries": 7,
+    "manifestDiff": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        "/pmtool/settings/dashboard_user.json"
+      ]
+    },
+    "transientImportDraftGeometryNotUsedAsStableInitial": true
+  },
+  "geometry": [
+    {
+      "label": "drag0",
+      "at": "2026-10-21T12:55:11.409Z",
+      "rows": [
+        0,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "layouts": [
+        {
+          "i": "w-hero",
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 6,
+          "minW": 3,
+          "minH": 6
+        },
+        {
+          "i": "w-ms-deliver",
+          "x": 0,
+          "y": 6,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-scale",
+          "x": 0,
+          "y": 8,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-obj",
+          "x": 0,
+          "y": 10,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-load",
+          "x": 0,
+          "y": 12,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-risk",
+          "x": 0,
+          "y": 14,
+          "w": 12,
+          "h": 3,
+          "minW": 3,
+          "minH": 3
+        }
+      ],
+      "topHole": [
+        0,
+        0
+      ],
+      "maxBottomRow": 17,
+      "collisions": [],
+      "gridHeight": 828,
+      "gridScrollHeight": 828,
+      "stageHeight": 861,
+      "stageScrollHeight": 856,
+      "shellScrollTop": 377.5,
+      "shellScrollHeight": 1277,
+      "undoDisabled": true
+    },
+    {
+      "label": "drag1-drop",
+      "at": "2026-10-21T12:55:12.869Z",
+      "rows": [
+        12,
+        18,
+        20,
+        22,
+        24,
+        26
+      ],
+      "layouts": [
+        {
+          "i": "w-hero",
+          "x": 0,
+          "y": 12,
+          "w": 12,
+          "h": 6,
+          "minW": 3,
+          "minH": 6
+        },
+        {
+          "i": "w-ms-deliver",
+          "x": 0,
+          "y": 18,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-scale",
+          "x": 0,
+          "y": 20,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-obj",
+          "x": 0,
+          "y": 22,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-load",
+          "x": 0,
+          "y": 24,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-risk",
+          "x": 0,
+          "y": 26,
+          "w": 12,
+          "h": 3,
+          "minW": 3,
+          "minH": 3
+        }
+      ],
+      "topHole": [
+        0,
+        12
+      ],
+      "maxBottomRow": 29,
+      "collisions": [],
+      "gridHeight": 1404,
+      "gridScrollHeight": 1404,
+      "stageHeight": 1437,
+      "stageScrollHeight": 1432,
+      "shellScrollTop": 377.5,
+      "shellScrollHeight": 1853,
+      "undoDisabled": false
+    },
+    {
+      "label": "drag1",
+      "at": "2026-10-21T12:55:13.409Z",
+      "rows": [
+        12,
+        18,
+        20,
+        22,
+        24,
+        26
+      ],
+      "layouts": [
+        {
+          "i": "w-hero",
+          "x": 0,
+          "y": 12,
+          "w": 12,
+          "h": 6,
+          "minW": 3,
+          "minH": 6
+        },
+        {
+          "i": "w-ms-deliver",
+          "x": 0,
+          "y": 18,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-scale",
+          "x": 0,
+          "y": 20,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-obj",
+          "x": 0,
+          "y": 22,
+          "w": 12,
+          "h": 2,
+          "minW": 3,
+          "minH": 2
+        },
+        {
+          "i": "w-load",
+          "x": 0,
+          "y": 24,
+          "w": 12,
+          "h": 2,
+          "minW": 4,
+          "minH": 2
+        },
+        {
+          "i": "w-risk",
+          "x": 0,
+          "y": 26,
+          "w": 12,
+          "h": 3,
+          "minW": 3,
+          "minH": 3
+        }
+      ],
+      "topHole": [
+        0,
+        12
+      ],
+      "maxBottomRow": 29,
+      "collisions": [],
+      "gridHeight": 1404,
+      "gridScrollHeight": 1404,
+      "stageHeight": 1437,
+      "stageScrollHeight": 1432,
+      "shellScrollTop": 377.5,
+      "shellScrollHeight": 1853,
+      "undoDisabled": false
+    }
+  ],
+  "target": {
+    "actualATop": 612.828125,
+    "actualDBottom": 1176.828125,
+    "placeholderTop": 564.828125,
+    "placeholderRoundedRow": 11,
+    "actualADRelationReached": false,
+    "pointer": {
+      "start": {
+        "x": 634,
+        "y": 58.828125
+      },
+      "destination": {
+        "x": 634,
+        "y": 634.828125
+      },
+      "buttons": 1,
+      "targetRow": 12
+    },
+    "threeDragsExecuted": false
+  },
+  "productionOps": {
+    "replayNullFrames": [
+      {
+        "requestedRow": 1,
+        "rows": [
+          6,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 2,
+        "rows": [
+          2,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 3,
+        "rows": [
+          3,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 4,
+        "rows": [
+          4,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 5,
+        "rows": [
+          5,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 6,
+        "rows": [
+          6,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      {
+        "requestedRow": 7,
+        "rows": [
+          12,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      },
+      {
+        "requestedRow": 8,
+        "rows": [
+          8,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      },
+      {
+        "requestedRow": 9,
+        "rows": [
+          9,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      },
+      {
+        "requestedRow": 10,
+        "rows": [
+          10,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      },
+      {
+        "requestedRow": 11,
+        "rows": [
+          11,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      },
+      {
+        "requestedRow": 12,
+        "rows": [
+          12,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      }
+    ],
+    "replayNullRows": [
+      12,
+      18,
+      20,
+      22,
+      24,
+      26
+    ],
+    "reverseAndCompactRows": [
+      0,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "compactEqualsInitial": true,
+    "persistedParseSanitizeCompactedRows": [
+      0,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "sanitizeRawRows": [
+      12,
+      18,
+      20,
+      22,
+      24,
+      26
+    ],
+    "unchangedPropsDerivedResult": null,
+    "freshObjectSameValuesDerivedResult": null,
+    "changedValuesDerivedRows": [
+      0,
+      6,
+      8,
+      10,
+      12,
+      15
+    ],
+    "freshSynchronizationRows": [
+      0,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "verticalCounterfactualFrames": [
+      {
+        "requestedRow": 1,
+        "rows": [
+          0,
+          6,
+          8,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 2,
+        "rows": [
+          2,
+          0,
+          8,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 3,
+        "rows": [
+          2,
+          0,
+          8,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 4,
+        "rows": [
+          4,
+          0,
+          2,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 5,
+        "rows": [
+          4,
+          0,
+          2,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 6,
+        "rows": [
+          6,
+          0,
+          2,
+          4,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 7,
+        "rows": [
+          6,
+          0,
+          2,
+          4,
+          12,
+          14
+        ]
+      },
+      {
+        "requestedRow": 8,
+        "rows": [
+          8,
+          0,
+          2,
+          4,
+          6,
+          14
+        ]
+      },
+      {
+        "requestedRow": 9,
+        "rows": [
+          8,
+          0,
+          2,
+          4,
+          6,
+          14
+        ]
+      },
+      {
+        "requestedRow": 10,
+        "rows": [
+          8,
+          0,
+          2,
+          4,
+          6,
+          14
+        ]
+      },
+      {
+        "requestedRow": 11,
+        "rows": [
+          11,
+          0,
+          2,
+          4,
+          6,
+          8
+        ]
+      },
+      {
+        "requestedRow": 12,
+        "rows": [
+          11,
+          0,
+          2,
+          4,
+          6,
+          8
+        ]
+      }
+    ],
+    "verticalCounterfactualRows": [
+      11,
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "verticalCounterfactualADRelation": true,
+    "minimalTwoCardRawRows": [
+      12,
+      18
+    ],
+    "singleStepTwoCardRows": [
+      12,
+      6
+    ],
+    "renderedStateRows": [
+      12,
+      18,
+      20,
+      22,
+      24,
+      26
+    ]
+  },
+  "sourceStable": true,
+  "disposition": {
+    "observation": "LIMITED_FAIL: post-release visible top hole and cascading push",
+    "callSiteMechanism": "reproduced dependency null compaction + equal-props resynchronization gap; live draft/export not collected",
+    "completeGate": "BLOCKED; no full original three-drag journey, video, save/cancel, or live candidate binding"
+  }
+}

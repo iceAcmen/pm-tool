@@ -1,0 +1,77 @@
+{
+  "role": "trae independent AUTO28 R3",
+  "origin": "Observed functions.exec_command terminal results; recorded by this independent executor, not inferred from test counts or child exit",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "environmentLauncher": "env -i",
+  "environment": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/home",
+    "TMPDIR": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/tmp",
+    "XDG_CONFIG_HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/config",
+    "XDG_CACHE_HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/cache",
+    "LANG": "en_US.UTF-8",
+    "TZ": "Asia/Shanghai",
+    "CI": "1",
+    "NO_COLOR": "1"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-related28-infrastructure-retest-20261023-r3-runner.mjs",
+        "prepare"
+      ],
+      "observedTerminalExit": 0,
+      "wallTimeSeconds": 0.4745,
+      "stdout": "{\"mode\":\"prepare\",\"root\":\"/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a\",\"inputCount\":17,\"dependencyFiles\":641,\"priorExitPreserved\":1,\"next\":\"run once\"}\n",
+      "stderr": "",
+      "ongoingSessionId": null
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-related28-infrastructure-retest-20261023-r3-runner.mjs",
+        "run"
+      ],
+      "observedTerminalExit": 0,
+      "wallTimeSeconds": 0.8806,
+      "stdout": "{\"mode\":\"run\",\"childExit\":0,\"signal\":null,\"error\":null,\"tests\":28,\"passed\":28,\"files\":[{\"name\":\"/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-options.test.ts\",\"status\":\"passed\",\"count\":8},{\"name\":\"/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-payloads.test.ts\",\"status\":\"passed\",\"count\":11},{\"name\":\"/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-history.test.ts\",\"status\":\"passed\",\"count\":3},{\"name\":\"/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/form-validation.test.ts\",\"status\":\"passed\",\"count\":6}]}\n",
+      "stderr": "",
+      "ongoingSessionId": null
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-related28-infrastructure-retest-20261023-r3-runner.mjs",
+        "finish"
+      ],
+      "observedTerminalExit": 1,
+      "wallTimeSeconds": 0.2568,
+      "stdout": "{\"mode\":\"finish\",\"verdict\":\"BLOCKED_INFRASTRUCTURE\",\"protectedCount\":684,\"protectedDrift\":[],\"copyDrift\":[],\"dependencyDrift\":[],\"perSuite\":[{\"file\":\"src/client/views/records/records-options.test.ts\",\"expected\":8,\"actual\":8,\"status\":\"passed\",\"originalCaseNamesSame\":true,\"allAssertionsPassed\":true,\"message\":\"\"},{\"file\":\"src/client/views/records/records-payloads.test.ts\",\"expected\":11,\"actual\":11,\"status\":\"passed\",\"originalCaseNamesSame\":true,\"allAssertionsPassed\":true,\"message\":\"\"},{\"file\":\"src/client/views/records/records-history.test.ts\",\"expected\":3,\"actual\":3,\"status\":\"passed\",\"originalCaseNamesSame\":true,\"allAssertionsPassed\":true,\"message\":\"\"},{\"file\":\"src/client/form-validation.test.ts\",\"expected\":6,\"actual\":6,\"status\":\"passed\",\"originalCaseNamesSame\":true,\"allAssertionsPassed\":true,\"message\":\"\"}],\"auto9Plus28Closure\":\"NO\"}\n",
+      "stderr": "",
+      "ongoingSessionId": null,
+      "failureClassification": "Own wrapper wrote Vitest dependency descriptor instead of existing spawnSync receipt; preserved, not product FAIL"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-related28-infrastructure-retest-20261023-r3-reconcile-seal.mjs",
+        "reconcile"
+      ],
+      "observedTerminalExit": 0,
+      "wallTimeSeconds": 0.4688,
+      "stdout": "{\"mode\":\"reconcile\",\"verdict\":\"PASS_LIMITED_AUTO28\",\"preservedInfrastructureFailure\":\"original finish exit1 + audit BLOCKED\",\"testReruns\":0,\"protectedInputs\":684,\"drift\":[],\"perSuite\":[{\"file\":\"src/client/views/records/records-options.test.ts\",\"expected\":8,\"passed\":8,\"status\":\"passed\",\"originalCaseNamesSame\":true},{\"file\":\"src/client/views/records/records-payloads.test.ts\",\"expected\":11,\"passed\":11,\"status\":\"passed\",\"originalCaseNamesSame\":true},{\"file\":\"src/client/views/records/records-history.test.ts\",\"expected\":3,\"passed\":3,\"status\":\"passed\",\"originalCaseNamesSame\":true},{\"file\":\"src/client/form-validation.test.ts\",\"expected\":6,\"passed\":6,\"status\":\"passed\",\"originalCaseNamesSame\":true}]}\n",
+      "stderr": "",
+      "ongoingSessionId": null,
+      "productTestsExecuted": false
+    }
+  ],
+  "productTestExecutions": 1,
+  "productTestReruns": 0,
+  "childReceiptOrigin": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-command.json",
+  "rawChildReceiptSha256": "942941de63c92848a17cc7982abc7ed121c9b647f3e64018f12b2f4782b1a049",
+  "priorR2CombinedExit": 1,
+  "priorR2Retained": true,
+  "sealCommand": "Recorded separately after observed completion in same-prefix seal-tool-receipt.json",
+  "resources": "All listed exec_command calls synchronously returned; no ongoing session"
+}

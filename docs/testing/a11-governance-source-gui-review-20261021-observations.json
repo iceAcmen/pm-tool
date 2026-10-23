@@ -1,0 +1,577 @@
+{
+  "at": "2026-10-21T16:34:55.746Z",
+  "mode": "static-original-evidence-analysis-only",
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "sourceCount": 512,
+    "artifactCount": 453,
+    "patchHashMatches": true,
+    "artifactManifestMatchesCandidate": true,
+    "build": {
+      "argv": [
+        "pnpm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool",
+      "start": "2026-10-21T15:33:14.386392+00:00",
+      "end": "2026-10-21T15:33:22.064247+00:00",
+      "exit": 0
+    },
+    "start": {
+      "at": "2026-10-21T16:07:00.210Z",
+      "label": "governance",
+      "port": 3223,
+      "root": "/private/tmp/pmtool-a10-governance-runtime-20261021",
+      "plugin": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool",
+      "empty": true,
+      "patchSha": "fe82dde2b475b227cb5f0df4528ce2ef4ab7538dc5865f88f6c3856fd6e3c641",
+      "pid": 22135,
+      "argv": [
+        "--import",
+        "tsx/esm",
+        "apps/cli/src/bin.ts",
+        "--profile",
+        "pm",
+        "--no-open",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3223"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2"
+    },
+    "runtimeSourceMismatches": [
+      {
+        "path": "src/core/csv-import.ts",
+        "expert": "ebeb028f84e73b3a8c2637a703754a14f80f49effd0f00005f7ea25af989b430",
+        "a10": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5"
+      },
+      {
+        "path": "src/core/ui-feedback.ts",
+        "expert": "f43615f324d71dd7dd31e5c1a264cc3467f9b95bf6f8518d90c90e983d6f4cba",
+        "a10": "3808eef79e34595754ea9d8970d62c5c5da87feb1f42722eba593a061f1bbde7"
+      }
+    ],
+    "panelHash": "ff319e4e7d9fc47cf3c8b34b56f4b260901c0039841a054837b7b2cf93779ca6"
+  },
+  "loaded": {
+    "file": "reports/all-pending-evidence-20261021/A10/governance/loaded-r1/combo-1.txt",
+    "responseBytes": 2572530,
+    "responseSha": "e16c70d5a75b368794d53754fd1fb8a3aba0f0a0c0f3fe3a3ac7023992ab21a2",
+    "pluginStart": 875361,
+    "pluginEnd": 2569056,
+    "secondStart": -1,
+    "recoveredBytes": 1693730,
+    "recoveredArtifactSha": "894a515cee081225687ef8ba887f55a51762ecc481c0d3c3613f035e9c202d2f",
+    "a10ArtifactSha": "894a515cee081225687ef8ba887f55a51762ecc481c0d3c3613f035e9c202d2f",
+    "exactArtifactWithOnlySourceMapSuffixRestored": true,
+    "resultJsonPresentInFrozenInputs": false,
+    "limitation": "Body identity is proved; HTTP status/cache, document timeOrigin, browser/context and actual request linkage are not supplied by the missing result file."
+  },
+  "refs": [
+    {
+      "table": "tasks",
+      "id": "t-0001",
+      "label": "来源任务一",
+      "role": "basis",
+      "title": "来源任务一",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "tasks",
+      "id": "t-0002",
+      "label": "来源任务二",
+      "role": "basis",
+      "title": "来源任务二",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "milestones",
+      "id": "m-0001",
+      "label": "来源里程碑",
+      "role": "basis",
+      "title": "来源里程碑",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "risk_issues",
+      "id": "ri-0001",
+      "label": "来源风险",
+      "role": "basis",
+      "title": "来源风险",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "deliverables",
+      "id": "dlv-0001",
+      "label": "来源交付物",
+      "role": "basis",
+      "title": "来源交付物",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "meetings",
+      "id": "mtg-0001",
+      "label": "来源会议",
+      "role": "basis",
+      "title": "来源会议",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "milestones",
+      "id": "m-0002",
+      "label": "AI 新里程碑",
+      "role": "basis",
+      "title": "AI 新里程碑",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "risk_issues",
+      "id": "ri-0002",
+      "label": "AI 新风险",
+      "role": "basis",
+      "title": "AI 新风险",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "deliverables",
+      "id": "dlv-0002",
+      "label": "AI 新交付物",
+      "role": "basis",
+      "title": "AI 新交付物",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    },
+    {
+      "table": "meetings",
+      "id": "mtg-0002",
+      "label": "AI 新会议",
+      "role": "basis",
+      "title": "AI 新会议",
+      "titleMatches": true,
+      "origin": "http://127.0.0.1:3223",
+      "timeOrigin": 1792599255490.4,
+      "ledgerTextHasLabel": true,
+      "ledgerTextHasSourceId": false
+    }
+  ],
+  "jumps": {
+    "refsMatchOriginalAppliedLedger": true,
+    "refsMatchPostChangedLedger": true,
+    "kinds": [
+      "ask-apply"
+    ],
+    "basisCount": 10,
+    "sourceManifestDelta": [],
+    "stateCount": 11,
+    "sameNameFixture": false
+  },
+  "changed": {
+    "initialToContinuedDelta": [
+      {
+        "path": "/pmtool/settings/pmProvenanceLedger.json",
+        "before": "5ec97e82c34c231425de56c0a19b1069b324bdb3d4b713d32b8a4f9bc1cfa7b7",
+        "after": "d42d440f4728903e88ceb6543e2e7f94d826f84ea6589ea22f96e563a1251579"
+      },
+      {
+        "path": "/pmtool/tasks/t-0001.json",
+        "before": "93ca4434e08553700c72356bd169f81d4807798d3d55083a46c3b3d02135e6f9",
+        "after": "b0460917e33ea35c5d7ec2a477a1ed085ca5f7929af1c753cccae9df85a62d1c"
+      },
+      {
+        "path": "/session_projcache/sessions/session-7e25ae1f-37d7-4fc7-88e2-4d35eb128d10.json",
+        "before": "b7aabe83d45e180f21269e5b6c359ec70ff17afdee6441174f1ad6cb7e05ee1d",
+        "after": "bd264dd936826ec64c0dafe296bfd30e72472f92fc64237510c0dbb62108b660"
+      }
+    ],
+    "continuedHistory": [
+      {
+        "at": "2026-10-21T16:18:16.215Z",
+        "conclusion": "needs-regen"
+      }
+    ],
+    "entryExceptHistoryMatchesOriginal": false,
+    "secondRecheck": {
+      "beforeLength": 1,
+      "afterLength": 2,
+      "originalPrefixEqual": true,
+      "entryExceptHistoryEqual": true,
+      "refsEqual": true,
+      "appended": [
+        {
+          "at": "2026-10-21T16:21:03.432Z",
+          "conclusion": "needs-regen",
+          "snapshotVersion": 1,
+          "ruleRevision": 1,
+          "states": [
+            {
+              "table": "tasks",
+              "id": "t-0001",
+              "state": "changed",
+              "reason": "updatedAt 已变更"
+            },
+            {
+              "table": "tasks",
+              "id": "t-0002",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "milestones",
+              "id": "m-0001",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "risk_issues",
+              "id": "ri-0001",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "deliverables",
+              "id": "dlv-0001",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "meetings",
+              "id": "mtg-0001",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "milestones",
+              "id": "m-0002",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "risk_issues",
+              "id": "ri-0002",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "deliverables",
+              "id": "dlv-0002",
+              "state": "consistent",
+              "reason": "与来源一致"
+            },
+            {
+              "table": "meetings",
+              "id": "mtg-0002",
+              "state": "consistent",
+              "reason": "与来源一致"
+            }
+          ]
+        }
+      ]
+    },
+    "secondRecheckManifestDelta": [
+      {
+        "path": "/pmtool/settings/pmProvenanceLedger.json",
+        "before": "d42d440f4728903e88ceb6543e2e7f94d826f84ea6589ea22f96e563a1251579",
+        "after": "84dd9f8dfac315368d4f040ad71cdf3c2cdfa8e7ce9c4f3084e4008afa2b4d81"
+      }
+    ]
+  },
+  "missing": {
+    "deletionManifestDelta": [
+      {
+        "path": "/pmtool/tasks/t-0002.json",
+        "before": "15f692d2e17d3a32396ae6686fbfde319adc8f5eae19ad403fe8857c821881da",
+        "after": null
+      }
+    ],
+    "sourceExistsAfterDelete": false,
+    "rawLedgerUnchangedByDelete": true,
+    "rawLedgerFileShaUnchanged": true,
+    "deletedSourceId": "t-0002",
+    "firstBeforeMatchesPostDelete": true,
+    "twoStepsBoundaryContinuous": true,
+    "steps": [
+      {
+        "step": 1,
+        "beforeLength": 2,
+        "afterLength": 3,
+        "originalPrefixEqual": true,
+        "entryExceptHistoryEqual": true,
+        "refsEqual": true,
+        "appended": [
+          {
+            "at": "2026-10-21T16:26:37.150Z",
+            "conclusion": "manual-review",
+            "snapshotVersion": 1,
+            "ruleRevision": 1,
+            "states": [
+              {
+                "table": "tasks",
+                "id": "t-0001",
+                "state": "changed",
+                "reason": "updatedAt 已变更"
+              },
+              {
+                "table": "tasks",
+                "id": "t-0002",
+                "state": "missing",
+                "reason": "记录已删除"
+              },
+              {
+                "table": "milestones",
+                "id": "m-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "risk_issues",
+                "id": "ri-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "deliverables",
+                "id": "dlv-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "meetings",
+                "id": "mtg-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "milestones",
+                "id": "m-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "risk_issues",
+                "id": "ri-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "deliverables",
+                "id": "dlv-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "meetings",
+                "id": "mtg-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              }
+            ]
+          }
+        ],
+        "manifestDelta": [
+          {
+            "path": "/pmtool/settings/pmProvenanceLedger.json",
+            "before": "84dd9f8dfac315368d4f040ad71cdf3c2cdfa8e7ce9c4f3084e4008afa2b4d81",
+            "after": "9ed6e2b3ba710aff9a2877fc03724b51375ceff59848d4a6e5c0c879d84584a2"
+          }
+        ],
+        "beforeLedgerShaMatchesManifest": true,
+        "afterLedgerShaMatchesManifest": true
+      },
+      {
+        "step": 2,
+        "beforeLength": 3,
+        "afterLength": 4,
+        "originalPrefixEqual": true,
+        "entryExceptHistoryEqual": true,
+        "refsEqual": true,
+        "appended": [
+          {
+            "at": "2026-10-21T16:26:37.380Z",
+            "conclusion": "manual-review",
+            "snapshotVersion": 1,
+            "ruleRevision": 1,
+            "states": [
+              {
+                "table": "tasks",
+                "id": "t-0001",
+                "state": "changed",
+                "reason": "updatedAt 已变更"
+              },
+              {
+                "table": "tasks",
+                "id": "t-0002",
+                "state": "missing",
+                "reason": "记录已删除"
+              },
+              {
+                "table": "milestones",
+                "id": "m-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "risk_issues",
+                "id": "ri-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "deliverables",
+                "id": "dlv-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "meetings",
+                "id": "mtg-0001",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "milestones",
+                "id": "m-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "risk_issues",
+                "id": "ri-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "deliverables",
+                "id": "dlv-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              },
+              {
+                "table": "meetings",
+                "id": "mtg-0002",
+                "state": "consistent",
+                "reason": "与来源一致"
+              }
+            ]
+          }
+        ],
+        "manifestDelta": [
+          {
+            "path": "/pmtool/settings/pmProvenanceLedger.json",
+            "before": "9ed6e2b3ba710aff9a2877fc03724b51375ceff59848d4a6e5c0c879d84584a2",
+            "after": "214a3219362331a7674a912ec15b014a75011e0bedde6ec1180f9c017087a3af"
+          }
+        ],
+        "beforeLedgerShaMatchesManifest": true,
+        "afterLedgerShaMatchesManifest": true
+      }
+    ],
+    "missingNameJumpButtons": [],
+    "lastLedgerRefsEqualOriginal": true
+  },
+  "frames": [
+    {
+      "directory": "source-jumps-r3/frames",
+      "count": 100,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:16:58.344Z",
+      "atLast": "2026-10-21T16:17:01.121Z",
+      "timestampRegressions": [
+        "000022.jpg",
+        "000030.jpg"
+      ]
+    },
+    {
+      "directory": "changed-recheck-r2/frames",
+      "count": 34,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:18:15.418Z",
+      "atLast": "2026-10-21T16:18:16.281Z",
+      "timestampRegressions": []
+    },
+    {
+      "directory": "recheck-history/frames",
+      "count": 9,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:21:03.217Z",
+      "atLast": "2026-10-21T16:21:03.527Z",
+      "timestampRegressions": []
+    },
+    {
+      "directory": "missing-recheck/delete-frames",
+      "count": 4,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:24:44.683Z",
+      "atLast": "2026-10-21T16:24:44.860Z",
+      "timestampRegressions": [
+        "000001.jpg"
+      ]
+    },
+    {
+      "directory": "missing-recheck/missing-frames",
+      "count": 16,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:25:38.533Z",
+      "atLast": "2026-10-21T16:25:39.104Z",
+      "timestampRegressions": []
+    },
+    {
+      "directory": "missing-history-r2/frames",
+      "count": 10,
+      "source": "CDP Page.screencastFrame; actual browser compositor",
+      "mismatch": [],
+      "atFirst": "2026-10-21T16:26:37.096Z",
+      "atLast": "2026-10-21T16:26:37.439Z",
+      "timestampRegressions": []
+    }
+  ],
+  "limitations": [
+    "No product tests, GUI actions, credential reads, runtime business reads, build, service or Git mutations performed.",
+    "Original runner scripts/outer exit/ask-provenance and ask-recheck request-response bodies are not in the reviewed governance handoff.",
+    "Frame hash verification is not visual signoff; only the explicitly listed raw images were visually reviewed.",
+    "No whole-ID, remaining 29 GUI IDs, 32-ID aggregate, real-model or current A11 dirty candidate PASS."
+  ]
+}

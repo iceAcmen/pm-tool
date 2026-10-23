@@ -1,0 +1,57 @@
+{
+  "status": "DIAGNOSIS_REPRODUCED",
+  "version": "Chrome/139.0.7258.155",
+  "pid": 16263,
+  "first": {
+    "label": "N1-ready",
+    "timeOrigin": 1792587086219.7,
+    "hash": "",
+    "hashEvents": 0,
+    "calls": [
+      {
+        "url": "http://127.0.0.1:18345/api/entered",
+        "nonce": "N1"
+      }
+    ]
+  },
+  "hashOnly": {
+    "label": "N2-hash-only",
+    "timeOrigin": 1792587086219.7,
+    "hash": "#pm-launch=18345.N2",
+    "hashEvents": 1,
+    "calls": [
+      {
+        "url": "http://127.0.0.1:18345/api/entered",
+        "nonce": "N1"
+      }
+    ]
+  },
+  "refreshed": {
+    "label": "N2-ready-same-document",
+    "timeOrigin": 1792587086219.7,
+    "hash": "#pm-launch=18345.N2",
+    "hashEvents": 1,
+    "calls": [
+      {
+        "url": "http://127.0.0.1:18345/api/entered",
+        "nonce": "N1"
+      }
+    ]
+  },
+  "reloaded": {
+    "label": "N2-ready-full-reload",
+    "timeOrigin": 1792587086891.9,
+    "hash": "",
+    "hashEvents": 0,
+    "calls": [
+      {
+        "url": "http://127.0.0.1:18345/api/entered",
+        "nonce": "N2"
+      }
+    ]
+  },
+  "errors": [],
+  "blockedRequests": [],
+  "boundary": "Production bridge + fixture button, not React PmPanel or authenticated host; no HTTP server/fetch.",
+  "pidStillPresent": false
+}

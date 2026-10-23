@@ -1,0 +1,93 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 4 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 新行部分成功后失败保输入，重试不重复 add 且只在全部成功后关闭
+[31m[1mAssertionError[22m: expected undefined to be true // Object.is equality[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m162:73[22m[39m
+    [90m160| [39m  [34mexpect[39m([34mgetMeeting[39m(f[33m.[39mdomain[33m,[39m emptyMeeting[33m.[39mid)[33m![39m[33m.[39mactions[33m.[39m[34mmap[39m(action [33m=>[39m …
+    [90m161| [39m  [35mconst[39m rows [33m=[39m renderer[33m.[39mroot[33m.[39m[34mfindAllByProps[39m({ className[33m:[39m [32m'rb-action-ro[39m…
+    [90m162| [39m  [34mexpect[39m(rows[[34m0[39m][33m.[39m[34mfindByProps[39m({ [32m'aria-label'[39m[33m:[39m [32m'行动项标题'[39m })[33m.[39mprops[33m.[39mdis…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m163| [39m  [34mexpect[39m(rows[[34m1[39m][33m.[39m[34mfindByProps[39m({ [32m'aria-label'[39m[33m:[39m [32m'行动项标题'[39m })[33m.[39mprops[33m.[39mval…
+    [90m164| [39m  [34mexpect[39m(renderer[33m.[39mroot[33m.[39m[34mfindAllByProps[39m({ role[33m:[39m [32m'alert'[39m })[33m.[39mlength)[33m.[39m[34mtoBeG[39m…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b meeting/action 拒绝或抛错均保输入可重试，既有空标题不静默关闭
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m182:66[22m[39m
+    [90m180| [39m  [35mawait[39m [34msubmit[39m(renderer)
+    [90m181| [39m  [34mexpect[39m(f[33m.[39monSaved)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()
+    [90m182| [39m  [34mexpect[39m(renderer[33m.[39mroot[33m.[39m[34mfindAllByProps[39m({ role[33m:[39m [32m'alert'[39m })[33m.[39mlength)[33m.[39m[34mtoBeG[39m…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m183| [39m  f[33m.[39mcallbacks[33m.[39monSaveMeeting [33m=[39m [35masync[39m () [33m=>[39m [35mfalse[39m
+    [90m184| [39m  [35mawait[39m [34msubmit[39m(renderer)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 同一事件轮主保存重复点击及行内保存不能重复写，busy 阻止取消
+[31m[1mAssertionError[22m: expected "spy" to be called 1 times, but got 2 times[39m
+[36m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m208:37[22m[39m
+    [90m206| [39m    form[33m.[39mprops[33m.[39m[34monSubmit[39m({ preventDefault[33m:[39m noop })
+    [90m207| [39m  })
+    [90m208| [39m  [34mexpect[39m(f[33m.[39mcallbacks[33m.[39monSaveMeeting)[33m.[39m[34mtoHaveBeenCalledTimes[39m([34m1[39m)
+    [90m   | [39m                                    [31m^[39m
+    [90m209| [39m  [34mexpect[39m([34mbutton[39m(renderer[33m.[39mroot[33m,[39m [32m'取消'[39m)[33m.[39mprops[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m210| [39m  [34mexpect[39m([34mbutton[39m(renderer[33m.[39mroot[33m.[39m[34mfindAllByProps[39m({ className[33m:[39m [32m'rb-action-r[39m…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 空新行跳过、部分填入但无标题应提示；取消草稿零写
+[31m[1mAssertionError[22m: expected [ …(3) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   "meeting update mtg-0001 {\"title\":\"A9 会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[],\"notes\":\"\"}",[39m
+[31m+   "meeting action update mtg-0001 ai-001 {\"title\":\"原行动一\",\"owner\":\"\",\"dueDate\":null,\"status\":\"todo\",\"taskId\":\"t-0001\",\"riskIssueId\":\"ri-0001\"}",[39m
+[31m+   "meeting action update mtg-0001 ai-002 {\"title\":\"原行动二\",\"owner\":\"\",\"dueDate\":null,\"status\":\"in_progress\",\"taskId\":null,\"riskIssueId\":null}",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m228:19[22m[39m
+    [90m226| [39m  [35mawait[39m [34mchange[39m(row[33m,[39m [32m'负责人'[39m[33m,[39m [32m'有输入'[39m)
+    [90m227| [39m  [35mawait[39m [34msubmit[39m(renderer)
+    [90m228| [39m  [34mexpect[39m(f[33m.[39mlines)[33m.[39m[34mtoEqual[39m([])
+    [90m   | [39m                  [31m^[39m
+    [90m229| [39m  [34mexpect[39m(f[33m.[39monSaved)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()
+    [90m230| [39m  [35mawait[39m [34mchange[39m(row[33m,[39m [32m'负责人'[39m[33m,[39m [32m''[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯[1m[7m Unhandled Rejection [27m[22m⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: 受控传输失败[39m
+[36m [2m❯[22m Object.f.callbacks.onSaveMeeting src/client/views/records/records-meeting-entry.test.tsx:[2m176:51[22m[39m
+    [90m174| [39m  [35mconst[39m f [33m=[39m [35mawait[39m [34mfixture[39m()
+    [90m175| [39m  [35mconst[39m original [33m=[39m f[33m.[39mcallbacks[33m.[39monSaveMeeting
+    [90m176| [39m  f[33m.[39mcallbacks[33m.[39monSaveMeeting [33m=[39m [35masync[39m () [33m=>[39m { [35mthrow[39m [35mnew[39m [33mError[39m([32m'受控传输[39m…
+    [90m   | [39m                                                  [31m^[39m
+    [90m177| [39m  [35mconst[39m renderer [33m=[39m [34mmount[39m([34mcreateElement[39m([33mRecordsMeetingForm[39m[33m,[39m { projectId…
+    [90m178| [39m    callbacks[33m:[39m f[33m.[39mcallbacks[33m,[39m onCancel[33m:[39m noop }))
+[90m [2m❯[22m submit src/client/views/records/records-meeting-form.tsx:[2m100:34[22m[39m
+[90m [2m❯[22m Object.onSubmit src/client/views/records/records-meeting-form.tsx:[2m124:73[22m[39m
+[90m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m34:64[22m[39m
+[90m [2m❯[22m Proxy.act ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:[2m2512:16[22m[39m
+[90m [2m❯[22m submit src/client/views/records/records-meeting-entry.test.tsx:[2m34:9[22m[39m
+[90m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m180:9[22m[39m
+[90m [2m❯[22m ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m533:5[22m[39m
+[90m [2m❯[22m runTest ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1056:11[22m[39m
+[90m [2m❯[22m runSuite ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1205:15[22m[39m
+
+[31mThis error originated in "[1msrc/client/views/records/records-meeting-entry.test.tsx[22m" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.[39m
+[31mThe latest test that might've caused the error is "[1mLG-01b meeting/action 拒绝或抛错均保输入可重试，既有空标题不静默关闭[22m". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.[39m
+

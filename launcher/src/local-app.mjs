@@ -10,6 +10,11 @@
 import { mkdirSync, writeFileSync, chmodSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
+/** POSIX 单引号字面量：路径中的引号通过结束/转义/重开保留，不参与壳语法。 */
+function shellLiteral(value) {
+  return "'" + String(value).replaceAll("'", "'\\''") + "'"
+}
+
 function plistXml({ name, identifier, executable }) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -63,8 +68,8 @@ export function buildLocalAppBundle(opts) {
   // POSIX sh；Finder 双击无 nvm/PATH，故壳内自行定位 node；日志脱敏、失败弹窗。
   const launcherScript = `#!/bin/sh
 # PM工作台 可点击入口：定位稳定 Node 22 后转发启动器；不复制 cookie、不外取 token、不写全局。
-LAUNCHER_BIN='${launcherBin}'
-BAKED_NODE='${bakedNode}'
+LAUNCHER_BIN=${shellLiteral(launcherBin)}
+BAKED_NODE=${shellLiteral(bakedNode)}
 ${envBlock}LOG_DIR="\${HOME}/Library/Logs/pm-launcher"
 mkdir -p "\$LOG_DIR" 2>/dev/null
 LOG="\$LOG_DIR/launcher.log"

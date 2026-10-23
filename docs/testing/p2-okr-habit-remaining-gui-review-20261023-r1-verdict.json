@@ -1,0 +1,160 @@
+{
+  "role": "独立GUI审证专家，非开发/GUI执行端",
+  "evidenceRoot": "reports/all-pending-evidence-20261021/P2OkrRemainingR1",
+  "index": {
+    "file": "index-r1.json",
+    "count": 2372,
+    "sha256": "8451130fee227512dd540ef8b8d42a7fb5e46d8c37997e1277c2d5cd4a8e83a5"
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "sourceCount": 114,
+    "completeInputCount": 521,
+    "frozenSourceCopiesVerified": 10,
+    "port": 3264,
+    "pid": 10975,
+    "e2e": 0,
+    "pilot": "OFF",
+    "currentMainCombinationSigned": false
+  },
+  "visualInspection": {
+    "pngCount": 23,
+    "jpegCount": 19,
+    "all555FramesVisuallyInspected": false,
+    "png": [
+      "round04-objective-before-save.png",
+      "round04-objective-saved.png",
+      "round08-kr-before-save.png",
+      "round08-kr-tree.png",
+      "round09-missing-error-retained.png",
+      "round09-self-error-retained.png",
+      "round10-missing-exact-error.png",
+      "round10-self-exact-error.png",
+      "round10-cut-related-confirmed.png",
+      "round10-confirmed-tree.png",
+      "round13-b-project-pending.png",
+      "round13-repeat-error-visible.png",
+      "round13-b-reentry.png",
+      "round13-a-reentry-preserved.png",
+      "round14-cross-project-error-retained.png",
+      "round14-related-not-visible-tree.png",
+      "round16-habit-second-target-before-save.png",
+      "round16-habit-second-target-saved.png",
+      "round16-habit-missing-error-visible.png",
+      "round16-habit-cross-error-visible.png",
+      "round16-habit-reopen-fields.png",
+      "round17-habit-after-reload.png",
+      "round17-okr-after-reload.png"
+    ],
+    "jpeg": [
+      "frames/round04-10.jpg",
+      "frames/round04-26.jpg",
+      "frames/round06-0.jpg",
+      "frames/round06-1.jpg",
+      "frames/round07-2.jpg",
+      "frames/round08-36.jpg",
+      "frames/round09-10.jpg",
+      "frames/round09-20.jpg",
+      "frames/round10-10.jpg",
+      "frames/round10-20.jpg",
+      "frames/round10-32.jpg",
+      "frames/round13-0.jpg",
+      "frames/round13-50.jpg",
+      "frames/round13-85.jpg",
+      "frames/round14-10.jpg",
+      "frames/round16-1.jpg",
+      "frames/round16-40.jpg",
+      "frames/round16-60.jpg",
+      "frames/round17-32.jpg"
+    ],
+    "assertionGroups": {
+      "P2004_save_tree_restore_reload": {
+        "png": ["round04-objective-before-save.png", "round04-objective-saved.png", "round08-kr-before-save.png", "round08-kr-tree.png", "round14-related-not-visible-tree.png", "round17-okr-after-reload.png"],
+        "jpeg": ["frames/round04-10.jpg", "frames/round04-26.jpg", "frames/round08-36.jpg", "frames/round17-32.jpg"],
+        "observation": "保存实际生效；KR只挂主A，合法软联已在raw/snapshot但树无相关行。帧04-26是下一表单的类型菜单，不拿作KR已保存。"
+      },
+      "executor_failures_not_product_defects": {
+        "png": ["round09-missing-error-retained.png", "round09-self-error-retained.png"],
+        "jpeg": ["frames/round06-0.jpg", "frames/round06-1.jpg", "frames/round07-2.jpg", "frames/round09-10.jpg", "frames/round09-20.jpg"],
+        "observation": "round06帧是主父菜单而非成功软联菜单；round07回树且未save；round09原ID拼接失效，不是exact missing/self。"
+      },
+      "P2004_exact_invalid_and_confirm": {
+        "png": ["round10-missing-exact-error.png", "round10-self-exact-error.png", "round10-cut-related-confirmed.png", "round10-confirmed-tree.png", "round14-cross-project-error-retained.png"],
+        "jpeg": ["frames/round10-10.jpg", "frames/round10-20.jpg", "frames/round10-32.jpg", "frames/round14-10.jpg"],
+        "observation": "missing/B前端保输入拒绝，无对应写RPC；self真实后端错误，切空后人confirmed保存成功。"
+      },
+      "P2003_isolation_clear_processed_error": {
+        "png": ["round13-b-project-pending.png", "round13-repeat-error-visible.png", "round13-b-reentry.png", "round13-a-reentry-preserved.png"],
+        "jpeg": ["frames/round13-0.jpg", "frames/round13-50.jpg", "frames/round13-85.jpg"],
+        "observation": "B不露A，ignored再confirm可见拒绝；Bclear后两pending保留，回A仍有A建议。帧0是项目选择过渡，不冒B终态。"
+      },
+      "P3004_valid_save_command_negative_projection": {
+        "png": ["round16-habit-second-target-before-save.png", "round16-habit-second-target-saved.png", "round16-habit-missing-error-visible.png", "round16-habit-cross-error-visible.png", "round16-habit-reopen-fields.png", "round17-habit-after-reload.png"],
+        "jpeg": ["frames/round16-1.jpg", "frames/round16-40.jpg", "frames/round16-60.jpg"],
+        "observation": "关联菜单三项均合法同项目；第二目标save/reopen/reload一致；非法命令错误可读，表单此前已关闭，不冒失败表单保稿。"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "RA-P2003",
+      "scope": "原异项目动态隔离/clear反例及错误正文",
+      "verdict": "PASS_LIMITED_GUI",
+      "exactRemaining": [],
+      "repeatBranch": "ignored建议再次confirm被真实already-processed守卫拒绝"
+    },
+    {
+      "id": "RA-P2004",
+      "verdict": "FAIL",
+      "passedSlices": ["单主父", "合法KR草稿实际save", "切空软关联并人confirmed", "精确missing/self/B拒绝保输入零写"],
+      "exactRemaining": ["同项目primaryA＋relatedB真实树中的KR关联可见性"],
+      "defect": {
+        "id": "P2OKR-R1-01",
+        "class": "展示遗漏",
+        "krId": "okr-mvk2jwys-vxyg3c",
+        "primaryId": "okr-mvi5z847-33y3xk",
+        "relatedId": "okr-mvk2hl7d-refwvh",
+        "source": "frozen-source/src/client/views/okrs.tsx",
+        "sourceSha256": "2408f42a166060596cd7d72462fe34ffcba5c7a69f2f0233da17a102c4926b8f",
+        "minimalFiles": ["packages/dsh-pm-tool/src/client/views/okrs.tsx", "packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx"],
+        "forbiddenScope": ["Main当前index/panel/tasks在途锁", "schema/权重/存储更改", "聚合/调度/新按钮"],
+        "insufficientSourceScope": "封件没有client/okr-model源码副本；若views单文件无法修，Main先交模型证据和最小追加范围，不自行扩大。"
+      },
+      "invalidBoundary": {
+        "missing": "前端拒绝，无RPC",
+        "self": "真实RPC d18eea84-e5a9-4997-a407-a7528bb9c157拒绝",
+        "crossProject": "前端拒绝，无OKR更新RPC",
+        "round09ExactSelfClaim": false
+      }
+    },
+    {
+      "id": "RA-P3004",
+      "verdict": "PASS_LIMITED_GUI_AND_READ_WITH_BLOCKED_EXACT_BOUNDARY",
+      "passedSlices": ["第二合法同项目目标save/reopen/reload", "missing/B真实host命令拒绝可见且零写", "原空checkIns/streak保全", "snapshot只读身份集合matched1"],
+      "exactRemaining": ["失败表单保输入"],
+      "blockedReason": "当前菜单只有合法项目白名单、没有rawID入口；两失败发生在关闭表单后的host命令，合法重开不能证明失败草稿保留。",
+      "minimumDisposition": "先交同候选已有真实可达关联失败且草稿仍开的原证；无原证则保留BLOCKED交原合同范围裁定。无新按钮/坏种子/删除目标/重复已签命令。",
+      "productDefectConfirmed": false,
+      "f7NonemptyHistorySigned": false
+    },
+    {
+      "id": "RA-P3005",
+      "verdict": "PASS_LIMITED_READ_WITH_INHERITED_AUTO",
+      "exactRemaining": [],
+      "actualCycleDueObject": "okr-mvk2hl7d-refwvh",
+      "cycleDue": "2026-10-23",
+      "hookExecutedThisReview": false,
+      "schedulerTriggered": false,
+      "habitCycleDueWritten": false
+    }
+  ],
+  "release": {
+    "resourcesReleased": true,
+    "STOP": true,
+    "productExecutionCount": 0,
+    "guiExecutionCount": 0,
+    "gitActionsCount": 0,
+    "ordinaryCommitSigned": false,
+    "parentAllGatesSigned": false
+  }
+}

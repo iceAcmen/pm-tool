@@ -1,0 +1,290 @@
+{
+  "numTotalTestSuites": 5,
+  "numPassedTestSuites": 5,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 22,
+  "numPassedTests": 22,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792703210032,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 同一aside/子组件反复最小化不重挂载，独立竖标签可达，零自动请求",
+          "status": "passed",
+          "title": "同一aside/子组件反复最小化不重挂载，独立竖标签可达，零自动请求",
+          "duration": 340.91720799999985,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） hidden规则覆盖display:flex；几何和滚动仍由原fixed/body规则承担",
+          "status": "passed",
+          "title": "hidden规则覆盖display:flex；几何和滚动仍由原fixed/body规则承担",
+          "duration": 2.8892080000000533,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 未确认消息/勾选/编辑/输入保留，隐藏期间最新tasks/baseline实时刷新且保留openedAt警告",
+          "status": "passed",
+          "title": "未确认消息/勾选/编辑/输入保留，隐藏期间最新tasks/baseline实时刷新且保留openedAt警告",
+          "duration": 252.57600000000002,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 副驾取消仅清计划；最小化不自动确认或重生成",
+          "status": "passed",
+          "title": "副驾取消仅清计划；最小化不自动确认或重生成",
+          "duration": 72.96391700000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 明确apply失败后保编辑草稿/错误；再最小化不会重试或捞句柄",
+          "status": "passed",
+          "title": "明确apply失败后保编辑草稿/错误；再最小化不会重试或捞句柄",
+          "duration": 117.85666700000002,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 补档展开/未发送文本/生成后未确认draft保留，零自动capture-apply",
+          "status": "passed",
+          "title": "补档展开/未发送文本/生成后未确认draft保留，零自动capture-apply",
+          "duration": 54.753541999999925,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 四次明确确认后仅保最近三条本地句柄，隐藏/展开不查询历史或执行撤销",
+          "status": "passed",
+          "title": "四次明确确认后仅保最近三条本地句柄，隐藏/展开不查询历史或执行撤销",
+          "duration": 232.32350000000042,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 主表单干净取消仍可达/真正关闭，副驾撤销及未发送内容保持",
+          "status": "passed",
+          "title": "主表单干净取消仍可达/真正关闭，副驾撤销及未发送内容保持",
+          "duration": 111.27604100000008,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 主保存失败不关闭表单或丢副驾；主保存成功实时props及历史数组保留",
+          "status": "passed",
+          "title": "主保存失败不关闭表单或丢副驾；主保存成功实时props及历史数组保留",
+          "duration": 180.57550000000083,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 快照失败/重试保持同一副驾与草稿，不伪造最新投影",
+          "status": "passed",
+          "title": "快照失败/重试保持同一副驾与草稿，不伪造最新投影",
+          "duration": 77.67050000000017,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 明确关闭/ESC仍真正卸载并归还开关焦点，再开不重建fresh撤销",
+          "status": "passed",
+          "title": "明确关闭/ESC仍真正卸载并归还开关焦点，再开不重建fresh撤销",
+          "duration": 69.23233400000026,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签）"
+          ],
+          "fullName": "SM01 开发回归：最小化生命周期与既有边界（非GUI/独立审签） 切项目沿用既有projectId/props切换语义，隐藏不锁旧任务也不恢复历史句柄",
+          "status": "passed",
+          "title": "切项目沿用既有projectId/props切换语义，隐藏不锁旧任务也不恢复历史句柄",
+          "duration": 32.7201670000004,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792703213234,
+      "endTime": 1792703214781.7202,
+      "status": "passed",
+      "message": "",
+      "name": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/sidecar-minimize-retention.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "P-AUTH 真实组件保完整原因且同场景前缀仅一次",
+          "status": "passed",
+          "title": "P-AUTH 真实组件保完整原因且同场景前缀仅一次",
+          "duration": 16.312958000000435,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "P-RATE-PREFIX 真实组件保完整原因且同场景前缀仅一次",
+          "status": "passed",
+          "title": "P-RATE-PREFIX 真实组件保完整原因且同场景前缀仅一次",
+          "duration": 16.69866600000023,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C-RAW 真实组件保完整原因且同场景前缀仅一次",
+          "status": "passed",
+          "title": "C-RAW 真实组件保完整原因且同场景前缀仅一次",
+          "duration": 14.959125000000313,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C-COLON 真实组件保完整原因且同场景前缀仅一次",
+          "status": "passed",
+          "title": "C-COLON 真实组件保完整原因且同场景前缀仅一次",
+          "duration": 11.657124999999724,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C-SUCCESS 真实组件保完整原因且同场景前缀仅一次",
+          "status": "passed",
+          "title": "C-SUCCESS 真实组件保完整原因且同场景前缀仅一次",
+          "duration": 7.50275000000056,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792703214870,
+      "endTime": 1792703214936.5027,
+      "status": "passed",
+      "message": "",
+      "name": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/copilot-error-prefix.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "任务抽屉取消关闭合同（panel.tsx）"
+          ],
+          "fullName": "任务抽屉取消关闭合同（panel.tsx） footer 取消：tryClose() 返回 true（干净）时调用 onCancel() 关闭，不再丢弃返回值",
+          "status": "passed",
+          "title": "footer 取消：tryClose() 返回 true（干净）时调用 onCancel() 关闭，不再丢弃返回值",
+          "duration": 0.3257499999999709,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "任务抽屉取消关闭合同（panel.tsx）"
+          ],
+          "fullName": "任务抽屉取消关闭合同（panel.tsx） dirty 守卫：mustConfirm 时仍弹「放弃未保存修改？」，确认后才 onCancel",
+          "status": "passed",
+          "title": "dirty 守卫：mustConfirm 时仍弹「放弃未保存修改？」，确认后才 onCancel",
+          "duration": 0.5187089999999444,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "任务抽屉取消关闭合同（panel.tsx）"
+          ],
+          "fullName": "任务抽屉取消关闭合同（panel.tsx） 干净分支：非 mustConfirm 直接放行返回 true（由调用方/守卫关闭）",
+          "status": "passed",
+          "title": "干净分支：非 mustConfirm 直接放行返回 true（由调用方/守卫关闭）",
+          "duration": 0.11074999999982538,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "任务抽屉取消关闭合同（panel.tsx）"
+          ],
+          "fullName": "任务抽屉取消关闭合同（panel.tsx） 关闭守卫仍向抽屉壳注册，ESC/X/scrim 不绕过 dirty 确认",
+          "status": "passed",
+          "title": "关闭守卫仍向抽屉壳注册，ESC/X/scrim 不绕过 dirty 确认",
+          "duration": 0.11050000000068394,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "任务抽屉取消关闭合同（panel.tsx）"
+          ],
+          "fullName": "任务抽屉取消关闭合同（panel.tsx） 回归：提交/删除/AI 确认入库能力保留，未被取消返修改动",
+          "status": "passed",
+          "title": "回归：提交/删除/AI 确认入库能力保留，未被取消返修改动",
+          "duration": 0.1218749999998181,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792703214986,
+      "endTime": 1792703214988.1218,
+      "status": "passed",
+      "message": "",
+      "name": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/panel-cancel-close.test.ts"
+    }
+  ]
+}

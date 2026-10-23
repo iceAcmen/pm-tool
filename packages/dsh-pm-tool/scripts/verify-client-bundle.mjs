@@ -35,21 +35,46 @@ const requireMap = (id) => {
 const exports_ = captured(requireMap, mod)
 const out = exports_ && typeof exports_ === 'object' ? exports_ : mod.exports
 assert.equal(typeof out.apply, 'function', '应导出 apply 安装函数')
-// 最小 mock ctx
+// 最小 mock ctx：覆盖 slot 注册与本地 command/executed → conversation 通知公开接缝。
 const registeredNames = []
+const eventListeners = new Map()
+const notices = []
+const sessionScope = { id: 'bundle-session-scope' }
 const slots = {
   inject(name, cb) { registeredNames.push(name); cb() },
   register() { return () => {} },
 }
 const mockCtx = {
   slots,
-  remote: {},
-  'remote.commands': { execute: async () => ({ kind: 'success', text: '' }) },
-  sessions: { current: () => ({ on: () => {} }) },
+  remote: { commands: { execute: async () => ({ ok: true, value: { result: { kind: 'success', text: '' } } }) } },
+  sessions: {
+    list: { getSnapshot: () => ({ ids: ['bundle-session'] }) },
+    create: async () => 'bundle-session',
+    scope: sessionId => sessionId === 'bundle-session' ? sessionScope : undefined,
+  },
+  on(name, listener) {
+    eventListeners.set(name, listener)
+    return () => eventListeners.delete(name)
+  },
+  get(name) {
+    if (name !== 'conversation') return undefined
+    return {
+      input: {
+        for: scope => scope === sessionScope
+          ? { notify: (level, text) => notices.push({ level, text }) }
+          : undefined,
+      },
+    }
+  },
 }
 out.apply(mockCtx)
 assert.deepEqual(new Set(registeredNames), new Set(['main', 'sidebar.panellist']),
   'apply 应注册 main 与 sidebar.panellist')
+const commandExecuted = eventListeners.get('command/executed')
+assert.equal(typeof commandExecuted, 'function', 'apply 应注册 command/executed 本地监听')
+commandExecuted('bundle-session', 'pm', { kind: 'success', text: 'bundle feedback' })
+assert.deepEqual(notices, [{ level: 'info', text: 'bundle feedback' }],
+  '构建后 bundle 应把 pm 成功正文通知到事件所属 session')
 
 // B8-2：单包内联后不应再产出兄弟块；若未来恢复异步块，入口也只允许 require.async，
 // 不得出现同步相对 require('./client.*.js')。这里静态扫描入口，防止回归到 missed module table。

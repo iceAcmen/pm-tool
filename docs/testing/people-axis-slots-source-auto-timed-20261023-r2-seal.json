@@ -1,0 +1,441 @@
+{
+  "startedAtUtc": "2026-10-23T03:21:56.804Z",
+  "endedAtUtc": "2026-10-23T03:21:57.020Z",
+  "durationSeconds": 0.215166542,
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/private/tmp/people-axis-slots-source-auto-timed-20261023-r2/finalize.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "pid": 70546,
+  "records": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-plan.md",
+      "bytes": 14069,
+      "sha256": "83c1ea16a985e52efb78f37ec8f31520bff569bd7ac9354e4431a0844a3417fb"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-report.md",
+      "bytes": 9487,
+      "sha256": "90b11477d49e9e93527d5f71af85f8bc2e08b3ad4cedcbf31e618a124fa60a6e"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-audit.json",
+      "bytes": 200457,
+      "sha256": "1c1246f8f2566662d535b7a75b911227a9a79aa842fe0c67f8ada2a8e9436900"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-audit-incomplete-first-seal.json",
+      "bytes": 157493,
+      "sha256": "0768bf473e37c8c87873c05a3df3d6f84f785f46919612a8aa85e7d31b3157ef"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/auto-oracles.json",
+      "bytes": 7561,
+      "sha256": "4eea273b2ef54aea3b0b903a76cc301e8b2438b587bdd8d0133107909cbc3e9c"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/auto-receipts.json",
+      "bytes": 9991,
+      "sha256": "394e3e3a9727acdd9fd8d1e1c7ab8228cb5601a548e8481d211e67205a521989"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/css-delta.json",
+      "bytes": 5169,
+      "sha256": "8a758f0c502299caaebe8b4796c34eb4ee2d99e7e4ba139e4bf6abae8204ab04"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/css-full.json",
+      "bytes": 17408,
+      "sha256": "b31abd8a581eb0e240c21cb6798d8a2746e61dde4d5de0ff5c3aff4fd32ed541"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/final-seal.json",
+      "bytes": 1160,
+      "sha256": "7a0da1d8416691e780738dab371797a6c71e88f7713b707596e47eeb95832e95"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/finalize.mjs",
+      "bytes": 8400,
+      "sha256": "ac994ef8618f32f8a8f096077512f2f97e025f1b24b63a33901041d2684c0180"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/finite-integrity-recheck.json",
+      "bytes": 22707,
+      "sha256": "915f50381d5e37224f1612d7d94978e5b4e550aba849f070b39a80f5622f4333"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/finite-integrity-result.json",
+      "bytes": 13529,
+      "sha256": "2180c9a43216f2b5ae13bf1f4539a8c8ab6f105d7327a391705ca885536a85b0"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/finite-integrity.json",
+      "bytes": 22699,
+      "sha256": "4e783b4fa5fc90e9b770de141747dec8a1787bae69d981b735e51641497d09a9"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/inspect.mjs",
+      "bytes": 6167,
+      "sha256": "e49547bb4d2b68346ca04584cbbb31d69a1a8e3508d5c804f0f8d51613d51bff"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/plan-readback.json",
+      "bytes": 1081,
+      "sha256": "dc8c74676788d87b4df042ef97e1ed25132761eedf7384d9d1ea7afb156e6c33"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/read-handoff.json",
+      "bytes": 8431,
+      "sha256": "3604c6a9dda3a38edfc19c927fcc5b6fa374be1fa3a32c983a72b1a1d64bb090"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/read-seal-receipts.json",
+      "bytes": 9264,
+      "sha256": "2421a336a99595fc41935df1d8b6582fa53c037259222184908edefee162839b"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/read-vendor-policy.json",
+      "bytes": 22680,
+      "sha256": "515f4fe009881c411ff5abf9c9f0181664f3d2e066ef42e6bea6c0ec3878c70a"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/report-correction-read.json",
+      "bytes": 3819,
+      "sha256": "106b933bc8d77fd8e00931c716768e13e3963767f404e8975c65aba8a4602ce2"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/run.mjs",
+      "bytes": 1640,
+      "sha256": "373c5b82135b4861c32dd5ee8f77d3b32a0f3574b8eadf67c46fc95b10b3c64d"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/timed-read.mjs",
+      "bytes": 2619,
+      "sha256": "20d98f326841ad445da3aa5cac87286a6dbb31bd988f05927884959c3f208a19"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/tsx-delta.json",
+      "bytes": 2858,
+      "sha256": "a51ae68682f2b5867b5d579595965627ae4ccd5a50758b0916703e59599d34cf"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/tsx-full.json",
+      "bytes": 31856,
+      "sha256": "ebe94406fdae1e66e6aaf0429875fc1715ca351a40cd9cbbfd9b21a1e55dede6"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/vendor-code-review.json",
+      "bytes": 7315,
+      "sha256": "0c53e1f8d4f0e1d2a92bf63ba03b03153f4a3e20f08d137d75d4a9ad8d6cbde8"
+    },
+    {
+      "path": "/tmp/people-axis-slots-source-auto-timed-20261023-r2/vendor-static.json",
+      "bytes": 5836,
+      "sha256": "0164d2dcc079b5c92f90f0413b8efcc87a79e36baac767b9f9457672640a5e25"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/before-people.css",
+      "bytes": 14066,
+      "sha256": "8665e0874b0995a77bcd119fbcd892eaeb853593ce4014bce33100d270a995f4"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/before-people.tsx",
+      "bytes": 26112,
+      "sha256": "e41ab4ec75a04b47fef95595cfde2bc1e915a319ce81ccba6cc99885259ac6a6"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/after-people.css",
+      "bytes": 14862,
+      "sha256": "7fa9e31329595f05fe846999eafc21208ec7ee011e86883e44afd223743c1594"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/after-people.tsx",
+      "bytes": 26546,
+      "sha256": "d32a316ab25b958fc1bd93f14b157e8da1f75556f419ea72f72ab708f85c107b"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/sources-before.json",
+      "bytes": 351,
+      "sha256": "853c14e3ca9a50d1aa8e5045f197cf59ddd11bcc23e7357cd576f61371786ace"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/sources-after.json",
+      "bytes": 351,
+      "sha256": "80c9a47695d61557a4c9f9ddb1f95d86b438f94255430265946950acaeb429b9"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-css.json",
+      "bytes": 523,
+      "sha256": "95cd04520c68d7683bb2f16da19e80028ad9f7b1a4c9e2341a97603ca17d844a"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-css.stdout",
+      "bytes": 4476,
+      "sha256": "a3cf5fc143a9e85874df6d02d977c410a5024d2e4c076c72ee2189559076fdbb"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-css.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-tsx.json",
+      "bytes": 523,
+      "sha256": "3c99524240947063598bd1d7ce724c234d0f46ad4462b32216b64251c697a1af"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-tsx.stdout",
+      "bytes": 2171,
+      "sha256": "ad1e808788911fe70709d551fb427440dce5034ce268baaba17e11af3ab206e4"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/diff-tsx.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/five-cases.json",
+      "bytes": 824,
+      "sha256": "99f45f27c2e62831b19ba03be9a701a9db74860d00d50bfedd68d9b615a44ce3"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/five-cases.stdout",
+      "bytes": 622,
+      "sha256": "7a57f14bf8319f28c19b4adbc29cdf870154ab3d16165b2d2563a4a1ff0e9f88"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/five-cases.stderr",
+      "bytes": 186,
+      "sha256": "426f4358a09aa14c70d059d7e2d683b431c86f685cb4bfc92ecc6ee2568d5b72"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/narrow-check.json",
+      "bytes": 743,
+      "sha256": "25621fae945b99592f16b0a0248c8603f6eded2cc1374c31ebfed3bbca8e91ac"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/narrow-check.stdout",
+      "bytes": 123,
+      "sha256": "c092676d1c6c1f0f54c7c13ca18688efc31403ad5c87c18d4154e9838776c47a"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/narrow-check.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/vitest.config.mjs",
+      "bytes": 371,
+      "sha256": "3b748b593dbc439eaaeba7fd5283d78c6935799ca4ec5f0d5a60a65744c7dd05"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/narrow.mjs",
+      "bytes": 4492,
+      "sha256": "662fcc14b0cc8ce804192ed950e41e822419aaf156d811eb5d91fe9968cf75c7"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen-inputs.json",
+      "bytes": 5230,
+      "sha256": "931949b72bc640ba22e7caf90e0ecf3c12de4499963310395268793d83f33ba1"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/2026-10-23-people-axis-slots-capacity-developer-plan.md",
+      "bytes": 5016,
+      "sha256": "b0f1315800d26bbe53c8a3400b6b3c1d76f92db94b2c2d4a6354cf5b1afa7674"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/2026-10-23-people-axis-slots-capacity-developer-handoff.md",
+      "bytes": 7810,
+      "sha256": "de537d6a5fae7505fddad50dc5a936e730f46bb9e565cf10ea381e5c5715eaca"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/views/people.tsx",
+      "bytes": 26546,
+      "sha256": "d32a316ab25b958fc1bd93f14b157e8da1f75556f419ea72f72ab708f85c107b"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/views/people.css",
+      "bytes": 14862,
+      "sha256": "7fa9e31329595f05fe846999eafc21208ec7ee011e86883e44afd223743c1594"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/views/people-scale.ts",
+      "bytes": 967,
+      "sha256": "5a45ec6d2e24cb7d054ee7d25c70b4a22afd32e9e195660efec938223b8670d6"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/people-load.ts",
+      "bytes": 8915,
+      "sha256": "758bbddf2c4e49bbdc9923542ce614fae226b19db10a7b8e378562911971cdd2"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/settings.ts",
+      "bytes": 7983,
+      "sha256": "f017816e653906662cdae7fb6ab8e0dfdb29e1c9c64b1913af2840b361da7bcb"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/derived.ts",
+      "bytes": 7721,
+      "sha256": "424a42289f65fc51bd804a0c62b2611e70f62deaa69f5f9d50923e9b572f6c78"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/status.ts",
+      "bytes": 1150,
+      "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/labels.ts",
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/load-stance.ts",
+      "bytes": 8270,
+      "sha256": "ea3fd0aae076621dca045c64e784bf0c02b11ff87437dd210f853861ad58131c"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/gantt.ts",
+      "bytes": 29170,
+      "sha256": "c5084fcb00b9cb2a9a2bf65cff184ac945778654e934d60fa6afa6b076c6bf6c"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/progress-derivation.ts",
+      "bytes": 17727,
+      "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/views/types.ts",
+      "bytes": 5435,
+      "sha256": "36add9a9fa577c3b847814a50c53bbfe76c8194dd00b6541b4bc71bc7218cbee"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/views/people-scale.test.ts",
+      "bytes": 1084,
+      "sha256": "4ed2783cbae19683538a4233ca98a04d3e62a3c7841c530f70854ff2a49b774d"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/core/people-load.test.ts",
+      "bytes": 1109,
+      "sha256": "f1caf1d0da433d2ce7da7e62b706cf0737e7f379fb8de60070b6ad2d5d15fe9c"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/frozen/src/client/assets.d.ts",
+      "bytes": 336,
+      "sha256": "a3d1c661d52f9e0964531f6965258a132d3cd310572a0e3d351e52a325eb62bc"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/seal-manifest.json",
+      "bytes": 23790,
+      "sha256": "a998d44cec5e90ce08ae068a0925caabcc46722fde64f8bb0f79675344290bbc"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/seal.json",
+      "bytes": 2171,
+      "sha256": "908ef5548f462f835fc373a22cbe60a3812b136be6892c31291046d9137f24a7"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/seal.stdout",
+      "bytes": 104,
+      "sha256": "ab9a5ff73a518b378833b1bfb68cc4c91068823633c9d6d1611e9c42002d5fbe"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/seal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/readback.json",
+      "bytes": 1461,
+      "sha256": "a8a3df18c54683fc6142c8c2801b852648c42ce8484d5b9c87b2879b49712e6e"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/readback.stdout",
+      "bytes": 68,
+      "sha256": "a63830fc35e44038575840efe3288989f6ba1fb62e08597f0b449994e0ce4780"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/readback.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/people-axis-slots-capacity-developer-20261023/timing-summary.json",
+      "bytes": 24977,
+      "sha256": "1e5d3d78195ccc7db98fde3f39fc18168c31d554404a9941e8b73931fe8d0552"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/LICENSE",
+      "bytes": 1068,
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/grill-me/SKILL.md",
+      "bytes": 157,
+      "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/grill-me/agents/openai.yaml",
+      "bytes": 137,
+      "sha256": "c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/grilling/SKILL.md",
+      "bytes": 2049,
+      "sha256": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/grilling/agents/openai.yaml",
+      "bytes": 113,
+      "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/tdd/SKILL.md",
+      "bytes": 3629,
+      "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/tdd/tests.md",
+      "bytes": 2214,
+      "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/tdd/mocking.md",
+      "bytes": 1481,
+      "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/tdd/agents/openai.yaml",
+      "bytes": 87,
+      "sha256": "ea6f01cf1b8c06a4b0f5b649d74b1b8ce8685e72af1b38d70d877693e092af0b"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/code-review/SKILL.md",
+      "bytes": 6670,
+      "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/code-review/agents/openai.yaml",
+      "bytes": 100,
+      "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/diagnosing-bugs/SKILL.md",
+      "bytes": 8664,
+      "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills/mattpocock/skills/diagnosing-bugs/agents/openai.yaml",
+      "bytes": 103,
+      "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b"
+    }
+  ],
+  "scope": "Finite review documents, own commands, 38 selected developer entries, 8 final receipts, registered13; no live product source",
+  "excludedForNonCircularity": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-seal.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-readback.json"
+  ],
+  "productGuiOrWholeCandidatePass": false,
+  "releaseClaimed": false
+}

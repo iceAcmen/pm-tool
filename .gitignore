@@ -50,3 +50,23 @@ backups/
 # 决定性结论已摘要入 docs/testing 与 docs/verification，原始运行目录/归档不入库、不删除（本地留存证据）。
 verify-run-*/
 verify-run-*.tar.gz
+
+# 2026-10-23 在途状态存档：保留本机原件，Git 只纳入源码与审证摘要
+/.preview/
+/reports/all-pending-evidence-20261021/
+/reports/wechat-pilot-20261021/
+/reports/*-selftmp/
+/reports/*-tmp/
+/reports/*-evidence/
+/docs/testing/*-selftmp/
+/docs/testing/*-evidence/
+# 大型源声明/观察日志的完整原件留本机，名单与大小见 docs/archives/
+/docs/plans/*-baseline.json
+/docs/plans/*-observations.json
+/docs/plans/*-output.json
+/docs/plans/*-evidence.json
+/docs/plans/*-seal.json
+/docs/plans/2026-10-23-p2004-kr-related-affected-inputs.json
+/docs/plans/2026-10-23-p2004-kr-related-git-baseline-receipt.json
+/docs/plans/2026-10-23-p2004-kr-related-green-inputs.json
+/docs/plans/2026-10-23-p2004-kr-related-red-inputs.json

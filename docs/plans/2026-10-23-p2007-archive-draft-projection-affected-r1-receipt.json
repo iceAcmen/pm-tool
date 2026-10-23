@@ -1,0 +1,38 @@
+{
+  "label": "affected-r1",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "args": [
+    "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/config/vitest.config.mjs",
+    "--reporter=verbose"
+  ],
+  "cwd": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/input",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/home",
+    "TMPDIR": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/output/tmp",
+    "XDG_CONFIG_HOME": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/config",
+    "XDG_CACHE_HOME": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/cache",
+    "XDG_DATA_HOME": "/tmp/pmtool-p2007-archive-draft-projection-4tcraU/output/data",
+    "LANG": "en_US.UTF-8",
+    "TZ": "UTC",
+    "CI": "1",
+    "NO_COLOR": "1"
+  },
+  "start": "2026-10-22T21:23:19.614Z",
+  "end": "2026-10-22T21:23:20.740Z",
+  "exit": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "bytes": 5679,
+    "sha256": "99e446586fff99ddb4f9e655d67e46442a7351ae7f860ce7a84c6153fdecce79"
+  },
+  "stderr": {
+    "bytes": 157,
+    "sha256": "d72c22b023f403d910e6ee40ead1eb7642ebcc2f41622a42aa429cb0bc11de73"
+  },
+  "independentJudgment": "NOT_JUDGED"
+}

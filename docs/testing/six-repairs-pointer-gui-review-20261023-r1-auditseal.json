@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-22T23:02:56.412Z",
+  "protectedInputs": 360,
+  "drift": [],
+  "badLinks": [],
+  "trailingWhitespace": [],
+  "outputs": {
+    "docs/testing/six-repairs-pointer-gui-review-20261023-r1-audit.json": {
+      "bytes": 365407,
+      "sha256": "8df880ef2822edb5ed5b5ac842342071d8a8d795c63a7f81323b1d67ed07b252"
+    },
+    "docs/testing/six-repairs-pointer-gui-review-20261023-r1-command-audit.md": {
+      "bytes": 5211,
+      "sha256": "056387b901e37da5e1a55e5f4debce56cfe54efc8b2b73386cd8a38044f6d3f2"
+    },
+    "docs/testing/six-repairs-pointer-gui-review-20261023-r1-report.md": {
+      "bytes": 16901,
+      "sha256": "d8bbf6c93344a42cc3181e67974c15725f631f534db4087caf551b27d15c1dcd"
+    }
+  },
+  "reader": {
+    "bytes": 13019,
+    "sha256": "92d2ce1d4977ca1f111c3b8a80cb4c64558a6ce9a3806c7a7081780ce59264e6"
+  },
+  "auditWarningsPreserved": [],
+  "evidenceVerdict": "P1L2-F02 FAIL_LIMITED_GUI; backend save NOT_REACHED",
+  "ownProductExecution": "NOT_RUN",
+  "ownGUIExecution": "NOT_RUN",
+  "exitCode": 0,
+  "status": "released / STOP",
+  "note": "exitCode is own validation result; actual outer exit is tool receipt"
+}

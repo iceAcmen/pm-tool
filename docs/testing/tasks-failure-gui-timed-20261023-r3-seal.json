@@ -1,0 +1,82 @@
+{
+  "sealedAt": "2026-10-23T02:16:02.802Z",
+  "status": "STOP/released",
+  "scope": "同域四封件的有限独立原证审签，不签整项/父commit",
+  "fullReaderSeal": {
+    "path": "/tmp/tasks-failure-gui-timed-20261023-r3-seal.json",
+    "sha256": "12e975f271831acd1ae9891e43a3c29f2f7f93c3658be47edcd81e71a5053738",
+    "includes": "22份自有审计/摘要/阶段计时指纹、报告成员、四输入包保护回读"
+  },
+  "protectedInputIndexes": [
+    {
+      "packName": "TimedTasksLoadingR2",
+      "members": 613,
+      "indexSha256": "73df3c773564d27a1212aa4da8312c3aa3a67a1199a94cfd9c1364a2e03b1e36",
+      "changedMembersAtSeal": []
+    },
+    {
+      "packName": "TimedO5FormR1",
+      "members": 280,
+      "indexSha256": "01cb0df8fed13a9859d65eebc82caf6edff2b543fae90ce3993f611c3c6e9868",
+      "changedMembersAtSeal": []
+    },
+    {
+      "packName": "TimedTaskDirtyR1",
+      "members": 315,
+      "indexSha256": "9d324c405a4bd92fbc8cb98bcf298be037f6edc8ec89be29674ee62798310f20",
+      "changedMembersAtSeal": []
+    },
+    {
+      "packName": "TimedTaskDirtyRemainingR1",
+      "members": 755,
+      "indexSha256": "9c92455036dee16a4ace746a1e50cd26d52b8674e18e8d0bbea54840bad48edf",
+      "changedMembersAtSeal": []
+    }
+  ],
+  "reportMembers": [
+    {
+      "path": "docs/testing/tasks-failure-gui-timed-20261023-r3-audit.json",
+      "bytes": 6854,
+      "sha256": "1fd6297f804a9ed2309c813c7ecdcf0f43930f01e8a6db432a4db1ac5ea54eb1"
+    },
+    {
+      "path": "docs/testing/tasks-failure-gui-timed-20261023-r3-command-receipts.md",
+      "bytes": 5627,
+      "sha256": "63612738bd1ade7e628ba8fd07d8076a7175fee9446fa1bc1e109acfd462ced8"
+    },
+    {
+      "path": "docs/testing/tasks-failure-gui-timed-20261023-r3-firstload-plan.md",
+      "bytes": 3988,
+      "sha256": "7cc50a3b61d244c5213321fc5e46d3eee0a44089fdcf33c4162a07d1fd0dc560"
+    },
+    {
+      "path": "docs/testing/tasks-failure-gui-timed-20261023-r3-o4-escape-plan.md",
+      "bytes": 7267,
+      "sha256": "a873bc52b51bb73c4f958761c5856f0e37f90a75ab9ea92a6e282e106e368eb0"
+    },
+    {
+      "path": "docs/testing/tasks-failure-gui-timed-20261023-r3-report.md",
+      "bytes": 13249,
+      "sha256": "6f3ac8a02d7dbc487bbed0f9f8bbcfdfbe48acebbb1ccfe7e9bbd4786fbffa22"
+    }
+  ],
+  "reader": {
+    "path": "/tmp/tasks-failure-gui-timed-20261023-r3-reader.mjs",
+    "sha256": "fae76b2bc419d9698d5e4f3605d16164e37e12261ddcef3939cf8003086d0fa4",
+    "syntaxCheckExit": 0
+  },
+  "timingSnapshot": {
+    "path": "/tmp/tasks-failure-gui-timed-20261023-r3-timing-sealed.jsonl",
+    "bytes": 14431,
+    "sha256": "4ca157c5afac600e88f48437811797007b3d06f521eb86df772d8235dbfb9444",
+    "boundary": "封存步骤进行中快照；后续seal/readback实际终码由工具回执记录"
+  },
+  "excludesFromSelfFingerprint": [
+    "本seal自身",
+    "随后封存工具回执/回读文件",
+    "追加的工具计时活账行"
+  ],
+  "productExecution": false,
+  "GUIExecution": false,
+  "gitOperation": false
+}

@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-23",
+  "role": "trae独立K16归档GUI原证审查",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs",
+    "readback"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.2919,
+  "actualToolStatus": "Process exited with code 0",
+  "actualToolStdout": "{\"protected\":730,\"drift\":[],\"sealToolExitReadBack\":0,\"readback\":{\"bytes\":674,\"sha256\":\"e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d\"}}\n",
+  "actualToolStderr": "",
+  "origin": "readback命令实际返回0后登记；已读回前次seal实际工具0、seal原字节、8输出指纹及730明确输入",
+  "pid": null,
+  "pidBoundary": "同步工具不提供PID，不补造",
+  "readback": {
+    "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback.json",
+    "bytes": 674,
+    "sha256": "e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d"
+  },
+  "seal": {
+    "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+    "bytes": 2199,
+    "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+  },
+  "sealToolExitActuallyRead": 0,
+  "packageMembers": 717,
+  "physicalMembers": 720,
+  "protectedCount": 730,
+  "protectedDrift": [],
+  "sealedOutputsEqual": 8,
+  "failureLayersPreserved": {
+    "mainFiles": "actual1 / compound Control+End unsupported after original package body read",
+    "mainReentry": "actual1 / successful original reload followed by wrong wait for ephemeral output",
+    "independentReader": "actual1/1/1/0; original errors retained, no productFAIL inferred"
+  },
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "ordinarycommit": "NOT_RUN / NOT_SIGNED",
+  "p2007Whole": "NOT_SIGNED",
+  "cycleWhole": "NOT_SIGNED",
+  "parentCommitGate": "NOT_SIGNED",
+  "state": "released",
+  "stop": true,
+  "resources": "无builder/GUI/桌面/端口/profile/数据锁、服务或长运行子进程；Main继续其他原余件无需等待",
+  "excludedFromSeal": true,
+  "exclusionReason": "真实后置工具收据不循环自指纹"
+}

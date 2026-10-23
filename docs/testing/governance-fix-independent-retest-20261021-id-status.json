@@ -1,0 +1,834 @@
+[
+  {
+    "id": "RA-AI01",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-AI01",
+        "name": "production-gateway-draft-zero-business-write",
+        "status": "PASS",
+        "detail": {
+          "gatewayCalls": 1
+        }
+      },
+      {
+        "id": "RA-AI01",
+        "name": "explicit-confirm-real-dispatch-nonempty-provenance",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-AI02",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-AI02",
+        "name": "normal-title-update-changed-recheck-appends-history",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI02",
+        "name": "real-ref-cross-project-rule-snapshot-pure-defense",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-AI03",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-AI03",
+        "name": "normal-delete-missing-two-rechecks-old-history-kept",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-AI04",
+    "oldAuto": "FAIL",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-AI04",
+        "name": "draft-cancel-regenerate-no-business-write",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "same-target-chain-baseline-two-steps",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "clean-undo-restores-two-step-original",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "external-update-rejects-related-dependent-keeps-independent",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "mixed-undo-conflict-not-burn-runtime-or-ledger",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "explicit-stepwise-two-confirmations",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI04",
+        "name": "changed-only-undo-refuses-overwrite-runtime-retryable",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-AI05",
+    "oldAuto": "FAIL",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-AI05",
+        "name": "applied-create-provenance-milestones",
+        "status": "PASS",
+        "detail": {
+          "table": "milestones",
+          "id": "m-0002"
+        }
+      },
+      {
+        "id": "RA-AI05",
+        "name": "applied-create-provenance-risk_issues",
+        "status": "PASS",
+        "detail": {
+          "table": "risk_issues",
+          "id": "ri-0002"
+        }
+      },
+      {
+        "id": "RA-AI05",
+        "name": "applied-create-provenance-deliverables",
+        "status": "PASS",
+        "detail": {
+          "table": "deliverables",
+          "id": "dlv-0002"
+        }
+      },
+      {
+        "id": "RA-AI05",
+        "name": "applied-create-provenance-meetings",
+        "status": "PASS",
+        "detail": {
+          "table": "meetings",
+          "id": "mtg-0002"
+        }
+      },
+      {
+        "id": "RA-AI05",
+        "name": "negative-whitelist-cross-project-wrapped-arrays-zero-write",
+        "status": "PASS",
+        "detail": {
+          "kind": "success",
+          "text": "已应用 0 条；拒绝 7 条（t-0002：不允许的操作 task.delete；t-0003：任务 t-0003 不存在；t-0001：未知字段 unknown；t-0001：AI 不得直接写 wrapped（已收尾是人显式决策，请由人手动收尾）；t-0001：未知字段 attachments；t-0001：未知字段 progressLog；mtg-0001：未知字段 projectId）",
+          "appliedCount": 0
+        }
+      },
+      {
+        "id": "RA-AI05",
+        "name": "materials-history-preserved-by-valid-update",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-AI06",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-AI06",
+        "name": "gateway-faults-chinese-zero-business-write-recovery",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-AI06",
+        "name": "no-llm-production-error",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "MAIN_NOT_RUN",
+    "owner": "CONDITIONAL_NOT_REQUESTED",
+    "excluded": "真实网络模型、busy/cancel GUI/120s"
+  },
+  {
+    "id": "RA-P0001",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P0001",
+        "name": "production-context-real-materials-and-empty-no-secret-refs",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0002",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P0002",
+        "name": "narrow-fields-final-schema-valid-and-five-legacy-unchanged",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "branch-only-optional-valid-schema",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-title",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-priority",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-manualProgress",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-checklist",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-evidenceUrl",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-repoUrl",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-branch",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-description",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-branch",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0002",
+        "name": "illegal-patch-dueDate",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0003",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P0003",
+        "name": "production-capture-draft-handle-confirm-provenance",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0003",
+        "name": "invalid-capture-whole-draft-zero-write",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0004",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P0004",
+        "name": "attach-evidence-persist-provenance-no-status-auto-completion",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0005",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P0005",
+        "name": "same-session-merge-notes-and-project-isolation",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "sessions 不入标准 backup；只有原库新进程回读"
+  },
+  {
+    "id": "RA-P0006",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P0006",
+        "name": "metric-ledger-independent-counts-and-empty-no-business-write",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0007",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P0007",
+        "name": "task-done-single-hook-idempotent-draft-human-edit-final",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0007",
+        "name": "bare-done-honest-gap",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P0007",
+        "name": "reflection-storage-failure-best-effort-keeps-task-save",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P0008",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P0008",
+        "name": "five-rules-boundaries-read-only-log-not-material",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1001",
+    "oldAuto": "FAIL",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1001",
+        "name": "queue-list-snapshot-read-only-open-only-settings",
+        "status": "PASS",
+        "detail": null
+      },
+      {
+        "id": "RA-P1001",
+        "name": "absence-only-folded-not-top",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1002",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1002",
+        "name": "mute-normal-visible-critical-exempt-unmute",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1003",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1003",
+        "name": "real-local-quiet-window-off-and-midnight-boundaries",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1004",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1004",
+        "name": "snapshot-refresh-latest-values-zero-model-calls",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1005",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1005",
+        "name": "milestone-deliverable-event-reflection-idempotent-and-bad-link-zero-write",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P1006",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P1006",
+        "name": "legal-history-standard-restore-real-load-threshold",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2001",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P2001",
+        "name": "three-exports-safe-static-snapshot-overwrite-only-confirm",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2002",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P2002",
+        "name": "standard-backup-history-31-29-real-export-archive-append-only",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2003",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P2003",
+        "name": "okr-suggest-confirm-ignore-repeat-clear-preserves-pending-other-project",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2004",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P2004",
+        "name": "okr-single-parent-soft-link-human-confirm-relation-negatives",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2005",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P2005",
+        "name": "human-wrapped-stats-queue-check-load-no-reflect-ai-rejected",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "board/people/客观进度 GUI 与完整消费链由 Main/OP 分工，非本门"
+  },
+  {
+    "id": "RA-P2006",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P2006",
+        "name": "lesson-real-source-marks-edit-human-final",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P2007",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P2007",
+        "name": "archive-review-readonly-no-outbound-audit-wrapped-not-done",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P3001",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P3001",
+        "name": "habit-inbox-confirm-ignore-repeat-no-auto-final",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P3002",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P3002",
+        "name": "real-date-production-checkin-two-day-window-repeat-zero-write",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P3003",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "AFFECTED_OLD_INTEGRATION_SUPERSEDED_BY_EXACT_NEW_TEST",
+    "probes": [
+      {
+        "id": "RA-P3003",
+        "name": "legal-multimonth-history-standard-backup-precheck-restore-streak",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "14天与多月 GUI 折叠未执行"
+  },
+  {
+    "id": "RA-P3004",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P3004",
+        "name": "habit-okr-update-readonly-aggregate-human-final-idempotent-negatives",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  },
+  {
+    "id": "RA-P3005",
+    "oldAuto": "PASS_LIMITED",
+    "auto": "PASS_LIMITED",
+    "candidate": "run-2ACog5",
+    "inheritance": "OLD_FROZEN_LEAF_SCOPE_RETAINED_AND_NEW_COMMAND_RETESTED",
+    "probes": [
+      {
+        "id": "RA-P3005",
+        "name": "cycle-hook-disabled-real-return-no-timer-registration",
+        "status": "PASS",
+        "detail": null
+      }
+    ],
+    "gui": "NOT_RUN",
+    "guiReason": "本授权禁止 GUI，待 Main 同候选原证",
+    "realNetworkModel": "NOT_APPLICABLE",
+    "owner": "NOT_APPLICABLE",
+    "excluded": "完整 GUI/样式/UX 与合同非前置深故障/并发不在本 AUTO 子断言"
+  }
+]

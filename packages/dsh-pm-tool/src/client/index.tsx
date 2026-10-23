@@ -9,7 +9,35 @@ import { PmPanel, type PmPanelApi } from './panel.js'
 
 const PANEL_ID = 'pm-tool' as MainPanelId
 
-export const inject = ['slots', 'remote', 'remote.commands', 'sessions']
+export const inject = ['slots', 'remote', 'remote.commands', 'sessions', 'conversation']
+
+interface CommandFeedbackClient {
+  sessions: ISessions & { scope(sessionId: unknown): Context | undefined }
+  get(name: 'conversation'): {
+    input?: {
+      for?(scope: Context): {
+        notify?(level: 'info' | 'error', text: string): void
+      } | undefined
+    } | undefined
+  } | undefined
+  on(
+    name: 'command/executed',
+    listener: (sessionId: unknown, commandName: string, result: { kind: string, text?: string }) => void,
+  ): unknown
+}
+
+function registerCommandFeedback(client: CommandFeedbackClient): void {
+  client.on('command/executed', (sessionId, commandName, result) => {
+    if (commandName !== 'pm' || result.text === undefined) return
+    const scope = client.sessions.scope(sessionId)
+    if (!scope) return
+    const input = client.get('conversation')?.input
+    if (typeof input?.for !== 'function') return
+    const target = input.for(scope)
+    if (typeof target?.notify !== 'function') return
+    target.notify(result.kind === 'error' ? 'error' : 'info', result.text)
+  })
+}
 
 export function apply(ctx: Context): void {
   const client = ctx as Context & {
@@ -17,6 +45,7 @@ export function apply(ctx: Context): void {
     slots: { inject(name: string, callback: () => unknown): void, register(options: object, component: unknown): unknown }
     remote: { commands: { execute(sessionId: unknown, line: string, attachments: unknown[]): Promise<any> } }
   }
+  registerCommandFeedback(client as unknown as CommandFeedbackClient)
   const executeRaw: PmPanelApi['executeRaw'] = async (line) => {
     let sessionId = client.sessions.list.getSnapshot().ids[0]
     if (!sessionId) sessionId = await client.sessions.create()

@@ -1,0 +1,79 @@
+{
+  "rows": [
+    {
+      "start": "2026-10-23T03:09:02.812Z",
+      "end": "2026-10-23T03:09:04.099Z",
+      "parentPid": 68400,
+      "childPid": 68404,
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/people-fd-axis-gui-timed-20261023-r1-reader.mjs",
+        "inspect",
+        "TimedPeopleFDR1"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualStatus": 0,
+      "signal": null,
+      "stdout": "{\"id\":\"integrity-TimedPeopleFDR1\",\"start\":\"2026-10-23T03:09:02.901Z\",\"end\":\"2026-10-23T03:09:04.082Z\",\"result\":{\"name\":\"TimedPeopleFDR1\",\"members\":1848,\"parsed\":1685,\"png\":15,\"mismatch\":0,\"index\":{\"path\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TimedPeopleFDR1/index-r1.json\",\"bytes\":321652,\"sha256\":\"0a7083032a656c00198411db370714c5a1d118aadffcc4d2f5dca71c93a14421\"},\"seal\":{\"path\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TimedPeopleFDR1/seal.json\",\"bytes\":220,\"sha256\":\"1d2b8893e7813074b18514a1ea7bab66910c2047719a4930fceb024aaebe9570\"},\"extras\":[\"index-r1.json\",\"seal.json\"],\"topFiles\":[\"activation-binding.json\",\"actual-runtime-artifacts-check.json\",\"built-artifacts.json\",\"candidate.json\",\"complete-inputs.json\",\"fd-1024-dark100-expanded-r1.json\",\"fd-1024-dark100-expanded-r1.png\",\"fd-1024-dark100-metrics.json\",\"fd-1024-dark100-scroll-r1.json\",\"fd-1024-dark100-scroll-r1.png\",\"fd-1024-dark100-top-r1.json\",\"fd-1024-dark100-top-r1.png\",\"fd-1440-dark100-expanded-r1.json\",\"fd-1440-dark100-expanded-r1.png\",\"fd-1440-dark100-metrics.json\",\"fd-1440-dark100-scroll-r1.json\",\"fd-1440-dark100-scroll-r1.png\",\"fd-1440-dark100-top-r1.json\",\"fd-1440-dark100-top-r1.png\",\"fd-390-dark100-expanded-r1.json\",\"fd-390-dark100-expanded-r1.png\",\"fd-390-dark100-metrics.json\",\"fd-390-dark100-scroll-r1.json\",\"fd-390-dark100-scroll-r1.png\",\"fd-390-dark100-top-r1.json\",\"fd-390-dark100-top-r1.png\",\"fd-768-dark100-expanded-r1.json\",\"fd-768-dark100-expanded-r1.png\",\"fd-768-dark100-metrics.json\",\"fd-768-dark100-scroll-r1.json\",\"fd-768-dark100-scroll-r1.png\",\"fd-768-dark100-top-r1.json\",\"fd-768-dark100-top-r1.png\",\"fd-confirm-dialog-r3.json\",\"fd-confirm-dialog-r3.png\",\"fd-precheck-command-r3.json\",\"fd-prechecked-r3.json\",\"fd-prechecked-r3.png\",\"fd-restore-command-r3.json\",\"fd-restored-r3.json\",\"fd-restored-r3.png\",\"fd-standard-restore-r3-events.json\",\"fd-viewports-r1-events.json\",\"fixture-original.json\",\"fixture-transfer.json\",\"host-ready.json\",\"host-start.json\",\"isolated-profile.yml\",\"observations.json\",\"source-files.json\",\"timing-subset.json\"]}}\n",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "start": "2026-10-23T03:09:04.099Z",
+      "end": "2026-10-23T03:09:04.368Z",
+      "parentPid": 68400,
+      "childPid": 68415,
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/people-fd-axis-gui-timed-20261023-r1-reader.mjs",
+        "inspect",
+        "TimedPeopleFDAxisR1"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualStatus": 0,
+      "signal": null,
+      "stdout": "{\"id\":\"integrity-TimedPeopleFDAxisR1\",\"start\":\"2026-10-23T03:09:04.163Z\",\"end\":\"2026-10-23T03:09:04.363Z\",\"result\":{\"name\":\"TimedPeopleFDAxisR1\",\"members\":595,\"parsed\":568,\"png\":5,\"mismatch\":0,\"index\":{\"path\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TimedPeopleFDAxisR1/index-r1.json\",\"bytes\":104150,\"sha256\":\"c2c3f6c4d0115967a85d76510006901f1e43ad85dd7021442d639758a79f9309\"},\"seal\":{\"path\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TimedPeopleFDAxisR1/seal.json\",\"bytes\":219,\"sha256\":\"24aae62e33a5e227569b2cbf6e9f9a301cf530986ece8c804a7cf2df8630d0ad\"},\"extras\":[\"index-r1.json\",\"seal.json\"],\"topFiles\":[\"activation-binding.json\",\"built-artifacts.json\",\"candidate.json\",\"complete-inputs.json\",\"fd-axis-before-r1.json\",\"fd-axis-before-r1.png\",\"fd-axis-final-metrics.json\",\"fd-axis-final-visible-r2.json\",\"fd-axis-final-visible-r2.png\",\"fd-axis-follow-metrics.json\",\"fd-axis-follow-r1-events.json\",\"fd-axis-follow-visible-r1.json\",\"fd-axis-follow-visible-r1.png\",\"fd-axis-horizontal-metrics.json\",\"fd-axis-horizontal-r1-events.json\",\"fd-axis-horizontal-r2-events.json\",\"fd-axis-horizontal-visible-r1.json\",\"fd-axis-horizontal-visible-r1.png\",\"fd-axis-supplement-r1-events.json\",\"fd-axis-visible-r1.json\",\"fd-axis-visible-r1.png\",\"observations.json\",\"source-files.json\"]}}\n",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "start": "2026-10-23T03:09:04.368Z",
+      "end": "2026-10-23T03:09:04.849Z",
+      "parentPid": 68400,
+      "childPid": 68417,
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/people-fd-axis-gui-timed-20261023-r1-reader.mjs",
+        "analyze"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualStatus": 0,
+      "signal": null,
+      "stdout": "{\"id\":\"semantic-FD-axis\",\"start\":\"2026-10-23T03:09:04.436Z\",\"end\":\"2026-10-23T03:09:04.837Z\",\"result\":{\"states\":17,\"events\":[{\"name\":\"fd-standard-restore-r3-events.json\",\"frames\":59,\"rpc\":3},{\"name\":\"fd-viewports-r1-events.json\",\"frames\":81,\"rpc\":0},{\"name\":\"fd-axis-follow-r1-events.json\",\"frames\":4,\"rpc\":0},{\"name\":\"fd-axis-horizontal-r1-events.json\",\"frames\":4,\"rpc\":0},{\"name\":\"fd-axis-horizontal-r2-events.json\",\"frames\":4,\"rpc\":0},{\"name\":\"fd-axis-supplement-r1-events.json\",\"frames\":6,\"rpc\":0}],\"rawPerState\":109,\"rootsPerState\":111,\"status\":{\"todo\":8,\"in_progress\":6,\"blocked\":2,\"done\":7,\"wrapped\":1},\"openAssigned\":14,\"unassigned\":2}}\n",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "start": "2026-10-23T03:09:04.849Z",
+      "end": "2026-10-23T03:09:04.906Z",
+      "parentPid": 68400,
+      "childPid": 68419,
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/people-fd-axis-gui-timed-20261023-r1-reader.mjs",
+        "name-review"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualStatus": 0,
+      "signal": null,
+      "stdout": "{\"id\":\"source-name-and-original-auto\",\"start\":\"2026-10-23T03:09:04.888Z\",\"end\":\"2026-10-23T03:09:04.899Z\",\"result\":{\"sourceConclusion\":\"PASS_NAME_SLOT_ONLY\",\"autoConclusion\":\"ADMISSIBLE_ORIGINAL_2_FILES_5_CASE_EXECUTION_NOT_RA_P1006_AUTO_OR_CSS_GUI_PASS\",\"checked\":13,\"cssSha256\":\"8665e0874b0995a77bcd119fbcd892eaeb853593ce4014bce33100d270a995f4\",\"byteDelta\":57}}\n",
+      "stderr": "",
+      "error": null
+    }
+  ],
+  "tool": {
+    "path": "/tmp/people-fd-axis-gui-timed-20261023-r1-reader.mjs",
+    "bytes": 21046,
+    "sha256": "51af08367d1c9eb57c0801abb0074dc35eb14062431f07e07cb4d8e729497114"
+  }
+}

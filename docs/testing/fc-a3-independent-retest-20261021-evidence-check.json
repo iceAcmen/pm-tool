@@ -1,0 +1,371 @@
+{
+  "at": "2026-10-21T12:11:52.580Z",
+  "node": "v22.23.3",
+  "checks": {
+    "sourceHash": true,
+    "responseHash": true,
+    "responseBytes": true,
+    "exactSourceCorePresent": true,
+    "firstOffset": true,
+    "unique": true,
+    "segmentHash": true,
+    "segmentBytes": true,
+    "comboSeparator": true,
+    "nativeImageHash": true,
+    "finderChromePreference": true,
+    "finderActionS3": true,
+    "finderServerS4": true,
+    "finderDomS4": true,
+    "finderControlNotReloaded": true,
+    "finderHostMounted": true
+  },
+  "combo": {
+    "firstOffset": 875361,
+    "sourceHash": "5ae7808cb3bcdb3f8e2577c84a587080f6dbd4f87b516a9520266a84872ac9ec",
+    "responseHash": "e9404eb6f474b191b7b284aa04cfe3211440fb5a74f526d1c6ff3e657c1b1d60",
+    "sourceCoreBytes": 1671075,
+    "sourceCoreHash": "e243de783b32fc36c73481a9d47a8c7e729c97451ab750cb88b0b39753fabc8a",
+    "segmentBytes": 1671077,
+    "segmentHash": "547a93011bd1f14fca2f9d9fff2285e4f13bc560461aefba6886592994798c81",
+    "boundary": "原证segment含源core后combo分隔符;不含sourceMappingURL，非整source文件逐字包含；CDP响应fromDiskCache=true，不证明新网络传输"
+  },
+  "native": {
+    "metadataSha256": "70a73407311857115145a5a5e38bba7d38265361009013d1378c1251f3541394",
+    "imageSha256": "1891b2580dc58e9cf9c1b5e63d78e2a287f3ae9447937439856d5939eab38ec0",
+    "boundary": "仅当前2026-10-21T19:50帧菜单100%；不追溯旧截图zoom"
+  },
+  "finder": [
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/control-open-result.json",
+      "sha256": "a6a95826ed355aaa9adbe02911291206e47ab2c9e0eec1ffc42f645a7c965c36"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/control-open-result.png",
+      "sha256": "ce6e3c08f82eed24c74b51682ed7c6f8188193c9c56d2f59e580c3e44e6042a6"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/menu.png",
+      "sha256": "bf368ff154f12dc69db6545d122b3c994997595762d0d3a4cf04e8acbd1203b2"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/s4-proof.json",
+      "sha256": "017fc49c494ead449eb1f46efefc41eda0c1741125089314bc063e1b00f612f7"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/control-auto-s4.png",
+      "sha256": "0212054ae8c1f7f93baa6dcac8d061590165440d4ea3c9573b64584c3abbd8c5"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/host-mount-ax.txt",
+      "sha256": "469d2c18f2d70d5b339b2d5eee3a0b546557145a83488a8e123cd2f1b2699b8f"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A3/finder/safe-app.json",
+      "sha256": "9d2f43782171fe5a502224e0565245ecd4eb13db535ce53462b358bff48a2724"
+    }
+  ],
+  "finderMissing": [
+    "Finder指针动作持久原始记录",
+    "environment-only wrapper原件（本专家禁读runtime，当前仅hash声明）",
+    "首次生产open逐命令argv/exit/时间原件",
+    "直接entered响应与本轮回告关联原证",
+    "完整Finder/S4全部合同与reopen"
+  ],
+  "rounds": [
+    {
+      "mode": "initial",
+      "resultSha256": "6246c8e20b943df20db49c20a9f42cebe0bec4d31b401395f2f1e044615076ab",
+      "commands": [
+        {
+          "label": "launcher53",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/contract.state.test.mjs",
+            "test/browsers.controller.test.mjs",
+            "test/app.loopback.test.mjs",
+            "test/control-html.test.mjs",
+            "test/cancel.race.test.mjs",
+            "test/journey-race.test.mjs",
+            "test/loopback-security.test.mjs",
+            "test/local-app.test.mjs",
+            "test/browser-open.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:00:52.896Z",
+          "finishedAt": "2026-10-21T12:00:53.772Z",
+          "exit": 0,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-initial-launcher53.txt",
+          "sha256": "fbf55d81365857944812193a2bf8656387402001cad0e86f71a0a57500f5fc07",
+          "hashValid": true,
+          "summary": {
+            "tests": 53,
+            "pass": 53,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "label": "dom7",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/control-html-sync.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:00:53.773Z",
+          "finishedAt": "2026-10-21T12:01:03.730Z",
+          "exit": 0,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-initial-dom7.txt",
+          "sha256": "9c6df3f89579ce1fa585738dec08d978464f15b8d584b234ab4ca27af8afc58f",
+          "hashValid": true,
+          "summary": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "label": "original8",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/fc-original-probes.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:01:03.734Z",
+          "finishedAt": "2026-10-21T12:01:22.870Z",
+          "exit": 0,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-initial-original8.txt",
+          "sha256": "acedeed36fe898e988101b94c1f369cdf46824ea598e8792f2f80b75eb35d816",
+          "hashValid": true,
+          "summary": {
+            "tests": 8,
+            "pass": 8,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "sourceChanges": 0,
+      "artifactChanges": 0,
+      "launcherChanges": 0,
+      "candidateSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4",
+      "candidateAfterSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    },
+    {
+      "mode": "a2",
+      "resultSha256": "5b16179fc4d0e8de74ed1d09547b36ac273a6392df456602cc156a34027674b6",
+      "commands": [
+        {
+          "label": "additional9",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/fc-a2-additional.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:02:11.536Z",
+          "finishedAt": "2026-10-21T12:02:56.785Z",
+          "exit": 0,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-a2-additional9.txt",
+          "sha256": "c646a36cfe7d993e6f658a40074f5e16e25c85c21563688e7b562327854b352f",
+          "hashValid": true,
+          "summary": {
+            "tests": 9,
+            "pass": 9,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "label": "followup11",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/fc-a2-followup.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:02:56.797Z",
+          "finishedAt": "2026-10-21T12:03:42.727Z",
+          "exit": 0,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-a2-followup11.txt",
+          "sha256": "448cc4772ce319493c13cec43822aa66865ce68b4cd6783aca6ffdb86e837cf0",
+          "hashValid": true,
+          "summary": {
+            "tests": 10,
+            "pass": 10,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "sourceChanges": 0,
+      "artifactChanges": 0,
+      "launcherChanges": 0,
+      "candidateSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4",
+      "candidateAfterSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    },
+    {
+      "mode": "probes",
+      "resultSha256": "38a509800aec001103755183da0e2f3a12f00032d851a3d21140c5b3dfc5c9a6",
+      "commands": [
+        {
+          "label": "new-probes",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/fc-a3-probes.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:04:07.607Z",
+          "finishedAt": "2026-10-21T12:04:51.354Z",
+          "exit": 1,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-probes-new-probes.txt",
+          "sha256": "d64c6ff35ffbf0b9973a4a163ece1970a6aa406d310bfa6779a43787b1c61745",
+          "hashValid": true,
+          "summary": {
+            "tests": 11,
+            "pass": 9,
+            "fail": 2,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "sourceChanges": 0,
+      "artifactChanges": 0,
+      "launcherChanges": 0,
+      "candidateSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4",
+      "candidateAfterSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    },
+    {
+      "mode": "probes-r2",
+      "resultSha256": "24f6cbe40a0d2dd56b498208632a2704738bdd888b0903cdb51a7dafd7e6a684",
+      "commands": [
+        {
+          "label": "new-probes",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "test/fc-a3-probes.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:06:54.385Z",
+          "finishedAt": "2026-10-21T12:07:40.295Z",
+          "exit": 1,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-probes-r2-new-probes.txt",
+          "sha256": "112393de9f675c87f03bdc3a709c9cf37dc7d3ed4b8712ccfc38a984c6aef006",
+          "hashValid": true,
+          "summary": {
+            "tests": 12,
+            "pass": 10,
+            "fail": 2,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "sourceChanges": 0,
+      "artifactChanges": 0,
+      "launcherChanges": 0,
+      "candidateSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4",
+      "candidateAfterSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    },
+    {
+      "mode": "followup-r3",
+      "resultSha256": "767c5f9cfc48994ff121f80b5e1d9a3072ae9f74e12f078e5598e9a5476c067b",
+      "commands": [
+        {
+          "label": "new-probes",
+          "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "args": [
+            "--test",
+            "--test-name-pattern=A3-P(02|11|12|13)",
+            "test/fc-a3-probes.test.mjs"
+          ],
+          "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher",
+          "startedAt": "2026-10-21T12:09:16.526Z",
+          "finishedAt": "2026-10-21T12:09:22.003Z",
+          "exit": 1,
+          "signal": null,
+          "error": null,
+          "log": "docs/testing/fc-a3-independent-retest-20261021-followup-r3-new-probes.txt",
+          "sha256": "dfc3fad7086db8ae232713ce7aa98c10c1a897904d5a7821b4c91ef9e995e6c2",
+          "hashValid": true,
+          "summary": {
+            "tests": 4,
+            "pass": 1,
+            "fail": 3,
+            "cancelled": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "sourceChanges": 0,
+      "artifactChanges": 0,
+      "launcherChanges": 0,
+      "candidateSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4",
+      "candidateAfterSha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    }
+  ],
+  "ownBrowserProcesses": [
+    {
+      "pid": 4665,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    },
+    {
+      "pid": 5107,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    },
+    {
+      "pid": 6928,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    },
+    {
+      "pid": 4385,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    },
+    {
+      "pid": 5281,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    },
+    {
+      "pid": 6429,
+      "exists": false,
+      "psExit": 1,
+      "output": ""
+    }
+  ],
+  "boundary": "未连接任何既有浏览器或产品服务；只读允许reports原件和既有lib；ps仅记录本轮自有Chrome PID，无kill"
+}

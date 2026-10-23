@@ -1,0 +1,101 @@
+{
+  "role": "独立任务域 SOURCE/AUTO 专家，非产品开发/GUI执行",
+  "decision": "PASS_LIMITED_SOURCE_AUTO",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "evidenceRoot": "/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs",
+  "developerRoot": "/private/tmp/task-o4-stale-developer-20261023-MqM0UL",
+  "productPins": {"packages/dsh-pm-tool/src/client/panel.tsx":"afe188bda04c8d27df5c74037c4a4a9872eb0f0f132b06c6df370b10bc45c0b6","packages/dsh-pm-tool/src/client/panel-confirm-escape.test.tsx":"99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40","packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx":"e1bc7607fdbaeecb7de6f36708b99b2f416937d5c22105850a7346648723b14f"},
+  "developerSeal": {"bytes":1599827,"sha256":"2476c090eb1527f7045fd51ec46d3d9d69c38657f478ac5f517b6da6b15d50e7"},
+  "developerVerified": {"count":8819,"byteFiles":8499,"links":320,"differences":[]},
+  "developerReleased": "STOP",
+  "declarations": {"baseline":"9b1a8c5317774ff07cc594a0acd12a5cc7893ebd","source":127,"complete":528,"overlap":112,"delta":["packages/dsh-pm-tool/src/client/panel.tsx","packages/dsh-pm-tool/src/client/panel-confirm-escape.test.tsx","packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx"]},
+  "originalFinal": [
+    {"stage":"red-o4-r3","startedAt":"2026-10-23T02:43:48.866Z","endedAt":"2026-10-23T02:44:02.268Z","seconds":13.403148792,"status":1,"tests":{"passed":9,"failed":2,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/red-o4-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-red-o4-r3.status.json"},
+    {"stage":"red-transport-r3","startedAt":"2026-10-23T02:43:48.865Z","endedAt":"2026-10-23T02:44:00.671Z","seconds":11.806572416,"status":1,"tests":{"passed":23,"failed":1,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/red-transport-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-red-transport-r3.status.json"},
+    {"stage":"green-o4-r3","startedAt":"2026-10-23T02:44:20.566Z","endedAt":"2026-10-23T02:44:30.653Z","seconds":10.087731542,"status":0,"tests":{"passed":11,"failed":0,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/green-o4-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-green-o4-r3.status.json"},
+    {"stage":"green-transport-r3","startedAt":"2026-10-23T02:44:20.785Z","endedAt":"2026-10-23T02:44:29.765Z","seconds":8.980372667,"status":0,"tests":{"passed":24,"failed":0,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/green-transport-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-green-transport-r3.status.json"},
+    {"stage":"affected-dom-r3","startedAt":"2026-10-23T02:44:37.542Z","endedAt":"2026-10-23T02:44:43.651Z","seconds":6.109575208,"status":0,"tests":{"passed":9,"failed":0,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/affected-dom-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-affected-dom-r3.status.json"},
+    {"stage":"affected-renderer-r3","startedAt":"2026-10-23T02:44:37.529Z","endedAt":"2026-10-23T02:44:45.280Z","seconds":7.750931124999999,"status":0,"tests":{"passed":38,"failed":0,"pending":0},"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/affected-renderer-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-affected-renderer-r3.status.json"},
+    {"stage":"type-r3","startedAt":"2026-10-23T02:43:49.997Z","endedAt":"2026-10-23T02:44:09.174Z","seconds":19.178056166999998,"status":0,"tests":null,"raw":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/type-r3","outer":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/outer-type-r3.status.json"}
+  ],
+  "independent": [
+    {"stage":"red-confirm","startedAt":"2026-10-23T02:54:31.686Z","endedAt":"2026-10-23T02:54:40.892Z","seconds":9.205920459000001,"status":1,"tests":{"passed":9,"failed":2,"pending":0},"pid":64196,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/red-confirm","child":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/red-confirm/child.status.json"},
+    {"stage":"green-confirm","startedAt":"2026-10-23T02:54:31.686Z","endedAt":"2026-10-23T02:54:40.999Z","seconds":9.313595708,"status":0,"tests":{"passed":11,"failed":0,"pending":0},"pid":64195,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/green-confirm","child":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/green-confirm/child.status.json"},
+    {"stage":"red-transport","startedAt":"2026-10-23T02:54:56.593Z","endedAt":"2026-10-23T02:55:03.089Z","seconds":6.495284707999999,"status":1,"tests":{"passed":23,"failed":1,"pending":0},"pid":64298,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/red-transport","child":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/red-transport/child.status.json"},
+    {"stage":"green-transport","startedAt":"2026-10-23T02:54:56.594Z","endedAt":"2026-10-23T02:55:03.078Z","seconds":6.484022791999999,"status":0,"tests":{"passed":24,"failed":0,"pending":0},"pid":64299,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/green-transport","child":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/green-transport/child.status.json"}
+  ],
+  "ownInputs": [
+    {"stage":"red-confirm","inputCount":411,"changedVsFrozenGreen":["src/client/panel.tsx"]},
+    {"stage":"green-confirm","inputCount":411,"changedVsFrozenGreen":[]},
+    {"stage":"red-transport","inputCount":411,"changedVsFrozenGreen":["src/client/panel.tsx"]},
+    {"stage":"green-transport","inputCount":411,"changedVsFrozenGreen":[]}
+  ],
+  "dependencyChecks": [
+    {"stage":"red-confirm","declaredInputs":416,"dependencyPackageFingerprints":7,"cachesOwned":true},
+    {"stage":"green-confirm","declaredInputs":416,"dependencyPackageFingerprints":7,"cachesOwned":true},
+    {"stage":"red-transport","declaredInputs":416,"dependencyPackageFingerprints":7,"cachesOwned":true},
+    {"stage":"green-transport","declaredInputs":416,"dependencyPackageFingerprints":7,"cachesOwned":true}
+  ],
+  "observationsIdentical": 33,
+  "listenerSequences": [
+    "d205f04954a8b302e6d31f0786e75b141609e0fdf39abd104d7e08e11049117e,910c686fbf3de5f41dc5a720e65ca92b2947a8bb17224454fbbeb84f24baa5a8",
+    "910c686fbf3de5f41dc5a720e65ca92b2947a8bb17224454fbbeb84f24baa5a8,d205f04954a8b302e6d31f0786e75b141609e0fdf39abd104d7e08e11049117e"
+  ],
+  "strictDiscardFocus": "原/修均body；仅观察NOT_PASS，不是新增StrictMode GUI合同，不免除原GUI退出归opener",
+  "history": [
+    {"stage":"red-o4","startedAt":"2026-10-23T02:36:06.609Z","endedAt":"2026-10-23T02:36:17.271Z","seconds":10.662818,"status":1,"tests":{"passed":8,"failed":3},"stdout":{"bytes":1529,"sha256":"ace86564227c08c57471562f71889444c2a93aad2ec66c852ffa1f3e6724bff4"},"stderr":{"bytes":101791,"sha256":"77436e31b82eea5285f3860c4e69291e53ef0b0cfa945c689585f57a78b486ca"}},
+    {"stage":"red-transport","startedAt":"2026-10-23T02:36:06.576Z","endedAt":"2026-10-23T02:38:09.442Z","seconds":122.86872675000001,"status":1,"tests":{"passed":23,"failed":0},"stdout":{"bytes":913,"sha256":"13c0ab5fdac65317967445e5a4a69359fe63d932b294c6580eb4b27b827dff85"},"stderr":{"bytes":1670,"sha256":"77f145cf945f1642d8346921d2249b873da6636dfaccb99cb3a11400d5deebff"}},
+    {"stage":"red-o4-final","startedAt":"2026-10-23T02:39:30.475Z","endedAt":"2026-10-23T02:39:36.172Z","seconds":5.697515833,"status":1,"tests":{"passed":9,"failed":2},"stdout":{"bytes":1136,"sha256":"c6deb3801cac1cdd99c09ef30eccf5dcd3151ab6aec7dbba9e6568fa8391e689"},"stderr":{"bytes":2914,"sha256":"706b6e21a705737456c91d576cfab7e97646b8f693089d4b07cc6e2f12d0ca02"}},
+    {"stage":"red-transport-final","startedAt":"2026-10-23T02:39:30.470Z","endedAt":"2026-10-23T02:39:35.435Z","seconds":4.965388,"status":1,"tests":{"passed":23,"failed":1},"stdout":{"bytes":964,"sha256":"fb9cad9c2258c8aa0de309852c1c76681ee03fd3e274d44152cb5f64f991948c"},"stderr":{"bytes":2416,"sha256":"6966a4c8297e198dbc11491dc8abe66be455e8e3c518fda9f040da268d66af42"}},
+    {"stage":"type-r2","startedAt":"2026-10-23T02:42:06.803Z","endedAt":"2026-10-23T02:42:33.760Z","seconds":26.957295791999996,"status":2,"tests":null,"stdout":{"bytes":4320,"sha256":"40f3b4fca8d8d75c0e953f12da1ca57bd09ff640e2e618a80421d6a3483ff9e3"},"stderr":{"bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}}
+  ],
+  "oracleHistory": [
+    {"stage":"red-o4","oracle":{"bytes":9390,"sha256":"a5c0d2a7eb4ba850034889a232a02a8a5ba7bd85a234724f98836a92d02c370e"}},
+    {"stage":"red-o4-final","oracle":{"bytes":9537,"sha256":"99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40"}},
+    {"stage":"red-o4-r2","oracle":{"bytes":9537,"sha256":"99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40"}},
+    {"stage":"red-o4-r3","oracle":{"bytes":9537,"sha256":"99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40"}},
+    {"stage":"red-transport","oracle":{"bytes":17324,"sha256":"9323523a9d08a82fcf5401d376eea15a9654496d549062436f89bb498a1ed847"}},
+    {"stage":"red-transport-final","oracle":{"bytes":17289,"sha256":"748781ce2c965f9a0bff31f47a97b97dc5020dfb5a08563328ccdea805aa1ca1"}},
+    {"stage":"red-transport-r2","oracle":{"bytes":17379,"sha256":"9dde1f18cfeb75498d9d145663627e934a168e9d138ff0507712a4f1922e802f"}},
+    {"stage":"red-transport-r3","oracle":{"bytes":17411,"sha256":"e1bc7607fdbaeecb7de6f36708b99b2f416937d5c22105850a7346648723b14f"}}
+  ],
+  "originalWarnings": [
+    {"stage":"affected-renderer-r3","stderr":{"bytes":3739,"sha256":"1410818571e8dbdf5b3be5fd779cf7561efc0dd99fb7e925b1cb147121c6494e"},"requestAnimationFrame":true,"maxListeners":true},
+    {"stage":"affected-renderer-original","stderr":{"bytes":2971,"sha256":"7755525f4ab66d60e207ce9436f96a191b9c27a165be69541c7aac223b1a340a"},"requestAnimationFrame":true,"maxListeners":true}
+  ],
+  "facilityTermDeveloperRecord": {"originalRound":"red-transport","originalStatus":1,"originalError":"Worker exited unexpectedly","ownVitestPid":58982,"ownWorkerPid":59005,"workerCwd":"/private/tmp/task-o4-stale-developer-20261023-MqM0UL/red-transport","stoppedExactPid":59005,"signal":"TERM","checks":["ps -p 59005 -o pid,ppid,etime,command","lsof -a -p 59005 -d cwd -Fn"],"recoveryStart":"2026-10-23T02:38:04.412Z","notProductFailure":true,"retained":["red-transport/vitest.stdout.txt","red-transport/vitest.stderr.txt","red-transport/vitest.status.json"]},
+  "facilityTermCaveat": "summary中开发记录精确TERM59005；原ps/lsof工具原输出不在此封件，未独立回查进程或补造",
+  "receipts": [
+    {"stage":"inspect","startedAt":"2026-10-23T02:54:08.535Z","endedAt":"2026-10-23T02:54:12.435Z","seconds":3.900417458,"status":0,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-inspect.status.json"},
+    {"stage":"vendor","startedAt":"2026-10-23T02:54:08.527Z","endedAt":"2026-10-23T02:54:08.638Z","seconds":0.11189650000000001,"status":0,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-vendor.status.json"},
+    {"stage":"red-confirm","startedAt":"2026-10-23T02:54:30.575Z","endedAt":"2026-10-23T02:54:40.895Z","seconds":10.319844958000001,"status":1,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-red-confirm.status.json"},
+    {"stage":"green-confirm","startedAt":"2026-10-23T02:54:30.573Z","endedAt":"2026-10-23T02:54:41.002Z","seconds":10.428962666,"status":0,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-green-confirm.status.json"},
+    {"stage":"red-transport","startedAt":"2026-10-23T02:54:56.006Z","endedAt":"2026-10-23T02:55:03.092Z","seconds":7.085333208,"status":1,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-red-transport.status.json"},
+    {"stage":"green-transport","startedAt":"2026-10-23T02:54:56.014Z","endedAt":"2026-10-23T02:55:03.085Z","seconds":7.070046292,"status":0,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-green-transport.status.json"},
+    {"stage":"audit","startedAt":"2026-10-23T02:55:11.047Z","endedAt":"2026-10-23T02:55:11.442Z","seconds":0.39559895800000006,"status":0,"raw":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/outer-audit.status.json"}
+  ],
+  "timing": {"scope":"仅上述真实脚本阶段；不含早期读证/手编完整起止，不加child与outer","sumSeconds":39.312100040000004,"unionSeconds":21.818,"elapsedSeconds":62.915},
+  "warnings": "不吞stderr；原requestAnimationFrame/MaxListeners设施缺口、TaskTable key/cache警告保留",
+  "reviewPilot": {"skill":"code-review","sourceCommit":"49dd158d1076134a641b33efb035946536778336","vendorIntegrityVerified":true,"route":"delivery；仅引用Standards/Spec方法","deviations":"父限单覆盖git/宽scan/setup/安装/跨目录试点；无子代理工具，未冒并行双审","standardsFindings":0,"specFindings":0,"notAcceptanceSubstitute":true},
+  "selectedLiveUnchanged": true,
+  "notRun": [
+    "full build",
+    "GUI",
+    "firstload rerun",
+    "adjacent rerun",
+    "type rerun",
+    "git",
+    "install",
+    "runtime",
+    "people sourcewide"
+  ],
+  "remaining": {"staleVisual":"FAIL_LIMITED_VISUAL，待Main四viewport新GUI封件","o4EscapeGui":"原FAIL_LIMITED_GUI保留，待Main新GUI","oldErrorRecovery":"BLOCKED_RECOVERY_UX保留","parentOrdinaryCommit":"未放行；Main全源门齐合L8一次整build/完整回归/受影响GUI再审"},
+  "readIssues": [
+    "rg不可用exit127，改用grep",
+    "误读green-o4-r3/status.json路径exit1",
+    "误读shared/opener-focus.ts路径exit1",
+    "progress前65行含巨长旧条目导致工具输出大；停止宽读",
+    "工具UUID会话无法用所暴露数字session_id轮询；实际终码从已落outer/child回读，不倒造"
+  ],
+  "fullAudit": {"path":"/private/tmp/tasks-o4-stale-source-auto-20261023-r1-3pcNKs/published-full-audit.json","bytes":31096,"sha256":"6f8f31a1378fdc9be3898a765adbc3776b5e1cd71f041a9ce6504523e18187b9"}
+}

@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-23T03:23:59.424Z",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "freeze": "/private/tmp/pmtool-combined-tasks-people-repair-20261023-r1",
+  "pkg": "/private/tmp/pmtool-combined-tasks-people-repair-20261023-r1/packages/dsh-pm-tool",
+  "sourceCount": 129,
+  "completeInputCount": 528,
+  "version": "0.7.4",
+  "builder": "Main",
+  "runtimeLoaded": false,
+  "authorization": "All existing pending acceptance to ordinary commit; no push/release/formal switch",
+  "independent": [
+    "p1004-handoff-source-auto-20261023-r1-report.md",
+    "p1005-reflect-entry-source-auto-20261023-r1-report.md",
+    "p1005-listbox-backdrop-source-auto-20261023-r1.md",
+    "p2007-archive-projection-source-auto-20261023-r1-report.md",
+    "p2002-outbound-slot-source-auto-20261023-r2-report.md",
+    "p2004-kr-related-source-auto-20261023-r2-report.md",
+    "f02-option-default-source-auto-20261023-r2-report.md",
+    "f02-related28-infrastructure-retest-20261023-r3-report.md",
+    "l8-gantt-source-auto-review-20261023-r7-report.md",
+    "tasks-firstload-source-auto-20261023-r1-report.md",
+    "tasks-o4-stale-source-auto-20261023-r1-report.md",
+    "people-fd-axis-gui-timed-20261023-r1-report.md",
+    "people-axis-slots-source-auto-timed-20261023-r2-report.md"
+  ],
+  "gitResults": {
+    "tracked-product.diff": {
+      "argv": [
+        "/usr/bin/git",
+        "diff",
+        "--binary",
+        "--",
+        "packages/dsh-pm-tool",
+        "launcher"
+      ],
+      "exitCode": 0
+    },
+    "changed-product-files.txt": {
+      "argv": [
+        "/usr/bin/git",
+        "diff",
+        "--name-only",
+        "--",
+        "packages/dsh-pm-tool",
+        "launcher"
+      ],
+      "exitCode": 0
+    },
+    "new-product-files.txt": {
+      "argv": [
+        "/usr/bin/git",
+        "ls-files",
+        "--others",
+        "--exclude-standard",
+        "--",
+        "packages/dsh-pm-tool/src",
+        "packages/dsh-pm-tool/scripts",
+        "launcher"
+      ],
+      "exitCode": 0
+    }
+  }
+}

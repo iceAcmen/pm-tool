@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-23",
+  "reviewer": "trae 独立原F02诊断审证专家",
+  "source": "本角色functions.exec_command实际工具终态回报转录；不是预填终码，也不是Main原封工具执行。",
+  "environment": {
+    "os": "macOS",
+    "shell": "bash",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "node": "v22.23.3",
+    "pnpm": "未调用"
+  },
+  "commands": [
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/f02-option-native-trace-review-20261023-r2-reader.mjs audit",
+      "actualToolExitCode": 0,
+      "combinedOutput": "{\"mode\":\"audit\",\"indexCount\":443,\"physicalCount\":446,\"indexSha256\":\"9cbb0bf2737874fc0ebcfae5bcc19666fc25563f8b9f1f707a716e9de0033e7b\",\"chainStates\":7,\"allStates\":9,\"chainRoots\":44,\"rawPerState\":38,\"rawCount\":342,\"frameCount\":40,\"clicks\":6,\"checks\":894,\"errors\":[],\"output\":\"docs/testing/f02-option-native-trace-review-20261023-r2-audit.json\"}\n"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check /tmp/f02-option-native-trace-review-20261023-r2-reader.mjs",
+      "actualToolExitCode": 0,
+      "combinedOutput": "",
+      "scope": "初版reader语法；不运行audit或产品"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check /private/tmp/f02-option-native-trace-review-20261023-r2-reader.mjs",
+      "actualToolExitCode": 0,
+      "combinedOutput": "",
+      "scope": "首次seal前补核版reader语法；seal2新增分支由其实际执行解析，不另称执行过第三次--check"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/f02-option-native-trace-review-20261023-r2-reader.mjs seal",
+      "actualToolExitCode": 1,
+      "combinedOutput": "{\"mode\":\"seal\",\"protectedInputs\":451,\"changes\":[],\"errors\":[{\"name\":\"round26-snapshot-raw:fileAssets\",\"detail\":null}],\"output\":\"docs/testing/f02-option-native-trace-review-20261023-r2-auditseal.json\",\"auditseal\":{\"bytes\":4109,\"sha256\":\"4c48e976beb485794a48e7797908c13ca8b7f86e14cc75684ef44a3060d185d2\"}}\n",
+      "classification": "自有补核断言边界错误：raw独有relPath，非产品/封件FAIL；首封失败件保留"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/f02-option-native-trace-review-20261023-r2-reader.mjs seal2",
+      "actualToolExitCode": 0,
+      "combinedOutput": "{\"mode\":\"seal2\",\"protectedInputs\":451,\"changes\":[],\"errors\":[],\"output\":\"docs/testing/f02-option-native-trace-review-20261023-r2-auditseal-r2.json\",\"auditseal\":{\"bytes\":4890,\"sha256\":\"b589a8aadeac8b18be671e8b1ac4c5a3fda73b82c5e573ae9ef81ed4395889b6\"}}\n",
+      "classification": "自有完整性二次封存及原只读RPC公开投影补核完成，不是修后GUI PASS"
+    }
+  ],
+  "signalAndSeparateStderr": "exec_command回报未单列signal/分离stderr，不补造；combinedOutput按实际Output转录。",
+  "finalSeal": {
+    "path": "docs/testing/f02-option-native-trace-review-20261023-r2-auditseal-r2.json",
+    "bytes": 4890,
+    "sha256": "b589a8aadeac8b18be671e8b1ac4c5a3fda73b82c5e573ae9ef81ed4395889b6",
+    "protectedInputs": 451,
+    "changes": [],
+    "errors": []
+  },
+  "scope": "仅本原子单封件审证、自有audit及原图目视；产品测试/GUI执行/修后SOURCE-AUTO/新GUI本角色NOT_RUN。",
+  "rootCauseSupport": "原native label默认激活根因强支持，额外trusted trigger重开为直接观测；不是排他因果确证。",
+  "originalF02Verdict": "FAIL_LIMITED_GUI保留，不回填旧R1；仍仅原R1§6 remaining。",
+  "selfHash": "本收据在seal2工具实际结束后新增，不纳入该seal指纹，避免循环；没有再写旧seal或原封件。",
+  "release": "本原子审证完成，路径released / STOP；无长运行session或builder/GUI/端口/数据锁。通知Main按父原持续授权继续，不暂停父goal。"
+}

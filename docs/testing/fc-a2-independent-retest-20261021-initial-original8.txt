@@ -1,0 +1,71 @@
+TAP version 13
+# {"event":"browser","pid":99789,"version":"Chrome/139.0.7258.155"}
+# {"event":"slow-open","serverStatus":"S2","reads":9,"observed":{"status":"S2","actionBusy":true,"reading":false,"cancelVisible":true,"body":"PM 工作台\\n◐\\n正在打开工作台\\n\\n完成后将在所选浏览器打开；取消不会停止已有服务。\\n\\n检查本地服务\\n2\\n准备工作台\\n3\\n打开浏览器\\n取消打开\\n仅在这台 Mac 上运行\\n关闭窗口"}}
+# {"event":"cleanup","test":"FC-04补：慢open在途仍应读取S2并允许取消，不因actionBusy锁死","errors":[],"actions":[{"type":"open","browser":"系统默认浏览器"}],"reads":9,"maxStateInFlight":1}
+# Subtest: FC-04补：慢open在途仍应读取S2并允许取消，不因actionBusy锁死
+ok 1 - FC-04补：慢open在途仍应读取S2并允许取消，不因actionBusy锁死
+  ---
+  duration_ms: 5138.413958
+  type: 'test'
+  ...
+# {"event":"rapid-select","optimistic":"S\\nSafari","settled":"S\\nSafari","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"}]}
+# {"event":"cleanup","test":"FC-04补：第一浏览器选择在途，第二次可见选择不能被静默丢弃","errors":[],"actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"}],"reads":3,"maxStateInFlight":1}
+# Subtest: FC-04补：第一浏览器选择在途，第二次可见选择不能被静默丢弃
+ok 2 - FC-04补：第一浏览器选择在途，第二次可见选择不能被静默丢弃
+  ---
+  duration_ms: 1624.068958
+  type: 'test'
+  ...
+# {"event":"option-focus","observed":{"tag":"BUTTON","browser":"Chrome","menu":"true"}}
+# {"event":"cleanup","test":"FC-04补：S0到S1有效更新重绘保留菜单内键盘焦点","errors":[],"actions":[],"reads":2,"maxStateInFlight":1}
+# Subtest: FC-04补：S0到S1有效更新重绘保留菜单内键盘焦点
+ok 3 - FC-04补：S0到S1有效更新重绘保留菜单内键盘焦点
+  ---
+  duration_ms: 654.60725
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"FC-01/04补：Space展开、键盘选项激活和Escape归焦；同态读取不替换节点","errors":[],"actions":[{"type":"select-browser","browser":"Chrome"}],"reads":3,"maxStateInFlight":1}
+# Subtest: FC-01/04补：Space展开、键盘选项激活和Escape归焦；同态读取不替换节点
+ok 4 - FC-01/04补：Space展开、键盘选项激活和Escape归焦；同态读取不替换节点
+  ---
+  duration_ms: 1442.764625
+  type: 'test'
+  ...
+# {"event":"503-recovery","reads":3,"status":"S4"}
+# {"event":"cleanup","test":"FC-03补：503携带S4也不能接受；下一次有效读恢复；无回告不自行S4","errors":[],"actions":[{"type":"open","browser":"系统默认浏览器"}],"reads":3,"maxStateInFlight":1}
+# Subtest: FC-03补：503携带S4也不能接受；下一次有效读恢复；无回告不自行S4
+ok 5 - FC-03补：503携带S4也不能接受；下一次有效读恢复；无回告不自行S4
+  ---
+  duration_ms: 1156.816167
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"FC-03/04补：3s只读Abort有界串行并恢复，不接受已abort响应","errors":[],"actions":[],"reads":3,"maxStateInFlight":1}
+# Subtest: FC-03/04补：3s只读Abort有界串行并恢复，不接受已abort响应
+ok 6 - FC-03/04补：3s只读Abort有界串行并恢复，不接受已abort响应
+  ---
+  duration_ms: 4433.622083
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"FC-04补：关闭时真实GET在途，释放迟到S4不重建页且不继续读","errors":[],"actions":[],"reads":2,"maxStateInFlight":1}
+# Subtest: FC-04补：关闭时真实GET在途，释放迟到S4不重建页且不继续读
+ok 7 - FC-04补：关闭时真实GET在途，释放迟到S4不重建页且不继续读
+  ---
+  duration_ms: 1744.762667
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"FC-04补：真实pagehide停止同步，迟到动作不在离开页面更新","errors":[],"actions":[{"type":"open","browser":"系统默认浏览器"}],"reads":1,"maxStateInFlight":1}
+# Subtest: FC-04补：真实pagehide停止同步，迟到动作不在离开页面更新
+ok 8 - FC-04补：真实pagehide停止同步，迟到动作不在离开页面更新
+  ---
+  duration_ms: 1626.879292
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18266.712083

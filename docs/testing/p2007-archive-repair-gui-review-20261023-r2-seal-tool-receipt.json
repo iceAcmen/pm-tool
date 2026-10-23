@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-23",
+  "role": "trae独立K16归档GUI原证审查",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.3462,
+  "actualToolStatus": "Process exited with code 0",
+  "actualToolStdout": "{\"protected\":730,\"drift\":[],\"outputs\":8,\"seal\":{\"bytes\":2199,\"sha256\":\"22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e\"}}\n",
+  "actualToolStderr": "",
+  "origin": "exec_command同步实际返回后人工逐字登记，不是reader或seal预计成功值",
+  "pid": null,
+  "pidBoundary": "实际同步工具结果未提供PID，不补造",
+  "seal": {
+    "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+    "bytes": 2199,
+    "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+  },
+  "priorActualTools": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs"
+      ],
+      "stage": "final reader syntax",
+      "actualExitCode": 0,
+      "actualWallSeconds": 0.0869,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs",
+        "publish"
+      ],
+      "actualExitCode": 0,
+      "actualWallSeconds": 0.1366,
+      "publishedOriginalByteCopies": 6,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs",
+        "audit"
+      ],
+      "attemptActualExitCodes": [1, 1, 1, 0],
+      "attemptActualWallSeconds": [0.3623, 0.2937, 0.3608, 0.4209],
+      "validAuditStdout": "{\"checks\":11,\"members\":717,\"protected\":730,\"index\":{\"bytes\":124739,\"sha256\":\"fbeee5ee6fd51ed4957fd16bb16021c1d1d51ba7671f22dfb299fea00922d9c8\"},\"errors\":[]}\n",
+      "failureOrigins": [
+        "自有reader错误把dirty source SHA字符串当size/SHA对象",
+        "自有reader错误把dirty124当完整525，要求未变化storage.ts在dirty内",
+        "自有reader重建source-map注释时多补newline"
+      ],
+      "productFailuresClaimedFromThese": false
+    }
+  ],
+  "excludedFromSeal": true,
+  "exclusionReason": "seal自身及之后实际工具收据/readback不循环自指纹",
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "resourceState": "无builder/GUI/端口/profile/数据锁或长运行子进程；仅待本seal实际收据读回",
+  "scope": "K16修后known/gaps真实链和本包已有done/wrapped/readback有限PASS，不签整P2007/周期整门/父commit"
+}

@@ -265,6 +265,26 @@ body:not([data-ds-dark-theme]) .pm-shell {
   display: flex; flex-direction: column; background: var(--pm-canvas); border-right: 1px solid var(--pm-line);
 }
 .pm-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+/* A7-RV01：恢复全文属于纵向主内容，长路径只在局部折行，不撑出第三主列。 */
+.pm-restore-preview {
+  min-width: 0; max-width: 100%; box-sizing: border-box;
+  padding: 14px 18px; border-bottom: 1px solid var(--pm-line);
+  background: var(--pm-surface);
+}
+.pm-restore-preview-warning {
+  color: var(--pm-warning); line-height: 1.6;
+  overflow-wrap: anywhere; white-space: normal;
+}
+.pm-restore-preview-text {
+  min-width: 0; max-width: 100%; max-height: 36vh; overflow: auto;
+  white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6;
+  color: var(--pm-ink);
+}
+.pm-restore-preview-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.pm-task-checklist { display: grid; gap: 8px; min-width: 0; padding-block: 10px; }
+.pm-task-checklist-item { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.pm-task-checklist-item input { flex: 0 0 auto; margin-top: 3px; }
+.pm-task-checklist-item span { min-width: 0; overflow-wrap: anywhere; line-height: 1.5; }
 .pm-rail-brand { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; }
 .pm-rail-logo {
   width: 30px; height: 30px; flex-shrink: 0; border-radius: var(--r-sm);
@@ -2254,6 +2274,7 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
   background: var(--pm-surface); box-shadow: var(--shadow-1);
   overflow: hidden;
 }
+.pm-sidecar[hidden] { display: none; }
 .pm-sidecar-chrome {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 12px; border-bottom: 1px solid var(--pm-line-soft); flex: 0 0 auto;
@@ -2898,8 +2919,12 @@ body:not([data-ds-dark-theme]) .pm-rail-item.active .pm-rail-count { color: var(
 .pm-habit-status--final { background: color-mix(in srgb, var(--pm-success) 14%, transparent); color: var(--pm-success); }
 .pm-habit-okr {
   display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--pm-muted);
+  min-width: 0; max-width: 100%; box-sizing: border-box;
   padding: 4px 8px; border: 1px dashed var(--pm-line); border-radius: 7px; width: fit-content;
+  overflow-wrap: anywhere; white-space: normal;
 }
+.pm-habit-okr > svg { flex: 0 0 auto; }
+.pm-habit-okr-text { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
 /* goal/frequency/notes 兼容字段回显：次级文本，不套徽章。 */
 .pm-habit-field { font-size: 12.5px; color: var(--pm-secondary); line-height: 1.6; }
 .pm-habit-field-lab { color: var(--pm-muted); margin-right: 6px; font-weight: 600; }

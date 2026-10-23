@@ -74,6 +74,7 @@ export function parseDraftMarkdown(markdown: string): {
  * - 首行 known 记录完成时刻（completedDate 优先，缺省落本地今天，不编造精确时刻）；
  * - description 存在则追加一条 known（截断 200 字）；
  * - 已登记证据链接 / 已挂交付物 ID 各追加一条 known（只陈述「已连接」，不评判质量）；
+ * - 资料区按已登记附件项统计链接、交付物和文件数量，不读取附件内容或判断质量；
  * - 无证据链接、无清单、无交付物 ID 时，gap 留白「待补：交付验收材料与证据链接」。
  */
 export function buildReflectionDraft(
@@ -97,9 +98,11 @@ export function buildReflectionDraft(
   if (Array.isArray(task.attachments) && task.attachments.length > 0) {
     const links = task.attachments.filter(a => a.kind === 'link').length
     const dlvs = task.attachments.filter(a => a.kind === 'deliverable').length
+    const files = task.attachments.filter(a => a.kind === 'file').length
     const parts: string[] = []
     if (links) parts.push(`${links} 条链接`)
     if (dlvs) parts.push(`${dlvs} 项交付物`)
+    if (files) parts.push(`${files} 个文件`)
     lines.push({ text: `资料区已登记：${parts.join('、')}（质量由人复核）`, mark: 'known' })
   }
   const gaps: string[] = []

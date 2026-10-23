@@ -1,0 +1,325 @@
+diff --git a/packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx b/packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx
+new file mode 100644
+index 0000000..4193c8a
+--- /dev/null
++++ b/packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx
+@@ -0,0 +1,319 @@
++import { createElement } from 'react'
++import { act, create, type ReactTestInstance, type ReactTestRenderer } from 'react-test-renderer'
++import { afterEach, beforeEach, expect, it, vi } from 'vitest'
++import { RecordsMeetingForm, type RecordsMeetingFormProps } from './records-meeting-form.js'
++import { RecordsListbox } from './records-listbox.js'
++import { MeetingsView } from '../meetings.js'
++import { createMeetingCallbacks } from '../../shared/records-callbacks.js'
++import { addProject } from '../../../core/projects.js'
++import { addTask } from '../../../core/tasks.js'
++import { addRiskIssue } from '../../../core/risk-issues.js'
++import { addMeeting, addMeetingAction, getMeeting } from '../../../core/meetings.js'
++import { handleMeetingCommand } from '../../../commands/meeting.js'
++import type { PmDomain } from '../../../core/storage.js'
++
++const noop = () => {}
++const mounts: ReactTestRenderer[] = []
++const text = (node: ReactTestInstance): string => node.children.map(child =>
++  typeof child === 'string' ? child : text(child)).join('')
++function mount(element: ReturnType<typeof createElement>) {
++  let renderer!: ReactTestRenderer
++  act(() => { renderer = create(element) })
++  mounts.push(renderer)
++  return renderer
++}
++function button(root: ReactTestInstance, label: string) {
++  const result = root.findAllByType('button').find(node => text(node) === label)
++  expect(result, label).toBeTruthy()
++  return result!
++}
++async function change(root: ReactTestInstance, label: string, value: string) {
++  await act(async () => root.findByProps({ 'aria-label': label }).props.onChange({ currentTarget: { value } }))
++}
++async function submit(renderer: ReactTestRenderer) {
++  await act(async () => renderer.root.findByType('form').props.onSubmit({ preventDefault: noop }))
++}
++function memoryDomain(): PmDomain {
++  const tables = new Map<string, Map<string, unknown>>()
++  return { table(name: string) {
++    if (!tables.has(name)) tables.set(name, new Map())
++    const table = tables.get(name)!
++    return { get: (id: string) => table.get(id), put: (id: string, value: unknown) => table.set(id, value),
++      entries: () => table.entries(), keys: () => table.keys(), list: () => [...table.values()],
++      delete: (id: string) => table.delete(id) }
++  } } as unknown as PmDomain
++}
++async function fixture() {
++  const domain = memoryDomain()
++  const project = await addProject(domain, { name: 'A9 A', startDate: '2026-10-21', targetDate: '2026-12-31' })
++  const other = await addProject(domain, { name: 'A9 B', startDate: '2026-10-21', targetDate: '2026-12-31' })
++  const task = await addTask(domain, { projectId: project.id, title: '同项目任务' })
++  const otherTask = await addTask(domain, { projectId: other.id, title: '跨项目任务' })
++  const issue = await addRiskIssue(domain, { projectId: project.id, type: 'issue', title: '同项目问题', impact: 'low' })
++  const risk = await addRiskIssue(domain, { projectId: project.id, type: 'risk', title: '同项目风险', impact: 'low', probability: 'low' })
++  const otherIssue = await addRiskIssue(domain, { projectId: other.id, type: 'issue', title: '跨项目问题', impact: 'low' })
++  const meeting = await addMeeting(domain, { projectId: project.id, title: 'A9 会议', meetingDate: '2026-10-21' })
++  await addMeetingAction(domain, meeting.id, { title: '原行动一', taskId: task.id, riskIssueId: issue.id })
++  await addMeetingAction(domain, meeting.id, { title: '原行动二', status: 'in_progress' })
++  const lines: string[] = []
++  const onSaved = vi.fn()
++  const callbacks = createMeetingCallbacks({ projectId: project.id, refresh: noop, confirm: async () => true,
++    run: async line => {
++      lines.push(line)
++      return (await handleMeetingCommand(line.slice('meeting '.length), domain)).kind === 'success'
++    } })
++  callbacks.onSaved = onSaved
++  return { domain, project, task, otherTask, issue, risk, otherIssue, meeting: getMeeting(domain, meeting.id)!,
++    callbacks, lines, onSaved }
++}
++beforeEach(() => {
++  vi.stubGlobal('window', { addEventListener: noop, removeEventListener: noop })
++  vi.stubGlobal('document', { activeElement: null, addEventListener: noop, removeEventListener: noop,
++    querySelector: () => null, body: { dataset: {} } })
++  vi.stubGlobal('HTMLElement', class {})
++  vi.stubGlobal('requestAnimationFrame', (callback: () => void) => { callback(); return 1 })
++  vi.stubGlobal('cancelAnimationFrame', noop)
++})
++afterEach(() => {
++  for (const renderer of mounts.splice(0)) act(() => renderer.unmount())
++  vi.unstubAllGlobals()
++})
++
++it('LG-01b 主保存两条既有草稿，按 stable ID 保关联、来源与创建历史', async () => {
++  const f = await fixture()
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  const rows = renderer.root.findAllByProps({ className: 'rb-action-row' })
++  await change(rows[0], '行动项标题', '主保存一')
++  await change(rows[1], '行动项标题', '主保存二')
++  await act(async () => rows[1].findByType(RecordsListbox).props.onChange('done'))
++  await submit(renderer)
++  const saved = getMeeting(f.domain, f.meeting.id)!
++  expect(saved.actions).toEqual([
++    { ...f.meeting.actions[0], title: '主保存一' },
++    { ...f.meeting.actions[1], title: '主保存二', status: 'done' },
++  ])
++  expect(saved.createdAt).toBe(f.meeting.createdAt)
++  expect(saved.sourceType).toBe(f.meeting.sourceType)
++  expect(saved.sourceSessionId).toBe(f.meeting.sourceSessionId)
++  expect(f.onSaved).toHaveBeenCalledTimes(1)
++  expect(JSON.parse(f.lines[0].slice(`meeting update ${f.meeting.id} `.length))).not.toHaveProperty('actions')
++})
++
++it('LG-01 默认会议编辑透传同项目 task/issue select，可解除且拒绝跨项目或 risk', async () => {
++  const f = await fixture()
++  const renderer = mount(createElement(MeetingsView, { meetings: [f.meeting], onCreate: noop, onEdit: noop,
++    tasks: [f.task, f.otherTask], riskIssues: [f.issue, f.risk, f.otherIssue],
++    records: { projectId: f.project.id, callbacks: f.callbacks } }))
++  await act(async () => renderer.root.findByProps({ 'aria-label': '编辑会议' }).props.onClick())
++  const row = renderer.root.findAllByProps({ className: 'rb-action-row' })[0]
++  const taskSelect = row.findByProps({ 'aria-label': '关联任务' })
++  const issueSelect = row.findByProps({ 'aria-label': '关联问题' })
++  expect(taskSelect.type).toBe('select')
++  expect(taskSelect.findAllByType('option').map(node => node.props.value)).toEqual(['', f.task.id])
++  expect(issueSelect.findAllByType('option').map(node => node.props.value)).toEqual(['', f.issue.id])
++  await change(row, '关联任务', f.otherTask.id)
++  await change(row, '关联问题', f.risk.id)
++  expect(row.findByProps({ 'aria-label': '关联任务' }).props.value).toBe(f.task.id)
++  expect(row.findByProps({ 'aria-label': '关联问题' }).props.value).toBe(f.issue.id)
++  expect(f.lines).toEqual([])
++  await change(row, '关联任务', '')
++  await change(row, '关联问题', '')
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0]).toEqual({
++    ...f.meeting.actions[0], taskId: null, riskIssueId: null,
++  })
++  expect(renderer.root.findAllByType(RecordsMeetingForm)).toHaveLength(0)
++})
++
++it('LG-01 未提供候选时仍显示已存关联，不用空列表清空 ID', async () => {
++  const f = await fixture()
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  const row = renderer.root.findAllByProps({ className: 'rb-action-row' })[0]
++  expect(row.findByProps({ 'aria-label': '关联任务' }).findAllByType('option')
++    .some(node => node.props.value === f.task.id)).toBe(true)
++  await change(row, '行动项标题', '保留关联')
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0]).toMatchObject({
++    title: '保留关联', taskId: f.task.id, riskIssueId: f.issue.id,
++  })
++})
++
++it('LG-01b 新行部分成功后失败保输入，重试不重复 add 且只在全部成功后关闭', async () => {
++  const f = await fixture()
++  const emptyMeeting = await addMeeting(f.domain, { projectId: f.project.id, title: '空行动会议', meetingDate: '2026-10-21' })
++  let fail = true
++  const original = f.callbacks.onSaveAction
++  f.callbacks.onSaveAction = async (meetingId, actionId, payload) => {
++    if (fail && payload.title === '第二新行') return false
++    return original(meetingId, actionId, payload)
++  }
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: emptyMeeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  for (const title of ['第一新行', '第二新行']) {
++    await act(async () => button(renderer.root, '添加行动项').props.onClick())
++    await change(renderer.root.findAllByProps({ className: 'rb-action-row' }).at(-1)!, '行动项标题', title)
++  }
++  await submit(renderer)
++  expect(f.onSaved).not.toHaveBeenCalled()
++  expect(getMeeting(f.domain, emptyMeeting.id)!.actions.map(action => action.title)).toEqual(['第一新行'])
++  const rows = renderer.root.findAllByProps({ className: 'rb-action-row' })
++  expect(rows[0].findByProps({ 'aria-label': '行动项标题' }).props.disabled).toBe(true)
++  expect(rows[1].findByProps({ 'aria-label': '行动项标题' }).props.value).toBe('第二新行')
++  expect(renderer.root.findAllByProps({ role: 'alert' }).length).toBeGreaterThan(0)
++  fail = false
++  await submit(renderer)
++  expect(getMeeting(f.domain, emptyMeeting.id)!.actions.map(action => [action.id, action.title])).toEqual([
++    ['ai-001', '第一新行'], ['ai-002', '第二新行'],
++  ])
++  expect(f.onSaved).toHaveBeenCalledTimes(1)
++})
++
++it('LG-01b meeting/action 拒绝或抛错均保输入可重试，既有空标题不静默关闭', async () => {
++  const f = await fixture()
++  const original = f.callbacks.onSaveMeeting
++  f.callbacks.onSaveMeeting = async () => { throw new Error('受控传输失败') }
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  await change(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '行动项标题', '仍在草稿')
++  await submit(renderer)
++  expect(f.onSaved).not.toHaveBeenCalled()
++  expect(renderer.root.findAllByProps({ role: 'alert' }).length).toBeGreaterThan(0)
++  f.callbacks.onSaveMeeting = async () => false
++  await submit(renderer)
++  expect(f.lines).toEqual([])
++  f.callbacks.onSaveMeeting = original
++  await change(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '行动项标题', '')
++  await submit(renderer)
++  expect(f.onSaved).not.toHaveBeenCalled()
++  expect(f.lines).toEqual([])
++  await change(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '行动项标题', '成功重试')
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0].title).toBe('成功重试')
++})
++
++it('LG-01b 同一事件轮主保存重复点击及行内保存不能重复写，busy 阻止取消', async () => {
++  const f = await fixture()
++  let release!: (value: boolean) => void
++  f.callbacks.onSaveMeeting = vi.fn(() => new Promise<boolean>(resolve => { release = resolve }))
++  const cancel = vi.fn()
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: cancel }))
++  const form = renderer.root.findByType('form')
++  await act(async () => {
++    form.props.onSubmit({ preventDefault: noop })
++    form.props.onSubmit({ preventDefault: noop })
++  })
++  expect(f.callbacks.onSaveMeeting).toHaveBeenCalledTimes(1)
++  expect(button(renderer.root, '取消').props.disabled).toBe(true)
++  expect(button(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '保存').props.disabled).toBe(true)
++  await act(async () => release(false))
++  expect(cancel).not.toHaveBeenCalled()
++  expect(button(renderer.root, '取消').props.disabled).toBe(false)
++})
++
++it('LG-01b 空新行跳过、部分填入但无标题应提示；取消草稿零写', async () => {
++  const f = await fixture()
++  const cancel = vi.fn()
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: cancel }))
++  await act(async () => button(renderer.root, '添加行动项').props.onClick())
++  await act(async () => button(renderer.root, '取消').props.onClick())
++  expect(cancel).toHaveBeenCalledTimes(1)
++  expect(f.lines).toEqual([])
++  const row = renderer.root.findAllByProps({ className: 'rb-action-row' }).at(-1)!
++  await change(row, '负责人', '有输入')
++  await submit(renderer)
++  expect(f.lines).toEqual([])
++  expect(f.onSaved).not.toHaveBeenCalled()
++  await change(row, '负责人', '')
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions).toHaveLength(2)
++  expect(f.lines.filter(line => line.startsWith('meeting action add'))).toHaveLength(0)
++})
++
++it('LG-01 同项目新关联可主保存，props 重排不把行内命令错认成数组下标', async () => {
++  const f = await fixture()
++  const props: RecordsMeetingFormProps = { projectId: f.project.id, meeting: f.meeting,
++    tasks: [f.task], riskIssues: [f.issue], callbacks: f.callbacks, onCancel: noop }
++  const renderer = mount(createElement(RecordsMeetingForm, props))
++  const second = renderer.root.findAllByProps({ className: 'rb-action-row' })[1]
++  await change(second, '关联任务', f.task.id)
++  await change(second, '关联问题', f.issue.id)
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[1]).toMatchObject({
++    id: 'ai-002', taskId: f.task.id, riskIssueId: f.issue.id,
++  })
++  act(() => renderer.update(createElement(RecordsMeetingForm, { ...props,
++    meeting: { ...f.meeting, actions: [...f.meeting.actions].reverse() } })))
++  const first = renderer.root.findAllByProps({ className: 'rb-action-row' })[0]
++  await change(first, '行动项标题', '按 ID 行内保存')
++  await act(async () => button(first, '保存').props.onClick())
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0]).toMatchObject({
++    id: 'ai-001', title: '按 ID 行内保存',
++  })
++})
++
++it('LG-01 后端拒绝跨项目/风险关联，失败不关闭且行动项未写', async () => {
++  const f = await fixture()
++  const original = f.callbacks.onSaveAction
++  let invalid = true
++  f.callbacks.onSaveAction = (meetingId, actionId, payload) => original(meetingId, actionId,
++    invalid ? { ...payload, taskId: f.otherTask.id, riskIssueId: f.risk.id } : payload)
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  await change(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '行动项标题', '待重试')
++  await submit(renderer)
++  expect(f.onSaved).not.toHaveBeenCalled()
++  expect(getMeeting(f.domain, f.meeting.id)!.actions).toEqual(f.meeting.actions)
++  invalid = false
++  await submit(renderer)
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0].title).toBe('待重试')
++  const riskOnly = await handleMeetingCommand(`action update ${f.meeting.id} ai-001 ${JSON.stringify({ riskIssueId: f.risk.id })}`, f.domain)
++  expect(riskOnly.kind).toBe('error')
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0].riskIssueId).toBe(f.issue.id)
++})
++
++it('LG-02 新建会议保持分命令无行动项入口；既有行内新增/转任务/删除保原语义', async () => {
++  const f = await fixture()
++  const renderer = mount(createElement(RecordsMeetingForm, { projectId: f.project.id,
++    callbacks: f.callbacks, onCancel: noop }))
++  expect(renderer.root.findAllByProps({ className: 'rb-action-row' })).toHaveLength(0)
++  for (const [name, value] of [['title', '分命令会议'], ['meetingDate', '2026-10-21']]) {
++    await act(async () => renderer.root.findByProps({ name }).props.onChange({ currentTarget: { value } }))
++  }
++  await submit(renderer)
++  expect(f.lines).toHaveLength(1)
++  expect(f.lines[0]).toMatch(/^meeting add /)
++  const editing = mount(createElement(RecordsMeetingForm, { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }))
++  await act(async () => button(editing.root, '添加行动项').props.onClick())
++  const added = editing.root.findAllByProps({ className: 'rb-action-row' }).at(-1)!
++  await change(added, '行动项标题', '行内新增')
++  await act(async () => button(added, '保存').props.onClick())
++  expect(getMeeting(f.domain, f.meeting.id)!.actions.at(-1)).toMatchObject({ id: 'ai-003', title: '行内新增' })
++  const first = editing.root.findAllByProps({ className: 'rb-action-row' })[0]
++  await act(async () => button(first, '转任务').props.onClick())
++  expect(getMeeting(f.domain, f.meeting.id)!.actions[0].taskId).toBe(f.task.id)
++  await act(async () => button(first, '删除').props.onClick())
++  expect(getMeeting(f.domain, f.meeting.id)!.actions.map(action => action.id)).toEqual(['ai-002', 'ai-003'])
++})
++
++it('LG-01b 行动项回调抛错后无未处理异常，disabled 表单不触发任何写入', async () => {
++  const f = await fixture()
++  const original = f.callbacks.onSaveAction
++  f.callbacks.onSaveAction = async () => { throw new Error('行动项传输中断') }
++  const props: RecordsMeetingFormProps = { projectId: f.project.id, meeting: f.meeting,
++    callbacks: f.callbacks, onCancel: noop }
++  const renderer = mount(createElement(RecordsMeetingForm, props))
++  await submit(renderer)
++  expect(f.onSaved).not.toHaveBeenCalled()
++  expect(renderer.root.findAllByProps({ role: 'alert' }).length).toBeGreaterThan(0)
++  f.callbacks.onSaveAction = original
++  act(() => renderer.update(createElement(RecordsMeetingForm, { ...props, disabled: true })))
++  const before = [...f.lines]
++  await submit(renderer)
++  await act(async () => button(renderer.root.findAllByProps({ className: 'rb-action-row' })[0], '保存').props.onClick())
++  expect(f.lines).toEqual(before)
++})

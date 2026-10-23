@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-23T00:17:35.967Z",
+  "artifacts": {
+    "docs/testing/p1004-repair-gui-review-20261023-r2-report.md": {
+      "bytes": 18051,
+      "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9"
+    },
+    "docs/testing/p1004-repair-gui-review-20261023-r2-audit.json": {
+      "bytes": 426278,
+      "sha256": "a4a95e3fea6776ddb3454a5980101fae6d7d18067088e50193c32549cbf98632"
+    },
+    "docs/testing/p1004-repair-gui-review-20261023-r2-command-receipts.json": {
+      "bytes": 6333,
+      "sha256": "b2d9672e1fbed677ade6b1519ebeeb969db7cda65348bf367b57c6077e64419b"
+    },
+    "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs": {
+      "bytes": 20354,
+      "sha256": "95218e5fba73bb24284eb89e648d42325d67db17ba56f4e8a8456b8c2361d6c3"
+    },
+    "/tmp/p1004-repair-gui-review-20261023-r2/audit-receipt.json": {
+      "bytes": 449,
+      "sha256": "68d35df65313a5d44247ae606d91b9966fb8cd01178c469a64a1c3e0e3df31f1"
+    },
+    "/tmp/p1004-repair-gui-review-20261023-r2/format-receipt.json": {
+      "bytes": 579,
+      "sha256": "4307f7c8e4edaf706bf6f52f06a8f553729c5e91318305a2fb0adfc6c0eb6a15"
+    },
+    "/tmp/p1004-repair-gui-review-20261023-r2/audit-failure-27901.json": {
+      "bytes": 1060,
+      "sha256": "4aef7aeda37f07d61b54305a8d1d77b89851c5849d0f76b9c2996f4428ca2fe0"
+    }
+  },
+  "stableInputCount": 1333,
+  "index": {
+    "bytes": 242022,
+    "sha256": "65f7f34811efe3d08450961375830f5b2df59ed39b4a2b8077aa6535c5dbd971"
+  },
+  "memberCount": 1314,
+  "frameCount": 179,
+  "reportFormat": {
+    "localLinks": 12,
+    "trailingWhitespace": 0,
+    "finalNewline": true
+  },
+  "ownProcessReceipt": {
+    "start": "2026-10-23T00:17:35.706Z",
+    "end": "2026-10-23T00:17:35.967Z",
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs",
+      "seal"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "parentPID": 29018,
+    "childPID": 29020,
+    "node": "v22.23.3",
+    "status": 0,
+    "signal": null,
+    "scope": "Own fs/path/crypto/assert reader only; no child process"
+  },
+  "excluded": [
+    "seal itself",
+    "subsequent actual tool receipt"
+  ],
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "spawn": 0
+}

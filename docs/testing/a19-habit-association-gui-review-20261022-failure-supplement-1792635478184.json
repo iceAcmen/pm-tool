@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-22T02:17:58.184Z",
+  "pid": 90776,
+  "originalExit": 1,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(f.metadata.timestamp >= previous)\n",
+  "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(f.metadata.timestamp >= previous)\n\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:360:9\n    at check (file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:64:31)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:352:3\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)",
+  "checks": [],
+  "scriptSHA": "63ccacdf37c2a5882cff6ef8d1105ffe5a28033dfb6416f0da9e3c91b991dfce",
+  "boundary": "Own file audit failure, original evidence untouched"
+}

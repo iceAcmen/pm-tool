@@ -1,0 +1,2356 @@
+{
+  "schema": "acceptance-percent-baseline-r1-v1",
+  "generatedAt": "2026-10-23T02:04:20.855Z",
+  "status": "BASELINE_NOT_FINAL",
+  "scopeRevision": "remaining-contracts-20261021-final-reconcile-r3+l8-source125-complete526-baseline-r1",
+  "sourceScopeRevision": "remaining-contracts-20261021-final-reconcile-r3",
+  "parentGoalPreserved": "父目标全部已实现未验到本批普通commit；Main唯一builder/GUI/桌面；无push/tag/release/正式切。",
+  "rawAcceptanceScopeCount": 1436,
+  "rawScopeCountIncludingFinalCommit": 1437,
+  "originalContractIds": 252,
+  "originalMatrixIds": 1184,
+  "excludedSupplementalSummaryLabels": 53,
+  "applicableAcceptance": 1434,
+  "applicable": 1435,
+  "applicableMeaning": "Applicable acceptance IDs plus one required final ordinary commit milestone.",
+  "completed": null,
+  "percent": null,
+  "completedLowerBound": 5,
+  "percentLowerBound": 0.35,
+  "percentLowerBoundMeaning": "Proven minimum only, NOT exact current overall percentage or labour estimate.",
+  "formula": "Exact completed / applicable * 100; completed includes final commit. Exact numerator remains unaudited.",
+  "scopeRevisions": [
+    {
+      "from": 1437,
+      "to": 1435,
+      "reason": "Two independently explicit whole-ID N/A; no other denominator reduction."
+    }
+  ],
+  "candidate": {
+    "id": "Main-L8-successor-source125-complete526",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "sourceManifest": "/private/tmp/l8-gantt-developer-20261023-Pes2Ba/main-source125.json",
+    "completeManifest": "/private/tmp/l8-gantt-developer-20261023-Pes2Ba/main-complete526.json",
+    "sourceCount": 125,
+    "completeCount": 526,
+    "independentSourceReview": "PENDING",
+    "physicalReadBoundary": [
+      "packages/dsh-pm-tool/src/core/progress-derivation.ts",
+      "packages/dsh-pm-tool/src/core/status.ts"
+    ],
+    "unverified": "Whole source125/complete526 bytes, new bundle, runtime instance and flags; declarations are not independent SOURCE approval."
+  },
+  "sourceDelta": {
+    "oldCount": 124,
+    "newCount": 125,
+    "sameCount": 123,
+    "changed": [
+      {
+        "path": "packages/dsh-pm-tool/src/client/views/gantt.tsx",
+        "before": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+        "after": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7"
+      }
+    ],
+    "added": [
+      {
+        "path": "packages/dsh-pm-tool/src/client/views/gantt-status.test.tsx",
+        "value": "28e6f478fd6d16d78707d4976ea88981d0cce838c2be38ff50dd5804ddc6690c"
+      }
+    ],
+    "removed": []
+  },
+  "completeDelta": {
+    "oldCount": 525,
+    "newCount": 526,
+    "sameCount": 524,
+    "changed": [
+      {
+        "path": "src/client/views/gantt.tsx",
+        "before": {
+          "bytes": 30901,
+          "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf"
+        },
+        "after": {
+          "bytes": 30859,
+          "sha256": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7"
+        }
+      }
+    ],
+    "added": [
+      {
+        "path": "src/client/views/gantt-status.test.tsx",
+        "value": {
+          "bytes": 9143,
+          "sha256": "28e6f478fd6d16d78707d4976ea88981d0cce838c2be38ff50dd5804ddc6690c"
+        }
+      }
+    ],
+    "removed": []
+  },
+  "sourceProof": [
+    {
+      "path": "packages/dsh-pm-tool/src/core/progress-derivation.ts",
+      "bytes": 17727,
+      "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b",
+      "historicalDeclaredPath": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/src/core/progress-derivation.ts",
+      "historical": {
+        "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b",
+        "size": 17727,
+        "mtimeMs": 1792567167749.3162
+      },
+      "oldComplete": {
+        "bytes": 17727,
+        "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b"
+      },
+      "currentComplete": {
+        "bytes": 17727,
+        "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b"
+      }
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/status.ts",
+      "bytes": 1150,
+      "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32",
+      "historicalDeclaredPath": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/src/core/status.ts",
+      "historical": {
+        "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32",
+        "size": 1150,
+        "mtimeMs": 1792567167762.3086
+      },
+      "oldComplete": {
+        "bytes": 1150,
+        "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32"
+      },
+      "currentComplete": {
+        "bytes": 1150,
+        "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32"
+      }
+    }
+  ],
+  "complete": [
+    {
+      "id": "OP-EX-01",
+      "status": "COMPLETE_INHERITED_ORIGINAL_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "reports": [
+        {
+          "path": "docs/testing/objective-independent-auto-20261021.md",
+          "section": "§1/3/4"
+        },
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.1/3.2"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§3"
+        }
+      ],
+      "originalContract": [
+        {
+          "path": "docs/testing/remaining-objective-cases-20261021.md",
+          "line": 43,
+          "section": "原表对应ID行"
+        }
+      ],
+      "independentDisposition": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json",
+        "row": {
+          "id": "OP-EX-01",
+          "status": "PASS（仅所列AUTO/源码子项）",
+          "evidenceRows": [
+            {
+              "id": "OP-EX-01",
+              "file": "domain-results.json",
+              "start": "2026-10-21T12:17:54.610Z",
+              "end": "2026-10-21T12:17:54.751Z",
+              "actionStart": 136,
+              "actionEnd": 136
+            }
+          ],
+          "remaining": "仅覆盖证据行的断言；任何GUI/布局/浏览器认证不在本签字范围"
+        }
+      },
+      "originalAssertionEvidence": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json",
+        "rows": [
+          {
+            "id": "OP-EX-01",
+            "name": "100/1000/10000深树：Map全量/确定；属性读取计数与后序源码",
+            "status": "PASS",
+            "start": "2026-10-21T12:17:54.610Z",
+            "end": "2026-10-21T12:17:54.751Z",
+            "actionStart": 136,
+            "actionEnd": 136
+          }
+        ]
+      },
+      "reason": "All applicable original assertions are pure derivation/source only; no GUI assertion. Original signed bytes, old complete525, L8 complete526 and two physically read current files agree; runtime dependency is status only, unrelated to changed gantt presentation.",
+      "noWholeCandidateApproval": true
+    },
+    {
+      "id": "OP-EX-02",
+      "status": "COMPLETE_INHERITED_ORIGINAL_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "reports": [
+        {
+          "path": "docs/testing/objective-independent-auto-20261021.md",
+          "section": "§1/3/4"
+        },
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.1/3.2"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§3"
+        }
+      ],
+      "originalContract": [
+        {
+          "path": "docs/testing/remaining-objective-cases-20261021.md",
+          "line": 44,
+          "section": "原表对应ID行"
+        }
+      ],
+      "independentDisposition": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json",
+        "row": {
+          "id": "OP-EX-02",
+          "status": "PASS（仅所列AUTO/源码子项）",
+          "evidenceRows": [
+            {
+              "id": "OP-EX-02",
+              "file": "domain-results.json",
+              "start": "2026-10-21T12:17:54.751Z",
+              "end": "2026-10-21T12:17:54.751Z",
+              "actionStart": 136,
+              "actionEnd": 136
+            }
+          ],
+          "remaining": "仅覆盖证据行的断言；任何GUI/布局/浏览器认证不在本签字范围"
+        }
+      },
+      "originalAssertionEvidence": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json",
+        "rows": [
+          {
+            "id": "OP-EX-02",
+            "name": "仅纯函数A/B环不挂死，合法leaf保留",
+            "status": "PASS",
+            "start": "2026-10-21T12:17:54.751Z",
+            "end": "2026-10-21T12:17:54.751Z",
+            "actionStart": 136,
+            "actionEnd": 136
+          }
+        ]
+      },
+      "reason": "All applicable original assertions are pure derivation/source only; no GUI assertion. Original signed bytes, old complete525, L8 complete526 and two physically read current files agree; runtime dependency is status only, unrelated to changed gantt presentation.",
+      "noWholeCandidateApproval": true
+    },
+    {
+      "id": "OP-EX-03",
+      "status": "COMPLETE_INHERITED_ORIGINAL_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "reports": [
+        {
+          "path": "docs/testing/objective-independent-auto-20261021.md",
+          "section": "§1/3/4"
+        },
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.1/3.2"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§3"
+        }
+      ],
+      "originalContract": [
+        {
+          "path": "docs/testing/remaining-objective-cases-20261021.md",
+          "line": 45,
+          "section": "原表对应ID行"
+        }
+      ],
+      "independentDisposition": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json",
+        "row": {
+          "id": "OP-EX-03",
+          "status": "PASS（仅所列AUTO/源码子项）",
+          "evidenceRows": [
+            {
+              "id": "OP-EX-03",
+              "file": "domain-results.json",
+              "start": "2026-10-21T12:17:54.751Z",
+              "end": "2026-10-21T12:17:54.751Z",
+              "actionStart": 136,
+              "actionEnd": 136
+            }
+          ],
+          "remaining": "仅覆盖证据行的断言；任何GUI/布局/浏览器认证不在本签字范围"
+        }
+      },
+      "originalAssertionEvidence": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json",
+        "rows": [
+          {
+            "id": "OP-EX-03",
+            "name": "仅纯函数缺ID/悬空父降级，合法leaf不吞",
+            "status": "PASS",
+            "start": "2026-10-21T12:17:54.751Z",
+            "end": "2026-10-21T12:17:54.751Z",
+            "actionStart": 136,
+            "actionEnd": 136
+          }
+        ]
+      },
+      "reason": "All applicable original assertions are pure derivation/source only; no GUI assertion. Original signed bytes, old complete525, L8 complete526 and two physically read current files agree; runtime dependency is status only, unrelated to changed gantt presentation.",
+      "noWholeCandidateApproval": true
+    },
+    {
+      "id": "OP-EX-05",
+      "status": "COMPLETE_INHERITED_ORIGINAL_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "reports": [
+        {
+          "path": "docs/testing/objective-independent-auto-20261021.md",
+          "section": "§1/3/4"
+        },
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.1/3.2"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§3"
+        }
+      ],
+      "originalContract": [
+        {
+          "path": "docs/testing/remaining-objective-cases-20261021.md",
+          "line": 47,
+          "section": "原表对应ID行"
+        }
+      ],
+      "independentDisposition": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json",
+        "row": {
+          "id": "OP-EX-05",
+          "status": "PASS（仅所列AUTO/源码子项）",
+          "evidenceRows": [
+            {
+              "id": "OP-EX-05",
+              "file": "domain-results.json",
+              "start": "2026-10-21T12:17:54.788Z",
+              "end": "2026-10-21T12:17:54.788Z",
+              "actionStart": 140,
+              "actionEnd": 140
+            }
+          ],
+          "remaining": "仅覆盖证据行的断言；任何GUI/布局/浏览器认证不在本签字范围"
+        }
+      },
+      "originalAssertionEvidence": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json",
+        "rows": [
+          {
+            "id": "OP-EX-05",
+            "name": "两待验收leaf+环，pendingCount准确不造数",
+            "status": "PASS",
+            "start": "2026-10-21T12:17:54.788Z",
+            "end": "2026-10-21T12:17:54.788Z",
+            "actionStart": 140,
+            "actionEnd": 140
+          }
+        ]
+      },
+      "reason": "All applicable original assertions are pure derivation/source only; no GUI assertion. Original signed bytes, old complete525, L8 complete526 and two physically read current files agree; runtime dependency is status only, unrelated to changed gantt presentation.",
+      "noWholeCandidateApproval": true
+    },
+    {
+      "id": "OP-RU-06",
+      "status": "COMPLETE_INHERITED_ORIGINAL_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "reports": [
+        {
+          "path": "docs/testing/objective-independent-auto-20261021.md",
+          "section": "§1/3/4"
+        },
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.1/3.2"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§3"
+        }
+      ],
+      "originalContract": [
+        {
+          "path": "docs/testing/remaining-objective-cases-20261021.md",
+          "line": 41,
+          "section": "原表对应ID行"
+        }
+      ],
+      "independentDisposition": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json",
+        "row": {
+          "id": "OP-RU-06",
+          "status": "PASS（仅所列AUTO/源码子项）",
+          "evidenceRows": [
+            {
+              "id": "OP-RU-06",
+              "file": "domain-results.json",
+              "start": "2026-10-21T12:17:54.470Z",
+              "end": "2026-10-21T12:17:54.471Z",
+              "actionStart": 121,
+              "actionEnd": 121
+            }
+          ],
+          "remaining": "仅覆盖证据行的断言；任何GUI/布局/浏览器认证不在本签字范围"
+        }
+      },
+      "originalAssertionEvidence": {
+        "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json",
+        "rows": [
+          {
+            "id": "OP-RU-06",
+            "name": "F2中间层不重复leaf",
+            "status": "PASS",
+            "start": "2026-10-21T12:17:54.470Z",
+            "end": "2026-10-21T12:17:54.471Z",
+            "actionStart": 121,
+            "actionEnd": 121
+          }
+        ]
+      },
+      "reason": "All applicable original assertions are pure derivation/source only; no GUI assertion. Original signed bytes, old complete525, L8 complete526 and two physically read current files agree; runtime dependency is status only, unrelated to changed gantt presentation.",
+      "noWholeCandidateApproval": true
+    }
+  ],
+  "na": [
+    {
+      "id": "OP-DEFER-05",
+      "status": "N/A_WHOLE_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "denominatorDelta": -1,
+      "reports": [
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.2 OP-DEFER-05/06"
+        },
+        {
+          "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-report.md",
+          "section": "§6"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§2"
+        }
+      ],
+      "reason": "Original multiuser live merge remains explicitly out of scope; no new synchronization contract."
+    },
+    {
+      "id": "OP-DEFER-06",
+      "status": "N/A_WHOLE_ID",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "denominatorDelta": -1,
+      "reports": [
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "section": "§3.2 OP-DEFER-05/06"
+        },
+        {
+          "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-report.md",
+          "section": "§6"
+        },
+        {
+          "path": "docs/testing/acceptance-percent-baseline-20261023-r1-report.md",
+          "section": "§2"
+        }
+      ],
+      "reason": "Independent war-room hot repair remains outside this original acceptance; existing state regression remains in B8."
+    }
+  ],
+  "partialNa": [
+    {
+      "id": "RA-DR-30",
+      "status": "N/A_POPUP_ASSERTION_ONLY",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "denominatorDelta": 0,
+      "reports": [
+        {
+          "path": "docs/testing/a8-layer-gap-contract-review-20261021.md",
+          "section": "§1/3/5 LG03"
+        },
+        {
+          "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+          "section": "§4.1"
+        }
+      ],
+      "reason": "Popup reference not in gate; ordinary owner fill/clear/save/reentry and keyboard assertions remain applicable."
+    },
+    {
+      "id": "RA-MENU-14",
+      "status": "N/A_POPUP_ASSERTION_ONLY",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "denominatorDelta": 0,
+      "reports": [
+        {
+          "path": "docs/testing/a8-layer-gap-contract-review-20261021.md",
+          "section": "§1/3/5 LG03"
+        },
+        {
+          "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+          "section": "§4.1"
+        }
+      ],
+      "reason": "Popup reference not in gate; ordinary owner fill/clear/save/reentry and keyboard assertions remain applicable."
+    },
+    {
+      "id": "RA-MENU-26",
+      "status": "N/A_POPUP_ASSERTION_ONLY",
+      "candidate": "Main-L8-successor-source125-complete526",
+      "denominatorDelta": 0,
+      "reports": [
+        {
+          "path": "docs/testing/a8-layer-gap-contract-review-20261021.md",
+          "section": "§1/3/5 LG03"
+        },
+        {
+          "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+          "section": "§4.1"
+        }
+      ],
+      "reason": "Popup reference not in gate; ordinary owner fill/clear/save/reentry and keyboard assertions remain applicable."
+    }
+  ],
+  "finalCommit": {
+    "id": "FINAL_ORDINARY_COMMIT",
+    "applicable": true,
+    "completed": false,
+    "reason": "Required by parent goal; no Git execution or commit admission in this reviewer subtask."
+  },
+  "commitAdmission": false,
+  "parentPass": false,
+  "confirmedManualPending": [],
+  "retainedOriginalIds": [
+    "B1",
+    "B1-DESK-01",
+    "B1-DESK-02",
+    "B1-GUI-01",
+    "B1-GUI-02",
+    "B1-GUI-03",
+    "B1-GUI-04",
+    "B1-PATH-01",
+    "B1-PATH-02",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "BF-C01",
+    "BF-C02",
+    "BF-C03",
+    "BF-C04",
+    "BF-C05",
+    "BF-C06",
+    "BF-C07",
+    "BF-C08",
+    "BF-C09",
+    "BF-G01",
+    "BF-G02",
+    "BF-G03",
+    "BF-G04",
+    "BF-G05",
+    "BF-S01",
+    "OP-BD-01",
+    "OP-BD-02",
+    "OP-BD-03",
+    "OP-BD-04",
+    "OP-BD-05",
+    "OP-BD-06",
+    "OP-CK-01",
+    "OP-CK-02",
+    "OP-CK-03",
+    "OP-CK-04",
+    "OP-CK-05",
+    "OP-CK-06",
+    "OP-DEFER-01",
+    "OP-DEFER-02",
+    "OP-DEFER-03",
+    "OP-DEFER-04",
+    "OP-DEFER-05",
+    "OP-DEFER-06",
+    "OP-DV-01",
+    "OP-DV-02",
+    "OP-DV-03",
+    "OP-DV-04",
+    "OP-DV-05",
+    "OP-DV-06",
+    "OP-DV-07",
+    "OP-EV-01",
+    "OP-EV-02",
+    "OP-EV-03",
+    "OP-EX-01",
+    "OP-EX-02",
+    "OP-EX-03",
+    "OP-EX-04",
+    "OP-EX-05",
+    "OP-GUI-01",
+    "OP-GUI-02",
+    "OP-GUI-03",
+    "OP-LEG-01",
+    "OP-LEG-02",
+    "OP-LEG-03",
+    "OP-LEG-04",
+    "OP-Q-01",
+    "OP-Q-02",
+    "OP-Q-03",
+    "OP-Q-04",
+    "OP-RU-01",
+    "OP-RU-02",
+    "OP-RU-03",
+    "OP-RU-04",
+    "OP-RU-05",
+    "OP-RU-06",
+    "OP-RU-07",
+    "OP-SRC-01",
+    "OP-SRC-02",
+    "OP-SRC-03",
+    "OP-SRC-04",
+    "OP-SRC-05",
+    "OP-SRC-06",
+    "RA-AI01",
+    "RA-AI02",
+    "RA-AI03",
+    "RA-AI04",
+    "RA-AI05",
+    "RA-AI06",
+    "RA-B401",
+    "RA-B402",
+    "RA-B403",
+    "RA-B404",
+    "RA-CI01",
+    "RA-CI02",
+    "RA-D02",
+    "RA-D03",
+    "RA-D06",
+    "RA-D07",
+    "RA-D10",
+    "RA-D11",
+    "RA-D12",
+    "RA-DR-01",
+    "RA-DR-02",
+    "RA-DR-03",
+    "RA-DR-04",
+    "RA-DR-05",
+    "RA-DR-06",
+    "RA-DR-07",
+    "RA-DR-08",
+    "RA-DR-09",
+    "RA-DR-10",
+    "RA-DR-11",
+    "RA-DR-12",
+    "RA-DR-13",
+    "RA-DR-14",
+    "RA-DR-15",
+    "RA-DR-16",
+    "RA-DR-17",
+    "RA-DR-18",
+    "RA-DR-19",
+    "RA-DR-20",
+    "RA-DR-21",
+    "RA-DR-22",
+    "RA-DR-23",
+    "RA-DR-24",
+    "RA-DR-25",
+    "RA-DR-26",
+    "RA-DR-27",
+    "RA-DR-28",
+    "RA-DR-29",
+    "RA-DR-30",
+    "RA-DR-31",
+    "RA-DR-32",
+    "RA-DR-33",
+    "RA-DR-34",
+    "RA-DR-35",
+    "RA-DR-36",
+    "RA-DR-37",
+    "RA-DR-38",
+    "RA-DR-39",
+    "RA-DR-40",
+    "RA-DR-41",
+    "RA-DR-42",
+    "RA-F01",
+    "RA-F02",
+    "RA-F03",
+    "RA-F04",
+    "RA-F05",
+    "RA-F06",
+    "RA-F07",
+    "RA-F08",
+    "RA-IM01",
+    "RA-J01",
+    "RA-J02",
+    "RA-J03",
+    "RA-J04",
+    "RA-J05",
+    "RA-J06",
+    "RA-M01",
+    "RA-M02",
+    "RA-M03",
+    "RA-M04",
+    "RA-M05",
+    "RA-M06",
+    "RA-M07",
+    "RA-MENU-01",
+    "RA-MENU-02",
+    "RA-MENU-03",
+    "RA-MENU-04",
+    "RA-MENU-05",
+    "RA-MENU-06",
+    "RA-MENU-07",
+    "RA-MENU-08",
+    "RA-MENU-09",
+    "RA-MENU-10",
+    "RA-MENU-11",
+    "RA-MENU-12",
+    "RA-MENU-13",
+    "RA-MENU-14",
+    "RA-MENU-15",
+    "RA-MENU-16",
+    "RA-MENU-17",
+    "RA-MENU-18",
+    "RA-MENU-19",
+    "RA-MENU-20",
+    "RA-MENU-21",
+    "RA-MENU-22",
+    "RA-MENU-23",
+    "RA-MENU-24",
+    "RA-MENU-25",
+    "RA-MENU-26",
+    "RA-MENU-27",
+    "RA-MENU-28",
+    "RA-MENU-29",
+    "RA-MENU-30",
+    "RA-MENU-31",
+    "RA-MENU-32",
+    "RA-MENU-33",
+    "RA-MENU-34",
+    "RA-MENU-35",
+    "RA-MENU-36",
+    "RA-MENU-37",
+    "RA-MENU-38",
+    "RA-MENU-39",
+    "RA-N01",
+    "RA-OP01",
+    "RA-OP02",
+    "RA-OP03",
+    "RA-OP04",
+    "RA-OP05",
+    "RA-OP06",
+    "RA-P0001",
+    "RA-P0002",
+    "RA-P0003",
+    "RA-P0004",
+    "RA-P0005",
+    "RA-P0006",
+    "RA-P0007",
+    "RA-P0008",
+    "RA-P1001",
+    "RA-P1002",
+    "RA-P1003",
+    "RA-P1004",
+    "RA-P1005",
+    "RA-P1006",
+    "RA-P2001",
+    "RA-P2002",
+    "RA-P2003",
+    "RA-P2004",
+    "RA-P2005",
+    "RA-P2006",
+    "RA-P2007",
+    "RA-P3001",
+    "RA-P3002",
+    "RA-P3003",
+    "RA-P3004",
+    "RA-P3005",
+    "RA-R01",
+    "RA-R02",
+    "RA-R03",
+    "RA-R04",
+    "RA-R05",
+    "RA-TOOL01",
+    "RA-TOOL02",
+    "RA-TOOL03",
+    "RA-TOOL04"
+  ],
+  "matrixIdSet": {
+    "count": 1184,
+    "sortedIdsSha256": "f58e8d29732f258084a877bdc70e249739cc8215ceb2e9a06f5f1e37eb95bd62",
+    "source": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-table-r3.json",
+    "locator": "orderedEntries[kind=matrix]"
+  },
+  "excludedSupplemental": [
+    {
+      "id": "D-09",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "TF-X08",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-10",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-COPY-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-COPY-02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-DEF-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-DEF-02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-DEF-03",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-JOURNEY-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-JOURNEY-02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-PATH-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-TTL-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-TTL-02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "BA-TTL-03",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-03",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-04",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-06",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-07",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-08",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-11",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-12",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "PC-G01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "PC-G02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "PC-G03",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-05",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "D-13",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "GNHD-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-completionHero",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-completionTrend",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-divider",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-formulaCard",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-kpiMetric",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-milestoneDeliverable",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-objectiveProgress",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-overdueSoon",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-peopleLoad",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-projectScale",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-queueCard",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-recordList",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-riskMatrix",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-statusRing",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-textNote",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-W-weeklyPlan",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-AT01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-AT02",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "A18-GM-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "A18-IM-01",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "PC-G04",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-GAP-U4",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-U401",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    },
+    {
+      "id": "RA-U402",
+      "reason": "Original delta index contains no originalContracts row for this registry label; excluded from given counting rule only, not from parent acceptance.",
+      "parentGateRetained": true,
+      "equivalenceMapping": "NOT_FULLY_VERIFIED"
+    }
+  ],
+  "unresolvedNumeratorCount": 1429,
+  "unresolvedMeaning": "Not certified complete by this baseline review; not a claim all remaining IDs fail or need new evidence.",
+  "minimalPending": {
+    "autoOnly": [
+      {
+        "id": "OP-BD-02",
+        "remaining": [
+          "最终备份接缝继承；MD有损不是全量库恢复入口"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 62,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-BD-04",
+        "remaining": [
+          "最终doctor/读schema继承；不以新包browse代全部旧包"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 64,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-CK-01",
+        "remaining": [
+          "最终schema继承；GUI含新键不能按旧task仅checklist误判"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 19,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-CK-02",
+        "remaining": [
+          "最终命令/task写接缝继承或必要复验，非再开GUI门"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 20,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-CK-03",
+        "remaining": [
+          "同上，保清单与树不变量"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 21,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-CK-04",
+        "remaining": [
+          "最终入口继承；新增UI行不是自动证明原CRUD"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 22,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-CK-05",
+        "remaining": [
+          "最终toggle接缝继承；真实UI错误/重试未签则原GUI合同另补"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 23,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-DV-01",
+        "remaining": [
+          "最终derive继承，无新增四遍GUI门"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 29,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-DV-07",
+        "remaining": [
+          "最终写语义继承，合法status动作顺带GUI"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 35,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-EV-03",
+        "remaining": [
+          "最终doctor/读语义继承，不要求再开GUI"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 50,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-EX-04",
+        "remaining": [
+          "同上，合法通道不能跨项目写"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 46,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-Q-01",
+        "remaining": [
+          "最终commands/checklist/task写语义继承"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 57,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-Q-02",
+        "remaining": [
+          "最终toggle接口继承，不新增多人rev/actor协议"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 58,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-Q-03",
+        "remaining": [
+          "最终queue写链继承；仅接缝变动重测，不冒same请求重放"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 59,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-Q-04",
+        "remaining": [
+          "最终task/material事务受影响才复验；不混预host失败GUI"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 60,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-RU-04",
+        "remaining": [
+          "纯derive继承，原GUI标签按其合同映射"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 39,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-RU-05",
+        "remaining": [
+          "纯derive继承，真实证据不足与oldbrowse合并"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 40,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-RU-07",
+        "remaining": [
+          "最终move/delete语义继承；wrapped迁父另RAOP03"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 42,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-SRC-03",
+        "remaining": [
+          "最终report差异接缝继承；非强制新增所有GUI变体"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 53,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-OP06",
+        "remaining": [
+          "最终derive/report文件diff继承，无新GUI要求"
+        ],
+        "original": [
+          {
+            "path": "docs/testing/remaining-objective-cases-20261021.md",
+            "line": 88,
+            "section": "原表对应ID行"
+          }
+        ],
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      }
+    ],
+    "previouslyClosedActionsRequireInheritance": [
+      {
+        "id": "OP-BD-01",
+        "signed": "原F2精确旧停/新PID7387真实清单UUID与派生回读闭",
+        "reports": [
+          {
+            "key": "OPR1",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+            "section": "§3/5",
+            "candidateScope": "112；clear/迁父/日期/390/新PID有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-GUI-02",
+        "signed": "合法转换旧格式标准恢复/只browse退出重进bytes-mtime+40/80旁注可见有限闭",
+        "reports": [
+          {
+            "key": "LEGACY",
+            "path": "docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+            "section": "§1/3–5/7",
+            "candidateScope": "114；旧格式转换/标准恢复/只浏览mtime"
+          },
+          {
+            "key": "LEGACY40",
+            "path": "docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+            "section": "§1/4/5",
+            "candidateScope": "114；仅补旧L1/L3原手填40可见"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-GUI-03",
+        "signed": "原F2真390×900人工/清单/pending/null/coverage标签与无外壳横溢有限闭",
+        "reports": [
+          {
+            "key": "OPR1",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+            "section": "§3/5",
+            "candidateScope": "112；clear/迁父/日期/390/新PID有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-LEG-01",
+        "signed": "合法转换旧格式标准恢复/只browse退出重进bytes-mtime+40/80旁注可见有限闭",
+        "reports": [
+          {
+            "key": "LEGACY",
+            "path": "docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+            "section": "§1/3–5/7",
+            "candidateScope": "114；旧格式转换/标准恢复/只浏览mtime"
+          },
+          {
+            "key": "LEGACY40",
+            "path": "docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+            "section": "§1/4/5",
+            "candidateScope": "114；仅补旧L1/L3原手填40可见"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-LEG-02",
+        "signed": "合法转换旧格式标准恢复/只browse退出重进bytes-mtime+40/80旁注可见有限闭",
+        "reports": [
+          {
+            "key": "LEGACY",
+            "path": "docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+            "section": "§1/3–5/7",
+            "candidateScope": "114；旧格式转换/标准恢复/只浏览mtime"
+          },
+          {
+            "key": "LEGACY40",
+            "path": "docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+            "section": "§1/4/5",
+            "candidateScope": "114；仅补旧L1/L3原手填40可见"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-LEG-04",
+        "signed": "合法转换旧格式标准恢复/只browse退出重进bytes-mtime+40/80旁注可见有限闭",
+        "reports": [
+          {
+            "key": "LEGACY",
+            "path": "docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+            "section": "§1/3–5/7",
+            "candidateScope": "114；旧格式转换/标准恢复/只浏览mtime"
+          },
+          {
+            "key": "LEGACY40",
+            "path": "docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+            "section": "§1/4/5",
+            "candidateScope": "114；仅补旧L1/L3原手填40可见"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "OP-SRC-05",
+        "signed": "精确清单40/有排期null空条/同L5人工70→clear40分轨有限闭",
+        "reports": [
+          {
+            "key": "OPR2",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r2-report.md",
+            "section": "§1/3/5",
+            "candidateScope": "112；66全文/保存字段/非法错/日期/甘特40-null-70有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-AI01",
+        "signed": "原来源十跳转/changed-missing重校/三mode共享来源台账的限定GUI门闭",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-AI02",
+        "signed": "原来源十跳转/changed-missing重校/三mode共享来源台账的限定GUI门闭",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-AI03",
+        "signed": "原来源十跳转/changed-missing重校/三mode共享来源台账的限定GUI门闭",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-CI01",
+        "signed": "原run39557586592/9b1a8c5 core日志限定保留",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "B8MAP",
+            "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+            "section": "§3–6",
+            "candidateScope": "1184格/42抽屉/39菜单/16卡；14格仅部分映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-M01",
+        "signed": "basic/link备注/E1 append单主save+重开备注/rv4/E2E3保全原签",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          }
+        ]
+      },
+      {
+        "id": "RA-OP01",
+        "signed": "人工30/0与两固定报告客观66完整值，已露出人工/客观标签闭",
+        "reports": [
+          {
+            "key": "OPR1",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+            "section": "§3/5",
+            "candidateScope": "112；clear/迁父/日期/390/新PID有限签"
+          },
+          {
+            "key": "OPR2",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r2-report.md",
+            "section": "§1/3/5",
+            "candidateScope": "112；66全文/保存字段/非法错/日期/甘特40-null-70有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-OP02",
+        "signed": "无清单manual40→cancel-clear零写→合法clear/null以及旧有清单clear50闭",
+        "reports": [
+          {
+            "key": "OPR1",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+            "section": "§3/5",
+            "candidateScope": "112；clear/迁父/日期/390/新PID有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-OP05",
+        "signed": "L1 done主save/当天只读/命令纠正/revert清除/reopen及稳定日期字形闭",
+        "reports": [
+          {
+            "key": "OPR1",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+            "section": "§3/5",
+            "candidateScope": "112；clear/迁父/日期/390/新PID有限签"
+          },
+          {
+            "key": "OPR2",
+            "path": "docs/testing/op-growth-remaining-gui-review-20261022-r2-report.md",
+            "section": "§1/3/5",
+            "candidateScope": "112；66全文/保存字段/非法错/日期/甘特40-null-70有限签"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0001",
+        "signed": "有/无材料真实ask、投影及不确认退出原双输入链闭",
+        "reports": [
+          {
+            "key": "CONTEXT",
+            "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+            "section": "§1/3/4/6",
+            "candidateScope": "114；有无材料context/合法窄集/title/两kind metric+undo"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0002",
+        "signed": "合法窄集/title/八拒/wrapped/最终schema数据+新拒因图按原专家组合exactRemaining=[]",
+        "reports": [
+          {
+            "key": "CONTEXT",
+            "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+            "section": "§1/3/4/6",
+            "candidateScope": "114；有无材料context/合法窄集/title/两kind metric+undo"
+          },
+          {
+            "key": "REJECT",
+            "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/3/4/6",
+            "candidateScope": "114；八拒/wrapped/data，拒因旧图BLOCKED"
+          },
+          {
+            "key": "RECAP",
+            "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+            "section": "§1/5/6",
+            "candidateScope": "114；新观察0/1+中文拒因，原P0002断言组合exactRemaining=[]"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0003",
+        "signed": "capture草稿不确认退出→第二draft确认→task/来源/reload；attach原签+capture附evidence支路闭",
+        "reports": [
+          {
+            "key": "CAPTURE",
+            "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4–7",
+            "candidateScope": "114；P0003/P0004 capture支路有限闭"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0004",
+        "signed": "capture草稿不确认退出→第二draft确认→task/来源/reload；attach原签+capture附evidence支路闭",
+        "reports": [
+          {
+            "key": "CAPTURE",
+            "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4–7",
+            "candidateScope": "114；P0003/P0004 capture支路有限闭"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0005",
+        "signed": "原quiet/off、同对session、lesson有限核心链无行为余动作",
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0006",
+        "signed": "原专家限定capture+ask-apply两kind/cleanundo/空/reload当前metric链闭，不造rejected字段",
+        "reports": [
+          {
+            "key": "CONTEXT",
+            "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+            "section": "§1/3/4/6",
+            "candidateScope": "114；有无材料context/合法窄集/title/两kind metric+undo"
+          },
+          {
+            "key": "CAPTURE",
+            "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4–7",
+            "candidateScope": "114；P0003/P0004 capture支路有限闭"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0007",
+        "signed": "GM01/A20V3指定缺陷/反思材料count及SR-G01..06有限闭",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P0008",
+        "signed": "原五规则25步及task单项/叙事非材料/wrapped-check三个余件已签",
+        "reports": [
+          {
+            "key": "FINAL22",
+            "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+            "section": "§3–7",
+            "candidateScope": "A20V3/U4，102输入"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P1001",
+        "signed": "标准历史/生产session/正常跟进刷新/reload/到期命令已签；共用下部rest缺图已补",
+        "reports": [
+          {
+            "key": "P1H",
+            "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+            "section": "§3/5",
+            "candidateScope": "114/521；absence/到期/小尺度历史，非F1/FL/MAX"
+          },
+          {
+            "key": "P1REST",
+            "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+            "section": "§1–3/5",
+            "candidateScope": "114原读出口；只闭P1001/P1002共用下部rest缺图"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P1002",
+        "signed": "标准历史/生产session/正常跟进刷新/reload/到期命令已签；共用下部rest缺图已补",
+        "reports": [
+          {
+            "key": "P1H",
+            "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+            "section": "§3/5",
+            "candidateScope": "114/521；absence/到期/小尺度历史，非F1/FL/MAX"
+          },
+          {
+            "key": "P1REST",
+            "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+            "section": "§1–3/5",
+            "candidateScope": "114原读出口；只闭P1001/P1002共用下部rest缺图"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P1003",
+        "signed": "原quiet/off、同对session、lesson有限核心链无行为余动作",
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P1005",
+        "signed": "两事件创建/重复原签；F01无taskId完整view/edit/final/repeat/reload闭；F02默认label/span首点save及键盘对照闭",
+        "reports": [
+          {
+            "key": "L2OLD",
+            "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+            "section": "§1/3/4.1/5/7",
+            "candidateScope": "114；两真实事件创建/重复；F01/F02历史FAIL"
+          },
+          {
+            "key": "L2",
+            "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+            "section": "§1/5/6",
+            "candidateScope": "CombinedSixRepairsR1；F01两无taskId完整view/edit/final/repeat/reload有限闭"
+          },
+          {
+            "key": "F02",
+            "path": "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+            "section": "§1/5/6/8",
+            "candidateScope": "CombinedF02RepairR2；默认label/span指针稳定闭合/唯一首save/键盘对照"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P2001",
+        "signed": "三档静态/拒覆盖-confirm原签+恶意标题web真实file打开无执行/外请求有限闭",
+        "reports": [
+          {
+            "key": "POUT",
+            "path": "docs/testing/p2-outbound-history-review-20261023-r1.md",
+            "section": "§3–6",
+            "candidateScope": "114；恶意web/31-29历史/量化有限；出站位旧FAIL"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P2003",
+        "signed": "同项目建议守卫原签+B动态隔离/clear/已处理拒因指定余片闭",
+        "reports": [
+          {
+            "key": "POKR",
+            "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4/7",
+            "candidateScope": "114；P2003隔离/clear、P3004正例集合、P3005占位；KR旧FAIL"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P2004",
+        "signed": "主父/切软联/人确认/非法保稿已签；KR自身related展示遗漏定向闭",
+        "reports": [
+          {
+            "key": "POKR",
+            "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4/7",
+            "candidateScope": "114；P2003隔离/clear、P3004正例集合、P3005占位；KR旧FAIL"
+          },
+          {
+            "key": "KR",
+            "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+            "section": "§2–5",
+            "candidateScope": "9854字节okrs；8/19/59分别有限，原outer1保"
+          },
+          {
+            "key": "PDISPLAY",
+            "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+            "section": "§1/5/7",
+            "candidateScope": "CombinedF02RepairR2；出站顶层/状态组+KR定向闭；P1004仅恢复处理卡Tab"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P2006",
+        "signed": "原quiet/off、同对session、lesson有限核心链无行为余动作",
+        "reports": [
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P3004",
+        "signed": "第二同项目目标/只读集合/人final历史保留，E空选项回退missing/B两失败同稿五字段与零写闭",
+        "reports": [
+          {
+            "key": "POKR",
+            "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4/7",
+            "candidateScope": "114；P2003隔离/clear、P3004正例集合、P3005占位；KR旧FAIL"
+          },
+          {
+            "key": "P3004",
+            "path": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+            "section": "§1/4–6",
+            "candidateScope": "CombinedSixRepairsR1；E空选项文本回退missing/B同稿两失败有限闭"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      },
+      {
+        "id": "RA-P3005",
+        "signed": "既有OKR cycleDue读出口和disabled hooks原AUTO有限闭；不是habit写cycleDue/后台调度",
+        "reports": [
+          {
+            "key": "POKR",
+            "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+            "section": "§1/4/7",
+            "candidateScope": "114；P2003隔离/clear、P3004正例集合、P3005占位；KR旧FAIL"
+          },
+          {
+            "key": "INHERIT",
+            "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+            "section": "§3–5",
+            "candidateScope": "102输入；63 OP和26 P ID有限映射"
+          }
+        ]
+      }
+    ],
+    "absentExactAssertionRowsNotAbsentEvidence": [
+      "OP-Q-04",
+      "OP-RU-04"
+    ],
+    "mixedPureAndWriteAssertion": "OP-EX-04 requires production cross-project move inheritance, not just pure algorithm hash.",
+    "existingMatrixPolicy": "Retain 1184 original cells and old signed segments; missing index matching does not require recapturing all cells.",
+    "l8": {
+      "originalPlan": "docs/testing/l8-gantt-refresh-defect-20261023-r3-test-plan.md",
+      "section": "T01-T04",
+      "required": "Independent SOURCE/AUTO plus affected combined regression/GUI and final candidate binding."
+    },
+    "supplementalMapping": "Confirm exact original-ID equivalence for 53 excluded registry labels without dropping their parent gates or inventing new scope."
+  },
+  "duplicatePolicy": "252/1184 exact-ID sets deduplicated and match original delta. Multiple report pointers count once; shared action rows do not merge distinct original IDs.",
+  "timingLimits": {
+    "activelyTimedFrom": "2026-10-23T01:58:11.321Z",
+    "initialUtcAnchor": "2026-10-23T01:56:03Z",
+    "uninstrumentedInitialShell": "Only observed tool wall receipts; exact per-step start/end unknown, no retrospective invented timing.",
+    "syntaxFailure": {
+      "command": "node /tmp/acceptance-percent-baseline-20261023-r1-reader.mjs inspect",
+      "exitCode": 1,
+      "toolWallSeconds": 0.1274,
+      "start": null,
+      "end": null
+    },
+    "preparationFailures": [
+      "custom shell/login=false rejected",
+      "rg unavailable exit127",
+      "over-broad recursive find sessions stopped",
+      "over-broad combined/structured text output; private tool logs not read"
+    ],
+    "totalTaskSeconds": null,
+    "productTestSeconds": 0,
+    "functionCompleteEvent": false
+  },
+  "prohibitedExecution": {
+    "productImports": 0,
+    "productTests": 0,
+    "MainReaders": 0,
+    "build": 0,
+    "network": 0,
+    "browser": 0,
+    "ports": 0,
+    "runtime": 0,
+    "formal": 0,
+    "Git": 0
+  },
+  "inputs": {
+    "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-table-r3.json": {
+      "bytes": 12405436,
+      "sha256": "d251b580fc7cb0e58ce85faf617b2366fb93793d0cbda7667a44cd273ed66d75"
+    },
+    "docs/testing/remaining-acceptance-delta-20261022-index-r2.json": {
+      "bytes": 3544062,
+      "sha256": "ba1ec89a010b41d3e9fe1c3c6efdaadc4a2c15cfe37156bafab28f34ace0779f"
+    },
+    "reports/acceptance-progress-20261023-r1.json": {
+      "bytes": 1655,
+      "sha256": "74c066d8e1ec0283935a495323f39e5ac14d2b396b7b305ade6259bec1b37008"
+    },
+    "reports/all-pending-evidence-20261021/CombinedF02RepairR2/source-files.json": {
+      "bytes": 15902,
+      "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+    },
+    "/private/tmp/l8-gantt-developer-20261023-Pes2Ba/main-source125.json": {
+      "bytes": 16038,
+      "sha256": "de2b4ea63e87e0be8470b85a91c785ef0d6e04ed71f590f6f1ffea75c979987b"
+    },
+    "reports/all-pending-evidence-20261021/CombinedF02RepairR2/complete-inputs.json": {
+      "bytes": 75604,
+      "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+    },
+    "/private/tmp/l8-gantt-developer-20261023-Pes2Ba/main-complete526.json": {
+      "bytes": 75756,
+      "sha256": "74688fa9395589a11efb09f568fac352b73ff4ea0687da537e3bf5c308a0d3fa"
+    },
+    "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/case-disposition.json": {
+      "bytes": 26786,
+      "sha256": "c8ab0fdb96b0c2069e59bd47544673eb6101d689a75c1735e40121c4b0d546d4"
+    },
+    "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/domain-results.json": {
+      "bytes": 250881,
+      "sha256": "c74feda4956c9e59ac2823cda88e27096f60f049d225b7800438b2550ea81854"
+    },
+    "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/inputs-before.json": {
+      "bytes": 528009,
+      "sha256": "a110d4fed90bcbe8c364e9e8a8b8bbe4c01995f5d03c4e4d9034b29965874456"
+    },
+    "packages/dsh-pm-tool/src/core/progress-derivation.ts": {
+      "bytes": 17727,
+      "sha256": "c0d6177b96ce702d0c5bea17d8bbea47bc4b16ad3b1f58acc886e6d6d0032c1b"
+    },
+    "packages/dsh-pm-tool/src/core/status.ts": {
+      "bytes": 1150,
+      "sha256": "6e3c4ba783b561293376646ba4a561851787a98ab455c43be2c40064479d9f32"
+    },
+    "docs/testing/acceptance-percent-baseline-20261023-r1-report.md": {
+      "bytes": 7833,
+      "sha256": "72dc66c521bb39bc99610f494a4587567ccfe61b87f252e6527b0ba02b6e3a8c"
+    },
+    "docs/testing/remaining-acceptance-register-20261021.md": {
+      "bytes": 15023,
+      "sha256": "1ac19a6efacb5316fdd6ca74da47751b0ef55eee8a5897e819ea51db464f430d"
+    },
+    "docs/testing/remaining-acceptance-delta-20261022-ledger.md": {
+      "bytes": 49397,
+      "sha256": "2e40674bbb58205589f99a8e106f52ae82e2182af380d84b497229f9e31610c3"
+    },
+    "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-report.md": {
+      "bytes": 22514,
+      "sha256": "7ae523bba48f0e5379c4e7b6e95c7eacc20cac04d807c8d39a2d0d8789ab42cc"
+    },
+    "docs/testing/objective-independent-auto-20261021.md": {
+      "bytes": 12250,
+      "sha256": "877fa92ce9f96d8e0d41666207f5895120e4a72e68e7bbdda893cc083f33a10a"
+    },
+    "docs/testing/op-growth-final-inheritance-20261022-r1.md": {
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    "docs/testing/a8-layer-gap-contract-review-20261021.md": {
+      "bytes": 14096,
+      "sha256": "0d239ef3b31928291ab78a3cdb8d1ce74ffca8702c3931c6a524a3dea5ade4ff"
+    },
+    "docs/testing/b8-existing-evidence-mapping-20261022-r1.md": {
+      "bytes": 16742,
+      "sha256": "5637da660a591e93344671fb4b04c9a1dc80f20e648b892e33ea81d2424c68f7"
+    },
+    "docs/testing/remaining-objective-cases-20261021.md": {
+      "bytes": 11773,
+      "sha256": "fa3800dcdaedfd4bffa76097a20db103b9983fe2518ea3abd41e642d255ec433"
+    },
+    "docs/testing/l8-gantt-refresh-defect-20261023-r3-test-plan.md": {
+      "bytes": 6866,
+      "sha256": "299e6d1fd850b50db401b35c2aa546afe4b7c8736508ef42835667645659a9fb"
+    },
+    "docs/plans/2026-10-23-timed-acceptance-execution.md": {
+      "bytes": 5058,
+      "sha256": "4f6f371a1ac25ea081cf0b53cf1a5026ca8b2ecc6b34413ac798479d7f921df5"
+    },
+    "docs/plans/2026-10-23-acceptance-efficiency-adjustment.md": {
+      "bytes": 4948,
+      "sha256": "83bc326b2662fbafa58fc733837ffe041615ce65ff937a984150f4f260c8a842"
+    }
+  }
+}

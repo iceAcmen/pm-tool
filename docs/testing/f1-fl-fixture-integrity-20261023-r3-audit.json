@@ -1,0 +1,369 @@
+{
+  "at": "2026-10-23T01:08:23.680Z",
+  "environment": {
+    "os": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "role": "INDEPENDENT_FIXTURE_INTEGRITY_REVIEW_ONLY",
+  "target": "reports/all-pending-evidence-20261021/F1FLFixtureR3/index-r1.json",
+  "targetSha256": "66bdb7066b21c7c3176b6b2b5ee13ecfbdc4f5cd77bbbb2794ac0e2f6d3ba879",
+  "candidateBaselineFromSealedMetadata": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "candidate": "CombinedF02RepairR2",
+  "checks": [
+    {
+      "name": "index-and-inventory",
+      "result": "PASS",
+      "details": {
+        "members": 202,
+        "files": 205,
+        "emptySidecars": [
+          "base-standard-backup.json.files.877345b79a35a8ff",
+          "fd-standard-backup.json.files.e85d517b6e9c55ef",
+          "fl-standard-backup.json.files.3fbd42b7030c22f4"
+        ]
+      }
+    },
+    {
+      "name": "main-real-outers-and-seal",
+      "result": "PASS",
+      "details": {
+        "outerExitCodes": {
+          "base": 0,
+          "fl": 0,
+          "fd": 0,
+          "seal": 0
+        },
+        "sealSha256": "a0e01d24949099525beae3923fa2d74456b1bfc0f27c7b4d40cb6557034e31b2",
+        "sealOuterSha256": "85761b4b381d054fea4da8e7733776d1dd76c33bac8ac27e4b8988539b50d231",
+        "independentlyRerun": false
+      }
+    },
+    {
+      "name": "frozen-artifact-metadata-455-and-origin",
+      "result": "PASS",
+      "details": {
+        "artifactMetadata": 455,
+        "sourceRecords": 124,
+        "completeInputs": 525,
+        "origin": "CombinedF02RepairR2",
+        "reopenedFrozenPrivatePaths": false
+      }
+    },
+    {
+      "name": "schema-static-metadata-fingerprints-only",
+      "result": "PASS",
+      "details": {
+        "explicitLocatorFingerprintsMatched": 13,
+        "additionalInputMetadataPresent": 20,
+        "locatorSha256": "bda2e7d37b9d084ea1417efc2357906347128f00622fe3722359e6acdb642768",
+        "schemaExecuted": false,
+        "actualSourceOrFrozenLibReopened": false,
+        "inheritanceToNewCandidate": "NOT_REVIEWED"
+      }
+    },
+    {
+      "name": "protected-root-records-only",
+      "result": "PASS",
+      "details": {
+        "records": 47,
+        "baselineIdentical": true,
+        "liveRootsRead": false,
+        "liveRootsWritten": false
+      }
+    },
+    {
+      "name": "base-action-prefix-chain",
+      "result": "PASS",
+      "details": {
+        "actions": 28,
+        "fullPrefixSnapshotsChecked": 28
+      }
+    },
+    {
+      "name": "fl-action-prefix-chain",
+      "result": "PASS",
+      "details": {
+        "actions": 115,
+        "fullPrefixSnapshotsChecked": 115
+      }
+    },
+    {
+      "name": "fd-action-prefix-chain",
+      "result": "PASS",
+      "details": {
+        "actions": 22,
+        "fullPrefixSnapshotsChecked": 22
+      }
+    },
+    {
+      "name": "base-full-backup-and-finite-chain",
+      "result": "PASS",
+      "details": {
+        "sha256": "ed69b80870239f0a96e66a9469e3a7e6d4a93213dcbe53abf595777c7d0d3134",
+        "bytes": 13042,
+        "counts": {
+          "projects": 2,
+          "tasks": 26,
+          "milestones": 0,
+          "risk_issues": 0,
+          "meetings": 0,
+          "reports": 0,
+          "deliverables": 0,
+          "settings": 0,
+          "reflections": 0,
+          "okrs": 0,
+          "lessons": 0,
+          "habits": 0,
+          "file_assets": 0
+        },
+        "emptySidecar": true,
+        "restoredEqualsHistoryEqualsFinalDomain": true,
+        "independentProductionParse": false
+      }
+    },
+    {
+      "name": "base-identity-flat-status-and-engineering-dates",
+      "result": "PASS",
+      "details": {
+        "A": "p-0001",
+        "B": "p-0002",
+        "tasksA": 24,
+        "tasksB": 2,
+        "openA": 16,
+        "doneA": 7,
+        "completionPercentA": 29,
+        "D": "2026-10-23",
+        "startDate": "2026-09-22",
+        "T01Updated": "2026-10-15",
+        "B01Updated": "2026-10-19"
+      }
+    },
+    {
+      "name": "fl-full-backup-and-finite-chain",
+      "result": "PASS",
+      "details": {
+        "sha256": "4805e3843edb2a93849124cbd6c1f72ee08f059604fc34ffc238bd09b8868c2f",
+        "bytes": 1061394,
+        "counts": {
+          "projects": 2,
+          "tasks": 26,
+          "milestones": 1,
+          "risk_issues": 0,
+          "meetings": 20,
+          "reports": 0,
+          "deliverables": 20,
+          "settings": 0,
+          "reflections": 0,
+          "okrs": 20,
+          "lessons": 0,
+          "habits": 20,
+          "file_assets": 0
+        },
+        "emptySidecar": true,
+        "restoredEqualsHistoryEqualsFinalDomain": true,
+        "independentProductionParse": false
+      }
+    },
+    {
+      "name": "fl-identity-flat-status-and-engineering-dates",
+      "result": "PASS",
+      "details": {
+        "A": "p-0001",
+        "B": "p-0002",
+        "tasksA": 24,
+        "tasksB": 2,
+        "openA": 16,
+        "doneA": 7,
+        "completionPercentA": 29,
+        "D": "2026-10-23",
+        "startDate": "2026-09-22",
+        "T01Updated": "2026-10-15",
+        "B01Updated": "2026-10-19"
+      }
+    },
+    {
+      "name": "fd-full-backup-and-finite-chain",
+      "result": "PASS",
+      "details": {
+        "sha256": "5eaf296ca3f091b23d4e8ddcfa41ac2492cdacfe8f70c325a4dee795bbb9231d",
+        "bytes": 1061218,
+        "counts": {
+          "projects": 2,
+          "tasks": 26,
+          "milestones": 1,
+          "risk_issues": 0,
+          "meetings": 20,
+          "reports": 0,
+          "deliverables": 20,
+          "settings": 0,
+          "reflections": 0,
+          "okrs": 20,
+          "lessons": 0,
+          "habits": 20,
+          "file_assets": 0
+        },
+        "emptySidecar": true,
+        "restoredEqualsHistoryEqualsFinalDomain": true,
+        "independentProductionParse": false
+      }
+    },
+    {
+      "name": "fd-identity-flat-status-and-engineering-dates",
+      "result": "PASS",
+      "details": {
+        "A": "p-0001",
+        "B": "p-0002",
+        "tasksA": 24,
+        "tasksB": 2,
+        "openA": 16,
+        "doneA": 7,
+        "completionPercentA": 29,
+        "D": "2026-10-23",
+        "startDate": "2026-09-22",
+        "T01Updated": "2026-10-15",
+        "B01Updated": "2026-10-19"
+      }
+    },
+    {
+      "name": "base-original-payload-real-ids-to-backup",
+      "result": "PASS",
+      "details": {
+        "realReturnedIds": 28,
+        "originalPayloadsChecked": 28,
+        "basePrecheckContentDigest": true
+      }
+    },
+    {
+      "name": "fl-long-fields-and-real-action-results",
+      "result": "PASS",
+      "details": {
+        "taskTitle": 240,
+        "taskDescription": 2000,
+        "assignedName": 80,
+        "otherKindsEach": 20,
+        "frozenDeliverableName": 200,
+        "remainingDeliverableNames": 240
+      }
+    },
+    {
+      "name": "fl-material-history-and-same-day-independent-entries",
+      "result": "PASS",
+      "details": {
+        "linkTitle": 200,
+        "linkNote": 500,
+        "revisionContent": 2000,
+        "author": 80,
+        "E1Revisions": 3,
+        "E2Revisions": 2,
+        "E2SoftDeleted": true,
+        "E3Revisions": 1,
+        "E1LatestAndE3SameDate": "2026-10-23",
+        "entriesRemainDistinct": true
+      }
+    },
+    {
+      "name": "fd-independent-mapping-and-preserved-long-domain",
+      "result": "PASS",
+      "details": {
+        "assignedTasks": 22,
+        "distinctAssignedNames": 20,
+        "unassignedTasks": 2,
+        "actionMappingChecked": 22,
+        "onlyAssigneeChangedAgainstFL": true
+      }
+    },
+    {
+      "name": "existing-oracle-records-not-new-oracle",
+      "result": "PASS",
+      "details": {
+        "recordCrosschecks": {
+          "base": {
+            "reportPeople": 2,
+            "openValues": [
+              8,
+              6
+            ],
+            "unassigned": 2,
+            "actualRecordedScale": {
+              "maxX": 10,
+              "ticks": [
+                0,
+                2,
+                4,
+                6,
+                8,
+                10
+              ]
+            }
+          },
+          "fl": {
+            "reportPeople": 2,
+            "openValues": [
+              8,
+              6
+            ],
+            "unassigned": 2,
+            "actualRecordedScale": {
+              "maxX": 10,
+              "ticks": [
+                0,
+                2,
+                4,
+                6,
+                8,
+                10
+              ]
+            }
+          },
+          "fd": {
+            "reportPeople": 14,
+            "openValues": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "unassigned": 2,
+            "actualRecordedScale": {
+              "maxX": 8,
+              "ticks": [
+                0,
+                2,
+                4,
+                6,
+                8
+              ]
+            }
+          }
+        },
+        "baseRecordedBoardMAX": 13,
+        "formulaDifferenceNotGUIApproval": true,
+        "generatedNewOracle": false
+      }
+    }
+  ],
+  "findings": [],
+  "verdict": "FIXTURE_INTEGRITY_FINITE_GENERATION_CHAIN_ADMISSIBLE",
+  "limits": [
+    "NO_INDEPENDENT_PRODUCTION_PARSE",
+    "NO_PRODUCT_IMPORT_OR_EXECUTION",
+    "NO_GUI_APPROVAL",
+    "NO_LONG_DENSE_LAYOUT_APPROVAL",
+    "NO_RA_P1006",
+    "NO_B8",
+    "NO_PARENT_COMMIT_APPROVAL",
+    "NO_L8_CANDIDATE_INHERITANCE_APPROVAL",
+    "NO_LIVE_RUNTIME_PRIVATE_OR_FORMAL_ROOT_READ"
+  ]
+}

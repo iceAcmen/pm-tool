@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-21T11:44:39.677Z",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "checkerSha256": "acc7ee1345d5997553055383fc90c5214a18774df9629fbe995705cd4fb2bf97",
+  "sourceIdentity": [
+    {
+      "path": "launcher/src/launcher-core.mjs",
+      "main": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+      "isolated": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+      "baseline": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c"
+    },
+    {
+      "path": "launcher/src/browsers.mjs",
+      "main": "5a49166a4c7e7cf88ef154c050a2039bafdcd6552e6e650b2ad521a17c734855",
+      "isolated": "5a49166a4c7e7cf88ef154c050a2039bafdcd6552e6e650b2ad521a17c734855",
+      "baseline": "5a49166a4c7e7cf88ef154c050a2039bafdcd6552e6e650b2ad521a17c734855"
+    },
+    {
+      "path": "launcher/bin/pm-launcher.mjs",
+      "main": "3bd85661e87f98daeaecf979cbcc5f9470918967f62a604fe1ede59b04ae4f19",
+      "isolated": "3bd85661e87f98daeaecf979cbcc5f9470918967f62a604fe1ede59b04ae4f19",
+      "baseline": "3bd85661e87f98daeaecf979cbcc5f9470918967f62a604fe1ede59b04ae4f19"
+    },
+    {
+      "path": "launcher/src/loopback.mjs",
+      "main": "6dce1acea2e7064c1fea75c171bfdf345874d670d6bd0160478979eb0a7a62ba",
+      "isolated": "6dce1acea2e7064c1fea75c171bfdf345874d670d6bd0160478979eb0a7a62ba",
+      "baseline": "6dce1acea2e7064c1fea75c171bfdf345874d670d6bd0160478979eb0a7a62ba"
+    }
+  ],
+  "productionOpenFunctionSha256": "2a0def75b62da55e82f5ee279f1e4e9a43798ac2421f200002ff8d9c0f3a8b45",
+  "nonSensitiveFixture": "http://127.0.0.1:3211/fc-a2-nonsecret-fixture",
+  "actualChromeArgs": {
+    "argv": [
+      "open",
+      "-a",
+      "Chrome",
+      "--args",
+      "--app=http://127.0.0.1:3211/fc-a2-nonsecret-fixture"
+    ],
+    "mode": "app",
+    "fallback": false
+  },
+  "tabAlternative": {
+    "argv": [
+      "open",
+      "-a",
+      "Chrome",
+      "http://127.0.0.1:3211/fc-a2-nonsecret-fixture"
+    ],
+    "mode": "tab",
+    "fallback": false
+  },
+  "asynchronousExitFixture": {
+    "events": [
+      {
+        "event": "spawn",
+        "detached": true,
+        "stdio": "ignore"
+      },
+      {
+        "event": "unref"
+      },
+      {
+        "event": "child-close",
+        "code": 17
+      }
+    ],
+    "returnedStatus": "S3",
+    "finalStatus": "S3"
+  },
+  "manual": {
+    "executable": "/usr/bin/man",
+    "args": [
+      "open"
+    ],
+    "exit": 0,
+    "log": "docs/testing/fc-a2-independent-retest-20261021-open-man.txt",
+    "sha256": "de4e95492f3e6449514868dbd6723252e953b8769c6bca99d63709ba27e24bcb",
+    "argsSemantics": "--args\n         All remaining arguments are passed to the opened application in the\n         argv parameter to main().  These arguments are not opened or\n         interpreted by the open tool.\n\n     --env VAR\n         Adds VAR to the e"
+  },
+  "boundary": "只证明生产函数字节、参数与异步失败无处理；未运行LaunchServices/真实Chrome投递，不判已运行Chrome忽略参数、Finder或S4认证"
+}

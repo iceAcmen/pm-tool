@@ -1,0 +1,1483 @@
+{
+  "stage": "run",
+  "exit": 0,
+  "tmp": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY",
+  "receipt": {
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config/vitest.mjs"
+    ],
+    "cwd": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs",
+    "environment": {
+      "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+      "HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/home",
+      "XDG_CONFIG_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config",
+      "XDG_CACHE_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/cache",
+      "XDG_DATA_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/home/data",
+      "TMPDIR": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/tmp",
+      "VITE_CACHE_DIR": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/cache",
+      "LANG": "en_US.UTF-8",
+      "CI": "1",
+      "QA_POINTER_EVIDENCE_ROOT": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations",
+      "QA_IDENTITY_OUTPUT": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/identity.json"
+    },
+    "exit": 0,
+    "signal": null,
+    "facilityError": null,
+    "startedAt": "2026-10-22T21:23:42.263Z",
+    "endedAt": "2026-10-22T21:23:43.947Z"
+  },
+  "numPassedTests": 7,
+  "numFailedTests": 0,
+  "identity": {
+    "sameIdentity": true,
+    "reactVersion": "18.3.1",
+    "reactDOMVersion": "18.3.1",
+    "reactDOMReactResolved": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/widget-poc/node_modules/react/index.js",
+    "timing": "after production DOM suite"
+  },
+  "validFacts": true,
+  "facts": [
+    {
+      "case": "D01",
+      "calls": [
+        {
+          "kind": "save",
+          "args": [
+            "p-0001",
+            "dlv-0001",
+            {
+              "name": "QA交付物V1",
+              "version": "v1",
+              "owner": "",
+              "status": "accepted",
+              "location": "",
+              "description": "",
+              "dueDate": null,
+              "repoUrl": "",
+              "branch": "",
+              "milestoneId": "m-0001",
+              "note": "合法备注"
+            }
+          ]
+        },
+        {
+          "kind": "saved"
+        }
+      ],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "rb-lb-option",
+            "role": "option",
+            "aria": null,
+            "text": "已验收"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 1,
+      "submitPrevented": [
+        true
+      ],
+      "backdropPrevented": [],
+      "states": [
+        {
+          "label": "mounted",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "INPUT",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-pointer-accepted",
+          "expanded": "true",
+          "labelText": "计划中▾",
+          "options": 5,
+          "backdrop": true,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"true\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button><div class=\"rb-lb-backdrop\"></div><div class=\"rb-lb-menu\" role=\"listbox\" aria-label=\"交付物状态\"><button type=\"button\" role=\"option\" aria-selected=\"true\" class=\"rb-lb-option is-active is-selected\"><span>计划中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>制作中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已提交</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已验收</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已收尾</span><span class=\"rb-lb-hint\">人显式收尾，非正式验收</span></button></div></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-pointer-accepted",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BODY",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": "交付物编辑交付物01基础信息交付物名称 *版本状态已验收▾负责人关联里程碑（可选，清空即解除）QA里程碑▾位置（路径 /"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-pointer-save",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "saved"
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "saved"
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        }
+      ],
+      "events": [
+        "focusin",
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click",
+        "submit"
+      ]
+    },
+    {
+      "case": "D02",
+      "calls": [
+        {
+          "kind": "save",
+          "args": [
+            "p-0001",
+            "dlv-0001",
+            {
+              "name": "QA交付物V1",
+              "version": "v1",
+              "owner": "",
+              "status": "accepted",
+              "location": "",
+              "description": "",
+              "dueDate": null,
+              "repoUrl": "",
+              "branch": "",
+              "milestoneId": "m-0001",
+              "note": "合法备注"
+            }
+          ]
+        },
+        {
+          "kind": "saved"
+        }
+      ],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "SPAN",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": "已验收"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 1,
+      "submitPrevented": [
+        true
+      ],
+      "backdropPrevented": [],
+      "states": [
+        {
+          "label": "mounted",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "INPUT",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-pointer-accepted",
+          "expanded": "true",
+          "labelText": "计划中▾",
+          "options": 5,
+          "backdrop": true,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"true\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button><div class=\"rb-lb-backdrop\"></div><div class=\"rb-lb-menu\" role=\"listbox\" aria-label=\"交付物状态\"><button type=\"button\" role=\"option\" aria-selected=\"true\" class=\"rb-lb-option is-active is-selected\"><span>计划中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>制作中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已提交</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已验收</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已收尾</span><span class=\"rb-lb-hint\">人显式收尾，非正式验收</span></button></div></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-pointer-accepted",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BODY",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": "交付物编辑交付物01基础信息交付物名称 *版本状态已验收▾负责人关联里程碑（可选，清空即解除）QA里程碑▾位置（路径 /"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-pointer-save",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "saved"
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "saved"
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        }
+      ],
+      "events": [
+        "focusin",
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click",
+        "submit"
+      ]
+    },
+    {
+      "case": "D03",
+      "calls": [],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 0,
+      "submitPrevented": [],
+      "backdropPrevented": [],
+      "states": [
+        {
+          "label": "mounted",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "INPUT",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "trigger-open",
+          "expanded": "true",
+          "labelText": "计划中▾",
+          "options": 5,
+          "backdrop": true,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"true\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button><div class=\"rb-lb-backdrop\"></div><div class=\"rb-lb-menu\" role=\"listbox\" aria-label=\"交付物状态\"><button type=\"button\" role=\"option\" aria-selected=\"true\" class=\"rb-lb-option is-active is-selected\"><span>计划中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>制作中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已提交</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已验收</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已收尾</span><span class=\"rb-lb-hint\">人显式收尾，非正式验收</span></button></div></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "trigger-close",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        }
+      ],
+      "events": [
+        "focusin",
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click"
+      ]
+    },
+    {
+      "case": "D04",
+      "calls": [],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "DIV",
+            "id": "",
+            "class": "rb-lb-backdrop",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 0,
+      "submitPrevented": [],
+      "backdropPrevented": [
+        true
+      ],
+      "states": [
+        {
+          "label": "mounted",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "INPUT",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "backdrop-click",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        }
+      ],
+      "events": [
+        "focusin",
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click"
+      ]
+    },
+    {
+      "case": "D05",
+      "calls": [
+        {
+          "kind": "save",
+          "args": [
+            "p-0001",
+            "dlv-0001",
+            {
+              "name": "QA交付物V1",
+              "version": "v1",
+              "owner": "",
+              "status": "accepted",
+              "location": "",
+              "description": "",
+              "dueDate": null,
+              "repoUrl": "",
+              "branch": "",
+              "milestoneId": "m-0001",
+              "note": "合法备注"
+            }
+          ]
+        },
+        {
+          "kind": "save",
+          "args": [
+            "p-0001",
+            "dlv-0001",
+            {
+              "name": "QA交付物V1",
+              "version": "v1",
+              "owner": "",
+              "status": "accepted",
+              "location": "",
+              "description": "",
+              "dueDate": null,
+              "repoUrl": "",
+              "branch": "",
+              "milestoneId": "m-0001",
+              "note": "合法备注"
+            }
+          ]
+        },
+        {
+          "kind": "saved"
+        }
+      ],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "SPAN",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": "已验收"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 2,
+      "submitPrevented": [
+        true,
+        true
+      ],
+      "backdropPrevented": [],
+      "states": [
+        {
+          "label": "mounted",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "INPUT",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-pointer-accepted",
+          "expanded": "true",
+          "labelText": "计划中▾",
+          "options": 5,
+          "backdrop": true,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": "交付物状态",
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"true\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button><div class=\"rb-lb-backdrop\"></div><div class=\"rb-lb-menu\" role=\"listbox\" aria-label=\"交付物状态\"><button type=\"button\" role=\"option\" aria-selected=\"true\" class=\"rb-lb-option is-active is-selected\"><span>计划中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>制作中</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已提交</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已验收</span></button><button type=\"button\" role=\"option\" aria-selected=\"false\" class=\"rb-lb-option\"><span>已收尾</span><span class=\"rb-lb-hint\">人显式收尾，非正式验收</span></button></div></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-pointer-accepted",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BODY",
+            "id": "",
+            "class": "",
+            "role": null,
+            "aria": null,
+            "text": "交付物编辑交付物01基础信息交付物名称 *版本状态已验收▾负责人关联里程碑（可选，清空即解除）QA里程碑▾位置（路径 /"
+          },
+          "calls": [],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "after-false-save",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "已验收▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "",
+            "class": "pm-button pm-button-primary",
+            "role": null,
+            "aria": null,
+            "text": "保存更改"
+          },
+          "calls": [
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "save",
+              "args": [
+                "p-0001",
+                "dlv-0001",
+                {
+                  "name": "QA交付物V1",
+                  "version": "v1",
+                  "owner": "",
+                  "status": "accepted",
+                  "location": "",
+                  "description": "",
+                  "dueDate": null,
+                  "repoUrl": "",
+                  "branch": "",
+                  "milestoneId": "m-0001",
+                  "note": "合法备注"
+                }
+              ]
+            },
+            {
+              "kind": "saved"
+            }
+          ],
+          "html": "<div class=\"pm-drawer-layer\" role=\"dialog\" aria-modal=\"true\" aria-label=\"编辑交付物\"><button type=\"button\" class=\"pm-drawer-scrim\" aria-label=\"关闭\"></button><div class=\"pm-drawer\"><header><span>交付物</span><h2>编辑交付物</h2></header><div class=\"pm-drawer-body\"><form class=\"pm-drawer-form\" novalidate=\"\"><style></style><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">01</span><span class=\"pm-form-section-title\">基础信息</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>交付物名称<span class=\"pm-field-required\" aria-hidden=\"true\"> *</span></span><input aria-required=\"true\" value=\"QA交付物V1\"></label><label class=\"pm-field\"><span>版本</span><input placeholder=\"如 v1.0\" value=\"v1\"></label><label class=\"pm-field\"><span>状态</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"交付物状态\"><span class=\"rb-lb-value\">已验收</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\"><span>负责人</span><input value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>关联里程碑（可选，清空即解除）</span><div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-milestone\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\" aria-label=\"关联里程碑\"><span class=\"rb-lb-value\">QA里程碑</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label><label class=\"pm-field\" data-wide=\"true\"><span>位置（路径 / 链接 / 存放说明）</span><input placeholder=\"exports/交付物.md 或 https://...\" value=\"\"></label><label class=\"pm-field\" data-wide=\"true\"><span>说明</span><textarea rows=\"4\"></textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>备注（可选，仅内部记录）</span><textarea rows=\"2\">合法备注</textarea></label><label class=\"pm-field\" data-wide=\"true\"><span>本次变更说明（版本/状态变化时留痕）</span><input placeholder=\"如：提交评审、验收通过\" value=\"\"></label></div></section><section class=\"pm-form-section\"><div class=\"pm-form-section-h\"><span class=\"pm-form-section-n\" aria-hidden=\"true\">02</span><span class=\"pm-form-section-title\">排期与仓库</span></div><div class=\"pm-form-section-grid\"><label class=\"pm-field\" data-wide=\"true\" data-invalid=\"false\"><span>计划交付日期</span><input type=\"date\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>仓库地址（可选）</span><input placeholder=\"https://host/org/repo.git\" value=\"\"></label><label class=\"pm-field\" data-invalid=\"false\"><span>分支（可选）</span><input placeholder=\"main\" value=\"\"></label></div></section><section class=\"rb-history\"><h3>版本 / 状态变更留痕（0）</h3><button type=\"button\" class=\"pm-button\">查看历史</button></section><div class=\"pm-drawer-actions\"><button type=\"button\" class=\"pm-button pm-button-danger pm-actions-left\">删除</button><button type=\"button\" class=\"pm-button\">取消</button><button type=\"submit\" class=\"pm-button pm-button-primary\">保存更改</button></div></form></div></div></div>"
+        }
+      ],
+      "events": [
+        "focusin",
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click",
+        "submit"
+      ]
+    },
+    {
+      "case": "D06",
+      "calls": [],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "DIV",
+            "id": "",
+            "class": "rb-lb-backdrop",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 0,
+      "submitPrevented": [],
+      "backdropPrevented": [
+        true
+      ],
+      "states": [
+        {
+          "label": "minimal-backdrop",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<label>状态<div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<label>状态<div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></label>"
+        }
+      ],
+      "events": [
+        "pointerdown",
+        "mousedown",
+        "focusin",
+        "pointerup",
+        "mouseup",
+        "click"
+      ]
+    },
+    {
+      "case": "D07",
+      "calls": [],
+      "clicks": [
+        {
+          "target": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "detail": 0
+        },
+        {
+          "target": {
+            "tag": "DIV",
+            "id": "",
+            "class": "rb-lb-backdrop",
+            "role": null,
+            "aria": null,
+            "text": ""
+          },
+          "detail": 0
+        }
+      ],
+      "submitCount": 0,
+      "submitPrevented": [],
+      "backdropPrevented": [
+        true
+      ],
+      "states": [
+        {
+          "label": "minimal-backdrop",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div>状态<div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></div>"
+        },
+        {
+          "label": "before-cleanup",
+          "expanded": "false",
+          "labelText": "计划中▾",
+          "options": 0,
+          "backdrop": false,
+          "active": {
+            "tag": "BUTTON",
+            "id": "deliverable-status",
+            "class": "rb-lb-trigger",
+            "role": null,
+            "aria": null,
+            "text": "计划中▾"
+          },
+          "calls": [],
+          "html": "<div>状态<div class=\"rb-lb\"><style></style><button type=\"button\" id=\"deliverable-status\" class=\"rb-lb-trigger\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><span class=\"rb-lb-value\">计划中</span><span class=\"rb-lb-caret\" aria-hidden=\"true\">▾</span></button></div></div>"
+        }
+      ],
+      "events": [
+        "pointerdown",
+        "mousedown",
+        "focusin",
+        "pointerup",
+        "mouseup",
+        "click"
+      ]
+    }
+  ],
+  "cleanStderr": true,
+  "protectedDrift": [],
+  "dependencyDrift": [],
+  "inputDrift": [],
+  "outputs": [
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/cache/vitest/results.json",
+      "bytes": 149,
+      "sha256": "e78f3db55509904ac538946d2bcba4582333b769618342c171f19e81e8cfdb26"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config/identity-after-dom.mjs",
+      "bytes": 822,
+      "sha256": "66035f4e10832b33c8e1a2eea4367761c5ae7fa77c8345722e337f1e731fbbdd"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config/vitest.mjs",
+      "bytes": 896,
+      "sha256": "8e69d8045a3b1280113f3c8018d2f2100487b582ab0b12aa3b180558b3d76038"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/package.json",
+      "bytes": 18,
+      "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/form-validation.test.ts",
+      "bytes": 2356,
+      "sha256": "79b8bb155fb43af792ad76516e8a0e2f85591c5a1464332df0d9ada530705523"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/form-validation.ts",
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/shared/records-props.ts",
+      "bytes": 6692,
+      "sha256": "e21646bcd0445d00e6aa18120fe43736eabc8ffdf3bdc4812ba0a0504bf5cc1f"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records.css",
+      "bytes": 6842,
+      "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-deliverable-form.tsx",
+      "bytes": 9686,
+      "sha256": "e2eb1ef86b8e568c78e4ea6f71c4f4fcb19a477d0b5c40b5d07510ceec0f9ca8"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+      "bytes": 9159,
+      "sha256": "6de116ba10c320a162f1c465958f428ca9023e328b67827581db9ea23df42aec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-history.test.ts",
+      "bytes": 2074,
+      "sha256": "059cce35168dcf1fa1be47e90f5aa3bcfe4ef68b2f3c0d89bfe3cb7d9705c6cf"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-history.ts",
+      "bytes": 1760,
+      "sha256": "6658625630ad2ad001f886cf7a9c0f47ef82ca5c288c15452f0b7ff70a0ec0ec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-listbox.tsx",
+      "bytes": 4886,
+      "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-options.test.ts",
+      "bytes": 3162,
+      "sha256": "6d375abbea8d1dd359c14aeb731e068bfb815e5cc835e1830c9d8b1b8ee75e00"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-options.ts",
+      "bytes": 3737,
+      "sha256": "d0af55147e0faaa11e2d4ffd7688a7366b76a4e0fd6c03ce09c944208ac8eeed"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-overlay.tsx",
+      "bytes": 1316,
+      "sha256": "dfd1f68b4ffe3eaf10bbc95e47c567bf5d63c32919bd9770ca58759173498beb"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-payloads.test.ts",
+      "bytes": 5214,
+      "sha256": "5d7ffa018c01e754857c041fb03c3a42bdca86424f7e9df65c1388195624ff42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-payloads.ts",
+      "bytes": 6473,
+      "sha256": "050d216522173edad1ea7a308e3535336b3ed9e8245fbb4071eee30802cfa723"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/types.ts",
+      "bytes": 5435,
+      "sha256": "36add9a9fa577c3b847814a50c53bbfe76c8194dd00b6541b4bc71bc7218cbee"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/core/labels.ts",
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/core/repo-format.ts",
+      "bytes": 3962,
+      "sha256": "0db54e8a42638dec3da9ffd824cf6efa84c620ee4f8d3a9c751c45c083bee0ac"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/command.json",
+      "bytes": 1562,
+      "sha256": "154530c05af6e929a6d5507fe509ecb15b1a15a3a0a0ba65c88f29b0720b684f"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/identity.json",
+      "bytes": 243,
+      "sha256": "a7fa5e08962d1e5eada102a75c9f9dcf98c70a247a7e5254f0c740fb144cd3d6"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D01.json",
+      "bytes": 181302,
+      "sha256": "00e7b29efc4cd0369d19b75952b061a0ca23b0814fbc200629b2b0aacc43c4e5"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D02.json",
+      "bytes": 182792,
+      "sha256": "50737d348e472a69e63737870ef0a36295c8c33b6619446a3de59de0c895597d"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D03.json",
+      "bytes": 118540,
+      "sha256": "6801fb2da4ccd96fe427d932e5bc8ffcce50d72c0e2b2e778bc311e4535e594b"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D04.json",
+      "bytes": 112934,
+      "sha256": "e52543dffd04c27b52073a422261de9605de975071af6b7be07433d721a6e704"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D05.json",
+      "bytes": 222710,
+      "sha256": "98194645060d829ccc8b82012862e6a5ecff6472d45e800e68c165a2c0dd3e4c"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D06.json",
+      "bytes": 41829,
+      "sha256": "d43dc4daf80dbf69b6bd1a6e0011a66d1a80edbecd24c91501cc7a9cedb6e3d7"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D07.json",
+      "bytes": 41777,
+      "sha256": "c6a5bf262f9f0f3e646627b99b077ecf9c7daeaf74bd67e8ff84514adfb96617"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/stdout.log",
+      "bytes": 678,
+      "sha256": "f0b6024aa4674921f05dcc467e5b17c3b92608f1a117b7ed257e9701140df425"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/vitest.json",
+      "bytes": 2839,
+      "sha256": "e19a651f39a14639d13e2e9c81f373672f6b55c3953dc7e7527c73d429b325df"
+    }
+  ],
+  "initialDOM": {
+    "accepted": false,
+    "vitestExit": 0,
+    "reason": "独立 setup 过早加载 ReactDOM，污染 canUseDOM/input-event 检测；不签该轮7绿",
+    "uncaughtCount": 10
+  },
+  "acceptedAffected": {
+    "receipt": {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/config/affected.mjs"
+      ],
+      "cwd": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs",
+      "environment": {
+        "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+        "HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/home",
+        "XDG_CONFIG_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/config",
+        "XDG_CACHE_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/cache/affected",
+        "XDG_DATA_HOME": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/home/data",
+        "TMPDIR": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/tmp",
+        "VITE_CACHE_DIR": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/cache/affected",
+        "LANG": "en_US.UTF-8",
+        "CI": "1",
+        "QA_POINTER_EVIDENCE_ROOT": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/observations",
+        "QA_IDENTITY_OUTPUT": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/identity.json"
+      },
+      "startedAt": "2026-10-22T21:21:46.158Z",
+      "endedAt": "2026-10-22T21:21:46.865Z",
+      "exit": 0,
+      "signal": null,
+      "facilityError": null
+    },
+    "tests": [
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "状态选项与 core 真源一致，不另造状态词 会议两态；交付物五态（含 wrapped 已收尾，人可手动写入）",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "状态选项与 core 真源一致，不另造状态词 optionLabel 命中中文；未知值原样回显；空值返回空串",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "状态选项与 core 真源一致，不另造状态词 U5 汇报来源两态 manual/session，label 为手动撰写/会话生成",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "filterOptions：不区分大小写匹配 label/hint/value，空词全量 按中文姓名/角色子串过滤",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "filterOptions：不区分大小写匹配 label/hint/value，空词全量 空词返回全量且为新对象副本",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "filterOptions：不区分大小写匹配 label/hint/value，空词全量 交付物 wrapped 可按中文「已收尾」/ value「wrapped」/ hint 过滤命中",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "moveHighlight：环形移动，空列表 -1 上移越界回卷到末项，下移到首项，空列表保持 -1",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-options.test.ts",
+        "fullName": "indexOfValue：按 value 定位，无匹配 -1 命中返回索引，空值/无匹配 -1",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "parseTextList：换行/顿号/中英文逗号拆分、trim、去重保序 混合分隔符去空去重",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "parseTextList：换行/顿号/中英文逗号拆分、trim、去重保序 空输入返回空数组",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeMeetingPayload（对齐 MeetingPayload，分片只归一不拼命令） 空时间/时长归一 null，列表拆分，字段 trim",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeMeetingPayload（对齐 MeetingPayload，分片只归一不拼命令） 时长转整数分钟；非法状态回落 draft",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeMeetingActionPayload（对齐 MeetingActionPayload） 可空外键/日期空串归一 null，非法状态回落 todo",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeReportPayload（对齐 ReportPayload；周期不进 payload） 标题留空省略键，状态 clamp，三列表拆分",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeReportPayload（对齐 ReportPayload；周期不进 payload） 标题非空才带上；非法状态回落 draft",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeReportPayload（对齐 ReportPayload；周期不进 payload） U5：manual 默认且 sourceSessionId=null；session 带非空会话 id，空 id 回落 null",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeDeliverablePayload（对齐 DeliverablePayload；仓库始终为字符串） dueDate 空→null；changeNote 空省略；repo/branch 空串保留由 panel 删键",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeDeliverablePayload（对齐 DeliverablePayload；仓库始终为字符串） wrapped 已收尾五态内原样保留；changeNote 非空带上；未知状态回落 planned",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-payloads.test.ts",
+        "fullName": "normalizeDeliverablePayload（对齐 DeliverablePayload；仓库始终为字符串） U5：milestoneId 空→null（解除关联）；note 非空带上、空省略",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-history.test.ts",
+        "fullName": "projectDeliverableHistory：只读投影，最新在前，不改原数组 created 行显示终态标签；status 行给中文 from→to；version 行给版本号",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-history.test.ts",
+        "fullName": "projectDeliverableHistory：只读投影，最新在前，不改原数组 未知 field 原样回显；空 history 返回空数组；原数组不被修改",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/views/records/records-history.test.ts",
+        "fullName": "projectDeliverableHistory：只读投影，最新在前，不改原数组 wrapped 已收尾状态变更行正确渲染中文 from→to，不静默丢标签",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateOkrForm（OKR 新建/编辑即时校验） 空表单逐字段报 title/kind",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateOkrForm（OKR 新建/编辑即时校验） 非法日期 / 非法 kind / 悬空父目标逐一定位",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateOkrForm（OKR 新建/编辑即时校验） 合法目标通过；description/owner/related 兼容位留空合法",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateOkrForm（OKR 新建/编辑即时校验） parseIdList：中英文逗号拆分、去空、去重",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateHabitForm（习惯新建/编辑即时校验，对齐 core schema） title 必填且 ≤80；goal/frequency/notes 长度上限逐一定位",
+        "status": "passed",
+        "failureMessages": []
+      },
+      {
+        "file": "src/client/form-validation.test.ts",
+        "fullName": "validateHabitForm（习惯新建/编辑即时校验，对齐 core schema） okrId 填写即须合法 ID 格式；其余可选留空合法",
+        "status": "passed",
+        "failureMessages": []
+      }
+    ],
+    "count": 28,
+    "cleanStderr": true
+  },
+  "extraProtectedInputs": [
+    {
+      "path": "docs/testing/remaining-journey-cases-20261021.md",
+      "bytes": 23525,
+      "sha256": "ae44705d3bde794b0f349381f10218ba20b77a8ff55d12d81623fc426eb60ab2"
+    },
+    {
+      "path": "docs/testing/remaining-layer-map-20261021.md",
+      "bytes": 11552,
+      "sha256": "5729a6306755c8d06cb704c13e88247033729ea70af2e63345503d78186c738e"
+    },
+    {
+      "path": "docs/testing/remaining-objective-cases-20261021.md",
+      "bytes": 11773,
+      "sha256": "fa3800dcdaedfd4bffa76097a20db103b9983fe2518ea3abd41e642d255ec433"
+    }
+  ]
+}

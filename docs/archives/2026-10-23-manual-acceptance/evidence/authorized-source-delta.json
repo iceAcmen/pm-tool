@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-23T03:23:13.305Z",
+  "priorCompleteCount": 525,
+  "currentCompleteCount": 528,
+  "expectedDeltaNames": [
+    "src/client/panel-confirm-escape.test.tsx",
+    "src/client/panel-firstload.test.tsx",
+    "src/client/panel-transport-error-feedback.test.tsx",
+    "src/client/panel.tsx",
+    "src/client/views/gantt-status.test.tsx",
+    "src/client/views/gantt.tsx",
+    "src/client/views/people.css",
+    "src/client/views/people.tsx"
+  ],
+  "expectedCompleteDelta": {
+    "src/client/panel-confirm-escape.test.tsx": {
+      "bytes": 9537,
+      "sha256": "99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40"
+    },
+    "src/client/panel-firstload.test.tsx": {
+      "bytes": 10808,
+      "sha256": "ec0bcc59fb57b925968ba533c2075ef21f39f7c120a252b8935027b280777277"
+    },
+    "src/client/panel-transport-error-feedback.test.tsx": {
+      "bytes": 17411,
+      "sha256": "e1bc7607fdbaeecb7de6f36708b99b2f416937d5c22105850a7346648723b14f"
+    },
+    "src/client/panel.tsx": {
+      "bytes": 193137,
+      "sha256": "afe188bda04c8d27df5c74037c4a4a9872eb0f0f132b06c6df370b10bc45c0b6"
+    },
+    "src/client/views/gantt-status.test.tsx": {
+      "bytes": 9143,
+      "sha256": "28e6f478fd6d16d78707d4976ea88981d0cce838c2be38ff50dd5804ddc6690c"
+    },
+    "src/client/views/gantt.tsx": {
+      "bytes": 30859,
+      "sha256": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7"
+    },
+    "src/client/views/people.css": {
+      "bytes": 14862,
+      "sha256": "7fa9e31329595f05fe846999eafc21208ec7ee011e86883e44afd223743c1594"
+    },
+    "src/client/views/people.tsx": {
+      "bytes": 26546,
+      "sha256": "d32a316ab25b958fc1bd93f14b157e8da1f75556f419ea72f72ab708f85c107b"
+    }
+  },
+  "additionalIndependentReports": [
+    "tasks-firstload-source-auto-20261023-r1-report.md",
+    "tasks-o4-stale-source-auto-20261023-r1-report.md",
+    "people-fd-axis-gui-timed-20261023-r1-report.md",
+    "people-axis-slots-source-auto-timed-20261023-r2-report.md"
+  ],
+  "independentReportFingerprints": {
+    "tasks-firstload-source-auto-20261023-r1-report.md": {
+      "bytes": 4971,
+      "sha256": "36a37411a16969d59a85173199c6b2fcdae34a041da1b0f8a81b6bcb8c36b377"
+    },
+    "tasks-o4-stale-source-auto-20261023-r1-report.md": {
+      "bytes": 6626,
+      "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47"
+    },
+    "people-fd-axis-gui-timed-20261023-r1-report.md": {
+      "bytes": 13434,
+      "sha256": "ccf4ec644556b982480e9525f69acabbdf84433087a32da2dc4ef84f3b150131"
+    },
+    "people-axis-slots-source-auto-timed-20261023-r2-report.md": {
+      "bytes": 9487,
+      "sha256": "90b11477d49e9e93527d5f71af85f8bc2e08b3ad4cedcbf31e618a124fa60a6e"
+    }
+  },
+  "axisIndependentReadbackSha256": "c1759c56cb264c8f32bc339de79293bef0664ef251cb91e67843240925b8bc63"
+}

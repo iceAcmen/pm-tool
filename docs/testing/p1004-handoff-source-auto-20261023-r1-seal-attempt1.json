@@ -1,0 +1,17 @@
+{
+  "role": "independent SOURCE/AUTO expert",
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "docs/testing/p1004-handoff-source-auto-20261023-r1-run.mjs",
+    "seal"
+  ],
+  "exit": 1,
+  "sealCreated": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal; expected [], actual two protected source paths",
+  "actualDriftPaths": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/commands/reflect.ts"
+  ],
+  "classification": "concurrent P1005 input drift after completed P1004 tests; not a product test failure",
+  "next": "bind exact before/current bytes and retain isolated P1004 result only; no product edits or test rerun"
+}

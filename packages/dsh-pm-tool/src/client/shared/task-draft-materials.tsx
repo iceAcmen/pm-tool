@@ -88,24 +88,41 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
   const rowsRef = useRef<StagedRow[]>([])
   rowsRef.current = stagedRows
   const abortRef = useRef<AbortController | null>(null)
+  const stageMountRef = useRef({ active: false, generation: 0 })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   // 仅在组件真正卸载（取消/关闭抽屉）时中止在途上传并按纯决策回收未消费暂存；
   // 普通重渲染不触发；失败由 TTL sweep 兜底，不阻断关闭。
-  useEffect(() => () => {
-    abortRef.current?.abort()
-    const submitted = submissionRef?.current ?? false
-    const plan = reconcileStagedCleanup(rowsRef.current, submitted)
-    for (const stageId of plan.cancel) void cancelStagedAsset(stageId)
+  useEffect(() => {
+    stageMountRef.current.active = true
+    stageMountRef.current.generation += 1
+    return () => {
+      stageMountRef.current.active = false
+      stageMountRef.current.generation += 1
+      abortRef.current?.abort()
+      const submitted = submissionRef?.current ?? false
+      const plan = reconcileStagedCleanup(rowsRef.current, submitted)
+      for (const stageId of plan.cancel) void cancelStagedAsset(stageId)
+    }
   }, [])
 
   const onPickFile = async (file: File | undefined) => {
-    if (!file) return
+    if (!file || !stageMountRef.current.active || (abortRef.current && !abortRef.current.signal.aborted)) return
+    const generation = stageMountRef.current.generation
     setFileError('')
     setStaging(true)
     const controller = new AbortController()
     abortRef.current = controller
+    const isCurrent = () => stageMountRef.current.active
+      && stageMountRef.current.generation === generation
+      && abortRef.current === controller
+      && !controller.signal.aborted
     try {
       const stage = await stageAsset({ body: file, fileName: file.name, mediaType: file.type || undefined, signal: controller.signal })
+      // 服务可能已收完字节，abort仍无法阻止迟到201；该stage从未交给主提交，立即回收。
+      if (!isCurrent()) {
+        void cancelStagedAsset(stage.stageId)
+        return
+      }
       const clientId = session.addFile({ stageId: stage.stageId })
       setStagedRows(prev => [...prev, {
         clientId,
@@ -117,7 +134,7 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
       }])
       rerender(); publish()
     } catch (error) {
-      if (controller.signal.aborted) return
+      if (!isCurrent()) return
       if (error instanceof StageUnavailable && error.reason === 'expired') {
         setFileError('暂存已过期，请重新选择文件上传')
       } else {
@@ -126,8 +143,8 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
       // 重置 input，允许直接重选同一文件重试。
       if (fileInputRef.current) fileInputRef.current.value = ''
     } finally {
-      abortRef.current = null
-      setStaging(false)
+      if (isCurrent()) setStaging(false)
+      if (abortRef.current === controller) abortRef.current = null
     }
   }
 
@@ -166,22 +183,20 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
   const activeLog = visibleProgressLog(task ?? {})
   const deletedLog = (task?.progressLog ?? []).filter(e => e.deletedAt)
 
-  // 可选 refs：既有 at-N + 本次新增别名 clientId。
-  const refOptions = useMemo(() => {
-    const existing = (task?.attachments ?? [])
-      .filter(a => a.id)
-      .map(a => ({ value: a.id!, label: attachmentDisplay(a).label }))
-    const stagedByName = new Map(stagedRows.map(r => [r.clientId, r.fileName]))
-    const aliases = session.attachmentOps
-      .filter(o => o.clientId)
-      .map(o => ({
-        value: o.clientId!,
-        label: o.op === 'addFile'
-          ? `新文件（${o.clientId}）${stagedByName.get(o.clientId!) ?? ''}`
-          : `新资料（${o.clientId}）${o.op === 'addLink' ? o.url : o.deliverableId ?? ''}`,
-      }))
-    return [...existing, ...aliases]
-  }, [task, session.attachmentOps, stagedRows])
+  // 可选 refs：既有 at-N + 新别名；journal 原地追加，每次渲染从当前内容重算。
+  const existingRefs = (task?.attachments ?? [])
+    .filter(a => a.id)
+    .map(a => ({ value: a.id!, label: attachmentDisplay(a).label }))
+  const stagedByName = new Map(stagedRows.map(r => [r.clientId, r.fileName]))
+  const aliasRefs = session.attachmentOps
+    .filter(o => o.clientId)
+    .map(o => ({
+      value: o.clientId!,
+      label: o.op === 'addFile'
+        ? `新文件（${o.clientId}）${stagedByName.get(o.clientId!) ?? ''}`
+        : `新资料（${o.clientId}）${o.op === 'addLink' ? o.url : o.deliverableId ?? ''}`,
+    }))
+  const refOptions = [...existingRefs, ...aliasRefs]
 
   const addLink = () => {
     session.addLink({ url: linkUrl, title: linkTitle, note: linkNote })
@@ -411,7 +426,10 @@ export function TaskDraftMaterials({ task, deliverableOptions, stageEnabled, tas
               {refOptions.map(r => (
                 <label key={r.value} className="pm-prog-ref">
                   <input type="checkbox" checked={pRefs.includes(r.value)}
-                    onChange={e => setPRefs(prev => e.currentTarget.checked ? [...prev, r.value] : prev.filter(v => v !== r.value))}/>
+                    onChange={e => {
+                      const checked = e.currentTarget.checked
+                      setPRefs(prev => checked ? [...prev, r.value] : prev.filter(v => v !== r.value))
+                    }}/>
                   {r.label}
                 </label>
               ))}

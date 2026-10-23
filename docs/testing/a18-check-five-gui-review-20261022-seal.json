@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-22T01:31:54.148Z",
+  "protectedCount": 4470,
+  "untouched": true,
+  "drift": {
+    "added": {},
+    "removed": {},
+    "changed": {}
+  },
+  "auditOk": true,
+  "auditArtifacts": {
+    "a18-check-five-gui-review-20261022-audit-r2.json": {
+      "bytes": 127033,
+      "sha256": "2244753973edf24a9d458a87c2f82e797f76ac3e1339fbc21108c2d83324559e",
+      "mtimeMs": 1792632652293.0212
+    },
+    "a18-check-five-gui-review-20261022-audit.json": {
+      "bytes": 127039,
+      "sha256": "9e80928c73a0cd8623a14e33b64da114617fb96e137b71b2101d191b2cab352d",
+      "mtimeMs": 1792632578453.4792
+    },
+    "a18-check-five-gui-review-20261022-audit.mjs": {
+      "bytes": 26538,
+      "sha256": "683569345989f54683284ebc1652e036aff0cc1f4578dbaec09bdc3e4c0b42cc",
+      "mtimeMs": 1792632610119.0742
+    },
+    "a18-check-five-gui-review-20261022-before.json": {
+      "bytes": 1213777,
+      "sha256": "b4af0718c1fc90ad2aefc8dfaea2f41d5a60509700c0d0640a00d1bbe22ade50",
+      "mtimeMs": 1792632565915.9363
+    }
+  },
+  "reviewResourceReleased": true,
+  "boundary": "Pre-report byte seal only. No GUI/lib/service/Main source ownership; no scripts after the final report. Not a release/commit gate."
+}

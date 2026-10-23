@@ -1,0 +1,732 @@
+{
+  "at": "2026-10-21T16:07:24.674Z",
+  "reviewer": "trae independent finite evidence review",
+  "auditSourceSha256": "d107b10385f504223071d86ce71522a961ebd15a8008905c0eb2b04bfe53c06c",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "docs/testing/a10-finder-reopen-gui-independent-review-20261021-audit.mjs",
+    "r2"
+  ],
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "sha256": "c142866eac4fb87159e7af36df2c52b3cda84f0e780d5b9ae4d7614e7968eda3",
+    "trackedPatchSha": "caddc276e6b83d6f79850cc8c1490afdc6a1c5f9409cd8d160fa066cc632c715",
+    "clientSha": "894a515cee081225687ef8ba887f55a51762ecc481c0d3c3613f035e9c202d2f"
+  },
+  "checks": [
+    {
+      "id": "candidate-artifact-manifests",
+      "ok": true,
+      "detail": {
+        "count": 453
+      }
+    },
+    {
+      "id": "candidate-sync-source",
+      "ok": true,
+      "detail": {
+        "sourceCount": 512,
+        "syncDrift": [],
+        "postDrift": []
+      }
+    },
+    {
+      "id": "finder-skeleton-not-loaded-proof",
+      "ok": true,
+      "detail": {
+        "finderEnvironment": {
+          "label": "finder",
+          "port": 3217,
+          "root": "/private/tmp/pmtool-a10-finder-runtime-20261021",
+          "plugin": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool",
+          "empty": true,
+          "patchSha": "345fd1ee14088da1f571954a0c028a94a64f7391dc6201e9b58d58dbdbf26e4b"
+        },
+        "appPort": 3217
+      }
+    },
+    {
+      "id": "fixture-pmtool-a10-finder-entry-20261021.mjs",
+      "ok": true,
+      "detail": {
+        "archive": "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-entry-20261021.mjs",
+        "expected": "e3c239fafa8c28495dfdf97ec84e10c75f0db88b9f13d68b342d0aec17560d86",
+        "actual": "e3c239fafa8c28495dfdf97ec84e10c75f0db88b9f13d68b342d0aec17560d86"
+      }
+    },
+    {
+      "id": "fixture-pmtool-a10-finder-passive-20261021.mjs",
+      "ok": true,
+      "detail": {
+        "archive": "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-passive-20261021.mjs",
+        "expected": "6699a6798db19f0fd038dea6e7ebde64b46a808a6658d787f360ffa647bf8bea",
+        "actual": "6699a6798db19f0fd038dea6e7ebde64b46a808a6658d787f360ffa647bf8bea"
+      }
+    },
+    {
+      "id": "app-production-bin",
+      "ok": true,
+      "detail": {
+        "expected": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734"
+      }
+    },
+    {
+      "id": "source-main-current",
+      "ok": false,
+      "detail": {
+        "checked": 512,
+        "mismatches": [
+          {
+            "name": "packages/dsh-pm-tool/src/client/views/overview.tsx",
+            "expected": "17391f8a308926b0d559a1a346b9e4946f7c2054ba251458ffeb0c44b5c4c67e",
+            "actual": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d"
+          },
+          {
+            "name": "launcher/test/fc-independent-probes.test.mjs",
+            "expected": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+            "error": "ENOENT"
+          },
+          {
+            "name": "launcher/test/fc-a2-followup.test.mjs",
+            "expected": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+            "error": "ENOENT"
+          },
+          {
+            "name": "launcher/test/fc-a3-probes.test.mjs",
+            "expected": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+            "error": "ENOENT"
+          },
+          {
+            "name": "launcher/test/fc-a4-probes.test.mjs",
+            "expected": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6",
+            "error": "ENOENT"
+          },
+          {
+            "name": "launcher/test/fc-a2-additional.test.mjs",
+            "expected": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+            "error": "ENOENT"
+          }
+        ]
+      }
+    },
+    {
+      "id": "source-isolated-current",
+      "ok": true,
+      "detail": {
+        "checked": 512,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "built-isolated-current-not-network",
+      "ok": true,
+      "detail": {
+        "checked": 453,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "tracked-patch",
+      "ok": true,
+      "detail": {
+        "actual": "caddc276e6b83d6f79850cc8c1490afdc6a1c5f9409cd8d160fa066cc632c715",
+        "expected": "caddc276e6b83d6f79850cc8c1490afdc6a1c5f9409cd8d160fa066cc632c715"
+      }
+    },
+    {
+      "id": "panel-handshake-block-only-inheritance",
+      "ok": true,
+      "detail": {
+        "previous": "374bb7f373e15a36ff2c14bb3e753e3f7baac0c9982b12b80916c5bf7ad04cd8",
+        "current": "374bb7f373e15a36ff2c14bb3e753e3f7baac0c9982b12b80916c5bf7ad04cd8",
+        "boundary": "exact handshake refs/refresh/mount/cleanup block only; not complete panel or import graph"
+      }
+    },
+    {
+      "id": "frame-control-open-frames-000000.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000000.jpg",
+        "expected": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+        "actual": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a"
+      }
+    },
+    {
+      "id": "frame-control-open-frames-000001.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000001.jpg",
+        "expected": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+        "actual": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a"
+      }
+    },
+    {
+      "id": "frame-control-open-frames-000002.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000002.jpg",
+        "expected": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+        "actual": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a"
+      }
+    },
+    {
+      "id": "frame-control-open-r2-frames-000000.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000000.jpg",
+        "expected": "17e5d53573de3d9c72565e083b2f53bd4afba98bc87dffde4cc002ec3719a5a5",
+        "actual": "17e5d53573de3d9c72565e083b2f53bd4afba98bc87dffde4cc002ec3719a5a5"
+      }
+    },
+    {
+      "id": "frame-control-open-r2-frames-000001.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000001.jpg",
+        "expected": "7a0e3f0bbe7838deb71f6f77ed6079edb16ac0d80b7a7fad21f7573f2d3fed3b",
+        "actual": "7a0e3f0bbe7838deb71f6f77ed6079edb16ac0d80b7a7fad21f7573f2d3fed3b"
+      }
+    },
+    {
+      "id": "frame-control-open-r2-frames-000002.jpg",
+      "ok": true,
+      "detail": {
+        "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000002.jpg",
+        "expected": "f2c9d9f182f10e2e86866d49305c5b8ea2bae53be4850505aa0850224eef7189",
+        "actual": "f2c9d9f182f10e2e86866d49305c5b8ea2bae53be4850505aa0850224eef7189"
+      }
+    },
+    {
+      "id": "observed-N1",
+      "ok": true,
+      "detail": {
+        "opened": {
+          "at": "2026-10-21T15:56:37.869Z",
+          "event": "open-start",
+          "pid": 19074,
+          "argv": [
+            "open",
+            "-a",
+            "Google Chrome",
+            "http://127.0.0.1:3217/?token=[REDACTED]#pm-launch=60787.N1"
+          ]
+        },
+        "exit": {
+          "at": "2026-10-21T15:56:38.490Z",
+          "event": "open-exit",
+          "pid": 19074,
+          "code": 0,
+          "signal": null
+        },
+        "request": [
+          {
+            "at": "2026-10-21T15:57:45.539Z",
+            "event": "entered-request",
+            "alias": "N1",
+            "origin": "http://127.0.0.1:3217",
+            "controlPort": 60787
+          }
+        ],
+        "response": [
+          {
+            "at": "2026-10-21T15:57:45.540Z",
+            "event": "entered-response",
+            "alias": "N1",
+            "status": 200,
+            "controlPort": 60787
+          }
+        ]
+      }
+    },
+    {
+      "id": "observed-N2",
+      "ok": true,
+      "detail": {
+        "opened": {
+          "at": "2026-10-21T15:58:24.949Z",
+          "event": "open-start",
+          "pid": 19333,
+          "argv": [
+            "open",
+            "-a",
+            "Google Chrome",
+            "http://127.0.0.1:3217/#pm-launch=60787.N2"
+          ]
+        },
+        "exit": {
+          "at": "2026-10-21T15:58:25.349Z",
+          "event": "open-exit",
+          "pid": 19333,
+          "code": 0,
+          "signal": null
+        },
+        "request": [
+          {
+            "at": "2026-10-21T15:59:15.915Z",
+            "event": "entered-request",
+            "alias": "N2",
+            "origin": "http://127.0.0.1:3217",
+            "controlPort": 60787
+          }
+        ],
+        "response": [
+          {
+            "at": "2026-10-21T15:59:15.915Z",
+            "event": "entered-response",
+            "alias": "N2",
+            "status": 200,
+            "controlPort": 60787
+          }
+        ]
+      }
+    },
+    {
+      "id": "reopen-clean-url",
+      "ok": true,
+      "detail": {
+        "argv": [
+          "open",
+          "-a",
+          "Google Chrome",
+          "http://127.0.0.1:3217/#pm-launch=60787.N2"
+        ]
+      }
+    },
+    {
+      "id": "final-state",
+      "ok": true,
+      "detail": {
+        "at": "2026-10-21T16:01:24.280Z",
+        "state": {
+          "state": {
+            "status": "S4",
+            "step": 0,
+            "browser": "Chrome",
+            "confirmed": true,
+            "view": "S4",
+            "host": "127.0.0.1",
+            "port": 3217,
+            "browsers": [
+              "系统默认浏览器",
+              "Chrome",
+              "Safari"
+            ],
+            "selectedBrowser": "Chrome",
+            "theme": "light"
+          }
+        },
+        "boundary": "read-only control state, authentication fields and URLs excluded"
+      }
+    },
+    {
+      "id": "final-state-no-auth-fields",
+      "ok": true,
+      "detail": {
+        "keys": [
+          "status",
+          "step",
+          "browser",
+          "confirmed",
+          "view",
+          "host",
+          "port",
+          "browsers",
+          "selectedBrowser",
+          "theme"
+        ]
+      }
+    }
+  ],
+  "sourceMain": {
+    "checked": 512,
+    "mismatches": [
+      {
+        "name": "packages/dsh-pm-tool/src/client/views/overview.tsx",
+        "expected": "17391f8a308926b0d559a1a346b9e4946f7c2054ba251458ffeb0c44b5c4c67e",
+        "actual": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d"
+      },
+      {
+        "name": "launcher/test/fc-independent-probes.test.mjs",
+        "expected": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+        "error": "ENOENT"
+      },
+      {
+        "name": "launcher/test/fc-a2-followup.test.mjs",
+        "expected": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+        "error": "ENOENT"
+      },
+      {
+        "name": "launcher/test/fc-a3-probes.test.mjs",
+        "expected": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+        "error": "ENOENT"
+      },
+      {
+        "name": "launcher/test/fc-a4-probes.test.mjs",
+        "expected": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6",
+        "error": "ENOENT"
+      },
+      {
+        "name": "launcher/test/fc-a2-additional.test.mjs",
+        "expected": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+        "error": "ENOENT"
+      }
+    ]
+  },
+  "sourceIsolated": {
+    "checked": 512,
+    "mismatches": []
+  },
+  "builtIsolated": {
+    "checked": 453,
+    "mismatches": []
+  },
+  "launcherInheritance": {
+    "launcher/src/probe.mjs": {
+      "current": "d85968ac983cbd06e3496ba86baf37dea1d7b7ca6feccf3b6b6ac30a87605e35",
+      "unchanged": false
+    },
+    "launcher/src/control-html.mjs": {
+      "current": "3b4a30c7b6393b3c2131e62a038358763bd3f8fa20a05aa09bf7562275289a9e",
+      "a5": "3b4a30c7b6393b3c2131e62a038358763bd3f8fa20a05aa09bf7562275289a9e",
+      "unchanged": true
+    },
+    "launcher/src/launcher-core.mjs": {
+      "current": "34563cdf8a787f48b4ba3220cb27801d5551a1890922d85ae06d8999ce3b5c2b",
+      "a5": "34563cdf8a787f48b4ba3220cb27801d5551a1890922d85ae06d8999ce3b5c2b",
+      "unchanged": true
+    },
+    "launcher/src/loopback.mjs": {
+      "current": "6dce1acea2e7064c1fea75c171bfdf345874d670d6bd0160478979eb0a7a62ba",
+      "unchanged": false
+    },
+    "launcher/src/browsers.mjs": {
+      "current": "5a49166a4c7e7cf88ef154c050a2039bafdcd6552e6e650b2ad521a17c734855",
+      "unchanged": false
+    },
+    "launcher/src/browser-open.mjs": {
+      "current": "4d0355b4c6cf02feae295fa8ed4ff2a30fb77070fe436b16ce78c4a80183a0d6",
+      "a5": "4d0355b4c6cf02feae295fa8ed4ff2a30fb77070fe436b16ce78c4a80183a0d6",
+      "unchanged": true
+    },
+    "launcher/src/launcher-app.mjs": {
+      "current": "840d59383d68267c7454bb76e566a1ba8335c49cc12bda9daa8cf2d6b8fe3b47",
+      "a5": "840d59383d68267c7454bb76e566a1ba8335c49cc12bda9daa8cf2d6b8fe3b47",
+      "unchanged": true
+    },
+    "launcher/src/panel-model.mjs": {
+      "current": "6e1a7460025c3887e4a8251f22ca661668ed6c6e9ad03c3f96c956eb9d079a62",
+      "unchanged": false
+    },
+    "launcher/src/local-app.mjs": {
+      "current": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+      "a5": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+      "unchanged": true
+    },
+    "launcher/src/dsh-controller.mjs": {
+      "current": "6459100ee8520dc959c4762782b34574a1ad543c1af53e7e366f9ab11507219b",
+      "unchanged": false
+    },
+    "launcher/bin/pm-launcher.mjs": {
+      "current": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734",
+      "a5": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734",
+      "unchanged": true
+    }
+  },
+  "bridgeInheritance": {
+    "src/client/launch-handshake.ts": {
+      "previous": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+      "current": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+      "unchanged": true
+    },
+    "src/client/panel.tsx": {
+      "previous": "eebdc234b339f52012f0ec2cf7bd0f947332570418658b41d95a34423b689af9",
+      "current": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+      "unchanged": false
+    },
+    "src/client/index.tsx": {
+      "previous": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "current": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "unchanged": true
+    },
+    "src/client/launch-handshake.test.ts": {
+      "previous": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+      "current": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+      "unchanged": true
+    },
+    "src/client/panel-launch-handshake.test.tsx": {
+      "previous": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+      "current": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+      "unchanged": true
+    }
+  },
+  "publicFixtures": {
+    "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-entry-20261021.mjs": "e3c239fafa8c28495dfdf97ec84e10c75f0db88b9f13d68b342d0aec17560d86",
+    "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-passive-20261021.mjs": "6699a6798db19f0fd038dea6e7ebde64b46a808a6658d787f360ffa647bf8bea"
+  },
+  "syntax": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-entry-20261021.mjs"
+      ],
+      "exit": 0,
+      "boundary": "syntax only; not executed"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-passive-20261021.mjs"
+      ],
+      "exit": 0,
+      "boundary": "syntax only; not executed"
+    }
+  ],
+  "frames": [
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000000.jpg",
+      "file": "000000.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598166.477903
+      },
+      "sha256": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+      "at": "2026-10-21T15:56:06.521Z"
+    },
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000001.jpg",
+      "file": "000001.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598166.470171
+      },
+      "sha256": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+      "at": "2026-10-21T15:56:06.527Z"
+    },
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000002.jpg",
+      "file": "000002.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598166.510481
+      },
+      "sha256": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+      "at": "2026-10-21T15:56:06.527Z"
+    },
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000000.jpg",
+      "file": "000000.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598194.174317
+      },
+      "sha256": "17e5d53573de3d9c72565e083b2f53bd4afba98bc87dffde4cc002ec3719a5a5",
+      "at": "2026-10-21T15:56:34.222Z"
+    },
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000001.jpg",
+      "file": "000001.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598194.180621
+      },
+      "sha256": "7a0e3f0bbe7838deb71f6f77ed6079edb16ac0d80b7a7fad21f7573f2d3fed3b",
+      "at": "2026-10-21T15:56:34.231Z"
+    },
+    {
+      "name": "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000002.jpg",
+      "file": "000002.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792598194.286337
+      },
+      "sha256": "f2c9d9f182f10e2e86866d49305c5b8ea2bae53be4850505aa0850224eef7189",
+      "at": "2026-10-21T15:56:34.295Z"
+    }
+  ],
+  "roundTrips": [
+    {
+      "alias": "N1",
+      "opened": {
+        "at": "2026-10-21T15:56:37.869Z",
+        "event": "open-start",
+        "pid": 19074,
+        "argv": [
+          "open",
+          "-a",
+          "Google Chrome",
+          "http://127.0.0.1:3217/?token=[REDACTED]#pm-launch=60787.N1"
+        ]
+      },
+      "exit": {
+        "at": "2026-10-21T15:56:38.490Z",
+        "event": "open-exit",
+        "pid": 19074,
+        "code": 0,
+        "signal": null
+      },
+      "request": [
+        {
+          "at": "2026-10-21T15:57:45.539Z",
+          "event": "entered-request",
+          "alias": "N1",
+          "origin": "http://127.0.0.1:3217",
+          "controlPort": 60787
+        }
+      ],
+      "response": [
+        {
+          "at": "2026-10-21T15:57:45.540Z",
+          "event": "entered-response",
+          "alias": "N1",
+          "status": 200,
+          "controlPort": 60787
+        }
+      ],
+      "mintToResponseMs": 67671,
+      "boundary": "method/headers/body and personal Chrome loaded bytes not captured"
+    },
+    {
+      "alias": "N2",
+      "opened": {
+        "at": "2026-10-21T15:58:24.949Z",
+        "event": "open-start",
+        "pid": 19333,
+        "argv": [
+          "open",
+          "-a",
+          "Google Chrome",
+          "http://127.0.0.1:3217/#pm-launch=60787.N2"
+        ]
+      },
+      "exit": {
+        "at": "2026-10-21T15:58:25.349Z",
+        "event": "open-exit",
+        "pid": 19333,
+        "code": 0,
+        "signal": null
+      },
+      "request": [
+        {
+          "at": "2026-10-21T15:59:15.915Z",
+          "event": "entered-request",
+          "alias": "N2",
+          "origin": "http://127.0.0.1:3217",
+          "controlPort": 60787
+        }
+      ],
+      "response": [
+        {
+          "at": "2026-10-21T15:59:15.915Z",
+          "event": "entered-response",
+          "alias": "N2",
+          "status": 200,
+          "controlPort": 60787
+        }
+      ],
+      "mintToResponseMs": 50966,
+      "boundary": "method/headers/body and personal Chrome loaded bytes not captured"
+    }
+  ],
+  "separateUnaliased204": [
+    {
+      "at": "2026-10-21T15:57:45.498Z",
+      "event": "entered-response",
+      "status": 204,
+      "controlPort": 60787
+    },
+    {
+      "at": "2026-10-21T15:59:15.914Z",
+      "event": "entered-response",
+      "status": 204,
+      "controlPort": 60787
+    }
+  ],
+  "fingerprints": {
+    "reports/all-pending-evidence-20261021/A10/finder/S4-first.png": "0212054ae8c1f7f93baa6dcac8d061590165440d4ea3c9573b64584c3abbd8c5",
+    "reports/all-pending-evidence-20261021/A10/finder/S4-reopen.json": "f3d35969d58ae47bdb4f1497c3ad2f690946038085b1f6f9e736e1df4f686878",
+    "reports/all-pending-evidence-20261021/A10/finder/S4-reopen.png": "0212054ae8c1f7f93baa6dcac8d061590165440d4ea3c9573b64584c3abbd8c5",
+    "reports/all-pending-evidence-20261021/A10/finder/app.json": "83862d13639327a183b9f13aacc49fd0887fd83bbcbe10ff9125eab95851a574",
+    "reports/all-pending-evidence-20261021/A10/finder/before-doubleclick.png": "d497ad74733a05447bad79f56cecc32e202bc2d6f89955a862d738944375e1fb",
+    "reports/all-pending-evidence-20261021/A10/finder/control-initial.png": "dc803350bcf78f91263e144bd2bb94224ef1caa1de922de1467ca8ff948800d3",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000000.jpg": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000001.jpg": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/000002.jpg": "eefd9e0751fac5b0695671803c8f3ef7d7ea7c587ce89db86dfb6e1582c82b0a",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-frames/frames.json": "271dbee127ea02224e07c4cda240c9de19dfc04dc8944b5ffa79e63c3d8b989b",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000000.jpg": "17e5d53573de3d9c72565e083b2f53bd4afba98bc87dffde4cc002ec3719a5a5",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000001.jpg": "7a0e3f0bbe7838deb71f6f77ed6079edb16ac0d80b7a7fad21f7573f2d3fed3b",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/000002.jpg": "f2c9d9f182f10e2e86866d49305c5b8ea2bae53be4850505aa0850224eef7189",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-r2-frames/frames.json": "905410dca14ca80421daee038923bf6a02d32b761c1a322c9708f54e93fadae8",
+    "reports/all-pending-evidence-20261021/A10/finder/control-open-r2.json": "1dead5b45cd17b71af3d7aa17a4cd4e41b339b24fff5015d028cff2df986137c",
+    "reports/all-pending-evidence-20261021/A10/finder/execution.md": "50894d6416ff9b3edd826ac5f053df11e2c51ac43fe63b0a1f15236a37100ad2",
+    "reports/all-pending-evidence-20261021/A10/finder/passive.ndjson": "a1513be59f608f54772307eee7ccc780cc8795d8860daa6e3b5ddc3586029287",
+    "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-entry-20261021.mjs": "e3c239fafa8c28495dfdf97ec84e10c75f0db88b9f13d68b342d0aec17560d86",
+    "reports/all-pending-evidence-20261021/A10/finder/pmtool-a10-finder-passive-20261021.mjs": "6699a6798db19f0fd038dea6e7ebde64b46a808a6658d787f360ffa647bf8bea",
+    "reports/all-pending-evidence-20261021/A10/finder/process-record.txt": "f643ebc4ba35dcc75bafd5cf85715d8913edd34bb293fdaefab15fa76394e9ee",
+    "reports/all-pending-evidence-20261021/A10/finder/reopen-click.png": "773d3e55ab090cc92d9221ec74ecf2c8148af380a2260fe194afdbdb86f3ffaa",
+    "reports/all-pending-evidence-20261021/A10/finder/state-after-reopen.json": "1895ba6607148e441c3d6d1d9881f5ed85566c0c4c62ba49777d7adf18ab3db6",
+    "reports/all-pending-evidence-20261021/A10/candidate.json": "c142866eac4fb87159e7af36df2c52b3cda84f0e780d5b9ae4d7614e7968eda3",
+    "reports/all-pending-evidence-20261021/A10/environment.json": "22f1f2925338acabfcf9a04b046ca54c93f316d079b7dd9d7fce4365c15beafd",
+    "reports/all-pending-evidence-20261021/A10/product-tracked.patch": "caddc276e6b83d6f79850cc8c1490afdc6a1c5f9409cd8d160fa066cc632c715",
+    "reports/all-pending-evidence-20261021/A10/build/artifacts.json": "a58e15912d053b3209877ae5ba594c54218d65c0e6e0362edbdeb86eddb3b36a",
+    "reports/all-pending-evidence-20261021/A10/build/build.exit.json": "b08e30eb1aba8adcec581cd25cf876102518e29a0874827f92e6ccdee1f4f9e1",
+    "reports/all-pending-evidence-20261021/A10/build/build.stderr.txt": "ba0c793e719b714cc9a34173dc5caea43608ea69b6b96cf19fde7176639acae6",
+    "reports/all-pending-evidence-20261021/A10/build/build.stdout.txt": "97ee8f9cc5f9ff64408745d3014728f95eaba44e241162b2d0753f44bfc5eefe",
+    "reports/all-pending-evidence-20261021/A10/build/coverage.exit.json": "31a4f270e89081f2a4272d40b2807d3d84e398fd0a6e89d48229dde5d6d551b2",
+    "reports/all-pending-evidence-20261021/A10/build/coverage.stderr.txt": "41334b1db5f822d22b252149bf0a041bca136a36dd5dc3deea77d6a40ee4e1d9",
+    "reports/all-pending-evidence-20261021/A10/build/coverage.stdout.txt": "4de9e871ec7a49c430175170f8a86eb09eb6c5559ef8dcbfac680c7bf01b0c84",
+    "reports/all-pending-evidence-20261021/A10/build/noemit.exit.json": "4419e15f8263f3a4c90e5ac0a07a7c9df93201e3db72a0588e1a1dcbefcb4403",
+    "reports/all-pending-evidence-20261021/A10/build/noemit.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reports/all-pending-evidence-20261021/A10/build/noemit.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reports/all-pending-evidence-20261021/A10/build/sync.json": "488219ad2272cbd54ca438c1d39cbd0190038fe66af1d08af3ea9ccccf7d69a7",
+    "reports/all-pending-evidence-20261021/A10/build/verify.exit.json": "47c48df8527c60f7d6e537ceb5e5cf08e433a5706e3b8fee054a55db2f5e7651",
+    "reports/all-pending-evidence-20261021/A10/build/verify.stderr.txt": "ae9e8c21a9d5e2a1c5addfa2b44f35d390455dcda9d8d0ea185bd3df08668715",
+    "reports/all-pending-evidence-20261021/A10/build/verify.stdout.txt": "97a00072054f980a4c70285cf74bf7944456a499aba79dded94e818c727ac96f",
+    "AGENTS.md": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d",
+    "docs/collaboration.md": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab",
+    "reports/all-pending-acceptance-execution-20261021.md": "00390c20bf1cb71ec20d8305a877b867e56f59ecef7040fa3849987f954f21f2",
+    "docs/testing/fc-a5-independent-retest-20261021.md": "92d5d3a9fdf4727ef27805dabd01ead3d5117b53eeff8ddcfe4fb8829f9950ba",
+    "docs/testing/bridge-panel-independent-retest-20261021.md": "b4ace12f1145a855b63193db2b95c2a3ad31d0129d0b45ac3be405178c090bd5",
+    "docs/testing/reopen-handshake-diagnosis-20261021.md": "9041b3606b8e8360a1d4c386ed86bd7a4e9761e8c63a0a5ac23f79d00f722849",
+    "docs/testing/a0-paths-board-review-20261021.md": "1a368f9b3572d6b971fb7d1f880054dfb3abb94c781805603f7747f8cce67748"
+  },
+  "boundary": "Only repository evidence and declared public candidate files read. No runtime root, credentials, GUI, network, service, installation, build, product write or commit. Audit consistency is not GUI PASS."
+}

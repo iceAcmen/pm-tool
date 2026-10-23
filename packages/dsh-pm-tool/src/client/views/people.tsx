@@ -406,7 +406,7 @@ export function PeopleView(props: {
                   {rows.map(({ row, isUnassigned }) => (
                     <div className="pp-g-name" key={row.key}>
                       <i className={`pp-g-dot${isUnassigned ? ' is-un' : row.overdue > 0 ? ' is-late' : ''}`} />
-                      {isUnassigned ? '未分配' : row.display}
+                      <span className="pp-g-name-text" title={isUnassigned ? '未分配' : row.display}>{isUnassigned ? '未分配' : row.display}</span>
                     </div>
                   ))}
                 </div>
@@ -445,7 +445,7 @@ export function PeopleView(props: {
             <span className="pp-note">每人 open 任务数</span>
           </div>
           <div className="pp-dist-body">
-            <div className="pp-dplot">
+            <div className="pp-dplot" style={{ height: Math.max(124, (dots.at(-1)?.top ?? 0) + 24) }}>
               <div className="pp-dline pp-dmed" style={{ left: `${(median / maxX) * 100}%` }}><span>中位 {median}</span></div>
               <div className="pp-dline pp-dthr" style={{ left: `${(overloadThreshold / maxX) * 100}%` }}><span>过载阈值 {overloadThreshold}</span></div>
               <div className="pp-daxis" />
@@ -464,8 +464,13 @@ export function PeopleView(props: {
                   <span
                     key={v.key}
                     className={`pp-dot${flip ? ' flip' : ''}${v.isUnassigned ? ' is-un' : v.value >= overloadThreshold ? ' is-late' : v.value >= 3 ? ' is-prog' : ' is-todo'}`}
-                    style={{ left: `${xPct}%`, top: `${v.top}px` }}
-                  >{v.name} {v.value}</span>
+                    style={{ left: `${xPct}%`, top: `${v.top}px`, maxWidth: `${flip ? xPct : 100 - xPct}%` }}
+                  >
+                    <span className="pp-dot-label">
+                      <span className="pp-dot-name" title={v.name}>{v.name}</span>{' '}
+                      <span className="pp-dot-value">{v.value}</span>
+                    </span>
+                  </span>
                 )
               })}
             </div>

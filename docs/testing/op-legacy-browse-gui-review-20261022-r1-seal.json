@@ -1,0 +1,62 @@
+{
+  "kind": "独立审证封存，不是产品 PASS",
+  "at": "2026-10-22T15:50:32.859Z",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3"
+  },
+  "inputCount": 685,
+  "drift": [],
+  "badWhitespace": [],
+  "brokenLinks": [],
+  "ownedFingerprints": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-reader.mjs": {
+      "bytes": 20588,
+      "sha256": "56d23f95bcc04fa86a95a930c0385955c05a0cae7ea34518c63523d06fb089e4",
+      "mtimeNs": "1792684212172387833",
+      "ctimeNs": "1792684212172387833",
+      "ino": "56948119"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-audit.json": {
+      "bytes": 1055956,
+      "sha256": "93f125b6a8d351e5ecc5e612242852dbee6ac48eba09bebc60398200ed523966",
+      "mtimeNs": "1792684081697526916",
+      "ctimeNs": "1792684081697526916",
+      "ino": "56948424"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md": {
+      "bytes": 15448,
+      "sha256": "c6bd16cb043fe7fe2c351a66c3fa01e11419711eceaf19e00ad81128c515da6f",
+      "mtimeNs": "1792684223563763483",
+      "ctimeNs": "1792684223563763483",
+      "ino": "56949911"
+    }
+  },
+  "scope": {
+    "writable": "仅本前缀自有四文件",
+    "productExecuted": false,
+    "MainScriptExecuted": false,
+    "browserUsed": false,
+    "serviceProbed": false,
+    "runtimeBusinessRead": false,
+    "GitUsed": false
+  },
+  "counts": {
+    "archived": 127,
+    "source": 114,
+    "complete": 521,
+    "businessFiles": 11,
+    "rawCopies": 55,
+    "receipts": 5,
+    "mainSealExit": 0
+  },
+  "remaining": [
+    {
+      "assertion": "本旧包 F2-L1/L3 原手填40%在列表可见且与客观证据不足分离",
+      "status": "BLOCKED",
+      "reason": "既有 PNG 未覆盖该行；非产品 FAIL、非 MANUAL_PENDING，不派额外旅程"
+    }
+  ],
+  "released": true,
+  "stop": true
+}

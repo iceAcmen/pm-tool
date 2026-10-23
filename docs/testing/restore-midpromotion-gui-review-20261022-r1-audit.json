@@ -1,0 +1,4583 @@
+{
+  "at": "2026-10-22T13:39:35.229Z",
+  "role": "trae 独立 GUI 审证，非开发、非执行",
+  "environment": {
+    "os": "darwin",
+    "node": "v22.23.3",
+    "pnpm": "11.28.5 原执行口径，审证未调用"
+  },
+  "indexes": [
+    {
+      "file": "reports/all-pending-evidence-20261021/F07RemainingR1/index.json",
+      "bytes": 101999,
+      "sha256": "b18c77445de3f1d281d0a51ec9627c6e5551b60f328bc1f4afb594700eb61168",
+      "count": 573,
+      "at": "2026-10-22T13:33:00.108Z",
+      "verified": 573
+    },
+    {
+      "file": "reports/all-pending-evidence-20261021/CombinedGuiR1/j03-index.json",
+      "bytes": 81249,
+      "sha256": "e4833192fa8429b89d6a121eb9de1a1b1621f4b67e3b645c2ad77c3e5f455535",
+      "count": 468,
+      "at": "2026-10-22T12:26:03.735Z",
+      "verified": 468
+    },
+    {
+      "file": "reports/all-pending-evidence-20261021/CombinedGuiR1/continuation-index.json",
+      "bytes": 270825,
+      "sha256": "2c1dd6628834258893c4ae8a36e656f71006cda455b29f6ab933746fd602ceb9",
+      "count": 1537,
+      "at": "2026-10-22T12:54:44.173Z",
+      "verified": 1537
+    },
+    {
+      "file": "reports/all-pending-evidence-20261021/CombinedGuiR1/shared-index.json",
+      "bytes": 317676,
+      "sha256": "cba4e79542cf50ada54a0dad5749e56cc5432aff010f30a8dc0253d762407c40",
+      "count": 1799,
+      "at": "2026-10-22T13:10:13.667Z",
+      "verified": 1799
+    }
+  ],
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "sourceCount": 107,
+  "frozenPackage": [
+    {
+      "file": "packages/dsh-pm-tool/package.json",
+      "bytes": 3160,
+      "sha256": "8098dfa788025596ee1e4664969e4ffd4a69dee664950931313ac0d648cd55a9"
+    },
+    {
+      "file": "packages/dsh-pm-tool/pnpm-lock.yaml",
+      "bytes": 201524,
+      "sha256": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa"
+    },
+    {
+      "file": "packages/dsh-pm-tool/scripts/feedback-context-contract.mjs",
+      "bytes": 6483,
+      "sha256": "27b834a2786ea6b71615bf6d24dc67888f79321b4bb10160a392e97f225d4e03"
+    },
+    {
+      "file": "packages/dsh-pm-tool/scripts/verify-client-bundle.mjs",
+      "bytes": 10219,
+      "sha256": "ec7f95e9a5ca87589e9c281ed28e8ab49c54bf7fe7f73e2816508e8b986bfb1a"
+    },
+    {
+      "file": "packages/dsh-pm-tool/scripts/verify-gantt-drag.mjs",
+      "bytes": 9274,
+      "sha256": "153cf607a7a3b07de3314b66f25871be3e99ecc91baee6981337164b08a74eb4"
+    },
+    {
+      "file": "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs",
+      "bytes": 25840,
+      "sha256": "3694be0b1a53a886968a8de83ca76ed3a8169c9aacd6e84589b8af3eb54dd056"
+    },
+    {
+      "file": "packages/dsh-pm-tool/scripts/verify-web.mjs",
+      "bytes": 17140,
+      "sha256": "c230b4f96460c4a0b86f4e5623a461e4ac57a34af881464aef8fac124d150c75"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+      "bytes": 6338,
+      "sha256": "57ba3f107a0e43e6f7ca9c42cc88935856988bb9ba2f707bef8ae346208a5797"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/board/BoardBento.tsx",
+      "bytes": 19271,
+      "sha256": "43d4bc943867e78226eb861a2e6875717d42c519687027bc58c21617e8a786d6"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/board/board.css",
+      "bytes": 17786,
+      "sha256": "646ab1916c506e0bd890a2052f157cc550ba18d871114483b0e21cb36013e280"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+      "bytes": 10541,
+      "sha256": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/board/editor.tsx",
+      "bytes": 46456,
+      "sha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx",
+      "bytes": 15802,
+      "sha256": "cef2f64f80a47f46be29a74357937547c783cb326d2aa14dc44f4e88ad74298e"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx",
+      "bytes": 5492,
+      "sha256": "9c43bf4655e302eb235fd3b736e2b9397c35ec6f1df9ddbf7c8682faa10257af"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/index.tsx",
+      "bytes": 3403,
+      "sha256": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+      "bytes": 9079,
+      "sha256": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/launch-handshake.ts",
+      "bytes": 4958,
+      "sha256": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+      "bytes": 3811,
+      "sha256": "986a92ff011f4e0e47d287cffdd625e44a8832ec004f0a6304e4d0b9f7dc73c6"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+      "bytes": 5420,
+      "sha256": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+      "bytes": 6501,
+      "sha256": "eb8375b9aea341baf5b9c46efc1fc5de655e95c5465c437066bb5271afc48d45"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx",
+      "bytes": 14743,
+      "sha256": "b6c4b78e9fc86012134b1dda9e6ce78b2fc8dd9eef487362681bcf0d1976862a"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel.css",
+      "bytes": 326019,
+      "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 190993,
+      "sha256": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/provenance-panel.test.tsx",
+      "bytes": 8787,
+      "sha256": "5c484781fe1609360e34359ccecb667f98101de458ddc267141671f488ac8584"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/provenance-panel.tsx",
+      "bytes": 11559,
+      "sha256": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/result-card.test.ts",
+      "bytes": 5378,
+      "sha256": "cde00f00437f802fefaf542d880f54abf9202eae9c45a3f07ca75d270ae85566"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/result-card.tsx",
+      "bytes": 3870,
+      "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+      "bytes": 6953,
+      "sha256": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx",
+      "bytes": 14656,
+      "sha256": "26c214236164b60b11a795cfa675f64ae886ec7003de1bb01d337439b8118041"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+      "bytes": 45842,
+      "sha256": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts",
+      "bytes": 7434,
+      "sha256": "dc6b7424e588afba3dc4c05c9dd29c7f19fd14e17d1b7d2ebd7fce05725d50d7"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/stage-client.ts",
+      "bytes": 4485,
+      "sha256": "3d47b8fb194cb221b7518c4f121aea93dc650b3bc1bdc1aaa8749b11b954b5d1"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+      "bytes": 7474,
+      "sha256": "95992aef68f8a97f92137a5574b215fcad760246495317c2f383c52907b7b7a8"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx",
+      "bytes": 22466,
+      "sha256": "b7ecc42640705c61a8aa38630ce773c178674cf20b09477f0f5267422e2cf90c"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx",
+      "bytes": 19419,
+      "sha256": "95e4396e2be961e58aaca045299e45ed339e9b883063479d0066e3953e9eee61"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/gantt.tsx",
+      "bytes": 30901,
+      "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx",
+      "bytes": 2736,
+      "sha256": "071c2b0488e88078d15f6436c1798cced495706c15bf8ecbfcf435c343459d0d"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx",
+      "bytes": 5036,
+      "sha256": "8d7220cff8f01ed9d43dd00d1e59584936f4aa7ed68612aa40b56f00ca7cc709"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/habits.tsx",
+      "bytes": 15535,
+      "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/meetings.tsx",
+      "bytes": 16221,
+      "sha256": "19a6af2eff6c42a290b9f6102e5a88c0e080703a564b3f30ca89fef3633147c4"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+      "bytes": 12028,
+      "sha256": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+      "bytes": 8466,
+      "sha256": "8ed1ca262d6f9ccf586636da39515e6acef59fe235d05a5bb51d1471005d06a7"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/overview.tsx",
+      "bytes": 24056,
+      "sha256": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/records.css",
+      "bytes": 6842,
+      "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+      "bytes": 17993,
+      "sha256": "fea8f4f164d1d1b174f28aa03e6c1f692d2a2abbfa5bc18de4068ad0d436254d"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx",
+      "bytes": 18126,
+      "sha256": "d88c9bee1d2571f7ada3551bc8b7b5f1e7c98d7c2417f78a80a06f4766bb9388"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+      "bytes": 9242,
+      "sha256": "6c7a15bc744675af0fda91dcb289366a41491e0f8107bef8c4f7d0ffd6f00344"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+      "bytes": 12480,
+      "sha256": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+      "bytes": 4952,
+      "sha256": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/tasks.css",
+      "bytes": 46510,
+      "sha256": "369019753cdb985016afa17c21c5bc96dd5f1ae19b7bca3a2641246c117d2583"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+      "bytes": 77377,
+      "sha256": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+      "bytes": 15447,
+      "sha256": "8d7a71f2b89d1414649caad8e541e350c203cc043816cc91bde89279a50cd7be"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/ask.ts",
+      "bytes": 34928,
+      "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+      "bytes": 16339,
+      "sha256": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/backup.ts",
+      "bytes": 7316,
+      "sha256": "48369dafe70023bce1ebdf5a82d7b2475627ea6d6b58036187c8845491cf8cdd"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/task-import-filename.test.ts",
+      "bytes": 4882,
+      "sha256": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/task.ts",
+      "bytes": 41347,
+      "sha256": "1af8ac22df8d5876c4738e5c44fe8ec019d34678a3868e5c90c37197bc88863b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/backup.ts",
+      "bytes": 26049,
+      "sha256": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/csv-import.test.ts",
+      "bytes": 9302,
+      "sha256": "d31c5587c590aa01cab2efc550384c9c97b1577175861d7b5e05a98176d95d92"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/csv-import.ts",
+      "bytes": 10787,
+      "sha256": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-asset-store.ts",
+      "bytes": 21633,
+      "sha256": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-assets.test.ts",
+      "bytes": 6685,
+      "sha256": "fab5eb2578ba022997229264bdedbb75af2f5895c70e5c7fb1af3a7916980510"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-assets.ts",
+      "bytes": 10012,
+      "sha256": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-root.test.ts",
+      "bytes": 3701,
+      "sha256": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts",
+      "bytes": 6281,
+      "sha256": "3e48dedb7f9dec655cbfd9e7e00edc488a971f4b0a6182a56681212a79209f26"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/file-staging.ts",
+      "bytes": 9146,
+      "sha256": "3c643d5a47beeccad22908bb2c57a0d9d415b72243a169540ffa9638dc6f8e81"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/http/asset-route.test.ts",
+      "bytes": 26118,
+      "sha256": "c0d623ed9884cff1def7c508d588fd970c6c490aecc69b211de0875ebe4ef01e"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/http/asset-route.ts",
+      "bytes": 17035,
+      "sha256": "bac973650943798090c148f6245121781c2e7a080cb5b30f108b0ac793e1da80"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "bytes": 10855,
+      "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/queue.ts",
+      "bytes": 13563,
+      "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/reflect-file-count.test.ts",
+      "bytes": 3082,
+      "sha256": "059a67a3dbeda0ab72284564fc627b52b3ca57bb57e7f405d489b09c4f9da16a"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/reflect.ts",
+      "bytes": 17084,
+      "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+      "bytes": 6171,
+      "sha256": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-materials.ts",
+      "bytes": 32638,
+      "sha256": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task.ts",
+      "bytes": 13669,
+      "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+      "bytes": 15522,
+      "sha256": "5fb5b3cddd15cd6f32da923649eedbe8f55b466226462feb376474042cfc8591"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/tasks.ts",
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+      "bytes": 11293,
+      "sha256": "5687ee7ecefa3680c8794a5e167f6ff1f041da71266fbbc6f8ab8f221094fac0"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/ui-feedback.ts",
+      "bytes": 13794,
+      "sha256": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7"
+    },
+    {
+      "file": "packages/dsh-pm-tool/vitest.config.ts",
+      "bytes": 1072,
+      "sha256": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-views.ts",
+      "bytes": 14915,
+      "sha256": "6d1bdefbafe74f19a3446cbd0633727f1bdd40504af68948384e73f07dbc940c"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-views.test.ts",
+      "bytes": 13538,
+      "sha256": "86b8bcaf4866bf22057c7673f48a55a18a901693d2ba9298f75ddea36c4c18ce"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-tree.ts",
+      "bytes": 2660,
+      "sha256": "0d63b259129597098dfb3e8142fa5722c303a7a23f22eece59a60a0d47af0932"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/task-tree-u4.test.ts",
+      "bytes": 1309,
+      "sha256": "2f8f9f2561ca51df273b1d0d7d9918ebdf7f49efcce9dd5e4766290260ae0d7c"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/task-views-persist.ts",
+      "bytes": 2559,
+      "sha256": "a3b7fc0ed0fadec1832319d75b3a58e4ebb4ca7f78986da3f99521ae3b05ae90"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx",
+      "bytes": 6080,
+      "sha256": "ebd8739299f3135d2d993dadd955dada8488cf3097381d98e7a1ab85d638876d"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts",
+      "bytes": 5291,
+      "sha256": "51fe0e1e521c0993107894561d952c4ff7382f7d3faec65c9429ba31bcad68bd"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts",
+      "bytes": 6122,
+      "sha256": "cc7bab8b673c3cbbf6e58fa3ab68f47343aaba98c2c883e6c476bed6332ed792"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/result-card-permission.test.ts",
+      "bytes": 3737,
+      "sha256": "ff32f9024d4896b2a18fee8ff5e28b87d2e87fac81a51388db8e9086329ae4a9"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/ai-client.ts",
+      "bytes": 8933,
+      "sha256": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts",
+      "bytes": 9155,
+      "sha256": "3403fbf72e5db73dd788d94f64a42bad386a4092711dfd7abce511507f14ceed"
+    },
+    {
+      "file": "packages/dsh-pm-tool/src/client/shared/task-draft-materials-refs-dom.test.tsx",
+      "bytes": 11667,
+      "sha256": "73f5d1abc30d92e80b4e12156bbdbd99d422bfb0890b8cbd02b69148b4735a98"
+    }
+  ],
+  "launcherDeclarationOnly": 15,
+  "client": {
+    "bytes": 1719054,
+    "sha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db"
+  },
+  "sourceBinding": {
+    "bytes": 22059,
+    "sha256": "71ea0e70700df6efbe4338b0e7caab9bc6ad2927f3224aaf26533914a2c3a2af"
+  },
+  "finalSourceBinding": {
+    "bytes": 14799,
+    "sha256": "de8db05ce46bdd155a3202d95e4db584467cbd16578e4fca9faca6a43e1434da"
+  },
+  "original": {
+    "name": "pmtool-backup-2026-10-22T12-41-19-715Z.json",
+    "bytes": [
+      {
+        "id": "fa-0001",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "bytes": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a"
+      },
+      {
+        "id": "fa-0002",
+        "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+        "bytes": 22,
+        "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522"
+      }
+    ],
+    "sha256": "bf685cd0eec617a8d6f01c1de1b5fd69bb83fbd921c062915b8b8effe672a489",
+    "fileBundleId": "69ba8b57a76af04c",
+    "manifest": {
+      "bytes": 598,
+      "sha256": "7d14f0c2d96f00ed9e893d3a3f63e79166b6c0139d02f5bbe7626854e87c0051"
+    },
+    "ordinaryFiles": 4,
+    "rows": {
+      "projects": [
+        [
+          "p-0001",
+          {
+            "id": "p-0001",
+            "name": "QA-A-fixture-F5",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.927Z",
+            "updatedAt": "2026-10-21T13:44:54.927Z"
+          }
+        ],
+        [
+          "p-0002",
+          {
+            "id": "p-0002",
+            "name": "QA-B-fixture-F5",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.940Z",
+            "updatedAt": "2026-10-21T13:44:54.940Z"
+          }
+        ]
+      ],
+      "tasks": [
+        [
+          "t-0001",
+          {
+            "id": "t-0001",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F3-fixture-F5",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": "m-0001",
+            "deliverableId": "dlv-0001",
+            "predecessorIds": [
+              "t-0004"
+            ],
+            "evidenceUrl": "https://example.com/qa-legacy",
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/qa-spec",
+                "title": "QA规范",
+                "addedAt": "2026-10-21T13:44:55.003Z",
+                "note": "link原备注"
+              },
+              {
+                "id": "at-2",
+                "kind": "deliverable",
+                "deliverableId": "dlv-0001",
+                "addedAt": "2026-10-21T13:44:55.015Z",
+                "frozenVersion": "v1",
+                "frozenName": "QA交付物V1",
+                "note": "冻结V1"
+              },
+              {
+                "id": "at-3",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-21T13:44:55.146Z"
+              },
+              {
+                "id": "at-4",
+                "kind": "file",
+                "assetId": "fa-0002",
+                "addedAt": "2026-10-21T13:44:55.197Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-19",
+                "author": "测试甲",
+                "createdAt": "2026-10-21T13:44:55.021Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试甲",
+                    "content": "E1 rv1正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.021Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E1 rv2正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.034Z"
+                  },
+                  {
+                    "id": "rv-3",
+                    "date": "2026-10-21",
+                    "author": "测试甲",
+                    "content": "E1 rv3正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.053Z"
+                  }
+                ],
+                "refs": [
+                  "at-1"
+                ]
+              },
+              {
+                "id": "pl-2",
+                "date": "2026-10-20",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.063Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv1已删除",
+                    "revisedAt": "2026-10-21T13:44:55.063Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv2已删除",
+                    "revisedAt": "2026-10-21T13:44:55.072Z"
+                  }
+                ],
+                "deletedAt": "2026-10-21T13:44:55.088Z"
+              },
+              {
+                "id": "pl-3",
+                "date": "2026-10-19",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.101Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试乙",
+                    "content": "E3 rv1同日异ID",
+                    "revisedAt": "2026-10-21T13:44:55.101Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.980Z",
+            "updatedAt": "2026-10-22T12:27:51.376Z"
+          }
+        ],
+        [
+          "t-0002",
+          {
+            "id": "t-0002",
+            "projectId": "p-0002",
+            "parentId": null,
+            "title": "QA-B任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "QA-B乙",
+                "createdAt": "2026-10-21T13:44:55.113Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "QA-B乙",
+                    "content": "QA-B不得入A",
+                    "revisedAt": "2026-10-21T13:44:55.113Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.993Z",
+            "updatedAt": "2026-10-21T13:44:55.113Z"
+          }
+        ],
+        [
+          "t-0003",
+          {
+            "id": "t-0003",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F5共享文件任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-21T13:44:55.172Z"
+              }
+            ],
+            "code": "2",
+            "order": 2,
+            "createdAt": "2026-10-21T13:44:55.125Z",
+            "updatedAt": "2026-10-21T13:44:55.172Z"
+          }
+        ],
+        [
+          "t-0004",
+          {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "J03修后三资料原子任务",
+            "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/j03/first",
+                "title": "J03资料甲",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              },
+              {
+                "id": "at-2",
+                "kind": "link",
+                "url": "https://example.com/j03/second",
+                "title": "J03资料乙",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              },
+              {
+                "id": "at-3",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "修后验收作者",
+                "createdAt": "2026-10-22T12:22:53.094Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "修后验收作者",
+                    "content": "J03修后进展，引用第二资料与真实文件。",
+                    "refs": [
+                      "at-2",
+                      "at-3"
+                    ],
+                    "revisedAt": "2026-10-22T12:22:53.094Z"
+                  }
+                ],
+                "refs": [
+                  "at-2",
+                  "at-3"
+                ]
+              }
+            ],
+            "code": "3",
+            "order": 3,
+            "createdAt": "2026-10-22T12:22:53.094Z",
+            "updatedAt": "2026-10-22T12:22:53.094Z"
+          }
+        ]
+      ],
+      "milestones": [
+        [
+          "m-0001",
+          {
+            "id": "m-0001",
+            "projectId": "p-0001",
+            "title": "QA里程碑",
+            "targetDate": "2026-10-21",
+            "status": "planned",
+            "achievedDate": null,
+            "description": "",
+            "createdAt": "2026-10-21T13:44:54.949Z",
+            "updatedAt": "2026-10-21T13:44:54.949Z"
+          }
+        ]
+      ],
+      "risk_issues": [
+        [
+          "ri-0001",
+          {
+            "id": "ri-0001",
+            "projectId": "p-0001",
+            "type": "risk",
+            "title": "F5风险",
+            "description": "",
+            "owner": "",
+            "dueDate": null,
+            "status": "open",
+            "probability": "medium",
+            "impact": "high",
+            "responsePlan": "",
+            "solution": "",
+            "createdAt": "2026-10-21T13:44:55.221Z",
+            "updatedAt": "2026-10-21T13:44:55.221Z"
+          }
+        ]
+      ],
+      "meetings": [
+        [
+          "mtg-0001",
+          {
+            "id": "mtg-0001",
+            "projectId": "p-0001",
+            "title": "F5会议",
+            "meetingDate": "2026-10-21",
+            "startTime": null,
+            "durationMinutes": null,
+            "location": "",
+            "facilitator": "",
+            "recorder": "",
+            "participants": [],
+            "status": "draft",
+            "summary": "",
+            "topics": [],
+            "decisions": [
+              "保留标准来源"
+            ],
+            "actions": [],
+            "notes": "",
+            "sourceType": "manual",
+            "sourceSessionId": null,
+            "createdAt": "2026-10-21T13:44:55.241Z",
+            "updatedAt": "2026-10-21T13:44:55.241Z"
+          }
+        ]
+      ],
+      "reports": [
+        [
+          "rpt-0001",
+          {
+            "id": "rpt-0001",
+            "projectId": "p-0001",
+            "periodStart": "2026-10-19",
+            "periodEnd": "2026-10-21",
+            "title": "QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报",
+            "status": "draft",
+            "executiveSummary": "",
+            "completedWork": [],
+            "nextPlans": [],
+            "blockers": [],
+            "snapshotAt": "2026-10-21T13:44:55.347Z",
+            "snapshot": {
+              "project": {
+                "name": "QA-A-fixture-F5",
+                "owner": "",
+                "status": "planning",
+                "targetDate": "2026-12-31"
+              },
+              "tasks": {
+                "total": 2,
+                "todo": 2,
+                "inProgress": 0,
+                "blocked": 0,
+                "done": 0,
+                "averageProgress": null,
+                "calcVersion": 1
+              },
+              "milestones": {
+                "total": 1,
+                "achieved": 0,
+                "atRisk": 0,
+                "missed": 0
+              },
+              "meetings": {
+                "inPeriod": 1,
+                "decisions": 1
+              },
+              "periodMilestones": [
+                {
+                  "id": "m-0001",
+                  "title": "QA里程碑",
+                  "targetDate": "2026-10-21",
+                  "status": "planned"
+                }
+              ],
+              "periodMeetings": [
+                {
+                  "id": "mtg-0001",
+                  "title": "F5会议",
+                  "meetingDate": "2026-10-21",
+                  "decisions": [
+                    "保留标准来源"
+                  ]
+                }
+              ],
+              "exceptions": [
+                {
+                  "kind": "risk_issue",
+                  "severity": "warning",
+                  "id": "ri-0001",
+                  "title": "F5风险",
+                  "detail": "风险未关闭，影响为 high",
+                  "owner": "",
+                  "dueDate": null
+                }
+              ]
+            },
+            "sourceType": "session",
+            "sourceSessionId": "qa-f5-session",
+            "createdAt": "2026-10-21T13:44:55.347Z",
+            "updatedAt": "2026-10-21T13:44:55.347Z"
+          }
+        ]
+      ],
+      "deliverables": [
+        [
+          "dlv-0001",
+          {
+            "id": "dlv-0001",
+            "projectId": "p-0001",
+            "name": "QA交付物V1",
+            "version": "v1",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": "m-0001",
+            "note": "合法备注",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.960Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.960Z",
+            "updatedAt": "2026-10-21T13:44:54.960Z"
+          }
+        ],
+        [
+          "dlv-0002",
+          {
+            "id": "dlv-0002",
+            "projectId": "p-0002",
+            "name": "QA-B V2",
+            "version": "v2",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": null,
+            "note": "",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.969Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.969Z",
+            "updatedAt": "2026-10-21T13:44:54.969Z"
+          }
+        ]
+      ],
+      "settings": [
+        [
+          "aiModelMode",
+          {
+            "value": "prod",
+            "updatedAt": "2026-10-22T12:31:43.291Z"
+          }
+        ],
+        [
+          "pmExportAudit",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md",
+                "itemCount": 2
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ],
+        [
+          "pmExportSent",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md"
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ]
+      ],
+      "reflections": [
+        [
+          "ref-mvi5z85j-yk04ji",
+          {
+            "id": "ref-mvi5z85j-yk04ji",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "sourceEvent": "task-done",
+            "draft": {
+              "title": "F3-fixture-F5 · 完成即时复盘（草稿）",
+              "at": "2026-10-21T13:44:55.303Z",
+              "lines": [
+                {
+                  "text": "完成时刻 2026-10-21",
+                  "mark": "known"
+                },
+                {
+                  "text": "已登记客观佐证链接（质量由人复核）",
+                  "mark": "known"
+                },
+                {
+                  "text": "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+                  "mark": "known"
+                },
+                {
+                  "text": "资料区已登记：1 条链接、1 项交付物（质量由人复核）",
+                  "mark": "known"
+                }
+              ],
+              "gaps": []
+            },
+            "createdAt": "2026-10-21T13:44:55.303Z",
+            "updatedAt": "2026-10-21T13:44:55.303Z"
+          }
+        ]
+      ],
+      "okrs": [
+        [
+          "okr-mvi5z847-33y3xk",
+          {
+            "id": "okr-mvi5z847-33y3xk",
+            "projectId": "p-0001",
+            "title": "F5目标",
+            "kind": "objective",
+            "primaryOkrId": null,
+            "relatedOkrIds": [],
+            "status": "draft",
+            "createdAt": "2026-10-21T13:44:55.255Z",
+            "updatedAt": "2026-10-21T13:44:55.255Z"
+          }
+        ]
+      ],
+      "lessons": [
+        [
+          "lesson-mvi5z858-cxvv9t",
+          {
+            "id": "lesson-mvi5z858-cxvv9t",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "lines": [
+              {
+                "text": "已核：备份需保留原字节",
+                "mark": "known"
+              }
+            ],
+            "gaps": [],
+            "createdAt": "2026-10-21T13:44:55.291Z",
+            "updatedAt": "2026-10-21T13:44:55.291Z"
+          }
+        ]
+      ],
+      "habits": [
+        [
+          "habit-mvi5z84q-32ztau",
+          {
+            "id": "habit-mvi5z84q-32ztau",
+            "projectId": "p-0001",
+            "okrId": "okr-mvi5z847-33y3xk",
+            "title": "F5习惯",
+            "status": "draft",
+            "checkIns": [],
+            "streak": {
+              "current": 0,
+              "longest": 0,
+              "totalDays": 0
+            },
+            "createdAt": "2026-10-21T13:44:55.274Z",
+            "updatedAt": "2026-10-21T13:44:55.274Z"
+          }
+        ]
+      ],
+      "file_assets": [
+        [
+          "fa-0001",
+          {
+            "id": "fa-0001",
+            "projectId": "p-0001",
+            "fileName": "QA 中文 文件.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+            "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+            "addedAt": "2026-10-21T13:44:55.146Z"
+          }
+        ],
+        [
+          "fa-0002",
+          {
+            "id": "fa-0002",
+            "projectId": "p-0001",
+            "fileName": "version-two.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+            "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+            "addedAt": "2026-10-21T13:44:55.197Z"
+          }
+        ]
+      ]
+    },
+    "sidecar": "reports/all-pending-evidence-20261021/CombinedGuiR1/backup-packages/pmtool-backup-2026-10-22T12-41-19-715Z.json.files.69ba8b57a76af04c"
+  },
+  "sourcePackage": {
+    "name": "pmtool-backup-2026-10-22T13-20-09-542Z.json",
+    "bytes": [
+      {
+        "id": "fa-0001",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "bytes": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a"
+      },
+      {
+        "id": "fa-0002",
+        "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+        "bytes": 22,
+        "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522"
+      },
+      {
+        "id": "fa-0003",
+        "relPath": "37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+        "bytes": 21,
+        "sha256": "3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471"
+      },
+      {
+        "id": "fa-0004",
+        "relPath": "ae/aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1.txt",
+        "bytes": 21,
+        "sha256": "aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1"
+      }
+    ],
+    "sha256": "d8b1348e690a8ea5d906d5c70bba545310d425cc647524938cdcf6de488403f2",
+    "fileBundleId": "18ff796574f9419e",
+    "manifest": {
+      "bytes": 1010,
+      "sha256": "6b2a00436fea1789c231f5d44b4a4ce57983896602401b44e66a4809ee1f10a8"
+    },
+    "ordinaryFiles": 6,
+    "rows": {
+      "projects": [
+        [
+          "p-0001",
+          {
+            "id": "p-0001",
+            "name": "RA-F07-source-midpromotion",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.927Z",
+            "updatedAt": "2026-10-22T13:20:09.406Z"
+          }
+        ],
+        [
+          "p-0002",
+          {
+            "id": "p-0002",
+            "name": "QA-B-fixture-F5",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.940Z",
+            "updatedAt": "2026-10-21T13:44:54.940Z"
+          }
+        ]
+      ],
+      "tasks": [
+        [
+          "t-0001",
+          {
+            "id": "t-0001",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F3-fixture-F5",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": "m-0001",
+            "deliverableId": "dlv-0001",
+            "predecessorIds": [
+              "t-0004"
+            ],
+            "evidenceUrl": "https://example.com/qa-legacy",
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/qa-spec",
+                "title": "QA规范",
+                "addedAt": "2026-10-21T13:44:55.003Z",
+                "note": "link原备注"
+              },
+              {
+                "id": "at-2",
+                "kind": "deliverable",
+                "deliverableId": "dlv-0001",
+                "addedAt": "2026-10-21T13:44:55.015Z",
+                "frozenVersion": "v1",
+                "frozenName": "QA交付物V1",
+                "note": "冻结V1"
+              },
+              {
+                "id": "at-3",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-21T13:44:55.146Z"
+              },
+              {
+                "id": "at-4",
+                "kind": "file",
+                "assetId": "fa-0002",
+                "addedAt": "2026-10-21T13:44:55.197Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-19",
+                "author": "测试甲",
+                "createdAt": "2026-10-21T13:44:55.021Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试甲",
+                    "content": "E1 rv1正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.021Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E1 rv2正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.034Z"
+                  },
+                  {
+                    "id": "rv-3",
+                    "date": "2026-10-21",
+                    "author": "测试甲",
+                    "content": "E1 rv3正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.053Z"
+                  }
+                ],
+                "refs": [
+                  "at-1"
+                ]
+              },
+              {
+                "id": "pl-2",
+                "date": "2026-10-20",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.063Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv1已删除",
+                    "revisedAt": "2026-10-21T13:44:55.063Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv2已删除",
+                    "revisedAt": "2026-10-21T13:44:55.072Z"
+                  }
+                ],
+                "deletedAt": "2026-10-21T13:44:55.088Z"
+              },
+              {
+                "id": "pl-3",
+                "date": "2026-10-19",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.101Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试乙",
+                    "content": "E3 rv1同日异ID",
+                    "revisedAt": "2026-10-21T13:44:55.101Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.980Z",
+            "updatedAt": "2026-10-22T12:27:51.376Z"
+          }
+        ],
+        [
+          "t-0002",
+          {
+            "id": "t-0002",
+            "projectId": "p-0002",
+            "parentId": null,
+            "title": "QA-B任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "QA-B乙",
+                "createdAt": "2026-10-21T13:44:55.113Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "QA-B乙",
+                    "content": "QA-B不得入A",
+                    "revisedAt": "2026-10-21T13:44:55.113Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.993Z",
+            "updatedAt": "2026-10-21T13:44:55.113Z"
+          }
+        ],
+        [
+          "t-0003",
+          {
+            "id": "t-0003",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F5共享文件任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-21T13:44:55.172Z"
+              }
+            ],
+            "code": "2",
+            "order": 2,
+            "createdAt": "2026-10-21T13:44:55.125Z",
+            "updatedAt": "2026-10-21T13:44:55.172Z"
+          }
+        ],
+        [
+          "t-0004",
+          {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "J03修后三资料原子任务",
+            "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/j03/first",
+                "title": "J03资料甲",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              },
+              {
+                "id": "at-2",
+                "kind": "link",
+                "url": "https://example.com/j03/second",
+                "title": "J03资料乙",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              },
+              {
+                "id": "at-3",
+                "kind": "file",
+                "assetId": "fa-0001",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "修后验收作者",
+                "createdAt": "2026-10-22T12:22:53.094Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "修后验收作者",
+                    "content": "J03修后进展，引用第二资料与真实文件。",
+                    "refs": [
+                      "at-2",
+                      "at-3"
+                    ],
+                    "revisedAt": "2026-10-22T12:22:53.094Z"
+                  }
+                ],
+                "refs": [
+                  "at-2",
+                  "at-3"
+                ]
+              }
+            ],
+            "code": "3",
+            "order": 3,
+            "createdAt": "2026-10-22T12:22:53.094Z",
+            "updatedAt": "2026-10-22T12:22:53.094Z"
+          }
+        ]
+      ],
+      "milestones": [
+        [
+          "m-0001",
+          {
+            "id": "m-0001",
+            "projectId": "p-0001",
+            "title": "QA里程碑",
+            "targetDate": "2026-10-21",
+            "status": "planned",
+            "achievedDate": null,
+            "description": "",
+            "createdAt": "2026-10-21T13:44:54.949Z",
+            "updatedAt": "2026-10-21T13:44:54.949Z"
+          }
+        ]
+      ],
+      "risk_issues": [
+        [
+          "ri-0001",
+          {
+            "id": "ri-0001",
+            "projectId": "p-0001",
+            "type": "risk",
+            "title": "F5风险",
+            "description": "",
+            "owner": "",
+            "dueDate": null,
+            "status": "open",
+            "probability": "medium",
+            "impact": "high",
+            "responsePlan": "",
+            "solution": "",
+            "createdAt": "2026-10-21T13:44:55.221Z",
+            "updatedAt": "2026-10-21T13:44:55.221Z"
+          }
+        ]
+      ],
+      "meetings": [
+        [
+          "mtg-0001",
+          {
+            "id": "mtg-0001",
+            "projectId": "p-0001",
+            "title": "F5会议",
+            "meetingDate": "2026-10-21",
+            "startTime": null,
+            "durationMinutes": null,
+            "location": "",
+            "facilitator": "",
+            "recorder": "",
+            "participants": [],
+            "status": "draft",
+            "summary": "",
+            "topics": [],
+            "decisions": [
+              "保留标准来源"
+            ],
+            "actions": [],
+            "notes": "",
+            "sourceType": "manual",
+            "sourceSessionId": null,
+            "createdAt": "2026-10-21T13:44:55.241Z",
+            "updatedAt": "2026-10-21T13:44:55.241Z"
+          }
+        ]
+      ],
+      "reports": [
+        [
+          "rpt-0001",
+          {
+            "id": "rpt-0001",
+            "projectId": "p-0001",
+            "periodStart": "2026-10-19",
+            "periodEnd": "2026-10-21",
+            "title": "QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报",
+            "status": "draft",
+            "executiveSummary": "",
+            "completedWork": [],
+            "nextPlans": [],
+            "blockers": [],
+            "snapshotAt": "2026-10-21T13:44:55.347Z",
+            "snapshot": {
+              "project": {
+                "name": "QA-A-fixture-F5",
+                "owner": "",
+                "status": "planning",
+                "targetDate": "2026-12-31"
+              },
+              "tasks": {
+                "total": 2,
+                "todo": 2,
+                "inProgress": 0,
+                "blocked": 0,
+                "done": 0,
+                "averageProgress": null,
+                "calcVersion": 1
+              },
+              "milestones": {
+                "total": 1,
+                "achieved": 0,
+                "atRisk": 0,
+                "missed": 0
+              },
+              "meetings": {
+                "inPeriod": 1,
+                "decisions": 1
+              },
+              "periodMilestones": [
+                {
+                  "id": "m-0001",
+                  "title": "QA里程碑",
+                  "targetDate": "2026-10-21",
+                  "status": "planned"
+                }
+              ],
+              "periodMeetings": [
+                {
+                  "id": "mtg-0001",
+                  "title": "F5会议",
+                  "meetingDate": "2026-10-21",
+                  "decisions": [
+                    "保留标准来源"
+                  ]
+                }
+              ],
+              "exceptions": [
+                {
+                  "kind": "risk_issue",
+                  "severity": "warning",
+                  "id": "ri-0001",
+                  "title": "F5风险",
+                  "detail": "风险未关闭，影响为 high",
+                  "owner": "",
+                  "dueDate": null
+                }
+              ]
+            },
+            "sourceType": "session",
+            "sourceSessionId": "qa-f5-session",
+            "createdAt": "2026-10-21T13:44:55.347Z",
+            "updatedAt": "2026-10-21T13:44:55.347Z"
+          }
+        ]
+      ],
+      "deliverables": [
+        [
+          "dlv-0001",
+          {
+            "id": "dlv-0001",
+            "projectId": "p-0001",
+            "name": "QA交付物V1",
+            "version": "v1",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": "m-0001",
+            "note": "合法备注",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.960Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.960Z",
+            "updatedAt": "2026-10-21T13:44:54.960Z"
+          }
+        ],
+        [
+          "dlv-0002",
+          {
+            "id": "dlv-0002",
+            "projectId": "p-0002",
+            "name": "QA-B V2",
+            "version": "v2",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": null,
+            "note": "",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.969Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.969Z",
+            "updatedAt": "2026-10-21T13:44:54.969Z"
+          }
+        ]
+      ],
+      "settings": [
+        [
+          "aiModelMode",
+          {
+            "value": "prod",
+            "updatedAt": "2026-10-22T12:31:43.291Z"
+          }
+        ],
+        [
+          "pmExportAudit",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md",
+                "itemCount": 2
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ],
+        [
+          "pmExportSent",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md"
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ]
+      ],
+      "reflections": [
+        [
+          "ref-mvi5z85j-yk04ji",
+          {
+            "id": "ref-mvi5z85j-yk04ji",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "sourceEvent": "task-done",
+            "draft": {
+              "title": "F3-fixture-F5 · 完成即时复盘（草稿）",
+              "at": "2026-10-21T13:44:55.303Z",
+              "lines": [
+                {
+                  "text": "完成时刻 2026-10-21",
+                  "mark": "known"
+                },
+                {
+                  "text": "已登记客观佐证链接（质量由人复核）",
+                  "mark": "known"
+                },
+                {
+                  "text": "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+                  "mark": "known"
+                },
+                {
+                  "text": "资料区已登记：1 条链接、1 项交付物（质量由人复核）",
+                  "mark": "known"
+                }
+              ],
+              "gaps": []
+            },
+            "createdAt": "2026-10-21T13:44:55.303Z",
+            "updatedAt": "2026-10-21T13:44:55.303Z"
+          }
+        ]
+      ],
+      "okrs": [
+        [
+          "okr-mvi5z847-33y3xk",
+          {
+            "id": "okr-mvi5z847-33y3xk",
+            "projectId": "p-0001",
+            "title": "F5目标",
+            "kind": "objective",
+            "primaryOkrId": null,
+            "relatedOkrIds": [],
+            "status": "draft",
+            "createdAt": "2026-10-21T13:44:55.255Z",
+            "updatedAt": "2026-10-21T13:44:55.255Z"
+          }
+        ]
+      ],
+      "lessons": [
+        [
+          "lesson-mvi5z858-cxvv9t",
+          {
+            "id": "lesson-mvi5z858-cxvv9t",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "lines": [
+              {
+                "text": "已核：备份需保留原字节",
+                "mark": "known"
+              }
+            ],
+            "gaps": [],
+            "createdAt": "2026-10-21T13:44:55.291Z",
+            "updatedAt": "2026-10-21T13:44:55.291Z"
+          }
+        ]
+      ],
+      "habits": [
+        [
+          "habit-mvi5z84q-32ztau",
+          {
+            "id": "habit-mvi5z84q-32ztau",
+            "projectId": "p-0001",
+            "okrId": "okr-mvi5z847-33y3xk",
+            "title": "F5习惯",
+            "status": "draft",
+            "checkIns": [],
+            "streak": {
+              "current": 0,
+              "longest": 0,
+              "totalDays": 0
+            },
+            "createdAt": "2026-10-21T13:44:55.274Z",
+            "updatedAt": "2026-10-21T13:44:55.274Z"
+          }
+        ]
+      ],
+      "file_assets": [
+        [
+          "fa-0001",
+          {
+            "id": "fa-0001",
+            "projectId": "p-0001",
+            "fileName": "QA 中文 文件.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+            "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+            "addedAt": "2026-10-21T13:44:55.146Z"
+          }
+        ],
+        [
+          "fa-0002",
+          {
+            "id": "fa-0002",
+            "projectId": "p-0001",
+            "fileName": "version-two.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+            "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+            "addedAt": "2026-10-21T13:44:55.197Z"
+          }
+        ],
+        [
+          "fa-0003",
+          {
+            "id": "fa-0003",
+            "projectId": "p-0001",
+            "fileName": "ra-f07-A.txt",
+            "mediaType": "text/plain",
+            "size": 21,
+            "sha256": "3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471",
+            "relPath": "37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+            "addedAt": "2026-10-22T13:20:09.471Z"
+          }
+        ],
+        [
+          "fa-0004",
+          {
+            "id": "fa-0004",
+            "projectId": "p-0001",
+            "fileName": "ra-f07-B.txt",
+            "mediaType": "text/plain",
+            "size": 21,
+            "sha256": "aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1",
+            "relPath": "ae/aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1.txt",
+            "addedAt": "2026-10-22T13:20:09.521Z"
+          }
+        ]
+      ]
+    },
+    "sidecar": "reports/all-pending-evidence-20261021/F07RemainingR1/source-package/pmtool-backup-2026-10-22T13-20-09-542Z.json.files.18ff796574f9419e"
+  },
+  "safety": {
+    "name": "pmtool-backup-2026-10-22T13-23-44-808Z.json",
+    "bytes": [
+      {
+        "id": "fa-0001",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "bytes": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a"
+      },
+      {
+        "id": "fa-0002",
+        "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+        "bytes": 22,
+        "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522"
+      }
+    ],
+    "sha256": "80e7b92042d09c30eccf769f6672e6aa12825f2df4548fb796d3afc59c5a952f",
+    "fileBundleId": "895b10c8dd74022f",
+    "manifest": {
+      "bytes": 598,
+      "sha256": "8c4d84544c799d3ddbd57ba0835d669d088d1afb31c5971b9fd3a9330a4954d5"
+    },
+    "ordinaryFiles": 4,
+    "rows": {
+      "projects": [
+        [
+          "p-0001",
+          {
+            "id": "p-0001",
+            "name": "QA-A-fixture-F5",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.927Z",
+            "updatedAt": "2026-10-21T13:44:54.927Z"
+          }
+        ],
+        [
+          "p-0002",
+          {
+            "id": "p-0002",
+            "name": "QA-B-fixture-F5",
+            "description": "",
+            "owner": "",
+            "status": "planning",
+            "startDate": "2026-01-01",
+            "targetDate": "2026-12-31",
+            "createdAt": "2026-10-21T13:44:54.940Z",
+            "updatedAt": "2026-10-21T13:44:54.940Z"
+          }
+        ]
+      ],
+      "tasks": [
+        [
+          "t-0001",
+          {
+            "id": "t-0001",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F3-fixture-F5",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": "m-0001",
+            "deliverableId": "dlv-0001",
+            "predecessorIds": [
+              "t-0004"
+            ],
+            "evidenceUrl": "https://example.com/qa-legacy",
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/qa-spec",
+                "title": "QA规范",
+                "addedAt": "2026-10-21T13:44:55.003Z",
+                "note": "link原备注"
+              },
+              {
+                "id": "at-2",
+                "kind": "deliverable",
+                "deliverableId": "dlv-0001",
+                "addedAt": "2026-10-21T13:44:55.015Z",
+                "frozenVersion": "v1",
+                "frozenName": "QA交付物V1",
+                "note": "冻结V1"
+              },
+              {
+                "id": "at-4",
+                "kind": "file",
+                "assetId": "fa-0002",
+                "addedAt": "2026-10-21T13:44:55.197Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-19",
+                "author": "测试甲",
+                "createdAt": "2026-10-21T13:44:55.021Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试甲",
+                    "content": "E1 rv1正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.021Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E1 rv2正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.034Z"
+                  },
+                  {
+                    "id": "rv-3",
+                    "date": "2026-10-21",
+                    "author": "测试甲",
+                    "content": "E1 rv3正文",
+                    "refs": [
+                      "at-1"
+                    ],
+                    "revisedAt": "2026-10-21T13:44:55.053Z"
+                  }
+                ],
+                "refs": [
+                  "at-1"
+                ]
+              },
+              {
+                "id": "pl-2",
+                "date": "2026-10-20",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.063Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv1已删除",
+                    "revisedAt": "2026-10-21T13:44:55.063Z"
+                  },
+                  {
+                    "id": "rv-2",
+                    "date": "2026-10-20",
+                    "author": "测试乙",
+                    "content": "E2 rv2已删除",
+                    "revisedAt": "2026-10-21T13:44:55.072Z"
+                  }
+                ],
+                "deletedAt": "2026-10-21T13:44:55.088Z"
+              },
+              {
+                "id": "pl-3",
+                "date": "2026-10-19",
+                "author": "测试乙",
+                "createdAt": "2026-10-21T13:44:55.101Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-19",
+                    "author": "测试乙",
+                    "content": "E3 rv1同日异ID",
+                    "revisedAt": "2026-10-21T13:44:55.101Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.980Z",
+            "updatedAt": "2026-10-22T13:05:21.899Z"
+          }
+        ],
+        [
+          "t-0002",
+          {
+            "id": "t-0002",
+            "projectId": "p-0002",
+            "parentId": null,
+            "title": "QA-B任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "QA-B乙",
+                "createdAt": "2026-10-21T13:44:55.113Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "QA-B乙",
+                    "content": "QA-B不得入A",
+                    "revisedAt": "2026-10-21T13:44:55.113Z"
+                  }
+                ]
+              }
+            ],
+            "code": "1",
+            "order": 1,
+            "createdAt": "2026-10-21T13:44:54.993Z",
+            "updatedAt": "2026-10-21T13:44:55.113Z"
+          }
+        ],
+        [
+          "t-0003",
+          {
+            "id": "t-0003",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "F5共享文件任务",
+            "description": "",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [],
+            "code": "2",
+            "order": 2,
+            "createdAt": "2026-10-21T13:44:55.125Z",
+            "updatedAt": "2026-10-22T13:05:20.050Z"
+          }
+        ],
+        [
+          "t-0004",
+          {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "J03修后三资料原子任务",
+            "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+            "assignee": "",
+            "status": "todo",
+            "priority": "P1",
+            "progress": 0,
+            "milestoneId": null,
+            "attachments": [
+              {
+                "id": "at-1",
+                "kind": "link",
+                "url": "https://example.com/j03/first",
+                "title": "J03资料甲",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              },
+              {
+                "id": "at-2",
+                "kind": "link",
+                "url": "https://example.com/j03/second",
+                "title": "J03资料乙",
+                "addedAt": "2026-10-22T12:22:53.094Z"
+              }
+            ],
+            "progressLog": [
+              {
+                "id": "pl-1",
+                "date": "2026-10-21",
+                "author": "修后验收作者",
+                "createdAt": "2026-10-22T12:22:53.094Z",
+                "revisions": [
+                  {
+                    "id": "rv-1",
+                    "date": "2026-10-21",
+                    "author": "修后验收作者",
+                    "content": "J03修后进展，引用第二资料与真实文件。",
+                    "refs": [
+                      "at-2",
+                      "at-3"
+                    ],
+                    "revisedAt": "2026-10-22T12:22:53.094Z"
+                  }
+                ],
+                "refs": [
+                  "at-2",
+                  "at-3"
+                ]
+              }
+            ],
+            "code": "3",
+            "order": 3,
+            "createdAt": "2026-10-22T12:22:53.094Z",
+            "updatedAt": "2026-10-22T13:04:37.939Z"
+          }
+        ]
+      ],
+      "milestones": [
+        [
+          "m-0001",
+          {
+            "id": "m-0001",
+            "projectId": "p-0001",
+            "title": "QA里程碑",
+            "targetDate": "2026-10-21",
+            "status": "planned",
+            "achievedDate": null,
+            "description": "",
+            "createdAt": "2026-10-21T13:44:54.949Z",
+            "updatedAt": "2026-10-21T13:44:54.949Z"
+          }
+        ]
+      ],
+      "risk_issues": [
+        [
+          "ri-0001",
+          {
+            "id": "ri-0001",
+            "projectId": "p-0001",
+            "type": "risk",
+            "title": "F5风险",
+            "description": "",
+            "owner": "",
+            "dueDate": null,
+            "status": "open",
+            "probability": "medium",
+            "impact": "high",
+            "responsePlan": "",
+            "solution": "",
+            "createdAt": "2026-10-21T13:44:55.221Z",
+            "updatedAt": "2026-10-21T13:44:55.221Z"
+          }
+        ]
+      ],
+      "meetings": [
+        [
+          "mtg-0001",
+          {
+            "id": "mtg-0001",
+            "projectId": "p-0001",
+            "title": "F5会议",
+            "meetingDate": "2026-10-21",
+            "startTime": null,
+            "durationMinutes": null,
+            "location": "",
+            "facilitator": "",
+            "recorder": "",
+            "participants": [],
+            "status": "draft",
+            "summary": "",
+            "topics": [],
+            "decisions": [
+              "保留标准来源"
+            ],
+            "actions": [],
+            "notes": "",
+            "sourceType": "manual",
+            "sourceSessionId": null,
+            "createdAt": "2026-10-21T13:44:55.241Z",
+            "updatedAt": "2026-10-21T13:44:55.241Z"
+          }
+        ]
+      ],
+      "reports": [
+        [
+          "rpt-0001",
+          {
+            "id": "rpt-0001",
+            "projectId": "p-0001",
+            "periodStart": "2026-10-19",
+            "periodEnd": "2026-10-21",
+            "title": "QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报",
+            "status": "draft",
+            "executiveSummary": "",
+            "completedWork": [],
+            "nextPlans": [],
+            "blockers": [],
+            "snapshotAt": "2026-10-21T13:44:55.347Z",
+            "snapshot": {
+              "project": {
+                "name": "QA-A-fixture-F5",
+                "owner": "",
+                "status": "planning",
+                "targetDate": "2026-12-31"
+              },
+              "tasks": {
+                "total": 2,
+                "todo": 2,
+                "inProgress": 0,
+                "blocked": 0,
+                "done": 0,
+                "averageProgress": null,
+                "calcVersion": 1
+              },
+              "milestones": {
+                "total": 1,
+                "achieved": 0,
+                "atRisk": 0,
+                "missed": 0
+              },
+              "meetings": {
+                "inPeriod": 1,
+                "decisions": 1
+              },
+              "periodMilestones": [
+                {
+                  "id": "m-0001",
+                  "title": "QA里程碑",
+                  "targetDate": "2026-10-21",
+                  "status": "planned"
+                }
+              ],
+              "periodMeetings": [
+                {
+                  "id": "mtg-0001",
+                  "title": "F5会议",
+                  "meetingDate": "2026-10-21",
+                  "decisions": [
+                    "保留标准来源"
+                  ]
+                }
+              ],
+              "exceptions": [
+                {
+                  "kind": "risk_issue",
+                  "severity": "warning",
+                  "id": "ri-0001",
+                  "title": "F5风险",
+                  "detail": "风险未关闭，影响为 high",
+                  "owner": "",
+                  "dueDate": null
+                }
+              ]
+            },
+            "sourceType": "session",
+            "sourceSessionId": "qa-f5-session",
+            "createdAt": "2026-10-21T13:44:55.347Z",
+            "updatedAt": "2026-10-21T13:44:55.347Z"
+          }
+        ]
+      ],
+      "deliverables": [
+        [
+          "dlv-0001",
+          {
+            "id": "dlv-0001",
+            "projectId": "p-0001",
+            "name": "QA交付物V1",
+            "version": "v1",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": "m-0001",
+            "note": "合法备注",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.960Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.960Z",
+            "updatedAt": "2026-10-21T13:44:54.960Z"
+          }
+        ],
+        [
+          "dlv-0002",
+          {
+            "id": "dlv-0002",
+            "projectId": "p-0002",
+            "name": "QA-B V2",
+            "version": "v2",
+            "owner": "",
+            "status": "planned",
+            "location": "",
+            "description": "",
+            "dueDate": null,
+            "milestoneId": null,
+            "note": "",
+            "history": [
+              {
+                "at": "2026-10-21T13:44:54.969Z",
+                "field": "created",
+                "from": "",
+                "to": "planned",
+                "by": "",
+                "note": "创建交付物"
+              }
+            ],
+            "createdAt": "2026-10-21T13:44:54.969Z",
+            "updatedAt": "2026-10-21T13:44:54.969Z"
+          }
+        ]
+      ],
+      "settings": [
+        [
+          "aiModelMode",
+          {
+            "value": "prod",
+            "updatedAt": "2026-10-22T12:31:43.291Z"
+          }
+        ],
+        [
+          "pmExportAudit",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md",
+                "itemCount": 2
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ],
+        [
+          "pmExportSent",
+          {
+            "value": [
+              {
+                "at": "2026-10-21T13:44:55.368Z",
+                "projectId": "p-0001",
+                "format": "markdown",
+                "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md"
+              }
+            ],
+            "updatedAt": "2026-10-21T13:44:55.368Z"
+          }
+        ]
+      ],
+      "reflections": [
+        [
+          "ref-mvi5z85j-yk04ji",
+          {
+            "id": "ref-mvi5z85j-yk04ji",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "sourceEvent": "task-done",
+            "draft": {
+              "title": "F3-fixture-F5 · 完成即时复盘（草稿）",
+              "at": "2026-10-21T13:44:55.303Z",
+              "lines": [
+                {
+                  "text": "完成时刻 2026-10-21",
+                  "mark": "known"
+                },
+                {
+                  "text": "已登记客观佐证链接（质量由人复核）",
+                  "mark": "known"
+                },
+                {
+                  "text": "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+                  "mark": "known"
+                },
+                {
+                  "text": "资料区已登记：1 条链接、1 项交付物（质量由人复核）",
+                  "mark": "known"
+                }
+              ],
+              "gaps": []
+            },
+            "createdAt": "2026-10-21T13:44:55.303Z",
+            "updatedAt": "2026-10-21T13:44:55.303Z"
+          }
+        ]
+      ],
+      "okrs": [
+        [
+          "okr-mvi5z847-33y3xk",
+          {
+            "id": "okr-mvi5z847-33y3xk",
+            "projectId": "p-0001",
+            "title": "F5目标",
+            "kind": "objective",
+            "primaryOkrId": null,
+            "relatedOkrIds": [],
+            "status": "draft",
+            "createdAt": "2026-10-21T13:44:55.255Z",
+            "updatedAt": "2026-10-21T13:44:55.255Z"
+          }
+        ]
+      ],
+      "lessons": [
+        [
+          "lesson-mvi5z858-cxvv9t",
+          {
+            "id": "lesson-mvi5z858-cxvv9t",
+            "projectId": "p-0001",
+            "taskId": "t-0001",
+            "status": "draft",
+            "lines": [
+              {
+                "text": "已核：备份需保留原字节",
+                "mark": "known"
+              }
+            ],
+            "gaps": [],
+            "createdAt": "2026-10-21T13:44:55.291Z",
+            "updatedAt": "2026-10-21T13:44:55.291Z"
+          }
+        ]
+      ],
+      "habits": [
+        [
+          "habit-mvi5z84q-32ztau",
+          {
+            "id": "habit-mvi5z84q-32ztau",
+            "projectId": "p-0001",
+            "okrId": "okr-mvi5z847-33y3xk",
+            "title": "F5习惯",
+            "status": "draft",
+            "checkIns": [],
+            "streak": {
+              "current": 0,
+              "longest": 0,
+              "totalDays": 0
+            },
+            "createdAt": "2026-10-21T13:44:55.274Z",
+            "updatedAt": "2026-10-21T13:44:55.274Z"
+          }
+        ]
+      ],
+      "file_assets": [
+        [
+          "fa-0001",
+          {
+            "id": "fa-0001",
+            "projectId": "p-0001",
+            "fileName": "QA 中文 文件.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+            "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+            "addedAt": "2026-10-21T13:44:55.146Z"
+          }
+        ],
+        [
+          "fa-0002",
+          {
+            "id": "fa-0002",
+            "projectId": "p-0001",
+            "fileName": "version-two.md",
+            "mediaType": "text/markdown",
+            "size": 22,
+            "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+            "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+            "addedAt": "2026-10-21T13:44:55.197Z"
+          }
+        ]
+      ]
+    },
+    "sidecar": "reports/all-pending-evidence-20261021/F07RemainingR1/safety-package/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f"
+  },
+  "beforeFaultRows": {
+    "projects": [
+      [
+        "p-0001",
+        {
+          "id": "p-0001",
+          "name": "QA-A-fixture-F5",
+          "description": "",
+          "owner": "",
+          "status": "planning",
+          "startDate": "2026-01-01",
+          "targetDate": "2026-12-31",
+          "createdAt": "2026-10-21T13:44:54.927Z",
+          "updatedAt": "2026-10-21T13:44:54.927Z"
+        }
+      ],
+      [
+        "p-0002",
+        {
+          "id": "p-0002",
+          "name": "QA-B-fixture-F5",
+          "description": "",
+          "owner": "",
+          "status": "planning",
+          "startDate": "2026-01-01",
+          "targetDate": "2026-12-31",
+          "createdAt": "2026-10-21T13:44:54.940Z",
+          "updatedAt": "2026-10-21T13:44:54.940Z"
+        }
+      ]
+    ],
+    "tasks": [
+      [
+        "t-0001",
+        {
+          "id": "t-0001",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "F3-fixture-F5",
+          "description": "",
+          "assignee": "",
+          "status": "todo",
+          "priority": "P1",
+          "progress": 0,
+          "milestoneId": "m-0001",
+          "deliverableId": "dlv-0001",
+          "predecessorIds": [
+            "t-0004"
+          ],
+          "evidenceUrl": "https://example.com/qa-legacy",
+          "attachments": [
+            {
+              "id": "at-1",
+              "kind": "link",
+              "url": "https://example.com/qa-spec",
+              "title": "QA规范",
+              "addedAt": "2026-10-21T13:44:55.003Z",
+              "note": "link原备注"
+            },
+            {
+              "id": "at-2",
+              "kind": "deliverable",
+              "deliverableId": "dlv-0001",
+              "addedAt": "2026-10-21T13:44:55.015Z",
+              "frozenVersion": "v1",
+              "frozenName": "QA交付物V1",
+              "note": "冻结V1"
+            },
+            {
+              "id": "at-4",
+              "kind": "file",
+              "assetId": "fa-0002",
+              "addedAt": "2026-10-21T13:44:55.197Z"
+            }
+          ],
+          "progressLog": [
+            {
+              "id": "pl-1",
+              "date": "2026-10-19",
+              "author": "测试甲",
+              "createdAt": "2026-10-21T13:44:55.021Z",
+              "revisions": [
+                {
+                  "id": "rv-1",
+                  "date": "2026-10-19",
+                  "author": "测试甲",
+                  "content": "E1 rv1正文",
+                  "refs": [
+                    "at-1"
+                  ],
+                  "revisedAt": "2026-10-21T13:44:55.021Z"
+                },
+                {
+                  "id": "rv-2",
+                  "date": "2026-10-20",
+                  "author": "测试乙",
+                  "content": "E1 rv2正文",
+                  "refs": [
+                    "at-1"
+                  ],
+                  "revisedAt": "2026-10-21T13:44:55.034Z"
+                },
+                {
+                  "id": "rv-3",
+                  "date": "2026-10-21",
+                  "author": "测试甲",
+                  "content": "E1 rv3正文",
+                  "refs": [
+                    "at-1"
+                  ],
+                  "revisedAt": "2026-10-21T13:44:55.053Z"
+                }
+              ],
+              "refs": [
+                "at-1"
+              ]
+            },
+            {
+              "id": "pl-2",
+              "date": "2026-10-20",
+              "author": "测试乙",
+              "createdAt": "2026-10-21T13:44:55.063Z",
+              "revisions": [
+                {
+                  "id": "rv-1",
+                  "date": "2026-10-20",
+                  "author": "测试乙",
+                  "content": "E2 rv1已删除",
+                  "revisedAt": "2026-10-21T13:44:55.063Z"
+                },
+                {
+                  "id": "rv-2",
+                  "date": "2026-10-20",
+                  "author": "测试乙",
+                  "content": "E2 rv2已删除",
+                  "revisedAt": "2026-10-21T13:44:55.072Z"
+                }
+              ],
+              "deletedAt": "2026-10-21T13:44:55.088Z"
+            },
+            {
+              "id": "pl-3",
+              "date": "2026-10-19",
+              "author": "测试乙",
+              "createdAt": "2026-10-21T13:44:55.101Z",
+              "revisions": [
+                {
+                  "id": "rv-1",
+                  "date": "2026-10-19",
+                  "author": "测试乙",
+                  "content": "E3 rv1同日异ID",
+                  "revisedAt": "2026-10-21T13:44:55.101Z"
+                }
+              ]
+            }
+          ],
+          "code": "1",
+          "order": 1,
+          "createdAt": "2026-10-21T13:44:54.980Z",
+          "updatedAt": "2026-10-22T13:05:21.899Z"
+        }
+      ],
+      [
+        "t-0002",
+        {
+          "id": "t-0002",
+          "projectId": "p-0002",
+          "parentId": null,
+          "title": "QA-B任务",
+          "description": "",
+          "assignee": "",
+          "status": "todo",
+          "priority": "P1",
+          "progress": 0,
+          "milestoneId": null,
+          "progressLog": [
+            {
+              "id": "pl-1",
+              "date": "2026-10-21",
+              "author": "QA-B乙",
+              "createdAt": "2026-10-21T13:44:55.113Z",
+              "revisions": [
+                {
+                  "id": "rv-1",
+                  "date": "2026-10-21",
+                  "author": "QA-B乙",
+                  "content": "QA-B不得入A",
+                  "revisedAt": "2026-10-21T13:44:55.113Z"
+                }
+              ]
+            }
+          ],
+          "code": "1",
+          "order": 1,
+          "createdAt": "2026-10-21T13:44:54.993Z",
+          "updatedAt": "2026-10-21T13:44:55.113Z"
+        }
+      ],
+      [
+        "t-0003",
+        {
+          "id": "t-0003",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "F5共享文件任务",
+          "description": "",
+          "assignee": "",
+          "status": "todo",
+          "priority": "P1",
+          "progress": 0,
+          "milestoneId": null,
+          "attachments": [],
+          "code": "2",
+          "order": 2,
+          "createdAt": "2026-10-21T13:44:55.125Z",
+          "updatedAt": "2026-10-22T13:05:20.050Z"
+        }
+      ],
+      [
+        "t-0004",
+        {
+          "id": "t-0004",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "J03修后三资料原子任务",
+          "description": "两link+进展c2+真文件；取消保留放弃后重建一次保存",
+          "assignee": "",
+          "status": "todo",
+          "priority": "P1",
+          "progress": 0,
+          "milestoneId": null,
+          "attachments": [
+            {
+              "id": "at-1",
+              "kind": "link",
+              "url": "https://example.com/j03/first",
+              "title": "J03资料甲",
+              "addedAt": "2026-10-22T12:22:53.094Z"
+            },
+            {
+              "id": "at-2",
+              "kind": "link",
+              "url": "https://example.com/j03/second",
+              "title": "J03资料乙",
+              "addedAt": "2026-10-22T12:22:53.094Z"
+            }
+          ],
+          "progressLog": [
+            {
+              "id": "pl-1",
+              "date": "2026-10-21",
+              "author": "修后验收作者",
+              "createdAt": "2026-10-22T12:22:53.094Z",
+              "revisions": [
+                {
+                  "id": "rv-1",
+                  "date": "2026-10-21",
+                  "author": "修后验收作者",
+                  "content": "J03修后进展，引用第二资料与真实文件。",
+                  "refs": [
+                    "at-2",
+                    "at-3"
+                  ],
+                  "revisedAt": "2026-10-22T12:22:53.094Z"
+                }
+              ],
+              "refs": [
+                "at-2",
+                "at-3"
+              ]
+            }
+          ],
+          "code": "3",
+          "order": 3,
+          "createdAt": "2026-10-22T12:22:53.094Z",
+          "updatedAt": "2026-10-22T13:04:37.939Z"
+        }
+      ]
+    ],
+    "milestones": [
+      [
+        "m-0001",
+        {
+          "id": "m-0001",
+          "projectId": "p-0001",
+          "title": "QA里程碑",
+          "targetDate": "2026-10-21",
+          "status": "planned",
+          "achievedDate": null,
+          "description": "",
+          "createdAt": "2026-10-21T13:44:54.949Z",
+          "updatedAt": "2026-10-21T13:44:54.949Z"
+        }
+      ]
+    ],
+    "risk_issues": [
+      [
+        "ri-0001",
+        {
+          "id": "ri-0001",
+          "projectId": "p-0001",
+          "type": "risk",
+          "title": "F5风险",
+          "description": "",
+          "owner": "",
+          "dueDate": null,
+          "status": "open",
+          "probability": "medium",
+          "impact": "high",
+          "responsePlan": "",
+          "solution": "",
+          "createdAt": "2026-10-21T13:44:55.221Z",
+          "updatedAt": "2026-10-21T13:44:55.221Z"
+        }
+      ]
+    ],
+    "meetings": [
+      [
+        "mtg-0001",
+        {
+          "id": "mtg-0001",
+          "projectId": "p-0001",
+          "title": "F5会议",
+          "meetingDate": "2026-10-21",
+          "startTime": null,
+          "durationMinutes": null,
+          "location": "",
+          "facilitator": "",
+          "recorder": "",
+          "participants": [],
+          "status": "draft",
+          "summary": "",
+          "topics": [],
+          "decisions": [
+            "保留标准来源"
+          ],
+          "actions": [],
+          "notes": "",
+          "sourceType": "manual",
+          "sourceSessionId": null,
+          "createdAt": "2026-10-21T13:44:55.241Z",
+          "updatedAt": "2026-10-21T13:44:55.241Z"
+        }
+      ]
+    ],
+    "reports": [
+      [
+        "rpt-0001",
+        {
+          "id": "rpt-0001",
+          "projectId": "p-0001",
+          "periodStart": "2026-10-19",
+          "periodEnd": "2026-10-21",
+          "title": "QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报",
+          "status": "draft",
+          "executiveSummary": "",
+          "completedWork": [],
+          "nextPlans": [],
+          "blockers": [],
+          "snapshotAt": "2026-10-21T13:44:55.347Z",
+          "snapshot": {
+            "project": {
+              "name": "QA-A-fixture-F5",
+              "owner": "",
+              "status": "planning",
+              "targetDate": "2026-12-31"
+            },
+            "tasks": {
+              "total": 2,
+              "todo": 2,
+              "inProgress": 0,
+              "blocked": 0,
+              "done": 0,
+              "averageProgress": null,
+              "calcVersion": 1
+            },
+            "milestones": {
+              "total": 1,
+              "achieved": 0,
+              "atRisk": 0,
+              "missed": 0
+            },
+            "meetings": {
+              "inPeriod": 1,
+              "decisions": 1
+            },
+            "periodMilestones": [
+              {
+                "id": "m-0001",
+                "title": "QA里程碑",
+                "targetDate": "2026-10-21",
+                "status": "planned"
+              }
+            ],
+            "periodMeetings": [
+              {
+                "id": "mtg-0001",
+                "title": "F5会议",
+                "meetingDate": "2026-10-21",
+                "decisions": [
+                  "保留标准来源"
+                ]
+              }
+            ],
+            "exceptions": [
+              {
+                "kind": "risk_issue",
+                "severity": "warning",
+                "id": "ri-0001",
+                "title": "F5风险",
+                "detail": "风险未关闭，影响为 high",
+                "owner": "",
+                "dueDate": null
+              }
+            ]
+          },
+          "sourceType": "session",
+          "sourceSessionId": "qa-f5-session",
+          "createdAt": "2026-10-21T13:44:55.347Z",
+          "updatedAt": "2026-10-21T13:44:55.347Z"
+        }
+      ]
+    ],
+    "deliverables": [
+      [
+        "dlv-0001",
+        {
+          "id": "dlv-0001",
+          "projectId": "p-0001",
+          "name": "QA交付物V1",
+          "version": "v1",
+          "owner": "",
+          "status": "planned",
+          "location": "",
+          "description": "",
+          "dueDate": null,
+          "milestoneId": "m-0001",
+          "note": "合法备注",
+          "history": [
+            {
+              "at": "2026-10-21T13:44:54.960Z",
+              "field": "created",
+              "from": "",
+              "to": "planned",
+              "by": "",
+              "note": "创建交付物"
+            }
+          ],
+          "createdAt": "2026-10-21T13:44:54.960Z",
+          "updatedAt": "2026-10-21T13:44:54.960Z"
+        }
+      ],
+      [
+        "dlv-0002",
+        {
+          "id": "dlv-0002",
+          "projectId": "p-0002",
+          "name": "QA-B V2",
+          "version": "v2",
+          "owner": "",
+          "status": "planned",
+          "location": "",
+          "description": "",
+          "dueDate": null,
+          "milestoneId": null,
+          "note": "",
+          "history": [
+            {
+              "at": "2026-10-21T13:44:54.969Z",
+              "field": "created",
+              "from": "",
+              "to": "planned",
+              "by": "",
+              "note": "创建交付物"
+            }
+          ],
+          "createdAt": "2026-10-21T13:44:54.969Z",
+          "updatedAt": "2026-10-21T13:44:54.969Z"
+        }
+      ]
+    ],
+    "settings": [
+      [
+        "aiModelMode",
+        {
+          "value": "prod",
+          "updatedAt": "2026-10-22T12:31:43.291Z"
+        }
+      ],
+      [
+        "pmExportAudit",
+        {
+          "value": [
+            {
+              "at": "2026-10-21T13:44:55.368Z",
+              "projectId": "p-0001",
+              "format": "markdown",
+              "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md",
+              "itemCount": 2
+            }
+          ],
+          "updatedAt": "2026-10-21T13:44:55.368Z"
+        }
+      ],
+      [
+        "pmExportSent",
+        {
+          "value": [
+            {
+              "at": "2026-10-21T13:44:55.368Z",
+              "projectId": "p-0001",
+              "format": "markdown",
+              "targetPath": "/private/tmp/materials-files-reports-independent-auto-20261021-fiKpOr/runtime/exports/F5-audit/p-0001-report.md"
+            }
+          ],
+          "updatedAt": "2026-10-21T13:44:55.368Z"
+        }
+      ]
+    ],
+    "reflections": [
+      [
+        "ref-mvi5z85j-yk04ji",
+        {
+          "id": "ref-mvi5z85j-yk04ji",
+          "projectId": "p-0001",
+          "taskId": "t-0001",
+          "status": "draft",
+          "sourceEvent": "task-done",
+          "draft": {
+            "title": "F3-fixture-F5 · 完成即时复盘（草稿）",
+            "at": "2026-10-21T13:44:55.303Z",
+            "lines": [
+              {
+                "text": "完成时刻 2026-10-21",
+                "mark": "known"
+              },
+              {
+                "text": "已登记客观佐证链接（质量由人复核）",
+                "mark": "known"
+              },
+              {
+                "text": "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+                "mark": "known"
+              },
+              {
+                "text": "资料区已登记：1 条链接、1 项交付物（质量由人复核）",
+                "mark": "known"
+              }
+            ],
+            "gaps": []
+          },
+          "createdAt": "2026-10-21T13:44:55.303Z",
+          "updatedAt": "2026-10-21T13:44:55.303Z"
+        }
+      ]
+    ],
+    "okrs": [
+      [
+        "okr-mvi5z847-33y3xk",
+        {
+          "id": "okr-mvi5z847-33y3xk",
+          "projectId": "p-0001",
+          "title": "F5目标",
+          "kind": "objective",
+          "primaryOkrId": null,
+          "relatedOkrIds": [],
+          "status": "draft",
+          "createdAt": "2026-10-21T13:44:55.255Z",
+          "updatedAt": "2026-10-21T13:44:55.255Z"
+        }
+      ]
+    ],
+    "lessons": [
+      [
+        "lesson-mvi5z858-cxvv9t",
+        {
+          "id": "lesson-mvi5z858-cxvv9t",
+          "projectId": "p-0001",
+          "taskId": "t-0001",
+          "status": "draft",
+          "lines": [
+            {
+              "text": "已核：备份需保留原字节",
+              "mark": "known"
+            }
+          ],
+          "gaps": [],
+          "createdAt": "2026-10-21T13:44:55.291Z",
+          "updatedAt": "2026-10-21T13:44:55.291Z"
+        }
+      ]
+    ],
+    "habits": [
+      [
+        "habit-mvi5z84q-32ztau",
+        {
+          "id": "habit-mvi5z84q-32ztau",
+          "projectId": "p-0001",
+          "okrId": "okr-mvi5z847-33y3xk",
+          "title": "F5习惯",
+          "status": "draft",
+          "checkIns": [],
+          "streak": {
+            "current": 0,
+            "longest": 0,
+            "totalDays": 0
+          },
+          "createdAt": "2026-10-21T13:44:55.274Z",
+          "updatedAt": "2026-10-21T13:44:55.274Z"
+        }
+      ]
+    ],
+    "file_assets": [
+      [
+        "fa-0001",
+        {
+          "id": "fa-0001",
+          "projectId": "p-0001",
+          "fileName": "QA 中文 文件.md",
+          "mediaType": "text/markdown",
+          "size": 22,
+          "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+          "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+          "addedAt": "2026-10-21T13:44:55.146Z"
+        }
+      ],
+      [
+        "fa-0002",
+        {
+          "id": "fa-0002",
+          "projectId": "p-0001",
+          "fileName": "version-two.md",
+          "mediaType": "text/markdown",
+          "size": 22,
+          "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+          "relPath": "87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+          "addedAt": "2026-10-21T13:44:55.197Z"
+        }
+      ]
+    ]
+  },
+  "states": [
+    {
+      "name": "00-target-before0-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "01-target-before-fault-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "02-source-prechecked-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "03-danger-confirm-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "04-failure-after-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "05-failure-fulltext-visible-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "06-precheck-cancelled-after-failure-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "07-failed-restore-meetings-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "08-failed-restore-reports-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "09-failed-restore-deliverables-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "10-failed-restore-habits-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "11-failed-restore-okrs-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792673515397.8,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "13-newhost-original-tasks-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "14-newhost-materials-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "15-newhost-fa2-downloaded-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "16-newhost-meetings-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "17-newhost-reports-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "18-newhost-deliverables-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "19-newhost-habits-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "20-newhost-okrs-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    },
+    {
+      "name": "21-redownload-before-raw",
+      "counts": {
+        "projects": 2,
+        "tasks": 4,
+        "milestones": 1,
+        "risk_issues": 1,
+        "meetings": 1,
+        "reports": 1,
+        "deliverables": 2,
+        "settings": 3,
+        "reflections": 1,
+        "okrs": 1,
+        "lessons": 1,
+        "habits": 1,
+        "file_assets": 2
+      },
+      "timeOrigin": 1792675741850.9,
+      "viewport": {
+        "innerWidth": 1458,
+        "innerHeight": 734,
+        "outerWidth": 1470,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "allRowsAndRawHashesEqual": true
+    }
+  ],
+  "roots": {
+    "before0ToFault": [
+      "files/ae"
+    ],
+    "faultToFailure": [
+      "data/session_projcache/sessions/session-ed2499c1-b497-4378-b393-f7f2e0298657.json",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/manifest.json"
+    ],
+    "faultToNewHost": [
+      "data/session_projcache/sessions/session-ed2499c1-b497-4378-b393-f7f2e0298657.json",
+      "data/session_projcache/sessions/session-309235ae-48f6-4570-b281-9ef4989a88c4.json",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/manifest.json"
+    ],
+    "directoriesAdded": [
+      "files/37",
+      "backups/.staging-2026-10-22T13-23-44-808Z-895b10c8dd74022f",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f",
+      "backups/pmtool-backup-2026-10-22T13-23-44-808Z.json.files.895b10c8dd74022f/87"
+    ],
+    "blocker": {
+      "at": "2026-10-22T13:21:47.963Z",
+      "path": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/ae",
+      "bytes": 54,
+      "sha256": "ab481c2740ec8334abcfb59140d9e19e27da0d8b015e34beb57ab46825673192",
+      "type": "ordinary-file",
+      "sourcePath": "/private/tmp/pmtool-f07-source-20261022-r1/backups/pmtool-backup-2026-10-22T13-20-09-542Z.json",
+      "A": {
+        "id": "fa-0003",
+        "projectId": "p-0001",
+        "fileName": "ra-f07-A.txt",
+        "mediaType": "text/plain",
+        "size": 21,
+        "sha256": "3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471",
+        "relPath": "37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+        "addedAt": "2026-10-22T13:20:09.471Z",
+        "alreadyExisted": false
+      },
+      "B": {
+        "id": "fa-0004",
+        "projectId": "p-0001",
+        "fileName": "ra-f07-B.txt",
+        "mediaType": "text/plain",
+        "size": 21,
+        "sha256": "aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1",
+        "relPath": "ae/aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1.txt",
+        "addedAt": "2026-10-22T13:20:09.521Z",
+        "alreadyExisted": false
+      }
+    },
+    "precheckChanges": {
+      "02-source-prechecked": [
+        {
+          "file": "data/session_projcache/sessions/session-ed2499c1-b497-4378-b393-f7f2e0298657.json",
+          "before": {
+            "bytes": 4527,
+            "sha256": "e43398d27575f63fb9557b736929d17f661abca9f2593068e7392595af4c2d5d",
+            "type": "file"
+          },
+          "after": {
+            "bytes": 4527,
+            "sha256": "ab98a8f1bc5b8aaf581c023a68f7d9fb0e253b3e66a483bdf63aa28c4690846d",
+            "type": "file"
+          }
+        }
+      ],
+      "03-danger-confirm": [
+        {
+          "file": "data/session_projcache/sessions/session-ed2499c1-b497-4378-b393-f7f2e0298657.json",
+          "before": {
+            "bytes": 4527,
+            "sha256": "e43398d27575f63fb9557b736929d17f661abca9f2593068e7392595af4c2d5d",
+            "type": "file"
+          },
+          "after": {
+            "bytes": 4527,
+            "sha256": "ab98a8f1bc5b8aaf581c023a68f7d9fb0e253b3e66a483bdf63aa28c4690846d",
+            "type": "file"
+          }
+        }
+      ]
+    },
+    "businessAndOriginalBytesExact": true,
+    "boundary": "仅 data/files/backups 原清单与封存业务正文，不读活业务库、不签全机零写。"
+  },
+  "watch": [
+    {
+      "at": "2026-10-22T13:23:23.924Z",
+      "key": "project",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/data/pmtool/projects/p-0001.json",
+      "exists": true,
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f",
+      "name": "QA-A-fixture-F5"
+    },
+    {
+      "at": "2026-10-22T13:23:23.925Z",
+      "key": "A",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+      "exists": false,
+      "code": "ENOENT"
+    },
+    {
+      "at": "2026-10-22T13:23:23.925Z",
+      "key": "B",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/ae/aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1.txt",
+      "exists": false,
+      "code": "ENOTDIR"
+    },
+    {
+      "at": "2026-10-22T13:23:44.823Z",
+      "key": "project",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/data/pmtool/projects/p-0001.json",
+      "exists": false,
+      "code": "ENOENT"
+    },
+    {
+      "at": "2026-10-22T13:23:44.829Z",
+      "key": "project",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/data/pmtool/projects/p-0001.json",
+      "exists": true,
+      "bytes": 318,
+      "sha256": "ade06223a2f9187553093fdd37b55ab90f694270cf533821e166a5dc956ca96b",
+      "name": "RA-F07-source-midpromotion"
+    },
+    {
+      "at": "2026-10-22T13:23:45.024Z",
+      "key": "A",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+      "exists": true,
+      "bytes": 21,
+      "sha256": "3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471"
+    },
+    {
+      "at": "2026-10-22T13:23:45.025Z",
+      "key": "project",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/data/pmtool/projects/p-0001.json",
+      "exists": false,
+      "code": "ENOENT"
+    },
+    {
+      "at": "2026-10-22T13:23:45.030Z",
+      "key": "project",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/data/pmtool/projects/p-0001.json",
+      "exists": true,
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f",
+      "name": "QA-A-fixture-F5"
+    },
+    {
+      "at": "2026-10-22T13:23:45.182Z",
+      "key": "A",
+      "file": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/37/3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471.txt",
+      "exists": false,
+      "code": "ENOENT"
+    }
+  ],
+  "observedA": {
+    "bytes": 21,
+    "sha256": "3738e6580bc26062378b677326483e7086d477389b32605e29ca0147b0a19471"
+  },
+  "rpc": [
+    {
+      "requestFile": "02-source-precheck-events.json",
+      "responseFile": "02-source-precheck-events.json",
+      "requestId": "24317.1178",
+      "rpcId": "b74d9072-69c2-44b8-904f-5eb2bc82f1a7",
+      "line": "/pm restore \"/private/tmp/pmtool-f07-source-20261022-r1/backups/pmtool-backup-2026-10-22T13-20-09-542Z.json\"",
+      "status": 200,
+      "business": {
+        "kind": "success",
+        "text": "备份文件完整预检通过（结构、关系及附件侧车字节；演练，尚未恢复）：\n  导出时间：2026-10-22T13:20:09.542Z\n  项目 2｜任务 4｜里程碑 1\n  风险问题 1｜会议 1｜汇报 1｜交付物 2\n  额外业务表：settings 3｜reflections 1｜okrs 1｜lessons 1｜habits 1｜file_assets 4\n确认将替换七类实体及备份内显式额外业务表/附件（恢复前会自动先存一份安全快照）：\n  /pm restore \"/private/tmp/pmtool-f07-source-20261022-r1/backups/pmtool-backup-2026-10-22T13-20-09-542Z.json\" confirm"
+      }
+    },
+    {
+      "requestFile": "04-failure-drain-0-events.json",
+      "responseFile": "04-failure-drain-3-events.json",
+      "requestId": "24317.1179",
+      "rpcId": "54e286ac-f9dd-4c5e-b3ad-202d54433e62",
+      "line": "/pm restore \"/private/tmp/pmtool-f07-source-20261022-r1/backups/pmtool-backup-2026-10-22T13-20-09-542Z.json\" confirm",
+      "status": 200,
+      "business": {
+        "kind": "error",
+        "text": "备份/恢复失败：恢复中途失败，但已自动回滚到恢复前状态；安全快照：/private/tmp/pmtool-combined-gui-runtime-20261022-r1/backups/pmtool-backup-2026-10-22T13-23-44-808Z.json。原始错误：ENOTDIR: not a directory, lstat '/private/tmp/pmtool-combined-gui-runtime-20261022-r1/files/ae/aed3cd57ccf0bb18a932f3977d42a9ee538fa9a515bae4e76d1c9147934998d1.txt'"
+      }
+    }
+  ],
+  "exceptionsCaptured": [],
+  "consolesCaptured": [],
+  "executions": [
+    {
+      "id": "13905a92f457a7d5b9b1889785c5a5d4",
+      "metadata": {
+        "version": 2,
+        "executionId": "13905a92f457a7d5b9b1889785c5a5d4",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "fe375610960c437f49fa41a33ec27be15868b00c5cc1dd13761ad2b666d96ebe",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 86297,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675403849,
+        "startedAtMs": 1792675403863,
+        "finishedAtMs": 1792675449372
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "a8243f0cbeb887ebb49dada6105e94883acad0831bd32161c55ba6d7f712a4b8"
+      },
+      "logBinding": {
+        "bytes": 76,
+        "sha256": "667b91b217471052a64416f4af51993c49a2ad24329e2ce0cad259dccc79f008"
+      }
+    },
+    {
+      "id": "2999b70a8aa1709acc2e945b0350dbe6",
+      "metadata": {
+        "version": 2,
+        "executionId": "2999b70a8aa1709acc2e945b0350dbe6",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "aa68640a2b0f4aab16de638cb5ffba6120da88e67eec2680748b84fd492ac568",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 87481,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675741192,
+        "startedAtMs": 1792675741210,
+        "finishedAtMs": 1792675757397
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "26bbfaab2c8ab7b9b2b0ea8d9adce4d3bd8f73f25e2209da56ab9a96c4a8837f"
+      },
+      "logBinding": {
+        "bytes": 656,
+        "sha256": "724211d1e7727510795463226419fcee40b4dd72d1083737d7f09af4a89bf233"
+      }
+    },
+    {
+      "id": "510b7164a53825cae708aa5b5d2bf82d",
+      "metadata": {
+        "version": 2,
+        "executionId": "510b7164a53825cae708aa5b5d2bf82d",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "e97d3349128198dd8007c5f8965b7cfe7c815a54fc4926b93cc132f83252c5c9",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 85468,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675207625,
+        "startedAtMs": 1792675207729,
+        "finishedAtMs": 1792675209795
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "9f3905190a89b986c72a29f0966325d0801674d57d004dc2e3818effb240fd17"
+      },
+      "logBinding": {
+        "bytes": 224,
+        "sha256": "1b20493bcee8873fbb76fc4190feb81728ae00ddba72ccd9649425c26b5f96d2"
+      }
+    },
+    {
+      "id": "58533f8dba7ca2ec3f047142148b2df6",
+      "metadata": {
+        "version": 2,
+        "executionId": "58533f8dba7ca2ec3f047142148b2df6",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "37ba80b2768c43853b04b194e193512be47fa03cf967ddbe4c04de8a4ef936b7",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 85728,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675295789,
+        "startedAtMs": 1792675295842,
+        "finishedAtMs": 1792675308642
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "fd04ff90ab0b9159a174e371118367a34b6fee50daa30a6c32e42c13bc0c48b9"
+      },
+      "logBinding": {
+        "bytes": 145,
+        "sha256": "6eba00ad1790e11469b9a07606f22be8a44b34ea6a3a576f4839a0eec3a2515e"
+      }
+    },
+    {
+      "id": "59bffa3798e51e324ed593b981e4cb9d",
+      "metadata": {
+        "version": 2,
+        "executionId": "59bffa3798e51e324ed593b981e4cb9d",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "7a66715db7c9932f04d6aece167ed3bc64d6c3565dc296987ca8df8009497290",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 87367,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675698960,
+        "startedAtMs": 1792675698980,
+        "finishedAtMs": 1792675711803
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "47a87c33476af1e4ad064b448d32be57da7ad048f57c6656b98d5b0b8c649c15"
+      },
+      "logBinding": {
+        "bytes": 28,
+        "sha256": "d7cce85b3fe0054a8089d46df7c0c5aa9f93521754c9ae60eec61cd5edf2acb8"
+      }
+    },
+    {
+      "id": "5d5bf871695a473599555b71be25a7b6",
+      "metadata": {
+        "version": 2,
+        "executionId": "5d5bf871695a473599555b71be25a7b6",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "e74633b1bc57a628612398e1ba85aeb01e4aa1ca1d6e960a66033dea199c43df",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 86940,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675505906,
+        "startedAtMs": 1792675505923,
+        "finishedAtMs": 1792675513098
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "1db105a0b8e9d1f64aa5ff655b8f4954434aced562bfe661dc2c09daa5f97d50"
+      },
+      "logBinding": {
+        "bytes": 464,
+        "sha256": "41fea0cd972e17670adea874e7fd98cc2d909082f979718f7a9fe359f023c88b"
+      }
+    },
+    {
+      "id": "a597e1f796a29f786d3e2ad096d90176",
+      "metadata": {
+        "version": 2,
+        "executionId": "a597e1f796a29f786d3e2ad096d90176",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "3fbbadd6f470746ae37489ce9e08f89eed271b00b9a825522fbcc8eef9d2c457",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 85801,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675332448,
+        "startedAtMs": 1792675332480,
+        "finishedAtMs": 1792675336330
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "00d89395b9d0211dce75de147cafcac13254c4aa379f05c6f14c4db9a07e142e"
+      },
+      "logBinding": {
+        "bytes": 1259,
+        "sha256": "aa545f9c4ed4415b2b2a3dbceb6affaf0cbc1eadfaf170ea868deb061135bf3d"
+      }
+    },
+    {
+      "id": "dbf03f1c8a2d3022a0faa29f4cfe72cf",
+      "metadata": {
+        "version": 2,
+        "executionId": "dbf03f1c8a2d3022a0faa29f4cfe72cf",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "b7b94100c0e3c7b8ab2d7d430dac2cab6837e23b3503e8ccba091d9aa5d9a4db",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 87782,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675875975,
+        "startedAtMs": 1792675875998,
+        "finishedAtMs": 1792675883982
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "2029ed2f6d90d71bc2492887eecb0d314cdc6651a6efa40abcf1b97c93d9a54b"
+      },
+      "logBinding": {
+        "bytes": 294,
+        "sha256": "dbae172983a9670b2aa1679765ccf8ac7bc54c602cd1e57f2c35101b14993587"
+      }
+    },
+    {
+      "id": "fb39d65cbe4c246465f728c21d785c86",
+      "metadata": {
+        "version": 2,
+        "executionId": "fb39d65cbe4c246465f728c21d785c86",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "df97f7a9d56ec34b2f3ccbe41c2647ecef12f20c4aa2eeee6619b8ab09f8ed44",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 86316,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792675424271,
+        "startedAtMs": 1792675424285,
+        "finishedAtMs": 1792675426407
+      },
+      "metadataBinding": {
+        "bytes": 530,
+        "sha256": "a0a7cb1031d5a7ce3ee9a001152a9b7cac5b41a8ac4c897d647ef38980aa4733"
+      },
+      "logBinding": {
+        "bytes": 3186,
+        "sha256": "8089f5eea94c03e4ed612a3d1feb1347b2cec58786abc57e7077d354773958b1"
+      }
+    }
+  ],
+  "firstSeal": {
+    "id": "fd92fb1bb5d27a28426411cf1ed32551",
+    "metadata": {
+      "version": 2,
+      "executionId": "fd92fb1bb5d27a28426411cf1ed32551",
+      "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+      "requestDigest": "8d946a8d3618b18703f78cbd39f625289c3f71ba02b10c4c461a1237fe2b1a28",
+      "stdinMode": "piped",
+      "captureStderr": false,
+      "target": "host",
+      "status": "exited",
+      "pid": 87719,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 1,
+      "terminalReason": "process_exited",
+      "outputComplete": true,
+      "sandbox": null,
+      "createdAtMs": 1792675824632,
+      "startedAtMs": 1792675824647,
+      "finishedAtMs": 1792675824727
+    },
+    "metadataBinding": {
+      "bytes": 530,
+      "sha256": "425650dbe832551aa111f1b893f270848d033acbfcdf1381fc56cd94902fe032"
+    },
+    "logBinding": {
+      "bytes": 946,
+      "sha256": "a60b45457849f265d58c9052bcda339623765791d83db40be0bd9d6d62bc96bf"
+    },
+    "log": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'\n- '875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522'\n\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/F07RemainingR1/executor-seal.mjs:14:8\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',\n  expected: '875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.3\n",
+    "boundary": "原封存外层失败，不在九份执行内；自有 audit 保存原日志与元数据，不改旧 index。"
+  },
+  "downloads": {
+    "firstDownload": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "download": {
+      "bytes": 22,
+      "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522"
+    },
+    "receipt": {
+      "at": "2026-10-22T13:31:21.129Z",
+      "url": "http://127.0.0.1:3260/api/pm/v1/assets/fa-0002?taskId=t-0001",
+      "filename": "version-two.md",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/F07RemainingR1/22-newhost-fa2-redownload.md",
+      "bytes": 22,
+      "failure": null
+    },
+    "assetHttpCaptured": false,
+    "refsFa1": []
+  },
+  "host": {
+    "stop": {
+      "at": "2026-10-22T13:28:19.290Z",
+      "pid": 71922,
+      "port": 3260,
+      "argv": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --import tsx/esm apps/cli/src/bin.ts --profile pm --no-open --host 127.0.0.1 --port 3260",
+      "cwd": "p71922\nfcwd\nn/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "signal": "SIGTERM"
+    },
+    "gone": {
+      "at": "2026-10-22T13:28:19.777Z",
+      "pid": 71922,
+      "port": 3260,
+      "listenerGone": true
+    },
+    "start": {
+      "at": "2026-10-22T13:28:19.781Z",
+      "pid": 87385,
+      "port": 3260,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--import",
+        "tsx/esm",
+        "apps/cli/src/bin.ts",
+        "--profile",
+        "pm",
+        "--no-open",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3260"
+      ],
+      "envNames": [
+        "PATH",
+        "HOME",
+        "DSH_HOME",
+        "TMPDIR",
+        "DSH_PM_ISOLATED_ROOT",
+        "DSH_PM_FILE_ROOT",
+        "DSH_PM_BACKUP_DIR",
+        "DSH_PM_LOCAL_GATEWAY_KEY",
+        "CODING_PLAN_API_KEY",
+        "DSH_PM_E2E"
+      ],
+      "bundle": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+      "bundleSha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db",
+      "purpose": "P13 new process after real mid-promotion failure; same frozen107/data/file roots and blocker preserved"
+    },
+    "ready": {
+      "at": "2026-10-22T13:28:31.748Z",
+      "pid": 87385,
+      "port": 3260
+    }
+  },
+  "pictures": [
+    {
+      "file": "00-target-before0.png",
+      "bytes": 169874,
+      "sha256": "786737be999d3fd33568883c4b992c40b1101151b7ca2f2585b3efa700a749cc",
+      "actuallyViewed": true
+    },
+    {
+      "file": "01-target-before-fault.png",
+      "bytes": 169912,
+      "sha256": "b167b4edd2205168d0f969e7487a912a2e319afe658dd2a9aff74b0e83175077",
+      "actuallyViewed": true
+    },
+    {
+      "file": "02-source-prechecked.png",
+      "bytes": 187628,
+      "sha256": "2d5bed03ece0138a393a055369020816067ff0eaa1f2ef39a2729e98ec99ecaa",
+      "actuallyViewed": true
+    },
+    {
+      "file": "03-danger-confirm.png",
+      "bytes": 220802,
+      "sha256": "20aabc934760d480293f905fdbf1f55d246f820e66a7d40e54cd061c98448db7",
+      "actuallyViewed": true
+    },
+    {
+      "file": "04-failure-after.png",
+      "bytes": 186163,
+      "sha256": "0385eebc152a1471a6a77e4f913586535a950af4321b66cab2dd1588787ee1cc",
+      "actuallyViewed": true
+    },
+    {
+      "file": "05-failure-fulltext-visible.png",
+      "bytes": 186204,
+      "sha256": "05ac95863689acf47cd9e7dc1f445b7699226f11a285ef3efe0882b2f4542ce0",
+      "actuallyViewed": true
+    },
+    {
+      "file": "06-precheck-cancelled-after-failure.png",
+      "bytes": 175837,
+      "sha256": "1a56acb275a77a5798abf6b5c690906474c72a8a54af4ab64b13b7fe8fc6c7c4",
+      "actuallyViewed": true
+    },
+    {
+      "file": "07-failed-restore-meetings.png",
+      "bytes": 161157,
+      "sha256": "888562fbeab3bcc19d9d8d6b010d086c3319840f07ac4a612f0360489aff27c9",
+      "actuallyViewed": true
+    },
+    {
+      "file": "08-failed-restore-reports.png",
+      "bytes": 162369,
+      "sha256": "2e6d75b34e67d47809716c0806bdfb7c24d564a1f5083221eca705a9138da625",
+      "actuallyViewed": true
+    },
+    {
+      "file": "09-failed-restore-deliverables.png",
+      "bytes": 152138,
+      "sha256": "ebae54f8fbfd5c04d631fbc907eff881746f3815fe68a51a4bb3a56185ac6453",
+      "actuallyViewed": true
+    },
+    {
+      "file": "10-failed-restore-habits.png",
+      "bytes": 151925,
+      "sha256": "3371498dbced86196779ce5821a71ab43412ab55fa1af23c436faa5615467eb5",
+      "actuallyViewed": true
+    },
+    {
+      "file": "11-failed-restore-okrs.png",
+      "bytes": 140709,
+      "sha256": "576998af3ffefe3652521b6ba476ff4e676627e2f306a8c00c0a82bb073044fd",
+      "actuallyViewed": true
+    },
+    {
+      "file": "13-newhost-original-tasks.png",
+      "bytes": 169874,
+      "sha256": "786737be999d3fd33568883c4b992c40b1101151b7ca2f2585b3efa700a749cc",
+      "actuallyViewed": true
+    },
+    {
+      "file": "14-newhost-materials.png",
+      "bytes": 212150,
+      "sha256": "9e8a401ee99f45d17858b6471c21fee3a88a4c30c69f42cab8a9c7946c5afe82",
+      "actuallyViewed": true
+    },
+    {
+      "file": "15-newhost-fa2-downloaded.png",
+      "bytes": 176270,
+      "sha256": "82eb1a5fd26b0fe8f2f33f7ccf978730afe899d67948f860f0fc6cc78f056384",
+      "actuallyViewed": true
+    },
+    {
+      "file": "16-newhost-meetings.png",
+      "bytes": 130143,
+      "sha256": "607732777aa65cb48e88ac9668400b8e228d087427a744c4391dd05cfa873b5c",
+      "actuallyViewed": true
+    },
+    {
+      "file": "17-newhost-reports.png",
+      "bytes": 141732,
+      "sha256": "9251b7f8c3fe7bfe4d7fc7fe19ea7e56e253479cfb37ee8de82fc5dd7c2ad297",
+      "actuallyViewed": true
+    },
+    {
+      "file": "18-newhost-deliverables.png",
+      "bytes": 116363,
+      "sha256": "a9ee0838e4484c9e73999a19b460ff8f0a33acce168b67c17e8ad4aa7c4f4b41",
+      "actuallyViewed": true
+    },
+    {
+      "file": "19-newhost-habits.png",
+      "bytes": 124315,
+      "sha256": "71e5e28c7f64b7cce64c4371af3116f887732434b95dd728afb5f053ffb10a8c",
+      "actuallyViewed": true
+    },
+    {
+      "file": "20-newhost-okrs.png",
+      "bytes": 103925,
+      "sha256": "edd466741264825d6650122bcc4c891b4f3a132df36dbc331119729ce8d0c3eb",
+      "actuallyViewed": true
+    },
+    {
+      "file": "21-redownload-before.png",
+      "bytes": 213104,
+      "sha256": "b19c016fccc3ee29f103f3ecad70f416150c1da713768116bf031269f643c26f",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/02-source-precheck-1-1792675334724.jpg",
+      "bytes": 77610,
+      "sha256": "d387c998f5388cf695248bf397638d226da3cf53756b45cdd001e03f2cbd31f0",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/02-source-precheck-1-1792675334817.jpg",
+      "bytes": 77610,
+      "sha256": "d387c998f5388cf695248bf397638d226da3cf53756b45cdd001e03f2cbd31f0",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/02-source-precheck-1-1792675334902.jpg",
+      "bytes": 77615,
+      "sha256": "4767a22ab356415fb61dcf00b8f79942d7375e4b95c56e6df88991fa8854bba8",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/03-danger-opened-1-1792675335870.jpg",
+      "bytes": 93283,
+      "sha256": "47519ae540a4cf246ca982c663ee1518fe5312ea3ad12c077062bc29b6158248",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/03-danger-opened-1-1792675335988.jpg",
+      "bytes": 93283,
+      "sha256": "47519ae540a4cf246ca982c663ee1518fe5312ea3ad12c077062bc29b6158248",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/03-danger-opened-1-1792675336104.jpg",
+      "bytes": 86165,
+      "sha256": "c699357124a28e831db66f119745b67e543b2daf604a80a5f010eec97e15abaf",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/15-newhost-fa2-1-1792675750059.jpg",
+      "bytes": 65180,
+      "sha256": "e0360d058ec5f3e6af741ff2301d02b9e2a92276a25536a870db0050553e5428",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/15-newhost-fa2-1-1792675750141.jpg",
+      "bytes": 66030,
+      "sha256": "a48908aa964aacaf1f8ef3efa77b6549f92eebce6227e453f08f7d8e2bc1611e",
+      "actuallyViewed": true
+    },
+    {
+      "file": "frames/15-newhost-fa2-1-1792675750231.jpg",
+      "bytes": 66031,
+      "sha256": "f1a8f9e46a43049aa855d3d9fce68bf6f91dc7811d7a30612e8cba10a57f0018",
+      "actuallyViewed": true
+    }
+  ],
+  "pictureBoundary": "全部21PNG及9JPEG逐图目视；JPEG仅预检/确认/首次下载片段，非P06-P12连续全程录屏。",
+  "rawObservations": {
+    "rollbackBinding": {
+      "bytes": 4953,
+      "sha256": "c78fed9147745b3ba0d649caf215ff63150376763144aed34817d8b4913d2834"
+    },
+    "finalBinding": {
+      "bytes": 2344,
+      "sha256": "bd3403abe6ad1e01105730a0cae42d81c0ab912c242418b04d5a17fd187f66ab"
+    },
+    "reportBinding": {
+      "bytes": 2435,
+      "sha256": "4dc7ecd81d39aa7c92634be87765fd198ba5a6e280f9c7f44a8bdfb1514ae0cb"
+    }
+  },
+  "reviewerReaderFirstFailure": {
+    "exitCode": 1,
+    "lineAtFailure": 199,
+    "cause": "自有reader误将宿主session缓存纳入预检零写；实际仅同一session SHA变，业务/files/backups均不变。",
+    "actualSessionSha": "ab98a8f1bc5b8aaf581c023a68f7d9fb0e253b3e66a483bdf63aa28c4690846d",
+    "beforeSessionSha": "e43398d27575f63fb9557b736929d17f661abca9f2593068e7392595af4c2d5d",
+    "correction": "只修本reader按原合同单列宿主变化，不改原件/产品/用例；首次未写出audit.json。"
+  },
+  "boundary": "证据一致性不自成产品PASS；有限裁决见同前缀独立报告，不签整F07/F06/J06/父总门/commit，release STOP。"
+}

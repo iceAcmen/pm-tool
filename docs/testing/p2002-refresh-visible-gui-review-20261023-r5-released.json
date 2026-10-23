@@ -1,0 +1,58 @@
+{
+  "platform": "trae",
+  "role": "独立 P2002 后置封签接续专家，仅封存原证读取与有限裁定",
+  "mode": "released",
+  "startedAt": "2026-10-23T02:49:40.183Z",
+  "endedAt": "2026-10-23T02:49:40.193Z",
+  "durationMs": 10,
+  "environment": {
+    "os": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "pid": 63319
+  },
+  "state": "released / STOP",
+  "verdict": "PASS_LIMITED_GUI_REFRESH_VISIBLE",
+  "scope": "仅 P2002TreeR3 报告 §8.2：原 refresh 完成并沿原合同滚入视口后，同 ID 父行及两子行的同视口原图缺口",
+  "readback": {
+    "bytes": 42763,
+    "sha256": "c3b433fc4e27d597fa22d09329781525feab41ebdce8b3a9f9095ad120690a34"
+  },
+  "readbackOuter": {
+    "bytes": 1067,
+    "sha256": "22242c907bf1ae4b8d88874632aae5f487e1ca4dfe7435123578eabad78c3701"
+  },
+  "readbackReceiptStatus": 0,
+  "originalR4Unchanged": true,
+  "originalGapRemaining": "仅本 refresh 同视口原图缺口已关闭",
+  "noWholeP2002B8TaskCurrentPanelOrParentCommitPass": true,
+  "noCommitPushReleaseOrFormalSwitch": true,
+  "noRuntimeNetworkBrowserProductOrMainScriptExecution": true,
+  "locksHeld": [],
+  "remainingOwnProcessesAfterExit": 0,
+  "parentContinues": true,
+  "inputReads": [
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json",
+      "bytes": 42763,
+      "sha256": "c3b433fc4e27d597fa22d09329781525feab41ebdce8b3a9f9095ad120690a34"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback-tool-receipt.json",
+      "bytes": 1067,
+      "sha256": "22242c907bf1ae4b8d88874632aae5f487e1ca4dfe7435123578eabad78c3701"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal.json",
+      "bytes": 83167,
+      "sha256": "301bac2f4da3cdc88abe4cd37ff8dd6b23efd32d967e67eb8249ec695199fa07"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal-tool-receipt.json",
+      "bytes": 1028,
+      "sha256": "b62da051cdc3891ba92a1ce9ccc7e72506f61970a59e637bed4d114afdad2198"
+    }
+  ],
+  "inputDrift": []
+}

@@ -1,0 +1,153 @@
+{
+  "at": "2026-10-22T14:39:17.290Z",
+  "actor": "Independent original-tool-receipt reader; no product/helper execution",
+  "receipts": [
+    {
+      "label": "reader audit: host-cache scope assertion failure retained",
+      "executionId": "53fdaadbfc7c3d22b0d14cadd62e3c0f",
+      "pid": 2384,
+      "exitCode": 1,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "status": "exited",
+      "outputComplete": true,
+      "startedAtMs": 1792679775920,
+      "finishedAtMs": 1792679777085,
+      "files": {
+        "execution.json": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/53fdaadbfc7c3d22b0d14cadd62e3c0f/execution.json",
+          "bytes": 529,
+          "sha256": "1f8a91f64ddf958c7c08be5336f71ca1944593cb1ace511a32ec5743f56c1e81"
+        },
+        "output.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/53fdaadbfc7c3d22b0d14cadd62e3c0f/output.log",
+          "bytes": 884,
+          "sha256": "0f55de3a82d903c34b7557296f422941239fedf3e2a03b1efd00c826d95f6d97",
+          "text": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'data/session_projcache/sessions/session-7c6757cc-30e3-41fa-b8db-0d987e779161.json'\n+ ]\n- []\n\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/successor112-predecessor-gui-review-20261022-r1-reader.mjs:180:10\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: [\n    'data/session_projcache/sessions/session-7c6757cc-30e3-41fa-b8db-0d987e779161.json'\n  ],\n  expected: [],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.3\n"
+        },
+        "stderr.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/53fdaadbfc7c3d22b0d14cadd62e3c0f/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "reader audit-r2: RPC envelope access typo retained",
+      "executionId": "ab69a850214fa240922656c5a8c993ab",
+      "pid": 2743,
+      "exitCode": 1,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "status": "exited",
+      "outputComplete": true,
+      "startedAtMs": 1792679824921,
+      "finishedAtMs": 1792679825626,
+      "files": {
+        "execution.json": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ab69a850214fa240922656c5a8c993ab/execution.json",
+          "bytes": 529,
+          "sha256": "0908a7017166eae10250e3ce88f6182713e5abee94ee2ea786d7cabf875293b7"
+        },
+        "output.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ab69a850214fa240922656c5a8c993ab/output.log",
+          "bytes": 499,
+          "sha256": "628e181b0b41e981c0bd926827b7f72a94b24660a886209290e4335957519b66",
+          "text": "<anonymous_script>:1\nundefined\n^\n\nSyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/successor112-predecessor-gui-review-20261022-r1-reader.mjs:221:25\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v22.23.3\n"
+        },
+        "stderr.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ab69a850214fa240922656c5a8c993ab/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "reader audit-r3: exact evidence audit",
+      "executionId": "a977764cbb2d22f33ddb667c47dadbd8",
+      "pid": 2886,
+      "exitCode": 0,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "status": "exited",
+      "outputComplete": true,
+      "startedAtMs": 1792679859028,
+      "finishedAtMs": 1792679860467,
+      "files": {
+        "execution.json": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/a977764cbb2d22f33ddb667c47dadbd8/execution.json",
+          "bytes": 529,
+          "sha256": "8a5bf3bb3069a618f56c869e6460ffd9e7ba680baedb89626d1d474315c6a9dd"
+        },
+        "output.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/a977764cbb2d22f33ddb667c47dadbd8/output.log",
+          "bytes": 206,
+          "sha256": "cdc33f467e9d8e5283dc8d1c02437476e7020f9b2ec4950d0c82928253dd0501",
+          "text": "{\"phase\":\"audit-r3\",\"sealEntries\":747,\"declaredSource\":112,\"readFiles\":1867,\"originalDrift\":0,\"productTestsExecuted\":0,\"output\":\"docs/testing/successor112-predecessor-gui-review-20261022-r1-audit-r3.json\"}\n"
+        },
+        "stderr.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/a977764cbb2d22f33ddb667c47dadbd8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "reader final: unchanged original-byte recheck",
+      "executionId": "36662533ada78b4cb8be9bb5776fc1a2",
+      "pid": 3386,
+      "exitCode": 0,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "status": "exited",
+      "outputComplete": true,
+      "startedAtMs": 1792679923865,
+      "finishedAtMs": 1792679926867,
+      "files": {
+        "execution.json": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/36662533ada78b4cb8be9bb5776fc1a2/execution.json",
+          "bytes": 529,
+          "sha256": "73bafb446d67a250f68fe2108762a50bea0ae2dfc9e99d751afa6cf0d1b5e3a5"
+        },
+        "output.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/36662533ada78b4cb8be9bb5776fc1a2/output.log",
+          "bytes": 200,
+          "sha256": "920a33c5fbd73ba1051dbbc18bf6fe2b224174d8279f7a0e39dd7b2ad0c9f227",
+          "text": "{\"phase\":\"final\",\"sealEntries\":747,\"declaredSource\":112,\"readFiles\":1868,\"originalDrift\":0,\"productTestsExecuted\":0,\"output\":\"docs/testing/successor112-predecessor-gui-review-20261022-r1-final.json\"}\n"
+        },
+        "stderr.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/36662533ada78b4cb8be9bb5776fc1a2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "Main step19: original clean-cancel execution output",
+      "executionId": "ccf4e815ed9eec9ae03a64ecf6a71932",
+      "pid": 97697,
+      "exitCode": 0,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "status": "exited",
+      "outputComplete": true,
+      "startedAtMs": 1792678303918,
+      "finishedAtMs": 1792678308309,
+      "files": {
+        "execution.json": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ccf4e815ed9eec9ae03a64ecf6a71932/execution.json",
+          "bytes": 530,
+          "sha256": "49540a2205a60921ff4a1dd1a77584154ea89c2eed3527b4d422f83ec72605ab"
+        },
+        "output.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ccf4e815ed9eec9ae03a64ecf6a71932/output.log",
+          "bytes": 56,
+          "sha256": "93c0069df1d19e5175ac91af5ef165cbc789b0c6a6a0da332dafceca56dabf04",
+          "text": "{ formPresent: false, titlePresent: true, alerts: [] }\n\n"
+        },
+        "stderr.log": {
+          "file": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/ccf4e815ed9eec9ae03a64ecf6a71932/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "independentProductVerdict": "See limited GUI report",
+  "productTestsExecuted": 0
+}

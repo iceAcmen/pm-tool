@@ -1,4 +1,4 @@
-/** 固定快照进度汇报的精简 Markdown：默认只含摘要、周期事件和异常项。 */
+/** 固定快照进度汇报 Markdown：摘要、周期事件、异常项及已保存的冻结摘录。 */
 import { progressReportSourceTypeLabels, progressReportStatusLabels, type ProgressReport } from './progress-report.js'
 
 function inline(value: string): string {
@@ -71,6 +71,24 @@ export function renderProgressReportMarkdown(report: ProgressReport): string {
     snapshot.exceptions.forEach(item => lines.push(
       `| ${item.severity === 'critical' ? '严重' : '关注'} | ${item.kind} | \`${item.id}\` | ${inline(item.title)} | ${inline(item.owner || '未指定')} | ${item.dueDate ?? '-'} | ${inline(item.detail)} |`,
     ))
+  }
+  if (report.excerpts?.length) {
+    lines.push('', '## 冻结进展摘录', '')
+    for (const [index, excerpt] of report.excerpts.entries()) {
+      const frozen = [
+        `任务：${excerpt.taskId} / 进展：${excerpt.entryId} / 修订：${excerpt.revisionId}`,
+        `作者：${excerpt.author} / 日期：${excerpt.date}`,
+        '',
+        excerpt.contentSnapshot,
+      ].join('\n')
+      // 字面保留冻结文本；比内部反引号更长的围栏防止正文逃逸为 HTML/链接。
+      let fenceLength = 3
+      for (const match of frozen.matchAll(/`+/g)) {
+        fenceLength = Math.max(fenceLength, match[0].length + 1)
+      }
+      const fence = '`'.repeat(fenceLength)
+      lines.push(`### 摘录 ${index + 1}`, '', fence, frozen, fence, '')
+    }
   }
   lines.push('', '---', '', '本报告由 pm-tool 固定快照生成；后续业务数据变化不会改写本报告记录。', '')
   return lines.join('\n')

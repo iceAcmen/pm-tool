@@ -1,0 +1,182 @@
+{
+  "at": "2026-10-22T23:24:50.870Z",
+  "startedAt": "2026-10-22T23:24:50.682Z",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-option-native-trace-review-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "computedExitCode": 1,
+  "protectedInputs": 451,
+  "changes": [],
+  "checks": [
+    {
+      "name": "round26-readonly-rpc-not-zero",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:projects",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:tasks",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:milestones",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:riskIssues",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:meetings",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:reports",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:deliverables",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:okrs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:lessons",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:habits",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:fileAssets",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "name": "sealed-members-unchanged",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no-trailing-whitespace:-report.md",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no-trailing-whitespace:-command-audit.md",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "protected-inputs",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "audit-no-errors",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [
+    {
+      "name": "round26-snapshot-raw:fileAssets",
+      "detail": null
+    }
+  ],
+  "outputs": {
+    "docs/testing/f02-option-native-trace-review-20261023-r2-report.md": {
+      "bytes": 18084,
+      "sha256": "bab6dfa1458dcb809e4bec977c46f0c030f510ec570390464a75fb1cb23bd496"
+    },
+    "docs/testing/f02-option-native-trace-review-20261023-r2-audit.json": {
+      "bytes": 493676,
+      "sha256": "9e6da93ff2257da81067b0623eb18741184f92eeb64a55e7046f27fe961bafb1"
+    },
+    "docs/testing/f02-option-native-trace-review-20261023-r2-command-audit.md": {
+      "bytes": 8677,
+      "sha256": "81fa1385e121449da051701042dab7aa2660241729674ed9ed86c8fcf15492cb"
+    }
+  },
+  "reader": {
+    "bytes": 18908,
+    "sha256": "b939644e03e36df30c4a2bba487be95449bec868207f0f569fba121e5fa08476"
+  },
+  "round26RpcCorrection": {
+    "rpcId": "7d6d3707-4a30-4824-ab2e-8edf8c62645c",
+    "command": "/pm web snapshot",
+    "requestCount": 1,
+    "responseCount": 1,
+    "snapshotCollections": {
+      "projects": {
+        "count": 3,
+        "same": true
+      },
+      "tasks": {
+        "count": 8,
+        "same": true
+      },
+      "milestones": {
+        "count": 1,
+        "same": true
+      },
+      "riskIssues": {
+        "count": 1,
+        "same": true
+      },
+      "meetings": {
+        "count": 1,
+        "same": true
+      },
+      "reports": {
+        "count": 1,
+        "same": true
+      },
+      "deliverables": {
+        "count": 2,
+        "same": true
+      },
+      "okrs": {
+        "count": 4,
+        "same": true
+      },
+      "lessons": {
+        "count": 1,
+        "same": true
+      },
+      "habits": {
+        "count": 2,
+        "same": true
+      },
+      "fileAssets": {
+        "count": 2,
+        "same": false
+      }
+    }
+  },
+  "selfHashExcluded": true,
+  "boundary": "仅完整性封存和原只读RPC补核，不是GUI PASS或父普通提交放行。self链接将在本次创建后存在；封后真实命令收据不参与循环指纹。"
+}

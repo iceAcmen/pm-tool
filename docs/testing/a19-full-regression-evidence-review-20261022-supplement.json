@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-22T02:18:42.542Z",
+  "command": [
+    "/usr/bin/git",
+    "diff",
+    "--binary",
+    "--",
+    "packages/dsh-pm-tool",
+    "launcher"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "originalExit": 0,
+  "signal": null,
+  "actualPatchSHA": "f50844acb9a0aa7a74c796a71431bd856d2f1e022fc9dfc117b0c17474dc99e2",
+  "declaredPatchSHA": "f50844acb9a0aa7a74c796a71431bd856d2f1e022fc9dfc117b0c17474dc99e2",
+  "matches": true,
+  "independentCommonInputs": 502,
+  "drift": [],
+  "extra": [
+    {
+      "path": "packages/dsh-pm-tool/README.md",
+      "signedSHA": "fe1da010d2a105c660296254f993dbf207ef6d8d1d0c140affc2658deeb2849f",
+      "frozenPresent": true,
+      "frozenMatches": true
+    },
+    {
+      "path": "packages/dsh-pm-tool/.gitignore",
+      "signedSHA": "187f7c6aab9d787d3ea8c9599ecdffc5e66a97aa038aed1fca6d485924632c3e",
+      "frozenPresent": true,
+      "frozenMatches": true
+    },
+    {
+      "path": "packages/dsh-pm-tool/pnpm-workspace.yaml",
+      "signedSHA": "fbf618ddd3997cb8e0c577703ca49f607b164925a2836a77110895dd724995a1",
+      "frozenPresent": true,
+      "frozenMatches": true
+    },
+    {
+      "path": "packages/dsh-pm-tool/tsconfig.core.json",
+      "signedSHA": "2e27d84d84b2e828453ecefffcbaa33c786f3789faf29f587ae1ab707264caef",
+      "frozenPresent": true,
+      "frozenMatches": true
+    },
+    {
+      "path": "packages/dsh-pm-tool/docs/model-providers.md",
+      "signedSHA": "79ce7e94f41b5a7f1c5c647d06b318e12ed6cf0c92ff36988dc684174b012ce2",
+      "frozenPresent": false,
+      "frozenMatches": false
+    },
+    {
+      "path": "packages/dsh-pm-tool/docs/可配置仪表盘技术方案.md",
+      "signedSHA": "9e35f52c519409261974619de692ccf8cc2cdeee6523eef60813391670b1efaf",
+      "frozenPresent": false,
+      "frozenMatches": false
+    }
+  ],
+  "boundary": "Read-only patch/input comparison, not product tests or new binding of historical missing evidence."
+}

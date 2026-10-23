@@ -1,0 +1,53 @@
+{
+  "role": "trae independent GUI original-evidence reviewer",
+  "method": "Actual functions.view_image calls; original PNG and JPEG only; no GUI execution or generated images",
+  "base": "reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2",
+  "indexSha256": "99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852",
+  "uniquePNG": 19,
+  "uniqueJPEG": 13,
+  "pngCalls": 20,
+  "repeatedOriginalDetail": "round05-a-long-title-edit-visible.png",
+  "all245FramesByteCheckedNotAllVisuallyReviewed": true,
+  "png": [
+    {"file": "round05-a-long-row-visible.png", "observation": "A真实七顶层行，长标题按现有设计省略；完整出站文案与编辑入口分格可见"},
+    {"file": "round05-a-long-title-edit-visible.png", "observation": "真实t7 TaskForm，完整恶意文本标题/描述作为文本可见，标题蓝焦点；另以original2880x1436复看"},
+    {"file": "round05-a-edit-cancel-zero-write.png", "observation": "表单退出，A原七行与出站位保留；Escape取消由原脚本/RPC/root合证，不冒点击底部取消"},
+    {"file": "round06-grouped-long-visible.png", "observation": "状态分组真实任务行及done/wrapped组可见，出站位未进组头，编辑入口独立"},
+    {"file": "round06-grouped-edit-visible.png", "observation": "状态分组真实t7编辑表单，恶意文本标题可见"},
+    {"file": "round06-grouped-cancel.png", "observation": "退出返回状态分组，出站位保留"},
+    {"file": "round08-b-tasks.png", "observation": "B页仅QA-B任务t2，未导出，无A时刻"},
+    {"file": "round08-b-edit-visible.png", "observation": "B原任务编辑表单可见"},
+    {"file": "round08-b-refresh.png", "observation": "B刷新后仍未导出，不借A"},
+    {"file": "round08-a-reentry.png", "observation": "返回A项目，同源出站位恢复，不能说此视图切换改变timeOrigin"},
+    {"file": "round09-related-neighbor-visible.png", "observation": "KR仅在F5目标下，已定稿，自身关联精确第二目标ID恰一行邻接；第二目标独立"},
+    {"file": "round09-related-reentry.png", "observation": "切离回OKR后上述KR关联仍可见"},
+    {"file": "round10-related-after-reload.png", "observation": "真实reload后KR主父/状态/自身关联同，第二目标独立"},
+    {"file": "round10-a-slot-after-reload.png", "observation": "reload后A七顶层行，各显示最近21:23/外部唯一文案；无子层fixture"},
+    {"file": "round10-b-slot-after-reload.png", "observation": "reload后B t2仍未导出"},
+    {"file": "round02-original-card-observed.png", "observation": "正常恢复旧撤销批次处理卡，t6/负责人/47；原ask正文未恢复，不冒原问答卡"},
+    {"file": "round04-natural-previous-visible.png", "observation": "现有旧处理卡自然前一刷新按钮蓝焦点可见"},
+    {"file": "round04-natural-tab-opener-visible.png", "observation": "同旧处理卡打开任务按钮蓝焦点可见，真实nativeTab由源输入序列/零RPC/roots合证"},
+    {"file": "round03-native-after.png", "observation": "首18Tab未达opener，保留原reached=false，不以有限遍历判键盘陷阱"}
+  ],
+  "jpeg": [
+    {"file": "frames/round04-native-tab-follow-8.jpg", "observation": "当前旧处理卡opener蓝焦点原帧"},
+    {"file": "frames/round04-native-tab-follow-10.jpg", "observation": "随后最小化旧副驾，未输入/发送"},
+    {"file": "frames/round05-a-tasks-10.jpg", "observation": "A原七行滚入可视区，出站文案和右编辑入口"},
+    {"file": "frames/round05-a-tasks-20.jpg", "observation": "长标题t7编辑入口可见/聚焦，不冒此帧已开表单"},
+    {"file": "frames/round05-a-tasks-25.jpg", "observation": "t7原行和编辑焦点，无副驾覆盖；实际表单以原PNG另证"},
+    {"file": "frames/round06-a-grouped-20.jpg", "observation": "状态分组done/wrapped真实任务行及出站位，不冒树子层"},
+    {"file": "frames/round05-a-tasks-34.jpg", "observation": "读刷新返回A任务页，不是save"},
+    {"file": "frames/round06-a-grouped-31.jpg", "observation": "状态分组退出回原t7行，编辑焦点仍可见"},
+    {"file": "frames/round08-project-isolation-20.jpg", "observation": "B原t2未导出与编辑焦点，不借A"},
+    {"file": "frames/round09-okr-related-4.jpg", "observation": "KR自身关联行邻接可读、第二目标独立"},
+    {"file": "frames/round10-reload-1.jpg", "observation": "reload前OKR关联原页"},
+    {"file": "frames/round10-reload-20.jpg", "observation": "真实浏览器重载过渡到宿主页；不把过渡浅色算完整浅色矩阵"},
+    {"file": "frames/round10-reload-35.jpg", "observation": "reload后正常重进A任务页；稳定KR/A/B终态由各原PNG证"}
+  ],
+  "limitations": [
+    "A七任务parentId全部null，未实际树子层/有子任务父折叠展开",
+    "nativeTab只签当前恢复旧处理卡，原ask卡/原问上下文未恢复",
+    "DPR2不是200%文本缩放，不签完整B8/整P2002/P2004/父ordinarycommit",
+    "Byte hashes/DOM/Mainassert/HTTP200 are auxiliary, not independent GUI verdicts"
+  ]
+}

@@ -62,6 +62,14 @@ describe('P0 工具条分组 / 顶部间距 / 响应式（tasks.css）', () => {
     expect(tail).toContain('.pt-density-chip')
   })
 
+  it('窄屏 ≤560：组织动作段在自身宽度内换行，不把旧排序控件裁到视口外', () => {
+    const blocks = [...css.matchAll(/@media \(max-width: 560px\)\s*\{/g)]
+    const last = blocks[blocks.length - 1]
+    const tail = last ? css.slice(last.index) : ''
+    expect(tail).toMatch(/\.pt-seg-org\s*\{[^}]*flex-wrap:\s*wrap/)
+    expect(tail).toMatch(/\.pt-seg-org\s*\{[^}]*max-width:\s*100%/)
+  })
+
   it('390：动作簇两行内收纳、密度 seg 均分，不顶出父宽', () => {
     const n390 = css.match(/@media \(max-width: 390px\)\s*\{([\s\S]*?)\n\}/g)?.at(-1) ?? ''
     expect(n390).toContain('.pt-tools')

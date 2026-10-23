@@ -12,7 +12,7 @@
  */
 import { createHash } from 'node:crypto'
 import { basename, join, resolve, sep } from 'node:path'
-import { lstat, mkdir, open, readFile, rename, rm } from 'node:fs/promises'
+import { lstat, mkdir, open, readFile, rename, rm, realpath } from 'node:fs/promises'
 
 export class FileAssetRejectedError extends Error {
   constructor(readonly status: 400 | 413 | 415 | 422, message: string) {
@@ -125,15 +125,49 @@ export function contentAddressedRelPath(validated: ValidatedFile): string {
   return join(validated.sha256.slice(0, 2), `${validated.sha256}${ext}`)
 }
 
-/** 防穿越：resolve 后必须仍在 root 内；且不落 symlink。 */
+/** 防穿越：根、每个现存祖先和目标均不可是 symlink；不存在的后续路径允许创建。 */
 export async function resolveWithinRoot(root: string, rel: string): Promise<string> {
   const abs = resolve(root, rel)
   const rootAbs = resolve(root)
   if (abs !== rootAbs && !abs.startsWith(rootAbs + sep)) {
     throw new FileAssetRejectedError(400, '路径越界，已拒绝')
   }
-  const stat = await lstat(abs).catch(() => undefined)
-  if (stat?.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')
+  const inspect = async (path: string) => {
+    try { return await lstat(path) } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined
+      throw error
+    }
+  }
+  // 配置根自身可能经更上层软链穿出；只允许macOS固定系统父别名。
+  let ancestor: string = sep
+  for (const component of rootAbs.split(sep).filter(Boolean)) {
+    ancestor = join(ancestor, component)
+    const stat = await inspect(ancestor)
+    if (!stat) break
+    if (stat.isSymbolicLink()) {
+      const platformAlias = process.platform === 'darwin' && ancestor !== rootAbs
+        && ['/tmp', '/var', '/etc'].includes(ancestor)
+        && await realpath(ancestor) === `/private${ancestor}`
+      if (!platformAlias) throw new FileAssetRejectedError(400, '拒绝符号链接')
+    }
+  }
+  const rootStat = await inspect(rootAbs)
+  if (rootStat?.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')
+  // macOS /tmp 的父别名不属于用户根内组件，按真实根比较，不误拒合法临时目录。
+  const canonicalRoot = rootStat ? await realpath(rootAbs) : undefined
+  let path = rootAbs
+  for (const component of abs.slice(rootAbs.length).split(sep).filter(Boolean)) {
+    path = join(path, component)
+    const stat = await inspect(path)
+    if (!stat) break
+    if (stat.isSymbolicLink()) throw new FileAssetRejectedError(400, '拒绝符号链接')
+    if (canonicalRoot) {
+      const canonical = await realpath(path)
+      if (!canonical.startsWith(canonicalRoot + sep)) {
+        throw new FileAssetRejectedError(400, '路径越界，已拒绝')
+      }
+    }
+  }
   return abs
 }
 
@@ -148,6 +182,8 @@ export async function storeAssetBuffer(
   const relPath = contentAddressedRelPath(validated)
   const abs = await resolveWithinRoot(root, relPath)
   await mkdir(resolve(root, validated.sha256.slice(0, 2)), { recursive: true, mode: 0o700 })
+  // 创建祖先后再验证，不能仅以尚不存在的最终文件作为安全检查。
+  await resolveWithinRoot(root, relPath)
   // 幂等：同 hash 已存在直接返回（取消/重试不产生重复字节）。
   const existing = await lstat(abs).catch(() => undefined)
   if (existing?.isFile()) return { relPath, sha256: validated.sha256, size: validated.size, alreadyExisted: true, createdFile: false }

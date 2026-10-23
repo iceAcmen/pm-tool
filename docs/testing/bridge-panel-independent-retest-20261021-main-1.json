@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-21T13:15:14.300100+00:00",
+  "cwd": "/private/tmp/pmtool-handshake-red-frozen-20261021",
+  "args": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "src/client/launch-handshake.test.ts",
+    "src/client/panel-launch-handshake.test.tsx",
+    "--maxWorkers=1",
+    "--minWorkers=1"
+  ],
+  "exit": 1,
+  "sources": {
+    "src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "src/client/launch-handshake.ts": "c7303c993809b41790f9f299d9818c73facbcb888dbe058aab414b20a1081057"
+  }
+}

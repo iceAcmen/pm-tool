@@ -1,0 +1,2314 @@
+{
+  "results": [
+    {
+      "key": "GG",
+      "report": {
+        "path": "docs/testing/governance-fix-independent-retest-20261021-report.md",
+        "bytes": 15976,
+        "sha256": "40c88ed06858ab5cea5ef8a704a2d462acef3b2b759c521f0e31f0eead50981d"
+      },
+      "section": "§5，run-2ACog5 原26 exact probes，GUI另签",
+      "candidate": "GG/run-2ACog5",
+      "sealPath": null,
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/governance-fix-independent-retest-20261021-report.md",
+          "sha256": "40c88ed06858ab5cea5ef8a704a2d462acef3b2b759c521f0e31f0eead50981d",
+          "bytes": 15976
+        },
+        {
+          "path": "governance-fix-independent-retest-20261021-report.md",
+          "sha256": "40c88ed06858ab5cea5ef8a704a2d462acef3b2b759c521f0e31f0eead50981d",
+          "bytes": 15976
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "OLD",
+      "report": {
+        "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+        "bytes": 29009,
+        "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+      },
+      "section": "§4 原26逐ID与既有有限继承；不扩整域",
+      "candidate": "A20V3+U4/102",
+      "sealPath": "docs/testing/op-growth-final-inheritance-20261022-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+          "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23",
+          "bytes": 29009
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "CTX",
+      "report": {
+        "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+        "bytes": 17291,
+        "sha256": "f91354cd659221db5e73e15f87ea754201a5287601bb7e0f4933a3eb137d1652"
+      },
+      "section": "§1/3/4/6",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p0-context-metric-gui-review-20261023-r1-seal-r2.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+          "sha256": "f91354cd659221db5e73e15f87ea754201a5287601bb7e0f4933a3eb137d1652",
+          "bytes": 17291
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "CAP",
+      "report": {
+        "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+        "bytes": 15798,
+        "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023"
+      },
+      "section": "§1/4/5/7",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+          "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023",
+          "bytes": 15798
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "REJ",
+      "report": {
+        "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+        "bytes": 17204,
+        "sha256": "9124058cd5810c6b68e9e08be0b8df86cbd5dd41b3964f22a985f29da7b487ec"
+      },
+      "section": "§1/3/4/6，原拒因BLOCKED保留",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-seal-r2.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+          "sha256": "9124058cd5810c6b68e9e08be0b8df86cbd5dd41b3964f22a985f29da7b487ec",
+          "bytes": 17204
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "REASON",
+      "report": {
+        "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+        "bytes": 17012,
+        "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e"
+      },
+      "section": "§1/5/6，新观察闭原断言组合",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+          "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e",
+          "bytes": 17012
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "IM",
+      "report": {
+        "path": "docs/testing/a18-integration-more-gui-review-20261022.md",
+        "bytes": 16140,
+        "sha256": "5081af5bcf7256885274b59085ad927d7245c6ad0a9b914877353fe6b442b278"
+      },
+      "section": "§4/5/6，同对session/attach/lesson/quiet已签原动作",
+      "candidate": "A13/514",
+      "sealPath": "docs/testing/a18-integration-more-gui-review-20261022-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "a18-integration-more-gui-review-20261022.md",
+          "sha256": "5081af5bcf7256885274b59085ad927d7245c6ad0a9b914877353fe6b442b278",
+          "bytes": 16140
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a18-integration-more-gui-review-20261022.md",
+          "sha256": "5081af5bcf7256885274b59085ad927d7245c6ad0a9b914877353fe6b442b278",
+          "bytes": 16140
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "A20",
+      "report": {
+        "path": "docs/testing/a20v3-total-gate-independent-review-20261022.md",
+        "bytes": 11352,
+        "sha256": "0bdccc7f24e444cd58360ceb105f4b5b2d0a391b60f398dbe905d8c280573098"
+      },
+      "section": "§1/5，P0007限定继承",
+      "candidate": "A20V3/95",
+      "sealPath": null,
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a20v3-total-gate-independent-review-20261022.md",
+          "sha256": "0bdccc7f24e444cd58360ceb105f4b5b2d0a391b60f398dbe905d8c280573098",
+          "bytes": 11352
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "A20G",
+      "report": {
+        "path": "docs/testing/a20v2-gui-independent-review-20261022.md",
+        "bytes": 6673,
+        "sha256": "c7e9170f7f82524d8c29de683cb82cfdbe7003bf6b0b3f84d34e1b3bdff3c187"
+      },
+      "section": "§1/3，SR-G01..06；不替P0007全部断言",
+      "candidate": "A20V2",
+      "sealPath": null,
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a20v2-gui-independent-review-20261022.md",
+          "sha256": "c7e9170f7f82524d8c29de683cb82cfdbe7003bf6b0b3f84d34e1b3bdff3c187",
+          "bytes": 6673
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "CHECK",
+      "report": {
+        "path": "docs/testing/a18-check-five-gui-review-20261022.md",
+        "bytes": 21453,
+        "sha256": "825793041501b04eba9f7b674362e5da58cc8d67d90fda6657f905278b591e5f"
+      },
+      "section": "§1/5，原五规则25步",
+      "candidate": "A18/520",
+      "sealPath": "docs/testing/a18-check-five-gui-review-20261022-seal.json",
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a18-check-five-gui-review-20261022.md",
+          "sha256": "825793041501b04eba9f7b674362e5da58cc8d67d90fda6657f905278b591e5f",
+          "bytes": 21453
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "CHECKREM",
+      "report": {
+        "path": "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+        "bytes": 7551,
+        "sha256": "057b1a3a84df163916fe5d733c09881e5ed69452456ff58cd3d25b3f70bea88f"
+      },
+      "section": "§1/5，task单项/叙事/wrapped三余片",
+      "candidate": "A18/520",
+      "sealPath": "docs/testing/a19-p0008-check-remainder-review-20261022-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+          "sha256": "057b1a3a84df163916fe5d733c09881e5ed69452456ff58cd3d25b3f70bea88f",
+          "bytes": 7551
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+          "sha256": "057b1a3a84df163916fe5d733c09881e5ed69452456ff58cd3d25b3f70bea88f",
+          "bytes": 7551
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "P1H",
+      "report": {
+        "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+        "bytes": 13184,
+        "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7"
+      },
+      "section": "§3/5，history与跟进刷新",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p1-history-remaining-gui-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+          "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7",
+          "bytes": 13184
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "REST",
+      "report": {
+        "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+        "bytes": 8517,
+        "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be"
+      },
+      "section": "§1/2/3，原下部rest缺图闭",
+      "candidate": "原114/521/3267，非新实例功能",
+      "sealPath": "docs/testing/p1-rest-visible-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+          "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be",
+          "bytes": 8517
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "P104S",
+      "report": {
+        "path": "docs/testing/p1004-handoff-source-auto-20261023-r1-report.md",
+        "bytes": 19304,
+        "sha256": "a65bd833d533773361716b8d33594e47aceb9aa4237e6e2fad660bdd318a3589"
+      },
+      "section": "§1/4/7，原隔离接缝及漂移补记",
+      "candidate": "交付panel a58e2165，非当前整包",
+      "sealPath": "docs/testing/p1004-handoff-source-auto-20261023-r1-seal.json",
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "P104G",
+      "report": {
+        "path": "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+        "bytes": 18051,
+        "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9"
+      },
+      "section": "§1/4/7，nativeTab到opener原剩余",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/p1004-repair-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+          "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9",
+          "bytes": 18051
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "L2",
+      "report": {
+        "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+        "bytes": 23686,
+        "sha256": "436b5152dd96af9134a90f5e4d220aa487903d0d1f5a5be36895b6c3b574374d"
+      },
+      "section": "§3/4，原F01/F02 FAIL保留",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p1-l2-events-gui-review-20261023-r1-seal-r2.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+          "sha256": "436b5152dd96af9134a90f5e4d220aa487903d0d1f5a5be36895b6c3b574374d",
+          "bytes": 23686
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "F01",
+      "report": {
+        "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+        "bytes": 16658,
+        "sha256": "063511d2e6a82d1fe0f1dd3405a9c12f64cb730f0b3c0bc4d590bff3048b9b3f"
+      },
+      "section": "§1/5/6，双无taskId事件完整查看/edit/final/repeat/reload",
+      "candidate": "CombinedSixRepairsR1/124/525",
+      "sealPath": "docs/testing/six-repairs-l2-gui-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+          "sha256": "063511d2e6a82d1fe0f1dd3405a9c12f64cb730f0b3c0bc4d590bff3048b9b3f",
+          "bytes": 16658
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "F02",
+      "report": {
+        "path": "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+        "bytes": 16679,
+        "sha256": "fe9927979b94a6e97c671f1e5349ef8f9fc0dfc252fb43f192502ef96da4076f"
+      },
+      "section": "§1/5/6/8，默认label/span首点save及键盘",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/f02-repair-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+          "sha256": "fe9927979b94a6e97c671f1e5349ef8f9fc0dfc252fb43f192502ef96da4076f",
+          "bytes": 16679
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "PEOPLE",
+      "report": {
+        "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-report.md",
+        "bytes": 9012,
+        "sha256": "0be3ff8664f50f38cf1276b56ee6eabe7cdce0a6fb8c445156bbe52d7eca123c"
+      },
+      "section": "§1/3，FL姓名FAIL、MAX10图轴NOT_RUN",
+      "candidate": "CombinedF02RepairR2/124/525/3270",
+      "sealPath": "docs/testing/people-f1-fl-gui-timed-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-report.md",
+          "sha256": "0be3ff8664f50f38cf1276b56ee6eabe7cdce0a6fb8c445156bbe52d7eca123c",
+          "bytes": 9012
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "FD",
+      "report": {
+        "path": "docs/testing/people-fd-axis-gui-timed-20261023-r1-report.md",
+        "bytes": 13434,
+        "sha256": "ccf4ec644556b982480e9525f69acabbdf84433087a32da2dc4ef84f3b150131"
+      },
+      "section": "§1/3/4，旧FD四宽姓名/轴FAIL；不读活两源",
+      "candidate": "CombinedF02RepairR2/124/525/3270旧源",
+      "sealPath": "docs/testing/people-fd-axis-gui-timed-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-fd-axis-gui-timed-20261023-r1-report.md",
+          "sha256": "ccf4ec644556b982480e9525f69acabbdf84433087a32da2dc4ef84f3b150131",
+          "bytes": 13434
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "OUT",
+      "report": {
+        "path": "docs/testing/p2-outbound-history-review-20261023-r1.md",
+        "bytes": 22155,
+        "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238"
+      },
+      "section": "§3/4/5/6，恶意HTML/31-29/周期正例，旧出站位FAIL",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p2-outbound-history-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "p2-outbound-history-review-20261023-r1.md",
+          "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238",
+          "bytes": 22155
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "DISPLAY",
+      "report": {
+        "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+        "bytes": 15830,
+        "sha256": "3067961280e74550bcbba48aa70a0e0091aecfffc913058c5f2ab2b798ffc1bb"
+      },
+      "section": "§1/4/5/7，顶层/状态组/B/KR，ask原对象仍BLOCKED",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/p2-display-repair-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+          "sha256": "3067961280e74550bcbba48aa70a0e0091aecfffc913058c5f2ab2b798ffc1bb",
+          "bytes": 15830
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "TREE",
+      "report": {
+        "path": "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+        "bytes": 13550,
+        "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+      },
+      "section": "§1/4..8，父子/折叠/cancel/reload，原即时refresh缺图",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+          "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721",
+          "bytes": 13550
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "REFRESH",
+      "report": {
+        "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+        "bytes": 10990,
+        "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b"
+      },
+      "section": "§1/3/4，原R3§8.2当态三行缺图闭",
+      "candidate": "CombinedF02RepairR2/124/525/3269",
+      "sealPath": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+          "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b",
+          "bytes": 10990
+        },
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+          "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b",
+          "bytes": 10990
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "OKRH",
+      "report": {
+        "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+        "bytes": 22907,
+        "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+      },
+      "section": "§1/4/5/7，P2003/P3004/5精确片",
+      "candidate": "CombinedSuccessor114R1/114/521",
+      "sealPath": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+          "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a",
+          "bytes": 22907
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "KR",
+      "report": {
+        "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+        "bytes": 14805,
+        "sha256": "8ad5b8a4db553b3b6312f366dabd095ccdc6ac7aa54a132001d36f3417a9ff7c"
+      },
+      "section": "§2/3/5，KR自身related SOURCE/AUTO，GUI由DISPLAY替接",
+      "candidate": "views/okrs.tsx 122516a4",
+      "sealPath": "docs/testing/p2004-kr-related-source-auto-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+          "sha256": "8ad5b8a4db553b3b6312f366dabd095ccdc6ac7aa54a132001d36f3417a9ff7c",
+          "bytes": 14805
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "ARC",
+      "report": {
+        "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+        "bytes": 16181,
+        "sha256": "b7e26de2d10024cd4ef3ccfd95e449a0e8338c248434c32e15ac134d5e2189f4"
+      },
+      "section": "§1/4/5/6/8，9known/2gaps及文件/review全文",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+          "sha256": "b7e26de2d10024cd4ef3ccfd95e449a0e8338c248434c32e15ac134d5e2189f4",
+          "bytes": 16181
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "ARCS",
+      "report": {
+        "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+        "bytes": 11466,
+        "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5"
+      },
+      "section": "§2/3/4，archive9/review-materials9/35受影响，非GUI",
+      "candidate": "archive.ts 46ab5017",
+      "sealPath": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+          "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5",
+          "bytes": 11466
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "HABIT",
+      "report": {
+        "path": "docs/testing/a18-growth-more-gui-review-20261022.md",
+        "bytes": 21131,
+        "sha256": "828fdf0ddbf4ae0baf576168230b7fb54857a1b17135ea063d09b64e1face02c"
+      },
+      "section": "§1/4/5，D+1/D-3拒零写，但错误正文未签",
+      "candidate": "A13/514",
+      "sealPath": "docs/testing/a18-growth-more-gui-review-20261022-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "a18-growth-more-gui-review-20261022.md",
+          "sha256": "828fdf0ddbf4ae0baf576168230b7fb54857a1b17135ea063d09b64e1face02c",
+          "bytes": 21131
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a18-growth-more-gui-review-20261022.md",
+          "sha256": "828fdf0ddbf4ae0baf576168230b7fb54857a1b17135ea063d09b64e1face02c",
+          "bytes": 21131
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "GM",
+      "report": {
+        "path": "docs/testing/a19-habit-association-gui-review-20261022.md",
+        "bytes": 20973,
+        "sha256": "2ecf07925488b76bceb9564e85af697cab6541396d09684e5d4ed08610900b89"
+      },
+      "section": "原GM01并沿OLD §4补正签字，不重目视",
+      "candidate": "A19",
+      "sealPath": "docs/testing/a19-habit-association-gui-review-20261022-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022.md",
+          "sha256": "2ecf07925488b76bceb9564e85af697cab6541396d09684e5d4ed08610900b89",
+          "bytes": 20973
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a19-habit-association-gui-review-20261022.md",
+          "sha256": "2ecf07925488b76bceb9564e85af697cab6541396d09684e5d4ed08610900b89",
+          "bytes": 20973
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "HC",
+      "report": {
+        "path": "docs/testing/a19hc-gui-independent-review-20261022.md",
+        "bytes": 4765,
+        "sha256": "310c42f8ef5763b2860ccba9949b66ec135911ef9ff19c9e81686d1ca2c8768f"
+      },
+      "section": "HC01指定展示范围",
+      "candidate": "A19HC",
+      "sealPath": null,
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/a19hc-gui-independent-review-20261022.md",
+          "sha256": "310c42f8ef5763b2860ccba9949b66ec135911ef9ff19c9e81686d1ca2c8768f",
+          "bytes": 4765
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "F7",
+      "report": {
+        "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+        "bytes": 12429,
+        "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182"
+      },
+      "section": "§1/2/3/4，原历史/收起/refresh/reload/8月/bytes",
+      "candidate": "CombinedSuccessor114R1/114/521/3266",
+      "sealPath": "docs/testing/f7-history-remaining-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+          "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182",
+          "bytes": 12429
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "GNHD",
+      "report": {
+        "path": "docs/testing/gui-numbers-habit-dark-review-20261021.md",
+        "bytes": 23484,
+        "sha256": "248ba13647f13812ae58111cbab3fde86dafea39a18260a68d0bdcfaace1de5e"
+      },
+      "section": "§1/3.2，旧D-13/-14/月与390有限；旧环境欠绑定",
+      "candidate": "A0/A3/A5/3213旧史",
+      "sealPath": null,
+      "declaredReportPins": [],
+      "reportPinMatched": false,
+      "inheritedReportPins": [
+        {
+          "path": "docs/testing/gui-numbers-habit-dark-review-20261021.md",
+          "sha256": "248ba13647f13812ae58111cbab3fde86dafea39a18260a68d0bdcfaace1de5e",
+          "bytes": 23484
+        }
+      ],
+      "inheritedReportPinMatched": true,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "NEG",
+      "report": {
+        "path": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+        "bytes": 13208,
+        "sha256": "5730e6d1e1f0ed9cb63fa60fb15c50bc6733f7e68ed6e74b96b1234cde8b6ac7"
+      },
+      "section": "§1/4/5，missing/B同未关草稿五字段/零写",
+      "candidate": "CombinedSixRepairsR1/124/525",
+      "sealPath": "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "p3004-negative-gui-review-20261023-r2-report.md",
+          "sha256": "5730e6d1e1f0ed9cb63fa60fb15c50bc6733f7e68ed6e74b96b1234cde8b6ac7",
+          "bytes": 13208
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "SCOPE",
+      "report": {
+        "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md",
+        "bytes": 15291,
+        "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02"
+      },
+      "section": "§1/4/6，原空选项文本回退非新增oracle",
+      "candidate": "原114/521",
+      "sealPath": "docs/testing/p3004-original-scope-resolution-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md",
+          "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02",
+          "bytes": 15291
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "COMBINED",
+      "report": {
+        "path": "docs/testing/f02-combined-regression-review-20261023-r2-report.md",
+        "bytes": 16145,
+        "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+      },
+      "section": "§3/4/6，最新已冻SOURCE/AUTO；不替GUI",
+      "candidate": "CombinedF02RepairR2/124/525",
+      "sealPath": "docs/testing/f02-combined-regression-review-20261023-r2-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "f02-combined-regression-review-20261023-r2-report.md",
+          "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f",
+          "bytes": 16145
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "FIRST",
+      "report": {
+        "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-report.md",
+        "bytes": 4971,
+        "sha256": "36a37411a16969d59a85173199c6b2fcdae34a041da1b0f8a81b6bcb8c36b377"
+      },
+      "section": "有限SOURCE/AUTO；修后GUI BLOCKED",
+      "candidate": "前序source126/complete527声明",
+      "sealPath": "docs/testing/tasks-firstload-source-auto-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-report.md",
+          "sha256": "36a37411a16969d59a85173199c6b2fcdae34a041da1b0f8a81b6bcb8c36b377",
+          "bytes": 4971
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "O4",
+      "report": {
+        "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md",
+        "bytes": 6626,
+        "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47"
+      },
+      "section": "最小移块/确认重入保护；Strict最终归焦非PASS",
+      "candidate": "前序source127/complete528声明",
+      "sealPath": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md",
+          "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47",
+          "bytes": 6626
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    },
+    {
+      "key": "L8",
+      "report": {
+        "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+        "bytes": 11343,
+        "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3"
+      },
+      "section": "§1/3/4，T01-T04 SOURCE/AUTO，仅GUI待Main",
+      "candidate": "前序source125/complete526声明",
+      "sealPath": "docs/testing/l8-gantt-source-auto-review-20261023-r7-seal.json",
+      "declaredReportPins": [
+        {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+          "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3",
+          "bytes": 11343
+        }
+      ],
+      "reportPinMatched": true,
+      "inheritedReportPins": [],
+      "inheritedReportPinMatched": false,
+      "boundary": "Only report pin/seal structure reused; no mass evidence rehash or new GUI review."
+    }
+  ],
+  "readbacks": [
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json",
+      "receipt": {
+        "platform": "trae",
+        "role": "独立 P2002 后置封签接续专家，仅封存原证读取与有限裁定",
+        "mode": "readback",
+        "startedAt": "2026-10-23T02:49:34.778Z",
+        "endedAt": "2026-10-23T02:49:34.835Z",
+        "durationMs": 57,
+        "environment": {
+          "os": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.3",
+          "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+          "pid": 63306
+        },
+        "verdict": "PASS_LIMITED_GUI_REFRESH_VISIBLE",
+        "scope": "仅 P2002TreeR3 报告 §8.2：原 refresh 完成并沿原合同滚入视口后，同 ID 父行及两子行的同视口原图缺口",
+        "checkedUniqueFiles": 146,
+        "drift": [],
+        "seal": {
+          "bytes": 83167,
+          "sha256": "301bac2f4da3cdc88abe4cd37ff8dd6b23efd32d967e67eb8249ec695199fa07"
+        },
+        "sealOuter": {
+          "bytes": 1028,
+          "sha256": "b62da051cdc3891ba92a1ce9ccc7e72506f61970a59e637bed4d114afdad2198"
+        },
+        "sealReceiptStatus": 0,
+        "originalR4Unchanged": true,
+        "noProductRuntimeBuildGit": true,
+        "inputReads": [
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal.json",
+            "bytes": 83167,
+            "sha256": "301bac2f4da3cdc88abe4cd37ff8dd6b23efd32d967e67eb8249ec695199fa07"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal-tool-receipt.json",
+            "bytes": 1028,
+            "sha256": "b62da051cdc3891ba92a1ce9ccc7e72506f61970a59e637bed4d114afdad2198"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-index-check.json",
+            "bytes": 39293,
+            "sha256": "9b0bfdb29ca64fc380267e57cb96c4dee17fdbf7b3fb88b22ddc01b4b25fb5f9"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-index-tool-receipt.json",
+            "bytes": 1004,
+            "sha256": "f3625bc14785d981442e21abeee660d86d7e508160546afd184fcc99b4651388"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-audit.json",
+            "bytes": 59533,
+            "sha256": "dea9e12e89481eea3463fb2034c44b18484cd40ddc593fed800fe9199f0ca60d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-audit-tool-receipt.json",
+            "bytes": 998,
+            "sha256": "7c6d7c35230117812c115f5117a1d5325ece6d4bc6326297e702cce2517f7d65"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-visual-review.json",
+            "bytes": 4971,
+            "sha256": "a04ed73f120c27145fb4aaf6059d5b06d7cdd01f5f40d2bc55c7c072e5dcf4ce"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+            "bytes": 10990,
+            "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-setup-log.json",
+            "bytes": 4957,
+            "sha256": "351713b26a06b3b8fe4ed267269eec3ae663c1b4786823c404c09579bdc93371"
+          },
+          {
+            "file": "/tmp/p2002-refresh-visible-gui-review-20261023-r5-expert-Pkx64s/reader.mjs",
+            "bytes": 18911,
+            "sha256": "545fcd97a9b4d6eaebc0478f4167199837f5d3c0367dccfb0592a3960010d825"
+          },
+          {
+            "file": "/tmp/p2002-refresh-visible-gui-review-20261023-r5-expert-Pkx64s/outer.mjs",
+            "bytes": 1948,
+            "sha256": "0c5ba86af848d9cac0b89281c852d9c76644bdc06753a768f9016da0329e7d24"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/index-r1.json",
+            "bytes": 20210,
+            "sha256": "adaafbf104eef570d521cbaf327584facd089aacf13f6d7113da202ee4c31d87"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/activation-binding.json",
+            "bytes": 1550,
+            "sha256": "8bb339b5e506829fc8ec7f0a13cd300fb87d326caa636c37024102396d2b7961"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/built-artifacts.json",
+            "bytes": 63704,
+            "sha256": "7da06d7ce5068439ceff2e55be7635f8a7d234e5eecb5c49b78cd179b286a9d5"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/candidate.json",
+            "bytes": 1708,
+            "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-executor-source.mjs",
+            "bytes": 2969,
+            "sha256": "36a067aa5a1435f6442438f572bab35d29000e4573af4825f211f45232319158"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-outer-receipt.json",
+            "bytes": 2466,
+            "sha256": "ec79873b36d939fac2a0244c9fb78022c3c57e2f8698d282e2e6b8a62ad6420a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-outer-start.json",
+            "bytes": 297,
+            "sha256": "df7116a1429d90aa890257477bf1c325f3097ff413b9e46e6268853c15eae616"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/complete-inputs.json",
+            "bytes": 75604,
+            "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-0.jpg",
+            "bytes": 80142,
+            "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-1.jpg",
+            "bytes": 80142,
+            "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-10.jpg",
+            "bytes": 79028,
+            "sha256": "9f685fc71e1c74b1d6ad04b4f7f03879122327b7158060c31514a88bd92e8e86"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-11.jpg",
+            "bytes": 80142,
+            "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-12.jpg",
+            "bytes": 80142,
+            "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-2.jpg",
+            "bytes": 79027,
+            "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-3.jpg",
+            "bytes": 79027,
+            "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-4.jpg",
+            "bytes": 78889,
+            "sha256": "54d3ab8789f9151f3e4867ca8899edd8e6df414810bd117475fdb4ef51bb1159"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-5.jpg",
+            "bytes": 78889,
+            "sha256": "4bad4603be5a223d892b6fcfef43ab6e96b16f949a44dec7eb0caad777df23d1"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-6.jpg",
+            "bytes": 79009,
+            "sha256": "4b02fbba2f117d239c86f184c0e03ae3bffa51a41287ec828a0b03fa22c3b55b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-7.jpg",
+            "bytes": 79040,
+            "sha256": "d2084b67784bbb1273659492d643d09dcb8eb8eb7e2a8ac8f0a54100c3857f18"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-8.jpg",
+            "bytes": 79051,
+            "sha256": "6391bda4c629e12c9f520b66cd45f945af44c674434b0324e70c232f9e341fa4"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-9.jpg",
+            "bytes": 79027,
+            "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/harness-source.mjs",
+            "bytes": 5049,
+            "sha256": "4617f66981f86eff5b26bd7fb065db04aaf04c7c2d79ea9779c255a73f4592fe"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-final-roots.json",
+            "bytes": 7290,
+            "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-ids.json",
+            "bytes": 1165,
+            "sha256": "7b13bc48e8f86c04860739525231b8a557ebafd42266393af0cc59b411cae422"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-r3-report.md",
+            "bytes": 13550,
+            "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-rows.json",
+            "bytes": 8136,
+            "sha256": "5be6e111046792a920909ca8f64207f5c9f82719b0dea1c63cd7f988486aaa1d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/deliverables/dlv-0001.json",
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/deliverables/dlv-0002.json",
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/file_assets/fa-0001.json",
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/file_assets/fa-0002.json",
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json",
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/meetings/mtg-0001.json",
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/milestones/m-0001.json",
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json",
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json",
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json",
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0001.json",
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0002.json",
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0003.json",
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json",
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json",
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json",
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reports/rpt-0001.json",
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/risk_issues/ri-0001.json",
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/aiModelMode.json",
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/askApplyIdempotency.json",
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportAudit.json",
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportSent.json",
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportSentArchive.json",
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmOkrInbox.json",
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmProvenanceLedger.json",
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmProvenancePending.json",
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0001.json",
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0002.json",
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0003.json",
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0004.json",
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0005.json",
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0006.json",
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0007.json",
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0008.json",
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0009.json",
+            "bytes": 400,
+            "sha256": "2f0653bb809d9fe579ff0e33fe03e5fd78f5bf72dc2c1df6bdfd7a18ec7ef762"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0010.json",
+            "bytes": 409,
+            "sha256": "9cefa5d85da49a4a4773bf0c15e920346c303652839cccd35e8d60d4777b0a81"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0011.json",
+            "bytes": 409,
+            "sha256": "a5660bbf880081275368352bd82f02a5f59312ebaf099469c5e87f36f4ba0243"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-roots.json",
+            "bytes": 7290,
+            "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible.json",
+            "bytes": 14260,
+            "sha256": "20204d539a65e6ad4e03014c12f114753816e86c6387425c8b15b9af0b3e68a6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible.png",
+            "bytes": 395509,
+            "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/deliverables/dlv-0001.json",
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/deliverables/dlv-0002.json",
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/file_assets/fa-0001.json",
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/file_assets/fa-0002.json",
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json",
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/meetings/mtg-0001.json",
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/milestones/m-0001.json",
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json",
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json",
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json",
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0001.json",
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0002.json",
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0003.json",
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json",
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json",
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json",
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reports/rpt-0001.json",
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/risk_issues/ri-0001.json",
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/aiModelMode.json",
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/askApplyIdempotency.json",
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportAudit.json",
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportSent.json",
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportSentArchive.json",
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmOkrInbox.json",
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmProvenanceLedger.json",
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmProvenancePending.json",
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0001.json",
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0002.json",
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0003.json",
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0004.json",
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0005.json",
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0006.json",
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0007.json",
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0008.json",
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0009.json",
+            "bytes": 400,
+            "sha256": "2f0653bb809d9fe579ff0e33fe03e5fd78f5bf72dc2c1df6bdfd7a18ec7ef762"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0010.json",
+            "bytes": 409,
+            "sha256": "9cefa5d85da49a4a4773bf0c15e920346c303652839cccd35e8d60d4777b0a81"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0011.json",
+            "bytes": 409,
+            "sha256": "a5660bbf880081275368352bd82f02a5f59312ebaf099469c5e87f36f4ba0243"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-roots.json",
+            "bytes": 7290,
+            "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh.json",
+            "bytes": 14288,
+            "sha256": "3dcbbab2b16ece05f5ffac510c51842c074e457bba596dbb91a1a62a5c5ce4da"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh.png",
+            "bytes": 395509,
+            "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-refresh-snapshot.json",
+            "bytes": 16730,
+            "sha256": "d2ec8e54fee83d830d2d754c2b6125ce19cd9c1d7a5c39620b1270cfda3332ee"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-refreshed-tree-visible-events.json",
+            "bytes": 22978,
+            "sha256": "f7fc3242cf227aacb520180c3312632ec418b5c081a7e1f60875f54ea04cca2d"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-executor-source.mjs",
+            "bytes": 1567,
+            "sha256": "08cff529d775730b89bf67d7df2e8c0281e7a3de8500c888746c8845554c3c48"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-outer-start.json",
+            "bytes": 294,
+            "sha256": "76f17897be7dd976923340e743d10ccf2ef77b62e52fcaff83bac95006d672f6"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/source-files.json",
+            "bytes": 15902,
+            "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal.json",
+            "bytes": 378,
+            "sha256": "b783022e37cd26fa038c6ff97bbc93a18c518c25adb66820ea5140e0045d9f9c"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-outer-receipt.json",
+            "bytes": 559,
+            "sha256": "04152851652b602af0f4025992c668ca92fd79efe6f8f0844edcc1d54875354e"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r4-audit.json",
+            "bytes": 57027,
+            "sha256": "96f9d0228d4557862716a1ae134f3b52a88fd6336f32b1f9ed5621519d29dcc9"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r4-visual-review.json",
+            "bytes": 5566,
+            "sha256": "87ef2ef45d04253a4d417be8154c502cc3334c0ad02b84614f4588cf85c6a84a"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/candidate.json",
+            "bytes": 1708,
+            "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedF02RepairR2/candidate.json",
+            "bytes": 1708,
+            "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/source-files.json",
+            "bytes": 15902,
+            "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedF02RepairR2/source-files.json",
+            "bytes": 15902,
+            "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/complete-inputs.json",
+            "bytes": 75604,
+            "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedF02RepairR2/complete-inputs.json",
+            "bytes": 75604,
+            "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/built-artifacts.json",
+            "bytes": 63704,
+            "sha256": "7da06d7ce5068439ceff2e55be7635f8a7d234e5eecb5c49b78cd179b286a9d5"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedF02RepairR2/built-artifacts.json",
+            "bytes": 63704,
+            "sha256": "7da06d7ce5068439ceff2e55be7635f8a7d234e5eecb5c49b78cd179b286a9d5"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/activation-binding.json",
+            "bytes": 1550,
+            "sha256": "8bb339b5e506829fc8ec7f0a13cd300fb87d326caa636c37024102396d2b7961"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/activation-binding.json",
+            "bytes": 1550,
+            "sha256": "8bb339b5e506829fc8ec7f0a13cd300fb87d326caa636c37024102396d2b7961"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/ids.json",
+            "bytes": 1165,
+            "sha256": "7b13bc48e8f86c04860739525231b8a557ebafd42266393af0cc59b411cae422"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/round04-tree-after-reload-roots.json",
+            "bytes": 7290,
+            "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+            "bytes": 13550,
+            "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+          },
+          {
+            "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeR3/harness-source.mjs",
+            "bytes": 5049,
+            "sha256": "4617f66981f86eff5b26bd7fb065db04aaf04c7c2d79ea9779c255a73f4592fe"
+          }
+        ],
+        "inputDrift": []
+      }
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback-tool-receipt.json",
+      "receipt": {
+        "platform": "trae",
+        "role": "本专家自有 outer，仅启动同目录内置 reader",
+        "startedAt": "2026-10-23T02:49:34.721Z",
+        "endedAt": "2026-10-23T02:49:34.846Z",
+        "durationMs": 125,
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/tmp/p2002-refresh-visible-gui-review-20261023-r5-expert-Pkx64s/reader.mjs",
+          "readback"
+        ],
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "parentPid": 63305,
+        "childPid": 63306,
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "{\"mode\":\"readback\",\"file\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json\",\"pid\":63306,\"startedAt\":\"2026-10-23T02:49:34.778Z\",\"endedAt\":\"2026-10-23T02:49:34.835Z\",\"durationMs\":57,\"checkedUniqueFiles\":146,\"inputReads\":148,\"drift\":0,\"verdict\":\"PASS_LIMITED_GUI_REFRESH_VISIBLE\"}\n",
+        "stderr": "",
+        "receiptBasis": "node:child_process.spawnSync 实际 wait 结果，非预填状态；上层 exec_command 另实际观察本 outer 终码"
+      }
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2-readback.json",
+      "receipt": {
+        "at": "2026-10-23T00:49:15.254Z",
+        "inputCount": 724,
+        "outputs": 5,
+        "inputDrift": [],
+        "outputDrift": [],
+        "seal": {
+          "bytes": 1692,
+          "sha256": "50a8e2e3c1d8acbabface103984fc605172f7d827960ea8560fa8232d7367b9a"
+        },
+        "actualSealToolReceipt": {
+          "bytes": 833,
+          "sha256": "5f12a9d108088e5ec91d9d284e43c177af04fbd386c8d0c7e20c81861a3f4966"
+        },
+        "stopped": true,
+        "released": true,
+        "noProductOrGuiExecution": true
+      }
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-readback.json",
+      "receipt": {
+        "execution": {
+          "start": "2026-10-23T00:47:38.251Z",
+          "node": "v22.23.3",
+          "platform": "darwin",
+          "arch": "arm64",
+          "pid": 35402,
+          "ppid": 35400,
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/tmp/p2-display-repair-gui-review-20261023-r2-expert-outer.mjs",
+            "readback"
+          ],
+          "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+          "method": "Independent native fs/path/crypto/assert outer; no child processes or imported Main/product scripts",
+          "exitBoundary": "Actual tool exit recorded only after tool returns",
+          "end": "2026-10-23T00:47:38.600Z"
+        },
+        "seal": {
+          "bytes": 431276,
+          "sha256": "3291c0d82be367bfdeeec7b60ca6a43dab095b58bda2aac5ee7cc7fa5068940e"
+        },
+        "sealToolReceipt": {
+          "bytes": 1057,
+          "sha256": "609bc8059a5228913950041dbbc05a1b1b062e3cadb14d24a42f985cc4fce8f3"
+        },
+        "artifactCount": 4,
+        "tmpArtifactCount": 11,
+        "protectedInputCount": 1774,
+        "allArtifactsAndProtectedInputsUnchanged": true,
+        "visualCount": 32,
+        "indexSha256": "99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852",
+        "resourceState": "released / STOP",
+        "GUIBoundary": "Readback is integrity only; finite GUI verdict is report, not this exit",
+        "excludesSelfAndLaterToolReceipt": true
+      }
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback.json",
+      "receipt": {
+        "at": "2026-10-23T00:29:47.745Z",
+        "seal": {
+          "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+          "bytes": 2199,
+          "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+        },
+        "toolReceiptObservedExit": 0,
+        "allSealedOutputsEqual": true,
+        "protectedCount": 730,
+        "protectedDrift": [],
+        "packageMembers": 717,
+        "physicalMembers": 720,
+        "index": {
+          "bytes": 124739,
+          "sha256": "fbeee5ee6fd51ed4957fd16bb16021c1d1d51ba7671f22dfb299fea00922d9c8"
+        },
+        "ownSealAndRepositoryCopySame": true,
+        "state": "released",
+        "stop": true,
+        "actualReadbackToolExit": "recorded only after this command returns"
+      }
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback-tool-receipt.json",
+      "receipt": {
+        "date": "2026-10-23",
+        "role": "trae独立K16归档GUI原证审查",
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs",
+          "readback"
+        ],
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "actualToolExitCode": 0,
+        "actualToolWallSeconds": 0.2919,
+        "actualToolStatus": "Process exited with code 0",
+        "actualToolStdout": "{\"protected\":730,\"drift\":[],\"sealToolExitReadBack\":0,\"readback\":{\"bytes\":674,\"sha256\":\"e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d\"}}\n",
+        "actualToolStderr": "",
+        "origin": "readback命令实际返回0后登记；已读回前次seal实际工具0、seal原字节、8输出指纹及730明确输入",
+        "pid": null,
+        "pidBoundary": "同步工具不提供PID，不补造",
+        "readback": {
+          "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback.json",
+          "bytes": 674,
+          "sha256": "e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d"
+        },
+        "seal": {
+          "file": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+          "bytes": 2199,
+          "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+        },
+        "sealToolExitActuallyRead": 0,
+        "packageMembers": 717,
+        "physicalMembers": 720,
+        "protectedCount": 730,
+        "protectedDrift": [],
+        "sealedOutputsEqual": 8,
+        "failureLayersPreserved": {
+          "mainFiles": "actual1 / compound Control+End unsupported after original package body read",
+          "mainReentry": "actual1 / successful original reload followed by wrong wait for ephemeral output",
+          "independentReader": "actual1/1/1/0; original errors retained, no productFAIL inferred"
+        },
+        "productExecutions": 0,
+        "guiExecutions": 0,
+        "gitExecutions": 0,
+        "ordinarycommit": "NOT_RUN / NOT_SIGNED",
+        "p2007Whole": "NOT_SIGNED",
+        "cycleWhole": "NOT_SIGNED",
+        "parentCommitGate": "NOT_SIGNED",
+        "state": "released",
+        "stop": true,
+        "resources": "无builder/GUI/桌面/端口/profile/数据锁、服务或长运行子进程；Main继续其他原余件无需等待",
+        "excludedFromSeal": true,
+        "exclusionReason": "真实后置工具收据不循环自指纹"
+      }
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-readback.json",
+      "receipt": {
+        "at": "2026-10-23T02:58:25.290Z",
+        "verified": {
+          "count": 1775,
+          "byteFiles": 1711,
+          "links": 64,
+          "differences": []
+        },
+        "seal": {
+          "bytes": 322225,
+          "sha256": "bd08a6e7e95cc45c5e44044f34be60c48d0875f940fce337ea15bd87afa1f498"
+        },
+        "documents": {
+          "docs/testing/tasks-o4-stale-source-auto-20261023-r1-plan.md": {
+            "bytes": 2066,
+            "sha256": "4272e8a1203abd3d4d4cbfc2762e5c9c60790a124a1c76953e2ff1174f10c901"
+          },
+          "docs/testing/tasks-o4-stale-source-auto-20261023-r1-scope-contract.md": {
+            "bytes": 1959,
+            "sha256": "1051530db85b4e0dc622974a7ca11e5547b07811953258044915d90e9f73089b"
+          },
+          "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md": {
+            "bytes": 6626,
+            "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47"
+          },
+          "docs/testing/tasks-o4-stale-source-auto-20261023-r1-audit.json": {
+            "bytes": 14062,
+            "sha256": "ca6d9cf2c131350b9d757ec60486cd5681dc16241dd92af4cbf86f2058697ab9"
+          }
+        },
+        "selectedLiveUnchanged": true
+      }
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-readback.json",
+      "receipt": {
+        "status": 0,
+        "at": "2026-10-23T02:02:30.570Z",
+        "checkedEntries": 852,
+        "seal": {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-seal.json",
+          "bytes": 150202,
+          "sha256": "a16dd2a4933f769794fef851375416f5ccab48df834208c6067203c9d9d1848b"
+        },
+        "report": {
+          "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+          "bytes": 11343,
+          "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3"
+        },
+        "source": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7",
+        "test": "28e6f478fd6d16d78707d4976ea88981d0cce838c2be38ff50dd5804ddc6690c",
+        "sourceGate": "PASS (L8 repair only)",
+        "autoGate": "PASS (T01/T02 component + T04 narrow controls only)",
+        "GUI": "BLOCKED, Main original T02/T03 remaining",
+        "B8": "NOT_SIGNED",
+        "parentCommit": "NOT_SIGNED",
+        "processes": "All spawned narrow child processes returned; no services started."
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/tmp/p26-original-id-inheritance-timed-20261023-r1-map.json",
+      "bytes": 15905,
+      "sha256": "4de9c0a97c4096937295d5d6198a02b2831daa08b108135e67a11f7cb31fe115"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit-r2.json",
+      "bytes": 9466422,
+      "sha256": "95f88179d95165521df1e6802a9e879c40a2f1f432bf16b30725271b9fc74ac8"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-deliverable-index.json",
+      "bytes": 802535,
+      "sha256": "b7079872419cc1c4856923a8c7b02fe6678f3790b8d9d35f0f795ad489a6d2c3"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-report.md",
+      "bytes": 15976,
+      "sha256": "40c88ed06858ab5cea5ef8a704a2d462acef3b2b759c521f0e31f0eead50981d"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-seal.json",
+      "bytes": 13066,
+      "sha256": "f4fd9fc434a56f4c09e1f857b34b687f7641ead3a36c79fecf35ba22d96238a8"
+    },
+    {
+      "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+      "bytes": 17291,
+      "sha256": "f91354cd659221db5e73e15f87ea754201a5287601bb7e0f4933a3eb137d1652"
+    },
+    {
+      "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 1459,
+      "sha256": "5670f8b5aa96b7dc809f5ed1f36b4ace24ba69f4b99fb79fd5bcdb323b230492"
+    },
+    {
+      "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 15798,
+      "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023"
+    },
+    {
+      "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1435,
+      "sha256": "1d770aa1f96e6a58e52aae002ae70d20edbfed2a318934ea1446adeb49f60cd6"
+    },
+    {
+      "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 17204,
+      "sha256": "9124058cd5810c6b68e9e08be0b8df86cbd5dd41b3964f22a985f29da7b487ec"
+    },
+    {
+      "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 147102,
+      "sha256": "8912ee6b8ca80a8baae043fc7456a117081fa5f981b03c1537fdd79926b34916"
+    },
+    {
+      "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+      "bytes": 17012,
+      "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e"
+    },
+    {
+      "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-seal.json",
+      "bytes": 1226,
+      "sha256": "fc8cf29f3b5695dcfd0a583a716cd49e8cfdd272f286d2fdafdd5175218f61d6"
+    },
+    {
+      "path": "docs/testing/a18-integration-more-gui-review-20261022.md",
+      "bytes": 16140,
+      "sha256": "5081af5bcf7256885274b59085ad927d7245c6ad0a9b914877353fe6b442b278"
+    },
+    {
+      "path": "docs/testing/a18-integration-more-gui-review-20261022-seal.json",
+      "bytes": 923,
+      "sha256": "2e960bb2f8d7879aed0cd3f763ed00133840caed444f13b7871264daf4e83114"
+    },
+    {
+      "path": "docs/testing/a20v3-total-gate-independent-review-20261022.md",
+      "bytes": 11352,
+      "sha256": "0bdccc7f24e444cd58360ceb105f4b5b2d0a391b60f398dbe905d8c280573098"
+    },
+    {
+      "path": "docs/testing/a20v2-gui-independent-review-20261022.md",
+      "bytes": 6673,
+      "sha256": "c7e9170f7f82524d8c29de683cb82cfdbe7003bf6b0b3f84d34e1b3bdff3c187"
+    },
+    {
+      "path": "docs/testing/a18-check-five-gui-review-20261022.md",
+      "bytes": 21453,
+      "sha256": "825793041501b04eba9f7b674362e5da58cc8d67d90fda6657f905278b591e5f"
+    },
+    {
+      "path": "docs/testing/a18-check-five-gui-review-20261022-seal.json",
+      "bytes": 1208,
+      "sha256": "2ac2328be9685aff18ba84ebde902d8c91f3aedb9c292514ea574024408515c6"
+    },
+    {
+      "path": "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+      "bytes": 7551,
+      "sha256": "057b1a3a84df163916fe5d733c09881e5ed69452456ff58cd3d25b3f70bea88f"
+    },
+    {
+      "path": "docs/testing/a19-p0008-check-remainder-review-20261022-seal.json",
+      "bytes": 1388,
+      "sha256": "8d1775869ce19ee2707d21a10fd30e9ca953a7ac2ff82b6d0fcd93fa442bfb90"
+    },
+    {
+      "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+      "bytes": 13184,
+      "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7"
+    },
+    {
+      "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1227,
+      "sha256": "3000297185cd39b351b3b4449fdfc0d926c422e0fd335fd559fc7dd5704d4c7d"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+      "bytes": 8517,
+      "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2-seal.json",
+      "bytes": 1692,
+      "sha256": "50a8e2e3c1d8acbabface103984fc605172f7d827960ea8560fa8232d7367b9a"
+    },
+    {
+      "path": "docs/testing/p1004-handoff-source-auto-20261023-r1-report.md",
+      "bytes": 19304,
+      "sha256": "a65bd833d533773361716b8d33594e47aceb9aa4237e6e2fad660bdd318a3589"
+    },
+    {
+      "path": "docs/testing/p1004-handoff-source-auto-20261023-r1-seal.json",
+      "bytes": 5243,
+      "sha256": "1506b9ecdd92b6ffc1f8545d5a9f2c033356f98f8a22b32d22804226a6e84793"
+    },
+    {
+      "path": "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+      "bytes": 18051,
+      "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9"
+    },
+    {
+      "path": "docs/testing/p1004-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 2287,
+      "sha256": "d1d1aed512932f2d7543adca89f90fbdbf711951024c11271e3ea50c0f3d4443"
+    },
+    {
+      "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+      "bytes": 23686,
+      "sha256": "436b5152dd96af9134a90f5e4d220aa487903d0d1f5a5be36895b6c3b574374d"
+    },
+    {
+      "path": "docs/testing/p1-l2-events-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 1456,
+      "sha256": "eb83f5b707b27ad2d62b3e12d3b3a5e61a9e9064d34288b50658b9e9ccb3d1b1"
+    },
+    {
+      "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+      "bytes": 16658,
+      "sha256": "063511d2e6a82d1fe0f1dd3405a9c12f64cb730f0b3c0bc4d590bff3048b9b3f"
+    },
+    {
+      "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-seal.json",
+      "bytes": 1422,
+      "sha256": "0fdb661052b6f13982805107447598aad6b0398a1c4195b58e7bd98e505502ea"
+    },
+    {
+      "path": "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16679,
+      "sha256": "fe9927979b94a6e97c671f1e5349ef8f9fc0dfc252fb43f192502ef96da4076f"
+    },
+    {
+      "path": "docs/testing/f02-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 281412,
+      "sha256": "5a438a98e14bd66403903e4afb4e10853f4d5bc6047c31766e0c5125c95ab273"
+    },
+    {
+      "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-report.md",
+      "bytes": 9012,
+      "sha256": "0be3ff8664f50f38cf1276b56ee6eabe7cdce0a6fb8c445156bbe52d7eca123c"
+    },
+    {
+      "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-seal.json",
+      "bytes": 1098,
+      "sha256": "1330dc8047757b847d0640694789eecf0020359ae2656c1a8364bce1f348bb57"
+    },
+    {
+      "path": "docs/testing/people-fd-axis-gui-timed-20261023-r1-report.md",
+      "bytes": 13434,
+      "sha256": "ccf4ec644556b982480e9525f69acabbdf84433087a32da2dc4ef84f3b150131"
+    },
+    {
+      "path": "docs/testing/people-fd-axis-gui-timed-20261023-r1-seal.json",
+      "bytes": 2237,
+      "sha256": "b73be77b0975799126c4fc85eba33b52e0b790145af7f796c44c14cd53065526"
+    },
+    {
+      "path": "docs/testing/p2-outbound-history-review-20261023-r1.md",
+      "bytes": 22155,
+      "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238"
+    },
+    {
+      "path": "docs/testing/p2-outbound-history-review-20261023-r1-seal.json",
+      "bytes": 1274,
+      "sha256": "5c0a12962d471c0e79d4da330a19ae4d08335fef82d7f13ee067bf22df915a44"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+      "bytes": 15830,
+      "sha256": "3067961280e74550bcbba48aa70a0e0091aecfffc913058c5f2ab2b798ffc1bb"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 431276,
+      "sha256": "3291c0d82be367bfdeeec7b60ca6a43dab095b58bda2aac5ee7cc7fa5068940e"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+      "bytes": 13550,
+      "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+      "bytes": 166628,
+      "sha256": "d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+      "bytes": 10990,
+      "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal.json",
+      "bytes": 83167,
+      "sha256": "301bac2f4da3cdc88abe4cd37ff8dd6b23efd32d967e67eb8249ec695199fa07"
+    },
+    {
+      "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 22907,
+      "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+    },
+    {
+      "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1136,
+      "sha256": "4b970b57c99d75a20128e9efab38551d260a9ddb6226d9138e688b2ab4ca9d90"
+    },
+    {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+      "bytes": 14805,
+      "sha256": "8ad5b8a4db553b3b6312f366dabd095ccdc6ac7aa54a132001d36f3417a9ff7c"
+    },
+    {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-seal.json",
+      "bytes": 19337,
+      "sha256": "fe767598cec94e5aec9930891ad08d7bfb27f6a5736194ac9ef77304a28eded6"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16181,
+      "sha256": "b7e26de2d10024cd4ef3ccfd95e449a0e8338c248434c32e15ac134d5e2189f4"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 2199,
+      "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+      "bytes": 11466,
+      "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-seal.json",
+      "bytes": 5629,
+      "sha256": "c5bb28a88b127fb0a15592e1f79db0f2af6b4a44dc99247f1e4fd94ce8a1e5dc"
+    },
+    {
+      "path": "docs/testing/a18-growth-more-gui-review-20261022.md",
+      "bytes": 21131,
+      "sha256": "828fdf0ddbf4ae0baf576168230b7fb54857a1b17135ea063d09b64e1face02c"
+    },
+    {
+      "path": "docs/testing/a18-growth-more-gui-review-20261022-seal.json",
+      "bytes": 1067,
+      "sha256": "e93074a371ce33032411595e9220fc185fe1694633686f9570c5b41886a9e6d0"
+    },
+    {
+      "path": "docs/testing/a19-habit-association-gui-review-20261022.md",
+      "bytes": 20973,
+      "sha256": "2ecf07925488b76bceb9564e85af697cab6541396d09684e5d4ed08610900b89"
+    },
+    {
+      "path": "docs/testing/a19-habit-association-gui-review-20261022-seal.json",
+      "bytes": 3809,
+      "sha256": "59f73e43a225ff9708d4bd7d3735d17cc064305535a26f23f9a9564746e0e28b"
+    },
+    {
+      "path": "docs/testing/a19hc-gui-independent-review-20261022.md",
+      "bytes": 4765,
+      "sha256": "310c42f8ef5763b2860ccba9949b66ec135911ef9ff19c9e81686d1ca2c8768f"
+    },
+    {
+      "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+      "bytes": 12429,
+      "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182"
+    },
+    {
+      "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-seal.json",
+      "bytes": 1701,
+      "sha256": "98ec8b062b8c7afdf4a3e55975c2c87409a4c259ef5812ac7b8a125e869caba6"
+    },
+    {
+      "path": "docs/testing/gui-numbers-habit-dark-review-20261021.md",
+      "bytes": 23484,
+      "sha256": "248ba13647f13812ae58111cbab3fde86dafea39a18260a68d0bdcfaace1de5e"
+    },
+    {
+      "path": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+      "bytes": 13208,
+      "sha256": "5730e6d1e1f0ed9cb63fa60fb15c50bc6733f7e68ed6e74b96b1234cde8b6ac7"
+    },
+    {
+      "path": "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json",
+      "bytes": 1177,
+      "sha256": "b1597311751a6553340db8682942ae33fe58f0efb187de8463151c6baed8cb13"
+    },
+    {
+      "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md",
+      "bytes": 15291,
+      "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02"
+    },
+    {
+      "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-seal.json",
+      "bytes": 1200,
+      "sha256": "441dbaa6484a78c8573ba1c4cd6ed6777a51c990d08dfb19229fad801a436a02"
+    },
+    {
+      "path": "docs/testing/f02-combined-regression-review-20261023-r2-report.md",
+      "bytes": 16145,
+      "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+    },
+    {
+      "path": "docs/testing/f02-combined-regression-review-20261023-r2-seal.json",
+      "bytes": 3479,
+      "sha256": "33f939f7f235db80d6475333243ed1c4915a75d5eb4a96bf2fba01507d6ea40b"
+    },
+    {
+      "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-report.md",
+      "bytes": 4971,
+      "sha256": "36a37411a16969d59a85173199c6b2fcdae34a041da1b0f8a81b6bcb8c36b377"
+    },
+    {
+      "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-seal.json",
+      "bytes": 153739,
+      "sha256": "01bfe44b3c2b281110c246cddc769ff7a2c1cefed6d5262d4e4fe675348c001b"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md",
+      "bytes": 6626,
+      "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-seal.json",
+      "bytes": 322225,
+      "sha256": "bd08a6e7e95cc45c5e44044f34be60c48d0875f940fce337ea15bd87afa1f498"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+      "bytes": 11343,
+      "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-seal.json",
+      "bytes": 150202,
+      "sha256": "a16dd2a4933f769794fef851375416f5ccab48df834208c6067203c9d9d1848b"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json",
+      "bytes": 42763,
+      "sha256": "c3b433fc4e27d597fa22d09329781525feab41ebdce8b3a9f9095ad120690a34"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback-tool-receipt.json",
+      "bytes": 1067,
+      "sha256": "22242c907bf1ae4b8d88874632aae5f487e1ca4dfe7435123578eabad78c3701"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2-readback.json",
+      "bytes": 441,
+      "sha256": "54f74d817e8df30cbd223822b947d1405749693d7841e7f0db96feece2964f04"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-readback.json",
+      "bytes": 1286,
+      "sha256": "f62a2fd1e711f4a181c6f89e4fa4baad405337bcb455dabb290fd78ad47cccea"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback.json",
+      "bytes": 674,
+      "sha256": "e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback-tool-receipt.json",
+      "bytes": 2203,
+      "sha256": "08757fcbf5dda4b55d860609e15480f04e0590d2d047a5e763a575321abcd580"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-readback.json",
+      "bytes": 1050,
+      "sha256": "058a2a89e0f98cde9179a61d35d4929cf0e5b5030844472712b23cff2153e54d"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-readback.json",
+      "bytes": 1015,
+      "sha256": "9a364cfc9dcb99c54acdd5800e963ef6c00febf9aae0c7840f99fffec0952feb"
+    }
+  ]
+}

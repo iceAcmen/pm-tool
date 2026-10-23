@@ -1,0 +1,194 @@
+{
+  "at": "2026-10-21T20:53:25.671Z",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "scope": "Read-only contract clarification; no product imports, tests, GUI, services or credentials",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 26011,
+      "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+    },
+    {
+      "path": "docs/collaboration.md",
+      "bytes": 31271,
+      "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+    },
+    {
+      "path": "docs/requirements.md",
+      "bytes": 39071,
+      "sha256": "d774d33209b79fe52584af7ecd003c985e5ecacf9b2aa96e29700972baf054dd"
+    },
+    {
+      "path": "docs/testing/remaining-governance-cases-20261021.md",
+      "bytes": 13892,
+      "sha256": "7ed381f0fc5d0807722b9f1197e188b6705f6fa674ea85266d2b98dba989bade"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-register-20261021.md",
+      "bytes": 15023,
+      "sha256": "1ac19a6efacb5316fdd6ca74da47751b0ef55eee8a5897e819ea51db464f430d"
+    },
+    {
+      "path": "docs/testing/remaining-objective-cases-20261021.md",
+      "bytes": 11773,
+      "sha256": "fa3800dcdaedfd4bffa76097a20db103b9983fe2518ea3abd41e642d255ec433"
+    },
+    {
+      "path": "docs/testing/objective-progress-acceptance.md",
+      "bytes": 24291,
+      "sha256": "57fd31075f355e55a0a73317028aeab61a6a0020d3c50ce96edf58bc1a1566b6"
+    },
+    {
+      "path": "docs/testing/p2-6-independent-verification-20261017.md",
+      "bytes": 34278,
+      "sha256": "82be1ef8deaaff30819c0c0eba85fe865226853950bf83aec6286f00ed755445"
+    },
+    {
+      "path": "docs/testing/p2-6-implementation-test-plan-20261017.md",
+      "bytes": 21216,
+      "sha256": "730e30e7655f8074f957740341e3ced11045f7647ebb6944c2bea0e1227559c2"
+    },
+    {
+      "path": "docs/testing/p2-6-deterministic-test-spec-20261017.md",
+      "bytes": 10374,
+      "sha256": "77ad0e2affcd37bbdff705336e00b17b6fc77becc846deebe71ba57a1fda9fae"
+    },
+    {
+      "path": "docs/testing/a11-governance-source-gui-review-20261021.md",
+      "bytes": 16235,
+      "sha256": "9a630558f5561d72306af41032346135d10e1e36453c36c65abc847636cfac7f"
+    },
+    {
+      "path": "docs/testing/a12-governance-source-gui-retest-20261021.md",
+      "bytes": 17161,
+      "sha256": "cd8379a21c14a664d7904aabc6baf4e3df7f4b26bae358058389523957451d82"
+    },
+    {
+      "path": "docs/testing/governance-growth-independent-auto-20261021-gui-handoff.md",
+      "bytes": 9177,
+      "sha256": "cb740350ca489cdbb9bf9c5967b0de1d9da7585702e59626ede4c439fa37b1c1"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-gui-handoff.md",
+      "bytes": 4477,
+      "sha256": "a915adaf4209fb974d23731ac26fd6faf3d316c785b3d7b2c2552b7d81f9ea30"
+    },
+    {
+      "path": "docs/testing/governance-growth-independent-auto-20261021-worker.mjs",
+      "bytes": 57462,
+      "sha256": "8626dcbed6d982b03c9da8157bdc8fb0cd516ef55bd0ddeaa034eeb65f6a8e6f"
+    },
+    {
+      "path": "docs/design/p2-6-storage-decision-20261017.md",
+      "bytes": 3341,
+      "sha256": "6377262ae3deeafb0809b6f9054f59c86fedd08d5cc87a1f185529e796024df1"
+    },
+    {
+      "path": "reports/all-pending-acceptance-execution-20261021.md",
+      "bytes": 43012,
+      "sha256": "bfdbd735b5a8585924cd2d70e7cf50fff32f0a6cafdd84f22fa206d8a2941533"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/index.ts",
+      "bytes": 21091,
+      "sha256": "c6c50f831f15f049b7833852d2dd013fa8b61b18f40f8008cbf506189e1afb56"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/ask.ts",
+      "bytes": 34928,
+      "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/task.ts",
+      "bytes": 40683,
+      "sha256": "7f02fbd6daaac985958cb3ea789c7597c7b9e4f72307eeee72efa4713af4f63e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/progress-report.ts",
+      "bytes": 16919,
+      "sha256": "e4d6d36496e785e828fb07fd0fdeb20dd77e90010058306acc3ebf370e387157"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/meeting.ts",
+      "bytes": 18064,
+      "sha256": "a89ba4ca3add582607d69dc7bae55eeb06c329ad83e519df4fc96df43a3d1b25"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance.ts",
+      "bytes": 17058,
+      "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "bytes": 10855,
+      "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-view.ts",
+      "bytes": 6377,
+      "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/meeting-summarize.ts",
+      "bytes": 4222,
+      "sha256": "9a0a243864e513a567def600921f5d507ea845733b07b028b662cc0f3f49b144"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/wbs-ai.ts",
+      "bytes": 2780,
+      "sha256": "55b317262d7a8e3dc7d7d034752841445b7c4fe018220a7e3e23a81034196e2c"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/copilot.ts",
+      "bytes": 24137,
+      "sha256": "9059ab4de0c46398c180f24a9928f4b2de670fee5a2cdc5d317ea26e5a389c25"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/record-location.ts",
+      "bytes": 1708,
+      "sha256": "b9546b4a460ea8458bb5b4ef3a0febecff5258c06769e1d41c85f748ea91efc5"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/ask-projection.ts",
+      "bytes": 4465,
+      "sha256": "046804306b2006a5d5a29e1fa110270551b409cb94009dac791fb853d6269283"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 189611,
+      "sha256": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/provenance-panel.tsx",
+      "bytes": 11559,
+      "sha256": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/shared/drawers/ai-assistant.tsx",
+      "bytes": 15647,
+      "sha256": "99b0627258110ea9bfce946e36b1a2816aff409159ea387b03fa598f23c16054"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+      "bytes": 44000,
+      "sha256": "a3a5e70e459fd74b3454757bcd419e7a2e44b8adce41685dc522dcc494c0ab5d"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/green-corrected/F6-ui-ids.json",
+      "bytes": 399,
+      "sha256": "1c3b418d23da18529650d6f96cf9cd808af8b5a63899376bad71f6e1b9c6fe36"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/green-corrected/F6-ui-expected.json",
+      "bytes": 6211,
+      "sha256": "39b204e6a74a9a1889ebe00c7866582a7e45cb0de42a7d6572947b41d0e18281"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/green-corrected/F6-ui-standard/pmtool-backup-2026-10-21T14-08-30-668Z.json",
+      "bytes": 22661,
+      "sha256": "c786212c1a5b0023d4a5b8e75b32ed4f4c3dde192b9b0e3901eeb857c1490035"
+    }
+  ]
+}

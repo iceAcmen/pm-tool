@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-23",
+  "role": "独立GUI原证审证专家",
+  "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "readback"],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.4470,
+  "actualToolStatus": "Process exited with code 0",
+  "stdout": "{\"readback\":true,\"sealSha256\":\"d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1\",\"protectedInputs\":722,\"original708Unchanged\":true,\"drift\":[],\"pid\":38970}\n",
+  "stderr": "",
+  "pid": 38970,
+  "pidBoundary": "来自本实际同步stdout，不补造工具未提供的parent/child。",
+  "origin": "readback实际返回0后新增本收据；原件708、明列722输入、4份报告审计目视与收据、6份自有tmp逐字节回读同。",
+  "readback": "docs/testing/p2002-tree-gui-review-20261023-r3-readback.json",
+  "seal": {
+    "file": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+    "sha256": "d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1"
+  },
+  "excludedFromSeal": true,
+  "boundary": "自身为执行后收据，不循环自指纹，不由文件存在推造outer码；原失败保留。",
+  "productBrowserNetworkPortDesktopGitExecutions": 0,
+  "release": "released / STOP；无自有未决进程、builder/GUI/端口/profile/业务锁；无commit/push/release/正式切，父持续。",
+  "limitedVerdict": "已采父/子/折叠/子甲取消/后续重进和reload有限PASS；refresh完成当态三行目视仍BLOCKED；不签整P2002/P2/B8/父commit。"
+}

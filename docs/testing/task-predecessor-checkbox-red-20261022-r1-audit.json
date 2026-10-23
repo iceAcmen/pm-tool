@@ -1,0 +1,781 @@
+{
+  "at": "2026-10-22T12:43:20.167Z",
+  "node": "v22.23.3",
+  "runnerPid": 69128,
+  "verdict": "FAIL_NECESSARY_RED / RELEASE_STOP",
+  "actual": {
+    "total": 7,
+    "controlPassed": [
+      "C01",
+      "C03"
+    ],
+    "controlFailedSeparate": [
+      "C02"
+    ],
+    "targetCrashFailed": [
+      "N01",
+      "N02",
+      "N03",
+      "N04"
+    ],
+    "vitestExit": 1
+  },
+  "seals": [
+    {
+      "round": "r1",
+      "entries": 532,
+      "unchanged": true
+    },
+    {
+      "round": "r2",
+      "entries": 16763,
+      "unchanged": true
+    },
+    {
+      "round": "r3",
+      "entries": 16,
+      "unchanged": true
+    }
+  ],
+  "candidate": {
+    "parentCandidate": {
+      "at": "2026-10-22T11:56:06.987Z",
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "freeze": "/private/tmp/pmtool-combined-repair-20261022-r2",
+      "pkg": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+      "sourceCount": 107,
+      "completeInputCount": 515,
+      "version": "0.7.4",
+      "independent": [
+        "docs/testing/cycle-feedback-independent-retest-20261022-r1-report.md",
+        "docs/testing/ai-terminal-independent-retest-20261022-r1-report.md",
+        "docs/testing/material-progress-ref-independent-retest-20261022-r1-report.md"
+      ],
+      "builder": "Main",
+      "runtimeLoaded": false,
+      "excluded": "historical lib/tmp/artifacts, data, unrelated WeChat"
+    },
+    "baselineCommit": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "source": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+    "frozen": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool",
+    "completeInputCount": 515,
+    "originalPanelSha256": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+    "mainPanelBefore": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+    "mainPanelMatchesFrozen": true,
+    "testedIdentity": "CombinedRepairR1/r2原源字节+唯一新源test+仅export虚拟adapter；不冒全主树新dirty或实例再加载",
+    "parentGUI": {
+      "origin": "http://127.0.0.1:3260",
+      "loadedBinding": {
+        "at": "2026-10-22T12:16:08.195Z",
+        "origin": "http://127.0.0.1:3260",
+        "resources": [
+          {
+            "name": "/plugins/",
+            "decodedBodySize": 2597854,
+            "deliveryType": "",
+            "transferSize": 830278
+          }
+        ],
+        "loadedBytes": 2597854,
+        "loadedSha256": "14414cd388b1c638a4c75863ea1f26972eab88d48f696b3d330d6b48785516f1",
+        "compiledBytes": 1719054,
+        "compiledSha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db",
+        "segmentBytes": 1719019,
+        "offset": 875361,
+        "second": -1
+      }
+    },
+    "excluded": [
+      "lib",
+      "coverage",
+      "artifacts",
+      "data",
+      "vendor",
+      "其他在途新源tests"
+    ]
+  },
+  "adapter": {
+    "source": "src/client/panel.tsx",
+    "sourceSha256": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+    "transformedSha256": "4d5f1d438b91aee026966ed89b5ae8979dedac2d79b72b4b2d45f7ebbffd219f",
+    "additionOnly": "\nexport { TaskForm }\n",
+    "originalNotEdited": true,
+    "boundary": "仅Vitest transform新增export，完整真实组件/子组件/hooks不改"
+  },
+  "ownership": [
+    {
+      "from": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool/node_modules",
+      "to": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/node_modules",
+      "files": 13579,
+      "links": 1030,
+      "sharedInodes": [],
+      "externalLinks": []
+    },
+    {
+      "from": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/MaterialRefDevR1/dom-deps/node_modules",
+      "to": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules",
+      "files": 1595,
+      "links": 2,
+      "sharedInodes": [],
+      "externalLinks": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "1-C01",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/1-C01/observations.json",
+      "sha256": "47cafd3dcfe7bb91bf3d3f600bdb40e93940f6e967d2f057ddb000a66171f2d6",
+      "necessary": false,
+      "caught": [],
+      "steps": [
+        {
+          "label": "before-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    },
+    {
+      "name": "2-C02",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/2-C02/observations.json",
+      "sha256": "194f6fceeba77e4873d56ab3d9c222f3fc12dc28888595c8a68081558924cec0",
+      "necessary": false,
+      "caught": [],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "assert-selected-t-0002",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-input-候选任务1",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-input-候选任务1",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "候选任务1",
+          "selected": [],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "assert-selected-t-0002",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "候选任务1",
+          "selected": [],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "候选任务1",
+          "selected": [],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_REACHED:搜索隐藏已选FormData失败，非null checked"
+    },
+    {
+      "name": "3-C03",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/3-C03/observations.json",
+      "sha256": "3618969d2e14cdbbe880dd75e818e64765f28ee8c0ac9cda84c487f78750e123",
+      "necessary": false,
+      "caught": [],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-rapid-title-search",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-rapid-title-search",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "assert-selected-",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    },
+    {
+      "name": "4-N01",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/4-N01/observations.json",
+      "sha256": "712b686ab985b64be07add21aa62659f26dcedcd650421da9d2900b9bae14b41",
+      "necessary": true,
+      "caught": [
+        {
+          "message": "Cannot read properties of null (reading 'checked')",
+          "stack": "TypeError: Cannot read properties of null (reading 'checked')\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2938:41\n    at basicStateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15721:41)\n    at updateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15845:22)\n    at updateState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:16185:10)\n    at Object.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:17096:16)\n    at Proxy.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react/cjs/react.development.js:1622:21)\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2530:39)\n    at renderWithHooks (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15486:18)\n    at updateFunctionComponent (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:19617:20)\n    at beginWork (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:21640:16)",
+          "componentStack": "\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:3912:3)\n    at div\n    at Boundary (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx:70:1)"
+        }
+      ],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "before-input-已有任务四本地改名",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "after-input-已有任务四本地改名",
+          "formPresent": true,
+          "title": "已有任务四本地改名",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "before-click-t-0001",
+          "formPresent": true,
+          "title": "已有任务四本地改名",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "after-click-t-0001",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "assert-selected-t-0001",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "74a4ebba43c355f223b499522d0b261fb0c19ebcc660eb33d5a53a0d441d0c98"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    },
+    {
+      "name": "5-N02",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/5-N02/observations.json",
+      "sha256": "2a446004c88f445dd789b68fa958ef8fbf9152e4fa8ea26929b61035423393a0",
+      "necessary": true,
+      "caught": [
+        {
+          "message": "Cannot read properties of null (reading 'checked')",
+          "stack": "TypeError: Cannot read properties of null (reading 'checked')\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2938:41\n    at basicStateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15721:41)\n    at updateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15845:22)\n    at updateState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:16185:10)\n    at Object.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:17096:16)\n    at Proxy.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react/cjs/react.development.js:1622:21)\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2530:39)\n    at renderWithHooks (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15486:18)\n    at updateFunctionComponent (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:19617:20)\n    at beginWork (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:21640:16)",
+          "componentStack": "\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:3912:3)\n    at div\n    at Boundary (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx:70:1)"
+        }
+      ],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-input-已有任务四反选",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-input-已有任务四反选",
+          "formPresent": true,
+          "title": "已有任务四反选",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-click-t-0002",
+          "formPresent": true,
+          "title": "已有任务四反选",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-click-t-0002",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "assert-selected-",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    },
+    {
+      "name": "6-N03",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/6-N03/observations.json",
+      "sha256": "98f1cbe6931a787af4f540433dd4a60a8f9f36d8340fb144d88bf79926542242",
+      "necessary": true,
+      "caught": [
+        {
+          "message": "Cannot read properties of null (reading 'checked')",
+          "stack": "TypeError: Cannot read properties of null (reading 'checked')\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2938:41\n    at basicStateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15721:41)\n    at updateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15845:22)\n    at updateState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:16185:10)\n    at Object.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:17096:16)\n    at Proxy.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react/cjs/react.development.js:1622:21)\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2530:39)\n    at renderWithHooks (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15486:18)\n    at updateFunctionComponent (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:19617:20)\n    at beginWork (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:21640:16)",
+          "componentStack": "\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:3912:3)\n    at div\n    at Boundary (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx:70:1)"
+        }
+      ],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-click-t-0002",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [],
+          "footer": "已选 0 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-click-t-0002",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "assert-selected-t-0002",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-rapid-title-search",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-rapid-title-search",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-click-t-0001",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-click-t-0001",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "assert-selected-t-0002,t-0001",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "bbc53ebf90f0e3b67fc488c87d8c62e4d83f70b8cf21477521b1a429a92515c1"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    },
+    {
+      "name": "7-N04",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r3/observations/7-N04/observations.json",
+      "sha256": "ce992a7be1dcc376f9c86dabd35aee537a11c738161a24fddfab43352b53f024",
+      "necessary": true,
+      "caught": [
+        {
+          "message": "Cannot read properties of null (reading 'checked')",
+          "stack": "TypeError: Cannot read properties of null (reading 'checked')\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2938:41\n    at basicStateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15721:41)\n    at updateReducer (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15845:22)\n    at updateState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:16185:10)\n    at Object.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:17096:16)\n    at Proxy.useState (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react/cjs/react.development.js:1622:21)\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:2530:39)\n    at renderWithHooks (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:15486:18)\n    at updateFunctionComponent (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:19617:20)\n    at beginWork (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/dom-deps/node_modules/react-dom/cjs/react-dom.development.js:21640:16)",
+          "componentStack": "\n    at TaskForm (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/panel.tsx:3912:3)\n    at div\n    at Boundary (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredCheckboxRedR1/r2/frozen/packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx:70:1)"
+        }
+      ],
+      "steps": [
+        {
+          "label": "mounted-existing-t4",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-rapid-title-search",
+          "formPresent": true,
+          "title": "已有任务四",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-rapid-title-search",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-click-t-0001",
+          "formPresent": true,
+          "title": "连续标题最终",
+          "search": "",
+          "selected": [
+            "t-0002"
+          ],
+          "footer": "已选 1 项",
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-click-t-0001",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "assert-selected-t-0001,t-0002",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "before-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        },
+        {
+          "label": "after-cleanup",
+          "formPresent": false,
+          "selected": null,
+          "recordsSha256": "0b6f6d7cb4dd1c56482472280ec531d42ef39109a151eaa5c84a60b80d14bc75"
+        }
+      ],
+      "calls": [],
+      "recordUnchanged": true,
+      "cancellation": "NOT_PLANNED_OR_NOT_REACHED"
+    }
+  ],
+  "guiDeltas": [
+    {
+      "before": "21-o3-cycle-before-save-roots.json",
+      "after": "22r2-o3-shell-missing-roots.json",
+      "allDelta": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "data/session_projcache/sessions/session-f2b84416-5434-4380-abe3-1ab8222ce63a.json"
+        ]
+      },
+      "businessDelta": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "data/session_projcache/sessions/session-f2b84416-5434-4380-abe3-1ab8222ce63a.json"
+        ]
+      },
+      "businessDeltaCorrected": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      },
+      "correction": "原运行器businessDelta排除dsh/不足，data/session_projcache亦为宿主会话缓存；原字段保留，不覆原件"
+    },
+    {
+      "before": "23-o3-reconstructed-before-check-roots.json",
+      "after": "24-o3-after-predecessor-check-roots.json",
+      "allDelta": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      },
+      "businessDelta": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      },
+      "businessDeltaCorrected": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      },
+      "correction": "原运行器businessDelta排除dsh/不足，data/session_projcache亦为宿主会话缓存；原字段保留，不覆原件"
+    }
+  ],
+  "currentGui": {
+    "loaded-binding.json": {
+      "bytes": 516,
+      "sha256": "7c39111ba726ee8614969a989cc44ee18ec6f296f0a9cce8e4ab987751614fbc"
+    },
+    "25-o3-console-events.json": {
+      "bytes": 18636,
+      "sha256": "0c7c09dc726c54a424ddad8e296a34a1998734fa609e37003d1e9d1b38cf0db4"
+    },
+    "20r2-o3-real-edge-command.json": {
+      "bytes": 3008,
+      "sha256": "d2c12ab9f540b314ba733cdab7bc4c07161e7ae67e32a78289af83f07c6889c0"
+    },
+    "21-o3-cycle-before-save.json": {
+      "bytes": 372,
+      "sha256": "422900fadc250a635d38ea99df1975e39ad14c00a3c3c41e1f8b8f3a326e8be0"
+    },
+    "21-o3-cycle-before-save-roots.json": {
+      "bytes": 3861,
+      "sha256": "0172e9786bdbe29445ca64c508228ebe6bbe88e33db6e5a78c8f614443fa508e"
+    },
+    "21-o3-cycle-before-save.png": {
+      "bytes": 22185,
+      "sha256": "1299aea5e291b3b008755b64f99133428e362a382f6679b54889f6e48ab63a28"
+    },
+    "22r2-o3-shell-missing.json": {
+      "bytes": 372,
+      "sha256": "444c1b847534429316b311725d33ce8ffcba0617026aae0863b4f8efd27578c6"
+    },
+    "22r2-o3-shell-missing-roots.json": {
+      "bytes": 3861,
+      "sha256": "91a712c2d43883fa94d4322dc37083161ec8bab63c94be2b390a555e89b02193"
+    },
+    "22r2-o3-shell-missing.png": {
+      "bytes": 22185,
+      "sha256": "1299aea5e291b3b008755b64f99133428e362a382f6679b54889f6e48ab63a28"
+    },
+    "23-o3-reconstructed-before-check.json": {
+      "bytes": 9802,
+      "sha256": "53391b3fa3e591a25bbdd89f03cf7d5e2bb6f8e18833c26ac17d34a6e1b945bd"
+    },
+    "23-o3-reconstructed-before-check-roots.json": {
+      "bytes": 4055,
+      "sha256": "bea0875f49dde6ae114b347f0313906ff29b853d21c4c5ba19878470a7a70d07"
+    },
+    "23-o3-reconstructed-before-check.png": {
+      "bytes": 152505,
+      "sha256": "cfe88dc6760f449c67a304ff39586027bdb44009b528a45a5af70e616d5c66af"
+    },
+    "24-o3-after-predecessor-check.json": {
+      "bytes": 372,
+      "sha256": "69a6565be322f6fd5ebc9d3bdcbc2e3a59c58b91a09595bd15a2f69aaacc9972"
+    },
+    "24-o3-after-predecessor-check-roots.json": {
+      "bytes": 4055,
+      "sha256": "bea0875f49dde6ae114b347f0313906ff29b853d21c4c5ba19878470a7a70d07"
+    },
+    "24-o3-after-predecessor-check.png": {
+      "bytes": 22185,
+      "sha256": "1299aea5e291b3b008755b64f99133428e362a382f6679b54889f6e48ab63a28"
+    },
+    "24-o3-check-events-events.json": {
+      "bytes": 1337,
+      "sha256": "ab3eff28b2601f74d19d250bc91a8901226a56d25d4d3e6d9bd809fdd1511c81"
+    }
+  },
+  "separateFinding": "C02真实已有选择被搜索隐藏后FormData为空，footer仍已选1；取消未到达，只交Main另裁范围/合同，不开发或混事件根因",
+  "protectedBoundaries": "r2原冻结/deps/lib/MaterialRefDOM/主lib/package/lock/test终核0，r3借自有r2未写；不外推全盘/并行产品零变",
+  "guiVisualReview": {
+    "reviewer": "独立先行专家",
+    "sources": [
+      "23-o3-reconstructed-before-check.png",
+      "24-o3-after-predecessor-check.png"
+    ],
+    "observation": "原图23 PM工作台与已有任务编辑抽屉可见，24仅宿主侧栏/主区为空；console同一TaskForm null checked",
+    "notClaimed": "不执行GUI，不签三次完整操作/修后GUI/整项"
+  },
+  "noProductEdit": true,
+  "noBuildNoemitInstallGUIServiceGit": true,
+  "stopped": true
+}

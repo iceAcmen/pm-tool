@@ -1,0 +1,60 @@
+diff --git a/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx b/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
+index c447956..075fd57 100644
+--- a/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
++++ b/packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx
+@@ -32,6 +32,7 @@ export interface RecordsMeetingFormProps {
+ 
+ interface ActionDraft {
+   key: string
++  actionId: string | null
+   title: string
+   owner: string
+   dueDate: string
+@@ -40,9 +41,10 @@ interface ActionDraft {
+   riskIssueId: string
+ }
+ 
+-function actionToDraft(action: MeetingAction, index: number): ActionDraft {
++function actionToDraft(action: MeetingAction): ActionDraft {
+   return {
+-    key: action.id || `new-${index}`,
++    key: action.id,
++    actionId: action.id,
+     title: action.title,
+     owner: action.owner,
+     dueDate: action.dueDate ?? '',
+@@ -91,7 +93,15 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+     try {
+       const payload: MeetingPayload = normalizeMeetingPayload(values)
+       const ok = await callbacks.onSaveMeeting(projectId, meeting?.id ?? null, payload)
+-      if (ok) callbacks.onSaved()
++      if (!ok) return
++      if (meeting) {
++        for (const draft of drafts) {
++          const actionPayload = normalizeMeetingActionPayload(draft)
++          if (!draft.actionId && !actionPayload.title) continue
++          if (!await callbacks.onSaveAction(meeting.id, draft.actionId, actionPayload)) return
++        }
++      }
++      callbacks.onSaved()
+     } finally {
+       setSubmitting(false)
+     }
+@@ -198,7 +208,7 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+           </div>
+           <div className="pm-form-section-grid">
+             {drafts.map((draft, idx) => {
+-              const existing = meeting.actions[idx]
++              const existing = meeting.actions.find(action => action.id === draft.actionId)
+               return (
+                 <div className="rb-action-row" key={draft.key}>
+                   <input aria-label="行动项标题" placeholder="行动项标题" value={draft.title}
+@@ -232,7 +242,7 @@ export function RecordsMeetingForm(props: RecordsMeetingFormProps) {
+               )
+             })}
+             <button type="button" className="pm-button" onClick={() => setDrafts(prev => [...prev, {
+-              key: `new-${prev.length}`, title: '', owner: '', dueDate: '', status: 'todo', taskId: '', riskIssueId: '',
++              key: `new-${prev.length}`, actionId: null, title: '', owner: '', dueDate: '', status: 'todo', taskId: '', riskIssueId: '',
+             }])}>添加行动项</button>
+           </div>
+         </section>

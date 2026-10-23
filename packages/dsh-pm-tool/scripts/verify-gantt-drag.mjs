@@ -17,6 +17,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { shiftDatesByDrag } from '../lib/core/gantt.js'
+import { verifyCatchFeedback } from './feedback-context-contract.mjs'
 
 const here = import.meta.dirname
 const panel = readFileSync(join(here, '..', 'src/client/panel.tsx'), 'utf8')
@@ -102,8 +103,7 @@ const ganttSignature = ganttSrc.slice(ganttFnStart, ganttSigEnd)
 assert.doesNotMatch(ganttSignature, /onSaved/, 'GanttView 不应声明 onSaved prop（单 refresh 闭环）')
 
 // ---------- C. 失败可见（不吞错误 + 内联错误态） ----------
-assert.match(runBlock, /catch \(error\)[\s\S]*setMessage\(error/,
-  'run catch 必须仍 setMessage——quiet 不得吞掉全局错误提示')
+verifyCatchFeedback(panel, join(here, '..'))
 assert.match(ganttSrc, /更新失败，请重试/,
   '拖拽失败必须有内联错误态文案（不得静默成功、不得假装已更新）')
 const onUpBlock = extractBlock(ganttSrc, 'const onPointerUpBar = async')

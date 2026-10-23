@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-22T21:00:27.859Z",
+  "checks": {
+    "response": true,
+    "executable": true,
+    "unique": true,
+    "reconstructed": true,
+    "getTaskSource": true
+  },
+  "executable": {
+    "bytes": 1719055,
+    "sha256": "aabe6a0eb9b3545522478b76af057c7c3d2843b619dcafb6aac00fa3b504e4af"
+  },
+  "reconstructed": {
+    "bytes": 1719089,
+    "sha256": "e4bda1dba6cd0d0110fa8eafb9f60e58b8a5cef9c6e1390b2016317b31b5c2d3"
+  },
+  "normalization": "Only the exact 34-byte sourceMappingURL tail comment is restored; not a product build",
+  "taskSource": {
+    "declaration": {
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    "actual": {
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    "getTaskLines": [
+      "export function getTask(domain: PmDomain, id: string): Task | undefined {",
+      "  taskIdSchema.parse(id)",
+      "  const record = domain.table('tasks').get(id)",
+      "  return record ? structuredClone(record) : undefined",
+      "}"
+    ]
+  },
+  "inputs": {
+    "reports/all-pending-evidence-20261021/Successor114GuiR1/04-loaded-0.json": {
+      "bytes": 1073,
+      "sha256": "37b9fc9a209d2bd2ea5b41dc0de70f916377300b1e3858d348eddc43fa63b5da"
+    },
+    "reports/all-pending-evidence-20261021/Successor114GuiR1/04-loaded-0.js": {
+      "bytes": 2597889,
+      "sha256": "ac391abd549e31bab3118c4ad2e7aa918422ec1fe01f22472408d05794a662ac"
+    },
+    "reports/all-pending-evidence-20261021/CombinedSuccessor114R1/complete-inputs.json": {
+      "bytes": 74962,
+      "sha256": "f7d918b92b7fa65551d5ba2072b04a8e3273950deeca66dea902790bdcf9871a"
+    },
+    "packages/dsh-pm-tool/src/core/tasks.ts": {
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    }
+  }
+}

@@ -1,0 +1,1409 @@
+{
+  "at": "2026-10-21T22:13:33.340Z",
+  "auditEnvironment": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "tree": "/private/tmp/pmtool-a13-closure-20261022",
+    "candidateSha256": "d70267f974fb9aa8aaf496a4f1d49abef33d26d410b6a453eb4569fadaa9a51f",
+    "patchSha256": "824d9c3c96095731580fac8edffbaced9998d5b8e245affbbb8c342e07df507b",
+    "declaredPatch": "824d9c3c96095731580fac8edffbaced9998d5b8e245affbbb8c342e07df507b",
+    "sourceCount": 514,
+    "artifactCount": 453,
+    "sourceDrift": [],
+    "artifactDrift": []
+  },
+  "fixtures": [
+    {
+      "path": "/private/tmp/pmtool-a11-native-import/QA 原生导入.csv",
+      "bytes": 169,
+      "sha256": "9ff4d80a312a90a2f09c3c31805aad7796341ade44e2944fa5c690cb07010501"
+    },
+    {
+      "path": "/private/tmp/pmtool-a11-native-import/QA 原生导入.xlsx",
+      "bytes": 16561,
+      "sha256": "1181f20b5bfe4400608bc85415b8ffeeadd70f51ac4035099fc4dfc1ed0ff4a8"
+    },
+    {
+      "path": "/private/tmp/pmtool-a11-native-import/QA 非法日期.csv",
+      "bytes": 169,
+      "sha256": "6a4990f56b81438a6c24aa0b1e21ae68eeb616377f2a736bdbca0ba148d337ee"
+    },
+    {
+      "path": "/private/tmp/pmtool-a11-native-import/QA 非法日期.xlsx",
+      "bytes": 16561,
+      "sha256": "0d446fdcc112b4cb718f974938f31517869839ce63fb717a507511783e412e68"
+    }
+  ],
+  "loaded": {
+    "at": "2026-10-21T21:35:33.623Z",
+    "label": "materials",
+    "browserContextKind": "default",
+    "targetId": "2EDCCF4D81671D87CBBD9934F50CF274",
+    "events": [
+      {
+        "names": [
+          "client.js"
+        ],
+        "path": "/plugins/",
+        "requestId": "94843.126",
+        "requestTimestamp": 316869.611621,
+        "wallTime": 1792618531.977151,
+        "frameId": "2EDCCF4D81671D87CBBD9934F50CF274",
+        "status": 200,
+        "fromDiskCache": false,
+        "file": "combo-1.txt",
+        "bytes": 2581559,
+        "responseSha": "69656e3d1164c9a26bea86a31138adc42167fc8abcacb66941ef7ed211b405fa",
+        "matches": [
+          {
+            "name": "client.js",
+            "sourceSha": "7f037fce5115157101afb64cef7b7fd0e470742ac3eb96a11cabe0a43e56ae7c",
+            "responseExact": false,
+            "segmentSha": "c29382ca1c7f2e5f2a1ddbcbbccb4b0e92258142e585ab3b122ac0fd1c28289d",
+            "segmentBytes": 1702727,
+            "first": 875361,
+            "second": -1,
+            "uniqueComplete": true
+          }
+        ]
+      }
+    ],
+    "state": {
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "width": 1440,
+      "height": 900,
+      "pilot": "off",
+      "pmMounted": true,
+      "editorMounted": false
+    },
+    "computed": {
+      "comboSha256": "69656e3d1164c9a26bea86a31138adc42167fc8abcacb66941ef7ed211b405fa",
+      "comboBytes": 2581559,
+      "clientSha256": "7f037fce5115157101afb64cef7b7fd0e470742ac3eb96a11cabe0a43e56ae7c",
+      "segmentSha256": "c29382ca1c7f2e5f2a1ddbcbbccb4b0e92258142e585ab3b122ac0fd1c28289d",
+      "segmentBytes": 1702727,
+      "first": 875361,
+      "second": -1,
+      "uniqueComplete": true
+    }
+  },
+  "zeroWrite": {
+    "csv-cancel": {
+      "beforeAt": "2026-10-21T21:53:51.046679+00:00",
+      "afterAt": "2026-10-21T21:55:13.040Z",
+      "preview": {
+        "data": {
+          "beforeCount": 21,
+          "afterCount": 21,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "after": {
+        "data": {
+          "beforeCount": 21,
+          "afterCount": 21,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    "xlsx-cancel": {
+      "beforeAt": "2026-10-21T22:01:35.018274+00:00",
+      "afterAt": "2026-10-21T22:01:59.016Z",
+      "preview": {
+        "data": {
+          "beforeCount": 23,
+          "afterCount": 23,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "after": {
+        "data": {
+          "beforeCount": 23,
+          "afterCount": 23,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    "csv-invalid": {
+      "beforeAt": "2026-10-21T22:04:53.839537+00:00",
+      "afterAt": "2026-10-21T22:05:24.727Z",
+      "preview": {
+        "data": {
+          "beforeCount": 25,
+          "afterCount": 25,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "after": {
+        "data": {
+          "beforeCount": 25,
+          "afterCount": 25,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    "xlsx-invalid": {
+      "beforeAt": "2026-10-21T22:06:40.000257+00:00",
+      "afterAt": "2026-10-21T22:07:04.218Z",
+      "preview": {
+        "data": {
+          "beforeCount": 25,
+          "afterCount": 25,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "after": {
+        "data": {
+          "beforeCount": 25,
+          "afterCount": 25,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    }
+  },
+  "confirms": {
+    "csv-confirm": {
+      "originalExit": {
+        "at": "2026-10-21T21:59:40.925Z",
+        "exit": 0,
+        "boundary": "actual native file preview then explicit confirm and normal WBS root/child reentry; current original event capture starts after preview, separate observer holds earlier event"
+      },
+      "frames": {
+        "count": 30,
+        "firstAt": "2026-10-21T21:59:39.668Z",
+        "lastAt": "2026-10-21T21:59:40.929Z",
+        "declaredHashMismatch": []
+      },
+      "previewAgainstPriorCancel": {
+        "data": {
+          "beforeCount": 21,
+          "afterCount": 21,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "roots": {
+        "data": {
+          "beforeCount": 21,
+          "afterCount": 23,
+          "added": [
+            "pmtool/tasks/t-0004.json",
+            "pmtool/tasks/t-0005.json"
+          ],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "added": [
+        {
+          "file": "t-0004.json",
+          "id": "t-0004",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "QA原生导入根",
+          "description": "",
+          "assignee": "测试甲",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-10-22",
+          "dueDate": "2026-11-01",
+          "progress": 0,
+          "milestoneId": null,
+          "code": "3",
+          "order": 3,
+          "createdAt": "2026-10-21T21:59:40.002Z",
+          "updatedAt": "2026-10-21T21:59:40.002Z"
+        },
+        {
+          "file": "t-0005.json",
+          "id": "t-0005",
+          "projectId": "p-0001",
+          "parentId": "t-0004",
+          "title": "QA原生导入子",
+          "description": "",
+          "assignee": "测试乙",
+          "status": "in_progress",
+          "priority": "P2",
+          "startDate": "2026-10-22",
+          "dueDate": "2026-10-30",
+          "progress": 10,
+          "milestoneId": null,
+          "code": "3.1",
+          "order": 1,
+          "createdAt": "2026-10-21T21:59:40.040Z",
+          "updatedAt": "2026-10-21T21:59:40.040Z"
+        }
+      ],
+      "changedExisting": [],
+      "reopenedEqual": true,
+      "events": [
+        {
+          "at": "2026-10-21T21:59:40.029Z",
+          "type": "command/run",
+          "seq": 21,
+          "commandId": "cmd-65d01e89-10",
+          "name": "pm",
+          "projectId": "p-0001",
+          "filename": "QA 原生导入.csv",
+          "confirm": true,
+          "argsSha256": "9991321d44f467a080ac60a3543aaa62b4da91eacb6069c25fb2598d1205d7c9",
+          "previewArgsSha256": "5c0cdc1f28274ae36019f1f7bd5c6433420ffc556f683fb1b87c2f71f23f78b0",
+          "contentBytes": 169,
+          "contentSha256": "9ff4d80a312a90a2f09c3c31805aad7796341ade44e2944fa5c690cb07010501"
+        },
+        {
+          "at": "2026-10-21T21:59:40.077Z",
+          "type": "command/done",
+          "seq": 22,
+          "commandId": "cmd-65d01e89-10",
+          "kind": "success",
+          "text": "已从上传文件导入 2 个任务到项目 p-0001：\n  3｜t-0004｜QA原生导入根\n  3.1｜t-0005｜QA原生导入子"
+        },
+        {
+          "at": "2026-10-21T21:59:40.095Z",
+          "type": "command/run",
+          "seq": 23,
+          "commandId": "cmd-65d01e89-11",
+          "name": "pm",
+          "operation": "web snapshot"
+        },
+        {
+          "at": "2026-10-21T21:59:40.097Z",
+          "type": "command/done",
+          "seq": 24,
+          "commandId": "cmd-65d01e89-11",
+          "kind": "success",
+          "snapshotTasks": [
+            {
+              "id": "t-0001",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "1",
+              "title": "F3-fixture-F5",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0002",
+              "projectId": "p-0002",
+              "parentId": null,
+              "code": "1",
+              "title": "QA-B任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0003",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "2",
+              "title": "F5共享文件任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0004",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "3",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0005",
+              "projectId": "p-0001",
+              "parentId": "t-0004",
+              "code": "3.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            }
+          ]
+        },
+        {
+          "at": "2026-10-21T21:59:40.166Z",
+          "type": "command/run",
+          "seq": 25,
+          "commandId": "cmd-65d01e89-12",
+          "name": "pm",
+          "operation": "web snapshot"
+        },
+        {
+          "at": "2026-10-21T21:59:40.179Z",
+          "type": "command/done",
+          "seq": 26,
+          "commandId": "cmd-65d01e89-12",
+          "kind": "success",
+          "snapshotTasks": [
+            {
+              "id": "t-0001",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "1",
+              "title": "F3-fixture-F5",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0002",
+              "projectId": "p-0002",
+              "parentId": null,
+              "code": "1",
+              "title": "QA-B任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0003",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "2",
+              "title": "F5共享文件任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0004",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "3",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0005",
+              "projectId": "p-0001",
+              "parentId": "t-0004",
+              "code": "3.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            }
+          ]
+        }
+      ]
+    },
+    "xlsx-confirm": {
+      "originalExit": {
+        "at": "2026-10-21T22:03:25.970Z",
+        "exit": 0,
+        "boundary": "actual native file preview then explicit confirm and normal WBS root/child reentry; current original event capture starts after preview, separate observer holds earlier event"
+      },
+      "frames": {
+        "count": 30,
+        "firstAt": "2026-10-21T22:03:24.977Z",
+        "lastAt": "2026-10-21T22:03:25.969Z",
+        "declaredHashMismatch": []
+      },
+      "previewAgainstPriorCancel": {
+        "data": {
+          "beforeCount": 23,
+          "afterCount": 23,
+          "added": [],
+          "removed": [],
+          "changed": [
+            "session_projcache/sessions/session-792b22a6-e1db-428a-8816-4e86592a7262.json"
+          ]
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "roots": {
+        "data": {
+          "beforeCount": 23,
+          "afterCount": 25,
+          "added": [
+            "pmtool/tasks/t-0006.json",
+            "pmtool/tasks/t-0007.json"
+          ],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "beforeCount": 2,
+          "afterCount": 2,
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "beforeCount": 0,
+          "afterCount": 0,
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "added": [
+        {
+          "file": "t-0006.json",
+          "id": "t-0006",
+          "projectId": "p-0001",
+          "parentId": null,
+          "title": "QA原生导入根",
+          "description": "",
+          "assignee": "测试甲",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-10-22",
+          "dueDate": "2026-11-01",
+          "progress": 0,
+          "milestoneId": null,
+          "code": "4",
+          "order": 4,
+          "createdAt": "2026-10-21T22:03:25.133Z",
+          "updatedAt": "2026-10-21T22:03:25.133Z"
+        },
+        {
+          "file": "t-0007.json",
+          "id": "t-0007",
+          "projectId": "p-0001",
+          "parentId": "t-0006",
+          "title": "QA原生导入子",
+          "description": "",
+          "assignee": "测试乙",
+          "status": "in_progress",
+          "priority": "P2",
+          "startDate": "2026-10-22",
+          "dueDate": "2026-10-30",
+          "progress": 10,
+          "milestoneId": null,
+          "code": "4.1",
+          "order": 1,
+          "createdAt": "2026-10-21T22:03:25.155Z",
+          "updatedAt": "2026-10-21T22:03:25.155Z"
+        }
+      ],
+      "changedExisting": [],
+      "reopenedEqual": true,
+      "events": [
+        {
+          "at": "2026-10-21T22:03:25.126Z",
+          "type": "command/run",
+          "seq": 31,
+          "commandId": "cmd-65d01e89-15",
+          "name": "pm",
+          "projectId": "p-0001",
+          "filename": "QA 原生导入.xlsx",
+          "confirm": true,
+          "argsSha256": "6bfb7ebac8d343467e8365a4e8f37c83a9296b784c477b8f4113d00ce40c179d",
+          "previewArgsSha256": "f54be71406e18afc9f4881a7516f450c9c1a4577f72bf96296c811cd63b8b884",
+          "contentBytes": 16561,
+          "contentSha256": "1181f20b5bfe4400608bc85415b8ffeeadd70f51ac4035099fc4dfc1ed0ff4a8"
+        },
+        {
+          "at": "2026-10-21T22:03:25.167Z",
+          "type": "command/done",
+          "seq": 32,
+          "commandId": "cmd-65d01e89-15",
+          "kind": "success",
+          "text": "已从上传文件导入 2 个任务到项目 p-0001：\n  4｜t-0006｜QA原生导入根\n  4.1｜t-0007｜QA原生导入子"
+        },
+        {
+          "at": "2026-10-21T22:03:25.170Z",
+          "type": "command/run",
+          "seq": 33,
+          "commandId": "cmd-65d01e89-16",
+          "name": "pm",
+          "operation": "web snapshot"
+        },
+        {
+          "at": "2026-10-21T22:03:25.170Z",
+          "type": "command/done",
+          "seq": 34,
+          "commandId": "cmd-65d01e89-16",
+          "kind": "success",
+          "snapshotTasks": [
+            {
+              "id": "t-0001",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "1",
+              "title": "F3-fixture-F5",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0002",
+              "projectId": "p-0002",
+              "parentId": null,
+              "code": "1",
+              "title": "QA-B任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0003",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "2",
+              "title": "F5共享文件任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0004",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "3",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0005",
+              "projectId": "p-0001",
+              "parentId": "t-0004",
+              "code": "3.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            },
+            {
+              "id": "t-0006",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "4",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0007",
+              "projectId": "p-0001",
+              "parentId": "t-0006",
+              "code": "4.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            }
+          ]
+        },
+        {
+          "at": "2026-10-21T22:03:25.196Z",
+          "type": "command/run",
+          "seq": 35,
+          "commandId": "cmd-65d01e89-17",
+          "name": "pm",
+          "operation": "web snapshot"
+        },
+        {
+          "at": "2026-10-21T22:03:25.200Z",
+          "type": "command/done",
+          "seq": 36,
+          "commandId": "cmd-65d01e89-17",
+          "kind": "success",
+          "snapshotTasks": [
+            {
+              "id": "t-0001",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "1",
+              "title": "F3-fixture-F5",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0002",
+              "projectId": "p-0002",
+              "parentId": null,
+              "code": "1",
+              "title": "QA-B任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0003",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "2",
+              "title": "F5共享文件任务",
+              "assignee": "",
+              "priority": "P1",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0004",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "3",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0005",
+              "projectId": "p-0001",
+              "parentId": "t-0004",
+              "code": "3.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            },
+            {
+              "id": "t-0006",
+              "projectId": "p-0001",
+              "parentId": null,
+              "code": "4",
+              "title": "QA原生导入根",
+              "assignee": "测试甲",
+              "priority": "P1",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-11-01",
+              "progress": 0,
+              "status": "todo"
+            },
+            {
+              "id": "t-0007",
+              "projectId": "p-0001",
+              "parentId": "t-0006",
+              "code": "4.1",
+              "title": "QA原生导入子",
+              "assignee": "测试乙",
+              "priority": "P2",
+              "startDate": "2026-10-22",
+              "dueDate": "2026-10-30",
+              "progress": 10,
+              "status": "in_progress"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "passive": [
+    {
+      "at": "2026-10-21T21:49:34.641Z",
+      "type": "command/run",
+      "seq": 13,
+      "commandId": "cmd-65d01e89-6",
+      "name": "pm",
+      "operation": "task update t-0001"
+    },
+    {
+      "at": "2026-10-21T21:49:34.692Z",
+      "type": "command/done",
+      "seq": 14,
+      "commandId": "cmd-65d01e89-6",
+      "kind": "success",
+      "text": "[pm:summary]任务已更新｜t-0001 F3-fixture-F5\n[pm:detail]\n```\n任务 ID：t-0001\nWBS：1\n项目 ID：p-0001\n父任务：无\n标题：F3-fixture-F5\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：未填写\n截止日期：未填写\n完成日期：未填写\n进度：0%\n里程碑：m-0001\n仓库：未填写\n创建时间：2026-10-21T13:44:54.980Z\n更新时间：2026-10-21T21:49:34.657Z\n```"
+    },
+    {
+      "at": "2026-10-21T21:49:34.700Z",
+      "type": "command/run",
+      "seq": 15,
+      "commandId": "cmd-65d01e89-7",
+      "name": "pm",
+      "operation": "web snapshot"
+    },
+    {
+      "at": "2026-10-21T21:49:34.709Z",
+      "type": "command/done",
+      "seq": 16,
+      "commandId": "cmd-65d01e89-7",
+      "kind": "success",
+      "snapshotTasks": [
+        {
+          "id": "t-0001",
+          "projectId": "p-0001",
+          "parentId": null,
+          "code": "1",
+          "title": "F3-fixture-F5",
+          "assignee": "",
+          "priority": "P1",
+          "progress": 0,
+          "status": "todo"
+        },
+        {
+          "id": "t-0002",
+          "projectId": "p-0002",
+          "parentId": null,
+          "code": "1",
+          "title": "QA-B任务",
+          "assignee": "",
+          "priority": "P1",
+          "progress": 0,
+          "status": "todo"
+        },
+        {
+          "id": "t-0003",
+          "projectId": "p-0001",
+          "parentId": null,
+          "code": "2",
+          "title": "F5共享文件任务",
+          "assignee": "",
+          "priority": "P1",
+          "progress": 0,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-21T21:54:10.826Z",
+      "type": "command/run",
+      "seq": 17,
+      "commandId": "cmd-65d01e89-8",
+      "name": "pm",
+      "projectId": "p-0001",
+      "filename": "QA 原生导入.csv",
+      "confirm": false,
+      "argsSha256": "5c0cdc1f28274ae36019f1f7bd5c6433420ffc556f683fb1b87c2f71f23f78b0",
+      "previewArgsSha256": "5c0cdc1f28274ae36019f1f7bd5c6433420ffc556f683fb1b87c2f71f23f78b0",
+      "contentBytes": 169,
+      "contentSha256": "9ff4d80a312a90a2f09c3c31805aad7796341ade44e2944fa5c690cb07010501"
+    },
+    {
+      "at": "2026-10-21T21:54:10.827Z",
+      "type": "command/done",
+      "seq": 18,
+      "commandId": "cmd-65d01e89-8",
+      "kind": "success",
+      "text": "已解析上传文件 QA 原生导入.csv：将为项目 p-0001 创建 2 个任务（按层级列还原父子树）。当前未写入。\n1｜QA原生导入根\n  1.1｜QA原生导入子"
+    }
+  ],
+  "pages": {
+    "csv-cancel": {
+      "at": "2026-10-21T21:55:12.724Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "已解析上传文件 QA 原生导入.csv：将为项目 p-0001 创建 2 个任务（按层级列还原父子树）。当前未写入。",
+        "1｜QA原生导入根",
+        "  1.1｜QA原生导入子"
+      ],
+      "buttons": [
+        {
+          "text": "确认落盘",
+          "aria": null,
+          "disabled": false
+        },
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    },
+    "xlsx-cancel": {
+      "at": "2026-10-21T22:01:58.692Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "3.1｜t-0005｜QA原生导入子",
+        "已解析上传文件 QA 原生导入.xlsx：将为项目 p-0001 创建 2 个任务（按层级列还原父子树）。当前未写入。",
+        "1｜QA原生导入根",
+        "  1.1｜QA原生导入子"
+      ],
+      "buttons": [
+        {
+          "text": "确认落盘",
+          "aria": null,
+          "disabled": false
+        },
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    },
+    "csv-confirm": {
+      "at": "2026-10-21T21:59:39.749Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "已解析上传文件 QA 原生导入.csv：将为项目 p-0001 创建 2 个任务（按层级列还原父子树）。当前未写入。",
+        "1｜QA原生导入根",
+        "  1.1｜QA原生导入子"
+      ],
+      "buttons": [
+        {
+          "text": "确认落盘",
+          "aria": null,
+          "disabled": false
+        },
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    },
+    "xlsx-confirm": {
+      "at": "2026-10-21T22:03:24.920Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "3.1｜t-0005｜QA原生导入子",
+        "已解析上传文件 QA 原生导入.xlsx：将为项目 p-0001 创建 2 个任务（按层级列还原父子树）。当前未写入。",
+        "1｜QA原生导入根",
+        "  1.1｜QA原生导入子"
+      ],
+      "buttons": [
+        {
+          "text": "确认落盘",
+          "aria": null,
+          "disabled": false
+        },
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    },
+    "csv-invalid": {
+      "at": "2026-10-21T22:05:24.523Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "4.1｜t-0007｜QA原生导入子",
+        "解析失败：导入失败：第 3 行：dueDate：日期须为有效的 YYYY-MM-DD；dueDate：截止日期不得早于开始日期"
+      ],
+      "buttons": [
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    },
+    "xlsx-invalid": {
+      "at": "2026-10-21T22:07:04.000Z",
+      "origin": "http://127.0.0.1:3242",
+      "timeOrigin": 1792618531950.5,
+      "viewport": {
+        "width": 1440,
+        "height": 718,
+        "outerWidth": 1440,
+        "outerHeight": 857,
+        "dpr": 2
+      },
+      "dark": true,
+      "importText": [
+        "4.1｜t-0007｜QA原生导入子",
+        "解析失败：导入失败：第 3 行：dueDate：日期须为有效的 YYYY-MM-DD；dueDate：截止日期不得早于开始日期"
+      ],
+      "buttons": [
+        {
+          "text": "取消",
+          "aria": null,
+          "disabled": false
+        }
+      ]
+    }
+  },
+  "inheritance": [
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+      "a13": "c37f046188f763486010e9867117ca90899c4983b09fd163f4d004007f6f2dc1",
+      "independent": "c37f046188f763486010e9867117ca90899c4983b09fd163f4d004007f6f2dc1",
+      "mainNow": "c37f046188f763486010e9867117ca90899c4983b09fd163f4d004007f6f2dc1"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/task.ts",
+      "a13": "223472a8580a78ff1aa18468c3d3560ca05eebef0d4d7066d518eabe91901f44",
+      "independent": "223472a8580a78ff1aa18468c3d3560ca05eebef0d4d7066d518eabe91901f44",
+      "mainNow": "223472a8580a78ff1aa18468c3d3560ca05eebef0d4d7066d518eabe91901f44"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/csv-import.ts",
+      "a13": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+      "independent": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+      "mainNow": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task.ts",
+      "a13": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+      "independent": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+      "mainNow": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/index.tsx",
+      "a13": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "independent": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "mainNow": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "a13": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+      "independent": "8618d9091d3544a4236e9ae92fa0225e3914ea065b910ff1f3cb55013d0bc506",
+      "mainNow": "0d2a4560e74adb137084d2e37b34625e4b2e5b1801ec76e72fce5b689ccffe03"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/tasks.css",
+      "a13": "101a5f01bbd77dd8f234bbe2145df143cbc35682841f8317f5f18d8247d961b4",
+      "independent": "101a5f01bbd77dd8f234bbe2145df143cbc35682841f8317f5f18d8247d961b4",
+      "mainNow": "101a5f01bbd77dd8f234bbe2145df143cbc35682841f8317f5f18d8247d961b4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.css",
+      "a13": "42f1222456948542464e22de87340c64dd443089183602a6d6a9baf9f25e2063",
+      "independent": "42f1222456948542464e22de87340c64dd443089183602a6d6a9baf9f25e2063",
+      "mainNow": "87ca4fc9f0899d87b3103fcc279a791839a23e921de6511a81086d85d9e54246"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+      "a13": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00",
+      "independent": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00",
+      "mainNow": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/task-import-filename.test.ts",
+      "a13": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7",
+      "independent": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7",
+      "mainNow": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7"
+    }
+  ],
+  "actualReentry": [
+    {
+      "id": "t-0006",
+      "at": "2026-10-21T22:03:54.318Z",
+      "rawEqualsConfirmed": true,
+      "rawSha256": "7c111369b1830b43c3baac59b6c0446a1e5aab611d97e2780da3caa5a6a3bbc0",
+      "fields": {
+        "title": "QA原生导入根",
+        "description": "",
+        "status": "todo",
+        "priority": "P1",
+        "assignee": "测试甲",
+        "startDate": "2026-10-22",
+        "dueDate": "2026-11-01",
+        "progress": "0",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": ""
+      },
+      "selectableOtherTasks": [
+        "t-0001",
+        "t-0003",
+        "t-0004",
+        "t-0005",
+        "t-0007"
+      ],
+      "excludesSelf": true
+    },
+    {
+      "id": "t-0007",
+      "at": "2026-10-21T22:03:54.673Z",
+      "rawEqualsConfirmed": true,
+      "rawSha256": "6cff94c395b18216270e2c281f066cd3b4c548d423cb548ef4d031a178254f79",
+      "fields": {
+        "title": "QA原生导入子",
+        "description": "",
+        "status": "in_progress",
+        "priority": "P2",
+        "assignee": "测试乙",
+        "startDate": "2026-10-22",
+        "dueDate": "2026-10-30",
+        "progress": "10",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": ""
+      },
+      "selectableOtherTasks": [
+        "t-0001",
+        "t-0003",
+        "t-0004",
+        "t-0005",
+        "t-0006"
+      ],
+      "excludesSelf": true
+    }
+  ],
+  "correction": {
+    "at": "2026-10-21T22:03:54.824Z",
+    "boundary": "first runner selected duplicate CSV titles t4/t5; original wrong-target evidence retained; this actual data-pm-row targets XLSX t6/t7 individually"
+  },
+  "buildExits": [
+    {
+      "argv": [
+        "pnpm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/pmtool-a13-closure-20261022/packages/dsh-pm-tool",
+      "start": "2026-10-21T21:27:44.756888+00:00",
+      "end": "2026-10-21T21:27:52.555720+00:00",
+      "exit": 0
+    },
+    {
+      "argv": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--coverage",
+        "--maxWorkers=1",
+        "--minWorkers=1",
+        "--no-cache"
+      ],
+      "cwd": "/private/tmp/pmtool-a13-closure-20261022/packages/dsh-pm-tool",
+      "start": "2026-10-21T21:27:52.556974+00:00",
+      "end": "2026-10-21T21:28:32.161731+00:00",
+      "exit": 0
+    },
+    {
+      "argv": [
+        "pnpm",
+        "exec",
+        "tsc",
+        "--noEmit"
+      ],
+      "cwd": "/private/tmp/pmtool-a13-closure-20261022/packages/dsh-pm-tool",
+      "start": "2026-10-21T21:27:38.062944+00:00",
+      "end": "2026-10-21T21:27:44.756468+00:00",
+      "exit": 0
+    }
+  ],
+  "fullVerify": {
+    "at": "2026-10-21T21:51:50.334500+00:00",
+    "rows": [
+      {
+        "label": "guard",
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "scripts/verify-isolation.mjs"
+        ],
+        "cwd": "/private/tmp/pmtool-a13-closure-20261022/packages/dsh-pm-tool",
+        "start": "2026-10-21T21:51:21.253511+00:00",
+        "end": "2026-10-21T21:51:49.001541+00:00",
+        "exit": 0
+      },
+      {
+        "label": "guard-selftest",
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "scripts/test-isolation-guard.mjs"
+        ],
+        "cwd": "/private/tmp/pmtool-a13-closure-20261022/packages/dsh-pm-tool",
+        "start": "2026-10-21T21:51:49.003234+00:00",
+        "end": "2026-10-21T21:51:49.060730+00:00",
+        "exit": 0
+      },
+      {
+        "label": "launcher-test",
+        "argv": [
+          "pnpm",
+          "test"
+        ],
+        "cwd": "/private/tmp/pmtool-a13-closure-20261022/launcher",
+        "start": "2026-10-21T21:51:49.061092+00:00",
+        "end": "2026-10-21T21:51:49.964528+00:00",
+        "exit": 0
+      },
+      {
+        "label": "launcher-verify",
+        "argv": [
+          "pnpm",
+          "run",
+          "verify"
+        ],
+        "cwd": "/private/tmp/pmtool-a13-closure-20261022/launcher",
+        "start": "2026-10-21T21:51:49.964866+00:00",
+        "end": "2026-10-21T21:51:50.333830+00:00",
+        "exit": 0
+      }
+    ],
+    "boundary": "A13 frozen source only; excludes real-model credential smoke by guard contract, explicit final scope separately; newer sidecar candidate not covered"
+  },
+  "boundary": "Audit only. Summaries are not fabricated missing command events or GUI evidence. Source/artifact reads do not rerun product."
+}

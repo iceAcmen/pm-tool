@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-21T16:10:19.198Z",
+  "node": "v22.23.3",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "docs/testing/a10-finder-reopen-gui-independent-review-20261021-check.mjs"
+  ],
+  "ok": true,
+  "exit": 0,
+  "reportSha256": "05b0eda829fa97abe26a6551cbaa9d4acdf7f28394ec77d1d7965768e735c25d",
+  "auditSha256": "8b71549748693892dcaac2e4336a9c47dfa047be9664eedead6839760a595b33",
+  "checkSourceSha256": "01c06525ad394adad80551f13c823904510e4ef90aba07110d6b3a2dfa8e690a",
+  "links": 23,
+  "missingLinks": [],
+  "fences": 2,
+  "checkedInputs": 46,
+  "evidenceDrift": [],
+  "otherReferenceDrift": [],
+  "syntax": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "docs/testing/a10-finder-reopen-gui-independent-review-20261021-audit.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "docs/testing/a10-finder-reopen-gui-independent-review-20261021-check.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "boundary": "Evidence consistency and document checks only; not product or GUI PASS."
+}

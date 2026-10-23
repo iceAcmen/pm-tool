@@ -68,16 +68,40 @@ function headerValue(req: IncomingMessage, name: string): string | undefined {
 
 function sanitizeFileName(raw: string | undefined): string {
   if (!raw) return 'upload.bin'
-  let name = raw
-  try {
-    name = decodeURIComponent(raw)
-  } catch {
-    name = raw
-  }
   // 只保留 basename，去掉路径分隔与控制字符；空则回落。
-  name = name.split(/[\\/]/).pop() ?? name
+  let name = raw.split(/[\\/]/).pop() ?? raw
   name = name.replace(/[\r\n\x00-\x1f]/g, '').trim()
   return name || 'upload.bin'
+}
+
+/** 新协议严格单次解码；无标记保留旧 URI 容错。sanitize 本身不得再解码。 */
+function uploadFileName(req: IncomingMessage): { ok: true; fileName: string } | { ok: false } {
+  const markerKey = 'x-pm-file-name-encoding'
+  const nameKey = 'x-pm-file-name'
+  const marker = req.headers[markerKey]
+  if (marker === undefined) {
+    let legacy = headerValue(req, nameKey)
+    if (legacy) {
+      try { legacy = decodeURIComponent(legacy) } catch { /* 旧请求保留 malformed-percent 原名。 */ }
+    }
+    return { ok: true, fileName: sanitizeFileName(legacy) }
+  }
+  const raw = req.headers[nameKey]
+  if (marker !== 'uri-component' || typeof raw !== 'string' || !raw.trim()
+    || !/^[\x20-\x7e]+$/.test(raw) || raw.includes(',')) return { ok: false }
+  // Node 可把重复自定义头合并；原始头仍可见时也拒绝重复，不误走 legacy。
+  for (const key of [markerKey, nameKey]) {
+    let count = 0
+    for (let i = 0; i < (req.rawHeaders?.length ?? 0); i += 2) {
+      if (req.rawHeaders[i].toLowerCase() === key) count++
+    }
+    if (count > 1) return { ok: false }
+  }
+  try {
+    return { ok: true, fileName: sanitizeFileName(decodeURIComponent(raw)) }
+  } catch {
+    return { ok: false }
+  }
 }
 
 /** 流式累计字节到有界 Buffer；超限/abort 立即终止。 */
@@ -150,7 +174,12 @@ export function buildAssetRoutes({ getDomain, auth, attachFile, resolveAsset }: 
       return
     }
     const projectHeader = headerValue(req, 'x-pm-project-id')
-    const fileName = sanitizeFileName(headerValue(req, 'x-pm-file-name'))
+    const parsedName = uploadFileName(req)
+    if (!parsedName.ok) {
+      sendError(res, 400, 'invalid_request', '文件名编码协议非法')
+      return
+    }
+    const fileName = parsedName.fileName
     const mediaType = headerValue(req, 'x-pm-media-type')
     const declared = Number(req.headers['content-length'])
     if (Number.isSafeInteger(declared) && declared > ASSET_MAX_BYTES) {

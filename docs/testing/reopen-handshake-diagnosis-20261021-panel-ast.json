@@ -1,0 +1,21 @@
+{
+  "statements": [
+    {
+      "line": 728,
+      "text": "launchHandshakeRef = useRef<ReturnType<typeof createLaunchHandshakeRetrier> | null>(null)"
+    },
+    {
+      "line": 729,
+      "text": "if (!launchHandshakeRef.current && typeof window !== 'undefined') {\n    launchHandshakeRef.current = createLaunchHandshakeRetrier({\n      getHash: () => window.location.hash,\n      replaceState: (cleaned) => window.history.replaceState(\n        null,\n        '',\n        buildLaunchHistoryUrl(window.location.pathname, window.location.search, cleaned),\n      ),\n    })\n  }"
+    },
+    {
+      "line": 741,
+      "text": "refresh = async (): Promise<boolean> => {\n    setBusy(true)\n    try {\n      const next = JSON.parse(await execute('web snapshot')) as Snapshot\n      setData(next)\n      setStale(false)\n      // OPT-03：刷新后回填记住的项目；已删除则回退到当前首个项目，不留脏值。\n      const ids = next.projects.map(p => p.id)\n      let stored = ''\n      try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }\n      setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))\n      // 首次读取失败不永久错过 Finder 启动回告；后续任一成功刷新都会补试，成功后幂等。\n      void launchHandshakeRef.current?.reportReady()\n      return true\n    } catch (error) {\n      // B1-C2：失败不清空已有数据（保留旧内容），仅标陈旧；错误原文进 ResultCard，不静默合并。\n      setStale(true)\n      setMessage(error instanceof Error ? error.message : String(error))\n      return false\n    } finally {\n      setBusy(false)\n    }\n  }"
+    },
+    {
+      "line": 765,
+      "text": "useEffect(() => {\n    // 面板挂载后读取；权威回告由 refresh 的成功分支统一处理。\n    void refresh()\n  }, [])"
+    }
+  ],
+  "hashListeners": []
+}

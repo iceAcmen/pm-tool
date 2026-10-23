@@ -1,0 +1,96 @@
+{
+  "at": "2026-10-22T23:43:52.758Z",
+  "role": "独立组合审证",
+  "verdict": {
+    "source": "PASS_LIMITED_COMBINED_SOURCE",
+    "auto": "PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE",
+    "gui": "NOT_SIGNED_THIS_ROLE",
+    "parentCommit": "NOT_SIGNED_THIS_ROLE"
+  },
+  "candidateIndex": {
+    "bytes": 377747,
+    "sha256": "b7d00adf033966ba94b69eab250b9781d89de532c32e243ff40793159c28f275"
+  },
+  "candidateSeal": {
+    "bytes": 2280,
+    "sha256": "c4d80c483b9924631bb299559d83c18f3f897bb5febcbb4b8582f6c038367913"
+  },
+  "members": {
+    "f02-combined-regression-review-20261023-r2-audit-attempt1.json": {
+      "bytes": 11431645,
+      "sha256": "59b0fdaf5ba145a192831db8fd04ae04794113a347915485ea453652da52f9cb"
+    },
+    "f02-combined-regression-review-20261023-r2-audit-final.json": {
+      "bytes": 11462289,
+      "sha256": "75109adfa2734efa177ade10cb3a08409bf805269927b2d977dc8e1d2bd2839b"
+    },
+    "f02-combined-regression-review-20261023-r2-command-audit.md": {
+      "bytes": 3878,
+      "sha256": "82e98965bae2d093eb20bd88e9bec480eff66d51adf3c38af49678c1eb413219"
+    },
+    "f02-combined-regression-review-20261023-r2-command-receipts.json": {
+      "bytes": 8625,
+      "sha256": "9f7521e974ca18c7efaf996b32dfeb13758c1d4a40e5785afc43d759fb5f1469"
+    },
+    "f02-combined-regression-review-20261023-r2-report.md": {
+      "bytes": 16145,
+      "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+    },
+    "f02-combined-regression-review-20261023-r2-stability.json": {
+      "bytes": 2015,
+      "sha256": "ff1d498ebda52ddcd73f7f6f593572e8c857a171ae1b1791b0700e887818e261"
+    },
+    "f02-combined-regression-review-20261023-r2-trace-attempt1.json": {
+      "bytes": 11631,
+      "sha256": "690c9282bca18277f57e5627a0c2d030ba06ef307d5ff3ebd1013afbf1cd7eee"
+    },
+    "f02-combined-regression-review-20261023-r2-trace-final.json": {
+      "bytes": 13023,
+      "sha256": "02fca7417ef8d495d8d7a20153a3186eee944e67eaf94b03f856e1d1869c6995"
+    }
+  },
+  "ownTools": {
+    "/tmp/f02-combined-regression-review-20261023-r2-reader.mjs": {
+      "bytes": 32943,
+      "sha256": "8f19c60945e9793e2baa13038dae737d397a89a40e0dcd712d268a13d273f0c2"
+    },
+    "/tmp/f02-combined-regression-review-20261023-r2-trace.mjs": {
+      "bytes": 4688,
+      "sha256": "eb05c34c697fb1e81fdd54c57da56485242672300046c915ddc15685b0259a90"
+    },
+    "/tmp/f02-combined-regression-review-20261023-r2-trace-reconcile.mjs": {
+      "bytes": 2187,
+      "sha256": "eb5df19575e5f13a72115a16e6e04f817ec8d7da501a98ae04f13178e4796d65"
+    },
+    "/tmp/f02-combined-regression-review-20261023-r2-seal.mjs": {
+      "bytes": 10633,
+      "sha256": "4c4b061dac0ffc2948d81e9900d90e428f2a2024d239fc1e218c077a127a7e42"
+    }
+  },
+  "actualReaderReceipt": {
+    "version": 2,
+    "executionId": "eafea4a32c1b1a2a713eb4c88cb0d724",
+    "pid": 21127,
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "status": "exited",
+    "exitCode": 0,
+    "terminalReason": "process_exited",
+    "outputComplete": true,
+    "createdAtMs": 1792712367020,
+    "startedAtMs": 1792712367031,
+    "finishedAtMs": 1792712375004,
+    "origin": "精确读取本角色实际工具execution.json；不从审计expectedExit倒推"
+  },
+  "actualTraceExits": [
+    1,
+    0
+  ],
+  "actualStabilityExit": 0,
+  "historicalFailuresPreserved": true,
+  "productExecutions": 0,
+  "excludes": [
+    "本seal自身",
+    "随后实际seal-tool-receipt"
+  ],
+  "resources": "released / STOP"
+}

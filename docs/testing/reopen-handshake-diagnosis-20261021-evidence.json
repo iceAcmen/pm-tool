@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-21T12:51:29.868Z",
+  "execution": {
+    "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "args": [
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/reopen-handshake-diagnosis-20261021-run.mjs",
+      "r3"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "startedAt": "2026-10-21T12:51:23.479Z",
+    "finishedAt": "2026-10-21T12:51:29.573Z",
+    "exitCode": 1,
+    "signal": null,
+    "stdout": "{\"resultPath\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/reopen-handshake-diagnosis-20261021-r3.json\",\"summary\":{\"passed\":6,\"failed\":4},\"dom\":\"DIAGNOSIS_REPRODUCED\",\"pidStillPresent\":false}\n",
+    "stderr": ""
+  },
+  "results": [
+    {
+      "round": "r1",
+      "startedAt": "2026-10-21T12:49:21.217Z",
+      "finishedAt": "2026-10-21T12:49:26.199Z",
+      "summary": {
+        "passed": 6,
+        "failed": 4
+      },
+      "chromePid": 15769,
+      "chromeExited": true
+    },
+    {
+      "round": "r2",
+      "startedAt": "2026-10-21T12:50:04.330Z",
+      "finishedAt": "2026-10-21T12:50:07.293Z",
+      "summary": {
+        "passed": 6,
+        "failed": 4
+      },
+      "chromePid": 15964,
+      "chromeExited": true
+    },
+    {
+      "round": "r3",
+      "startedAt": "2026-10-21T12:51:23.858Z",
+      "finishedAt": "2026-10-21T12:51:29.458Z",
+      "summary": {
+        "passed": 6,
+        "failed": 4
+      },
+      "chromePid": 16263,
+      "chromeExited": true
+    }
+  ],
+  "sourceBinding": {
+    "packages/dsh-pm-tool/src/client/launch-handshake.ts": {
+      "currentSha256": "c7303c993809b41790f9f299d9818c73facbcb888dbe058aab414b20a1081057",
+      "a4ManifestSha256": null,
+      "productBaseSha256": "c7303c993809b41790f9f299d9818c73facbcb888dbe058aab414b20a1081057",
+      "meaning": "Additional bridge source binding; not in A4 23-item manifest"
+    },
+    "packages/dsh-pm-tool/src/client/panel.tsx": {
+      "currentSha256": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+      "a4ManifestSha256": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+      "productBaseSha256": "23dde6d4f731ca64f0eb66b9e002c68dbf95557b387fe49d573b15acf527e49c",
+      "meaning": "A4 manifest-listed source"
+    },
+    "packages/dsh-pm-tool/src/client/index.tsx": {
+      "currentSha256": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "a4ManifestSha256": null,
+      "productBaseSha256": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+      "meaning": "Additional bridge source binding; not in A4 23-item manifest"
+    },
+    "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": {
+      "currentSha256": "0fd3d9c1dd23495c10900e85159ebf29810d09c99eb629c356ef973896cac2be",
+      "a4ManifestSha256": null,
+      "productBaseSha256": "0fd3d9c1dd23495c10900e85159ebf29810d09c99eb629c356ef973896cac2be",
+      "meaning": "Additional bridge source binding; not in A4 23-item manifest"
+    }
+  },
+  "inputManifest": {
+    "AGENTS.md": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d",
+    "docs/collaboration.md": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab",
+    "docs/external-skills.md": "4858809f288e678b2c41febe0905df10fe8ef5cfc46ff4a5bce0c7e5e5464f2d",
+    "docs/testing/fc-a3-independent-retest-20261021.md": "2d6a22269873aea06906b9c3a63654e71e8ff060961c12412b56de41b8ab9f5d",
+    "docs/testing/fc-a4-independent-retest-20261021.md": "cd7a2ffe76f1e0d1d2224a490a17ea7d7f563d143233a79a06b25353a5476c82",
+    "reports/all-pending-evidence-20261021/A4/candidate.json": "df94ef965b2d9dfc5d3ecc5d3fae15e975097bdeb550e18735d15ca6df50e87f",
+    "reports/all-pending-evidence-20261021/A4/finder/N1-auto-S4.json": "c64f1258f654ccd6394cd4e428fd565eb8a5dd51a389eabfc8ee48287e04cf1e",
+    "reports/all-pending-evidence-20261021/A4/finder/N1-auto-S4.png": "0212054ae8c1f7f93baa6dcac8d061590165440d4ea3c9573b64584c3abbd8c5",
+    "reports/all-pending-evidence-20261021/A4/finder/N2-waiting.json": "f0314606fcfb65494d4485ea83263a5244cab0d6f9c1da7d11b850bb9913d081",
+    "reports/all-pending-evidence-20261021/A4/finder/N2-waiting.png": "ce6e3c08f82eed24c74b51682ed7c6f8188193c9c56d2f59e580c3e44e6042a6",
+    "reports/all-pending-evidence-20261021/A4/finder/travel-observations.json": "ce3108cf37b99dae827fee7be37ac5861be79c5cb4b9e950f5ce7de646b827de",
+    "reports/all-pending-evidence-20261021/A4/finder/safe-app.json": "e5a48869fe4d66c1390832d75802232a31ab7099c9a458abc2301c681ebfce83"
+  },
+  "observer": {
+    "path": "/private/tmp/pmtool-a4-passive-observer-20261021.mjs",
+    "sha256": "21b25bfcee4afb246954534ba597997d52db4be86da47630ffe3d336c1795988",
+    "role": "Only explicitly allowed passive source; not executed; runtime/output root not read."
+  },
+  "vendor": {
+    "exitCode": 0,
+    "stdout": "[verify-external-skills] 扫描目录 = /Users/bytedance/Projects/dsh-pm/pm-tool/vendor/agent-skills（仅显式注册 profile；未注册目录拒绝）\n[verify-external-skills] 只读/离线/确定性；不执行 vendored 内容、不联网、不改写任何文件\n  [mattpocock] [REF-EXTERNAL] skills/code-review/SKILL.md: 引用 \"CODING_STANDARDS.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [mattpocock] [REF-EXTERNAL] skills/code-review/SKILL.md: 引用 \"CONTRIBUTING.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [mattpocock] [REF-EXTERNAL] skills/diagnosing-bugs/SKILL.md: 引用 \"GLOSSARY.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [mattpocock] [REF-EXTERNAL] skills/diagnosing-bugs/SKILL.md: 引用 \"scripts/hitl-loop.template.sh\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [mattpocock] [REF-EXTERNAL] skills/tdd/SKILL.md: 引用 \"GLOSSARY.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [HTML-LOCAL-SRC] skills/oiloil-ui-ux-guide/references/design-preview-template.html: 本地脚本 \"design-config.js\" 非 vendored，已在 manifest 声明（agent 生成/会话临时）\n  [oil-oil] [HTML-URL-PASSIVE] skills/oiloil-ui-ux-guide/references/design-preview-template.html: 被动引用 https://fonts.googleapis.com（静态文本/命名空间/preconnect，非执行）\n  [oil-oil] [HTML-URL-PASSIVE] skills/oiloil-ui-ux-guide/references/design-preview-template.html: 被动引用 https://fonts.gstatic.com（静态文本/命名空间/preconnect，非执行）\n  [oil-oil] [HTML-URL-PASSIVE] skills/oiloil-ui-ux-guide/references/design-preview-template.html: 被动引用 http://www.w3.org/2000/svg（静态文本/命名空间/preconnect，非执行）\n  [oil-oil] [HTML-URL-PASSIVE] skills/oiloil-ui-ux-guide/references/design-preview-template.html: 被动引用 https://fonts.googleapis.com/css2?（静态文本/命名空间/preconnect，非执行）\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/SKILL.md: 引用 \"theme.ts\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/SKILL.md: 引用 \"package.json\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/SKILL.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/SKILL.md: 引用 \"DESIGN.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/SKILL.md: 引用 \"AGENT.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/design-interview.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/design-spec-template.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/design-spec-template.md: 引用 \"design-spec-components.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/extended-dimensions.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/extended-dimensions.md: 引用 \"design-config.js\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/style-families/brand-driven.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [oil-oil] [REF-EXTERNAL] skills/oiloil-ui-ux-guide/references/style-families/index.md: 引用 \"design-spec.md\" 非 vendored，已在 manifest excluded/risk/note/externalProjectReferences 中声明\n  [SKIPPED_UNREGISTERED] \"product-os\" 不在本校验器显式 profile allowlist，跳过（不由本门审计；不得在该树内夹带注册文件）\n  [SKIPPED_UNREGISTERED] \"ui-ux-pro-max\" 不在本校验器显式 profile allowlist，跳过（不由本门审计；不得在该树内夹带注册文件）\n  [SKIPPED_UNREGISTERED] \"ux-ui-skills\" 不在本校验器显式 profile allowlist，跳过（不由本门审计；不得在该树内夹带注册文件）\n\n[verify-external-skills] PASS（2 个注册 vendor）\n  - mattpocock: commit=49dd158d1076134a641b33efb035946536778336；文件数=13；entry=4；声明依赖=1\n  - oil-oil: commit=f32bc2bd210a6693f86841816a531ab511b258b4；文件数=23；entry=1；声明依赖=0\n  所有文件 sha256/bytes 与 manifest 逐位一致；无越界文件/脚本/symlink/远程 html 脚本；无 F1 危险指令。\n",
+    "stderr": "",
+    "taskKind": "rootCause",
+    "skill": "diagnosing-bugs",
+    "vendorIntegrityVerified": true,
+    "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+    "skipped": "No product fix, HITL script, installer, globals, full regression or commit under this assignment."
+  },
+  "missingRaw": [
+    "reports/all-pending-evidence-20261021/A4/finder/passive.ndjson"
+  ],
+  "boundary": "Confirmed independent source/bridge/DOM diagnosis only. Missing Main entered/OS trace and exact reload target; no complete GUI FAIL/PASS or whole Launcher verdict."
+}

@@ -1,0 +1,274 @@
+{
+  "sourceBindings": [
+    {
+      "label": "red-final",
+      "files": [
+        {
+          "path": "src/index.ts",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/red-final/inputs/src/index.ts",
+            "bytes": 21091,
+            "sha256": "c6c50f831f15f049b7833852d2dd013fa8b61b18f40f8008cbf506189e1afb56"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/index.ts",
+            "bytes": 21091,
+            "sha256": "c6c50f831f15f049b7833852d2dd013fa8b61b18f40f8008cbf506189e1afb56"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/red-final/inputs/src/client/panel.tsx",
+            "bytes": 191668,
+            "sha256": "a58e21657daa79d41255a4e1fd929b8d084101fdf8b7a236eaf9c0205d08247d"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+            "bytes": 191668,
+            "sha256": "a58e21657daa79d41255a4e1fd929b8d084101fdf8b7a236eaf9c0205d08247d"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/red-final/inputs/src/client/views/tasks.tsx",
+            "bytes": 77377,
+            "sha256": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+            "bytes": 77377,
+            "sha256": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec"
+          },
+          "matches": true
+        }
+      ]
+    },
+    {
+      "label": "green-final",
+      "files": [
+        {
+          "path": "src/index.ts",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/green-final/inputs/src/index.ts",
+            "bytes": 21961,
+            "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/index.ts",
+            "bytes": 21961,
+            "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/green-final/inputs/src/client/panel.tsx",
+            "bytes": 191954,
+            "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+            "bytes": 191954,
+            "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/green-final/inputs/src/client/views/tasks.tsx",
+            "bytes": 77665,
+            "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+            "bytes": 77665,
+            "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+          },
+          "matches": true
+        }
+      ]
+    },
+    {
+      "label": "affected-final",
+      "files": [
+        {
+          "path": "src/index.ts",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/affected-final/inputs/src/index.ts",
+            "bytes": 21961,
+            "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/index.ts",
+            "bytes": 21961,
+            "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/affected-final/inputs/src/client/panel.tsx",
+            "bytes": 191954,
+            "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+            "bytes": 191954,
+            "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+          },
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "captured": {
+            "path": "../../../../../tmp/pm-p2002-outbound-slot-0BVVIe/affected-final/inputs/src/client/views/tasks.tsx",
+            "bytes": 77665,
+            "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+          },
+          "expected": {
+            "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+            "bytes": 77665,
+            "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+          },
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "testMatches": [
+    {
+      "label": "red-final",
+      "matches": true
+    },
+    {
+      "label": "green-final",
+      "matches": true
+    }
+  ],
+  "guards": [
+    {
+      "label": "red-final",
+      "sourceDelta": 0,
+      "dependencyDelta": 0,
+      "protectedInputDelta": 0
+    },
+    {
+      "label": "green-final",
+      "sourceDelta": 0,
+      "dependencyDelta": 0,
+      "protectedInputDelta": 0
+    },
+    {
+      "label": "affected-final",
+      "sourceDelta": 0,
+      "dependencyDelta": 0,
+      "protectedInputDelta": 0
+    }
+  ],
+  "dbGuards": [
+    {
+      "case": "1-S01",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 1,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "2-S02",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 1,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "3-S03",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 3,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "4-S04",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 2,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "5-S05",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 1,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "6-S06",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 1,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "7-S07",
+      "files": 11,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 2,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    },
+    {
+      "case": "8-S08",
+      "files": 10,
+      "rawByteEqual": true,
+      "writes": 0,
+      "requests": 2,
+      "allCommandsReadOnly": true,
+      "commandsZeroWrite": true
+    }
+  ],
+  "whitespace": [],
+  "productSource": [
+    {
+      "path": "packages/dsh-pm-tool/src/index.ts",
+      "bytes": 21961,
+      "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+      "bytes": 77665,
+      "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+    }
+  ],
+  "test": {
+    "path": "docs/plans/2026-10-23-p2002-outbound-slot-test.tsx",
+    "bytes": 15418,
+    "sha256": "5f1c2cf3d5e3539ae34bdc4d9a21d8f833edec4490af5a8f443eff6e0a41c5bd"
+  },
+  "boundary": "开发字节保护，不是独立 PASS；不签jsdom布局或主机/runtime，无整构建。",
+  "satisfied": true
+}

@@ -118,19 +118,71 @@
 .rb-history-meta { color: var(--pm-muted); font-size: var(--t-11); margin-top: 2px; }
 .rb-history-note { color: var(--pm-secondary); margin-top: 2px; }
 
-/* 会议行动项行：标题/负责人/截止/状态/动作横向排布，窄屏自然换行 */
-.rb-action-row {
+/* 行动项独占父表单全宽；列数取本区实际宽度，不取窗口宽度。 */
+.rb-meeting-actions {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.2fr auto auto auto;
-  gap: var(--sp-2);
-  align-items: center;
-  padding: var(--sp-2);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-3);
+  min-width: 0;
+  container-type: inline-size;
+  container-name: rb-meeting-actions;
+}
+.rb-action-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: start;
+  min-width: 0;
+  padding: var(--sp-3);
   background: var(--pm-surface-muted);
   border-radius: var(--r-sm);
 }
-.rb-action-row input { font: inherit; font-size: var(--t-13); padding: var(--sp-1) var(--sp-2); }
-@media (max-width: 720px) {
-  .rb-action-row { grid-template-columns: 1fr 1fr; }
+.rb-action-row > .pm-field, .rb-action-links > .pm-field { min-width: 0; }
+.rb-action-title, .rb-action-links, .rb-action-commands, .rb-action-row > [role="status"] {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.rb-action-links {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: start;
+}
+.rb-action-row input, .rb-action-row select, .rb-action-row .rb-lb {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.rb-action-row input, .rb-action-row select { font: inherit; font-size: var(--t-14); }
+.rb-action-row .rb-lb-trigger { min-width: 0; box-sizing: border-box; }
+.rb-action-row .rb-lb-value {
+  min-width: 0;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.rb-action-commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.rb-action-commands .pm-button, .rb-meeting-actions > .pm-button {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.rb-meeting-actions > .pm-button { justify-self: start; }
+.rb-action-row > [role="status"] { overflow-wrap: anywhere; }
+@container rb-meeting-actions (min-width: 24rem) {
+  .rb-action-row, .rb-action-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container rb-meeting-actions (min-width: 30rem) {
+  .rb-action-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 

@@ -15,6 +15,7 @@ const TOKENS = `
 .body{padding:26px 24px}.brand{display:flex;align-items:center;gap:14px;margin-bottom:20px}.app-icon{width:52px;height:52px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;flex-shrink:0}.app-icon svg{width:30px;height:30px}.brand h2{font-size:21px;font-weight:650;letter-spacing:-.5px}.brand p{font-size:13px;color:var(--muted);margin-top:2px}
 .status-line{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}.status-dot{width:7px;height:7px;background:var(--ok);border-radius:50%}.status-dot.off{background:var(--muted)}.sub{margin:6px 0 0 15px;color:var(--muted);font-size:14px}
 .form-label{display:block;margin:18px 0 8px;font-size:14px;font-weight:550}.browser-field{position:relative}.browser-select{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}.browser-current{display:flex;align-items:center;gap:10px}.browser-mark{width:25px;height:25px;border-radius:7px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700}.chevron{color:var(--muted)}
+.browser-select>svg{width:18px;height:18px;flex:0 0 18px;color:var(--muted)}
 .menu{position:absolute;left:0;right:0;top:54px;background:var(--surface);padding:5px;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);z-index:4}.menu button{display:flex;width:100%;align-items:center;gap:10px;padding:9px 10px;min-height:44px;text-align:left;border-radius:6px}.menu button:hover{background:var(--soft)}.menu .selected{margin-left:auto;color:var(--accent)}
 .primary{width:100%;min-height:48px;padding:11px 18px;background:var(--accent);color:#fff;border-radius:9px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px}.secondary{border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-height:44px;background:var(--surface);width:100%}.text-btn{color:var(--muted);font-size:13px;min-height:34px;padding:4px 6px;text-decoration:underline;text-underline-offset:3px}.row{display:flex;gap:10px;margin-top:18px}.row>*{flex:1}
 .state-main{text-align:center;padding:14px 0 4px}.state-icon{width:54px;height:54px;border-radius:50%;background:var(--soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 14px}.state-icon svg{width:25px;height:25px}.state-main h2{font-size:21px;font-weight:650}.state-main p{font-size:14px;color:var(--muted);margin-top:8px}
@@ -69,12 +70,94 @@ export function renderControlHtml(viewModel, ctx = {}) {
 const INIT=${initial};
 const ICONS=${JSON.stringify(ICONS)};
 let state=INIT; let menuOpen=false; let detailOpen=false;
+let stopped=false; let syncTimer=null; let reading=false; let actionBusy=false; let revision=0; let readController=null;
+let actionTicket=0; let pendingBrowser=null; let preferenceFlight=null; const actionControllers=new Set();
+let preferenceError='';
+let localTheme=state.theme||'light';
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function svg(name){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[name]+'</svg>'; }
-async function act(payload){ try{ const r=await fetch('/api/action',{method:'POST',headers:{'content-type':'application/json','x-csrf-nonce':state.csrfNonce||''},body:JSON.stringify(payload)}); const j=await r.json(); if(j.state) state=j.state; render(); }catch(e){ /* 离线时保持当前态 */ } }
-async function refresh(){ try{ const r=await fetch('/api/state'); const j=await r.json(); state=j.state; render(); }catch(e){} }
+function acceptState(next){
+  if(!next||stopped)return;
+  const merged={...next,csrfNonce:state.csrfNonce||'',theme:localTheme};
+  if(pendingBrowser!==null)merged.selectedBrowser=pendingBrowser;
+  if(JSON.stringify(merged)===JSON.stringify(state))return;
+  state=merged; render();
+}
+function scheduleSync(){
+  if(stopped||syncTimer!==null)return;
+  syncTimer=setTimeout(()=>{syncTimer=null;void refresh();},500);
+}
+function stopSync(){
+  stopped=true;revision+=1;
+  if(syncTimer!==null){clearTimeout(syncTimer);syncTimer=null;}
+  readController?.abort();
+  actionControllers.forEach(controller=>controller.abort());
+}
+async function postAction(payload){
+  const controller=new AbortController();actionControllers.add(controller);
+  // owned 启动允许最多30s；读取和取消独立进行，POST也必须有结束边界。
+  const deadline=setTimeout(()=>controller.abort(),35000);
+  try{
+    const r=await fetch('/api/action',{method:'POST',signal:controller.signal,headers:{'content-type':'application/json','x-csrf-nonce':state.csrfNonce||''},body:JSON.stringify(payload)});
+    const j=await r.json();
+    return r.ok?j.state:null;
+  }finally{clearTimeout(deadline);actionControllers.delete(controller);}
+}
+async function saveBrowser(){
+  try{
+    while(!stopped&&pendingBrowser!==null){
+      const browser=pendingBrowser;revision+=1;
+      const next=await postAction({type:'select-browser',browser});
+      if(stopped)return;
+      revision+=1;
+      if(next&&pendingBrowser===browser)pendingBrowser=null;
+      if(next)acceptState(next);
+      // 失败时保留本地选择，等下一次用户选择/打开再尝试，避免无限写请求。
+      if(!next)break;
+    }
+  }catch(e){ /* 不把失败的偏好写入显示成权威成功。 */ }
+  finally{preferenceFlight=null;scheduleSync();}
+}
+async function act(payload){
+  if(stopped)return;
+  if(payload.type==='select-browser'){
+    preferenceError='';
+    pendingBrowser=payload.browser;
+    if(!preferenceFlight)preferenceFlight=saveBrowser();
+    return preferenceFlight;
+  }
+  if(actionBusy&&payload.type!=='cancel')return;
+  if(payload.type!=='cancel'&&preferenceFlight)await preferenceFlight;
+  if(payload.type!=='cancel'&&pendingBrowser!==null){
+    if(!preferenceFlight)preferenceFlight=saveBrowser();
+    await preferenceFlight;
+    if(pendingBrowser!==null){
+      preferenceError='浏览器选择未保存，请重新选择后重试。';
+      render();return;
+    }
+  }
+  if(stopped||(actionBusy&&payload.type!=='cancel'))return;
+  const ticket=++actionTicket;actionBusy=true;revision+=1;render();
+  try{
+    const next=await postAction({...payload,browser:pendingBrowser||state.selectedBrowser||state.browser});
+    if(!stopped&&ticket===actionTicket&&next){revision+=1;acceptState(next);}
+  }catch(e){ /* 保留当前权威状态；只读同步仍可恢复，不模拟成功。 */ }
+  finally{if(ticket===actionTicket){actionBusy=false;render();}scheduleSync();}
+}
+async function refresh(){
+  if(stopped)return;
+  if(reading){scheduleSync();return;}
+  reading=true;const requestRevision=revision;
+  const controller=new AbortController();readController=controller;
+  const deadline=setTimeout(()=>controller.abort(),3000);
+  try{
+    const r=await fetch('/api/state',{signal:controller.signal});const j=await r.json();
+    if(!stopped&&requestRevision===revision&&r.ok)acceptState(j.state);
+  }catch(e){ /* 读取失败保持真实旧态；下次串行读取可恢复。 */ }
+  finally{clearTimeout(deadline);if(readController===controller)readController=null;reading=false;scheduleSync();}
+}
 function chrome(){ return state.browser||'系统默认浏览器' }
-function actionsRow(actions){ return '<div class="row">'+actions.map(a=>'<button class="'+(a.kind==='primary'?'primary':a.kind==='secondary'?'secondary':'text-btn')+'" data-act="'+esc(a.id)+'">'+esc(a.label)+'</button>').join('')+'</div>' }
+function actionsRow(actions){ return '<div class="row" aria-busy="'+actionBusy+'">'+actions.map(a=>'<button class="'+(a.kind==='primary'?'primary':a.kind==='secondary'?'secondary':'text-btn')+'" data-act="'+esc(a.id)+'"'+(actionBusy&&a.id!=='cancel'?' disabled':'')+'>'+esc(a.label)+'</button>').join('')+'</div>' }
 function body(){
   const v=state.view||state.status;
   if(v==='S2'){ const steps=['检查本地服务','准备工作台','打开浏览器'].map((t,i)=>'<li class="'+(i<state.step?'done':i===state.step?'active':'')+'"><span class="step-icon">'+(i<state.step?svg('check'):i===state.step?'<span class="spin"></span>':String(i+1))+'</span>'+t+'</li>').join('');
@@ -89,18 +172,26 @@ function body(){
   const options=(state.browsers||['系统默认浏览器']).map(b=>'<button role="option" aria-selected="'+(currentBrowser===b)+'" data-browser="'+esc(b)+'"><span class="browser-mark">'+(b==='系统默认浏览器'?'↗':esc(b.charAt(0)))+'</span>'+esc(b)+(currentBrowser===b?'<span class="selected">'+svg('check')+'</span>':'')+'</button>').join('');
   return '<div class="brand"><div class="app-icon">'+svg('app')+'</div><div><h2>PM 工作台</h2><p>DeepSeek Harness · 本地入口</p></div></div>'
     +'<div class="status-line"><span class="status-dot '+(running?'':'off')+'"></span>'+(running?'工作台已在运行':'工作台尚未启动')+'</div><p class="sub">'+(running?'将打开现有服务，不重复启动；复用依赖该浏览器既有登录态。':'点击打开后，自动启动本地服务。')+'</p>'
-    +'<div class="form-label" id="browser-label">打开方式</div><div class="browser-field"><button class="browser-select" id="browser-toggle" aria-labelledby="browser-label" aria-haspopup="listbox" aria-expanded="'+menuOpen+'"><span class="browser-current"><span class="browser-mark">'+(currentBrowser==='系统默认浏览器'?'↗':esc(currentBrowser.charAt(0)))+'</span>'+esc(currentBrowser)+'</span>'+svg('chevron')+'</button>'+(menuOpen?'<div class="menu" role="listbox" aria-label="选择浏览器">'+options+'</div>':'')+'</div>'
+    +'<div class="form-label" id="browser-label">打开方式</div><div class="browser-field"><button class="browser-select" id="browser-toggle" data-act="browser-toggle" aria-labelledby="browser-label" aria-haspopup="listbox" aria-expanded="'+menuOpen+'"><span class="browser-current"><span class="browser-mark">'+(currentBrowser==='系统默认浏览器'?'↗':esc(currentBrowser.charAt(0)))+'</span>'+esc(currentBrowser)+'</span>'+svg('chevron')+'</button>'+(menuOpen?'<div class="menu" role="listbox" aria-label="选择浏览器">'+options+'</div>':'')+'</div>'
+    +(preferenceError?'<p class="safe-line" role="alert">'+esc(preferenceError)+'</p>':'')
     +actionsRow([{id:'open',label:'打开 PM 工作台',kind:'primary'}]);
 }
 function render(){
-  document.body.dataset.theme=state.theme||'light';
+  if(stopped)return;
+  const focusedId=document.activeElement?.id;
+  const focusedBrowser=document.activeElement?.dataset.browser;
+  const focusedAction=document.activeElement?.dataset.act;
+  document.body.dataset.theme=localTheme;
   document.getElementById('root').innerHTML=body();
   document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{ const id=b.dataset.act; if(id==='toggle-detail'){detailOpen=!detailOpen;render();return;} if(id==='browser-toggle'){menuOpen=!menuOpen;render();return;} act({type:id,browser:state.selectedBrowser||state.browser}); });
-  document.querySelectorAll('[data-browser]').forEach(b=>b.onclick=()=>{ state.selectedBrowser=b.dataset.browser; state.browser=b.dataset.browser; menuOpen=false; act({type:'select-browser',browser:state.selectedBrowser}); });
-  const t=document.getElementById('theme-toggle'); if(t)t.onclick=()=>{ state.theme=state.theme==='dark'?'light':'dark'; render(); };
-  const c=document.getElementById('close'); if(c)c.onclick=()=>{ document.querySelector('.window').remove(); };
+  document.querySelectorAll('[data-browser]').forEach(b=>b.onclick=()=>{ state.selectedBrowser=b.dataset.browser; menuOpen=false;render(); act({type:'select-browser',browser:state.selectedBrowser});document.getElementById('browser-toggle')?.focus(); });
+  const t=document.getElementById('theme-toggle'); if(t)t.onclick=()=>{ localTheme=localTheme==='dark'?'light':'dark';state.theme=localTheme; render(); };
+  const c=document.getElementById('close'); if(c)c.onclick=()=>{ stopSync();document.querySelector('.window')?.remove(); };
+  const focused=focusedId?document.getElementById(focusedId):focusedBrowser?[...document.querySelectorAll('[data-browser]')].find(b=>b.dataset.browser===focusedBrowser):focusedAction?[...document.querySelectorAll('[data-act]')].find(b=>b.dataset.act===focusedAction):null;
+  focused?.focus();
 }
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ menuOpen=false; detailOpen=false; render(); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ menuOpen=false; detailOpen=false; render();document.getElementById('browser-toggle')?.focus(); } });
+window.addEventListener('pagehide',stopSync,{once:true});
 render(); refresh();
 </script>
 </body>

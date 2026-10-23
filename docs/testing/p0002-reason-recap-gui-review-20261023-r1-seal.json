@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-22T21:41:34.509Z",
+  "mode": "seal",
+  "status": "SEALED",
+  "exitCode": 0,
+  "protectedInputCount": 481,
+  "protectedInputsDrift": [],
+  "original439Integrity": true,
+  "originalGatewayRowMatches": 1,
+  "reportLinkErrors": [],
+  "whitespaceErrors": [],
+  "ownOutputs": {
+    "docs/testing/p0002-reason-recap-gui-review-20261023-r1-audit.json": {
+      "bytes": 264607,
+      "sha256": "a0bc606e6c3aa293bd9a7ff99f2092d0f140a2aa5157312817abab0342494dc7"
+    },
+    "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md": {
+      "bytes": 17012,
+      "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e"
+    },
+    "/tmp/p0002-reason-recap-gui-review-20261023-r1-reader.mjs": {
+      "bytes": 25149,
+      "sha256": "64ea7e0b64148b61f198b59622d00b0a3db21cc2cf47309eae1a99a3ae426eb3"
+    }
+  },
+  "originalId": "RA-P0002",
+  "verdict": "PASS_LIMITED_P0002_REASON_GUI_AND_ORIGINAL_ASSERTION_COMBINATION",
+  "exactRemaining": [],
+  "historicalReasonVisual": "BLOCKED_NOT_RECOVERED",
+  "currentMainRepairsSigned": false,
+  "fullP0OrB8OrParentGateSigned": false,
+  "ordinaryCommitAuthorizedByThisRole": false,
+  "pushReleaseAuthorized": false,
+  "resources": "released/STOP"
+}

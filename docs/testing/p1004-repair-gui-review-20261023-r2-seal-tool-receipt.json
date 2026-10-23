@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-23",
+  "role": "trae 独立原 P1004 GUI 审证专家",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.4037,
+  "actualToolStatus": "Process exited with code 0",
+  "actualToolStdout": "{\"mode\":\"seal\",\"pid\":29020,\"parentPID\":29018,\"sealSha256\":\"d1d1aed512932f2d7543adca89f90fbdbf711951024c11271e3ea50c0f3d4443\",\"inputsUnchanged\":1333,\"reportFormat\":{\"localLinks\":12,\"trailingWhitespace\":0,\"finalNewline\":true},\"status\":0}",
+  "origin": "观察本次exec_command真实终码后落盘，不是reader自填预计成功；本次实际内层PID来自stdout和seal.ownProcessReceipt",
+  "parentPID": 29018,
+  "childPID": 29020,
+  "signal": null,
+  "seal": {
+    "file": "docs/testing/p1004-repair-gui-review-20261023-r2-seal.json",
+    "sha256": "d1d1aed512932f2d7543adca89f90fbdbf711951024c11271e3ea50c0f3d4443"
+  },
+  "exclusion": "seal自身及本后置实际工具收据不循环自指纹",
+  "verified": {
+    "members": 1314,
+    "frames": 179,
+    "rawStates": 26,
+    "rawFiles": 988,
+    "stableInputs": 1333,
+    "localLinks": 12,
+    "trailingWhitespace": 0
+  },
+  "limitedVerdict": {
+    "P1004FirstHandoffDirectCancelX": "PASS_LIMITED_GUI_REPAIR",
+    "seamStyleUX": "PASS_LIMITED_SEAM",
+    "nativeEnterTargetTabEscapeReturnFocus": "PASS_LIMITED_KEYBOARD_SEAM",
+    "nativeTabArrivalAtOpener": "NOT_RUN，实际0次，不签",
+    "fullB8ParentCommitOtherRepairs": "NOT_SIGNED_THIS_ROLE"
+  },
+  "productExecutions": 0,
+  "GUIExecutions": 0,
+  "gitExecutions": 0,
+  "spawn": 0,
+  "resources": "released / STOP；同步自有命令均退出；无builder/GUI/桌面/浏览器/port/profile/data锁。不提交、不推送、不发布、不正式切。"
+}

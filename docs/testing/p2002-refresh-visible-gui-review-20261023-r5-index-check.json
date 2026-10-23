@@ -1,0 +1,675 @@
+{
+  "platform": "trae",
+  "role": "独立 P2002 后置封签接续专家，仅封存原证读取与有限裁定",
+  "mode": "index",
+  "startedAt": "2026-10-23T02:45:42.630Z",
+  "endedAt": "2026-10-23T02:45:42.717Z",
+  "durationMs": 87,
+  "environment": {
+    "os": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "pid": 62549
+  },
+  "index": {
+    "bytes": 20210,
+    "sha256": "adaafbf104eef570d521cbaf327584facd089aacf13f6d7113da202ee4c31d87"
+  },
+  "members": 118,
+  "physicalFiles": 121,
+  "drift": [],
+  "mainSeal": {
+    "at": "2026-10-23T01:05:44.063Z",
+    "members": 118,
+    "indexSha256": "adaafbf104eef570d521cbaf327584facd089aacf13f6d7113da202ee4c31d87",
+    "frames": 13,
+    "scope": "仅原P2002刷新后三行同屏缺图，Main不自判PASS",
+    "root47Unchanged": true,
+    "requests": 1,
+    "writes": 0,
+    "excluded": [
+      "index-r1.json",
+      "seal.json",
+      "seal-outer-receipt.json"
+    ],
+    "outer": {
+      "start": "2026-10-23T01:05:43.784Z",
+      "end": "2026-10-23T01:05:44.072Z",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-p2002-tree-refresh-r4-seal.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "parentPid": 39779,
+      "childPid": 39780,
+      "status": 0,
+      "signal": null,
+      "stdout": "{\"sealed\":118,\"indexSha256\":\"adaafbf104eef570d521cbaf327584facd089aacf13f6d7113da202ee4c31d87\",\"frames\":13,\"root47Unchanged\":true}\n",
+      "stderr": ""
+    }
+  },
+  "mainCapture": {
+    "start": "2026-10-23T01:05:24.684Z",
+    "end": "2026-10-23T01:05:26.083Z",
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/plans/2026-10-23-p2002-tree-refresh-r4-capture.mjs"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "parentPid": 39622,
+    "childPid": 39623,
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"origin\":\"http://127.0.0.1:3269\",\"protected47\":true,\"ids\":[\"t-0009\",\"t-0010\",\"t-0011\"],\"rows\":[{\"id\":\"t-0009\",\"text\":\"8\\nP2002-R3出站父任务\\n0/2 完成\\n已导出 · 最近\\n21:23\\n· 外部为唯一事实源\\n未指派\\n—\\n客观 证据不足\\n覆盖 0/2\\n原手填 0%\",\"bbox\":{\"x\":535,\"y\":330.3828125,\"width\":877,\"height\":56.890625,\"top\":330.3828125,\"right\":1412,\"bottom\":387.2734375,\"left\":535},\"slots\":[{\"text\":\"已导出 · 最近\\n21:23\\n· 外部为唯一事实源\",\"at\":\"2026-10-22T21:23:08.315Z\",\"bbox\":{\"x\":663,\"y\":366.328125,\"width\":205,\"height\":15.9453125,\"top\":366.328125,\"right\":868,\"bottom\":382.2734375,\"left\":663}}]},{\"id\":\"t-0010\",\"text\":\"8.1\\nP2002-R3出站子任务甲\\n未开始\\n进行中\\n受阻\\n已完成\\n已收尾\\n已导出 · 最近\\n21:23\\n· 外部为唯一事实源\\n–\\n未指派\\nP1\\n客观 证据不足\\n覆盖 0/1\\n原手填 0%\",\"bbox\":{\"x\":535,\"y\":387.2734375,\"width\":877,\"height\":85.1875,\"top\":387.2734375,\"right\":1412,\"bottom\":472.4609375,\"left\":535},\"slots\":[{\"text\":\"已导出 · 最近\\n21:23\\n· 外部为唯一事实源\",\"at\":\"2026-10-22T21:23:08.315Z\",\"bbox\":{\"x\":663,\"y\":451.515625,\"width\":205,\"height\":15.9453125,\"top\":451.515625,\"right\":868,\"bottom\":467.4609375,\"left\":663}}]},{\"id\":\"t-0011\",\"text\":\"8.2\\nP2002-R3出站子任务乙\\n未开始\\n进行中\\n受阻\\n已完成\\n已收尾\\n已导出 · 最近\\n21:23\\n· 外部为唯一事实源\\n–\\n未指派\\nP1\\n客观 证据不足\\n覆盖 0/1\\n原手填 0%\",\"bbox\":{\"x\":535,\"y\":564.90625,\"width\":877,\"height\":85.1875,\"top\":564.90625,\"right\":1412,\"bottom\":650.09375,\"left\":535},\"slots\":[{\"text\":\"已导出 · 最近\\n21:23\\n· 外部为唯一事实源\",\"at\":\"2026-10-22T21:23:08.315Z\",\"bbox\":{\"x\":663,\"y\":629.1484375,\"width\":205,\"height\":15.9453125,\"top\":629.1484375,\"right\":868,\"bottom\":645.09375,\"left\":663}}]}]}\n",
+    "stderr": ""
+  },
+  "inputReads": [
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/index-r1.json",
+      "bytes": 20210,
+      "sha256": "adaafbf104eef570d521cbaf327584facd089aacf13f6d7113da202ee4c31d87"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/activation-binding.json",
+      "bytes": 1550,
+      "sha256": "8bb339b5e506829fc8ec7f0a13cd300fb87d326caa636c37024102396d2b7961"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/built-artifacts.json",
+      "bytes": 63704,
+      "sha256": "7da06d7ce5068439ceff2e55be7635f8a7d234e5eecb5c49b78cd179b286a9d5"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/candidate.json",
+      "bytes": 1708,
+      "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-executor-source.mjs",
+      "bytes": 2969,
+      "sha256": "36a067aa5a1435f6442438f572bab35d29000e4573af4825f211f45232319158"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-outer-receipt.json",
+      "bytes": 2466,
+      "sha256": "ec79873b36d939fac2a0244c9fb78022c3c57e2f8698d282e2e6b8a62ad6420a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/capture-outer-start.json",
+      "bytes": 297,
+      "sha256": "df7116a1429d90aa890257477bf1c325f3097ff413b9e46e6268853c15eae616"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/complete-inputs.json",
+      "bytes": 75604,
+      "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-0.jpg",
+      "bytes": 80142,
+      "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-1.jpg",
+      "bytes": 80142,
+      "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-10.jpg",
+      "bytes": 79028,
+      "sha256": "9f685fc71e1c74b1d6ad04b4f7f03879122327b7158060c31514a88bd92e8e86"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-11.jpg",
+      "bytes": 80142,
+      "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-12.jpg",
+      "bytes": 80142,
+      "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-2.jpg",
+      "bytes": 79027,
+      "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-3.jpg",
+      "bytes": 79027,
+      "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-4.jpg",
+      "bytes": 78889,
+      "sha256": "54d3ab8789f9151f3e4867ca8899edd8e6df414810bd117475fdb4ef51bb1159"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-5.jpg",
+      "bytes": 78889,
+      "sha256": "4bad4603be5a223d892b6fcfef43ab6e96b16f949a44dec7eb0caad777df23d1"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-6.jpg",
+      "bytes": 79009,
+      "sha256": "4b02fbba2f117d239c86f184c0e03ae3bffa51a41287ec828a0b03fa22c3b55b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-7.jpg",
+      "bytes": 79040,
+      "sha256": "d2084b67784bbb1273659492d643d09dcb8eb8eb7e2a8ac8f0a54100c3857f18"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-8.jpg",
+      "bytes": 79051,
+      "sha256": "6391bda4c629e12c9f520b66cd45f945af44c674434b0324e70c232f9e341fa4"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/frames/round01-refreshed-tree-visible-9.jpg",
+      "bytes": 79027,
+      "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/harness-source.mjs",
+      "bytes": 5049,
+      "sha256": "4617f66981f86eff5b26bd7fb065db04aaf04c7c2d79ea9779c255a73f4592fe"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-final-roots.json",
+      "bytes": 7290,
+      "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-ids.json",
+      "bytes": 1165,
+      "sha256": "7b13bc48e8f86c04860739525231b8a557ebafd42266393af0cc59b411cae422"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/original-r3-report.md",
+      "bytes": 13550,
+      "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-rows.json",
+      "bytes": 8136,
+      "sha256": "5be6e111046792a920909ca8f64207f5c9f82719b0dea1c63cd7f988486aaa1d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/deliverables/dlv-0001.json",
+      "bytes": 1125,
+      "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/deliverables/dlv-0002.json",
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/file_assets/fa-0001.json",
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/file_assets/fa-0002.json",
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "bytes": 377,
+      "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json",
+      "bytes": 448,
+      "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/meetings/mtg-0001.json",
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/milestones/m-0001.json",
+      "bytes": 317,
+      "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json",
+      "bytes": 364,
+      "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json",
+      "bytes": 388,
+      "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json",
+      "bytes": 329,
+      "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0002.json",
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/projects/p-0003.json",
+      "bytes": 320,
+      "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json",
+      "bytes": 852,
+      "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json",
+      "bytes": 875,
+      "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json",
+      "bytes": 873,
+      "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/reports/rpt-0001.json",
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/risk_issues/ri-0001.json",
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/aiModelMode.json",
+      "bytes": 103,
+      "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/askApplyIdempotency.json",
+      "bytes": 362,
+      "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportAudit.json",
+      "bytes": 1723,
+      "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportSent.json",
+      "bytes": 1335,
+      "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmExportSentArchive.json",
+      "bytes": 347,
+      "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmOkrInbox.json",
+      "bytes": 886,
+      "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmProvenanceLedger.json",
+      "bytes": 3829,
+      "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/settings/pmProvenancePending.json",
+      "bytes": 124,
+      "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 3414,
+      "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 574,
+      "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 502,
+      "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 655,
+      "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 469,
+      "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 400,
+      "sha256": "2f0653bb809d9fe579ff0e33fe03e5fd78f5bf72dc2c1df6bdfd7a18ec7ef762"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 409,
+      "sha256": "9cefa5d85da49a4a4773bf0c15e920346c303652839cccd35e8d60d4777b0a81"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-raw/data/pmtool/tasks/t-0011.json",
+      "bytes": 409,
+      "sha256": "a5660bbf880081275368352bd82f02a5f59312ebaf099469c5e87f36f4ba0243"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible-roots.json",
+      "bytes": 7290,
+      "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible.json",
+      "bytes": 14260,
+      "sha256": "20204d539a65e6ad4e03014c12f114753816e86c6387425c8b15b9af0b3e68a6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-after-refresh-tree-visible.png",
+      "bytes": 395509,
+      "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/deliverables/dlv-0001.json",
+      "bytes": 1125,
+      "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/deliverables/dlv-0002.json",
+      "bytes": 574,
+      "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/file_assets/fa-0001.json",
+      "bytes": 388,
+      "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/file_assets/fa-0002.json",
+      "bytes": 383,
+      "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "bytes": 377,
+      "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json",
+      "bytes": 448,
+      "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "bytes": 368,
+      "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/meetings/mtg-0001.json",
+      "bytes": 579,
+      "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/milestones/m-0001.json",
+      "bytes": 317,
+      "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "bytes": 311,
+      "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json",
+      "bytes": 364,
+      "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json",
+      "bytes": 388,
+      "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json",
+      "bytes": 329,
+      "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 307,
+      "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0002.json",
+      "bytes": 307,
+      "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/projects/p-0003.json",
+      "bytes": 320,
+      "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "bytes": 979,
+      "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json",
+      "bytes": 852,
+      "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json",
+      "bytes": 875,
+      "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json",
+      "bytes": 873,
+      "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/reports/rpt-0001.json",
+      "bytes": 1782,
+      "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/risk_issues/ri-0001.json",
+      "bytes": 398,
+      "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/aiModelMode.json",
+      "bytes": 103,
+      "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/askApplyIdempotency.json",
+      "bytes": 362,
+      "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportAudit.json",
+      "bytes": 1723,
+      "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportSent.json",
+      "bytes": 1335,
+      "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmExportSentArchive.json",
+      "bytes": 347,
+      "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmOkrInbox.json",
+      "bytes": 886,
+      "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmProvenanceLedger.json",
+      "bytes": 3829,
+      "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/settings/pmProvenancePending.json",
+      "bytes": 124,
+      "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 3414,
+      "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 804,
+      "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 563,
+      "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 1645,
+      "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 574,
+      "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 502,
+      "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 655,
+      "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 469,
+      "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 400,
+      "sha256": "2f0653bb809d9fe579ff0e33fe03e5fd78f5bf72dc2c1df6bdfd7a18ec7ef762"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 409,
+      "sha256": "9cefa5d85da49a4a4773bf0c15e920346c303652839cccd35e8d60d4777b0a81"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-raw/data/pmtool/tasks/t-0011.json",
+      "bytes": 409,
+      "sha256": "a5660bbf880081275368352bd82f02a5f59312ebaf099469c5e87f36f4ba0243"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh-roots.json",
+      "bytes": 7290,
+      "sha256": "27610df97f2eeac2ccdac41f45558bde8f1f3930ab9eb56aac1d0cac51626f45"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh.json",
+      "bytes": 14288,
+      "sha256": "3dcbbab2b16ece05f5ffac510c51842c074e457bba596dbb91a1a62a5c5ce4da"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-before-refresh.png",
+      "bytes": 395509,
+      "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-refresh-snapshot.json",
+      "bytes": 16730,
+      "sha256": "d2ec8e54fee83d830d2d754c2b6125ce19cd9c1d7a5c39620b1270cfda3332ee"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/round01-refreshed-tree-visible-events.json",
+      "bytes": 22978,
+      "sha256": "f7fc3242cf227aacb520180c3312632ec418b5c081a7e1f60875f54ea04cca2d"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-executor-source.mjs",
+      "bytes": 1567,
+      "sha256": "08cff529d775730b89bf67d7df2e8c0281e7a3de8500c888746c8845554c3c48"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-outer-start.json",
+      "bytes": 294,
+      "sha256": "76f17897be7dd976923340e743d10ccf2ef77b62e52fcaff83bac95006d672f6"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/source-files.json",
+      "bytes": 15902,
+      "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal.json",
+      "bytes": 378,
+      "sha256": "b783022e37cd26fa038c6ff97bbc93a18c518c25adb66820ea5140e0045d9f9c"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/P2002TreeRefreshR4/seal-outer-receipt.json",
+      "bytes": 559,
+      "sha256": "04152851652b602af0f4025992c668ca92fd79efe6f8f0844edcc1d54875354e"
+    }
+  ],
+  "inputDrift": []
+}

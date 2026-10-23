@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-22T22:35:01.664Z",
+  "reviewer": "trae independent GUI evidence reviewer",
+  "inputCount": 2131,
+  "drift": [],
+  "outputs": {
+    "docs/testing/p1-history-remaining-gui-review-20261023-r1.md": {
+      "bytes": 13184,
+      "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7"
+    },
+    "docs/testing/p1-history-remaining-gui-review-20261023-r1-audit.mjs": {
+      "bytes": 12969,
+      "sha256": "8fcd02153fb3a200527943d5db83c63b4bfbc62746848a5508fd0ddb4f2f39e8"
+    },
+    "docs/testing/p1-history-remaining-gui-review-20261023-r1-audit.json": {
+      "bytes": 529680,
+      "sha256": "7b1550bb552dd721dccf70a4a114f65f2d22703735f804b20f1f9dd515422163"
+    },
+    "docs/testing/p1-history-remaining-gui-review-20261023-r1-verdict.json": {
+      "bytes": 6388,
+      "sha256": "b5f0608d0c36a474e0654f369cdaff257986db4d58ee39550301779b51eedec9"
+    }
+  },
+  "originalEvidenceCount": 2122,
+  "originalIndexSha256": "229946f9f242766b58ecb986c26fbf59fa1e6ffbf554b58dc0e0ba62e6d9a5bc",
+  "decision": "LIMITED_SLICE_PASS_WITH_EXACT_REMAINING",
+  "parentCommitPass": false,
+  "combinedSixFixPass": false,
+  "stopped": true,
+  "writes": "Only new files under the authorized review prefix"
+}

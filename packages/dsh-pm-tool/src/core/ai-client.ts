@@ -114,6 +114,14 @@ async function attempt(
   for await (const chunk of call.stream(streamOptions)) {
     assembler.push(chunk as Parameters<typeof assembler.push>[0])
   }
+  // blocks 会保留终止失败前的部分正文；先判 finish，不能把可解析的半份草稿当成功。
+  const finish = assembler.finish
+  if (finish?.kind === 'aborted') {
+    throw new AiDraftError('ABORTED', '模型请求已取消或中断，请按需重新发起。')
+  }
+  if (finish?.kind === 'error') {
+    throw normalizeError(finish.failure, `${candidate.provider}/${candidate.model}`)
+  }
   const text = assembler.blocks()
     .filter(block => block.type === 'text')
     .map(block => (block as { text: string }).text)
@@ -131,27 +139,25 @@ async function attempt(
  */
 const NON_RETRYABLE = new Set([
   'RATE_LIMIT', 'QUOTA_EXCEEDED', 'CONTEXT_OVERFLOW',
-  'INVALID_CREDENTIAL', 'NO_ADAPTER', 'MISSING_CREDENTIAL',
+  'INVALID_CREDENTIAL', 'NO_ADAPTER', 'MISSING_CREDENTIAL', 'ABORTED',
 ])
 
 /** 把上游英文错误归一为中文 AiDraftError（不泄露原始英文堆栈）。 */
 function normalizeError(error: unknown, attempted: string): AiDraftError {
   if (error instanceof AiDraftError) return error
-  // 超时/中断：上游 AbortError/TimeoutError 或自带 timeout signal 触发，归一为中文超时。
-  const name = (error as { name?: string })?.name
-  const message = String((error as { message?: string })?.message ?? '')
-  if (name === 'AbortError' || name === 'TimeoutError' || /aborted|timeout/i.test(message)) {
-    return new AiDraftError('MODEL_TIMEOUT', '模型超时或被中断，请重试一次。')
-  }
+  // 真实协议稳定码优先；保留旧内部别名，不让故障原文中的 timeout/aborted 覆盖硬码。
   const raw = (error as { code?: string })?.code
   const code = String(raw ?? 'AI_DRAFT_FAILED')
   if (code === 'RATE_LIMIT') {
     return new AiDraftError('RATE_LIMIT', '模型服务限流，请稍后再试。')
   }
-  if (code === 'CONTEXT_OVERFLOW') {
+  if (code === 'CONTEXT_WINDOW_EXCEEDED' || code === 'CONTEXT_OVERFLOW') {
     return new AiDraftError('CONTEXT_OVERFLOW', '输入内容过长，请精简后重试。')
   }
-  if (code === 'INVALID_CREDENTIAL') {
+  if (code === 'QUOTA' || code === 'QUOTA_EXCEEDED') {
+    return new AiDraftError('QUOTA_EXCEEDED', '模型服务额度不足，请检查配额或余额后重试。')
+  }
+  if (code === 'AUTH' || code === 'INVALID_CREDENTIAL') {
     return new AiDraftError('INVALID_CREDENTIAL', `模型 ${attempted} 凭据无效或已失效，请检查 API Key。`)
   }
   if (code === 'NO_ADAPTER') {
@@ -163,6 +169,21 @@ function normalizeError(error: unknown, attempted: string): AiDraftError {
       '生产模型凭据缺失（CODING_PLAN_API_KEY）：请在「设置 → 模型」录入方舟 Coding Plan Key，'
       + '或用 /pm model mode poc 切回验证车道。',
     )
+  }
+  if (code === 'ABORTED') {
+    return new AiDraftError('ABORTED', '模型请求已取消或中断，请按需重新发起。')
+  }
+  if (code === 'TIMEOUT' || code === 'MODEL_TIMEOUT') {
+    return new AiDraftError('MODEL_TIMEOUT', '模型超时或被中断，请重试一次。')
+  }
+  if (code === 'EMPTY_RESPONSE') {
+    return new AiDraftError('EMPTY', `模型 ${attempted} 未返回正文。`)
+  }
+  // 兼容未带稳定码的直接抛错；一般结构化失败不凭报文猜成超时。
+  const name = (error as { name?: string })?.name
+  const message = String((error as { message?: string })?.message ?? '')
+  if (raw == null && (name === 'AbortError' || name === 'TimeoutError' || /aborted|timeout/i.test(message))) {
+    return new AiDraftError('MODEL_TIMEOUT', '模型超时或被中断，请重试一次。')
   }
   return new AiDraftError(code, `模型 ${attempted} 生成失败，请稍后重试。`)
 }

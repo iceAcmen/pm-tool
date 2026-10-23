@@ -1,0 +1,233 @@
+{
+  "startedAt": "2026-10-21T12:50:04.330Z",
+  "finishedAt": "2026-10-21T12:50:07.293Z",
+  "round": "r2",
+  "root": "/tmp/pmtool-reopen-handshake-diagnosis-20261021.uOtK7e/r2",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node"
+  },
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "before": {
+    "packages/dsh-pm-tool/src/client/launch-handshake.ts": "c7303c993809b41790f9f299d9818c73facbcb888dbe058aab414b20a1081057",
+    "packages/dsh-pm-tool/src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "packages/dsh-pm-tool/src/client/index.tsx": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+    "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": "0fd3d9c1dd23495c10900e85159ebf29810d09c99eb629c356ef973896cac2be"
+  },
+  "after": {
+    "packages/dsh-pm-tool/src/client/launch-handshake.ts": "c7303c993809b41790f9f299d9818c73facbcb888dbe058aab414b20a1081057",
+    "packages/dsh-pm-tool/src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "packages/dsh-pm-tool/src/client/index.tsx": "e5702c69f788e4513a78f2e2861ef87d08f1bfa7ea2dce3807ed600505340f89",
+    "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": "0fd3d9c1dd23495c10900e85159ebf29810d09c99eb629c356ef973896cac2be"
+  },
+  "sourceBytesUnchanged": true,
+  "tests": [
+    {
+      "id": "R01",
+      "contract": "首次N1回告且只在成功后清hash，omit且body仅nonce",
+      "status": "PASS",
+      "actual": {
+        "calls": [
+          {
+            "url": "http://127.0.0.1:18345/api/entered",
+            "method": "POST",
+            "credentials": "omit",
+            "body": {
+              "nonce": "N1"
+            }
+          }
+        ],
+        "hash": ""
+      }
+    },
+    {
+      "id": "R02",
+      "contract": "同token在途合并，成功后重复ready不重复发",
+      "status": "PASS",
+      "actual": {
+        "count": 1
+      }
+    },
+    {
+      "id": "R03",
+      "contract": "失败保hash，下次成功ready可重试",
+      "status": "PASS",
+      "actual": {
+        "count": 2
+      }
+    },
+    {
+      "id": "R04",
+      "contract": "无token不发，后续新token正常发",
+      "status": "PASS",
+      "actual": {
+        "count": 1,
+        "hash": "#/projects"
+      }
+    },
+    {
+      "id": "R05",
+      "contract": "同实例N1成功后换N2，ready必须发N2而非借N1成功",
+      "status": "FAIL",
+      "actual": {
+        "returned": true,
+        "nonces": [
+          "N1"
+        ],
+        "hash": "#pm-launch=18345.N2"
+      },
+      "expected": {
+        "returned": true,
+        "nonces": [
+          "N1",
+          "N2"
+        ],
+        "hash": ""
+      },
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   hash: '#pm-launch=18345.N2',\n-   hash: '',\n    nonces: [\n      'N1',\n-     'N2'\n    ],\n    returned: true\n  }\n"
+    },
+    {
+      "id": "R06",
+      "contract": "token身份包含port，相同合成nonce换port仍需发",
+      "status": "FAIL",
+      "actual": [
+        "http://127.0.0.1:18345/api/entered"
+      ],
+      "expected": [
+        "http://127.0.0.1:18345/api/entered",
+        "http://127.0.0.1:18346/api/entered"
+      ],
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'http://127.0.0.1:18345/api/entered',\n-   'http://127.0.0.1:18346/api/entered'\n  ]\n"
+    },
+    {
+      "id": "R07",
+      "contract": "旧N1在途后URL变N2，旧成功不得清N2",
+      "status": "FAIL",
+      "actual": {
+        "hash": "#/projects",
+        "clears": [
+          "#/projects"
+        ],
+        "nonces": [
+          "N1"
+        ]
+      },
+      "expected": {
+        "hash": "#/projects&pm-launch=18345.N2",
+        "clears": [],
+        "nonces": [
+          "N1"
+        ]
+      },
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   clears: [\n+     '#/projects'\n+   ],\n+   hash: '#/projects',\n-   clears: [],\n-   hash: '#/projects&pm-launch=18345.N2',\n    nonces: [\n      'N1'\n    ]\n  }\n"
+    },
+    {
+      "id": "R08",
+      "contract": "跨token在途ready不能借旧Promise成功，最终必须发N2",
+      "status": "FAIL",
+      "actual": {
+        "samePromise": true,
+        "nonces": [
+          "N1"
+        ]
+      },
+      "expected": {
+        "samePromise": false,
+        "nonces": [
+          "N1",
+          "N2"
+        ]
+      },
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    nonces: [\n      'N1',\n-     'N2'\n    ],\n+   samePromise: true\n-   samePromise: false\n  }\n"
+    },
+    {
+      "id": "R09",
+      "contract": "新实例在N2的反证：能够发送而非终身记忆N1",
+      "status": "PASS",
+      "actual": {
+        "nonces": [
+          "N1",
+          "N2"
+        ]
+      }
+    },
+    {
+      "id": "R10",
+      "contract": "旧在途失败不清新N2，后续成功ready发新N2",
+      "status": "PASS",
+      "actual": {
+        "nonces": [
+          "N1",
+          "N2"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 4
+  },
+  "panelAst": {
+    "file": "/tmp/pmtool-reopen-handshake-diagnosis-20261021.uOtK7e/r2/panel-ast.json",
+    "sha256": "1b0f088d45e532552e13826594850f4a165e71147408290fb28e8365177e4423"
+  },
+  "dom": {
+    "status": "DIAGNOSIS_REPRODUCED",
+    "version": "Chrome/139.0.7258.155",
+    "pid": 15964,
+    "first": {
+      "label": "N1-ready",
+      "timeOrigin": 1792587006258.8,
+      "hash": "",
+      "hashEvents": 0,
+      "calls": [
+        {
+          "url": "http://127.0.0.1:18345/api/entered",
+          "nonce": "N1"
+        }
+      ]
+    },
+    "hashOnly": {
+      "label": "N2-hash-only",
+      "timeOrigin": 1792587006258.8,
+      "hash": "#pm-launch=18345.N2",
+      "hashEvents": 1,
+      "calls": [
+        {
+          "url": "http://127.0.0.1:18345/api/entered",
+          "nonce": "N1"
+        }
+      ]
+    },
+    "refreshed": {
+      "label": "N2-ready-same-document",
+      "timeOrigin": 1792587006258.8,
+      "hash": "#pm-launch=18345.N2",
+      "hashEvents": 1,
+      "calls": [
+        {
+          "url": "http://127.0.0.1:18345/api/entered",
+          "nonce": "N1"
+        }
+      ]
+    },
+    "reloaded": {
+      "label": "N2-ready-full-reload",
+      "timeOrigin": 1792587006729.6,
+      "hash": "",
+      "hashEvents": 0,
+      "calls": [
+        {
+          "url": "http://127.0.0.1:18345/api/entered",
+          "nonce": "N2"
+        }
+      ]
+    },
+    "errors": [],
+    "blockedRequests": [],
+    "boundary": "Production bridge + fixture button, not React PmPanel or authenticated host; no HTTP server/fetch.",
+    "pidStillPresent": false
+  },
+  "boundary": "Limited diagnosis; no product fix/build/install/server, Main browser, real credentials or whole-product verdict."
+}

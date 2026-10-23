@@ -1,0 +1,228 @@
+{
+  "at": "2026-10-22T23:32:04.434Z",
+  "role": "independent AUTO28 R3 final evidence seal",
+  "root": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a",
+  "verdict": "PASS_LIMITED_AUTO28",
+  "auto9Plus28Closure": "YES_LIMITED: reference unchanged R2 SOURCE/DOM9 + this original28 valid independent execution; no combined37 rerun or F02 GUI/parent PASS",
+  "originalR2Report": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-option-default-source-auto-20261023-r2-report.md",
+    "bytes": 8882,
+    "sha256": "19d6ede7cee232c7ee992a867f3193ac952e44f2a6b0d653a1815854716f3d32"
+  },
+  "originalR2Execution": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-option-default-source-auto-20261023-r2-execution.json",
+    "bytes": 379823,
+    "sha256": "1c9cba8b2d3c04c187efa06356aefd89f383dbb9c968f47622a115eb0ac59d57",
+    "exit": 1,
+    "retained": true
+  },
+  "source": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+    "bytes": 5059,
+    "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+  },
+  "domTestReferenceOnly": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+    "bytes": 10641,
+    "sha256": "841e3fa0591c7a83213572650a73d7c63cf277e50e1ecf56197e8c0e58cc6057"
+  },
+  "developmentIndex": {
+    "bytes": 18102,
+    "sha256": "e9c9e524aac3f63ccc32c4618994d0c9979b68dcd18a3a8f018b44a4520b34c5"
+  },
+  "developmentSeal": {
+    "bytes": 1021,
+    "sha256": "d6be7f26220aad8e23befd7cdb0d1143c88fb3d48e9e8936465a8fedfcd4a49f"
+  },
+  "executionReceipt": {
+    "path": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-command.json",
+    "bytes": 7121,
+    "sha256": "942941de63c92848a17cc7982abc7ed121c9b647f3e64018f12b2f4782b1a049"
+  },
+  "vitestResult": {
+    "path": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-results.json",
+    "bytes": 12297,
+    "sha256": "cbf0dad411e76eab1a81c85b5702e2b319c853393f4a785c92d59acb01690162"
+  },
+  "repositoryFiles": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-audit-final.json": {
+      "bytes": 688980,
+      "sha256": "ee460d88a2629a909c30b3cc88e31878c4cf7640efc00749e8f53697eca6296b"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-audit.json": {
+      "bytes": 685766,
+      "sha256": "b57e19f672651e601345f20c2f406d4fc7947d93a3f6ccdd79856bf8245a4eb5"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-command-audit.md": {
+      "bytes": 5800,
+      "sha256": "1ccb71dc560a6df533ea27479f965eb8f62b7204792bde18a718a1d27953a05f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-command-tool-receipts.json": {
+      "bytes": 5654,
+      "sha256": "7d11bfbf564504f70b65ed2e4ff03d1204d426f3b6aad205c6c2f54a7b0a9b7c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-execution-reconciled.json": {
+      "bytes": 30124,
+      "sha256": "dccfce79883b85463c17a89c072b238c5988301ca945f7f820b6a1fd301f9e2e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-execution.json": {
+      "bytes": 21150,
+      "sha256": "700814fa8cc55d87ae9a815adcad7b0ffad02a96b4d2f1ec5e18440443383a2c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-report.md": {
+      "bytes": 8669,
+      "sha256": "2a227ba16cdd7c1a016b2504401b7e3550d710e0023449967bdbf35c1c6c6877"
+    }
+  },
+  "ownTemporaryFiles": {
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-reconcile-seal.mjs": {
+      "bytes": 11329,
+      "sha256": "f88f5b97b372e3debe966d821e0bbe0e80d834520d747d43517786bebf8d49b4"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-runner.mjs": {
+      "bytes": 18378,
+      "sha256": "c9e7ab3ad0d804e513c91d94fd29bd6e1c9c3a25a18758b576d58bbe94c5e16d"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/audit-final.json": {
+      "bytes": 688980,
+      "sha256": "ee460d88a2629a909c30b3cc88e31878c4cf7640efc00749e8f53697eca6296b"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/audit.json": {
+      "bytes": 685766,
+      "sha256": "b57e19f672651e601345f20c2f406d4fc7947d93a3f6ccdd79856bf8245a4eb5"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/before.json": {
+      "bytes": 348361,
+      "sha256": "7cbb95566e7dc0f04364e9826c02b39f9842b92cd0fa4db5163399f82d13e452"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/execution-reconciled.json": {
+      "bytes": 30124,
+      "sha256": "dccfce79883b85463c17a89c072b238c5988301ca945f7f820b6a1fd301f9e2e"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/execution.json": {
+      "bytes": 21150,
+      "sha256": "700814fa8cc55d87ae9a815adcad7b0ffad02a96b4d2f1ec5e18440443383a2c"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/syntax-config-command.json": {
+      "bytes": 1084,
+      "sha256": "65daba5cd5afb66b13c25752fb332e274a9f665a7b6b46defb2cac99b223fe58"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/syntax-reconcile-command.json": {
+      "bytes": 1038,
+      "sha256": "8ac5b3f3daaa333726b3279b9cf55246af92dab5423e04982b1b85f90dcd2278"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/syntax-runner-command.json": {
+      "bytes": 1058,
+      "sha256": "d6c08c1e67ef337a1408800b034c3639a8999275d0d594afbd3d2bade8c0be5a"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-command.json": {
+      "bytes": 7121,
+      "sha256": "942941de63c92848a17cc7982abc7ed121c9b647f3e64018f12b2f4782b1a049"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-results.json": {
+      "bytes": 12297,
+      "sha256": "cbf0dad411e76eab1a81c85b5702e2b319c853393f4a785c92d59acb01690162"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/vitest-stdout.txt": {
+      "bytes": 5610,
+      "sha256": "9dd16085a3623a448ec9b3a05784a95980440fc4da9c207e083b0925ebda490a"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/config/vitest.mjs": {
+      "bytes": 1071,
+      "sha256": "127c328bac17b471fa7c38cd2e654431acc52eca010470dca18ebad22dd7ae17"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-listbox.tsx": {
+      "bytes": 5059,
+      "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-deliverable-form.tsx": {
+      "bytes": 9686,
+      "sha256": "e2eb1ef86b8e568c78e4ea6f71c4f4fcb19a477d0b5c40b5d07510ceec0f9ca8"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-overlay.tsx": {
+      "bytes": 1316,
+      "sha256": "dfd1f68b4ffe3eaf10bbc95e47c567bf5d63c32919bd9770ca58759173498beb"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-options.ts": {
+      "bytes": 3737,
+      "sha256": "d0af55147e0faaa11e2d4ffd7688a7366b76a4e0fd6c03ce09c944208ac8eeed"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-payloads.ts": {
+      "bytes": 6473,
+      "sha256": "050d216522173edad1ea7a308e3535336b3ed9e8245fbb4071eee30802cfa723"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-history.ts": {
+      "bytes": 1760,
+      "sha256": "6658625630ad2ad001f886cf7a9c0f47ef82ca5c288c15452f0b7ff70a0ec0ec"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records.css": {
+      "bytes": 6842,
+      "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/form-validation.ts": {
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/core/repo-format.ts": {
+      "bytes": 3962,
+      "sha256": "0db54e8a42638dec3da9ffd824cf6efa84c620ee4f8d3a9c751c45c083bee0ac"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/core/labels.ts": {
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/types.ts": {
+      "bytes": 5435,
+      "sha256": "36add9a9fa577c3b847814a50c53bbfe76c8194dd00b6541b4bc71bc7218cbee"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/shared/records-props.ts": {
+      "bytes": 6692,
+      "sha256": "e21646bcd0445d00e6aa18120fe43736eabc8ffdf3bdc4812ba0a0504bf5cc1f"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-deliverable-pointer-dom.test.tsx": {
+      "bytes": 10641,
+      "sha256": "841e3fa0591c7a83213572650a73d7c63cf277e50e1ecf56197e8c0e58cc6057"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-options.test.ts": {
+      "bytes": 3162,
+      "sha256": "6d375abbea8d1dd359c14aeb731e068bfb815e5cc835e1830c9d8b1b8ee75e00"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-payloads.test.ts": {
+      "bytes": 5214,
+      "sha256": "5d7ffa018c01e754857c041fb03c3a42bdca86424f7e9df65c1388195624ff42"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/views/records/records-history.test.ts": {
+      "bytes": 2074,
+      "sha256": "059cce35168dcf1fa1be47e90f5aa3bcfe4ef68b2f3c0d89bfe3cb7d9705c6cf"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/inputs/src/client/form-validation.test.ts": {
+      "bytes": 2356,
+      "sha256": "79b8bb155fb43af792ad76516e8a0e2f85591c5a1464332df0d9ada530705523"
+    }
+  },
+  "protectedInputAggregateSha256": "e199ad2ba12da03d30f956ec0df0494f567325de09a2b9f3415a552f811a1204",
+  "originalR3InfrastructureErrorRetained": {
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/execution.json": {
+      "bytes": 21150,
+      "sha256": "700814fa8cc55d87ae9a815adcad7b0ffad02a96b4d2f1ec5e18440443383a2c"
+    },
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/output/audit.json": {
+      "bytes": 685766,
+      "sha256": "b57e19f672651e601345f20c2f406d4fc7947d93a3f6ccdd79856bf8245a4eb5"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-execution.json": {
+      "bytes": 21150,
+      "sha256": "700814fa8cc55d87ae9a815adcad7b0ffad02a96b4d2f1ec5e18440443383a2c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-audit.json": {
+      "bytes": 685766,
+      "sha256": "b57e19f672651e601345f20c2f406d4fc7947d93a3f6ccdd79856bf8245a4eb5"
+    }
+  },
+  "resources": "released / STOP; one synchronous Vitest child returned exit0; all syntax checks returned; no builder/GUI/service/port/profile/data lock acquired",
+  "excludes": "Seal itself and later external seal-tool receipt excluded to avoid self-reference; caches/home/tmp not evidence; no whole-machine/runtime zero-write claim"
+}

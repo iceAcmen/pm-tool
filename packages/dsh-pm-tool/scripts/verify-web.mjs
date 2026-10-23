@@ -91,6 +91,7 @@ try {
   assert.deepEqual(manifest.dsh.client.inject, [
     '@deepseek-ai/dsh-api-remotes',
     '@deepseek-ai/dsh-api-session-controller',
+    '@deepseek-ai/dsh-client-ui-conversation',
     '@deepseek-ai/dsh-client-ui-layout',
     '@deepseek-ai/dsh-client-ui-sidebar',
   ])

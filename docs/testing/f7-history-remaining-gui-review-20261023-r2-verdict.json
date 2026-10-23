@@ -1,0 +1,169 @@
+{
+  "date": "2026-10-23",
+  "platform": "trae",
+  "role": "独立GUI审证，非执行/开发",
+  "status": "PASS",
+  "qualifier": "仅原F7指定剩余切片，非整门或父commit",
+  "previousReview": {
+    "round": "r1",
+    "state": "中断，send finished，无report",
+    "inheritedVerdict": false,
+    "stillRunningClaim": false
+  },
+  "authorization": {
+    "parent": "持续全部未验独立收口至ordinarycommit，无push/release/正式切",
+    "child": "只读Main封件，独立审证；只新增本r2前缀及自有tmpreader，足证审结后STOP",
+    "gitActions": false,
+    "guiExecution": false,
+    "productDevelopment": false
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "id": "CombinedSuccessor114R1",
+    "version": "0.7.4",
+    "sourceCount": 114,
+    "completeInputCount": 521,
+    "builtMetadataCount": 455,
+    "sourceCopiesActuallyChecked": 6,
+    "portDeclaredInSealedEvidence": 3266,
+    "pidDeclaredInSealedEvidence": 98161,
+    "origin": "http://127.0.0.1:3266",
+    "e2e": "0",
+    "pilot": "OFF",
+    "clientReconstructedBytes": 1719089,
+    "clientReconstructedSha256": "e4bda1dba6cd0d0110fa8eafb9f60e58b8a5cef9c6e1390b2016317b31b5c2d3",
+    "allBuildInputsActuallyRead": false,
+    "sourceMapBytesReviewed": false,
+    "allFiveBrowserScriptsMatchedToBuild": false,
+    "liveServiceChecked": false,
+    "subsequentRepairsIncluded": false
+  },
+  "evidence": {
+    "index": "reports/all-pending-evidence-20261021/F7RemainderR1/index-r1.json",
+    "indexSha256": "dd17a326a318e8f76988d98cfa76bfdbb31a0d807737078ec50789df521c5cc7",
+    "indexedFilesChecked": 231,
+    "differences": 0,
+    "effectiveAudit": "docs/testing/f7-history-remaining-gui-review-20261023-r2-audit-r2.json",
+    "originalBackupSha256": "842759ed3bb840baceda73bb3dddef201eaa56803f38569a3ed7f3735a1470ce",
+    "habitId": "habit-qa-history-20261021",
+    "projectId": "p-0001",
+    "originalCheckIns": 14,
+    "sealedRawCopies": 11,
+    "rawEnvelopeBytes": 2012,
+    "rawEnvelopeSha256": "8edc1bfa099be2ef1fc0e63872173d36e6877dc9f434828f3c035749aed1a5e0",
+    "historyRootManifestsChecked": 11,
+    "entriesPerHistoryRootManifest": 3,
+    "f5ProtectionDifferences": 0,
+    "actualGuiDate": "2026-10-23",
+    "originalFixtureDate": "2026-10-21"
+  },
+  "assertions": [
+    {
+      "original": "B1-GUI-04 §8步骤4 / 原收起余段",
+      "status": "PASS",
+      "scope": "三月从展开经逐月收起到全部折叠",
+      "evidence": ["round11-all-expanded.png", "frames/round11-11.jpg", "round11-all-collapsed.png"]
+    },
+    {
+      "original": "GNHD-M06 / 8月可见纵滚余段",
+      "status": "PASS",
+      "scope": "08-31/18/03/01及四备注可见，18/01补记标记保持",
+      "evidence": ["round11-august-visible.png", "frames/round11-7.jpg", "execution-scripts/round11.mjs"]
+    },
+    {
+      "original": "B1-GUI-04 §8步骤5 / 数据刷新",
+      "status": "PASS",
+      "scope": "全收后刷新，历史保留，三月全false；不是展开态直接刷新重置",
+      "evidence": ["round11-after-refresh.png", "round11-month-states.json", "round11-events.json"]
+    },
+    {
+      "original": "B1-GUI-04 §8步骤5 / reload",
+      "status": "PASS",
+      "scope": "同origin，新timeOrigin加载后历史和三月折叠仍在",
+      "timeOriginBefore": 1792706596851.3,
+      "timeOriginAfter": 1792706880171.9,
+      "evidence": ["round12-reload-history.png", "round12-events.json", "round12-reload-history.json"]
+    },
+    {
+      "original": "B1-GUI-04 §8步骤5 / 离开后重进",
+      "status": "PASS",
+      "scope": "实际全部任务页后回习惯页，原历史保留，三月全false",
+      "evidence": ["round12-left-history.png", "round12-reentry-history.png", "frames/round12-34.jpg", "frames/round12-35.jpg"]
+    },
+    {
+      "original": "RA-P3003 / 原历史字段及bytes保全",
+      "status": "PASS",
+      "scope": "11份record对原备份全字段相同，11份落盘envelope原字节相同，11份三项root键值相同"
+    },
+    {
+      "original": "Main原3264最新F5保护",
+      "status": "PASS",
+      "scope": "封件before/after清单字节相同；非F5功能或全机保护PASS",
+      "evidence": ["protected-F5-before.json", "protected-F5-after.json"]
+    }
+  ],
+  "visualReview": {
+    "performed": true,
+    "guiExecutedByReviewer": false,
+    "pngsOpened": [
+      "round06-current.png",
+      "round08-current-confirm.png",
+      "round09-restored.png",
+      "round11-all-expanded.png",
+      "round11-august-visible.png",
+      "round11-all-collapsed.png",
+      "round11-after-refresh.png",
+      "round12-reload-history.png",
+      "round12-left-history.png",
+      "round12-reentry-history.png"
+    ],
+    "originalJpegsOpened": [
+      "frames/round11-7.jpg",
+      "frames/round11-11.jpg",
+      "frames/round12-34.jpg",
+      "frames/round12-35.jpg"
+    ],
+    "contactSheetCoverage": [
+      {"round": 11, "first": 0, "last": 19},
+      {"round": 12, "first": 0, "last": 17},
+      {"round": 12, "first": 18, "last": 35}
+    ],
+    "contactSheetSha256": [
+      "19808dadd297a28b59a47ec91b70b697b59f895eabf9ac9db65759a756551792",
+      "b68d7570d350ed0f5e2ef1c8f1996795d0ee4705eb4501cff15e3b8cdbbf0700",
+      "70ae6c4f3cee91e8194e88df597604f1db72bd2922d6cac3cf0bdef44368d9c9"
+    ],
+    "domRole": "仅辅助，不代目视",
+    "fullDesktopVideoReviewed": false,
+    "nativeZoomSigned": false
+  },
+  "exclusions": [
+    "不重签原10/21的D-13/D-14窗口或D+3派生",
+    "不签原完整F7/B1-GUI-04、RA-P3003整项或习惯整页",
+    "不签完整fixture生成/取消/安全快照/幂等/超窗链",
+    "不签展开态直接刷新或reload重置的未执行变体",
+    "不签sourceMap正文、全部源码输入或完整宿主模块图",
+    "不签native100%/390/200%/键盘/VoiceOver矩阵",
+    "不签组合、后继freeze、父ordinarycommit、push/release/正式切换"
+  ],
+  "executionHistory": {
+    "bootstrap": 0,
+    "round01": "NOT_COLLECTED",
+    "round05": {"exit": 1, "reason": "误等dialog，实际banner"},
+    "round07": {"exit": 1, "reason": "误等alertdialog，实际dialog"},
+    "firstSeal": {"exit": 1, "reason": "core/habit.ts错路径"},
+    "mainSealR2": {
+      "recordedExitInContinuation": 0,
+      "executionReceiptsNumericExit": "NOT_COLLECTED，原字段为文字，不推断数值"
+    },
+    "reviewerCaptureFirst": {"exit": 1, "reason": "误定位旧A0索引"},
+    "reviewerCaptureSecond": {"exit": 0, "rootComparison": "无效0项，首audit保留"},
+    "reviewerCaptureR2": {"exit": 0, "rootComparison": "11份三项逐键值全等"},
+    "swiftFirstExit": "NOT_COLLECTED",
+    "swiftRepeatExit": 0
+  },
+  "productTestsExecuted": "NOT_RUN",
+  "newProductFailures": [],
+  "completion": "限定余项证据充分，无需重复GUI；其他门沿原报告。审结后STOP，不执行父commit",
+  "stop": true
+}

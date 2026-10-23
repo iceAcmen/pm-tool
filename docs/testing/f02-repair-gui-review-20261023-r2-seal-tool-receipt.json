@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-23",
+  "role": "trae独立原F02 GUI审证",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-repair-gui-review-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.4518,
+  "actualToolStdout": "{\"mode\":\"seal\",\"packageProtected\":1460,\"inputChanges\":[],\"links\":10,\"pid\":25018}",
+  "readerPidFromActualStdout": 25018,
+  "origin": "exec_command实际终止后记录exit0/stdout，再用纯fs/crypto读取自有seal；不是预计成功，不读取工具runtime",
+  "seal": {
+    "file": "docs/testing/f02-repair-gui-review-20261023-r2-seal.json",
+    "bytes": 281412,
+    "sha256": "5a438a98e14bd66403903e4afb4e10853f4d5bc6047c31766e0c5125c95ab273"
+  },
+  "packageMembers": 1457,
+  "packageProtectedIncludingIndexSealOuter": 1460,
+  "inputChanges": [],
+  "formatLinks": 10,
+  "rawFilesChecked": 950,
+  "frameFingerprintsChecked": 298,
+  "originalImagesIndependentlyViewed": 28,
+  "excludedFromSeal": true,
+  "exclusionReason": "seal自身与执行后真实工具收据不循环自指纹",
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "spawnExecutions": 0,
+  "verdict": "PASS_LIMITED_GUI，仅原R1 §6最小F02 slice",
+  "remaining": "本slice无补件/重跑；父其余既有门由Main汇合，不签父ordinarycommit",
+  "resources": "released / STOP；无后台会话、builder/GUI/桌面/端口/profile/数据锁；未停服务"
+}

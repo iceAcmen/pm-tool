@@ -49,7 +49,7 @@ export function BoardBento({ data, actions, persistence, projectId }: {
   const [editorError, setEditorError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [adopting, setAdopting] = useState(false)
-  const [banner, setBanner] = useState<string | null>(null)
+  const [banner, setBanner] = useState<{ kind: 'success' | 'error', text: string } | null>(null)
 
   // R8：迁移反馈降级为中性 info 摘要（首屏 1–2 行白话，无 w-*/坐标）；技术明细默认折叠进次级「详情」。
   // 不提供「撤销」（history 仅保存后历史，不支持迁移前恢复，放假按钮即误导）。已读按签名 localStorage 持久。
@@ -114,9 +114,9 @@ export function BoardBento({ data, actions, persistence, projectId }: {
       // 落盘成功后确认快照刷新；返回 false 即失败，调用方不给成功态。
       await refreshAndConfirm(actions.refreshBoard)
       setLayout(next)
-      setBanner('已添加补记队列并保存到个人布局。')
+      setBanner({ kind: 'success', text: '已添加补记队列并保存到个人布局。' })
     } catch (e) {
-      setBanner('添加补记队列失败：' + (e instanceof Error ? e.message : String(e)))
+      setBanner({ kind: 'error', text: '添加补记队列失败：' + (e instanceof Error ? e.message : String(e)) })
     } finally {
       setAdopting(false)
     }
@@ -259,8 +259,11 @@ export function BoardBento({ data, actions, persistence, projectId }: {
       </div>
     )}
     {(banner || editorError) && (
-      <div className="pm-bento-validation" role="alert">
-        <span>{editorError ?? banner}</span>
+      <div
+        className={`pm-bento-validation${!editorError && banner?.kind === 'success' ? ' pm-bento-validation--success' : ''}`}
+        role={!editorError && banner?.kind === 'success' ? 'status' : 'alert'}
+      >
+        <span>{editorError ?? banner?.text}</span>
         <button type="button" className="pm-bento-validation-x" onClick={() => { setBanner(null); setEditorError(null) }} aria-label="关闭">×</button>
       </div>
     )}
@@ -301,22 +304,27 @@ export function BoardBento({ data, actions, persistence, projectId }: {
               await refreshAndConfirm(actions.refreshBoard)
               setLayout(final)
               setSavedLayout(structuredClone(final))
-              setBanner('布局已保存并刷新。')
+              setBanner({ kind: 'success', text: '布局已保存并刷新。' })
             } catch (e) {
-              setBanner('保存失败，未落盘：' + (e instanceof Error ? e.message : String(e)))
+              setBanner({ kind: 'error', text: '保存失败，操作未完成：' + (e instanceof Error ? e.message : String(e)) })
               throw e
             } finally { setSaving(false) }
           }}
           onReset={async () => {
             // R-B9：重置同样走刷新闸门；失败不本地回退成「假成功」。项目级只重置 project:<id>，不碰旧全局。
-            await persistence.onReset(activeScope)
-            if (typeof actions.refreshBoard === 'function') await refreshAndConfirm(actions.refreshBoard)
-            const resolved = projectId
-              ? resolveProjectDashboard(data.dashboards?.byProject, projectId, data.dashboards?.project, PROJECT_DEFAULT_LAYOUT, knownTypes)
-              : resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes)
-            setLayout(resolved)
-            setSavedLayout(structuredClone(resolved))
-            setBanner('已恢复默认布局。')
+            try {
+              await persistence.onReset(activeScope)
+              if (typeof actions.refreshBoard === 'function') await refreshAndConfirm(actions.refreshBoard)
+              const resolved = projectId
+                ? resolveProjectDashboard(data.dashboards?.byProject, projectId, data.dashboards?.project, PROJECT_DEFAULT_LAYOUT, knownTypes)
+                : resolveDashboard(data.dashboards?.user, data.dashboards?.project, DEFAULT_LAYOUT, knownTypes)
+              setLayout(resolved)
+              setSavedLayout(structuredClone(resolved))
+              setBanner({ kind: 'success', text: '已恢复默认布局。' })
+            } catch (e) {
+              setBanner({ kind: 'error', text: '重置失败：' + (e instanceof Error ? e.message : String(e)) })
+              throw e
+            }
           }}
         />
       : <div className="pm-bento-grid pm-bento-grid-static" style={{ gridTemplateColumns: `repeat(${viewCols}, minmax(0, 1fr))` }}>

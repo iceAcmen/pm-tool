@@ -1,0 +1,156 @@
+{
+  "at": "2026-10-22T23:43:52.665Z",
+  "role": "独立只读组合审证",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-combined-regression-review-20261023-r2-reader.mjs",
+        "audit"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualExit": 0,
+      "receipt": {
+        "version": 2,
+        "executionId": "eafea4a32c1b1a2a713eb4c88cb0d724",
+        "pid": 21127,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "status": "exited",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "createdAtMs": 1792712367020,
+        "startedAtMs": 1792712367031,
+        "finishedAtMs": 1792712375004,
+        "origin": "精确读取本角色实际工具execution.json；不从审计expectedExit倒推"
+      },
+      "productExecutions": 0
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-combined-regression-review-20261023-r2-trace.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualExit": 1,
+      "origin": "exec_command实际返回Process exited with code 1",
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ {\n+   onCreate: [],\n+   onEdit: [],\n+   onSaved: [],\n+   run: []\n+ }\n- []\n",
+      "originalPreserved": "/tmp/f02-combined-regression-review-20261023-r2/trace-attempt1.json",
+      "productExecutions": 0
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-combined-regression-review-20261023-r2-trace-reconcile.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualExit": 0,
+      "origin": "exec_command实际返回Process exited with code 0",
+      "correction": "仅原OKR calls对象四个空数组与fetch；不重复已绿项",
+      "productExecutions": 0
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-combined-regression-review-20261023-r2-reader.mjs",
+        "stability"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "actualExit": 0,
+      "origin": "exec_command实际返回Process exited with code 0，8.3517s",
+      "scope": "证据窗口终核，非产品测试",
+      "productExecutions": 0
+    }
+  ],
+  "failedPreparatory": [
+    {
+      "command": "ls /projects/-Users-bytedance-Projects-dsh-pm-pm-tool--p2-11b908a9362bd421871f",
+      "actualExit": 1,
+      "stderr": "ls: /projects/-Users-bytedance-Projects-dsh-pm-pm-tool--p2-11b908a9362bd421871f: No such file or directory",
+      "consequence": "无记忆文件读到；仓库及明确子单权威；未扩搜private目录"
+    },
+    {
+      "command": "cat packages/dsh-pm-tool/scripts/verify-isolation.mjs packages/dsh-pm-tool/scripts/lib/isolation-guard.mjs",
+      "actualExit": 1,
+      "stderr": "cat: packages/dsh-pm-tool/scripts/lib/isolation-guard.mjs: No such file or directory",
+      "consequence": "第一文件原守卫已完整读取；不存在helper未读取，不import原守卫"
+    },
+    {
+      "tool": "exec_command",
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/f02-combined-regression-review-20261023-r2-reader.mjs audit",
+      "login": false,
+      "actualExit": null,
+      "error": "custom shell and login=false are not supported yet",
+      "executionStarted": false,
+      "consequence": "去掉不支持参数后仅运行一次实际audit"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --input-type=module -e \"import fs from \\\"node:fs\\\";const o=\\\"reports/all-pending-evidence-20261021/CombinedF02RepairR2/\\\";for(const d of [\\\"dom-observations\\\",\\\"okr-observations\\\"]){for(const n of fs.readdirSync(o+d).slice(0,2)){let j=JSON.parse(fs.readFileSync(o+d+\\\"/\\\"+n));console.log(d,n,Object.keys(j),JSON.stringify(j).slice(0,800));}}const s=fs.readFileSync(\\\"packages/dsh-pm-tool/tsconfig.json\\\",\\\"utf8\\\");console.log(s);\"",
+      "actualExit": 1,
+      "error": "EISDIR: illegal operation on a directory, read",
+      "code": "EISDIR",
+      "errno": -21,
+      "syscall": "read",
+      "consequence": "dom-observations子目录误当文件；随后先withFileTypes辨目录，补所阻层级及tsconfig；不重跑10绿核"
+    }
+  ],
+  "otherReadCommands": {
+    "actualExit": 0,
+    "origin": "本轮exec_command逐次返回0；仅本repo声明文件、自有/tmp及精确自有工具收据",
+    "commands": [
+      "cat AGENTS.md",
+      "cat docs/plans/2026-10-23-f02-combined-regression.md",
+      "cat docs/testing/combined-six-repairs-regression-review-20261023-r1-report.md",
+      "cat docs/plans/2026-10-23-f02-combined-execute.mjs",
+      "cat docs/plans/2026-10-23-f02-combined-seal.mjs",
+      "cat docs/testing/f02-option-default-source-auto-20261023-r2-report.md",
+      "cat docs/testing/f02-related28-infrastructure-retest-20261023-r3-report.md",
+      "ls reports/all-pending-evidence-20261021/CombinedF02RepairR2",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/executor-source.mjs",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/close.json",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/verify.stdout.txt",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/candidate.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/derivation.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/parent-six-to-current-inputs.json",
+      "sed -n '410,710p' docs/collaboration.md",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/vitest-full.config.mjs reports/all-pending-evidence-20261021/CombinedF02RepairR2/vitest-dom.config.mjs reports/all-pending-evidence-20261021/CombinedF02RepairR2/vitest-special.config.mjs",
+      "wc -l docs/collaboration.md",
+      "sed -n '150,287p' docs/collaboration.md",
+      "cat /private/tmp/pmtool-combined-f02-repair-20261023-r2/packages/dsh-pm-tool/retest-stress.test.ts /private/tmp/pmtool-combined-f02-repair-20261023-r2/packages/dsh-pm-tool/retest-probes.test.ts",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/pointer-observations/D08.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/pointer-observations/D09.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/runtime/report-probes/author-stress.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/runtime/report-probes/legacy-missing-manual.json reports/all-pending-evidence-20261021/CombinedF02RepairR2/runtime/report-probes/fence-1800.json",
+      "head -n 65 reports/all-pending-evidence-20261021/CombinedF02RepairR2/tracked-product.diff",
+      "cat packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+      "cat /tmp/f02-combined-regression-review-20261023-r2/audit-attempt1.json",
+      "cat '/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/eafea4a32c1b1a2a713eb4c88cb0d724/execution.json'",
+      "cat reports/all-pending-evidence-20261021/CombinedF02RepairR2/handoff-observations.json",
+      "cat docs/testing/six-repairs-pointer-gui-review-20261023-r1-report.md"
+    ],
+    "inlineReadOnlySummaries": [
+      "fs解析声明manifest形状及十outer/八inner收据摘要",
+      "fs原stdout/stderr字节/尾部与full/dom/special JSON分母/键名",
+      "fs索引fixture路径及R2/R3/旧六修审计键名",
+      "fs原R2/R3字段、pointer D08/D09原事件及原fixture字段",
+      "fs自有audit组状态/终码摘要",
+      "fs原full fixture生产源码行/raw结构及新artifact delta",
+      "fs.withFileTypes纠正EISDIR目录读取，tsconfig和8份raw/fixed比较",
+      "fs解析当轮source map与handoff/OKR字段",
+      "fs最终依赖/原Main收据摘要"
+    ],
+    "inlineBoundary": "均node --input-type=module -e、只import node:fs；不是产品import/eval。仅摘要，不伪造额外执行ID/PID。"
+  },
+  "productExecutions": 0,
+  "gitExecutions": 0,
+  "guiExecutions": 0,
+  "networkExecutions": 0,
+  "sealCommand": {
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/tmp/f02-combined-regression-review-20261023-r2-seal.mjs"
+    ],
+    "actualExit": "随后实际工具收据填写；本文件不自填预计成功为真实0"
+  }
+}

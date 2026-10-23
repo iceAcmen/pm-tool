@@ -8,7 +8,8 @@
     "pm-launcher": "bin/pm-launcher.mjs"
   },
   "scripts": {
-    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs test/loopback-security.test.mjs test/local-app.test.mjs",
+    "test": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs test/journey-race.test.mjs test/loopback-security.test.mjs test/local-app.test.mjs test/browser-open.test.mjs",
+    "test:control-gui": "node --test test/control-html-sync.test.mjs",
     "verify": "node scripts/verify-launcher.mjs",
     "make-app": "node scripts/make-app.mjs",
     "start": "node bin/pm-launcher.mjs"

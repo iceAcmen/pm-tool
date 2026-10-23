@@ -1,0 +1,23 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/tmp/pmtool-a9-import-onNcQ6[39m
+
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 CSV：预览零写，确认原内容末尾confirm，落库两层树并重开读回字段
+ [31m×[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 busy：同一帧连点只发一次确认，在途禁取消/重选，成功仍只建两条
+[31m   → expected 2 to be 1 // Object.is equality[39m
+ [31m×[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败false：保原预览和内容，可重试且仅成功关闭
+[31m   → expected [] to have a length of 1 but got +0[39m
+ [31m×[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败reject：保原预览和内容，可重试且仅成功关闭
+[31m   → expected [] to have a length of 1 but got +0[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Unhandled Errors [27m[22m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 22:57:22
+[2m   Duration [22m 867ms[2m (transform 312ms, setup 0ms, collect 563ms, tests 148ms, environment 0ms, prepare 42ms)[22m
+
+JSON report written to /private/tmp/pmtool-a9-import-onNcQ6/vitest.json

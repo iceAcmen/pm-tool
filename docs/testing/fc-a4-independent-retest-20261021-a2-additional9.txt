@@ -1,0 +1,78 @@
+TAP version 13
+# {"event":"browser","pid":10763,"version":"Chrome/139.0.7258.155"}
+# {"event":"cleanup","test":"A2-X01：真实生产app慢owned open，DOM点取消确实撤销旅程，释放ready不投递","actions":[{"type":"open","browser":"系统默认浏览器"},{"type":"cancel","browser":"系统默认浏览器"}],"trace":[{"type":"open","browser":"系统默认浏览器","start":1792585679229,"finish":1792585679751,"disconnected":1792585679751},{"type":"cancel","browser":"系统默认浏览器","start":1792585679743,"finish":1792585679743,"disconnected":1792585679747}],"reads":3,"cancels":2,"opened":[],"state":{"status":"S0","step":0,"browser":"系统默认浏览器","confirmed":false,"view":"S0","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"errors":[],"maxPreferenceInFlight":0,"inFlight":0}
+# Subtest: A2-X01：真实生产app慢owned open，DOM点取消确实撤销旅程，释放ready不投递
+ok 1 - A2-X01：真实生产app慢owned open，DOM点取消确实撤销旅程，释放ready不投递
+  ---
+  duration_ms: 3078.240917
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"A2-X02：取消后旧POST明确带S3，actionTicket拒旧而非依赖fixture返回S0","actions":[{"type":"open","browser":"系统默认浏览器"},{"type":"cancel","browser":"系统默认浏览器"}],"trace":[{"type":"open","browser":"系统默认浏览器","start":1792585680486,"finish":1792585680992,"disconnected":1792585680993},{"type":"cancel","browser":"系统默认浏览器","start":1792585680962,"finish":1792585680962,"disconnected":1792585680962}],"reads":2,"cancels":2,"opened":[],"state":{"status":"S0","step":0,"browser":"系统默认浏览器","confirmed":false,"view":"S0","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"errors":[],"maxPreferenceInFlight":0,"inFlight":0}
+# Subtest: A2-X02：取消后旧POST明确带S3，actionTicket拒旧而非依赖fixture返回S0
+ok 2 - A2-X02：取消后旧POST明确带S3，actionTicket拒旧而非依赖fixture返回S0
+  ---
+  duration_ms: 924.597542
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"A2-X03：连续三选串行latest，open在第一偏好在途时点两次，最终只投递Safari一次","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"},{"type":"open","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585681348,"finish":1792585681444,"disconnected":1792585681444},{"type":"select-browser","browser":"Safari","start":1792585681458,"finish":1792585681458,"disconnected":1792585681459},{"type":"open","browser":"Safari","start":1792585681461,"finish":1792585681461,"disconnected":1792585681462}],"reads":1,"cancels":1,"opened":[["open","-a","Safari","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"errors":[],"maxPreferenceInFlight":1,"inFlight":0}
+# Subtest: A2-X03：连续三选串行latest，open在第一偏好在途时点两次，最终只投递Safari一次
+ok 3 - A2-X03：连续三选串行latest，open在第一偏好在途时点两次，最终只投递Safari一次
+  ---
+  duration_ms: 328.878291
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"A2-X04：偏好503后新用户选择重试恢复，不无限写，不回滚latest","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"},{"type":"open","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585681664,"finish":null,"disconnected":1792585681664},{"type":"select-browser","browser":"Safari","start":1792585682662,"finish":1792585682662,"disconnected":1792585682662},{"type":"open","browser":"Safari","start":1792585682712,"finish":1792585682713,"disconnected":1792585682713}],"reads":3,"cancels":1,"opened":[["open","-a","Safari","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"errors":[],"maxPreferenceInFlight":1,"inFlight":0}
+# Subtest: A2-X04：偏好503后新用户选择重试恢复，不无限写，不回滚latest
+ok 4 - A2-X04：偏好503后新用户选择重试恢复，不无限写，不回滚latest
+  ---
+  duration_ms: 1266.826
+  type: 'test'
+  ...
+# {"event":"failed-preference-open","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"}],"actual":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"opened":[["open","-a","Google Chrome","http://127.0.0.1:3211/"]]}
+# {"event":"cleanup","test":"A2-X05：偏好503失败后直接open应重试或实际使用当前Chrome，不只发送乐观payload","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585682963,"finish":null,"disconnected":1792585682963},{"type":"select-browser","browser":"Chrome","start":1792585683013,"finish":1792585683013,"disconnected":1792585683013},{"type":"open","browser":"Chrome","start":1792585683025,"finish":1792585683025,"disconnected":1792585683025}],"reads":1,"cancels":1,"opened":[["open","-a","Google Chrome","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"errors":[],"maxPreferenceInFlight":1,"inFlight":0}
+# Subtest: A2-X05：偏好503失败后直接open应重试或实际使用当前Chrome，不只发送乐观payload
+ok 5 - A2-X05：偏好503失败后直接open应重试或实际使用当前Chrome，不只发送乐观payload
+  ---
+  duration_ms: 300.375417
+  type: 'test'
+  ...
+# {"event":"failed-inflight-latest-open","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"},{"type":"open","browser":"Safari"}],"actual":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"opened":[["open","-a","Safari","http://127.0.0.1:3211/"]]}
+# {"event":"cleanup","test":"A2-X06：偏好网络断开、最新Safari仍pending，等待中的open不能退回权威默认","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Chrome"},{"type":"select-browser","browser":"Safari"},{"type":"open","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585683247,"finish":null,"disconnected":1792585683296},{"type":"select-browser","browser":"Chrome","start":1792585683297,"finish":1792585683297,"disconnected":1792585683297},{"type":"select-browser","browser":"Safari","start":1792585683309,"finish":1792585683309,"disconnected":1792585683310},{"type":"open","browser":"Safari","start":1792585683311,"finish":1792585683311,"disconnected":1792585683312}],"reads":1,"cancels":1,"opened":[["open","-a","Safari","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"errors":[],"maxPreferenceInFlight":1,"inFlight":0}
+# Subtest: A2-X06：偏好网络断开、最新Safari仍pending，等待中的open不能退回权威默认
+ok 6 - A2-X06：偏好网络断开、最新Safari仍pending，等待中的open不能退回权威默认
+  ---
+  duration_ms: 282.545542
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"A2-X07：关闭时偏好在途且open等待，迟到偏好不启动旅程、不续读、不重建页","actions":[{"type":"select-browser","browser":"Chrome"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792585683531,"finish":1792585683583,"disconnected":1792585683576}],"reads":1,"cancels":0,"opened":[],"state":{"status":"S1","step":0,"confirmed":false,"view":"S1","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"errors":[],"maxPreferenceInFlight":1,"inFlight":0}
+# Subtest: A2-X07：关闭时偏好在途且open等待，迟到偏好不启动旅程、不续读、不重建页
+ok 7 - A2-X07：关闭时偏好在途且open等待，迟到偏好不启动旅程、不续读、不重建页
+  ---
+  duration_ms: 1361.371458
+  type: 'test'
+  ...
+# {"event":"cleanup","test":"A2-X08：关闭时真实app慢open在途，仅中止本页；ready仍可完成且不假称cancel","actions":[{"type":"open","browser":"系统默认浏览器"}],"trace":[{"type":"open","browser":"系统默认浏览器","start":1792585684863,"finish":1792585685365,"disconnected":1792585685358}],"reads":2,"cancels":1,"opened":[["open","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":2,"browser":"系统默认浏览器","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"errors":[],"maxPreferenceInFlight":0,"inFlight":0}
+# Subtest: A2-X08：关闭时真实app慢open在途，仅中止本页；ready仍可完成且不假称cancel
+ok 8 - A2-X08：关闭时真实app慢open在途，仅中止本页；ready仍可完成且不假称cancel
+  ---
+  duration_ms: 1801.55625
+  type: 'test'
+  ...
+# {"event":"real-post-deadline","elapsed":34998,"reads":70,"state":"S1"}
+# {"event":"cleanup","test":"A2-X09：真实35s POST超时中止、普通动作解锁，读同步仍继续，无S4伪成功","actions":[{"type":"open","browser":"系统默认浏览器"}],"trace":[{"type":"open","browser":"系统默认浏览器","start":1792585686666,"finish":1792585721696,"disconnected":1792585721664}],"reads":70,"cancels":1,"opened":[["open","http://127.0.0.1:3211/"]],"state":{"status":"S3","step":0,"browser":"系统默认浏览器","confirmed":false,"view":"S3","host":"127.0.0.1","port":3211,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"errors":[],"maxPreferenceInFlight":0,"inFlight":0}
+# Subtest: A2-X09：真实35s POST超时中止、普通动作解锁，读同步仍继续，无S4伪成功
+ok 9 - A2-X09：真实35s POST超时中止、普通动作解锁，读同步仍继续，无S4伪成功
+  ---
+  duration_ms: 35220.120584
+  type: 'test'
+  ...
+# {"event":"browser-closed","pid":10763,"exitCode":0}
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45331.756417

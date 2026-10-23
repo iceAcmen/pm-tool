@@ -1,0 +1,40 @@
+{
+  "label": "diff-archive-test-ts",
+  "command": "/usr/bin/diff",
+  "args": [
+    "-u",
+    "--label",
+    "a/packages/dsh-pm-tool/src/core/archive.test.ts",
+    "--label",
+    "b/packages/dsh-pm-tool/src/core/archive.test.ts",
+    "/tmp/pmtool-p2007-archive-draft-projection-Qdq0dI/input/src/core/archive.test.ts",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/core/archive.test.ts"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/pmtool-p2007-archive-draft-projection-bZy0vY/home",
+    "TMPDIR": "/tmp/pmtool-p2007-archive-draft-projection-bZy0vY/output/tmp",
+    "XDG_CONFIG_HOME": "/tmp/pmtool-p2007-archive-draft-projection-bZy0vY/config",
+    "XDG_CACHE_HOME": "/tmp/pmtool-p2007-archive-draft-projection-bZy0vY/cache",
+    "XDG_DATA_HOME": "/tmp/pmtool-p2007-archive-draft-projection-bZy0vY/output/data",
+    "LANG": "en_US.UTF-8",
+    "TZ": "UTC",
+    "CI": "1",
+    "NO_COLOR": "1"
+  },
+  "start": "2026-10-22T21:27:17.199Z",
+  "end": "2026-10-22T21:27:17.234Z",
+  "exit": 1,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "bytes": 8887,
+    "sha256": "3d0f4081fa71db4d3b1bab3deffb796ec2b4e491ee850bd94b049584ed0753f7"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "independentJudgment": "NOT_JUDGED"
+}

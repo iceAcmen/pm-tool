@@ -1,0 +1,525 @@
+{
+  "task": "RA-P2002-OUTBOUND-SLOT",
+  "root": "/tmp/p2002-source-auto-r2-Vxx6jU",
+  "sourceAutoVerdict": "有限 PASS",
+  "satisfied": true,
+  "developmentAudit": {
+    "path": "docs/testing/p2002-outbound-slot-source-auto-20261023-r2-development-audit-r2.json",
+    "bytes": 550124,
+    "sha256": "2e6f7682007e32293f5910d0a36becb0d76230ce49c69860381c2a7612057927"
+  },
+  "runs": [
+    {
+      "label": "narrow",
+      "receipt": {
+        "command": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+          "run",
+          "--config",
+          "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/vitest.config.mjs",
+          "--testNamePattern",
+          "\\bT0[1-5]\\b"
+        ],
+        "cwd": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/inputs",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+          "HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/home",
+          "TMPDIR": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/tmp",
+          "XDG_CACHE_HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/cache/xdg",
+          "TZ": "Asia/Shanghai",
+          "DSH_PM_E2E": "0",
+          "DSH_PM_SKILL_PILOT": "0",
+          "P2002_OUTPUT": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output",
+          "DSH_PM_ISOLATED_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/assets",
+          "DSH_PM_FILE_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/assets/files",
+          "PM_FILES_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/files",
+          "PM_BACKUPS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/backups",
+          "PM_EXPORTS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/exports"
+        },
+        "startedAt": "2026-10-22T22:19:27.690Z",
+        "finishedAt": "2026-10-22T22:19:30.940Z",
+        "exit": 1,
+        "signal": null,
+        "error": null,
+        "node": "v22.23.3",
+        "platform": "darwin",
+        "protectedInputDelta": [],
+        "dependencyDelta": [],
+        "isolatedSourceDelta": []
+      },
+      "total": 13,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 8,
+      "tests": [
+        {
+          "title": "S01 真 audit 取最大 at 非数组末，B隔离，窄投影与非法只读防御",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S02 真 panel 顶层与子层同项目 time/文本，编辑列不被长 slot 占用",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S03 切真实B无记录，再切A/refresh/面板重进始终同源零写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S04 原U4多规则树排序/编号/状态/清单保持，各行都有slot",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S05 原U4状态分组实际leafRow同样真time/slot，非空分组头冒充行",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S06 长标题/完整slot保持真实编辑入口，开关未改表单零业务写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S07 非数组 audit 按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S08 缺 audit 行按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T01 ISO偏移按真实时间取最大，C真源不同，非法B记录拒绝且仅窄字段",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "title": "T02 真嵌套父/孙层与折叠展开slot，72px操作格仅编辑，编号清单源不变",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at /tmp/p2002-source-auto-r2-Vxx6jU/narrow/inputs/src/client/p2002-independent.test.tsx:371:62\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)\n    at run (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:112:3)"
+          ]
+        },
+        {
+          "title": "T03 真选中C不同时间再B持久重进，refresh不借A时刻，无写无业务按钮",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "title": "T04 状态分组实际深层叶与blocked/wrapped同在，分组头不伪充slot",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "title": "T05 最高绝对at非末项，sent/archive不是来源，ISO完整且HHMM不随TZ转换",
+          "status": "passed",
+          "failureMessages": []
+        }
+      ],
+      "observations": [
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/1-T01/observations.json",
+          "integrity": true,
+          "files": 13,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 1,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-legal-schema-fixture",
+            "final-before-unmount",
+            "closed"
+          ]
+        },
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/2-T02/observations.json",
+          "integrity": true,
+          "files": 13,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 1,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-legal-schema-fixture",
+            "mounted-real-panel",
+            "assert-exported",
+            "independent-deep-tree",
+            "final-before-unmount",
+            "closed"
+          ]
+        },
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/3-T03/observations.json",
+          "integrity": true,
+          "files": 13,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 3,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-legal-schema-fixture",
+            "mounted-real-panel",
+            "selected-项目C",
+            "C-selected",
+            "selected-项目B",
+            "assert-none",
+            "mounted-real-panel",
+            "assert-none",
+            "final-before-unmount",
+            "closed"
+          ]
+        },
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/4-T04/observations.json",
+          "integrity": true,
+          "files": 13,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 1,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-legal-schema-fixture",
+            "mounted-real-panel",
+            "independent-status-groups",
+            "assert-exported",
+            "final-before-unmount",
+            "closed"
+          ]
+        },
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/narrow/output/5-T05/observations.json",
+          "integrity": true,
+          "files": 11,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 2,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-max-fixture",
+            "mounted-real-panel",
+            "independent-max-timezone",
+            "selected-项目B",
+            "assert-none",
+            "final-before-unmount",
+            "closed"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "t02-corrected",
+      "receipt": {
+        "command": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+          "run",
+          "--config",
+          "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/vitest.config.mjs",
+          "--testNamePattern",
+          "\\bT02\\b"
+        ],
+        "cwd": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/inputs",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+          "HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/home",
+          "TMPDIR": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/tmp",
+          "XDG_CACHE_HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/cache/xdg",
+          "TZ": "Asia/Shanghai",
+          "DSH_PM_E2E": "0",
+          "DSH_PM_SKILL_PILOT": "0",
+          "P2002_OUTPUT": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output",
+          "DSH_PM_ISOLATED_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/assets",
+          "DSH_PM_FILE_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/assets/files",
+          "PM_FILES_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/files",
+          "PM_BACKUPS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/backups",
+          "PM_EXPORTS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/exports"
+        },
+        "startedAt": "2026-10-22T22:20:18.089Z",
+        "finishedAt": "2026-10-22T22:20:25.849Z",
+        "exit": 0,
+        "signal": null,
+        "error": null,
+        "node": "v22.23.3",
+        "platform": "darwin",
+        "protectedInputDelta": [],
+        "dependencyDelta": [],
+        "isolatedSourceDelta": []
+      },
+      "total": 13,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 12,
+      "tests": [
+        {
+          "title": "S01 真 audit 取最大 at 非数组末，B隔离，窄投影与非法只读防御",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S02 真 panel 顶层与子层同项目 time/文本，编辑列不被长 slot 占用",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S03 切真实B无记录，再切A/refresh/面板重进始终同源零写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S04 原U4多规则树排序/编号/状态/清单保持，各行都有slot",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S05 原U4状态分组实际leafRow同样真time/slot，非空分组头冒充行",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S06 长标题/完整slot保持真实编辑入口，开关未改表单零业务写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S07 非数组 audit 按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S08 缺 audit 行按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T01 ISO偏移按真实时间取最大，C真源不同，非法B记录拒绝且仅窄字段",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T02 真嵌套父/孙层与折叠展开slot，72px操作格仅编辑，编号清单源不变",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "title": "T03 真选中C不同时间再B持久重进，refresh不借A时刻，无写无业务按钮",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T04 状态分组实际深层叶与blocked/wrapped同在，分组头不伪充slot",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T05 最高绝对at非末项，sent/archive不是来源，ISO完整且HHMM不随TZ转换",
+          "status": "skipped",
+          "failureMessages": []
+        }
+      ],
+      "observations": [
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/t02-corrected/output/1-T02/observations.json",
+          "integrity": true,
+          "files": 13,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 2,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-legal-schema-fixture",
+            "mounted-real-panel",
+            "assert-exported",
+            "independent-deep-tree",
+            "assert-exported",
+            "assert-exported",
+            "final-before-unmount",
+            "closed"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "utc",
+      "receipt": {
+        "command": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+          "run",
+          "--config",
+          "/tmp/p2002-source-auto-r2-Vxx6jU/utc/vitest.config.mjs",
+          "--testNamePattern",
+          "\\bT05\\b"
+        ],
+        "cwd": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/inputs",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+          "HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/home",
+          "TMPDIR": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/tmp",
+          "XDG_CACHE_HOME": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/cache/xdg",
+          "TZ": "UTC",
+          "DSH_PM_E2E": "0",
+          "DSH_PM_SKILL_PILOT": "0",
+          "P2002_OUTPUT": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output",
+          "DSH_PM_ISOLATED_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output/assets",
+          "DSH_PM_FILE_ROOT": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output/assets/files",
+          "PM_FILES_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output/files",
+          "PM_BACKUPS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output/backups",
+          "PM_EXPORTS_DIR": "/tmp/p2002-source-auto-r2-Vxx6jU/utc/output/exports"
+        },
+        "startedAt": "2026-10-22T22:20:18.102Z",
+        "finishedAt": "2026-10-22T22:20:25.784Z",
+        "exit": 0,
+        "signal": null,
+        "error": null,
+        "node": "v22.23.3",
+        "platform": "darwin",
+        "protectedInputDelta": [],
+        "dependencyDelta": [],
+        "isolatedSourceDelta": []
+      },
+      "total": 13,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 12,
+      "tests": [
+        {
+          "title": "S01 真 audit 取最大 at 非数组末，B隔离，窄投影与非法只读防御",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S02 真 panel 顶层与子层同项目 time/文本，编辑列不被长 slot 占用",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S03 切真实B无记录，再切A/refresh/面板重进始终同源零写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S04 原U4多规则树排序/编号/状态/清单保持，各行都有slot",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S05 原U4状态分组实际leafRow同样真time/slot，非空分组头冒充行",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S06 长标题/完整slot保持真实编辑入口，开关未改表单零业务写",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S07 非数组 audit 按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "S08 缺 audit 行按既有read回落",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T01 ISO偏移按真实时间取最大，C真源不同，非法B记录拒绝且仅窄字段",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T02 真嵌套父/孙层与折叠展开slot，72px操作格仅编辑，编号清单源不变",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T03 真选中C不同时间再B持久重进，refresh不借A时刻，无写无业务按钮",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T04 状态分组实际深层叶与blocked/wrapped同在，分组头不伪充slot",
+          "status": "skipped",
+          "failureMessages": []
+        },
+        {
+          "title": "T05 最高绝对at非末项，sent/archive不是来源，ISO完整且HHMM不随TZ转换",
+          "status": "passed",
+          "failureMessages": []
+        }
+      ],
+      "observations": [
+        {
+          "path": "../../../../../tmp/p2002-source-auto-r2-Vxx6jU/utc/output/1-T05/observations.json",
+          "integrity": true,
+          "files": 11,
+          "dbEqual": true,
+          "writes": 0,
+          "calls": 2,
+          "readOnly": true,
+          "labels": [
+            "legal-schema-fixture",
+            "supplement-max-fixture",
+            "mounted-real-panel",
+            "independent-max-timezone",
+            "selected-项目B",
+            "assert-none",
+            "final-before-unmount",
+            "closed"
+          ]
+        }
+      ]
+    }
+  ],
+  "testCorrection": {
+    "classification": "TEST_ASSUMPTION_ERROR，不是产品缺陷",
+    "originalTitle": "T02 真嵌套父/孙层与折叠展开slot，72px操作格仅编辑，编号清单源不变",
+    "originalReceipt": {
+      "path": "docs/testing/p2002-outbound-slot-source-auto-20261023-r2-narrow-receipt.json",
+      "bytes": 1565,
+      "sha256": "aaf89eaefee65aa018a03cf010f5f70aaa5153e3d29663b7d2d2ab8c577cd508"
+    },
+    "originalFailure": [
+      "AssertionError: expected false to be true // Object.is equality\n    at /tmp/p2002-source-auto-r2-Vxx6jU/narrow/inputs/src/client/p2002-independent.test.tsx:371:62\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)\n    at run (file:///Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:112:3)"
+    ],
+    "correction": {
+      "from": "expect(row.style.gridTemplateColumns.endsWith('72px')).toBe(true)",
+      "to": "expect(row.style.getPropertyValue('--pt-grid-columns').trim().endsWith('72px')).toBe(true)",
+      "reason": "现产品使用 --pt-grid-columns + CSS消费；原inline属性假设错误，不证明产品列宽失败。"
+    },
+    "exactlyOneChange": true
+  },
+  "protectedInputDelta": [],
+  "source": [
+    {
+      "path": "packages/dsh-pm-tool/src/index.ts",
+      "bytes": 21961,
+      "sha256": "43d9c3f0ef754143f2082357695b708be048b8bcaf6975205dd9b9ce58e3f299"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+      "bytes": 77665,
+      "sha256": "5639b455c452d69686355e8b4e65daa1d91b82ef9965a5f085074d044a7771e6"
+    }
+  ],
+  "GUI": "NOT_RUN",
+  "build": "NOT_RUN",
+  "wholeCombination": "NOT_JUDGED",
+  "parentCommitAdmission": "NOT_JUDGED"
+}

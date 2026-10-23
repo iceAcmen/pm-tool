@@ -1,0 +1,237 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/tmp/pmtool-a9-import-MweuST[39m
+
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 CSV：预览零写，确认原内容末尾confirm，落库两层树并重开读回字段
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 busy：同一帧连点只发一次确认，在途禁取消/重选，成功仍只建两条
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 XLSX：FileReader二进制→生产解析，预览零写，确认原base64落库并重开树
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 取消csv：预览与取消均零任务写，重进仍空
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 取消xlsx：预览与取消均零任务写，重进仍空
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 非法列：生产预览失败无确认入口，取消与重开均零写
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 首行非法日期：预览零写，真实确认拒绝且保预览，取消重开仍零写
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败false：保原预览和内容，可重试且仅成功关闭
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败reject：保原预览和内容，可重试且仅成功关闭
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mDEFAULT_VIEW_STATE 锁定表格初始现值[2m > [22m逐值等于 tasks.tsx useState 初始（默认等价基线）
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mBUILTIN_VIEWS 内置视图[2m > [22m提供全部任务 / 我的任务 / 进行中 / 已逾期 / 本周到期 / 风险视图，且只用现有四态
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mBUILTIN_VIEWS 内置视图[2m > [22m本周到期 / 风险视图内置条目：id/name/chip/sort 正确
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mBUILTIN_VIEWS 内置视图[2m > [22m顶部快捷栏 VIEW_CHIP_OPTIONS 不含 due_week / risk（新视图仅由切换器选中）
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mnormalizeTaskViewState 损坏/非法兜底[2m > [22m非对象 → 全默认，不抛
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mnormalizeTaskViewState 损坏/非法兜底[2m > [22m非法 chip / sort 回落默认，非字符串 query 置空，非布尔 grouped 回落
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mnormalizeTaskViewState 损坏/非法兜底[2m > [22m合法字段逐值采纳，未知键忽略
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mparseTaskViewsStore / normalizeTaskViewsStore 损坏仓兜底[2m > [22m损坏 JSON 文本 / 非字符串 / 空串 → 空仓，绝不抛
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mparseTaskViewsStore / normalizeTaskViewsStore 损坏仓兜底[2m > [22m非对象仓 → 空仓
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mparseTaskViewsStore / normalizeTaskViewsStore 损坏仓兜底[2m > [22mviews 逐条校验：非法条目丢弃、重复 id 保留首条、伪造内置 id 不落盘
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mparseTaskViewsStore / normalizeTaskViewsStore 损坏仓兜底[2m > [22mdefaultViewId 指向未知视图 → 置 null；指向内置视图 → 保留
+ [32m✓[39m src/core/task-views.test.ts[2m > [22msaveTaskView 新增 / 更新[2m > [22m新增追加；同 id 更新（保留位置、覆盖名称与状态）
+ [32m✓[39m src/core/task-views.test.ts[2m > [22msaveTaskView 新增 / 更新[2m > [22m内置 id 拒绝写入；空白名回落「未命名视图」；非法状态归一化
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mrenameTaskView[2m > [22m自定义视图重命名；内置 / 未知 / 空白名 → 原样返回
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mdeleteTaskView[2m > [22m删除自定义视图；内置 / 未知 → 原样返回
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mdeleteTaskView[2m > [22m删除默认视图时清空默认标记
+ [32m✓[39m src/core/task-views.test.ts[2m > [22msetDefaultTaskView / resolveDefaultTaskView[2m > [22m自定义视图与内置视图均可设默认；未知 id 原样返回
+ [32m✓[39m src/core/task-views.test.ts[2m > [22msetDefaultTaskView / resolveDefaultTaskView[2m > [22m默认失效（被删/被篡改）时 resolve 返回 undefined
+ [32m✓[39m src/core/task-views.test.ts[2m > [22m状态往返一致与项目隔离[2m > [22mserialize → parse 后四态逐值相等
+ [32m✓[39m src/core/task-views.test.ts[2m > [22m状态往返一致与项目隔离[2m > [22msameTaskViewState 逐值比较：相等 true，任一不同 false
+ [32m✓[39m src/core/task-views.test.ts[2m > [22m状态往返一致与项目隔离[2m > [22m存储键按项目隔离：不同 projectId 不同键，互不串视图
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mlistAllViews / findTaskView / describeTaskViewState[2m > [22m内置在前、自定义在后；findTaskView 先内置后自定义
+ [32m✓[39m src/core/task-views.test.ts[2m > [22mlistAllViews / findTaskView / describeTaskViewState[2m > [22m摘要包含 chip / 排序 / 分组 / 搜索文案
+ [32m✓[39m src/core/task-views.test.ts[2m > [22m新增 due_week / risk chip 归一化与中文摘要[2m > [22mnormalizeTaskViewState 对 chip:due_week / risk 原样保留，不回落默认
+ [32m✓[39m src/core/task-views.test.ts[2m > [22m新增 due_week / risk chip 归一化与中文摘要[2m > [22mdescribeTaskViewState 对新 chip 输出中文标签，不显示原始 key
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mparseFeedback 反馈分型（J5）[2m > [22m结构化信封：短摘要与完整字段分离，摘要无 HTML/MD/完整实体
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mparseFeedback 反馈分型（J5）[2m > [22mwrapped 提示进摘要（含 ≠），完整字段仍分离
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mparseFeedback 反馈分型（J5）[2m > [22m无信封的既有命令原样回退，不被吞、不强行分型
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mparseFeedback 反馈分型（J5）[2m > [22m错误持久且单处：feedbackIsError 命中即错误态
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mparseFeedback 反馈分型（J5）[2m > [22m成功自动消失时长固定 3s（错误持久，不走该 TTL）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22mparseActionLine：`[pm:action]文案：命令` 拆出 label/command；格式不符返回 null
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22m非结构化草稿预览：content 原样进 summary，action 独立抽出，不混进正文
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22mbuildSuccessEnvelope：≤2 行短摘要加前缀，完整字段进 detail；空行被过滤
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22m结构化成功信封 → classifyFeedback 3s 自动消失；action 透传
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22mP1-1：结构化成功摘要含「错误/失败」字样（如已修复错误清单）仍判成功，不被中文关键词误红
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22maction 分离与信封构造（AI 草稿 content/action）[2m > [22mP1-1：非结构化裸返回命中错误关键词仍判 error（关键词只兜底无信封文本）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mcommandAccepted（O3 失败不关抽屉）[2m > [22m业务拒绝文本 → false（保留抽屉，不 onSaved 关层）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mcommandAccepted（O3 失败不关抽屉）[2m > [22m结构化成功信封 → true
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mcommandAccepted（O3 失败不关抽屉）[2m > [22m无信封既有成功文本 → true（不另造成功正则，仅排除错误词）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mcommandAccepted（O3 失败不关抽屉）[2m > [22m只读预览文本不含错误词 → true，不误判为失败
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mprefixFeedbackOnce（场景错误前缀不重复）[2m > [22m底层错误已带“恢复失败”时原样保留
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mprefixFeedbackOnce（场景错误前缀不重复）[2m > [22m底层错误没有场景前缀时补一次中文冒号
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mprefixFeedbackOnce（场景错误前缀不重复）[2m > [22m兼容 Error 与全角冒号，不把相似正文误判为前缀
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mD-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）[2m > [22m纯结构化成功信封（无 action/无备份路径）→ 不持久化 ResultCard，交给 3s toast
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mD-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）[2m > [22m错误 → 持久化（role=alert 单处）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mD-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）[2m > [22m非结构化原样回退 → 持久化（不吞不改写）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mD-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）[2m > [22m带 [pm:action] 独立确认动作 → 持久化（动作按钮须常驻可点）
+ [32m✓[39m src/core/ui-feedback.test.ts[2m > [22mD-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发）[2m > [22m结构化成功但携带备份路径 → 持久化（复制路径位需常驻）
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 frozenExcerptSchema：冻结摘录形状与拒绝[2m > [22m合法摘录通过，sourceKind 固定 progress
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 frozenExcerptSchema：冻结摘录形状与拒绝[2m > [22mid/entryId/revisionId/taskId 格式错误、错误 sourceKind、未知键被拒
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 frozenExcerptSchema：冻结摘录形状与拒绝[2m > [22m空正文/空作者/非 ISO capturedAt 被拒
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 frozenExcerptSchema：冻结摘录形状与拒绝[2m > [22mexcerpts 数组：id 唯一、上限 50
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选[2m > [22mgenerate 接受 selectedRefs（taskId+entryId+可选revisionId）；缺省字段进缺省出
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选[2m > [22m裸 selectedEntryIds / 缺 taskId 的选择器被 strict 拒绝（pl-N 跨任务撞号）
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选[2m > [22mexcerpts 与 selectedRefs 同传被 strict 互斥拒绝（不静默忽略任一）
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选[2m > [22mgenerate 接受预建 excerpts；未知键被拒
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mB6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选[2m > [22mupdate 传 excerpts 替换；不传则缺键（保留现有由域层负责）
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mU5 sourceType 枚举与 sourceSessionId 条件[2m > [22m缺省 manual，不带 sourceSessionId 通过
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mU5 sourceType 枚举与 sourceSessionId 条件[2m > [22msession 必须带非空 sourceSessionId；缺/空被拒
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mU5 sourceType 枚举与 sourceSessionId 条件[2m > [22mmanual 不得传 sourceSessionId；非法 sourceType 被拒
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mU5 legacy report 只读 normalize，不物理迁移[2m > [22m缺 source 字段/非法 sourceType 归一为 manual/null；有效 session 保留
+ [32m✓[39m src/core/progress-report.test.ts[2m > [22mU5 legacy report 只读 normalize，不物理迁移[2m > [22mlist/get 读取旧记录补 manual/null；update 前 normalize 后可写且保留来源
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mtask ops 信封：no-op 原样保留稳定 ID/历史/软删[2m > [22m空 ops 不改动既有条目、revisions、deletedAt
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mattachmentOps：分配、重算冻结、摘除、改注[2m > [22maddLink 续号 at-2；addDeliverable 服务端重算 frozen；remove；updateNote 改 title
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mattachmentOps：分配、重算冻结、摘除、改注[2m > [22m跨项目交付物 / 非法 URL / 重复 clientId / 未知 id 抛错零写
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mprogressOps：alias 引用、edit 追加 revision、delete/restore[2m > [22madd 用前面 clientId 别名解析；edit 追加 rv-3 继承 author/date 且保留旧版
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mprogressOps：alias 引用、edit 追加 revision、delete/restore[2m > [22mdelete 软删保留 revisions；restore 清除 deletedAt；重复 delete/restore 按现命令语义抛错
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mprogressOps：alias 引用、edit 追加 revision、delete/restore[2m > [22m向后引用 clientId / 未知 ref / 编辑已删条目抛错
+ [32m✓[39m src/core/task-ops.test.ts[2m > [22mraw 数组与 ops 互斥[2m > [22m同区 raw 与 ops 同传抛 TaskOpsError
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22m未完成（in_progress）+ 截止日在过去 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22m已完成（done）+ 截止日在过去 → false（done 不逾期）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22mstatus 非 done 但进度=100 + 截止日在过去 → false（进度达标不逾期）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22m截止日恰好是今天 → false（days=0 非负，今天到期不算逾期）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22m截止日在未来 → false
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22m无截止日（null / undefined）→ false（诚实降级，不臆造逾期）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22mprogress=null 按 0 处理 + 截止日在过去 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22mprogress 缺省（undefined）按 0 处理 + 截止日在过去 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22mblocked 状态 + 截止日在过去 → true（受阻未闭环仍计逾期）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskOverdue 冻结口径[2m > [22mstatus 缺省（undefined）+ 截止日在过去 → true（按未完成处理）
+ [32m✓[39m src/core/derived.test.ts[2m > [22maddDaysIso 日期推进[2m > [22m普通日加 7 天 → 同月内正确推进
+ [32m✓[39m src/core/derived.test.ts[2m > [22maddDaysIso 日期推进[2m > [22m月末进位：1月31日 +1 → 2月1日
+ [32m✓[39m src/core/derived.test.ts[2m > [22maddDaysIso 日期推进[2m > [22m跨年：12月31日 +1 → 次年1月1日；12月28日 +7 → 次年1月4日
+ [32m✓[39m src/core/derived.test.ts[2m > [22maddDaysIso 日期推进[2m > [22m闰年 2024：2月28日 +1 → 2月29日；2月29日 +1 → 3月1日
+ [32m✓[39m src/core/derived.test.ts[2m > [22maddDaysIso 日期推进[2m > [22m平年 2026：2月28日 +1 → 3月1日（无29日）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m未来 7 天内到期且未完成 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m边界：恰好第 7 天（today+7）→ true；第 8 天 → false
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m含已逾期：过去到期日同样满足 ≤ today+7 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m排除已完成（done / 进度 100）→ false
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m无截止日（null / undefined）→ false
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskDueWithin 本周到期冻结口径[2m > [22m月末跨年：12月28日起 7 天内覆盖次年1月初；超窗排除
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22mblocked 状态 → true（无需截止日/里程碑）
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22m已逾期 → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22m关联里程碑延期（planned 且 targetDate 过去）→ true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22m里程碑显式 missed → true
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22m三者都不满足（未阻塞/未逾期/里程碑正常）→ false
+ [32m✓[39m src/core/derived.test.ts[2m > [22misTaskAtRisk 风险视图冻结口径[2m > [22m不传 milestone：只判 blocked / 逾期，其余 → false
+ [32m✓[39m src/core/derived.test.ts[2m > [22mX2 wrapped 口径：已收尾不催办[2m > [22misTaskOverdue 对 wrapped 返回 false（即使过期未完成）
+ [32m✓[39m src/core/derived.test.ts[2m > [22mX2 wrapped 口径：已收尾不催办[2m > [22misTaskDueWithin 对 wrapped 不入选（即使到期落在窗口内）
+ [32m✓[39m src/core/derived.test.ts[2m > [22mX2 wrapped 口径：已收尾不催办[2m > [22misTaskAtRisk 不因 wrapped 且过期而报风险（逾期谓词已排除）
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-04 任务工具条四段视觉分组 + 密度收末端次要位[2m > [22m四段 seg 容器齐备：视图切换 / 视图持久化 / 组织 / 数据，密度单独成段
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-04 任务工具条四段视觉分组 + 密度收末端次要位[2m > [22mDOM/Tab 顺序：视图切换 → 持久化(保存) → 组织(分组/排序) → 数据(模板/导入/导出/分享) → 密度
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-04 任务工具条四段视觉分组 + 密度收末端次要位[2m > [22mCSS：段间 hairline 分隔，密度段收末端（margin-left:auto）并标注全局偏好
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-04 任务工具条四段视觉分组 + 密度收末端次要位[2m > [22m主操作「新建任务」不在工具条内重复造等权按钮（页头 CTA 由 panel 承担）
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-05 编号列恒显稳定句柄（code/短 ID），可点击复制并反馈[2m > [22m句柄恒显：WBS code 优先，缺省回退短 ID（t.id），禁止空白
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-05 编号列恒显稳定句柄（code/短 ID），可点击复制并反馈[2m > [22m复制到剪贴板（经 copyHandleToClipboard）+ 瞬时「已复制」反馈，不回写任务编号
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-05 编号列恒显稳定句柄（code/短 ID），可点击复制并反馈[2m > [22mCSS：句柄等宽、存量短 ID 弱化、可点击 affordance 与焦点环，列内不溢出不叠印
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-05 编号列恒显稳定句柄（code/短 ID），可点击复制并反馈[2m > [22m既有编号列宽固定，不挤压任务名（grid 62px 列保留）
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-05 编号列恒显稳定句柄（code/短 ID），可点击复制并反馈[2m > [22m【Minor 返修】writeText reject/缺失不得假成功：仅 resolve 才报已复制，失败给温和手动复制提示
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22m经 collectTaskMaterials 的 deliverableId 建反查映射，状态用 taskStatusLabels
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22m卡片展示「关联任务」：句柄 + 状态 + 标题；无关联诚实显示「暂无关联任务」
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22mSH-3 接缝可选 onGotoTask 跳转，未接线时静态展示不报错
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22mCSS：反查块句柄等宽、状态 chip、标题省略，链接有 hover/焦点 affordance
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22m零 schema：不新增交付物字段、不回写任务（视图只读取 tasks，无 setTasks/写盘调用）
+ [32m✓[39m src/client/views/d04-d05-d11-contract.test.ts[2m > [22mD-11 交付物侧只读反查关联任务（零 schema、不回写）[2m > [22m【Minor 返修】关联任务按钮点击必须阻止冒泡，仅开任务抽屉、不触发卡片 openEdit（事件契约）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22min_progress（进行中）正确写入，不再被旧白名单丢弃
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22mblocked（受阻）正确写入，不再被旧白名单丢弃
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22mtodo / done 正常写入
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22m非法状态值被丢弃，返回 {}（调用方据此静默返回）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22m旧枚举残留 doing 不再被接受（历史 bug 不复现）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22m进度 100 联动置 done；合法进度原样 round 落库
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22m合法 dueDate 写入，非法日期丢弃
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mbuildUpdate：状态枚举对齐 todo/in_progress/blocked/done[2m > [22m转发权威枚举，与 status.ts 单一来源一致
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mclampProgress：写路径「必须有值」（非有限 → 0，round，0..100）[2m > [22m数字/数字字符串 round 后钳制到 0..100
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mclampProgress：写路径「必须有值」（非有限 → 0，round，0..100）[2m > [22m非有限值回退 0（不写 NaN/Infinity 进库）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mparseProgressInput：写路径「可选字段」（空/非法 → undefined 不写）[2m > [22m数字与数字字符串合法解析为 round 后的 0..100
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mparseProgressInput：写路径「可选字段」（空/非法 → undefined 不写）[2m > [22m越界值钳制：150→100，-5→0
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mparseProgressInput：写路径「可选字段」（空/非法 → undefined 不写）[2m > [22mnull / undefined / 空串 / 纯空白 → undefined（不写该字段）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mparseProgressInput：写路径「可选字段」（空/非法 → undefined 不写）[2m > [22mNaN / Infinity / 非数字串 → undefined
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mCSV 进度列行为（parseCsvTasks，与改前等价）[2m > [22m整数与百分号等价解析为同一数值
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mCSV 进度列行为（parseCsvTasks，与改前等价）[2m > [22m空 / 纯空白 / 非法串 → undefined（不写进度）
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22mCSV 进度列行为（parseCsvTasks，与改前等价）[2m > [22m越界钳制：150→100，-5→0
+ [32m✓[39m src/core/task-inline.test.ts[2m > [22m网格导入路径（planGridCsvImport → parseGridTasks）进度列同口径[2m > [22m百分号/空行正常出计划，深度与编号不被进度解析影响
+ [32m✓[39m src/client/views/tasks-number-feedback.test.tsx[2m > [22mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m成功反馈独立于62px按钮和图标，编号仍保留；1599ms不早清、1600ms复原
+ [32m✓[39m src/client/views/tasks-number-feedback.test.tsx[2m > [22mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m失败denied显示全文并保可选原编号，无假成功，1600ms复原
+ [32m✓[39m src/client/views/tasks-number-feedback.test.tsx[2m > [22mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m失败missing显示全文并保可选原编号，无假成功，1600ms复原
+ [32m✓[39m src/client/views/tasks-number-feedback.test.tsx[2m > [22mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m第二行复制时第一行反馈清除，只向剪贴板交原编号；reset仍归属对应行
+ [32m✓[39m src/client/views/tasks-number-feedback.test.tsx[2m > [22mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m反馈独立样式允许列内换行而非hidden/ellipsis；失败编号可选，固定62px列不拓宽
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m顶部安全间距：pt-head 有 padding-top，h1 不贴宿主上沿
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m宽屏 ≥1080：pt-toolbar space-between 单行优先，动作簇居右换行兜底
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m嵌入中宽 561–1079：视图+chips 一行、动作簇一行（column 两行），密度长 chip 收起
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m窄屏 ≤560：chips 横向滚动单行不堆列，密度长 chip 收起
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m390：动作簇两行内收纳、密度 seg 均分，不顶出父宽
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 工具条分组 / 顶部间距 / 响应式（tasks.css）[2m > [22m窄屏视图切换器整行规则不得泄漏到桌面（顶层不得出现 pt-viewleft/pt-viewswitch width:100%）
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 回归保护：既有任务能力不得被返修破坏（tasks.tsx）[2m > [22m批量条 + 不可撤销删除确认保留
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 回归保护：既有任务能力不得被返修破坏（tasks.tsx）[2m > [22m行内状态直改 + 同源 tally/donePercent 保留
+ [32m✓[39m src/client/views/tasks-p0-toolbar.test.ts[2m > [22mP0 回归保护：既有任务能力不得被返修破坏（tasks.tsx）[2m > [22m命名视图保存/分享、导出菜单、导入模板、分组开关、排序、密度、搜索保留
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 甘特密度与今天线避让[2m > [22m行高提升到可容纳标题+副行（ROW_H ≥ 40），条高同步
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 甘特密度与今天线避让[2m > [22m身份列加宽到 250px，副行不再用最小 t-10 挤截
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 甘特密度与今天线避让[2m > [22m「今天」标签移入顶部日期轴，不压任务条
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 甘特密度与今天线避让[2m > [22mgantt.css 零裸色
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 OKR/习惯真空态复用 S0 EmptyState、消除双 CTA[2m > [22m两视图均从 shared/ui 引入 EmptyState
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 OKR/习惯真空态复用 S0 EmptyState、消除双 CTA[2m > [22m空态卡内不再出现第二个「新建首个」重复 CTA
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P1 OKR/习惯真空态复用 S0 EmptyState、消除双 CTA[2m > [22m页头唯一新建入口保留（onCreate）
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 里程碑达成率格同权伸缩[2m > [22m达成率格不再锁死 180px 被推到带外
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 里程碑达成率格同权伸缩[2m > [22mmilestones.css 零裸色
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 人员分布 x 轴/统计行预留空间不裁切[2m > [22m分布体底部留白、点图预留刻度区
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 人员分布 x 轴/统计行预留空间不裁切[2m > [22mpeople.css 零裸色
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 汇报快照格不竖排折行[2m > [22m证据不足走非数值小号文本变体，不与大数字同阶
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 汇报快照格不竖排折行[2m > [22m快照格最小宽度 + 横滚，数值 nowrap
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 汇报快照格不竖排折行[2m > [22mreports.css 零裸色
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 交付物全部视图不渲染空状态分组[2m > [22m全部视图过滤空组，仅显式筛选空状态时才给空提示
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 风险矩阵纵轴「概率」只标一次[2m > [22m角格标概率，行内不再重复「概率」前缀
+ [32m✓[39m src/client/views/non-p0-fixes.test.ts[2m > [22m非P0返修 · P2 风险矩阵纵轴「概率」只标一次[2m > [22mrisk-issues.css 零裸色
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22m交付前核对卡 390 流式换行契约（不得 nowrap 撑破 / 不靠 hidden 遮蔽）[2m > [22m头部按钮与副标题恢复 normal，文本列可收缩
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22m交付前核对卡 390 流式换行契约（不得 nowrap 撑破 / 不靠 hidden 遮蔽）[2m > [22m条目按钮流式换行、min-width:0、max-width:100%，文字 normal 可断
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22m交付前核对卡 390 流式换行契约（不得 nowrap 撑破 / 不靠 hidden 遮蔽）[2m > [22m卡片盒模型 border-box / max-width:100%，模块不给检查卡加 overflow:hidden 遮蔽
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22m交付前核对卡 390 流式换行契约（不得 nowrap 撑破 / 不靠 hidden 遮蔽）[2m > [22m表格 .pt-scroll 保留内部横滚（表格例外），文本卡不靠横滚
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-card
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-head
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-head-txt
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-head-sub
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-count
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-body
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-group
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-item
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-rule
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-main
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-title
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-reason
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-suggest
+ [32m✓[39m src/client/views/tasks-responsive.test.ts[2m > [22mtasks.tsx 检查卡类名接线不漂移[2m > [22m渲染包含 .pm-check-foot
+ [32m✓[39m src/commands/task-feedback.test.ts[2m > [22mJ5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约[2m > [22m成功：摘要 ≤2 行、无 details/任务 ID/代码围栏，完整字段仅进 detail，TTL=3000
+ [32m✓[39m src/commands/task-feedback.test.ts[2m > [22mJ5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约[2m > [22m空日期 null 与旧值 undefined 等价，不产生“空 → 空”伪变更
+ [32m✓[39m src/commands/task-feedback.test.ts[2m > [22mJ5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约[2m > [22m错误：持久（不自动消失）、单处、走回退文本
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mclampProgress 展示钳制[2m > [22m合法值原样返回（0..100）
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mclampProgress 展示钳制[2m > [22m超过 100 的脏值（现网 1.3 实测 123）→ 100
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mclampProgress 展示钳制[2m > [22m负值 → 0
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mclampProgress 展示钳制[2m > [22m非有限数（NaN / Infinity / -Infinity）→ 0
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mclampProgress 展示钳制[2m > [22mnull / undefined → 0（缺省按 0 展示）
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22misProgressOutOfRange 越界判定（纯检测，不改写）[2m > [22m合法值（含边界 0 / 100）→ false
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22misProgressOutOfRange 越界判定（纯检测，不改写）[2m > [22m>100 / <0 → true
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22misProgressOutOfRange 越界判定（纯检测，不改写）[2m > [22m非有限数 → true；null / undefined（缺省）→ false
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mresolveTaskProgressMeta 展示值 clamp（脏 manual 不污染对外）[2m > [22mmanualProgress=123：manual 保留原值供检测，display 钳到 100，mode 仍为 manual
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mresolveTaskProgressMeta 展示值 clamp（脏 manual 不污染对外）[2m > [22mmanualProgress=-8：manual 保留原值，display 钳到 0
+ [32m✓[39m src/core/progress-clamp.test.ts[2m > [22mresolveTaskProgressMeta 展示值 clamp（脏 manual 不污染对外）[2m > [22m无 manual / 无客观：display=null（不伪造 0%），clamp 不把 null 变 0
+ [32m✓[39m src/client/views/visible-layer-contract.test.ts[2m > [22m1A 可见层：每页局部 CSS 非空态改动 + 390 档[2m > [22mmeetings：分段激活层级 / 状态 chip / 390 单列紧凑
+ [32m✓[39m src/client/views/visible-layer-contract.test.ts[2m > [22m1A 可见层：每页局部 CSS 非空态改动 + 390 档[2m > [22mreports：分段激活层级 / 快照条数字对齐 / 390 两列
+ [32m✓[39m src/client/views/visible-layer-contract.test.ts[2m > [22m1A 可见层：每页局部 CSS 非空态改动 + 390 档[2m > [22mdeliverables：状态 chip 激活层级 / 概览条数字对齐 / 390 单列
+ [32m✓[39m src/client/views/visible-layer-contract.test.ts[2m > [22m1A 可见层：每页局部 CSS 非空态改动 + 390 档[2m > [22mtasks：批量条危险层级 / 筛选 chip 激活 / 390 换行，且删除仍走不可撤销确认
+ [32m✓[39m src/client/views/visible-layer-contract.test.ts[2m > [22m1A 可见层：每页局部 CSS 非空态改动 + 390 档[2m > [22moverview：主按钮层级 / 状态 chip / 仓库按钮 390 堆叠，健康环保留
+ [32m✓[39m src/core/progress-meta.test.ts[2m > [22mresolveTaskProgressMeta 客观/人工双轨[2m > [22m有清单客观派生时，无人工 → mode=objective，display=objective
+ [32m✓[39m src/core/progress-meta.test.ts[2m > [22mresolveTaskProgressMeta 客观/人工双轨[2m > [22m人工设定与客观并存：manual 不污染 objective，display 人工优先，mode=manual
+ [32m✓[39m src/core/progress-meta.test.ts[2m > [22mresolveTaskProgressMeta 客观/人工双轨[2m > [22m无清单/无信号：objective=null，未人工 → mode=none，display=null（不伪造 0%）
+ [32m✓[39m src/core/progress-meta.test.ts[2m > [22mresolveTaskProgressMeta 客观/人工双轨[2m > [22m清除人工（manualProgress=null）→ 回落客观，mode=objective
+ [32m✓[39m src/core/progress-meta.test.ts[2m > [22mresolveTaskProgressMeta 客观/人工双轨[2m > [22m无客观仅有人工：mode=manual，display=manual，objective=null
+ [32m✓[39m src/client/views/tasks-contract.test.ts[2m > [22mG-A tasks 视图 S0 合同门（批次 1A）[2m > [22m真空 / 无结果态复用 S0 EmptyState，不再用私有 pt-empty 块
+ [32m✓[39m src/client/views/tasks-contract.test.ts[2m > [22mG-A tasks 视图 S0 合同门（批次 1A）[2m > [22m批量删除走 confirmDanger 不可撤销二次确认，不直接删
+ [32m✓[39m src/client/views/tasks-contract.test.ts[2m > [22mG-A tasks 视图 S0 合同门（批次 1A）[2m > [22m行内状态/截止/进度直改走 buildUpdate，计数同源 tallyTasksByStatus/donePercent
+ [32m✓[39m src/client/views/tasks-contract.test.ts[2m > [22mG-A tasks 视图 S0 合同门（批次 1A）[2m > [22m命名视图保存/分享/删除与导出菜单保留，不被空态改造破坏
+ [32m✓[39m src/core/progress-report-markdown-u5.test.ts[2m > [22mU5 report Markdown 输出来源与安全转义[2m > [22m输出会话派生来源，sessionId 转义竖线并展示
+ [32m✓[39m src/core/progress-report-markdown-u5.test.ts[2m > [22mU5 report Markdown 输出来源与安全转义[2m > [22mmanual 不展示 sessionId
+ [32m✓[39m src/client/views/tasks-clipboard.test.ts[2m > [22mcopyHandleToClipboard 真实成功/失败三态[2m > [22mwriteText resolve → 返回 true（允许报已复制）
+ [32m✓[39m src/client/views/tasks-clipboard.test.ts[2m > [22mcopyHandleToClipboard 真实成功/失败三态[2m > [22mwriteText reject（权限/非安全上下文）→ 返回 false，不抛、不假成功
+ [32m✓[39m src/client/views/tasks-clipboard.test.ts[2m > [22mcopyHandleToClipboard 真实成功/失败三态[2m > [22mnavigator.clipboard 缺失 → 返回 false，不抛
+ [32m✓[39m src/client/views/tasks-tally.test.ts[2m > [22mtallyTasksByStatus 五态互斥（契约 §7 / 数字口径字典）[2m > [22m五桶合计恒等于输入条数，wrapped 单独成桶不并入 done
+ [32m✓[39m src/client/views/tasks-tally.test.ts[2m > [22mtallyTasksByStatus 五态互斥（契约 §7 / 数字口径字典）[2m > [22mopen = todo+in_progress+blocked，不含 done/wrapped
+ [32m✓[39m src/client/views/tasks-tally.test.ts[2m > [22mtallyTasksByStatus 五态互斥（契约 §7 / 数字口径字典）[2m > [22mdonePercent 四舍五入，空总数为 0 不除零
+ [32m✓[39m src/client/views/tasks-tally.test.ts[2m > [22mtallyTasksByStatus 五态互斥（契约 §7 / 数字口径字典）[2m > [22m空输入返回全零桶
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (22)[39m
+[2m      Tests [22m [1m[32m227 passed[39m[22m[90m (227)[39m
+[2m   Start at [22m 23:00:49
+[2m   Duration [22m 1.35s[2m (transform 384ms, setup 0ms, collect 706ms, tests 326ms, environment 0ms, prepare 44ms)[22m
+
+JSON report written to /private/tmp/pmtool-a9-import-MweuST/vitest.json

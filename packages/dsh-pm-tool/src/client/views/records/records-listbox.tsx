@@ -106,7 +106,11 @@ export function RecordsListbox(props: RecordsListboxProps) {
 
       {open && (
         <>
-          <div className="rb-lb-backdrop" onClick={() => setOpen(false)} />
+          <div className="rb-lb-backdrop" onClick={event => {
+            // 外层 label 的默认激活会再点 trigger，抵消本次关闭。
+            event.preventDefault()
+            setOpen(false)
+          }} />
           <div className="rb-lb-menu" role="listbox" aria-label={ariaLabel}>
             {searchable && (
               <input
@@ -128,7 +132,11 @@ export function RecordsListbox(props: RecordsListboxProps) {
                 aria-selected={option.value === value}
                 className={`rb-lb-option${idx === active ? ' is-active' : ''}${option.value === value ? ' is-selected' : ''}`}
                 onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(option)}
+                onClick={event => {
+                  // 选项卸载后的外层 label 默认激活会再次点击 trigger。
+                  event.preventDefault()
+                  choose(option)
+                }}
               >
                 <span>{option.label}</span>
                 {option.hint && <span className="rb-lb-hint">{option.hint}</span>}

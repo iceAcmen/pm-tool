@@ -1,0 +1,18 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 非法日期：生产解析失败无确认入口，取消与重开均零写
+[31m[1mAssertionError[22m: expected 'success' to be 'error' // Object.is equality[39m
+
+Expected: [32m"error"[39m
+Received: [31m"success"[39m
+
+[36m [2m❯[22m src/client/views/tasks-import-confirm.test.tsx:[2m211:27[22m[39m
+    [90m209| [39m  [35mconst[39m f [33m=[39m [35mawait[39m [34mfixture[39m()
+    [90m210| [39m  [35mawait[39m [34mselect[39m(f[33m.[39mmounted[33m,[39m csv[33m.[39m[34mreplace[39m([32m'2026-11-09'[39m[33m,[39m [32m'2026-02-30'[39m))
+    [90m211| [39m  [34mexpect[39m(f[33m.[39mcalls[[34m0[39m][33m.[39mkind)[33m.[39m[34mtoBe[39m([32m'error'[39m)
+    [90m   | [39m                          [31m^[39m
+    [90m212| [39m  [34mexpect[39m([34mtext[39m(f[33m.[39mmounted[33m.[39mroot[33m.[39m[34mfindByProps[39m({ className[33m:[39m [32m'pt-import'[39m })))…
+    [90m213| [39m  [34mexpect[39m(f[33m.[39mmounted[33m.[39mroot[33m.[39m[34mfindAllByProps[39m({ className[33m:[39m [32m'pt-primary pm-imp[39m…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

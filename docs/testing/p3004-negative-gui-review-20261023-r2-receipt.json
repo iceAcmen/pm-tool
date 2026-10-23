@@ -1,0 +1,76 @@
+{
+  "角色": "trae，独立GUI审证专家；非开发/GUI执行",
+  "范围": "原P3004NegativeGuiR1冻结证据审计；非产品执行",
+  "环境": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "记录依据": "本角色实际exec_command工具已完成返回的退出码与可见输出；非Main摘要或自造spawn收据。",
+  "syntaxCheck": {
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "--check",
+      "/tmp/p3004-negative-gui-review-20261023-r2-reader.mjs"
+    ],
+    "observedToolExit": 0,
+    "wallSeconds": 0.139,
+    "toolOutput": "",
+    "startEnd": "工具未提供，NOT_COLLECTED"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p3004-negative-gui-review-20261023-r2-reader.mjs",
+        "audit"
+      ],
+      "observedToolExit": 0,
+      "wallSeconds": 0.4805,
+      "stdout": "{\"mode\":\"audit\",\"start\":\"2026-10-22T23:20:45.761Z\",\"end\":\"2026-10-22T23:20:46.092Z\",\"indexed\":893,\"physical\":896,\"source\":7,\"states\":11,\"roots\":44,\"rawCopies\":418,\"rpcErrors\":[\"efd4bf21-d77c-4f33-bedd-9abd4fd5bbbe\",\"9d276e12-f2c3-47eb-92e9-4d53cf9fa6ec\"],\"exit\":0}\n",
+      "separateStderr": "工具未独立分栏，NOT_COLLECTED；可见输出无错误",
+      "readerStartEnd": "来自已实跑reader输出与audit同值，不冒工具外层起止时间"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "-e",
+        "const fs=require(\"node:fs\"),c=require(\"node:crypto\"); const root=\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p3004-negative-gui-review-20261023-r2\";const a=JSON.parse(fs.readFileSync(root+\"-audit.json\"));const b=fs.readFileSync(\"/tmp/p3004-negative-gui-review-20261023-r2-reader.mjs\");require(\"node:assert/strict\").deepEqual({bytes:b.length,sha256:c.createHash(\"sha256\").update(b).digest(\"hex\")},a.reader);console.log(\"OK\");"
+      ],
+      "observedToolExit": 0,
+      "wallSeconds": 0.1457,
+      "stdout": "OK\n",
+      "作用": "独立只读回核本reader与已产audit指纹一致，非重跑产品/GUI/完整审计",
+      "separateStderr": "工具未独立分栏，NOT_COLLECTED"
+    }
+  ],
+  "原执行收据": {
+    "来源": "只读P3004NegativeGuiR1内round20至25、activation、seal收据，具体argv/时间/exit/stdout指纹见audit.receipts",
+    "实际子进程终码": "八件均0/null signal/空stderr，已物理核SHA",
+    "原封包工具更外层终码": "NOT_COLLECTED，不补造"
+  },
+  "原图目视": {
+    "工具": "view_image",
+    "detail": "original",
+    "png": [
+      "round23-original-H-edit-text-fallback.png",
+      "round24-missing-before-save.png",
+      "round24-missing-after-rejection.png",
+      "round24-cross-before-save.png",
+      "round24-cross-after-rejection.png",
+      "round25-after-normal-habit-cancel.png"
+    ],
+    "jpeg": [
+      "frames/round24-30.jpg",
+      "frames/round24-34.jpg",
+      "frames/round24-37.jpg"
+    ],
+    "结果": "9次工具均实际返回原图；非新采GUI、非声称逐图目视全部198张"
+  },
+  "设施边界": [
+    "初始五个login=false并行读调用被工具拒绝，不执行对应命令；默认shell重试成功",
+    "指定/user_profile.md及项目project_memory.md不存在，ls退出1，以仓库事实为准",
+    "产品/GUI/build/install/服务/Git/Main脚本/spawn均NOT_RUN"
+  ],
+  "seal工具终态": "在本文件形成时尚未调用；完成后只追加同前缀seal-command-receipt新文件，不伪造已完成、不改本收据"
+}

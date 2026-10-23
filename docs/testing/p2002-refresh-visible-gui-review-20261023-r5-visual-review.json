@@ -1,0 +1,107 @@
+{
+  "platform": "trae",
+  "role": "独立 P2002 后置封签接续专家；不执行 GUI、产品或 Main 脚本",
+  "verdict": "PASS_LIMITED_GUI_REFRESH_VISIBLE",
+  "scope": "仅 P2002TreeR3 报告 §8.2：原 refresh 完成并沿原合同滚入视口后，同 ID 父行及两子行的同视口原图缺口",
+  "inheritance": {
+    "method": "继承原 r4 两 PNG/13 JPEG 的真实 functions.view_image 记录；本轮 reader 重核其全部 15 件指纹，本轮不冒重新目视全 15 件",
+    "audit": {
+      "file": "docs/testing/p2002-refresh-visible-gui-review-20261023-r4-audit.json",
+      "bytes": 57027,
+      "sha256": "96f9d0228d4557862716a1ae134f3b52a88fd6336f32b1f9ed5621519d29dcc9"
+    },
+    "visual": {
+      "file": "docs/testing/p2002-refresh-visible-gui-review-20261023-r4-visual-review.json",
+      "bytes": 5566,
+      "sha256": "87ef2ef45d04253a4d417be8154c502cc3334c0ad02b84614f4588cf85c6a84a"
+    },
+    "originalR4NotModified": true
+  },
+  "currentVisualToolReceipt": {
+    "tool": "functions.view_image",
+    "startedAt": "2026-10-23T02:45:58.538Z",
+    "endedAt": "2026-10-23T02:46:29.346Z",
+    "bracketDurationMs": 30808,
+    "timingLimit": "前后实际时钟包络，包含调用和审图间隔；工具未提供各图起止/终码，不填单图耗时或伪造进程 exit",
+    "successfulImageLoads": 3,
+    "failedImageLoads": 0,
+    "newBrowserExecution": false,
+    "newScreenshotOrFrameGeneration": false
+  },
+  "viewportMetadata": {
+    "innerWidth": 1440,
+    "innerHeight": 718,
+    "outerWidth": 1440,
+    "outerHeight": 857,
+    "dpr": 2
+  },
+  "bodyText": {
+    "beforeChars": 1569,
+    "afterChars": 1569,
+    "source": "原 before/after JSON 的 text.length；不是活 DOM、非新候选 body 或首读"
+  },
+  "currentImages": [
+    {
+      "file": "round01-after-refresh-tree-visible.png",
+      "fingerprint": {
+        "bytes": 395509,
+        "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a"
+      },
+      "nativeImageHeader": { "width": 2880, "height": 1436 },
+      "toolReturned": "Image loaded (2048x1020, detail=high)",
+      "viewedInCurrentRole": true,
+      "observation": "父 P2002-R3出站父任务、子甲和子乙同视口。各一处已导出 · 最近21:23 · 外部为唯一事实源完整可读。右侧编辑入口不与文案重叠。子编号格实际 8...；中间 AI 只读诊断卡不是第三子行。",
+      "temporalLimit": "PNG 与 before PNG 字节相同，不能凭字节证明先后；由已配对 response 和 after JSON 时钟及末帧定位刷新后当态"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-11.jpg",
+      "fingerprint": {
+        "bytes": 80142,
+        "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+      },
+      "nativeImageHeader": { "width": 1500, "height": 748 },
+      "toolReturned": "Image loaded (1500x748, detail=high)",
+      "viewedInCurrentRole": true,
+      "captureAt": "2026-10-23T01:05:25.744Z",
+      "observation": "response 后恢复三行同屏，三处出站文案可读，诊断卡与子行区分明确；与末 PNG 一致。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-12.jpg",
+      "fingerprint": {
+        "bytes": 80142,
+        "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d"
+      },
+      "nativeImageHeader": { "width": 1500, "height": 748 },
+      "toolReturned": "Image loaded (1500x748, detail=high)",
+      "viewedInCurrentRole": true,
+      "captureAt": "2026-10-23T01:05:25.815Z",
+      "observation": "response 后末帧三行同屏，各一出站位完整，与末 PNG 相符。"
+    }
+  ],
+  "transition": {
+    "inheritedFrames0And1": "请求前已有三行同屏，不单独算刷新后凭据",
+    "inheritedFrames2Through10": "页首过渡，三行在视口下；帧9/10虽已 response 返回，仍不能作三行目视凭据",
+    "currentFrames11And12": "本轮真实补看，response 后末帧三行同屏",
+    "noContinuousAllVisibleClaim": true
+  },
+  "crossChecks": {
+    "rpcId": "25bf131c-7d3c-42d9-ab54-cb397ced52a0",
+    "requestAt": "2026-10-23T01:05:25.600Z",
+    "responseAt": "2026-10-23T01:05:25.673Z",
+    "afterStateAt": "2026-10-23T01:05:25.796Z",
+    "projectId": "p-0001",
+    "ids": ["t-0009", "t-0010", "t-0011"],
+    "codesVerifiedInSealedRpcRawAndRows": ["8", "8.1", "8.2"],
+    "childCodeFullTextNotVisuallyClaimed": true,
+    "latestAtVerifiedInAuditSnapshotAndTimeDatetime": "2026-10-22T21:23:08.315Z",
+    "fullIsoNotVisuallyClaimed": true,
+    "nativeImageSizeNotViewportOrToolPreviewSize": true
+  },
+  "exclusions": [
+    "不签连续全过程三行 visible",
+    "不签 whole P2002、P2、B8、任务全项、当前新 panel 源或父 ordinarycommit",
+    "不称新 L8、当前源码首读、活 runtime 探测或新 GUI 执行",
+    "不重 TTL/导出/顶层/B/状态 group/KR/ask",
+    "新源码或产物变化后继承须另审受影响范围"
+  ]
+}

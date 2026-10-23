@@ -6,6 +6,26 @@
 
 ---
 
+## KB-049 ｜ 隔离DOM依赖须覆盖ESM与createRequire，回归补跑只接未执行或失败项（沉淀：trae，2026-10-23）
+
+- **已实测**：新组合[回归原件](plans/2026-10-23-combined-tasks-people-regression.md#1140实际回归封交)ESM alias能完成原6文件41例，但两新测试的Node `createRequire`仍从主包寻jsdom/react-dom；仅自有transform重锚到现冻结dom-deps，原oracle不改，9/11例实际退出0。不往主包安装依赖或为测试扩产品代码。
+- **有效结果与历史分开**：保原collector exit1/原41绿，补执行20绿，机器effective记录61；95verify初94绿和单P0串行补绿同理保原exit1。close不篡改原commands终码，补链必须有准确未执行/失败集合、同候选/原oracle/真实后继收据，放行由独立专家审。
+- **计时和效率**：阶段监督后置记录真实childargv/exit，不以“排队成功”当测试成功；full与DOM分cache并行，full夹具生成后才跑报告专项。固定80ms异步脚本串行，不重跑已绿94项；父/command/child计时重叠不加总。
+
+## KB-048 ｜ 长密与历史fixture先走真实写API，再标准预检恢复并分开计数口径（沉淀：trae，2026-10-23）
+
+- **已实测路径**：[F1/FL准备](plans/2026-10-23-f1-fl-fixture-r3-plan.md)及`F1FLFixtureR3`的base/fl/fd真实outer均0。真实addProject/addTask/各领域add/update返回系统ID；collectBackup的新合法历史内容→precheckBackupContent→restoreBackupFromContent→createBackup→precheckBackupFile。隔离无file_assets仍产标准空侧车；带真资产须原路径/侧车链，不能用JSON-only绕字节检查。
+- **长度保全**：新FL task title240/description2000、link title200/note500、progress content2000/author80均生产写读回保持；E1三版、E2两版软删、E3独立ID保持。同A四类各20实record，不用建议条目/文字段数充数。新FD另20长姓名负责人，仍A24平面五态；当前运行47根未变。
+- **口径分开**：基线甲13任务/open8、乙9/open6、未分配2；people页阈值5与open值产生maxX10，board四段全部已分配任务共享MAX13。FD重新求实值maxX8，不沿用两人轴。源定位见[生产API报告](plans/2026-10-23-f1-fl-production-schema-r3.md)，准备oracle是真函数输出与工程期望，不是GUI/独立功能PASS。
+- **边界**：合法历史仅新标准包createdAt/updatedAt连贯值，普通update不能写历史时间；完成材料后再恢复D-8，避免后续资料写刷掉历史。新对象以新别名/ID认领，不伪称找到了缺失原包。独立fixture审证/人员和长密GUI仍后继。
+
+## KB-047 ｜ React DOM诊断先建立JSDOM环境，默认动作与坐标命中分别取证（沉淀：trae，2026-10-23）
+
+- **结论**：JSDOM globals必须先安装再import ReactDOM；React/ReactDOM同来源identity检查放suite后afterAll，避免在setup提前加载ReactDOM改变输入事件特性判断。真实DOM默认动作取消可观察document bubble的defaultPrevented，但不能据JSDOM闭合推定浏览器label默认激活时序相同。
+- **适用场景**：实际form/overlay/listbox option及子span测试；原布局中的pointer主save。浏览器先采可信事件顺序及实际elementFromPoint命中，分开判“选择未闭”“submit未到达”“后台返回失败”。
+- **实证**：[F02开发包与命令](plans/2026-10-23-f02-option-default-development.md) red7+2红/同test9绿/原28绿，两identity同来源、无attachEvent错误；[原GUI审证](testing/six-repairs-pointer-gui-review-20261023-r1-report.md)首save命中遮罩。独立新源门/修后GUI尚待，不以开发绿补验收。
+- **隔离**：每轮新inputs/config/cache/home/tmp/output，四声明依赖只读链接并核前后SHA；记录原stdout/stderr/argv/cwd/实际子exit。外层异步工具终码未收须单列，不从文件存在推零。
+
 ## KB-041 ｜ 负责人指令检查要有具体触发，澄清不能转嫁工程责任（沉淀：trae，2026-10-21；ADL-058）
 
 - **已授权做法**：执行前核有效范围、授权、候选和测试门；能从上下文补齐的直接补齐。遇实质冲突，引用原句和具体规则，说明受影响动作与后果，问最小问题并继续不受影响工作。完整操作以 collaboration §11.7 为准。
@@ -403,3 +423,40 @@
 - **未来演进**：显式 promote 可根据行动项创建 WBS 任务并回写 `taskId`；已有 `taskId` 时拒绝重复创建。现有标题、负责人、截止日期和状态可直接映射，无需迁移 meetings 表。
 - **适用场景**：子实体主要依附父记录，但未来需要被单独引用、转换或审计的场景。
 - **来源/佐证**：ADL-025；`src/core/meeting.ts`、`src/core/meetings.ts`、`scripts/verify-meetings.mjs`。
+
+## KB-042 ｜ macOS 授权、应用控件可读与真实消息采集须分开验证（trae，2026-10-21）
+
+- **结论**：`AXIsProcessTrusted=true`、录屏true与`AXUIElementCopyAttributeValue(...AXWindows)`返回0只证明权限/窗口层，不证明聊天列表或消息控件可读。Computer Use服务、Terminal和TRAE是不同运行身份，应在实际采集进程复查。
+- **已验证实例**：微信4.1.15本机修复Terminal/TRAΕ辅助功能及Terminal录屏后doctor退出0，窗口1；原读取器仍侧栏0、标题null。单独本机Vision从消息区域截图识别5条真实消息，须保留来源、置信度、可见窗口范围，不能扩大成完整群历史。
+- **诊断策略**：权限拒绝与空控件树分别报告；空树暂停定时采集。原文、截图放Git忽略的私有data，报告不伪造平台消息ID、发出日期或完成率。
+- **后续兼容实测**：本机Vision适配后r13/r14同源码连续两轮四群均采到，末轮16条完整文本消息，25/25开发自验；报告 `reports/wechat-pilot-20261021/四群OCR兼容修复与实测.md` 及最终指纹索引。单窗口截图漏搜索子窗口，区域截图才包含实际弹层；本地结果分类可能为“最常使用”。输入OCR只作辅助，唯一候选与切入后完整标题/群人数才是对象核验。
+- **CLI 前台读取**：NSWorkspace前台缓存依赖NSRunLoop，`sleep`后可能仍返回激活前的旧应用。本机从TRAE→`open -b`微信实验中，缓存仍TRAE、刷新事件循环后才读到微信；不据缓存误判真实失焦，也不取消失焦保护。
+- **OCR 覆盖/去重**：相同正文窗口可能因时间分隔漏识而不能按全部行对齐。本轮一群被记gap、三群unchanged，不能把gap条目自认真实新消息；原始批次保留，当前画面稿和逐批派生稿分开。正文/图片/引用/时间各须独立证据，截图媒体文字不可按位置猜成引用。
+- **证据与边界**：ISS-038；权限初验保留在原25211记录。完整历史、增量完整率、无人值守及独立审签未通过，OCR的watch仍拒绝，不依本条宣布可生产运行。
+
+## KB-043 ｜ React复选事件先取值，提交集合用完整受控状态（trae，2026-10-22）
+
+- React事件回调结束后`currentTarget`可为null；函数式updater延后执行/重算不得读取事件对象。同步取checked，updater只闭包布尔值、稳定ID与prev。初次eager更新成功不证明下一次安全。
+- 搜索可从DOM移除已选行；footer/受控Set保留不代表FormData仍完整。主保存应提交完整受控集合，空集合显式[]仍遵后端清空合同。
+- 证据与当前边界见ISS-039，真实DOM四崩红/真实handler提交两红与开发绿分开。原裸FormData子断言由独立专家裁，不删原红或为测试添加产品伪字段；新GUI未完成不冒全部通过。
+
+## KB-044 ｜ 固定摘录导出、结构化错误和共享资产保护的核对点（trae，2026-10-22）
+
+- 固定报告输出只消费已存摘录六字段，不能读当前源或因源软删过滤；JSON不变和导出内容完整是两条不同断言。复杂正文可用字面围栏安全保留，最长匹配用迭代求值，避免可变长spread栈溢出。ISS-040与独立RED/R1报告保已确认根因，R2仍待独立门。
+- 凭据错误按结构化码区分，不按正文出现Key就推导“未配置”；真实request到网关401可反证缺配置假说。ISS-041与独立11项明确层次，底层和command错误须分别验。
+- 文件task引用断为0不自动删`file_assets`元数据；现有GC扫描被asset元数据引用的内容寻址路径，故metadata仍在时dryrun/apply均0，不能为制造孤儿而删源。共享下载、末断保字节与真实孤儿apply是不同断言，旧孤儿AUTO不冒新GUI执行。
+- 标准含附件备份需JSON+同名sidecar一起预检；成功GUI备份→非空恢复前安全快照→13表/字节→新进程回读已由[独立有限审证](testing/ui-backup-nonempty-reentry-gui-review-20261022-r1.md)签，回滚失败路径仍另待，不以此单件签整个恢复域。
+
+## KB-045 ｜ EGO设施恢复、宿主串包和显式模式设置的核验（trae，2026-10-22）
+
+- ISS-042的八环境变量组合清除后同space恢复已实测；未逐项隔离，根因不能缩成一个变量。默认env最小console/直接安装路径也挂，不凭`help`成功说Node连接成功。
+- 宿主合并plugin响应去掉最终`//# sourceMappingURL=client.js.map`；新112完整client1719114byte与合并响应不是全字节包含，可执行1719080byte去此唯一尾注后在offset875361唯一精确。保原false检查，仅此非执行注释可归一，不删除业务代码/任意空白。运行身份仍需源/产物/profile/PID/flags串联，归一不证明首载cacheeligible。
+- 用户明确点prod模式会更新时间戳，即使模式value前后均prod；副驾只读AI调用前后可保业务/files，不能把设置时间戳变化说成全领域零写。先读差异字段，再按原合同记录例外，原seal失败保。
+- 最新SOURCE/AUTO及112整回归分别已有独立有限签字；三修新GUI747审在途。固定MD1468byte实际出口含两六字段旧摘录、源rv4软删后reportRAW不变，只是Main原件，不由本知识条目签GUI。
+
+## KB-046 ｜ 真实schema投影、合法历史备份和临时反馈采证（trae，2026-10-23）
+
+- 反思内容嵌套在 `ReflectionRecord.draft`；archive与review应从同一真实schema取known/gaps，不能用顶层假fixture证明内容完整。ISS-043的7句/2gap红与独立修后源码子门分别保存，源码绿不自动补新宿主文件主链。
+- 合法历史测试包可从真实标准备份仅追加明确的历史settings行，再通过原precheck/confirm导入；含附件必须保整侧车字节，并为新测试JSON重绑manifest摘要，原备份/manifest不覆盖。P2实际只变两settings与自动安全包，31天sent归档/29天active和audit4→5→6已由独立专家限定签字；不宣称这些测试历史是曾真实发送。
+- 副驾系统结果是当前React组件临时消息，关闭后正常重开不能恢复该条拒因；来源台账的旧applied摘要不代本次失败。原缺图保BLOCKED，经专家显式修订后一次新真实ask/apply并立即正常内滚采可见结果，前中末全部实际写根零变；Main新439原件在独立目视审，不凭DOM或success envelope自签。
+- 任务静态出站标识应沿现snapshot→selected项目→当前实际行消费真实项目audit最大时间；不只复用旧不可达leaf占位、不从其他项目借时间。当前接线缺陷在修，保原U4排序、状态/编号及读出口零写。

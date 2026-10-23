@@ -1,0 +1,439 @@
+{
+  "at": "2026-10-22T02:00:25.193Z",
+  "runtime": "v22.23.3",
+  "platform": "darwin",
+  "ok": true,
+  "checks": {
+    "index292ExactFileSetAndHashes": true,
+    "frozen520Inputs453ArtifactsMatch": true,
+    "baselineAndPatchBound": true,
+    "observationsCandidateLoadedBinding": true,
+    "fullUncachedUniqueClientSegment": true,
+    "recordedHostAndContext": true,
+    "open-1792633717128:contextAndFrames": true,
+    "open-1792633717128:rawMatchesCapturedManifest": true,
+    "compose-1792633754552:contextAndFrames": true,
+    "compose-1792633754552:rawMatchesCapturedManifest": true,
+    "save-1792633797652:contextAndFrames": true,
+    "save-1792633845858:contextAndFrames": true,
+    "save-1792633845858:rawMatchesCapturedManifest": true,
+    "open-1792633874373:contextAndFrames": true,
+    "open-1792633874373:rawMatchesCapturedManifest": true,
+    "cancel-1792633889539:contextAndFrames": true,
+    "cancel-1792633889539:rawMatchesCapturedManifest": true,
+    "sixSteps136RealFrames11PNGs": true,
+    "consoleEmptyAllSixSteps": true,
+    "openComposeReopenCancelZeroRoots": true,
+    "nonSaveIncludingFailedSelectorNoCommands": true,
+    "failedSelectorPreservedNoAfterFabricated": true,
+    "failedAttemptBracketedByEqualManifests": true,
+    "successfulExitsSeparateFromFailure": true,
+    "oneBusinessPOSTThenReadonlySnapshot": true,
+    "singleDraftIncrementalOpsNoRawReplacement": true,
+    "twoMatchedRunDoneSuccessPairs": true,
+    "legalF5MaterialHistorySeed": true,
+    "composedDraftNotPersisted": true,
+    "onlyRequestedTitleNoteAppendAndUpdatedAt": true,
+    "stableFourAttachmentsFrozenDeliverableAndFiles": true,
+    "E1OnlyAppendOldThreeRevisionsAndEntryMetadataIntact": true,
+    "E2SoftDeleteAndBothRevisionsE3AllFieldsUnchanged": true,
+    "rv4CorrectAuthorContentCurrentDateNotToday": true,
+    "snapshotEqualsSavedRaw": true,
+    "saveChangesOnlyTargetBusinessRecordAndHostSession": true,
+    "twoBytesAssetsAndAllUnrelatedTablesPreserved": true,
+    "reopenAndCancelRawEqualSavedIncludingUpdatedAt": true,
+    "reentryDOMTitleNoteRevisionAndFourVersionLabel": true,
+    "protectedInputsUnchanged": true
+  },
+  "index": {
+    "files": 292,
+    "mismatches": [],
+    "sha256": "a881d49729bb9f3320ccd065f9d7a7932071a39b7389ae2e6d223687a2a1276f"
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "tree": "/private/tmp/pmtool-a18-closure-20261022",
+    "sourceMismatch": [],
+    "artifactMismatch": [],
+    "sourceCount": 520,
+    "artifactCount": 453,
+    "sourceSHA": "2d533a1d214c0ae68739b354aac2e0d85b37ca6735c256d3dd3820bce3c191b9"
+  },
+  "loadedChecks": [
+    {
+      "bytes": 2584301,
+      "sha256": "b4a54301e085753ab4193ae1284156ac779064ec097d7e775970a3d6a9e9f708",
+      "first": 875361,
+      "second": -1,
+      "segmentBytes": 1705469,
+      "segmentSha": "21d941ca10d41935a5416b58f6da29f2b5520e8bf93396e850de526a68eea343",
+      "ok": true
+    }
+  ],
+  "rows": [
+    {
+      "step": "open-1792633717128",
+      "exit": {
+        "at": "2026-10-22T01:48:42.957Z",
+        "exit": 0,
+        "action": "open",
+        "boundary": "Main raw actual UI composition only, not independent PASS"
+      },
+      "frames": 8,
+      "frameErrors": [],
+      "timestampReorders": [
+        {
+          "file": "000005.jpg",
+          "previous": 1792633721.737042,
+          "timestamp": 1792633721.725514
+        }
+      ],
+      "requests": [],
+      "events": [],
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "step": "compose-1792633754552",
+      "exit": {
+        "at": "2026-10-22T01:49:23.780Z",
+        "exit": 0,
+        "action": "compose",
+        "boundary": "Main raw actual UI composition only, not independent PASS"
+      },
+      "frames": 71,
+      "frameErrors": [],
+      "timestampReorders": [
+        {
+          "file": "000058.jpg",
+          "previous": 1792633762.187523,
+          "timestamp": 1792633762.172341
+        },
+        {
+          "file": "000061.jpg",
+          "previous": 1792633762.340294,
+          "timestamp": 1792633762.325818
+        }
+      ],
+      "requests": [],
+      "events": [],
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "step": "save-1792633797652",
+      "exit": {
+        "at": "2026-10-22T01:50:00.207Z",
+        "exit": 1,
+        "action": "save",
+        "error": "Error: visible target missing: 保存"
+      },
+      "frames": 2,
+      "frameErrors": [],
+      "timestampReorders": [],
+      "requests": [],
+      "events": [],
+      "rootDiff": null
+    },
+    {
+      "step": "save-1792633845858",
+      "exit": {
+        "at": "2026-10-22T01:50:55.224Z",
+        "exit": 0,
+        "action": "save",
+        "boundary": "Main raw actual UI composition only, not independent PASS"
+      },
+      "frames": 41,
+      "frameErrors": [],
+      "timestampReorders": [],
+      "requests": [
+        {
+          "at": "2026-10-22T01:50:49.129Z",
+          "path": "/api/commands/execute",
+          "body": {
+            "type": "client-request",
+            "rpcId": "8ffd442f-abfe-423e-86ff-75ba7d90704f",
+            "method": "commands/execute",
+            "payload": {
+              "args": {
+                "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+                "line": "/pm task update t-0001 {\"title\":\"QA 组合保存 基础字段与资料进展\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":null,\"dueDate\":null,\"progress\":0,\"milestoneId\":\"m-0001\",\"predecessorIds\":[],\"repoUrl\":\"\",\"branch\":\"\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"draft\":{\"attachmentOps\":[{\"op\":\"updateNote\",\"id\":\"at-1\",\"note\":\"QA 组合保存原链接备注\",\"title\":\"QA规范\"}],\"progressOps\":[{\"op\":\"edit\",\"id\":\"pl-1\",\"content\":\"QA 组合保存 rv4 正文；既有版本必须保留。\",\"author\":\"测试甲组合\",\"date\":\"2026-10-21\"}]}}",
+                "submittedAttachments": []
+              }
+            }
+          }
+        },
+        {
+          "at": "2026-10-22T01:50:53.347Z",
+          "path": "/api/commands/execute",
+          "body": {
+            "type": "client-request",
+            "rpcId": "3559d0cc-91aa-4a90-b3e8-6f26929fb15c",
+            "method": "commands/execute",
+            "payload": {
+              "args": {
+                "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f",
+                "line": "/pm web snapshot",
+                "submittedAttachments": []
+              }
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-10-22T01:50:51.278Z",
+          "event": {
+            "type": "command/run",
+            "seq": 105,
+            "time": 1792633849130,
+            "data": {
+              "commandId": "cmd-2b310026-52",
+              "name": "pm",
+              "args": " task update t-0001 {\"title\":\"QA 组合保存 基础字段与资料进展\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":null,\"dueDate\":null,\"progress\":0,\"milestoneId\":\"m-0001\",\"predecessorIds\":[],\"repoUrl\":\"\",\"branch\":\"\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"draft\":{\"attachmentOps\":[{\"op\":\"updateNote\",\"id\":\"at-1\",\"note\":\"QA 组合保存原链接备注\",\"title\":\"QA规范\"}],\"progressOps\":[{\"op\":\"edit\",\"id\":\"pl-1\",\"content\":\"QA 组合保存 rv4 正文；既有版本必须保留。\",\"author\":\"测试甲组合\",\"date\":\"2026-10-21\"}]}}",
+              "source": {
+                "kind": "user"
+              }
+            }
+          }
+        },
+        {
+          "at": "2026-10-22T01:50:52.881Z",
+          "event": {
+            "type": "command/done",
+            "seq": 106,
+            "time": 1792633852693,
+            "data": {
+              "commandId": "cmd-2b310026-52",
+              "kind": "success",
+              "text": "[pm:summary]任务已更新｜t-0001 QA 组合保存 基础字段与资料进展\n[pm:summary]已修改：标题：Error register · Failed delivery · 成功重试 → QA 组合保存 基础字段与资料进展\n[pm:detail]\n```\n任务 ID：t-0001\nWBS：1\n项目 ID：p-0001\n父任务：无\n标题：QA 组合保存 基础字段与资料进展\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：未填写\n截止日期：未填写\n完成日期：未填写\n进度：0%\n里程碑：m-0001\n仓库：未填写\n创建时间：2026-10-21T13:44:54.980Z\n更新时间：2026-10-22T01:50:50.347Z\n```"
+            }
+          }
+        },
+        {
+          "at": "2026-10-22T01:50:54.147Z",
+          "event": {
+            "type": "command/run",
+            "seq": 107,
+            "time": 1792633853166,
+            "data": {
+              "commandId": "cmd-2b310026-53",
+              "name": "pm",
+              "args": " web snapshot",
+              "source": {
+                "kind": "user"
+              }
+            }
+          }
+        },
+        {
+          "at": "2026-10-22T01:50:54.150Z",
+          "event": {
+            "type": "command/done",
+            "seq": 108,
+            "time": 1792633853295,
+            "data": {
+              "commandId": "cmd-2b310026-53",
+              "kind": "success",
+              "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 组合保存 基础字段与资料进展\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"QA 组合保存原链接备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"},{\"id\":\"rv-4\",\"date\":\"2026-10-21\",\"author\":\"测试甲组合\",\"content\":\"QA 组合保存 rv4 正文；既有版本必须保留。\",\"revisedAt\":\"2026-10-22T01:50:49.991Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:50:50.347Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+            }
+          }
+        }
+      ],
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/tasks/t-0001.json",
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "step": "open-1792633874373",
+      "exit": {
+        "at": "2026-10-22T01:51:18.442Z",
+        "exit": 0,
+        "action": "open",
+        "boundary": "Main raw actual UI composition only, not independent PASS"
+      },
+      "frames": 7,
+      "frameErrors": [],
+      "timestampReorders": [],
+      "requests": [],
+      "events": [],
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "step": "cancel-1792633889539",
+      "exit": {
+        "at": "2026-10-22T01:51:33.432Z",
+        "exit": 0,
+        "action": "cancel",
+        "boundary": "Main raw actual UI composition only, not independent PASS"
+      },
+      "frames": 7,
+      "frameErrors": [],
+      "timestampReorders": [],
+      "requests": [],
+      "events": [],
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    }
+  ],
+  "payload": {
+    "title": "QA 组合保存 基础字段与资料进展",
+    "description": "",
+    "assignee": "",
+    "status": "todo",
+    "priority": "P1",
+    "startDate": null,
+    "dueDate": null,
+    "progress": 0,
+    "milestoneId": "m-0001",
+    "predecessorIds": [],
+    "repoUrl": "",
+    "branch": "",
+    "evidenceUrl": "https://example.com/qa-legacy",
+    "manualProgress": null,
+    "draft": {
+      "attachmentOps": [
+        {
+          "op": "updateNote",
+          "id": "at-1",
+          "note": "QA 组合保存原链接备注",
+          "title": "QA规范"
+        }
+      ],
+      "progressOps": [
+        {
+          "op": "edit",
+          "id": "pl-1",
+          "content": "QA 组合保存 rv4 正文；既有版本必须保留。",
+          "author": "测试甲组合",
+          "date": "2026-10-21"
+        }
+      ]
+    }
+  },
+  "initialTaskSHA": "1ee32a0238e89fd618892c56d523ceba000bbc9cc110f6096e9a3354a816971a",
+  "savedTaskSHA": "edd07216aeaa0d3ef5b8aedb1c3def2be5f89d873f2e0f0e7532ef2dafa7aac5",
+  "changedTaskFields": [
+    "attachments",
+    "progressLog",
+    "title",
+    "updatedAt"
+  ],
+  "rv4": {
+    "id": "rv-4",
+    "date": "2026-10-21",
+    "author": "测试甲组合",
+    "content": "QA 组合保存 rv4 正文；既有版本必须保留。",
+    "revisedAt": "2026-10-22T01:50:49.991Z"
+  },
+  "drift": {
+    "added": [],
+    "removed": [],
+    "changed": []
+  },
+  "boundary": "Mechanical archive audit only, not an independent GUI verdict. Reentry material text is DOM/raw evidence, not visible expanded history."
+}

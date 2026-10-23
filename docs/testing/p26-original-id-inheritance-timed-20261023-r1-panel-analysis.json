@@ -1,0 +1,73 @@
+{
+  "inputs": [
+    {
+      "path": "reports/all-pending-evidence-20261021/P2OkrRemainingR1/frozen-source/src/client/panel.tsx",
+      "bytes": 191080,
+      "sha256": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/frozen-source/src/client/panel.tsx",
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 193137,
+      "sha256": "afe188bda04c8d27df5c74037c4a4a9872eb0f0f132b06c6df370b10bc45c0b6"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-audit.json",
+      "bytes": 14062,
+      "sha256": "ca6d9cf2c131350b9d757ec60486cd5681dc16241dd92af4cbf86f2058697ab9"
+    }
+  ],
+  "declarations": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "source": 127,
+    "complete": 528,
+    "overlap": 112,
+    "delta": [
+      "packages/dsh-pm-tool/src/client/panel.tsx",
+      "packages/dsh-pm-tool/src/client/panel-confirm-escape.test.tsx",
+      "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx"
+    ]
+  },
+  "pieces": [
+    {
+      "marker": "function OkrForm",
+      "oldOffset": 134803,
+      "combinedOffset": 135607,
+      "currentOffset": 136588,
+      "oldSuffixSha": "d4475eb339cac811f4c8fab8ac0166d9b1e2a553109c99e6ccf43c3573b336e7",
+      "combinedSuffixSha": "d4475eb339cac811f4c8fab8ac0166d9b1e2a553109c99e6ccf43c3573b336e7",
+      "currentSuffixSha": "d4475eb339cac811f4c8fab8ac0166d9b1e2a553109c99e6ccf43c3573b336e7"
+    },
+    {
+      "marker": "function HabitForm",
+      "oldOffset": 138004,
+      "combinedOffset": 138808,
+      "currentOffset": 139789,
+      "oldSuffixSha": "bc2bb972040f64690fb89ba102584b9340dccf7bb3ebe10dfa1975277310f28f",
+      "combinedSuffixSha": "bc2bb972040f64690fb89ba102584b9340dccf7bb3ebe10dfa1975277310f28f",
+      "currentSuffixSha": "bc2bb972040f64690fb89ba102584b9340dccf7bb3ebe10dfa1975277310f28f"
+    },
+    {
+      "marker": "function DrawerPanel",
+      "oldOffset": 93417,
+      "combinedOffset": 94221,
+      "currentOffset": 95067,
+      "oldSuffixSha": "c7ad50d7fa5c908a59d6485507eefaad16de0a627568be87d6e78da32f5d26fd",
+      "combinedSuffixSha": "c7ad50d7fa5c908a59d6485507eefaad16de0a627568be87d6e78da32f5d26fd",
+      "currentSuffixSha": "d68f1d892012bb6a88afc7f1185c534c92205a98be0fb3f2e62093e4da03e2df"
+    },
+    {
+      "marker": "function TaskForm",
+      "oldOffset": 102985,
+      "combinedOffset": 103789,
+      "currentOffset": 104770,
+      "oldSuffixSha": "8386cac54f43fa285cd774261607a69e49cffedd9d4045bfe65b1ad4e81befdf",
+      "combinedSuffixSha": "8386cac54f43fa285cd774261607a69e49cffedd9d4045bfe65b1ad4e81befdf",
+      "currentSuffixSha": "8386cac54f43fa285cd774261607a69e49cffedd9d4045bfe65b1ad4e81befdf"
+    }
+  ]
+}

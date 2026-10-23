@@ -1,0 +1,94 @@
+{
+  "at": "2026-10-22T13:56:50.170Z",
+  "rows": [
+    {
+      "name": "preflight",
+      "metadata": {
+        "version": 2,
+        "executionId": "6074d80c4c9e66e087a38c4311a7dbf2",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "c630531ef1a00a47a3bc7bbee42235696acf0be213a0975ce22cc3e2c58f49f7",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 93350,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792677148281,
+        "startedAtMs": 1792677148296,
+        "finishedAtMs": 1792677177581
+      },
+      "metadataFingerprint": {
+        "bytes": 530,
+        "sha256": "3028952b5e0efbefc3a015716c86eb63719bcf7afa6c690b1e1d83f7d1a4c817"
+      },
+      "outputFingerprint": {
+        "bytes": 122,
+        "sha256": "e695a73328b364f0f44a868c9b9302bce613f6181a547d5ee405d104a679daa9"
+      },
+      "originalOutput": "{\"mode\":\"preflight\",\"checks\":8,\"evidenceFiles\":62,\"testsExecuted\":0,\"verdict\":\"NOT_SIGNED_PENDING_FINAL_RECEIPTS_REVIEW\"}\n"
+    },
+    {
+      "name": "final",
+      "metadata": {
+        "version": 2,
+        "executionId": "cbf1b39fb7a33b6eeaba4f9368de3e7e",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "b6908671c86659f92bcc5640854e44d46f202680ebe0a7aa62eee2f8c1adb4e1",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 93513,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792677245544,
+        "startedAtMs": 1792677245556,
+        "finishedAtMs": 1792677269249
+      },
+      "metadataFingerprint": {
+        "bytes": 530,
+        "sha256": "18e0eecdf25f9ad2a3b12724422bc597e22dcd18f08fe7160ff407c4fc2d8478"
+      },
+      "outputFingerprint": {
+        "bytes": 120,
+        "sha256": "d758652dc0b5844317e2d771bf4e53011c44f755697b16c4843e3496b4c979e8"
+      },
+      "originalOutput": "{\"mode\":\"final\",\"checks\":10,\"evidenceFiles\":62,\"testsExecuted\":0,\"verdict\":\"PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE\"}\n"
+    }
+  ],
+  "files": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor112-regression-independent-review-20261022-r1-reader.mjs": {
+      "bytes": 20165,
+      "sha256": "9588e06b713d8ab7c11e5b0891eb9374c0fc794d4d05c1f81761b58ea9226acb"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor112-regression-independent-review-20261022-r1-audit-preflight.json": {
+      "bytes": 67539,
+      "sha256": "0bc82a7d38f962060907af05810dc00dbccd8973a06717e2d5c8a8e20da0cb7f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor112-regression-independent-review-20261022-r1-audit-final.json": {
+      "bytes": 74797,
+      "sha256": "a1bf2f26d26ddc54c4aa047dca9dcf0ef9f2045d701d33466c8ba37065bfc26e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor112-regression-independent-review-20261022-r1-report.md": {
+      "bytes": 11921,
+      "sha256": "9d65ee3a3bb25d1f52c73a926cf9aaaf2b972cc98abfec3558960f64c40d3813"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-successor112-regression-independent-review-20261022-r1-audit-receipts.mjs": {
+      "bytes": 1980,
+      "sha256": "07dd893669a66d0d408e56ab7da377e977d34f5cc1d18d671e3e4ce1161d1573"
+    }
+  },
+  "selfIndexed": false,
+  "testsExecutedThisRole": 0,
+  "verdict": "PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE",
+  "release": "STOP",
+  "scope": "Own evidence-reader receipts and file fingerprints only; not a product test or GUI gate"
+}

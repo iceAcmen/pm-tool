@@ -1,0 +1,1495 @@
+{
+  "at": "2026-10-22T01:48:50.742Z",
+  "pid": 83284,
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "checks": [
+    {
+      "name": "审计前限定保护未漂移",
+      "verified": true
+    },
+    {
+      "name": "原797索引完整名单、bytes与SHA",
+      "verified": true
+    },
+    {
+      "name": "原520输入453产物与patch实际字节",
+      "verified": true
+    },
+    {
+      "name": "uncached完整client段唯一匹配与BA817上下文",
+      "verified": true
+    },
+    {
+      "name": "原SOURCE签字指纹与有限继承",
+      "verified": true
+    },
+    {
+      "name": "14动作、原exit与全部真实帧索引",
+      "verified": true
+    },
+    {
+      "name": "真实POST/run/done一一对应且snapshot不算重复confirm",
+      "verified": true
+    },
+    {
+      "name": "三建议ID理由状态、pending仅settings写",
+      "verified": true
+    },
+    {
+      "name": "真UIconfirm单次建draftKR主归属原F5并保其他建议",
+      "verified": true
+    },
+    {
+      "name": "真UIignore零建档、原理由与confirmed指针保留",
+      "verified": true
+    },
+    {
+      "name": "第一次重进完整历史与业务记录保留",
+      "verified": true
+    },
+    {
+      "name": "重复confirm真实error、所有四根零写",
+      "verified": true
+    },
+    {
+      "name": "clear仅本项目processed保第三pending、记录和历史原件",
+      "verified": true
+    },
+    {
+      "name": "最终nav/reenter仍draftKR和pending，无自动定稿",
+      "verified": true
+    },
+    {
+      "name": "全部本步及相邻采样无额外业务/files/backups/exports写",
+      "verified": true
+    },
+    {
+      "name": "原导航失败保留，纠正非业务步骤非伪造0",
+      "verified": true
+    },
+    {
+      "name": "审计后限定保护未漂移",
+      "verified": true
+    },
+    {
+      "name": "未纳520的五个Launcher测试仅本次审计期间指纹稳定",
+      "verified": true
+    }
+  ],
+  "indexedFiles": 797,
+  "protectedFiles": 1885,
+  "frameCount": 522,
+  "identities": {
+    "candidate": {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/candidate.json",
+      "bytes": 124336,
+      "sha256": "2d533a1d214c0ae68739b354aac2e0d85b37ca6735c256d3dd3820bce3c191b9",
+      "mtimeMs": 1792629150821.7756,
+      "ino": 54555824
+    },
+    "index": {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/index.json",
+      "bytes": 139411,
+      "sha256": "8cffbf2474645452970d99847444458f81772548bf5c2d197dfacbdc28ad63eb",
+      "mtimeMs": 1792633333131.009,
+      "ino": 54751254
+    },
+    "observations": {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/observations.json",
+      "bytes": 11889,
+      "sha256": "4eb931457534c37d8a64d2ffcb0b8ea51693ed9d7a260a2b552c8ddb8d1568a7",
+      "mtimeMs": 1792633331956.4016,
+      "ino": 54751228
+    },
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "tree": "/private/tmp/pmtool-a18-closure-20261022",
+    "sourceCount": 520,
+    "artifactCount": 453,
+    "clientSha": "9ab0c3e0d94751870a53507530d899d4a711bda4fbe5c2b474ebd66127cc06bb",
+    "loaded": {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/final/loaded/result.json",
+      "bytes": 8540,
+      "sha256": "50aa8e550d0c32b02ebf32004ec64c206ca58b10cc40ef370548b679e5bff10f",
+      "mtimeMs": 1792629514712.2446,
+      "ino": 54570022
+    },
+    "targetId": "BA817F66FCE81BD58357C4B50BFFDF2C",
+    "origin": "http://127.0.0.1:3248",
+    "timeOrigin": 1792629512672.7,
+    "responseSha": "b4a54301e085753ab4193ae1284156ac779064ec097d7e775970a3d6a9e9f708",
+    "segmentSha": "21d941ca10d41935a5416b58f6da29f2b5520e8bf93396e850de526a68eea343"
+  },
+  "steps": [
+    {
+      "step": "host-open-1792632915974",
+      "exit": {
+        "at": "2026-10-22T01:35:20.724Z",
+        "exit": 0,
+        "action": "host-open",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 8,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [],
+      "commands": []
+    },
+    {
+      "step": "command-1792632937978",
+      "exit": {
+        "at": "2026-10-22T01:35:49.186Z",
+        "exit": 0,
+        "action": "command",
+        "value": "/pm okr suggest p-0001 {\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\"}",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 127,
+      "rootDiff": {
+        "data": {
+          "added": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:35:47.107Z",
+          "line": "/pm okr suggest p-0001 {\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\"}",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 79,
+          "time": 1792632947528,
+          "data": {
+            "commandId": "cmd-2b310026-39",
+            "name": "pm",
+            "args": " okr suggest p-0001 {\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\"}",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 80,
+          "time": 1792632948435,
+          "data": {
+            "commandId": "cmd-2b310026-39",
+            "kind": "success",
+            "text": "建议已进入收件区（未确认不生效，不会创建 OKR 记录）。\nokrsug-mvivdffc-rd040g｜[关键结果] QA OKR 采纳草稿｜父目标 okr-mvi5z847-33y3xk｜待确认｜理由：由人确认后建立草稿；本条用于建议处理闭环。｜2026-10-22T01:35:48.311Z\n[pm:action]确认采纳：/pm okr confirm okrsug-mvivdffc-rd040g\n忽略：/pm okr ignore okrsug-mvivdffc-rd040g"
+          }
+        }
+      ]
+    },
+    {
+      "step": "command-1792633009125",
+      "exit": {
+        "at": "2026-10-22T01:36:56.670Z",
+        "exit": 0,
+        "action": "command",
+        "value": "/pm okr suggest p-0001 {\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"rationale\":\"只忽略并保留理由，不能生成正式目标。\"}",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 98,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:36:56.192Z",
+          "line": "/pm okr suggest p-0001 {\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"rationale\":\"只忽略并保留理由，不能生成正式目标。\"}",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 81,
+          "time": 1792633016221,
+          "data": {
+            "commandId": "cmd-2b310026-40",
+            "name": "pm",
+            "args": " okr suggest p-0001 {\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"rationale\":\"只忽略并保留理由，不能生成正式目标。\"}",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 82,
+          "time": 1792633016247,
+          "data": {
+            "commandId": "cmd-2b310026-40",
+            "kind": "success",
+            "text": "建议已进入收件区（未确认不生效，不会创建 OKR 记录）。\nokrsug-mvivevtw-58ry3u｜[目标] QA OKR 忽略留痕｜根目标｜待确认｜理由：只忽略并保留理由，不能生成正式目标。｜2026-10-22T01:36:56.228Z\n[pm:action]确认采纳：/pm okr confirm okrsug-mvivevtw-58ry3u\n忽略：/pm okr ignore okrsug-mvivevtw-58ry3u"
+          }
+        }
+      ]
+    },
+    {
+      "step": "command-1792633036545",
+      "exit": {
+        "at": "2026-10-22T01:37:23.386Z",
+        "exit": 0,
+        "action": "command",
+        "value": "/pm okr suggest p-0001 {\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"rationale\":\"清理已处理项时必须保留本条pending。\"}",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 97,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:37:22.999Z",
+          "line": "/pm okr suggest p-0001 {\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"rationale\":\"清理已处理项时必须保留本条pending。\"}",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 83,
+          "time": 1792633043046,
+          "data": {
+            "commandId": "cmd-2b310026-41",
+            "name": "pm",
+            "args": " okr suggest p-0001 {\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"rationale\":\"清理已处理项时必须保留本条pending。\"}",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 84,
+          "time": 1792633043083,
+          "data": {
+            "commandId": "cmd-2b310026-41",
+            "kind": "success",
+            "text": "建议已进入收件区（未确认不生效，不会创建 OKR 记录）。\nokrsug-mvivfgj1-oef5vd｜[目标] QA OKR 保留待确认｜根目标｜待确认｜理由：清理已处理项时必须保留本条pending。｜2026-10-22T01:37:23.053Z\n[pm:action]确认采纳：/pm okr confirm okrsug-mvivfgj1-oef5vd\n忽略：/pm okr ignore okrsug-mvivfgj1-oef5vd"
+          }
+        }
+      ]
+    },
+    {
+      "step": "nav-1792633053707",
+      "exit": {
+        "at": "2026-10-22T01:37:38.119Z",
+        "exit": 1,
+        "action": "nav",
+        "value": "目标（OKR）",
+        "error": "Error: visible target missing: 目标（OKR）"
+      },
+      "frames": 18,
+      "rootDiff": null,
+      "requests": [
+        {
+          "at": "2026-10-22T01:37:37.087Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 85,
+          "time": 1792633057311,
+          "data": {
+            "commandId": "cmd-2b310026-42",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 86,
+          "time": 1792633057655,
+          "data": {
+            "commandId": "cmd-2b310026-42",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivdffc-rd040g\",\"at\":\"2026-10-22T01:35:48.311Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\",\"status\":\"pending\"},{\"id\":\"okrsug-mvivevtw-58ry3u\",\"at\":\"2026-10-22T01:36:56.228Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"只忽略并保留理由，不能生成正式目标。\",\"status\":\"pending\"},{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        }
+      ]
+    },
+    {
+      "step": "nav-1792633111064",
+      "exit": {
+        "at": "2026-10-22T01:38:36.239Z",
+        "exit": 0,
+        "action": "nav",
+        "value": "目标（OKR）",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 5,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [],
+      "commands": []
+    },
+    {
+      "step": "confirm-1792633127005",
+      "exit": {
+        "at": "2026-10-22T01:38:50.902Z",
+        "exit": 0,
+        "action": "confirm",
+        "value": "QA OKR 采纳草稿",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 21,
+      "rootDiff": {
+        "data": {
+          "added": [
+            "/pmtool/okrs/okr-mvivhbaq-sonewn.json"
+          ],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:38:49.524Z",
+          "line": "/pm okr confirm okrsug-mvivdffc-rd040g",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        },
+        {
+          "at": "2026-10-22T01:38:50.032Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        },
+        {
+          "at": "2026-10-22T01:38:50.321Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 87,
+          "time": 1792633129558,
+          "data": {
+            "commandId": "cmd-2b310026-43",
+            "name": "pm",
+            "args": " okr confirm okrsug-mvivdffc-rd040g",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 88,
+          "time": 1792633129911,
+          "data": {
+            "commandId": "cmd-2b310026-43",
+            "kind": "success",
+            "text": "[pm:summary]已确认建议 okrsug-mvivdffc-rd040g，创建草稿 OKR 记录 okr-mvivhbaq-sonewn\n[pm:summary]草稿；定稿请用 update，无自动定稿\n[pm:detail]\n· [关键结果] okr-mvivhbaq-sonewn｜QA OKR 采纳草稿（草稿）\n  父目标：okr-mvi5z847-33y3xk\n  创建时间：2026-10-22T01:38:49.586Z\n  更新时间：2026-10-22T01:38:49.586Z"
+          }
+        },
+        {
+          "type": "command/run",
+          "seq": 89,
+          "time": 1792633129999,
+          "data": {
+            "commandId": "cmd-2b310026-44",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 90,
+          "time": 1792633130019,
+          "data": {
+            "commandId": "cmd-2b310026-44",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivdffc-rd040g\",\"at\":\"2026-10-22T01:35:48.311Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\",\"status\":\"confirmed\",\"confirmedOkrId\":\"okr-mvivhbaq-sonewn\",\"processedAt\":\"2026-10-22T01:38:49.586Z\"},{\"id\":\"okrsug-mvivevtw-58ry3u\",\"at\":\"2026-10-22T01:36:56.228Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"只忽略并保留理由，不能生成正式目标。\",\"status\":\"pending\"},{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        },
+        {
+          "type": "command/run",
+          "seq": 91,
+          "time": 1792633130274,
+          "data": {
+            "commandId": "cmd-2b310026-45",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 92,
+          "time": 1792633130276,
+          "data": {
+            "commandId": "cmd-2b310026-45",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivdffc-rd040g\",\"at\":\"2026-10-22T01:35:48.311Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\",\"status\":\"confirmed\",\"confirmedOkrId\":\"okr-mvivhbaq-sonewn\",\"processedAt\":\"2026-10-22T01:38:49.586Z\"},{\"id\":\"okrsug-mvivevtw-58ry3u\",\"at\":\"2026-10-22T01:36:56.228Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"只忽略并保留理由，不能生成正式目标。\",\"status\":\"pending\"},{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        }
+      ]
+    },
+    {
+      "step": "ignore-1792633142753",
+      "exit": {
+        "at": "2026-10-22T01:39:08.139Z",
+        "exit": 0,
+        "action": "ignore",
+        "value": "QA OKR 忽略留痕",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 26,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:39:06.878Z",
+          "line": "/pm okr ignore okrsug-mvivevtw-58ry3u",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        },
+        {
+          "at": "2026-10-22T01:39:07.460Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        },
+        {
+          "at": "2026-10-22T01:39:07.623Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 93,
+          "time": 1792633146907,
+          "data": {
+            "commandId": "cmd-2b310026-46",
+            "name": "pm",
+            "args": " okr ignore okrsug-mvivevtw-58ry3u",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 94,
+          "time": 1792633147344,
+          "data": {
+            "commandId": "cmd-2b310026-46",
+            "kind": "success",
+            "text": "[pm:summary]已忽略建议 okrsug-mvivevtw-58ry3u\n[pm:summary]保留在收件区标 ignored，可逆；不会创建记录"
+          }
+        },
+        {
+          "type": "command/run",
+          "seq": 95,
+          "time": 1792633147444,
+          "data": {
+            "commandId": "cmd-2b310026-47",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 96,
+          "time": 1792633147446,
+          "data": {
+            "commandId": "cmd-2b310026-47",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivdffc-rd040g\",\"at\":\"2026-10-22T01:35:48.311Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\",\"status\":\"confirmed\",\"confirmedOkrId\":\"okr-mvivhbaq-sonewn\",\"processedAt\":\"2026-10-22T01:38:49.586Z\"},{\"id\":\"okrsug-mvivevtw-58ry3u\",\"at\":\"2026-10-22T01:36:56.228Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"只忽略并保留理由，不能生成正式目标。\",\"status\":\"ignored\",\"ignoredAt\":\"2026-10-22T01:39:06.945Z\"},{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        },
+        {
+          "type": "command/run",
+          "seq": 97,
+          "time": 1792633147491,
+          "data": {
+            "commandId": "cmd-2b310026-48",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 98,
+          "time": 1792633147513,
+          "data": {
+            "commandId": "cmd-2b310026-48",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivdffc-rd040g\",\"at\":\"2026-10-22T01:35:48.311Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"由人确认后建立草稿；本条用于建议处理闭环。\",\"status\":\"confirmed\",\"confirmedOkrId\":\"okr-mvivhbaq-sonewn\",\"processedAt\":\"2026-10-22T01:38:49.586Z\"},{\"id\":\"okrsug-mvivevtw-58ry3u\",\"at\":\"2026-10-22T01:36:56.228Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 忽略留痕\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"只忽略并保留理由，不能生成正式目标。\",\"status\":\"ignored\",\"ignoredAt\":\"2026-10-22T01:39:06.945Z\"},{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        }
+      ]
+    },
+    {
+      "step": "reenter-1792633159657",
+      "exit": {
+        "at": "2026-10-22T01:39:25.237Z",
+        "exit": 0,
+        "action": "reenter",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 6,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [],
+      "commands": []
+    },
+    {
+      "step": "host-open-1792633178289",
+      "exit": {
+        "at": "2026-10-22T01:39:43.762Z",
+        "exit": 0,
+        "action": "host-open",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 6,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [],
+      "commands": []
+    },
+    {
+      "step": "command-1792633199812",
+      "exit": {
+        "at": "2026-10-22T01:40:08.339Z",
+        "exit": 0,
+        "action": "command",
+        "value": "/pm okr confirm okrsug-mvivdffc-rd040g",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 49,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:40:07.571Z",
+          "line": "/pm okr confirm okrsug-mvivdffc-rd040g",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 99,
+          "time": 1792633207604,
+          "data": {
+            "commandId": "cmd-2b310026-49",
+            "name": "pm",
+            "args": " okr confirm okrsug-mvivdffc-rd040g",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 100,
+          "time": 1792633207640,
+          "data": {
+            "commandId": "cmd-2b310026-49",
+            "kind": "error",
+            "text": "该建议已确认过"
+          }
+        }
+      ]
+    },
+    {
+      "step": "command-1792633237373",
+      "exit": {
+        "at": "2026-10-22T01:40:43.912Z",
+        "exit": 0,
+        "action": "command",
+        "value": "/pm okr inbox p-0001 clear",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 34,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmOkrInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:40:43.243Z",
+          "line": "/pm okr inbox p-0001 clear",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 101,
+          "time": 1792633243380,
+          "data": {
+            "commandId": "cmd-2b310026-50",
+            "name": "pm",
+            "args": " okr inbox p-0001 clear",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 102,
+          "time": 1792633243464,
+          "data": {
+            "commandId": "cmd-2b310026-50",
+            "kind": "success",
+            "text": "已清空项目 p-0001 的 2 条已处理/已忽略建议（待确认建议保留）。"
+          }
+        }
+      ]
+    },
+    {
+      "step": "nav-1792633257090",
+      "exit": {
+        "at": "2026-10-22T01:41:01.912Z",
+        "exit": 0,
+        "action": "nav",
+        "value": "目标（OKR）",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 22,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [
+        {
+          "at": "2026-10-22T01:41:00.927Z",
+          "line": "/pm web snapshot",
+          "agentId": "session-04548dcf-b6ba-4259-a7ad-e7957eb0593f"
+        }
+      ],
+      "commands": [
+        {
+          "type": "command/run",
+          "seq": 103,
+          "time": 1792633261070,
+          "data": {
+            "commandId": "cmd-2b310026-51",
+            "name": "pm",
+            "args": " web snapshot",
+            "source": {
+              "kind": "user"
+            }
+          }
+        },
+        {
+          "type": "command/done",
+          "seq": 104,
+          "time": 1792633261195,
+          "data": {
+            "commandId": "cmd-2b310026-51",
+            "kind": "success",
+            "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"},{\"id\":\"okr-mvivhbaq-sonewn\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 采纳草稿\",\"kind\":\"key-result\",\"primaryOkrId\":\"okr-mvi5z847-33y3xk\",\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-22T01:38:49.586Z\",\"updatedAt\":\"2026-10-22T01:38:49.586Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[{\"id\":\"okrsug-mvivfgj1-oef5vd\",\"at\":\"2026-10-22T01:37:23.053Z\",\"projectId\":\"p-0001\",\"title\":\"QA OKR 保留待确认\",\"kind\":\"objective\",\"primaryOkrId\":null,\"rationale\":\"清理已处理项时必须保留本条pending。\",\"status\":\"pending\"}],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}"
+          }
+        }
+      ]
+    },
+    {
+      "step": "reenter-1792633271342",
+      "exit": {
+        "at": "2026-10-22T01:41:14.028Z",
+        "exit": 0,
+        "action": "reenter",
+        "boundary": "A18 actual production command/UI only, Main records evidence without PASS"
+      },
+      "frames": 5,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "requests": [],
+      "commands": []
+    }
+  ],
+  "bridges": [
+    {
+      "from": "host-open-1792632915974",
+      "to": "command-1792632937978",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "command-1792632937978",
+      "to": "command-1792633009125",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "command-1792633009125",
+      "to": "command-1792633036545",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "command-1792633036545",
+      "to": "nav-1792633053707",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "nav-1792633053707",
+      "to": "nav-1792633111064",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": true
+    },
+    {
+      "from": "nav-1792633111064",
+      "to": "confirm-1792633127005",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "confirm-1792633127005",
+      "to": "ignore-1792633142753",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "ignore-1792633142753",
+      "to": "reenter-1792633159657",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "reenter-1792633159657",
+      "to": "host-open-1792633178289",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "host-open-1792633178289",
+      "to": "command-1792633199812",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "command-1792633199812",
+      "to": "command-1792633237373",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "command-1792633237373",
+      "to": "nav-1792633257090",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    },
+    {
+      "from": "nav-1792633257090",
+      "to": "reenter-1792633271342",
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "failedAfterNotCaptured": false
+    }
+  ],
+  "visual": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/nav-1792633111064/actual.png",
+      "bytes": 317024,
+      "sha256": "fc4d595248ab00d7595534faa819799f36a57d56e60395a14a2c840ac029be7d",
+      "mtimeMs": 1792633116136.3833,
+      "ino": 54729931
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/confirm-1792633127005/actual.png",
+      "bytes": 353988,
+      "sha256": "9887b3eb0e917a27a8c632bcf227bc5d87dc48bfda845ade155ba5b9447a5c3c",
+      "mtimeMs": 1792633130821.6702,
+      "ino": 54730275
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/ignore-1792633142753/actual.png",
+      "bytes": 340716,
+      "sha256": "8109187079b93bac13d6af09598f38d787afffa38bca5607f22f565f240cfc1e",
+      "mtimeMs": 1792633148104.9458,
+      "ino": 54730674
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/reenter-1792633271342/actual.png",
+      "bytes": 258498,
+      "sha256": "eb2536b905a5afa75227afdda90e98535ad2a5ca40b715e58306800652af0f41",
+      "mtimeMs": 1792633274002.289,
+      "ino": 54749875
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/confirm-1792633127005/frames/000000.jpg",
+      "bytes": 91524,
+      "sha256": "8869a1b4177d722f647f7295c7dc5e4f662888e0f456c31559cacacfcd375b16",
+      "mtimeMs": 1792633129162.449,
+      "ino": 54730235
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/confirm-1792633127005/frames/000020.jpg",
+      "bytes": 102148,
+      "sha256": "7e7c387cc30e38be319a75f570b614a4fed7984e4d110dcccf0c2b21ff5095aa",
+      "mtimeMs": 1792633130820.7002,
+      "ino": 54730276
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/ignore-1792633142753/frames/000025.jpg",
+      "bytes": 96562,
+      "sha256": "1b828f7d8b3efbd3ab00d3d83d3136a2c651bb4f7229a5a292bdf33ddbdc1e06",
+      "mtimeMs": 1792633147895.7466,
+      "ino": 54730673
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/command-1792633199812/before-submit.png",
+      "bytes": 95923,
+      "sha256": "efc14babb2615b6c7593aa683d1ffe3f66579b675063b6a3e33c2d25e3df765f",
+      "mtimeMs": 1792633207514.8298,
+      "ino": 54742590
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/command-1792633199812/actual.png",
+      "bytes": 102539,
+      "sha256": "4dc1a22fa8c00c298029e0ebf58f445c1928ed6cb9e4c09522d86a97cd337428",
+      "mtimeMs": 1792633208206.6665,
+      "ino": 54742705
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/reenter-1792633271342/frames/000004.jpg",
+      "bytes": 76480,
+      "sha256": "d41efb2a2d22a99e0969cc0a95808a6b6187f21605d686527faaad5de76530a2",
+      "mtimeMs": 1792633274003.0842,
+      "ino": 54749876
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A18/okr-journey/nav-1792633053707/frames/000017.jpg",
+      "bytes": 104359,
+      "sha256": "5e920446f405c0ddd1645ef3363e31812e80bd7acd55934d9abc36c23243cbd3",
+      "mtimeMs": 1792633058126.5764,
+      "ino": 54728634
+    }
+  ],
+  "launcherAdditionalFiles": [
+    {
+      "path": "/private/tmp/pmtool-a18-closure-20261022/launcher/test/fc-a2-additional.test.mjs",
+      "bytes": 13413,
+      "sha256": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+      "mtimeMs": 1792582643274.2544,
+      "ino": 54542473
+    },
+    {
+      "path": "/private/tmp/pmtool-a18-closure-20261022/launcher/test/fc-a2-followup.test.mjs",
+      "bytes": 14850,
+      "sha256": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+      "mtimeMs": 1792582926803.217,
+      "ino": 54542469
+    },
+    {
+      "path": "/private/tmp/pmtool-a18-closure-20261022/launcher/test/fc-a3-probes.test.mjs",
+      "bytes": 19267,
+      "sha256": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+      "mtimeMs": 1792584459392.6057,
+      "ino": 54542471
+    },
+    {
+      "path": "/private/tmp/pmtool-a18-closure-20261022/launcher/test/fc-a4-probes.test.mjs",
+      "bytes": 19686,
+      "sha256": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6",
+      "mtimeMs": 1792585976222.5056,
+      "ino": 54542472
+    },
+    {
+      "path": "/private/tmp/pmtool-a18-closure-20261022/launcher/test/fc-independent-probes.test.mjs",
+      "bytes": 9595,
+      "sha256": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+      "mtimeMs": 1792582048902.1184,
+      "ino": 54542466
+    }
+  ],
+  "limitedVerdict": "PASS：原RA-P2003建议处理有限切片；独立PNG与选定真实帧目视另见报告",
+  "excluded": [
+    "跨项目建议/clear他项目动态反例",
+    "P2004/selfcross",
+    "error visual空hero",
+    "全矩阵/整目标/全门/A19/commit"
+  ],
+  "sourceAutoInheritance": "原签字仅原范围引用，520/453字节相同；不重跑、不替GUI或扩大旧PASS",
+  "actions": {
+    "productImports": 0,
+    "childrenStarted": 0,
+    "guiConnections": 0,
+    "buildInstall": 0,
+    "serviceActions": 0,
+    "credentialReads": 0,
+    "commit": false
+  }
+}

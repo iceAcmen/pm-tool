@@ -1,0 +1,438 @@
+{
+  "stage": "seal",
+  "exit": 0,
+  "sourceInputsChecked": 1341,
+  "sourceDrift": [],
+  "originalInputs": 1077,
+  "developerDeclaredInputs": 1102,
+  "dependencyInputsChecked": 641,
+  "dependencyDrift": [],
+  "outputInputsChecked": 75,
+  "outputDrift": [],
+  "outputs": [
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-capture.json",
+      "bytes": 465599,
+      "sha256": "6c63088a4b14b4e9564e6265947cdc883c88eb87f4a8b3b77c79ce00784b3547"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-command-audit.md",
+      "bytes": 7933,
+      "sha256": "04c72149264722c7c20c1463e9fc90f0f7db082c606a561c36a1a6e86d962005"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-execution.json",
+      "bytes": 55973,
+      "sha256": "96aef05afddcc1488ce14a1a5be7b6060796fc1f9f3d4223eabf3148d40bf528"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-recovery.json",
+      "bytes": 128634,
+      "sha256": "cb7efdff2fa91cbf31eb3724f0d10b66857eb1d74a0689730cb843f3054478ad"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-recovery.mjs",
+      "bytes": 11977,
+      "sha256": "4ebd5cbdfd69afc0aa6b9a5b5b33d0c4097226e804c12d868ad98f83f6d02bcb"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1-runner.mjs",
+      "bytes": 19454,
+      "sha256": "6e821b38acdacfd8b5074ae046ffd86a3c778cf5c6bcb7a2b808013aed8eab3f"
+    },
+    {
+      "path": "docs/testing/p1005-listbox-backdrop-source-auto-20261023-r1.md",
+      "bytes": 13045,
+      "sha256": "a5f63dbfdd27e8f5f2d2f400cead96c11d0359c266e3bfb438038683feec97a7"
+    }
+  ],
+  "tmpRoots": [
+    "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI",
+    "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY"
+  ],
+  "tmpOutputs": [
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/cache/affected/vitest/results.json",
+      "bytes": 422,
+      "sha256": "622ad7d67d2e163f1fc93a365a71e69679d1f10b1200c0a808b702d05cf7bc14"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/cache/dom/vitest/results.json",
+      "bytes": 149,
+      "sha256": "2d6ee9cf9cc42b35b6d5d81b4c79443ed1374afd43532d5b077e0000f6f76508"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/config/affected.mjs",
+      "bytes": 924,
+      "sha256": "bb63ec3bd3173c11dafba994be47c2811d2e2709fc2224f43196e9c88fbb5772"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/config/dom.mjs",
+      "bytes": 871,
+      "sha256": "be13d1a870bcf7c0a5fbed44fc0248701e6b34033b6a814ab14e1674779411c5"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/config/identity.mjs",
+      "bytes": 793,
+      "sha256": "bb5d89d62bc57da43b103d771d2ae3d455490b9476b58920189cec4e0c7509ce"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/package.json",
+      "bytes": 18,
+      "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/form-validation.test.ts",
+      "bytes": 2356,
+      "sha256": "79b8bb155fb43af792ad76516e8a0e2f85591c5a1464332df0d9ada530705523"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/form-validation.ts",
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/shared/records-props.ts",
+      "bytes": 6692,
+      "sha256": "e21646bcd0445d00e6aa18120fe43736eabc8ffdf3bdc4812ba0a0504bf5cc1f"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records.css",
+      "bytes": 6842,
+      "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-deliverable-form.tsx",
+      "bytes": 9686,
+      "sha256": "e2eb1ef86b8e568c78e4ea6f71c4f4fcb19a477d0b5c40b5d07510ceec0f9ca8"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+      "bytes": 9159,
+      "sha256": "6de116ba10c320a162f1c465958f428ca9023e328b67827581db9ea23df42aec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-history.test.ts",
+      "bytes": 2074,
+      "sha256": "059cce35168dcf1fa1be47e90f5aa3bcfe4ef68b2f3c0d89bfe3cb7d9705c6cf"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-history.ts",
+      "bytes": 1760,
+      "sha256": "6658625630ad2ad001f886cf7a9c0f47ef82ca5c288c15452f0b7ff70a0ec0ec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-listbox.tsx",
+      "bytes": 4886,
+      "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-options.test.ts",
+      "bytes": 3162,
+      "sha256": "6d375abbea8d1dd359c14aeb731e068bfb815e5cc835e1830c9d8b1b8ee75e00"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-options.ts",
+      "bytes": 3737,
+      "sha256": "d0af55147e0faaa11e2d4ffd7688a7366b76a4e0fd6c03ce09c944208ac8eeed"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-overlay.tsx",
+      "bytes": 1316,
+      "sha256": "dfd1f68b4ffe3eaf10bbc95e47c567bf5d63c32919bd9770ca58759173498beb"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-payloads.test.ts",
+      "bytes": 5214,
+      "sha256": "5d7ffa018c01e754857c041fb03c3a42bdca86424f7e9df65c1388195624ff42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/records/records-payloads.ts",
+      "bytes": 6473,
+      "sha256": "050d216522173edad1ea7a308e3535336b3ed9e8245fbb4071eee30802cfa723"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/client/views/types.ts",
+      "bytes": 5435,
+      "sha256": "36add9a9fa577c3b847814a50c53bbfe76c8194dd00b6541b4bc71bc7218cbee"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/core/labels.ts",
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/inputs/src/core/repo-format.ts",
+      "bytes": 3962,
+      "sha256": "0db54e8a42638dec3da9ffd824cf6efa84c620ee4f8d3a9c751c45c083bee0ac"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/vitest-command.json",
+      "bytes": 1510,
+      "sha256": "73c900c76162e957027e3784dfb95a399a27394a52b9eac61e59a532667e83a1"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/vitest-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/vitest-stdout.log",
+      "bytes": 1008,
+      "sha256": "abb675e74dbb8316c1ba3ca871e774b6689f144ce04cfd446f30d7b246a17cf1"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/affected/vitest.json",
+      "bytes": 12242,
+      "sha256": "2552f069221c50832b53060754f96c2cc918839e27bf5456fe517b5b3d484667"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/delta-command.json",
+      "bytes": 805,
+      "sha256": "16f4c49c1b82d3f59df7c178590c5abcc3f05e999053ab6f3b1a0c137f44d446"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/delta-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/delta-stdout.log",
+      "bytes": 781,
+      "sha256": "8c4085b289dda8bcf27110ffc7737c9e0bd098c4603f5aa06daa823efda11f26"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/identity.json",
+      "bytes": 299,
+      "sha256": "ab436fd0b4e51708b126ca06167b802793675d9fae651233c4ed77487f15a955"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D01.json",
+      "bytes": 181302,
+      "sha256": "00e7b29efc4cd0369d19b75952b061a0ca23b0814fbc200629b2b0aacc43c4e5"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D02.json",
+      "bytes": 182792,
+      "sha256": "50737d348e472a69e63737870ef0a36295c8c33b6619446a3de59de0c895597d"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D03.json",
+      "bytes": 118540,
+      "sha256": "6801fb2da4ccd96fe427d932e5bc8ffcce50d72c0e2b2e778bc311e4535e594b"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D04.json",
+      "bytes": 112934,
+      "sha256": "e52543dffd04c27b52073a422261de9605de975071af6b7be07433d721a6e704"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D05.json",
+      "bytes": 222710,
+      "sha256": "98194645060d829ccc8b82012862e6a5ecff6472d45e800e68c165a2c0dd3e4c"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D06.json",
+      "bytes": 41829,
+      "sha256": "d43dc4daf80dbf69b6bd1a6e0011a66d1a80edbecd24c91501cc7a9cedb6e3d7"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/observations/D07.json",
+      "bytes": 41777,
+      "sha256": "c6a5bf262f9f0f3e646627b99b077ecf9c7daeaf74bd67e8ff84514adfb96617"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/vitest-command.json",
+      "bytes": 1485,
+      "sha256": "0b8c731991d0b4c1688cd972e380d1ec6614928a594df778affd7b6b1b0e42f9"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/vitest-stderr.log",
+      "bytes": 34437,
+      "sha256": "ac7507a1deb67cf37f8ca221f04d80e03328ba789a88ed944882e98df752681a"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/vitest-stdout.log",
+      "bytes": 663,
+      "sha256": "e18b2cbf0766c0879fd8106f0c83316647f411e53f6df63625b036b2da51acd0"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-jXA2wI/output/dom/vitest.json",
+      "bytes": 2834,
+      "sha256": "6d77694c407eff78a087cd4a6e678821c6fed45d2feea06eb41b97de68ecbc92"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/cache/vitest/results.json",
+      "bytes": 149,
+      "sha256": "e78f3db55509904ac538946d2bcba4582333b769618342c171f19e81e8cfdb26"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config/identity-after-dom.mjs",
+      "bytes": 822,
+      "sha256": "66035f4e10832b33c8e1a2eea4367761c5ae7fa77c8345722e337f1e731fbbdd"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/config/vitest.mjs",
+      "bytes": 896,
+      "sha256": "8e69d8045a3b1280113f3c8018d2f2100487b582ab0b12aa3b180558b3d76038"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/package.json",
+      "bytes": 18,
+      "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/form-validation.test.ts",
+      "bytes": 2356,
+      "sha256": "79b8bb155fb43af792ad76516e8a0e2f85591c5a1464332df0d9ada530705523"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/form-validation.ts",
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/shared/records-props.ts",
+      "bytes": 6692,
+      "sha256": "e21646bcd0445d00e6aa18120fe43736eabc8ffdf3bdc4812ba0a0504bf5cc1f"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records.css",
+      "bytes": 6842,
+      "sha256": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-deliverable-form.tsx",
+      "bytes": 9686,
+      "sha256": "e2eb1ef86b8e568c78e4ea6f71c4f4fcb19a477d0b5c40b5d07510ceec0f9ca8"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+      "bytes": 9159,
+      "sha256": "6de116ba10c320a162f1c465958f428ca9023e328b67827581db9ea23df42aec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-history.test.ts",
+      "bytes": 2074,
+      "sha256": "059cce35168dcf1fa1be47e90f5aa3bcfe4ef68b2f3c0d89bfe3cb7d9705c6cf"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-history.ts",
+      "bytes": 1760,
+      "sha256": "6658625630ad2ad001f886cf7a9c0f47ef82ca5c288c15452f0b7ff70a0ec0ec"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-listbox.tsx",
+      "bytes": 4886,
+      "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-options.test.ts",
+      "bytes": 3162,
+      "sha256": "6d375abbea8d1dd359c14aeb731e068bfb815e5cc835e1830c9d8b1b8ee75e00"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-options.ts",
+      "bytes": 3737,
+      "sha256": "d0af55147e0faaa11e2d4ffd7688a7366b76a4e0fd6c03ce09c944208ac8eeed"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-overlay.tsx",
+      "bytes": 1316,
+      "sha256": "dfd1f68b4ffe3eaf10bbc95e47c567bf5d63c32919bd9770ca58759173498beb"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-payloads.test.ts",
+      "bytes": 5214,
+      "sha256": "5d7ffa018c01e754857c041fb03c3a42bdca86424f7e9df65c1388195624ff42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/records/records-payloads.ts",
+      "bytes": 6473,
+      "sha256": "050d216522173edad1ea7a308e3535336b3ed9e8245fbb4071eee30802cfa723"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/client/views/types.ts",
+      "bytes": 5435,
+      "sha256": "36add9a9fa577c3b847814a50c53bbfe76c8194dd00b6541b4bc71bc7218cbee"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/core/labels.ts",
+      "bytes": 968,
+      "sha256": "40fd3802800ccceb84c7c0ed7eb8fa11df1be0fbcc652df36019a9bab9297a42"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/inputs/src/core/repo-format.ts",
+      "bytes": 3962,
+      "sha256": "0db54e8a42638dec3da9ffd824cf6efa84c620ee4f8d3a9c751c45c083bee0ac"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/command.json",
+      "bytes": 1562,
+      "sha256": "154530c05af6e929a6d5507fe509ecb15b1a15a3a0a0ba65c88f29b0720b684f"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/identity.json",
+      "bytes": 243,
+      "sha256": "a7fa5e08962d1e5eada102a75c9f9dcf98c70a247a7e5254f0c740fb144cd3d6"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D01.json",
+      "bytes": 181302,
+      "sha256": "00e7b29efc4cd0369d19b75952b061a0ca23b0814fbc200629b2b0aacc43c4e5"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D02.json",
+      "bytes": 182792,
+      "sha256": "50737d348e472a69e63737870ef0a36295c8c33b6619446a3de59de0c895597d"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D03.json",
+      "bytes": 118540,
+      "sha256": "6801fb2da4ccd96fe427d932e5bc8ffcce50d72c0e2b2e778bc311e4535e594b"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D04.json",
+      "bytes": 112934,
+      "sha256": "e52543dffd04c27b52073a422261de9605de975071af6b7be07433d721a6e704"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D05.json",
+      "bytes": 222710,
+      "sha256": "98194645060d829ccc8b82012862e6a5ecff6472d45e800e68c165a2c0dd3e4c"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D06.json",
+      "bytes": 41829,
+      "sha256": "d43dc4daf80dbf69b6bd1a6e0011a66d1a80edbecd24c91501cc7a9cedb6e3d7"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/observations/D07.json",
+      "bytes": 41777,
+      "sha256": "c6a5bf262f9f0f3e646627b99b077ecf9c7daeaf74bd67e8ff84514adfb96617"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/stdout.log",
+      "bytes": 678,
+      "sha256": "f0b6024aa4674921f05dcc467e5b17c3b92608f1a117b7ed257e9701140df425"
+    },
+    {
+      "path": "/tmp/p1005-listbox-backdrop-source-auto-20261023-r1-recovery-BvvKqY/output/vitest.json",
+      "bytes": 2839,
+      "sha256": "e19a651f39a14639d13e2e9c81f373672f6b55c3953dc7e7527c73d429b325df"
+    }
+  ],
+  "linkFailures": [],
+  "trailingWhitespace": [],
+  "scope": "有限 SOURCE/AUTO；首轮 DOM 设施污染不签；最终 DOM7 + 首轮受影响28",
+  "locks": [],
+  "longRunningChildren": [],
+  "released": true,
+  "stop": true,
+  "boundary": "不签GUI/B8/P1005/父出口，不操作Git/服务；seal不自指纹，不冒全盘零污染"
+}

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-21T22:38:30.590Z",
+  "boundary": "Read-only archived hash/mtime, source/artifact and Markdown link checks; owned script syntax only.",
+  "protectedOriginalFiles": 290,
+  "drift": [],
+  "missingLinks": [],
+  "syntax": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-audit.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-finalize.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exit": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "ownFiles": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022.md": {
+      "sha256": "f0f5b585417de2664cff370c1fd6c99969349fcaddcfd74c88e07c9d3ff8298a",
+      "mtimeMs": 1792622281050.7983
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-plan.md": {
+      "sha256": "09d645852c32f40bf727b3081d8927c94bd1041d93c5c2219ce0521ae90fb442",
+      "mtimeMs": 1792621848876.5667
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-audit.mjs": {
+      "sha256": "74cada3c215ac4f1654e01a5018c27e7f555e4f054c9e0ac68f63f436b178016",
+      "mtimeMs": 1792621998462.016
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-finalize.mjs": {
+      "sha256": "35f51115b7deff4277c836c8a58469d839dacdac32954a92064058f24de7475c",
+      "mtimeMs": 1792622300673.214
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022-audit-r1.json": {
+      "sha256": "89fcc31fa668eed493ca11e24f0ceca1757c998e1076bc5ecdc9141ab89fb7bb",
+      "mtimeMs": 1792622008792.4758
+    }
+  }
+}

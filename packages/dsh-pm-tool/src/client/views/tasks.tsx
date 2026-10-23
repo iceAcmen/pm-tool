@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { flattenVisible, indexChildren } from '../../core/task-tree.js'
 import { buildUpdate } from '../../core/task-inline.js'
 import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
-import { clampProgress } from '../../core/progress-derivation.js'
+import {
+  clampProgress, deriveProgressMap, resolveTaskProgressMeta, progressHeadline,
+  formatProgressValue, checklistFraction, type TaskProgressMetaInput,
+} from '../../core/progress-derivation.js'
 import { tallyTasksByStatus, donePercent } from './tasks-tally.js'
 import { copyHandleToClipboard } from './tasks-clipboard.js'
 import { taskStatusLabels } from '../../core/labels.js'
@@ -36,8 +39,11 @@ import X from 'lucide-react/dist/esm/icons/x.mjs'
 import Download from 'lucide-react/dist/esm/icons/download.mjs'
 import Share2 from 'lucide-react/dist/esm/icons/share-2.mjs'
 import Copy from 'lucide-react/dist/esm/icons/copy.mjs'
+import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up.mjs'
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down.mjs'
 import {
   DEFAULT_VIEW_STATE,
+  TASK_VIEW_OPTIONAL_COLUMNS,
   VIEW_CHIP_OPTIONS,
   VIEW_SORT_OPTIONS,
   deleteTaskView,
@@ -51,7 +57,11 @@ import {
   setDefaultTaskView,
   type SavedTaskView,
   type TaskViewChip,
+  type TaskViewColumns,
+  type TaskViewOptionalColumn,
   type TaskViewSort,
+  type TaskViewSortDirection,
+  type TaskViewSortRule,
   type TaskViewState,
   type TaskViewsStore,
 } from '../../core/task-views.js'
@@ -73,6 +83,7 @@ type ChipKey = TaskViewChip
 // P2-5：chip/排序选项与 core/task-views 同源（口径不变，仅去重）。
 const CHIPS = VIEW_CHIP_OPTIONS
 const SORT_OPTIONS = VIEW_SORT_OPTIONS
+const OPTIONAL_COLUMNS = TASK_VIEW_OPTIONAL_COLUMNS
 
 // ---- K6 交付检查（只读）：规则标签/分组与 P0 core/check.ts 五类规则一一对应，前端不新增规则、不下完成裁决。
 const K6_RULE_LABELS: Record<CheckFinding['rule'], string> = {
@@ -255,6 +266,22 @@ export function TaskTable(props: {
     diagnosis = [], onDismissDiagnosis, latestExport = null,
   } = props
 
+  // 与实际顶层/子层/状态分组行共用，独占标题格一行，长文本不挤占编辑操作格。
+  const exportSlot = (
+    <span
+      className={`pm-export-slot pm-export-slot--${latestExport?.at ? 'done' : 'none'}`}
+      style={{ flexBasis: '100%', minWidth: 0, maxWidth: '100%', whiteSpace: 'normal',
+        overflowWrap: 'anywhere', fontSize: 'var(--t-11)', fontWeight: 400, color: 'var(--muted)' }}
+      title={latestExport?.at
+        ? '已导出：外部文件为唯一事实源，工具不做后续同步/镜像'
+        : '暂无导出记录'}
+    >
+      {latestExport?.at
+        ? <>已导出 · 最近 <time dateTime={latestExport.at} title={latestExport.at}>{hhmm(latestExport.at)}</time> · 外部为唯一事实源</>
+        : '未导出'}
+    </span>
+  )
+
   // P2-5：命名视图。首挂载按项目默认视图恢复四态；boot 只取一次，后续切换由 effect 驱动。
   const [boot] = useState(() => {
     const store = loadTaskViews(projectId)
@@ -266,6 +293,8 @@ export function TaskTable(props: {
   const [chip, setChip] = useState<TaskViewChip>(boot.def?.state.chip ?? DEFAULT_VIEW_STATE.chip)
   const [grouped, setGrouped] = useState(boot.def?.state.grouped ?? DEFAULT_VIEW_STATE.grouped)
   const [sort, setSort] = useState<TaskViewSort>(boot.def?.state.sort ?? DEFAULT_VIEW_STATE.sort)
+  const [sorts, setSorts] = useState<TaskViewSortRule[]>(boot.def?.state.sorts ?? [])
+  const [columns, setColumns] = useState<TaskViewColumns>(boot.def?.state.columns ?? {})
   // P2-5：视图切换菜单 / 另存为弹窗 / 管理弹窗的开合态。
   const [menuOpen, setMenuOpen] = useState(false)
   // 导出下拉（Markdown/CSV/JSON）开合态，与视图切换器同构：点外部 / Esc 关闭。
@@ -279,6 +308,26 @@ export function TaskTable(props: {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [movePickerFor, setMovePickerFor] = useState<Task | null>(null)
   const [importPreview, setImportPreview] = useState<{ text: string, confirm: string } | null>(null)
+  const [importBusy, setImportBusy] = useState(false)
+  const [importError, setImportError] = useState('')
+  const importInFlight = useRef(false)
+  const confirmImport = async () => {
+    if (disabled || importInFlight.current || !importPreview?.confirm) return
+    // ref 同步挡住同一帧连点，state 只负责在途控件呈现。
+    importInFlight.current = true
+    setImportBusy(true)
+    setImportError('')
+    try {
+      const ok = await run(importPreview.confirm)
+      if (ok) { setImportPreview(null); onSaved() }
+      else setImportError('导入失败，预览已保留，请重试。')
+    } catch {
+      setImportError('导入失败，预览已保留，请重试。')
+    } finally {
+      importInFlight.current = false
+      setImportBusy(false)
+    }
+  }
   const [activeId, setActiveId] = useState<string | null>(null)
   const activeRef = useRef<HTMLDivElement | null>(null)
   // D-05（C-07 稳定句柄列）：编号格恒显 code 或短 ID，点击复制到剪贴板并给瞬时反馈；
@@ -311,6 +360,7 @@ export function TaskTable(props: {
     const copied = copiedHandleId === t.id
     const failed = failedHandleId === t.id
     return (
+      <>
       <button
         type="button"
         className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}${failed ? ' failed' : ''}`}
@@ -322,14 +372,21 @@ export function TaskTable(props: {
         aria-label={copied ? '已复制' : failed ? '复制失败，可手动选择复制' : `复制编号 ${handle}`}
         onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
       >
-        <span className="pt-code-val">{copied ? '已复制' : failed ? '复制失败' : handle}</span>
+        <span className="pt-code-val">{handle}</span>
         <Copy size={11} className="pt-code-ic" aria-hidden="true" />
       </button>
+      {(copied || failed) && <span
+        className={`pt-code-feedback${failed ? ' failed' : ''}`} role="status"
+        title={failed ? '复制失败，可手动选中上方编号复制' : '已复制编号'}
+      >{copied ? '已复制' : '复制失败'}</span>}
+      </>
     )
   }
 
   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
   const childMap = useMemo(() => indexChildren(tasks), [tasks])
+  // 用未筛选全量任务派生，搜索/折叠不会把父聚合的后代丢掉。
+  const progressMap = useMemo(() => deriveProgressMap(tasks), [tasks])
   // P2-5 风险视图：按 milestoneId 关联里程碑，供 isTaskAtRisk 判断里程碑是否延期。
   const milestoneById = useMemo(() => new Map(milestones.map(m => [m.id, m])), [milestones])
 
@@ -355,16 +412,74 @@ export function TaskTable(props: {
     })
   }, [tasks, query, chip, milestones, milestoneById]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 排序（与旧实现一致：组内/扁平视图生效；树视图由 flattenVisible 按 WBS 序）
+  // 排序：旧单排序保持原方向；U4 多规则显式方向，并只在同层重排树。
   const priorityRank = (p: string) => ({ P0: 0, P1: 1, P2: 2 }[p] ?? 3)
+  const taskComparator = useMemo(() => {
+    if (sorts.length === 0) return undefined
+    const compareOptional = <T,>(
+      left: T | null | undefined,
+      right: T | null | undefined,
+      dir: TaskViewSortDirection,
+      compare: (a: T, b: T) => number,
+    ) => {
+      const leftMissing = left === null || left === undefined || left === ''
+      const rightMissing = right === null || right === undefined || right === ''
+      if (leftMissing || rightMissing) {
+        if (leftMissing && rightMissing) return 0
+        return leftMissing ? 1 : -1
+      }
+      const ranked = compare(left as T, right as T)
+      return dir === 'asc' ? ranked : -ranked
+    }
+    return (a: Task, b: Task) => {
+      for (const rule of sorts) {
+        let ranked = 0
+        if (rule.field === 'code') {
+          ranked = compareOptional(
+            a.code || a.id,
+            b.code || b.id,
+            rule.dir,
+            (left, right) => left.localeCompare(right, 'en', { numeric: true }),
+          )
+        } else if (rule.field === 'dueDate') {
+          ranked = compareOptional(
+            a.dueDate,
+            b.dueDate,
+            rule.dir,
+            (left, right) => left.localeCompare(right),
+          )
+        } else if (rule.field === 'priority') {
+          ranked = compareOptional(
+            priorityRank(a.priority),
+            priorityRank(b.priority),
+            rule.dir,
+            (left, right) => left - right,
+          )
+        } else {
+          ranked = compareOptional(
+            resolveTaskProgressMeta(a as Task & TaskProgressMetaInput, progressMap.get(a.id)).display,
+            resolveTaskProgressMeta(b as Task & TaskProgressMetaInput, progressMap.get(b.id)).display,
+            rule.dir,
+            (left, right) => left - right,
+          )
+        }
+        if (ranked !== 0) return ranked
+      }
+      return 0
+    }
+  }, [sorts, progressMap]) // eslint-disable-line react-hooks/exhaustive-deps
   const visible = useMemo(() => {
     const arr = [...filtered]
-    if (sort === 'dueDate') arr.sort((a, b) => String(a.dueDate ?? '9999').localeCompare(String(b.dueDate ?? '9999')))
+    if (taskComparator) arr.sort((a, b) =>
+      taskComparator(a, b) || (a.code ?? a.id).localeCompare(b.code ?? b.id, 'en', { numeric: true }))
+    else if (sort === 'dueDate') arr.sort((a, b) => String(a.dueDate ?? '9999').localeCompare(String(b.dueDate ?? '9999')))
     else if (sort === 'priority') arr.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
-    else if (sort === 'progress') arr.sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0))
+    else if (sort === 'progress') arr.sort((a, b) =>
+      (resolveTaskProgressMeta(b as Task & TaskProgressMetaInput, progressMap.get(b.id)).display ?? -1)
+      - (resolveTaskProgressMeta(a as Task & TaskProgressMetaInput, progressMap.get(a.id)).display ?? -1))
     else arr.sort((a, b) => (a.code ?? a.id).localeCompare(b.code ?? b.id, 'en', { numeric: true }))
     return arr
-  }, [filtered, sort]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [filtered, sort, progressMap, taskComparator]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 契约 §7 + 数字口径字典：5 态互斥（todo/in_progress/blocked/done/wrapped）合计=总数，
   // 纯函数同源；open=todo+in_progress+blocked；wrapped 单独成桶，不并入 done、不漏算。
@@ -416,7 +531,14 @@ export function TaskTable(props: {
   const nvTriggerRef = useRef<HTMLButtonElement | null>(null)
   const exTriggerRef = useRef<HTMLButtonElement | null>(null)
   const activeView = findTaskView(viewsStore, activeViewId)
-  const currentState: TaskViewState = { query, chip, grouped, sort }
+  const currentState: TaskViewState = {
+    query,
+    chip,
+    grouped,
+    sort,
+    ...(sorts.length > 0 ? { sorts } : {}),
+    ...(Object.keys(columns).length > 0 ? { columns } : {}),
+  }
   const dirty = activeView ? !sameTaskViewState(currentState, activeView.state) : true
   const allViews = listAllViews(viewsStore)
 
@@ -456,6 +578,8 @@ export function TaskTable(props: {
     setChip(v.state.chip)
     setGrouped(v.state.grouped)
     setSort(v.state.sort)
+    setSorts(v.state.sorts ?? [])
+    setColumns(v.state.columns ?? {})
     setActiveViewId(v.id)
     setMenuOpen(false)
   }
@@ -509,12 +633,16 @@ export function TaskTable(props: {
       setChip(def.state.chip)
       setGrouped(def.state.grouped)
       setSort(def.state.sort)
+      setSorts(def.state.sorts ?? [])
+      setColumns(def.state.columns ?? {})
       setActiveViewId(def.id)
     } else {
       setQuery(DEFAULT_VIEW_STATE.query)
       setChip(DEFAULT_VIEW_STATE.chip)
       setGrouped(DEFAULT_VIEW_STATE.grouped)
       setSort(DEFAULT_VIEW_STATE.sort)
+      setSorts([])
+      setColumns({})
       setActiveViewId(null)
     }
     setMenuOpen(false)
@@ -574,7 +702,12 @@ export function TaskTable(props: {
     })).filter(group => group.rows.length),
   [visible])
 
-  const treeRows = useMemo(() => flattenVisible(visible, collapsed), [visible, collapsed])
+  const treeRows = useMemo(
+    () => taskComparator
+      ? flattenVisible(filtered, collapsed, taskComparator)
+      : flattenVisible(visible, collapsed),
+    [filtered, visible, collapsed, taskComparator],
+  )
   const renderedIds = useMemo(
     () => grouped
       ? statusGroups.flatMap(g => g.rows.map(t => t.id))
@@ -582,6 +715,39 @@ export function TaskTable(props: {
     [grouped, statusGroups, treeRows],
   )
   const effectiveActiveId = activeId && renderedIds.includes(activeId) ? activeId : (renderedIds[0] ?? null)
+
+  const columnVisible = (key: TaskViewOptionalColumn) => columns[key] !== false
+  const gridTemplate = [
+    '22px',
+    '28px',
+    '62px',
+    'minmax(0, 1fr)',
+    ...(columnVisible('assignee') ? ['128px'] : []),
+    ...(columnVisible('priority') ? ['64px'] : []),
+    ...(columnVisible('dueDate') ? ['108px'] : []),
+    ...(columnVisible('progress') ? ['148px'] : []),
+    '72px',
+  ].join(' ')
+  const gridStyle = { '--pt-grid-columns': gridTemplate } as CSSProperties
+
+  const updateSortRule = (index: number, patch: Partial<TaskViewSortRule>) => {
+    setSorts(current => current.map((rule, ruleIndex) =>
+      ruleIndex === index ? { ...rule, ...patch } : rule))
+  }
+  const moveSortRule = (index: number, delta: -1 | 1) => {
+    setSorts(current => {
+      const target = index + delta
+      if (target < 0 || target >= current.length) return current
+      const next = [...current]
+      ;[next[index], next[target]] = [next[target], next[index]]
+      return next
+    })
+  }
+  const addSortRule = () => {
+    const used = new Set(sorts.map(rule => rule.field))
+    const field = SORT_OPTIONS.find(option => !used.has(option.value))?.value
+    if (field) setSorts(current => [...current, { field, dir: 'asc' }])
+  }
 
   const toggleCollapse = (id: string) => setCollapsed(prev => {
     const next = new Set(prev)
@@ -666,6 +832,31 @@ export function TaskTable(props: {
     return h % 2 === 0 ? '' : 'alt'
   }
 
+  const renderProgress = (t: Task) => {
+    const derived = progressMap.get(t.id)!
+    const meta = resolveTaskProgressMeta(t as Task & TaskProgressMetaInput, derived)
+    const fraction = checklistFraction(derived)
+    const objectiveText = `客观 ${formatProgressValue(derived)}`
+    return (
+      <div className="pt-cell pt-prog" data-progress-mode={meta.mode}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 2, overflowWrap: 'anywhere', fontSize: 'var(--t-10)' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          {meta.display !== null && <span className="pt-bar"><i style={{ width: `${meta.display}%` }}/></span>}
+          <span>{meta.mode === 'manual' ? `人工设定 ${meta.display}%` : objectiveText}</span>
+        </span>
+        {meta.mode === 'manual' && <span>{objectiveText}</span>}
+        <span>{fraction ? `清单 ${fraction} · ` : ''}覆盖 {derived.coverage.coveredLeaves}/{derived.coverage.totalLeaves}</span>
+        {derived.source === 'rollup' && <span>{progressHeadline(derived)}</span>}
+        {meta.manualNote && meta.mode === 'manual' &&
+          <span title={meta.manualNote} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{meta.manualNote}</span>}
+        {derived.value === null && derived.legacyProgress !== null &&
+          <span title="历史手填值不参与客观派生">原手填 {clampProgress(derived.legacyProgress)}%</span>}
+        {derived.pendingAcceptance && <span>待验收</span>}
+        {derived.warnings.length > 0 && <span title={derived.warnings.join('\n')}>请确认验收</span>}
+      </div>
+    )
+  }
+
   const leafRow = (row: { task: Task, depth: number, hasChildren: boolean }) => {
     const t = row.task
     const late = isLate(t)
@@ -676,6 +867,7 @@ export function TaskTable(props: {
       <div
         className={`pt-grid pt-row pm-task-row${effectiveActiveId === t.id ? ' pt-active' : ''}`}
         data-pm-row={t.id}
+        style={{ ...gridStyle, height: 'auto', minHeight: 56, paddingTop: 4, paddingBottom: 4 }}
         onPointerDown={e => {
           if (!(e.target as HTMLElement).closest('button,select,input,a,textarea')) focusRow(t.id)
         }}
@@ -697,7 +889,7 @@ export function TaskTable(props: {
         <div className="pt-cell pt-code">
           {taskHandleButton(t)}
         </div>
-        <div className="pt-cell pt-task">
+        <div className="pt-cell pt-task" style={{ flexWrap: 'wrap' }}>
           {row.hasChildren && (
             <button
               className={`pt-tri pm-task-toggle${collapsed.has(t.id) ? '' : ' open'}`}
@@ -745,17 +937,18 @@ export function TaskTable(props: {
               <Flag size={11} strokeWidth={2.2}/>{milestone.title}
             </span>
           )}
+          {exportSlot}
         </div>
-        <div className="pt-cell pt-assignee">
+        {columnVisible('assignee') && <div className="pt-cell pt-assignee">
           {t.assignee
             ? <><span className={`pt-av ${assigneeColor(t.assignee)}`}>{t.assignee.slice(0, 1)}</span>
               <span className="pt-aname">{t.assignee}</span></>
             : <><span className="pt-av ghost">–</span><span className="pt-aname none">未指派</span></>}
-        </div>
-        <div className="pt-cell pt-pri-cell">
+        </div>}
+        {columnVisible('priority') && <div className="pt-cell pt-pri-cell">
           <span className={`pt-pri ${t.priority === 'P0' ? 'p0' : ''}`}>{t.priority || 'P2'}</span>
-        </div>
-        <div className={`pt-cell pt-due${late ? ' late' : ''}${t.status === 'done' ? ' done' : ''}`}>
+        </div>}
+        {columnVisible('dueDate') && <div className={`pt-cell pt-due${late ? ' late' : ''}${t.status === 'done' ? ' done' : ''}`}>
           <input
             type="date" className="pm-row-due" aria-label={`${t.title} 截止日期`} disabled={disabled}
             value={t.dueDate ?? ''}
@@ -765,34 +958,9 @@ export function TaskTable(props: {
               void run(`task update ${t.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
             }}
           />
-        </div>
-        <div className="pt-cell pt-prog">
-          <span className="pt-prog-status">{taskStatusLabels[t.status] ?? t.status}</span>
-          <span className="pt-bar"><i style={{ width: `${clampProgress(t.progress ?? 0)}%` }} /></span>
-          {t.progress == null
-            ? <span className="pt-pct-null" title="无客观进度依据，显示证据不足，不按 0% 计">证据不足</span>
-            : <input
-                className="pt-pct pm-row-progress" aria-label={`${t.title} 进度`} disabled={disabled}
-                type="number" min={0} max={100} step={10} value={clampProgress(t.progress)}
-                onChange={e => {
-                  const upd = buildUpdate({ progress: e.currentTarget.value })
-                  if (!Object.keys(upd).length) return
-                  void run(`task update ${t.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
-                }}
-              />}
-        </div>
+        </div>}
+        {columnVisible('progress') && renderProgress(t)}
         <div className="pt-cell pt-acts">
-          {/* K18 任务卡静态出站关联位：只显示不回写；审计未就绪/无记录时「未导出」占位，不伪造。 */}
-          {latestExport?.at ? (
-            <span
-              className="pm-export-slot pm-export-slot--done"
-              title="已导出：外部文件为唯一事实源，工具不做后续同步/镜像"
-            >
-              已导出 · 最近 {hhmm(latestExport.at)} · 外部为唯一事实源
-            </span>
-          ) : (
-            <span className="pm-export-slot pm-export-slot--none" title="暂无导出记录">未导出</span>
-          )}
           <button className="pt-iconbtn" title="编辑" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
             <Pencil size={15} />
           </button>
@@ -809,7 +977,8 @@ export function TaskTable(props: {
     const { total, done } = stageCount(t.id)
     const countCls = total === 0 ? 'none' : done === total ? 'all' : ''
     return (
-      <div className={`pt-grid pt-group${open ? ' open' : ''}`} data-pm-row={t.id}>
+      <div className={`pt-grid pt-group${open ? ' open' : ''}`} data-pm-row={t.id}
+        style={{ ...gridStyle, height: 'auto', minHeight: 56, paddingTop: 4, paddingBottom: 4, flexWrap: 'wrap' }}>
         <div className="pt-cell pt-sel" />
         <div className="pt-cell pt-gutter">
           {hasKids
@@ -821,25 +990,24 @@ export function TaskTable(props: {
         <div className="pt-cell pt-code">
           {taskHandleButton(t)}
         </div>
-        <div className="pt-cell pt-gname">
+        <div className="pt-cell pt-gname" style={{ flexWrap: 'wrap' }}>
           <button className="pt-name" style={{ cursor: 'pointer' }} onClick={() => onEdit(t)}>
             {t.title}
           </button>
           <span className={`pt-gcount ${countCls}`}>{total === 0 ? '无子任务' : `${done}/${total} 完成`}</span>
+          {exportSlot}
         </div>
-        <div className="pt-cell pt-assignee">
+        {columnVisible('assignee') && <div className="pt-cell pt-assignee">
           {t.assignee
             ? <><span className={`pt-av ${assigneeColor(t.assignee)}`}>{t.assignee.slice(0, 1)}</span>
               <span className="pt-aname">{t.assignee}</span></>
             : <span className="pt-aname none">未指派</span>}
-        </div>
-        <div className="pt-cell" />
-        <div className={`pt-cell pt-due${isLate(t) ? ' late' : ''}`}>
+        </div>}
+        {columnVisible('priority') && <div className="pt-cell pt-pri-cell" />}
+        {columnVisible('dueDate') && <div className={`pt-cell pt-due${isLate(t) ? ' late' : ''}`}>
           <span className="pt-gstage-meta">{t.dueDate || '—'}</span>
-        </div>
-        <div className="pt-cell pt-prog">
-          <span className="pt-gstage-meta">{t.status === 'done' ? '已完成' : t.status === 'in_progress' ? '进行中' : t.progress ? `${clampProgress(t.progress)}%` : '待开始'}</span>
-        </div>
+        </div>}
+        {columnVisible('progress') && renderProgress(t)}
         <div className="pt-cell pt-acts">
           <button className="pt-iconbtn" title="编辑阶段" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
             <Pencil size={15} />
@@ -851,7 +1019,7 @@ export function TaskTable(props: {
 
   /** 按状态分组模式的分组头（与阶段行同款 pt-group 样式，扁平、无折叠三角）。 */
   const statusGroupRow = (g: { key: string, label: string, rows: Task[] }) => (
-    <div className="pt-grid pt-group open" key={g.key}>
+    <div className="pt-grid pt-group open" key={g.key} style={gridStyle}>
       <div className="pt-cell pt-sel" />
       <div className="pt-cell pt-gutter" />
       <div className="pt-cell" />
@@ -860,9 +1028,10 @@ export function TaskTable(props: {
         {g.label}
         <span className="pt-gcount">{g.rows.length} 条</span>
       </div>
-      <div className="pt-cell" />
-      <div className="pt-cell" />
-      <div className="pt-cell" />
+      {columnVisible('assignee') && <div className="pt-cell pt-assignee" />}
+      {columnVisible('priority') && <div className="pt-cell pt-pri-cell" />}
+      {columnVisible('dueDate') && <div className="pt-cell pt-due" />}
+      {columnVisible('progress') && <div className="pt-cell pt-prog" />}
       <div className="pt-cell pt-acts" />
     </div>
   )
@@ -1058,6 +1227,108 @@ export function TaskTable(props: {
             </div>
             {/* ③ 组织段：按状态分组 / 按 WBS 编号排序。 */}
             <div className="pt-seg pt-seg-org">
+            <details className="pt-view-settings">
+              <summary className="pt-ghost" aria-label="视图设置">
+                <Settings2 size={14} />
+                视图设置
+                {(sorts.length > 0 || OPTIONAL_COLUMNS.some(({ key }) => !columnVisible(key)))
+                  && <span className="pt-view-settings-count">
+                    {sorts.length + OPTIONAL_COLUMNS.filter(({ key }) => !columnVisible(key)).length}
+                  </span>}
+              </summary>
+              <div className="pt-view-settings-panel">
+                <section aria-labelledby="pt-sort-rules-title">
+                  <header>
+                    <span id="pt-sort-rules-title">多规则排序</span>
+                    <button
+                      type="button"
+                      className="pt-iconbtn"
+                      aria-label="添加排序规则"
+                      title="添加排序规则"
+                      disabled={sorts.length >= SORT_OPTIONS.length}
+                      onClick={addSortRule}
+                    ><Plus size={14} /></button>
+                  </header>
+                  {sorts.length === 0
+                    ? <p>当前使用下方单项快捷排序。</p>
+                    : <div className="pt-sort-rules">
+                        {sorts.map((rule, index) => (
+                          <div className="pt-sort-rule" key={rule.field}>
+                            <span className="pt-sort-index">{index + 1}</span>
+                            <select
+                              aria-label={`排序规则 ${index + 1} 字段`}
+                              value={rule.field}
+                              onChange={event => updateSortRule(index, {
+                                field: event.currentTarget.value as TaskViewSort,
+                              })}
+                            >
+                              {SORT_OPTIONS.map(option => (
+                                <option
+                                  key={option.value}
+                                  value={option.value}
+                                  disabled={option.value !== rule.field && sorts.some(item => item.field === option.value)}
+                                >{option.label.replace(/^按\s*/, '')}</option>
+                              ))}
+                            </select>
+                            <select
+                              aria-label={`排序规则 ${index + 1} 方向`}
+                              value={rule.dir}
+                              onChange={event => updateSortRule(index, {
+                                dir: event.currentTarget.value as TaskViewSortDirection,
+                              })}
+                            >
+                              <option value="asc">升序</option>
+                              <option value="desc">降序</option>
+                            </select>
+                            <span className="pt-sort-rule-actions">
+                              <button
+                                type="button"
+                                className="pt-iconbtn"
+                                aria-label={`上移排序规则 ${index + 1}`}
+                                title="上移"
+                                disabled={index === 0}
+                                onClick={() => moveSortRule(index, -1)}
+                              ><ArrowUp size={13} /></button>
+                              <button
+                                type="button"
+                                className="pt-iconbtn"
+                                aria-label={`下移排序规则 ${index + 1}`}
+                                title="下移"
+                                disabled={index === sorts.length - 1}
+                                onClick={() => moveSortRule(index, 1)}
+                              ><ArrowDown size={13} /></button>
+                              <button
+                                type="button"
+                                className="pt-iconbtn"
+                                aria-label={`删除排序规则 ${index + 1}`}
+                                title="删除规则"
+                                onClick={() => setSorts(current => current.filter((_, ruleIndex) => ruleIndex !== index))}
+                              ><Trash2 size={13} /></button>
+                            </span>
+                          </div>
+                        ))}
+                      </div>}
+                </section>
+                <section aria-labelledby="pt-visible-columns-title">
+                  <header><span id="pt-visible-columns-title">显示列</span></header>
+                  <div className="pt-column-options">
+                    {OPTIONAL_COLUMNS.map(column => (
+                      <label key={column.key}>
+                        <input
+                          type="checkbox"
+                          checked={columnVisible(column.key)}
+                          onChange={event => setColumns(current => ({
+                            ...current,
+                            [column.key]: event.currentTarget.checked,
+                          }))}
+                        />
+                        <span>{column.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </details>
             <button
               className="pt-ghost pm-group-toggle" aria-pressed={grouped}
               title="按任务状态扁平分组（替代阶段树）"
@@ -1066,7 +1337,10 @@ export function TaskTable(props: {
             <label className="pt-ghost pt-sort-wrap" title="任务排序">
               <select
                 className="pm-sort-select" aria-label="任务排序"
-                value={sort} onChange={e => setSort(e.currentTarget.value as TaskViewSort)}
+                value={sort} onChange={e => {
+                  setSort(e.currentTarget.value as TaskViewSort)
+                  setSorts([])
+                }}
               >
                 {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
@@ -1086,12 +1360,13 @@ export function TaskTable(props: {
             <label className="pt-ghost pm-import-dropzone" title="导入 .csv / .xlsx 任务表（先预览，确认后才落盘）">
               <FileText size={14} />导入
               <input
-                type="file" accept=".csv,.xlsx" hidden className="pm-import-file"
+                type="file" accept=".csv,.xlsx" hidden className="pm-import-file" disabled={disabled || importBusy}
                 onChange={e => {
                   const file = e.currentTarget.files?.[0]
                   const pid = projectId
                   e.currentTarget.value = ''
-                  if (!file) return
+                  if (!file || disabled || importInFlight.current) return
+                  setImportError('')
                   if (!pid) { setImportPreview({ text: '请先在顶部选择项目，再上传任务表。', confirm: '' }); return }
                   const isCsv = /\.csv$/i.test(file.name)
                   const reader = new FileReader()
@@ -1099,9 +1374,9 @@ export function TaskTable(props: {
                     const content = isCsv ? String(reader.result ?? '') : arrayBufferToB64(reader.result as ArrayBuffer)
                     const enc = JSON.stringify(content)
                     try {
-                      const text = await execute(`task import-content ${pid} ${file.name} ${enc}`)
+                      const text = await execute(`task import-content ${pid} ${JSON.stringify(file.name)} ${enc}`)
                       if (/失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/.test(text)) { setImportPreview({ text, confirm: '' }); return }
-                      setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc}` })
+                      setImportPreview({ text, confirm: `task import-content ${pid} ${JSON.stringify(file.name)} ${enc} confirm` })
                     } catch (err) {
                       setImportPreview({ text: `解析失败：${err instanceof Error ? err.message : String(err)}`, confirm: '' })
                     }
@@ -1221,17 +1496,20 @@ export function TaskTable(props: {
       </section>
 
       {importPreview && (
-        <div className="pt-import">
+        <div className="pt-import" aria-busy={importBusy}>
           <pre>{importPreview.text}</pre>
+          {importError && <p role="alert">{importError}</p>}
           {importPreview.confirm && (
             <button
-              className="pt-primary pm-import-confirm" disabled={disabled}
-              onClick={() => void run(importPreview.confirm).then(ok => {
-                if (ok) { setImportPreview(null); onSaved() }
-              })}
+              className="pt-primary pm-import-confirm" disabled={disabled || importBusy}
+              onClick={confirmImport}
             >确认落盘</button>
           )}
-          <button className="pt-ghost" onClick={() => setImportPreview(null)}>取消</button>
+          <button className="pt-ghost" disabled={importBusy} onClick={() => {
+            if (importInFlight.current) return
+            setImportPreview(null)
+            setImportError('')
+          }}>取消</button>
         </div>
       )}
 
@@ -1267,15 +1545,15 @@ export function TaskTable(props: {
 
       <div className="pt-card">
         <div className="pt-scroll">
-          <div className="pt-grid pt-thead">
+          <div className="pt-grid pt-thead" style={gridStyle}>
             <div className="pt-cell pt-sel" />
             <div className="pt-cell pt-gutter" />
             <div className="pt-th">编号</div>
             <div className="pt-th">任务</div>
-            <div className="pt-th">负责人</div>
-            <div className="pt-th">优先级</div>
-            <div className="pt-th">截止日期</div>
-            <div className="pt-th">进度</div>
+            {columnVisible('assignee') && <div className="pt-th">负责人</div>}
+            {columnVisible('priority') && <div className="pt-th">优先级</div>}
+            {columnVisible('dueDate') && <div className="pt-th">截止日期</div>}
+            {columnVisible('progress') && <div className="pt-th">进度</div>}
             <div className="pt-th right">操作</div>
           </div>
 

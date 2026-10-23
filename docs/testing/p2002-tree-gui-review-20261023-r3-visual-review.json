@@ -1,0 +1,190 @@
+{
+  "role": "独立 GUI 原图目视",
+  "indexSha256": "605af75dc633eef8215e9c96eec94cd3852f74f392b89f729390117c1ffad64c",
+  "png": 8,
+  "jpeg": 12,
+  "total": 20,
+  "entries": [
+    {
+      "file": "round03-tree-expanded.png",
+      "observation": "父行和两子行同屏；三个出站文案完整可读，与右侧编辑入口不重叠。子层编号格显示省略，完整8.1/8.2只由原raw/DOM及诊断引用证实，不称编号格全文目视。",
+      "bytes": 395510,
+      "sha256": "01fb644cb10f09672f1b21aa143a50f92b9912ed009f5f2757709fd2da59f977",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round03-tree-collapsed.png",
+      "observation": "父行箭头朝右，出站位保留；两子行和其诊断卡消失。",
+      "bytes": 399402,
+      "sha256": "6078d2687b255a1928a86880ae854a18945ca95de7a1757c546a82bc79527688",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round03-tree-reexpanded.png",
+      "observation": "父行箭头朝下，两子行和各自出站文案重新可见。",
+      "bytes": 396946,
+      "sha256": "d68a1664af2d973c8971dc865207dbbecd9ee9687e2cd4115eb64e63bd09e833",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round03-child-edit-visible.png",
+      "observation": "真实编辑任务抽屉打开，子甲标题完整且蓝焦点环可见；背景遮罩是正常表单覆盖，不误称无遮挡。",
+      "bytes": 344352,
+      "sha256": "deb0f60d2ba71e5984510a2453a9b09e939fce8721a805fc6005879293e04f29",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round03-child-edit-cancelled.png",
+      "observation": "抽屉退出；子甲编辑按钮蓝焦点环可见，父/两子出站位可读。",
+      "bytes": 397112,
+      "sha256": "6f163d1a294aabbfef31017151f882604d0010619ae91da2fc6749a02305a544",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round03-tree-refreshed.png",
+      "observation": "刷新后图停在页首，仅旧顶层任务可见；不能用此PNG称父/两子刷新当态视口可见。",
+      "bytes": 381463,
+      "sha256": "a4c760ae3d217643a8b83be2c99a3c5ac52d3e239824a0589277fb53cc5a0900",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round04-tree-reentry.png",
+      "observation": "后续切离任务再重进，父/两子三个出站位同屏且文案完整。",
+      "bytes": 395510,
+      "sha256": "01fb644cb10f09672f1b21aa143a50f92b9912ed009f5f2757709fd2da59f977",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "round04-tree-after-reload.png",
+      "observation": "真实reload重新进入PM后，父/两子出站位同屏且文案完整。",
+      "bytes": 395509,
+      "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-4.jpg",
+      "observation": "折叠动作过渡帧，父行仍在而两子行已不显示；不把该过渡帧当最初展开态。",
+      "bytes": 79559,
+      "sha256": "0c4e8b2157b5231b0a3e8707856ca3e97b72a405668e21d9b1e57373ba0abed3",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-10.jpg",
+      "observation": "父箭头朝右、两子行消失，支持真实折叠。",
+      "bytes": 79556,
+      "sha256": "14de77c62a4b61a18d2e8ab21707a85da63ddca82a733ce96c6acf3f0b94e683",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-17.jpg",
+      "observation": "再展开过程中父/两子与出站位恢复可见。",
+      "bytes": 80258,
+      "sha256": "85b719cbda834d6f7a904ce10b4f39f30cb4873ac9331c7c3e3194e1ef00af20",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-30.jpg",
+      "observation": "子甲编辑抽屉及完整标题可见，焦点在标题。",
+      "bytes": 64804,
+      "sha256": "ca5d265180d580c9bd24dfe692eb86a08f1851e707afff39fe75b15859daf523",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-40.jpg",
+      "observation": "取消后抽屉消失，子甲编辑按钮焦点环可见。",
+      "bytes": 80415,
+      "sha256": "8af0b07c3d0d397e44c660cb2898caf1291c307658a0a12a2b374f6c5a5bdf5a",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-50.jpg",
+      "observation": "刷新响应后视图已回页首，父/子不在截图视口。",
+      "bytes": 79010,
+      "sha256": "2a26c261b7387bda77cf01c4fc0cabab94b7286787ea226b6dfa18da10f007b2",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round03-real-tree-57.jpg",
+      "observation": "本录段尾帧仍在页首，没有补出刷新后的父/子目视。",
+      "bytes": 79137,
+      "sha256": "3d8e8de6cdce8bb776039ab57c42c51c810cdaf8801e5df4fffdda511d711d25",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round04-reentry-reload-0.jpg",
+      "observation": "后续段起始帧仍为页首。",
+      "bytes": 79137,
+      "sha256": "3d8e8de6cdce8bb776039ab57c42c51c810cdaf8801e5df4fffdda511d711d25",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round04-reentry-reload-6.jpg",
+      "observation": "重进过程早期帧仍为页首，单此帧不证父/两子可见。",
+      "bytes": 79010,
+      "sha256": "2a26c261b7387bda77cf01c4fc0cabab94b7286787ea226b6dfa18da10f007b2",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round04-reentry-reload-15.jpg",
+      "observation": "真实reload加载中出现HARNESS/Loading plugins，不冒无reload；该帧原metadata高度770。",
+      "bytes": 8474,
+      "sha256": "ce7ff7638080a6aabfa5805434192b31a4b650d2f31e306ef530abc667f4cc8d",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round04-reentry-reload-35.jpg",
+      "observation": "reload后父/两子及三个出站文案恢复同屏。",
+      "bytes": 79617,
+      "sha256": "e6e932899079422ed6fdb837ed8bce64c080213bddc1320187dbed242ac46d74",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    },
+    {
+      "file": "frames/round04-reentry-reload-41.jpg",
+      "observation": "reload后尾帧父/两子仍同屏，文案与初始展开相同。",
+      "bytes": 80142,
+      "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d",
+      "tool": "functions.view_image",
+      "actuallyViewed": true,
+      "detail": "high"
+    }
+  ],
+  "boundary": "实际目视20张不同原图；182帧全部哈希，不声称逐帧目视或完整录屏观看。"
+}

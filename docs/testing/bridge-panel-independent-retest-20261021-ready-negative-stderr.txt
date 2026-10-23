@@ -1,0 +1,129 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P01 pending snapshot sees no POST; latest token waits for successful actual execute
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "http://127.0.0.1:18345/api/entered",
+      Object {
+        "body": "{"nonce":"N2"}",
+        "credentials": "omit",
+        "headers": Object {
+          "content-type": "application/json",
+        },
+        "method": "POST",
+      },
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:161:25
+    159|     await hashChange('#pm-launch=18345.N2')
+    160|     await hashChange('#pm-launch=18345.N2')
+    161|     expect(fetcher).not.toHaveBeenCalled()
+       |                         ^
+    162|     await act(async () => { read.resolve(encoded) })
+    163|     expect(sent().map(item => item.nonce)).toEqual(['N2'])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P03 successful panel closes ready during next read; N2 sends only after success
+AssertionError: expected [ 'N1', 'N2' ] to deeply equal [ 'N1' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
++   "N2",
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:172:44
+    170|     await refresh()
+    171|     await hashChange('#pm-launch=18345.N2')
+    172|     expect(sent().map(item => item.nonce)).toEqual(['N1'])
+       |                                            ^
+    173|     expect(location.hash).toBe('#pm-launch=18345.N2')
+    174|     await act(async () => { read.resolve(encoded) })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P03 malformed snapshot JSON fails ready; real retry processes current token
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "http://127.0.0.1:18345/api/entered",
+      Object {
+        "body": "{"nonce":"N2"}",
+        "credentials": "omit",
+        "headers": Object {
+          "content-type": "application/json",
+        },
+        "method": "POST",
+      },
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:183:25
+    181|     await mount(execute)
+    182|     await hashChange('#pm-launch=18345.N2')
+    183|     expect(fetcher).not.toHaveBeenCalled()
+       |                         ^
+    184|     expect(location.hash).toBe('#pm-launch=18345.N2')
+    185|     const retry = mounted!.root.findAllByType('button').find(node => n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 未成功snapshot不回告，失败后真实重试成功才处理当前N2
+AssertionError: expected [ 'N2' ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "N2",
++ ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:77:20
+     75|     await mount(execute)
+     76|     await changeHash('#pm-launch=18345.N2')
+     77|     expect(sent()).toEqual([])
+       |                    ^
+     78|     await act(async () => { request.reject(new Error('snapshot failed'…
+     79|     expect(sent()).toEqual([])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 成功读取后若刷新失败，新hash仍保留到后续成功重读
+AssertionError: expected [ 'N1', 'N2' ] to deeply equal [ 'N1' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
++   "N2",
+  ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:92:20
+     90|     await act(async () => { refresh.props.onClick() })
+     91|     await changeHash('#pm-launch=18345.N2')
+     92|     expect(sent()).toEqual(['N1'])
+       |                    ^
+     93|     const retry = mounted!.root.findAllByType('button').find(node => n…
+     94|     await act(async () => { retry.props.onClick() })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

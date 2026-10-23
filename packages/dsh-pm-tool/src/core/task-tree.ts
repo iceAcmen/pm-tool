@@ -23,9 +23,15 @@ export interface TreeRow<T = TreeTask> {
 const codeRank = (a: TreeTask, b: TreeTask) =>
   String(a.code ?? '').localeCompare(String(b.code ?? ''), 'en', { numeric: true })
 
+export type TreeTaskComparator<T extends TreeTask> = (a: T, b: T) => number
+
 /** 建树：返回按 (parentId|根) 分组的 children id 列表。 */
-export function indexChildren<T extends TreeTask>(tasks: T[]): Map<string, string[]> {
+export function indexChildren<T extends TreeTask>(
+  tasks: T[],
+  compare?: TreeTaskComparator<T>,
+): Map<string, string[]> {
   const byId = new Map(tasks.map(t => [t.id, t]))
+  const inputRank = new Map(tasks.map((task, index) => [task.id, index]))
   const children = new Map<string, string[]>()
   const roots: string[] = []
   for (const t of tasks) {
@@ -39,8 +45,12 @@ export function indexChildren<T extends TreeTask>(tasks: T[]): Map<string, strin
   }
   // 每个分组按 code 排序
   const idOf = (id: string) => byId.get(id)!
-  for (const [pid, list] of children) list.sort((a, b) => codeRank(idOf(a), idOf(b)))
-  roots.sort((a, b) => codeRank(idOf(a), idOf(b)))
+  const rank = (a: string, b: string) =>
+    (compare?.(idOf(a), idOf(b)) ?? 0)
+    || codeRank(idOf(a), idOf(b))
+    || (inputRank.get(a) ?? 0) - (inputRank.get(b) ?? 0)
+  for (const [pid, list] of children) list.sort(rank)
+  roots.sort(rank)
   children.set('__root__', roots)
   return children
 }
@@ -49,9 +59,13 @@ export function indexChildren<T extends TreeTask>(tasks: T[]): Map<string, strin
  * 输出可见行序列（前序遍历）。collapsed 为折叠的父任务 id 集合，
  * 其直接/间接后代不出现在结果中。
  */
-export function flattenVisible<T extends TreeTask>(tasks: T[], collapsed: Set<string> = new Set()): TreeRow<T>[] {
+export function flattenVisible<T extends TreeTask>(
+  tasks: T[],
+  collapsed: Set<string> = new Set(),
+  compare?: TreeTaskComparator<T>,
+): TreeRow<T>[] {
   const byId = new Map<string, T>(tasks.map(t => [t.id, t]))
-  const children = indexChildren(tasks)
+  const children = indexChildren(tasks, compare)
   const rows: TreeRow<T>[] = []
   const walk = (id: string, depth: number) => {
     const task = byId.get(id)

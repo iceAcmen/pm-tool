@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-21T13:14:52.199565+00:00",
+  "cwd": "/private/tmp/pmtool-handshake-tests-20261021",
+  "args": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "src/client/launch-handshake.test.ts",
+    "src/client/panel-launch-handshake.test.tsx",
+    "--maxWorkers=1",
+    "--minWorkers=1"
+  ],
+  "exit": 0
+}

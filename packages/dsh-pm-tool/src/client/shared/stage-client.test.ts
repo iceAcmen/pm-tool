@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import {
   stageAsset,
   cancelStagedAsset,
@@ -43,6 +45,7 @@ describe('stageAsset 暂存 POST（无 taskId）', () => {
     expect(init.credentials).toBe('same-origin')
     expect(init.cache).toBe('no-store')
     expect(init.headers['x-pm-file-name']).toBe('a.png')
+    expect(init.headers['x-pm-file-name-encoding']).toBe('uri-component')
     expect(init.headers['x-pm-media-type']).toBe('image/png')
     expect(init.headers['x-pm-task-id']).toBeUndefined()
     expect(init.headers['content-type']).toBe('image/png')
@@ -75,6 +78,63 @@ describe('stageAsset 暂存 POST（无 taskId）', () => {
 
     vi.stubGlobal('fetch', async () => { throw new Error('down') })
     await expect(stageAsset({ body: new Blob(['x']) })).rejects.toMatchObject({ reason: 'network' })
+  })
+})
+
+describe('A13-C01/C02 文件名完整编码，经原生 Headers/Request 构造（零网络）', () => {
+  const originalName = 'QA 文件 原件.md'
+  const bytes = readFileSync(`/private/tmp/pmtool-a11-native-files/${originalName}`)
+  const sha256 = '87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a'
+
+  it.each([
+    [originalName, 'QA%20%E6%96%87%E4%BB%B6%20%E5%8E%9F%E4%BB%B6.md'],
+    ['100% + #?.md', '100%25%20%2B%20%23%3F.md'],
+    ['literal%2Fname.md', 'literal%252Fname.md'],
+    ['qa-note.md', 'qa-note.md'],
+  ])('%s 保留完整原名、body/signal/同源契约及 Unicode 响应', async (fileName, wire) => {
+    expect(bytes.length).toBe(22)
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(sha256)
+    const body = new Blob([bytes], { type: 'text/markdown' })
+    const signal = new AbortController().signal
+    const response = { ...envelope, fileName, size: 22, sha256, mediaType: 'text/markdown' }
+    const intercept = vi.fn(async (url: string, init: RequestInit) => {
+      const headers = new Headers(init.headers)
+      const request = new Request(new URL(url, 'https://a13-no-network.invalid'), init)
+      expect(headers.get('x-pm-file-name')).toBe(wire)
+      expect(request.headers.get('x-pm-file-name')).toBe(wire)
+      expect(decodeURIComponent(wire)).toBe(fileName)
+      expect(headers.get('x-pm-file-name-encoding')).toBe('uri-component')
+      headers.forEach(value => expect(value).toMatch(/^[\x20-\x7e]*$/))
+      expect(headers.get('x-pm-task-id')).toBeNull()
+      expect(headers.get('content-type')).toBe('text/markdown')
+      expect(headers.get('x-pm-media-type')).toBe('text/markdown')
+      expect(init.body).toBe(body)
+      expect(init.signal).toBe(signal)
+      expect(init.method).toBe('POST')
+      expect(init.credentials).toBe('same-origin')
+      expect(init.cache).toBe('no-store')
+      return new Response(JSON.stringify(response), { status: 201 })
+    })
+    vi.stubGlobal('fetch', intercept)
+    expect(await stageAsset({ body, fileName, signal })).toEqual(response)
+    expect(intercept).toHaveBeenCalledOnce()
+  })
+
+  it.each(['', undefined])('A13-C03 空/缺名 %s 不发送编码标记，仍可原生构造', async (fileName) => {
+    vi.stubGlobal('fetch', async (url: string, init: RequestInit) => {
+      const request = new Request(new URL(url, 'https://a13-no-network.invalid'), init)
+      expect(request.headers.get('x-pm-file-name')).toBe('')
+      expect(request.headers.has('x-pm-file-name-encoding')).toBe(false)
+      return new Response(JSON.stringify(envelope), { status: 201 })
+    })
+    expect(await stageAsset({ body: new Blob(['x']), fileName })).toEqual(envelope)
+  })
+
+  it('平台仍拒绝 raw Unicode，不能放宽 Headers/Request 来使测试变绿', () => {
+    expect(() => new Headers({ 'x-pm-file-name': originalName })).toThrow(TypeError)
+    expect(() => new Request('https://a13-no-network.invalid', {
+      method: 'POST', headers: { 'x-pm-file-name': originalName }, body: new Blob([bytes]),
+    })).toThrow(TypeError)
   })
 })
 

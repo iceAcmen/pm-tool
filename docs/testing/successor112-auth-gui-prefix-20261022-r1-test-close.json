@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-22T14:38:45.006Z",
+  "released": true,
+  "stop": true,
+  "ownedPid": 3086,
+  "ownedPidExited": true,
+  "originalFrozenSourceAndDependenciesUnchanged": true,
+  "ownSourceDependenciesConfigTranscriptUnchanged": true,
+  "actualExit": 1,
+  "counts": {
+    "actualCases": 5,
+    "passed": 1,
+    "failed": 4,
+    "other": 0
+  },
+  "cases": [
+    {
+      "title": "P-AUTH 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "P-RATE-PREFIX 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "C-RAW 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "C-COLON 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "C-SUCCESS 真实组件保完整原因且同场景前缀仅一次",
+      "status": "passed"
+    }
+  ],
+  "observations": 5,
+  "sourceOrComponentFailNotGui": true,
+  "preservedTmp": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-5vfhv9"
+}

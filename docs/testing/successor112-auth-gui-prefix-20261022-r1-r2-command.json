@@ -1,0 +1,37 @@
+{
+  "startedAt": "2026-10-22T14:40:05.942Z",
+  "endedAt": "2026-10-22T14:40:07.220Z",
+  "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "argv": [
+    "/private/tmp/successor112-auth-gui-prefix-20261022-r1-5vfhv9/package/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/private/tmp/successor112-auth-gui-prefix-20261022-r1-r2-tmRWav/vitest.config.mjs",
+    "--no-cache",
+    "--reporter=json",
+    "--outputFile=/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/successor112-auth-gui-prefix-20261022-r1-r2-test.result.json"
+  ],
+  "cwd": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-5vfhv9/package",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    "HOME": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-r2-tmRWav/home",
+    "TMPDIR": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-r2-tmRWav/tmp",
+    "XDG_CACHE_HOME": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-r2-tmRWav/cache",
+    "CI": "true",
+    "LANG": "zh_CN.UTF-8",
+    "PREFIX_TRANSCRIPT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/successor112-auth-gui-prefix-20261022-r1-transcript.json",
+    "PREFIX_OBSERVATIONS": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/successor112-auth-gui-prefix-20261022-r1-r2-observations.ndjson"
+  },
+  "pid": 3566,
+  "status": 1,
+  "signal": null,
+  "error": null,
+  "adapter": {
+    "originalReader": "const visibleText = (n: ReactTestInstance): string => n.children.map(c => typeof c === 'string' ? c : visibleText(c)).join('')",
+    "correctedReader": "const visibleText = (n: ReactTestInstance): string => n.type === 'br' ? '\\n' : n.children.map(c => typeof c === 'string' ? c : visibleText(c)).join('')",
+    "originalTestSha256": "23473acbbf8ceb4989a79eb769140d48894e62e9f0ff3800595232bdffe5147b",
+    "correctedTestSha256": "ad563f67804d90bbc44de370112f82d087ba2b8bae720ba03a5ad94afcd80b4f",
+    "productTransform": false
+  },
+  "tmp": "/private/tmp/successor112-auth-gui-prefix-20261022-r1-r2-tmRWav"
+}

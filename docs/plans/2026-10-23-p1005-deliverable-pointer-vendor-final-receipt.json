@@ -1,0 +1,81 @@
+{
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/scripts/verify-external-skills.mjs"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "exit": 0,
+  "manifest": {
+    "path": "vendor/agent-skills/mattpocock/manifest.json",
+    "bytes": 11543,
+    "sha256": "ebb7833967b9dfe7f93f33c848be34f63ecce8c739f2258cb882dbcf2a4f7734"
+  },
+  "inputs": [
+    {
+      "path": "vendor/agent-skills/mattpocock/LICENSE",
+      "bytes": 1068,
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/grill-me/SKILL.md",
+      "bytes": 157,
+      "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/grill-me/agents/openai.yaml",
+      "bytes": 137,
+      "sha256": "c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/grilling/SKILL.md",
+      "bytes": 2049,
+      "sha256": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/grilling/agents/openai.yaml",
+      "bytes": 113,
+      "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/tdd/SKILL.md",
+      "bytes": 3629,
+      "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/tdd/tests.md",
+      "bytes": 2214,
+      "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/tdd/mocking.md",
+      "bytes": 1481,
+      "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/tdd/agents/openai.yaml",
+      "bytes": 87,
+      "sha256": "ea6f01cf1b8c06a4b0f5b649d74b1b8ce8685e72af1b38d70d877693e092af0b"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/code-review/SKILL.md",
+      "bytes": 6670,
+      "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/code-review/agents/openai.yaml",
+      "bytes": 100,
+      "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/diagnosing-bugs/SKILL.md",
+      "bytes": 8664,
+      "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d"
+    },
+    {
+      "path": "vendor/agent-skills/mattpocock/skills/diagnosing-bugs/agents/openai.yaml",
+      "bytes": 103,
+      "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b"
+    }
+  ],
+  "vendorIntegrityVerified": true
+}

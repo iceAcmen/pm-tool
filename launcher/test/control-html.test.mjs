@@ -69,6 +69,10 @@ test('S1 内联脚本可执行并渲染打开按钮，避免首屏正文空白',
     ['close', {}],
   ])
   const context = vm.createContext({
+    window: { addEventListener: () => {} },
+    AbortController,
+    setTimeout: () => 1,
+    clearTimeout: () => {},
     document: {
       body,
       getElementById: (id) => elements.get(id) ?? null,

@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-21T20:40:00.162Z",
+  "checked": 1060,
+  "differences": [
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-acceptance-execution-20261021.md",
+      "before": {
+        "bytes": 41609,
+        "sha256": "43ba2d46c4e6ae359ed0902f619a99f61806234e502248d613bdbd6e8abec66b"
+      },
+      "after": {
+        "bytes": 43012,
+        "sha256": "bfdbd735b5a8585924cd2d70e7cf50fff32f0a6cafdd84f22fa206d8a2941533"
+      }
+    }
+  ],
+  "addedFinderFiles": [],
+  "removedFinderFiles": [],
+  "status": "DRIFT_REQUIRES_REVIEW",
+  "auditSha256": "a2fd9589b47983b2ebee01db4934d05b692d64eaaca1776bb11e0585b9c0da16",
+  "boundary": "No new GUI run, build, request, nonce access, runtime-private read, service or Git operation."
+}

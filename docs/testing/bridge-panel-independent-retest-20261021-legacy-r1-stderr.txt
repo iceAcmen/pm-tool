@@ -1,0 +1,331 @@
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B01 same-token shares flight; failed token retries independently after another success
+AssertionError: expected Promise{…} not to be Promise{…} // Object.is equality
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:97:24
+     95|     location.hash = '#pm-launch=18345.N2'
+     96|     const second = r.reportReady()
+     97|     expect(second).not.toBe(first)
+       |                        ^
+     98|     n1.resolve({ ok: true } as Response)
+     99|     await expect(first).resolves.toBe(true)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B03 old finally cannot remove new token flight; reverse completion preserves business hash
+AssertionError: expected Promise{…} to be Promise{…} // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: Promise{…}
+Received: serializes to the same string
+
+
+Compared values have no visual difference.
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:118:29
+    116|     n1.resolve({ ok: false } as Response)
+    117|     await first
+    118|     expect(r.reportReady()).toBe(second)
+       |                             ^
+    119|     expect(fetcher).toHaveBeenCalledTimes(2)
+    120|     n2.resolve({ ok: true } as Response)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B04 in-flight success must not erase a newer plain business route
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "#/reports?tab=history",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:135:23
+    133|     response.resolve({ ok: true } as Response)
+    134|     await first
+    135|     expect(clean).not.toHaveBeenCalled()
+       |                       ^
+    136|     expect(location.hash).toBe('#/reports?tab=history')
+    137|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B02 completed same token is not reposted; equal nonce on another port is distinct
+AssertionError: expected [ { …(2) } ] to deeply equal [ { …(2) }, { …(2) } ]
+
+- Expected
++ Received
+
+  Array [
+    Object {
+      "nonce": "N1",
+      "url": "http://127.0.0.1:18345/api/entered",
+    },
+-   Object {
+-     "nonce": "N1",
+-     "url": "http://127.0.0.1:18346/api/entered",
+-   },
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:147:20
+    145|     location.hash = '#/tasks&pm-launch=18346.N1'
+    146|     await r.reportReady()
+    147|     expect(sent()).toEqual([
+       |                    ^
+    148|       { url: 'http://127.0.0.1:18345/api/entered', nonce: 'N1' },
+    149|       { url: 'http://127.0.0.1:18346/api/entered', nonce: 'N1' },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P03 successful panel closes ready during next read; N2 sends only after success
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N2",
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:175:44
+    173|     expect(location.hash).toBe('#pm-launch=18345.N2')
+    174|     await act(async () => { read.resolve(encoded) })
+    175|     expect(sent().map(item => item.nonce)).toEqual(['N1', 'N2'])
+       |                                            ^
+    176|     expect(execute).toHaveBeenCalledTimes(2)
+    177|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P02 hash-only new nonce and same-nonce new port report without second snapshot
+AssertionError: expected [ { …(2) } ] to deeply equal [ { …(2) }, { …(2) }, { …(2) } ]
+
+- Expected
++ Received
+
+  Array [
+    Object {
+      "nonce": "N1",
+      "url": "http://127.0.0.1:18345/api/entered",
+    },
+-   Object {
+-     "nonce": "N1",
+-     "url": "http://127.0.0.1:18346/api/entered",
+-   },
+-   Object {
+-     "nonce": "N2",
+-     "url": "http://127.0.0.1:18346/api/entered",
+-   },
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:195:20
+    193|     await hashChange('#/tasks&pm-launch=18346.N1')
+    194|     await hashChange('#/tasks&pm-launch=18346.N2')
+    195|     expect(sent()).toEqual([
+       |                    ^
+    196|       { url: 'http://127.0.0.1:18345/api/entered', nonce: 'N1' },
+    197|       { url: 'http://127.0.0.1:18346/api/entered', nonce: 'N1' },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P04 POST failure preserves token; repeated hash retries then completed-token events dedupe
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N1' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N1",
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:220:44
+    218|     expect(location.hash).toBe('#pm-launch=18345.N1')
+    219|     await hashChange('#pm-launch=18345.N1')
+    220|     expect(sent().map(item => item.nonce)).toEqual(['N1', 'N1'])
+       |                                            ^
+    221|     expect(location.hash).toBe('')
+    222|     await hashChange('#pm-launch=18345.N1')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P05 old snapshot resolves while new actual mount is pending: no false N2 readiness
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:232:32
+    230|     const newRead = pending<string>()
+    231|     await mount(vi.fn().mockReturnValue(oldRead.promise))
+    232|     expect(hashListeners.size).toBe(1)
+       |                                ^
+    233|     act(() => mounted!.unmount())
+    234|     mounted = undefined
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P05 N2 completes before old N1; unmount removes listener without new POST
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N2",
+  ]
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:255:44
+    253|     await mount()
+    254|     await hashChange('#/tasks&pm-launch=18345.N2')
+    255|     expect(sent().map(item => item.nonce)).toEqual(['N1', 'N2'])
+       |                                            ^
+    256|     await act(async () => { n2.resolve({ ok: true } as Response) })
+    257|     expect(location.hash).toBe('#/tasks')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+
+ FAIL  src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R05/R06：N1成功后新令牌18345.N2独立回告
+ FAIL  src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R05/R06：N1成功后新令牌18346.N1独立回告
+AssertionError: expected [ Array(1) ] to have a length of 2 but got 1
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ src/client/launch-handshake.test.ts:173:18
+    171|     hash = `#/tasks&pm-launch=${next}`
+    172|     await retrier.reportReady()
+    173|     expect(sent).toHaveLength(2)
+       |                  ^
+    174|     expect(sent[1]).toBe(`http://127.0.0.1:${next.split('.')[0]}/api/e…
+    175|     expect(hash).toBe('#/tasks')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+
+ FAIL  src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R07：旧N1成功不能清新N2 hash
+AssertionError: expected '#/tasks' to be '#/tasks&pm-launch=18345.N2' // Object.is equality
+
+Expected: "#/tasks&pm-launch=18345.N2"
+Received: "#/tasks"
+
+ ❯ src/client/launch-handshake.test.ts:189:18
+    187|     release({ ok: true } as Response)
+    188|     await expect(flight).resolves.toBe(true)
+    189|     expect(hash).toBe('#/tasks&pm-launch=18345.N2')
+       |                  ^
+    190|   })
+    191| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+
+ FAIL  src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R08：旧请求在途不能合并新N2，新finally不丢同token并发守卫
+AssertionError: expected Promise{…} not to be Promise{…} // Object.is equality
+ ❯ src/client/launch-handshake.test.ts:207:20
+    205|     hash = '#/tasks&pm-launch=18345.N2'
+    206|     const n2 = retrier.reportReady()
+    207|     expect(n2).not.toBe(n1)
+       |                    ^
+    208|     expect(sent).toEqual(['N1', 'N2'])
+    209|     releases[0]({ ok: true } as Response)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/17]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 成功snapshot后同一挂载收到N2，直接回告新旅程；业务hash不发
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N2",
+  ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:65:20
+     63|     expect(sent()).toEqual(['N1'])
+     64|     await changeHash('#/tasks&pm-launch=18345.N2')
+     65|     expect(sent()).toEqual(['N1', 'N2'])
+       |                    ^
+     66|     expect(location.hash).toBe('#/tasks')
+     67|     await changeHash('#/tasks')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/17]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 成功读取后若刷新失败，新hash仍保留到后续成功重读
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N2",
+  ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:95:20
+     93|     const retry = mounted!.root.findAllByType('button').find(node => n…
+     94|     await act(async () => { retry.props.onClick() })
+     95|     expect(sent()).toEqual(['N1', 'N2'])
+       |                    ^
+     96|   })
+     97| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/17]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 旧N1在途换N2不吞新请求，旧成功不清新hash，重复事件合并
+AssertionError: expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+
+- Expected
++ Received
+
+  Array [
+    "N1",
+-   "N2",
+  ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:105:20
+    103|     await changeHash('#/tasks&pm-launch=18345.N2')
+    104|     await changeHash('#/tasks&pm-launch=18345.N2')
+    105|     expect(sent()).toEqual(['N1', 'N2'])
+       |                    ^
+    106|     await act(async () => { n1.resolve({ ok: true } as Response) })
+    107|     expect(location.hash).toContain('N2')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/17]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 卸载移除监听；卸载后迟到snapshot也不回告，重新真实挂载可处理N2
+AssertionError: expected [ 'N2' ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "N2",
++ ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:119:20
+    117|     await changeHash('#pm-launch=18345.N2')
+    118|     await act(async () => { request.resolve(JSON.stringify(snapshot)) …
+    119|     expect(sent()).toEqual([])
+       |                    ^
+    120|     await mount()
+    121|     expect(sent()).toEqual(['N2'])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/17]⎯
+

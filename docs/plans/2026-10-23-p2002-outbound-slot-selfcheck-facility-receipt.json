@@ -1,0 +1,10 @@
+{
+  "command": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "docs/plans/2026-10-23-p2002-outbound-slot-runner.mjs", "selfcheck"],
+  "exit": 1,
+  "error": "ENOENT: open '/tmp/pm-p2002-outbound-slot-0BVVIe/green-final/output/assets/observations.json'",
+  "classification": "FACILITY_FAIL",
+  "productTestsExecuted": false,
+  "cause": "collector included assets output directory as if it were a numbered test case",
+  "action": "preserved; restrict collector to numbered S01..S08 case directories; do not alter tests/product",
+  "verdict": "NOT_JUDGED"
+}

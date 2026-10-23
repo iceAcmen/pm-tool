@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-22T21:17:31.001Z",
+  "inputs": 214,
+  "drift": [],
+  "inventoryOk": true,
+  "copiedAuditMatches": true,
+  "copiedReaderMatches": true,
+  "documentCheck": {
+    "links": 26,
+    "brokenLinks": [],
+    "trailingWhitespace": false,
+    "finalNewline": true,
+    "balancedFences": true,
+    "sealLink": "Own seal created with exclusive copy below"
+  },
+  "audit": {
+    "bytes": 133878,
+    "sha256": "bae98ec5507d7000d138bd4f6aa0c0f4c135375a02d81a58a3e2cd140fb977c8"
+  },
+  "reader": {
+    "bytes": 17113,
+    "sha256": "e7e7ac39e16e57bf0b755e3a5de4fddf73e3a9309d41a768244c084f11d38991"
+  },
+  "outputs": [
+    {
+      "path": "docs/testing/p2007-archive-known-gaps-red-20261023-r1.md",
+      "bytes": 14264,
+      "sha256": "a4b52291b1860a6b7c31a2009cb79fc067adaada8fc333b449bc0f70f131886f"
+    },
+    {
+      "path": "docs/testing/p2007-archive-known-gaps-red-20261023-r1-audit.json",
+      "bytes": 133878,
+      "sha256": "bae98ec5507d7000d138bd4f6aa0c0f4c135375a02d81a58a3e2cd140fb977c8"
+    },
+    {
+      "path": "docs/testing/p2007-archive-known-gaps-red-20261023-r1-reader.mjs",
+      "bytes": 17113,
+      "sha256": "e7e7ac39e16e57bf0b755e3a5de4fddf73e3a9309d41a768244c084f11d38991"
+    }
+  ],
+  "scope": "Explicit repository inputs only; no private frozen/runtime reads",
+  "released": true,
+  "resources": "No product/build/GUI/service/Git/data locks or child processes",
+  "stop": "STOP"
+}

@@ -3,15 +3,16 @@
  * 备份为带时间戳与 file bundle manifest 的 JSON；恢复前自动生成一份安全快照。
  */
 import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { resolve, isAbsolute } from 'node:path'
 import { randomBytes } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { writeExportFile, resolveIsolatedExportDirectory, isolatedExportBase } from './export.js'
 import { writeBundleDir, backupJsonSha, precheckBackupBytes, restoreAssetBytes, rollbackAssetBytes } from './file-backup.js'
+import { contentAddressedRelPath, validateUploadedFile } from './file-assets.js'
 import { enqueueDomainWrite } from './projects.js'
 import type { Milestone } from './milestone.js'
 import type { Project } from './project.js'
-import type { PmDomain } from './storage.js'
+import type { FileAssetRecord, PmDomain } from './storage.js'
 import type { Task } from './task.js'
 import type { RiskIssue } from './risk-issue.js'
 import type { Meeting } from './meeting.js'
@@ -35,7 +36,7 @@ export const BACKUP_TABLES = [
 ] as const
 
 /**
- * 其余业务表（unknown-safe 整表备份/恢复，不逐条强 schema）：
+ * 其余业务表（按原始 key/value 整表备份/恢复，预检复用现有 domain schema，不规整或迁移原值）：
  * settings（出站日志/收件区等设置键）、reflections（复盘草稿）、okrs、lessons、habits、file_assets（字节 bundle 随备份发布）。
  * 宿主表 checks/sessions 与任何密钥不进备份。
  */
@@ -159,12 +160,16 @@ export function validateBackup(value: unknown): PmBackup {
   if (b.format !== 'pm-tool-backup' || b.formatVersion !== 1) throw new Error('备份文件格式不认识（format/formatVersion 不符）')
   // legacy 备份无 extra（undefined）即按缺省、保留当前额外表；若提供必须是「白名单表名 → 键值对数组」映射。
   if (b.extra !== undefined) {
-    if (typeof b.extra !== 'object' || Array.isArray(b.extra)) {
+    if (!b.extra || typeof b.extra !== 'object' || Array.isArray(b.extra)) {
       throw new Error('备份 extra 段格式不认识（应为表名到键值对数组的映射）')
     }
     for (const name of Object.keys(b.extra)) {
       if (!EXTRA_BACKUP_TABLES.includes(name as (typeof EXTRA_BACKUP_TABLES)[number])) {
         throw new Error(`备份含未授权的额外表 ${name}，拒绝恢复（白名单：${EXTRA_BACKUP_TABLES.join('/')}）`)
+      }
+      if (!Array.isArray(b.extra[name]) || b.extra[name].some(row =>
+        !Array.isArray(row) || row.length !== 2 || typeof row[0] !== 'string' || !row[0])) {
+        throw new Error(`备份 extra.${name} 格式不正确（应为 [非空主键, 记录] 数组）`)
       }
     }
   }
@@ -181,12 +186,23 @@ export function validateBackup(value: unknown): PmBackup {
 
 /** 读取并校验备份文件（不落盘）。 */
 export async function readBackupFile(path: string): Promise<PmBackup> {
+  return (await readBackupSource(path)).backup
+}
+
+async function readBackupSource(path: string): Promise<{ backup: PmBackup; path: string; jsonSha: string }> {
   const raw = await readFile(resolve(path), 'utf8')
   try {
-    return validateBackup(JSON.parse(raw))
+    return { backup: validateBackup(JSON.parse(raw)), path: resolve(path), jsonSha: backupJsonSha(raw) }
   } catch (error) {
     throw new Error(`备份文件无法解析：${error instanceof Error ? error.message : String(error)}`)
   }
+}
+
+/** 路径演练：与确认恢复同级的只读 schema/关系/完整侧车字节预检，不生成安全快照。 */
+export async function precheckBackupFile(path: string): Promise<PmBackup> {
+  const source = await readBackupSource(path)
+  await precheckBackupSource(source.backup, source.path, source.jsonSha)
+  return source.backup
 }
 
 /**
@@ -194,20 +210,55 @@ export async function readBackupFile(path: string): Promise<PmBackup> {
  * 表以「先清空再逐条 put」方式替换；ID 原样保留（续号由各表自增逻辑在后续 add 时基于现有 max id 计算）。
  */
 export async function restoreBackup(domain: PmDomain, path: string, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
-  const backup = await readBackupFile(path)
-  const raw = await readFile(resolve(path), 'utf8')
-  return applyBackup(domain, backup, directory, undefined, resolve(path), backupJsonSha(raw))
+  const source = await readBackupSource(path)
+  return applyBackup(domain, source.backup, directory, undefined, source.path, source.jsonSha)
 }
 
 /** OPT-06：按备份 JSON 内容（浏览器 FileReader 读入）恢复，区别于服务端路径。可注入 directory 使测试备份目录隔离。 */
 export async function restoreBackupFromContent(domain: PmDomain, jsonText: string, directory?: string): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
-  let backup: PmBackup
+  return applyBackup(domain, parseBackupContent(jsonText), directory)
+}
+
+function parseBackupContent(jsonText: string): PmBackup {
   try {
-    backup = validateBackup(JSON.parse(jsonText))
+    return validateBackup(JSON.parse(jsonText))
   } catch (error) {
     throw new Error(`备份内容无法解析（不是合法的 pmtool 备份 JSON）：${error instanceof Error ? error.message : String(error)}`)
   }
-  return applyBackup(domain, backup, directory)
+}
+
+/** 网页 JSON-only 演练：先完整校验可识别内容，不能以缺少侧车掩盖结构或关系错误。 */
+export async function precheckBackupContent(jsonText: string): Promise<PmBackup> {
+  const backup = parseBackupContent(jsonText)
+  await precheckBackupSource(backup)
+  return backup
+}
+
+async function precheckBackupSource(backup: PmBackup, assetPath?: string, assetJsonSha?: string): Promise<void> {
+  await precheckBackup(backup)
+  if (assetPath == null || assetJsonSha == null) {
+    assertContentHasNoFiles(backup)
+    return
+  }
+  await precheckBackupBytes(backup, assetPath, assetJsonSha)
+  // 复用提升时的文件白名单/媒体/大小校验，先拒绝不可提升或元数据与实际字节不一致的包。
+  for (const [, value] of backup.extra?.file_assets ?? []) {
+    const row = value as FileAssetRecord
+    const bytes = await readFile(resolve(`${assetPath}.files.${backup.fileBundleId}`, row.relPath))
+    const file = validateUploadedFile({ originalName: row.fileName, declaredMediaType: row.mediaType, bytes })
+    if (file.size !== row.size || file.sha256 !== row.sha256) {
+      throw new Error(`备份文件资产 ${row.id} 的实际字节大小或 sha256 与元数据不符`)
+    }
+    if (contentAddressedRelPath(file) !== row.relPath) {
+      throw new Error(`备份文件资产 ${row.id} 的 relPath 与内容寻址路径不符`)
+    }
+  }
+}
+
+function assertContentHasNoFiles(backup: PmBackup): void {
+  if ((backup.extra?.file_assets ?? []).length > 0) {
+    throw new Error('备份含 file_assets 附件，但仅提供 JSON 内容，未检验侧车字节，不能判为预检通过或恢复。请填写本机标准备份 JSON 的完整路径，并保留同目录 .files.<fileBundleId> 侧车后重新预检。')
+  }
 }
 
 /** 把备份内容规整成「表名 → 行数组」，供逐表替换/回滚共用。 */
@@ -283,12 +334,7 @@ export async function applyBackup(
 ): Promise<{ safetySnapshot?: string; backup: PmBackup }> {
   // 1) 删除前先对全部七类实体做完整 schema + 关系预检；任何一条不合法直接抛错，不触碰现有数据。
   //    预检只读备份内容、不碰 domain，放全局写队列外，避免大备份校验期间占住写队列。
-  await precheckBackup(backup)
-  // B3 字节预检：有 file_assets 元数据就必须有匹配 bundle 且逐字节 sha256 校验通过，否则零写拒绝。
-  if (assetPath != null && assetJsonSha != null) await precheckBackupBytes(backup, assetPath, assetJsonSha)
-  else if ((backup.extra?.file_assets ?? []).length > 0) {
-    throw new Error('备份含 file_assets 元数据但未提供备份文件路径/摘要，无法校验字节，拒绝恢复（避免清空既有资产）')
-  }
+  await precheckBackupSource(backup, assetPath, assetJsonSha)
 
   // 2) 其余步骤整体进入全局单写者队列临界区：before 内存快照、安全快照落盘、replaceAll 破坏性替换、
   //    失败回滚必须与普通写严格互斥——否则恢复期间并发的普通写会被 replaceAll/回滚的整表清空抹掉。
@@ -354,8 +400,10 @@ export async function precheckBackup(backup: PmBackup): Promise<void> {
   const { meetingRecordSchema } = await import('./meeting.js')
   const { progressReportRecordSchema } = await import('./progress-report.js')
   const { deliverableRecordSchema } = await import('./deliverable.js')
+  const { fileAssetRecordSchema, pmDomainSpec } = await import('./storage.js')
 
   const must = (rows: unknown[], schema: { parse(x: unknown): unknown }, kind: string): void => {
+    if (!Array.isArray(rows)) throw new Error(`备份${kind}表应为数组`)
     for (const r of rows) schema.parse(r)
   }
   must(backup.projects, projectRecordSchema, '项目')
@@ -365,15 +413,57 @@ export async function precheckBackup(backup: PmBackup): Promise<void> {
   must(backup.meetings, meetingRecordSchema, '会议')
   must(backup.reports.map(normalizeProgressReportRecord), progressReportRecordSchema, '汇报')
   must(backup.deliverables, deliverableRecordSchema, '交付物')
+  for (const [name, rows] of Object.entries(backup.extra ?? {})) {
+    if (!EXTRA_BACKUP_TABLES.includes(name as (typeof EXTRA_BACKUP_TABLES)[number])) {
+      throw new Error(`备份含未授权的额外表 ${name}，拒绝恢复`)
+    }
+    if (!Array.isArray(rows)) throw new Error(`备份 extra.${name} 格式不正确`)
+    const keys = new Set<string>()
+    for (const pair of rows) {
+      if (!Array.isArray(pair) || pair.length !== 2 || typeof pair[0] !== 'string' || !pair[0] || keys.has(pair[0])) {
+        throw new Error(`备份 extra.${name} 主键格式不正确或重复`)
+      }
+      keys.add(pair[0])
+      pmDomainSpec.tables[name as (typeof EXTRA_BACKUP_TABLES)[number]].valueSchema.parse(pair[1])
+    }
+  }
 
   // 关系：任务所属项目存在、parentId/milestoneId 同项目存在、predecessorIds 存在/同项目/无环
   const pids = new Set(backup.projects.map(p => p.id))
+  const assets = new Map<string, { projectId: string }>()
+  for (const [key, value] of backup.extra?.file_assets ?? []) {
+    const row = fileAssetRecordSchema.parse(value)
+    if (key !== row.id || assets.has(key)) throw new Error(`文件资产 ${key} 的主键不符或重复`)
+    if (!pids.has(row.projectId)) throw new Error(`文件资产 ${key} 的 projectId 不在备份项目内`)
+    if (isAbsolute(row.relPath) || row.relPath.includes('\\') || row.relPath.includes('\0')) {
+      throw new Error(`文件资产 ${key} 路径不合法：${row.relPath}`)
+    }
+    if (/(^|\/)\.\.(\/|$)/.test(row.relPath)) throw new Error(`文件资产 ${key} 路径越界：${row.relPath}`)
+    if (!row.relPath.startsWith(`${row.sha256.slice(0, 2)}/`)) throw new Error(`文件资产 ${key} 路径与 sha256 不符`)
+    assets.set(key, row)
+  }
   const milestoneProjectById = new Map(backup.milestones.map(m => [m.id, m.projectId]))
   const deliverableProjectById = new Map(backup.deliverables.map(d => [d.id, d.projectId]))
   const tids = new Set(backup.tasks.map(t => t.id))
+  const byId = new Map(backup.tasks.map(t => [t.id, t]))
   for (const t of backup.tasks) {
     if (!pids.has(t.projectId)) throw new Error(`任务 ${t.id} 的 projectId ${t.projectId} 不在备份项目内`)
+    for (const attachment of t.attachments ?? []) {
+      if (attachment.kind === 'file' && assets.get(attachment.assetId)?.projectId !== t.projectId) {
+        throw new Error(`任务 ${t.id} 的文件资产 ${attachment.assetId} 不存在或不属于本项目`)
+      }
+    }
     if (t.parentId != null && !tids.has(t.parentId)) throw new Error(`任务 ${t.id} 的 parentId 不存在`)
+    if (t.parentId != null && byId.get(t.parentId)?.projectId !== t.projectId) {
+      throw new Error(`任务 ${t.id} 的 parentId 不属于本项目`)
+    }
+    const parents = new Set([t.id])
+    let parentId = t.parentId
+    while (parentId != null) {
+      if (parents.has(parentId)) throw new Error(`任务 ${t.id} 的 parentId 存在循环`)
+      parents.add(parentId)
+      parentId = byId.get(parentId)?.parentId ?? null
+    }
     if (t.milestoneId != null) {
       if (milestoneProjectById.get(t.milestoneId) !== t.projectId) {
         throw new Error(`任务 ${t.id} 的 milestoneId ${t.milestoneId} 不存在或不属于本项目`)
@@ -400,7 +490,6 @@ export async function precheckBackup(backup: PmBackup): Promise<void> {
   }
 
   // 成环预检：沿 predecessorIds DFS，任一任务能回到自身即拒绝整份备份。
-  const byId = new Map(backup.tasks.map(t => [t.id, t]))
   for (const start of backup.tasks) {
     const seen = new Set<string>()
     const queue: string[] = [...(start.predecessorIds ?? [])]

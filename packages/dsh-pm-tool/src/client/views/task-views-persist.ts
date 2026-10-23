@@ -17,6 +17,8 @@ import {
 
 /** localStorage 不可用时的会话内内存仓（键 = 存储键）。 */
 const memory = new Map<string, TaskViewsStore>()
+/** 写入失败的键继续以会话内存为准，避免后续 getItem(null) 把刚保存的状态清空。 */
+const memoryOnly = new Set<string>()
 
 function hasLocalStorage(): boolean {
   try {
@@ -29,6 +31,10 @@ function hasLocalStorage(): boolean {
 /** 读取某项目的自定义视图仓；损坏/缺失/存储不可用 → 空仓，绝不抛。 */
 export function loadTaskViews(projectId: string): TaskViewsStore {
   const key = taskViewsStorageKey(projectId)
+  if (memoryOnly.has(key)) {
+    const cached = memory.get(key)
+    return cached ? normalizeTaskViewsStore(cached) : emptyTaskViewsStore()
+  }
   if (!hasLocalStorage()) {
     const cached = memory.get(key)
     return cached ? normalizeTaskViewsStore(cached) : emptyTaskViewsStore()
@@ -51,8 +57,10 @@ export function persistTaskViews(projectId: string, store: TaskViewsStore): void
   if (!hasLocalStorage()) return
   try {
     localStorage.setItem(key, serializeTaskViewsStore(store))
+    memoryOnly.delete(key)
   } catch {
     /* 隐私模式/配额满：保留内存态，不阻断操作 */
+    memoryOnly.add(key)
   }
 }
 

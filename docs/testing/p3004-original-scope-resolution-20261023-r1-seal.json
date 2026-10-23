@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-22T22:32:36.727Z",
+  "inputCount": 26,
+  "drift": [],
+  "reader": {
+    "path": "/private/tmp/p3004-original-scope-resolution-20261023-r1-reader.mjs",
+    "bytes": 9898,
+    "sha256": "cfe4222686c901c473b662a14f4712b29210d885e59931730b05da5a5333b036"
+  },
+  "outputs": {
+    "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md": {
+      "bytes": 15291,
+      "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02"
+    },
+    "docs/testing/p3004-original-scope-resolution-20261023-r1-audit.json": {
+      "bytes": 9505,
+      "sha256": "d34f52adcabab0c160be579d0a3ba673e4d207f789dbc12b18b700419b146718"
+    }
+  },
+  "checks": {
+    "jsonParsed": true,
+    "reportLocalLinksExist": true,
+    "reportLocalLinkCount": 25,
+    "noTrailingWhitespace": true,
+    "inputFingerprintsUnchangedSinceAudit": true
+  },
+  "protectedScope": "explicit inputs only; not a whole-worktree or whole-disk claim",
+  "productExecuted": false,
+  "guiExecuted": false,
+  "independentGuiPassGranted": false,
+  "wholeP3004PassGranted": false,
+  "combinedCandidatePassGranted": false,
+  "parentOrdinaryCommitGranted": false,
+  "resourcesReleased": true,
+  "stop": true
+}

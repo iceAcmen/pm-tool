@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-23",
+  "role": "独立GUI原证审证专家",
+  "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "seal"],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.9349,
+  "actualToolStatus": "Process exited with code 0",
+  "stdout": "{\"sealed\":true,\"sealFile\":\"docs/testing/p2002-tree-gui-review-20261023-r3-seal.json\",\"sealSha256\":\"d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1\",\"members\":4,\"protectedInputs\":722,\"ownFiles\":6,\"pid\":38885,\"inputDrift\":[]}\n",
+  "stderr": "",
+  "pid": 38885,
+  "pidBoundary": "来自本同步执行实际stdout；工具没有另给parent/child PID，不补造。",
+  "seal": {
+    "file": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+    "sha256": "d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1"
+  },
+  "origin": "seal执行完成后，观察到exec_command真实退出0再新增本收据；不是seal自填预计码。",
+  "excludedFromSeal": true,
+  "exclusionReason": "seal自身与随后真实工具收据不循环自指纹。",
+  "remaining": "仅refresh完成当态父/两子三行视口目视未证；已采主体有限PASS，不签整P2002/P2/B8/父commit。",
+  "productBrowserNetworkPortGitExecutions": 0,
+  "release": "readback及其真实工具收据完成后STOP/released；父持续。"
+}

@@ -1,0 +1,94 @@
+{
+  "at": "2026-10-22T02:19:26.564Z",
+  "pid": 91019,
+  "checks": [
+    {
+      "name": "all 19 compositor manifests: exact frame files/SHA, original 2 timestamp inversions retained, pageScale=1",
+      "verified": true
+    },
+    {
+      "name": "each actual build/noEmit/coverage/guard/Launcher final receipt matches candidate row",
+      "verified": true
+    },
+    {
+      "name": "confirmed/ignored changes only permitted processing fields, original entries fully preserved",
+      "verified": true
+    },
+    {
+      "name": "old habit-card renderer/CSS unchanged from original A18; missing suggest is legal before confirm",
+      "verified": true
+    },
+    {
+      "name": "bounded originals/candidates remain intact at supplement",
+      "verified": true
+    }
+  ],
+  "frames": 325,
+  "inversions": [
+    {
+      "step": "command-1792634807916",
+      "previous": {
+        "file": "000003.jpg",
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1440,
+          "deviceHeight": 900,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1792634808.680315
+        },
+        "sha256": "ab66bb84a3b7c321dfdf2b8ad80adae89165d1a1b17599d82251aab7b9f6d418",
+        "at": "2026-10-22T02:06:48.694Z"
+      },
+      "current": {
+        "file": "000004.jpg",
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1440,
+          "deviceHeight": 900,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1792634808.668903
+        },
+        "sha256": "73e9f1c2a9b0e9fc146e807b791b8307506f6d9d580ba2150fcf1e82c5b70572",
+        "at": "2026-10-22T02:06:48.697Z"
+      },
+      "deltaSeconds": -0.011411905288696289
+    },
+    {
+      "step": "ignore-1792634894762",
+      "previous": {
+        "file": "000000.jpg",
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1440,
+          "deviceHeight": 900,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1792634895.378599
+        },
+        "sha256": "97ff61263657a62efe259280289baff0f6809a184f11b83aab27dc84d27cbc9b",
+        "at": "2026-10-22T02:08:15.405Z"
+      },
+      "current": {
+        "file": "000001.jpg",
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1440,
+          "deviceHeight": 900,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1792634895.367087
+        },
+        "sha256": "97ff61263657a62efe259280289baff0f6809a184f11b83aab27dc84d27cbc9b",
+        "at": "2026-10-22T02:08:15.413Z"
+      },
+      "deltaSeconds": -0.011512041091918945
+    }
+  ],
+  "boundary": "Extra file checks only, no new GUI cases or old A18 review"
+}

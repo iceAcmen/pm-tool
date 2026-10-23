@@ -1,0 +1,59 @@
+{
+  "started": "2026-10-23T03:47:23.660Z",
+  "ended": "2026-10-23T03:47:23.687Z",
+  "pid": 75538,
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/private/tmp/combined-tasks-people-regression-review-timed-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "files": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-tasks-people-regression-review-timed-20261023-r2-plan.md": {
+      "bytes": 2190,
+      "sha256": "62cbb2ea46734ef96d7b381cf4fe607d9c1f8be7ef22f59583b598d3cb81262d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-tasks-people-regression-review-timed-20261023-r2-audit.json": {
+      "bytes": 362717,
+      "sha256": "235f4ff7cb29af76b5fc7e792de27959a880d35fb6110fc83068d56ab637fa75"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-tasks-people-regression-review-timed-20261023-r2-audit-final.json": {
+      "bytes": 380607,
+      "sha256": "d98343a65ff34e2bb15e35a3061571a145d0c6c592dbdbc025ee433772609b26"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-tasks-people-regression-review-timed-20261023-r2-report.md": {
+      "bytes": 6650,
+      "sha256": "3be79e219fc2a8280d2811089d70087184b850a7482a0c8188930be9c58972ce"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-tasks-people-regression-review-timed-20261023-r2-command-receipts.json": {
+      "bytes": 9297,
+      "sha256": "e82965b20ee5d36435ea0f4e47831c4edd3b9adf205297d7ba2f50d7d1f47bcf"
+    },
+    "/private/tmp/combined-tasks-people-regression-review-timed-20261023-r2-reader.mjs": {
+      "bytes": 21532,
+      "sha256": "799af752004f9341ac4dd1ec693138e0d6c5be84a55d11eb3f31774d0431831e"
+    },
+    "/private/tmp/combined-tasks-people-regression-review-timed-20261023-r2-verify-reconcile.mjs": {
+      "bytes": 4159,
+      "sha256": "03dc1ba776508262b53fa4f9f11eec4e64633a323563d22434a0ae3c2a0bf785"
+    },
+    "/private/tmp/combined-tasks-people-regression-review-timed-20261023-r2-source-chain.mjs": {
+      "bytes": 5724,
+      "sha256": "524fb5d41380f9444c874f21e68fa4151960116b83d015b5e1a4cc463446fa89"
+    }
+  },
+  "candidate": {
+    "index": {
+      "bytes": 346450,
+      "sha256": "fdcf43ae94c9efed2463adf7b4ce488c77e9c0c8ce6583c50031b516a89d5ba7"
+    },
+    "seal": {
+      "bytes": 1184,
+      "sha256": "0999eba99aea0dd253558d814d9b107fae57afa4a44a2ad59841a518e9128af1"
+    },
+    "readback": {
+      "bytes": 850,
+      "sha256": "ca6f9eee955c7a2db7ecbc79ba8e0c7b2aadaec24f94ac0df2e51cdc9c06a2db"
+    }
+  },
+  "cycle": "SEAL_AND_SUBSEQUENT_RECEIPTS_EXCLUDED"
+}

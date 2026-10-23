@@ -14,7 +14,10 @@ import {
   barLabelPolicy, shortDate, dependencyEdges, parentBarRange, milestoneOffset,
   taskDurationDays, routeEdge, criticalPath, milestoneTitleForTask,
 } from '../../core/gantt.js'
-import { deriveProgressMap, checklistFraction, type TaskProgress } from '../../core/progress-derivation.js'
+import {
+  deriveProgressMap, checklistFraction, resolveTaskProgressMeta, formatProgressValue,
+  progressHeadline, clampProgress, type TaskProgress, type TaskProgressMetaInput,
+} from '../../core/progress-derivation.js'
 import { sampleGanttTicks } from '../../core/ui-feedback.js'
 
 // 行高对齐设计基线（pl-g-row min-height 48）：容纳「标题 + 负责人·状态·进度」两行，避免副文本被挤到截断。
@@ -36,6 +39,7 @@ const clampDue = (due: string, start: string) => (due < start ? start : due)
 /** 身份列副行状态文案（只读派生，与条内口径一致；不回写 status）。 */
 const ganttStatusText = (s: Task['status']) =>
   s === 'done' ? '已完成'
+    : s === 'wrapped' ? '已收尾 · 非正式完成'
     : s === 'in_progress' ? '进行中'
       : s === 'blocked' ? '阻塞' : '待办'
 
@@ -323,11 +327,18 @@ export function GanttView(props: {
 
   const renderBar = (t: Task, range: { start: string, end: string, derived: boolean }) => {
     const done = t.status === 'done'
-    // v0.8 客观进度：null=证据不足（不画实心、显 —），0=0% 填充
+    const derived = progressMap.get(t.id) ?? emptyProgress
+    const meta = resolveTaskProgressMeta(t as Task & TaskProgressMetaInput, derived)
+    // display遵守人工模式，objective仍取原派生；父日期范围带保留不填充。
     const fill = range.derived
       ? null
-      : progressFill(progressMap.get(t.id) ?? emptyProgress)
-    const pct = fill === null ? '—' : `${Math.round(fill * 100)}%`
+      : meta.mode === 'manual'
+        ? meta.display! / 100
+        : progressFill(derived)
+    const pct = meta.display === null ? '证据不足' : `${meta.display}%`
+    const progressText = meta.mode === 'manual'
+      ? `人工设定 ${pct} · 客观 ${formatProgressValue(derived)}${meta.manualNote ? ` · ${meta.manualNote}` : ''}`
+      : `客观 ${formatProgressValue(derived)}`
     const leftDays = daysFrom(range.start, axis.start)
     const widthDays = taskDurationDays(range.start, range.end)
     const policy = barLabelPolicy(widthDays, PX)
@@ -336,13 +347,11 @@ export function GanttView(props: {
     const overdue = !range.derived && isTaskOverdue(t, today)
     const blocked = !done && t.status === 'blocked'
     const isCritical = !range.derived && criticalIds.has(t.id)
-    const statusText = done ? '已完成'
-      : t.status === 'in_progress' ? '进行中'
-        : t.status === 'blocked' ? '阻塞' : '待办'
+    const statusText = ganttStatusText(t.status)
     const preNames = (t.predecessorIds ?? [])
       .map(pid => byId.get(pid)?.title).filter(Boolean).join('、')
     const msTitle = milestoneTitleForTask(t, milestones)
-    const aria = `任务 ${t.title}，${range.start} ~ ${range.end}，${widthDays} 天，${statusText}，进度 ${pct}${msTitle ? `，关联里程碑 ${msTitle}` : ''}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。单击选中；双击或回车打开详情；←/→ 移动 1 天，Shift+←/→ 调整工期。`
+    const aria = `任务 ${t.title}，${range.start} ~ ${range.end}，${widthDays} 天，${statusText}，${progressText}${msTitle ? `，关联里程碑 ${msTitle}` : ''}${preNames ? `，前置：${preNames}` : ''}${isCritical ? '，关键路径' : ''}。单击选中；双击或回车打开详情；←/→ 移动 1 天，Shift+←/→ 调整工期。`
     // ghost 预览：move=整体平移；start/end=resize 候选起止（仅标签预览，条体待回读刷新归位）。
     const ghost = preview && preview.id === t.id
       ? preview.mode === 'move'
@@ -362,11 +371,12 @@ export function GanttView(props: {
     return <div
       className={cls}
       data-task-id={t.id}
+      data-progress-mode={meta.mode}
       tabIndex={0}
       role="button"
       aria-label={aria}
       style={{ left: `${leftDays * PX}px`, width: `${widthDays * PX}px`, top: `${(ROW_H - BAR_H) / 2}px` }}
-      title={`${t.title}（${range.start} ~ ${range.end}）· 进度 ${pct}${msTitle ? ` · 关联里程碑 ${msTitle}` : ''}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}${isCritical ? ' · 关键路径（总时差 0 天）' : ''}${range.derived ? '' : ' · 双击或回车打开详情'}`}
+      title={`${t.title}（${range.start} ~ ${range.end}）· ${progressText}${msTitle ? ` · 关联里程碑 ${msTitle}` : ''}${t.assignee ? ` · 负责人 ${t.assignee}` : ''}${preNames ? ` · 前置 ${preNames}` : ''}${isCritical ? ' · 关键路径（总时差 0 天）' : ''}${range.derived ? '' : ' · 双击或回车打开详情'}`}
       onDoubleClick={() => openBar(t)}
       onKeyDown={(e) => onKeyDownBar(e, t)}
       onPointerDown={(e) => { if (!range.derived) onPointerDownBar(e, t) }}
@@ -381,12 +391,12 @@ export function GanttView(props: {
       {fill !== null && !range.derived && <div className="pm-gantt-bar-progress" style={{ width: `${Math.round(fill * 100)}%` }} />}
       {(policy === 'inside') && <>
         <span className="pm-gantt-bar-dates">{shortDate(range.start)} ~ {shortDate(range.end)}</span>
-        <span className="pm-gantt-bar-pct">{pct}</span>
+        <span className="pm-gantt-bar-pct">{meta.mode === 'manual' ? `人工 ${pct}` : pct}</span>
       </>}
       {ghost && <span className="pm-gantt-ghost">{ghost.startDate} ~ {ghost.dueDate}</span>}
       {policy === 'outside' && (
         <span className="pm-gantt-bar-side" style={{ left: `${widthDays * PX + 4}px` }}>
-          {shortDate(range.start)} ~ {shortDate(range.end)} · {pct}
+          {shortDate(range.start)} ~ {shortDate(range.end)} · {meta.mode === 'manual' ? `人工 ${pct}` : pct}
         </span>
       )}
     </div>
@@ -434,8 +444,19 @@ export function GanttView(props: {
         {tasks.map(t => {
           const depth = (t.code || '1').split('.').length - 1
           const er = effectiveRange(t)
-          const tprog = progressMap.get(t.id)
-          const frac = checklistFraction(tprog ?? emptyProgress)
+          const tprog = progressMap.get(t.id) ?? emptyProgress
+          const meta = resolveTaskProgressMeta(t as Task & TaskProgressMetaInput, tprog)
+          const frac = checklistFraction(tprog)
+          const details = [
+            `客观 ${formatProgressValue(tprog)}`,
+            frac ? `清单 ${frac}` : '',
+            `覆盖 ${tprog.coverage.coveredLeaves}/${tprog.coverage.totalLeaves}`,
+            tprog.source === 'rollup' ? progressHeadline(tprog) : '',
+            tprog.value === null && tprog.legacyProgress !== null ? `原手填 ${clampProgress(tprog.legacyProgress)}%` : '',
+            tprog.pendingAcceptance ? '待验收' : '',
+            ...tprog.warnings,
+            meta.mode === 'manual' ? meta.manualNote : '',
+          ].filter(Boolean).join(' · ')
           const done = t.status === 'done'
           const crit = !!er && criticalIds.has(t.id)
           const msTitle = milestoneTitleForTask(t, milestones)
@@ -445,9 +466,9 @@ export function GanttView(props: {
               <span className="pm-gantt-label-code">{t.code}</span>
               <span className="pm-gantt-label-main">
                 <span className="pm-gantt-label-title">{t.title}</span>
-                <span className="pm-gantt-label-sub">
-                  负责人 {t.assignee?.trim() || '未分配'} · {ganttStatusText(t.status)}
-                  {t.progress != null && t.progress > 0 ? ` · 进度 ${t.progress}%` : ''}
+                <span className="pm-gantt-label-sub" data-progress-mode={meta.mode} title={details}>
+                  {meta.mode === 'manual' && <>人工设定 {meta.display}% · </>}
+                  {details} · {ganttStatusText(t.status)} · 负责人 {t.assignee?.trim() || '未分配'}
                 </span>
                 {msTitle && <span className="pm-gantt-ms-chip" title={`关联里程碑：${msTitle}`}>◆ {msTitle}</span>}
               </span>

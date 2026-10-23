@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-23",
+  "role": "trae independent GUI original-evidence reviewer",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p2-display-repair-gui-review-20261023-r2-expert-outer.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.4530,
+  "actualToolStatus": "Process exited with code 0",
+  "actualPidFromOuter": 35376,
+  "origin": "Observed functions.exec_command completion after actual seal execution; not an expected status or inferred from file existence",
+  "actualToolSummary": {
+    "protectedInputs": 1774,
+    "artifacts": 4,
+    "tmpArtifacts": 11,
+    "visualFiles": 32,
+    "drift": []
+  },
+  "seal": {
+    "bytes": 431276,
+    "sha256": "3291c0d82be367bfdeeec7b60ca6a43dab095b58bda2aac5ee7cc7fa5068940e"
+  },
+  "excludedFromEarlierSeal": true,
+  "reason": "Post-execution receipt cannot be self-included in preceding seal",
+  "productExecutions": 0,
+  "GUIExecutions": 0,
+  "gitExecutions": 0,
+  "spawnedChildren": 0
+}

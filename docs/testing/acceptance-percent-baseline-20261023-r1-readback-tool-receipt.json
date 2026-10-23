@@ -1,0 +1,18 @@
+{
+  "type": "observed_tool_receipt",
+  "tool": "functions.exec_command",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/acceptance-percent-baseline-20261023-r1-reader.mjs readback",
+  "exitCode": 0,
+  "processId": 51651,
+  "toolWallSeconds": 0.2487,
+  "readerDurationMs": 72.124,
+  "observedResult": {
+    "mode": "readback",
+    "applicable": 1435,
+    "completed": null,
+    "percent": null,
+    "inputDrift": 0
+  },
+  "meaning": "Actual readback outer exit observed after execution; baseline remains not final, no product PASS or commit admission.",
+  "timingSource": "Reader start/end in acceptance-percent-baseline-20261023-r1-timing.jsonl; outer duration from returned tool receipt."
+}

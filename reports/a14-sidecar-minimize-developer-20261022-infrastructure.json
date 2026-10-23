@@ -1,0 +1,47 @@
+{
+  "role": "限定开发SM01",
+  "environment": "macOS Darwin24.6.0 arm64 / nvm Node v22.23.3",
+  "scope": "仅记录自有验证设施；不伪造未采得退出码，不替产品或独立门签字",
+  "attempts": [
+    {
+      "argv": ["bash", "-c", "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\"; nvm use 22 >/dev/null; node --check reports/a14-sidecar-minimize-developer-20261022-run.mjs; node reports/a14-sidecar-minimize-developer-20261022-run.mjs before"],
+      "toolExecutionId": "e99a12fcc6d7dbae939d3aea677cf970",
+      "originalExit": null,
+      "exitState": "未采得终态，不能按0或1记账",
+      "observations": [
+        "工具仅返回执行ID及空stdout",
+        "后续pgrep无相应runner/vitest进程；自有冻结根尚不存在",
+        "没有把该调用当作语法通过、产品控制绿或产品红"
+      ]
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "reports/a14-sidecar-minimize-developer-20261022-run.mjs", "before"],
+      "originalExit": 1,
+      "productTestsExecuted": 0,
+      "error": "Error: ENOENT: no such file or directory, lstat '/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/vite'",
+      "stackLocation": "protection / depNames.map / realpathSync",
+      "rootCreated": false,
+      "correction": "自有记录器移除并不存在的直接vite软链保护条目；保留实际react/react-test-renderer/vitest/lucide-react/typescript五依赖物理根，不安装依赖",
+      "nextAttempt": "before：控制exit0，三红各exit1；父exit0仅表示符合预期"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "reports/a14-sidecar-minimize-developer-20261022-run.mjs", "after"],
+      "originalExit": 1,
+      "productTestsExecuted": 0,
+      "error": "AssertionError [ERR_ASSERTION]: 修后冻结仅允许本批三文件变化",
+      "actual": ["client/panel.css", "client/panel.tsx", "client/sidecar-minimize-retention.test.tsx"],
+      "expectedBeforeFacilityCorrection": ["src/client/panel.css", "src/client/panel.tsx", "src/client/sidecar-minimize-retention.test.tsx"],
+      "retainedRoot": "reports/a14-sidecar-minimize-developer-20261022-selftmp/after/frozen",
+      "correction": "仅自有记录器统一src相对路径；另建after-r2，不覆盖原失败轮，不改产品以迎合设施断言"
+    },
+    {
+      "commandRecord": "a14-sidecar-minimize-developer-20261022-selftmp/after-r2/SM-A03.command.json",
+      "originalExit": 1,
+      "error": "Error: Unable to find node on an unmounted component.",
+      "stackLocation": "原专家案例L235读取checks.map(n => n.props)，此前L233正常切回diagnosis并卸载draft控件",
+      "correction": "仅自有sampling-r1与sampling-before-r1复制文件在原采样时点保存控件props值；原动作/断言/期望完全不改；源专家和产品副本不改",
+      "originalEvidenceRetained": true,
+      "independentReviewRequired": true
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B03 old finally cannot remove new token flight; reverse completion preserves business hash
+AssertionError: expected Promise{…} to be Promise{…} // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: Promise{…}
+Received: serializes to the same string
+
+
+Compared values have no visual difference.
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:118:29
+    116|     n1.resolve({ ok: false } as Response)
+    117|     await first
+    118|     expect(r.reportReady()).toBe(second)
+       |                             ^
+    119|     expect(fetcher).toHaveBeenCalledTimes(2)
+    120|     n2.resolve({ ok: true } as Response)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R08：旧请求在途不能合并新N2，新finally不丢同token并发守卫
+AssertionError: expected Promise{…} to be Promise{…} // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: Promise{…}
+Received: serializes to the same string
+
+
+Compared values have no visual difference.
+
+ ❯ src/client/launch-handshake.test.ts:212:35
+    210|     await n1
+    211|     expect(hash).toContain('N2')
+    212|     expect(retrier.reportReady()).toBe(n2)
+       |                                   ^
+    213|     releases[1]({ ok: true } as Response)
+    214|     await n2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

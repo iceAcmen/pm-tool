@@ -1,0 +1,37 @@
+[90mstderr[2m | src/client/views/tasks-number-feedback.test.tsx[2m > [22m[2mGNHD-01 编号复制真实组件结构与计时契约（非GUI样式验收）[2m > [22m[2m成功反馈独立于62px按钮和图标，编号仍保留；1599ms不早清、1600ms复原
+[22m[39mWarning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `TaskTable`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at TaskTable (/private/tmp/pmtool-a9-import-MweuST/src/client/views/tasks.tsx:355:5)
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Suites 2 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/objective-consumers.test.tsx[2m [ src/client/views/objective-consumers.test.tsx ][22m
+[31m[1mError[22m: ENOENT: no such file or directory, open '/private/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json'[39m
+[36m [2m❯[22m src/client/views/objective-consumers.test.tsx:[2m12:28[22m[39m
+    [90m 10| [39m
+    [90m 11| [39m[90m// 专家原始合法 F2，预期来自报告 §5，不以展示算法反算 oracle。[39m
+    [90m 12| [39m[35mconst[39m fixture [33m=[39m [33mJSON[39m[33m.[39m[34mparse[39m([34mreadFileSync[39m([35mnew[39m [33mURL[39m(
+    [90m   | [39m                           [31m^[39m
+    [90m 13| [39m  [32m'../../../../../docs/testing/objective-independent-auto-20261021-evi[39m…
+    [90m 14| [39m  [35mimport[39m[33m.[39mmeta[33m.[39murl[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/private/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/core/task-evidence-protocol.test.ts[2m [ src/core/task-evidence-protocol.test.ts ][22m
+[31m[1mError[22m: ENOENT: no such file or directory, open '/private/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json'[39m
+[36m [2m❯[22m src/core/task-evidence-protocol.test.ts:[2m17:23[22m[39m
+    [90m 15| [39m[35mimport[39m { taskCreateSchema[33m,[39m taskUpdateSchema[33m,[39m taskRecordSchema } [35mfrom[39m [32m'[39m…
+    [90m 16| [39m
+    [90m 17| [39m[35mconst[39m f2 [33m=[39m [33mJSON[39m[33m.[39m[34mparse[39m([34mreadFileSync[39m([35mnew[39m [33mURL[39m(
+    [90m   | [39m                      [31m^[39m
+    [90m 18| [39m  [32m'../../../../docs/testing/objective-independent-auto-20261021-eviden[39m…
+    [90m 19| [39m  [35mimport[39m[33m.[39mmeta[33m.[39murl[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/private/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+

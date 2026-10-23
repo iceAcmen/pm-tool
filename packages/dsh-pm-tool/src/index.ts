@@ -58,6 +58,7 @@ import { buildQueueForProject } from './core/queue.js'
 import { localTodayIso } from './core/derived.js'
 import { readOkrInbox } from './core/okr.js'
 import { readHabitInbox } from './core/habits.js'
+import { readExportAudit, type ExportAuditEntry } from './core/export.js'
 
 // PM 包只依赖本地最小接口，避免为类型扩展引入 DSH 宿主实现包；运行时由明确 inject 保证服务存在。
 declare module '@deepseek-ai/cordis' {
@@ -226,6 +227,18 @@ export async function apply(ctx: Context): Promise<void> {
             buildQueueForProject(domain, pid, { today: localTodayIso(), nowHhmm: snapHhmm }),
           ]),
         )
+        // P2002：只读审计的项目最近时刻，不依赖追加顺序、不触发已发日志 TTL 或回写。
+        const latestExports = new Map<string, Pick<ExportAuditEntry, 'at' | 'format'> | null>(
+          [...domain.table('projects').entries()].map(([pid]) => [pid, null]),
+        )
+        for (const entry of readExportAudit(domain)) {
+          const timestamp = Date.parse(entry.at)
+          if (!latestExports.has(entry.projectId) || !Number.isFinite(timestamp)) continue
+          const previous = latestExports.get(entry.projectId)
+          if (!previous || timestamp > Date.parse(previous.at)) {
+            latestExports.set(entry.projectId, { at: entry.at, format: entry.format })
+          }
+        }
         return {
           kind: 'success',
           text: JSON.stringify({
@@ -254,6 +267,7 @@ export async function apply(ctx: Context): Promise<void> {
             },
             // #21 口径设置：归一化后的生效口径（缺省=默认），供 Web 设置 UI 与派生视图直接消费。
             settings: readProjectSettings(domain),
+            latestExports: Object.fromEntries(latestExports),
             // K11：按项目派生的补记队列（读时派生、零写）。
             queue,
             // 宿主 HTTP 能力探测：以「路由注册成功」为准；缺失/冲突 CLI-only，前端据此显示 unavailable。

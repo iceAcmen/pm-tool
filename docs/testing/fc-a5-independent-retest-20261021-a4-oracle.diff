@@ -1,0 +1,12 @@
+--- /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a5-H4S4qu/launcher/test/fc-a4-original.test.mjs	2026-10-21 20:50:54
++++ /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a5-H4S4qu/launcher/test/fc-a4-corrected.test.mjs	2026-10-21 20:51:24
+@@ -171,6 +171,9 @@
+     } else if (outcome === 'replace-error') {
+       assertState(f.app, 'S4', 'Safari', true)
+       assert.equal(f.app.verifyEntered(current), false)
++    } else if (outcome === 'early-failure') {
++      assertState(f.app, 'S4', 'Chrome', true)
++      assert.equal(f.app.verifyEntered(current), false)
+     } else if (outcome.endsWith('failure')) {
+       assertState(f.app, 'S6', 'Chrome')
+       assert.equal(f.app.verifyEntered(current), false)

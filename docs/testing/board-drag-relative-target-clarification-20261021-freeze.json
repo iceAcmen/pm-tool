@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-21T14:00:32.428Z",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "tmp": "/private/tmp/pmtool-board-relative-target-20261021-Zb0DFW",
+  "dependencies": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules",
+  "fingerprints": {
+    "packages/dsh-pm-tool/src/client/board/editor.tsx": {
+      "sha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+      "bytes": 46456
+    },
+    "packages/dsh-pm-tool/src/client/board/editor-ops.ts": {
+      "sha256": "ade6c08dd648dc02cb6813c89d159e59116052e0d3701eabd3cef414e7d06601",
+      "bytes": 12588
+    },
+    "packages/dsh-pm-tool/src/client/board/history.ts": {
+      "sha256": "580971c879debf24b252c55c6373dbded9e91c4c51d5a4a54525e0db0f58c4c6",
+      "bytes": 5035
+    },
+    "packages/dsh-pm-tool/src/client/board/projection.ts": {
+      "sha256": "622977c899038d7c95b36b27673d879051c996d380e12b6a17e6630ac0794555",
+      "bytes": 6646
+    },
+    "packages/dsh-pm-tool/src/client/board/persist.ts": {
+      "sha256": "0a34fdf50f930b2ab794edba65c67ff2ed1448b86495fc3884534d2b06f3ffa5",
+      "bytes": 9383
+    },
+    "packages/dsh-pm-tool/src/client/board/types.ts": {
+      "sha256": "3ed8c9411d2e09408efaea24f40cca81e23445c890a517a820cb6560e59506ca",
+      "bytes": 4660
+    },
+    "docs/testing/board-fixture-clarification-20261021-fixture.json": {
+      "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+      "bytes": 1121
+    },
+    "docs/testing/board-fixture-clarification-20261021.md": {
+      "sha256": "99224ef366e7b2bb7a0b199a0bb887cbf870f1849691e90ab950096360d9f563",
+      "bytes": 18215
+    },
+    "docs/testing/board-fullwidth-drag-diagnosis-20261021.md": {
+      "sha256": "62c0d94d731731e6ea290eef181ea2e13a521c8bde10f832c2cb5c732608c63b",
+      "bytes": 26538
+    },
+    "docs/testing/board-fullwidth-independent-retest-20261021.md": {
+      "sha256": "60dd1897a86e374cf9cc405944de4743907de8c8ea75836a9c3f4d9d9b341c70",
+      "bytes": 18325
+    },
+    "docs/testing/board-fullwidth-independent-retest-20261021-result.json": {
+      "sha256": "1d8c21a9865057922a4006c15cd6f4bdf146de6891f199bcf3d34a7cc5be0964",
+      "bytes": 11894
+    },
+    "docs/testing/independent-acceptance-batch1-closure-plan-20261021.md": {
+      "sha256": "5efb85a99d7717ce1ba398fe8694cfe9ee820536bb4a270f974db97beef23860",
+      "bytes": 40364
+    },
+    "reports/all-pending-evidence-20261021/A6/board/initial-relative.json": {
+      "sha256": "ad51758720d838a8109e62010f353ca00b34a058d1189ee1f44e89d916c90e5a",
+      "bytes": 1916
+    }
+  },
+  "dependencyHashes": {
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react@18.3.1/node_modules/react/package.json": "d4e68a5c96babb20cad1daafea8b78822eae45b341552cf5418d06a5304fa64c",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/package.json": "e3b09e5a62e134d5241b520715de45b63ff3568ccbbeeeb70601607c3136c811",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-grid-layout@1.4.4_react-dom@19.3.1_react@18.3.1__react@18.3.1/node_modules/react-grid-layout/package.json": "a40823ae99ba132388ffcca3e24309ccee7fc5de56cd88d7520776e905f1f17a",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/package.json": "6ea35e567829660d9832744086c18526b9ddebd5358c4a0cadfb0a355925f917",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/zod@4.6.5/node_modules/zod/package.json": "a046ed85fa09571dba539fee9ef236152d12dabd1f229b014ec3bd2ebaad9000",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/react-grid-layout/build/ReactGridLayout.js": "e2e915cc1957f0c81a3e6bf2f6805e3764c7bbc548dfedb309f3ae348236bf2c",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/react-grid-layout/build/utils.js": "03518edc832d2913b4beeb3e38e2b37a496020519618c5813dc5d9c95aae48b2",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/react-grid-layout/build/GridItem.js": "703d6c772fd9b9b069f10d6c7efc390050a421b62ad24342f41c8cbf2ecbd14b",
+    "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/react-grid-layout/build/calculateUtils.js": "f6930999a6b02a82d52312fd9e6672bd64ad432bd5333d9626a41c0438b33b92"
+  },
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node"
+  },
+  "scope": "Original action feasibility only; real component callbacks, not pointer GUI or a new acceptance gate"
+}

@@ -11,6 +11,7 @@ import { join } from 'node:path'
 import {
   validateUploadedFile,
   storeAssetBuffer,
+  resolveWithinRoot,
   type ValidatedFile,
 } from './file-assets.js'
 import { resolveFileRoot, resolveFileRootOptional } from './file-asset-store.js'
@@ -39,8 +40,31 @@ interface StageSidecar {
 export class StageNotFoundError extends Error {}
 export class StageExpiredError extends Error {}
 
-function stageDir(root: string): string {
-  return join(root, 'staging')
+async function preflightStageRoot(): Promise<void> {
+  // 根解析器会 mkdir；先按其现有优先级检查配置路径，避免经链接创建缺失子目录。
+  // 实际根选择和生产 fail-closed 仍由 resolveFileRoot/Optional 决定。
+  const explicit = process.env.DSH_PM_FILE_ROOT?.trim()
+  const isolated = process.env.DSH_PM_ISOLATED_ROOT?.trim()
+  const home = process.env.DSH_HOME?.trim()
+  const configured = explicit || (isolated ? join(isolated, 'files')
+    : home ? join(home, 'profiles', 'pm', 'data', 'assets') : undefined)
+  if (configured) await resolveWithinRoot(configured, 'staging')
+}
+
+async function stageDir(root: string): Promise<string> {
+  return resolveWithinRoot(root, 'staging')
+}
+
+async function stagePaths(root: string, stageId: string) {
+  const dir = await stageDir(root)
+  const binPath = await resolveWithinRoot(root, join('staging', `${stageId}.bin`))
+  const sidecarPath = await resolveWithinRoot(root, join('staging', `${stageId}.json`))
+  return { dir, binPath, sidecarPath }
+}
+
+async function removeStageFiles(root: string, stageId: string): Promise<void> {
+  const { binPath, sidecarPath } = await stagePaths(root, stageId)
+  await Promise.all([unlink(binPath).catch(() => {}), unlink(sidecarPath).catch(() => {})])
 }
 
 function safeStageId(stageId: string): boolean {
@@ -62,12 +86,12 @@ export async function stageUpload(input: {
   const createdAt = now.toISOString()
   const expiresAt = new Date(now.getTime() + STAGE_TTL_MS).toISOString()
   const stageId = randomBytes(16).toString('hex')
+  await preflightStageRoot()
   const root = await resolveFileRoot()
-  const dir = stageDir(root)
+  const dir = await stageDir(root)
   await mkdir(dir, { recursive: true })
 
-  const binPath = join(dir, `${stageId}.bin`)
-  const sidecarPath = join(dir, `${stageId}.json`)
+  const { binPath, sidecarPath } = await stagePaths(root, stageId)
   const sidecar: StageSidecar = {
     fileName: validated.originalName,
     mediaType: validated.mediaType,
@@ -77,10 +101,11 @@ export async function stageUpload(input: {
     expiresAt,
   }
   // 先写临时再 rename，避免半截暂存。
-  const binTmp = `${binPath}.tmp`
-  const sideTmp = `${sidecarPath}.tmp`
+  const binTmp = await resolveWithinRoot(root, join('staging', `${stageId}.bin.tmp`))
+  const sideTmp = await resolveWithinRoot(root, join('staging', `${stageId}.json.tmp`))
   await writeFile(binTmp, validated.bytes)
   await writeFile(sideTmp, JSON.stringify(sidecar), 'utf8')
+  await stagePaths(root, stageId)
   await rename(binTmp, binPath)
   await rename(sideTmp, sidecarPath)
 
@@ -89,10 +114,9 @@ export async function stageUpload(input: {
 
 async function loadStage(stageId: string, nowIso?: string): Promise<{ dir: string; binPath: string; sidecarPath: string; meta: StageSidecar }> {
   if (!safeStageId(stageId)) throw new StageNotFoundError('暂存不存在')
+  await preflightStageRoot()
   const root = await resolveFileRoot()
-  const dir = stageDir(root)
-  const binPath = join(dir, `${stageId}.bin`)
-  const sidecarPath = join(dir, `${stageId}.json`)
+  const { dir, binPath, sidecarPath } = await stagePaths(root, stageId)
   let raw: string
   try {
     raw = await readFile(sidecarPath, 'utf8')
@@ -107,7 +131,7 @@ async function loadStage(stageId: string, nowIso?: string): Promise<{ dir: strin
   }
   const now = new Date(nowIso ?? Date.now())
   if (new Date(meta.expiresAt).getTime() <= now.getTime()) {
-    await Promise.all([unlink(binPath).catch(() => {}), unlink(sidecarPath).catch(() => {})])
+    await removeStageFiles(root, stageId)
     throw new StageExpiredError('暂存已过期')
   }
   return { dir, binPath, sidecarPath, meta }
@@ -141,12 +165,9 @@ export async function prepareStage(stageId: string, nowIso?: string): Promise<{
 /** finalize：DB 成功后清理暂存字节与 sidecar（幂等，不存在忽略）。 */
 export async function finalizeStage(stageId: string): Promise<void> {
   if (!safeStageId(stageId)) return
+  await preflightStageRoot()
   const root = await resolveFileRoot()
-  const dir = stageDir(root)
-  await Promise.all([
-    unlink(join(dir, `${stageId}.bin`)).catch(() => {}),
-    unlink(join(dir, `${stageId}.json`)).catch(() => {}),
-  ])
+  await removeStageFiles(root, stageId)
 }
 
 /**
@@ -168,10 +189,9 @@ export async function consumeStage(stageId: string, nowIso?: string): Promise<{
 /** cancel：best-effort 删除暂存字节与元数据，不存在不报错。 */
 export async function deleteStage(stageId: string): Promise<boolean> {
   if (!safeStageId(stageId)) return false
+  await preflightStageRoot()
   const root = await resolveFileRoot()
-  const dir = stageDir(root)
-  const binPath = join(dir, `${stageId}.bin`)
-  const sidecarPath = join(dir, `${stageId}.json`)
+  const { binPath, sidecarPath } = await stagePaths(root, stageId)
   let removed = false
   for (const p of [binPath, sidecarPath]) {
     try {
@@ -186,14 +206,21 @@ export async function deleteStage(stageId: string): Promise<boolean> {
 
 /** 崩溃恢复：扫描暂存目录，删除已过期（或 sidecar 缺失/损坏）的条目，返回清理数。 */
 export async function sweepExpiredStages(nowIso?: string, ttlMs: number = STAGE_TTL_MS): Promise<number> {
+  await preflightStageRoot()
   const root = await resolveFileRootOptional()
   if (!root) return 0
-  const dir = stageDir(root)
+  const dir = await stageDir(root)
   let names: string[]
   try {
     names = await readdir(dir)
   } catch {
     return 0
+  }
+  // 先检查整批候选，再读/删；链接条目不能被当成损坏sidecar或孤儿字节回收。
+  for (const name of names) {
+    if (name.endsWith('.json') || name.endsWith('.bin')) {
+      await resolveWithinRoot(root, join('staging', name))
+    }
   }
   const now = new Date(nowIso ?? Date.now()).getTime()
   let removed = 0
@@ -203,7 +230,7 @@ export async function sweepExpiredStages(nowIso?: string, ttlMs: number = STAGE_
     const stageId = name.slice(0, -5)
     if (!safeStageId(stageId)) continue
     seen.add(stageId)
-    const sidecarPath = join(dir, name)
+    const { sidecarPath } = await stagePaths(root, stageId)
     let expired = false
     try {
       const meta = JSON.parse(await readFile(sidecarPath, 'utf8')) as StageSidecar
@@ -212,7 +239,7 @@ export async function sweepExpiredStages(nowIso?: string, ttlMs: number = STAGE_
       expired = true
     }
     if (expired) {
-      await Promise.all([unlink(join(dir, `${stageId}.bin`)).catch(() => {}), unlink(sidecarPath).catch(() => {})])
+      await removeStageFiles(root, stageId)
       removed++
     }
   }
@@ -221,7 +248,8 @@ export async function sweepExpiredStages(nowIso?: string, ttlMs: number = STAGE_
     if (!name.endsWith('.bin')) continue
     const stageId = name.slice(0, -4)
     if (!seen.has(stageId)) {
-      await unlink(join(dir, name)).catch(() => {})
+      const binPath = await resolveWithinRoot(root, join('staging', name))
+      await unlink(binPath).catch(() => {})
       removed++
     }
   }

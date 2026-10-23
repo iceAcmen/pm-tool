@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-22T02:18:47.015Z",
+  "pid": 90938,
+  "originalExit": 1,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  '/**\\n' +\n    ' * P3 X7 习惯层视图（只读呈现，零写、不下裁决）。\\n' +\n    ' *\\n' +\n    ' * 呈现口径（契约 docs/design/deep-integration-v2-p3-dev.md §二.5）：\\n' +\n    ' * - 习惯卡片：title、status 徽章（draft=草稿 / confirmed=已确认 / final=已定稿）；\\n' +\n...\n    '  inbox?: HabitInboxSuggestion[]\\n' +\n+   '  /** 可选 OKR 清单（只读）；兼容父层已按项目过滤的最小 refs，完整记录保留项目归属。 */\\n' +\n+   '  okrs?: (HabitOkrRef & { projectId?: string })[]\\n' +\n-   '  /** 可选 OKR 清单（标题解析用，只读）。 */\\n' +\n-   '  okrs?: HabitOkrRef[]\\n' +\n    '  run?: Run\\n' +\n    '  onSaved?: () => void\\n' +\n    '  /** 打开新建习惯抽屉。 */\\n' +\n    '  onCreate?: () => void\\n' +\n    '  /** 打开编辑抽屉（record 为快照全量记录，goal/frequency/notes 兼容位一并回显）。 */\\n' +\n...\n    '                    className=\"pm-habit-btn pm-habit-btn-ghost\"\\n' +\n+   '                    disabl'... 967 more characters\n-   '                    disabled={!run}\\n' +\n-   '                    onClick={() => void a'... 916 more characters\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  '/**\\n' +\n    ' * P3 X7 习惯层视图（只读呈现，零写、不下裁决）。\\n' +\n    ' *\\n' +\n    ' * 呈现口径（契约 docs/design/deep-integration-v2-p3-dev.md §二.5）：\\n' +\n    ' * - 习惯卡片：title、status 徽章（draft=草稿 / confirmed=已确认 / final=已定稿）；\\n' +\n...\n    '  inbox?: HabitInboxSuggestion[]\\n' +\n+   '  /** 可选 OKR 清单（只读）；兼容父层已按项目过滤的最小 refs，完整记录保留项目归属。 */\\n' +\n+   '  okrs?: (HabitOkrRef & { projectId?: string })[]\\n' +\n-   '  /** 可选 OKR 清单（标题解析用，只读）。 */\\n' +\n-   '  okrs?: HabitOkrRef[]\\n' +\n    '  run?: Run\\n' +\n    '  onSaved?: () => void\\n' +\n    '  /** 打开新建习惯抽屉。 */\\n' +\n    '  onCreate?: () => void\\n' +\n    '  /** 打开编辑抽屉（record 为快照全量记录，goal/frequency/notes 兼容位一并回显）。 */\\n' +\n...\n    '                    className=\"pm-habit-btn pm-habit-btn-ghost\"\\n' +\n+   '                    disabl'... 967 more characters\n-   '                    disabled={!run}\\n' +\n-   '                    onClick={() => void a'... 916 more characters\n\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:402:12\n    at check (file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:64:31)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a19-habit-association-gui-review-20261022-audit.mjs:397:3\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)",
+  "checks": [
+    {
+      "name": "all 19 compositor manifests: exact frame files/SHA, original 2 timestamp inversions retained, pageScale=1",
+      "verified": true
+    },
+    {
+      "name": "each actual build/noEmit/coverage/guard/Launcher final receipt matches candidate row",
+      "verified": true
+    },
+    {
+      "name": "confirmed/ignored changes only permitted processing fields, original entries fully preserved",
+      "verified": true
+    }
+  ],
+  "scriptSHA": "17af559e744ae649ff2a9e0a6b9f3b42bb97c46ef8a37a75ff14f3fa2ed6f7e1",
+  "boundary": "Own file audit failure, original evidence untouched"
+}

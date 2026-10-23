@@ -1,0 +1,2978 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 1720394\n- 1720393\n        ^\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 1720394\n- 1720393\n        ^\n\n    at file:///private/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs:129:12\n    at check (file:///private/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs:44:18)\n    at audit (file:///private/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs:114:3)\n    at file:///private/tmp/p2007-archive-repair-gui-review-20261023-r2-reader.mjs:366:25\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)",
+  "completedChecks": [
+    {
+      "label": "717 members and index actual bytes/SHA/membership",
+      "result": "VERIFIED",
+      "detail": {
+        "index": {
+          "bytes": 124739,
+          "sha256": "fbeee5ee6fd51ed4957fd16bb16021c1d1d51ba7671f22dfb299fea00922d9c8"
+        },
+        "members": 717,
+        "physicalMembers": 720,
+        "files": {
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/2026-10-23-p2007-archive-gui-r2-outer.mjs": {
+            "bytes": 1332,
+            "sha256": "e58b41a64a04a6032e66e8b7a0cfd5860ece74f94b5b901d7ab3d5bd0c910fc5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/2026-10-23-p2007-archive-gui-r2-plan.md": {
+            "bytes": 2479,
+            "sha256": "795dec2e9efb90c27c5e48b3c70f0abec8377d476d226a71ca534c99bfc0a714"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/activation-binding.json": {
+            "bytes": 1550,
+            "sha256": "8bb339b5e506829fc8ec7f0a13cd300fb87d326caa636c37024102396d2b7961"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/combined-built-artifacts.json": {
+            "bytes": 63704,
+            "sha256": "7da06d7ce5068439ceff2e55be7635f8a7d234e5eecb5c49b78cd179b286a9d5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/combined-candidate.json": {
+            "bytes": 1708,
+            "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/combined-complete-inputs.json": {
+            "bytes": 75604,
+            "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/combined-source-files.json": {
+            "bytes": 15902,
+            "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/entry-executor-source.mjs": {
+            "bytes": 1374,
+            "sha256": "ec7c095c5363acc23b3266f034e2de1ea0c1eada7f70d78517718e147ce81e2f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/entry-outer-receipt.json": {
+            "bytes": 1560,
+            "sha256": "84014d5a8d662a2d2233ffdec9d5d67667e88024ceb14b6a4fed3f7f204d093c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/entry-outer-start.json": {
+            "bytes": 294,
+            "sha256": "caf2ab4e3833568388f492a45ea21b26af284a8d675850255115d9fb267d37f8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/export-executor-source.mjs": {
+            "bytes": 1903,
+            "sha256": "0fd9bd8f765f6f8dcb6316d9eebd1a7cbddc343d7f6de2814fb1454376adbe08"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/export-outer-receipt.json": {
+            "bytes": 6186,
+            "sha256": "2920d04eb812b0efd759fa588769dc4da7b97d24abcb16fdbd7eefa42b9bcd36"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/export-outer-start.json": {
+            "bytes": 295,
+            "sha256": "659709a9658fdcf0530a1a6af4f1f2e88752ac64d963c9ddb4316a41c60c0af3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/exported-originals/README-字段说明.md": {
+            "bytes": 1290,
+            "sha256": "3f5b60e6d3e60775e5c1c9ff02c8337cd4a473c1b419aadecc8898d5e2e95f02"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/exported-originals/package.json": {
+            "bytes": 10100,
+            "sha256": "5d6593a1a69e546bfca442140249f94ec24ee3b67f9419a0c23965d564576d65"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/files-executor-source.mjs": {
+            "bytes": 3545,
+            "sha256": "b9e08dc8a7ddba5fe1b171ef7b5f839ddf37797f76d48867ee85301b471e251a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/files-outer-receipt.json": {
+            "bytes": 1570,
+            "sha256": "2745620be3dd0283dd90dc48c9cb1d506b7ec9f466ff71ef2aaddd28791124b9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/files-outer-start.json": {
+            "bytes": 294,
+            "sha256": "7abd230c5b559bae9f00ba1494ebaa8342d41902e68f2d238d22e55d6a6f0f87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/filesfollow-executor-source.mjs": {
+            "bytes": 2583,
+            "sha256": "15e26ce7a2b5322bde3e640ba8a68cb047a0ea6b82b4059b392cf67662fc892c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/filesfollow-outer-receipt.json": {
+            "bytes": 533,
+            "sha256": "b12f8dac2e69fc2780559148e6a08137e7fc78c4b8288ccf01d0ab6152ef9b20"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/filesfollow-outer-start.json": {
+            "bytes": 300,
+            "sha256": "ede7635c702b34986938a8e70dcbc5ee7deea752e5a57ef971060f14d33b095a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-0.jpg": {
+            "bytes": 96738,
+            "sha256": "9d37e057cc2867bfabd966fdbf30f3d32e6ce7c5ba065ee09dbf3e7b5f48987f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-1.jpg": {
+            "bytes": 96807,
+            "sha256": "0e74ef7165573533083b3f84e98f6925c7b523aefe8f7dbac556d1cb5dd56bc4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-2.jpg": {
+            "bytes": 78577,
+            "sha256": "a54d66073b0ad37d508fb359e0551f73cafc3e7f1f2bec189441e17732f9ee1d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-3.jpg": {
+            "bytes": 78577,
+            "sha256": "a54d66073b0ad37d508fb359e0551f73cafc3e7f1f2bec189441e17732f9ee1d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-4.jpg": {
+            "bytes": 78583,
+            "sha256": "5cf2e8d444f72b6756a3ef2a38ffa27288c75fe0ed5266f0caae0cc9f184abe9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-5.jpg": {
+            "bytes": 25043,
+            "sha256": "22d9598a5e9a80a8787741a18a33ef44026c0cc9a9f0dfe29f0543fb954b97a2"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-6.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round01-entry-7.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-0.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-1.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-10.jpg": {
+            "bytes": 25257,
+            "sha256": "9d8a787600a4d152e601adf5766a4c3712025a5a8724f9ea100fd729def8c952"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-11.jpg": {
+            "bytes": 25611,
+            "sha256": "acfdec7f7b27ef29ae00bc45709d045bb82e183743504cd3f4a47b22bd56354d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-12.jpg": {
+            "bytes": 25973,
+            "sha256": "84aa9eed0d5e4bc7f938d2a80914e84a1ea0668c517809e32719bfdc59be2dda"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-13.jpg": {
+            "bytes": 26106,
+            "sha256": "aa942bdd63eaebec3dccb43b92f6d173c6dfe943cbe01b1831929730760728e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-14.jpg": {
+            "bytes": 26479,
+            "sha256": "abbcac36c87ff2de96815defa36393fac0d41c46527bd01cae4b4fd9a1568c7e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-15.jpg": {
+            "bytes": 26727,
+            "sha256": "1b2b4bac0533978ec6fa19558503826236f5f72cf7420bc97883f482a2e56327"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-16.jpg": {
+            "bytes": 26486,
+            "sha256": "fb6784f372b56355dde1da0ea58697cb176caea544cb57106311fa5baa65624c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-17.jpg": {
+            "bytes": 34402,
+            "sha256": "ab532d3a1e42bbd9ec00011fde51b47451ead5af3ebd454ae50a5db4c4ffac01"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-18.jpg": {
+            "bytes": 34402,
+            "sha256": "ab532d3a1e42bbd9ec00011fde51b47451ead5af3ebd454ae50a5db4c4ffac01"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-19.jpg": {
+            "bytes": 31316,
+            "sha256": "936804cd88c5fde3b5d7b83716900d9bcf0e43e92bd050d17bbfcd1ff6311df4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-2.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-20.jpg": {
+            "bytes": 31242,
+            "sha256": "809329008cf5f4224741923f643cc4b3e0ffd1356da80b7933af8485987086a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-21.jpg": {
+            "bytes": 33289,
+            "sha256": "ec318beea4e6a8066bef2261acce9cf6927bc1e26c964328f5f5c69063e83622"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-22.jpg": {
+            "bytes": 33560,
+            "sha256": "1bc90812991ad3242d7a25c0c366885e68d94e5511d05c9a9dc8eacabb389f3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-23.jpg": {
+            "bytes": 33973,
+            "sha256": "8de2078e97f8218cf3bae94d139887938a53c0beb6c91255668768a3c102c934"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-24.jpg": {
+            "bytes": 34356,
+            "sha256": "4c36f6511f1a87abf0884462bb50019be980bf910985a52a6b8a76f43010824d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-25.jpg": {
+            "bytes": 34435,
+            "sha256": "5d0cbc0653fc5f2db1cfa8262b7a02d0bd012e6aa7dafe17abdc3779d003f55e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-26.jpg": {
+            "bytes": 34440,
+            "sha256": "822f1366c6d5e761401117bbf05b6b6d223d9b0a9becc20b548841cab6fe4f86"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-27.jpg": {
+            "bytes": 34598,
+            "sha256": "dacd704e9a6cda9005e9436e9a7096ada793a543b9c9830270c13a547977be9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-28.jpg": {
+            "bytes": 34873,
+            "sha256": "4bacdd8210233b32a37068d48127acbb899e17fa561877c73de100a2ca0809c4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-29.jpg": {
+            "bytes": 35018,
+            "sha256": "629a191b5df8bac1894ab91882fd1535313e2ac7a8e6021c4bd34950b2edef50"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-3.jpg": {
+            "bytes": 30837,
+            "sha256": "6de2ebd7dc9b5fa673695d170ed71782a295dac316281fe60a668af0c7bbc8b5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-30.jpg": {
+            "bytes": 34786,
+            "sha256": "12dda576be239a00a02ecfc6e0e998966e58d2c37bd7748780b340f86a9a1186"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-31.jpg": {
+            "bytes": 139360,
+            "sha256": "16987cb1a782f9556eb7d8d1db2f827a5f884bd95793d7bec8ec1e44183a9a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-32.jpg": {
+            "bytes": 139360,
+            "sha256": "16987cb1a782f9556eb7d8d1db2f827a5f884bd95793d7bec8ec1e44183a9a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-4.jpg": {
+            "bytes": 32493,
+            "sha256": "efc2ea51954aa1b6db8c10bc01566265b1561a40444804a247465505b8c31a4d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-5.jpg": {
+            "bytes": 27713,
+            "sha256": "660d31ee01489810fd503b9887c7c5862c0585217c49abe57316e0f85fe34e02"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-6.jpg": {
+            "bytes": 28809,
+            "sha256": "78380a84f332280b2e9c4b524c7db36da4f1142e4c5af352421478d7ef456a94"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-7.jpg": {
+            "bytes": 24531,
+            "sha256": "300f6040e3be9ef5d78bde7896c9beb34500948abda0739e880fe03a68b6d5ad"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-8.jpg": {
+            "bytes": 24712,
+            "sha256": "d4bece6f622dd2240ec1a8e3cf7371b4da86fe5ac854f2b9e09424ffb3886467"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round02-archive-review-9.jpg": {
+            "bytes": 24992,
+            "sha256": "8e3a3b7dbc1052412a5cfe50dc3e0984382ab9043629ee576b800387af32eba6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round03-real-file-open-0.jpg": {
+            "bytes": 6910,
+            "sha256": "d0c770046f9669b6afe476e1dd5fec55bd4b2007aa6a84c0213f0dcb2b7daa4a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round03-real-file-open-1.jpg": {
+            "bytes": 61040,
+            "sha256": "07d21812a894701d153a4ad4362c8456c9c3c8cf2c23ccf64de7ee294857c0c6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round03-real-file-open-2.jpg": {
+            "bytes": 61040,
+            "sha256": "07d21812a894701d153a4ad4362c8456c9c3c8cf2c23ccf64de7ee294857c0c6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-0.jpg": {
+            "bytes": 61040,
+            "sha256": "07d21812a894701d153a4ad4362c8456c9c3c8cf2c23ccf64de7ee294857c0c6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-1.jpg": {
+            "bytes": 8908,
+            "sha256": "f1ccd925209279acc0eee7f1bc8d6d5a43b45e5cb5ecef859c7cc79a39fd0038"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-10.jpg": {
+            "bytes": 59728,
+            "sha256": "87d166d09d6982a7ee608655802bdb0090a139574d67f95a50456d4751d2ddc5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-11.jpg": {
+            "bytes": 66326,
+            "sha256": "938e1f4bcae1a2eef66a9c86d108d40afd6920ad68f77a75eb631355e19e5177"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-12.jpg": {
+            "bytes": 66179,
+            "sha256": "36ec9c40bf175ed8c70c20cdf951b6ac1e9cb9011b718cda709474826a5b555e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-13.jpg": {
+            "bytes": 66294,
+            "sha256": "fa58577c397b7a09096c10f0cddcd5b2b338f044a959b59ac7fbb3eab6db001d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-14.jpg": {
+            "bytes": 66796,
+            "sha256": "2e6ecaaa323dc640850c6796332958b79647b75317ba46451b049ed6c7f4248d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-15.jpg": {
+            "bytes": 70821,
+            "sha256": "056ab3f4af97e9c549dae4ca8f4f1b04a3feff574cc03ebc14cbebc2e518faae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-16.jpg": {
+            "bytes": 64792,
+            "sha256": "db6b2f48e5e54af14c95c9f17f999470dacaa9fc7d7b81b2e02b6840451ea752"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-17.jpg": {
+            "bytes": 65823,
+            "sha256": "ae213fce3429ddde5001c1010c8e7063e2d62d15ce99aea440165ca72cc2345b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-18.jpg": {
+            "bytes": 67438,
+            "sha256": "8c513db1d6a20cc6a9136d04b9307d02f5232aa9ff7313f162da30fb42913913"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-19.jpg": {
+            "bytes": 66191,
+            "sha256": "30e34ad48d5e9971cb91b1f142a7ef695d2aef989024fd913cd2178c72f09b3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-2.jpg": {
+            "bytes": 8908,
+            "sha256": "f1ccd925209279acc0eee7f1bc8d6d5a43b45e5cb5ecef859c7cc79a39fd0038"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-20.jpg": {
+            "bytes": 64592,
+            "sha256": "de3ecf3c4703ecceffec4d55db488d90cd404859db45f69b5d28c150297199bc"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-21.jpg": {
+            "bytes": 62282,
+            "sha256": "67d926a35802cf527831739fd5798754f649a444d3aa0b177c6ade085e2963e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-22.jpg": {
+            "bytes": 53059,
+            "sha256": "3e8e74f88e2708291cbdcd601bbd55c6149fb4b80640c6b417ee9306b558335c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-23.jpg": {
+            "bytes": 49798,
+            "sha256": "7933d8e5301d8999cf410da069b5d8bfdcad3303ae417efe1206f32ec1a8b74c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-24.jpg": {
+            "bytes": 49008,
+            "sha256": "9e9160222ebf5052ffbc371c5bdb9b2449b39a901e2277efe67b81637d2c17d7"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-25.jpg": {
+            "bytes": 49008,
+            "sha256": "9e9160222ebf5052ffbc371c5bdb9b2449b39a901e2277efe67b81637d2c17d7"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-26.jpg": {
+            "bytes": 62998,
+            "sha256": "25a97a0bf5ca10fa835b59a086068b5c1cd307aa671fe6241d856b0a8741b961"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-27.jpg": {
+            "bytes": 62998,
+            "sha256": "25a97a0bf5ca10fa835b59a086068b5c1cd307aa671fe6241d856b0a8741b961"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-3.jpg": {
+            "bytes": 8908,
+            "sha256": "f1ccd925209279acc0eee7f1bc8d6d5a43b45e5cb5ecef859c7cc79a39fd0038"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-4.jpg": {
+            "bytes": 8908,
+            "sha256": "f1ccd925209279acc0eee7f1bc8d6d5a43b45e5cb5ecef859c7cc79a39fd0038"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-5.jpg": {
+            "bytes": 54780,
+            "sha256": "44b4946d30d42fdbfbc0a13e18fabc23bbba6987c06b4aa329988b1f0c51e210"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-6.jpg": {
+            "bytes": 55548,
+            "sha256": "d7721b2b96fa53985100b46410c56a0ed41665b80a06002f5ed99316aeced48c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-7.jpg": {
+            "bytes": 58372,
+            "sha256": "1f6ac3d7053caff31b7ef4c028bbe1893c0e950cf04713f915f85734bf78556b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-8.jpg": {
+            "bytes": 58472,
+            "sha256": "d1cec043701e0446ff3d5d1ee21597e2c1e64167e6ca7ae8fe4f40b56e759887"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round04-files-follow-9.jpg": {
+            "bytes": 61670,
+            "sha256": "89b6eb682cfe41bcafc56a6cd4c694da7aefb00c23169c960f4fc251a8e5f85e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-0.jpg": {
+            "bytes": 139360,
+            "sha256": "16987cb1a782f9556eb7d8d1db2f827a5f884bd95793d7bec8ec1e44183a9a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-1.jpg": {
+            "bytes": 8493,
+            "sha256": "9b8c11d6df60bd0c1ccbbb2119a5fd3fb3f2b89b4878dab407d29615fc5d3e3e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-10.jpg": {
+            "bytes": 8478,
+            "sha256": "e274c8ba4c619caeb4fb29e9830282153395abc908a06cd5bd05bd5939804c74"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-11.jpg": {
+            "bytes": 8478,
+            "sha256": "c3ae5247d17b491adf2b829a8c338f348d71a617ad32f54545c2a1fc65d6a8b5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-12.jpg": {
+            "bytes": 8475,
+            "sha256": "d5100b6e1d48eee8389cce90c9162efbf8ec05f99e3138a55361a6eff8cd114d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-13.jpg": {
+            "bytes": 8473,
+            "sha256": "2d212d03779f8975909fec896467c1f825576e237e424c4cb581b644a87b0244"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-14.jpg": {
+            "bytes": 8477,
+            "sha256": "ec5720cbc8b930a02cacd4df8ed4b19f5937255818a00752a33fa996859d3225"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-15.jpg": {
+            "bytes": 8488,
+            "sha256": "2e6dd560cd685b2ee42264efb484bd44847079e2c86db6d3ece6efcbdd4fb98d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-16.jpg": {
+            "bytes": 8481,
+            "sha256": "b3943e1eb6900b489f8fb28cb1b15bcd6c1a99bbe44f6c2d4055b8ffcc772bc6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-17.jpg": {
+            "bytes": 8479,
+            "sha256": "92eca6a55dbb72b6e00f793c05b52c6aeffdbaece1303ca8352848f185985367"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-18.jpg": {
+            "bytes": 8454,
+            "sha256": "692d4ba3750390e639cb378dc2b89ae7d16d85a1db46c585240864d43a023cb9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-19.jpg": {
+            "bytes": 8449,
+            "sha256": "d7a6c36f37e234ebf95ce86ffdd7398e95df9aee033fa4a1f23cb5f6b79004fa"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-2.jpg": {
+            "bytes": 8480,
+            "sha256": "12ebec2c715c575aeeaefc13e743cdbba7c9d4c6babcb21fbd280de88e7ff69a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-20.jpg": {
+            "bytes": 8459,
+            "sha256": "263403bf44e8e2565e41ea7b7af8db0a64eac2e845af5616b8d7d7f58aaca47e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-21.jpg": {
+            "bytes": 8454,
+            "sha256": "616fa2d77be8ffaf99610688fc314ca1679e2d1a132b6e83a2fea9ade373c17f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-22.jpg": {
+            "bytes": 8459,
+            "sha256": "c6cecc8544dd3acaf39b27a67b88bc85cefd6b32a61632a7576af37da024b97e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-23.jpg": {
+            "bytes": 8464,
+            "sha256": "91f7eb1cf21389925d92fbf6ba702b6ac56ee3f817d1b95878ac719ecd0f744a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-24.jpg": {
+            "bytes": 8463,
+            "sha256": "8761a85360daf7dd1a35a5c07c91282624788c6f2e4cdf1c2cdec84daf1c7447"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-25.jpg": {
+            "bytes": 8469,
+            "sha256": "ec6afb297f7819b3d02c783ec72e188c6db90b14b584e4a7297c81373710973a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-26.jpg": {
+            "bytes": 8469,
+            "sha256": "826b4280006c8d51938af9268299d0a0847350f8618cbd146523f0fd1b339ab8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-27.jpg": {
+            "bytes": 8472,
+            "sha256": "d133d240818f827f7b9012b9e29a8c240de6757f5e5affa516149be64efe5a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-28.jpg": {
+            "bytes": 8459,
+            "sha256": "9e56680678bb955e5f9b93b39f257c50ccbe404ab9d4bf464559706a768df3fe"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-29.jpg": {
+            "bytes": 8463,
+            "sha256": "821bae09998fb96b7c3c91ae72625b3d6b70306db8dd65fb23b399c00d5d09a1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-3.jpg": {
+            "bytes": 8478,
+            "sha256": "f50a3daa128e8827459af23649cd6186cbe125164a9d849880cbf9f9b6874a54"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-30.jpg": {
+            "bytes": 8568,
+            "sha256": "23578339973041c69f3a1a1b78d7e5f425290ed01b9d8d83fdad9e3501ccd4d4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-31.jpg": {
+            "bytes": 8569,
+            "sha256": "f3004b5308c05a7868f3aba87b3e76222902d563c350ead5ba57d0bdf8fcce2d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-32.jpg": {
+            "bytes": 17726,
+            "sha256": "19c46fd48d2e39f7e012e46d8b282f112c6cdebb85c48061a3406c274dd0561b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-33.jpg": {
+            "bytes": 17840,
+            "sha256": "d86eb6a636f5d77c5352f0fdc1cc0f818e3c528bd4c4270dc00f859504e921ac"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-34.jpg": {
+            "bytes": 18620,
+            "sha256": "a750b33eedbf6e3ae4e8a51256d8b4d9932ef7a661b76090f2cb70c26ee2770c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-35.jpg": {
+            "bytes": 19798,
+            "sha256": "7a3dc9f92a0c22c0aa2a4d233c2b7dff5a5566d55e3ab4a0b16268ea8b7ad362"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-36.jpg": {
+            "bytes": 20775,
+            "sha256": "599f07b76b27f9b725ed299565843321517aba157d691a075b2968940189c0b7"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-37.jpg": {
+            "bytes": 20566,
+            "sha256": "d1fcaa8662b973fc04fb7e8530e499818412228d0fc4a593e6d2ead769b6000f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-38.jpg": {
+            "bytes": 21068,
+            "sha256": "952358d59f48f14ddc334987ddd532f4fa60a6c4de75e1b0e063ff8a506557e1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-39.jpg": {
+            "bytes": 22199,
+            "sha256": "8c0b4b77309917843c1e918c2cf3c7bbdb3921272a856e0ddbae6dc1228b3d4b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-4.jpg": {
+            "bytes": 8474,
+            "sha256": "20bc0417d1bb990d48f9051008bb3c2ea40e5db908055949ec192b9eba915515"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-40.jpg": {
+            "bytes": 22839,
+            "sha256": "ba88852efcecad69f570bca05a00faf9ce63a139144122cee76dd60851419250"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-41.jpg": {
+            "bytes": 23130,
+            "sha256": "4a066fb3a3171bed2e53772d58670c4a46821ad624b3a43ca0fe37eba1a66473"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-42.jpg": {
+            "bytes": 23329,
+            "sha256": "e1064aa82c55001b5ce23b16cfa7f864a457605bbb96642b4ab2f66380dc2d02"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-43.jpg": {
+            "bytes": 23405,
+            "sha256": "3625ddb8180217e537333194a967379a227ab606a34de7a11f21c245ab0125ff"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-44.jpg": {
+            "bytes": 24266,
+            "sha256": "76a83761da72f7f026ed17d424fad38b3cf92c5e7a0a1ee3ed6fd4b361870bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-45.jpg": {
+            "bytes": 24246,
+            "sha256": "26b4d5c7726e91cf1af41df5cf2f237a93aa3f3f3297c449aa595e43771911fb"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-46.jpg": {
+            "bytes": 25043,
+            "sha256": "22d9598a5e9a80a8787741a18a33ef44026c0cc9a9f0dfe29f0543fb954b97a2"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-47.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-48.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-49.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-5.jpg": {
+            "bytes": 8481,
+            "sha256": "5d906c42bff968264a4988c3bf19b29594494e4bac2913a3c0f41e460e111d8f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-50.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-51.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-52.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-53.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-54.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-55.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-56.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-57.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-58.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-59.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-6.jpg": {
+            "bytes": 8478,
+            "sha256": "422f764f7a266c25258c8ccc8b498f34558f01ccc78f9f3b3796700fc6c399d3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-60.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-61.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-62.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-63.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-64.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-65.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-66.jpg": {
+            "bytes": 25734,
+            "sha256": "e6b913c2afe76f923e77b97b0d772bdafe8ec51fab3acaca74a394701f852218"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-67.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-68.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-7.jpg": {
+            "bytes": 8478,
+            "sha256": "c8f3b6675097092ea5631f5b70593b643126915c9aaeaf40c22f8a0427af8ae7"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-8.jpg": {
+            "bytes": 8479,
+            "sha256": "19f482f7e7ebfc8b78e161d7b048cfac1b8a46b987aa2660f21d7a6f8b25fed2"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round05-reentry-review-9.jpg": {
+            "bytes": 8486,
+            "sha256": "09c038392db4e7daaca8e9474ab7a704bb9715d2bf1aecc2723a2d48e1997acd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-0.jpg": {
+            "bytes": 25777,
+            "sha256": "7dbb584eea81bf2ec90227a6f9b3cc3f692f04b26c3d74fe4594700e4d013e61"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-1.jpg": {
+            "bytes": 30837,
+            "sha256": "6de2ebd7dc9b5fa673695d170ed71782a295dac316281fe60a668af0c7bbc8b5"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-10.jpg": {
+            "bytes": 26227,
+            "sha256": "6c909e2a702b4d4c204d85b8da5d3ad96f68a4d8da4ef936c974c2fec6542943"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-11.jpg": {
+            "bytes": 26568,
+            "sha256": "305d1407875d706d0b365e492b925e5d7a3eafafb0e28090d36bdea8f8f237c0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-12.jpg": {
+            "bytes": 26283,
+            "sha256": "d5c34f0ef7aeaf5d79edefe0cf49333e68fd115aa3563ff20a8b7f2f20e274d6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-13.jpg": {
+            "bytes": 139360,
+            "sha256": "16987cb1a782f9556eb7d8d1db2f827a5f884bd95793d7bec8ec1e44183a9a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-14.jpg": {
+            "bytes": 139360,
+            "sha256": "16987cb1a782f9556eb7d8d1db2f827a5f884bd95793d7bec8ec1e44183a9a5a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-2.jpg": {
+            "bytes": 32493,
+            "sha256": "efc2ea51954aa1b6db8c10bc01566265b1561a40444804a247465505b8c31a4d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-3.jpg": {
+            "bytes": 27713,
+            "sha256": "660d31ee01489810fd503b9887c7c5862c0585217c49abe57316e0f85fe34e02"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-4.jpg": {
+            "bytes": 28809,
+            "sha256": "78380a84f332280b2e9c4b524c7db36da4f1142e4c5af352421478d7ef456a94"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-5.jpg": {
+            "bytes": 24579,
+            "sha256": "a8138e37ae96e3d54ba5958702974feab18d74eabc1b2e1476242a2ad7e8b292"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-6.jpg": {
+            "bytes": 24644,
+            "sha256": "56b3d2b129649bffc95163a23cec4f98db01cb53e291388d4b89fdc99c918ee6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-7.jpg": {
+            "bytes": 25003,
+            "sha256": "530ea737e45b66fd7c7b28208db323c4d364f0fff91047539db90bbf0697f5e8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-8.jpg": {
+            "bytes": 25383,
+            "sha256": "d7b1cea2ff9ac0352c9b3978558e858bdcea65996c611ef15318a7188ddc146e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frames/round06-review-reread-9.jpg": {
+            "bytes": 25745,
+            "sha256": "335f326d6b48ec53a482ebb22c090d78a50a4cdf05bc7cd8e1efd009c02794da"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/commands/archive.ts": {
+            "bytes": 2755,
+            "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/commands/review.ts": {
+            "bytes": 3104,
+            "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/core/archive.test.ts": {
+            "bytes": 12831,
+            "sha256": "c53a8bbaf5ad49d84478d667ea3279c1c6be23cc00592254ecc58767e71e730b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/core/archive.ts": {
+            "bytes": 9339,
+            "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/core/review-materials.ts": {
+            "bytes": 9381,
+            "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/frozen-source/src/core/storage.ts": {
+            "bytes": 8840,
+            "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/harness-source.mjs": {
+            "bytes": 5049,
+            "sha256": "4617f66981f86eff5b26bd7fb065db04aaf04c7c2d79ea9779c255a73f4592fe"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/inspect-executor-source.mjs": {
+            "bytes": 938,
+            "sha256": "22e5d4649476a7d3d0e0bfc5c0d13f17a1bc9b37dc122e909d3b15a561b2356f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/inspect-outer-receipt.json": {
+            "bytes": 1532,
+            "sha256": "418933891be816580c4f7ec55d525b0e9c90740deb115fed7b8869c7ac8016b0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/inspect-outer-start.json": {
+            "bytes": 296,
+            "sha256": "6af90877cd941598f8ca6dc36ae45da4851e25f81212ec4c87e6ec57679f8e8f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentry-executor-source.mjs": {
+            "bytes": 2097,
+            "sha256": "93c4f886fc5831bb593c7911f1982b73578954addbb50dc94d2d8cc5814cae74"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentry-outer-receipt.json": {
+            "bytes": 1853,
+            "sha256": "960a1cd6a06fe0c465ed8a2e6c33c2527db68ad59e3dad2812b2f46356ee4d05"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentry-outer-start.json": {
+            "bytes": 296,
+            "sha256": "b3dcfd050da34463035bfb7d15e088b1519f9d93220c811252e1a08ad132add0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentryfollow-executor-source.mjs": {
+            "bytes": 2984,
+            "sha256": "7145a14e9215f8be223a2dd9f71c8918ac42f1c6eda24d122f15aca654062ae3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentryfollow-outer-receipt.json": {
+            "bytes": 593,
+            "sha256": "b88c2d31cb9f594a0dafc6879c861807a66717e21c3bf796e3bbd45adef20dd1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/reentryfollow-outer-start.json": {
+            "bytes": 302,
+            "sha256": "8ac7081aee805290230a2f0be2a6a9c5c977eacbcb1527faa059c95884eb45b9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry.json": {
+            "bytes": 14367,
+            "sha256": "180e3bba30888573dbfdda2841c56600a357016aa9bc3f4ea37ae21f42912a07"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-before-entry.png": {
+            "bytes": 471004,
+            "sha256": "153ea46ae96a0907068d08fe437863dd8942490830942210672237fc7845ec5f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round00-host-entry-observation.json": {
+            "bytes": 8665,
+            "sha256": "79996231d386f3af92d368f51086c8a1b89935f15b5fe43e895e3064d2c0bb46"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready.json": {
+            "bytes": 2559,
+            "sha256": "6283151bbe95071026d2c9f84c0b12e9cf0ffab3297fdbbf299888bdd8e3c7e1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-composer-ready.png": {
+            "bytes": 103084,
+            "sha256": "fbdc08390171b7abff8fca08eab0fd82e1f31a775313c8e17a437e86a9fc8334"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round01-entry-events.json": {
+            "bytes": 3362,
+            "sha256": "f275bf1c7c54e21e7726b9d692513b376a618aa7ecdde208779b6c1e1002b00b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive.json": {
+            "bytes": 2497,
+            "sha256": "4ab4edde12f29afaaaf6455f1a4a8ebaf5507544197913af93b4c869d99a5fad"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-archive.png": {
+            "bytes": 148184,
+            "sha256": "3a12520a30509bea55a48e370ddb36c7642e4af1b9bf71e9249c8427a494caf0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review.json": {
+            "bytes": 2497,
+            "sha256": "24d319d4ded4e3868da6518052c63d0b46acdfb8ed11f7d8e7e71c690bdba14a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-after-review.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-archive-command.json": {
+            "bytes": 646,
+            "sha256": "96c7d3c2ec7169fb1ddbefde565b6808da02564bf1beb331b97153ce92ff7484"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-archive-review-events.json": {
+            "bytes": 20791,
+            "sha256": "af6876487c51eb102873099215c304c1daf44eac3a3f2008d2593436d59741cb"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive.json": {
+            "bytes": 2559,
+            "sha256": "47280bb908b07ee3ff1f099c20fc882fe6ffb45393c6b1bd292533f2d9c82239"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-before-archive.png": {
+            "bytes": 103084,
+            "sha256": "fbdc08390171b7abff8fca08eab0fd82e1f31a775313c8e17a437e86a9fc8334"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-inputs-preflight.json": {
+            "bytes": 84,
+            "sha256": "be5137f0fe72c79da9b78af911607421897af1162f3d0d489b12bc14db5c5dc9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round02-review-command.json": {
+            "bytes": 4961,
+            "sha256": "4eac5e5c151ec86f6160d0fc91e1e9439ae2b444d99fe5513c4104906c90e02d"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state.json": {
+            "bytes": 2497,
+            "sha256": "385916959b04fffdb8a1570cf977b2b8d674f23fe6ff17c35b706a985d004469"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error-state.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-error.json": {
+            "bytes": 1122,
+            "sha256": "0263d3a261b3d39b299c8d840585fee554d3dd578c05ee5eabfb85439a65e6c6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-export-originals.json": {
+            "bytes": 551,
+            "sha256": "a8a320c75a6295a8f5062338739f42bd2339659bb890e69a18e3cdcc65563058"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-file-0-upper.png": {
+            "bytes": 205373,
+            "sha256": "0682ac9fa2bb093178098e5df0b7db4b43b61d3d88987893623e62d259bd38eb"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-file-0.json": {
+            "bytes": 11671,
+            "sha256": "409bf6e3432e22607c241d3cc2e2820649fa08847e8b8c6af1b7257b3549ba3a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-owned-file-tab.json": {
+            "bytes": 88,
+            "sha256": "74d504a722efad432060a4ad0e07cca125b283ad23545b7b78414ea79e19db06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-real-file-open-events.json": {
+            "bytes": 1309,
+            "sha256": "a567687f3c1b73bfd5420afd7c1399fd4264bb67ea819e753a9bd417efaa32e6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round03-source-archive-byte-observations.json": {
+            "bytes": 4402,
+            "sha256": "622070b0bdb63ae024f444978bdad2b01924e4216239d33b54becf0b187107b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files.json": {
+            "bytes": 2497,
+            "sha256": "8d4777b4d19752e162130bad19105c38db414a5bfae80f64e0d5c4a2484c331b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-after-files.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-0-bottom-scroll.json": {
+            "bytes": 206,
+            "sha256": "430e3153450285efb0937618211fe720a921d4966bd71bd8d7e62acda436826c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-0-bottom.png": {
+            "bytes": 212628,
+            "sha256": "0019130249d30cfd170cad291ad88d116615deac140e9864000fe16d87aa788b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-0-reflection-scroll.json": {
+            "bytes": 206,
+            "sha256": "890f7cfe2cf02a7a48c9b5282029b1bcd2681c20bb0cb2766c4c0c3933802c7a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-0-reflections-lower.png": {
+            "bytes": 237608,
+            "sha256": "a278a44aac3895446cfebb0294ebcb497e9ba1675ed7c703973879aae48b44d2"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-0-reflections-upper.png": {
+            "bytes": 232159,
+            "sha256": "b6e5cc63c5108798559e750f0530aefe200299679c2f17e24c228b3ec0bdf29f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-1.json": {
+            "bytes": 1568,
+            "sha256": "56bb2751ed7fd1c2a2a4b8990e45e002c9c503ff75c1268409d35328a902ab1c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-file-1.png": {
+            "bytes": 240899,
+            "sha256": "865e226558b5ece841b7ef6979e9f526fa7ede231233125aa5135b183ee80846"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round04-files-follow-events.json": {
+            "bytes": 12103,
+            "sha256": "dad4f7d56adfb3939a66af8e88d1dd59f0c7447b0605c1ded747fee1e04af697"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry.json": {
+            "bytes": 2497,
+            "sha256": "a24cedbc51778a9e5cc70cb7990c6437ab63fd6618140b6126c84a979a2a516c"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-before-reentry.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state.json": {
+            "bytes": 2559,
+            "sha256": "57072e883165345cdcda360d885a7c59866e6c0c6495ab7ecce79e8fa668c475"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error-state.png": {
+            "bytes": 103084,
+            "sha256": "fbdc08390171b7abff8fca08eab0fd82e1f31a775313c8e17a437e86a9fc8334"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-error.json": {
+            "bytes": 1414,
+            "sha256": "0c302512673f299354e146599863270f8c8c5492b38d6827ac71ff1bae4b43e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round05-reentry-review-events.json": {
+            "bytes": 29412,
+            "sha256": "c5380c5c14b1dd2ab09e7b4a2521d03cb9e87ba8ef43967bd1f1cf0fb0a54f91"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload.json": {
+            "bytes": 2559,
+            "sha256": "cc424c5e1e061d18206b9f735e7be3d4eb73c299c3c121e7e226f6f5fc0bdd91"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-original-reload.png": {
+            "bytes": 103084,
+            "sha256": "fbdc08390171b7abff8fca08eab0fd82e1f31a775313c8e17a437e86a9fc8334"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread.json": {
+            "bytes": 2497,
+            "sha256": "f7b7f0250ab3ac2bf3e9f1af1d197e0a44ad456456c610fcbe370334e08a9242"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-after-review-reread.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-archive-file-reread.json": {
+            "bytes": 11669,
+            "sha256": "fdaf7f9fe80f823271b34c5672bcc09404bec9cd7e1ae6f8f1b407bdf32b02f8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-archive-file-reread.png": {
+            "bytes": 205373,
+            "sha256": "0682ac9fa2bb093178098e5df0b7db4b43b61d3d88987893623e62d259bd38eb"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/deliverables/dlv-0001.json": {
+            "bytes": 1125,
+            "sha256": "1f549e70554d1673638b37d0e9f5c208b69737a9c53c3b9e9c2783ea475144a6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/deliverables/dlv-0002.json": {
+            "bytes": 574,
+            "sha256": "1d7d6d717d2bfe546a8b8dd01d1eba1fe87cdd41dac82fd9b662ecc37e5541e0"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/file_assets/fa-0001.json": {
+            "bytes": 388,
+            "sha256": "61908677ed7a2fcf98b754a2e0cd21fdc8e790ba190a1ecd5ce619590d54503b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/file_assets/fa-0002.json": {
+            "bytes": 383,
+            "sha256": "69c0b14bad3c35917eb1b33eaa44f1d427706d793950131f02c324048fe2a1a4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json": {
+            "bytes": 377,
+            "sha256": "cd2c96dc2971bf4e1837ab23f33774a071c34bc15d0edb985bf5011c60fa7905"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/habits/habit-mvk5br0w-ff4ta7.json": {
+            "bytes": 448,
+            "sha256": "8d2c8a09aeec7c2e6a93b8a98e339b56d700f65910d50b69ceebce24c440a0be"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json": {
+            "bytes": 368,
+            "sha256": "b23fe70f9bd324e84f44f0f8b9fedfd173edadd461d51bc92300561460303d21"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/meetings/mtg-0001.json": {
+            "bytes": 579,
+            "sha256": "77e987a9b01eaf0b1f414ce5c40db64bd7a26dc67e97d1aa4d7b5fbafd655b06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/milestones/m-0001.json": {
+            "bytes": 317,
+            "sha256": "92a2da725d657ac2ae41394e30b8368ff4676034a92f8a778bf9b4a2104a28e9"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json": {
+            "bytes": 311,
+            "sha256": "47479a44552c8071e93bc5ab50805c421faeaa4d70a2259930b3b5af60a0f2bd"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/okrs/okr-mvk2hl7d-refwvh.json": {
+            "bytes": 364,
+            "sha256": "388a147abe3298750b47dec57d0c0bf54d3d34224de8a4e01f2738628a1a4fb1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/okrs/okr-mvk2jwys-vxyg3c.json": {
+            "bytes": 388,
+            "sha256": "c69b0ea0e85ee718506101fc59d66ec3a368c9f75ac1bb8388c99b0535c0f942"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/okrs/okr-mvk2mw6p-xiusuv.json": {
+            "bytes": 329,
+            "sha256": "20cbede4140e8a78d9f7c396688a9a69e43d85e18705149088724721f56f7138"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/projects/p-0001.json": {
+            "bytes": 307,
+            "sha256": "4f8c12b623d88434e69c2521eec086668d171c44cdf60470b5046620ed67820f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/projects/p-0002.json": {
+            "bytes": 307,
+            "sha256": "7239edd9882e00ecf1deb3eea48648c8b98907c351e1250c78b953afd1e1c5f1"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/projects/p-0003.json": {
+            "bytes": 320,
+            "sha256": "6d1d58eecdde23caec119691a3fdb6336b9808576b0bc2caa670652a1ff00354"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json": {
+            "bytes": 979,
+            "sha256": "710d08dba2d29c586e554a3b4df671b8881b5bb5d329da17b47531dd3a4bb332"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/reflections/ref-mvk0iiij-42f7xa.json": {
+            "bytes": 852,
+            "sha256": "811678c7c3b1a520f27bf32a339287212758619a11021f0acd40a51212cd128a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/reflections/ref-mvk0n0me-25tmos.json": {
+            "bytes": 875,
+            "sha256": "c93e9e50708991d5908a6b47b6e86e14e5f283780d57d0990cd35d77c3e7bcae"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/reflections/ref-mvk1iw2k-wd8ueq.json": {
+            "bytes": 873,
+            "sha256": "15b455a4362fa1d2da50c6146c43ce2e76d80bda92076730439a74721d7a6f06"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/reports/rpt-0001.json": {
+            "bytes": 1782,
+            "sha256": "6490f53a72aae70bb9948a6455fba35b861b87f6d81c40837ef88213edc37dd6"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/risk_issues/ri-0001.json": {
+            "bytes": 398,
+            "sha256": "9756912387d136251674df524eabaebc6ce314c44359c4c74f26e0a5fcedfb9a"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/aiModelMode.json": {
+            "bytes": 103,
+            "sha256": "eb889383385cb55b3f925ad00b1aa4d7105fc29e39f87c7a3ef7bf914ce5ce04"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/askApplyIdempotency.json": {
+            "bytes": 362,
+            "sha256": "a701af9da2c15faff22dff23c5364bfaa1ad0c7cae743bc17e6b959aa510706f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmExportAudit.json": {
+            "bytes": 1723,
+            "sha256": "fe94c968695335c9f6a33c6de4a85ce7ae16ffa658004988c038473e3ca5ea1f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmExportSent.json": {
+            "bytes": 1335,
+            "sha256": "8b29d3906f32dc3623c5252619d2488cc45976ff2ee21b06a907dab786e0e35e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmExportSentArchive.json": {
+            "bytes": 347,
+            "sha256": "b53705cf460940fcbe7167544602416f86dbeabaf86c3543b52f135142bf7c3f"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmOkrInbox.json": {
+            "bytes": 886,
+            "sha256": "90f5381f1a07a1b8b0b9dafeb8af88efadd3a45d818cd317f80c18ef2431ed87"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmProvenanceLedger.json": {
+            "bytes": 3829,
+            "sha256": "65b97fa0ad0386a40929c9bfa5d3dd615810c7b07f35293ea5b4b361c66636ce"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/settings/pmProvenancePending.json": {
+            "bytes": 124,
+            "sha256": "ea7b38fb296a1a9a2fbf763e09be72911fdab0d3afe98edab00565b802b41bba"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0001.json": {
+            "bytes": 3414,
+            "sha256": "e9be08cfba6ad98a796ddd12da0a1bf68b5b68cb7634941ffdc132744059f938"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0002.json": {
+            "bytes": 804,
+            "sha256": "02f0e40a901cbfed6b79c473eab0200e33c357a3a7a16d5c38aef696d852e211"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0003.json": {
+            "bytes": 563,
+            "sha256": "41761065799eb198e589f270f77a21a911c2bd474322e6aaa39945e836fb9e3b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0004.json": {
+            "bytes": 1645,
+            "sha256": "ea1d1a896313fe4950e999e5b43bf21c920d2ce97624e871d9636d21c903e835"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0005.json": {
+            "bytes": 574,
+            "sha256": "9b3deea2d359950e33de52d5abbe8ae6899b6ea9c1b108a25121d6ea86c1ff96"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0006.json": {
+            "bytes": 502,
+            "sha256": "d18dab7be663e354a8c96d962836e13974fdb7df2b88277a1f652a54d3a1a46b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0007.json": {
+            "bytes": 655,
+            "sha256": "c9065ff6c02b1b53a0ef753b77b785be532b5e75ad123b36a34b460a8061f404"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-raw/data/pmtool/tasks/t-0008.json": {
+            "bytes": 469,
+            "sha256": "312623765914bda253f77c90d3faf7d73b97a0c0b9126755f630b84078d643b4"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state-roots.json": {
+            "bytes": 6867,
+            "sha256": "17022947b257eb5328c5e35b3d5487117bee87778994291110f8308425080fea"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state.json": {
+            "bytes": 2497,
+            "sha256": "dc96b095841ac762fd9dde248899555e92bb09a7cd0d58149ddd6199f6fe06a7"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-final-readonly-state.png": {
+            "bytes": 728649,
+            "sha256": "c47c265db2cd213a36a90f7565654d48b1c07883c55a74f1f13be9666a20cdc3"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-reentered-host-before-reread.json": {
+            "bytes": 507,
+            "sha256": "cbac9b7ecea8542bd97ae45f5e5d37dd0d08410ca99d3f1119b00b5179482adf"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-reentry-observations.json": {
+            "bytes": 364,
+            "sha256": "1117f30b66fa7beae01b44931439f18ec8b595357bd61ce0d1a8bb420c658eec"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-review-reread-command.json": {
+            "bytes": 4961,
+            "sha256": "cb595f235ab6a9446bee6ca40076ccbdc52835d35863dbc2e812a1871c1ec18b"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/round06-review-reread-events.json": {
+            "bytes": 11907,
+            "sha256": "a0a2790a1311ca603dc66c2c32051e0f6cea3a9ef13e7a81167fa97baa2ceb0e"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/seal-executor-source.mjs": {
+            "bytes": 7775,
+            "sha256": "d227933285bc36d799030005d7790cc439be22d7a37bcceb1673cc9c07a9b496"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/seal-outer-start.json": {
+            "bytes": 293,
+            "sha256": "e4549e57f86bcb8d3c655e668add2f526a50a069bc43ca90c2d4087fed9372e2"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/summary.json": {
+            "bytes": 38881,
+            "sha256": "f7f7b7dcd10bfc2eb35e401ea88d458e59d083ef1b0c8e01ba7b8d141bd91953"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/index-r1.json": {
+            "bytes": 124739,
+            "sha256": "fbeee5ee6fd51ed4957fd16bb16021c1d1d51ba7671f22dfb299fea00922d9c8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/seal-r1.json": {
+            "bytes": 433,
+            "sha256": "b61a4a7ebce5f4f4d5b2f7278d4fb942ee47e4d0b59771fc86436519d20fe5a8"
+          },
+          "reports/all-pending-evidence-20261021/P2007ArchiveRepairGuiR2/seal-outer-receipt.json": {
+            "bytes": 640,
+            "sha256": "c7f0c040baf242398edbaff4a8ebae39149b02010dc1991eeb1db5b92379a91c"
+          },
+          "AGENTS.md": {
+            "bytes": 26011,
+            "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+          },
+          "docs/collaboration.md": {
+            "bytes": 31271,
+            "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+          },
+          "docs/testing/p2007-archive-known-gaps-red-20261023-r1.md": {
+            "bytes": 14264,
+            "sha256": "a4b52291b1860a6b7c31a2009cb79fc067adaada8fc333b449bc0f70f131886f"
+          },
+          "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md": {
+            "bytes": 11466,
+            "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5"
+          },
+          "docs/testing/p2007-archive-projection-source-auto-20261023-r1-seal.json": {
+            "bytes": 5629,
+            "sha256": "c5bb28a88b127fb0a15592e1f79db0f2af6b4a44dc99247f1e4fd94ce8a1e5dc"
+          },
+          "docs/testing/f02-combined-regression-review-20261023-r2-report.md": {
+            "bytes": 16145,
+            "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+          },
+          "docs/testing/f02-combined-regression-review-20261023-r2-seal-tool-receipt.json": {
+            "bytes": 1157,
+            "sha256": "d698bb026da328a0512af61882b4d8f2d60a544330d69aeeaa646227dbc9d11e"
+          },
+          "docs/plans/2026-10-23-p2007-archive-gui-r2-plan.md": {
+            "bytes": 2479,
+            "sha256": "795dec2e9efb90c27c5e48b3c70f0abec8377d476d226a71ca534c99bfc0a714"
+          },
+          "reports/all-pending-evidence-20261021/F02RepairGuiR2/browser-script-binding.json": {
+            "bytes": 912,
+            "sha256": "af30cba199dbdf886a9422524e58958282b91728946135db274ed585ec8231d0"
+          },
+          "reports/all-pending-evidence-20261021/F02RepairGuiR2/browser-script-2.js": {
+            "bytes": 2599193,
+            "sha256": "b3366523782e3caf167ea5173b0a2a79765a01f8b8b68a922cd2b1f074164312"
+          }
+        }
+      }
+    },
+    {
+      "label": "declared candidate and six frozen necessary sources",
+      "result": "VERIFIED",
+      "detail": {
+        "sources": {
+          "src/core/archive.ts": {
+            "bytes": 9339,
+            "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+          },
+          "src/core/archive.test.ts": {
+            "bytes": 12831,
+            "sha256": "c53a8bbaf5ad49d84478d667ea3279c1c6be23cc00592254ecc58767e71e730b"
+          },
+          "src/core/storage.ts": {
+            "bytes": 8840,
+            "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+          },
+          "src/core/review-materials.ts": {
+            "bytes": 9381,
+            "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+          },
+          "src/commands/archive.ts": {
+            "bytes": 2755,
+            "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+          },
+          "src/commands/review.ts": {
+            "bytes": 3104,
+            "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+          }
+        },
+        "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+        "source": 124,
+        "complete": 525,
+        "version": "0.7.4",
+        "currentSourceRead": false
+      }
+    }
+  ],
+  "actualExitPending": true
+}

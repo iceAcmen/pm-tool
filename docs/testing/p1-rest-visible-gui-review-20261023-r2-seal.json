@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-23T00:48:47.672Z",
+  "environment": {
+    "node": "v22.23.3",
+    "os": "darwin",
+    "pid": 35593,
+    "parentPid": 35591,
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p1-rest-visible-gui-review-20261023-r2-reader.mjs",
+      "seal"
+    ]
+  },
+  "inputCount": 724,
+  "drift": [],
+  "outputs": {
+    "docs/testing/p1-rest-visible-gui-review-20261023-r2.md": {
+      "bytes": 8517,
+      "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be"
+    },
+    "docs/testing/p1-rest-visible-gui-review-20261023-r2-reader.mjs": {
+      "bytes": 14653,
+      "sha256": "2f2bddb86530bd4e17d38d65f0099c43f1caa03b030f0f2545889b8966776da5"
+    },
+    "docs/testing/p1-rest-visible-gui-review-20261023-r2-audit.json": {
+      "bytes": 197534,
+      "sha256": "5ae58edc0c14cda06f89817334774acd98dc6813c6e4822c957782311868c39b"
+    },
+    "docs/testing/p1-rest-visible-gui-review-20261023-r2-verdict.json": {
+      "bytes": 4003,
+      "sha256": "161ff844e61a4154068bccbbfee20850d1fa91ebce913682e183997488e4a1eb"
+    },
+    "docs/testing/p1-rest-visible-gui-review-20261023-r2-tool-receipts.json": {
+      "bytes": 2385,
+      "sha256": "e197e3025365a001fb78b82d7e95fd61a7e981f0d7f05edd04045acc8a8f3269"
+    }
+  },
+  "indexSha256": "ccc98a2c691e9a299fd2106fce43afc34de5aa9bfbdb3a6a21aa8a8d5010e7b5",
+  "decision": "PASS_ONLY_ORIGINAL_QUEUE_LOWER_REST_VISUAL",
+  "wholeIdPass": false,
+  "wholeP1Pass": false,
+  "parentCommitPass": false,
+  "excludedOuter": "docs/testing/p1-rest-visible-gui-review-20261023-r2-seal-outer-receipt.json",
+  "stopped": true,
+  "released": true
+}

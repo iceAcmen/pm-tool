@@ -1,0 +1,80 @@
+{
+  "role": "独立只读审计；仅自有脚本，不执行产品",
+  "attempts": [
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check docs/testing/a18-interface-full-regression-review-20261022-audit.mjs",
+      "exit": 0
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs freeze",
+      "toolState": "首次工具异步返回；后仅读取此 execution ID 的本次 execution.json，确证 exited/exitCode0/outputComplete",
+      "exit": 0,
+      "pid": 73765,
+      "executionId": "a6419c83587e806716ce10bcce3d5266"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 1,
+      "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal",
+      "actual": "153cf607a7a3b07de3314b66f25871be3e99ecc91baee6981337164b08a74eb4",
+      "expected": "0d43990edceb549d336a1e414cded3aff74226feb78f9ad5055b92fd397f5871",
+      "location": "a18-interface-full-regression-review-20261022-audit.mjs:193:57（首版）",
+      "cause": "自有审计错误要求 Main 与专家 adapter 完整字节相同；实际仅新增 import 在原 import 列表中的位置不同",
+      "correction": "核专家完整原哈希；分别删除唯一相同 import 后逐字比较；再反向替换唯一断言必须完整等于旧 A18 原件，不改产品或原证"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 1,
+      "failure": "AssertionError [ERR_ASSERTION]: missing output for scripts/verify-gantt-drag.mjs",
+      "location": "a18-interface-full-regression-review-20261022-audit.mjs:119:5（第二版）",
+      "cause": "自有解析器错误要求旧 FAIL 目标也有非空 stdout；旧两目标真实 AssertionError 仅在 stderr",
+      "correction": "成功项仍要求非空原 stdout；失败项保留原 exit1，另核旧 stderr 原105/234位置，不造成功输出"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 1,
+      "failure": "AssertionError [ERR_ASSERTION]: undefined !== 1",
+      "location": "a18-interface-full-regression-review-20261022-audit.mjs:325:12（第三版）",
+      "cause": "自有审计器误按 exit 读取旧 context 命令；其实际字段是 originalExit",
+      "correction": "读取原字段 originalExit=1；原 reporter 19绿1红与原TF-X08失败不变"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 1,
+      "executionId": "9c684daa33a702800b2dba4f8466bd7b",
+      "pid": 74139,
+      "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal（AJV dist/runtime 与 lib/runtime 文件缺于自有扫描结果）",
+      "location": "a18-interface-full-regression-review-20261022-audit.mjs:341:12（第四版）",
+      "cause": "自有保护扫描按目录名 runtime 排除私有运行根，误排除依赖树内真实库代码，不是依赖源或副本缺失",
+      "correction": "仅依赖树允许完整库目录扫描；另封存首冻结误排除的库目录补充指纹；原before保持原样，私有HOME/cache/tmp仍排除"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 1,
+      "executionId": "72d92009f9e6f74d21217dfdd6ecb5b5",
+      "pid": 74591,
+      "failure": "AssertionError [ERR_ASSERTION]: 唯一已读在途 feedback-controls 计划由18194d...更新为b81d74...",
+      "cause": "其他独立专家合法更新自己在途计划的收尾进度；负责人新交接已确认报告完成，非产品/原证污染",
+      "correction": "保留原before与这条真实delta，单列精确前后指纹为合法并行参考更新；新报告只引用，不重复GUI审证；不将所有变化自动豁免"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/a18-interface-full-regression-review-20261022-audit.mjs audit",
+      "exit": 0,
+      "executionId": "fd8d62a7c884545bc03ffe07a273a22b",
+      "pid": 74996,
+      "stdout": "{\"audit\":\"PASS\",\"checks\":9,\"protectedEntries\":34892,\"guard\":[95,95,0],\"launcher\":56,\"dependencies\":[13613,1030]}",
+      "outputComplete": true,
+      "status": "exited"
+    },
+    {
+      "command": "env -i PATH=/usr/bin:/bin NODE_DISABLE_COMPILE_CACHE=1 /Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check docs/testing/a18-interface-full-regression-review-20261022-audit.mjs",
+      "exit": 0,
+      "note": "最终脚本语法复核，无输出"
+    }
+  ],
+  "otherReadOnlyCommands": {
+    "rg": "工具不可用，exit127；换 find/grep，不安装",
+    "memory": "指定入口不存在，ls exit1；以仓库为准",
+    "diff": "exit1 表示所需文本差异，不是产品回归失败"
+  }
+}

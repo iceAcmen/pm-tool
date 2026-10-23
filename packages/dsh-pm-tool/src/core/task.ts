@@ -181,6 +181,11 @@ export const taskWriteSchema = taskRecordSchema
   .superRefine(validateDateOrder)
   .superRefine(validateRepoRelation)
 
+// 只收紧新提交的字段；record/write 仍允许历史值，读取/恢复或改其他字段无需迁移旧库。
+const evidenceUrlInputSchema = z.string().trim().max(2048, '证据链接过长')
+  .refine(isValidEvidenceUrl, '证据链接只支持合法 http/https URL，长度不超过 2048')
+  .optional()
+
 export const taskCreateSchema = z.strictObject({
   projectId: taskFields.projectId,
   parentId: taskFields.parentId.default(null),
@@ -198,7 +203,7 @@ export const taskCreateSchema = z.strictObject({
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
   effortHours: taskFields.effortHours,
-  evidenceUrl: taskFields.evidenceUrl,
+  evidenceUrl: evidenceUrlInputSchema,
   manualProgress: taskFields.manualProgress,
   manualProgressNote: taskFields.manualProgressNote,
 }).superRefine(validateDateOrder).superRefine(validateRepoRelation)
@@ -220,7 +225,7 @@ export const taskUpdateSchema = z.strictObject({
   repoUrl: taskFields.repoUrl,
   branch: taskFields.branch,
   effortHours: taskFields.effortHours,
-  evidenceUrl: taskFields.evidenceUrl,
+  evidenceUrl: evidenceUrlInputSchema,
   manualProgress: taskFields.manualProgress,
   manualProgressNote: taskFields.manualProgressNote,
 }).superRefine(validateRepoRelation)

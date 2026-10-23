@@ -1,0 +1,39 @@
+{
+  "role": "trae independent AUTO28 R3",
+  "origin": "Observed functions.exec_command terminal result after final seal invocation; not inferred from payload",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "environmentLauncher": "env -i",
+  "environment": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/home",
+    "TMPDIR": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/tmp",
+    "XDG_CONFIG_HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/config",
+    "XDG_CACHE_HOME": "/tmp/f02-related28-infrastructure-retest-20261023-r3-independent-7c914a/cache",
+    "LANG": "en_US.UTF-8",
+    "TZ": "Asia/Shanghai",
+    "CI": "1",
+    "NO_COLOR": "1"
+  },
+  "actualArgv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-related28-infrastructure-retest-20261023-r3-reconcile-seal.mjs",
+    "seal"
+  ],
+  "observedTerminalExit": 0,
+  "wallTimeSeconds": 0.3987,
+  "stdout": "{\"mode\":\"seal\",\"verdict\":\"PASS_LIMITED_AUTO28\",\"seal\":{\"path\":\"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-seal.json\",\"bytes\":12610,\"sha256\":\"963818922032e532c9034f2261748aefab0496f0ca346eca4bc57ee01d62103b\"},\"repositoryFiles\":7,\"temporaryFiles\":32,\"resources\":\"released / STOP; one synchronous Vitest child returned exit0; all syntax checks returned; no builder/GUI/service/port/profile/data lock acquired\"}\n",
+  "stderr": "",
+  "ongoingSessionId": null,
+  "seal": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f02-related28-infrastructure-retest-20261023-r3-seal.json",
+    "bytes": 12610,
+    "sha256": "963818922032e532c9034f2261748aefab0496f0ca346eca4bc57ee01d62103b"
+  },
+  "verdict": "PASS_LIMITED_AUTO28",
+  "auto9Plus28": "May close original limited AUTO9+28 using unchanged R2 SOURCE/DOM9 and this single independent original28; no combined37 rerun",
+  "priorR2CombinedExit": 1,
+  "originalGui": "FAIL_LIMITED_GUI",
+  "repairedGui": "NOT_RUN",
+  "resources": "released / STOP; no ongoing exec session, builder, GUI, service, profile, port or data lock acquired",
+  "exclusion": "This receipt is intentionally outside the seal to avoid self-reference; seal itself is likewise not self-hashed"
+}

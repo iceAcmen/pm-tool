@@ -1,0 +1,248 @@
+{
+  "at": "2026-10-22T22:30:38.430Z",
+  "role": "independent-original-test-scope-resolution-only",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "inputCount": 26,
+  "inputs": {
+    "AGENTS.md": {
+      "bytes": 26011,
+      "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+    },
+    "docs/collaboration.md": {
+      "bytes": 31271,
+      "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+    },
+    "docs/requirements.md": {
+      "bytes": 39071,
+      "sha256": "d774d33209b79fe52584af7ecd003c985e5ecacf9b2aa96e29700972baf054dd"
+    },
+    "docs/design/deep-integration-v2-p3-dev.md": {
+      "bytes": 9215,
+      "sha256": "e9cf7781fe5e12dd534eeadb70ee5e81f8b46b04f0b98b379ffe79b41025de1c"
+    },
+    "docs/testing/b7-growth-panel-qa-20261020.md": {
+      "bytes": 4045,
+      "sha256": "4d98d5218ed427946b6670a5dc2888460a9253f4f044fccbe82a79155bff1f60"
+    },
+    "docs/testing/remaining-governance-cases-20261021.md": {
+      "bytes": 13892,
+      "sha256": "7ed381f0fc5d0807722b9f1197e188b6705f6fa674ea85266d2b98dba989bade"
+    },
+    "docs/testing/op-growth-final-inheritance-20261022-r1.md": {
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md": {
+      "bytes": 22907,
+      "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+    },
+    "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-seal.json": {
+      "bytes": 1136,
+      "sha256": "4b970b57c99d75a20128e9efab38551d260a9ddb6226d9138e688b2ab4ca9d90"
+    },
+    "reports/all-pending-evidence-20261021/CombinedSuccessor114R1/complete-inputs.json": {
+      "bytes": 74962,
+      "sha256": "f7d918b92b7fa65551d5ba2072b04a8e3273950deeca66dea902790bdcf9871a"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/candidate-source-binding.json": {
+      "bytes": 3184,
+      "sha256": "49fe642e8ff898cf6829f7aaf3b2ed8c4e899735b850e3bf116a0ecdf52c1b4e"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/index-r1.json": {
+      "bytes": 394044,
+      "sha256": "8451130fee227512dd540ef8b8d42a7fb5e46d8c37997e1277c2d5cd4a8e83a5"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/frozen-source/src/client/panel.tsx": {
+      "bytes": 191080,
+      "sha256": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/round16-habit-options.json": {
+      "bytes": 280,
+      "sha256": "a006c44852ee46e7a54a73ae0fb255b63bc5c0543c3451d0defd09c16c35e21c"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/round16-before-command-negative.json": {
+      "bytes": 2559,
+      "sha256": "0718f2c2ac55fe5754783fd2718f37b121ac9c79f327a258ea22af321a7eec2c"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/round16-habit-missing-rejected-command.json": {
+      "bytes": 441,
+      "sha256": "d0ba36c04f7452f566459e38e859acf4d92d6c00abd9fc0b25caa4e8aa75559e"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/round16-habit-cross-rejected-command.json": {
+      "bytes": 425,
+      "sha256": "84721579c5adc0c443ef11b89699186ec3e91de369a4c91e620079c2ce4a3ff6"
+    },
+    "reports/all-pending-evidence-20261021/P2OkrRemainingR1/round16-snapshot-aggregation-cycle-command.json": {
+      "bytes": 14646,
+      "sha256": "1869e985cad10f3efde192ed880588a53cb15dec185e869361858b74e95a631f"
+    },
+    "packages/dsh-pm-tool/src/client/panel.tsx": {
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    "packages/dsh-pm-tool/src/client/views/habit-form.tsx": {
+      "bytes": 4854,
+      "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+    },
+    "packages/dsh-pm-tool/src/client/views/growth-form-props.ts": {
+      "bytes": 4276,
+      "sha256": "0e07ee09757ad74b75076b5007b43b4c5781f2de9a3f2e01529db6c03a54a8e4"
+    },
+    "packages/dsh-pm-tool/src/client/form-validation.ts": {
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx": {
+      "bytes": 4886,
+      "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+    },
+    "packages/dsh-pm-tool/src/client/views/habits.tsx": {
+      "bytes": 15535,
+      "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+    },
+    "packages/dsh-pm-tool/src/core/habits.ts": {
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+    },
+    "packages/dsh-pm-tool/src/commands/habit.ts": {
+      "bytes": 14064,
+      "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+    }
+  },
+  "reader": {
+    "path": "/private/tmp/p3004-original-scope-resolution-20261023-r1-reader.mjs",
+    "bytes": 9898,
+    "sha256": "cfe4222686c901c473b662a14f4712b29210d885e59931730b05da5a5333b036"
+  },
+  "baselineFromOriginalMetadataOnly": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "original114Metadata": {
+    "changedSourceCount": 114,
+    "completeInputCount": 521,
+    "fullInputVerificationPerformed": false
+  },
+  "targetedEvidenceIntegrity": {
+    "candidate-source-binding.json": {
+      "bytes": 3184,
+      "sha256": "49fe642e8ff898cf6829f7aaf3b2ed8c4e899735b850e3bf116a0ecdf52c1b4e",
+      "matchesIndex": true
+    },
+    "frozen-source/src/client/panel.tsx": {
+      "bytes": 191080,
+      "sha256": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d",
+      "matchesIndex": true
+    },
+    "round16-habit-options.json": {
+      "bytes": 280,
+      "sha256": "a006c44852ee46e7a54a73ae0fb255b63bc5c0543c3451d0defd09c16c35e21c",
+      "matchesIndex": true
+    },
+    "round16-before-command-negative.json": {
+      "bytes": 2559,
+      "sha256": "0718f2c2ac55fe5754783fd2718f37b121ac9c79f327a258ea22af321a7eec2c",
+      "matchesIndex": true
+    },
+    "round16-habit-missing-rejected-command.json": {
+      "bytes": 441,
+      "sha256": "d0ba36c04f7452f566459e38e859acf4d92d6c00abd9fc0b25caa4e8aa75559e",
+      "matchesIndex": true
+    },
+    "round16-habit-cross-rejected-command.json": {
+      "bytes": 425,
+      "sha256": "84721579c5adc0c443ef11b89699186ec3e91de369a4c91e620079c2ce4a3ff6",
+      "matchesIndex": true
+    },
+    "round16-snapshot-aggregation-cycle-command.json": {
+      "bytes": 14646,
+      "sha256": "1869e985cad10f3efde192ed880588a53cb15dec185e869361858b74e95a631f",
+      "matchesIndex": true
+    }
+  },
+  "sourceBindings": {
+    "src/client/views/habit-form.tsx": {
+      "bytes": 4854,
+      "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29",
+      "matchesOriginal114": true
+    },
+    "src/client/views/growth-form-props.ts": {
+      "bytes": 4276,
+      "sha256": "0e07ee09757ad74b75076b5007b43b4c5781f2de9a3f2e01529db6c03a54a8e4",
+      "matchesOriginal114": true
+    },
+    "src/client/form-validation.ts": {
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4",
+      "matchesOriginal114": true
+    },
+    "src/core/habits.ts": {
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684",
+      "matchesOriginal114": true
+    },
+    "src/commands/habit.ts": {
+      "bytes": 14064,
+      "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e",
+      "matchesOriginal114": true
+    }
+  },
+  "panelBinding": {
+    "frozen": {
+      "bytes": 191080,
+      "sha256": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d"
+    },
+    "current": {
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    "currentWholeFileMatchesOriginal114": false,
+    "currentCombinedCandidateCertified": false
+  },
+  "originalEvidence": {
+    "preCommandDialogs": [],
+    "missing": {
+      "kind": "error",
+      "text": "未找到关联目标：okr-not-found-20261023",
+      "rpcId": "8c2f4488-2d9d-4e91-a56c-6ab7009bfedc"
+    },
+    "cross": {
+      "kind": "error",
+      "text": "关联目标不属于指定项目",
+      "rpcId": "6531f516-aaad-43b6-84b3-4568add11a47"
+    },
+    "projectSetsAtOriginalRound16": [
+      {
+        "projectId": "p-0001",
+        "okrIds": [
+          "okr-mvi5z847-33y3xk",
+          "okr-mvk2hl7d-refwvh",
+          "okr-mvk2jwys-vxyg3c"
+        ]
+      },
+      {
+        "projectId": "p-0002",
+        "okrIds": [
+          "okr-mvk2mw6p-xiusuv"
+        ]
+      }
+    ],
+    "emptyOkrProjectsAtOriginalRound16": [],
+    "retainedFailedHabitFormEvidenceFound": false,
+    "exhaustiveSearchOfAllHistoricEvidencePerformed": false,
+    "originalGuiVerdictsResigned": false
+  },
+  "scopeResolution": {
+    "nonemptyOptions": "selection-only; raw-ID-submit-not-applicable-to-this-control-state",
+    "emptyOptions": "existing-text-ID-fallback; missing/cross-project-rejection-retention-applicable",
+    "preciseRemainingAssertion": "BLOCKED_PENDING_ORIGINAL_RELATION_FAILURE_FORM_EVIDENCE",
+    "productFailureDeclared": false,
+    "exemptionGranted": false,
+    "newRawIdFeatureAuthorized": false
+  },
+  "productExecuted": false,
+  "guiExecuted": false,
+  "gitExecuted": false,
+  "privateFreezeOrRuntimeRead": false
+}

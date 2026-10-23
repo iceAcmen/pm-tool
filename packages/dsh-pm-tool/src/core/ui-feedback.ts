@@ -125,7 +125,8 @@ export function feedbackIsError(text: string): boolean {
  * 只读预览文本（如「只读预览 / 尚未写入」）不含错误词，不得被误判为失败。
  */
 export function commandAccepted(response: string): boolean {
-  return !feedbackIsError(response)
+  // 结构化成功的正文可含“失败”等合法标题，接受判定与已批准的显示分类保持同源。
+  return !classifyFeedback(response).isError
 }
 
 /**
@@ -135,6 +136,9 @@ export function commandAccepted(response: string): boolean {
 export function prefixFeedbackOnce(prefix: string, error: unknown): string {
   const raw = error instanceof Error ? error.message : String(error)
   if (raw === prefix || raw.startsWith(`${prefix}：`) || raw.startsWith(`${prefix}:`)) return raw
+  // 命令层明确共享的备份/恢复场景已包含本地场景；保全文原因，不清洗正文中的“失败”。
+  if ((prefix === '恢复失败' || prefix === '备份失败') &&
+    (raw === '备份/恢复失败' || raw.startsWith('备份/恢复失败：') || raw.startsWith('备份/恢复失败:'))) return raw
   return `${prefix}：${raw}`
 }
 
@@ -153,11 +157,21 @@ export interface ClassifiedFeedback {
   autoDismissMs: number | null
 }
 
+/** 已知 catch 的内存呈现类别，不从原因正文推断、不改变命令协议。 */
+export interface FeedbackContext {
+  kind: 'error'
+}
+
 /**
  * panel run → Notice 共用的反馈映射（生产唯一实现，测试复用，不复制策略）：
  * 分型 → 错误判定 → TTL。成功结构化提示 3s 自动消失；错误与无信封原样回退均持久。
  */
-export function classifyFeedback(message: string): ClassifiedFeedback {
+export function classifyFeedback(message: string, context?: FeedbackContext): ClassifiedFeedback {
+  // catch 原因里的标记也是原文，不能变成成功信封或可执行动作。
+  if (context?.kind === 'error') {
+    return { isError: true, structured: false, summary: [message],
+      detail: null, action: null, autoDismissMs: null }
+  }
   const parsed = parseFeedback(message)
   // P1-1：结构化成功信封本身即成功（buildSuccessEnvelope 只由成功路径构造），
   // 不再对摘要正文跑中文错误关键词，避免「已修复错误清单」这类成功串被误判为 error alert；

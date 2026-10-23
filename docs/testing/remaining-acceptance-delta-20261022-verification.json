@@ -1,0 +1,119 @@
+{
+  "type": "有限余项对账文档验证与释放，不是产品PASS",
+  "verifiedAt": "2026-10-22T01:48:39.601Z",
+  "environment": {
+    "os": "macOS",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "pnpm": "11.28.5为项目约定，本角色未调用"
+  },
+  "baselineHead": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "cutoff": {
+    "primary": "2026-10-22 09:25 +0800，截至A18独立报告",
+    "supplement": "2026-10-22 09:44 +0800持续执行记录：A19开发交回/独立复验在途、新A19未build；五check已签；OKR旅程交审",
+    "a19IndependentVerdict": "本角色不复验、不判定、不因开发绿宣布关闭",
+    "a20": "先行原红/控制已交，等待当前独立门，未实施",
+    "wholeGoalVerdict": "不签PASS，Main继续既有持续任务"
+  },
+  "commandsActuallyObserved": [
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check docs/testing/remaining-acceptance-delta-20261022-audit.mjs",
+      "exitCode": 0,
+      "scope": "初版、更新后及最终语法检查，均无产品执行"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/remaining-acceptance-delta-20261022-audit.mjs",
+      "exitCode": 0,
+      "scope": "初版文档索引：297台账ID/244原合同普通ID/1184矩阵格，问题0；旧index保留"
+    },
+    {
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/remaining-acceptance-delta-20261022-audit.mjs r2",
+      "exitCode": 0,
+      "scope": "增加B1-B8汇总域后的文档索引，305台账ID/252原合同普通ID/1184矩阵格/24来源码/53链接，问题0"
+    },
+    {
+      "command": "git diff --check -- 'docs/testing/remaining-acceptance-delta-20261022*'",
+      "exitCode": 0,
+      "scope": "最终及中间检查；未跟踪文件另逐字读检，未把无输出作产品PASS"
+    },
+    {
+      "command": "git rev-parse HEAD",
+      "exitCode": 0,
+      "stdout": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd"
+    },
+    {
+      "command": "node -e 纯文件最终检查：本前缀JSON解析、Markdown相对链接/换行/行尾空白、305行ID与r2原行号、全部自有文件bytes/SHA",
+      "exitCode": 0,
+      "scope": "2026-10-22T01:48:39.601Z实际读取，错误0；无产品import/子进程/网络"
+    }
+  ],
+  "countsAreDocumentIndexesNotFunctionPassTotals": {
+    "ledgerIds": 305,
+    "originalOrdinaryContractIds": 252,
+    "matrixIds": 1184,
+    "allIndexedIds": 1489,
+    "evidenceCodes": 24,
+    "executionLinkedReportsRead": 62,
+    "sourceDocuments": 85,
+    "linksChecked": 53,
+    "issues": 0,
+    "selfReference": "62执行记录链接中含本对账主报告，非新增独立证据"
+  },
+  "filesBeforeThisVerificationFile": [
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-audit.mjs",
+      "bytes": 11554,
+      "sha256": "047a634f03411bc1ae9d807d741686a28b74abff8866a0efeff51e17186b7421"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-index-r2.json",
+      "bytes": 3544062,
+      "sha256": "ba1ec89a010b41d3e9fe1c3c6efdaadc4a2c15cfe37156bafab28f34ace0779f"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-index.json",
+      "bytes": 3520996,
+      "sha256": "8d53418ef8703b06ffa4dec832e0f658e85ed4927352d9122b399bef82aeed8b"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-ledger.md",
+      "bytes": 49397,
+      "sha256": "2e40674bbb58205589f99a8e106f52ae82e2182af380d84b497229f9e31610c3"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022.md",
+      "bytes": 29082,
+      "sha256": "b8d157206abf1676c4a8eb3b975b73a40a4ff3c09eea11afb2a9bfbcab4ff43e"
+    }
+  ],
+  "snapshotBoundary": {
+    "initialIndex": "补列B1-B8前文档快照，保原不覆盖",
+    "r2Index": "最终台账与矩阵索引；主报告随后新增09:44接续与实际验证计数，最终主报告hash见本单，不伪称r2锁定随后字节",
+    "externalReports": "源文档hash仅绑定读取时点；Main/其他专家合法追加不是本角色污染，不承诺整盘或所有外部文件永久零变"
+  },
+  "explorationAndDocumentErrors": [
+    "rg不可用exit127，改find/grep，未安装",
+    "指定memory入口不存在，未搜索private/credentials或创建记忆",
+    "一次自有主报告patch上下文不匹配被拒、无写入；重读后正确补记，不是产品FAIL"
+  ],
+  "notExecuted": [
+    "build",
+    "install",
+    "产品verify或测试套件",
+    "GUI/浏览器/桌面",
+    "服务启动/停止/探活",
+    "credentials/profile/活业务根访问",
+    "commit/push/tag/发布",
+    "A19/A20重复派单或独立测试"
+  ],
+  "writes": "仅新前缀6个自有文件；不覆盖产品、原证、原报告、其他testing或livingdocs",
+  "resources": {
+    "builder": false,
+    "guiConnection": false,
+    "serviceOrPortOwnership": false,
+    "runningProductTestProcess": false,
+    "runningExecSession": false,
+    "released": true,
+    "note": "本角色同步文件命令均已观察退出，无需操作任何Main服务；交回即释放，Main持续父目标不停止"
+  }
+}

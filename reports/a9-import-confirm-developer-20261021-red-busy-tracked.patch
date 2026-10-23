@@ -1,0 +1,155 @@
+diff --git a/packages/dsh-pm-tool/src/client/views/tasks.tsx b/packages/dsh-pm-tool/src/client/views/tasks.tsx
+index 7f6e6c3..a19f5e6 100644
+--- a/packages/dsh-pm-tool/src/client/views/tasks.tsx
++++ b/packages/dsh-pm-tool/src/client/views/tasks.tsx
+@@ -2,7 +2,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
+ import { flattenVisible, indexChildren } from '../../core/task-tree.js'
+ import { buildUpdate } from '../../core/task-inline.js'
+ import { blockingPredecessors, localTodayIso, isTaskOverdue, isTaskDueWithin, isTaskAtRisk } from '../../core/derived.js'
+-import { clampProgress } from '../../core/progress-derivation.js'
++import {
++  clampProgress, deriveProgressMap, resolveTaskProgressMeta, progressHeadline,
++  formatProgressValue, checklistFraction, type TaskProgressMetaInput,
++} from '../../core/progress-derivation.js'
+ import { tallyTasksByStatus, donePercent } from './tasks-tally.js'
+ import { copyHandleToClipboard } from './tasks-clipboard.js'
+ import { taskStatusLabels } from '../../core/labels.js'
+@@ -311,6 +314,7 @@ export function TaskTable(props: {
+     const copied = copiedHandleId === t.id
+     const failed = failedHandleId === t.id
+     return (
++      <>
+       <button
+         type="button"
+         className={`pt-code-btn${wbs ? '' : ' pt-code-btn-missing'}${copied ? ' copied' : ''}${failed ? ' failed' : ''}`}
+@@ -322,14 +326,21 @@ export function TaskTable(props: {
+         aria-label={copied ? '已复制' : failed ? '复制失败，可手动选择复制' : `复制编号 ${handle}`}
+         onClick={e => { e.stopPropagation(); copyHandle(t.id, handle) }}
+       >
+-        <span className="pt-code-val">{copied ? '已复制' : failed ? '复制失败' : handle}</span>
++        <span className="pt-code-val">{handle}</span>
+         <Copy size={11} className="pt-code-ic" aria-hidden="true" />
+       </button>
++      {(copied || failed) && <span
++        className={`pt-code-feedback${failed ? ' failed' : ''}`} role="status"
++        title={failed ? '复制失败，可手动选中上方编号复制' : '已复制编号'}
++      >{copied ? '已复制' : '复制失败'}</span>}
++      </>
+     )
+   }
+ 
+   const byId = useMemo(() => new Map(tasks.map(t => [t.id, t])), [tasks])
+   const childMap = useMemo(() => indexChildren(tasks), [tasks])
++  // 用未筛选全量任务派生，搜索/折叠不会把父聚合的后代丢掉。
++  const progressMap = useMemo(() => deriveProgressMap(tasks), [tasks])
+   // P2-5 风险视图：按 milestoneId 关联里程碑，供 isTaskAtRisk 判断里程碑是否延期。
+   const milestoneById = useMemo(() => new Map(milestones.map(m => [m.id, m])), [milestones])
+ 
+@@ -361,10 +372,12 @@ export function TaskTable(props: {
+     const arr = [...filtered]
+     if (sort === 'dueDate') arr.sort((a, b) => String(a.dueDate ?? '9999').localeCompare(String(b.dueDate ?? '9999')))
+     else if (sort === 'priority') arr.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
+-    else if (sort === 'progress') arr.sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0))
++    else if (sort === 'progress') arr.sort((a, b) =>
++      (resolveTaskProgressMeta(b as Task & TaskProgressMetaInput, progressMap.get(b.id)).display ?? -1)
++      - (resolveTaskProgressMeta(a as Task & TaskProgressMetaInput, progressMap.get(a.id)).display ?? -1))
+     else arr.sort((a, b) => (a.code ?? a.id).localeCompare(b.code ?? b.id, 'en', { numeric: true }))
+     return arr
+-  }, [filtered, sort]) // eslint-disable-line react-hooks/exhaustive-deps
++  }, [filtered, sort, progressMap]) // eslint-disable-line react-hooks/exhaustive-deps
+ 
+   // 契约 §7 + 数字口径字典：5 态互斥（todo/in_progress/blocked/done/wrapped）合计=总数，
+   // 纯函数同源；open=todo+in_progress+blocked；wrapped 单独成桶，不并入 done、不漏算。
+@@ -666,6 +679,31 @@ export function TaskTable(props: {
+     return h % 2 === 0 ? '' : 'alt'
+   }
+ 
++  const renderProgress = (t: Task) => {
++    const derived = progressMap.get(t.id)!
++    const meta = resolveTaskProgressMeta(t as Task & TaskProgressMetaInput, derived)
++    const fraction = checklistFraction(derived)
++    const objectiveText = `客观 ${formatProgressValue(derived)}`
++    return (
++      <div className="pt-cell pt-prog" data-progress-mode={meta.mode}
++        style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 2, overflowWrap: 'anywhere', fontSize: 'var(--t-10)' }}>
++        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
++          {meta.display !== null && <span className="pt-bar"><i style={{ width: `${meta.display}%` }}/></span>}
++          <span>{meta.mode === 'manual' ? `人工设定 ${meta.display}%` : objectiveText}</span>
++        </span>
++        {meta.mode === 'manual' && <span>{objectiveText}</span>}
++        <span>{fraction ? `清单 ${fraction} · ` : ''}覆盖 {derived.coverage.coveredLeaves}/{derived.coverage.totalLeaves}</span>
++        {derived.source === 'rollup' && <span>{progressHeadline(derived)}</span>}
++        {meta.manualNote && meta.mode === 'manual' &&
++          <span title={meta.manualNote} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{meta.manualNote}</span>}
++        {derived.value === null && derived.legacyProgress !== null &&
++          <span title="历史手填值不参与客观派生">原手填 {clampProgress(derived.legacyProgress)}%</span>}
++        {derived.pendingAcceptance && <span>待验收</span>}
++        {derived.warnings.length > 0 && <span title={derived.warnings.join('\n')}>请确认验收</span>}
++      </div>
++    )
++  }
++
+   const leafRow = (row: { task: Task, depth: number, hasChildren: boolean }) => {
+     const t = row.task
+     const late = isLate(t)
+@@ -676,6 +714,7 @@ export function TaskTable(props: {
+       <div
+         className={`pt-grid pt-row pm-task-row${effectiveActiveId === t.id ? ' pt-active' : ''}`}
+         data-pm-row={t.id}
++        style={{ height: 'auto', minHeight: 56, paddingTop: 4, paddingBottom: 4 }}
+         onPointerDown={e => {
+           if (!(e.target as HTMLElement).closest('button,select,input,a,textarea')) focusRow(t.id)
+         }}
+@@ -766,21 +805,7 @@ export function TaskTable(props: {
+             }}
+           />
+         </div>
+-        <div className="pt-cell pt-prog">
+-          <span className="pt-prog-status">{taskStatusLabels[t.status] ?? t.status}</span>
+-          <span className="pt-bar"><i style={{ width: `${clampProgress(t.progress ?? 0)}%` }} /></span>
+-          {t.progress == null
+-            ? <span className="pt-pct-null" title="无客观进度依据，显示证据不足，不按 0% 计">证据不足</span>
+-            : <input
+-                className="pt-pct pm-row-progress" aria-label={`${t.title} 进度`} disabled={disabled}
+-                type="number" min={0} max={100} step={10} value={clampProgress(t.progress)}
+-                onChange={e => {
+-                  const upd = buildUpdate({ progress: e.currentTarget.value })
+-                  if (!Object.keys(upd).length) return
+-                  void run(`task update ${t.id} ${JSON.stringify(upd)}`).then(ok => ok && onSaved())
+-                }}
+-              />}
+-        </div>
++        {renderProgress(t)}
+         <div className="pt-cell pt-acts">
+           {/* K18 任务卡静态出站关联位：只显示不回写；审计未就绪/无记录时「未导出」占位，不伪造。 */}
+           {latestExport?.at ? (
+@@ -809,7 +834,8 @@ export function TaskTable(props: {
+     const { total, done } = stageCount(t.id)
+     const countCls = total === 0 ? 'none' : done === total ? 'all' : ''
+     return (
+-      <div className={`pt-grid pt-group${open ? ' open' : ''}`} data-pm-row={t.id}>
++      <div className={`pt-grid pt-group${open ? ' open' : ''}`} data-pm-row={t.id}
++        style={{ height: 'auto', minHeight: 56, paddingTop: 4, paddingBottom: 4, flexWrap: 'wrap' }}>
+         <div className="pt-cell pt-sel" />
+         <div className="pt-cell pt-gutter">
+           {hasKids
+@@ -837,9 +863,7 @@ export function TaskTable(props: {
+         <div className={`pt-cell pt-due${isLate(t) ? ' late' : ''}`}>
+           <span className="pt-gstage-meta">{t.dueDate || '—'}</span>
+         </div>
+-        <div className="pt-cell pt-prog">
+-          <span className="pt-gstage-meta">{t.status === 'done' ? '已完成' : t.status === 'in_progress' ? '进行中' : t.progress ? `${clampProgress(t.progress)}%` : '待开始'}</span>
+-        </div>
++        {renderProgress(t)}
+         <div className="pt-cell pt-acts">
+           <button className="pt-iconbtn" title="编辑阶段" aria-label={`编辑 ${t.title}`} onClick={() => onEdit(t)}>
+             <Pencil size={15} />
+@@ -1101,7 +1125,7 @@ export function TaskTable(props: {
+                     try {
+                       const text = await execute(`task import-content ${pid} ${file.name} ${enc}`)
+                       if (/失败|错误|拒绝|不可用|无法处理|未找到|不支持|不合法|无效|被阻止|缺失/.test(text)) { setImportPreview({ text, confirm: '' }); return }
+-                      setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc}` })
++                      setImportPreview({ text, confirm: `task import-content ${pid} ${file.name} ${enc} confirm` })
+                     } catch (err) {
+                       setImportPreview({ text: `解析失败：${err instanceof Error ? err.message : String(err)}`, confirm: '' })
+                     }

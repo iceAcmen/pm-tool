@@ -1,0 +1,139 @@
+{
+  "snapshot": {
+    "origin": "pm-tool",
+    "kind": "pm-tool-archive",
+    "exportedAt": "2026-10-23T00:00:00.000Z",
+    "archivedAt": "2026-10-23T00:00:00.000Z",
+    "projectId": "p-0001",
+    "project": {
+      "id": "p-0001",
+      "name": "QA-A-fixture-F5",
+      "description": "",
+      "owner": "",
+      "status": "planning",
+      "startDate": "2026-01-01",
+      "targetDate": "2026-12-31",
+      "tags": [],
+      "repoUrl": null,
+      "branch": null,
+      "createdAt": "2026-10-21T13:44:54.927Z",
+      "updatedAt": "2026-10-21T13:44:54.927Z"
+    },
+    "tasks": [],
+    "deliverables": [],
+    "evidence": [],
+    "reflections": [
+      {
+        "id": "ref-mvi5z85j-yk04ji",
+        "taskId": "t-0001",
+        "milestoneId": null,
+        "deliverableId": null,
+        "sourceEvent": "task-done",
+        "status": "draft",
+        "knownLines": [
+          "完成时刻 2026-10-21",
+          "已登记客观佐证链接（质量由人复核）",
+          "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+          "资料区已登记：1 条链接、1 项交付物（质量由人复核）"
+        ],
+        "gaps": [],
+        "createdAt": "2026-10-21T13:44:55.303Z",
+        "updatedAt": "2026-10-21T13:44:55.303Z"
+      },
+      {
+        "id": "ref-mvk0iiij-42f7xa",
+        "taskId": null,
+        "milestoneId": "m-0001",
+        "deliverableId": null,
+        "sourceEvent": "milestone-achieved",
+        "status": "draft",
+        "knownLines": [
+          "达成时刻 2026-10-22"
+        ],
+        "gaps": [
+          "待补：关联任务 t-0001「F3-fixture-F5」尚未闭环（未完成/缺证据，留白不编造）"
+        ],
+        "createdAt": "2026-10-22T20:47:29.851Z",
+        "updatedAt": "2026-10-22T20:47:29.851Z"
+      },
+      {
+        "id": "ref-mvk0n0me-25tmos",
+        "taskId": null,
+        "milestoneId": null,
+        "deliverableId": "dlv-0001",
+        "sourceEvent": "deliverable-accepted",
+        "status": "draft",
+        "knownLines": [
+          "验收状态：accepted（验收结论由人确认，草稿不替代验收）",
+          "版本/存放：版本 v1；位置 未填写"
+        ],
+        "gaps": [
+          "待补：关联任务 t-0001「F3-fixture-F5」尚未闭环（未完成/缺证据，留白不编造）"
+        ],
+        "createdAt": "2026-10-22T20:50:59.942Z",
+        "updatedAt": "2026-10-22T20:50:59.942Z"
+      }
+    ],
+    "milestones": [],
+    "notes": "K16 最小保存包：只读快照，非全量镜像；不写 K18 出站日志；原数据零改动。"
+  },
+  "review": {
+    "projectId": "p-0001",
+    "period": {
+      "start": "2026-10-16",
+      "end": "2026-10-23"
+    },
+    "tasks": [],
+    "milestones": [],
+    "reflections": [
+      {
+        "id": "ref-mvi5z85j-yk04ji",
+        "title": "F3-fixture-F5 · 完成即时复盘（草稿）",
+        "sourceEvent": "task-done",
+        "knownLines": [
+          "完成时刻 2026-10-21",
+          "已登记客观佐证链接（质量由人复核）",
+          "关联交付物 dlv-0001（连接字段；交付物本身由交付物台账维护，本字段不自动生成交付物）",
+          "资料区已登记：1 条链接、1 项交付物（质量由人复核）"
+        ]
+      },
+      {
+        "id": "ref-mvk0iiij-42f7xa",
+        "title": "QA里程碑 · 里程碑达成复盘（草稿）",
+        "sourceEvent": "milestone-achieved",
+        "knownLines": [
+          "达成时刻 2026-10-22"
+        ]
+      },
+      {
+        "id": "ref-mvk0n0me-25tmos",
+        "title": "QA交付物V1 · 交付验收复盘（草稿）",
+        "sourceEvent": "deliverable-accepted",
+        "knownLines": [
+          "验收状态：accepted（验收结论由人确认，草稿不替代验收）",
+          "版本/存放：版本 v1；位置 未填写"
+        ]
+      }
+    ],
+    "counts": {
+      "doneTasks": 0,
+      "wrappedTasks": 0,
+      "achievedMilestones": 0,
+      "reflectionKnownLines": 7,
+      "avgDoneProgress": null
+    }
+  },
+  "knownUTF8": [
+    "e5ae8ce68890e697b6e588bb20323032362d31302d3231",
+    "e5b7b2e799bbe8aeb0e5aea2e8a782e4bd90e8af81e993bee68ea5efbc88e8b4a8e9878fe794b1e4babae5a48de6a0b8efbc89",
+    "e585b3e88194e4baa4e4bb98e789a920646c762d30303031efbc88e8bf9ee68ea5e5ad97e6aeb5efbc9be4baa4e4bb98e789a9e69cace8baabe794b1e4baa4e4bb98e789a9e58fb0e8b4a6e7bbb4e68aa4efbc8ce69cace5ad97e6aeb5e4b88de887aae58aa8e7949fe68890e4baa4e4bb98e789a9efbc89",
+    "e8b584e69699e58cbae5b7b2e799bbe8aeb0efbc9a3120e69da1e993bee68ea5e380813120e9a1b9e4baa4e4bb98e789a9efbc88e8b4a8e9878fe794b1e4babae5a48de6a0b8efbc89",
+    "e8bebee68890e697b6e588bb20323032362d31302d3232",
+    "e9aa8ce694b6e78ab6e68081efbc9a6163636570746564efbc88e9aa8ce694b6e7bb93e8aebae794b1e4babae7a1aee8aea4efbc8ce88d89e7a8bfe4b88de69bbfe4bba3e9aa8ce694b6efbc89",
+    "e78988e69cac2fe5ad98e694beefbc9ae78988e69cac207631efbc9be4bd8de7bdae20e69caae5a1abe58699"
+  ],
+  "gapUTF8": [
+    "e5be85e8a1a5efbc9ae585b3e88194e4bbbbe58aa120742d30303031e3808c46332d666978747572652d4635e3808de5b09ae69caae997ade78eafefbc88e69caae5ae8ce688902fe7bcbae8af81e68daeefbc8ce79599e799bde4b88de7bc96e980a0efbc89",
+    "e5be85e8a1a5efbc9ae585b3e88194e4bbbbe58aa120742d30303031e3808c46332d666978747572652d4635e3808de5b09ae69caae997ade78eafefbc88e69caae5ae8ce688902fe7bcbae8af81e68daeefbc8ce79599e799bde4b88de7bc96e980a0efbc89"
+  ]
+}

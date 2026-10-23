@@ -20,6 +20,7 @@ import {
   FEEDBACK_SUCCESS_TTL_MS,
 } from '../lib/core/ui-feedback.js'
 import { flattenVisible } from '../lib/core/task-tree.js'
+import { verifyNoticeContext } from './feedback-context-contract.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 
@@ -153,11 +154,15 @@ assert.deepEqual(groupedIds, ['c', 'a', 'b'], '分组渲染序列按状态 key �
 // ---- renderedIds 与 DOM 序同源契约（源码级，R3-02 防回归）----
 // v2 落地后 TaskTable 迁至 src/client/views/tasks.tsx；以下断言钉住该文件。
 const tasksSrc = readFileSync(join(here, '..', 'src', 'client', 'views', 'tasks.tsx'), 'utf8')
-assert.match(tasksSrc, /const treeRows = useMemo\(\(\) => flattenVisible\(visible, collapsed\), \[visible, collapsed\]\)/)
+assert.match(
+  tasksSrc,
+  /const treeRows = useMemo\(\s*\(\) => taskComparator\s*\?\s*flattenVisible\(filtered, collapsed, taskComparator\)\s*:\s*flattenVisible\(visible, collapsed\)/,
+  '多规则树必须把 comparator 交给 flattenVisible，旧单排序仍回落原 visible/collapsed 路径',
+)
 assert.match(
   tasksSrc,
   /const renderedIds = useMemo\(\s*\(\) => grouped\s*\?\s*statusGroups\.flatMap\(g => g\.rows\.map\(t => t\.id\)\)\s*:\s*treeRows\.map\(r => r\.task\.id\)/,
-  'renderedIds 树分支必须 == flattenVisible(visible, collapsed) 的行序列',
+  'renderedIds 树分支必须与实际 treeRows 行序列同源',
 )
 assert.match(
   tasksSrc,
@@ -231,12 +236,14 @@ const taskSrc = readFileSync(join(here, '..', 'src', 'commands', 'task.ts'), 'ut
 assert.match(taskSrc, /PM_SUMMARY_PREFIX/, 'task update 成功须走结构化信封短摘要')
 assert.match(taskSrc, /PM_DETAIL_MARKER/, '完整字段须经 detail 标记分离，不进 toast')
 assert.doesNotMatch(taskSrc, /<details><summary>完整字段<\/summary>/, '命令层不得再把 <details> 塞进成功文本')
-assert.match(panelSrc, /classifyFeedback\(message\)/, 'Notice 须经 classifyFeedback 分型，不整体平铺')
-assert.match(panelSrc, /pm-result-card__detail/, '完整字段须进独立可展开详情卡（ResultCard 折叠 detail）')
+verifyNoticeContext(panelSrc, join(here, '..'))
+const resultCardSrc = readFileSync(join(here, '..', 'src', 'client', 'result-card.tsx'), 'utf8')
+assert.match(panelSrc, /import \{ ResultCard \} from '\.\/result-card\.js'/, '真实面板接线共用ResultCard组件')
+assert.match(resultCardSrc, /pm-result-card__detail/, '完整字段须进独立可展开详情卡（ResultCard 折叠 detail）')
 assert.match(panelSrc, /autoDismissMs/, '成功提示须按 TTL 自动消失')
 assert.match(panelSrc, /classifyFeedback/, '错误集中判定并持久单处展示')
 // 错误卡 role=alert 单处、成功 toast role=status。
-assert.match(panelSrc, /role=\{isError \? 'alert' : 'status'\}/, '错误 role=alert / 成功 role=status')
+assert.match(resultCardSrc, /role=\{isError \? 'alert' : 'status'\}/, '错误 role=alert / 成功 role=status')
 // 保存完成回调关闭抽屉（TaskForm onSaved → setDrawer(undefined)），不卡「提交中」。
 assert.match(panelSrc, /<TaskForm[\s\S]*?onSaved=\{\(\) => setDrawer\(undefined\)\}/, '任务抽屉保存成功须关闭（onSaved 关抽屉）')
 // 摘要条本身不滚动、不出 HTML/MD；限高滚动只允许在详情 pre。

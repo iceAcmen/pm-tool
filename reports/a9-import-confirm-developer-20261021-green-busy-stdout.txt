@@ -1,0 +1,14 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/tmp/pmtool-a9-import-cKypGW[39m
+
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 CSV：预览零写，确认原内容末尾confirm，落库两层树并重开读回字段
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 busy：同一帧连点只发一次确认，在途禁取消/重选，成功仍只建两条
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败false：保原预览和内容，可重试且仅成功关闭
+ [32m✓[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败reject：保原预览和内容，可重试且仅成功关闭
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 22:57:57
+[2m   Duration [22m 896ms[2m (transform 314ms, setup 0ms, collect 523ms, tests 158ms, environment 0ms, prepare 44ms)[22m
+
+JSON report written to /private/tmp/pmtool-a9-import-cKypGW/vitest.json

@@ -38,6 +38,7 @@
       "inject": [
         "@deepseek-ai/dsh-api-remotes",
         "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-conversation",
         "@deepseek-ai/dsh-client-ui-layout",
         "@deepseek-ai/dsh-client-ui-sidebar"
       ],
@@ -76,9 +77,11 @@
     "@deepseek-ai/dsh-storage-json": "0.2.1-alpha.2",
     "@types/node": "^22.10.0",
     "@types/react": "18.3.20",
+    "@types/react-test-renderer": "18.3.1",
     "@vitest/coverage-v8": "^2.1.9",
     "puppeteer-core": "^23.11.1",
     "react": "18.3.1",
+    "react-test-renderer": "18.3.1",
     "tsdown": "0.15.10",
     "typescript": "^5.9.0",
     "vitest": "^2.1.9"

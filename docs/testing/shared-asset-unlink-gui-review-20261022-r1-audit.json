@@ -1,0 +1,1213 @@
+{
+  "at": "2026-10-22T13:15:57.432Z",
+  "protectedInputs": {
+    "shared": {
+      "bytes": 317676,
+      "sha256": "cba4e79542cf50ada54a0dad5749e56cc5432aff010f30a8dc0253d762407c40"
+    },
+    "sharedCount": 1799,
+    "priorCount": 1537,
+    "j03Count": 468,
+    "prior": {
+      "bytes": 270825,
+      "sha256": "2c1dd6628834258893c4ae8a36e656f71006cda455b29f6ab933746fd602ceb9"
+    },
+    "inheritedUnchanged": true,
+    "added": [
+      "70-shared-before-unlink-raw/data/pmtool/deliverables/dlv-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/deliverables/dlv-0002.json",
+      "70-shared-before-unlink-raw/data/pmtool/file_assets/fa-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/file_assets/fa-0002.json",
+      "70-shared-before-unlink-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "70-shared-before-unlink-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "70-shared-before-unlink-raw/data/pmtool/meetings/mtg-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/milestones/m-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "70-shared-before-unlink-raw/data/pmtool/projects/p-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/projects/p-0002.json",
+      "70-shared-before-unlink-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "70-shared-before-unlink-raw/data/pmtool/reports/rpt-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/risk_issues/ri-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/settings/aiModelMode.json",
+      "70-shared-before-unlink-raw/data/pmtool/settings/pmExportAudit.json",
+      "70-shared-before-unlink-raw/data/pmtool/settings/pmExportSent.json",
+      "70-shared-before-unlink-raw/data/pmtool/tasks/t-0001.json",
+      "70-shared-before-unlink-raw/data/pmtool/tasks/t-0002.json",
+      "70-shared-before-unlink-raw/data/pmtool/tasks/t-0003.json",
+      "70-shared-before-unlink-raw/data/pmtool/tasks/t-0004.json",
+      "70-shared-before-unlink-roots.json",
+      "70-shared-before-unlink.json",
+      "70-shared-before-unlink.png",
+      "71-shared-t4-unlink-command.json",
+      "71-shared-t4-unlink-drain-0-events.json",
+      "71-shared-t4-unlink-drain-1-events.json",
+      "72-shared-other-reference-raw/data/pmtool/deliverables/dlv-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/deliverables/dlv-0002.json",
+      "72-shared-other-reference-raw/data/pmtool/file_assets/fa-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/file_assets/fa-0002.json",
+      "72-shared-other-reference-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "72-shared-other-reference-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "72-shared-other-reference-raw/data/pmtool/meetings/mtg-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/milestones/m-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "72-shared-other-reference-raw/data/pmtool/projects/p-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/projects/p-0002.json",
+      "72-shared-other-reference-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "72-shared-other-reference-raw/data/pmtool/reports/rpt-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/risk_issues/ri-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/settings/aiModelMode.json",
+      "72-shared-other-reference-raw/data/pmtool/settings/pmExportAudit.json",
+      "72-shared-other-reference-raw/data/pmtool/settings/pmExportSent.json",
+      "72-shared-other-reference-raw/data/pmtool/tasks/t-0001.json",
+      "72-shared-other-reference-raw/data/pmtool/tasks/t-0002.json",
+      "72-shared-other-reference-raw/data/pmtool/tasks/t-0003.json",
+      "72-shared-other-reference-raw/data/pmtool/tasks/t-0004.json",
+      "72-shared-other-reference-roots.json",
+      "72-shared-other-reference.json",
+      "72-shared-other-reference.png",
+      "73-shared-still-downloadable.md",
+      "74-shared-before-second-unlink-raw/data/pmtool/deliverables/dlv-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/deliverables/dlv-0002.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/file_assets/fa-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/file_assets/fa-0002.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/meetings/mtg-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/milestones/m-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/projects/p-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/projects/p-0002.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/reports/rpt-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/risk_issues/ri-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/settings/aiModelMode.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/settings/pmExportAudit.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/settings/pmExportSent.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/tasks/t-0001.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/tasks/t-0002.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/tasks/t-0003.json",
+      "74-shared-before-second-unlink-raw/data/pmtool/tasks/t-0004.json",
+      "74-shared-before-second-unlink-roots.json",
+      "74-shared-before-second-unlink.json",
+      "74-shared-before-second-unlink.png",
+      "75-shared-t3-unlink-command.json",
+      "75-shared-t3-unlink-drain-0-events.json",
+      "75-shared-t3-unlink-drain-1-events.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/deliverables/dlv-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/deliverables/dlv-0002.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/file_assets/fa-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/file_assets/fa-0002.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/meetings/mtg-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/milestones/m-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/projects/p-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/projects/p-0002.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/reports/rpt-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/risk_issues/ri-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/settings/aiModelMode.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/settings/pmExportAudit.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/settings/pmExportSent.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/tasks/t-0001.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/tasks/t-0002.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/tasks/t-0003.json",
+      "75-shared-t3-unlinked-raw/data/pmtool/tasks/t-0004.json",
+      "75-shared-t3-unlinked-roots.json",
+      "75-shared-t3-unlinked.json",
+      "75-shared-t3-unlinked.png",
+      "76-shared-last-unlink-command.json",
+      "76-shared-last-unlink-drain-0-events.json",
+      "76-shared-last-unlink-drain-1-events.json",
+      "76-shared-last-unlinked-raw/data/pmtool/deliverables/dlv-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/deliverables/dlv-0002.json",
+      "76-shared-last-unlinked-raw/data/pmtool/file_assets/fa-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/file_assets/fa-0002.json",
+      "76-shared-last-unlinked-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "76-shared-last-unlinked-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "76-shared-last-unlinked-raw/data/pmtool/meetings/mtg-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/milestones/m-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "76-shared-last-unlinked-raw/data/pmtool/projects/p-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/projects/p-0002.json",
+      "76-shared-last-unlinked-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "76-shared-last-unlinked-raw/data/pmtool/reports/rpt-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/risk_issues/ri-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/settings/aiModelMode.json",
+      "76-shared-last-unlinked-raw/data/pmtool/settings/pmExportAudit.json",
+      "76-shared-last-unlinked-raw/data/pmtool/settings/pmExportSent.json",
+      "76-shared-last-unlinked-raw/data/pmtool/tasks/t-0001.json",
+      "76-shared-last-unlinked-raw/data/pmtool/tasks/t-0002.json",
+      "76-shared-last-unlinked-raw/data/pmtool/tasks/t-0003.json",
+      "76-shared-last-unlinked-raw/data/pmtool/tasks/t-0004.json",
+      "76-shared-last-unlinked-roots.json",
+      "76-shared-last-unlinked.json",
+      "76-shared-last-unlinked.png",
+      "77-shared-gc-dryrun-command.json",
+      "77-shared-gc-dryrun-drain-0-events.json",
+      "77-shared-gc-dryrun-drain-1-events.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/deliverables/dlv-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/deliverables/dlv-0002.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/file_assets/fa-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/file_assets/fa-0002.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/meetings/mtg-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/milestones/m-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/projects/p-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/projects/p-0002.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/reports/rpt-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/risk_issues/ri-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/settings/aiModelMode.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/settings/pmExportAudit.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/settings/pmExportSent.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/tasks/t-0001.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/tasks/t-0002.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/tasks/t-0003.json",
+      "77-shared-gc-dryrun-raw/data/pmtool/tasks/t-0004.json",
+      "77-shared-gc-dryrun-roots.json",
+      "77-shared-gc-dryrun.json",
+      "77-shared-gc-dryrun.png",
+      "78-shared-after-dryrun-raw/data/pmtool/deliverables/dlv-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/deliverables/dlv-0002.json",
+      "78-shared-after-dryrun-raw/data/pmtool/file_assets/fa-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/file_assets/fa-0002.json",
+      "78-shared-after-dryrun-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "78-shared-after-dryrun-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "78-shared-after-dryrun-raw/data/pmtool/meetings/mtg-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/milestones/m-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "78-shared-after-dryrun-raw/data/pmtool/projects/p-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/projects/p-0002.json",
+      "78-shared-after-dryrun-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "78-shared-after-dryrun-raw/data/pmtool/reports/rpt-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/risk_issues/ri-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/settings/aiModelMode.json",
+      "78-shared-after-dryrun-raw/data/pmtool/settings/pmExportAudit.json",
+      "78-shared-after-dryrun-raw/data/pmtool/settings/pmExportSent.json",
+      "78-shared-after-dryrun-raw/data/pmtool/tasks/t-0001.json",
+      "78-shared-after-dryrun-raw/data/pmtool/tasks/t-0002.json",
+      "78-shared-after-dryrun-raw/data/pmtool/tasks/t-0003.json",
+      "78-shared-after-dryrun-raw/data/pmtool/tasks/t-0004.json",
+      "78-shared-after-dryrun-roots.json",
+      "78-shared-after-dryrun.json",
+      "78-shared-after-dryrun.png",
+      "79-shared-empty-task-reopen-raw/data/pmtool/deliverables/dlv-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/deliverables/dlv-0002.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/file_assets/fa-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/file_assets/fa-0002.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/meetings/mtg-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/milestones/m-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/projects/p-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/projects/p-0002.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/reports/rpt-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/risk_issues/ri-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/settings/aiModelMode.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/settings/pmExportAudit.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/settings/pmExportSent.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/tasks/t-0001.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/tasks/t-0002.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/tasks/t-0003.json",
+      "79-shared-empty-task-reopen-raw/data/pmtool/tasks/t-0004.json",
+      "79-shared-empty-task-reopen-roots.json",
+      "79-shared-empty-task-reopen.json",
+      "79-shared-empty-task-reopen.png",
+      "80-shared-gc-apply-empty-command.json",
+      "80-shared-gc-apply-empty-drain-0-events.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/deliverables/dlv-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/deliverables/dlv-0002.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/file_assets/fa-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/file_assets/fa-0002.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/habits/habit-mvi5z84q-32ztau.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/lessons/lesson-mvi5z858-cxvv9t.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/meetings/mtg-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/milestones/m-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/okrs/okr-mvi5z847-33y3xk.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/projects/p-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/projects/p-0002.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/reflections/ref-mvi5z85j-yk04ji.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/reports/rpt-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/risk_issues/ri-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/settings/aiModelMode.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/settings/pmExportAudit.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/settings/pmExportSent.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/tasks/t-0001.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/tasks/t-0002.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/tasks/t-0003.json",
+      "80-shared-gc-empty-applied-raw/data/pmtool/tasks/t-0004.json",
+      "80-shared-gc-empty-applied-roots.json",
+      "80-shared-gc-empty-applied.json",
+      "80-shared-gc-empty-applied.png",
+      "continuation-index.json",
+      "executor-shared-seal.mjs",
+      "frames/71-shared-t4-unlink-drain-0-1-1792674277975.jpg",
+      "frames/71-shared-t4-unlink-drain-0-1-1792674278067.jpg",
+      "frames/71-shared-t4-unlink-drain-0-1-1792674278126.jpg",
+      "frames/71-shared-t4-unlink-drain-1-1-1792674278355.jpg",
+      "frames/75-shared-t3-unlink-drain-0-1-1792674320097.jpg",
+      "frames/75-shared-t3-unlink-drain-0-1-1792674320507.jpg",
+      "frames/75-shared-t3-unlink-drain-0-1-1792674320778.jpg",
+      "frames/76-shared-last-unlink-drain-0-2-1792674321901.jpg",
+      "frames/76-shared-last-unlink-drain-0-2-1792674321990.jpg",
+      "frames/76-shared-last-unlink-drain-0-2-1792674322078.jpg",
+      "frames/76-shared-last-unlink-drain-1-2-1792674322298.jpg",
+      "frames/77-shared-gc-dryrun-drain-0-3-1792674323310.jpg",
+      "frames/77-shared-gc-dryrun-drain-0-3-1792674323564.jpg",
+      "frames/77-shared-gc-dryrun-drain-0-3-1792674323688.jpg",
+      "frames/77-shared-gc-dryrun-drain-1-3-1792674324119.jpg",
+      "frames/80-shared-gc-apply-empty-drain-0-1-1792674522500.jpg",
+      "frames/80-shared-gc-apply-empty-drain-0-1-1792674522778.jpg",
+      "frames/80-shared-gc-apply-empty-drain-0-1-1792674523059.jpg",
+      "shared-executions/25f1de6c0673dc0dde0e4390fb69e5b1.json",
+      "shared-executions/25f1de6c0673dc0dde0e4390fb69e5b1.log",
+      "shared-executions/9a2889f34db6caafb312c1a5f82fd625.json",
+      "shared-executions/9a2889f34db6caafb312c1a5f82fd625.log",
+      "shared-executions/dbe30f384c24de2433cb1496e0316d45.json",
+      "shared-executions/dbe30f384c24de2433cb1496e0316d45.log",
+      "shared-executions/de8859cfc29e46b8641326723035977e.json",
+      "shared-executions/de8859cfc29e46b8641326723035977e.log",
+      "shared-executions/e316c1e6548be0ad1eea7474eed2bec2.json",
+      "shared-executions/e316c1e6548be0ad1eea7474eed2bec2.log",
+      "shared-observation.json"
+    ],
+    "scope": "仅保护声明原件；未来新增不纳签、不报污染；不重审1537/J03产品结论。"
+  },
+  "runtime": {
+    "binding": {
+      "at": "2026-10-22T12:26:03.474Z",
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "source": {
+        "launcher/README.md": "8f51a97367848c2d5bb56f1cd4763fb4ce2e1c7a87c9a3e8410785cda3a04483",
+        "launcher/bin/pm-launcher.mjs": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734",
+        "launcher/package.json": "b8d2e0b0530d0725d64d3e7235c10ff86468580a9ce11b62e23568a8261e8e40",
+        "launcher/src/browser-open.mjs": "4d0355b4c6cf02feae295fa8ed4ff2a30fb77070fe436b16ce78c4a80183a0d6",
+        "launcher/src/control-html.mjs": "6994cdd109d7258f14b0283a8e2f0b1d55e6cacc34b80ed5d39736c6dd90a205",
+        "launcher/src/launcher-app.mjs": "840d59383d68267c7454bb76e566a1ba8335c49cc12bda9daa8cf2d6b8fe3b47",
+        "launcher/src/launcher-core.mjs": "34563cdf8a787f48b4ba3220cb27801d5551a1890922d85ae06d8999ce3b5c2b",
+        "launcher/src/local-app.mjs": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+        "launcher/test/app.loopback.test.mjs": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+        "launcher/test/browser-open.test.mjs": "0efa2fd0dab266115c3636f611ea09b99555f5d4d7014f0d5e2934c95c074819",
+        "launcher/test/browsers.controller.test.mjs": "4a1eb14dfef27852f4aef101b1b0a516c73d78cdcc79eff1bf5103caceb1659b",
+        "launcher/test/control-html-sync.test.mjs": "739e79616cf6caba764b6fcd90c57648400e7145d2c0d2d92b41b1ea3566d6a3",
+        "launcher/test/control-html.test.mjs": "00398c2b2a35e2cc79d6011ea9543ff039a243b9477fa0b049b3c9f35b26084f",
+        "launcher/test/journey-race.test.mjs": "fa9ae8e1ad5201bb8f870e5ed7fe6d6554e96bd9d6cd4315dbe2c82ef023c37a",
+        "launcher/test/local-app.test.mjs": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+        "packages/dsh-pm-tool/package.json": "8098dfa788025596ee1e4664969e4ffd4a69dee664950931313ac0d648cd55a9",
+        "packages/dsh-pm-tool/pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+        "packages/dsh-pm-tool/scripts/feedback-context-contract.mjs": "27b834a2786ea6b71615bf6d24dc67888f79321b4bb10160a392e97f225d4e03",
+        "packages/dsh-pm-tool/scripts/verify-client-bundle.mjs": "ec7f95e9a5ca87589e9c281ed28e8ab49c54bf7fe7f73e2816508e8b986bfb1a",
+        "packages/dsh-pm-tool/scripts/verify-gantt-drag.mjs": "153cf607a7a3b07de3314b66f25871be3e99ecc91baee6981337164b08a74eb4",
+        "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": "3694be0b1a53a886968a8de83ca76ed3a8169c9aacd6e84589b8af3eb54dd056",
+        "packages/dsh-pm-tool/scripts/verify-web.mjs": "c230b4f96460c4a0b86f4e5623a461e4ac57a34af881464aef8fac124d150c75",
+        "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx": "57ba3f107a0e43e6f7ca9c42cc88935856988bb9ba2f707bef8ae346208a5797",
+        "packages/dsh-pm-tool/src/client/board/BoardBento.tsx": "43d4bc943867e78226eb861a2e6875717d42c519687027bc58c21617e8a786d6",
+        "packages/dsh-pm-tool/src/client/board/board.css": "646ab1916c506e0bd890a2052f157cc550ba18d871114483b0e21cb36013e280",
+        "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79",
+        "packages/dsh-pm-tool/src/client/board/editor.tsx": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+        "packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx": "cef2f64f80a47f46be29a74357937547c783cb326d2aa14dc44f4e88ad74298e",
+        "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx": "9c43bf4655e302eb235fd3b736e2b9397c35ec6f1df9ddbf7c8682faa10257af",
+        "packages/dsh-pm-tool/src/client/index.tsx": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a",
+        "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+        "packages/dsh-pm-tool/src/client/launch-handshake.ts": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+        "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx": "986a92ff011f4e0e47d287cffdd625e44a8832ec004f0a6304e4d0b9f7dc73c6",
+        "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+        "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts": "eb8375b9aea341baf5b9c46efc1fc5de655e95c5465c437066bb5271afc48d45",
+        "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx": "b6c4b78e9fc86012134b1dda9e6ce78b2fc8dd9eef487362681bcf0d1976862a",
+        "packages/dsh-pm-tool/src/client/panel.css": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b",
+        "packages/dsh-pm-tool/src/client/panel.tsx": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+        "packages/dsh-pm-tool/src/client/provenance-panel.test.tsx": "5c484781fe1609360e34359ccecb667f98101de458ddc267141671f488ac8584",
+        "packages/dsh-pm-tool/src/client/provenance-panel.tsx": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b",
+        "packages/dsh-pm-tool/src/client/result-card.test.ts": "cde00f00437f802fefaf542d880f54abf9202eae9c45a3f07ca75d270ae85566",
+        "packages/dsh-pm-tool/src/client/result-card.tsx": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf",
+        "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+        "packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx": "26c214236164b60b11a795cfa675f64ae886ec7003de1bb01d337439b8118041",
+        "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269",
+        "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts": "dc6b7424e588afba3dc4c05c9dd29c7f19fd14e17d1b7d2ebd7fce05725d50d7",
+        "packages/dsh-pm-tool/src/client/shared/stage-client.ts": "3d47b8fb194cb221b7518c4f121aea93dc650b3bc1bdc1aaa8749b11b954b5d1",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx": "95992aef68f8a97f92137a5574b215fcad760246495317c2f383c52907b7b7a8",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx": "b7ecc42640705c61a8aa38630ce773c178674cf20b09477f0f5267422e2cf90c",
+        "packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx": "95e4396e2be961e58aaca045299e45ed339e9b883063479d0066e3953e9eee61",
+        "packages/dsh-pm-tool/src/client/views/gantt.tsx": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+        "packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx": "071c2b0488e88078d15f6436c1798cced495706c15bf8ecbfcf435c343459d0d",
+        "packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx": "8d7220cff8f01ed9d43dd00d1e59584936f4aa7ed68612aa40b56f00ca7cc709",
+        "packages/dsh-pm-tool/src/client/views/habits.tsx": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964",
+        "packages/dsh-pm-tool/src/client/views/meetings.tsx": "19a6af2eff6c42a290b9f6102e5a88c0e080703a564b3f30ca89fef3633147c4",
+        "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48",
+        "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx": "8ed1ca262d6f9ccf586636da39515e6acef59fe235d05a5bb51d1471005d06a7",
+        "packages/dsh-pm-tool/src/client/views/overview.tsx": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d",
+        "packages/dsh-pm-tool/src/client/views/records.css": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx": "fea8f4f164d1d1b174f28aa03e6c1f692d2a2abbfa5bc18de4068ad0d436254d",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx": "d88c9bee1d2571f7ada3551bc8b7b5f1e7c98d7c2417f78a80a06f4766bb9388",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx": "6c7a15bc744675af0fda91dcb289366a41491e0f8107bef8c4f7d0ffd6f00344",
+        "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00",
+        "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f",
+        "packages/dsh-pm-tool/src/client/views/tasks.css": "369019753cdb985016afa17c21c5bc96dd5f1ae19b7bca3a2641246c117d2583",
+        "packages/dsh-pm-tool/src/client/views/tasks.tsx": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec",
+        "packages/dsh-pm-tool/src/commands/ask-governance.test.ts": "8d7a71f2b89d1414649caad8e541e350c203cc043816cc91bde89279a50cd7be",
+        "packages/dsh-pm-tool/src/commands/ask.ts": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+        "packages/dsh-pm-tool/src/commands/backup-web.test.ts": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce",
+        "packages/dsh-pm-tool/src/commands/backup.ts": "48369dafe70023bce1ebdf5a82d7b2475627ea6d6b58036187c8845491cf8cdd",
+        "packages/dsh-pm-tool/src/commands/task-import-filename.test.ts": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7",
+        "packages/dsh-pm-tool/src/commands/task.ts": "1af8ac22df8d5876c4738e5c44fe8ec019d34678a3868e5c90c37197bc88863b",
+        "packages/dsh-pm-tool/src/core/backup.ts": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295",
+        "packages/dsh-pm-tool/src/core/csv-import.test.ts": "d31c5587c590aa01cab2efc550384c9c97b1577175861d7b5e05a98176d95d92",
+        "packages/dsh-pm-tool/src/core/csv-import.ts": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+        "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1",
+        "packages/dsh-pm-tool/src/core/file-assets.test.ts": "fab5eb2578ba022997229264bdedbb75af2f5895c70e5c7fb1af3a7916980510",
+        "packages/dsh-pm-tool/src/core/file-assets.ts": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+        "packages/dsh-pm-tool/src/core/file-root.test.ts": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d",
+        "packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts": "3e48dedb7f9dec655cbfd9e7e00edc488a971f4b0a6182a56681212a79209f26",
+        "packages/dsh-pm-tool/src/core/file-staging.ts": "3c643d5a47beeccad22908bb2c57a0d9d415b72243a169540ffa9638dc6f8e81",
+        "packages/dsh-pm-tool/src/core/http/asset-route.test.ts": "c0d623ed9884cff1def7c508d588fd970c6c490aecc69b211de0875ebe4ef01e",
+        "packages/dsh-pm-tool/src/core/http/asset-route.ts": "bac973650943798090c148f6245121781c2e7a080cb5b30f108b0ac793e1da80",
+        "packages/dsh-pm-tool/src/core/provenance-store.ts": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+        "packages/dsh-pm-tool/src/core/queue.ts": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144",
+        "packages/dsh-pm-tool/src/core/reflect-file-count.test.ts": "059a67a3dbeda0ab72284564fc627b52b3ca57bb57e7f405d489b09c4f9da16a",
+        "packages/dsh-pm-tool/src/core/reflect.ts": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b",
+        "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35",
+        "packages/dsh-pm-tool/src/core/task-materials.ts": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2",
+        "packages/dsh-pm-tool/src/core/task.ts": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+        "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts": "5fb5b3cddd15cd6f32da923649eedbe8f55b466226462feb376474042cfc8591",
+        "packages/dsh-pm-tool/src/core/tasks.ts": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29",
+        "packages/dsh-pm-tool/src/core/ui-feedback.test.ts": "5687ee7ecefa3680c8794a5e167f6ff1f041da71266fbbc6f8ab8f221094fac0",
+        "packages/dsh-pm-tool/src/core/ui-feedback.ts": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7",
+        "packages/dsh-pm-tool/vitest.config.ts": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+        "packages/dsh-pm-tool/src/core/task-views.ts": "6d1bdefbafe74f19a3446cbd0633727f1bdd40504af68948384e73f07dbc940c",
+        "packages/dsh-pm-tool/src/core/task-views.test.ts": "86b8bcaf4866bf22057c7673f48a55a18a901693d2ba9298f75ddea36c4c18ce",
+        "packages/dsh-pm-tool/src/core/task-tree.ts": "0d63b259129597098dfb3e8142fa5722c303a7a23f22eece59a60a0d47af0932",
+        "packages/dsh-pm-tool/src/core/task-tree-u4.test.ts": "2f8f9f2561ca51df273b1d0d7d9918ebdf7f49efcce9dd5e4766290260ae0d7c",
+        "packages/dsh-pm-tool/src/client/views/task-views-persist.ts": "a3b7fc0ed0fadec1832319d75b3a58e4ebb4ca7f78986da3f99521ae3b05ae90",
+        "packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx": "ebd8739299f3135d2d993dadd955dada8488cf3097381d98e7a1ab85d638876d",
+        "packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts": "51fe0e1e521c0993107894561d952c4ff7382f7d3faec65c9429ba31bcad68bd",
+        "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts": "cc7bab8b673c3cbbf6e58fa3ab68f47343aaba98c2c883e6c476bed6332ed792",
+        "packages/dsh-pm-tool/src/client/result-card-permission.test.ts": "ff32f9024d4896b2a18fee8ff5e28b87d2e87fac81a51388db8e9086329ae4a9",
+        "packages/dsh-pm-tool/src/core/ai-client.ts": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448",
+        "packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts": "3403fbf72e5db73dd788d94f64a42bad386a4092711dfd7abce511507f14ceed",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials-refs-dom.test.tsx": "73f5d1abc30d92e80b4e12156bbdbd99d422bfb0890b8cbd02b69148b4735a98"
+      },
+      "sourceCount": 107,
+      "frozen": "/private/tmp/pmtool-combined-repair-20261022-r2",
+      "runtime": "/private/tmp/pmtool-combined-gui-runtime-20261022-r1",
+      "host": 3260,
+      "pid": 60387,
+      "space": 13,
+      "page": "p3",
+      "differences": [],
+      "boundary": "Renderer/test successor in main is not loaded in this fixed107 instance."
+    },
+    "host": {
+      "at": "2026-10-22T12:51:03.139Z",
+      "pid": 71922,
+      "port": 3260,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--import",
+        "tsx/esm",
+        "apps/cli/src/bin.ts",
+        "--profile",
+        "pm",
+        "--no-open",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3260"
+      ],
+      "envNames": [
+        "PATH",
+        "HOME",
+        "DSH_HOME",
+        "TMPDIR",
+        "DSH_PM_ISOLATED_ROOT",
+        "DSH_PM_FILE_ROOT",
+        "DSH_PM_BACKUP_DIR",
+        "DSH_PM_LOCAL_GATEWAY_KEY",
+        "CODING_PLAN_API_KEY",
+        "DSH_PM_E2E"
+      ],
+      "bundle": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool",
+      "bundleSha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db",
+      "purpose": "New process after actual nonempty restore; same frozen107/data/file roots; no new product build"
+    },
+    "compiled": {
+      "bytes": 1719054,
+      "sha256": "09219cf81820294161dbdbdced09e73094b000a7d7e1d2e5b8c42f399fabb0db"
+    },
+    "loaded": {
+      "bytes": 2597854,
+      "sha256": "14414cd388b1c638a4c75863ea1f26972eab88d48f696b3d330d6b48785516f1"
+    },
+    "actualPageTimeOrigin": 1792673515397.8
+  },
+  "priorReaders": [
+    {
+      "rel": "docs/testing/ui-backup-nonempty-reentry-gui-review-20261022-r1.md",
+      "bytes": 18635,
+      "sha256": "659684d5ee258775ab792e55c29b7bf3f4bd0c326b253e460e9c0fa704cc21a9",
+      "scope": "只继承/不重签"
+    },
+    {
+      "rel": "docs/testing/atf-combined-runtime-gui-review-20261022-r1.md",
+      "bytes": 15878,
+      "sha256": "0c641c99ffa67ca9632f28d3c9ec7e7847e7c2eb34515239638e7cb35d2924a9",
+      "scope": "只继承/不重签"
+    },
+    {
+      "rel": "docs/testing/j03-combined-gui-review-20261022-r1.md",
+      "bytes": 18276,
+      "sha256": "afd991b015b4abfb8927f3d875a39e2f91780a40de31e94a45d7efed92c5c5e3",
+      "scope": "只继承/不重签"
+    }
+  ],
+  "uiStates": [
+    {
+      "name": "70-shared-before-unlink",
+      "at": "2026-10-22T13:04:35.777Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [
+        {
+          "task": "t-0001",
+          "attachment": "at-3"
+        },
+        {
+          "task": "t-0003",
+          "attachment": "at-1"
+        },
+        {
+          "task": "t-0004",
+          "attachment": "at-3"
+        }
+      ],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "72-shared-other-reference",
+      "at": "2026-10-22T13:04:41.884Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [
+        {
+          "task": "t-0001",
+          "attachment": "at-3"
+        },
+        {
+          "task": "t-0003",
+          "attachment": "at-1"
+        }
+      ],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "74-shared-before-second-unlink",
+      "at": "2026-10-22T13:05:18.815Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [
+        {
+          "task": "t-0001",
+          "attachment": "at-3"
+        },
+        {
+          "task": "t-0003",
+          "attachment": "at-1"
+        }
+      ],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "75-shared-t3-unlinked",
+      "at": "2026-10-22T13:05:21.332Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [
+        {
+          "task": "t-0001",
+          "attachment": "at-3"
+        }
+      ],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "76-shared-last-unlinked",
+      "at": "2026-10-22T13:05:22.662Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "77-shared-gc-dryrun",
+      "at": "2026-10-22T13:05:24.560Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "78-shared-after-dryrun",
+      "at": "2026-10-22T13:07:38.933Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "79-shared-empty-task-reopen",
+      "at": "2026-10-22T13:07:41.859Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    },
+    {
+      "name": "80-shared-gc-empty-applied",
+      "at": "2026-10-22T13:08:44.185Z",
+      "timeOrigin": 1792673515397.8,
+      "rawCount": 21,
+      "references": [],
+      "asset": {
+        "id": "fa-0001",
+        "projectId": "p-0001",
+        "fileName": "QA 中文 文件.md",
+        "mediaType": "text/markdown",
+        "size": 22,
+        "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+        "relPath": "87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+        "addedAt": "2026-10-21T13:44:55.146Z"
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "a": "70-shared-before-unlink",
+      "b": "72-shared-other-reference",
+      "task": "t-0004",
+      "attachment": "at-3",
+      "changed": [
+        "data/pmtool/tasks/t-0004.json"
+      ]
+    },
+    {
+      "a": "72-shared-other-reference",
+      "b": "74-shared-before-second-unlink",
+      "changed": [
+        "data/session_projcache/sessions/session-a651f9f3-7f84-4267-a996-4629b1ac8aad.json",
+        "data/session_projcache/sessions/session-e462f867-8946-4ecc-af54-7451beaf48d7.json",
+        "data/workspace.json"
+      ]
+    },
+    {
+      "a": "74-shared-before-second-unlink",
+      "b": "75-shared-t3-unlinked",
+      "task": "t-0003",
+      "attachment": "at-1",
+      "changed": [
+        "data/pmtool/tasks/t-0003.json"
+      ]
+    },
+    {
+      "a": "75-shared-t3-unlinked",
+      "b": "76-shared-last-unlinked",
+      "task": "t-0001",
+      "attachment": "at-3",
+      "changed": [
+        "data/pmtool/tasks/t-0001.json"
+      ]
+    },
+    {
+      "a": "76-shared-last-unlinked",
+      "b": "77-shared-gc-dryrun",
+      "changed": []
+    },
+    {
+      "a": "76-shared-last-unlinked",
+      "b": "78-shared-after-dryrun",
+      "changed": [
+        "data/session_projcache/sessions/session-a651f9f3-7f84-4267-a996-4629b1ac8aad.json"
+      ]
+    },
+    {
+      "a": "76-shared-last-unlinked",
+      "b": "79-shared-empty-task-reopen",
+      "changed": [
+        "data/session_projcache/sessions/session-a651f9f3-7f84-4267-a996-4629b1ac8aad.json"
+      ]
+    },
+    {
+      "a": "76-shared-last-unlinked",
+      "b": "80-shared-gc-empty-applied",
+      "changed": [
+        "data/session_projcache/sessions/session-a651f9f3-7f84-4267-a996-4629b1ac8aad.json",
+        "data/session_projcache/sessions/session-ed2499c1-b497-4378-b393-f7f2e0298657.json",
+        "data/workspace.json"
+      ]
+    }
+  ],
+  "rpc": [
+    {
+      "name": "71-shared-t4-unlink",
+      "line": "/pm material remove t-0004 at-3",
+      "requestId": "24317.1130",
+      "rpcId": "aab56197-40fc-415a-bc19-5fa84acfbee4",
+      "httpStatus": 200,
+      "ok": true,
+      "kind": "success",
+      "text": "[pm:summary]已从任务 t-0004 移除资料项 at-3（未删源）",
+      "exceptionsCaptured": [],
+      "frames": [
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:04:38.059Z",
+          "file": "frames/71-shared-t4-unlink-drain-0-1-1792674277975.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674277.577032
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:04:38.126Z",
+          "file": "frames/71-shared-t4-unlink-drain-0-1-1792674278067.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674277.68818
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:04:38.176Z",
+          "file": "frames/71-shared-t4-unlink-drain-0-1-1792674278126.jpg",
+          "sha256": "610e8e590c9248ae52ed8f99d16b0786544d9795c9647b7d11244dc55d2159c9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674277.715567
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:04:38.448Z",
+          "file": "frames/71-shared-t4-unlink-drain-1-1-1792674278355.jpg",
+          "sha256": "2a2f2d14f941de95bc47859ef855620a9a7b44fb0fc462a01736f27c9b754477",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674278.065407
+          }
+        }
+      ]
+    },
+    {
+      "name": "75-shared-t3-unlink",
+      "line": "/pm material remove t-0003 at-1",
+      "requestId": "24317.1138",
+      "rpcId": "8290d24b-e3f2-4e2e-8b0a-4f9c86fbbec8",
+      "httpStatus": 200,
+      "ok": true,
+      "kind": "success",
+      "text": "[pm:summary]已从任务 t-0003 移除资料项 at-1（未删源）",
+      "exceptionsCaptured": [],
+      "frames": [
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:20.507Z",
+          "file": "frames/75-shared-t3-unlink-drain-0-1-1792674320097.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674319.687126
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:20.778Z",
+          "file": "frames/75-shared-t3-unlink-drain-0-1-1792674320507.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674319.776728
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:20.848Z",
+          "file": "frames/75-shared-t3-unlink-drain-0-1-1792674320778.jpg",
+          "sha256": "d7b33a48a3c80b3f55dea0bd21789d2b18838b2f8b4bff62563bb24137b5f4fb",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674319.816438
+          }
+        }
+      ]
+    },
+    {
+      "name": "76-shared-last-unlink",
+      "line": "/pm material remove t-0001 at-3",
+      "requestId": "24317.1139",
+      "rpcId": "54047c9d-dffc-424b-b399-e06337276779",
+      "httpStatus": 200,
+      "ok": true,
+      "kind": "success",
+      "text": "[pm:summary]已从任务 t-0001 移除资料项 at-3（未删源）",
+      "exceptionsCaptured": [],
+      "frames": [
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:21.990Z",
+          "file": "frames/76-shared-last-unlink-drain-0-2-1792674321901.jpg",
+          "sha256": "ea6f5cb67922705ecb64d578b74efa102f2e7e388a29f98d1a5d9793cbd438b6",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674321.556411
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:22.078Z",
+          "file": "frames/76-shared-last-unlink-drain-0-2-1792674321990.jpg",
+          "sha256": "adf27d83eaff12041286a42f9ac20463832835b28f4c2d8ca1f4271ce1ddbd5c",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674321.631779
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:22.149Z",
+          "file": "frames/76-shared-last-unlink-drain-0-2-1792674322078.jpg",
+          "sha256": "6ee3d80201c49651aa61131da4382557507204f592fbbdd486df4038d4a8fe24",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674321.639176
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:22.360Z",
+          "file": "frames/76-shared-last-unlink-drain-1-2-1792674322298.jpg",
+          "sha256": "138c8684b4fa9519fc3f3d4229ed90bdc8715809b09dfe8db1a3d35d5cfa17f9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674321.943801
+          }
+        }
+      ]
+    },
+    {
+      "name": "77-shared-gc-dryrun",
+      "line": "/pm material gc",
+      "requestId": "24317.1140",
+      "rpcId": "7a127a6e-0098-4607-92bb-a4c31925394a",
+      "httpStatus": 200,
+      "ok": true,
+      "kind": "success",
+      "text": "[pm:summary]孤儿 GC 预览（dry-run，未删除）：0 个未引用字节；加 --apply 才删除",
+      "exceptionsCaptured": [],
+      "frames": [
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:23.564Z",
+          "file": "frames/77-shared-gc-dryrun-drain-0-3-1792674323310.jpg",
+          "sha256": "0a1213a02233f415e164ace19be22b55b26fc6cde676ab410866d091ec290e74",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674322.923405
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:23.688Z",
+          "file": "frames/77-shared-gc-dryrun-drain-0-3-1792674323564.jpg",
+          "sha256": "c9112a627b3145d77ab67e65ccc532960426ec7b1bc2e75f07035c8b88f86d01",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674322.985698
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:23.932Z",
+          "file": "frames/77-shared-gc-dryrun-drain-0-3-1792674323688.jpg",
+          "sha256": "f79166870debbb21021a876dd5393bed1ea63c1eb866a689e2dace134643c779",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674323.002326
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:05:24.177Z",
+          "file": "frames/77-shared-gc-dryrun-drain-1-3-1792674324119.jpg",
+          "sha256": "6b12e16c02af1357da499dc3503286a2c3923289302345436574f05b2498f251",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674323.360045
+          }
+        }
+      ]
+    },
+    {
+      "name": "80-shared-gc-apply-empty",
+      "line": "/pm material gc --apply",
+      "requestId": "24317.1162",
+      "rpcId": "a545dc64-ea12-46c6-94d3-673f3552043f",
+      "httpStatus": 200,
+      "ok": true,
+      "kind": "success",
+      "text": "[pm:summary]孤儿 GC 已清理 0 个未引用字节",
+      "exceptionsCaptured": [],
+      "frames": [
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:08:42.776Z",
+          "file": "frames/80-shared-gc-apply-empty-drain-0-1-1792674522500.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674521.216024
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:08:43.059Z",
+          "file": "frames/80-shared-gc-apply-empty-drain-0-1-1792674522778.jpg",
+          "sha256": "47d263e56c179a10814bb85638e12f08e2344a8105565a04ed9041be47917a30",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674521.636324
+          }
+        },
+        {
+          "method": "Page.screencastFrame",
+          "at": "2026-10-22T13:08:43.142Z",
+          "file": "frames/80-shared-gc-apply-empty-drain-0-1-1792674523059.jpg",
+          "sha256": "957bd26f82e5e77aef09bae0614418be495697092b8e675e5ee48395cfb06ba9",
+          "metadata": {
+            "offsetTop": 0,
+            "pageScaleFactor": 1,
+            "deviceWidth": 1458,
+            "deviceHeight": 734,
+            "scrollOffsetX": 0,
+            "scrollOffsetY": 0,
+            "timestamp": 1792674522.141031
+          }
+        }
+      ]
+    }
+  ],
+  "download": {
+    "original": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/MaterialRemainingR1/qa-j03-note.md",
+    "bytes": 22,
+    "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+    "copy": "73-shared-still-downloadable.md",
+    "boundary": "原生下载副本与GUI剩余链接有限；未归档下载wire/headers/完整native调用回执。"
+  },
+  "visuals": [
+    {
+      "rel": "70-shared-before-unlink.png",
+      "bytes": 46782,
+      "sha256": "f7ee9abf9741e14e98c4270b7c8ee956dee2505d012d32b889449d81bcce62eb",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "72-shared-other-reference.png",
+      "bytes": 211660,
+      "sha256": "872e4f173478abf0ed9643c3ef7af80c6782b99d78967643af037cb8b9c1ccd0",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "74-shared-before-second-unlink.png",
+      "bytes": 46782,
+      "sha256": "f7ee9abf9741e14e98c4270b7c8ee956dee2505d012d32b889449d81bcce62eb",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "75-shared-t3-unlinked.png",
+      "bytes": 52487,
+      "sha256": "7355cf25a7fa32ea4d294a32b0cc02f0bb3abbccc386e700acb1f1c5e04314c0",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "76-shared-last-unlinked.png",
+      "bytes": 52396,
+      "sha256": "0b438bca4abb60ec9e490fbcb66fa1bffc1fa4e31af0cd20b99643b080198385",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "77-shared-gc-dryrun.png",
+      "bytes": 53423,
+      "sha256": "ec113e714a5ba00aa8bf0de5137e67a893b81b3d7538da83300d51f0e4b649e1",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "78-shared-after-dryrun.png",
+      "bytes": 53423,
+      "sha256": "ec113e714a5ba00aa8bf0de5137e67a893b81b3d7538da83300d51f0e4b649e1",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "79-shared-empty-task-reopen.png",
+      "bytes": 211676,
+      "sha256": "d35969b627635ac36938ed82097e1eadf43f7eac2034ce3d40c4494688b41722",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "80-shared-gc-empty-applied.png",
+      "bytes": 50993,
+      "sha256": "435b43291e8aa27a530723dcaba9982a591e2c3dcabb8af142ff5176eff1a979",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/71-shared-t4-unlink-drain-0-1-1792674278126.jpg",
+      "bytes": 24816,
+      "sha256": "610e8e590c9248ae52ed8f99d16b0786544d9795c9647b7d11244dc55d2159c9",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/71-shared-t4-unlink-drain-1-1-1792674278355.jpg",
+      "bytes": 28915,
+      "sha256": "2a2f2d14f941de95bc47859ef855620a9a7b44fb0fc462a01736f27c9b754477",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/75-shared-t3-unlink-drain-0-1-1792674320778.jpg",
+      "bytes": 24816,
+      "sha256": "d7b33a48a3c80b3f55dea0bd21789d2b18838b2f8b4bff62563bb24137b5f4fb",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/76-shared-last-unlink-drain-1-2-1792674322298.jpg",
+      "bytes": 28607,
+      "sha256": "138c8684b4fa9519fc3f3d4229ed90bdc8715809b09dfe8db1a3d35d5cfa17f9",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/77-shared-gc-dryrun-drain-1-3-1792674324119.jpg",
+      "bytes": 27677,
+      "sha256": "6b12e16c02af1357da499dc3503286a2c3923289302345436574f05b2498f251",
+      "viewedDirectly": true
+    },
+    {
+      "rel": "frames/80-shared-gc-apply-empty-drain-0-1-1792674522778.jpg",
+      "bytes": 25323,
+      "sha256": "47d263e56c179a10814bb85638e12f08e2344a8105565a04ed9041be47917a30",
+      "viewedDirectly": true
+    }
+  ],
+  "executions": [
+    {
+      "id": "e316c1e6548be0ad1eea7474eed2bec2",
+      "exitCode": 0,
+      "outputComplete": true,
+      "log": {
+        "bytes": 5276,
+        "sha256": "21a807c8f369b157f8de2fb91842b817d160b16a048d629371e15a179d2a252b"
+      }
+    },
+    {
+      "id": "9a2889f34db6caafb312c1a5f82fd625",
+      "exitCode": 0,
+      "outputComplete": true,
+      "log": {
+        "bytes": 615,
+        "sha256": "538cb6e930ee0ca588d33a6a7abfa27ca7e47a7b4a964c81f195b268f9fa498c"
+      }
+    },
+    {
+      "id": "de8859cfc29e46b8641326723035977e",
+      "exitCode": 0,
+      "outputComplete": true,
+      "log": {
+        "bytes": 4387,
+        "sha256": "b9513e4a1438b7ad58d670ecf25a1f2fca945daa8de268aa3bf299897ab78f25"
+      }
+    },
+    {
+      "id": "25f1de6c0673dc0dde0e4390fb69e5b1",
+      "exitCode": 0,
+      "outputComplete": true,
+      "log": {
+        "bytes": 207,
+        "sha256": "f048a94762d95198ff673543e615702928e368456d83b91eef601c9f334f913b"
+      }
+    },
+    {
+      "id": "dbe30f384c24de2433cb1496e0316d45",
+      "exitCode": 0,
+      "outputComplete": true,
+      "log": {
+        "bytes": 379,
+        "sha256": "b4b88be8a3a23755141a2dd12e015acb12ed7844f64d2f453f84ff8400e607fd"
+      }
+    }
+  ],
+  "rawCount": 189,
+  "gcBoundary": "task引用0不等metadata引用0；不重跑非空孤儿AUTO、不删metadata、不补apply。",
+  "release": "STOP",
+  "productTotalNotSigned": true
+}

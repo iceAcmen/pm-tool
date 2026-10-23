@@ -1,0 +1,40 @@
+{
+  "label": "red-r1",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "args": [
+    "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/config/vitest.config.mjs",
+    "--reporter=verbose",
+    "-t",
+    "真实 schema"
+  ],
+  "cwd": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/input",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/home",
+    "TMPDIR": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/output/tmp",
+    "XDG_CONFIG_HOME": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/config",
+    "XDG_CACHE_HOME": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/cache",
+    "XDG_DATA_HOME": "/tmp/pmtool-p2007-archive-draft-projection-VfBwtf/output/data",
+    "LANG": "en_US.UTF-8",
+    "TZ": "UTC",
+    "CI": "1",
+    "NO_COLOR": "1"
+  },
+  "start": "2026-10-22T21:22:27.637Z",
+  "end": "2026-10-22T21:22:29.687Z",
+  "exit": 1,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "bytes": 1386,
+    "sha256": "1e14c4ab9e27198aebfc2dfb45d6553d7d4524a84a8f072d750f623f5e79a4da"
+  },
+  "stderr": {
+    "bytes": 3473,
+    "sha256": "2389403895d07e5a7f6587fe0ebe47ae4dd2945d5ed5e5743c0bdc4d0d44a28f"
+  },
+  "independentJudgment": "NOT_JUDGED"
+}

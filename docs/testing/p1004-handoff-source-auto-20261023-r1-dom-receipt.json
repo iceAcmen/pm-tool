@@ -1,0 +1,90 @@
+{
+  "role": "independent SOURCE/AUTO execution",
+  "mode": "dom",
+  "startedAt": "2026-10-22T21:06:49.048Z",
+  "endedAt": "2026-10-22T21:07:01.647Z",
+  "node": "v22.23.3",
+  "cwd": "/tmp/pmtool-p1004-independent-source-auto-eTiFFN",
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/independent-vitest.config.mjs"
+  ],
+  "config": {
+    "bytes": 894,
+    "sha256": "96fcf58c640bd06f57b2e7ae988f76b518ad74b61cd1ad6fafb8a8a442b7a754"
+  },
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "inputDrift": [],
+  "copyDrift": [],
+  "include": [
+    "src/client/panel-sidecar-task-handoff.test.tsx"
+  ],
+  "sourceCount": 407,
+  "react": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/widget-poc/node_modules/react",
+  "lucideInline": true,
+  "credentialsEnvironmentNotInherited": true,
+  "tests": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "pending": 0,
+    "files": [
+      {
+        "path": "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/client/panel-sidecar-task-handoff.test.tsx",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、取消直接退出且保原卡/最新投影/归焦",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、关闭抽屉直接退出且保原卡/最新投影/归焦",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、Escape直接退出且保原卡/最新投影/归焦",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） ESC只退出目标抽屉，不能同时关闭或重建副驾",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 取消放弃确认先保稿与交接，再明确放弃返回，零命令",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 明确主save仍只有原task.update，历史保留并返回同一副驾",
+            "status": "passed",
+            "failureMessages": []
+          },
+          {
+            "name": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 重复交接不留下隐藏状态；原最小化/展开与显式关闭语义不变",
+            "status": "passed",
+            "failureMessages": []
+          }
+        ]
+      }
+    ]
+  },
+  "notRun": [
+    "build",
+    "noEmit",
+    "install",
+    "service",
+    "GUI",
+    "Git",
+    "developer run.mjs",
+    "full suite"
+  ]
+}

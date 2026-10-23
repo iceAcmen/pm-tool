@@ -1,0 +1,135 @@
+{
+  "checkedUtc": "2026-10-23T03:19:59.896Z",
+  "actualChildStatuses": [
+    0,
+    0,
+    0
+  ],
+  "receipts": [
+    {
+      "step": "check",
+      "pin": {
+        "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-check-tool-receipt.json",
+        "bytes": 966,
+        "sha256": "2ea30d108072c8b4fc035979708dd24a73f085a18244fd0d5a8f503d53e6d02a"
+      },
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+        "check-child"
+      ],
+      "startedUtc": "2026-10-23T03:19:29.685Z",
+      "endedUtc": "2026-10-23T03:19:29.835Z",
+      "elapsedMs": 149.461,
+      "childPid": 70256,
+      "status": 0,
+      "stdout": {
+        "checkedOriginalIds": 26,
+        "completeCandidates": 20,
+        "unclosed": 6,
+        "applicable": 1435,
+        "explicitInputsChecked": 140,
+        "inputDrift": [],
+        "parentPass": false,
+        "commitAdmission": false
+      }
+    },
+    {
+      "step": "seal",
+      "pin": {
+        "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seal-tool-receipt.json",
+        "bytes": 1073,
+        "sha256": "225cf8f69bf3245f46737f421ac4f423230daa0ef2b6e0133103d21ca9044654"
+      },
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+        "seal-child"
+      ],
+      "startedUtc": "2026-10-23T03:19:48.736Z",
+      "endedUtc": "2026-10-23T03:19:48.909Z",
+      "elapsedMs": 173.808,
+      "childPid": 70298,
+      "status": 0,
+      "stdout": {
+        "checkedOriginalIds": 26,
+        "completeCandidates": 20,
+        "unclosed": 6,
+        "applicable": 1435,
+        "explicitInputsChecked": 140,
+        "inputDrift": [],
+        "parentPass": false,
+        "commitAdmission": false,
+        "seal": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seal.json",
+        "ownOutputs": 8
+      }
+    },
+    {
+      "step": "readback",
+      "pin": {
+        "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-readback-tool-receipt.json",
+        "bytes": 1096,
+        "sha256": "783439df32753b730db049f7dda5fdd5850441d51f78a6f90a263fa4faa9901d"
+      },
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+        "readback-child"
+      ],
+      "startedUtc": "2026-10-23T03:19:54.496Z",
+      "endedUtc": "2026-10-23T03:19:54.625Z",
+      "elapsedMs": 128.689,
+      "childPid": 70335,
+      "status": 0,
+      "stdout": {
+        "checkedOriginalIds": 26,
+        "completeCandidates": 20,
+        "unclosed": 6,
+        "applicable": 1435,
+        "explicitInputsChecked": 140,
+        "inputDrift": [],
+        "parentPass": false,
+        "commitAdmission": false,
+        "readback": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-readback.json",
+        "outputPinsChecked": 8
+      }
+    }
+  ],
+  "readbackPin": {
+    "path": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-readback.json",
+    "bytes": 1399,
+    "sha256": "6f2c849f7fa65dc64cbdbdf024b17420bd2d833f0f30a5fa99e7dd3eae8a8aa4"
+  },
+  "firstTimedUtc": "2026-10-23T03:07:54.558Z",
+  "elapsedFromFirstTimedSeconds": 725.338,
+  "actualHistoricalReaderFailures": [
+    {
+      "mode": "meta",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+        "meta",
+        "docs/testing/a20v3-total-gate-independent-review-20261022-audit.json"
+      ],
+      "startedUtc": "2026-10-23T03:16:19.571Z",
+      "endedUtc": "2026-10-23T03:16:19.575Z",
+      "elapsedMs": 2.263,
+      "exit": 1
+    },
+    {
+      "mode": "generate",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+        "generate"
+      ],
+      "startedUtc": "2026-10-23T03:17:00.981Z",
+      "endedUtc": "2026-10-23T03:17:01.009Z",
+      "elapsedMs": 26.19,
+      "exit": 1
+    }
+  ],
+  "productTestsExecuted": 0,
+  "gitCalls": 0,
+  "actualReceiptReadback": true
+}

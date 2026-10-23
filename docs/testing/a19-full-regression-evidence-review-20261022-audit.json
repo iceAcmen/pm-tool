@@ -1,0 +1,2254 @@
+{
+  "at": "2026-10-22T02:17:44.326Z",
+  "mode": "audit",
+  "candidateSHA": "e6ae8366eeaae4293d4d960cfe4002bf249b10f148aad13f97eecdb28fee25d7",
+  "checks": [
+    {
+      "id": "declared-531",
+      "status": "PASS",
+      "detail": {
+        "count": 531,
+        "actualScopeCount": 531,
+        "drift": []
+      }
+    },
+    {
+      "id": "main-526",
+      "status": "PASS",
+      "detail": {
+        "count": 526,
+        "drift": []
+      }
+    },
+    {
+      "id": "inherited-origin-five",
+      "status": "PASS",
+      "detail": [
+        {
+          "path": "launcher/test/fc-independent-probes.test.mjs",
+          "origin": "/private/tmp/pmtool-a18-interface-output-20261022/launcher/test/fc-independent-probes.test.mjs",
+          "sha256": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740",
+          "mainMissing": true,
+          "originMatches": true,
+          "frozenMatches": true
+        },
+        {
+          "path": "launcher/test/fc-a2-followup.test.mjs",
+          "origin": "/private/tmp/pmtool-a18-interface-output-20261022/launcher/test/fc-a2-followup.test.mjs",
+          "sha256": "16fbea00c69bdb56bff9df48833eabce946e697c39a95f8bebc41d58e882bdc8",
+          "mainMissing": true,
+          "originMatches": true,
+          "frozenMatches": true
+        },
+        {
+          "path": "launcher/test/fc-a3-probes.test.mjs",
+          "origin": "/private/tmp/pmtool-a18-interface-output-20261022/launcher/test/fc-a3-probes.test.mjs",
+          "sha256": "6c092c58c26d0e4c8ec88937e9299f55d19be85334e15fd331104232045afec4",
+          "mainMissing": true,
+          "originMatches": true,
+          "frozenMatches": true
+        },
+        {
+          "path": "launcher/test/fc-a4-probes.test.mjs",
+          "origin": "/private/tmp/pmtool-a18-interface-output-20261022/launcher/test/fc-a4-probes.test.mjs",
+          "sha256": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6",
+          "mainMissing": true,
+          "originMatches": true,
+          "frozenMatches": true
+        },
+        {
+          "path": "launcher/test/fc-a2-additional.test.mjs",
+          "origin": "/private/tmp/pmtool-a18-interface-output-20261022/launcher/test/fc-a2-additional.test.mjs",
+          "sha256": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0",
+          "mainMissing": true,
+          "originMatches": true,
+          "frozenMatches": true
+        }
+      ]
+    },
+    {
+      "id": "artifacts-453-final",
+      "status": "PASS",
+      "detail": {
+        "count": 453,
+        "drift": []
+      }
+    },
+    {
+      "id": "signed-handoff-and-two-sources",
+      "status": "PASS",
+      "detail": {
+        "reportSHA": "b3dd111b4e8650858b22c6d94c71eaa759c6fb828b4c081bf9b47ddb24442044",
+        "habitsSHA": "f8434485002b4b6aab494655ee31613c7caec15a9a4a5a3e9b87568f07f766f3",
+        "testSHA": "8d7220cff8f01ed9d43dd00d1e59584936f4aa7ed68612aa40b56f00ca7cc709"
+      }
+    },
+    {
+      "id": "author-and-independent-input-inheritance",
+      "status": "PASS",
+      "detail": {
+        "authorInputs": 502,
+        "authorDrift": [],
+        "independentManifestSHA": "1655cac041d2ab1219a4d6a8a16559c2f37ef6f104c6a8ceaf46cc4f609369e7",
+        "independentManifestEntries": 508
+      }
+    },
+    {
+      "id": "patch-and-newinputs",
+      "status": "PASS",
+      "detail": {
+        "patchSHA": "f50844acb9a0aa7a74c796a71431bd856d2f1e022fc9dfc117b0c17474dc99e2",
+        "newInputsSHA": "200408c53cc7da4e0c4a5195171967ac75b6158c0212a1f5f683bf6177cee930",
+        "newCount": 32
+      }
+    },
+    {
+      "id": "supplement-fixtures-16",
+      "status": "PASS",
+      "detail": [
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/ids.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/expected.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/manifest.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/manifest.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/ids.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/pmtool-backup-2026-10-21T13-44-52-909Z.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/expected.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/backup.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+          "matches": true
+        },
+        {
+          "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "id": "auxiliary-board-fixture-current",
+      "status": "PASS",
+      "detail": {
+        "path": "docs/testing/board-fixture-clarification-20261021-fixture.json",
+        "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+        "declaredInCandidate": false,
+        "boundary": "Current byte agreement only, not a retroactive first-build binding."
+      }
+    },
+    {
+      "id": "nine-original-exits",
+      "status": "PASS",
+      "detail": [
+        {
+          "label": "pnpm-version",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/Users/bytedance/.cache/node/corepack/v1/pnpm/11.28.5/bin/pnpm.mjs",
+            "--version"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 84829,
+          "start": "2026-10-22T01:58:01.170511+00:00",
+          "exit": 0,
+          "end": "2026-10-22T01:58:01.827158+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "8caf1c3d0c4975962e41861533c38d8328b3a1c4aeb001d198b60941e2229320",
+            "bytes": "8",
+            "mtimeNs": "1792634281818276054",
+            "inode": "54819703"
+          },
+          "stderr": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634281172098067",
+            "inode": "54819704"
+          }
+        },
+        {
+          "label": "noemit",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+            "--noEmit"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 84830,
+          "start": "2026-10-22T01:58:01.829045+00:00",
+          "exit": 0,
+          "end": "2026-10-22T01:58:15.397030+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634281829323974",
+            "inode": "54819723"
+          },
+          "stderr": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634281829727482",
+            "inode": "54819724"
+          }
+        },
+        {
+          "label": "build-tsc",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+            "-p",
+            "tsconfig.json"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 84857,
+          "start": "2026-10-22T01:58:15.398776+00:00",
+          "exit": 0,
+          "end": "2026-10-22T01:58:29.828059+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634295399034810",
+            "inode": "54819947"
+          },
+          "stderr": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634295399273856",
+            "inode": "54819948"
+          }
+        },
+        {
+          "label": "build-tsdown",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/node_modules/tsdown/dist/run.mjs",
+            "--config",
+            "tsdown.config.ts"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 84879,
+          "start": "2026-10-22T01:58:29.898865+00:00",
+          "exit": 0,
+          "end": "2026-10-22T01:58:31.505698+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "5b012948c8514bac9379be3dedf09b2be53f4471292a0f704eb0aa0293364aa8",
+            "bytes": "1037",
+            "mtimeNs": "1792634311485544414",
+            "inode": "54820667"
+          },
+          "stderr": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634309899848712",
+            "inode": "54820668"
+          }
+        },
+        {
+          "label": "coverage",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+            "run",
+            "--coverage",
+            "--maxWorkers=1",
+            "--minWorkers=1",
+            "--no-cache"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 85516,
+          "start": "2026-10-22T02:01:22.788178+00:00",
+          "exit": 0,
+          "end": "2026-10-22T02:02:09.622868+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "c239a828eacb499829e74558092608ac769f509b218a63bca8bc1466e46ababc",
+            "bytes": "22094",
+            "mtimeNs": "1792634529577481492",
+            "inode": "54826600"
+          },
+          "stderr": {
+            "sha256": "9449d389fefa898194b46fed80da2c06c6a63cbfbe74232f34148899a3f26493",
+            "bytes": "5976",
+            "mtimeNs": "1792634518378713006",
+            "inode": "54826601"
+          }
+        },
+        {
+          "label": "guard",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "scripts/verify-isolation.mjs"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 85964,
+          "start": "2026-10-22T02:02:09.625797+00:00",
+          "exit": 0,
+          "end": "2026-10-22T02:02:36.181741+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "aa0aa9699277c3a3eacdf23abfcb9e7d3a97573066ab80d6e033a797a1770b5e",
+            "bytes": "74188",
+            "mtimeNs": "1792634556179094578",
+            "inode": "54830673"
+          },
+          "stderr": {
+            "sha256": "48285e7518f942d8457a767741c00b801db8ed763162507aeabccb3238908290",
+            "bytes": "7155",
+            "mtimeNs": "1792634554719991381",
+            "inode": "54830674"
+          }
+        },
+        {
+          "label": "guard-selftest",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "scripts/test-isolation-guard.mjs"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 86170,
+          "start": "2026-10-22T02:02:36.189585+00:00",
+          "exit": 0,
+          "end": "2026-10-22T02:02:36.235057+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "5535bf1dd1db17345f97691031a036fce6a0819825a435caf1e3615162a7f6c7",
+            "bytes": "1780",
+            "mtimeNs": "1792634556231769117",
+            "inode": "54832974"
+          },
+          "stderr": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": "0",
+            "mtimeNs": "1792634556187897884",
+            "inode": "54832975"
+          }
+        },
+        {
+          "label": "launcher-test",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/Users/bytedance/.cache/node/corepack/v1/pnpm/11.28.5/bin/pnpm.mjs",
+            "test"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/launcher",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 86171,
+          "start": "2026-10-22T02:02:36.237439+00:00",
+          "exit": 0,
+          "end": "2026-10-22T02:02:37.008620+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "e8c00456443734f393f19e2d4d68fbe10c0ade15566c5c3f99e9513430c660bf",
+            "bytes": "14412",
+            "mtimeNs": "1792634556996272181",
+            "inode": "54832989"
+          },
+          "stderr": {
+            "sha256": "4fb672fc994313adcf0e3a8d7bd4ea623970e9fe076296697ada5fa8b98d98af",
+            "bytes": "267",
+            "mtimeNs": "1792634556612065986",
+            "inode": "54832990"
+          }
+        },
+        {
+          "label": "launcher-verify",
+          "argv": [
+            "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+            "/Users/bytedance/.cache/node/corepack/v1/pnpm/11.28.5/bin/pnpm.mjs",
+            "run",
+            "verify"
+          ],
+          "cwd": "/private/tmp/pmtool-a19-closure-20261022-r2/launcher",
+          "env": {
+            "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-home",
+            "TMPDIR": "/private/tmp/pmtool-a19-closure-20261022-r2/private-tmp",
+            "XDG_CACHE_HOME": "/private/tmp/pmtool-a19-closure-20261022-r2/private-cache",
+            "CI": "true",
+            "LANG": "en_US.UTF-8",
+            "NODE_DISABLE_COMPILE_CACHE": "1",
+            "DSH_PM_FILE_ROOT": "/private/tmp/pmtool-a19-closure-20261022-r2/files"
+          },
+          "pid": 86215,
+          "start": "2026-10-22T02:02:37.011692+00:00",
+          "exit": 0,
+          "end": "2026-10-22T02:02:37.418107+00:00",
+          "rawMatches": true,
+          "runningMatches": true,
+          "stdout": {
+            "sha256": "c25b8af7f59e91587bf50868c9dec9dfdbc82522f242b17eb4537e43430d18e9",
+            "bytes": "91",
+            "mtimeNs": "1792634557409181236",
+            "inode": "54833084"
+          },
+          "stderr": {
+            "sha256": "5ad1415611e598978359ed9aa79d171050fba00df03cb8c102b55ee00569b4b8",
+            "bytes": "35",
+            "mtimeNs": "1792634557350255927",
+            "inode": "54833085"
+          }
+        }
+      ]
+    },
+    {
+      "id": "coverage-discovery-150-1563",
+      "status": "PASS",
+      "detail": {
+        "files": 150,
+        "tests": 1563,
+        "discovered": 150,
+        "testRows": [
+          {
+            "path": "src/core/http/asset-route.test.ts",
+            "tests": 67
+          },
+          {
+            "path": "src/core/habits.test.ts",
+            "tests": 37
+          },
+          {
+            "path": "src/client/sidecar-minimize-retention.test.tsx",
+            "tests": 12
+          },
+          {
+            "path": "src/client/views/records/records-meeting-entry.test.tsx",
+            "tests": 11
+          },
+          {
+            "path": "src/core/okr.test.ts",
+            "tests": 29
+          },
+          {
+            "path": "src/commands/backup-web.test.ts",
+            "tests": 28
+          },
+          {
+            "path": "src/client/copilot-extension-baseline.test.tsx",
+            "tests": 23
+          },
+          {
+            "path": "src/core/tasks-files-atomic.test.ts",
+            "tests": 31
+          },
+          {
+            "path": "src/commands/ask-governance.test.ts",
+            "tests": 13
+          },
+          {
+            "path": "src/client/panel-transport-error-feedback.test.tsx",
+            "tests": 23
+          },
+          {
+            "path": "src/client/shared/drawers/copilot-preconfirm.test.tsx",
+            "tests": 20
+          },
+          {
+            "path": "src/client/views/tasks-import-confirm.test.tsx",
+            "tests": 9
+          },
+          {
+            "path": "src/core/export-outbound.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/client/views/objective-consumers.test.tsx",
+            "tests": 13
+          },
+          {
+            "path": "src/core/task-views.test.ts",
+            "tests": 25
+          },
+          {
+            "path": "src/core/queue.test.ts",
+            "tests": 19
+          },
+          {
+            "path": "src/core/provenance.test.ts",
+            "tests": 15
+          },
+          {
+            "path": "src/core/ui-feedback.test.ts",
+            "tests": 32
+          },
+          {
+            "path": "src/client/board/editor-drag-stop.test.tsx",
+            "tests": 7
+          },
+          {
+            "path": "src/client/board/b4-guard.test.ts",
+            "tests": 27
+          },
+          {
+            "path": "src/core/provenance-store.test.ts",
+            "tests": 14
+          },
+          {
+            "path": "src/core/csv-import.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/views/records/records-meeting-layout.test.tsx",
+            "tests": 6
+          },
+          {
+            "path": "src/core/http/preview-route.test.ts",
+            "tests": 15
+          },
+          {
+            "path": "src/client/launch-handshake.test.ts",
+            "tests": 23
+          },
+          {
+            "path": "src/client/provenance-panel.test.tsx",
+            "tests": 16
+          },
+          {
+            "path": "src/core/progress-report.test.ts",
+            "tests": 14
+          },
+          {
+            "path": "src/core/file-backup.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/client/views/overview-done-card.test.tsx",
+            "tests": 10
+          },
+          {
+            "path": "src/core/reflect-l2.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/client/shared/records-callbacks.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/core/review-materials.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/client/shared/markdown.test.ts",
+            "tests": 21
+          },
+          {
+            "path": "src/core/task-ops.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/capture.test.ts",
+            "tests": 28
+          },
+          {
+            "path": "src/client/board/editor-ops.test.ts",
+            "tests": 18
+          },
+          {
+            "path": "src/client/shared/task-draft-materials-stage.test.tsx",
+            "tests": 4
+          },
+          {
+            "path": "src/client/shared/stage-client.test.ts",
+            "tests": 12
+          },
+          {
+            "path": "src/core/derived.test.ts",
+            "tests": 30
+          },
+          {
+            "path": "src/client/board/persist.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/board/queue-aggregate.test.ts",
+            "tests": 17
+          },
+          {
+            "path": "src/client/views/b5-planning.test.ts",
+            "tests": 17
+          },
+          {
+            "path": "src/client/shared/contract-pilot.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/core/metric.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/reflect.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/file-assets.test.ts",
+            "tests": 14
+          },
+          {
+            "path": "src/core/copilot-validate.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/shared/task-materials-mirror.test.ts",
+            "tests": 12
+          },
+          {
+            "path": "src/client/views/d04-d05-d11-contract.test.ts",
+            "tests": 15
+          },
+          {
+            "path": "src/client/panel-restore-path.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/client/board/BoardBento-feedback.test.tsx",
+            "tests": 9
+          },
+          {
+            "path": "src/core/file-staging-symlink.test.ts",
+            "tests": 40
+          },
+          {
+            "path": "src/core/task-materials.test.ts",
+            "tests": 12
+          },
+          {
+            "path": "src/core/task-evidence-protocol.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/core/nav.test.ts",
+            "tests": 14
+          },
+          {
+            "path": "src/core/archive.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/views/growth-form-props.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/core/check.test.ts",
+            "tests": 13
+          },
+          {
+            "path": "src/client/shared/b2-ops.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/task-export.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/views/okr-model.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/core/provenance-view.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/backup-precheck.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/client/board/projection.test.ts",
+            "tests": 14
+          },
+          {
+            "path": "src/core/load-stance.test.ts",
+            "tests": 8
+          },
+          {
+            "path": "src/client/panel-launch-handshake.test.tsx",
+            "tests": 5
+          },
+          {
+            "path": "src/client/result-card.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/lessons.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/shared/drawers/gd-overlay-contract.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/views/records/records-payloads.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/core/task-inline.test.ts",
+            "tests": 18
+          },
+          {
+            "path": "src/core/file-staging.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/views/habits-suggestion-okr.test.tsx",
+            "tests": 11
+          },
+          {
+            "path": "src/commands/habit-feedback.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/views/tasks-number-feedback.test.tsx",
+            "tests": 5
+          },
+          {
+            "path": "src/client/board/query.multisort.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/commands/task-import-filename.test.ts",
+            "tests": 24
+          },
+          {
+            "path": "src/client/views/tasks-p0-toolbar.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/client/board/history.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/ask-copilot-b7.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/core/backup-mid-rollback.test.ts",
+            "tests": 1
+          },
+          {
+            "path": "src/client/views/non-p0-fixes.test.ts",
+            "tests": 17
+          },
+          {
+            "path": "src/client/views/records/records-preview.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/views/tasks-responsive.test.ts",
+            "tests": 18
+          },
+          {
+            "path": "src/client/shared/task-drawer-contract.test.ts",
+            "tests": 9
+          },
+          {
+            "path": "src/core/suggestion-engine.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/core/copilot-task-fields.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/commands/task-feedback.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/core/ask-projection.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/views/habit-model.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/gantt.criticalPath.test.ts",
+            "tests": 8
+          },
+          {
+            "path": "src/client/board/migration-banner.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/panel-checklist-toggle.test.tsx",
+            "tests": 2
+          },
+          {
+            "path": "src/core/file-gc.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/core/file-root.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/client/shared/asset-client.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/shared/report-preview-client.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/stale-placeholder.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/core/file-promotion.test.ts",
+            "tests": 2
+          },
+          {
+            "path": "src/core/session-bind.test.ts",
+            "tests": 12
+          },
+          {
+            "path": "src/client/shared/b2-commands.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/export-isolation.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/views/records/records-options.test.ts",
+            "tests": 8
+          },
+          {
+            "path": "src/core/design-tokens.test.ts",
+            "tests": 10
+          },
+          {
+            "path": "src/core/deliverable-export-u5.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/board/scope-snapshot.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/views/records/records-preview-authoritative.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/core/progress-clamp.test.ts",
+            "tests": 11
+          },
+          {
+            "path": "src/client/shared/legacy-note.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/core/settings.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/board/editor-compact.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/views/visible-layer-contract.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/commands/dashboard.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/board/project-default-layout.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/shared/task-relation-projection.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/shared/staged-lifecycle.test.ts",
+            "tests": 8
+          },
+          {
+            "path": "src/core/gantt.milestoneLink.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/shared/form-dirty.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/core/ask-context.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/form-validation.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/board/editor-geometry.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/core/progress-meta.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/client/shared/drawers/settings-drawer.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/views/overview-contract.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/views/tasks-contract.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/views/records/records-history.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/views/records-entry-guard.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/board/registry.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/panel-cancel-close.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/core/deliverable-u5.test.ts",
+            "tests": 2
+          },
+          {
+            "path": "src/client/views/reports-entry-guard.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/board/refresh-confirm.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/client/board/panel-library.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/board/layout-append.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/views/records/records-period.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/board/board-attn-narrow.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/core/gantt.routeEdge.test.ts",
+            "tests": 5
+          },
+          {
+            "path": "src/client/views/risk-model.test.ts",
+            "tests": 6
+          },
+          {
+            "path": "src/core/progress-report-markdown-u5.test.ts",
+            "tests": 2
+          },
+          {
+            "path": "src/client/views/planning-presenter.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/board/static-size.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/core/milestone.test.ts",
+            "tests": 7
+          },
+          {
+            "path": "src/client/views/tasks-clipboard.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/client/views/tasks-tally.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/core/evidence.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/core/people-load.test.ts",
+            "tests": 1
+          },
+          {
+            "path": "src/client/views/people-scale.test.ts",
+            "tests": 4
+          },
+          {
+            "path": "src/client/result-card-copy.test.ts",
+            "tests": 3
+          },
+          {
+            "path": "src/commands/u5-help.test.ts",
+            "tests": 2
+          },
+          {
+            "path": "src/client/board/head-spacing.test.ts",
+            "tests": 2
+          }
+        ],
+        "coverageSummary": {
+          "total": {
+            "lines": {
+              "total": 1123,
+              "covered": 1004,
+              "skipped": 0,
+              "pct": 89.4
+            },
+            "statements": {
+              "total": 1123,
+              "covered": 1004,
+              "skipped": 0,
+              "pct": 89.4
+            },
+            "functions": {
+              "total": 78,
+              "covered": 67,
+              "skipped": 0,
+              "pct": 85.89
+            },
+            "branches": {
+              "total": 563,
+              "covered": 464,
+              "skipped": 0,
+              "pct": 82.41
+            },
+            "branchesTrue": {
+              "total": 0,
+              "covered": 0,
+              "skipped": 0,
+              "pct": "Unknown"
+            }
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/src/core/copilot.ts": {
+            "lines": {
+              "total": 374,
+              "covered": 343,
+              "skipped": 0,
+              "pct": 91.71
+            },
+            "functions": {
+              "total": 29,
+              "covered": 25,
+              "skipped": 0,
+              "pct": 86.2
+            },
+            "statements": {
+              "total": 374,
+              "covered": 343,
+              "skipped": 0,
+              "pct": 91.71
+            },
+            "branches": {
+              "total": 263,
+              "covered": 210,
+              "skipped": 0,
+              "pct": 79.84
+            }
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/src/core/gantt.ts": {
+            "lines": {
+              "total": 433,
+              "covered": 389,
+              "skipped": 0,
+              "pct": 89.83
+            },
+            "functions": {
+              "total": 27,
+              "covered": 23,
+              "skipped": 0,
+              "pct": 85.18
+            },
+            "statements": {
+              "total": 433,
+              "covered": 389,
+              "skipped": 0,
+              "pct": 89.83
+            },
+            "branches": {
+              "total": 159,
+              "covered": 134,
+              "skipped": 0,
+              "pct": 84.27
+            }
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/src/core/progress-derivation.ts": {
+            "lines": {
+              "total": 253,
+              "covered": 209,
+              "skipped": 0,
+              "pct": 82.6
+            },
+            "functions": {
+              "total": 19,
+              "covered": 16,
+              "skipped": 0,
+              "pct": 84.21
+            },
+            "statements": {
+              "total": 253,
+              "covered": 209,
+              "skipped": 0,
+              "pct": 82.6
+            },
+            "branches": {
+              "total": 118,
+              "covered": 97,
+              "skipped": 0,
+              "pct": 82.2
+            }
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/packages/dsh-pm-tool/src/core/settings.ts": {
+            "lines": {
+              "total": 63,
+              "covered": 63,
+              "skipped": 0,
+              "pct": 100
+            },
+            "functions": {
+              "total": 3,
+              "covered": 3,
+              "skipped": 0,
+              "pct": 100
+            },
+            "statements": {
+              "total": 63,
+              "covered": 63,
+              "skipped": 0,
+              "pct": 100
+            },
+            "branches": {
+              "total": 23,
+              "covered": 23,
+              "skipped": 0,
+              "pct": 100
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "guard-95-and-five-sentinels",
+      "status": "PASS",
+      "detail": {
+        "discovered": [
+          "scripts/verify-ai-client.mjs",
+          "scripts/verify-ask-apply.mjs",
+          "scripts/verify-ask-idempotency-integration.mjs",
+          "scripts/verify-b2-materials.mjs",
+          "scripts/verify-b3-asset.mjs",
+          "scripts/verify-b3-bytes.mjs",
+          "scripts/verify-b6-report.mjs",
+          "scripts/verify-backup.mjs",
+          "scripts/verify-batch.mjs",
+          "scripts/verify-board-final.mjs",
+          "scripts/verify-cascade.mjs",
+          "scripts/verify-client-bundle.mjs",
+          "scripts/verify-client-module-table.mjs",
+          "scripts/verify-command.mjs",
+          "scripts/verify-completed-date.mjs",
+          "scripts/verify-copilot-cancel.mjs",
+          "scripts/verify-copilot-plan-cancel.mjs",
+          "scripts/verify-copilot-plan.mjs",
+          "scripts/verify-copilot-writes.mjs",
+          "scripts/verify-copilot.mjs",
+          "scripts/verify-critical-path.mjs",
+          "scripts/verify-csv.mjs",
+          "scripts/verify-dashboard.mjs",
+          "scripts/verify-deliverables.mjs",
+          "scripts/verify-doctor.mjs",
+          "scripts/verify-drawer-focus.mjs",
+          "scripts/verify-export.mjs",
+          "scripts/verify-external-skill-router.mjs",
+          "scripts/verify-external-skills.mjs",
+          "scripts/verify-form-validation.mjs",
+          "scripts/verify-formula.mjs",
+          "scripts/verify-fs-atomic.mjs",
+          "scripts/verify-gantt-d07-d08.mjs",
+          "scripts/verify-gantt-drag.mjs",
+          "scripts/verify-gantt.mjs",
+          "scripts/verify-gui-contract.mjs",
+          "scripts/verify-health.mjs",
+          "scripts/verify-import-content.mjs",
+          "scripts/verify-importmd.mjs",
+          "scripts/verify-integration.mjs",
+          "scripts/verify-keyboard.mjs",
+          "scripts/verify-llm-optional.mjs",
+          "scripts/verify-markdown.mjs",
+          "scripts/verify-meeting-ai.mjs",
+          "scripts/verify-meeting-source.mjs",
+          "scripts/verify-meetings.mjs",
+          "scripts/verify-migration.mjs",
+          "scripts/verify-milestones.mjs",
+          "scripts/verify-model-route.mjs",
+          "scripts/verify-no-native-confirm.mjs",
+          "scripts/verify-objective-progress.mjs",
+          "scripts/verify-p0-integration.mjs",
+          "scripts/verify-p1-integration.mjs",
+          "scripts/verify-p1a-queue.mjs",
+          "scripts/verify-p1b-adopt.mjs",
+          "scripts/verify-p1c-integration.mjs",
+          "scripts/verify-p2-integration.mjs",
+          "scripts/verify-p2a-export.mjs",
+          "scripts/verify-p2b-okr.mjs",
+          "scripts/verify-p2c.mjs",
+          "scripts/verify-p3-integration.mjs",
+          "scripts/verify-p3a.mjs",
+          "scripts/verify-people-load.mjs",
+          "scripts/verify-person-candidates.mjs",
+          "scripts/verify-predecessors.mjs",
+          "scripts/verify-projects.mjs",
+          "scripts/verify-promote.mjs",
+          "scripts/verify-provenance-disk.mjs",
+          "scripts/verify-provenance.mjs",
+          "scripts/verify-r12.mjs",
+          "scripts/verify-record-location.mjs",
+          "scripts/verify-reflect.mjs",
+          "scripts/verify-reminders.mjs",
+          "scripts/verify-repo-format.mjs",
+          "scripts/verify-report-ai.mjs",
+          "scripts/verify-report-diff.mjs",
+          "scripts/verify-reports.mjs",
+          "scripts/verify-risk-issues.mjs",
+          "scripts/verify-schema-v2.mjs",
+          "scripts/verify-settings.mjs",
+          "scripts/verify-storage.mjs",
+          "scripts/verify-task-checklist.mjs",
+          "scripts/verify-task-inline.mjs",
+          "scripts/verify-task-meta.mjs",
+          "scripts/verify-task-move-renumber.mjs",
+          "scripts/verify-task-repo.mjs",
+          "scripts/verify-task-tree.mjs",
+          "scripts/verify-tasks.mjs",
+          "scripts/verify-ui-feedback.mjs",
+          "scripts/verify-war-room.mjs",
+          "scripts/verify-wbs.mjs",
+          "scripts/verify-web-assignee-list.mjs",
+          "scripts/verify-web-repo-link.mjs",
+          "scripts/verify-web.mjs",
+          "scripts/verify-xlsx.mjs"
+        ],
+        "actual": [
+          "scripts/verify-ai-client.mjs",
+          "scripts/verify-ask-apply.mjs",
+          "scripts/verify-ask-idempotency-integration.mjs",
+          "scripts/verify-b2-materials.mjs",
+          "scripts/verify-b3-asset.mjs",
+          "scripts/verify-b3-bytes.mjs",
+          "scripts/verify-b6-report.mjs",
+          "scripts/verify-backup.mjs",
+          "scripts/verify-batch.mjs",
+          "scripts/verify-board-final.mjs",
+          "scripts/verify-cascade.mjs",
+          "scripts/verify-client-bundle.mjs",
+          "scripts/verify-client-module-table.mjs",
+          "scripts/verify-command.mjs",
+          "scripts/verify-completed-date.mjs",
+          "scripts/verify-copilot-cancel.mjs",
+          "scripts/verify-copilot-plan-cancel.mjs",
+          "scripts/verify-copilot-plan.mjs",
+          "scripts/verify-copilot-writes.mjs",
+          "scripts/verify-copilot.mjs",
+          "scripts/verify-critical-path.mjs",
+          "scripts/verify-csv.mjs",
+          "scripts/verify-dashboard.mjs",
+          "scripts/verify-deliverables.mjs",
+          "scripts/verify-doctor.mjs",
+          "scripts/verify-drawer-focus.mjs",
+          "scripts/verify-export.mjs",
+          "scripts/verify-external-skill-router.mjs",
+          "scripts/verify-external-skills.mjs",
+          "scripts/verify-form-validation.mjs",
+          "scripts/verify-formula.mjs",
+          "scripts/verify-fs-atomic.mjs",
+          "scripts/verify-gantt-d07-d08.mjs",
+          "scripts/verify-gantt-drag.mjs",
+          "scripts/verify-gantt.mjs",
+          "scripts/verify-gui-contract.mjs",
+          "scripts/verify-health.mjs",
+          "scripts/verify-import-content.mjs",
+          "scripts/verify-importmd.mjs",
+          "scripts/verify-integration.mjs",
+          "scripts/verify-keyboard.mjs",
+          "scripts/verify-llm-optional.mjs",
+          "scripts/verify-markdown.mjs",
+          "scripts/verify-meeting-ai.mjs",
+          "scripts/verify-meeting-source.mjs",
+          "scripts/verify-meetings.mjs",
+          "scripts/verify-migration.mjs",
+          "scripts/verify-milestones.mjs",
+          "scripts/verify-model-route.mjs",
+          "scripts/verify-no-native-confirm.mjs",
+          "scripts/verify-objective-progress.mjs",
+          "scripts/verify-p0-integration.mjs",
+          "scripts/verify-p1-integration.mjs",
+          "scripts/verify-p1a-queue.mjs",
+          "scripts/verify-p1b-adopt.mjs",
+          "scripts/verify-p1c-integration.mjs",
+          "scripts/verify-p2-integration.mjs",
+          "scripts/verify-p2a-export.mjs",
+          "scripts/verify-p2b-okr.mjs",
+          "scripts/verify-p2c.mjs",
+          "scripts/verify-p3-integration.mjs",
+          "scripts/verify-p3a.mjs",
+          "scripts/verify-people-load.mjs",
+          "scripts/verify-person-candidates.mjs",
+          "scripts/verify-predecessors.mjs",
+          "scripts/verify-projects.mjs",
+          "scripts/verify-promote.mjs",
+          "scripts/verify-provenance-disk.mjs",
+          "scripts/verify-provenance.mjs",
+          "scripts/verify-r12.mjs",
+          "scripts/verify-record-location.mjs",
+          "scripts/verify-reflect.mjs",
+          "scripts/verify-reminders.mjs",
+          "scripts/verify-repo-format.mjs",
+          "scripts/verify-report-ai.mjs",
+          "scripts/verify-report-diff.mjs",
+          "scripts/verify-reports.mjs",
+          "scripts/verify-risk-issues.mjs",
+          "scripts/verify-schema-v2.mjs",
+          "scripts/verify-settings.mjs",
+          "scripts/verify-storage.mjs",
+          "scripts/verify-task-checklist.mjs",
+          "scripts/verify-task-inline.mjs",
+          "scripts/verify-task-meta.mjs",
+          "scripts/verify-task-move-renumber.mjs",
+          "scripts/verify-task-repo.mjs",
+          "scripts/verify-task-tree.mjs",
+          "scripts/verify-tasks.mjs",
+          "scripts/verify-ui-feedback.mjs",
+          "scripts/verify-war-room.mjs",
+          "scripts/verify-wbs.mjs",
+          "scripts/verify-web-assignee-list.mjs",
+          "scripts/verify-web-repo-link.mjs",
+          "scripts/verify-web.mjs",
+          "scripts/verify-xlsx.mjs"
+        ],
+        "guardExits": [
+          {
+            "path": "scripts/verify-ai-client.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-ask-apply.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-ask-idempotency-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-b2-materials.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-b3-asset.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-b3-bytes.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-b6-report.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-backup.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-batch.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-board-final.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-cascade.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-client-bundle.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-client-module-table.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-command.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-completed-date.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-copilot-cancel.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-copilot-plan-cancel.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-copilot-plan.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-copilot-writes.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-copilot.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-critical-path.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-csv.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-dashboard.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-deliverables.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-doctor.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-drawer-focus.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-export.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-external-skill-router.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-external-skills.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-form-validation.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-formula.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-fs-atomic.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-gantt-d07-d08.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-gantt-drag.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-gantt.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-gui-contract.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-health.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-import-content.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-importmd.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-keyboard.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-llm-optional.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-markdown.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-meeting-ai.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-meeting-source.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-meetings.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-migration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-milestones.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-model-route.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-no-native-confirm.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-objective-progress.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p0-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p1-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p1a-queue.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p1b-adopt.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p1c-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p2-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p2a-export.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p2b-okr.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p2c.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p3-integration.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-p3a.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-people-load.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-person-candidates.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-predecessors.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-projects.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-promote.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-provenance-disk.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-provenance.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-r12.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-record-location.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-reflect.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-reminders.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-repo-format.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-report-ai.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-report-diff.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-reports.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-risk-issues.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-schema-v2.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-settings.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-storage.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-checklist.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-inline.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-meta.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-move-renumber.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-repo.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-task-tree.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-tasks.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-ui-feedback.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-war-room.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-wbs.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-web-assignee-list.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-web-repo-link.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-web.mjs",
+            "exit": 0
+          },
+          {
+            "path": "scripts/verify-xlsx.mjs",
+            "exit": 0
+          }
+        ],
+        "sentinelBoundary": "Five missing-root markers in r2, not five real main files."
+      }
+    },
+    {
+      "id": "guard-selftest",
+      "status": "PASS",
+      "detail": {
+        "stdoutSHA": "5535bf1dd1db17345f97691031a036fce6a0819825a435caf1e3615162a7f6c7"
+      }
+    },
+    {
+      "id": "launcher-current-56",
+      "status": "PASS",
+      "detail": {
+        "script": "node --test test/contract.state.test.mjs test/browsers.controller.test.mjs test/app.loopback.test.mjs test/control-html.test.mjs test/cancel.race.test.mjs test/journey-race.test.mjs test/loopback-security.test.mjs test/local-app.test.mjs test/browser-open.test.mjs",
+        "entries": [
+          "test/contract.state.test.mjs",
+          "test/browsers.controller.test.mjs",
+          "test/app.loopback.test.mjs",
+          "test/control-html.test.mjs",
+          "test/cancel.race.test.mjs",
+          "test/journey-race.test.mjs",
+          "test/loopback-security.test.mjs",
+          "test/local-app.test.mjs",
+          "test/browser-open.test.mjs"
+        ],
+        "tapTitles": [
+          "回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4",
+          "running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token",
+          "自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172",
+          "not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）",
+          "回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效",
+          "S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token",
+          "conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程",
+          "loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token",
+          "生产浏览器参数：显示标签映射真实应用，普通URL保持一个参数",
+          "生产OS投递：error/非零/超时有界拒绝，exit0只确认命令接收",
+          "生产app：异步OS失败落S6且不复投，owned首投失败仍弃URL",
+          "生产app：取消后迟到OS成功/失败不覆盖S0，先到合法回告不降回S3",
+          "旅程固定浏览器：在途偏好只用于下一轮，不更改已投递归属和nonce",
+          "reopen新旅程必须清旧S4：无新回告S3/false，当前新回告才S4",
+          "当前合法S4先到，existing/owned/reopen的迟到OS失败不覆盖权威进入",
+          "discoverBrowsers：注入存在性，仅列出存在的浏览器，并标注 app 窗口能力",
+          "resolveBrowserOpen：Chrome真实应用普通tab；缺失选择回退默认tab",
+          "controller：fake spawn 捕获内存 token URL，就绪后返回；forget 丢弃；stop 拒绝",
+          "cancel（ready前）：SIGTERM 回收未就绪 owned 子进程并抛 STARTUP_ABORTED，不留 owned",
+          "ready 后 cancel：不杀已就绪 owned 服务，保留 pid（不终止已启动 PM）",
+          "重复 cancel 幂等：未就绪子进程只 SIGTERM 一次，不重复回收",
+          "启动失败（非取消，超时）→ 抛错由编排落 S6；就绪前超时回收自己未就绪子进程；失败后 cancel 为 no-op 不重复终止",
+          "编排：S2 取消收到 STARTUP_ABORTED 保持 S0，不转 S6，不投递浏览器",
+          "隔离真实 owned 假子进程：cancel SIGTERM 后真实退出",
+          "探测：端口拒绝 → not-running → 决策 start（S0）",
+          "探测：无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict → 安全失败，不误开未知服务",
+          "探测：识别出的 401 鉴权墙（身份匹配）→ 仍 running(S1)，不误判为 S5/失败",
+          "探测：可达但身份不匹配 → conflict → 安全失败，无 kill/spawn/争端口，可重试",
+          "状态机：S1 直接投递 → S3（待鉴权），未经确认不得到 S4",
+          "状态机：S0 需启动 → S2 → 完成 → S3；权威 entered 回告 → S4（非按钮）",
+          "状态机：S3 用户反馈登录错误 → S5（非探测推断）；S5 重试/换浏览器 → S3（不直接 S4）",
+          "状态机：S2 取消 → S0；S6 返回 → S0；关闭 → closed（均不停服务）",
+          "S3 面板：等待已进入回告；无「我已进入」假成功按钮；仅「看到登录/认证错误」+更换浏览器；禁止已打开/成功措辞",
+          "S5 面板：已打开但未登录；在标签页完成登录 / 换用已登录浏览器；折叠诊断含 401/跨profile（用户反馈触发）",
+          "S6 面板：白话原因 +「没有停止任何程序」+ 重新尝试/查看详情折叠/返回",
+          "S4 面板：权威回告后显示「工作台已打开」+ 再次打开/更换浏览器",
+          "安全缝：正式参数镜像；token 解析仅内存；日志脱敏；open 参数；不重放",
+          "渲染：含浅/深 token、隐私脚注；不嵌入 token；装饰灯 aria-hidden；reduced-motion",
+          "渲染：HTML 转义浏览器名，不注入原始引号",
+          "S6 失败页：访问地址用 state.host/port，不硬编码 3172（隔离 3199 不得误导）",
+          "模板：浏览器选择与打开负载走 selectedBrowser（回退 state.browser），不回退空默认",
+          "S1 内联脚本可执行并渲染打开按钮，避免首屏正文空白",
+          "探测迟到：取消/返回后成功或失败都不启动、不投递、不改变S0",
+          "旧探测不能覆盖已投递的新旅程，旧启动失败不能覆盖S4",
+          "替换owned启动前回收旧在途；已取消启动返回只丢认证URL",
+          "local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令",
+          "local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径",
+          "local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝",
+          "local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位",
+          "foreign Host（evil.com）→ 403，GET/POST 都拒绝，不触发动作",
+          "evil Origin（https://evil.com）+ 合法 JSON → 403，handleAction 不被调用",
+          "null Origin（Origin: null）无 nonce → 403，不触发动作",
+          "text/plain（跨站简单请求）same Origin → 拒绝（非 JSON），不触发动作",
+          "合法 same Origin + application/json → 200，动作被调用；响应不发 CORS 头",
+          "无 Origin（CLI）无 nonce → 403；带正确内存 nonce → 200",
+          "GET /api/state 只读，不触发任何动作；不含 token 字段"
+        ],
+        "graph": {
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/contract.state.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "../src/launcher-core.mjs",
+              "../src/panel-model.mjs"
+            ],
+            "literalTestTitles": [
+              "探测：端口拒绝 → not-running → 决策 start（S0）",
+              "探测：无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict → 安全失败，不误开未知服务",
+              "探测：识别出的 401 鉴权墙（身份匹配）→ 仍 running(S1)，不误判为 S5/失败",
+              "探测：可达但身份不匹配 → conflict → 安全失败，无 kill/spawn/争端口，可重试",
+              "状态机：S1 直接投递 → S3（待鉴权），未经确认不得到 S4",
+              "状态机：S0 需启动 → S2 → 完成 → S3；权威 entered 回告 → S4（非按钮）",
+              "状态机：S3 用户反馈登录错误 → S5（非探测推断）；S5 重试/换浏览器 → S3（不直接 S4）",
+              "状态机：S2 取消 → S0；S6 返回 → S0；关闭 → closed（均不停服务）",
+              "S3 面板：等待已进入回告；无「我已进入」假成功按钮；仅「看到登录/认证错误」+更换浏览器；禁止已打开/成功措辞",
+              "S5 面板：已打开但未登录；在标签页完成登录 / 换用已登录浏览器；折叠诊断含 401/跨profile（用户反馈触发）",
+              "S6 面板：白话原因 +「没有停止任何程序」+ 重新尝试/查看详情折叠/返回",
+              "S4 面板：权威回告后显示「工作台已打开」+ 再次打开/更换浏览器",
+              "安全缝：正式参数镜像；token 解析仅内存；日志脱敏；open 参数；不重放"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/launcher-core.mjs": {
+            "specs": [],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/panel-model.mjs": {
+            "specs": [],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/browsers.controller.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "../src/browsers.mjs",
+              "../src/dsh-controller.mjs"
+            ],
+            "literalTestTitles": [
+              "discoverBrowsers：注入存在性，仅列出存在的浏览器，并标注 app 窗口能力",
+              "resolveBrowserOpen：Chrome真实应用普通tab；缺失选择回退默认tab",
+              "controller：fake spawn 捕获内存 token URL，就绪后返回；forget 丢弃；stop 拒绝"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/browsers.mjs": {
+            "specs": [
+              "node:fs",
+              "./launcher-core.mjs"
+            ],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/dsh-controller.mjs": {
+            "specs": [
+              "node:child_process",
+              "./launcher-core.mjs"
+            ],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/app.loopback.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:http",
+              "../src/launcher-app.mjs",
+              "../src/loopback.mjs",
+              "../src/control-html.mjs",
+              "../src/dsh-controller.mjs"
+            ],
+            "literalTestTitles": [
+              "回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4",
+              "running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token",
+              "自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172",
+              "not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）",
+              "回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效",
+              "S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token",
+              "conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程",
+              "loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/launcher-app.mjs": {
+            "specs": [
+              "node:crypto",
+              "./launcher-core.mjs",
+              "./panel-model.mjs"
+            ],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/loopback.mjs": {
+            "specs": [
+              "node:http",
+              "node:crypto"
+            ],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/control-html.mjs": {
+            "specs": [],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/control-html.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:vm",
+              "../src/control-html.mjs"
+            ],
+            "literalTestTitles": [
+              "渲染：含浅/深 token、隐私脚注；不嵌入 token；装饰灯 aria-hidden；reduced-motion",
+              "渲染：HTML 转义浏览器名，不注入原始引号",
+              "S6 失败页：访问地址用 state.host/port，不硬编码 3172（隔离 3199 不得误导）",
+              "模板：浏览器选择与打开负载走 selectedBrowser（回退 state.browser），不回退空默认",
+              "S1 内联脚本可执行并渲染打开按钮，避免首屏正文空白"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/cancel.race.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:child_process",
+              "../src/dsh-controller.mjs",
+              "../src/launcher-app.mjs"
+            ],
+            "literalTestTitles": [
+              "cancel（ready前）：SIGTERM 回收未就绪 owned 子进程并抛 STARTUP_ABORTED，不留 owned",
+              "ready 后 cancel：不杀已就绪 owned 服务，保留 pid（不终止已启动 PM）",
+              "重复 cancel 幂等：未就绪子进程只 SIGTERM 一次，不重复回收",
+              "启动失败（非取消，超时）→ 抛错由编排落 S6；就绪前超时回收自己未就绪子进程；失败后 cancel 为 no-op 不重复终止",
+              "编排：S2 取消收到 STARTUP_ABORTED 保持 S0，不转 S6，不投递浏览器",
+              "隔离真实 owned 假子进程：cancel SIGTERM 后真实退出"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/journey-race.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "../src/launcher-app.mjs"
+            ],
+            "literalTestTitles": [
+              "探测迟到：取消/返回后成功或失败都不启动、不投递、不改变S0",
+              "旧探测不能覆盖已投递的新旅程，旧启动失败不能覆盖S4",
+              "替换owned启动前回收旧在途；已取消启动返回只丢认证URL"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/loopback-security.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:http",
+              "../src/loopback.mjs"
+            ],
+            "literalTestTitles": [
+              "foreign Host（evil.com）→ 403，GET/POST 都拒绝，不触发动作",
+              "evil Origin（https://evil.com）+ 合法 JSON → 403，handleAction 不被调用",
+              "null Origin（Origin: null）无 nonce → 403，不触发动作",
+              "text/plain（跨站简单请求）same Origin → 拒绝（非 JSON），不触发动作",
+              "合法 same Origin + application/json → 200，动作被调用；响应不发 CORS 头",
+              "无 Origin（CLI）无 nonce → 403；带正确内存 nonce → 200",
+              "GET /api/state 只读，不触发任何动作；不含 token 字段"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/local-app.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:fs",
+              "node:os",
+              "node:path",
+              "node:child_process",
+              "../src/local-app.mjs"
+            ],
+            "literalTestTitles": [
+              "local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令",
+              "local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径",
+              "local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝",
+              "local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/local-app.mjs": {
+            "specs": [
+              "node:fs",
+              "node:path"
+            ],
+            "literalTestTitles": []
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/test/browser-open.test.mjs": {
+            "specs": [
+              "node:test",
+              "node:assert/strict",
+              "node:events",
+              "../src/browser-open.mjs",
+              "../src/launcher-core.mjs",
+              "../src/launcher-app.mjs"
+            ],
+            "literalTestTitles": [
+              "生产浏览器参数：显示标签映射真实应用，普通URL保持一个参数",
+              "生产OS投递：error/非零/超时有界拒绝，exit0只确认命令接收",
+              "生产app：异步OS失败落S6且不复投，owned首投失败仍弃URL",
+              "生产app：取消后迟到OS成功/失败不覆盖S0，先到合法回告不降回S3",
+              "旅程固定浏览器：在途偏好只用于下一轮，不更改已投递归属和nonce",
+              "reopen新旅程必须清旧S4：无新回告S3/false，当前新回告才S4",
+              "当前合法S4先到，existing/owned/reopen的迟到OS失败不覆盖权威进入"
+            ]
+          },
+          "/private/tmp/pmtool-a19-closure-20261022-r2/launcher/src/browser-open.mjs": {
+            "specs": [
+              "node:child_process"
+            ],
+            "literalTestTitles": []
+          }
+        }
+      }
+    },
+    {
+      "id": "claim-old-probes-executed-in-current-56",
+      "status": "FAIL",
+      "detail": {
+        "reachedOld": [],
+        "actualCount": 0,
+        "declaredOldCount": 5,
+        "boundary": "Counter-evidence to candidate inherited reason. Files are preserved, not invoked by the explicit nine-file script."
+      }
+    },
+    {
+      "id": "launcher-verify",
+      "status": "PASS",
+      "detail": {
+        "script": "node scripts/verify-launcher.mjs"
+      }
+    },
+    {
+      "id": "css-recipe-13",
+      "status": "PASS",
+      "detail": {
+        "count": 13,
+        "paths": [
+          "src/client/panel.css",
+          "src/client/views/deliverables.css",
+          "src/client/views/gantt.css",
+          "src/client/views/growth-form.css",
+          "src/client/views/meetings.css",
+          "src/client/views/milestones.css",
+          "src/client/views/overview.css",
+          "src/client/views/people.css",
+          "src/client/views/records.css",
+          "src/client/views/reports.css",
+          "src/client/views/risk-issues.css",
+          "src/client/views/tasks.css",
+          "src/client/board/board.css"
+        ],
+        "packageBuild": "tsc -p tsconfig.json && cp src/client/panel.css lib/client/panel.css && mkdir -p lib/client/views && cp src/client/views/*.css lib/client/views/ && mkdir -p lib/client/board && cp src/client/board/*.css lib/client/board/ && rm -f lib/client.*.js lib/client.*.js.map && tsdown --config tsdown.config.ts"
+      }
+    },
+    {
+      "id": "original-lib-protection",
+      "status": "PASS",
+      "detail": {
+        "count": 2728,
+        "drift": []
+      }
+    },
+    {
+      "id": "dependency-supplement-and-current-closure",
+      "status": "PASS",
+      "detail": {
+        "beforeCount": 13613,
+        "sourceDrift": [],
+        "files": 13613,
+        "links": 1030,
+        "external": [],
+        "shared": [],
+        "copyDrift": [],
+        "boundary": "Original source before starts supplement; current copy check is review-time only."
+      }
+    },
+    {
+      "id": "original-coverage-failure-preserved",
+      "status": "PASS",
+      "detail": {
+        "originalExit": 1,
+        "pid": 84880,
+        "summary": [
+          " Test Files  4 failed | 146 passed (150)",
+          "      Tests  28 failed | 1503 passed (1531)"
+        ],
+        "suitesLoadingFailure": 3
+      }
+    },
+    {
+      "id": "interrupted-preparation-not-build",
+      "status": "PASS",
+      "detail": {
+        "at": "2026-10-22T02:00:00Z",
+        "pid": 84211,
+        "action": "TERM exact owned Python preparation PID after observed overbroad scaffold copy",
+        "pidExitChecked": true,
+        "buildStarted": false,
+        "partialTree": "/private/tmp/pmtool-a19-closure-20261022",
+        "retained": true,
+        "reason": "Old scaffold docs contained historical testing artifacts unrelated to build. Stop copy without deleting partial tree; use r2 distinct tree with build inputs and required board fixture only.",
+        "boundary": "Action record, not a captured parent wait status or signal receipt."
+      }
+    }
+  ],
+  "notCaptured": [
+    "First-build persisted dependency-before and owned-copy before/after manifest",
+    "Pre/post-build artifact byte manifest; candidate is final-only",
+    "Preparation/build/supplement/finalizer parent tool exit/signal raw receipts in this A19 archive",
+    "Original finalization failure stdout/stderr/exit receipt; failing main-only source flow is preserved in fixture-regression script",
+    "Initial board fixture SHA binding in candidate",
+    "Raw guard before/after root manifest serialization; aggregate output only"
+  ],
+  "boundary": "Evidence audit only. No product/build/test/GUI/service execution."
+}

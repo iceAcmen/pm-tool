@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: 回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4
+ok 1 - 回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4
+  ---
+  duration_ms: 3.605791
+  type: 'test'
+  ...
+# Subtest: running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token
+ok 2 - running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token
+  ---
+  duration_ms: 0.143917
+  type: 'test'
+  ...
+# Subtest: 自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172
+ok 3 - 自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172
+  ---
+  duration_ms: 0.151417
+  type: 'test'
+  ...
+# Subtest: not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）
+ok 4 - not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）
+  ---
+  duration_ms: 0.872708
+  type: 'test'
+  ...
+# Subtest: 回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效
+ok 5 - 回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效
+  ---
+  duration_ms: 0.223083
+  type: 'test'
+  ...
+# Subtest: S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token
+ok 6 - S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token
+  ---
+  duration_ms: 0.175625
+  type: 'test'
+  ...
+# Subtest: conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程
+ok 7 - conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程
+  ---
+  duration_ms: 0.201167
+  type: 'test'
+  ...
+# Subtest: loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token
+ok 8 - loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token
+  ---
+  duration_ms: 28.3685
+  type: 'test'
+  ...
+# Subtest: local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令
+ok 9 - local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令
+  ---
+  duration_ms: 232.852291
+  type: 'test'
+  ...
+# Subtest: local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径
+ok 10 - local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径
+  ---
+  duration_ms: 19.552583
+  type: 'test'
+  ...
+# Subtest: local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝
+ok 11 - local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝
+  ---
+  duration_ms: 14.182334
+  type: 'test'
+  ...
+# Subtest: local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位
+ok 12 - local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位
+  ---
+  duration_ms: 14.695125
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 332.232875

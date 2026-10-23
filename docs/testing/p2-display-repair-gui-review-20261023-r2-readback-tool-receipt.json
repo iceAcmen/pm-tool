@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-23",
+  "role": "trae independent GUI original-evidence reviewer",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p2-display-repair-gui-review-20261023-r2-expert-outer.mjs",
+    "readback"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolExitCode": 0,
+  "actualToolWallSeconds": 0.4706,
+  "actualToolStatus": "Process exited with code 0",
+  "actualPidFromOuter": 35402,
+  "origin": "Observed functions.exec_command completion after actual readback, not prefilled expected status",
+  "actualToolSummary": {
+    "protectedInputs": 1774,
+    "unchanged": true
+  },
+  "readback": {
+    "bytes": 1286,
+    "sha256": "f62a2fd1e711f4a181c6f89e4fa4baad405337bcb455dabb290fd78ad47cccea"
+  },
+  "excludedFromEarlierSealAndReadback": true,
+  "reason": "Receipt is generated after the observed readback completion; no circular self-fingerprint",
+  "resourceState": "released / STOP",
+  "boundary": "Finite GUI verdict only in report; no product/GUI/Git/service operation or child spawn"
+}

@@ -1,0 +1,81 @@
+{
+  "role": "trae独立GUI原证审证专家",
+  "date": "2026-10-23",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "runtime": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "reader": "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs",
+  "origin": "以下终码、耗时和stdout均在exec_command实际返回后记录；不由summary或文件存在倒推。",
+  "index": {
+    "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "index"],
+    "actualToolExitCode": 0,
+    "actualToolWallSeconds": 0.3790,
+    "actualToolStatus": "Process exited with code 0",
+    "observed": {"members": 708, "physical": 711, "mismatches": 0, "sha256": "605af75dc633eef8215e9c96eec94cd3852f74f392b89f729390117c1ffad64c"},
+    "rawResult": "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/index-audit.json",
+    "pid": null,
+    "pidBoundary": "工具未提供PID，不补造。"
+  },
+  "inspect": {
+    "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "inspect"],
+    "actualToolExitCode": 0,
+    "actualToolWallSeconds": 0.1732,
+    "actualToolStatus": "Process exited with code 0",
+    "rawResult": "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/inspect.json",
+    "boundary": "输出过大；只按本tmp原结果做有限字段读取，没有读工具私有输出路径。"
+  },
+  "auditAttempts": [
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "audit"],
+      "actualToolExitCode": 1,
+      "actualToolWallSeconds": 0.2993,
+      "actualToolStatus": "Process exited with code 1",
+      "originalError": "AssertionError [ERR_ASSERTION]: 3 !== 124",
+      "rawReceipt": "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/audit-attempt1-tool-receipt.json",
+      "correction": "仅将自有reader的source manifest条目计数改读sources.count及sources.source；证据/产品未改。"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "audit"],
+      "actualToolExitCode": 1,
+      "actualToolWallSeconds": 0.4025,
+      "actualToolStatus": "Process exited with code 1",
+      "originalError": "AssertionError [ERR_ASSERTION]: 770 !== 718",
+      "rawReceipt": "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/audit-attempt2-tool-receipt.json",
+      "correction": "仅移除自有reader对加载过渡帧恒高的错误假设，记录原5帧770/177帧718；稳定态718不变，不改GUI oracle。"
+    }
+  ],
+  "auditFinal": {
+    "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "audit"],
+    "actualToolExitCode": 0,
+    "actualToolWallSeconds": 0.5145,
+    "actualToolStatus": "Process exited with code 0",
+    "stdout": "{\"audited\":true,\"members\":708,\"freshGuiStates\":11,\"rootManifests\":12,\"raw\":446,\"readStates\":9,\"readRoots\":47,\"rpc\":7,\"preparationWrites\":3,\"readWrites\":0,\"frames\":182,\"inputDrift\":[],\"pid\":38318}\n",
+    "stderr": "",
+    "pid": 38318,
+    "result": "docs/testing/p2002-tree-gui-review-20261023-r3-audit.json"
+  },
+  "visual": {
+    "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2002-tree-gui-review-20261023-r3-expert-3YvzRR/reader.mjs", "visual"],
+    "actualToolExitCode": 0,
+    "actualToolWallSeconds": 0.1571,
+    "actualToolStatus": "Process exited with code 0",
+    "stdout": "{\"visualBound\":true,\"png\":8,\"jpeg\":12,\"pid\":38807}\n",
+    "stderr": "",
+    "pid": 38807,
+    "result": "docs/testing/p2002-tree-gui-review-20261023-r3-visual-review.json",
+    "boundary": "visual命令只将此前20次实际view_image目视注记与原图指纹绑定，不重新执行GUI或生成图片。"
+  },
+  "actualImages": {"tool": "functions.view_image", "uniquePng": 8, "uniqueJpeg": 12, "total": 20, "all182FramesVisuallyViewed": false},
+  "auxiliary": {
+    "methods": ["pwd", "cat", "sed", "ls", "wc", "mktemp", "Node内置fs读取自有inspect及本封包有限字段"],
+    "actualExitCodes": "全部辅助已执行命令0；没有未决session。",
+    "emptyRead": "首次读取collaboration第410至700行为空，实际0；随后wc确认287行后读取150至287行。",
+    "largeOutput": "inspect与第一次摘要输出过大，随后改有限字段；未读取工具私有输出日志。"
+  },
+  "mainExecutorsRunByExpert": 0,
+  "productTestsOrBuildsRunByExpert": 0,
+  "browserNetworkPortDesktopGitOperations": 0,
+  "livePrivateProfileFormalDataReads": 0,
+  "wholeRoundBusinessWrites": 3,
+  "readPhaseBusinessWrites": 0,
+  "release": "真实seal及readback收据完成后STOP/released；父持续。"
+}

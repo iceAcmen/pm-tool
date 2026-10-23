@@ -1,0 +1,23 @@
+{
+  "status": 0,
+  "at": "2026-10-23T02:02:30.570Z",
+  "checkedEntries": 852,
+  "seal": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-seal.json",
+    "bytes": 150202,
+    "sha256": "a16dd2a4933f769794fef851375416f5ccab48df834208c6067203c9d9d1848b"
+  },
+  "report": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+    "bytes": 11343,
+    "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3"
+  },
+  "source": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7",
+  "test": "28e6f478fd6d16d78707d4976ea88981d0cce838c2be38ff50dd5804ddc6690c",
+  "sourceGate": "PASS (L8 repair only)",
+  "autoGate": "PASS (T01/T02 component + T04 narrow controls only)",
+  "GUI": "BLOCKED, Main original T02/T03 remaining",
+  "B8": "NOT_SIGNED",
+  "parentCommit": "NOT_SIGNED",
+  "processes": "All spawned narrow child processes returned; no services started."
+}

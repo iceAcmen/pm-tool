@@ -1,0 +1,117 @@
+{
+  "numTotalTestSuites": 2,
+  "numPassedTestSuites": 2,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 7,
+  "numPassedTests": 7,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1792703210030,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、取消直接退出且保原卡/最新投影/归焦",
+          "status": "passed",
+          "title": "首次打开让层、取消直接退出且保原卡/最新投影/归焦",
+          "duration": 1872.8037089999998,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、关闭抽屉直接退出且保原卡/最新投影/归焦",
+          "status": "passed",
+          "title": "首次打开让层、关闭抽屉直接退出且保原卡/最新投影/归焦",
+          "duration": 558.1345410000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 首次打开让层、Escape直接退出且保原卡/最新投影/归焦",
+          "status": "passed",
+          "title": "首次打开让层、Escape直接退出且保原卡/最新投影/归焦",
+          "duration": 591.0970420000003,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） ESC只退出目标抽屉，不能同时关闭或重建副驾",
+          "status": "passed",
+          "title": "ESC只退出目标抽屉，不能同时关闭或重建副驾",
+          "duration": 800.2694999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 取消放弃确认先保稿与交接，再明确放弃返回，零命令",
+          "status": "passed",
+          "title": "取消放弃确认先保稿与交接，再明确放弃返回，零命令",
+          "duration": 1118.0293749999983,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 明确主save仍只有原task.update，历史保留并返回同一副驾",
+          "status": "passed",
+          "title": "明确主save仍只有原task.update，历史保留并返回同一副驾",
+          "duration": 790.9141659999987,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收）"
+          ],
+          "fullName": "P1004 真实副驾到TaskForm开发专项（非GUI/独立验收） 重复交接不留下隐藏状态；原最小化/展开与显式关闭语义不变",
+          "status": "passed",
+          "title": "重复交接不留下隐藏状态；原最小化/展开与显式关闭语义不变",
+          "duration": 1025.895124999999,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1792703214662,
+      "endTime": 1792703221419.895,
+      "status": "passed",
+      "message": "",
+      "name": "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/client/panel-sidecar-task-handoff.test.tsx"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "provenance": "开发角色逐工具实际返回转录；非独立签字。test/vendor 的真实子进程终码另有同步 runner receipts，不以文件存在推造退出。",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "node": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "runner": "docs/plans/2026-10-23-p2004-kr-related-runner.mjs",
+  "runs": [
+    { "stage": "capture", "executionID": "b7a07ef0436e86cabe0d358b29c2f8de", "exit": null, "status": "NOT_COLLECTED", "ownNodePid": 98175, "disposition": "定向TERM；不作有效baseline，不推造退出0" },
+    { "stage": "capture-r2", "exit": 0, "output": "P2004_ROOT=/tmp/pm-p2004-kr-related-PBNUBC; protected=1804; vendor=13; capture_EXIT=0" },
+    { "stage": "vendor-initial", "exit": 0, "childReceipt": "2026-10-23-p2004-kr-related-vendor-initial-receipt.json" },
+    { "stage": "red", "exit": 1, "testsFailed": 7, "testsPassed": 1, "childReceipt": "2026-10-23-p2004-kr-related-red-receipt.json", "failure": "KR 必须邻接展示自己声明的关联，不能借父 root 的行: expected  to have a length of 1 but got +0" },
+    { "stage": "green", "exit": 0, "testsPassed": 8, "childReceipt": "2026-10-23-p2004-kr-related-green-receipt.json" },
+    { "stage": "affected", "exit": 0, "testFilesPassed": 4, "testsPassed": 59, "childReceipt": "2026-10-23-p2004-kr-related-affected-receipt.json" },
+    { "stage": "vendor-final", "exit": 0, "childReceipt": "2026-10-23-p2004-kr-related-vendor-final-receipt.json" }
+  ],
+  "checks": [
+    { "command": "git diff --check -- packages/dsh-pm-tool/src/client/views/okrs.tsx packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx", "exit": 0, "output": "" },
+    { "command": "git diff -- packages/dsh-pm-tool/src/client/views/okrs.tsx", "exit": 0, "meaning": "只读产品补丁，+16/-9" },
+    { "command": "node --check docs/plans/2026-10-23-p2004-kr-related-runner.mjs", "exit": 0, "repetitions": 2 },
+    { "command": "kill -TERM 98175", "exit": 0, "scope": "已核argv的本单capture，非宿主/服务" },
+    { "command": "ps -p 98175 -o pid,ppid,etime,args", "exit": 1, "output": "仅表头，PID已不存在；不代表原capture终码" },
+    { "command": "ps -axo pid,ppid,etime,args | grep '[p]2004-kr-related-runner.mjs'", "exit": 1, "meaning": "最终未见本单runner，非所有系统进程资格审计" },
+    { "command": "git status --short -- packages/dsh-pm-tool/src/client/views/okrs.tsx packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx", "exit": 0, "output": " M packages/dsh-pm-tool/src/client/views/okrs.tsx\n?? packages/dsh-pm-tool/src/client/views/okrs-related.test.tsx" },
+    { "command": "shasum -a 256 两产品文件/actual model/自有baseline视图", "exit": 0, "meaning": "指纹见result和seal" }
+  ],
+  "sealTerminal": "本文件写入时尚未执行；后续独立seal回执另增，不在此推造exit0。",
+  "notRun": ["fetch", "pull", "install", "build", "full-regression", "service", "GUI", "Git-add", "Git-commit", "Git-push"]
+}

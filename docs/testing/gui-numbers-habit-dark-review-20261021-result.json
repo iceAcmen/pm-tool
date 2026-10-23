@@ -1,0 +1,771 @@
+{
+  "at": "2026-10-21T13:23:50.535Z",
+  "environment": {
+    "os": "darwin",
+    "node": "v22.23.3"
+  },
+  "role": "独立原证审查；不执行产品或GUI，不自动判完整门",
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "productBase": "2a7603023bc54ef13d788e50069ee3fde4671bf3",
+    "version": "0.7.4",
+    "candidateChanges": {
+      "before": 23,
+      "after": 23,
+      "added": [],
+      "deleted": [],
+      "changed": [
+        "launcher/src/launcher-app.mjs",
+        "launcher/src/launcher-core.mjs",
+        "launcher/test/browser-open.test.mjs"
+      ]
+    },
+    "currentPluginRecognition": {
+      "packages/dsh-pm-tool/package.json": true,
+      "packages/dsh-pm-tool/pnpm-lock.yaml": true,
+      "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": true,
+      "packages/dsh-pm-tool/src/client/panel.tsx": false,
+      "packages/dsh-pm-tool/src/client/result-card.test.ts": true,
+      "packages/dsh-pm-tool/src/client/result-card.tsx": true,
+      "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": true,
+      "packages/dsh-pm-tool/src/core/file-root.test.ts": true
+    },
+    "declaredBundleEquality": true,
+    "deliveredBuildListCount": 453,
+    "actual453FilesRead": false,
+    "inheritance": "453字节核验仅引用已有独立报告；本工具不访问Main隔离树或runtime"
+  },
+  "numbers": {
+    "comparison": {
+      "before": 7,
+      "after": 7,
+      "added": [],
+      "deleted": [],
+      "changed": []
+    },
+    "initialCells": [
+      {
+        "text": "1",
+        "bbox": {
+          "x": 593,
+          "y": 583.1875,
+          "width": 62,
+          "height": 21.9453125,
+          "top": 583.1875,
+          "right": 655,
+          "bottom": 605.1328125,
+          "left": 593
+        },
+        "buttons": [
+          {
+            "aria": "复制编号 1",
+            "title": "复制编号 1"
+          }
+        ]
+      },
+      {
+        "text": "2",
+        "bbox": {
+          "x": 593,
+          "y": 625.1875,
+          "width": 62,
+          "height": 21.9453125,
+          "top": 625.1875,
+          "right": 655,
+          "bottom": 647.1328125,
+          "left": 593
+        },
+        "buttons": [
+          {
+            "aria": "复制编号 2",
+            "title": "复制编号 2"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "at": "2026-10-21T12:07:42.918Z",
+        "i": 0,
+        "expected": "1",
+        "clipboard": "1",
+        "matches": true,
+        "focus": {
+          "tag": "BUTTON",
+          "text": "1",
+          "outline": "rgb(122, 170, 255) solid 2px"
+        },
+        "copied": [
+          "已复制",
+          "2"
+        ]
+      },
+      {
+        "at": "2026-10-21T12:07:44.624Z",
+        "i": 1,
+        "expected": "2",
+        "clipboard": "2",
+        "matches": true,
+        "focus": {
+          "tag": "BUTTON",
+          "text": "2",
+          "outline": "rgb(122, 170, 255) solid 2px"
+        },
+        "copied": [
+          "1",
+          "已复制"
+        ]
+      }
+    ],
+    "deniedCells": [
+      "复制失败",
+      "2"
+    ]
+  },
+  "okr": {
+    "comparison": {
+      "before": 5,
+      "after": 5,
+      "added": [],
+      "deleted": [],
+      "changed": []
+    },
+    "observed": {
+      "at": "2026-10-21T13:02:12.211Z",
+      "dark": true,
+      "drawer": "项目记录\n编辑 OKR\n标题 *\n类型 *\n目标 O\n▾\n负责人\n目标日期\n软关联目标（逗号分隔 ID，可多个）\n从目标清单选择添加（可选）\n▾\n\n软关联：仅展示引用，不计权重、不参与进度裁决；与主归属互不影响。\n\n未在本项目目标列表中找到：okr-zzz-notexist。软关联仅展示引用、不计权重、不参与进度裁决，也不影响主归属；请从列表选择存在的目标或移除该 ID。\n状态\n草稿\n▾\n补充描述（安全 Markdown）\n取消\n保存\n枚举：objective / key-result；状态：draft / confirmed",
+      "error": [
+        {
+          "text": "未在本项目目标列表中找到：okr-zzz-notexist。软关联仅展示引用、不计权重、不参与进度裁决，也不影响主归属；请从列表选择存在的目标或移除该 ID。",
+          "bbox": {
+            "x": 909,
+            "y": 409.7734375,
+            "width": 243.5,
+            "height": 43.5,
+            "top": 409.7734375,
+            "right": 1152.5,
+            "bottom": 453.2734375,
+            "left": 909
+          }
+        }
+      ],
+      "input": "okr-zzz-notexist",
+      "inputs": [
+        {
+          "value": "QA 深色关联错误验收",
+          "border": "rgba(255, 255, 255, 0.12)",
+          "color": "rgb(249, 250, 251)",
+          "background": "rgb(35, 35, 36)"
+        },
+        {
+          "value": "",
+          "border": "rgba(255, 255, 255, 0.12)",
+          "color": "rgb(249, 250, 251)",
+          "background": "rgb(35, 35, 36)"
+        },
+        {
+          "value": "",
+          "border": "rgba(255, 255, 255, 0.12)",
+          "color": "rgb(249, 250, 251)",
+          "background": "rgb(35, 35, 36)"
+        },
+        {
+          "value": "okr-zzz-notexist",
+          "border": "rgb(242, 90, 90)",
+          "color": "rgb(249, 250, 251)",
+          "background": "rgb(35, 35, 36)"
+        }
+      ]
+    }
+  },
+  "habit": {
+    "recent": [
+      "2026-10-21",
+      "2026-10-20",
+      "2026-10-18",
+      "2026-10-12",
+      "2026-10-08"
+    ],
+    "monthEntries": {
+      "2026-10": [
+        {
+          "at": "2026-10-07",
+          "backfilled": true,
+          "note": "历史备注 2026-10-07"
+        }
+      ],
+      "2026-09": [
+        {
+          "at": "2026-09-30",
+          "backfilled": false,
+          "note": "历史备注 2026-09-30"
+        },
+        {
+          "at": "2026-09-18",
+          "backfilled": true,
+          "note": "历史备注 2026-09-18"
+        },
+        {
+          "at": "2026-09-04",
+          "backfilled": false,
+          "note": "历史备注 2026-09-04"
+        },
+        {
+          "at": "2026-09-02",
+          "backfilled": true,
+          "note": "历史备注 2026-09-02"
+        }
+      ],
+      "2026-08": [
+        {
+          "at": "2026-08-31",
+          "backfilled": false,
+          "note": "历史备注 2026-08-31"
+        },
+        {
+          "at": "2026-08-18",
+          "backfilled": true,
+          "note": "历史备注 2026-08-18"
+        },
+        {
+          "at": "2026-08-03",
+          "backfilled": false,
+          "note": "历史备注 2026-08-03"
+        },
+        {
+          "at": "2026-08-01",
+          "backfilled": true,
+          "note": "历史备注 2026-08-01"
+        }
+      ]
+    },
+    "habitProtection": {
+      "producerRecordUnchanged": true,
+      "rawBeforeAfterHabitDelivered": false,
+      "producerByteComparisonInArchivedScript": true,
+      "rawBackupBytesDelivered": false,
+      "cancelBeforeAfterDelivered": false,
+      "fixtureRecordSemanticallyEqual": true,
+      "deliveredRestoredFileHash": "8edc1bfa099be2ef1fc0e63872173d36e6877dc9f434828f3c035749aed1a5e0"
+    },
+    "streak": {
+      "current": 3,
+      "lastDate": "2026-10-21",
+      "longest": 3,
+      "totalDays": 14
+    },
+    "narrow": {
+      "viewport": {
+        "width": 390,
+        "height": 900,
+        "dpr": 1
+      },
+      "htmlWidth": 390,
+      "pmWidth": 329
+    },
+    "actualMonthlyStates": [
+      {
+        "month": "2026 年 10 月",
+        "at": "2026-10-21T12:31:24.318Z",
+        "archives": [
+          {
+            "open": "true",
+            "text": "2026 年 10 月（1 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 501.8203125,
+              "width": 200.515625,
+              "height": 29.3984375,
+              "top": 501.8203125,
+              "right": 760.515625,
+              "bottom": 531.21875,
+              "left": 560
+            }
+          },
+          {
+            "open": "false",
+            "text": "2026 年 9 月（4 条 · 展开）",
+            "bbox": {
+              "x": 560,
+              "y": 549.21875,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 549.21875,
+              "right": 752.9609375,
+              "bottom": 578.6171875,
+              "left": 560
+            }
+          },
+          {
+            "open": "false",
+            "text": "2026 年 8 月（4 条 · 展开）",
+            "bbox": {
+              "x": 560,
+              "y": 596.6171875,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 596.6171875,
+              "right": 752.9609375,
+              "bottom": 626.015625,
+              "left": 560
+            }
+          }
+        ]
+      },
+      {
+        "month": "2026 年 9 月",
+        "at": "2026-10-21T12:31:24.529Z",
+        "archives": [
+          {
+            "open": "true",
+            "text": "2026 年 10 月（1 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 501.8203125,
+              "width": 200.515625,
+              "height": 29.3984375,
+              "top": 501.8203125,
+              "right": 760.515625,
+              "bottom": 531.21875,
+              "left": 560
+            }
+          },
+          {
+            "open": "true",
+            "text": "2026 年 9 月（4 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 602.3125,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 602.3125,
+              "right": 752.9609375,
+              "bottom": 631.7109375,
+              "left": 560
+            }
+          },
+          {
+            "open": "false",
+            "text": "2026 年 8 月（4 条 · 展开）",
+            "bbox": {
+              "x": 560,
+              "y": 702.8125,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 702.8125,
+              "right": 752.9609375,
+              "bottom": 732.2109375,
+              "left": 560
+            }
+          }
+        ]
+      },
+      {
+        "month": "2026 年 8 月",
+        "at": "2026-10-21T12:31:24.711Z",
+        "archives": [
+          {
+            "open": "true",
+            "text": "2026 年 10 月（1 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 487.8203125,
+              "width": 200.515625,
+              "height": 29.3984375,
+              "top": 487.8203125,
+              "right": 760.515625,
+              "bottom": 517.21875,
+              "left": 560
+            }
+          },
+          {
+            "open": "true",
+            "text": "2026 年 9 月（4 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 588.3125,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 588.3125,
+              "right": 752.9609375,
+              "bottom": 617.7109375,
+              "left": 560
+            }
+          },
+          {
+            "open": "true",
+            "text": "2026 年 8 月（4 条 · 收起）",
+            "bbox": {
+              "x": 560,
+              "y": 741.90625,
+              "width": 192.9609375,
+              "height": 29.3984375,
+              "top": 741.90625,
+              "right": 752.9609375,
+              "bottom": 771.3046875,
+              "left": 560
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "zoom": {
+    "submittedMenuAt": "2026-10-21T19:50:02.985393",
+    "origin": "http://127.0.0.1:3205/",
+    "currentFrameOnly": true,
+    "historicalAllFramesInherited": false,
+    "habit3213Inherited": false
+  },
+  "images": {
+    "A2/loaded/native-menu-100.png": {
+      "width": 2880,
+      "height": 1714
+    },
+    "A3/numbers/initial.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers/focus-0.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers/focus-1.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers/copied-0.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers/copied-1.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers/denied.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/initial.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/focus-0.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/focus-1.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/copied-0.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/copied-1.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/numbers-r2/denied.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/habit/empty.png": {
+      "width": 1440,
+      "height": 900
+    },
+    "A3/habit/precheck.png": {
+      "width": 2880,
+      "height": 1800
+    },
+    "A3/habit/danger-confirm.png": {
+      "width": 2880,
+      "height": 1800
+    },
+    "A3/habit/restored-history-page.png": {
+      "width": 2880,
+      "height": 1436
+    },
+    "A3/habit/month-1.png": {
+      "width": 2880,
+      "height": 1436
+    },
+    "A3/habit/month-2.png": {
+      "width": 2880,
+      "height": 1436
+    },
+    "A3/habit/month-3.png": {
+      "width": 2880,
+      "height": 1436
+    },
+    "A3/habit/history-390.png": {
+      "width": 390,
+      "height": 900
+    },
+    "A5/dark/okr-inline-error.png": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "hashes": {
+    "reports/all-pending-evidence-20261021/A0/candidate.json": {
+      "bytes": 4197,
+      "sha256": "2b6265bd1953c186f553d4092fa98ff87f2a14480a82e04383cc63255e0de071"
+    },
+    "reports/all-pending-evidence-20261021/A0/all-built-files.json": {
+      "bytes": 57076,
+      "sha256": "56c37374011c0d99de96a4bdb8bcc57816c131c4e48a75a8fa2a46391470eea0"
+    },
+    "reports/all-pending-evidence-20261021/A0/habit/fixture.json": {
+      "bytes": 2942,
+      "sha256": "fa4c7263bc4c1f14a2eb8acc69a872d12eac3afbe3a6e96f17698d4bddb53d52"
+    },
+    "reports/all-pending-evidence-20261021/A2/loaded/native-menu-100.json": {
+      "bytes": 437,
+      "sha256": "70a73407311857115145a5a5e38bba7d38265361009013d1378c1251f3541394"
+    },
+    "reports/all-pending-evidence-20261021/A2/loaded/native-menu-100.png": {
+      "bytes": 611727,
+      "sha256": "1891b2580dc58e9cf9c1b5e63d78e2a287f3ae9447937439856d5939eab38ec0"
+    },
+    "reports/all-pending-evidence-20261021/A2/loaded/combo-exact-response.json": {
+      "bytes": 1448,
+      "sha256": "fdc18070f793f661b41538a5de0eaa5dc2bc5dac035a69d6ecc14efe5763d824"
+    },
+    "reports/all-pending-evidence-20261021/A2/loaded/combo-exact-1.txt": {
+      "bytes": 2549909,
+      "sha256": "e9404eb6f474b191b7b284aa04cfe3211440fb5a74f526d1c6ff3e657c1b1d60"
+    },
+    "reports/all-pending-evidence-20261021/A3/candidate.json": {
+      "bytes": 7371,
+      "sha256": "a614d2c827b4ad18e0acb39d57dd5c699f152928533d2544c29cce96341b84b4"
+    },
+    "reports/all-pending-evidence-20261021/A3/tracked.patch": {
+      "bytes": 51416,
+      "sha256": "2977846ed45454463d1efa811e9d13b5a772a7a45abcfc5a864b111bcef90863"
+    },
+    "reports/all-pending-evidence-20261021/A3/execution-scripts/pmtool-number-closure-20261021.mjs": {
+      "bytes": 4551,
+      "sha256": "599bb25af35dc7431bb07c47321b2bb65f30d44e47814ca4c89e3e68f1436ee7"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/initial.json": {
+      "bytes": 1584,
+      "sha256": "3a083f161f427ee0eaa3bb53b5d375aade33d03c27532c3cb996c473def994ef"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/steps.json": {
+      "bytes": 4174,
+      "sha256": "992697561423d38e1564c9ed1f0db7a23b056f8a5e1018ddc0144f15075b768e"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/initial.png": {
+      "bytes": 167569,
+      "sha256": "90627b7fab7a94ea169bec9300a17ec4930a9b6160c9d839cdce0f78d787eaa9"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/focus-0.png": {
+      "bytes": 167553,
+      "sha256": "d35544b5055e37b22d4c1e18ccad3ac69b32aab3041e24174e4d90d39cb480cb"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/focus-1.png": {
+      "bytes": 168247,
+      "sha256": "cafcc66efaf8eceada8f24f2d87d7cabd5076f345eeaa0463deb7038f4f55599"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/copied-0.png": {
+      "bytes": 167804,
+      "sha256": "0111d4b184b14e802add25f35596ad9c1be827c342e81bb8479169413774d476"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/copied-1.png": {
+      "bytes": 167964,
+      "sha256": "67416450a65bc091879b49a769b977746d016fc2d39cd73ad6562219522436a1"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers/denied.png": {
+      "bytes": 168294,
+      "sha256": "867a8e8d9fc05334a9c7744707725ccc4ac562acf87e6111e06fbdb3ae8642d7"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/initial.json": {
+      "bytes": 1584,
+      "sha256": "3a083f161f427ee0eaa3bb53b5d375aade33d03c27532c3cb996c473def994ef"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/steps.json": {
+      "bytes": 4197,
+      "sha256": "c511a15e4c639a275fa26242e8fd0294ba97d1481181e2b9be2ddf1f4b12ba74"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/initial.png": {
+      "bytes": 167536,
+      "sha256": "bbca6931bb2d86dc055abafba3d789213e54bdae59e1c3e4c0f7207abd6778aa"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/focus-0.png": {
+      "bytes": 168150,
+      "sha256": "17f09e0ddfeff48cc5a0d20a5a99eb67defbdbd275aa72e41569e0f2b460853b"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/focus-1.png": {
+      "bytes": 168286,
+      "sha256": "ae9b671fe768b0137da0b21e0575984c8425d1d9ea22e75d9da74dc84f556030"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/copied-0.png": {
+      "bytes": 168133,
+      "sha256": "2e24489eee2ad4d98be39a4d32959569638c1bac64eddadec658cba6764281d5"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/copied-1.png": {
+      "bytes": 167983,
+      "sha256": "177cdfbbc72eee13acfcedde4cdde88b5971ecb964820fbfe003bc989e325135"
+    },
+    "reports/all-pending-evidence-20261021/A3/numbers-r2/denied.png": {
+      "bytes": 168394,
+      "sha256": "97480ea5003304b33665e4e42cdd609eedea9864fa18a727112f49c54265fe66"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/empty.json": {
+      "bytes": 2696,
+      "sha256": "2ff65b3cb1a4950893540d8d47c10b56176bd085a86a0b223dc44b1f7bd0e24d"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/empty.png": {
+      "bytes": 79576,
+      "sha256": "a244b59804fe4345225117d5b3eed7b39725bc48c05bdbe1eda52f5ec266ed13"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/precheck.png": {
+      "bytes": 240799,
+      "sha256": "99451ce1b1a6f63883002bc72b49614b3e825daab29b237c3d0c26e9e24a6d51"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/danger-confirm.png": {
+      "bytes": 304740,
+      "sha256": "8e919daebd0f7f76deeffced93c1c15f4b62ababde361afa36acee5355f59b9b"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/restore-continued.json": {
+      "bytes": 6819,
+      "sha256": "b5a93a41dcdfedada338e7d42d90775497c5df48e9cd3839e1ac4c0ba729ddfe"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/history-observations.json": {
+      "bytes": 11342,
+      "sha256": "a525cdd6616d53902b89c72285cfc24868baca62cc9a2b87d36509a2a0c7384d"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/restored-history-page.png": {
+      "bytes": 295260,
+      "sha256": "10fc5fa27e711b56323504595c77fec8b93fe9882ef10a6eaa24d9671f43c827"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/month-1.png": {
+      "bytes": 305136,
+      "sha256": "16453a5aad1b2e5d98746cf521657586da76ce436011dbca9d0cac50df91fae8"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/month-2.png": {
+      "bytes": 329950,
+      "sha256": "b49efa67f7869ffe5d7830b37491ab72c4e1d40e7f984e45687e54b4b32ba551"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/month-3.png": {
+      "bytes": 336300,
+      "sha256": "546694d7d579a4e22f2624bae22b116172b0163a108140567bd211bf0fe3451b"
+    },
+    "reports/all-pending-evidence-20261021/A3/habit/history-390.png": {
+      "bytes": 80720,
+      "sha256": "df74335187e21b8110084ade01e9fedfbbea41031716311d29bb5879d8120750"
+    },
+    "reports/all-pending-evidence-20261021/A5/candidate.json": {
+      "bytes": 7635,
+      "sha256": "9b0afc17ac171543184d3d885ce8ebd470c9d532855038c4b6dd063e841a9f6a"
+    },
+    "reports/all-pending-evidence-20261021/A5/tracked.patch": {
+      "bytes": 53519,
+      "sha256": "3b12aa7b5ce3582a1fe291dd775981d4cb31ad010ce82cb767e56bab083b17b7"
+    },
+    "reports/all-pending-evidence-20261021/A5/dark/okr-inline-error.json": {
+      "bytes": 3100,
+      "sha256": "ceff2ccba62fe1a0b0ce4d27b713219f50ddf70dc69c3c64109879540fd58edd"
+    },
+    "reports/all-pending-evidence-20261021/A5/dark/okr-inline-error.png": {
+      "bytes": 147805,
+      "sha256": "18ddf0fdb623088d2f6f600a933203b9587f23fb1e99b680505c01e4d53c4117"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/index.json": {
+      "bytes": 884,
+      "sha256": "73d6158ce3bcc2674200262ac8883897111d4a5dc364bcb174f46a918c6519f4"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/pmtool-habit-target-setup-20261021.py": {
+      "bytes": 730,
+      "sha256": "81f9bad0630d63240775d817c64953dd987ed7b10a9e14bb8326423b58b835ab"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/pmtool-habit-restore-20261021.mjs": {
+      "bytes": 3640,
+      "sha256": "7133cb8a6d294270a2416e4b4f419aa68ee965ad3cd849c8ede224555c03806a"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/pmtool-habit-continue-20261021.mjs": {
+      "bytes": 2649,
+      "sha256": "cdc2dce95f7ace5f3fac8756bba39c818b44578664c8a5eab769c547e39e4f7b"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/pmtool-habit-history-20261021.mjs": {
+      "bytes": 2723,
+      "sha256": "ec877354abe3b9b9172a63d454ec4542099873fd5c3ce57c82c428f3d1ef6b32"
+    },
+    "reports/all-pending-evidence-20261021/A5/execution-scripts/pmtool-okr-dark-error-20261021.mjs": {
+      "bytes": 2026,
+      "sha256": "7e781e78a2f1ab81e23612489c460e457f5497c16537354be7ec1df113705cec"
+    },
+    "packages/dsh-pm-tool/src/client/views/tasks.tsx": {
+      "bytes": 65693,
+      "sha256": "ebd763d30ff13448236bf8d03f41c93774d0963bfeebdb719ccbdd99010b2cc4"
+    },
+    "packages/dsh-pm-tool/src/client/views/tasks.css": {
+      "bytes": 42295,
+      "sha256": "6ffb9ab8e79b68c42cef947c756d0fd27fc4fcbb0c608c5eab030f95687a3976"
+    },
+    "packages/dsh-pm-tool/src/client/views/tasks-clipboard.ts": {
+      "bytes": 599,
+      "sha256": "18c301116229d232c380bf1cfd260f8fae9eb66aeae3b6cfaf46f113973010e5"
+    },
+    "packages/dsh-pm-tool/src/client/views/okr-form.tsx": {
+      "bytes": 9759,
+      "sha256": "0b9bd1b13abf89b6eeb53fd7cec0eabe5aeeca9df538b28de0862fbedc3b6092"
+    },
+    "packages/dsh-pm-tool/src/core/habits.ts": {
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+    },
+    "packages/dsh-pm-tool/src/client/views/habit-model.ts": {
+      "bytes": 4956,
+      "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+    },
+    "packages/dsh-pm-tool/src/client/views/habits.tsx": {
+      "bytes": 14634,
+      "sha256": "53b7791a183b6d7343ead5e902fd5d1232f25a7a22d9e3f579158ef652e3fe76"
+    },
+    "packages/dsh-pm-tool/package.json": {
+      "bytes": 3109,
+      "sha256": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66"
+    },
+    "packages/dsh-pm-tool/pnpm-lock.yaml": {
+      "bytes": 201524,
+      "sha256": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa"
+    },
+    "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": {
+      "bytes": 25674,
+      "sha256": "492f4cb47083e98360acdf7e08df92d36cec3b4db2743fd93f3f4c7dc076d110"
+    },
+    "packages/dsh-pm-tool/src/client/panel.tsx": {
+      "bytes": 185555,
+      "sha256": "eebdc234b339f52012f0ec2cf7bd0f947332570418658b41d95a34423b689af9"
+    },
+    "packages/dsh-pm-tool/src/client/result-card.test.ts": {
+      "bytes": 2770,
+      "sha256": "4e815421f70ab285343aa6d1ba2feaf4c0472ae167a9109d48d43fe83deda32a"
+    },
+    "packages/dsh-pm-tool/src/client/result-card.tsx": {
+      "bytes": 3328,
+      "sha256": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b"
+    },
+    "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": {
+      "bytes": 6953,
+      "sha256": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95"
+    },
+    "packages/dsh-pm-tool/src/core/file-root.test.ts": {
+      "bytes": 3701,
+      "sha256": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d"
+    }
+  },
+  "integrityFailures": [
+    "current plugin recognition: packages/dsh-pm-tool/src/client/panel.tsx"
+  ],
+  "limitations": [
+    "未持久交件录像不审完整动作",
+    "OKR实际主题选择/合法新建前置索引缺件",
+    "F7生成exit/标准备份字节/恢复安全快照/取消保护尚缺原件",
+    "无原始habit前后manifest，不把recordUnchanged布尔值当独立比较",
+    "反馈文字裁切由专家实际目视裁决，JSON完整字符串不能替代视觉"
+  ],
+  "changedDuringCheck": []
+}

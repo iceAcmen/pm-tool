@@ -1,0 +1,712 @@
+{
+  "at": "2026-10-22T12:53:41.883Z",
+  "role": "HiddenPredRedR1，独立原源测试，非开发非GUI",
+  "evidenceRoot": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1",
+  "sealedFilesRechecked": 16757,
+  "evidenceConsistent": true,
+  "auditExitMeaning": "exit0只表示原件完整且必要红归因一致，不是产品PASS",
+  "originalPanelSha256": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+  "test": {
+    "source": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx",
+    "frozen": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx",
+    "sha256": "ff3897e963641159ffd6d59e9bf0a8a2d8c52631857b630dcc9470e2437b1988",
+    "onlyExecutedTest": "src/client/task-predecessor-hidden-submit-dom.test.tsx"
+  },
+  "execution": {
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/vitest.config.mjs",
+      "--no-cache",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile=/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/vitest.result.json"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool",
+    "env": {
+      "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+      "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/home",
+      "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/tmp",
+      "TMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/tmp",
+      "TEMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/tmp",
+      "XDG_CACHE_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/cache",
+      "npm_config_cache": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/cache/npm",
+      "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/dsh-home",
+      "QA_EVIDENCE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/observations",
+      "CI": "1",
+      "LANG": "zh_CN.UTF-8",
+      "TZ": "UTC",
+      "NODE_ENV": "development"
+    },
+    "node": "v22.23.3",
+    "runnerPid": 71786,
+    "pid": 72060,
+    "started": "2026-10-22T12:51:39.201Z",
+    "ended": "2026-10-22T12:51:54.653Z",
+    "exit": 1,
+    "signal": null,
+    "error": null
+  },
+  "total": 5,
+  "controlPassed": 3,
+  "necessaryRed": 2,
+  "skipped": 0,
+  "cases": [
+    {
+      "id": "HPS-C01",
+      "status": "passed",
+      "independentResult": "CONTROL_PASS",
+      "raw": "observations/1-HPS-C01/observations.json",
+      "sha256": "285ba0ae4cf4621368b813c73efc289b1be977cf9744da903491aa344c96b242",
+      "initialPredecessorIds": [
+        "t-0002"
+      ],
+      "visibleCheckboxes": [
+        {
+          "id": "t-0001",
+          "checked": false,
+          "type": "checkbox"
+        },
+        {
+          "id": "t-0002",
+          "checked": true,
+          "type": "checkbox"
+        },
+        {
+          "id": "t-0003",
+          "checked": false,
+          "type": "checkbox"
+        }
+      ],
+      "formDataPredecessors": [
+        "t-0002"
+      ],
+      "footer": "已选 1 项",
+      "submitted": 1,
+      "run": {
+        "kind": "run",
+        "line": "task update t-0004 {\"title\":\"已有任务四只改标题1\",\"description\":\"合法已有任务说明\",\"assignee\":\"QA\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-01-01\",\"dueDate\":\"2026-12-31\",\"progress\":0,\"milestoneId\":null,\"predecessorIds\":[\"t-0002\"],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "taskId": "t-0004",
+        "payload": {
+          "title": "已有任务四只改标题1",
+          "description": "合法已有任务说明",
+          "assignee": "QA",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-01-01",
+          "dueDate": "2026-12-31",
+          "progress": 0,
+          "milestoneId": null,
+          "predecessorIds": [
+            "t-0002"
+          ],
+          "repoUrl": "",
+          "branch": "",
+          "manualProgress": null
+        }
+      },
+      "handlerResult": {
+        "kind": "handler-result",
+        "response": {
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0004 已有任务四只改标题1\n[pm:summary]已修改：标题：已有任务四 → 已有任务四只改标题1\n[pm:detail]\n```\n任务 ID：t-0004\nWBS：4\n项目 ID：p-0001\n父任务：无\n标题：已有任务四只改标题1\n说明：合法已有任务说明\n负责人：QA\n状态：未开始\n优先级：P1\n开始日期：2026-01-01\n截止日期：2026-12-31\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T12:51:53.046Z\n更新时间：2026-10-22T12:51:53.427Z\n```"
+        }
+      },
+      "onSaved": {
+        "kind": "onSaved"
+      },
+      "readback": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "已有任务四只改标题1",
+        "description": "合法已有任务说明",
+        "assignee": "QA",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-01-01",
+        "dueDate": "2026-12-31",
+        "progress": 0,
+        "milestoneId": null,
+        "predecessorIds": [
+          "t-0002"
+        ],
+        "manualProgress": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-22T12:51:53.046Z",
+        "updatedAt": "2026-10-22T12:51:53.427Z"
+      },
+      "writeDelta": [
+        {
+          "table": "tasks",
+          "id": "t-0004",
+          "before": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.046Z",
+            "updatedAt": "2026-10-22T12:51:53.046Z"
+          },
+          "after": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四只改标题1",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "manualProgress": null,
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.046Z",
+            "updatedAt": "2026-10-22T12:51:53.427Z"
+          }
+        }
+      ],
+      "fixtureUnchanged": true,
+      "preSubmitDomainUnchanged": true,
+      "runtimeErrors": [],
+      "caught": [],
+      "failureMessages": []
+    },
+    {
+      "id": "HPS-C02",
+      "status": "passed",
+      "independentResult": "CONTROL_PASS",
+      "raw": "observations/2-HPS-C02/observations.json",
+      "sha256": "9036d77850b156b5ccd96c9943bdf747233592b768b3d0e236b1fc7cd4c5dc44",
+      "initialPredecessorIds": [
+        "t-0002"
+      ],
+      "visibleCheckboxes": [
+        {
+          "id": "t-0001",
+          "checked": false,
+          "type": "checkbox"
+        },
+        {
+          "id": "t-0002",
+          "checked": true,
+          "type": "checkbox"
+        },
+        {
+          "id": "t-0003",
+          "checked": false,
+          "type": "checkbox"
+        }
+      ],
+      "formDataPredecessors": [
+        "t-0002"
+      ],
+      "footer": "已选 1 项",
+      "submitted": 1,
+      "run": {
+        "kind": "run",
+        "line": "task update t-0004 {\"title\":\"已有任务四只改标题2\",\"description\":\"合法已有任务说明\",\"assignee\":\"QA\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-01-01\",\"dueDate\":\"2026-12-31\",\"progress\":0,\"milestoneId\":null,\"predecessorIds\":[\"t-0002\"],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "taskId": "t-0004",
+        "payload": {
+          "title": "已有任务四只改标题2",
+          "description": "合法已有任务说明",
+          "assignee": "QA",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-01-01",
+          "dueDate": "2026-12-31",
+          "progress": 0,
+          "milestoneId": null,
+          "predecessorIds": [
+            "t-0002"
+          ],
+          "repoUrl": "",
+          "branch": "",
+          "manualProgress": null
+        }
+      },
+      "handlerResult": {
+        "kind": "handler-result",
+        "response": {
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0004 已有任务四只改标题2\n[pm:summary]已修改：标题：已有任务四 → 已有任务四只改标题2\n[pm:detail]\n```\n任务 ID：t-0004\nWBS：4\n项目 ID：p-0001\n父任务：无\n标题：已有任务四只改标题2\n说明：合法已有任务说明\n负责人：QA\n状态：未开始\n优先级：P1\n开始日期：2026-01-01\n截止日期：2026-12-31\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T12:51:53.534Z\n更新时间：2026-10-22T12:51:53.714Z\n```"
+        }
+      },
+      "onSaved": {
+        "kind": "onSaved"
+      },
+      "readback": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "已有任务四只改标题2",
+        "description": "合法已有任务说明",
+        "assignee": "QA",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-01-01",
+        "dueDate": "2026-12-31",
+        "progress": 0,
+        "milestoneId": null,
+        "predecessorIds": [
+          "t-0002"
+        ],
+        "manualProgress": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-22T12:51:53.534Z",
+        "updatedAt": "2026-10-22T12:51:53.714Z"
+      },
+      "writeDelta": [
+        {
+          "table": "tasks",
+          "id": "t-0004",
+          "before": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.534Z",
+            "updatedAt": "2026-10-22T12:51:53.534Z"
+          },
+          "after": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四只改标题2",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "manualProgress": null,
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.534Z",
+            "updatedAt": "2026-10-22T12:51:53.714Z"
+          }
+        }
+      ],
+      "fixtureUnchanged": true,
+      "preSubmitDomainUnchanged": true,
+      "runtimeErrors": [],
+      "caught": [],
+      "failureMessages": []
+    },
+    {
+      "id": "HPS-C03",
+      "status": "passed",
+      "independentResult": "CONTROL_PASS",
+      "raw": "observations/3-HPS-C03/observations.json",
+      "sha256": "a8e5a2508dc3c5352018815340a0b62b6897a41e529a4869a538147c4990d83b",
+      "initialPredecessorIds": [
+        "t-0002"
+      ],
+      "visibleCheckboxes": [
+        {
+          "id": "t-0002",
+          "checked": true,
+          "type": "checkbox"
+        }
+      ],
+      "formDataPredecessors": [
+        "t-0002"
+      ],
+      "footer": "已选 1 项",
+      "submitted": 1,
+      "run": {
+        "kind": "run",
+        "line": "task update t-0004 {\"title\":\"已有任务四只改标题3\",\"description\":\"合法已有任务说明\",\"assignee\":\"QA\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-01-01\",\"dueDate\":\"2026-12-31\",\"progress\":0,\"milestoneId\":null,\"predecessorIds\":[\"t-0002\"],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "taskId": "t-0004",
+        "payload": {
+          "title": "已有任务四只改标题3",
+          "description": "合法已有任务说明",
+          "assignee": "QA",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-01-01",
+          "dueDate": "2026-12-31",
+          "progress": 0,
+          "milestoneId": null,
+          "predecessorIds": [
+            "t-0002"
+          ],
+          "repoUrl": "",
+          "branch": "",
+          "manualProgress": null
+        }
+      },
+      "handlerResult": {
+        "kind": "handler-result",
+        "response": {
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0004 已有任务四只改标题3\n[pm:summary]已修改：标题：已有任务四 → 已有任务四只改标题3\n[pm:detail]\n```\n任务 ID：t-0004\nWBS：4\n项目 ID：p-0001\n父任务：无\n标题：已有任务四只改标题3\n说明：合法已有任务说明\n负责人：QA\n状态：未开始\n优先级：P1\n开始日期：2026-01-01\n截止日期：2026-12-31\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T12:51:53.803Z\n更新时间：2026-10-22T12:51:53.903Z\n```"
+        }
+      },
+      "onSaved": {
+        "kind": "onSaved"
+      },
+      "readback": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "已有任务四只改标题3",
+        "description": "合法已有任务说明",
+        "assignee": "QA",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-01-01",
+        "dueDate": "2026-12-31",
+        "progress": 0,
+        "milestoneId": null,
+        "predecessorIds": [
+          "t-0002"
+        ],
+        "manualProgress": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-22T12:51:53.803Z",
+        "updatedAt": "2026-10-22T12:51:53.903Z"
+      },
+      "writeDelta": [
+        {
+          "table": "tasks",
+          "id": "t-0004",
+          "before": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.803Z",
+            "updatedAt": "2026-10-22T12:51:53.803Z"
+          },
+          "after": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四只改标题3",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "manualProgress": null,
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.803Z",
+            "updatedAt": "2026-10-22T12:51:53.903Z"
+          }
+        }
+      ],
+      "fixtureUnchanged": true,
+      "preSubmitDomainUnchanged": true,
+      "runtimeErrors": [],
+      "caught": [],
+      "failureMessages": []
+    },
+    {
+      "id": "HPS-N01",
+      "status": "failed",
+      "independentResult": "FAIL_NECESSARY_RED",
+      "raw": "observations/4-HPS-N01/observations.json",
+      "sha256": "295d12e4f9bf67d4e28f73c76e010b6c18c98f1a4f6d2eaff9a9a36537c29771",
+      "initialPredecessorIds": [
+        "t-0002"
+      ],
+      "visibleCheckboxes": [
+        {
+          "id": "t-0001",
+          "checked": false,
+          "type": "checkbox"
+        }
+      ],
+      "formDataPredecessors": [],
+      "footer": "已选 1 项",
+      "submitted": 1,
+      "run": {
+        "kind": "run",
+        "line": "task update t-0004 {\"title\":\"已有任务四只改标题4\",\"description\":\"合法已有任务说明\",\"assignee\":\"QA\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-01-01\",\"dueDate\":\"2026-12-31\",\"progress\":0,\"milestoneId\":null,\"predecessorIds\":[],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "taskId": "t-0004",
+        "payload": {
+          "title": "已有任务四只改标题4",
+          "description": "合法已有任务说明",
+          "assignee": "QA",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-01-01",
+          "dueDate": "2026-12-31",
+          "progress": 0,
+          "milestoneId": null,
+          "predecessorIds": [],
+          "repoUrl": "",
+          "branch": "",
+          "manualProgress": null
+        }
+      },
+      "handlerResult": {
+        "kind": "handler-result",
+        "response": {
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0004 已有任务四只改标题4\n[pm:summary]已修改：标题：已有任务四 → 已有任务四只改标题4\n[pm:detail]\n```\n任务 ID：t-0004\nWBS：4\n项目 ID：p-0001\n父任务：无\n标题：已有任务四只改标题4\n说明：合法已有任务说明\n负责人：QA\n状态：未开始\n优先级：P1\n开始日期：2026-01-01\n截止日期：2026-12-31\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T12:51:53.936Z\n更新时间：2026-10-22T12:51:54.027Z\n```"
+        }
+      },
+      "onSaved": {
+        "kind": "onSaved"
+      },
+      "readback": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "已有任务四只改标题4",
+        "description": "合法已有任务说明",
+        "assignee": "QA",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-01-01",
+        "dueDate": "2026-12-31",
+        "progress": 0,
+        "milestoneId": null,
+        "manualProgress": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-22T12:51:53.936Z",
+        "updatedAt": "2026-10-22T12:51:54.027Z"
+      },
+      "writeDelta": [
+        {
+          "table": "tasks",
+          "id": "t-0004",
+          "before": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.936Z",
+            "updatedAt": "2026-10-22T12:51:53.936Z"
+          },
+          "after": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四只改标题4",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "manualProgress": null,
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:53.936Z",
+            "updatedAt": "2026-10-22T12:51:54.027Z"
+          }
+        }
+      ],
+      "fixtureUnchanged": true,
+      "preSubmitDomainUnchanged": true,
+      "runtimeErrors": [],
+      "caught": [],
+      "failureMessages": [
+        "AssertionError: TPC02: 搜索是只读过滤，保存 payload 必须保既有 t2: expected [] to deeply equal [ 't-0002' ]\n    at savePreservingRelation (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:186:81)\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:253:5\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)",
+        "AssertionError: TPC02: 真实 handler/core 内存回读必须保既有 t2: expected [] to deeply equal [ 't-0002' ]\n    at savePreservingRelation (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:187:95)\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:253:5\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)"
+      ]
+    },
+    {
+      "id": "HPS-N02",
+      "status": "failed",
+      "independentResult": "FAIL_NECESSARY_RED",
+      "raw": "observations/5-HPS-N02/observations.json",
+      "sha256": "00c664f94aa9587c04c60cc6d59bd90ba14d2866ec3e8737245aa326f72f32fe",
+      "initialPredecessorIds": [
+        "t-0002"
+      ],
+      "visibleCheckboxes": [],
+      "formDataPredecessors": [],
+      "footer": "已选 1 项",
+      "submitted": 1,
+      "run": {
+        "kind": "run",
+        "line": "task update t-0004 {\"title\":\"已有任务四只改标题5\",\"description\":\"合法已有任务说明\",\"assignee\":\"QA\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-01-01\",\"dueDate\":\"2026-12-31\",\"progress\":0,\"milestoneId\":null,\"predecessorIds\":[],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "taskId": "t-0004",
+        "payload": {
+          "title": "已有任务四只改标题5",
+          "description": "合法已有任务说明",
+          "assignee": "QA",
+          "status": "todo",
+          "priority": "P1",
+          "startDate": "2026-01-01",
+          "dueDate": "2026-12-31",
+          "progress": 0,
+          "milestoneId": null,
+          "predecessorIds": [],
+          "repoUrl": "",
+          "branch": "",
+          "manualProgress": null
+        }
+      },
+      "handlerResult": {
+        "kind": "handler-result",
+        "response": {
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0004 已有任务四只改标题5\n[pm:summary]已修改：标题：已有任务四 → 已有任务四只改标题5\n[pm:detail]\n```\n任务 ID：t-0004\nWBS：4\n项目 ID：p-0001\n父任务：无\n标题：已有任务四只改标题5\n说明：合法已有任务说明\n负责人：QA\n状态：未开始\n优先级：P1\n开始日期：2026-01-01\n截止日期：2026-12-31\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T12:51:54.114Z\n更新时间：2026-10-22T12:51:54.179Z\n```"
+        }
+      },
+      "onSaved": {
+        "kind": "onSaved"
+      },
+      "readback": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "已有任务四只改标题5",
+        "description": "合法已有任务说明",
+        "assignee": "QA",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-01-01",
+        "dueDate": "2026-12-31",
+        "progress": 0,
+        "milestoneId": null,
+        "manualProgress": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-22T12:51:54.114Z",
+        "updatedAt": "2026-10-22T12:51:54.179Z"
+      },
+      "writeDelta": [
+        {
+          "table": "tasks",
+          "id": "t-0004",
+          "before": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "predecessorIds": [
+              "t-0002"
+            ],
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:54.114Z",
+            "updatedAt": "2026-10-22T12:51:54.114Z"
+          },
+          "after": {
+            "id": "t-0004",
+            "projectId": "p-0001",
+            "parentId": null,
+            "title": "已有任务四只改标题5",
+            "description": "合法已有任务说明",
+            "assignee": "QA",
+            "status": "todo",
+            "priority": "P1",
+            "startDate": "2026-01-01",
+            "dueDate": "2026-12-31",
+            "progress": 0,
+            "milestoneId": null,
+            "manualProgress": null,
+            "code": "4",
+            "order": 4,
+            "createdAt": "2026-10-22T12:51:54.114Z",
+            "updatedAt": "2026-10-22T12:51:54.179Z"
+          }
+        }
+      ],
+      "fixtureUnchanged": true,
+      "preSubmitDomainUnchanged": true,
+      "runtimeErrors": [],
+      "caught": [],
+      "failureMessages": [
+        "AssertionError: TPC02: 搜索是只读过滤，保存 payload 必须保既有 t2: expected [] to deeply equal [ 't-0002' ]\n    at savePreservingRelation (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:186:81)\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:259:5\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)",
+        "AssertionError: TPC02: 真实 handler/core 内存回读必须保既有 t2: expected [] to deeply equal [ 't-0002' ]\n    at savePreservingRelation (/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:187:95)\n    at /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx:259:5\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runFiles (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)\n    at startTests (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)\n    at file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11\n    at withEnv (file:///Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/HiddenPredRedR1/r1/frozen/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)"
+      ]
+    }
+  ],
+  "protectedUnchanged": true,
+  "boundary": "真实TaskForm submit/run命令/handler/core内存领域清除确证；JSON落盘、重启、宿主run全链、GUI与正式业务损失未测试",
+  "release": "RELEASE_STOP",
+  "nextOwner": "Main统一panel最小修TPC01+TPC02，另一专家复验；本角色STOP"
+}

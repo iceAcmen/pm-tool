@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-22T14:42:34.407Z",
+  "receipts": [
+    {
+      "action": "freeze",
+      "executionId": "abb0015f49bbdfc1806f5af3d73616e6",
+      "pid": 2735,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 0,
+      "status": "exited",
+      "outputComplete": true,
+      "createdAtMs": 1792679823180,
+      "finishedAtMs": 1792679863689,
+      "output": "{\"action\":\"freeze\",\"tmp\":\"/private/tmp/successor112-auth-gui-prefix-20261022-r1-5vfhv9\",\"fileCount\":13579,\"linkCount\":1030,\"exit\":0}\n"
+    },
+    {
+      "action": "first-test-close",
+      "executionId": "a862389aa020c45ffa8e97626585c78c",
+      "pid": 3381,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 0,
+      "status": "exited",
+      "outputComplete": true,
+      "createdAtMs": 1792679909322,
+      "finishedAtMs": 1792679925108,
+      "output": "{\"action\":\"close\",\"cases\":5,\"observations\":5,\"exit\":0}\n"
+    },
+    {
+      "action": "own-oracle-r2",
+      "executionId": "8cdac43b33393d4d450232feceba9e8c",
+      "pid": 3526,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 1,
+      "status": "exited",
+      "outputComplete": true,
+      "createdAtMs": 1792679995697,
+      "finishedAtMs": 1792680015960,
+      "output": "{\"action\":\"own-oracle-r2\",\"actualExit\":1,\"total\":5,\"observations\":5,\"exited\":true}\n"
+    }
+  ],
+  "scope": "Only these three deferred tool executions; other synchronous tool exits are recorded in report, not invented metadata",
+  "childCommands": [
+    "test-command.json",
+    "r2-command.json"
+  ]
+}

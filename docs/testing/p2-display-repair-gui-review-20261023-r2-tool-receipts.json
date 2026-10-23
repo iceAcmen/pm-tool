@@ -1,0 +1,106 @@
+{
+  "role": "trae independent GUI original-evidence reviewer",
+  "environment": {"os": "macOS/darwin/arm64", "node": "v22.23.3", "pnpmCalled": false},
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "nodeExecutable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "origin": "Observed functions.exec_command results, not expected exit codes or Main summary",
+  "selfTmpPrefix": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-",
+  "verificationCalls": [
+    {
+      "command": "node /tmp/p2-display-repair-gui-review-20261023-r2-expert-reader.mjs index reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/index-r1.json 99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852",
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.4515,
+      "error": "Own path guard mistakenly rejected sealed round*-raw/data copies; not product FAIL",
+      "preservedReceipt": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-index-receipt.json"
+    },
+    {
+      "command": "node /tmp/p2-display-repair-gui-review-20261023-r2-expert-reader.mjs index reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/index-r1.json 99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852",
+      "actualToolExitCode": 0,
+      "wallSeconds": 0.6692,
+      "actualPidFromReader": 33041,
+      "ordinaryFiles": 1761,
+      "failures": [],
+      "preservedReceipt": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-index-receipt-2.json",
+      "correction": "Only sealed P2DisplayRepairGuiR2 round*-raw/data allowed; no live data read"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit.mjs"],
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.6773,
+      "error": "Read allowlist missed /pm ask-provenance p-0002",
+      "preserved": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit-failure-1792715994523.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit.mjs"],
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.6688,
+      "error": "Own source-manifest parser expected bytes/SHA object but actual changed-source value is SHA string",
+      "preserved": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit-failure-1792716030707.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit.mjs"],
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.6704,
+      "error": "Own reader confused changed-source124 with complete525; unchanged okr-model absent from changed set, present in complete inputs",
+      "preserved": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit-failure-1792716067567.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit.mjs"],
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.6275,
+      "error": "Own sourceMap reconstruction added a newline: 35 !== 34",
+      "preserved": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit-failure-1792716096157.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-audit.mjs"],
+      "actualToolExitCode": 0,
+      "wallSeconds": 0.6821,
+      "actualPidFromReader": 34333,
+      "start": "2026-10-23T00:42:04.982Z",
+      "end": "2026-10-23T00:42:05.522Z",
+      "actualSummary": {"states": 35, "raw": 1330, "frames": 245, "rpcPairs": 10, "exactAsk": 0, "writes": 0, "protectedInputs": 1767, "drift": []},
+      "GUIBoundary": "Reader success is evidence-byte result only, not GUI PASS"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p2-display-repair-gui-review-20261023-r2-expert-summary.mjs"],
+      "actualToolExitCode": 0,
+      "wallSeconds": 0.1106,
+      "purpose": "Readback of final audit, original outer statuses and four retained own failures"
+    }
+  ],
+  "exploration": [
+    {
+      "command": "pwd",
+      "toolRejectedBeforeLaunch": true,
+      "actualToolExitCode": null,
+      "error": "custom shell and login=false are not supported yet",
+      "boundary": "No shell was started; no exit fabricated"
+    },
+    {
+      "operation": "ReadMcp resource discovery",
+      "resources": 0,
+      "boundary": "No resources or external site read"
+    },
+    {
+      "operation": "Own reader text query ending with P2DisplayRepairGuiR2/source-binding.json",
+      "actualToolExitCode": 1,
+      "wallSeconds": 0.1488,
+      "error": "ENOENT for mistakenly guessed binding filename; actual sealed manifests located by names/index afterwards",
+      "boundary": "Earlier seal/outer/activation reads in same invocation completed; no seal or product modified"
+    },
+    {
+      "operation": "Own reader text/lines/match/json/names/list/shape/hash",
+      "boundary": "Read-only queries; exact successful paths and byte hashes in own reads journal; overlarge preview changed to narrow fields",
+      "journal": "/tmp/p2-display-repair-gui-review-20261023-r2-expert-reads.jsonl",
+      "productValidation": false
+    }
+  ],
+  "MainOriginalReceipts": "Original full argv/cwd/start/end/PID/status/signal/stdout/stderr preserved in audit.commands; not executed by this reviewer",
+  "MainSeal": {
+    "first": {"status": 1, "parentPid": 31370, "childPid": 31371, "reason": "unanchored ask regex also matched ask-provenance"},
+    "second": {"status": 0, "parentPid": 31847, "childPid": 31848, "indexSha256": "99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852"}
+  },
+  "visualTools": {"tool": "functions.view_image", "uniquePNG": 19, "uniqueJPEG": 13, "PNGCalls": 20, "JPEGCalls": 13, "purpose": "Original sealed images only; actual observations in visual-review.json"},
+  "notExecuted": ["product code", "Main helper/executor/harness", "build", "install", "verify", "Vitest", "Git/fetch", "browser/port probe", "GUI/desktop actions", "child process spawn", "service/profile operations"],
+  "sealAndReadbackReceipts": "Written separately after actual corresponding tool results; excluded from earlier seal to avoid circular fingerprints"
+}

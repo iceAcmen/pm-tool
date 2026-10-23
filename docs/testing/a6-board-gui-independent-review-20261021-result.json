@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-21",
+  "platform": "trae",
+  "role": "independent_gui_evidence_reviewer",
+  "collector": "Main",
+  "scope": "归档A6看板三拖/三撤销/保存取消/实际入口与环境子项；不执行GUI，不签整门",
+  "report": "a6-board-gui-independent-review-20261021.md",
+  "freeze": "a6-board-gui-independent-review-20261021-selftmp/r2/freeze.json",
+  "audit": "a6-board-gui-independent-review-20261021-selftmp/r2/audit.json",
+  "drift": "a6-board-gui-independent-review-20261021-selftmp/r2/drift.json",
+  "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "source_editor_sha256": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+  "archived_client_sha256": "1726375a196ea672f322f793a51169004348de9bc8a5e0ef28fb4a8873048c68",
+  "archived_editor_chunk_sha256": "89edce8deae392d9289720044a01b918567d16935f26f887e00def5cbbe9a6a2",
+  "results": [
+    { "id": "A6-R5-THREE-DRAGS", "status": "PASS", "boundary": "观察域局部；chunk实际字节装载缺证，不升级完整候选" },
+    { "id": "A6-R5-THREE-UNDO", "status": "PASS", "boundary": "观察域局部，完整JSON字节S2/S1/S0与末disabled" },
+    { "id": "A6-SAVE-CANCEL-CONTENT", "status": "PASS", "boundary": "功能及已枚举内容hash；完整磁盘记录和mtime/资产保护未签" },
+    { "id": "A6-ENTRY-LOADED", "status": "PASS", "boundary": "只签归档client.js唯一完整执行段；不签异步editor" },
+    { "id": "A6-ENV-MENU", "status": "PASS", "boundary": "只签归档新宿主启动/解析记录和原菜单可见100%时点；不倒签新document" },
+    { "id": "A6-EDITOR-CHUNK-LOADED", "status": "BLOCKED", "reason": "入口require.async另载client.editor.js，未归档实际chunk响应字节" },
+    { "id": "A6-FULL-WINDOW-PROTECTION", "status": "BLOCKED", "reason": "mtime/目录元数据/exports和附件解析根/正式保护/保存记录完整字节/localStorage缺证" },
+    { "id": "A6-BGUI-01", "status": "FAIL", "severity": "P2", "reason": "保存成功提示红底红边红字错误样式，与全程无错误横幅合同不符" },
+    { "id": "B1-GUI-01", "status": "NOT_PASS", "reason": "局部FAIL与绑定/保护缺证保留" },
+    { "id": "FW-T04-FULL", "status": "BLOCKED", "reason": "原动作观察域通过，完整装载身份未闭合" },
+    { "id": "FW-T05-FULL", "status": "NOT_PASS", "reason": "功能局部通过，反馈FAIL与完整保护缺证" },
+    { "id": "B8-TOTAL-OP-LAUNCHER", "status": "OUT_OF_SCOPE" }
+  ],
+  "failure_evidence": {
+    "path": "../../reports/all-pending-evidence-20261021/A6/board/save-cancel-r1/frames/000096.jpg",
+    "compositor_timestamp": 1792592138.740572,
+    "received_at": "2026-10-21T14:15:38.772Z",
+    "sha256": "36162874009f27e260d386c2ad1c9572a47cb4492fe4800f18867f7c26327963",
+    "text": "布局已保存并刷新。"
+  },
+  "visual_review": {
+    "method": "全部按序原帧联系表逐帧目视，关键原尺寸drop/成功反馈另审；不是只DOM或截图数量判",
+    "r5_frames": 149,
+    "save_cancel_frames": 215,
+    "fixture_frames": 13,
+    "r5_movie_duration": 7.048333333333333,
+    "save_cancel_movie_duration": 9.435,
+    "stage_bbox_height": 861,
+    "stage_scroll_height": 856,
+    "grid_bbox_height": 828,
+    "stable_collisions": 0,
+    "boundary": "viewport compositor非OS录屏；无cursor overlay；低分辨率/重载过渡尺寸原样登记，不冒称全程原分辨率"
+  },
+  "review_commands": {
+    "node_syntax_exit": 0,
+    "node_audit_r1_exit": 0,
+    "node_audit_r2_exit": 0,
+    "swift_contact_r5_initial_exit": 134,
+    "swift_contact_save_cancel_initial_exit": 134,
+    "swift_initial_failure": "末AVFoundation JSON写NaN，全部联系表已生成；审证设施失败，不是产品失败",
+    "swift_fixture_corrected_exit": 0,
+    "git_diff_check_exit": 0
+  },
+  "archived_author_preflights": {
+    "noemit_exit": 0,
+    "build_exit": 0,
+    "tests_initial_exit": 1,
+    "tests_r2_exit": 0,
+    "tests_r2_count": 1229,
+    "verify_exit": 0,
+    "verify_count": 95,
+    "boundary": "只审原exit/stdout，不是本专家产品重跑或全断言审签；guard实际为隔离根"
+  },
+  "forbidden_actions_executed": [],
+  "a7_inheritance": "无；不读取当前lib、不把新backup/panel或新实例当A6身份",
+  "next_owner": "Main按父授权修确证成功反馈并补最小装载/保护证据；无全disk新门"
+}

@@ -1,0 +1,1205 @@
+{
+  "at": "2026-10-22T11:05:16.687Z",
+  "sourceReview": {
+    "narrowFourRelationTypesOnly": true,
+    "reasons": [
+      "'前置依赖不能包含任务自身'",
+      "`前置依赖任务不存在：${pid}`",
+      "`前置依赖任务 ${pid} 不属于当前项目`",
+      "'前置依赖存在循环：任务不能间接地依赖自己'"
+    ],
+    "knownHandlerOnly": true,
+    "permissionHelperAndCallOnly": true,
+    "remainingProductBytesIdenticalToOldCandidate": true,
+    "unknownAndAggregateHandlerUnchanged": true,
+    "resultContextCopyGenerationAndSuccessHandlingUnchanged": true
+  },
+  "candidate": {
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "frozen": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen",
+    "oldCandidate": "/private/tmp/pmtool-u4-closure-20261022-r2",
+    "fullInputs": 509,
+    "successor": 104,
+    "incrementalFiles": 5,
+    "originalCaseSha256": "2eafe15ca37ab6768ee429a6a165e057cb823a313f6274883dea33f8ea6a783a",
+    "patchSha256": "2ab3267ea09dff1fbd72b7e3ad8b75bcf20318f9f154e1e1931caee74ce66ed2",
+    "dependencyWhitelist": "/private/tmp/pmtool-u4-closure-20261022-r2/packages/dsh-pm-tool/node_modules",
+    "dependencyFiles": 13579,
+    "dependencyLinks": 1030,
+    "node": "v22.23.3",
+    "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "productEdited": false,
+    "build": false,
+    "install": false,
+    "gui": false,
+    "services": false,
+    "gitWrite": false
+  },
+  "results": [
+    {
+      "suite": "original",
+      "tests": 10,
+      "files": 1,
+      "command": {
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+          "run",
+          "docs/testing/cycle-feedback-reason-20261022-cases.test.tsx",
+          "--config",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/vitest.config.mjs",
+          "--no-cache",
+          "--reporter=verbose",
+          "--reporter=json",
+          "--outputFile",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.result.json"
+        ],
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+          "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/home",
+          "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "XDG_CACHE_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/cache",
+          "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/runtime",
+          "PM_FILE_ATOMIC_TMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "CI": "true",
+          "LANG": "en_US.UTF-8",
+          "TZ": "UTC",
+          "NODE_DISABLE_COMPILE_CACHE": "1",
+          "CF_INPUT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/rpc-input.json",
+          "CF_OBSERVATIONS": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.observations.jsonl"
+        },
+        "start": "2026-10-22T11:00:12.016Z",
+        "end": "2026-10-22T11:00:18.195Z",
+        "pid": 34042,
+        "originalExit": 0,
+        "signal": null,
+        "error": null
+      },
+      "reporter": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.result.json",
+      "reporterSha256": "6a744b8ba951a92a7d861b4b7cbc9a8de38bbdcd60e9398d1fb168189687b08d",
+      "fileCases": [
+        {
+          "file": "docs/testing/cycle-feedback-reason-20261022-cases.test.tsx",
+          "tests": 10,
+          "cases": [
+            {
+              "name": "CF-C01 合法 t8→t9，真实 core 反选成环保持原原因与零 put",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 真实 command 必须保循环原因而非存储权限兜底，失败零写",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 45真实RPC通用排查建议不能被生产ResultCard标为权限不足",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C02 同被拒草稿只解除前置，retry真实成功一次任务put",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C03 真实成功合法标题 失败 / Error / Failed 清单已修复 不误红不显示权限标签",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C03 真实成功合法标题 权限 / permission 清单已整理 不误红不显示权限标签",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C04 明确权限拒绝原因 执行失败：权限不足，无法写入目录。 保留现有标签和全文",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C04 明确权限拒绝原因 执行失败：EACCES: permission denied, open /isolated/example.json 保留现有标签和全文",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C05 未知存储异常继续保守error兜底，不直接泄露原始异常",
+              "status": "passed"
+            },
+            {
+              "name": "CF-C06 既有typed里程碑错误仍保原因，零写",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "suite": "new",
+      "tests": 29,
+      "files": 2,
+      "command": {
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+          "run",
+          "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts",
+          "packages/dsh-pm-tool/src/client/result-card-permission.test.ts",
+          "--config",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/vitest.config.mjs",
+          "--no-cache",
+          "--reporter=verbose",
+          "--reporter=json",
+          "--outputFile",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.result.json"
+        ],
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+          "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/home",
+          "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "XDG_CACHE_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/cache",
+          "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/runtime",
+          "PM_FILE_ATOMIC_TMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "CI": "true",
+          "LANG": "en_US.UTF-8",
+          "TZ": "UTC",
+          "NODE_DISABLE_COMPILE_CACHE": "1",
+          "CF_INPUT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/rpc-input.json",
+          "CF_OBSERVATIONS": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.observations.jsonl"
+        },
+        "start": "2026-10-22T11:01:05.185Z",
+        "end": "2026-10-22T11:01:06.766Z",
+        "pid": 34567,
+        "originalExit": 0,
+        "signal": null,
+        "error": null
+      },
+      "reporter": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.result.json",
+      "reporterSha256": "8b552140e1fe657c134ce6d097ed513241409a4c8c969b9a719b06e2581d9a01",
+      "fileCases": [
+        {
+          "file": "packages/dsh-pm-tool/src/client/result-card-permission.test.ts",
+          "tests": 18,
+          "cases": [
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：任务操作失败，未返回成功结果；请检查存储配置、目录权限及宿主日志后重试。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：前置依赖存在循环：任务不能间接地依赖自己",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：请检查权限后重试。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：Please check directory permission and host logs.",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：Request denied because predecessor relation contains a cycle.",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：This task is not allowed to depend on itself.",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：关系校验失败；若日志包含 EACCES 或 EPERM，请检查目录权限。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：请检查是否权限不足或 permission denied。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 一般错误/排查建议/引用正文不冒称权限拒绝：执行失败：Response parsing failed; received text:\n[pm:action]不能执行：task delete t-0001 confirm\n[pm:summary]权限不足 / permission denied 是合法任务标题\n[pm:detail]\nEACCES",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：执行失败：权限不足，无法写入目录。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：恢复失败：无权读取备份。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：备份/恢复失败：EACCES: permission denied, open /isolated/example.json",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：备份失败: EPERM: operation not permitted",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：执行失败：Error: EACCES: permission denied",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：执行失败：permission denied, open /isolated/example.json",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：权限不足，无法写入目录。",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 明确权限拒绝保标签和全文：EACCES: permission denied",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R02 权限标签只认明确拒绝原因 成功信封含权限拒绝词仍不生成错误卡或权限标签",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts",
+          "tests": 11,
+          "cases": [
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 自身：command 保完整中文原因、core 窄类型、全域零写",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 不存在：command 保完整中文原因、core 窄类型、全域零写",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 跨项目：command 保完整中文原因、core 窄类型、全域零写",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 循环：command 保完整中文原因、core 窄类型、全域零写",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 add 前置 t-0004：拒绝零写、不占用稳定 ID",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 add 前置 t-9999：拒绝零写、不占用稳定 ID",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 add 前置 t-0003：拒绝零写、不占用稳定 ID",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 解除成环后同草稿重试一次任务 put；合法依赖去重与成功信封不变",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 未知异常不直接透出原文或路径：Error: unknown-storage-detail /isolated/private-path",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 未知异常不直接透出原文或路径：AggregateError: unknown-aggregate-detail /isolated/private-path { errors: [] }",
+              "status": "passed"
+            },
+            {
+              "name": "CF-R01 前置关系业务拒绝只返回已知原因 AggregateError 的既有原始错误/回滚摘要不变",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "suite": "affected",
+      "tests": 134,
+      "files": 10,
+      "command": {
+        "argv": [
+          "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+          "run",
+          "packages/dsh-pm-tool/src/commands/task-feedback.test.ts",
+          "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+          "packages/dsh-pm-tool/src/client/result-card.test.ts",
+          "packages/dsh-pm-tool/src/client/result-card-copy.test.ts",
+          "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx",
+          "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx",
+          "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+          "packages/dsh-pm-tool/src/core/task-ops.test.ts",
+          "packages/dsh-pm-tool/src/core/task-materials.test.ts",
+          "packages/dsh-pm-tool/src/client/shared/task-relation-projection.test.ts",
+          "--config",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/vitest.config.mjs",
+          "--no-cache",
+          "--reporter=verbose",
+          "--reporter=json",
+          "--outputFile",
+          "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.result.json"
+        ],
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen",
+        "env": {
+          "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+          "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/home",
+          "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "XDG_CACHE_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/cache",
+          "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/runtime",
+          "PM_FILE_ATOMIC_TMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+          "CI": "true",
+          "LANG": "en_US.UTF-8",
+          "TZ": "UTC",
+          "NODE_DISABLE_COMPILE_CACHE": "1",
+          "CF_INPUT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/rpc-input.json",
+          "CF_OBSERVATIONS": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.observations.jsonl"
+        },
+        "start": "2026-10-22T11:02:06.421Z",
+        "end": "2026-10-22T11:02:14.099Z",
+        "pid": 35079,
+        "originalExit": 0,
+        "signal": null,
+        "error": null
+      },
+      "reporter": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.result.json",
+      "reporterSha256": "68a0c7f26c1f71322315e777b5a3874e43fb9ddd7bdf0ef33b38e0f00b02fa8a",
+      "fileCases": [
+        {
+          "file": "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx",
+          "tests": 9,
+          "cases": [
+            {
+              "name": "slash-only session 的 /pm 结果回显 把 success 原文逐字回显到事件所属 session",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 把 error 原文逐字映射为错误通知",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 忽略非精确 pm 命令：help",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 忽略非精确 pm 命令：pmx",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 忽略非精确 pm 命令：PM",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 scope 或 conversation 缺失时安全跳过，后续合法事件仍可处理",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 input、for 返回值或 notify 能力缺失时安全跳过",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 undefined 正文不制造文案，空字符串仍逐字通知",
+              "status": "passed"
+            },
+            {
+              "name": "slash-only session 的 /pm 结果回显 面板 executeRaw 只执行一次且不触发 slash 回显",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx",
+          "tests": 23,
+          "cases": [
+            {
+              "name": "明确 catch fetch quiet=() => new Error(\"Failed to fetch\")/false 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch fetch quiet=() => new Error(\"Failed to fetch\")/true 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch a15-full quiet=() => new Error(\"client api: commands/execute failed: Failed to fetch\")/false 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch a15-full quiet=() => new Error(\"client api: commands/execute failed: Failed to fetch\")/true 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch abort quiet=() => Object.assign(new Error(\"The operation was aborted.\"), { name: \"AbortError\" })/false 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch abort quiet=() => Object.assign(new Error(\"The operation was aborted.\"), { name: \"AbortError\" })/true 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch unknown-string quiet=() => \"opaque transport reason\"/false 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch unknown-string quiet=() => \"opaque transport reason\"/true 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch unknown-object quiet=() => ({ code: 17, cause: \"opaque\" })/false 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "明确 catch unknown-object quiet=() => ({ code: 17, cause: \"opaque\" })/true 保错误全文、false、解锁和同命令重试",
+              "status": "passed"
+            },
+            {
+              "name": "已带失败场景不重复前缀：执行失败：client api: commands/execute failed: Failed to fetch",
+              "status": "passed"
+            },
+            {
+              "name": "已带失败场景不重复前缀：执行失败:opaque transport reason",
+              "status": "passed"
+            },
+            {
+              "name": "已带失败场景不重复前缀：执行失败",
+              "status": "passed"
+            },
+            {
+              "name": "长多行 Error.message 原全文显示和复制，quiet 不吞错且超3秒不消失",
+              "status": "passed"
+            },
+            {
+              "name": "A18 标记原因quiet=false完整alert/复制/无动作/持久，成功和close清上下文",
+              "status": "passed"
+            },
+            {
+              "name": "A18 标记原因quiet=true完整alert/复制/无动作/持久，成功和close清上下文",
+              "status": "passed"
+            },
+            {
+              "name": "A18 相同error全文新消息清复制且旧resolve不能污染",
+              "status": "passed"
+            },
+            {
+              "name": "A18 相同error全文新消息清复制且旧reject不能污染",
+              "status": "passed"
+            },
+            {
+              "name": "A18 旧success timer已排队也不能隐藏新success，同值新消息重新计时",
+              "status": "passed"
+            },
+            {
+              "name": "A18 已排队旧timer回调在新消息后调用不改变新toast",
+              "status": "passed"
+            },
+            {
+              "name": "A18 原TF-X08生产信封全文逐字显示复制，实际context持久且无toast",
+              "status": "passed"
+            },
+            {
+              "name": "A18 面板同值正文catch→正常success清context，旧复制resolve不串",
+              "status": "passed"
+            },
+            {
+              "name": "A18 面板同值正文catch→正常success清context，旧复制reject不串",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/client/result-card-copy.test.ts",
+          "tests": 3,
+          "cases": [
+            {
+              "name": "copyResultText：结果卡复制原文可核验且不假成功 writeText resolve → 写入完整原文并返回 true",
+              "status": "passed"
+            },
+            {
+              "name": "copyResultText：结果卡复制原文可核验且不假成功 writeText reject → 返回 false，不抛出",
+              "status": "passed"
+            },
+            {
+              "name": "copyResultText：结果卡复制原文可核验且不假成功 clipboard 不可用 → 返回 false，不假成功",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/client/result-card.test.ts",
+          "tests": 7,
+          "cases": [
+            {
+              "name": "ResultCard 真实组件：每条原文独立复制反馈 复制A后切B，B没有旧成功提示，只有复制B后才成功",
+              "status": "passed"
+            },
+            {
+              "name": "ResultCard 真实组件：每条原文独立复制反馈 A迟到resolve不能给B标复制结果",
+              "status": "passed"
+            },
+            {
+              "name": "ResultCard 真实组件：每条原文独立复制反馈 A迟到reject不能给B标复制结果",
+              "status": "passed"
+            },
+            {
+              "name": "ResultCard 真实组件：每条原文独立复制反馈 复制失败保留原文，切下一条后错误提示清除",
+              "status": "passed"
+            },
+            {
+              "name": "A18 ResultCard 显式上下文与同值消息代际 同值正文context变化后旧复制resolve不串新状态",
+              "status": "passed"
+            },
+            {
+              "name": "A18 ResultCard 显式上下文与同值消息代际 同值正文context变化后旧复制reject不串新状态",
+              "status": "passed"
+            },
+            {
+              "name": "A18 ResultCard 显式上下文与同值消息代际 同正文同error的新消息代际清除已复制与迟到结果",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/commands/task-feedback.test.ts",
+          "tests": 3,
+          "cases": [
+            {
+              "name": "J5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约 成功：摘要 ≤2 行、无 details/任务 ID/代码围栏，完整字段仅进 detail，TTL=3000",
+              "status": "passed"
+            },
+            {
+              "name": "J5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约 空日期 null 与旧值 undefined 等价，不产生“空 → 空”伪变更",
+              "status": "passed"
+            },
+            {
+              "name": "J5 真实链：task update 成功 CommandResult → classifyFeedback → Notice 契约 错误：持久（不自动消失）、单处、走回退文本",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/core/task-materials.test.ts",
+          "tests": 12,
+          "cases": [
+            {
+              "name": "B2-A02/A07 strict schema：attachments 判别联合与未知键拒绝 合法 link 项通过；deliverable 软引用项通过",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A02/A07 strict schema：attachments 判别联合与未知键拒绝 非法协议 ftp / 超长 / 空 url 被拒",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A02/A07 strict schema：attachments 判别联合与未知键拒绝 deliverable kind 缺 deliverableId / 错 id 格式被拒；未知键被拒",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A02/A07 strict schema：attachments 判别联合与未知键拒绝 资料项 id 重复被数组 schema 拒绝；create/update strictObject 拒收 attachments/progressLog",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A02/A07 strict schema：attachments 判别联合与未知键拒绝 本批仅 deliverable|link：file kind 不被判别联合接受",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A08 P3 修订版 append-only schema 合法条目通过；空 author/空 content 被拒；修订版 id 重复被拒",
+              "status": "passed"
+            },
+            {
+              "name": "B2-A08 P3 修订版 append-only schema 条目 id 重复被数组 schema 拒绝",
+              "status": "passed"
+            },
+            {
+              "name": "P3 纯派生：current/effective/软删可见/双读材料 currentRevision 取最后一版，旧版正文保留；effectiveAt 取最新 revisedAt",
+              "status": "passed"
+            },
+            {
+              "name": "P3 纯派生：current/effective/软删可见/双读材料 effectiveAt 缺最新 revisedAt 时回落 createdAt",
+              "status": "passed"
+            },
+            {
+              "name": "P3 纯派生：current/effective/软删可见/双读材料 visibleProgressLog 过滤软删并按 date 倒序",
+              "status": "passed"
+            },
+            {
+              "name": "P3 纯派生：current/effective/软删可见/双读材料 taskHasMaterials 双读：旧 evidenceUrl/deliverableId 与新数组/清单都算材料",
+              "status": "passed"
+            },
+            {
+              "name": "P3 纯派生：current/effective/软删可见/双读材料 collectMaterials 合并旧键与新数组，标注来源",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/core/task-ops.test.ts",
+          "tests": 7,
+          "cases": [
+            {
+              "name": "task ops 信封：no-op 原样保留稳定 ID/历史/软删 空 ops 不改动既有条目、revisions、deletedAt",
+              "status": "passed"
+            },
+            {
+              "name": "attachmentOps：分配、重算冻结、摘除、改注 addLink 续号 at-2；addDeliverable 服务端重算 frozen；remove；updateNote 改 title",
+              "status": "passed"
+            },
+            {
+              "name": "attachmentOps：分配、重算冻结、摘除、改注 跨项目交付物 / 非法 URL / 重复 clientId / 未知 id 抛错零写",
+              "status": "passed"
+            },
+            {
+              "name": "progressOps：alias 引用、edit 追加 revision、delete/restore add 用前面 clientId 别名解析；edit 追加 rv-3 继承 author/date 且保留旧版",
+              "status": "passed"
+            },
+            {
+              "name": "progressOps：alias 引用、edit 追加 revision、delete/restore delete 软删保留 revisions；restore 清除 deletedAt；重复 delete/restore 按现命令语义抛错",
+              "status": "passed"
+            },
+            {
+              "name": "progressOps：alias 引用、edit 追加 revision、delete/restore 向后引用 clientId / 未知 ref / 编辑已删条目抛错",
+              "status": "passed"
+            },
+            {
+              "name": "raw 数组与 ops 互斥 同区 raw 与 ops 同传抛 TaskOpsError",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+          "tests": 31,
+          "cases": [
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：同 hash 双 alias 都解析最终 at-ID，且一个资产/附件",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：末尾坏 author 零写、stage 可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：第二 stage 缺失，撤销第一已提升字节",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：坏 title 在准备之前零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：未知 refs 全包零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：记录 schema 超长正文拒绝并撤销已 prepare 文件",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：file/link 跨种类 alias 撞号零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：已 remove 的 file alias 不可用于进展",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：file_assets 第2写前故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：file_assets 第2写后故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：tasks 第1写前故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：tasks 第1写后故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） create：失败不删其他任务的旧共享 hash",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：同 hash 双 alias 都解析最终 at-ID，且一个资产/附件",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：末尾坏 author 零写、stage 可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：第二 stage 缺失，撤销第一已提升字节",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：坏 title 在准备之前零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：未知 refs 全包零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：记录 schema 超长正文拒绝并撤销已 prepare 文件",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：file/link 跨种类 alias 撞号零写",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：已 remove 的 file alias 不可用于进展",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：file_assets 第2写前故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：file_assets 第2写后故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：tasks 第1写前故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：tasks 第1写后故障全部补偿并可重试",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） update：失败不删其他任务的旧共享 hash",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） 真实 task update 命令单信封 basic+file+progress，保稳定四修订与软删",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） 同信封 link/file/link 按序编号，双 file alias 与 link refs 全部对应",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） 编辑追加第五修订引用新 file alias，前四版和软删条目不动",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） 同 hash 不同合法扩展名复用唯一最终路径，不留第二份最终字节",
+              "status": "passed"
+            },
+            {
+              "name": "主任务信封文件原子保存（真实 Context/JSON/domain） material apply 同 file 接缝双 alias 可用",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+          "tests": 32,
+          "cases": [
+            {
+              "name": "parseFeedback 反馈分型（J5） 结构化信封：短摘要与完整字段分离，摘要无 HTML/MD/完整实体",
+              "status": "passed"
+            },
+            {
+              "name": "parseFeedback 反馈分型（J5） wrapped 提示进摘要（含 ≠），完整字段仍分离",
+              "status": "passed"
+            },
+            {
+              "name": "parseFeedback 反馈分型（J5） 无信封的既有命令原样回退，不被吞、不强行分型",
+              "status": "passed"
+            },
+            {
+              "name": "parseFeedback 反馈分型（J5） 错误持久且单处：feedbackIsError 命中即错误态",
+              "status": "passed"
+            },
+            {
+              "name": "parseFeedback 反馈分型（J5） 成功自动消失时长固定 3s（错误持久，不走该 TTL）",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） parseActionLine：`[pm:action]文案：命令` 拆出 label/command；格式不符返回 null",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） 非结构化草稿预览：content 原样进 summary，action 独立抽出，不混进正文",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） buildSuccessEnvelope：≤2 行短摘要加前缀，完整字段进 detail；空行被过滤",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） 结构化成功信封 → classifyFeedback 3s 自动消失；action 透传",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） P1-1：结构化成功摘要含「错误/失败」字样（如已修复错误清单）仍判成功，不被中文关键词误红",
+              "status": "passed"
+            },
+            {
+              "name": "action 分离与信封构造（AI 草稿 content/action） P1-1：非结构化裸返回命中错误关键词仍判 error（关键词只兜底无信封文本）",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 业务拒绝文本 → false（保留抽屉，不 onSaved 关层）",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 结构化成功信封 → true",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 结构化成功保合法标题失败待重试一，不让正文覆盖信封语义",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 结构化成功保合法标题错误修复任务，不让正文覆盖信封语义",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 结构化成功保合法标题未找到原因的调查，不让正文覆盖信封语义",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 无信封既有成功文本 → true（不另造成功正则，仅排除错误词）",
+              "status": "passed"
+            },
+            {
+              "name": "commandAccepted（O3 失败不关抽屉） 只读预览文本不含错误词 → true，不误判为失败",
+              "status": "passed"
+            },
+            {
+              "name": "prefixFeedbackOnce（场景错误前缀不重复） 恢复场景保留明确备份/恢复组合前缀：和完整多行原因",
+              "status": "passed"
+            },
+            {
+              "name": "prefixFeedbackOnce（场景错误前缀不重复） 恢复场景保留明确备份/恢复组合前缀:和完整多行原因",
+              "status": "passed"
+            },
+            {
+              "name": "prefixFeedbackOnce（场景错误前缀不重复） 底层错误已带“恢复失败”时原样保留",
+              "status": "passed"
+            },
+            {
+              "name": "prefixFeedbackOnce（场景错误前缀不重复） 底层错误没有场景前缀时补一次中文冒号",
+              "status": "passed"
+            },
+            {
+              "name": "prefixFeedbackOnce（场景错误前缀不重复） 兼容 Error 与全角冒号，不把相似正文误判为前缀",
+              "status": "passed"
+            },
+            {
+              "name": "D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发） 纯结构化成功信封（无 action/无备份路径）→ 不持久化 ResultCard，交给 3s toast",
+              "status": "passed"
+            },
+            {
+              "name": "D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发） 错误 → 持久化（role=alert 单处）",
+              "status": "passed"
+            },
+            {
+              "name": "D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发） 非结构化原样回退 → 持久化（不吞不改写）",
+              "status": "passed"
+            },
+            {
+              "name": "D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发） 带 [pm:action] 独立确认动作 → 持久化（动作按钮须常驻可点）",
+              "status": "passed"
+            },
+            {
+              "name": "D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻大卡（单处不双发） 结构化成功但携带备份路径 → 持久化（复制路径位需常驻）",
+              "status": "passed"
+            },
+            {
+              "name": "A18 显式错误上下文独立于正文标记 A18 已知error全文非结构化持久且不抽取动作：opaque reason",
+              "status": "passed"
+            },
+            {
+              "name": "A18 显式错误上下文独立于正文标记 A18 已知error全文非结构化持久且不抽取动作：Response parsing failed; received text follows:\n[pm:summary]任务｜t-0001｜Failed delivery\n[pm:detail]\n{\"title\":\"Error register\"}",
+              "status": "passed"
+            },
+            {
+              "name": "A18 显式错误上下文独立于正文标记 A18 已知error全文非结构化持久且不抽取动作：  原因首行\n\n[pm:action]确认入库：task remove t-0001 confirm\n  原因尾部  ",
+              "status": "passed"
+            },
+            {
+              "name": "A18 显式错误上下文独立于正文标记 A18 缺省字符串调用保持成功信封/动作/关键词原规则",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "file": "packages/dsh-pm-tool/src/client/shared/task-relation-projection.test.ts",
+          "tests": 7,
+          "cases": [
+            {
+              "name": "D-08 关联里程碑只读投影 命中：返回名称 + 短 ID，供抽屉只读展示与直达",
+              "status": "passed"
+            },
+            {
+              "name": "D-08 关联里程碑只读投影 无关联（null/空串）→ null（诚实空态，不伪造）",
+              "status": "passed"
+            },
+            {
+              "name": "D-08 关联里程碑只读投影 关联 ID 在里程碑清单缺失 → null（不编造标题）",
+              "status": "passed"
+            },
+            {
+              "name": "D-11 关联交付物只读投影（名称 + 冻结版本） 附件带冻结快照名/版本 → 直接采用，不回查台账",
+              "status": "passed"
+            },
+            {
+              "name": "D-11 关联交付物只读投影（名称 + 冻结版本） 无冻结快照 → 回查交付物选项补名称/版本",
+              "status": "passed"
+            },
+            {
+              "name": "D-11 关联交付物只读投影（名称 + 冻结版本） 仅链接/文件附件、无交付物 → 空数组（诚实空态）",
+              "status": "passed"
+            },
+            {
+              "name": "D-11 关联交付物只读投影（名称 + 冻结版本） 无 attachments → 空数组，不抛错",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "noemit": {
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--project",
+      "tsconfig.json"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen/packages/dsh-pm-tool",
+    "env": {
+      "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+      "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/home",
+      "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+      "XDG_CACHE_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/cache",
+      "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/runtime",
+      "PM_FILE_ATOMIC_TMP": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tmp",
+      "CI": "true",
+      "LANG": "en_US.UTF-8",
+      "TZ": "UTC",
+      "NODE_DISABLE_COMPILE_CACHE": "1",
+      "CF_INPUT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/rpc-input.json",
+      "CF_OBSERVATIONS": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/noemit.observations.jsonl"
+    },
+    "start": "2026-10-22T11:03:08.620Z",
+    "end": "2026-10-22T11:03:20.147Z",
+    "pid": 35434,
+    "originalExit": 0,
+    "signal": null,
+    "error": null
+  },
+  "close": {
+    "at": "2026-10-22T11:05:00.863Z",
+    "protection": {
+      "protectedObjects": 890,
+      "drift": [],
+      "mainDrift": [],
+      "frozenDrift": [],
+      "dependencyDrift": false,
+      "dependencyExternal": 0,
+      "dependencySharedInodes": 0,
+      "caseDrift": false,
+      "bindingDrift": false,
+      "ok": true
+    },
+    "processChecks": [
+      {
+        "pid": 35079,
+        "exit": 1,
+        "stdout": "",
+        "gone": true
+      },
+      {
+        "pid": 34567,
+        "exit": 1,
+        "stdout": "",
+        "gone": true
+      },
+      {
+        "pid": 35434,
+        "exit": 1,
+        "stdout": "",
+        "gone": true
+      },
+      {
+        "pid": 34042,
+        "exit": 1,
+        "stdout": "",
+        "gone": true
+      }
+    ],
+    "remaining": [],
+    "released": true,
+    "stop": true,
+    "sourceAutoOnly": true,
+    "gui": "BLOCKED"
+  },
+  "evidence": [
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/candidate.json",
+      "bytes": 878,
+      "sha256": "39debea527612d630def1f1b845d66372fa50b66cabe6b076789214a9cbb0b47"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/binding.json",
+      "bytes": 103336,
+      "sha256": "c75f280adb43ccf9db8f45d71fcf9e4e8dfcb6034aa6a281bf02122e4ab15007"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/complete-input-files.json",
+      "bytes": 107229,
+      "sha256": "420b504c764a3e3c0266ec8f3556c0b2df266c4b8ac5c93183d57086b2b981c9"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/dependencies.json",
+      "bytes": 3420363,
+      "sha256": "faf9f5f6b55540bddbaff933fabe51d12a60feac8b68e8c52016b3b827f80167"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/protected-before.json",
+      "bytes": 18114554,
+      "sha256": "a833bcfdbd99dddb3ae8cb9a23617c8a83f79c8363c3e116df7ed846ddd2a7ef"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/main-inputs.json",
+      "bytes": 93651,
+      "sha256": "f85c7b71b16781854ba29595bfba410c4e02a8e7bf63107944f6da7c791826b7"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/frozen-inputs.json",
+      "bytes": 93214,
+      "sha256": "9fcad1096ecd48b07f9c23b0b41088c9f0d0a9db59ba5e5506ae017944e2d2b6"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/tracked-product.diff",
+      "bytes": 289721,
+      "sha256": "e4c66db0f8a34f3c02e864e95b21e46f02528cf14fbcfee2b2fb88fb91d57dde"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/untracked-product-files.txt",
+      "bytes": 2214,
+      "sha256": "5856f4cb03adf97467902196d97fd0acf47c3a559be69847b98fcd1f4b9275c9"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/increment.patch",
+      "bytes": 14146,
+      "sha256": "2ab3267ea09dff1fbd72b7e3ad8b75bcf20318f9f154e1e1931caee74ce66ed2"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/freeze-check.json",
+      "bytes": 232,
+      "sha256": "174ec82b99dbc962e46d286341fa301810fc27f666b7149f4b8e59adfccb53fb"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/close.json",
+      "bytes": 792,
+      "sha256": "a5da5db4a35fa519b47b59d5685208857fc950c1c6dd981f2e5f4841e8d74f60"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/sealed-inventory.json",
+      "bytes": 4356917,
+      "sha256": "83fdf24ca660f4b7886ad685c0c4ddbe6260f2be43ce92080aece4aab226c046"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.command.json",
+      "bytes": 2197,
+      "sha256": "08b1f0144283024a8242bd51e734c4ac81ec307f076b93e7bdc7bf47c396e9d7"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.summary.json",
+      "bytes": 723,
+      "sha256": "558eaadac3615676bdfd27a44f36a799ed760247193c34d64f2d4e6c876e7494"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.stdout.log",
+      "bytes": 2362,
+      "sha256": "ec3be3cacfe59ead8cfb7414c59b6847ee2f65bc537c033f643b6308c8bc3865"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.stderr.log",
+      "bytes": 2624,
+      "sha256": "9e76a1b3056ecc9af5eb67e298685650486fe93b6803f9ad033bb2aa96ca5fbf"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.command.json",
+      "bytes": 2266,
+      "sha256": "2357d516b8b3ca88c326411116810d4863a6b421acbcbdbd07dc10a2a18c14fc"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.summary.json",
+      "bytes": 723,
+      "sha256": "beadea55bfb713c16d56dfe99aeb4f2115fe286368a036f575051dd010b0c64b"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.stdout.log",
+      "bytes": 7890,
+      "sha256": "7256992874493d237742e3409d3e3ca6f5bea0ae4d188fac5a05f1735c66ca51"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.stderr.log",
+      "bytes": 6168,
+      "sha256": "da2376b4b64c0e1304165084288fc9b7cf1b9d612ad06eda519355ec8adc5bdf"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.command.json",
+      "bytes": 2781,
+      "sha256": "7a935f7f005d7fbc30b01eb7d590f27706a488fe20151ad1b6ce6b947aeb924f"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.summary.json",
+      "bytes": 724,
+      "sha256": "d9b809f9c2a299c97f6becd86a3a244490632221410c46c97fe2ac008c880e43"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.stdout.log",
+      "bytes": 29597,
+      "sha256": "251406a5454e3302b068da25bf10ae0253afdfdfe9187ba94e20da5550aa27f0"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/noemit.command.json",
+      "bytes": 1816,
+      "sha256": "94aa6209a96dd10007fc8192338d3379f1a345fb4f9e2c128405aff024ac3285"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/noemit.summary.json",
+      "bytes": 731,
+      "sha256": "c9262c299dead1d4d834b455fdd65f17ba7a85ad4d1d49661342a75fcf78d189"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/noemit.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/noemit.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.result.json",
+      "bytes": 3788,
+      "sha256": "6a744b8ba951a92a7d861b4b7cbc9a8de38bbdcd60e9398d1fb168189687b08d"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/new.result.json",
+      "bytes": 13355,
+      "sha256": "8b552140e1fe657c134ce6d097ed513241409a4c8c969b9a719b06e2581d9a01"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/affected.result.json",
+      "bytes": 52730,
+      "sha256": "68a0c7f26c1f71322315e777b5a3874e43fb9ddd7bdf0ef33b38e0f00b02fa8a"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-selftmp/r1/original.observations.jsonl",
+      "bytes": 18100,
+      "sha256": "d0c80202408c4bc89654fb04d84f0dcc6efe3d6a8f04e1fbde8d57272fd6918a"
+    }
+  ],
+  "sourceAutoVerdict": "PASS",
+  "gui": "BLOCKED",
+  "wholeFeedbackGateSigned": false,
+  "wholeParentGateSigned": false,
+  "commitSigned": false,
+  "released": true,
+  "stop": true
+}

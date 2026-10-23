@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-22T12:37:23.811Z",
+  "mode": "EVIDENCE_ONLY_FINAL_CHECK",
+  "index": {
+    "bytes": 81249,
+    "sha256": "e4833192fa8429b89d6a121eb9de1a1b1621f4b67e3b645c2ad77c3e5f455535"
+  },
+  "declaredFilesUnchanged": 468,
+  "files": {
+    "j03-combined-gui-review-20261022-r1.md": {
+      "bytes": 18276,
+      "sha256": "afd991b015b4abfb8927f3d875a39e2f91780a40de31e94a45d7efed92c5c5e3"
+    },
+    "j03-combined-gui-review-20261022-r1-audit.mjs": {
+      "bytes": 14801,
+      "sha256": "1cd3be1c7383314e24256b47f317a65b92408badb22ccb4cd45ca5077565678e"
+    },
+    "j03-combined-gui-review-20261022-r1-audit.json": {
+      "bytes": 128561,
+      "sha256": "364dba3ec6cdbf5216af8fb08d91df82da491cef4847aa8c7d112ea5e41bba3a"
+    },
+    "j03-combined-gui-review-20261022-r1-close.json": {
+      "bytes": 128937,
+      "sha256": "e9ea107ac1078ed6b05ff44c63f408c43578d02ceb0421f24a72e10b14667ae6"
+    },
+    "j03-combined-gui-review-20261022-r1-finalize.mjs": {
+      "bytes": 2167,
+      "sha256": "f36d90b61d3c8e4a0ffd571169710de00352975117acb0100e915e896373d052"
+    }
+  },
+  "links": {
+    "count": 15,
+    "missing": []
+  },
+  "exitCode": 0,
+  "historicalCloseReport": {
+    "bytes": 17527,
+    "sha256": "3574251bee5f815d0f3dce452f5513a97427e5f622e2753727e28ba6ea344b0e"
+  },
+  "boundary": "Final report includes later link-race disclosure; historical close kept unchanged. No product tests, browser, Git, service or network calls."
+}

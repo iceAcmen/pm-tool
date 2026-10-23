@@ -1,0 +1,44 @@
+{
+  "角色": "trae，独立GUI审证专家",
+  "记录依据": "seal命令已实际返回后追加，不覆盖原report/audit/receipt/seal",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p3004-negative-gui-review-20261023-r2-reader.mjs",
+    "seal"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "observedToolExit": 0,
+  "wallSeconds": 0.3019,
+  "toolOutput": "{\"mode\":\"seal\",\"indexed\":893,\"inputsUnchanged\":true,\"localLinks\":17,\"exit\":0}\n",
+  "separateStderr": "工具未独立分栏，NOT_COLLECTED；可见输出无错误",
+  "readerStart": "2026-10-22T23:22:59.817Z",
+  "readerEnd": "2026-10-22T23:23:00.008Z",
+  "startEndBoundary": "以上来自实际seal内容，不冒工具外层起止时间",
+  "seal": {
+    "path": "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json",
+    "sha256": "b1597311751a6553340db8682942ae33fe58f0efb187de8463151c6baed8cb13",
+    "physicalHashCommand": [
+      "/usr/bin/shasum",
+      "-a",
+      "256",
+      "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json"
+    ],
+    "observedHashToolExit": 0,
+    "observedHashToolOutput": "b1597311751a6553340db8682942ae33fe58f0efb187de8463151c6baed8cb13  docs/testing/p3004-negative-gui-review-20261023-r2-seal.json\n"
+  },
+  "门": {
+    "本子单": "有限GUI PASS：原missing/B真实失败保稿与连续零写，remaining=[]",
+    "不扩大": "全P3004/正例/F7/新source/父commit/发布均不由本件放行",
+    "输入": "893索引件/896物理件、7指定冻结源码、11状态/44根项/418业务raw、两真实RPC、9原图目视",
+    "限制": "missing错误摘要ID右端被抽屉遮挡如实保；files/backups六项仅连续根指纹；原封包工具更外层终码未取得"
+  },
+  "交回Main": {
+    "通知方式": "本轮最终回报与同前缀仓库审证文件；未发现可用Main消息工具，不伪称已发送内部消息",
+    "不做": "不spawn、不占GUI/builder/端口/业务根，不停止Main/父任务/服务",
+    "report": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+    "audit": "docs/testing/p3004-negative-gui-review-20261023-r2-audit.json",
+    "receipt": "docs/testing/p3004-negative-gui-review-20261023-r2-receipt.json",
+    "seal": "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json"
+  },
+  "停止": "本角色审结，资源释放/STOP；Main按父持续目标继续其他原门"
+}

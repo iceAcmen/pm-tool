@@ -18,7 +18,7 @@ import { MarkdownView } from '../markdown-view.js'
 import { LaneSwitcher } from './model-lane.js'
 import { validateActions, parseCopilotPlan, validatePlan, forStepwiseApply, type CopilotStep } from '../../../core/copilot.js'
 import { extractReferencedTaskIds, planTaskIds, dueUrgency, latestAppliedBatches, refreshSucceeded, type AppliedBatch } from '../../../core/ask-projection.js'
-import { parseActiveModelLane } from '../../../core/ui-feedback.js'
+import { parseActiveModelLane, prefixFeedbackOnce } from '../../../core/ui-feedback.js'
 import { localTodayIso, isTaskOverdue } from '../../../core/derived.js'
 import { clampProgress, isProgressOutOfRange } from '../../../core/progress-derivation.js'
 import { taskStatusLabels } from '../../../core/labels.js'
@@ -383,7 +383,7 @@ export function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliver
       }
     } catch (e) {
       removePlaceholder()
-      setMsgs(m => [...m, { role: 'ai', text: `副驾暂不可用：${e instanceof Error ? e.message : String(e)}` }])
+      setMsgs(m => [...m, { role: 'ai', text: prefixFeedbackOnce('副驾暂不可用', e) }])
     } finally { setSending(false) }
   }
 
@@ -419,34 +419,64 @@ export function CopilotPanel({ projectId, tasks, milestones, riskIssues, deliver
   const runApply = async (mode: 'batch' | 'stepwise') => {
     setBusy(true)
     try {
-      let base = { ...baselineMap }
+      // 执行基线绑定计划生成时刻；最新 props 只用于只读展示，不能洗掉确认前外改。
+      const base = { ...(openedAt ?? {}) }
       const ordered = buildActions()
       const newUndo: { id: string, label: string, at: number }[] = []
       const rememberUndo = (undoId: string | undefined, label: string): void => {
         if (undoId) newUndo.push({ id: undoId, label, at: Date.now() })
       }
-      // dsh 命令结果只透传 kind/text；落库后查询最近撤销句柄，取第一条（即本次落库产生的）。
-      const fetchLatestUndoId = async (): Promise<string | undefined> => {
-        const r = await executeRaw('ask-undo list')
+      // dsh 仅透传 kind/text；沿用后端实际应用数量文案，0/幂等命中不算本次成功。
+      const appliedCount = (res: { kind: string, text: string }): number =>
+        res.kind === 'success' ? Number(/^已应用 (\d+) (?:步|条)(?=[（；\s]|$)/.exec(res.text)?.[1] ?? 0) : 0
+      const fetchLatestUndoId = async (startedAt: number): Promise<string | undefined> => {
         try {
-          const parsed = JSON.parse(r.text) as { undoIds?: { id: string }[] }
-          return parsed.undoIds?.[0]?.id
+          const r = await executeRaw('ask-undo list')
+          const listedAt = Date.now()
+          if (r.kind !== 'success') return undefined
+          const parsed = JSON.parse(r.text) as { undoIds?: { id: string, at: number }[] }
+          // 仅认领本次实际成功调用时间窗的新句柄；不能从列表捞旧撤销。
+          return parsed.undoIds?.find(u => typeof u.id === 'string' && Number.isFinite(u.at)
+            && u.at >= startedAt && u.at <= listedAt
+            && !newUndo.some(n => n.id === u.id) && !undoIds.some(n => n.id === u.id))?.id
         } catch { return undefined }
       }
       if (mode === 'batch') {
+        const startedAt = Date.now()
         const res = await executeRaw(`ask-apply ${projectId} ${JSON.stringify(ordered)} --base ${JSON.stringify(base)}`)
         setMsgs(m => [...m, { role: 'sys', text: res.text }])
-        rememberUndo(await fetchLatestUndoId(), `整批 ${ordered.length} 步`)
+        const count = appliedCount(res)
+        if (count > 0) rememberUndo(await fetchLatestUndoId(startedAt), `整批 ${count} 步`)
       } else {
+        const appliedStepIds = new Set<string>()
+        type BaselineRow = { id: string, projectId: string, updatedAt?: string }
+        const targetTables: Record<string, string> = {
+          task: 'tasks', milestone: 'milestones', risk: 'riskIssues', deliverable: 'deliverables', meeting: 'meetings',
+        }
         for (const s of checked) {
-          // 逐步模式：单步发送时剥掉 needs（避免服务端误判前置未执行而级联跳过）。
-          const one = forStepwiseApply(s)
-          const res = await executeRaw(`ask-apply ${projectId} ${JSON.stringify([one])} --base ${JSON.stringify(base)}`)
-          setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：${res.text}` }])
-          rememberUndo(await fetchLatestUndoId(), s.stepId || '单步')
-          // 逐步模式每步后重读 domain 刷新链式 baseline（每次 ask-apply 后端也重读）。
-          const snap = JSON.parse(await execute('web snapshot')) as { tasks: (Task & { updatedAt?: string })[] }
-          base = Object.fromEntries((snap.tasks ?? []).filter(t => t.projectId === projectId).map(t => [t.id, t.updatedAt ?? '']))
+          if (s.needs.some(id => !appliedStepIds.has(id))) {
+            setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：依赖步骤未执行，已跳过` }])
+            continue
+          }
+          try {
+            // 只在本轮前置确已应用后剥 needs；跨调用仍沿用既有单步协议。
+            const one = forStepwiseApply(s)
+            const startedAt = Date.now()
+            const res = await executeRaw(`ask-apply ${projectId} ${JSON.stringify([one])} --base ${JSON.stringify(base)}`)
+            setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：${res.text}` }])
+            if (appliedCount(res) !== 1) continue
+            appliedStepIds.add(s.stepId)
+            rememberUndo(await fetchLatestUndoId(startedAt), s.stepId || '单步')
+            if (s.action.op.endsWith('.update') && s.action.id) {
+              // 重读只推进本次成功目标；其他待目标保原基线，不能洗白其外改。
+              const snap = JSON.parse(await execute('web snapshot')) as Record<string, BaselineRow[] | undefined>
+              const rows = snap[targetTables[s.action.op.split('.')[0]]]
+              const target = rows?.find(r => r.id === s.action.id && r.projectId === projectId)
+              if (target?.updatedAt) base[s.action.id] = target.updatedAt
+            }
+          } catch (e) {
+            setMsgs(m => [...m, { role: 'sys', text: `${s.stepId}：执行或刷新失败：${e instanceof Error ? e.message : String(e)}` }])
+          }
         }
       }
       // 新撤销句柄置顶，最多保留 3 条。

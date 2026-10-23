@@ -1,0 +1,142 @@
+{
+  "seal": {
+    "path": "docs/plans/2026-10-23-p1005-event-reflect-entry-seal.json",
+    "sha256": "682c3ab1013c24e437e44e9cf371303c64f03821a52b374dcc93fb3895dc10f9",
+    "bytes": 598272
+  },
+  "outputCount": 2858,
+  "outputDrift": [],
+  "artifactCount": 6,
+  "artifactDrift": [],
+  "declaredInputs": 437,
+  "currentDrift": [
+    {
+      "path": "docs/changelog.md",
+      "before": {
+        "path": "docs/changelog.md",
+        "sha256": "36184aa4724f7cfa2a1fb58109aabe92291cddd1419bd49ed540c0e3bd7f0c90",
+        "bytes": 245002
+      },
+      "after": {
+        "path": "docs/changelog.md",
+        "sha256": "4707986d71ba0e27ee9dbb0622186f02585628365ca4c26af7d9a8754e43caf5",
+        "bytes": 246564
+      }
+    },
+    {
+      "path": "docs/handoff.md",
+      "before": {
+        "path": "docs/handoff.md",
+        "sha256": "92c0aad17256cee12bdacb470251f2447d2675fade7b6aa6c2a76cb75e0a063b",
+        "bytes": 79436
+      },
+      "after": {
+        "path": "docs/handoff.md",
+        "sha256": "df47f5064186bed5a948e04810614b3bf658cdd334a032202ac9e98d5d5b584d",
+        "bytes": 80527
+      }
+    },
+    {
+      "path": "docs/onboarding-prompt.md",
+      "before": {
+        "path": "docs/onboarding-prompt.md",
+        "sha256": "f29b88dfbba4ef9f30bc7b4308639235ae66fba11024362338a77a1c4d09271a",
+        "bytes": 51793
+      },
+      "after": {
+        "path": "docs/onboarding-prompt.md",
+        "sha256": "85353abe666ad6a2f5e924c7eb795eb3853053c9ab2def90efb2d590da1e7d98",
+        "bytes": 53052
+      }
+    },
+    {
+      "path": "docs/progress.md",
+      "before": {
+        "path": "docs/progress.md",
+        "sha256": "30c8cf83c479d0531ef4b4c198e211eac6ba84478954129d35135cf85c020a8b",
+        "bytes": 127040
+      },
+      "after": {
+        "path": "docs/progress.md",
+        "sha256": "a76aa4c17b6758dfe9cd9c17220d390041d33cb5f35f5af116bd09b672172228",
+        "bytes": 128393
+      }
+    }
+  ],
+  "reconstructedDelta": [
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+      "before": {
+        "path": "packages/dsh-pm-tool/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+        "sha256": "d2e1c8685e2f49c71c5ddda951400b0a3e73e2c2a6601378da9b64a95fa7e38a",
+        "bytes": 7990
+      },
+      "after": {
+        "path": "packages/dsh-pm-tool/src/client/views/records/records-deliverable-pointer-dom.test.tsx",
+        "sha256": "6de116ba10c320a162f1c465958f428ca9023e328b67827581db9ea23df42aec",
+        "bytes": 9159
+      }
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+      "before": {
+        "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+        "sha256": "790533aed66fa35a6258e8a37c345058b8204d9d91cb86684e48453218f9cf7d",
+        "bytes": 4737
+      },
+      "after": {
+        "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+        "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2",
+        "bytes": 4886
+      }
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/reflect-l2-entry.test.ts",
+      "before": null,
+      "after": {
+        "path": "packages/dsh-pm-tool/src/commands/reflect-l2-entry.test.ts",
+        "sha256": "779b12ac9e99f3ab5b2ddeb06d6be86f81cd29ec8415adb0c83a6aa165dfdd78",
+        "bytes": 16059
+      }
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+      "before": {
+        "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+        "sha256": "69be050f31870274fcb831e935dd791f1903b031f20b1d0917c2665bda62f07c",
+        "bytes": 6015
+      },
+      "after": {
+        "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+        "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951",
+        "bytes": 7461
+      }
+    }
+  ],
+  "patchMatchesCurrent": true,
+  "sourceDeltaMatches": true,
+  "originalRed": {
+    "exit": 1,
+    "stdout": {
+      "sha256": "be1ee1d76592fc07a3a5612bf8e9f8f6a78f9eb5002d35452c72f3d0f2f53e55",
+      "bytes": 928
+    },
+    "stderr": {
+      "sha256": "4ff54eebd7e881b51b83f0d0c33f33d46e0cf0e046e785fcaae7646222815566",
+      "bytes": 590
+    },
+    "audit": {
+      "path": "/tmp/pm-p1005-event-reflect-entry-6iR2yc/output/fixtures/p1005-json-4MpUZd.audit.json",
+      "sha256": "b53157536de313d1aef0dc24a067e38c77759f430e5fd1dceca0147f36982bbf",
+      "bytes": 6627
+    },
+    "redContractExit": 1,
+    "preserved": true,
+    "executedHere": false
+  },
+  "developerGreenReferenceOnly": {
+    "finalExit": 0,
+    "regressionExit": 0
+  },
+  "boundary": "当前漂移是相对开发seal声明；不是Git全树diff。2858件只读核字节，不执行其中任何脚本。"
+}

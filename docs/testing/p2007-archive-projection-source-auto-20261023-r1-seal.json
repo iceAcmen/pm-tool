@@ -1,0 +1,147 @@
+{
+  "role": "independent SOURCE/AUTO expert",
+  "judgment": "有限PASS：K16 draft投影SOURCE/AUTO",
+  "boundSources": [
+    {
+      "path": "src/core/archive.ts",
+      "bytes": 9339,
+      "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+    },
+    {
+      "path": "src/core/archive.test.ts",
+      "bytes": 12831,
+      "sha256": "c53a8bbaf5ad49d84478d667ea3279c1c6be23cc00592254ecc58767e71e730b"
+    }
+  ],
+  "baselineDeclared": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "gitExecuted": false,
+  "protectedCount": 414,
+  "protectedDrift": [],
+  "dependencyCount": 1019,
+  "dependencyDrift": [],
+  "copiedDrift": [],
+  "runs": [
+    {
+      "label": "affected",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "tests": 35,
+      "inputDrift": []
+    },
+    {
+      "label": "bytes",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "tests": 3,
+      "inputDrift": []
+    }
+  ],
+  "originalMembershipEqual": true,
+  "outputs": [
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-inputs.json",
+      "bytes": 11064,
+      "sha256": "544474fb25c991c315277fcb651b074e1d6f24e54eabf2dc1c7f3cc72414b16c"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-receipt.json",
+      "bytes": 1811,
+      "sha256": "2bb1e71b3a266c0808489565fe71e7f0e8aed1435af69b69829a3134591fd346"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-stdout.log",
+      "bytes": 5809,
+      "sha256": "5754d9f8ff612b9f5f58d9b47b551311c0ec1a1bae41d1dc24d1d957e413ec45"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-vitest-result.json",
+      "bytes": 13760,
+      "sha256": "d83c9f2b8487b1eeb044d7b95e12861238d19c3d1c614384b198366c953bd105"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-audit.json",
+      "bytes": 408487,
+      "sha256": "0a6c0d64a924e9d131cbd3a418d9a5c59af263ec3de1171d9ef2cd9d8b3e2f4b"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes-inputs.json",
+      "bytes": 11409,
+      "sha256": "9b459bd0d8df290cded5dd7d4a73e3114d1beed32deaad8fc933f974ae707cfa"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes-receipt.json",
+      "bytes": 1798,
+      "sha256": "2c4d0d05f8d576b3f2dc60ff538fd6d385869045840f14fbbb6350c13a3b241b"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes-stdout.log",
+      "bytes": 862,
+      "sha256": "242579a5582aabcff53505d25a01f6707822fe3528dbc0b1d5664074afc397c8"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes-vitest-result.json",
+      "bytes": 1823,
+      "sha256": "e4a40d6ae01ba6010bef6ac6b201798fa69401089b76dcc70a2670b03632b193"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-bytes.test.ts",
+      "bytes": 6779,
+      "sha256": "6ba6eef90621732bdc5a9c9b2eb65708ee2e06eee2724f42ed5637170c81e6c6"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-capture-first-error.log",
+      "bytes": 1352,
+      "sha256": "a64843c7c47c61c8159c369d26b5978821ce0d6819868799967111a167dcc7e4"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-commands.md",
+      "bytes": 8347,
+      "sha256": "8e8d73904038ea9c39b9a6cf59ede40829777914dd87961208dccfff37038b1d"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-original-records-projection.json",
+      "bytes": 5446,
+      "sha256": "96212400bca4bbc991654dce5145a8e618b110d846b84e8dbf4bcd75d269da98"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-reader.mjs",
+      "bytes": 16375,
+      "sha256": "2ef0ee44cff466c3144ea0e2c4e05ad01a9bfc21bd3e7a215e5d27732d65c999"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+      "bytes": 11466,
+      "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-runner.mjs",
+      "bytes": 4221,
+      "sha256": "6ebbb9878ce35fd73dfba804121110cefb946a5206c3371719717765e4987ad7"
+    }
+  ],
+  "root": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo",
+  "nodeModulesLinkTarget": "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules",
+  "developerToCurrentDrift": [],
+  "protectionBoundary": "明确文件清单及四专项闭包；links非OS强制只读；不声称全库/全盘/完整依赖零变",
+  "gui": "NOT_RUN / Main only；旧GUI/archive红主chain不关闭",
+  "p2007": "整项不关闭",
+  "ordinarycommit": "NOT_RUN / 不授权",
+  "push": "NOT_RUN",
+  "release": "NOT_RUN",
+  "sharedLocks": "未持产品/builder/GUI/service锁；Main唯一builder/GUI；P1004/P1005在途未操作",
+  "children": "本轮runner的spawnSync子进程全部返回，无长运行任务",
+  "state": "released",
+  "stop": true
+}

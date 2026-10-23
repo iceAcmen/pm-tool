@@ -1,0 +1,1132 @@
+{
+  "at": "2026-10-21T21:12:29.903Z",
+  "checks": [
+    {
+      "name": "A13-label-A12-actual-package",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/source-binding.json"
+    },
+    {
+      "name": "A12-tracked-patch-bytes",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A12/candidate.json"
+    },
+    {
+      "name": "A12-source-512-matches",
+      "observed": true,
+      "evidence": "docs/testing/a13-gateway-clean-undo-gui-review-20261021-inputs.json"
+    },
+    {
+      "name": "A12-artifacts-453-matches",
+      "observed": true,
+      "evidence": "docs/testing/a13-gateway-clean-undo-gui-review-20261021-inputs.json"
+    },
+    {
+      "name": "later-reload-full-unique-client-byte-binding",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/loaded-r1"
+    },
+    {
+      "name": "recorded-host-gateway-owned-identities",
+      "observed": true,
+      "evidence": [
+        "reports/all-pending-evidence-20261021/A13/gateway/host-start-r2.json",
+        "reports/all-pending-evidence-20261021/A13/gateway/gateway-start.json"
+      ]
+    },
+    {
+      "name": "original-plan-text-hash",
+      "observed": false,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/environment.json"
+    },
+    {
+      "name": "same-t1-chain-and-independent-t2",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/gateway-start.json"
+    },
+    {
+      "name": "two-real-http-success-results",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/gateway.stdout.ndjson"
+    },
+    {
+      "name": "empty-target-first-confirm-zero-and-standard-source",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/seed/boundary.json"
+    },
+    {
+      "name": "seed-source-tasks-and-ledger-exact",
+      "observed": true,
+      "evidence": [
+        "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/green-corrected/F6-ui-standard/pmtool-backup-2026-10-21T14-08-30-668Z.json",
+        "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo"
+      ]
+    },
+    {
+      "name": "cancel-preimage-to-r2-continuation-raw-equal",
+      "observed": true,
+      "evidence": [
+        "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo",
+        "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/initial-t1.json"
+      ]
+    },
+    {
+      "name": "cancelled-and-regenerated-and-undo-visible-states",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/regenerated-plan.json"
+    },
+    {
+      "name": "page-continuity-not-retroactive-time-origin",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/loaded-r1/result.json"
+    },
+    {
+      "name": "r2-cancel-full-data-manifest-zero",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/boundary.json"
+    },
+    {
+      "name": "ask-through-cancel-no-business-write",
+      "observed": true,
+      "evidence": [
+        "reports/all-pending-evidence-20261021/A13/gateway/ask-three/boundary.json",
+        "reports/all-pending-evidence-20261021/A13/gateway/ask-three/continued.json"
+      ]
+    },
+    {
+      "name": "initial-runner-empty-is-not-success",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/ask-three"
+    },
+    {
+      "name": "original-timeout-preserved",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo/outer-exit.json"
+    },
+    {
+      "name": "real-apply-actions-match-gateway-plan-and-actual-base",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/command-events.json"
+    },
+    {
+      "name": "real-regeneration-done-text-matches-original-response",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/command-events.json"
+    },
+    {
+      "name": "apply-success-fresh-list-undo-success-order",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/command-events.json"
+    },
+    {
+      "name": "new-applied-only-unique-task-refs",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/applied-ledger.json"
+    },
+    {
+      "name": "fresh-handle-not-restored-handle",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/undone-ledger.json"
+    },
+    {
+      "name": "old-ledger-unchanged-and-new-audit-append-only",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/undone-ledger.json"
+    },
+    {
+      "name": "two-t1-postimages-chain-and-t2-independent",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/applied-ledger.json"
+    },
+    {
+      "name": "applied-tasks-requested-values-and-untouched-history",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/applied-t1.json"
+    },
+    {
+      "name": "clean-two-task-full-original-exact-bytes",
+      "observed": true,
+      "evidence": [
+        "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/undone-t1.json",
+        "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/undone-t2.json"
+      ]
+    },
+    {
+      "name": "real-snapshot-results-match-applied-and-undone-disk",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/command-events.json"
+    },
+    {
+      "name": "undo-no-unrelated-business-write",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/boundary.json"
+    },
+    {
+      "name": "r2-real-outer-exit-zero",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/outer-exit.json"
+    },
+    {
+      "name": "seed-original-frame-hashes",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/frames.json"
+    },
+    {
+      "name": "ask-three-original-frame-hashes",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/frames.json"
+    },
+    {
+      "name": "cancel-apply-undo-original-frame-hashes",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo/frames/frames.json"
+    },
+    {
+      "name": "cancel-apply-undo-r2-original-frame-hashes",
+      "observed": true,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/frames.json"
+    }
+  ],
+  "inheritedPrefixes": [
+    {
+      "path": "reports/all-pending-evidence-20261021/A13/gateway/gateway.stdout.ndjson",
+      "frozenBytes": 514,
+      "currentBytes": 732,
+      "frozenSha": "4bac8127b5270aa286f07e2708e6b95dad127c085f06cd339f72ffcf8b44b0c7",
+      "prefixExact": true
+    }
+  ],
+  "count": 34,
+  "matches": 33,
+  "mismatches": [
+    {
+      "name": "original-plan-text-hash",
+      "observed": false,
+      "evidence": "reports/all-pending-evidence-20261021/A13/gateway/environment.json"
+    }
+  ],
+  "commandTimeline": [
+    {
+      "seq": 19,
+      "time": 1792616733794,
+      "id": "cmd-621fa016-9",
+      "args": " ask p-0001  \"治理链式三步再次生成\"",
+      "resultKind": "success"
+    },
+    {
+      "seq": 21,
+      "time": 1792616734109,
+      "id": "cmd-621fa016-10",
+      "args": " ask-apply p-0001 [{\"op\":\"task.update\",\"id\":\"t-0001\",\"patch\":{\"status\":\"in_progress\",\"progress\":62},\"stepId\":\"s1\",\"title\":\"推进来源任务一\",\"needs\":[]},{\"op\":\"task.update\",\"id\":\"t-0001\",\"patch\":{\"assignee\":\"治理采证甲\"},\"stepId\":\"s2\",\"title\":\"来源任务一改派\",\"needs\":[\"s1\"]},{\"op\":\"task.update\",\"id\":\"t-0002\",\"patch\":{\"progress\":22},\"stepId\":\"s3\",\"title\":\"推进独立任务二\",\"needs\":[]}] --base {\"t-0001\":\"2026-10-21T14:07:53.825Z\",\"t-0002\":\"2026-10-21T14:07:53.835Z\"}",
+      "resultKind": "success"
+    },
+    {
+      "seq": 23,
+      "time": 1792616734243,
+      "id": "cmd-621fa016-11",
+      "args": " ask-undo list",
+      "resultKind": "success"
+    },
+    {
+      "seq": 25,
+      "time": 1792616734275,
+      "id": "cmd-621fa016-12",
+      "args": " web snapshot",
+      "resultKind": "success"
+    },
+    {
+      "seq": 27,
+      "time": 1792616734300,
+      "id": "cmd-621fa016-13",
+      "args": " ask-provenance p-0001",
+      "resultKind": "success"
+    },
+    {
+      "seq": 29,
+      "time": 1792616734442,
+      "id": "cmd-621fa016-14",
+      "args": " ask-undo undo-mvilpwj2-9rj0g6",
+      "resultKind": "success"
+    },
+    {
+      "seq": 31,
+      "time": 1792616734469,
+      "id": "cmd-621fa016-15",
+      "args": " web snapshot",
+      "resultKind": "success"
+    }
+  ],
+  "originalTaskHashes": {
+    "t1": {
+      "initial": "93ca4434e08553700c72356bd169f81d4807798d3d55083a46c3b3d02135e6f9",
+      "cancelled": "93ca4434e08553700c72356bd169f81d4807798d3d55083a46c3b3d02135e6f9",
+      "before-apply": "93ca4434e08553700c72356bd169f81d4807798d3d55083a46c3b3d02135e6f9",
+      "applied": "1540481df9b12acfc7df6656ec9838157ce379d2d7b8f7f2a2e95b19427c2d30",
+      "undone": "93ca4434e08553700c72356bd169f81d4807798d3d55083a46c3b3d02135e6f9"
+    },
+    "t2": {
+      "initial": "15f692d2e17d3a32396ae6686fbfde319adc8f5eae19ad403fe8857c821881da",
+      "cancelled": "15f692d2e17d3a32396ae6686fbfde319adc8f5eae19ad403fe8857c821881da",
+      "before-apply": "15f692d2e17d3a32396ae6686fbfde319adc8f5eae19ad403fe8857c821881da",
+      "applied": "ade858910bed7e347382497a2e95845ac37eb14a2d03f395d504bf4a28ca9869",
+      "undone": "15f692d2e17d3a32396ae6686fbfde319adc8f5eae19ad403fe8857c821881da"
+    }
+  },
+  "manifestDeltas": {
+    "firstAsk": [
+      {
+        "path": "/pmtool/settings/aiModelMode.json",
+        "before": null,
+        "after": "c4358bb40ab0f807f370d67abab15b60d74299b05ba860e3d0225244cdaad420"
+      }
+    ],
+    "cancelled": [],
+    "final": [
+      {
+        "path": "/pmtool/settings/askApplyIdempotency.json",
+        "before": "68f0152ba2fe6e93670226bfe230cfbb296a5d243e55cd0aada5a70154817e99",
+        "after": "cde533d7d510d74175e492d5cbc310401faa42b2047aeddcb7b2c2240566d2c0"
+      },
+      {
+        "path": "/pmtool/settings/pmProvenanceLedger.json",
+        "before": "5ec97e82c34c231425de56c0a19b1069b324bdb3d4b713d32b8a4f9bc1cfa7b7",
+        "after": "7a3dd4e5973ce42ee59f055c1b956bf67258e1f990e27c423c16544ef4ea4e2f"
+      },
+      {
+        "path": "/pmtool/settings/pmProvenancePending.json",
+        "before": "edb2681669c2c9bea37448852b94ef416b7532017c3299764db4c0af8d8a161f",
+        "after": "c3d0762bf4fd3271027d97fae88909128616a5c0f3399d807928c701c12286b9"
+      }
+    ]
+  },
+  "newProvenanceId": "prv-mvilpwj4-kqvjdo",
+  "currentUndoHandle": "undo-mvilpwj2-9rj0g6",
+  "frameSummary": [
+    {
+      "directory": "seed",
+      "count": 69,
+      "files": [
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000000.jpg",
+          "sha256": "b6230c9c257582b0a0919591199b11402fa4acac275406db8caf5ee703eb8fe8",
+          "expected": "b6230c9c257582b0a0919591199b11402fa4acac275406db8caf5ee703eb8fe8",
+          "at": "2026-10-21T21:01:33.742Z",
+          "compositorTimestamp": 1792616493.7287
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000001.jpg",
+          "sha256": "df4f4adcbf18bbd8a8a6e845903be36f6191fbf313ae9b46ba9e3cb5a9f5fee6",
+          "expected": "df4f4adcbf18bbd8a8a6e845903be36f6191fbf313ae9b46ba9e3cb5a9f5fee6",
+          "at": "2026-10-21T21:01:33.807Z",
+          "compositorTimestamp": 1792616493.795105
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000002.jpg",
+          "sha256": "813e8ec1738ab7d387be06fa1ec4b59416ff5b19a7d277fcd2001586e20edeff",
+          "expected": "813e8ec1738ab7d387be06fa1ec4b59416ff5b19a7d277fcd2001586e20edeff",
+          "at": "2026-10-21T21:01:33.812Z",
+          "compositorTimestamp": 1792616493.80033
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000003.jpg",
+          "sha256": "dc9a62c982850b0e7c85e8a7c0dc5d1106c34d01d38fde26ff5fca602cff287c",
+          "expected": "dc9a62c982850b0e7c85e8a7c0dc5d1106c34d01d38fde26ff5fca602cff287c",
+          "at": "2026-10-21T21:01:33.828Z",
+          "compositorTimestamp": 1792616493.815073
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000004.jpg",
+          "sha256": "941cee96540f8b6f6b459380d27f70ddde7624ca262640d4c9f63559c903dd17",
+          "expected": "941cee96540f8b6f6b459380d27f70ddde7624ca262640d4c9f63559c903dd17",
+          "at": "2026-10-21T21:01:33.840Z",
+          "compositorTimestamp": 1792616493.827979
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000005.jpg",
+          "sha256": "408f934e6ab22ba8ce4feec2679401ca6e417de4fa62c574076e6fb6277ac7a3",
+          "expected": "408f934e6ab22ba8ce4feec2679401ca6e417de4fa62c574076e6fb6277ac7a3",
+          "at": "2026-10-21T21:01:33.925Z",
+          "compositorTimestamp": 1792616493.889273
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000006.jpg",
+          "sha256": "8bcdfff3d6e71f300572fc1c210eb4852f117cfa4083b240caeb4b5321be42bf",
+          "expected": "8bcdfff3d6e71f300572fc1c210eb4852f117cfa4083b240caeb4b5321be42bf",
+          "at": "2026-10-21T21:01:33.930Z",
+          "compositorTimestamp": 1792616493.892823
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000007.jpg",
+          "sha256": "97bab071a0009e94b8c958ee41cdfaa73941f335b1ed46ba025f81e72cc00bea",
+          "expected": "97bab071a0009e94b8c958ee41cdfaa73941f335b1ed46ba025f81e72cc00bea",
+          "at": "2026-10-21T21:01:33.940Z",
+          "compositorTimestamp": 1792616493.894036
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000008.jpg",
+          "sha256": "18afe84e96b918902c7b686de045c927234f439ad10b418a8ae6b764678d65d3",
+          "expected": "18afe84e96b918902c7b686de045c927234f439ad10b418a8ae6b764678d65d3",
+          "at": "2026-10-21T21:01:33.947Z",
+          "compositorTimestamp": 1792616493.928242
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000009.jpg",
+          "sha256": "70e940f6ea50feff9e683b42225c81f94f30f53b8443db37e1161b8e76bc97e4",
+          "expected": "70e940f6ea50feff9e683b42225c81f94f30f53b8443db37e1161b8e76bc97e4",
+          "at": "2026-10-21T21:01:33.962Z",
+          "compositorTimestamp": 1792616493.949504
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000010.jpg",
+          "sha256": "6609bda30d6683e02a6a1cafc1782f4c6abcaafffc2f9ec0b1e35b1c546b90d8",
+          "expected": "6609bda30d6683e02a6a1cafc1782f4c6abcaafffc2f9ec0b1e35b1c546b90d8",
+          "at": "2026-10-21T21:01:33.973Z",
+          "compositorTimestamp": 1792616493.964241
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000011.jpg",
+          "sha256": "dd1bc43ba06c55cba2c5b86a2670f9b3ba0155001cb6f0c7ff1778dc67ae335b",
+          "expected": "dd1bc43ba06c55cba2c5b86a2670f9b3ba0155001cb6f0c7ff1778dc67ae335b",
+          "at": "2026-10-21T21:01:33.988Z",
+          "compositorTimestamp": 1792616493.982599
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000012.jpg",
+          "sha256": "19b762c10650f831614d9c58d6b023ca0829f6c95490b4894cae368a920a9f90",
+          "expected": "19b762c10650f831614d9c58d6b023ca0829f6c95490b4894cae368a920a9f90",
+          "at": "2026-10-21T21:01:34.008Z",
+          "compositorTimestamp": 1792616493.998553
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000013.jpg",
+          "sha256": "ee9cc95e6fd4cc53734d44e3862b42b7b6e40dfe3c6edc0665d0a185d49f8712",
+          "expected": "ee9cc95e6fd4cc53734d44e3862b42b7b6e40dfe3c6edc0665d0a185d49f8712",
+          "at": "2026-10-21T21:01:34.021Z",
+          "compositorTimestamp": 1792616494.014458
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000014.jpg",
+          "sha256": "ba220308fa5ca19c3c2771012843a946e66c4f2a74e1af798b414de2420abd39",
+          "expected": "ba220308fa5ca19c3c2771012843a946e66c4f2a74e1af798b414de2420abd39",
+          "at": "2026-10-21T21:01:34.037Z",
+          "compositorTimestamp": 1792616494.030472
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000015.jpg",
+          "sha256": "6d566d5b53ec959ef3e4a00da812b6c0e23969fe3047a3ffafb0e41c4881ddc4",
+          "expected": "6d566d5b53ec959ef3e4a00da812b6c0e23969fe3047a3ffafb0e41c4881ddc4",
+          "at": "2026-10-21T21:01:34.060Z",
+          "compositorTimestamp": 1792616494.049026
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000016.jpg",
+          "sha256": "c76c57d82c794637b5a91ba969f91542454021311af9ed9c88e8e3b8781e7e5f",
+          "expected": "c76c57d82c794637b5a91ba969f91542454021311af9ed9c88e8e3b8781e7e5f",
+          "at": "2026-10-21T21:01:34.071Z",
+          "compositorTimestamp": 1792616494.063766
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000017.jpg",
+          "sha256": "421ecf59047bc5065fe643711441f6faa6df91fa8ce8982d43cfd36614ad6202",
+          "expected": "421ecf59047bc5065fe643711441f6faa6df91fa8ce8982d43cfd36614ad6202",
+          "at": "2026-10-21T21:01:34.085Z",
+          "compositorTimestamp": 1792616494.079772
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000018.jpg",
+          "sha256": "aac875984e866182d6fb0da469426fedc1d4c908d56bd10702a48b2b12fb6814",
+          "expected": "aac875984e866182d6fb0da469426fedc1d4c908d56bd10702a48b2b12fb6814",
+          "at": "2026-10-21T21:01:34.103Z",
+          "compositorTimestamp": 1792616494.097052
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000019.jpg",
+          "sha256": "3923cc8e79a2d2a3bdc10b272a58180fa68260b60adc2ecbdef141cd02505b90",
+          "expected": "3923cc8e79a2d2a3bdc10b272a58180fa68260b60adc2ecbdef141cd02505b90",
+          "at": "2026-10-21T21:01:34.121Z",
+          "compositorTimestamp": 1792616494.114096
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000020.jpg",
+          "sha256": "1e4baec7f11cebd061619f62ea461b94457bf034418e3f84662e1eb5b5f8abbf",
+          "expected": "1e4baec7f11cebd061619f62ea461b94457bf034418e3f84662e1eb5b5f8abbf",
+          "at": "2026-10-21T21:01:34.137Z",
+          "compositorTimestamp": 1792616494.129747
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000021.jpg",
+          "sha256": "c4b4a50da6de3c1b3025baf864eb7c22a82e5e764b29e1f7a9c6b5b415196919",
+          "expected": "c4b4a50da6de3c1b3025baf864eb7c22a82e5e764b29e1f7a9c6b5b415196919",
+          "at": "2026-10-21T21:01:34.156Z",
+          "compositorTimestamp": 1792616494.148759
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000022.jpg",
+          "sha256": "d5bb860755a1e0fede76b5c8ce36fcfa1458cb4b71290911838a9aff4bd8bf73",
+          "expected": "d5bb860755a1e0fede76b5c8ce36fcfa1458cb4b71290911838a9aff4bd8bf73",
+          "at": "2026-10-21T21:01:34.186Z",
+          "compositorTimestamp": 1792616494.175391
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000023.jpg",
+          "sha256": "3666e684820cae8c0f2d990cdc37d1230e27c81d50eda9a28f888c4ab9e9cac2",
+          "expected": "3666e684820cae8c0f2d990cdc37d1230e27c81d50eda9a28f888c4ab9e9cac2",
+          "at": "2026-10-21T21:01:34.204Z",
+          "compositorTimestamp": 1792616494.196065
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000024.jpg",
+          "sha256": "3eae922c1a74c72b8e4c78a1bb4c4b95864568459b6df4e4231018314b317ffe",
+          "expected": "3eae922c1a74c72b8e4c78a1bb4c4b95864568459b6df4e4231018314b317ffe",
+          "at": "2026-10-21T21:01:34.222Z",
+          "compositorTimestamp": 1792616494.215244
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000025.jpg",
+          "sha256": "9397964cf157da5f94c37e03574f8c259882751b7c2386d8e418f422e60b4cab",
+          "expected": "9397964cf157da5f94c37e03574f8c259882751b7c2386d8e418f422e60b4cab",
+          "at": "2026-10-21T21:01:34.241Z",
+          "compositorTimestamp": 1792616494.229969
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000026.jpg",
+          "sha256": "b559a529e12739c3eb85c3898867e99abc2b87e7a17040c7aad3da4e20873809",
+          "expected": "b559a529e12739c3eb85c3898867e99abc2b87e7a17040c7aad3da4e20873809",
+          "at": "2026-10-21T21:01:34.266Z",
+          "compositorTimestamp": 1792616494.247769
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000027.jpg",
+          "sha256": "f10da7d6f4a7524277d9ad8f19f5ed9d457b9511c45d5e540b489e750c066df9",
+          "expected": "f10da7d6f4a7524277d9ad8f19f5ed9d457b9511c45d5e540b489e750c066df9",
+          "at": "2026-10-21T21:01:34.280Z",
+          "compositorTimestamp": 1792616494.26688
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000028.jpg",
+          "sha256": "ee3c0c1185aecad539e68fefdc6e23670b4ec0352a837f42042e4c07d42d7077",
+          "expected": "ee3c0c1185aecad539e68fefdc6e23670b4ec0352a837f42042e4c07d42d7077",
+          "at": "2026-10-21T21:01:34.288Z",
+          "compositorTimestamp": 1792616494.280794
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000029.jpg",
+          "sha256": "2e815bdbab432fc1eebadc6aac53377d46042c55a98ef3ab6f36e8cd8a17119f",
+          "expected": "2e815bdbab432fc1eebadc6aac53377d46042c55a98ef3ab6f36e8cd8a17119f",
+          "at": "2026-10-21T21:01:34.306Z",
+          "compositorTimestamp": 1792616494.299523
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000030.jpg",
+          "sha256": "d0b4ab108f00ef3acb62985318ffb2930e188023e5670fcae4985bd80f3a0223",
+          "expected": "d0b4ab108f00ef3acb62985318ffb2930e188023e5670fcae4985bd80f3a0223",
+          "at": "2026-10-21T21:01:34.323Z",
+          "compositorTimestamp": 1792616494.312859
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000031.jpg",
+          "sha256": "51c6dd9a79f1446fcb4d0a07a9d7a5d0a5409811dcda95c4adad2ba868efc649",
+          "expected": "51c6dd9a79f1446fcb4d0a07a9d7a5d0a5409811dcda95c4adad2ba868efc649",
+          "at": "2026-10-21T21:01:34.343Z",
+          "compositorTimestamp": 1792616494.330641
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000032.jpg",
+          "sha256": "245f436369a5f121517d8bad666946bbf2d78af582d6209e0e34e17eaf5024f1",
+          "expected": "245f436369a5f121517d8bad666946bbf2d78af582d6209e0e34e17eaf5024f1",
+          "at": "2026-10-21T21:01:34.362Z",
+          "compositorTimestamp": 1792616494.347919
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000033.jpg",
+          "sha256": "beda06d44e957c59b7e51afbaf685f2c4cac9c49a6f68c0d6dcabc00b9b7bf44",
+          "expected": "beda06d44e957c59b7e51afbaf685f2c4cac9c49a6f68c0d6dcabc00b9b7bf44",
+          "at": "2026-10-21T21:01:34.372Z",
+          "compositorTimestamp": 1792616494.363697
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000034.jpg",
+          "sha256": "01a4fb97b2dd45600fe8c3684cfee956a2b8fbb087fe124206043a39efc3e470",
+          "expected": "01a4fb97b2dd45600fe8c3684cfee956a2b8fbb087fe124206043a39efc3e470",
+          "at": "2026-10-21T21:01:34.390Z",
+          "compositorTimestamp": 1792616494.381902
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000035.jpg",
+          "sha256": "78a42e115676daea5c1ae85bfd7340228283a968a2d7784422758827a8bca132",
+          "expected": "78a42e115676daea5c1ae85bfd7340228283a968a2d7784422758827a8bca132",
+          "at": "2026-10-21T21:01:34.406Z",
+          "compositorTimestamp": 1792616494.399331
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000036.jpg",
+          "sha256": "e684fbf49280b5aaf49e77d8cd5c9243418295be3bf2251019567581c4fb1d73",
+          "expected": "e684fbf49280b5aaf49e77d8cd5c9243418295be3bf2251019567581c4fb1d73",
+          "at": "2026-10-21T21:01:34.423Z",
+          "compositorTimestamp": 1792616494.414784
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000037.jpg",
+          "sha256": "2fb57609b1a575fcd80448d6409329c6da92d6c94bfe846f3914ec91b4117938",
+          "expected": "2fb57609b1a575fcd80448d6409329c6da92d6c94bfe846f3914ec91b4117938",
+          "at": "2026-10-21T21:01:34.453Z",
+          "compositorTimestamp": 1792616494.433251
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000038.jpg",
+          "sha256": "476bdcb6ccbb292aa82fcd1c0e3e978324ba65c49a60eceab06d323c409e7182",
+          "expected": "476bdcb6ccbb292aa82fcd1c0e3e978324ba65c49a60eceab06d323c409e7182",
+          "at": "2026-10-21T21:01:34.458Z",
+          "compositorTimestamp": 1792616494.445916
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000039.jpg",
+          "sha256": "ac4b237093fbad7b103ffb349670ca7140136c9dacd2b1ab8c5e0b7162745ade",
+          "expected": "ac4b237093fbad7b103ffb349670ca7140136c9dacd2b1ab8c5e0b7162745ade",
+          "at": "2026-10-21T21:01:34.478Z",
+          "compositorTimestamp": 1792616494.463362
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000040.jpg",
+          "sha256": "ba03daaaedc1b370892373fad96aeff0cc33af9f17ae33cda3037b55dc1705c3",
+          "expected": "ba03daaaedc1b370892373fad96aeff0cc33af9f17ae33cda3037b55dc1705c3",
+          "at": "2026-10-21T21:01:34.493Z",
+          "compositorTimestamp": 1792616494.482967
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000041.jpg",
+          "sha256": "e05786582c21da7018fc21f7cc4f6d4c601d7ad8d2b1b8df3706364773282a38",
+          "expected": "e05786582c21da7018fc21f7cc4f6d4c601d7ad8d2b1b8df3706364773282a38",
+          "at": "2026-10-21T21:01:34.505Z",
+          "compositorTimestamp": 1792616494.496591
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000042.jpg",
+          "sha256": "4f1c8f90c8cdd788f97b9c2ca0edb305b4268e423593db0445598e69de7e87a2",
+          "expected": "4f1c8f90c8cdd788f97b9c2ca0edb305b4268e423593db0445598e69de7e87a2",
+          "at": "2026-10-21T21:01:34.525Z",
+          "compositorTimestamp": 1792616494.514464
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000043.jpg",
+          "sha256": "ffddca90a889afadd30da229939819906b56db3497dc08205c11f75e745f816a",
+          "expected": "ffddca90a889afadd30da229939819906b56db3497dc08205c11f75e745f816a",
+          "at": "2026-10-21T21:01:34.537Z",
+          "compositorTimestamp": 1792616494.528098
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000044.jpg",
+          "sha256": "36aca379711c98c5484f448bfdf4bd30ebd26054d5440695b21d66a369bc9b77",
+          "expected": "36aca379711c98c5484f448bfdf4bd30ebd26054d5440695b21d66a369bc9b77",
+          "at": "2026-10-21T21:01:34.556Z",
+          "compositorTimestamp": 1792616494.5482
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000045.jpg",
+          "sha256": "d28c3cd8ce976542486744ff1a20cac44145ac1f878a2625ae85211fec00ab9b",
+          "expected": "d28c3cd8ce976542486744ff1a20cac44145ac1f878a2625ae85211fec00ab9b",
+          "at": "2026-10-21T21:01:34.571Z",
+          "compositorTimestamp": 1792616494.563086
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000046.jpg",
+          "sha256": "c919905fe7a8a1106566d63218220edfdb6f080f43352ee96b9cd99da8a7bb9f",
+          "expected": "c919905fe7a8a1106566d63218220edfdb6f080f43352ee96b9cd99da8a7bb9f",
+          "at": "2026-10-21T21:01:34.588Z",
+          "compositorTimestamp": 1792616494.580189
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000047.jpg",
+          "sha256": "a41da0b2872620039c24029e94b9c30b3e38de1f4f5e7462ad07c036e11583c1",
+          "expected": "a41da0b2872620039c24029e94b9c30b3e38de1f4f5e7462ad07c036e11583c1",
+          "at": "2026-10-21T21:01:34.604Z",
+          "compositorTimestamp": 1792616494.597452
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000048.jpg",
+          "sha256": "40945581985585d884bea8fa2f3c3151a6b75b33f42f65010d8b96c2beb74227",
+          "expected": "40945581985585d884bea8fa2f3c3151a6b75b33f42f65010d8b96c2beb74227",
+          "at": "2026-10-21T21:01:34.625Z",
+          "compositorTimestamp": 1792616494.614825
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000049.jpg",
+          "sha256": "18b3db3b99645344bf0c7f646e2f36237eb12948ab6dae92d4993a6af02d016c",
+          "expected": "18b3db3b99645344bf0c7f646e2f36237eb12948ab6dae92d4993a6af02d016c",
+          "at": "2026-10-21T21:01:34.639Z",
+          "compositorTimestamp": 1792616494.631418
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000050.jpg",
+          "sha256": "9a768ede631c27f76f9f277243490aa333ac62beb46b35b67b546c8857dcde1c",
+          "expected": "9a768ede631c27f76f9f277243490aa333ac62beb46b35b67b546c8857dcde1c",
+          "at": "2026-10-21T21:01:34.655Z",
+          "compositorTimestamp": 1792616494.648125
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000051.jpg",
+          "sha256": "0500761f65841d1468a3db5d1ddb4fd94c89c2f33e69fb8c7ed4d82d0f2330b2",
+          "expected": "0500761f65841d1468a3db5d1ddb4fd94c89c2f33e69fb8c7ed4d82d0f2330b2",
+          "at": "2026-10-21T21:01:34.677Z",
+          "compositorTimestamp": 1792616494.66531
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000052.jpg",
+          "sha256": "a148fd08a1708aafd39ec6fb9249911ed33dc11613aa58e0ddd2dd3b3b85bb04",
+          "expected": "a148fd08a1708aafd39ec6fb9249911ed33dc11613aa58e0ddd2dd3b3b85bb04",
+          "at": "2026-10-21T21:01:34.688Z",
+          "compositorTimestamp": 1792616494.682047
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000053.jpg",
+          "sha256": "660c7ba9c55b5b91a2c4b6f889cd0c4cd0357fd781657ad6713b25c5bd36552f",
+          "expected": "660c7ba9c55b5b91a2c4b6f889cd0c4cd0357fd781657ad6713b25c5bd36552f",
+          "at": "2026-10-21T21:01:34.705Z",
+          "compositorTimestamp": 1792616494.699327
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000054.jpg",
+          "sha256": "b0e4399f04c8160988305126c772a365e42ba5ae7b2ceb3255ea8a8970f39015",
+          "expected": "b0e4399f04c8160988305126c772a365e42ba5ae7b2ceb3255ea8a8970f39015",
+          "at": "2026-10-21T21:01:34.720Z",
+          "compositorTimestamp": 1792616494.713142
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000055.jpg",
+          "sha256": "f00825ced5c6e5a8d372de3dc88a628245f0313d02ba4d2f0a52081fe9b125d1",
+          "expected": "f00825ced5c6e5a8d372de3dc88a628245f0313d02ba4d2f0a52081fe9b125d1",
+          "at": "2026-10-21T21:01:34.761Z",
+          "compositorTimestamp": 1792616494.749471
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000056.jpg",
+          "sha256": "51e1d6bc6d472c0538782275e29a3a323544f71f53960d260357cd4878ba7d20",
+          "expected": "51e1d6bc6d472c0538782275e29a3a323544f71f53960d260357cd4878ba7d20",
+          "at": "2026-10-21T21:01:34.773Z",
+          "compositorTimestamp": 1792616494.765519
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000057.jpg",
+          "sha256": "f59e6232c197352deed073ba293882d409b75baa9231a97629700e4d109e830c",
+          "expected": "f59e6232c197352deed073ba293882d409b75baa9231a97629700e4d109e830c",
+          "at": "2026-10-21T21:01:34.796Z",
+          "compositorTimestamp": 1792616494.783399
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000058.jpg",
+          "sha256": "a14e006e9a25027069a46acff217af332e46e147c1d9f1d55645f43a110cbc86",
+          "expected": "a14e006e9a25027069a46acff217af332e46e147c1d9f1d55645f43a110cbc86",
+          "at": "2026-10-21T21:01:34.807Z",
+          "compositorTimestamp": 1792616494.79866
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000059.jpg",
+          "sha256": "9ab51d0e293d7237a3d83dd0adec2dac56ae9e6a93d5ff093c40c38e92349d99",
+          "expected": "9ab51d0e293d7237a3d83dd0adec2dac56ae9e6a93d5ff093c40c38e92349d99",
+          "at": "2026-10-21T21:01:34.831Z",
+          "compositorTimestamp": 1792616494.812824
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000060.jpg",
+          "sha256": "73fe9a4caee6e556d35379219c888b7f797dd310fe8a296d4f9ec83d748d7bee",
+          "expected": "73fe9a4caee6e556d35379219c888b7f797dd310fe8a296d4f9ec83d748d7bee",
+          "at": "2026-10-21T21:01:34.840Z",
+          "compositorTimestamp": 1792616494.829952
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000061.jpg",
+          "sha256": "5825d65f33fc175f6a1f33744e148692a8dc67deaeca561f739640ff2fbc5dd3",
+          "expected": "5825d65f33fc175f6a1f33744e148692a8dc67deaeca561f739640ff2fbc5dd3",
+          "at": "2026-10-21T21:01:34.861Z",
+          "compositorTimestamp": 1792616494.84952
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000062.jpg",
+          "sha256": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "expected": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "at": "2026-10-21T21:01:35.100Z",
+          "compositorTimestamp": 1792616495.068664
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000063.jpg",
+          "sha256": "02c3a02d4d29ad4695ea95217db7ea8dd1d14c29b7a6988add11934920191f58",
+          "expected": "02c3a02d4d29ad4695ea95217db7ea8dd1d14c29b7a6988add11934920191f58",
+          "at": "2026-10-21T21:01:35.140Z",
+          "compositorTimestamp": 1792616495.129097
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000064.jpg",
+          "sha256": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "expected": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "at": "2026-10-21T21:01:35.215Z",
+          "compositorTimestamp": 1792616495.204244
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000065.jpg",
+          "sha256": "28ebcf8e978d87cf0b13a8c8b2b022f4e86fe695b6f7660cf2f8a6f0002f4173",
+          "expected": "28ebcf8e978d87cf0b13a8c8b2b022f4e86fe695b6f7660cf2f8a6f0002f4173",
+          "at": "2026-10-21T21:01:35.237Z",
+          "compositorTimestamp": 1792616495.22789
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000066.jpg",
+          "sha256": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "expected": "f81bedc7b17d927e9acaf3da2001adf9ea8c3e9c7d9dab00b57f8c128fcb8ba2",
+          "at": "2026-10-21T21:01:35.272Z",
+          "compositorTimestamp": 1792616495.266144
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000067.jpg",
+          "sha256": "036fbea80fcd839d61120442489f966a4aa0b04840b76ed178011c58100a6731",
+          "expected": "036fbea80fcd839d61120442489f966a4aa0b04840b76ed178011c58100a6731",
+          "at": "2026-10-21T21:01:35.409Z",
+          "compositorTimestamp": 1792616495.402402
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/seed/frames/000068.jpg",
+          "sha256": "81f4f0b34e8a454ce6ddd259c43a8ddc091d5fade35e05742680f121bc5b89fe",
+          "expected": "81f4f0b34e8a454ce6ddd259c43a8ddc091d5fade35e05742680f121bc5b89fe",
+          "at": "2026-10-21T21:01:35.542Z",
+          "compositorTimestamp": 1792616495.490251
+        }
+      ]
+    },
+    {
+      "directory": "ask-three",
+      "count": 19,
+      "files": [
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000000.jpg",
+          "sha256": "2ea7db2f361ceec18465652941a54a582b5baff7186082cb74dc6b005b198b2a",
+          "expected": "2ea7db2f361ceec18465652941a54a582b5baff7186082cb74dc6b005b198b2a",
+          "at": "2026-10-21T21:02:21.362Z",
+          "compositorTimestamp": 1792616541.347995
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000001.jpg",
+          "sha256": "af9904439ad8f96a73a021c838ab19194689018964069725d9a5f0864003e55e",
+          "expected": "af9904439ad8f96a73a021c838ab19194689018964069725d9a5f0864003e55e",
+          "at": "2026-10-21T21:02:21.387Z",
+          "compositorTimestamp": 1792616541.370333
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000002.jpg",
+          "sha256": "7f04d97e6c010f7186b76fa8e8ff1f1070fe7eae226d0a69bda4623e74a59a32",
+          "expected": "7f04d97e6c010f7186b76fa8e8ff1f1070fe7eae226d0a69bda4623e74a59a32",
+          "at": "2026-10-21T21:02:21.388Z",
+          "compositorTimestamp": 1792616541.372944
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000003.jpg",
+          "sha256": "86544acf9131b22c7eaeeec939c4fb28644d545c1a5d76541db219ef8d5d2f1e",
+          "expected": "86544acf9131b22c7eaeeec939c4fb28644d545c1a5d76541db219ef8d5d2f1e",
+          "at": "2026-10-21T21:02:21.390Z",
+          "compositorTimestamp": 1792616541.384475
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000004.jpg",
+          "sha256": "95cdeb0dc5424e1ad83e1914f1baba1147b06969980e5c5618e38714c00b83c0",
+          "expected": "95cdeb0dc5424e1ad83e1914f1baba1147b06969980e5c5618e38714c00b83c0",
+          "at": "2026-10-21T21:02:21.406Z",
+          "compositorTimestamp": 1792616541.399987
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000005.jpg",
+          "sha256": "933d9769084ca7a8434d7e77f197948f832850db5617845919cedcfd9e2aa86a",
+          "expected": "933d9769084ca7a8434d7e77f197948f832850db5617845919cedcfd9e2aa86a",
+          "at": "2026-10-21T21:02:21.497Z",
+          "compositorTimestamp": 1792616541.482277
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000006.jpg",
+          "sha256": "7d4ea3c7605de605b21c7bf3fd92b90fd130fdf8ee6777c0ebff9fc90935e0ae",
+          "expected": "7d4ea3c7605de605b21c7bf3fd92b90fd130fdf8ee6777c0ebff9fc90935e0ae",
+          "at": "2026-10-21T21:02:21.499Z",
+          "compositorTimestamp": 1792616541.486765
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000007.jpg",
+          "sha256": "9a745305a1f34afe0201648ff21834e723a8d956f1395de12452adf50853a727",
+          "expected": "9a745305a1f34afe0201648ff21834e723a8d956f1395de12452adf50853a727",
+          "at": "2026-10-21T21:02:21.499Z",
+          "compositorTimestamp": 1792616541.483463
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000008.jpg",
+          "sha256": "e3c42a37b15e49829f5e04c2f9b21b0f549f89e53b900b840857fba8a9f84fc6",
+          "expected": "e3c42a37b15e49829f5e04c2f9b21b0f549f89e53b900b840857fba8a9f84fc6",
+          "at": "2026-10-21T21:02:21.532Z",
+          "compositorTimestamp": 1792616541.523666
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000009.jpg",
+          "sha256": "8b41e3b90e6fb4e4e4521719f16289d981ca537e1f69083fdb81d5cebcce1fee",
+          "expected": "8b41e3b90e6fb4e4e4521719f16289d981ca537e1f69083fdb81d5cebcce1fee",
+          "at": "2026-10-21T21:02:21.540Z",
+          "compositorTimestamp": 1792616541.534947
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000010.jpg",
+          "sha256": "2826aa65234b033197221c30c83832c48fdb45de3a19a0884811309a95d7458c",
+          "expected": "2826aa65234b033197221c30c83832c48fdb45de3a19a0884811309a95d7458c",
+          "at": "2026-10-21T21:02:21.583Z",
+          "compositorTimestamp": 1792616541.57304
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000011.jpg",
+          "sha256": "895dbd7888c84feaad09e175345c9e75e6ee87dbc5e66fa74b9a199fbb727237",
+          "expected": "895dbd7888c84feaad09e175345c9e75e6ee87dbc5e66fa74b9a199fbb727237",
+          "at": "2026-10-21T21:02:21.588Z",
+          "compositorTimestamp": 1792616541.582371
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000012.jpg",
+          "sha256": "99c50c800e2f6dd771507bddbabf9136c14863b990c4ae8f6f1cb3b412c58dc6",
+          "expected": "99c50c800e2f6dd771507bddbabf9136c14863b990c4ae8f6f1cb3b412c58dc6",
+          "at": "2026-10-21T21:02:21.702Z",
+          "compositorTimestamp": 1792616541.599687
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000013.jpg",
+          "sha256": "c42a709d33d21fe132e260b43262ccdab33ce9440798eee98bab846cb270ed86",
+          "expected": "c42a709d33d21fe132e260b43262ccdab33ce9440798eee98bab846cb270ed86",
+          "at": "2026-10-21T21:02:21.704Z",
+          "compositorTimestamp": 1792616541.67246
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000014.jpg",
+          "sha256": "4171fc7f0b57d6cb4ecec5cee90f02b18891dd0e54900eaeb1a01ebca2a1002f",
+          "expected": "4171fc7f0b57d6cb4ecec5cee90f02b18891dd0e54900eaeb1a01ebca2a1002f",
+          "at": "2026-10-21T21:02:21.705Z",
+          "compositorTimestamp": 1792616541.671486
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000015.jpg",
+          "sha256": "bd6dbfea9b7213d79ccc61842637479fb39cdec8f403571ef8a7655ff27e7da8",
+          "expected": "bd6dbfea9b7213d79ccc61842637479fb39cdec8f403571ef8a7655ff27e7da8",
+          "at": "2026-10-21T21:02:21.718Z",
+          "compositorTimestamp": 1792616541.711853
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000016.jpg",
+          "sha256": "37de39cdac2ffef77af30c365f286e1854639c8f4d4b3dcc896c99ba6a31e21f",
+          "expected": "37de39cdac2ffef77af30c365f286e1854639c8f4d4b3dcc896c99ba6a31e21f",
+          "at": "2026-10-21T21:02:21.737Z",
+          "compositorTimestamp": 1792616541.730742
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000017.jpg",
+          "sha256": "89c85e0c39c2929e51f3eb42b68431fc49b9aceb85057b569710395f99d46ce3",
+          "expected": "89c85e0c39c2929e51f3eb42b68431fc49b9aceb85057b569710395f99d46ce3",
+          "at": "2026-10-21T21:02:21.760Z",
+          "compositorTimestamp": 1792616541.751721
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/ask-three/frames/000018.jpg",
+          "sha256": "89c85e0c39c2929e51f3eb42b68431fc49b9aceb85057b569710395f99d46ce3",
+          "expected": "89c85e0c39c2929e51f3eb42b68431fc49b9aceb85057b569710395f99d46ce3",
+          "at": "2026-10-21T21:02:21.770Z",
+          "compositorTimestamp": 1792616541.76328
+        }
+      ]
+    },
+    {
+      "directory": "cancel-apply-undo",
+      "count": 2,
+      "files": [
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo/frames/000000.jpg",
+          "sha256": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "expected": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "at": "2026-10-21T21:04:08.211Z",
+          "compositorTimestamp": 1792616648.191169
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo/frames/000001.jpg",
+          "sha256": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "expected": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "at": "2026-10-21T21:04:08.269Z",
+          "compositorTimestamp": 1792616648.263057
+        }
+      ]
+    },
+    {
+      "directory": "cancel-apply-undo-r2",
+      "count": 23,
+      "files": [
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000000.jpg",
+          "sha256": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "expected": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "at": "2026-10-21T21:05:33.403Z",
+          "compositorTimestamp": 1792616733.390589
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000001.jpg",
+          "sha256": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "expected": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "at": "2026-10-21T21:05:33.425Z",
+          "compositorTimestamp": 1792616733.419402
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000002.jpg",
+          "sha256": "ecc334ee08441b65e9b195ba32175def2f8cb88e56d700714e3caa285bb62e38",
+          "expected": "ecc334ee08441b65e9b195ba32175def2f8cb88e56d700714e3caa285bb62e38",
+          "at": "2026-10-21T21:05:33.594Z",
+          "compositorTimestamp": 1792616733.587738
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000003.jpg",
+          "sha256": "1adc084846a00e20d2b229e6215879dee18b87ec4811058ba24b124495f9df28",
+          "expected": "1adc084846a00e20d2b229e6215879dee18b87ec4811058ba24b124495f9df28",
+          "at": "2026-10-21T21:05:33.716Z",
+          "compositorTimestamp": 1792616733.69644
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000004.jpg",
+          "sha256": "8db8ca26eac75f6d54676fda1cdd84139119ddce03fcf4d40b17ee606626fb56",
+          "expected": "8db8ca26eac75f6d54676fda1cdd84139119ddce03fcf4d40b17ee606626fb56",
+          "at": "2026-10-21T21:05:33.752Z",
+          "compositorTimestamp": 1792616733.740131
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000005.jpg",
+          "sha256": "d24273e4d0c53f9b7435af882cca5154209cc3b993456923adbd4e66a0393bee",
+          "expected": "d24273e4d0c53f9b7435af882cca5154209cc3b993456923adbd4e66a0393bee",
+          "at": "2026-10-21T21:05:33.766Z",
+          "compositorTimestamp": 1792616733.756153
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000006.jpg",
+          "sha256": "48bf5929639e73a456750f3f4263392bc1f43365f72c356022c942fd2266760d",
+          "expected": "48bf5929639e73a456750f3f4263392bc1f43365f72c356022c942fd2266760d",
+          "at": "2026-10-21T21:05:33.777Z",
+          "compositorTimestamp": 1792616733.770805
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000007.jpg",
+          "sha256": "f0243f2ce4bbc22dc1c1392f5b6135dca3f143195b0b1a77d9dad5f75f7aa641",
+          "expected": "f0243f2ce4bbc22dc1c1392f5b6135dca3f143195b0b1a77d9dad5f75f7aa641",
+          "at": "2026-10-21T21:05:33.818Z",
+          "compositorTimestamp": 1792616733.806475
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000008.jpg",
+          "sha256": "4feb0b661b816a082e4e6a450e2d4ed006f8ca35cdead9391f2eaf8adb0f1ba0",
+          "expected": "4feb0b661b816a082e4e6a450e2d4ed006f8ca35cdead9391f2eaf8adb0f1ba0",
+          "at": "2026-10-21T21:05:33.826Z",
+          "compositorTimestamp": 1792616733.819021
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000009.jpg",
+          "sha256": "524aafbd6ffeb6e401c43497620dab0c9a6870cfcf7ec505e64d3fb6ccc98929",
+          "expected": "524aafbd6ffeb6e401c43497620dab0c9a6870cfcf7ec505e64d3fb6ccc98929",
+          "at": "2026-10-21T21:05:33.849Z",
+          "compositorTimestamp": 1792616733.83583
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000010.jpg",
+          "sha256": "4518583150b9997c81d10acf29f3321ae5c306d1c0b095f2f1efcc9fd0285578",
+          "expected": "4518583150b9997c81d10acf29f3321ae5c306d1c0b095f2f1efcc9fd0285578",
+          "at": "2026-10-21T21:05:33.864Z",
+          "compositorTimestamp": 1792616733.851077
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000011.jpg",
+          "sha256": "86cc461b1f4c6c7a35d99de243df29c53cfd8017bf2900c9ff70757d6e00a089",
+          "expected": "86cc461b1f4c6c7a35d99de243df29c53cfd8017bf2900c9ff70757d6e00a089",
+          "at": "2026-10-21T21:05:33.877Z",
+          "compositorTimestamp": 1792616733.868901
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000012.jpg",
+          "sha256": "886a3470383ee37d06769439730af24114e73ba2feaaeea878797fd5736760b7",
+          "expected": "886a3470383ee37d06769439730af24114e73ba2feaaeea878797fd5736760b7",
+          "at": "2026-10-21T21:05:33.900Z",
+          "compositorTimestamp": 1792616733.888826
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000013.jpg",
+          "sha256": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "expected": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "at": "2026-10-21T21:05:33.936Z",
+          "compositorTimestamp": 1792616733.927875
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000014.jpg",
+          "sha256": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "expected": "ccb0e15f2e00751e78332e5debc29ac417b3128260779363e9a4eba8a2bef1ba",
+          "at": "2026-10-21T21:05:33.941Z",
+          "compositorTimestamp": 1792616733.934464
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000015.jpg",
+          "sha256": "78f955de5bcda31158a4223799e5f72919d43bd2823e3f572c0f34bb8416878a",
+          "expected": "78f955de5bcda31158a4223799e5f72919d43bd2823e3f572c0f34bb8416878a",
+          "at": "2026-10-21T21:05:34.113Z",
+          "compositorTimestamp": 1792616734.096768
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000016.jpg",
+          "sha256": "04b156694103e66cf8a312004b08edbcfe9657691ba2fdca6bab8653c65891f2",
+          "expected": "04b156694103e66cf8a312004b08edbcfe9657691ba2fdca6bab8653c65891f2",
+          "at": "2026-10-21T21:05:34.306Z",
+          "compositorTimestamp": 1792616734.296617
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000017.jpg",
+          "sha256": "2210f7190701e2353db945c7e81866a3152d2ba4f12285e0f23017cf3f35ab21",
+          "expected": "2210f7190701e2353db945c7e81866a3152d2ba4f12285e0f23017cf3f35ab21",
+          "at": "2026-10-21T21:05:34.337Z",
+          "compositorTimestamp": 1792616734.31716
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000018.jpg",
+          "sha256": "9e59afea1446a28a712e5afc71e345395e62562accb008adfe0e508a40b4dea4",
+          "expected": "9e59afea1446a28a712e5afc71e345395e62562accb008adfe0e508a40b4dea4",
+          "at": "2026-10-21T21:05:34.338Z",
+          "compositorTimestamp": 1792616734.322631
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000019.jpg",
+          "sha256": "9e59afea1446a28a712e5afc71e345395e62562accb008adfe0e508a40b4dea4",
+          "expected": "9e59afea1446a28a712e5afc71e345395e62562accb008adfe0e508a40b4dea4",
+          "at": "2026-10-21T21:05:34.339Z",
+          "compositorTimestamp": 1792616734.332632
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000020.jpg",
+          "sha256": "d37fb065ac4c67561e937d762141f7eadb72273681c53e6bb55b9c442c2bc2ef",
+          "expected": "d37fb065ac4c67561e937d762141f7eadb72273681c53e6bb55b9c442c2bc2ef",
+          "at": "2026-10-21T21:05:34.458Z",
+          "compositorTimestamp": 1792616734.453179
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000021.jpg",
+          "sha256": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "expected": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "at": "2026-10-21T21:05:34.504Z",
+          "compositorTimestamp": 1792616734.493902
+        },
+        {
+          "file": "reports/all-pending-evidence-20261021/A13/gateway/cancel-apply-undo-r2/frames/000022.jpg",
+          "sha256": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "expected": "5e78252e7b80c00f29bc99a273ae2be9f5a601346bf69879dd8fccdec3454b50",
+          "at": "2026-10-21T21:05:34.506Z",
+          "compositorTimestamp": 1792616734.499214
+        }
+      ]
+    }
+  ],
+  "loadedBinding": {
+    "laterAt": "2026-10-21T21:07:51.285Z",
+    "targetId": "1BBF621A62D3BD5C2F6DA939DFDC7B64",
+    "context": "default",
+    "firstPageTimeOrigin": 1792616490570.5,
+    "laterPageTimeOrigin": 1792616867623,
+    "clientSha": "3bc4a1723f10e8f0393eceb48841007e52e9ebafdc4b37f98dc0a970151bc3b7",
+    "normalizedSegmentSha": "c19c1aa9cf11593f9daa10606e37f1401ada2e636f609b50b50f06b6274b5083",
+    "comboSha": "e10bf9b3fd69e2c0a8d744c146362a2e1c235e38a0cb5d6059f74cc692c76cda"
+  },
+  "boundary": "Mechanical evidence checks only. Independent limited GUI judgment and missing network-body/initial-load boundaries belong to the report; no whole RA-AI04 PASS."
+}

@@ -12,7 +12,7 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { defaultExportDirectory, isolatedExportBase, resolveIsolatedExportDirectory } from './export.js'
-import type { PmDomain } from './storage.js'
+import type { PmDomain, ReflectionRecord } from './storage.js'
 
 export class ArchiveProjectNotFoundError extends Error {}
 export class ArchiveTargetExistsError extends Error {}
@@ -93,7 +93,8 @@ function pickMilestone(m: Record<string, unknown>): Record<string, unknown> {
 
 /** 复盘只收 known（已核）行；pending/blank 不进包，gaps 留白清单原样保留。 */
 function pickReflection(r: Record<string, unknown>): Record<string, unknown> {
-  const lines = Array.isArray(r.lines) ? r.lines : []
+  const draft = r.draft as ReflectionRecord['draft']
+  const lines = draft.lines
   return {
     id: r.id,
     taskId: r.taskId ?? null,
@@ -102,7 +103,7 @@ function pickReflection(r: Record<string, unknown>): Record<string, unknown> {
     sourceEvent: r.sourceEvent,
     status: r.status,
     knownLines: lines.filter((l: { mark?: string }) => l?.mark === 'known').map((l: { text: string }) => l.text),
-    gaps: Array.isArray(r.gaps) ? r.gaps : [],
+    gaps: draft.gaps,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
   }

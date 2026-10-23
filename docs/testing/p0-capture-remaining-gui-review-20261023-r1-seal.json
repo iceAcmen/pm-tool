@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-22T20:36:20.875Z",
+  "files": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p0-capture-remaining-gui-review-20261023-r1-reader.mjs": {
+      "bytes": 21722,
+      "sha256": "9b934c6ed715d8bd91dee3c1432a5da40c9c4fc9c42f093915c3b20b670af242"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p0-capture-remaining-gui-review-20261023-r1-audit.json": {
+      "bytes": 283257,
+      "sha256": "c59524cc33ec64cf439f8f00961f92bb320ca89f333d32c41660590a9855fb0c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p0-capture-remaining-gui-review-20261023-r1-audit-r2.json": {
+      "bytes": 326367,
+      "sha256": "7dc6b6d61e75b786bd9df4898daaceecf43f88a21a9ee3159f0ce1a642a4c4c3"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md": {
+      "bytes": 15798,
+      "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023"
+    }
+  },
+  "protectedInputCount": 1171,
+  "inputDrift": [],
+  "original336And166Preserved": true,
+  "gatewayOriginalRowsPreserved": true,
+  "checks": "自有审计7组全部成立；终核不替代实际PNG目视",
+  "decision": "PASS_LIMITED_CAPTURE_GUI_AND_CURRENT_CAPTURE_METRIC",
+  "remainingCaptureSlice": [],
+  "released": true,
+  "resourceLocks": [],
+  "productTests": "NOT_RUN_THIS_ROLE",
+  "guiExecution": "NOT_RUN_THIS_ROLE",
+  "state": "released/STOP"
+}

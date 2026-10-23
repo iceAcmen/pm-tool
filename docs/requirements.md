@@ -2,8 +2,9 @@
 
 > 本文件记录产品「要做哪些功能、优先级如何、怎样算验收通过」，并给出 MVP 的数据模型与落盘约定；给开发与验收使用，按模块增删条目。本文档经项目所有者评审确认后作为阶段 3 开发依据。
 
-- 文档状态：**阶段 3 开发依据（v0.9）**，R12 关键字检索/统计看板/Markdown 任务表导入已实现；R11 与生成型能力、多人协作、Excel 导入按决策暂缓/裁剪
-- 最后更新：2026-10-11（R12 由 doubao-work 实现并通过自动化与隔离真实宿主 bundle 验证）
+- 文档状态：**MVP需求基线（v0.9，保留历史）**。当前实现/验收/提交状态见[2026-10-21整体盘点](plans/2026-10-21-project-status-and-next-implementation.md)，后续PROD、ADL及专项合同补充本基线。
+- 最后状态校准：2026-10-21（trae，仅核既有实现，不新增需求）。CSV/XLSX已按ADL-043实现，取代ADL-030；R13–R18已按ADL-036/039–041实现；人员补全、只读关键路径、客观进度、AI来源治理、OKR/习惯、资料/文件已有后续实现。R11常驻调度与多人实时协作仍暂缓。下文旧“待编码/生成型暂缓/Excel裁剪”按发生时间读取，不能否认后续有效决策。
+- 数据模型口径：下文为早期MVP七实体快照；当前`src/core/storage.ts`领域version=2、compatibleVersions=[1]，已含settings/sessions/reflections/okrs/lessons/habits/file_assets，任务有可选资料/进展等字段。当前字段与验收范围须同时核对应设计合同及源码，不能用旧表推定当前只有七表。
 - 技术可行性依据：见 [feasibility-map.md](./feasibility-map.md)
 - **需求变更追溯**：任何需求/范围调整都在 [decision-log.md](./decision-log.md) 记录「时间、变更、原因、替代方案、结果、改动平台」（v0.1→v0.2 见 ADL-007/008，v0.2→v0.3 见 ADL-009，v0.3→v0.4 见 ADL-011，v0.4→v0.5 见 ADL-024，v0.5→v0.6 见 ADL-025，v0.6→v0.7 见 ADL-026，v0.7→v0.8 见 ADL-028，v0.8→v0.9 见 ADL-029/030/031/032），并在 [changelog.md](./changelog.md) 留痕；多平台协作规则见根 `AGENTS.md` 与 [collaboration.md](./collaboration.md)。
 

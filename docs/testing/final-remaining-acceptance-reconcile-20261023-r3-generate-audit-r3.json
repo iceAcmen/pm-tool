@@ -1,0 +1,443 @@
+{
+  "at": "2026-10-23T01:07:00.324Z",
+  "pid": 40730,
+  "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "kind": "own-fs-document-reconciliation-not-product-test",
+  "counts": {
+    "ledger": 305,
+    "originalOrdinary": 252,
+    "supplementalLabels": 53,
+    "matrix": 1184,
+    "layers": 81,
+    "widgets": 16,
+    "specials": 3,
+    "allUnique": 1489,
+    "native200": 592,
+    "width390": 296,
+    "historicalPartialMatrixCells": 14,
+    "newFullCellPass": 0,
+    "newWholeIdPass": 0,
+    "laneCounts": {
+      "1": 3,
+      "2": 1,
+      "3": 1,
+      "4": 8,
+      "5": 15,
+      "6": 99,
+      "7": 695,
+      "8": 595,
+      "9": 29,
+      "10": 39,
+      "11": 4
+    }
+  },
+  "inputFingerprints": [
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-review-data.json",
+      "bytes": 28623,
+      "sha256": "2f06aed12b1379fcd81864b3d0b6ef7af1f0cb3b4608058175f5eb41685bb396"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-index-r2.json",
+      "bytes": 3544062,
+      "sha256": "ba1ec89a010b41d3e9fe1c3c6efdaadc4a2c15cfe37156bafab28f34ace0779f"
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.json",
+      "bytes": 4516365,
+      "sha256": "10142e18e4ba79b6262caef90d632c6049b71c4462da45973c0ae64eb72312aa"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit-r2.json",
+      "bytes": 9466422,
+      "sha256": "95f88179d95165521df1e6802a9e879c40a2f1f432bf16b30725271b9fc74ac8"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 26011,
+      "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+    },
+    {
+      "path": "docs/collaboration.md",
+      "bytes": 31271,
+      "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-register-20261021.md",
+      "bytes": 15023,
+      "sha256": "1ac19a6efacb5316fdd6ca74da47751b0ef55eee8a5897e819ea51db464f430d"
+    },
+    {
+      "path": "docs/testing/remaining-acceptance-delta-20261022-ledger.md",
+      "bytes": 49397,
+      "sha256": "2e40674bbb58205589f99a8e106f52ae82e2182af380d84b497229f9e31610c3"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+      "bytes": 35964,
+      "sha256": "3fb32869bd3f463590c0eeefcd6688bb2c84476ae8419a2e3455715184cb4d0c"
+    },
+    {
+      "path": "docs/testing/remaining-objective-cases-20261021.md",
+      "bytes": 11773,
+      "sha256": "fa3800dcdaedfd4bffa76097a20db103b9983fe2518ea3abd41e642d255ec433"
+    },
+    {
+      "path": "docs/testing/remaining-governance-cases-20261021.md",
+      "bytes": 13892,
+      "sha256": "7ed381f0fc5d0807722b9f1197e188b6705f6fa674ea85266d2b98dba989bade"
+    },
+    {
+      "path": "docs/testing/remaining-journey-cases-20261021.md",
+      "bytes": 23525,
+      "sha256": "ae44705d3bde794b0f349381f10218ba20b77a8ff55d12d81623fc426eb60ab2"
+    },
+    {
+      "path": "docs/testing/remaining-layer-map-20261021.md",
+      "bytes": 11552,
+      "sha256": "5729a6306755c8d06cb704c13e88247033729ea70af2e63345503d78186c738e"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+      "bytes": 16742,
+      "sha256": "5637da660a591e93344671fb4b04c9a1dc80f20e648b892e33ea81d2424c68f7"
+    },
+    {
+      "path": "docs/testing/feedback-remaining-gui-20261022-r3.md",
+      "bytes": 23633,
+      "sha256": "0b894bf622fc36cdee8912f12b14b680d05e549b5f12be865dbae3571cebc00e"
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-report.md",
+      "bytes": 13263,
+      "sha256": "5bb9bce6ede73912d0141299d54f1663d6ba1790bf461a1b5d578f3a87594022"
+    },
+    {
+      "path": "docs/testing/successor112-predecessor-gui-review-20261022-r1-report.md",
+      "bytes": 12746,
+      "sha256": "1f33720cc8d049518f31c549ee37f1d776df26fd230406a54599a8b2e7fb0a59"
+    },
+    {
+      "path": "docs/testing/material-meeting-report-gui-review-20261022-r1.md",
+      "bytes": 21584,
+      "sha256": "c7b85f4e74fc28fa763d9106e9f600352b0eec8c72527ecfdba302bde74d0dce"
+    },
+    {
+      "path": "docs/testing/j03-combined-gui-review-20261022-r1.md",
+      "bytes": 18276,
+      "sha256": "afd991b015b4abfb8927f3d875a39e2f91780a40de31e94a45d7efed92c5c5e3"
+    },
+    {
+      "path": "docs/testing/shared-asset-unlink-gui-review-20261022-r1.md",
+      "bytes": 14177,
+      "sha256": "4d719a2e25eef6b3ad4a19ca9a6939c8a5734929b988d733636a9923bf0ec437"
+    },
+    {
+      "path": "docs/testing/ui-backup-nonempty-reentry-gui-review-20261022-r1.md",
+      "bytes": 18635,
+      "sha256": "659684d5ee258775ab792e55c29b7bf3f4bd0c326b253e460e9c0fa704cc21a9"
+    },
+    {
+      "path": "docs/testing/restore-midpromotion-gui-review-20261022-r1.md",
+      "bytes": 17792,
+      "sha256": "bd4ae3df83b6a4e9504bb103dbf6480180d43d6670ed98a50d144119684366e9"
+    },
+    {
+      "path": "docs/testing/successor112-fixed-export-gui-review-20261022-r1-report.md",
+      "bytes": 14177,
+      "sha256": "031937957e2449d6de778a78c72689fa4b3b490b649f1bfc2ba8c9fdc0ad1636"
+    },
+    {
+      "path": "docs/testing/op-growth-remaining-gui-review-20261022-r1-report.md",
+      "bytes": 18407,
+      "sha256": "03ffacad82387ff6cd038e5fd683cdade1e16eaf63f354c425752d3181ddd04b"
+    },
+    {
+      "path": "docs/testing/op-growth-remaining-gui-review-20261022-r2-report.md",
+      "bytes": 17862,
+      "sha256": "45f60fead1b7c01105b53a7122badb868c24bdc6e84822b47d493f2b928363f1"
+    },
+    {
+      "path": "docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+      "bytes": 15448,
+      "sha256": "c6bd16cb043fe7fe2c351a66c3fa01e11419711eceaf19e00ad81128c515da6f"
+    },
+    {
+      "path": "docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+      "bytes": 11196,
+      "sha256": "7bd509adc721742babbe7f490055deaee6ec897393805fcb1ae526cb4600d1c0"
+    },
+    {
+      "path": "docs/testing/ai-remaining-gui-review-20261022-r1.md",
+      "bytes": 20015,
+      "sha256": "125197583a4d06d3f15a2f9f2d1cf87352d65f6e9994a79bc433ee77e5a2118c"
+    },
+    {
+      "path": "docs/testing/atf-combined-runtime-gui-review-20261022-r1.md",
+      "bytes": 15878,
+      "sha256": "0c641c99ffa67ca9632f28d3c9ec7e7847e7c2eb34515239638e7cb35d2924a9"
+    },
+    {
+      "path": "docs/testing/copilot-prefix114-gui-retest-20261022-r1-report.md",
+      "bytes": 14954,
+      "sha256": "d44fe2dafbee7dcbdf38930ef0e105025cd397d013e76713a56acacd48b9a49d"
+    },
+    {
+      "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 15798,
+      "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023"
+    },
+    {
+      "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+      "bytes": 17291,
+      "sha256": "f91354cd659221db5e73e15f87ea754201a5287601bb7e0f4933a3eb137d1652"
+    },
+    {
+      "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 17204,
+      "sha256": "9124058cd5810c6b68e9e08be0b8df86cbd5dd41b3964f22a985f29da7b487ec"
+    },
+    {
+      "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+      "bytes": 17012,
+      "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e"
+    },
+    {
+      "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+      "bytes": 13184,
+      "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+      "bytes": 8517,
+      "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be"
+    },
+    {
+      "path": "docs/testing/p1-projection-refresh-gui-review-20261023-r1.md",
+      "bytes": 17624,
+      "sha256": "ba539580aa071ee05a5e09baffebefdf632695021f47b9bdaf8e197dd51d6029"
+    },
+    {
+      "path": "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+      "bytes": 18051,
+      "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9"
+    },
+    {
+      "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+      "bytes": 23686,
+      "sha256": "436b5152dd96af9134a90f5e4d220aa487903d0d1f5a5be36895b6c3b574374d"
+    },
+    {
+      "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+      "bytes": 16658,
+      "sha256": "063511d2e6a82d1fe0f1dd3405a9c12f64cb730f0b3c0bc4d590bff3048b9b3f"
+    },
+    {
+      "path": "docs/testing/p2-outbound-history-review-20261023-r1.md",
+      "bytes": 22155,
+      "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+      "bytes": 13550,
+      "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+    },
+    {
+      "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 22907,
+      "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+    },
+    {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+      "bytes": 14805,
+      "sha256": "8ad5b8a4db553b3b6312f366dabd095ccdc6ac7aa54a132001d36f3417a9ff7c"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+      "bytes": 15830,
+      "sha256": "3067961280e74550bcbba48aa70a0e0091aecfffc913058c5f2ab2b798ffc1bb"
+    },
+    {
+      "path": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+      "bytes": 13208,
+      "sha256": "5730e6d1e1f0ed9cb63fa60fb15c50bc6733f7e68ed6e74b96b1234cde8b6ac7"
+    },
+    {
+      "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+      "bytes": 12429,
+      "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16181,
+      "sha256": "b7e26de2d10024cd4ef3ccfd95e449a0e8338c248434c32e15ac134d5e2189f4"
+    },
+    {
+      "path": "docs/testing/six-repairs-pointer-gui-review-20261023-r1-report.md",
+      "bytes": 16901,
+      "sha256": "d8bbf6c93344a42cc3181e67974c15725f631f534db4087caf551b27d15c1dcd"
+    },
+    {
+      "path": "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16679,
+      "sha256": "fe9927979b94a6e97c671f1e5349ef8f9fc0dfc252fb43f192502ef96da4076f"
+    },
+    {
+      "path": "docs/testing/f02-combined-regression-review-20261023-r2-report.md",
+      "bytes": 16145,
+      "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+    },
+    {
+      "path": "docs/testing/l8-gantt-refresh-defect-20261023-r3-report.md",
+      "bytes": 12897,
+      "sha256": "feb83c1fa0431bd37751803a4d7b3d91998854fc3c596d001603a0bab4adef1b"
+    },
+    {
+      "path": "docs/testing/l8-gantt-refresh-defect-20261023-r3-test-plan.md",
+      "bytes": 6866,
+      "sha256": "299e6d1fd850b50db401b35c2aa546afe4b7c8736508ef42835667645659a9fb"
+    },
+    {
+      "path": "docs/testing/l8-gantt-refresh-defect-20261023-r3-seal.json",
+      "bytes": 2138,
+      "sha256": "dfe098a3112c7b6b60895b9dba4c8e00ec218901f6ffd42ac931d4348cb6b92d"
+    },
+    {
+      "path": "docs/testing/l8-gantt-refresh-defect-20261023-r3-readback.json",
+      "bytes": 702,
+      "sha256": "4833592f39f5d7c8ed407d65709eb4c0d018e3e3986e0aa2117185d6a808aa4d"
+    },
+    {
+      "path": "docs/testing/l8-gantt-refresh-defect-20261023-r3-readback-receipt.json",
+      "bytes": 548,
+      "sha256": "0b7cb1a3645e5eabf6b0c455b3db713e4c6585b52fe61d355a2788c4990bdfa3"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-readback.json",
+      "bytes": 794,
+      "sha256": "d034e05f6de3c278cf1229fe6d1dd6efe7907de3306c7275d709850f29c5724f"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-readback-tool-receipt.json",
+      "bytes": 1629,
+      "sha256": "616ff90e406cd9171f17aec699d8b7e41115ec81fc85dcfc467b67563603c297"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+      "bytes": 166628,
+      "sha256": "d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-seal-tool-receipt.json",
+      "bytes": 1466,
+      "sha256": "0b95cf626fafe19beb2cd237e82a59a4f1f15e8b1f2cce1b2cea6d3abbe1bf8f"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-generate-audit.json",
+      "bytes": 15181,
+      "sha256": "6c39b85155e4b3b4a77eda3cabfb949fb04c95ff53cbf1e2bb8cc7d89e10caa6"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-generate-audit-r2.json",
+      "bytes": 16395,
+      "sha256": "9d23e48b32f1879e0b4b2fb5e293694918f92637543a09609588142ad387658e"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/candidate.json",
+      "bytes": 1708,
+      "sha256": "39acd3977652588fb849b6891d03aceb76b1359f399de7d915fbcac2ed45e380"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/source-files.json",
+      "bytes": 15902,
+      "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/complete-inputs.json",
+      "bytes": 75604,
+      "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/parent-six-to-current-inputs.json",
+      "bytes": 771,
+      "sha256": "cefcd7c021b815210fbd39a72800bbc34d400371c1f3177e1e64df55a81dad3f"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/index-r2.json",
+      "bytes": 377747,
+      "sha256": "b7d00adf033966ba94b69eab250b9781d89de532c32e243ff40793159c28f275"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/seal-r2.json",
+      "bytes": 2280,
+      "sha256": "c4d80c483b9924631bb299559d83c18f3f897bb5febcbb4b8582f6c038367913"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedSixRepairsR1/source-files.json",
+      "bytes": 15902,
+      "sha256": "c593d5215934db4586b7caffd6a45d6c85ca5ec8ac512b57d82477d51e5d441d"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A20V3/source-files.sha256",
+      "bytes": 11095,
+      "sha256": "777158a46c889acc38884af33f2eb114ec93b52e3ecedb4863f739ff63dbde0c"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/U4/increment-files.sha256",
+      "bytes": 1179,
+      "sha256": "4730ef5f81b4c1deb9da16966eb1ea48cdb51940e2eeb2117902ff91fbd191fb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/gantt.tsx",
+      "bytes": 30859,
+      "sha256": "06f0188c9185ec8e3444fa9d2665fcb716a1381f2c84bde3afc7f591177386e7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+      "bytes": 5059,
+      "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+    },
+    {
+      "path": "docs/testing/independent-acceptance-batch1-closure-plan-20261021.md",
+      "bytes": 40364,
+      "sha256": "5efb85a99d7717ce1ba398fe8694cfe9ee820536bb4a270f974db97beef23860"
+    },
+    {
+      "path": "docs/testing/b1-b8-coverage-mapping-20261020.md",
+      "bytes": 24492,
+      "sha256": "e61bcb3c1a887f5da776529e3cba75d9bf75596008dd8aa9c0ee9310e6a4e80f"
+    },
+    {
+      "path": "docs/testing/a8-board-feedback-contract-20261021.md",
+      "bytes": 14009,
+      "sha256": "8092f6a61f9e30bdfffc2fc68cf729a92de037f6457d34230b591a587dc260ad"
+    }
+  ],
+  "setEquality": true,
+  "originalLedgerDeepEquality": true,
+  "inputDrift": [],
+  "l8ActualReadbackExit": 0,
+  "newProductPass": false,
+  "outputs": [
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-table-r3.json",
+      "bytes": 12405436,
+      "sha256": "d251b580fc7cb0e58ce85faf617b2366fb93793d0cbda7667a44cd273ed66d75"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-queue-r3.md",
+      "bytes": 267120,
+      "sha256": "8820aa08770ea1d921606975450180df07caedc10638c2af6b498cdbb6813312"
+    }
+  ]
+}

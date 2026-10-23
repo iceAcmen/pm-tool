@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-23",
+  "role": "trae 独立原 P1004 GUI 审证专家",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "runtime": "macOS/bash; nvm Node v22.23.3; 未执行 pnpm",
+  "scope": "自有 fs/path/crypto/assert reader、原封件只读和 view_image；非产品/GUI执行",
+  "origin": "exec_command 返回真实终码后记录；内层PID来自本次自有reader实际process.pid/ppid，不复制Main或旧F02收据",
+  "commands": [
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "--check", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs"],
+      "phase": "初次语法检查",
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.0910,
+      "stdout": "",
+      "pid": null,
+      "pidBoundary": "同步工具未提供PID，不补造"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs", "audit"],
+      "phase": "首次设施失败，原件保留",
+      "actualToolExitCode": 1,
+      "actualToolWallSeconds": 0.4718,
+      "parentPID": 27899,
+      "childPID": 27901,
+      "actualStatus": "Process exited with code 1",
+      "error": "35 !== 34",
+      "explanation": "自有reader误给sourceMap尾注添加换行；未生成成功audit，不是产品FAIL",
+      "rawReceipt": "/tmp/p1004-repair-gui-review-20261023-r2/audit-failure-27901.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs", "audit"],
+      "phase": "只校正自有reader后实核",
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.6412,
+      "parentPID": 27938,
+      "childPID": 27940,
+      "actualStatus": "Process exited with code 0",
+      "stdout": "{\"mode\":\"audit\",\"pid\":27940,\"parentPID\":27938,\"members\":1314,\"frames\":179,\"states\":26,\"raw\":988,\"RPC\":9,\"tasks\":2,\"ask\":1,\"errors\":[]}",
+      "rawReceipt": "/tmp/p1004-repair-gui-review-20261023-r2/audit-receipt.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "--check", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs"],
+      "phase": "尾注校正后语法检查",
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.0894,
+      "stdout": "",
+      "pid": null,
+      "pidBoundary": "同步工具未提供PID，不补造"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs", "format"],
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.3514,
+      "parentPID": 28892,
+      "childPID": 28894,
+      "actualStatus": "Process exited with code 0",
+      "stdout": "{\"mode\":\"format\",\"pid\":28894,\"reportFormat\":{\"localLinks\":12,\"trailingWhitespace\":0,\"finalNewline\":true},\"inputsUnchanged\":1333}",
+      "rawReceipt": "/tmp/p1004-repair-gui-review-20261023-r2/format-receipt.json"
+    },
+    {
+      "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "--check", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs"],
+      "phase": "增加失败原件终封保护后最终语法检查",
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.1343,
+      "stdout": "",
+      "pid": null,
+      "pidBoundary": "同步工具未提供PID，不补造"
+    }
+  ],
+  "sealCommand": {
+    "argv": ["/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node", "/tmp/p1004-repair-gui-review-20261023-r2-reader.mjs", "seal"],
+    "actualReceipt": "docs/testing/p1004-repair-gui-review-20261023-r2-seal-tool-receipt.json",
+    "boundary": "之后单独记录真实工具终码；本字段不是预计成功"
+  },
+  "readOnlyExploration": {
+    "commands": "cat/sed/grep/ls；Node --input-type=module -e 仅内置fs解析/有限字段读出",
+    "rgExit": 127,
+    "rgReason": "command not found；已用grep，不引入依赖",
+    "wrongFrozenPrefixLsExit": 1,
+    "wrongFrozenPrefix": "P1004RepairGuiR2/frozen-source/packages/dsh-pm-tool/src/client",
+    "actualFrozenPrefix": "P1004RepairGuiR2/frozen-source/src/client",
+    "correction": "按原index四份实际路径只读定位；不补产品执行",
+    "otherReadOnlyCommands": "实际0；一次结构预览过大后改有限字段，不读取活工具runtime"
+  },
+  "visualReview": {
+    "tool": "view_image",
+    "root": "reports/all-pending-evidence-20261021/P1004RepairGuiR2",
+    "pngCountActuallyViewed": 12,
+    "frameCountActuallyViewed": 13,
+    "allFramesHashChecked": 179,
+    "png": [
+      "p1004update-first-target-open.png",
+      "p1004ask-old-zero-projection-visible.png",
+      "p1004update-refreshed-old-answer-latest-card.png",
+      "p1004exit-cancel-before.png",
+      "p1004exit-cancel-returned-original-card.png",
+      "p1004exit-x-first-target-open.png",
+      "p1004exit-x-returned-original-card.png",
+      "p1004exit-keys-first-target-open.png",
+      "p1004exit-keys-target-native-tab.png",
+      "p1004exit-keys-visible-return-focus.png",
+      "p1004prepare-zero-actually-saved.png",
+      "p1004update-human-draft-not-saved.png"
+    ],
+    "frames": [
+      "frames/p1004exit-cancel-0.jpg",
+      "frames/p1004exit-cancel-2.jpg",
+      "frames/p1004exit-cancel-4.jpg",
+      "frames/p1004exit-cancel-8.jpg",
+      "frames/p1004exit-x-0.jpg",
+      "frames/p1004exit-x-8.jpg",
+      "frames/p1004exit-x-4.jpg",
+      "frames/p1004exit-x-16.jpg",
+      "frames/p1004exit-keys-0.jpg",
+      "frames/p1004exit-keys-9.jpg",
+      "frames/p1004exit-keys-17.jpg",
+      "frames/p1004exit-keys-29.jpg",
+      "frames/p1004update-40.jpg"
+    ],
+    "boundary": "仅看封存原图帧；未probe/控制浏览器/桌面，未宣称完整179帧目视"
+  },
+  "unexecutedOriginalStep": {
+    "step": "从其他控件 native Tab 到打开任务 opener",
+    "actualTabCountToOpener": 0,
+    "evidence": "keys.observations.tabs仅1条，初态已为打开任务；原helper先判断reached并break，再才有Tab调用",
+    "signedSubset": "原生Enter打开、表单内title->description Tab、ESC退出、可见opener归焦",
+    "status": "NOT_RUN该原步，不扩大为产品FAIL/父门"
+  },
+  "executions": {
+    "product": 0,
+    "GUI": 0,
+    "browserPortProbe": 0,
+    "buildInstallVerify": 0,
+    "gitFetch": 0,
+    "spawn": 0
+  }
+}

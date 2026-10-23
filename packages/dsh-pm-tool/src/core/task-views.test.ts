@@ -250,3 +250,60 @@ describe('新增 due_week / risk chip 归一化与中文摘要', () => {
     expect(describeTaskViewState({ query: '', chip: 'risk', grouped: false, sort: 'dueDate' })).toContain('风险视图')
   })
 })
+
+describe('U4 可选多规则与列偏好', () => {
+  const legacy = { query: '', chip: 'all', grouped: false, sort: 'code' } as const
+  const sorts = [
+    { field: 'priority', dir: 'asc' },
+    { field: 'dueDate', dir: 'desc' },
+  ] as const
+
+  it('合法规则保序、重复字段保首，非法成员使整链回旧单排序', () => {
+    expect(normalizeTaskViewState({
+      ...legacy,
+      sorts: [sorts[0], { field: 'priority', dir: 'desc' }, sorts[1]],
+    })).toMatchObject({ ...legacy, sorts })
+    expect(normalizeTaskViewState({
+      ...legacy,
+      sort: 'dueDate',
+      sorts: [sorts[0], { field: 'unknown', dir: 'asc' }],
+    })).toEqual({ ...legacy, sort: 'dueDate' })
+  })
+
+  it('列偏好只接收四个已有可选列，坏值按可见处理', () => {
+    expect(normalizeTaskViewState({
+      ...legacy,
+      columns: { assignee: false, priority: true, dueDate: 'hide', arbitrary: false },
+    })).toEqual({
+      ...legacy,
+      columns: { assignee: false, priority: true },
+    })
+  })
+
+  it('空规则与全显等价旧态；规则方向、顺序和隐藏列会触发 dirty', () => {
+    expect(sameTaskViewState(legacy, {
+      ...legacy,
+      sorts: [],
+      columns: { assignee: true, priority: true, dueDate: true, progress: true },
+    })).toBe(true)
+    const withRules = { ...legacy, sorts: [...sorts] }
+    expect(sameTaskViewState(withRules, { ...withRules, sorts: [...sorts].reverse() })).toBe(false)
+    expect(sameTaskViewState(withRules, {
+      ...withRules,
+      sorts: [{ field: 'priority', dir: 'desc' }, sorts[1]],
+    })).toBe(false)
+    expect(sameTaskViewState(legacy, { ...legacy, columns: { dueDate: false } })).toBe(false)
+  })
+
+  it('摘要表达规则顺序、方向和隐藏列', () => {
+    const text = describeTaskViewState({
+      ...legacy,
+      sorts: [...sorts],
+      columns: { dueDate: false, progress: false },
+    })
+    expect(text).toContain('优先级升序')
+    expect(text).toContain('截止日期降序')
+    expect(text.indexOf('优先级升序')).toBeLessThan(text.indexOf('截止日期降序'))
+    expect(text).toContain('隐藏截止日期、进度')
+  })
+})

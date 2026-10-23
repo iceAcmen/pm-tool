@@ -1,0 +1,66 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 3 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 busy：同一帧连点只发一次确认，在途禁取消/重选，成功仍只建两条
+[31m[1mAssertionError[22m: expected 2 to be 1 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m src/client/views/tasks-import-confirm.test.tsx:[2m149:24[22m[39m
+    [90m147| [39m    [35mawait[39m [33mPromise[39m[33m.[39m[34mall[39m(f[33m.[39mrun[33m.[39mmock[33m.[39mresults[33m.[39m[34mmap[39m(result [33m=>[39m result[33m.[39mvalue))
+    [90m148| [39m  })
+    [90m149| [39m  [34mexpect[39m(confirmCount)[33m.[39m[34mtoBe[39m([34m1[39m)
+    [90m   | [39m                       [31m^[39m
+    [90m150| [39m  [34mexpect[39m(confirmDisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m151| [39m  [34mexpect[39m(cancelDisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败false：保原预览和内容，可重试且仅成功关闭
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/tasks-import-confirm.test.tsx[2m > [22mLG-05 失败reject：保原预览和内容，可重试且仅成功关闭
+[31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/client/views/tasks-import-confirm.test.tsx:[2m169:18[22m[39m
+    [90m167| [39m  [34mexpect[39m([34mtext[39m(f[33m.[39mmounted[33m.[39mroot[33m.[39m[34mfindByProps[39m({ className[33m:[39m [32m'pt-import'[39m })[33m.[39m[34mf[39m…
+    [90m168| [39m  [35mconst[39m alerts [33m=[39m f[33m.[39mmounted[33m.[39mroot[33m.[39m[34mfindByProps[39m({ className[33m:[39m [32m'pt-import'[39m }…
+    [90m169| [39m  [34mexpect[39m(alerts)[33m.[39m[34mtoHaveLength[39m([34m1[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m170| [39m  [34mexpect[39m([34mtext[39m(alerts[[34m0[39m]))[33m.[39m[34mtoMatch[39m([36m/失败.*重试/[39m)
+    [90m171| [39m  [34mexpect[39m([34mbutton[39m(f[33m.[39mmounted[33m.[39mroot[33m,[39m [32m'确认落盘'[39m)[33m.[39mprops[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯[1m[7m Unhandled Rejection [27m[22m⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: 传输中断[39m
+[36m [2m❯[22m src/client/views/tasks-import-confirm.test.tsx:[2m163:36[22m[39m
+    [90m161| [39m  [35mconst[39m original [33m=[39m [34mtext[39m(f[33m.[39mmounted[33m.[39mroot[33m.[39m[34mfindByProps[39m({ className[33m:[39m [32m'pt-im[39m…
+    [90m162| [39m  [35mif[39m (mode [33m===[39m [32m'false'[39m) f[33m.[39mrun[33m.[39m[34mmockResolvedValueOnce[39m([35mfalse[39m)
+    [90m163| [39m  [35melse[39m f[33m.[39mrun[33m.[39m[34mmockRejectedValueOnce[39m([35mnew[39m [33mError[39m([32m'传输中断'[39m))
+    [90m   | [39m                                   [31m^[39m
+    [90m164| [39m  [35mawait[39m [34mconfirm[39m(f[33m.[39mmounted)
+    [90m165| [39m  [34mexpect[39m([34mlistTasks[39m(f[33m.[39mdomain[33m,[39m f[33m.[39mproject[33m.[39mid))[33m.[39m[34mtoHaveLength[39m([34m0[39m)
+[90m [2m❯[22m ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m533:5[22m[39m
+[90m [2m❯[22m runTest ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1056:11[22m[39m
+[90m [2m❯[22m runSuite ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1205:15[22m[39m
+[90m [2m❯[22m runFiles ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1262:5[22m[39m
+[90m [2m❯[22m startTests ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:[2m1271:3[22m[39m
+[90m [2m❯[22m ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:[2m126:11[22m[39m
+[90m [2m❯[22m withEnv ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:[2m90:5[22m[39m
+[90m [2m❯[22m run ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:[2m112:3[22m[39m
+[90m [2m❯[22m runBaseTests ../pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/vitest@2.1.9_@types+node@22.20.5_supports-color@7.2.0/node_modules/vitest/dist/chunks/base.BZZh4cSm.js:[2m29:3[22m[39m
+
+[31mThis error originated in "[1msrc/client/views/tasks-import-confirm.test.tsx[22m" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.[39m
+[31mThe latest test that might've caused the error is "[1mLG-05 失败reject：保原预览和内容，可重试且仅成功关闭[22m". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.[39m
+

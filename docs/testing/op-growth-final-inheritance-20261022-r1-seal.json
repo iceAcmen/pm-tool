@@ -1,0 +1,241 @@
+{
+  "at": "2026-10-22T10:24:34.264Z",
+  "role": "独立审证，非执行",
+  "protectedInputs": 12921,
+  "drift": [],
+  "linkCount": 55,
+  "missingLinks": [],
+  "trailingWhitespaceLines": [],
+  "selfReference": {
+    "path": "docs/testing/op-growth-final-inheritance-20261022-r1-seal.json",
+    "checkedAfterWrite": true
+  },
+  "finalNewline": true,
+  "self": [
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23",
+      "bytes": 29009,
+      "mtimeMs": 1792664610327.991
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit.mjs",
+      "sha256": "9183a10a7b9941d710d1ed2bf17c0991106d410ad93bfd58ded975aa57b953c6",
+      "bytes": 12537,
+      "mtimeMs": 1792664657133.7834
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit.json",
+      "sha256": "adee9a647566d0eca8ea423e55547c8a96010dd0436e5f1da8296e237ccd90e3",
+      "bytes": 6933933,
+      "mtimeMs": 1792664308150.1511
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit-r2.json",
+      "sha256": "95f88179d95165521df1e6802a9e879c40a2f1f432bf16b30725271b9fc74ac8",
+      "bytes": 9466422,
+      "mtimeMs": 1792664378170.0935
+    }
+  ],
+  "regressionReadback": {
+    "path": "reports/all-pending-evidence-20261021/U4/full-regression-r5/vitest.json",
+    "sha256": "00bd2d9940cf969dfda014e1ba441bec72a24cec48bf7b84ed5471f6c88e8616",
+    "protectionStartsAtSeal": true,
+    "notExecuted": true,
+    "suites": [
+      {
+        "name": "/private/tmp/pmtool-u4-closure-20261022-r2/packages/dsh-pm-tool/src/core/progress-meta.test.ts",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "resolveTaskProgressMeta 客观/人工双轨 有清单客观派生时，无人工 → mode=objective，display=objective",
+            "status": "passed"
+          },
+          {
+            "name": "resolveTaskProgressMeta 客观/人工双轨 人工设定与客观并存：manual 不污染 objective，display 人工优先，mode=manual",
+            "status": "passed"
+          },
+          {
+            "name": "resolveTaskProgressMeta 客观/人工双轨 无清单/无信号：objective=null，未人工 → mode=none，display=null（不伪造 0%）",
+            "status": "passed"
+          },
+          {
+            "name": "resolveTaskProgressMeta 客观/人工双轨 清除人工（manualProgress=null）→ 回落客观，mode=objective",
+            "status": "passed"
+          },
+          {
+            "name": "resolveTaskProgressMeta 客观/人工双轨 无客观仅有人工：mode=manual，display=manual，objective=null",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "name": "/private/tmp/pmtool-u4-closure-20261022-r2/packages/dsh-pm-tool/src/core/progress-report.test.ts",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "B6 frozenExcerptSchema：冻结摘录形状与拒绝 合法摘录通过，sourceKind 固定 progress",
+            "status": "passed"
+          },
+          {
+            "name": "B6 frozenExcerptSchema：冻结摘录形状与拒绝 id/entryId/revisionId/taskId 格式错误、错误 sourceKind、未知键被拒",
+            "status": "passed"
+          },
+          {
+            "name": "B6 frozenExcerptSchema：冻结摘录形状与拒绝 空正文/空作者/非 ISO capturedAt 被拒",
+            "status": "passed"
+          },
+          {
+            "name": "B6 frozenExcerptSchema：冻结摘录形状与拒绝 excerpts 数组：id 唯一、上限 50",
+            "status": "passed"
+          },
+          {
+            "name": "B6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选 generate 接受 selectedRefs（taskId+entryId+可选revisionId）；缺省字段进缺省出",
+            "status": "passed"
+          },
+          {
+            "name": "B6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选 裸 selectedEntryIds / 缺 taskId 的选择器被 strict 拒绝（pl-N 跨任务撞号）",
+            "status": "passed"
+          },
+          {
+            "name": "B6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选 excerpts 与 selectedRefs 同传被 strict 互斥拒绝（不静默忽略任一）",
+            "status": "passed"
+          },
+          {
+            "name": "B6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选 generate 接受预建 excerpts；未知键被拒",
+            "status": "passed"
+          },
+          {
+            "name": "B6 generate/update schema：selectedRefs 复合选择器与 excerpts 可选 update 传 excerpts 替换；不传则缺键（保留现有由域层负责）",
+            "status": "passed"
+          },
+          {
+            "name": "U5 sourceType 枚举与 sourceSessionId 条件 缺省 manual，不带 sourceSessionId 通过",
+            "status": "passed"
+          },
+          {
+            "name": "U5 sourceType 枚举与 sourceSessionId 条件 session 必须带非空 sourceSessionId；缺/空被拒",
+            "status": "passed"
+          },
+          {
+            "name": "U5 sourceType 枚举与 sourceSessionId 条件 manual 不得传 sourceSessionId；非法 sourceType 被拒",
+            "status": "passed"
+          },
+          {
+            "name": "U5 legacy report 只读 normalize，不物理迁移 缺 source 字段/非法 sourceType 归一为 manual/null；有效 session 保留",
+            "status": "passed"
+          },
+          {
+            "name": "U5 legacy report 只读 normalize，不物理迁移 list/get 读取旧记录补 manual/null；update 前 normalize 后可写且保留来源",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "name": "/private/tmp/pmtool-u4-closure-20261022-r2/packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 javascript:alert(1)",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 ftp://example.com/a",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 //example.com/a",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 不是链接",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 ",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 create/update schema 拒绝非法新写 https://example.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 真实JSON domain命令：非法add/update（含其他字段和draft）拒绝且字节/mtime/记录零写",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 真实命令接受http(s)与trim、工时3.5；人工0/clear不改清单、legacy或status",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-03 新写证据协议与旧记录兼容 旧非法协议record仍可读；标准备份预检/恢复/往返保原值，不相关更新不被旧值阻塞",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "name": "/private/tmp/pmtool-u4-closure-20261022-r2/packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+        "status": "passed",
+        "assertions": [
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 F2 列表和树都显示 L1 客观50、P63覆盖2/3；legacy仅旁注，无清单证据不足",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 F2 总览阶段 P63而非legacy20，done清单40/无清单null，不强填100",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 人工30可见且来源明确；同组件清除回落objective，不回落legacy",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 人工0可见且来源明确；同组件清除回落objective，不回落legacy",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 总览阶段人工30不污染父客观63；清除后回落63，无清单清除仍null",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 总览阶段人工0不污染父客观63；清除后回落63，无清单清除仍null",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 全勾todo只显示待验收，wrapped自身可显100但不挂待验收/父覆盖；改回后重新纳入",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-01 真实任务列表/树及总览消费 无清单人工0在列表可见，清除后证据不足；父筛选只留P也保持完整63",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-02 甘特真实渲染而非仅progressFill纯函数 三fixture及人工0：'客观 40%'，客观40保真",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-02 甘特真实渲染而非仅progressFill纯函数 三fixture及人工0：'证据不足'，客观null保真",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-02 甘特真实渲染而非仅progressFill纯函数 三fixture及人工0：'人工设定 70%'，客观40保真",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-02 甘特真实渲染而非仅progressFill纯函数 三fixture及人工0：'人工设定 0%'，客观40保真",
+            "status": "passed"
+          },
+          {
+            "name": "OP-AUTO-DEF-02 甘特真实渲染而非仅progressFill纯函数 同实例人工70清除后回落50；改期仍只写日期、不改人工/客观/status",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "regressionMatches": true,
+  "productTest": "NOT_RUN",
+  "gui": "NOT_RUN",
+  "resourceReleased": true,
+  "stop": "STOP"
+}

@@ -1,0 +1,465 @@
+diff --git a/packages/dsh-pm-tool/package.json b/packages/dsh-pm-tool/package.json
+index ed67989..90996e0 100644
+--- a/packages/dsh-pm-tool/package.json
++++ b/packages/dsh-pm-tool/package.json
+@@ -76,9 +76,11 @@
+     "@deepseek-ai/dsh-storage-json": "0.2.1-alpha.2",
+     "@types/node": "^22.10.0",
+     "@types/react": "18.3.20",
++    "@types/react-test-renderer": "18.3.1",
+     "@vitest/coverage-v8": "^2.1.9",
+     "puppeteer-core": "^23.11.1",
+     "react": "18.3.1",
++    "react-test-renderer": "18.3.1",
+     "tsdown": "0.15.10",
+     "typescript": "^5.9.0",
+     "vitest": "^2.1.9"
+diff --git a/packages/dsh-pm-tool/pnpm-lock.yaml b/packages/dsh-pm-tool/pnpm-lock.yaml
+index b240401..7cda4b6 100644
+--- a/packages/dsh-pm-tool/pnpm-lock.yaml
++++ b/packages/dsh-pm-tool/pnpm-lock.yaml
+@@ -66,6 +66,9 @@ importers:
+       '@types/react':
+         specifier: 18.3.20
+         version: 18.3.20
++      '@types/react-test-renderer':
++        specifier: 18.3.1
++        version: 18.3.1
+       '@vitest/coverage-v8':
+         specifier: ^2.1.9
+         version: 2.1.9(supports-color@7.2.0)(vitest@2.1.9(@types/node@22.20.5)(supports-color@7.2.0))
+@@ -75,6 +78,9 @@ importers:
+       react:
+         specifier: 18.3.1
+         version: 18.3.1
++      react-test-renderer:
++        specifier: 18.3.1
++        version: 18.3.1(react@18.3.1)
+       tsdown:
+         specifier: 0.15.10
+         version: 0.15.10(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(supports-color@7.2.0)(typescript@5.9.3)
+@@ -1225,6 +1231,9 @@ packages:
+   '@types/prop-types@15.7.15':
+     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
+ 
++  '@types/react-test-renderer@18.3.1':
++    resolution: {integrity: sha512-vAhnk0tG2eGa37lkU9+s5SoroCsRI08xnsWFiAXOuPH2jqzMbcXvKExXViPi1P5fIklDeCvXqyrdmipFaSkZrA==}
++
+   '@types/react@18.3.20':
+     resolution: {integrity: sha512-IPaCZN7PShZK/3t6Q87pfTkRm6oLTd4vztyoj+cbHUF1g3FfVb2tFIL79uCRKEfv16AhqDMBywP2VW3KIZUvcg==}
+ 
+@@ -1909,12 +1918,25 @@ packages:
+   react-is@16.13.1:
+     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+ 
++  react-is@18.3.1:
++    resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
++
+   react-resizable@3.2.0:
+     resolution: {integrity: sha512-3NKQ0SLZV7rs3LQHeXlOzDSRQfFrkX6TVet77/Qk03zqiZyee37b7N8/gwDJAA8UUjRz7PdWCCy49hcso45SMQ==}
+     peerDependencies:
+       react: '>= 16.3'
+       react-dom: '>= 16.3'
+ 
++  react-shallow-renderer@16.15.0:
++    resolution: {integrity: sha512-oScf2FqQ9LFVQgA73vr86xl2NaOIX73rh+YFqcOp68CWj56tSfgtGKrEbyhCj0rSijyG9M1CYprTh39fBi5hzA==}
++    peerDependencies:
++      react: ^16.0.0 || ^17.0.0 || ^18.0.0
++
++  react-test-renderer@18.3.1:
++    resolution: {integrity: sha512-KkAgygexHUkQqtvvx/otwxtuFu5cVjfzTCtjXLH9boS19/Nbtg84zS7wIQn39G8IlrhThBpQsMKkq5ZHZIYFXA==}
++    peerDependencies:
++      react: ^18.3.1
++
+   react@18.3.1:
+     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+     engines: {node: '>=0.10.0'}
+@@ -1975,6 +1997,9 @@ packages:
+     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
+     hasBin: true
+ 
++  scheduler@0.23.2:
++    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
++
+   scheduler@0.28.0:
+     resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
+ 
+@@ -3244,6 +3269,10 @@ snapshots:
+ 
+   '@types/prop-types@15.7.15': {}
+ 
++  '@types/react-test-renderer@18.3.1':
++    dependencies:
++      '@types/react': 18.3.20
++
+   '@types/react@18.3.20':
+     dependencies:
+       '@types/prop-types': 15.7.15
+@@ -3920,6 +3949,8 @@ snapshots:
+ 
+   react-is@16.13.1: {}
+ 
++  react-is@18.3.1: {}
++
+   react-resizable@3.2.0(react-dom@19.3.1(react@18.3.1))(react@18.3.1):
+     dependencies:
+       prop-types: 15.8.1
+@@ -3927,6 +3958,19 @@ snapshots:
+       react-dom: 19.3.1(react@18.3.1)
+       react-draggable: 4.7.2(react-dom@19.3.1(react@18.3.1))(react@18.3.1)
+ 
++  react-shallow-renderer@16.15.0(react@18.3.1):
++    dependencies:
++      object-assign: 4.1.1
++      react: 18.3.1
++      react-is: 16.13.1
++
++  react-test-renderer@18.3.1(react@18.3.1):
++    dependencies:
++      react: 18.3.1
++      react-is: 18.3.1
++      react-shallow-renderer: 16.15.0(react@18.3.1)
++      scheduler: 0.23.2
++
+   react@18.3.1:
+     dependencies:
+       loose-envify: 1.4.0
+@@ -4036,6 +4080,10 @@ snapshots:
+       '@rollup/rollup-win32-x64-msvc': 4.64.7
+       fsevents: 2.3.3
+ 
++  scheduler@0.23.2:
++    dependencies:
++      loose-envify: 1.4.0
++
+   scheduler@0.28.0: {}
+ 
+   semver@7.8.5: {}
+diff --git a/packages/dsh-pm-tool/src/client/launch-handshake.test.ts b/packages/dsh-pm-tool/src/client/launch-handshake.test.ts
+index 7d4aea9..ef77745 100644
+--- a/packages/dsh-pm-tool/src/client/launch-handshake.test.ts
++++ b/packages/dsh-pm-tool/src/client/launch-handshake.test.ts
+@@ -154,3 +154,85 @@ describe('createLaunchHandshakeRetrier：首次就绪失败不永久错过 S4',
+     expect(fetchImpl).toHaveBeenCalledTimes(1)
+   })
+ })
++
++describe('跨旅程回告：令牌成功与在途分别归属', () => {
++  it.each(['18345.N2', '18346.N1'])('R05/R06：N1成功后新令牌%s独立回告', async (next) => {
++    let hash = '#pm-launch=18345.N1'
++    const sent: string[] = []
++    const retrier = createLaunchHandshakeRetrier({
++      getHash: () => hash,
++      replaceState: cleaned => { hash = cleaned },
++      fetchImpl: vi.fn(async (url, init) => {
++        sent.push(`${url}:${JSON.parse(String(init?.body)).nonce}`)
++        return { ok: true } as Response
++      }),
++    })
++    await retrier.reportReady()
++    hash = `#/tasks&pm-launch=${next}`
++    await retrier.reportReady()
++    expect(sent).toHaveLength(2)
++    expect(sent[1]).toBe(`http://127.0.0.1:${next.split('.')[0]}/api/entered:${next.split('.')[1]}`)
++    expect(hash).toBe('#/tasks')
++  })
++
++  it('R07：旧N1成功不能清新N2 hash', async () => {
++    let hash = '#/tasks&pm-launch=18345.N1'
++    let release!: (response: Response) => void
++    const flight = armLaunchHandshake({
++      getHash: () => hash,
++      replaceState: cleaned => { hash = cleaned },
++      fetchImpl: vi.fn(() => new Promise<Response>(resolve => { release = resolve })),
++    })
++    hash = '#/tasks&pm-launch=18345.N2'
++    release({ ok: true } as Response)
++    await expect(flight).resolves.toBe(true)
++    expect(hash).toBe('#/tasks&pm-launch=18345.N2')
++  })
++
++  it('R08：旧请求在途不能合并新N2，新finally不丢同token并发守卫', async () => {
++    let hash = '#pm-launch=18345.N1'
++    const releases: Array<(response: Response) => void> = []
++    const sent: string[] = []
++    const retrier = createLaunchHandshakeRetrier({
++      getHash: () => hash,
++      replaceState: cleaned => { hash = cleaned },
++      fetchImpl: vi.fn((_url, init) => {
++        sent.push(JSON.parse(String(init?.body)).nonce)
++        return new Promise<Response>(resolve => { releases.push(resolve) })
++      }),
++    })
++    const n1 = retrier.reportReady()
++    hash = '#/tasks&pm-launch=18345.N2'
++    const n2 = retrier.reportReady()
++    expect(n2).not.toBe(n1)
++    expect(sent).toEqual(['N1', 'N2'])
++    releases[0]({ ok: true } as Response)
++    await n1
++    expect(hash).toContain('N2')
++    expect(retrier.reportReady()).toBe(n2)
++    releases[1]({ ok: true } as Response)
++    await n2
++    expect(hash).toBe('#/tasks')
++  })
++
++  it('同token并发合并、失败可再试，普通业务hash不发', async () => {
++    let hash = '#pm-launch=18345.N1'
++    let release!: (response: Response) => void
++    const fetchImpl = vi.fn(() => new Promise<Response>(resolve => { release = resolve }))
++    const retrier = createLaunchHandshakeRetrier({
++      getHash: () => hash, replaceState: cleaned => { hash = cleaned }, fetchImpl,
++    })
++    const first = retrier.reportReady()
++    expect(retrier.reportReady()).toBe(first)
++    expect(fetchImpl).toHaveBeenCalledTimes(1)
++    release({ ok: false } as Response)
++    await first
++    const retry = retrier.reportReady()
++    expect(fetchImpl).toHaveBeenCalledTimes(2)
++    release({ ok: true } as Response)
++    await retry
++    hash = '#/tasks'
++    await retrier.reportReady()
++    expect(fetchImpl).toHaveBeenCalledTimes(2)
++  })
++})
+diff --git a/packages/dsh-pm-tool/src/client/launch-handshake.ts b/packages/dsh-pm-tool/src/client/launch-handshake.ts
+index b03fc71..4241f88 100644
+--- a/packages/dsh-pm-tool/src/client/launch-handshake.ts
++++ b/packages/dsh-pm-tool/src/client/launch-handshake.ts
+@@ -77,39 +77,50 @@ export interface ArmDeps {
+ }
+ 
+ /**
+- * 就绪后调用一次：解析 → 清参数 → POST。无令牌不发请求；失败返回 false（不假成功）。
++ * 就绪后调用一次：解析 → POST → 成功后清本轮参数。无令牌不发请求；失败不假成功。
+  */
+ export async function armLaunchHandshake(deps: ArmDeps): Promise<boolean> {
+   const token = parseLaunchToken(deps.getHash())
+   if (!token) return false
+   const ok = await reportEntered(token, deps.fetchImpl)
+-  if (ok) deps.replaceState(stripLaunchHash(deps.getHash()))
++  const currentHash = deps.getHash()
++  const current = parseLaunchToken(currentHash)
++  // 请求完成期间可能已收到另一轮打开句柄；旧成功只能清属于自己的参数。
++  if (ok && current?.port === token.port && current.nonce === token.nonce) {
++    deps.replaceState(stripLaunchHash(currentHash))
++  }
+   return ok
+ }
+ 
+ export interface LaunchHandshakeRetrier {
+-  /** 每次工作台数据成功就绪时调用；失败可重试，成功后幂等。 */
++  /** 每次工作台数据成功就绪时调用；失败可重试，每个令牌成功后幂等。 */
+   reportReady: () => Promise<boolean>
+ }
+ 
+ /**
+  * 工作台就绪回告门：首次快照/网络失败不永久丢失 S4，后续成功刷新会继续尝试；
+- * 同一时刻合并并发请求，成功后不重复 POST。
++ * 仅合并同一令牌的并发请求；新旅程不借用旧成功或旧请求。
++ * 状态仅存本次面板内存，随面板释放，不写盘或日志。
+  */
+ export function createLaunchHandshakeRetrier(deps: ArmDeps): LaunchHandshakeRetrier {
+-  let done = false
+-  let inflight: Promise<boolean> | null = null
++  const completed = new Set<string>()
++  const inflight = new Map<string, Promise<boolean>>()
+   return {
+     reportReady(): Promise<boolean> {
+-      if (done) return Promise.resolve(true)
+-      if (inflight) return inflight
+-      inflight = armLaunchHandshake(deps)
++      const token = parseLaunchToken(deps.getHash())
++      if (!token) return Promise.resolve(completed.size > 0)
++      const key = `${token.port}.${token.nonce}`
++      if (completed.has(key)) return Promise.resolve(true)
++      const existing = inflight.get(key)
++      if (existing) return existing
++      const flight = armLaunchHandshake(deps)
+         .then((ok) => {
+-          if (ok) done = true
++          if (ok) completed.add(key)
+           return ok
+         })
+-        .finally(() => { inflight = null })
+-      return inflight
++        .finally(() => { inflight.delete(key) })
++      inflight.set(key, flight)
++      return flight
+     },
+   }
+ }
+diff --git a/packages/dsh-pm-tool/src/client/panel.tsx b/packages/dsh-pm-tool/src/client/panel.tsx
+index 44d82b3..6986bd5 100644
+--- a/packages/dsh-pm-tool/src/client/panel.tsx
++++ b/packages/dsh-pm-tool/src/client/panel.tsx
+@@ -19,8 +19,8 @@ import { CopilotPanel } from './shared/drawers/sidecar-portal.js'
+ import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
+ import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
+ import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard, buildSuccessEnvelope, prefixFeedbackOnce } from '../core/ui-feedback.js'
+-import { buildLaunchHistoryUrl, createLaunchHandshakeRetrier } from './launch-handshake.js'
+-import { copyResultText } from './result-card-copy.js'
++import { buildLaunchHistoryUrl, createLaunchHandshakeRetrier, parseLaunchToken } from './launch-handshake.js'
++import { ResultCard } from './result-card.js'
+ import { buildDiagnosis } from '../core/suggestion-engine.js'
+ import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
+ import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
+@@ -726,6 +726,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+   // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
+   const [dismissedDiagnosis, setDismissedDiagnosis] = useState<ReadonlySet<string>>(new Set())
+   const launchHandshakeRef = useRef<ReturnType<typeof createLaunchHandshakeRetrier> | null>(null)
++  const launchMountRef = useRef({ active: false, generation: 0, snapshotReady: false })
+   if (!launchHandshakeRef.current && typeof window !== 'undefined') {
+     launchHandshakeRef.current = createLaunchHandshakeRetrier({
+       getHash: () => window.location.hash,
+@@ -739,9 +740,13 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+ 
+   /** 重读 web snapshot；返回是否成功（失败仅置消息并返回 false，不抛，兼容既有 void 调用方）。 */
+   const refresh = async (): Promise<boolean> => {
++    const generation = launchMountRef.current.generation
++    launchMountRef.current.snapshotReady = false
+     setBusy(true)
+     try {
+       const next = JSON.parse(await execute('web snapshot')) as Snapshot
++      // 卸载或StrictMode重新挂载后的旧响应，不能替当前面板宣布数据就绪。
++      if (!launchMountRef.current.active || launchMountRef.current.generation !== generation) return false
+       setData(next)
+       setStale(false)
+       // OPT-03：刷新后回填记住的项目；已删除则回退到当前首个项目，不留脏值。
+@@ -749,22 +754,38 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
+       let stored = ''
+       try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }
+       setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
+-      // 首次读取失败不永久错过 Finder 启动回告；后续任一成功刷新都会补试，成功后幂等。
++      launchMountRef.current.snapshotReady = true
++      // 首次失败可由后续成功刷新补试；成功仅属于本轮令牌。
+       void launchHandshakeRef.current?.reportReady()
+       return true
+     } catch (error) {
++      if (!launchMountRef.current.active || launchMountRef.current.generation !== generation) return false
+       // B1-C2：失败不清空已有数据（保留旧内容），仅标陈旧；错误原文进 ResultCard，不静默合并。
+       setStale(true)
+       setMessage(error instanceof Error ? error.message : String(error))
+       return false
+     } finally {
+-      setBusy(false)
++      if (launchMountRef.current.active && launchMountRef.current.generation === generation) setBusy(false)
+     }
+   }
+ 
+   useEffect(() => {
+-    // 面板挂载后读取；权威回告由 refresh 的成功分支统一处理。
++    launchMountRef.current.active = true
++    launchMountRef.current.generation += 1
++    // 已就绪的同一PM面板可收到reopen新hash；只观察本面板的成功snapshot门。
++    const onLaunchHash = () => {
++      if (launchMountRef.current.snapshotReady && parseLaunchToken(window.location.hash)) {
++        void launchHandshakeRef.current?.reportReady()
++      }
++    }
++    window.addEventListener('hashchange', onLaunchHash)
+     void refresh()
++    return () => {
++      launchMountRef.current.active = false
++      launchMountRef.current.snapshotReady = false
++      launchMountRef.current.generation += 1
++      window.removeEventListener('hashchange', onLaunchHash)
++    }
+   }, [])
+ 
+   // 「更多」菜单：Escape 关闭并把焦点还给触发按钮。
+@@ -1972,78 +1993,6 @@ function FeedbackToast({ message }: { message: string }) {
+   )
+ }
+ 
+-function ResultCard({ message, onClose, onAction }: {
+-  message: string
+-  onClose: () => void
+-  onAction: (command: string) => void
+-}) {
+-  const fb = classifyFeedback(message)
+-  const [detailOpen, setDetailOpen] = useState(false)
+-  const [copyState, setCopyState] = useState<'copied' | 'failed' | null>(null)
+-  const path = extractBackupPath(message)
+-  const isError = fb.isError
+-  // D-09/C-11：纯结构化成功短摘要只进 3s toast，不开常驻大卡（消除 toast+大卡双发、离页残留）；
+-  // 仅错误/非结构化/带 action/带备份路径才常驻本卡。
+-  if (!shouldPersistResultCard(fb, path)) return null
+-  // 非结构化回退：原样全量进卡体（不强行折叠、不改写）；结构化成功：摘要常显、详情折叠。
+-  const showInlineRaw = !fb.structured
+-  // B1-C3：permission-denied 给通用错误种类标签（权限不足），原始 command 错误原因原样保留，
+-  // 不静默合并、不改写、不吞；其余错误种类仍走通用 error 呈现。
+-  const isPermissionDenied = isError && /权限|denied|permission|无权|not allowed/i.test(message)
+-  const copy = async (value: string) => {
+-    setCopyState(await copyResultText(value) ? 'copied' : 'failed')
+-  }
+-  return (
+-    <div className={`pm-result-card${isError ? ' pm-result-card--error' : ''}`}
+-      role={isError ? 'alert' : 'status'}
+-      aria-live={isError ? 'assertive' : 'polite'}
+-    >
+-      <div className="pm-result-card__bar">
+-        {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
+-        <div className="pm-result-card__summary">
+-          {isPermissionDenied && <div className="pm-result-card__kind">权限不足</div>}
+-          {showInlineRaw ? message : fb.summary.join('\n')}
+-        </div>
+-        <button className="pm-plain-icon" aria-label="关闭结果卡" onClick={onClose}><X size={14}/></button>
+-      </div>
+-      {fb.detail && (
+-        <>
+-          <button
+-            className="pm-result-card__toggle"
+-            aria-expanded={detailOpen}
+-            onClick={() => setDetailOpen(v => !v)}
+-          >{detailOpen ? '收起详情 ▴' : '详情 ▾'}</button>
+-          {detailOpen ? <pre className="pm-result-card__detail">{fb.detail}</pre> : null}
+-        </>
+-      )}
+-      {fb.action && (
+-        <div className="pm-result-card__actions">
+-          <button className="pm-result-action" onClick={() => onAction(fb.action!.command)}>
+-            {fb.action.label}
+-          </button>
+-        </div>
+-      )}
+-      <div className="pm-result-card__actions">
+-        <button
+-          className="pm-result-card__copy"
+-          onClick={() => { void copy(message) }}
+-        >复制原文</button>
+-        {path && (
+-          <button
+-            className="pm-result-card__copy"
+-            onClick={() => { void copy(path) }}
+-          >复制路径</button>
+-        )}
+-        {copyState && (
+-          <span className={`pm-result-card__copy-state pm-result-card__copy-state--${copyState}`} role="status">
+-            {copyState === 'copied' ? '已复制' : '复制失败，请手动复制'}
+-          </span>
+-        )}
+-      </div>
+-    </div>
+-  )
+-}
+-
+ function EmptyWorkspace({ onCreate, onAI }: { onCreate: () => void, onAI?: () => void }) {
+   return <div className="pm-empty-workspace">
+     <FolderKanban size={38} strokeWidth={1.4}/>
+diff --git a/packages/dsh-pm-tool/vitest.config.ts b/packages/dsh-pm-tool/vitest.config.ts
+index c33ad70..fb5b7b9 100644
+--- a/packages/dsh-pm-tool/vitest.config.ts
++++ b/packages/dsh-pm-tool/vitest.config.ts
+@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config'
+ export default defineConfig({
+   test: {
+     environment: 'node',
+-    include: ['src/**/*.test.ts'],
++    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+     // 纯函数单测不碰文件系统/网络；并发安全。
+     coverage: {
+       provider: 'v8',

@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-21T13:48:49.088Z",
+  "oldArchive": "run-BgYW1S",
+  "newArchive": "run-qCokWR",
+  "oldFileAssetsSha256": "7e6c3c3705e6d1b89732f5c6b404f5930d004b99bf6ab282c11401242a07f5ef",
+  "newFileAssetsSha256": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+  "diff": {
+    "before": "let ancestor = sep",
+    "after": "let ancestor: string = sep",
+    "owner": "Main"
+  },
+  "emittedJsIdentical": true,
+  "emittedJsSha256": "00ae0804b85bd46ba2d2528ef8ca5a4a4596e23ecdf96fcc678e77163962049e",
+  "opEightUnchanged": true,
+  "compileExit": 0,
+  "fullPackageConfigNoEmitExit": 0,
+  "typecheckSourceChanges": [],
+  "typecheckArchive": "typecheck-MvbEmD",
+  "noEmitConfig": "原package tsconfig.json完整自有副本；非package build",
+  "mixedOldDiagnostic": "旧闭包叠新全包额外ask TS2554，不作当前产品/旧整包判定",
+  "reportIssues": [],
+  "checkedArchiveFiles": 28,
+  "verdict": "OP三缺陷SOURCE/AUTO有限PASS；GNHD结构有限PASS/视觉FAIL_OPEN；类型失败仅依赖历史，修后编译复验关闭；整门未放行"
+}

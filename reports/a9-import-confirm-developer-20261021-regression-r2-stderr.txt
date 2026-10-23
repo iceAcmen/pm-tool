@@ -1,0 +1,23 @@
+[90mstderr[2m | src/client/views/objective-consumers.test.tsx[2m > [22m[2mOP-AUTO-DEF-01 真实任务列表/树及总览消费[2m > [22m[2mF2 列表和树都显示 L1 客观50、P63覆盖2/3；legacy仅旁注，无清单证据不足
+[22m[39mWarning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `TaskTable`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at TaskTable (/private/tmp/pmtool-a9-import-cny86l/packages/dsh-pm-tool/src/client/views/tasks.tsx:355:5)
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/core/task-evidence-protocol.test.ts[2m > [22mOP-AUTO-DEF-03 新写证据协议与旧记录兼容[2m > [22m旧非法协议record仍可读；标准备份预检/恢复/往返保原值，不相关更新不被旧值阻塞
+[31m[1mError[22m: ENOENT: no such file or directory, open '/private/tmp/pmtool-a9-import-cny86l/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json'[39m
+[36m [2m❯[22m src/core/task-evidence-protocol.test.ts:[2m97:46[22m[39m
+    [90m 95| [39m  [34mit[39m([32m'旧非法协议record仍可读；标准备份预检/恢复/往返保原值，不相关更新[39m…
+    [90m 96| [39m    [35mconst[39m { root[33m,[39m domain } [33m=[39m [35mawait[39m [34mopen[39m()
+    [90m 97| [39m    [35mconst[39m backup [33m=[39m [34mvalidateBackup[39m([33mJSON[39m[33m.[39m[34mparse[39m([34mreadFileSync[39m([35mnew[39m [33mURL[39m(
+    [90m   | [39m                                             [31m^[39m
+    [90m 98| [39m      [32m'../../../../docs/testing/objective-independent-auto-20261021-ev[39m…
+    [90m 99| [39m      [35mimport[39m[33m.[39mmeta[33m.[39murl[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/private/tmp/pmtool-a9-import-cny86l/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

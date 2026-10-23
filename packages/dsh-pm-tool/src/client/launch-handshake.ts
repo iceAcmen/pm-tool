@@ -77,39 +77,50 @@ export interface ArmDeps {
 }
 
 /**
- * 就绪后调用一次：解析 → 清参数 → POST。无令牌不发请求；失败返回 false（不假成功）。
+ * 就绪后调用一次：解析 → POST → 成功后清本轮参数。无令牌不发请求；失败不假成功。
  */
 export async function armLaunchHandshake(deps: ArmDeps): Promise<boolean> {
   const token = parseLaunchToken(deps.getHash())
   if (!token) return false
   const ok = await reportEntered(token, deps.fetchImpl)
-  if (ok) deps.replaceState(stripLaunchHash(deps.getHash()))
+  const currentHash = deps.getHash()
+  const current = parseLaunchToken(currentHash)
+  // 请求完成期间可能已收到另一轮打开句柄；旧成功只能清属于自己的参数。
+  if (ok && current?.port === token.port && current.nonce === token.nonce) {
+    deps.replaceState(stripLaunchHash(currentHash))
+  }
   return ok
 }
 
 export interface LaunchHandshakeRetrier {
-  /** 每次工作台数据成功就绪时调用；失败可重试，成功后幂等。 */
+  /** 每次工作台数据成功就绪时调用；失败可重试，每个令牌成功后幂等。 */
   reportReady: () => Promise<boolean>
 }
 
 /**
  * 工作台就绪回告门：首次快照/网络失败不永久丢失 S4，后续成功刷新会继续尝试；
- * 同一时刻合并并发请求，成功后不重复 POST。
+ * 仅合并同一令牌的并发请求；新旅程不借用旧成功或旧请求。
+ * 状态仅存本次面板内存，随面板释放，不写盘或日志。
  */
 export function createLaunchHandshakeRetrier(deps: ArmDeps): LaunchHandshakeRetrier {
-  let done = false
-  let inflight: Promise<boolean> | null = null
+  const completed = new Set<string>()
+  const inflight = new Map<string, Promise<boolean>>()
   return {
     reportReady(): Promise<boolean> {
-      if (done) return Promise.resolve(true)
-      if (inflight) return inflight
-      inflight = armLaunchHandshake(deps)
+      const token = parseLaunchToken(deps.getHash())
+      if (!token) return Promise.resolve(completed.size > 0)
+      const key = `${token.port}.${token.nonce}`
+      if (completed.has(key)) return Promise.resolve(true)
+      const existing = inflight.get(key)
+      if (existing) return existing
+      const flight = armLaunchHandshake(deps)
         .then((ok) => {
-          if (ok) done = true
+          if (ok) completed.add(key)
           return ok
         })
-        .finally(() => { inflight = null })
-      return inflight
+        .finally(() => { inflight.delete(key) })
+      inflight.set(key, flight)
+      return flight
     },
   }
 }

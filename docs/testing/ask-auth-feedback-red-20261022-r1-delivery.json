@@ -1,0 +1,50 @@
+{
+  "role": "独立先行测试，非开发、非 GUI",
+  "date": "2026-10-22",
+  "verdict": "FAIL_NECESSARY_RED_CONFIRMED",
+  "report": "docs/testing/ask-auth-feedback-red-20261022-r1-report.md",
+  "plan": "docs/testing/ask-auth-feedback-red-20261022-r1-plan.md",
+  "test": "packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts",
+  "evidence": "reports/all-pending-evidence-20261021/AskAuthRedR1",
+  "evidenceDelivery": "reports/all-pending-evidence-20261021/AskAuthRedR1/delivery.json",
+  "evidenceIndex": "reports/all-pending-evidence-20261021/AskAuthRedR1/delivery-index.json",
+  "controls": { "passed": 8, "failed": 0, "originalExit": 0 },
+  "necessaryRed": { "passed": 0, "failed": 3, "originalExit": 1 },
+  "freezeExit": 0,
+  "closeExit": 0,
+  "seal": {
+    "originalExit": 0,
+    "executionId": "8d981fa7f63ac9cf1526cfb5925e5472",
+    "toolParentPid": 69963,
+    "status": "exited",
+    "outputComplete": true,
+    "start": "2026-10-22T12:46:29.744Z",
+    "end": "2026-10-22T12:46:37.175Z",
+    "provenance": "只读工具 execution.json 实际回读，不推断 exit",
+    "command": "node docs/testing/ask-auth-feedback-red-20261022-r1-seal.mjs 3c201a37e892a6012742f12df4e8ee62 62cf5639c8a2be2a75c3fd05f4392786 75b6e76cf7754831f8957a3ac9e86527 106f50d0cff3047dc39f1fb606aa1b03"
+  },
+  "reproduction": {
+    "environment": "macOS + nvm Node v22.23.3；旧 pnpm 11.28.5 依赖成果；不 install/build",
+    "config": "AskAuthRedR1/vitest.config.mjs；singleFork/no-cache；只运行唯一新测试",
+    "productionPiSource": "ASK_AUTH_PI_STREAM 必须指向本轮 frozen/upstream/pi-src/stream.ts 原样生产源副本，并提供内部独占旧依赖。不可用自编分类器或中文 AiDraftError stub 代替。",
+    "runtimeRoots": "PM_GOVERNANCE_TMP、HOME、TMPDIR、XDG cache、DSH_HOME、资料/备份/导出根均自有；完整白名单 env 见各 command.json。",
+    "defaultLoaderBoundary": "主仓库默认 loader 为并列只读 deepseek-harness 上游源；新的隔离封树不存在该并列路径时须显式提供 ASK_AUTH_PI_STREAM。不以跳过测试绕过此设施依赖，不把本轮专属执行宣称默认全门通过。"
+  },
+  "defect": {
+    "id": "ASK-AUTH-01",
+    "file": "packages/dsh-pm-tool/src/commands/ask.ts",
+    "lines": "126-128",
+    "recommendation": "不同开发角色仅删除 /Key|密钥/ 消息正则；缺凭据分支以 MISSING_CREDENTIAL code 或原 PROD_KEY_MISSING 精确哨兵判断；其余中文兜底不变。",
+    "productChanged": false
+  },
+  "aiClientSourceAuto": "原有限 PASS 保留；不撤销整 ATF 其他控制",
+  "released": true,
+  "stop": true,
+  "guiSigned": false,
+  "wholeRAAI06Signed": false,
+  "totalGateSigned": false,
+  "release": "STOP",
+  "nextOwner": "Main 派不同开发角色修最小 ask.ts 接缝，随后另一独立 SOURCE/AUTO 专家复验；Main唯一 build/原合同GUI采证，最后真正全部验完才普通commit。",
+  "constraints": "本角色不普通commit/push/tag/install/build/GUI/services/key/正式data/vendor；不改原src/test/oracle；不锁其他agent在途或共享lib。",
+  "indexNote": "此文件为证据封存后的最终工具退出与设施接续补记，不在此前自不含的 delivery-index 中；未改任何已封原件。"
+}

@@ -1,0 +1,123 @@
+{
+  "at": "2026-10-22T11:06:36.383Z",
+  "checks": [
+    {
+      "from": "07-normal-external-draft",
+      "to": "08-normal-external-saved",
+      "changed": [
+        "data/pmtool/tasks/t-0001.json"
+      ]
+    },
+    {
+      "from": "09-regenerated-draft",
+      "to": "10-regenerated-applied",
+      "changed": [
+        "data/pmtool/tasks/t-0001.json"
+      ]
+    }
+  ],
+  "exactPlanToApply": true,
+  "inheritance": [
+    {
+      "rel": "packages/dsh-pm-tool/src/core/copilot.ts",
+      "oldSha": "9059ab4de0c46398c180f24a9928f4b2de670fee5a2cdc5d317ea26e5a389c25",
+      "nextSha": "9059ab4de0c46398c180f24a9928f4b2de670fee5a2cdc5d317ea26e5a389c25",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/commands/ask.ts",
+      "oldSha": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+      "nextSha": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "oldSha": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+      "nextSha": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/core/ai-client.ts",
+      "oldSha": "08e2a80154acd782db6236eca64be9e899dd1b59c23d2926b7d6bf7069a92950",
+      "nextSha": "08e2a80154acd782db6236eca64be9e899dd1b59c23d2926b7d6bf7069a92950",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+      "oldSha": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269",
+      "nextSha": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "oldSha": "fe58fff88560141bf6d6886c93b6e8a38b82f2ee5c1c6a23bb4059116f3d71ac",
+      "nextSha": "fa07af612db1546e8df66cb31fb081087eb8aefcf60fd58d8484dca6664a0947",
+      "same": false,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/client/panel.css",
+      "oldSha": "87ca4fc9f0899d87b3103fcc279a791839a23e921de6511a81086d85d9e54246",
+      "nextSha": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b",
+      "same": false,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/client/result-card.tsx",
+      "oldSha": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+      "nextSha": "3bf14c4de117ce5e9577f7db0ed8e4bf81196492fd794be95f6df40310dca352",
+      "same": false,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    },
+    {
+      "rel": "packages/dsh-pm-tool/src/client/provenance-panel.tsx",
+      "oldSha": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b",
+      "nextSha": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b",
+      "same": true,
+      "boundary": "comparison with signed A16 manifest; not a replay of old GUI"
+    }
+  ],
+  "files": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-preconfirm-conflict-contract-20261022-plan.md": {
+      "bytes": 8362,
+      "sha256": "809b6a83d2a0e118aba6bcfdc015837de9f6d66df9f8995e00a99efc03b3604f",
+      "mtimeMs": 1792622216840.0786
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a13-gateway-clean-undo-gui-review-20261021.md": {
+      "bytes": 17400,
+      "sha256": "735f2020424c84bdd80d822cef2683bb387a6db078c76b84af055be1471a4d43",
+      "mtimeMs": 1792617472478.2344
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a13-source-remaining-gui-review-20261021.md": {
+      "bytes": 17412,
+      "sha256": "5a3df86f9771ddc3c6712c3436e435a1be2a377bb5dcbc7161322d68a11f2038",
+      "mtimeMs": 1792619477675.2878
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a14-sm01-clean-mixed-gui-review-20261022.md": {
+      "bytes": 18175,
+      "sha256": "c1a1bbdff18d22dea55ee31cfe9dc450a0acf2135e7f5e67c273174babc2c015",
+      "mtimeMs": 1792622348747.023
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/a12-governance-source-gui-retest-20261021.md": {
+      "bytes": 17161,
+      "sha256": "cd8379a21c14a664d7904aabc6baf4e3df7f4b26bae358058389523957451d82",
+      "mtimeMs": 1792615379864.5574
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/remaining-acceptance-delta-20261022-ledger.md": {
+      "bytes": 49397,
+      "sha256": "2e40674bbb58205589f99a8e106f52ae82e2182af380d84b497229f9e31610c3",
+      "mtimeMs": 1792633504809.6956
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A16/candidate.json": {
+      "bytes": 124152,
+      "sha256": "284dfbf509bcb286a935d60f3d6dc07161c1fbc3dcbfb6e6165f91f29fdadadb",
+      "mtimeMs": 1792625389971.982
+    }
+  },
+  "auditSha": "55b8d13f75aea464f358e1351dfba9ea6303f12565cb1db30adbefbe46255357"
+}

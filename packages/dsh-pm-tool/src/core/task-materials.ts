@@ -326,6 +326,7 @@ export function applyTaskDraftOps(
   base: { attachments?: AttachmentItem[]; progressLog?: ProgressEntry[] },
   ops: TaskDraftOps,
   at: string,
+  preparedFiles?: ReadonlyMap<string, { assetId: string }>,
 ): { attachments: AttachmentItem[]; progressLog: ProgressEntry[] } {
   const attachments = structuredClone(base.attachments ?? [])
   const progressLog = structuredClone(base.progressLog ?? [])
@@ -373,6 +374,17 @@ export function applyTaskDraftOps(
       if (o.note?.trim()) item.note = o.note.trim()
       attachments.push(item)
       if (o.clientId) clientToAt.set(o.clientId, item.id)
+    } else if (o.op === 'addFile' && preparedFiles) {
+      const prepared = preparedFiles.get(o.stageId ?? '')
+      if (!prepared) throw new TaskOpsError('addFile 的 stage 尚未准备')
+      let item = attachments.find(a => a.kind === 'file' && a.assetId === prepared.assetId)
+      if (!item) {
+        item = { id: nextAttachmentId(attachments), kind: 'file', assetId: prepared.assetId, addedAt: at }
+        if (o.note?.trim()) item.note = o.note.trim()
+        attachments.push(item)
+      }
+      // 同 hash 不同 stage/alias 共用真实资料 ID；不能只给首次新建者登记 alias。
+      if (o.clientId) clientToAt.set(o.clientId, item.id)
     } else if (o.op === 'remove') {
       const idx = attachments.findIndex(a => a.id === o.id)
       if (idx < 0) throw new MaterialNotFoundError(`资料项不存在：${o.id}`)
@@ -398,7 +410,7 @@ export function applyTaskDraftOps(
 
   const resolveRef = (ref: string, label: string): string => {
     const mapped = clientToAt.get(ref)
-    if (mapped) return mapped
+    if (mapped && attachments.some(a => a.id === mapped)) return mapped
     if (/^at-\d+$/.test(ref) && attachments.some(a => a.id === ref)) return ref
     throw new MaterialNotFoundError(`${label} 引用的资料项 ${ref} 不在本任务当前资料区`)
   }

@@ -1,0 +1,82 @@
+{
+  "at": "2026-10-21T14:11:44.721Z",
+  "candidate": "run-2ACog5",
+  "commands": [
+    {
+      "id": "F6-command-preview-reject-confirm",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "--import",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/governance-fix-independent-retest-20261021-selftmp/run-2ACog5/green-corrected/package/guard.mjs",
+        "backup-probe.mjs"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/governance-fix-independent-retest-20261021-selftmp/run-2ACog5/green-corrected/package",
+      "start": "2026-10-21T14:11:40.548Z",
+      "end": "2026-10-21T14:11:40.920Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "672e6b3a6943bf9a6331304d266077fab5f0921f8d2a0479f8fbdba58d74065a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "independent-extra-typecheck",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "--import",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/governance-fix-independent-retest-20261021-selftmp/run-2ACog5/green-corrected/package/guard.mjs",
+        "/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+        "-p",
+        "extra-typecheck.json"
+      ],
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/governance-fix-independent-retest-20261021-selftmp/run-2ACog5/green-corrected/package",
+      "start": "2026-10-21T14:11:40.921Z",
+      "end": "2026-10-21T14:11:43.122Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "domain": {
+    "pass": 62,
+    "fail": 0,
+    "blocked": 0
+  },
+  "ids": {
+    "limitedPass": 32,
+    "guiNotRun": 32,
+    "model": "MAIN_NOT_RUN"
+  },
+  "sourceDrift": [],
+  "dependencyDrift": [],
+  "interRoundDrift": [
+    {
+      "file": "commands/backup-web.test.ts",
+      "before": {
+        "sha256": "8eb110a602da1f691dc2cad09eaf2f4c967f14c0a879b10c8e531f538d94f11b",
+        "bytes": 15696
+      },
+      "after": {
+        "sha256": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce",
+        "bytes": 16339
+      }
+    },
+    {
+      "file": "core/backup.ts",
+      "before": {
+        "sha256": "8c1342d6ae550fb06a5ec831167e643f9573fd843f9bd8eaf1d42d066810c3df",
+        "bytes": 26116
+      },
+      "after": {
+        "sha256": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295",
+        "bytes": 26049
+      }
+    }
+  ],
+  "writes": 4411,
+  "forbiddenWrites": [],
+  "ownedProcesses": [],
+  "scope": "GG 四缺陷与逐32ID列出 AUTO 子断言；非全部dirty/GUI/发布 PASS"
+}

@@ -1,0 +1,43 @@
+{
+  "role": "developer, not independent acceptance",
+  "mode": "red-r3",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "startedAt": "2026-10-22T20:57:29.461Z",
+  "endedAt": "2026-10-22T20:57:38.505Z",
+  "cwd": "/tmp/pmtool-p1004-sidecar-handoff-Kpgnk6",
+  "command": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/pmtool-p1004-sidecar-handoff-Kpgnk6/p1004-vitest.config.mjs"
+  ],
+  "status": 1,
+  "signal": null,
+  "error": null,
+  "inputPanel": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d",
+  "sourceCount": 407,
+  "inputDrift": [],
+  "tests": {
+    "total": 7,
+    "passed": 1,
+    "failed": 6,
+    "suites": 2
+  },
+  "observedFiles": [
+    "stdout",
+    "stderr",
+    "source",
+    "observations"
+  ],
+  "notRun": [
+    "build",
+    "install",
+    "full verify",
+    "noEmit",
+    "GUI",
+    "service",
+    "Git write"
+  ]
+}

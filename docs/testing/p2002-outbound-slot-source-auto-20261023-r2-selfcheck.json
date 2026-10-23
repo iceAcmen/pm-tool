@@ -1,0 +1,73 @@
+{
+  "satisfied": true,
+  "changes": [],
+  "whitespace": [],
+  "bindings": [
+    {
+      "label": "narrow",
+      "ownSource": [
+        {
+          "path": "src/index.ts",
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "matches": true
+        }
+      ],
+      "jsonIntegrity": true
+    },
+    {
+      "label": "t02-corrected",
+      "ownSource": [
+        {
+          "path": "src/index.ts",
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "matches": true
+        }
+      ],
+      "jsonIntegrity": true
+    },
+    {
+      "label": "utc",
+      "ownSource": [
+        {
+          "path": "src/index.ts",
+          "matches": true
+        },
+        {
+          "path": "src/client/panel.tsx",
+          "matches": true
+        },
+        {
+          "path": "src/client/views/tasks.tsx",
+          "matches": true
+        }
+      ],
+      "jsonIntegrity": true
+    }
+  ],
+  "captureProcess": {
+    "command": [
+      "/usr/bin/pgrep",
+      "-f",
+      "^/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/p2002-outbound-slot-source-auto-20261023-r2-runner\\.mjs capture$"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "",
+    "error": null,
+    "meaning": "只查本次 capture 精确argv；exit1无匹配，非失败或杀进程。未补造capture外层终止码。"
+  }
+}

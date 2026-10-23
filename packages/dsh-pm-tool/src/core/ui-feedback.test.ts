@@ -143,6 +143,11 @@ describe('commandAccepted（O3 失败不关抽屉）', () => {
     expect(commandAccepted(buildSuccessEnvelope(['任务已更新｜t-1 收尾']))).toBe(true)
   })
 
+  it.each(['失败待重试一', '错误修复任务', '未找到原因的调查'])('结构化成功保合法标题%s，不让正文覆盖信封语义', title => {
+    expect(commandAccepted(buildSuccessEnvelope([`行动项已更新｜ai-001 ${title}`]))).toBe(true)
+    expect(commandAccepted(`操作失败：${title}`)).toBe(false)
+  })
+
   it('无信封既有成功文本 → true（不另造成功正则，仅排除错误词）', () => {
     expect(commandAccepted('任务已新增并保存。\n标题示例')).toBe(true)
   })
@@ -153,6 +158,13 @@ describe('commandAccepted（O3 失败不关抽屉）', () => {
 })
 
 describe('prefixFeedbackOnce（场景错误前缀不重复）', () => {
+  it.each(['：', ':'])('恢复场景保留明确备份/恢复组合前缀%s和完整多行原因', colon => {
+    const raw = `备份/恢复失败${colon}文件缺失\n原因正文：另一处恢复失败仍应保留`
+    expect(prefixFeedbackOnce('恢复失败', new Error(raw))).toBe(raw)
+    expect(prefixFeedbackOnce('备份失败', raw)).toBe(raw)
+    expect(prefixFeedbackOnce('其他失败', raw)).toBe(`其他失败：${raw}`)
+  })
+
   it('底层错误已带“恢复失败”时原样保留', () => {
     expect(prefixFeedbackOnce('恢复失败', '恢复失败：备份文件格式不认识')).toBe('恢复失败：备份文件格式不认识')
   })
@@ -193,5 +205,30 @@ describe('D-09 shouldPersistResultCard：结构化成功只进 toast，不常驻
   it('结构化成功但携带备份路径 → 持久化（复制路径位需常驻）', () => {
     const fb = classifyFeedback(buildSuccessEnvelope(['备份已生成'], null))
     expect(shouldPersistResultCard(fb, '/tmp/pmtool-backup-x.json')).toBe(true)
+  })
+})
+
+describe('A18 显式错误上下文独立于正文标记', () => {
+  const context = { kind: 'error' } as const
+  it.each([
+    'opaque reason',
+    `Response parsing failed; received text follows:\n${buildSuccessEnvelope(['任务｜t-0001｜Failed delivery'], '{"title":"Error register"}')}`,
+    `  原因首行\n\n${buildActionLine('确认入库', 'task remove t-0001 confirm')}\n  原因尾部  `,
+  ])('A18 已知error全文非结构化持久且不抽取动作：%s', message => {
+    const fb = classifyFeedback(message, context)
+    expect(fb).toEqual({ isError: true, structured: false, summary: [message],
+      detail: null, action: null, autoDismissMs: null })
+    expect(shouldPersistResultCard(fb, null)).toBe(true)
+  })
+  it('A18 缺省字符串调用保持成功信封/动作/关键词原规则', () => {
+    const message = `执行失败：Response parsing failed\n${buildActionLine('查看记录', 'task list p-0001')}\n${
+      buildSuccessEnvelope(['失败 / Failed / Error register'], '{"title":"失败"}')}`
+    const original = classifyFeedback(message)
+    expect(original).toMatchObject({ isError: false, structured: true, autoDismissMs: 3000,
+      action: { label: '查看记录', command: 'task list p-0001' } })
+    expect(classifyFeedback(message, undefined)).toEqual(original)
+    expect(classifyFeedback(message, context).summary).toEqual([message])
+    expect(classifyFeedback(message)).toEqual(original)
+    expect(classifyFeedback('Failed to fetch').isError).toBe(false)
   })
 })

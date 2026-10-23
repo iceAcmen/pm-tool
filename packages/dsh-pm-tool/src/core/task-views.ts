@@ -18,6 +18,16 @@ export type TaskViewChip = 'all' | 'in_progress' | 'done' | 'overdue' | 'mine' |
 /** 排序键（与 tasks.tsx 既有口径一致）。 */
 export type TaskViewSort = 'code' | 'dueDate' | 'priority' | 'progress'
 
+export type TaskViewSortDirection = 'asc' | 'desc'
+
+export interface TaskViewSortRule {
+  field: TaskViewSort
+  dir: TaskViewSortDirection
+}
+
+export type TaskViewOptionalColumn = 'assignee' | 'priority' | 'dueDate' | 'progress'
+export type TaskViewColumns = Partial<Record<TaskViewOptionalColumn, boolean>>
+
 /** 一个命名视图保存的整套表格状态。 */
 export interface TaskViewState {
   /** 搜索词（原始字符串，含空白；展示时再 trim）。 */
@@ -25,6 +35,10 @@ export interface TaskViewState {
   chip: TaskViewChip
   grouped: boolean
   sort: TaskViewSort
+  /** U4 加法字段；缺失或空数组继续使用旧单排序。 */
+  sorts?: TaskViewSortRule[]
+  /** U4 加法字段；缺键或非法值均按可见处理。 */
+  columns?: TaskViewColumns
 }
 
 /** 命名视图（builtin 为系统内置，只读）。 */
@@ -57,6 +71,13 @@ export const VIEW_SORT_OPTIONS: { value: TaskViewSort; label: string }[] = [
   { value: 'progress', label: '按进度' },
 ]
 
+export const TASK_VIEW_OPTIONAL_COLUMNS: { key: TaskViewOptionalColumn, label: string }[] = [
+  { key: 'assignee', label: '负责人' },
+  { key: 'priority', label: '优先级' },
+  { key: 'dueDate', label: '截止日期' },
+  { key: 'progress', label: '进度' },
+]
+
 /** 顶部快捷栏实际展示的 chip（VIEW_CHIP_OPTIONS 键集），保持原五项。 */
 const BAR_CHIP_KEYS = new Set(VIEW_CHIP_OPTIONS.map(c => c.key))
 
@@ -82,6 +103,8 @@ const CHIP_LABELS: Record<TaskViewChip, string> = {
 }
 
 const SORT_KEYS = new Set(VIEW_SORT_OPTIONS.map(s => s.value))
+const SORT_DIRECTIONS = new Set<TaskViewSortDirection>(['asc', 'desc'])
+const OPTIONAL_COLUMN_KEYS = new Set(TASK_VIEW_OPTIONAL_COLUMNS.map(column => column.key))
 
 /** 默认四态：与表格初始 useState 现值逐值相等（默认等价，老用户零迁移）。 */
 export const DEFAULT_VIEW_STATE: TaskViewState = {
@@ -124,6 +147,41 @@ export function normalizeTaskViewState(raw: unknown): TaskViewState {
   if (typeof obj.grouped === 'boolean') state.grouped = obj.grouped
   if (typeof obj.sort === 'string' && SORT_KEYS.has(obj.sort as TaskViewSort)) {
     state.sort = obj.sort as TaskViewSort
+  }
+  if (Array.isArray(obj.sorts) && obj.sorts.length > 0) {
+    const rules: TaskViewSortRule[] = []
+    const seen = new Set<TaskViewSort>()
+    let valid = true
+    for (const item of obj.sorts) {
+      if (item === null || typeof item !== 'object' || Array.isArray(item)) {
+        valid = false
+        break
+      }
+      const candidate = item as Record<string, unknown>
+      if (
+        typeof candidate.field !== 'string'
+        || !SORT_KEYS.has(candidate.field as TaskViewSort)
+        || typeof candidate.dir !== 'string'
+        || !SORT_DIRECTIONS.has(candidate.dir as TaskViewSortDirection)
+      ) {
+        valid = false
+        break
+      }
+      const field = candidate.field as TaskViewSort
+      if (seen.has(field)) continue
+      seen.add(field)
+      rules.push({ field, dir: candidate.dir as TaskViewSortDirection })
+    }
+    if (valid && rules.length > 0) state.sorts = rules
+  }
+  if (obj.columns !== null && typeof obj.columns === 'object' && !Array.isArray(obj.columns)) {
+    const columns: TaskViewColumns = {}
+    for (const [key, value] of Object.entries(obj.columns as Record<string, unknown>)) {
+      if (OPTIONAL_COLUMN_KEYS.has(key as TaskViewOptionalColumn) && typeof value === 'boolean') {
+        columns[key as TaskViewOptionalColumn] = value
+      }
+    }
+    if (Object.keys(columns).length > 0) state.columns = columns
   }
   return state
 }
@@ -201,7 +259,23 @@ export function findTaskView(store: TaskViewsStore, id: string | null | undefine
 
 /** 两态逐值相等（确定性比较，供「是否有改动/更新而非另存」判断）。 */
 export function sameTaskViewState(a: TaskViewState, b: TaskViewState): boolean {
-  return a.query === b.query && a.chip === b.chip && a.grouped === b.grouped && a.sort === b.sort
+  const left = normalizeTaskViewState(a)
+  const right = normalizeTaskViewState(b)
+  if (
+    left.query !== right.query
+    || left.chip !== right.chip
+    || left.grouped !== right.grouped
+    || left.sort !== right.sort
+  ) return false
+  const leftRules = left.sorts ?? []
+  const rightRules = right.sorts ?? []
+  if (
+    leftRules.length !== rightRules.length
+    || leftRules.some((rule, index) =>
+      rule.field !== rightRules[index]?.field || rule.dir !== rightRules[index]?.dir)
+  ) return false
+  return TASK_VIEW_OPTIONAL_COLUMNS.every(({ key }) =>
+    (left.columns?.[key] ?? true) === (right.columns?.[key] ?? true))
 }
 
 /**
@@ -259,10 +333,23 @@ export function resolveDefaultTaskView(store: TaskViewsStore): SavedTaskView | u
 
 /** 状态人类可读摘要（切换器/管理列表副文案），纯函数。 */
 export function describeTaskViewState(state: TaskViewState): string {
-  const chip = CHIP_LABELS[state.chip] ?? state.chip
-  const sort = VIEW_SORT_OPTIONS.find(s => s.value === state.sort)?.label ?? state.sort
-  const parts: string[] = [chip, sort]
-  if (state.grouped) parts.push('按状态分组')
-  if (state.query.trim()) parts.push(`搜索「${state.query.trim()}」`)
+  const normalized = normalizeTaskViewState(state)
+  const chip = CHIP_LABELS[normalized.chip] ?? normalized.chip
+  const sort = VIEW_SORT_OPTIONS.find(s => s.value === normalized.sort)?.label ?? normalized.sort
+  const rules = normalized.sorts ?? []
+  const sortText = rules.length > 0
+    ? rules.map(rule => {
+        const label = VIEW_SORT_OPTIONS.find(option => option.value === rule.field)?.label
+          ?.replace(/^按\s*/, '') ?? rule.field
+        return `${label}${rule.dir === 'asc' ? '升序' : '降序'}`
+      }).join(' → ')
+    : sort
+  const parts: string[] = [chip, sortText]
+  const hidden = TASK_VIEW_OPTIONAL_COLUMNS
+    .filter(({ key }) => normalized.columns?.[key] === false)
+    .map(({ label }) => label)
+  if (hidden.length > 0) parts.push(`隐藏${hidden.join('、')}`)
+  if (normalized.grouped) parts.push('按状态分组')
+  if (normalized.query.trim()) parts.push(`搜索「${normalized.query.trim()}」`)
   return parts.join(' · ')
 }

@@ -1,0 +1,123 @@
+{
+  "at": "2026-10-22T11:32:30.368Z",
+  "role": "independent-source-auto-expert-not-developer-not-gui",
+  "verdict": "PASS_LIMITED_SOURCE_AUTO",
+  "report": "ai-terminal-independent-retest-20261022-r1-report.md",
+  "candidate": "docs/testing/ai-terminal-independent-retest-20261022-r1-evidence/candidate.json",
+  "baselineCommit": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "sourceSha256": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448",
+  "testSha256": "3403fbf72e5db73dd788d94f64a42bad386a4092711dfd7abce511507f14ceed",
+  "patchSha256": "5fb4136a00899f5379304c96fa5e2fea910f3b929243e4c7a21d7082680720a2",
+  "parentDeclarations": 104,
+  "successorDeclarations": 106,
+  "completeInputs": 973,
+  "inputReconciliation": "509 + 1 new test + 463 original lib = 973",
+  "scope": [
+    "ATF-01 terminal partial rejection",
+    "ATF-02 stable-code Chinese classification and hard stop",
+    "ATF-03 model aborted protocol does not retry"
+  ],
+  "repairSurface": [
+    "packages/dsh-pm-tool/src/core/ai-client.ts",
+    "packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts"
+  ],
+  "sourceReview": "No new blocker in the narrow delivered patch; no product changes by reviewer.",
+  "results": [
+    {
+      "suite": "controls",
+      "originalExit": 0,
+      "passed": 8,
+      "failed": 0,
+      "pending": 10,
+      "verdict": "PASS_LIMITED_AUTO"
+    },
+    {
+      "suite": "original-red",
+      "originalExit": 0,
+      "passed": 10,
+      "failed": 0,
+      "pending": 8,
+      "verdict": "PASS_LIMITED_AUTO"
+    },
+    {
+      "suite": "new",
+      "originalExit": 0,
+      "passed": 43,
+      "failed": 0,
+      "pending": 0,
+      "verdict": "PASS_LIMITED_AUTO"
+    },
+    {
+      "suite": "affected",
+      "originalExit": 0,
+      "passed": 175,
+      "failed": 0,
+      "pending": 0,
+      "verdict": "PASS_LIMITED_AUTO"
+    },
+    {
+      "suite": "legacy-source",
+      "originalExit": 0,
+      "passed": null,
+      "failed": null,
+      "pending": null,
+      "verdict": "PASS_LIMITED_AUTO"
+    },
+    {
+      "suite": "noemit",
+      "originalExit": 0,
+      "passed": null,
+      "failed": null,
+      "pending": null,
+      "verdict": "PASS_LIMITED_AUTO"
+    }
+  ],
+  "totalExecutedTests": 236,
+  "protectedObjects": 910,
+  "original757Retained": true,
+  "protection": {
+    "protectedDrift": [],
+    "frozenDrift": [],
+    "fixturesDrift": [],
+    "dependenciesUnchanged": true,
+    "external": [],
+    "sharedInodes": [],
+    "sharedGovernanceChanges": [],
+    "concurrentInputChanges": [],
+    "otherTestingAdded": [
+      "material-progress-ref-crash-20261022-r1-audit-r1.json",
+      "material-progress-ref-crash-20261022-r1-audit.mjs",
+      "material-progress-ref-crash-20261022-r1-report.md"
+    ],
+    "otherTestingRemoved": [],
+    "concurrentPolicy": "Unrelated lawful successors are recorded, not locked or classified as contamination.",
+    "ok": true
+  },
+  "ownedGovernanceTmpRoots": 13,
+  "developmentHistory": "original8/10red, testred40red, firstfix42+1fail, r2outside13 retained; r3 is developer self-test only",
+  "ownReviewerFailures": "Initial JSON assumption exit1, identical-byte preservation replay exit1, ANSI assumption exit1; corrected exit0. No product test edit or rerun.",
+  "evidence": {
+    "close": "docs/testing/ai-terminal-independent-retest-20261022-r1-evidence/close.json",
+    "history": "docs/testing/ai-terminal-independent-retest-20261022-r1-evidence/history-review.json",
+    "receipts": "docs/testing/ai-terminal-independent-retest-20261022-r1-evidence/execution-receipts.json",
+    "fullIndex": "docs/testing/ai-terminal-independent-retest-20261022-r1-index.json"
+  },
+  "nextOwner": "Main only builder and GUI13 executor; separate independent GUI expert signs",
+  "gui": "NOT_RUN_MAIN_PENDING",
+  "runtime": "Old U4r2 3257/3258 not newly loaded or inspected",
+  "realModel": "NOT_RUN",
+  "wallClock120s": "NOT_RUN_PARAMETER_ONLY",
+  "uiCancellation": "NOT_RUN_PROTOCOL_ONLY",
+  "fullVerify": "NOT_RUN",
+  "build": "NOT_RUN",
+  "install": "NOT_RUN",
+  "coverage": "NOT_RUN",
+  "services": "NOT_TOUCHED",
+  "git": "NOT_RUN",
+  "credentials": "NOT_READ",
+  "wholeRAAI06": "NOT_SIGNED",
+  "parentGoal": "NOT_SIGNED",
+  "release": "STOP",
+  "released": true,
+  "stop": true
+}

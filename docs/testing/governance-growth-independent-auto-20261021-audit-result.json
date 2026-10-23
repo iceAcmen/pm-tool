@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T13:39:56.868Z",
+  "frozenEvidenceVerified": 630,
+  "supplementEvidenceVerified": 640,
+  "fixtureHashes": "PASS",
+  "idMapping": "32/32",
+  "frozenProductFailures": "GG-01..04；3 IDs；7 FAIL probes",
+  "ownRuntimeProcesses": [],
+  "postRunSourceDrift": [
+    "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+    "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx",
+    "packages/dsh-pm-tool/src/core/file-asset-store.ts",
+    "packages/dsh-pm-tool/src/core/file-assets.test.ts",
+    "packages/dsh-pm-tool/src/core/file-assets.ts",
+    "packages/dsh-pm-tool/src/core/task-materials.ts",
+    "packages/dsh-pm-tool/src/core/tasks.ts"
+  ],
+  "productOrOtherFilesModifiedByAudit": false
+}

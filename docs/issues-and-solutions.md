@@ -6,6 +6,27 @@
 
 ---
 
+## ISS-046 ｜ 新DOM用例的CommonJS解析绕过ESM alias、80ms异步断言在并发回归下未就绪（2026-10-23，trae）
+
+- **实际失败**：[任务/人员组合回归](plans/2026-10-23-combined-tasks-people-regression.md#1140实际回归封交)DOM原41绿，但首读/confirm两组`createRequire(import.meta.url)`找不到jsdom、collect为0，整阶段exit1。原95verify另唯一P0 `x6.gapsOnBareDone`在固定80ms等待后只读到“暂无复盘草稿”、整聚合exit1；其余94与五保护根零变化。
+- **设施修复**：ESM alias不作用于Node `createRequire`。仅自有Vitest变换该两测试的require锚为已冻结dom-deps位置，不改源码、oracle或依赖；续9+11=20绿，原41不重跑。负例测试临时软链封件按link文本登记，不随链读外域、不删原负例。原所有失败收据保留。
+- **异步限制**：P0全并发结束后同原脚本/同env、无改80ms等待串行复验28/28退出0。只证实两轮真实不同结果，负载造成钩子延迟的因果尚未独立签，不据此改产品或断言。后继此脚本串行安排；若再次失败按原失败门调查，不以再试多次凑绿。
+- **当前门**：组合1869件真实封回0；独立完整回归审在途、GUI未签。DOM/verify原exit1保在close及effective补链文件，不能写成“一次全绿”或项目已完成。
+
+## ISS-045 ｜ 甘特 wrapped 原记录正确而状态显示兜底成待办（2026-10-23，trae）
+
+- **确证**：[L8独立报告](testing/l8-gantt-refresh-defect-20261023-r3-report.md)判语义FAIL；原QA-OP/t-0010确为wrapped，PM任务页正确，重进及真实snapshot刷新后甘特仍生成“待办”。不是旧快照或需要再次wrapped写。
+- **根因**：`gantt.tsx`左列`ganttStatusText`与条体两套状态分支只覆盖四态；遗漏wrapped落入待办。PNG副行末尾省略仍单列字形BLOCKED，原未排期L8条体aria为NOT_RUN，源码语义FAIL不替这两项GUI证据。
+- **最小修复**：依[独立先行合同](testing/l8-gantt-refresh-defect-20261023-r3-test-plan.md)与[设计](plans/2026-10-23-l8-gantt-repair-design.md)，补“已收尾 · 非正式完成”、条体复用同映射，done仍仅done。开发两文件修复/46窄测已声明，真实交付封件/独立SOURCE-AUTO及新整包/GUI尚待，不标缺陷关闭。
+- **避坑**：新枚举必须核每个消费点；后端返回五态不证明页面五态齐。刷新产生宿主会话缓存可单列，不机械要求全data相同、不删cache“修”业务零写；原gantt保护断言真实1保留。
+
+## ISS-044 ｜ 状态选项已更新却菜单再开，首次保存实际被遮罩挡住（2026-10-23，trae）
+
+- **现象与证据**：[F02原独立GUI审证](testing/six-repairs-pointer-gui-review-20261023-r1-report.md)确认选planned/accepted后菜单持续，首save中心实际命中backdrop，后台保存NOT_REACHED。不能因脚本目标是button而称submit已触发。
+- **诊断**：后补443原生被动trace中，真实option span detail1可信click先closed；随即无Main输入的trigger button detail0可信click再open，defaultPrevented均false。外label默认激活为Main工程诊断，独立因果审证在途，不回填旧报告为当时已证。
+- **最小修**：仅option onClick先preventDefault再原choose。真实DOM D08/D09从defaultPrevented=false两必要红→同test9绿，原28专项绿；原7不变、其余523输入同。[开发交付及命令](plans/2026-10-23-f02-option-default-development.md)。独立新SOURCE/AUTO与新候选GUI未完成前不标缺陷关闭。
+- **避坑**：关闭React状态不证明浏览器默认动作后仍闭合；stopPropagation不能替代取消默认动作。JSDOM公开事件标志与真实浏览器时序分层验证；首save先记录实际坐标命中，不能第二点/键盘绕路洗首点失败。
+
 ## ISS-034 ｜ Finder 启动器复验停 S3 或启动超时：预启动实例旧认证与临时 App 的 DSH_HOME 拼写混用（2026-10-21，trae）
 
 - **现象**：手工重启 3199 后再让 launcher 复用服务，页面壳可见但 PM `web snapshot` 长时间等待，按契约不应回告 S4；改由 launcher 自拉起时又超时进入 S6。
@@ -326,3 +347,43 @@
 ## 待补充（占位）
 
 > 后续按现有最大编号继续追加；历史补记注明当时事实、来源、修后范围与本轮未测边界，不把归纳当新的验收。
+
+## ISS-038 ｜ 微信本机试点 AX -25211 与调用身份权限不一致（2026-10-21，trae）
+
+- **现象**：电脑操作服务报告辅助功能/录屏已授权，但独立 Python 访问微信仍 `AXIsProcessTrusted=false`、AX=-25211。旧试点因此未读取消息。
+- **根因证据**：系统设置中的 Terminal、TRAE CN 辅助功能开关为0，而 Computer Use为1；Terminal录屏也未授权。权限按实际运行应用区分，服务获权不替代终端。
+- **修复/实测**：开启相关辅助功能；为Terminal触发系统录屏请求，开启开关并按系统提示退出重开。Terminal实际doctor退出0、两权限true、AX0、窗口1（18:52:32+08:00）。不修改TCC/SIP/微信二进制。
+- **兼容后续**：微信4.1.15聊天树仍空；本机OCR补齐真实可见画面读取，处理搜索弹层、常用分类、前台事件循环缓存、剪贴板异步、标题图标与图片引用。r13/r14同源码均四群采到，末轮16完整文本消息，25项开发自验符合预期，非独立PASS；初验单群样本保留作历史。
+- **剩余边界**：一群重复窗口正文相同但时间分隔漏读，5个窗口条目记gap，不认作真实新增。完整历史、时间上下文/增量完整率、无人值守未验；OCR的watch拒绝，定时关闭。原权限过程 `reports/wechat-pilot-20261021/25211定位修复与实测.md`，最新报告 `reports/wechat-pilot-20261021/四群OCR兼容修复与实测.md`；后续只在独立本机工具核历史与时间缺口，不改PM正式台账。
+
+## ISS-039 ｜ 前置选择的事件生命周期与搜索后提交集合分离（2026-10-22，trae）
+
+- **现象与根因**：真实TaskForm编辑已有任务，改标题后勾前置，`panel.tsx`在函数式updater晚读`event.currentTarget.checked`抛null，宿主卸载PM区域。搜索隐藏已选行时，footer仍1，但DOM FormData为空，原主save真实handler/core按[]正确清空关系。两缺陷相互独立。
+- **证据**：[复选必要红](testing/task-predecessor-checkbox-red-20261022-r1-report.md)7项2控绿/1控制失败/4崩红；[真实提交必要红](testing/hidden-predecessor-submit-red-20261022-r1-report.md)5项3控绿/2必要红。GUI107实例完整console/bundle49299栈与前后业务根在CombinedGuiR1。关系丢失的后端证明限内存领域，不夸正式JSON丢失。
+- **最小修复**：同步取checked再给updater，主保存用完整checkedIds；搜索只过滤显示，不改后端[]清空合同。[开发交回](plans/task-predecessor-selection-dev-20261022-r1-report.md)四崩目标与真实5提交已绿、受影响182与材料5绿，原C02裸FormData红保留供不同专家裁定。独立修后SOURCE/AUTO/新GUI在途，不能据开发绿签整门。
+
+## ISS-040 ｜ 固定汇报JSON冻结正确，MD遗漏摘录与新围栏展开溢出（2026-10-22，trae）
+
+- **现象与根因**：原renderer只枚举摘要/快照/异常，未消费`report.excerpts`；实际MD1415byte缺两条冻结正文/来源，而源变/软删后报告JSON保全。首次最小修新增六字段字面围栏，用`Math.max(...匹配长度数组)`计算围栏；合法300024字符作者的150000匹配段触发RangeError。
+- **证据与修复**：[原13项7控绿6红](testing/fixed-report-export-excerpt-red-20261022-r1-report.md)；[不同复验](testing/fixed-report-export-excerpts-independent-retest-20261022-r1-report.md)原13/54/probes6绿但stress1红。R2只迭代最大段，保作者/正文不截断，[开发74/74/noEmit0](../reports/all-pending-evidence-20261021/ReportExportFenceDevR2/report.md)，另一独立复验及新GUI待；初noEmit设施失败保。
+- **避免复发**：输出以已存摘录为准；安全不能通过丢正文实现。可变长集合不展开成函数参数；冻结声明需新增renderer路径，原107+test为108子集，加renderer完整109，不假身份数量。
+
+## ISS-041 ｜ 上层按“Key”文字将AUTH失效原因重写成未配置（2026-10-22，trae）
+
+- **真实链**：修后AIclient将terminal AUTH归一INVALID_CREDENTIAL，提示包含API Key；`commands/ask.ts`的`/Key|密钥/`宽判断又替换PROD_KEY_MISSING。3260本地网关已实际401，Main先误诊环境gate后精确隔离重启仍一样，网关原请求推翻误诊，未需要用户真实Key。
+- **证据与修复**：[独立11项8控绿3鉴权红](testing/ask-auth-feedback-red-20261022-r1-report.md)，真实handleAsk→generateDraft→LlmRuntime/pi链；[开发](../reports/all-pending-evidence-20261021/AskAuthDevR1/delivery.md)只按MISSING_CREDENTIAL code/原精确哨兵，原11/相关199绿。不同专家SOURCE/AUTO、新GUI仍待，底层ATF已签的其他断言不撤。
+- **避坑**：缺配置、失效凭据、限流用结构化码分别处理；人话中提到Key不构成缺Key事实。先核真实request/terminalcode，再决定环境修复，设施误诊/旧失败保真。
+
+## ISS-042 ｜ EGO连接挂起与日期工具仅改DOM值（2026-10-22，trae）
+
+- **现象**：`ego-browser nodejs`无输出挂起，最小console探针也挂；原PID93439及两探针只挂CLI，服务与浏览器仍在。sample显示CLI在AppKit等待，lsof误读到TRAE Electron资源；不据此断言具体单一变量根因。
+- **有界恢复**：只核自有CLI精确PID93439/94075/94303后TERM，未停EGO浏览器25363或任何dsh；清除 `__CFBundleIdentifier / ICUBE_ELECTRON_PATH / ELECTRON_FORCE_IS_PACKAGED / VSCODE_CWD / VSCODE_PID / VSCODE_IPC_HOOK / XPC_SERVICE_NAME / XPC_FLAGS` 后同space13/p3成功。这是八变量组合恢复实测，没有逐一反证哪个变量必要；不改全局配置、不升级/清profile。
+- **日期**：RecordsReportForm原生date工具fill显示值，但权威候选仍0/0，后续状态重渲染清空。已有日期兼容问题复现；真实HTMLInputElement原型setter并冒泡input/change后实际生产preview返回3候选。没有React内部setter/伪返回/手造摘录；该辅助是执行设施，不冒已完成原生键盘或chooser门。
+- **原证**：`reports/all-pending-evidence-20261021/Successor112GuiR1/`的02/32/33、blocked-cli-exact-stop、真实日期preview事件与747索引；CLI挂起终止、date/locator/snapshot/等待错误保。对外口径须说“组合环境恢复”，不能说“已证明单个应用身份变量”。
+
+## ISS-043 ｜ 档案读取假顶层字段与任务出站真源未接通（2026-10-23，trae）
+
+- **档案已确证根因**：真实反思记录使用 `draft.lines/draft.gaps`；旧 `pickReflection` 读顶层 `lines/gaps`，三种事件的7条known和2条gap全部遗漏。原假顶层测试绿不能证明生产schema可用。独立[红证与合同](testing/p2007-archive-known-gaps-red-20261023-r1.md)绑定192原件，review同源7句正确。
+- **档案最小修复**：只读真实嵌套draft，保持身份/事件/原顺序，只选known并保gap；用真实 `reflectionRecordSchema.parse` 三事件补原专项。开发旧5有效红→9/9；[独立SOURCE/AUTO](testing/p2007-archive-projection-source-auto-20261023-r1-report.md)四专项35/35＋字节3/3有限PASS，新宿主archive主链尚未复验，旧FAIL不抹。
+- **另一个接线缺陷**：P2历史曾记latestExport待P3接入；当前有效P2002原合同仍要求真实项目audit最近出站位。1690件[独立审](testing/p2-outbound-history-review-20261023-r1.md)已签31/29分流，但任务顶层groupRow无slot、panel未传latestExport、现snapshot无audit投影；不是后端导出失败，也无证归因U4删除。Main已核index现分支，限定index→panel→tasks真源只读接线在途，不改TTL/backup、不新增路由，不提前签修好。
+- **避坑**：导出文件完整性逐句回绑真实record；UI prop或旧分支中存在标记不等当前入口能显示。历史deferred与当前生效余链分别记，不自动N/A。以上两个缺陷独立，不用一个绿代另一个门。

@@ -1,0 +1,42 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 主保存两条既有草稿，按 stable ID 保关联、来源与创建历史
+[31m[1mAssertionError[22m: expected [ { id: 'ai-001', …(6) }, …(1) ] to deeply equal [ { id: 'ai-001', …(6) }, …(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  Array [[22m
+[2m    Object {[22m
+[2m      "dueDate": null,[22m
+[2m      "id": "ai-001",[22m
+[2m      "owner": "",[22m
+[2m      "riskIssueId": "ri-0001",[22m
+[2m      "status": "todo",[22m
+[2m      "taskId": "t-0001",[22m
+[32m-     "title": "主保存一",[39m
+[31m+     "title": "原行动一",[39m
+[2m    },[22m
+[2m    Object {[22m
+[2m      "dueDate": null,[22m
+[2m      "id": "ai-002",[22m
+[2m      "owner": "",[22m
+[2m      "riskIssueId": null,[22m
+[32m-     "status": "done",[39m
+[31m+     "status": "in_progress",[39m
+[2m      "taskId": null,[22m
+[32m-     "title": "主保存二",[39m
+[31m+     "title": "原行动二",[39m
+[2m    },[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/client/views/records/records-meeting-entry.test.tsx:[2m92:25[22m[39m
+    [90m 90| [39m  [35mawait[39m [34msubmit[39m(renderer)
+    [90m 91| [39m  [35mconst[39m saved [33m=[39m [34mgetMeeting[39m(f[33m.[39mdomain[33m,[39m f[33m.[39mmeeting[33m.[39mid)[33m![39m
+    [90m 92| [39m  [34mexpect[39m(saved[33m.[39mactions)[33m.[39m[34mtoEqual[39m([
+    [90m   | [39m                        [31m^[39m
+    [90m 93| [39m    { [33m...[39mf[33m.[39mmeeting[33m.[39mactions[[34m0[39m][33m,[39m title[33m:[39m [32m'主保存一'[39m }[33m,[39m
+    [90m 94| [39m    { [33m...[39mf[33m.[39mmeeting[33m.[39mactions[[34m1[39m][33m,[39m title[33m:[39m [32m'主保存二'[39m[33m,[39m status[33m:[39m [32m'done'[39m }[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

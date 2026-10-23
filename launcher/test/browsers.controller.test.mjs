@@ -22,11 +22,11 @@ test('discoverBrowsers：注入存在性，仅列出存在的浏览器，并标�
   assert.ok(!list.some((b) => b.label === 'Microsoft Edge'))
 })
 
-test('resolveBrowserOpen：Chrome 走 --app= 专用窗口；缺失选择回退默认 tab；默认浏览器 tab', () => {
+test('resolveBrowserOpen：Chrome真实应用普通tab；缺失选择回退默认tab', () => {
   const discovered = [{ id: 'chrome', label: 'Chrome', app: 'Google Chrome.app', appWindow: true }]
   const chrome = resolveBrowserOpen('Chrome', discovered)
-  assert.deepEqual(chrome.argv, ['open', '-a', 'Chrome', '--args', '--app='])
-  assert.equal(chrome.mode, 'app')
+  assert.deepEqual(chrome.argv, ['open', '-a', 'Google Chrome', ''])
+  assert.equal(chrome.mode, 'tab')
   assert.equal(chrome.fallback, false)
 
   const missing = resolveBrowserOpen('Firefox', discovered)

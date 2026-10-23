@@ -1,0 +1,1775 @@
+{
+  "at": "2026-10-22T21:07:28.153Z",
+  "originalObservationFingerprint": {
+    "bytes": 1247783,
+    "sha256": "f455a03488dfe4c315fd9acf603e9a8711f08c7a36550460bfc0ccf5816e0aab"
+  },
+  "firstOpen": 7,
+  "directReturnObservations": 7,
+  "rows": [
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：人主保存负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "人主保存负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:02:00.000Z",
+        "startDate": null,
+        "dueDate": null,
+        "predecessorIds": [],
+        "repoUrl": "",
+        "branch": "",
+        "manualProgress": null
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001",
+        "task update t-0006 {\"title\":\"P1004任务\",\"description\":\"原始说明\",\"assignee\":\"人主保存负责人\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":null,\"dueDate\":null,\"progress\":47,\"milestoneId\":null,\"predecessorIds\":[],\"repoUrl\":\"\",\"branch\":\"\",\"manualProgress\":null}",
+        "web snapshot"
+      ]
+    },
+    {
+      "label": "before-open",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "first-open",
+      "sidecarHidden": true,
+      "display": "none",
+      "dialog": "编辑任务",
+      "focusTag": "INPUT",
+      "focusName": "title",
+      "focusText": "",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "direct-return",
+      "sidecarHidden": false,
+      "display": "flex",
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "打开任务",
+      "oldAnswer": "t-0006 当前未指派，进度0%。",
+      "projection": "5未开始P1004任务负责人：P1004刷新负责人截止：无进度：47%证据：无回答后该任务又有更新，已按最新状态显示本地台账只读投影，单动作回写打开任务",
+      "unsent": "本轮未发送问题",
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    },
+    {
+      "label": "before-unmount",
+      "display": null,
+      "dialog": null,
+      "focusTag": "BUTTON",
+      "focusName": null,
+      "focusText": "AI 副驾",
+      "oldAnswer": null,
+      "projection": null,
+      "unsent": null,
+      "taskId": "t-0006",
+      "task": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "P1004任务",
+        "description": "原始说明",
+        "assignee": "P1004刷新负责人",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 47,
+        "milestoneId": null,
+        "attachments": [
+          {
+            "id": "at-0001",
+            "kind": "link",
+            "url": "https://example.com/evidence",
+            "addedAt": "2026-10-23T00:00:00.000Z"
+          }
+        ],
+        "progressLog": [
+          {
+            "id": "pl-0001",
+            "date": "2026-10-23",
+            "author": "甲",
+            "createdAt": "2026-10-23T00:00:00.000Z",
+            "revisions": [
+              {
+                "id": "rv-0001",
+                "date": "2026-10-23",
+                "author": "甲",
+                "content": "历史保留",
+                "revisedAt": "2026-10-23T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-23T00:00:00.000Z",
+        "updatedAt": "2026-10-23T00:01:00.000Z"
+      },
+      "calls": [
+        "web snapshot",
+        "model status",
+        "ask-provenance p-0001",
+        "ask p-0001  \"当前任务情况\"",
+        "web snapshot",
+        "ask-provenance p-0001"
+      ]
+    }
+  ],
+  "affectedCounts": [
+    {
+      "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/sidecar-minimize-retention.test.tsx",
+      "count": 12
+    },
+    {
+      "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/copilot-error-prefix.test.tsx",
+      "count": 5
+    },
+    {
+      "path": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc/src/client/panel-cancel-close.test.ts",
+      "count": 5
+    }
+  ],
+  "finalDrift": [],
+  "limits": [
+    "jsdom has no layout/hit-test",
+    "transport replaced",
+    "no browser Tab default behavior",
+    "no real DB/model"
+  ]
+}

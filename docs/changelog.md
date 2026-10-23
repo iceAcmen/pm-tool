@@ -8,6 +8,373 @@
 
 ---
 
+## 当前在途状态存档与提交推送（2026-10-23，平台：trae）
+
+- 负责人本轮明确要求先存档现状并提交推送；本批以检查点保存当前源码及必要方案/独立审证正文，未签GUI/历史FAIL保留，不称完成或发布。新增`docs/archives/2026-10-23-manual-acceptance/`，保存状态、原验证完整命令和必要原件指纹，README/进度/交接/启动提示同步入口。
+- 根`.gitignore`屏蔽本批运行/截图/依赖副本、大型原始观察日志；原件本机保留不删除。凭据和实际业务JSON不入库。提交前528插件输入与已审候选一致，沿独立full1721/有效DOM61/专项7/有效verify95；本轮启动器56/56、vendor静态校验0。无版本变更/tag/发布/正式切。
+
+## 用户手动验收服务重启（2026-10-23，平台：trae，未提交）
+
+- 按负责人最新指令停止继续扩展自动GUI采证，保留既有SOURCE/AUTO独立结论及未签GUI边界；后续由负责人直接验收，问题反馈后再做定点修复。
+- 安全核对并TERM隔离端口3271旧PID75689，保留原运行根/数据，以同新候选重新启动PID77151；监听、argv、带token入口就绪，无tokenHTTP401符合鉴权。未操作3270或正式服务，未切正式、提交、推送或发布。
+- 按负责人后续要求，通过3271真实`/pm`命令新增自然演示数据，覆盖2项目、16任务及里程碑/风险问题/会议/汇报/交付物/OKR/习惯；最终`web snapshot`逐类计数一致。一次硬编码OKR父ID请求被业务拒绝且零写，读取实际动态ID后仅补剩余记录；未重放成功命令，不触碰正式数据。
+
+## 任务人员新合包回归与有效补执行封交（2026-10-23，平台：trae，未提交）
+
+- 新增[唯一构建/回归计划](plans/2026-10-23-combined-tasks-people-regression.md)及`CombinedTasksPeopleRepairR1`1869件，源129/528八delta、构建/完整full1721/有效DOM61/报告专项7/有效verify95/guard/close，主源与旧lib/三deps/launcher保护同。计时与真实后置supervisor收据保，不用排队码冒测试码。
+- 原DOM两个collector缺依赖1，/tmp只补require锚续20原例；verify唯一P0异步1后串行原脚本28绿，不改等待/断言，原1均保effective补链，独立r2有限SOURCE/AUTO审正文已落而末封待。新增ISS-046/KB-049，保因果未签和原封件软链设施1。
+- P26独立原20整候选/余6已封实0，进度json单列新候选待重绑不加当前下界；四接续档同步。/tmp新host与GUI原首读/stale/O4/F1FLFD脚本只准备，不新开宿主、无提交/推送/发布/正式切，原全部適用门到ordinarycommit保持。
+
+## 人员精确呈现续修与原26项继承补链（2026-10-23，平台：trae，未提交）
+
+- 更新人员修复计划及集中接续，CSS定位批零改源、14件实际回读0释放后，按父既有确证修授权精确追加people.tsx现姓名/数值槽及图容量、people.css局部收缩。独立合同§5已先行；唯一新继任与独立源审分离，旧姓名封件保持。
+- 独立FD2443件有限四宽/图轴FAIL及姓名SOURCE PASS实回读0已收；O4/stale独立源门有限PASS已实收。26原P ID历史继承审并行，不新增动作/矩阵或改进度分母。
+- /tmp新合executor增逐命令/阶段计时、冻结前delta及报告指纹守卫，依赖独立inode复制保持；3271独立宿主模板仅准备，语法检查均0。四接续档同步；无新整build/宿主启动/提交/推送/发布/正式切。每步时间/失败保，无整功能完成事件。
+
+## 同域修复封交、20原自动继承与密集人员采证（2026-10-23，平台：trae，未提交）
+
+- 10:58 name批实回读0后，FDaxis独立有效合同确证图窄列/文案叠/外壳横滚，新增[图轴局部顺序认领](plans/2026-10-23-people-axis-overflow-repair.md)，仅people.css后继唯一开发，不覆盖旧name封件、不改事件/公式/数据。
+- O4/stale唯一开发已封交127/528，最小panel门控/通知移位与两测试，独立源审在途；人员独立确证FL长名FAIL后新增[Main最小修](plans/2026-10-23-people-long-name-repair.md)，仅姓名CSS开发已封释放。FDaxis旧图新问题待独立合同，不擅扩源写。
+- 新增FD四viewport12态1848件及轴5态595件原证，正常标准恢复、业务根同、产品无写RPC；原图长名/轴窄列/外滚待独立裁。P2002refresh r5后置封签原有限缺口关闭。
+- 20原AUTO独立PASS、15必要窄复验/5字节继承实回读，进度台账确认下界25/1435=1.74%，精确%仍null；集中档案更新，临时合executor仅准备/语法0不新build。全部原门和失败保，无提交/推送/发布/正式切。
+
+## 首读有限审签与人员基准/长内容计时采证（2026-10-23，平台：trae，未提交）
+
+- 首读开发两文件已封回、独立SOURCE/AUTO有限PASS；Main新增[O4/stale最小认领](plans/2026-10-23-task-o4-stale-repair.md)，同panel唯一开发在途。独立报告及stale先行合同由专家写，不以此替GUI门。集中更新10:15计划、progress/handoff/onboarding与父计时合同。
+- 新增人员原证`TimedPeopleF1R1`651件、`TimedPeopleFLR1`1406件：3270正常标准路径预检/二层确认恢复，原MAX/计数/建议筛选/任务和建议目标返回，8态28/110根同且产品浏览无写RPC，独立人员专家在审。实际深1440×900/CSS100，旧浅口述/脚本标签更正，FL长名叠压交独立裁定，原失败/计时不洗。
+- 原20AUTO继承专家并行核有限证据，进度仍未核定、0.35%仅下界。新候选未整build，无提交/推送/发布/正式切；原全部适用验收至普通提交范围保持。
+
+## 固定域独立审恢复与任务/人员计时续验（2026-10-23，平台：trae，未提交）
+
+- 新增[10:15集中接续](plans/2026-10-23-1015-timed-continuation.md)及首读修复方案，Main四档/父执行/进度下界同步；临时O5/O4/人员脚本在/tmp，原证280/315/755已封交固定任务专家。L8独立r7源门有限PASS实seal/readback0，进度基线分母1435/下界5非实际总完成；首读panel开发在途。
+- 任务原确认Escape真实FAIL及首读误空/stale布局三红保，其他多数退出/恢复有限PASS；无产品自签。新3270PID53831只独立人员实例准备/合法F1包移交，欢迎/composer失败均留耗时、没有restore写，下一已有UI恢复入口。原所有服务/dirty保，无新build/stage/commit/push/release/正式切。
+
+## 逐步计时与整功能百分比/效率复盘执行（2026-10-23，平台：trae，未提交）
+
+- 新增[执行合同](plans/2026-10-23-timed-acceptance-execution.md)、`reports/acceptance-timing-20261023-r1.jsonl`与进度台账json，临时计时/浏览器/封件脚本均在/tmp；集中同步四档/父执行。计时覆盖命令/动作及失败恢复，父子重叠不加总；完整功能完成事件必须有独立报告/已核进度/效率复盘，未核百分比不虚填。
+- Main同3269恢复独立detachedChrome，真实3秒首读延迟/一次snapshot拒绝-刷新恢复/无结果输入清空，613原件8态根同封0，待独立审不自PASS。首次父浏览器55.049秒ETIMEDOUT被status0误列成功已追加更正，原失败和原图保。未改变产品/服务，L8独立源门及全父仍欠，无build/commit/push/release/正式切。
+
+## 验收耗时复核与执行组织纠正（2026-10-23，平台：trae，未提交）
+
+- 新增[效率调整](plans/2026-10-23-acceptance-efficiency-adjustment.md)，四接续档仅同步短入口。按原收据查批次过碎、设施错误、证据重复与恢复开销；下一批按域收口/旧证复用/固定候选/有界恢复，保原独立门与总范围。只文档，未运行产品或改变验收结论；链接/空白检查随本轮执行。
+
+## L8开发交接、合法长密样本与中断状态核对（2026-10-23，平台：trae，未提交）
+
+- 文件：新增F1FL/FD生产准备/封件与`F1FLFixtureR3`202原证、P2002刷新补图118件、组合L8后继计划/派生executor；L8开发只gantt.tsx/新gantt-status.test.tsx和开发交接，主端同步ISS-045/KB-048及[09:15状态](plans/2026-10-23-0915-status-checkpoint.md)、四档/父execution，不改专家原件。
+- 实证：L8同test原3wrapped红→修后46邻接/type0，source125/complete526、1321封存/readback0/released，独立源审仍缺；F1FL/FD真实API与标准预检恢复均0，A24五态/FL各20/FD20长姓名完整性获独立有限准入，不签人员/布局GUI。真树主体独立有限PASS、刷新118补图47根同尚未独立封签。
+- 中断/限制：三独立后台系统killed、send实finished；替补并发上限5失败，关闭本窗已结束pending后仍失败，不以list假running推在途。原生菜单调用281.8s无档位证，原owned浏览器target缺失，未替换重放；用户中断后gitdiffcheck0、原件dirty保。未新build/stage/commit/push/release/正式切，父全范围仍未验完。
+
+## 原审结、L8刷新疑点与P2002真实树补证（2026-10-23，平台：trae，未提交）
+
+- 文件：新增`2026-10-23-l8-refresh-r3-*`、`2026-10-23-p2002-tree-r3-*`计划/逐轮executor/真实outer，310件L8及708件真树原证、[09:00接续](plans/2026-10-23-0900-continuation.md)；同步progress/handoff/onboarding/父execution。只读收原P1/P2两独立seal/readback及fixture定位，不改原testing/封件/产品。
+- 实证：原P1下部缺图、KR展示定向有限关闭；原ask对象继承仍BLOCKED。L8原3263重进/真snapshot刷新后wrapped仍待办，两源码映射遗漏已封交独立，310/110帧sealouter0；gantt1来自宿主cache新增1件，业务/files/backups全同。P2002真实命令新增父t9/子t10-t11，旧44根同；读47根同、真折叠展开/edit-cancel/reload，708/182帧12态sealouter0交独立树审；prepare1是响应wrapper错读，后继不重父创建。
+- 验证/边界：Node22.23.3各实际outer/失败收据保，产品字节/build/full/verify未重跑；F1FL生产合法schema及全父逐ID对账继续，无stage/commit/push/release/正式切。
+
+## 原P1下部rest去重补图封交（2026-10-23，平台：trae，未提交）
+
+- 文件：新增`docs/plans/2026-10-23-p1-rest-gui-r2-*`与`P1RestVisibleR2`原证，[08:45接续](plans/2026-10-23-0845-continuation.md)及progress/handoff/onboarding/父execution同步。仅落实原P1专家§5两个ID同一缺图，不改产品、原testing/封件。
+- 实证/验证：原3267合法历史t22项目/缺席标签和t18普通无已静音标记真实入镜，t21不在完整rows；710件93帧9态对原final全同、实sealouter0，正常回3269/44roots对P2final同。scroll1错误locator保、follow只续展开行；无重bind/save/restore/open/TTL/build。交独立P1在途，P2独立/FL MAX定位与L8/native/B8父全范围继续，未stage/commit/push/release/正式切。
+
+## K16有限关闭与P2002/KR显示余链封交（2026-10-23，平台：trae，未提交）
+
+- 文件：新增`docs/plans/2026-10-23-p2-display-gui-r2-*`计划/逐轮executor/实际outer/seal2、`reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/`，新增[08:36接续](plans/2026-10-23-0836-continuation.md)，同步progress/handoff/onboarding/父execution；只读承接专家K16新report/seal，不修改原testing/封件或产品。
+- 原因/影响：按原P2002/KR GUI合同补A最新audit/B空、顶层与状态分组、长标题edit/cancel、KR自身邻接/第二root独立与reentry/reload；P1004仅旧处理卡Tab到opener，原ask上下文未恢复不冒继承；当前全parentnull保原子层/折叠未采。K169known/2gaps与已有done/wrapped/reload有限PASS实seal0、原修复切片关闭，周期/父整门继续。
+- 验证：525主/冻结输入逐SHA同；11GUI/读入口outer各0，35态44roots/每态38raw零变，245帧/1761普通件封seal2实际0、indexSHA99dd2f8d…交独立P2在途；seal1误正则识别ask-provenance的1保，seal2只续封装不重GUI。无build/full/95verify重复、无stage/commit/push/release/正式切；全部原rest/FL MAX/L8/native/VoiceOver/B8与父总出口持续。
+
+## P1004有限审结与K16原归档真实复验封交（2026-10-23，平台：trae，未提交）
+
+- 新增 `2026-10-23-p2007-archive-gui-r2-*`有限计划/逐轮GUI/实际outer/封件器、[08:21接续](plans/2026-10-23-0821-continuation.md)与717件156帧新原证，同步四livingdocs/父卡；不改产品，不重复已签full/verify。按原P2007§6真实唯一archive、原包README/file、真reload后readonlyreview与file复读，四真实反思known9/gap2逐字保持、12态44roots零变；K16独立GUI在途，Main不自签。files复合快捷键语法与reentry错误期望临时输出跨reload两个设施1保，后继仅续未采文件/读出口，无重写归档。
+- P1004原1314独立GUI首次遮层/直接取消X有限PASS，Enter/表单内Tab/ESC/可见归焦有限PASS，真实seal0已读。原nativeTab到opener实际0仍NOT_RUN，最小补原步，不重ask/save或扩大全B8。当前新会话composer须观察原卡，不伪称旧焦点/临时输出仍存。继续原全部未验到ordinarycommit；无stage/commit/push/tag/release/正式切，旧红证/实例/dirty保。
+
+## F02独立关闭与P1004原三退出采证（2026-10-23，平台：trae，未提交）
+
+- **08:10后继计数更正**：Main只读当前四个p-0001 reflection draft，known4/1/1/3＝9、gap0/1/1/0＝2；更正先前后继摘要known10，不改旧报告/反思或人为凑数。当前两L2final和新增t7 task-done按四真实ID/文本绑定，原三记录7句AUTO留历史边界；同步四档/父卡及08:08原余件，未执行archive或业务写。
+- 新增P1004原有限计划及 `2026-10-23-p1004-gui-r2-*`采证/封件器、[08:08接续](plans/2026-10-23-0808-continuation.md)、1314件/179帧封包；同步四档/父卡。未改产品、不重已绿full/verify。
+- F02原§6最小GUI独立PASS_LIMITED_GUI/remaining关闭，真实seal0已读，旧红/设施1保；不重这一个slice/F01/P3004。
+- 同3269原P1004新宿主正常任务初态准备→一次真实ask/gateway1→人负责人47主save/readonly刷新→首次正确可见title/副驾自动让位→直接cancel/X/nativeEnter-Tab-ESC与归焦，真实封outer0交独立GUI，旧P1004FAIL仍保直到审结。
+- 正常prepare业务save成功后reader错预期null的真实outer1保，不重save；整个新窗口仅t6raw变且最终只updatedAt变，37非目标raw/两L2/dlv/资料与附件保，gateway原字节恢复。当前副驾原卡展开、无dialog，接K16/P2002/KR/rest/FL MAX/L8/native/VoiceOver/B8到全门齐ordinarycommit，无stage/push/release/正式切。
+
+## F02真实首点保存与键盘对照封件（2026-10-23，平台：trae，未提交）
+
+- 新增 `docs/plans/2026-10-23-f02-gui-r2-*`有限执行/采证/封件器、[07:55接续](plans/2026-10-23-0755-continuation.md)与 `F02RepairGuiR2`1457件；同步四档/父卡。未改产品，未重跑已绿整包测试。
+- 新组合独立SOURCE/AUTO有限PASS，真实seal0已回读；新3269PID22463实际浏览器片段核同client SHA3be9d4a0…。当前3268正常backup含真侧车后一次标准restore到新实例成功、13表38记录同；旧实例/正式服务保持。
+- 原F02 planned正常准备与accepted稳定关闭/零选择写/唯一首点主save完整RPC及raw/正常重进成功；原nativeTab/Enter保存对照一次成功，三轮92帧、全窗仅dlv1变、其余37raw/两L2与附件保。1457封outer0交独立GUI，Main不签PASS。
+- 原navigation/首次入口/旧项目名等待/tuple reader四设施1保；不重restore，后继只读正确结构0。不洗旧F02FAIL，不扩B8门，继续P1004/K16/P2002/KR/rest/FL MAX/L8/native/VoiceOver/B8至全门齐ordinarycommit，未stage/push/release/正式切。
+
+## F02新组合完整回归与独立交审（2026-10-23，平台：trae，未提交）
+
+- 新增新组合sealer、[07:37接续](plans/2026-10-23-0737-continuation.md)、`CombinedF02RepairR2`1816件封包；同步本档/progress/handoff/onboarding/父execution。新freeze仅124/525两delta，主lib/旧六修lib/业务服务保持。
+- R2 SOURCE/DOM9+R3原28有效有限PASS；原37设施1与R3收据wrapper1均保，后者只读校正/无产品重跑。Main顺序freeze/tsc/bundle/noEmit/full162files1707/DOM6files41/special2files7/verify95/guard/close全实际inner/outer0；五受守护资产同/污染0，source/launcher/三依赖/旧lib同；455built，client1720393B SHA3be9d4a0…。封工具0、gitdiffcheck0。
+- 独立组合审新角色在途，不以全自动绿签新host/GUI/父PASS。F02旧GUIFAIL保；下一新host真实备份含侧车恢复、planned正常准备、accepted指针稳定闭与唯一首点save/键盘，其他原六修与父全部出口继续，无stage/commit/push/release/正式切。
+
+## 独立负例审结、F02设施补证与父出口恢复定位（2026-10-23，平台：trae，未提交）
+
+- 新增[07:28接续](plans/2026-10-23-0728-continuation.md)、F02新组合计划/执行器（尚NOT_RUN），ISS-044/KB-047；同步本档/progress/handoff/onboarding与实际已找到的 `reports/all-pending-acceptance-execution-20261021.md`。不改需求/新增功能。
+- P3004原893负例有限GUI PASS余0，不重保存；F02trace443强支持native默认激活，纠正26非零RPC（真实一对只读snapshot，无业务写），旧原件/旧GUIFAIL保。109开发SOURCE/DOM9有限PASS；37断言绿但专家设施wx重复identity退出1，原28独立R3最小必要补证在途，不把设施错误当产品FAIL或计数绿冒门过。
+- 原F01不重；新组合只派生已签六修executor的out/freeze/父归属/报告与2delta核，原专项排在full合法材料后。独立原28门齐才新完整构建/回归/GUI，父所有原域出口保持。新runner语法0，本批无新build/GUI/业务写/提交/推送/发布/正式切。
+
+## F02 option默认动作最小修与必要红绿（2026-10-23，平台：trae，未提交）
+
+- 文件：`records-listbox.tsx` option click局部preventDefault后choose；`records-deliverable-pointer-dom.test.tsx`原7不变、追加D08/09公开DOM默认动作取消断言。新增F02开发runner/sealer、[开发交付](plans/2026-10-23-f02-option-default-development.md)及109件自有证据，同步progress/handoff/onboarding/本档。
+- 依据原F02专家§6与真实443trace诊断，不新增功能/门/业务状态或保存通道。共享listbox13consumer选择接点受影响，原label/键盘/backdrop保持；新候选需完整回归和原GUI首点save实测。
+- 原525baseline全同→仅两文件变化/523保；真实red原7绿+2必要红exit1，同testSHA green9/9和related28/28 exit0、stderr空；四依赖/17输入前后同，afterAll identity同来源。baseline/green/related/seal工具0，red异步工具外层终码未独立收、真实Vitest收据1不伪0；语法2/gitdiffcheck0。Main开发结果不是独立PASS。
+- 新派单工具恢复，443trace/893习惯负例/109开发三独立角色分别审；F01不重，F02旧GUI FAIL与后台NOT_REACHED保，新GUI/完整新build NOT_RUN。父全部已实现未验目标仍续至普通commit，无stage/push/release/正式切。
+
+## L2独立审结、习惯负例与指针原生诊断（2026-10-23，平台：trae，未提交）
+
+- 文件：新增 `docs/plans/2026-10-23-six-repairs-gui-round20..28.mjs`、P3004/F02trace封件执行器、[F02最小计划](plans/2026-10-23-f02-option-default-repair.md)、[07:13接续](plans/2026-10-23-0713-continuation.md)，`P3004NegativeGuiR1`893件、`F02OptionNativeTraceR2`443件；同步progress/handoff/onboarding/本档。未改产品、旧testing、旧封件或主lib。
+- 原F01独立有限GUI PASS余项零，原F02独立有限FAIL保，首save被backdrop截住、后台NOT_REACHED；不重已证两L2。
+- Main正常项目p3/未关联H准备，既有空OKR文本回退同稿missing/B真实关系拒绝、精确5字段保、11连续态44roots同，893件待独立审。missing摘要ID右端在抽屉后方原图保，不擅自豁免可读性。
+- 原生passive click诊断443封：option真实detail1可信click先闭、随后无Main输入的trigger detail0可信click再开，defaultPrevented=false；无业务写，移除监听后正常backdrop/cancel无新增debug事件。Main诊断支持native label默认激活，独立因果审证待接，不倒改原r1为当时已证。
+- 原角色followup返回finished、新建派单发现无结果，未重复派/自验收；F02两文件必要红/最小修计划已成、尚NOT_RUN。新round26初挂ready断言1/0RPC保，其余20–25/27/28各0；seal真实收据0、vendor0，具体终码层次见接续。父原所有余门至普通commit继续，无stage/push/release/正式切。
+
+## 新六修宿主与L2补证、指针复验接续（2026-10-23，平台：trae，未提交）
+
+- 文件：新增 `docs/plans/2026-10-23-six-repairs-gui-*`、L2/指针封件执行器、[06:58接续](plans/2026-10-23-0658-continuation.md)，`reports/all-pending-evidence-20261021/SixRepairsGuiR1`、`SixRepairsL2GuiR1`1507件、`SixRepairsPointerGuiR1`353件；同步本档/progress/handoff/onboarding。未改产品、主lib、正式profile/服务。
+- 独立组合审已给1822件有限整回归PASS，1707/39/7及95verify全0，原special1/警告保。Main新3268/PID9103复用六修freeze，525主/冻结输入同，实际下发bundle唯一匹配；标准F5新备份及真实附件侧车正常预检/明确恢复成功一次。
+- L2两原reflectionId经composer完整view、三类材料edit仍draft、人final/repeat/reload双回读；连续根仅两目标反思变、旧3264导出后三根零差异。1507件交独立GUI；误按钮/首workspace等待/仅JSON附件拒/错恢复等待/换行提前发送原失败全保，后者真实部分写后由Shift+Enter正常三行纠正，不冒未发生写或恢复重放。L2seal自收据0、outer terminal未收，不补造。
+- 指针round17字段选planned但menu仍开、19选accepted后单次主save未发RPC、dialog仍开/全根零变，353封实际inner/outer0交另一独立专家，不自判产品FAIL或扩B8。round18仅编写NOT_RUN；原DBplanned准备未save。当前owned3268编辑交付物开着、DBaccepted、两L2final。父所有余门继续，未stage/commit/push/release。
+
+## 六修完整组合回归与原P1/P3004审结接续（2026-10-23，平台：trae，未提交）
+
+- 新增 `docs/plans/2026-10-23-six-repairs-{regression.md,execute.mjs,special-after-full.mjs,close.mjs}`、`2026-10-23-0637-continuation.md`；同步progress/handoff/onboarding，认领新完整候选与执行收据，继续原全部余门。
+- 新 `CombinedSixRepairsR1`1822封：124声明/525完整输入，旧114→12文件差异、三组独占依赖指纹、tsc/bundle/noEmit/full162文件1707、DOM6/39、专项2/7、默认95verify/guard/close均实际0，交独立组合审。专项首因Main过早并行缺full合法夹具exit1完整保；full0后同产品/断言专项r2才0，close成功清单仅special→special-r2，原警告未抹除。
+- 两原专家审结：P1历史只指定切片PASS，rest可见图一条与FL/MAX未签；P3004范围裁定原BLOCKED不豁免，既有空OKR文本回退可恢复missing/B失败保稿负例，未新增功能或删除目标。
+- 影响限候选冻结/原证/接续；Main不自签GUI或父PASS，下一步新宿主恢复最新3264F5、六修原GUI及rest/失败稿/FL MAX/L8/native/B8。全部适用独立出口齐后本批普通commit；本轮未stage/commit，不push/tag/release/正式切。
+
+## 三独立审结与P1历史余采证（2026-10-23，平台：trae，未提交）
+
+- 新增 `docs/plans/2026-10-23-0628-continuation.md`、P1历史 bootstrap/execute/seal 脚本及 `P1HistoryRemainingR1`2122件、`P1HistoryReturnR1`；同步progress/handoff/onboarding/父execution。目的为补原P1001/2/6历史切片并接六修统一候选，不新增业务功能。
+- 独立专家r2自有testing报告：P2002/KR有限SOURCE/AUTO PASS、F7限定历史GUI PASS；Main不写专家目录或自签。P1新封交独立、P3004原保稿BLOCKED交范围裁定；整组合/GUI/普通commit仍未准入。
+- 新3267/PID3133复用冻结114；原GG标准backup、真实预检/确认、两sessionbind补标准包不含的绑定、历史mute到期、absence/rest/正常t21跟进刷新与reload、t23历史33/10日人员筛选/返回/只读图表；F5/F7保护0diff，owned页回3264。23任务非F1平面24/FL MAX。
+- 验证环境macOS/Node22.23.3：round01..16中11轮exit0，02/04/06/12/13各1具体设施/入口等待错误保；bootstrap终码未收不推0；seal0/2122件、return0。同步runner收据保每条参数、stdout/stderr/status/signal。没有新build/整回归/Git或正式切换，下一步统一六修完整回归及原GUI。
+
+## KR关联最小修与原F7历史剩余采证（2026-10-23，平台：trae，未提交）
+
+- 新 `docs/plans/2026-10-23-0611-continuation.md`，同步progress/handoff/onboarding/父execution；引用独立2372原审结与KR最小修，不修改专家目录或旧封件。
+- 开发仅改 `views/okrs.tsx` 和新增 `okrs-related.test.tsx`；原关联树遗漏确证FAIL，RED exit1→开发8/8、邻59/59、vendor/封存0后released，另独立SOURCE/AUTO在途，未装入114。
+- Main新F7RemainderR1/231件封：原14条历史标准backup原字节、冻结114新3266/PID98161生产预检确认、收起/刷新/reload/重进/8月纵滚及六源码副本；原3264新F5前后0差异，另返回收据。只读审证交独立专家，不自PASS。bootstrap及有效轮0，intro未收终码、两次错等待exit1、首seal错core/habit.ts exit1保，r2核原副本封0。
+- 影响：仅既有KR展示修复、原历史剩余证据与接续档案；P3004失败保稿仍BLOCKED，P2002源审仍在途，后继统一freeze/fullregression/GUI及P1历史MAX/native/B8/L8与ordinarycommit继续，无push/release/正式切换。
+
+## 原拒因独立补签、目标关联与习惯剩余采证（2026-10-23，平台：trae，未提交）
+
+- 05:55 P2002开发[最终交回](plans/2026-10-23-p2002-outbound-slot-handoff.md)：index/panel/tasks三锁released，8有效红→开发8/8/相邻54/54与collect实际0；九项非自有并行文档变化保。另独立SOURCE/AUTO在途，不把自测写PASS。新增只读fixture定位explorer，不执行产品或GUI；主仍不整build。
+- Main新增 `reports/all-pending-evidence-20261021/P2OkrRemainingR1/`2372封；同步progress/handoff/onboarding/父execution。原封件不修改，独立testing只由专家写。P0002新439独立有限PASS结合前签仅原P0002剩余为空，不外推当前修复包/字段展示。
+- 原P2003 B动态隔离、重复拒与Bclear保A/Bpending；P2004真实primaryA/relatedB KR、切软联及人confirmed、精确missing/self/cross输入保留；P3004第二同项目目标save/reload、missing/B命令拒零写、现只读habit归属集合1；P3005 cycleDue预留真实写后snapshot读回。新fixture只正常业务入口，最终明确变更3个新OKR、1旧habit关联和pmOkrInbox，其余业务/files/backups字节同。
+- KR related落盘但tree/reload没有关联行，交独立裁原承诺。Habit不存在rawID输入，命令拒绝不冒失败表单保稿，F7history未补。错误label/空menu/无menu时ESC关unsaved/Meta-KeyA拼接失败保，后用原生三击与选区断言纠正精确观察；round01/09未收终码不伪exit0。首seal命名roots误读exit1原保，r2只核部分源副本后排UI对象封0。
+- macOS/Node22.23.3，17轮已观察实际终码详新封receipts；原114仍运行3264/PID10975，新P2002开发锁index/panel/tasks未抢，不整build，不stage/commit/push/tag/release/切正式。继续源门、组合回归/原GUI、P1历史MAX/F7/native/B8/L8/总出口。
+
+## 四修源门通过、出站余链签字及任务出站接线红（2026-10-23，平台：trae，未提交）
+
+- Main新增 `P2OutboundFixtureR1/`1690封、`P0RejectedReasonRecapR1/`439封；同步progress/handoff/onboarding/父execution、ISS-043/KB-046。两个原封包192/175及旧457不覆盖。专家独立报告和审计仅由对应专家写。
+- P1004源门7/7＋22/22、P1005事件入口10/10＋11/11＋24/24、Listbox有效7/7＋28/28、K16投影35/35＋3/3均有限SOURCE/AUTO PASS；设施首败保，不签原GUI或当前组合候选。
+- P2独立有限PASS：合法正常done/wrapped素材和review1/1/ms1/known10/avg100重进同，恶意title本地web真实转义、无事件/图片/弹窗，31/29历史包标准预检/确认恢复及两次export审计4→5→6、31归档/29活跃保。当前task顶层/重进无出站slot独立FAIL；Main核index现snapshot无audit投影，已派开发仅index/panel/tasks最小真源接线，保已签TTL/备份/U4规则，不新增功能或路由。
+- P0002按专家显式修订仅一次真实ask/一次GUI确认，最终0应用1未执行；真实滚动后完整中文schema拒因入镜，50键七前中末零变、末snapshot全同，439封交另一独立目视审。旧不可见缺证不洗，Main不自PASS。
+- Main所有新采证/两seal实际exit0，普通commit总出口仍缺新候选完整回归/原GUI、P1历史MAX/OKR关系/F7/native/B8/L8及任务位修复门。冻结114/521/3264仍旧运行，未build新包、stage/commit/push/tag/release或切正式。
+
+## 独立子片审结与P2档案原件续验（2026-10-23，平台：trae，未提交）
+
+- 文件：Main新增 `P2ArchiveReviewR1/`192封和 `P0RejectedReasonSupplementR1/`175封；`P2OutboundFixtureR1/`在采；同步progress/handoff/onboarding，专家新testing仅引用。
+- P1004独立SOURCE/AUTO7/7＋22/22仅锁定隔离输入有限PASS，不继承当前组合候选/GUI。P0002八拒/wrapped/data有限PASS，中文拒因仅RPC/DOM有、图帧不可读仍BLOCKED，纠正此前“完整可见”；正常重开副驾/草稿为空、根零变，未重ask/apply，另交专家原恢复合同。
+- P2真实archive/review命令、导出package/README原件及file://本地打开均已采：源反思7known和两gap，archive三反思known/gaps全空；review7/里程碑1/无done平均null正确。192封seal exit0、源6文件同114、业务/files/backups零变，交独立专家确认原K16缺陷和最小复验合同，不以Main观察代判。
+- P1005事件反思命令开发刚交回（新专项11/11＋受影响24/24，原红保），另派独立SOURCE/AUTO。pointer开发仅诊断/最小backdrop修复正在封交，原pointer有限GUI失败不洗。Main正常add新t7再done、新t8再人wrapped；恶意HTML只作为合法title/description文本用于既有出站与量化断言，旧任务不改。
+- macOS/Node22.23.3；两采证round01/02、P0只读round01/02/03和两seal exit0，原历史失败不覆盖；完整回归仍沿旧114限定签字。新组合未build/装载，无stage/commit/push/tag/release/正式切换，原总出口继续。
+
+## P0002原拒绝补证与P1004修复交回（2026-10-23，平台：trae，未提交）
+
+- 新增Main `P0RejectedRemainingR1/`457原件，更新progress/handoff/onboarding文末/父execution。两真实ask采8非法协议/长度/越权/日历日期逐行拒与执行禁用，另AIwrapped拒、非法branch明确确认后最终task schema拒；诊断显示完整0应用/1未执行，全部roots字节同。封包seal exit0、114/521输入同，交独立P0002剩余GUI审；round01pointer入口等不到/03成功ask后错tab标签失败保，02/04/05恢复均exit0，不重ask/apply。
+- 开发另交 `panel.tsx`本次精确+15/-5与 `panel-sidecar-task-handoff.test.tsx`、自有 `docs/plans/2026-10-23-p1004-sidecar-handoff-*`：任务入口临时让层/退回恢复原子树，保旧答/投影；开发有效原红6红1绿、两green各7/7、两affected各22/22，设施失败和警告保。Main只接收、另派独立SOURCE/AUTO，不冒新GUI已装载。
+- P1005独立报告确证事件完整view/edit/final命令入口缺陷、交付物指针选择/save有限失败；另派两个精确开发接缝（reflect命令、records-listbox/form），后者先根因诊断/有证采证归因更正，不盲改全局。旧114运行保持，新整包候选待各修/独立源门齐再Main build、原GUI复验。
+- 仅原余项和已授权缺陷闭环；P1历史/MAX、P2/P3、native/B8/L8与总出口继续。无stage/commit/push/tag/release/正式切换。
+
+## P0/P1审结与两L2事件补余（2026-10-23，平台：trae，未提交）
+
+- **文件**：新增Main `reports/all-pending-evidence-20261021/P1L2EventsR1/`1077件与 `P1L2EventsReceiptSupplementR1/`6件；更新本文件、progress/handoff/onboarding、父execution与P0/P1派审检查点。两新独立P0/P1报告由专家写自有testing前缀，Main只引用。
+- **结果与原因**：P0 context/窄集title/当前metric三片独立有限PASS；P1004数据刷新有限PASS但首次遮层/直接退出确证FAIL，按原专家§6另派开发最小层焦点修复，旧114运行不冒新修。P1005原F5里程碑/交付物两个正常主save各生产正确sourceEvent反思，关联t1仍todo的pending/gaps诚实，原状态重save各幂等，旧任务与task-done原包保。`reflect t-0001`实际只返旧task-done，两事件无taskId；未误改旧记录冒edit/final，该原入口对应关系交独立专家裁。
+- **验证**：macOS/Node22.23.3；新round02/04/05/12/13/14及两seal实际exit0，round06/07旧selector、09指针save零RPC、10popup等待及03dialog等待exit1保。两实际失败CLI收据补封6件；原seal自动scan因metadata无command得0，不改1077索引、不冒全收据。冻结114/521输入实核同，read/reload零业务写；既有114完整回归沿原独立限定证据，不凭本原件seal代GUI。
+- **范围**：仅原采证/专家审结与已授权缺陷闭环；Main唯一后继builder。P0002其余拒绝、P1历史/MAX、P2/P3、native/B8/L8及父出口继续；无stage/commit/push/tag/release/正式切换。
+
+## P0上下文/计量与P1刷新续证（2026-10-23，平台：trae，未提交）
+
+- 文件：新增原件 `P0ContextMetricR1/`695与`P1ProjectionRefreshR1/`379；Main同步progress/handoff/onboarding文末/父执行记录。capture独立报告归专家自写，Main只引用。
+- 原capture/P0003与P0004支路有限PASS已回，原件不重跑。补原P0001有/无材料ask三真实网关请求、只读投影/退出零业务写；P0002合法窄集明确确认及unknown title拒；真实clean undo还原t6，metric两kind/basis3/undo1/p2空/重进同。其他URL/长度/wrapped GUI负例未扩签。
+- P1004一真实ask保旧答，正常task主save只t6负责人/47变化，snapshot刷新/时间/更新旁注/正确目标/返回已采。副驾浮层遮抽屉导致首次cancel未生效，最小化后可看字段/现有顶部关闭，原失败/截图/帧保，待独立判定，不自签UX。
+- 两包seal actualexit0，P0两错等待及P1取消等待timeout不洗绿，未重放ask/apply。原capture专家finished，追加send拒；本窗没有spawn/followup工具，两新包明确待派，不伪称独立在审。既有114完整回归仅继承无变源码事实；本轮不新增build/产品test/服务或Git动作。父全部余项与普通commit目标继续，push/tag/release/正式切换未授权。
+
+## 中断恢复与P0采集补证（2026-10-23，平台：trae，未提交）
+
+- 新增Main `P0CaptureRemainingR1`336原件、自有capture网关输入/Chrome采证helper/真实命令/关闭指纹与执行收据；EGO13丢失在动作前失败保，切已有隔离Chrome新owned页。原114/3264两capture真实请求、不apply退出零业务写、draftId明确apply两任务/https证据/production来源、metric当前capture子段/reload重进已采，交不同独立GUI审。
+- 旧格式浏览及40旁注补审已独立有限PASS，原被中断专家无产物不重复引用。同步progress/handoff/onboarding/父执行记录，产品源码未改；native/context/其余成长/B8/总出口继续，未stage/commit/push/tag/release/切正式。
+
+## 持续续验 · 反馈补签与关系原因必要红（2026-10-22，平台：trae，未提交）
+
+- **23:45OP补封及旧包只读**：新增Main `OpGrowthRemainingR2`348件/自有轮次与封存来源、OP专家原缺口定向采证；07错等待/12错标签失败保，11陈旧文字不自签。新增 `OpLegacyBrowseR1`127件/合法旧格式转换来源/新114隔离3265PID16671标准恢复、只浏览前后11文件byte/mtime/ctime/inode核同；两包交不同独立GUI专家。同步进度/交接/启动/父执行记录，源码无改动，未stage/commit/push/tag/release/正式切换。
+- **23:27两门与OP补曝光**：不同专家已签114完整回归及401/429完整单前缀/正常恢复有限PASS，S112-PREFIX-01仅本候选原文本范围闭；旧FAIL保。新增Main自有OP补证轮次，原112/3263的两既有报告正常横滚完整66%，无报告重生成，补字段/准确fixture继续。同步progress/handoff/onboarding/父执行记录；产品无改动，未stage/commit/push/tag/release/正式切换。
+- **23:18后继114及修后提示采证**：Main新114freeze/build与全部必要回归161/1691+DOM17+special7/default95/guard/close0，独立整回归审在途；归档首symlink目录读取1保，另lstat封1687。新3264PID10975/166GUI原件/6执行0，标准F5恢复、client可执行唯一、AUTH/rate单前缀/正常恢复/明确设置timestamp例外交不同GUI。OP943限定审签已交，真实最小剩余（wrongboard、66曝光、精确40等）同步，未改产品或豁免。新增自有private采证脚本及必要归档来源/原收据，更新livingdocs/父记录；无stage/push/tag/release/正式切换。
+- **23:04前缀闭环/OP续证**：新增两份Main文件级闭环/114后继计划；sidecar仅helper导入+catch两行、新前缀test/403bytefixture由不同开发完成，另独立5/250/noEmit有限PASS，旧双前缀GUIFAIL保，新build未冒已载。Main原F2隔离3263采manualclear/effort/evidence/completed/wrapped/report/390/newPID子段943件/27收据交独立GUI；标准F2原件/旧服务保，精准2354→7387。112前置/MD有限签及准确未签边界回填，ISS042/KB045记录EGO八env组合/date工具/串包省略尾注/明确模式timestamp。同步progress/handoff/onboarding/父记录，无stage/push/tag/release/正式切换；P0–P3/B8及总出口继续。
+- **22:31修后三GUI封包**：新 `Successor112GuiR1`原件/helper/loaded-binding/747索引，3262PID92870标准F5真实restore，新112整回归已独立有限PASS。前置选反选重选/隐藏save/成环拒零写保稿→解除retry重开，401失效/429/正常、源rv4软删后rpt2旧摘录MD1468byte完整，交三个不同GUI专家；双错误前缀反证交必要红合同。执行脚本自有tmp，必要复核副本随封包，主业务无新增改动；date输入兼容/snapshot/locator/copy/CLI/首次seal1均保，模式clicktimestamp分离记录。同步livingdocs/父记录，OP成长/B8/最后ordinarycommit继续，无stage/push/tag/release/正式切换。
+- **21:51后继112回归及F07签字**：新增 `CombinedSuccessor112R1/executor.mjs`、设施修正/原失败副本/执行收据及隔离原证；112声明/519包输入独占build、160文件1686+DOM17+special7/default95/guard/close实际全0，覆盖率89.4/82.62/85.89。首freeze比较笔误与首full缺upstream裸依赖入口各exit1保；副驾自有真实依赖复制14394/1031后full-r2成功，业务/原tests无改，主输入/lib/旧107lib保真。新增 `Successor112GuiR1/setup.mjs`准备3262自有实例，仅复用原隔离网关；新GUI未签。F07不同专家有限PASS中途ENOTDIR/原库回滚/双字节与新PID，573/旧共享封包保。同步progress/handoff/onboarding/父记录，影响仅既有续验设施与证据，不扩全父门/发布；未stage/commit/push/tag/release/正式切换。
+- **21:33独立门汇合/112计划**：renderer围栏R2/askAUTH覆盖/panel前置两修均独立SOURCE/AUTO有限PASS（74/210/21files199），旧C02裸FormData6绿1红保由独立oracle校正不改产品/test。新增唯一后继112构建计划，包输入519，Main新freeze/build尚未执行；DOM/真实pi输入/原scheduler设施adapter边界列明，旧107/3260不冒新修。F07 source标准JSON+双新增37/aeasset、puretmpblocker、真实预检/两确认ENOTDIR回滚、watch项目/A字节中途与回收、13表/safety双byteexact、新87385回读，573封包交独立GUI；首download0byte/首seal1保重采22byte不假HTTP。共享1799有限独立签命令断联/下载/末断源/GC0，直接UI门不外推。新增ISS039..041/KB043..044、同期docs/plans/livingdocs/父记录；全余项最后commit未闭，未stage/push/tag/release。
+- **20:55三最小修与恢复续证**：新增既定缺陷计划`2026-10-22-{fixed-report-export-excerpts,ask-auth-feedback,task-predecessor-selection}-closure.md`，分别renderer长作者spread栈溢出R2、ask按Key误覆盖AUTH、panel复选currentTarget崩/搜索隐藏提交丢关系；各不同专家先行红，另开发限定单文件，不提前整包build。renderer R1原13/54/6通过但新stressFAIL，不假后继通过；完整109声明纠正108继承子集。107完整AUTO/J03新GUI有限独立签，新增 `CombinedGuiR1`续采/精确host重启/备份观察/封存脚本及1537声明，UI备份→非空restore安全snapshot→71922新进程回读/六extra双22byte一致，旧J03468保持；备份/ATF不同GUI审在途，rollback/共享unlink保缺。同步档案/父记录，不stage/commit/push/tag/release。
+- **20:14新实例与反证**：新增 `CombinedGuiR1/executor-{setup,gateway,helper}.mjs`及原证，只服务107冻结候选的3260/PID60387、3261/PID60386、自有runtime；同EGO space13/p3恢复真实原F5预检，首欢迎层/未开PM超时保，不影响旧实例。材料独立2852原件审证有限签M02/J02/current/session，但实际MD缺两冻结摘录/来源确证有限FAIL；新独立必要红另派，未改业务/旧封包，不沿旧raw-report的“摘录已导出”概括。同步livingdocs/执行记录，修后GUI/非空恢复/全余项继续，未stage/commit/push。
+- **20:04新候选**：Main `CombinedRepairR1/r2`107去重声明/515输入（估108纠正），直接tsc/tsdown/full coverage普通158files1662+DOM5/default95/noEmit/guard/close实际全0；原13579依赖独占/无外链漂移，源码/主旧lib保护0。首r1自动install后build0设施/警告记录保，未假无网络。顶层index交不同独立回归审证，GUI新实例未启；旧3257UI备份因缺已引用file字节真实失败交BackupRemainingR1，不冒成功。材料2852封包独立审证在途，继续恢复/原OP成长/B8，全门及Git未结束。
+- **19:51汇合**：ATF两文件独立8/10/43/175/legacy/noEmit/close有限PASS，资料refs同组件+新DOMtest独立7/5/194/noEmit有限PASS（事件同步checked/取消无效memo）。Main新108候选自有冻结 `CombinedRepairR1`准备唯一build/全回归，旧lib/实例不写；封存 `MaterialRemainingR1`2852原件/57执行15非零交独立GUI，实际M02/J02双关联issue/Rcurrent固定软删安全MD/覆盖/Rsession有限子段，不签整材料或J03修后。同步四livingdocs/执行记录，不stage/commit/push/tag/发布。
+- **19:19补件**：Cycle三产品/两测试不同独立SOURCE/AUTO10/29/134/noEmit有限PASS；AIremaining506件独立GUI有限补签regen实际base/四create/mixed，auth/rate分型FAIL与纯非法原因缺证保。ATF仅ai-client/新terminaltest开发交106后继，r3开发8/10/43/175/legacy/noEmit0，原r2治理tmp越界保/新独立复验在途。新增 `MaterialRemainingR1` M02两拒业务根不变、合法重建只t1/重开；J03新草稿两link+真文件c2引用点击两次崩PM，独立必要红派单，不自签/不改在途源码。B8原件映射独立专家交有限14格局部，不扩1184全PASS。同步进度/交接/启动/执行记录，继续会议与恢复，未新build或Git写。
+- **ATF**：新增 `2026-10-22-ai-terminal-failure-closure.md` 限定ai-client/必要tests，独立terminal真实协议8控制/10必要红；部分error/aborted正文误成功、硬码误EMPTY续池确证，另开发不重叠Cycle。原verify仍绿的盲区/首fixture失败保，未新build或提前提交。
+- **后继**：Cycle开发三产品/两同域tests修，后继104输入；开发原10/新29/affected134绿，独立复验在途、未构建/GUI。新增AIremainingR1 506原件/19执行6失败，regen真实base、四create/非法过滤/mixedapplied-only/authrate正常恢复交独立GUI；隔离网关pathname修正、精确换PID24241→26667，原设施失败保。终止模型失败误EMPTY另独立先行，不用成功fixture掩盖。
+- **原证**：新增 `FeedbackRemainingR1` 230件封包/27执行含6失败/49观察，实际精确marker原文/235byte系统复制、同值quiet迟到copy resolve/reject、O3真host拒/重试、O4有限关闭/说明留稿、O5权威S0/S1。独立R3只签实际切片，原ESC失败/缺证保留，不冒全反馈/全GUI。
+- **合同与开发计划**：新增 `2026-10-22-cycle-feedback-reason-closure.md`，独立两必要红成立，8控制绿；仅任务关系业务错误类/handler、ResultCard明确权限原因及必要tests限定修，另开发与复验。R2澄清精确mock同M成功/X07手调timer属AUTO-only，不假造GUI。
+- **接续**：OP/P0–P3有效继承89原ID，Main继续最小余链；新副驾隔离3258/3259只加载U4r2旧bundle，合法宿主命令fixture/确定性模型依赖，接线诊断在途。同步progress/handoff/onboarding/父执行记录，未commit/push/tag/发布/切正式。产品修前102输入同，纯文档/原证不无理由重跑旧1590/95。
+
+## 验收收口 · A20V3 与 U4 总门通过（2026-10-22，平台：trae，待普通提交）
+
+- **独立结论**：A20V3 总门 PASS，允许进入 U4；U4 的 RA-U401、RA-U402 与整项总门均 PASS。U4 仅修复 390px 下任务组织动作段裁切，并完成多规则排序、列显隐、保存、刷新、重进、项目隔离及父行/叶行/分组头同步的真实 GUI 补证。
+- **完整回归**：冻结 U4 r2 候选 `build`、`tsc --noEmit` 均 exit 0；Vitest **155/155 文件、1590/1590 测试**；`verify-isolation.mjs` **95/95**，保护资产 before=5、after=5、污染 0；隔离 guard 自测通过。r3/r4 fixture 缺失及 r5 首次缺 vendor 的失败原证保留。
+- **交付审查**：vendored `code-review` 按 Standards / Spec 双轴复核。首轮发现父相对 patch、r2 增量清单和完整证据索引三项治理缺口，已用新增交付边界元数据关闭；复审无阻断项，未改已签 manifest、专家报告、产品候选或原始 GUI 证据。
+- **父任务边界**：A20V3与U4报告均只签各自范围，不外推全部remaining acceptance。独立专家正在最后总范围对账；Main准备选择性清单，尚未commit。不 push/tag/发布/正式切换；3256/3257暂保，3248/3249/3255保留。
+
+## 独立闭门与余证 · A19展示/回归/旧卡缺陷（2026-10-22，平台：trae，未提交/推送）
+
+- **审签**：GM01建议关联展示有限GUI PASS；完整AUTO原结果/声明531源与453最终产物有限PASS，原失败保。新增既有习惯卡HC01长目标裁切FAIL，只派自有先行合同，不改源码、不升整习惯页或总门。
+- **补正**：新增`A19/candidate-scope-correction.md`，五旧probe保存来源成立但未执行，Launcher实际九文件56/56；原candidate/报告不覆盖，缺件NOT_CAPTURED不补造。
+- **采证/档案**：新编号视觉87件两合法值/完整反馈/四根mtime原件，手动选择两轮仍空交独立诊断；同origin菜单100%原图保。执行记录/progress10:29同步，A20原plan等待当前缺陷门，继续P0008余件及全部验收，普通commit未提前，无push/tag/发布。
+
+## 回归与独立采证 · A19新候选/OKR与材料闭门（2026-10-22，平台：trae，未提交/推送）
+
+- **A19**：不同专家190实际测试/noEmit有限SOURCE/AUTO PASS；新r2隔离输出构建/150files1563tests/95guard/Launcher56及专项全0、531输入453产物指纹绑定。原过量docs复制中止、漏F2/F3/F5夹具首回归失败、五旧probe来源终检设施失败均保留，只修自有准备/绑定不改业务断言。
+- **GUI**：新3249/86987实际完整client下发/F5恢复，建议自身关联三态/缺失/无关联/长文本1440深390局部19步699件交独立。OKR处理797件、资料basic+备注+修订组合292件及重开可见43件已有限独立PASS，不冒整P2003/材料或矩阵通过。
+- **计划/档案**：新增文件反思计数有限plan，等A19GUI门闭后才改core/reflect；执行记录/progress10:12更新，旧候选/正式/微信在途不改。最终全余项/独立总门/普通commit继续，无push/tag/发布。
+
+## 验收接续 · A19交回/五检查有限通过/OKR建议原证（2026-10-22，平台：trae，未提交/推送）
+
+- **改动**：A19开发仅`views/habits.tsx`与新`habits-suggestion-okr.test.tsx`，建议三态自身精确目标标题/ID普通文本展示、missing回原ID/无关联省略，局部自然换行；后端/schema/动作不改。完整作者交接/153件原证已落，不同专家复验进行。
+- **验证**：原13红→新13绿、控制10/模型10/作者11绿、完整noEmit0，affected首次缺原fixture套件失败保，补原输入后131/131。五check25步1628件/796帧准确命中与任务往返/只读边界有限独立PASS；非整项/发布通过。
+- **采证/档案**：OKR建议三pending/一确认新draftKR/一忽略/重复拒/clear保pending/重进14步797件交独立；nav含badge首匹配失败保。新增专家余项对账供Main防重复，执行记录09:44/progress更新；A19未新build，A20/U4未实施，最终总门和普通commit仍继续。
+
+## 验收接续 · A18原证独立门/A19开发/A20先行（2026-10-22，平台：trae，未提交/推送）
+
+- **结论/边界**：完整接口输出95/95、Launcher56/verify及453产物/完整依赖独立原证有限PASS；正常Failed/Error成功与discard/close后新编辑成功有限GUI PASS，modal后close/标记原因/竞争未采保BLOCKED。真无材料t8新draftgap/幂等/check目标opencancel有限PASS，原文件t3缺计数FAIL保。
+- **改动/采证**：A19限定habits与必要tests开发进行，原13红/20控制先行不改，完整自有依赖不重整旧共享树。A20仅原4红/12+31控制/计划交回未实施。五检查规则真实新增/清单操作与card逐IDopencancel25步1628件交独立，原A18lib/source/runtime不覆盖。
+- **档案**：执行记录09:25/progress最新；待所有适用旅程/矩阵/读屏/U4/最终总门闭后统一普通commit，无push/tag/发布。
+
+## 回归与采证 · A18静态接口适配/独立依赖（2026-10-22，平台：trae，未提交/推送）
+
+- **改动**：`scripts/verify-gantt-drag.mjs`、`verify-ui-feedback.mjs`各一import/一断言改用独立审过的实际错误context契约；新增`feedback-context-contract.mjs`逐字独立helper，检完整原因/quiet不吞/同state和两真实组件分类接线。产品运行实现无新改动。
+- **验证**：另自有输出仅2script+helper，453产物同A18；noEmit/95guard/selftest/Launcher56/verify0，保护5文件污染0；完整原证交不同专家，旧93/95FAIL保。完整13613文件/1030内部软链独立依赖副本，外链/共享inode/源漂移0，不安装或覆旧10bin。
+- **GUI/缺陷**：导入错误常驻/复制/失败零写/retry-reopen有限独立PASS；真实含Failed/Error/失败成功及error关闭续采162件另审。P0-P2补件限定PASS与BLOCKED逐项，新增file-only反思类型计数文本FAIL，A20先行合同准备；A19关联展示已先行，未同时开两缺陷实施。执行记录09:03/progress同步，整任务/提交未完成。
+
+## 独立复验与原证 · A18错误类别/接口脚本/P0-P2（2026-10-22，平台：trae，未提交/推送）
+
+- **文件/验证**：A18错误上下文有限独立SOURCE/AUTO PASS，原20保19绿1红、自有真实context adapter20绿/新独立16绿。新A18唯一构建首自动pnpm12原件保，后固定11.28.5 noEmit/build/coverage0，149files1552tests/453产物无变；95首93绿2旧静态断言红/污染0，独立接口报告准确adapter二绿/八组反对照有效，主script尚未改，待释放后采纳重跑。
+- **GUI/范围**：A18新3248/PID63429实际完整下发/标准F5恢复；native CSV/XLSX连接失败红alert常驻/67byte复制/保预览retry/parentchildreopen597件交独立审证。A16 G04/四扩展有限GUI PASS，未采再生成执行base局部BLOCKED；A13旧产品成长必要守卫PASS但建议关联展示P2FAIL，A19先行13红/控制20绿，新有限habits计划未实施。
+- **设施/补证**：共享10bin前缀A16→A18变化独立诊断、写入PID缺证保BLOCKED，后续完整自有依赖隔离。P0-P2会话/证据/queue/reflect/lesson/wrapped/export83步5755原件交审；旧3242宿主退出原因未确证，合法同source/root重启与完整下发另存，absolute路径拒/转场选择器/字面反斜杠n原错保。执行记录08:55与progress同步，所有剩余/总门/最后普通commit继续，无push/tag/发布。
+
+## 采证与开发交回 · A18错误上下文及习惯负例/确认（2026-10-22，平台：trae，未提交/推送）
+
+- **文件/原因**：`panel.tsx`、`result-card.tsx`、`ui-feedback.ts`与同域三测试实现已知catch显式error上下文，保错误全文/常驻/复制、不从原因生成动作，旧字符串缺省成功语义不变。A18开发报告/run/check/selftmp保原红新绿与完整候选；不同独立专家复验中。
+- **验证/边界**：新增13红→13绿、最终16绿；原五TF-F及72/14/PC/扩展/87/53/noEmit0。原专家20仍19绿1红，旧helper无context分类断言由不同专家核自有adapter，原失败不改；未build新A18。旧A16实例/源lib及四扩展原GUI独立审证继续。
+- **GUI补证**：`A18/growth-more`为A13旧产品33步970原件，真实host输入D+1/D-3拒绝、人final/repeat、两建议先零record再页面confirm/ignore、重复confirm拒绝、跨项目关联拒绝、取消关联后表单重新关联主save/reopen。空hero命令卡不显示、三设施错误和旧索引后额外只读采样诚实分列；新独立专家仅审必要切片。执行记录/progress同步，全部积压与最终普通commit尚未完成，无push/tag/发布。
+
+## 修复候选 · A18明确错误上下文（2026-10-22，平台：trae，未提交/推送）
+
+- **原因/文件**：A17独立反例TF-X08证明catch原因内成功标记使错误卡消失，原19绿/1红保。新`docs/plans/2026-10-22-feedback-error-context-closure.md`限定panel上下文透传、shared classifier可选显式error、ResultCard/Toast与必要同域测试，开发进行；默认字符串/成功信封语义保持，不改API/后台/刷新语义。
+- **边界/验证**：原五TF-F/65/14/PC/扩展等绿只签其范围，A17完整SOURCE/AUTO FAIL，不构建未过门A17。A16原freeze/lib/GUI继续原证，A17空3248预备未启动；执行记录07:55同步，修后新独立/新输出/实际故障页与全部积压门继续，无commit/push/发布。
+
+## 修复与采证 · A16确认守卫与A17明确异常反馈（2026-10-22，平台：trae，未提交/推送）
+
+- **文件/原因**：`panel.tsx`五类existing baseline收集与新`copilot-extension-baseline.test.tsx`有限独立通过；新`panel-transport-error-feedback.test.tsx`及run catch一行前缀修英文异常误success，原A17先行五红/开发绿分列，新`docs/plans/2026-10-22-transport-error-feedback-closure.md`与独立复验在途。不改classifier/backend/schema/model。
+- **验证**：EXT-BASE原四红→四绿，独立28/23/23/87/noEmit0；旧PCtask-only整base断言FAIL保，专家新版只补八合法扩展keys、其余不变，新全0。A16唯一新输出noEmit/build/coverage0，148files1522tests、519输入453产物、95guard/selftest/Launcher56/verify0，旧lib保护0。实际3247新source下发+原F6UI恢复，PC-G01/02/03/min/cleanundo有限独立GUI PASS；selectioncancel/regenerate/四扩展cleanundo/conflict原证在审。
+- **补证/边界**：filefault/filebusy/习惯三天/重复/save-reopen有限独立GUI PASS；兼容React18DOM测试依赖仅自有tmp，StrictEffects两轮14/14有限AUTO PASS，产品manifest/lock未改。CSV/XLSXbusy/fail/retry/reentry有限PASS，但全局错误卡P2FAIL另修；原sameframe/host后事务/旧trace/全矩阵等未放行。全部生活档案最新见执行记录07:47；任务/普通commit未完，无push/tag/发布/正式切换。
+
+## 修复与采证 · PC01/02复验、四扩展父层基线与上传故障（2026-10-22，平台：trae，未提交/推送）
+
+- **文件/原因**：`sidecar-portal.tsx`及新`copilot-preconfirm.test.tsx`修生成base/实际成功依赖/只成功target推进；开发报告与独立A15复验分列，原GUI FAIL保留。新`docs/plans/2026-10-22-copilot-extension-base-closure.md`限定父层`panel.tsx`收四扩展初始base及同域测试，开发独占进行，不改后端/schema/model。
+- **验证/边界**：PC01/02有限独立SOURCE/AUTO PASS，原控制/必要红0/0/1/1→新全0，独立23/作者87/noEmit0；新增真实父层四扩展缺base四P1 FAIL仍阻整门。三组补证有限独立PASS：fresh指定下发/下载安全头与匿名body、六导入previewtrace/缺标题列、clean原成功句可见；原缺trace与busy等未冒通过。
+- **GUI原证/影响**：`A15/file-fault`真实原生文件hold→取消全根零写、ConnectionFailed→保输入零写→重选原件真实201→一次主save新t2挂共享fa1→真实重开，324原件/四raw/脚本索引交独立审证。`A15/growth-habit`真实今日/两天补记/同日重复/编辑保存重开原证继续，不签全成长。设施错路径/selector/wrapper/copy按钮等保留，不自签GUI，不覆盖旧lib/实例。
+- **收尾**：执行记录/progress同步；所有剩余旅程/矩阵/读屏/U4/全部出口/总独立门继续，最后统一普通commit，无push/tag/发布/正式切换。
+
+## 修复与采证 · SM01、新文件闭环及确认守卫先行缺陷（2026-10-22，平台：trae，未提交/推送）
+
+- **文件/原因**：`src/client/panel.tsx`、`panel.css`及新`sidecar-minimize-retention.test.tsx`修最小化卸载丢上下文；独立合同/复验与开发报告分列。Main新增`docs/plans/2026-10-22-{sidecar-minimize,copilot-preconfirm}-closure.md`、A13/A14隔离候选/原证、执行记录与progress。本条不覆盖前述多批在途成果。
+- **行为/验证**：稳定aside hidden、独立竖标签保草稿/输入/undo；SM01有限独立188/noEmit PASS，新A14build/coverage146files1479tests、95guard/Launcher56/verify0，旧lib不变。新freshhandle min→正常主save→mixed/clean撤销有限独立GUI业务子项PASS；clean原成功文案视口补证另审。真实新空库原生文件cancel/两同hash一次save/重开/22byte下载有限独立PASS，新实际下发、安全下载头、匿名原body与再卸载补件在审。
+- **导入/影响**：CSV/XLSX六功能子项独立GUI PASS；新增真实preview/非法日期/缺标题列表头的native chooser与命令/console/根差异补证，不更改解析schema。busy/失败重试与全矩阵仍未关闭。
+- **后续已确证**：PC01确认前外改被最新baseline洗白、PC02前置零应用仍执行依赖，独立P1 FAIL；先行计划/必要红0/0控制与1/1已冻，限定`sidecar-portal.tsx`及同域测试开发。不改后端/模型/正式服务，修后必须新独立复验/GUI；整体任务与普通commit仍未完成，无push/tag/发布。
+
+## 修复候选 · 网页恢复完整预检与本机路径入口（2026-10-21，平台：trae，未提交/推送）
+
+- **文件/原因**：独立文件专项MFR-B01/B02证明网页JSON-only缺字节、演练漏关系/路径预检；修`core/backup.ts`、`commands/backup.ts`及新真实backup-web测试，Main在`panel.tsx`已有数据管理菜单补本机完整路径输入/预检并沿双确认恢复，新真实面板路径测试。计划/开发记录分别在`docs/plans/2026-10-21-backup-web-closure.md`和`reports/backup-web-developer-20261021.md`。
+- **行为/影响**：演练完整schema/关系/字节，与confirm同级；缺侧车明确尚未验而不假成功，旧无附件内容恢复保持。路径由人明确输入，不猜File.path、不新格式/上传，不删file_assets；取消不发confirm，双确认才恢复，输入失败保留。后端拒多余/未闭合路径token，危险恢复仍现事务与安全快照。
+- **验证/边界**：后端作者43绿/新进程读回一致；真实PmPanel路径5+launch5作者10绿，原面板同新test5红保。独立专家正在复验，A7尚未构建/实际装载，不能沿A6旧3214冒新路径GUI。
+- **已采A6**：唯一构建/noEmit0、133files/1229tests0、95隔离verify0/保护5文件0变化；新3214/PID45502真实uncached下发unique完整段，新100%menu。原6卡r5三不同拖动/三逆序JSON，另savecancel真重进，均已交独立GUI专家，作者不自签。GG四缺陷有限SOURCE/AUTO PASS，32GUI仍待。
+
+## 修复候选 · 文件根祖先与卸载暂存回收（2026-10-21，平台：trae，未提交/推送）
+
+- **依据/文件**：独立资料/文件/固定汇报专项确证MFR-F01..05，新增文件原子收口计划；Main修`file-assets.ts`及测试、`task-draft-materials.tsx`及新真实组件测试，领域开发另修tasks/file-promotion/ops接缝，禁止跨写。
+- **行为/影响**：文件根内现存祖先和最终节点拒软链，创建目录后复核；卸载或abort后的迟到201只回收未交主提交stage，不publish/setState，旧finally不清新上传。保合法根、白名单、主保存已消费资产。只关闭现有确定缺陷，不新增功能。
+- **验证**：Main同测试修前根2红/11绿、真实组件2红/2绿，修后17/17/exit0。首组件fixture漏必需日期设施失败保留；作者绿未当独立PASS，旧domain其他文件仍在修，未整包build或GUI。
+- **其他进度**：OP三P1+编号反馈开发114绿，独立复验中；看板独立36+9有限AUTO PASS但原GUI门未关闭。治理专项另确证四create来源漏ID、同目标撤销/混合used、absent误进top，最小计划/开发已派。远端CI旧候选事实单列，未提交/推送/正式变更。
+
+## 修复候选 · 跨次回告与真实看板提交同步（2026-10-21，平台：trae，未提交/推送）
+
+- **文件/依据**：按独立bridge/panel与全宽拖动专家合同，修`launch-handshake.ts`、`panel.tsx`、`board/editor.tsx`，扩bridge测试、新增真实PmPanel/BoardEditor组件测试；`vitest.config.ts`将`.test.tsx`纳入全集。开发记录分别见`reports/bridge-panel-developer-20261021.md`与`reports/board-fullwidth-developer-20261021.md`。
+- **行为**：成功/在途按port+nonce归属，旧回包不清新hash；真实成功snapshot门监听hashchange，卸载隔离迟到读取。看板仅显式拖动启用垂直碰撞排序，显式stop用RGL同步缓存适配确保同值canonical与显示一致，不被动写回，不改数据/存储/CSS/依赖。
+- **验证/边界**：桥接同测试旧8红/20绿、新28绿；看板真实组件/原ops/compact/geometry同测试旧5红/31绿、新36绿。主树缺renderer依赖的首轮设施失败保留，专项在自有tmp链接既有隔离deps完成；作者绿不等独立PASS，未新build/装载/真实GUI重验。
+- **接续**：回告独立专家复验中，OP三P1另独占修复；资料/文件/固定报告与治理/成长专家执行有限AUTO并交合法fixture。远端已推9b1a8c5的CI核心绿、1130单测绿，E2E明确缺宿主SKIP，不覆盖dirty候选。正式/旧隔离服务未切换，最终全集与所有适用GUI仍待完成。
+
+## 修复候选 · Launcher旅程归属与晚到失败优先级（2026-10-21，平台：trae，未提交/推送）
+
+- **文件/范围**：按A3/A4独立确证修`launcher-app.mjs`、`launcher-core.mjs`及browser-open测试/实施计划；每轮固定browser归属、begin-journey清旧成功态，晚到OS失败不得覆盖本轮有效S4、failure清confirmed。仅既有缺陷，不改认证/TTL/进程管理。
+- **独立验证**：A5有限AUTO PASS，56/56、DOM7/7、原8/8、A2 9+10、A3 13、A4纠正副本26、专项40全绿；A4旧P04误期望S6的原件失败保留，专家仅改自有副本三行并存diff。23源/453产物未变，非Finder整门PASS。
+- **真实/新发现**：A4真实Finder新launcher12047/control62000，正确Chrome应用与干净URL投递exit0，N1正确Origin200与自动S4已采。N2 reopen仍S3，独立client诊断确证全实例done吞新token/旧请求清新hash/panel无hashchange；另独立全宽拖动确证顶部12行洞/同值props不同步，OP发现三接线/协议缺口。各自先行合同已落testing，Main后续最小修复，未开U4。
+- **采证**：新空3213习惯合法历史恢复/三月展开与390、宽屏编号Tab复制/拒绝、真实深色OKR唯一就近错误零写已交专家；恢复设施超时与缺失初末清单诚实留边界。更新持续执行记录、A4/A5候选/设施源码/当前PM保护清单；未build主树lib、未动正式、未commit/push。
+
+## 修复候选 · 控制页失败恢复与真实Chrome投递接缝（2026-10-21，平台：trae，未提交/推送）
+
+- **文件/依据**：A1/A2独立复验确证慢open锁同步/取消、连续偏好丢失、选项焦点丢失、偏好失败误投默认、OS失败无反馈及Chrome应用名错误。修改control-html、launcher-app/core/bin及浏览器测试/package/README；新增browser-open生产模块与四项测试，扩DOM7与实施计划。仅现有启动器缺陷，不新增功能。
+- **行为**：同步读取独立于动作、串行且3s中止；POST35s边界、取消独立发送、旧响应拒绝；偏好串行保latest，打开前最多一次补试，失败就近提示。Chrome映射Google Chrome、生产采用普通URL tab；OS命令error/exit/5s超时安全反馈，失败S6、首投不重复、owned URL始终弃、合法先到S4不降回S3。
+- **验证**：A2原三失败条件独立有限PASS但后继三P1 FAIL保留；A3作者53/53、DOM15/15、A2 additional/followup全绿（真实35s）。A3独立复验进行中，未自签。新3212/PID4480、launcher4194/control49483，真实Finder双击→选Chrome→真实收到合法首投→AX点击PM挂载/快照→server/control自动S4；entered HTTP响应缺直接采集诚实保留。正式及旧3205/3211未动。
+- **原证**：A0/A1/A2历史不覆盖，新A3 23文件及patch认领；实际3205组合脚本完整唯一冻结主bundle片段匹配、原生Chrome菜单100%截图已补。宽屏两合法编号真实Tab/Enter系统复制与权限拒绝零data写，缺code GUI依专家§14撤销。最终收口仍待各域专家与完整剩余矩阵。
+
+## 本机兼容修复 · 微信四群可见画面 OCR 实测（2026-10-21，平台：trae，未commit/push）
+
+- **授权/文件**：延续所有者批准 Mac 试点并提供四群、要求修复-25211。新增本机独立 `app/ocr_reader.py`，改 `app/pilot.py`；新增兼容计划、实测报告、最终源码zip/指纹索引、25项开发自验与14轮采集过程日志，同步四份接续文档、ISS-038/KB-042。运行代码置`.local/share/wechat-project-pilot`，真实消息和截图只在Git忽略data。
+- **修复**：区域截图含搜索弹层、常用会话分类、旧弹层收起、NSWorkspace事件循环缓存刷新、剪贴板读取后恢复、标题起始区域/群人数核对、图片不误归引用、原始来源与运行源码指纹绑定。OCR仅限本机已校准可见画面，watch明确拒绝。
+- **验证/边界**：r13/r14同源码均4/4、失败0，末轮16完整文本消息（4/5/2/5）；25/25开发自验、语法、读取库指纹、私有权限/Git忽略符合预期。三群重复新增0；一群正文相同但时间分隔漏读导致gap，5窗口条目不认作真实新增。未独立PASS，定时/全历史/增量完整率未验，前期拒绝日志保留。
+- **影响**：未改PM产品、上游、lib、profile或正式服务，未build产品或继承其他验收。最新说明 `reports/wechat-pilot-20261021/四群OCR兼容修复与实测.md`，当前画面草稿见私有data；后续继续核历史/时间分隔再独立审证。
+
+## 修复候选 · Finder控制页下拉与权威状态同步（2026-10-21，平台：trae，未提交/推送）
+
+- **依据/文件**：独立专家确证FC-DEF-01/02；新增`docs/plans/2026-10-21-launcher-control-closure.md`与`launcher/test/control-html-sync.test.mjs`，修改`launcher/src/control-html.mjs`、原control-html测试和package专项命令。
+- **行为**：浏览器选择触发器接现有data-act；控制页每次只读一个权威state请求，动作代际拒旧响应，保主题/菜单/焦点、同态不重绘，关闭即停止读取。S4仍只由有效回告产生，不改TTL/Origin/nonce/进程控制。
+- **验证/边界**：真实Chrome DOM修前下拉false红；修后菜单、晚到S4、同态菜单/主题、旧响应及关闭3项与原5项8/8作者绿。隔离树已同步，全部launcher与专项仍在复验。Finder新轮/专家审签待完成，不自签PASS，不开U4，不改正式/上游。
+- **原证进展**：A0真实PATH/TTL有限独立PASS；看板r3十一态、深色A/B复制/权限及零data写原证已交专家。全屏mov仍在runtime登记hash；最终交接需可复核持久归档。微信目录同期变更单列保留，不写成全部data零污染。
+
+## 本机修复 · 微信试点 -25211 权限与诊断（2026-10-21，平台：trae，未commit/push）
+
+- 四个所有者指定群已写私有白名单。确认Terminal/TRAΕ辅助功能关闭、Computer Use已授权，补齐相关权限；Terminal录屏经系统请求开通并退出重开，实际doctor退出0、辅助功能/录屏true、AX0。
+- 本机独立 `~/.local/share/wechat-project-pilot/app/pilot.py` 增加空聊天控件树诊断与watch停止（修复前副本保留）；5项专项开发自验符合预期，非独立PASS。新源码包与实测说明在 `reports/wechat-pilot-20261021/`，同步ISS-038/KB-042及交接。
+- 微信4.1.15原读取器侧栏0/标题null，四群采集失败；单独本地Vision只采到“产品配置第二版”当前画面5条完整消息，证据/原文置Git忽略data，不扩大为历史完整或自动四群成功。
+- 不改PM产品/lib/profile/正式服务；四群定时仍未启动，待兼容适配和真实对照。当前源码指纹与完整命令见 `reports/wechat-pilot-20261021/25211定位修复与实测.md`。
+
+## 修复候选 · 全部积压持续验收与batchA三项确证修复（2026-10-21，平台：trae，未提交/推送）
+
+- **授权与执行**：负责人明确按盘点/分工持续验完全部已有未验功能、最后提交；独立专家先核用例与三项自查，Main唯一产品写者/builder与采证端。新增`reports/all-pending-acceptance-execution-20261021.md`、`batcha-fix-candidate-20261021.md`；旧盘点未提交成果保留，push/发布未授权。
+- **产品文件**：launcher local-app/app及两测试；插件panel抽出`client/result-card.tsx`及真实组件测试；消息代际防旧复制迟到，路径POSIX引用，旧旅程句柄取消失效。测试依赖与锁文件加react-test-renderer18；反馈verify改查新组件位置，行为断言保留。详见独立BA-DEF-01/02/03及修复候选。
+- **验证与边界**：修前launcher新增回归12项中2红→修后12绿；ResultCard真实组件4+writer3=7绿。依赖隔离安装、主树仅lockfile-only；隔离worktree唯一build，正式3172/profile/主树lib/业务数据/上游/vendor未改。全量/真实GUI/桌面待执行，自动绿非独立PASS。EGO创建space未返回，做有界恢复并切稳定工具，不反复重装。
+
+## 文档 · EGO/OIL试点结论与后续使用边界补盘（2026-10-21，平台：trae，未提交/推送）
+
+- 新增`reports/ego-oil-pilot-status-20261021.md`，补整体盘点、progress/handoff/onboarding：EGO曾真实运行原生表单/上传/12页导航，后期启动挂起/401也保留，严格性能对照未完成；OIL独立安全PASS与18项review补丁单测成立，O3/O5真实故障态及全量设计模式未验完。
+- 本轮回应负责人试点与后续分工问题，只核已有仓库专家记录、本机较新主端交付记录及原句；建议EGO可用时优先网页操作、稳定回归和桌面留备选、OIL作界面评审第二意见。没有找到已批准全量替换/设计接管决定，不擅自升格或宣布毕业；指出manifest/旧记录不同步但不改原件。
+- 本次只读核证与文档归档，未重装/升级/操作EGO、未执行OIL、未改vendor/testing/产品/服务。文档链接及空白检查通过，保护目录零差异；无新产品测试或独立PASS，未commit/push。
+
+## 文档 · 整体功能盘点与后续实施计划（2026-10-21，平台：trae，未提交/推送）
+
+- **文件**：新增`docs/plans/2026-10-21-project-status-and-next-implementation.md`；同步README、requirements、product/05路线表、progress/handoff/onboarding、旧复盘后计划和v0.7.4发布说明。
+- **内容/原因**：负责人要求区分已实现未验完、已验未提交、未实现并规划后续。以Git、当前源码与独立报告核对；无未提交产品代码，2a76030已推送待审签；Excel/人员补全/客观进度/AI溯源UI已有实现，P2-2 G3后续12门PASS取代旧BLOCKED。已存在远端v0.7.4的tag/commit补记，历史准备稿保留，不移tag。
+- **建议顺序**：当前候选审签与确证修复→完整旅程/B8验收→工程加固与发布准备→真实使用和新需求；H6、多人、自动排程等暂停范围保持。计划不等新增实施/发布授权，专家目录只读。
+- **验证/边界**：fetch/pull成功、HEAD=origin/main=9b1a8c5；37项候选源码指纹全部匹配，97条历史verify退出码均0；文档路径/链接/空白与产品/testing零差异检查。本轮未install/build/verify/GUI、未改产品、服务、profile或业务数据，无新独立PASS，未commit/push。
+
 ## 协作规则 · 负责人授权指令检查与暂停（2026-10-21，平台：trae，提交推送已获准）
 
 - **来源**：负责人要求不符合复盘约定时可拒绝执行或请其完善指令，按 ADL-058 落为 collaboration §11.7；AGENTS 简明入口、KB-041、progress/handoff/onboarding 同步。

@@ -1,0 +1,44 @@
+{
+  "sealedAt": "2026-10-23T00:58:19.590Z",
+  "drift": [],
+  "artifacts": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-audit-r2.json": {
+      "bytes": 405668,
+      "sha256": "00eb8535a22617d06a8c8a1f2fd44b7f1fa847f7fc0fde68cf3fa63fd899f4e5"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-report.md": {
+      "bytes": 12897,
+      "sha256": "feb83c1fa0431bd37751803a4d7b3d91998854fc3c596d001603a0bab4adef1b"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-test-plan.md": {
+      "bytes": 6866,
+      "sha256": "299e6d1fd850b50db401b35c2aa546afe4b7c8736508ef42835667645659a9fb"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-capture-receipt.json": {
+      "bytes": 4644,
+      "sha256": "aaa78d2f602c85ac0176536c2365bd700f53bd536c987c75f43e8525aca45579"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-audit.json": {
+      "bytes": 399667,
+      "sha256": "3109f61c5f5a1b098510258d6a99144c09f971d04d7b75eeb44c716d71bdae3f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/l8-gantt-refresh-defect-20261023-r3-capture-r2-receipt.json": {
+      "bytes": 4886,
+      "sha256": "f4cd8a1617aeb14b4039ae5ac7bb66c7f56f9fbe8fd903a3175c2f1e987a8939"
+    },
+    "/tmp/l8-gantt-refresh-defect-20261023-r3-reader.mjs": {
+      "bytes": 13082,
+      "sha256": "0c8a2713c8e92267af1be1e8c6e101e1d25dee3a1a4dbc06ebfeeef7f302f276"
+    },
+    "/tmp/l8-gantt-refresh-defect-20261023-r3-outer.mjs": {
+      "bytes": 1590,
+      "sha256": "6d26ae8b51fb2ef505cda1cc31e6acdc8724328416aedc9c09fec56e9c68b707"
+    }
+  },
+  "inputCount": 313,
+  "indexSha256": "e6053fd9f4d4978a874ed913a8ac2a1b914e84f4e3429917131cb5348ff20eda",
+  "independentDecision": "FAIL: L8 wrapped left-column label; scheduled L8 bar GUI NOT_RUN",
+  "originalGanttExit1Preserved": true,
+  "releaseState": "STOP/released after independent readback; no product/GUI/build/git activity",
+  "checksOk": true
+}

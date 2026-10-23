@@ -1,0 +1,281 @@
+{
+  "startedAt": "2026-10-21T07:41:29.242Z",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "head": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+  "baseline": "2a7603023bc54ef13d788e50069ee3fde4671bf3",
+  "root": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P",
+  "dependencies": "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules",
+  "sourceHashes": {
+    "launcher/src/local-app.mjs": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+    "launcher/src/launcher-app.mjs": "dd6ec83f410729ceef22871baa352e9af56cd344395a02c309372b6d06e1befe",
+    "launcher/src/dsh-controller.mjs": "6459100ee8520dc959c4762782b34574a1ad543c1af53e7e366f9ab11507219b",
+    "launcher/src/launcher-core.mjs": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+    "launcher/test/local-app.test.mjs": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+    "launcher/test/app.loopback.test.mjs": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+    "packages/dsh-pm-tool/src/client/result-card.tsx": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+    "packages/dsh-pm-tool/src/client/result-card.test.ts": "4e815421f70ab285343aa6d1ba2feaf4c0472ae167a9109d48d43fe83deda32a",
+    "packages/dsh-pm-tool/src/client/result-card-copy.ts": "4f358a60b431f6b351d62399a34f9aab881525da004f63cce7ed0016acabd881",
+    "packages/dsh-pm-tool/src/client/result-card-copy.test.ts": "3938553edb78dd3cdc72c2cfefd88ae6fdd864b99e52ea976f91dde643371022",
+    "packages/dsh-pm-tool/src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+    "packages/dsh-pm-tool/src/core/ui-feedback.ts": "f43615f324d71dd7dd31e5c1a264cc3467f9b95bf6f8518d90c90e983d6f4cba",
+    "packages/dsh-pm-tool/src/core/file-root.test.ts": "6fb111b3c60e00a6c670c7c0806b7c633706d39a2f62db04ddc055a6cfbf5849",
+    "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b013acf44529e95fa425d73d6556e553f32e40a6e922a12aea53b996891f24d3",
+    "packages/dsh-pm-tool/scripts/verify-isolation.mjs": "b0545013f1ffd8abf8b5fdeaab8553c8fed1d9f7556f6a681f3326011b7872d0",
+    "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": "492f4cb47083e98360acdf7e08df92d36cec3b4db2743fd93f3f4c7dc076d110",
+    "packages/dsh-pm-tool/package.json": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+    "packages/dsh-pm-tool/pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa"
+  },
+  "trackedDiffSha256": "b9ecd5b95d5ad44bd5e96d51cae2001e565f0e19e49026b75a41bd01c2da0a15",
+  "commands": [
+    {
+      "label": "launcher",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "--test",
+        "launcher/test/local-app.test.mjs",
+        "launcher/test/app.loopback.test.mjs"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P",
+      "exit": 0,
+      "signal": null,
+      "log": "docs/testing/batcha-independent-retest-launcher-20261021.log"
+    },
+    {
+      "label": "component",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "src/client/result-card.test.ts",
+        "src/client/result-card-copy.test.ts",
+        "src/client/shared/contract-pilot.test.ts",
+        "--maxWorkers=1",
+        "--minWorkers=1"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool",
+      "exit": 1,
+      "signal": null,
+      "log": "docs/testing/batcha-independent-retest-component-20261021.log"
+    },
+    {
+      "label": "fileroot-1",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "src/core/file-root.test.ts",
+        "--maxWorkers=1",
+        "--minWorkers=1"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-BzYMeJ/packages/dsh-pm-tool",
+      "exit": 0,
+      "signal": null,
+      "log": "docs/testing/batcha-independent-retest-fileroot-1-20261021.log"
+    },
+    {
+      "label": "fileroot-2",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "args": [
+        "/private/tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+        "run",
+        "src/core/file-root.test.ts",
+        "--maxWorkers=1",
+        "--minWorkers=1"
+      ],
+      "cwd": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-HVXLaw/packages/dsh-pm-tool",
+      "exit": 0,
+      "signal": null,
+      "log": "docs/testing/batcha-independent-retest-fileroot-2-20261021.log"
+    }
+  ],
+  "probes": [
+    {
+      "id": "probe-cancel-running",
+      "expected": "取消/返回后不投递、不新启动且保持S0",
+      "observed": {
+        "afterCancel": "S0",
+        "final": "S3",
+        "opens": 1,
+        "starts": 0,
+        "lateHandleAccepted": true
+      }
+    },
+    {
+      "id": "probe-cancel-stopped",
+      "expected": "取消/返回后不投递、不新启动且保持S0",
+      "observed": {
+        "afterCancel": "S0",
+        "final": "S3",
+        "opens": 1,
+        "starts": 1,
+        "lateHandleAccepted": true
+      }
+    },
+    {
+      "id": "probe-back-running",
+      "expected": "取消/返回后不投递、不新启动且保持S0",
+      "observed": {
+        "afterCancel": "S0",
+        "final": "S3",
+        "opens": 1,
+        "starts": 0,
+        "lateHandleAccepted": true
+      }
+    },
+    {
+      "id": "probe-back-stopped",
+      "expected": "取消/返回后不投递、不新启动且保持S0",
+      "observed": {
+        "afterCancel": "S0",
+        "final": "S3",
+        "opens": 1,
+        "starts": 1,
+        "lateHandleAccepted": true
+      }
+    },
+    {
+      "id": "probe-retry-order",
+      "expected": "旧探测不得投递或撤销新旅程句柄",
+      "observed": {
+        "opens": 2,
+        "currentHandleStillAccepted": false,
+        "lateHandleAccepted": true,
+        "status": "S3"
+      }
+    },
+    {
+      "id": "owned-late-failure-cancel",
+      "expected": "旧启动失败不得覆盖取消S0或新旅程S4",
+      "observed": {
+        "beforeLateFailure": "S0",
+        "final": "S6",
+        "opens": 0,
+        "terminated": [
+          {
+            "pid": 9101,
+            "signal": "SIGTERM"
+          }
+        ]
+      }
+    },
+    {
+      "id": "owned-late-failure-retry",
+      "expected": "旧启动失败不得覆盖取消S0或新旅程S4",
+      "observed": {
+        "beforeLateFailure": "S4",
+        "final": "S6",
+        "opens": 1,
+        "terminated": [
+          {
+            "pid": 9101,
+            "signal": "SIGTERM"
+          }
+        ]
+      }
+    },
+    {
+      "id": "owned-overlap-cancel",
+      "expected": "同控制器不得遗留先前尚未就绪的owned启动",
+      "observed": {
+        "spawns": 2,
+        "terminated": [
+          {
+            "pid": 9202,
+            "signal": "SIGTERM"
+          }
+        ],
+        "opens": 0,
+        "final": "S0",
+        "retainedAuthenticatedEntries": 0
+      }
+    },
+    {
+      "id": "select-browser-observation",
+      "expected": "仅观察偏好与已投递旅程，不据此单独判FAIL",
+      "observed": {
+        "afterPreference": false,
+        "afterRestoringPreference": true,
+        "deliveredBrowser": "Chrome",
+        "selectedBrowser": "Chrome",
+        "opens": 1
+      }
+    }
+  ],
+  "fileRoot": [
+    {
+      "facilityRoot": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-BzYMeJ",
+      "testExit": 0,
+      "before": [
+        [
+          "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-BzYMeJ/assets|!!MISSING",
+          ""
+        ]
+      ],
+      "after": [],
+      "assetsExists": true,
+      "entries": [],
+      "changes": [
+        "删除    /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-BzYMeJ/assets|!!MISSING"
+      ]
+    },
+    {
+      "facilityRoot": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-HVXLaw",
+      "testExit": 0,
+      "before": [
+        [
+          "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-HVXLaw/assets|!!MISSING",
+          ""
+        ]
+      ],
+      "after": [],
+      "assetsExists": true,
+      "entries": [],
+      "changes": [
+        "删除    /var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fileroot-HVXLaw/assets|!!MISSING"
+      ]
+    }
+  ],
+  "afterSourceHashes": {
+    "launcher/src/local-app.mjs": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+    "launcher/src/launcher-app.mjs": "dd6ec83f410729ceef22871baa352e9af56cd344395a02c309372b6d06e1befe",
+    "launcher/src/dsh-controller.mjs": "6459100ee8520dc959c4762782b34574a1ad543c1af53e7e366f9ab11507219b",
+    "launcher/src/launcher-core.mjs": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+    "launcher/test/local-app.test.mjs": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+    "launcher/test/app.loopback.test.mjs": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+    "packages/dsh-pm-tool/src/client/result-card.tsx": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+    "packages/dsh-pm-tool/src/client/result-card.test.ts": "4e815421f70ab285343aa6d1ba2feaf4c0472ae167a9109d48d43fe83deda32a",
+    "packages/dsh-pm-tool/src/client/result-card-copy.ts": "4f358a60b431f6b351d62399a34f9aab881525da004f63cce7ed0016acabd881",
+    "packages/dsh-pm-tool/src/client/result-card-copy.test.ts": "3938553edb78dd3cdc72c2cfefd88ae6fdd864b99e52ea976f91dde643371022",
+    "packages/dsh-pm-tool/src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+    "packages/dsh-pm-tool/src/core/ui-feedback.ts": "f43615f324d71dd7dd31e5c1a264cc3467f9b95bf6f8518d90c90e983d6f4cba",
+    "packages/dsh-pm-tool/src/core/file-root.test.ts": "6fb111b3c60e00a6c670c7c0806b7c633706d39a2f62db04ddc055a6cfbf5849",
+    "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b013acf44529e95fa425d73d6556e553f32e40a6e922a12aea53b996891f24d3",
+    "packages/dsh-pm-tool/scripts/verify-isolation.mjs": "b0545013f1ffd8abf8b5fdeaab8553c8fed1d9f7556f6a681f3326011b7872d0",
+    "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": "492f4cb47083e98360acdf7e08df92d36cec3b4db2743fd93f3f4c7dc076d110",
+    "packages/dsh-pm-tool/package.json": "c50ccd376a46dbf8ae9c05e9425edcecc4e052e79e748e172780137276848d66",
+    "packages/dsh-pm-tool/pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa"
+  },
+  "copiedSourceHashes": {
+    "launcher/src/local-app.mjs": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+    "launcher/src/launcher-app.mjs": "dd6ec83f410729ceef22871baa352e9af56cd344395a02c309372b6d06e1befe",
+    "launcher/src/dsh-controller.mjs": "6459100ee8520dc959c4762782b34574a1ad543c1af53e7e366f9ab11507219b",
+    "launcher/src/launcher-core.mjs": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+    "launcher/test/local-app.test.mjs": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+    "launcher/test/app.loopback.test.mjs": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+    "packages/dsh-pm-tool/src/client/result-card.tsx": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b",
+    "packages/dsh-pm-tool/src/client/result-card.test.ts": "4e815421f70ab285343aa6d1ba2feaf4c0472ae167a9109d48d43fe83deda32a",
+    "packages/dsh-pm-tool/src/client/result-card-copy.ts": "4f358a60b431f6b351d62399a34f9aab881525da004f63cce7ed0016acabd881",
+    "packages/dsh-pm-tool/src/client/result-card-copy.test.ts": "3938553edb78dd3cdc72c2cfefd88ae6fdd864b99e52ea976f91dde643371022",
+    "packages/dsh-pm-tool/src/client/panel.tsx": "195c3cababcbca069b2c47e3042f667736e3c4038bdc78c341d55989849ed90d",
+    "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+    "packages/dsh-pm-tool/src/core/ui-feedback.ts": "f43615f324d71dd7dd31e5c1a264cc3467f9b95bf6f8518d90c90e983d6f4cba",
+    "packages/dsh-pm-tool/src/core/file-root.test.ts": "6fb111b3c60e00a6c670c7c0806b7c633706d39a2f62db04ddc055a6cfbf5849",
+    "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b013acf44529e95fa425d73d6556e553f32e40a6e922a12aea53b996891f24d3",
+    "packages/dsh-pm-tool/scripts/verify-isolation.mjs": "b0545013f1ffd8abf8b5fdeaab8553c8fed1d9f7556f6a681f3326011b7872d0"
+  },
+  "sourceChangedWhileTesting": [],
+  "finishedAt": "2026-10-21T07:41:34.944Z"
+}

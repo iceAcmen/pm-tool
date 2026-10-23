@@ -1,8 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import * as fileSystem from 'node:fs/promises'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describeFileRoot, resolveFileRoot, FileRootUnavailableError } from './file-asset-store.js'
+
+vi.mock('node:fs/promises', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('node:fs/promises')>()
+  return { ...actual, mkdir: vi.fn(actual.mkdir) }
+})
 
 const KEYS = ['DSH_PM_FILE_ROOT', 'DSH_PM_ISOLATED_ROOT', 'DSH_HOME', 'NODE_ENV', 'DSH_DEV'] as const
 let saved: Record<string, string | undefined> = {}
@@ -63,11 +69,21 @@ describe('F2 文件根 precedence / fail-closed', () => {
   })
 
   it('dev/test 信号允许 builtin-dev 回退，生产无信号不回退', async () => {
-    process.env.DSH_DEV = '1'
-    const dev = await describeFileRoot()
-    expect(dev.source).toBe('builtin-dev')
-    delete process.env.DSH_DEV
-    const prod = await describeFileRoot()
-    expect(prod.source).toBe('unavailable')
+    // 本格验证默认路径选择与创建参数；隔离拦截唯一mkdir，不在仓库创建真实assets。
+    // 显式/isolated/profile三格仍走真实文件系统，生产fail-closed不变。
+    const mkdir = vi.mocked(fileSystem.mkdir).mockClear().mockResolvedValueOnce(undefined)
+    try {
+      process.env.DSH_DEV = '1'
+      const dev = await describeFileRoot()
+      expect(dev.source).toBe('builtin-dev')
+      expect(dev.dir).toMatch(/\/assets\/?$/)
+      expect(mkdir).toHaveBeenCalledWith(dev.dir, { recursive: true, mode: 0o700 })
+      delete process.env.DSH_DEV
+      const prod = await describeFileRoot()
+      expect(prod.source).toBe('unavailable')
+      expect(mkdir).toHaveBeenCalledTimes(1)
+    } finally {
+      mkdir.mockClear()
+    }
   })
 })

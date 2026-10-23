@@ -1,0 +1,972 @@
+{
+  "generatedUtc": "2026-10-23T03:17:28.654Z",
+  "role": "独立历史继承/完成分子审计，非产品/GUI/开发执行",
+  "originalIdsVerified": [
+    "RA-P0001",
+    "RA-P0002",
+    "RA-P0003",
+    "RA-P0004",
+    "RA-P0005",
+    "RA-P0006",
+    "RA-P0007",
+    "RA-P0008",
+    "RA-P1001",
+    "RA-P1002",
+    "RA-P1003",
+    "RA-P1004",
+    "RA-P1005",
+    "RA-P1006",
+    "RA-P2001",
+    "RA-P2002",
+    "RA-P2003",
+    "RA-P2004",
+    "RA-P2005",
+    "RA-P2006",
+    "RA-P2007",
+    "RA-P3001",
+    "RA-P3002",
+    "RA-P3003",
+    "RA-P3004",
+    "RA-P3005"
+  ],
+  "catalog": {
+    "GG": [
+      "docs/testing/governance-fix-independent-retest-20261021-report.md",
+      "§5，run-2ACog5 原26 exact probes，GUI另签",
+      "GG/run-2ACog5"
+    ],
+    "OLD": [
+      "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+      "§4 原26逐ID与既有有限继承；不扩整域",
+      "A20V3+U4/102"
+    ],
+    "CTX": [
+      "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+      "§1/3/4/6",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "CAP": [
+      "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+      "§1/4/5/7",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "REJ": [
+      "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+      "§1/3/4/6，原拒因BLOCKED保留",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "REASON": [
+      "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+      "§1/5/6，新观察闭原断言组合",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "IM": [
+      "docs/testing/a18-integration-more-gui-review-20261022.md",
+      "§4/5/6，同对session/attach/lesson/quiet已签原动作",
+      "A13/514"
+    ],
+    "A20": [
+      "docs/testing/a20v3-total-gate-independent-review-20261022.md",
+      "§1/5，P0007限定继承",
+      "A20V3/95"
+    ],
+    "A20G": [
+      "docs/testing/a20v2-gui-independent-review-20261022.md",
+      "§1/3，SR-G01..06；不替P0007全部断言",
+      "A20V2"
+    ],
+    "CHECK": [
+      "docs/testing/a18-check-five-gui-review-20261022.md",
+      "§1/5，原五规则25步",
+      "A18/520"
+    ],
+    "CHECKREM": [
+      "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+      "§1/5，task单项/叙事/wrapped三余片",
+      "A18/520"
+    ],
+    "P1H": [
+      "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+      "§3/5，history与跟进刷新",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "REST": [
+      "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+      "§1/2/3，原下部rest缺图闭",
+      "原114/521/3267，非新实例功能"
+    ],
+    "P104S": [
+      "docs/testing/p1004-handoff-source-auto-20261023-r1-report.md",
+      "§1/4/7，原隔离接缝及漂移补记",
+      "交付panel a58e2165，非当前整包"
+    ],
+    "P104G": [
+      "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+      "§1/4/7，nativeTab到opener原剩余",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "L2": [
+      "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+      "§3/4，原F01/F02 FAIL保留",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "F01": [
+      "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+      "§1/5/6，双无taskId事件完整查看/edit/final/repeat/reload",
+      "CombinedSixRepairsR1/124/525"
+    ],
+    "F02": [
+      "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+      "§1/5/6/8，默认label/span首点save及键盘",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "PEOPLE": [
+      "docs/testing/people-f1-fl-gui-timed-20261023-r1-report.md",
+      "§1/3，FL姓名FAIL、MAX10图轴NOT_RUN",
+      "CombinedF02RepairR2/124/525/3270"
+    ],
+    "FD": [
+      "docs/testing/people-fd-axis-gui-timed-20261023-r1-report.md",
+      "§1/3/4，旧FD四宽姓名/轴FAIL；不读活两源",
+      "CombinedF02RepairR2/124/525/3270旧源"
+    ],
+    "OUT": [
+      "docs/testing/p2-outbound-history-review-20261023-r1.md",
+      "§3/4/5/6，恶意HTML/31-29/周期正例，旧出站位FAIL",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "DISPLAY": [
+      "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+      "§1/4/5/7，顶层/状态组/B/KR，ask原对象仍BLOCKED",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "TREE": [
+      "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+      "§1/4..8，父子/折叠/cancel/reload，原即时refresh缺图",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "REFRESH": [
+      "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+      "§1/3/4，原R3§8.2当态三行缺图闭",
+      "CombinedF02RepairR2/124/525/3269"
+    ],
+    "OKRH": [
+      "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+      "§1/4/5/7，P2003/P3004/5精确片",
+      "CombinedSuccessor114R1/114/521"
+    ],
+    "KR": [
+      "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+      "§2/3/5，KR自身related SOURCE/AUTO，GUI由DISPLAY替接",
+      "views/okrs.tsx 122516a4"
+    ],
+    "ARC": [
+      "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+      "§1/4/5/6/8，9known/2gaps及文件/review全文",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "ARCS": [
+      "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+      "§2/3/4，archive9/review-materials9/35受影响，非GUI",
+      "archive.ts 46ab5017"
+    ],
+    "HABIT": [
+      "docs/testing/a18-growth-more-gui-review-20261022.md",
+      "§1/4/5，D+1/D-3拒零写，但错误正文未签",
+      "A13/514"
+    ],
+    "GM": [
+      "docs/testing/a19-habit-association-gui-review-20261022.md",
+      "原GM01并沿OLD §4补正签字，不重目视",
+      "A19"
+    ],
+    "HC": [
+      "docs/testing/a19hc-gui-independent-review-20261022.md",
+      "HC01指定展示范围",
+      "A19HC"
+    ],
+    "F7": [
+      "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+      "§1/2/3/4，原历史/收起/refresh/reload/8月/bytes",
+      "CombinedSuccessor114R1/114/521/3266"
+    ],
+    "GNHD": [
+      "docs/testing/gui-numbers-habit-dark-review-20261021.md",
+      "§1/3.2，旧D-13/-14/月与390有限；旧环境欠绑定",
+      "A0/A3/A5/3213旧史"
+    ],
+    "NEG": [
+      "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+      "§1/4/5，missing/B同未关草稿五字段/零写",
+      "CombinedSixRepairsR1/124/525"
+    ],
+    "SCOPE": [
+      "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md",
+      "§1/4/6，原空选项文本回退非新增oracle",
+      "原114/521"
+    ],
+    "COMBINED": [
+      "docs/testing/f02-combined-regression-review-20261023-r2-report.md",
+      "§3/4/6，最新已冻SOURCE/AUTO；不替GUI",
+      "CombinedF02RepairR2/124/525"
+    ],
+    "FIRST": [
+      "docs/testing/tasks-firstload-source-auto-20261023-r1-report.md",
+      "有限SOURCE/AUTO；修后GUI BLOCKED",
+      "前序source126/complete527声明"
+    ],
+    "O4": [
+      "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md",
+      "最小移块/确认重入保护；Strict最终归焦非PASS",
+      "前序source127/complete528声明"
+    ],
+    "L8": [
+      "docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+      "§1/3/4，T01-T04 SOURCE/AUTO，仅GUI待Main",
+      "前序source125/complete526声明"
+    ]
+  },
+  "sourceSignatureVet": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-source-signature-vet.json",
+  "seams": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-seams.json",
+  "panel": "docs/testing/p26-original-id-inheritance-timed-20261023-r1-panel-analysis.json",
+  "completeCandidates": [
+    "RA-P0001",
+    "RA-P0002",
+    "RA-P0003",
+    "RA-P0004",
+    "RA-P0005",
+    "RA-P0006",
+    "RA-P0007",
+    "RA-P0008",
+    "RA-P1001",
+    "RA-P1002",
+    "RA-P1003",
+    "RA-P1005",
+    "RA-P2001",
+    "RA-P2002",
+    "RA-P2003",
+    "RA-P2004",
+    "RA-P2006",
+    "RA-P2007",
+    "RA-P3004",
+    "RA-P3005"
+  ],
+  "unclosedCount": 6,
+  "originalApplicable": 1435,
+  "didMutateCounter": false,
+  "inputs": [
+    {
+      "path": "reports/acceptance-progress-20261023-r1.json",
+      "bytes": 2829,
+      "sha256": "465d23ce0178bb215096856ff920a8629167b2383cb44ee97c8747d7bf2cbaa2"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-report.md",
+      "bytes": 22514,
+      "sha256": "7ae523bba48f0e5379c4e7b6e95c7eacc20cac04d807c8d39a2d0d8789ab42cc"
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261023-r3-table-r3.json",
+      "bytes": 12405436,
+      "sha256": "d251b580fc7cb0e58ce85faf617b2366fb93793d0cbda7667a44cd273ed66d75"
+    },
+    {
+      "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+      "bytes": 13184,
+      "sha256": "f62e4b453177934ca2adabb2a00e68695f9b05f310a36dfa920ddbd50cae8ed7"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2.md",
+      "bytes": 8517,
+      "sha256": "88aa6448985e833eac1352fa8fb43559456b46b1393b9b32b1ea1a6354fe86be"
+    },
+    {
+      "path": "docs/testing/p1-l2-events-gui-review-20261023-r1.md",
+      "bytes": 23686,
+      "sha256": "436b5152dd96af9134a90f5e4d220aa487903d0d1f5a5be36895b6c3b574374d"
+    },
+    {
+      "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-report.md",
+      "bytes": 16658,
+      "sha256": "063511d2e6a82d1fe0f1dd3405a9c12f64cb730f0b3c0bc4d590bff3048b9b3f"
+    },
+    {
+      "path": "docs/testing/f02-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16679,
+      "sha256": "fe9927979b94a6e97c671f1e5349ef8f9fc0dfc252fb43f192502ef96da4076f"
+    },
+    {
+      "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-report.md",
+      "bytes": 17291,
+      "sha256": "f91354cd659221db5e73e15f87ea754201a5287601bb7e0f4933a3eb137d1652"
+    },
+    {
+      "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 15798,
+      "sha256": "b225510e5e62a9099894a8d0bf079ea5568ee717cf9a64a7ae4b55e9effb6023"
+    },
+    {
+      "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 17204,
+      "sha256": "9124058cd5810c6b68e9e08be0b8df86cbd5dd41b3964f22a985f29da7b487ec"
+    },
+    {
+      "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-report.md",
+      "bytes": 17012,
+      "sha256": "46204719899bd74549d6a67139b7bda422030951e3ba93c34c1f876b494ab13e"
+    },
+    {
+      "path": "docs/testing/p2-outbound-history-review-20261023-r1.md",
+      "bytes": 22155,
+      "sha256": "6bfce2d30862cf9b8080cd7f0bc73b1af4524a106adc187035fc7cd0eeb07238"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-report.md",
+      "bytes": 15830,
+      "sha256": "3067961280e74550bcbba48aa70a0e0091aecfffc913058c5f2ab2b798ffc1bb"
+    },
+    {
+      "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-report.md",
+      "bytes": 22907,
+      "sha256": "7a53b25d0600a0512340bc588aba39c381c2c1c4c1fb19ab522805d2c35d5d7a"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-report.md",
+      "bytes": 10990,
+      "sha256": "f22a2bb26061d7f4e62fe5a09ff3d372db371d3ab19c7c4fc475869676db036b"
+    },
+    {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-report.md",
+      "bytes": 14805,
+      "sha256": "8ad5b8a4db553b3b6312f366dabd095ccdc6ac7aa54a132001d36f3417a9ff7c"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-report.md",
+      "bytes": 16181,
+      "sha256": "b7e26de2d10024cd4ef3ccfd95e449a0e8338c248434c32e15ac134d5e2189f4"
+    },
+    {
+      "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-report.md",
+      "bytes": 12429,
+      "sha256": "91e7a46a53d8e2e7c2f00e142f8de805f75e7cc476e605a1a354bac36509e182"
+    },
+    {
+      "path": "docs/testing/p3004-negative-gui-review-20261023-r2-report.md",
+      "bytes": 13208,
+      "sha256": "5730e6d1e1f0ed9cb63fa60fb15c50bc6733f7e68ed6e74b96b1234cde8b6ac7"
+    },
+    {
+      "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-report.md",
+      "bytes": 15291,
+      "sha256": "20750851d3317defe2abc7316b1568386f3782cfd0b4711af5d135cf914a4a02"
+    },
+    {
+      "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-report.md",
+      "bytes": 9012,
+      "sha256": "0be3ff8664f50f38cf1276b56ee6eabe7cdce0a6fb8c445156bbe52d7eca123c"
+    },
+    {
+      "path": "docs/testing/people-fd-axis-gui-timed-20261023-r1-report.md",
+      "bytes": 13434,
+      "sha256": "ccf4ec644556b982480e9525f69acabbdf84433087a32da2dc4ef84f3b150131"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-report.md",
+      "bytes": 11466,
+      "sha256": "4d24187f09b3eb2c6fcf5fa9967e9e4660e3af081d03dd7c5351b7b6194adce5"
+    },
+    {
+      "path": "docs/testing/p1004-handoff-source-auto-20261023-r1-report.md",
+      "bytes": 19304,
+      "sha256": "a65bd833d533773361716b8d33594e47aceb9aa4237e6e2fad660bdd318a3589"
+    },
+    {
+      "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-report.md",
+      "bytes": 4971,
+      "sha256": "36a37411a16969d59a85173199c6b2fcdae34a041da1b0f8a81b6bcb8c36b377"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-report.md",
+      "bytes": 6626,
+      "sha256": "cdcc300234dc3f92cd3dc7b8abed85fa3453887bde91e940a43675c859212c47"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-report.md",
+      "bytes": 11343,
+      "sha256": "0b1c14166cf28f75ff6065cfbfdcb134916295404868b0010b8631caa53afff3"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-report.md",
+      "bytes": 15976,
+      "sha256": "40c88ed06858ab5cea5ef8a704a2d462acef3b2b759c521f0e31f0eead50981d"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/complete-inputs.json",
+      "bytes": 75604,
+      "sha256": "940ef7fe4f1ed84cbb256b0f5b63204dde0c7b0aa0b6f7d818a31d319fc4c723"
+    },
+    {
+      "path": "docs/testing/a18-growth-more-gui-review-20261022.md",
+      "bytes": 21131,
+      "sha256": "828fdf0ddbf4ae0baf576168230b7fb54857a1b17135ea063d09b64e1face02c"
+    },
+    {
+      "path": "docs/testing/a18-integration-more-gui-review-20261022.md",
+      "bytes": 16140,
+      "sha256": "5081af5bcf7256885274b59085ad927d7245c6ad0a9b914877353fe6b442b278"
+    },
+    {
+      "path": "docs/testing/a20v3-total-gate-independent-review-20261022.md",
+      "bytes": 11352,
+      "sha256": "0bdccc7f24e444cd58360ceb105f4b5b2d0a391b60f398dbe905d8c280573098"
+    },
+    {
+      "path": "docs/testing/a18-check-five-gui-review-20261022.md",
+      "bytes": 21453,
+      "sha256": "825793041501b04eba9f7b674362e5da58cc8d67d90fda6657f905278b591e5f"
+    },
+    {
+      "path": "docs/testing/a19-p0008-check-remainder-review-20261022.md",
+      "bytes": 7551,
+      "sha256": "057b1a3a84df163916fe5d733c09881e5ed69452456ff58cd3d25b3f70bea88f"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedSuccessor114R1/complete-inputs.json",
+      "bytes": 74962,
+      "sha256": "f7d918b92b7fa65551d5ba2072b04a8e3273950deeca66dea902790bdcf9871a"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-evidence/run-2ACog5/source-after.json",
+      "bytes": 52242,
+      "sha256": "4e3e6fc713535513c2007c68007a7eff5942e80f67d5a09e242616f4d7821adb"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/ask.ts",
+      "bytes": 34931,
+      "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-store.ts",
+      "bytes": 10855,
+      "sha256": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/capture.ts",
+      "bytes": 17175,
+      "sha256": "ec3fa1221901f29beb2a21aff5616728d2e707339004413b4babd61a5fcdbbe6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/session.ts",
+      "bytes": 4187,
+      "sha256": "ca058a9e1ba4b76c05ceb01df8199d55291e1fa6bc7ff939ebdec9bef6eb92b7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/metric.ts",
+      "bytes": 1908,
+      "sha256": "ed779216cec7f8847df567ba6d56e0373406e588b48a933273f7ea7e096e4488"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/metric.ts",
+      "bytes": 4385,
+      "sha256": "54a63371fa89859659070c052ce01c36b9fd4988f83dfc52b70d0da32607311b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/reflect.ts",
+      "bytes": 7461,
+      "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/task.ts",
+      "bytes": 13669,
+      "sha256": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/tasks.ts",
+      "bytes": 33404,
+      "sha256": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/check.ts",
+      "bytes": 4051,
+      "sha256": "0c7bf33ac035f3ef865321e81bdbb01cccdb2b65024068eadfb95f10a37ce578"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/check.ts",
+      "bytes": 6393,
+      "sha256": "444b0762a56856373965023c0d8953b53ce4f6298a4b141d560259fe48e7536e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/queue.ts",
+      "bytes": 7363,
+      "sha256": "88cf90a161720241f869b3f7ca8313c03b80e14658007629b8bff3cae10d569d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/queue.ts",
+      "bytes": 13563,
+      "sha256": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/export.ts",
+      "bytes": 9344,
+      "sha256": "691f80497556618c434acfa619e416358ea68158545cd6b609467a448bd7023f"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/export.ts",
+      "bytes": 36942,
+      "sha256": "6f86fa44930dc191c8c5ad839fad27cf910ea884a9220688365881b26aedf22d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/okr.ts",
+      "bytes": 13750,
+      "sha256": "1c1c631c1d9dc8ad81b27a18269bfe3841291f620678f694e0fd3f1e62879eb9"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/okr.ts",
+      "bytes": 22248,
+      "sha256": "5855f5af46657dad2642ff0c2789f92d210401f13198e5472803792533392c7d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/lesson.ts",
+      "bytes": 6088,
+      "sha256": "0ca938b932ff8d7b710881b9d664554b4a54ae2ab87aafcca4f524ebe5700343"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/lessons.ts",
+      "bytes": 6780,
+      "sha256": "eb7dca02bce801740bbd3f771cf8445f5d52b6011be623a26c239c7e8c893ebc"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/archive.ts",
+      "bytes": 2755,
+      "sha256": "30bc6b35b8c78213ee6306ddab015aa606332a7923736d215993e0ce73c140aa"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/archive.ts",
+      "bytes": 9339,
+      "sha256": "46ab5017b32443d086712b83c34f63e35982588a045a7e6bc3b5ca54423f7140"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/review.ts",
+      "bytes": 3104,
+      "sha256": "637a77f9e800d6ea9a27d3365f2ac7427020d22ec1cd7eec0a2ed306b6232f21"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/review-materials.ts",
+      "bytes": 9381,
+      "sha256": "0706608d405ae380244a36f0fdc392a391f14caef24f388a583e0960f19305c4"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/commands/habit.ts",
+      "bytes": 14064,
+      "sha256": "c23f38924949bdbb3087d3406746a06da9cc9c09140fe63885ba7b1d25e19b2e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/habits.ts",
+      "bytes": 23356,
+      "sha256": "641254ae50c5aee99be7f6be23300ccc89d022807d8bd5ee2689fedd9e1db684"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/cycle-hooks.ts",
+      "bytes": 1384,
+      "sha256": "d629d57eb4ad90b440ca08911155e7c6ab064dd2d5120723aeb478b6078600a6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/storage.ts",
+      "bytes": 8840,
+      "sha256": "79018f0bf6fc4d957e018304a184dd02b7b79a4bf0c987f34332939cc1c1fd5e"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habits.tsx",
+      "bytes": 15535,
+      "sha256": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habit-model.ts",
+      "bytes": 4956,
+      "sha256": "89f7dd229583427be4e83f07e9e552056389834e91b0d10a9658a1747169f08a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/habit-form.tsx",
+      "bytes": 4854,
+      "sha256": "ade148c9d79954f0659d2cfde200e22b85d365fc12df4a257b1efe3bf57a3e29"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/okrs.tsx",
+      "bytes": 9854,
+      "sha256": "122516a490b80da4a2fc9da0da66fb1283062efb3c54827c8a8399e3a28bc128"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/okr-model.ts",
+      "bytes": 6463,
+      "sha256": "1fb062b742aa6eed6c2c4db8ab834aa192114e8d03cc5162be6fe9ab947c4c1a"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/board/queue-aggregate.ts",
+      "bytes": 7112,
+      "sha256": "16b2de9ac35d1f88d68a998ae47fb43b41646513496791ce1082c5c875d5f0ef"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/board/queue-card.tsx",
+      "bytes": 9699,
+      "sha256": "87d5bdcce8837780cb59d232ad7cd0add940f673663c1c9359e295c0581b4c34"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+      "bytes": 45837,
+      "sha256": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.css",
+      "bytes": 326019,
+      "sha256": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/form-validation.ts",
+      "bytes": 14842,
+      "sha256": "f7e876f5a3684e319b14cb1752bcb856627179053d4c8a3c10223c90acd538a4"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-audit.json",
+      "bytes": 14062,
+      "sha256": "ca6d9cf2c131350b9d757ec60486cd5681dc16241dd92af4cbf86f2058697ab9"
+    },
+    {
+      "path": "docs/testing/gui-numbers-habit-dark-review-20261021.md",
+      "bytes": 23484,
+      "sha256": "248ba13647f13812ae58111cbab3fde86dafea39a18260a68d0bdcfaace1de5e"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/P2OkrRemainingR1/frozen-source/src/client/panel.tsx",
+      "bytes": 191080,
+      "sha256": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/P2DisplayRepairGuiR2/frozen-source/src/client/panel.tsx",
+      "bytes": 191954,
+      "sha256": "341675c4dd31b87d05264de520a4c198edbb3c3476f2f87d8f38cc80ba1d83d6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/panel.tsx",
+      "bytes": 193137,
+      "sha256": "afe188bda04c8d27df5c74037c4a4a9872eb0f0f132b06c6df370b10bc45c0b6"
+    },
+    {
+      "path": "docs/testing/a20v2-gui-independent-review-20261022.md",
+      "bytes": 6673,
+      "sha256": "c7e9170f7f82524d8c29de683cb82cfdbe7003bf6b0b3f84d34e1b3bdff3c187"
+    },
+    {
+      "path": "docs/testing/combined-successor114-regression-review-20261022-r1-report.md",
+      "bytes": 14931,
+      "sha256": "77e53e431bd7862dc63899f090fb3ac79162d56e361752c1cc10ae99fd97a96e"
+    },
+    {
+      "path": "docs/testing/p1004-repair-gui-review-20261023-r2-report.md",
+      "bytes": 18051,
+      "sha256": "399915920132e052be647a570ecda66f1199662c69ebb3cde4e2545f8f7769a9"
+    },
+    {
+      "path": "docs/testing/f02-combined-regression-review-20261023-r2-report.md",
+      "bytes": 16145,
+      "sha256": "7242122e153b54c82e6eb32da428e4e6dcae345a5c6fa10f924557ec2ebf851f"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/capture.ts",
+      "bytes": 12990,
+      "sha256": "9da5143ead64cdcdb9b865d3c53fad0e9e5d41794e588cb6d1e6e7d0957d45c7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/session-bind.ts",
+      "bytes": 5905,
+      "sha256": "0a632091505a1920de7ceec49e0102a0d24f659a21f4e807ceb11c4713f69ae7"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance.ts",
+      "bytes": 17058,
+      "sha256": "0ae70ce81ac6b0ac744824c647746754ef9ee8dc981462731ff14ece5025335d"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/provenance-view.ts",
+      "bytes": 6377,
+      "sha256": "d602b58cca82f789e685441068f0e01623c16711864f4685c9de9205b10ca1f6"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/core/reflect.ts",
+      "bytes": 17084,
+      "sha256": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/result-card.tsx",
+      "bytes": 3870,
+      "sha256": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf"
+    },
+    {
+      "path": "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+      "bytes": 5059,
+      "sha256": "aeb3d15125ad311f335cfb09d348c0402b9925da9d4979df8b2ceb402725275f"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-audit-r2.json",
+      "bytes": 9466422,
+      "sha256": "95f88179d95165521df1e6802a9e879c40a2f1f432bf16b30725271b9fc74ac8"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-affected-vitest-result.json",
+      "bytes": 13760,
+      "sha256": "d83c9f2b8487b1eeb044d7b95e12861238d19c3d1c614384b198366c953bd105"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1.md",
+      "bytes": 29009,
+      "sha256": "ef1b69bb61d598e16f581c8511aef2f7d6c5ebd0edf49f584f19e7b6e5a21a23"
+    },
+    {
+      "path": "docs/testing/op-growth-final-inheritance-20261022-r1-seal.json",
+      "bytes": 13066,
+      "sha256": "f4fd9fc434a56f4c09e1f857b34b687f7641ead3a36c79fecf35ba22d96238a8"
+    },
+    {
+      "path": "docs/testing/p0-context-metric-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 1459,
+      "sha256": "5670f8b5aa96b7dc809f5ed1f36b4ace24ba69f4b99fb79fd5bcdb323b230492"
+    },
+    {
+      "path": "docs/testing/p0-capture-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1435,
+      "sha256": "1d770aa1f96e6a58e52aae002ae70d20edbfed2a318934ea1446adeb49f60cd6"
+    },
+    {
+      "path": "docs/testing/p0-rejected-remaining-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 147102,
+      "sha256": "8912ee6b8ca80a8baae043fc7456a117081fa5f981b03c1537fdd79926b34916"
+    },
+    {
+      "path": "docs/testing/p0002-reason-recap-gui-review-20261023-r1-seal.json",
+      "bytes": 1226,
+      "sha256": "fc8cf29f3b5695dcfd0a583a716cd49e8cfdd272f286d2fdafdd5175218f61d6"
+    },
+    {
+      "path": "docs/testing/a18-integration-more-gui-review-20261022-seal.json",
+      "bytes": 923,
+      "sha256": "2e960bb2f8d7879aed0cd3f763ed00133840caed444f13b7871264daf4e83114"
+    },
+    {
+      "path": "docs/testing/a18-check-five-gui-review-20261022-seal.json",
+      "bytes": 1208,
+      "sha256": "2ac2328be9685aff18ba84ebde902d8c91f3aedb9c292514ea574024408515c6"
+    },
+    {
+      "path": "docs/testing/a19-p0008-check-remainder-review-20261022-seal.json",
+      "bytes": 1388,
+      "sha256": "8d1775869ce19ee2707d21a10fd30e9ca953a7ac2ff82b6d0fcd93fa442bfb90"
+    },
+    {
+      "path": "docs/testing/p1-history-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1227,
+      "sha256": "3000297185cd39b351b3b4449fdfc0d926c422e0fd335fd559fc7dd5704d4c7d"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2-seal.json",
+      "bytes": 1692,
+      "sha256": "50a8e2e3c1d8acbabface103984fc605172f7d827960ea8560fa8232d7367b9a"
+    },
+    {
+      "path": "docs/testing/p1004-handoff-source-auto-20261023-r1-seal.json",
+      "bytes": 5243,
+      "sha256": "1506b9ecdd92b6ffc1f8545d5a9f2c033356f98f8a22b32d22804226a6e84793"
+    },
+    {
+      "path": "docs/testing/p1004-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 2287,
+      "sha256": "d1d1aed512932f2d7543adca89f90fbdbf711951024c11271e3ea50c0f3d4443"
+    },
+    {
+      "path": "docs/testing/p1-l2-events-gui-review-20261023-r1-seal-r2.json",
+      "bytes": 1456,
+      "sha256": "eb83f5b707b27ad2d62b3e12d3b3a5e61a9e9064d34288b50658b9e9ccb3d1b1"
+    },
+    {
+      "path": "docs/testing/six-repairs-l2-gui-review-20261023-r1-seal.json",
+      "bytes": 1422,
+      "sha256": "0fdb661052b6f13982805107447598aad6b0398a1c4195b58e7bd98e505502ea"
+    },
+    {
+      "path": "docs/testing/f02-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 281412,
+      "sha256": "5a438a98e14bd66403903e4afb4e10853f4d5bc6047c31766e0c5125c95ab273"
+    },
+    {
+      "path": "docs/testing/people-f1-fl-gui-timed-20261023-r1-seal.json",
+      "bytes": 1098,
+      "sha256": "1330dc8047757b847d0640694789eecf0020359ae2656c1a8364bce1f348bb57"
+    },
+    {
+      "path": "docs/testing/people-fd-axis-gui-timed-20261023-r1-seal.json",
+      "bytes": 2237,
+      "sha256": "b73be77b0975799126c4fc85eba33b52e0b790145af7f796c44c14cd53065526"
+    },
+    {
+      "path": "docs/testing/p2-outbound-history-review-20261023-r1-seal.json",
+      "bytes": 1274,
+      "sha256": "5c0a12962d471c0e79d4da330a19ae4d08335fef82d7f13ee067bf22df915a44"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 431276,
+      "sha256": "3291c0d82be367bfdeeec7b60ca6a43dab095b58bda2aac5ee7cc7fa5068940e"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-report.md",
+      "bytes": 13550,
+      "sha256": "eba0a7d5bdeeb77e32494e161daeabc79d6d55b8e379383a92490deeefabf721"
+    },
+    {
+      "path": "docs/testing/p2002-tree-gui-review-20261023-r3-seal.json",
+      "bytes": 166628,
+      "sha256": "d6ac9a280a03816e6c4bad65119f25b70b2f9087c13a7dba22e1c33c14f765e1"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-seal.json",
+      "bytes": 83167,
+      "sha256": "301bac2f4da3cdc88abe4cd37ff8dd6b23efd32d967e67eb8249ec695199fa07"
+    },
+    {
+      "path": "docs/testing/p2-okr-habit-remaining-gui-review-20261023-r1-seal.json",
+      "bytes": 1136,
+      "sha256": "4b970b57c99d75a20128e9efab38551d260a9ddb6226d9138e688b2ab4ca9d90"
+    },
+    {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-seal.json",
+      "bytes": 19337,
+      "sha256": "fe767598cec94e5aec9930891ad08d7bfb27f6a5736194ac9ef77304a28eded6"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-seal.json",
+      "bytes": 2199,
+      "sha256": "22c55de718659018503963d1da08edd4da27dcc8eaa1d15740f6aa108efc8c6e"
+    },
+    {
+      "path": "docs/testing/p2007-archive-projection-source-auto-20261023-r1-seal.json",
+      "bytes": 5629,
+      "sha256": "c5bb28a88b127fb0a15592e1f79db0f2af6b4a44dc99247f1e4fd94ce8a1e5dc"
+    },
+    {
+      "path": "docs/testing/a18-growth-more-gui-review-20261022-seal.json",
+      "bytes": 1067,
+      "sha256": "e93074a371ce33032411595e9220fc185fe1694633686f9570c5b41886a9e6d0"
+    },
+    {
+      "path": "docs/testing/a19-habit-association-gui-review-20261022.md",
+      "bytes": 20973,
+      "sha256": "2ecf07925488b76bceb9564e85af697cab6541396d09684e5d4ed08610900b89"
+    },
+    {
+      "path": "docs/testing/a19-habit-association-gui-review-20261022-seal.json",
+      "bytes": 3809,
+      "sha256": "59f73e43a225ff9708d4bd7d3735d17cc064305535a26f23f9a9564746e0e28b"
+    },
+    {
+      "path": "docs/testing/a19hc-gui-independent-review-20261022.md",
+      "bytes": 4765,
+      "sha256": "310c42f8ef5763b2860ccba9949b66ec135911ef9ff19c9e81686d1ca2c8768f"
+    },
+    {
+      "path": "docs/testing/f7-history-remaining-gui-review-20261023-r2-seal.json",
+      "bytes": 1701,
+      "sha256": "98ec8b062b8c7afdf4a3e55975c2c87409a4c259ef5812ac7b8a125e869caba6"
+    },
+    {
+      "path": "docs/testing/p3004-negative-gui-review-20261023-r2-seal.json",
+      "bytes": 1177,
+      "sha256": "b1597311751a6553340db8682942ae33fe58f0efb187de8463151c6baed8cb13"
+    },
+    {
+      "path": "docs/testing/p3004-original-scope-resolution-20261023-r1-seal.json",
+      "bytes": 1200,
+      "sha256": "441dbaa6484a78c8573ba1c4cd6ed6777a51c990d08dfb19229fad801a436a02"
+    },
+    {
+      "path": "docs/testing/f02-combined-regression-review-20261023-r2-seal.json",
+      "bytes": 3479,
+      "sha256": "33f939f7f235db80d6475333243ed1c4915a75d5eb4a96bf2fba01507d6ea40b"
+    },
+    {
+      "path": "docs/testing/tasks-firstload-source-auto-20261023-r1-seal.json",
+      "bytes": 153739,
+      "sha256": "01bfe44b3c2b281110c246cddc769ff7a2c1cefed6d5262d4e4fe675348c001b"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-seal.json",
+      "bytes": 322225,
+      "sha256": "bd08a6e7e95cc45c5e44044f34be60c48d0875f940fce337ea15bd87afa1f498"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-seal.json",
+      "bytes": 150202,
+      "sha256": "a16dd2a4933f769794fef851375416f5ccab48df834208c6067203c9d9d1848b"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback.json",
+      "bytes": 42763,
+      "sha256": "c3b433fc4e27d597fa22d09329781525feab41ebdce8b3a9f9095ad120690a34"
+    },
+    {
+      "path": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-readback-tool-receipt.json",
+      "bytes": 1067,
+      "sha256": "22242c907bf1ae4b8d88874632aae5f487e1ca4dfe7435123578eabad78c3701"
+    },
+    {
+      "path": "docs/testing/p1-rest-visible-gui-review-20261023-r2-readback.json",
+      "bytes": 441,
+      "sha256": "54f74d817e8df30cbd223822b947d1405749693d7841e7f0db96feece2964f04"
+    },
+    {
+      "path": "docs/testing/p2-display-repair-gui-review-20261023-r2-readback.json",
+      "bytes": 1286,
+      "sha256": "f62a2fd1e711f4a181c6f89e4fa4baad405337bcb455dabb290fd78ad47cccea"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback.json",
+      "bytes": 674,
+      "sha256": "e93e53e51b9c6d7c00c0e23e10f6e9161b4ec92fc70f6dbefe733cf375d2e65d"
+    },
+    {
+      "path": "docs/testing/p2007-archive-repair-gui-review-20261023-r2-readback-tool-receipt.json",
+      "bytes": 2203,
+      "sha256": "08757fcbf5dda4b55d860609e15480f04e0590d2d047a5e763a575321abcd580"
+    },
+    {
+      "path": "docs/testing/tasks-o4-stale-source-auto-20261023-r1-readback.json",
+      "bytes": 1050,
+      "sha256": "058a2a89e0f98cde9179a61d35d4929cf0e5b5030844472712b23cff2153e54d"
+    },
+    {
+      "path": "docs/testing/l8-gantt-source-auto-review-20261023-r7-readback.json",
+      "bytes": 1015,
+      "sha256": "9a364cfc9dcb99c54acdd5800e963ef6c00febf9aae0c7840f99fffec0952feb"
+    },
+    {
+      "path": "docs/testing/governance-fix-independent-retest-20261021-deliverable-index.json",
+      "bytes": 802535,
+      "sha256": "b7079872419cc1c4856923a8c7b02fe6678f3790b8d9d35f0f795ad489a6d2c3"
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/CombinedF02RepairR2/source-files.json",
+      "bytes": 15902,
+      "sha256": "a3393f954e6a6435ca167264c0df96efb85d4577d9eb5bfba61f2c03aa8d0627"
+    }
+  ],
+  "productsExecuted": 0,
+  "testsExecuted": 0,
+  "gitCalls": 0,
+  "browserCalls": 0,
+  "networkCalls": 0,
+  "excludedLiveSources": [
+    "people.tsx/people.css及人员图轴后继两源均未读"
+  ],
+  "timingLimits": "reader启用前四组sed/ls和pwd仅工具墙钟；首个login=false工具拒绝未启动；不倒填UTC。reader主动计时并非全部审阅/编辑工时。",
+  "efficiencyFailures": [
+    "原26首次输出含rawCommands过宽；两次多报告batch/manifest shape过宽；一次旧audit grep过宽。只读工具返回预览，不读取私有输出；后续统一9500字符硬限。首seams gg键域误识未作裁定，复核name键后替接，未冒首结果有GG匹配。",
+    "探索不存在A20V3-audit文件exit1；generate误把source-files顶层3包装键当124声明exit1，修为count/source精确校验。均为自有读证设施错误，不是产品FAIL。"
+  ]
+}

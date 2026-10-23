@@ -1,0 +1,1894 @@
+{
+  "at": "2026-10-21T20:37:06.400Z",
+  "checks": [
+    {
+      "name": "A11 declared source in old tree",
+      "ok": true,
+      "detail": {
+        "count": 511,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "A11 declared artifacts in old tree",
+      "ok": true,
+      "detail": {
+        "count": 453,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "candidate versus sync source manifest",
+      "ok": true,
+      "detail": [
+        "packages/dsh-pm-tool/src/index.ts",
+        "packages/dsh-pm-tool/src/types/react-grid-layout.d.ts",
+        "packages/dsh-pm-tool/src/core/csv-import.ts",
+        "packages/dsh-pm-tool/src/core/stale-placeholder.test.ts",
+        "packages/dsh-pm-tool/src/core/project.ts",
+        "packages/dsh-pm-tool/src/core/check.test.ts",
+        "packages/dsh-pm-tool/src/core/derived.test.ts",
+        "packages/dsh-pm-tool/src/core/file-backup.ts",
+        "packages/dsh-pm-tool/src/core/reflect.ts",
+        "packages/dsh-pm-tool/src/core/status.ts",
+        "packages/dsh-pm-tool/src/core/ai-client.ts",
+        "packages/dsh-pm-tool/src/core/review-materials.ts",
+        "packages/dsh-pm-tool/src/core/progress-report-markdown-u5.test.ts",
+        "packages/dsh-pm-tool/src/core/derived.ts",
+        "packages/dsh-pm-tool/src/core/provenance-view.test.ts",
+        "packages/dsh-pm-tool/src/core/completion-history.ts",
+        "packages/dsh-pm-tool/src/core/report.ts",
+        "packages/dsh-pm-tool/src/core/backup-precheck.test.ts",
+        "packages/dsh-pm-tool/src/core/evidence.ts",
+        "packages/dsh-pm-tool/src/core/copilot-task-fields.test.ts",
+        "packages/dsh-pm-tool/src/core/metric.test.ts",
+        "packages/dsh-pm-tool/src/core/doctor.ts",
+        "packages/dsh-pm-tool/src/core/file-staging.ts",
+        "packages/dsh-pm-tool/src/core/repo-format.ts",
+        "packages/dsh-pm-tool/src/core/archive.test.ts",
+        "packages/dsh-pm-tool/src/core/progress-report-markdown.ts",
+        "packages/dsh-pm-tool/src/core/task-views.test.ts",
+        "packages/dsh-pm-tool/src/core/projects.ts",
+        "packages/dsh-pm-tool/src/core/people-load.ts",
+        "packages/dsh-pm-tool/src/core/milestone.ts",
+        "packages/dsh-pm-tool/src/core/task-ops.test.ts",
+        "packages/dsh-pm-tool/src/core/risk-issues.ts",
+        "packages/dsh-pm-tool/src/core/gantt.criticalPath.test.ts",
+        "packages/dsh-pm-tool/src/core/design-tokens.test.ts",
+        "packages/dsh-pm-tool/src/core/cycle-hooks.ts",
+        "packages/dsh-pm-tool/src/core/provenance.ts",
+        "packages/dsh-pm-tool/src/core/suggestion-engine.test.ts",
+        "packages/dsh-pm-tool/src/core/progress-meta.test.ts",
+        "packages/dsh-pm-tool/src/core/ui-feedback.ts",
+        "packages/dsh-pm-tool/src/core/load-stance.ts",
+        "packages/dsh-pm-tool/src/core/session-bind.test.ts",
+        "packages/dsh-pm-tool/src/core/external-skill-router.ts",
+        "packages/dsh-pm-tool/src/core/progress-clamp.test.ts",
+        "packages/dsh-pm-tool/src/core/panel-kbd.ts",
+        "packages/dsh-pm-tool/src/core/search.ts",
+        "packages/dsh-pm-tool/src/core/file-backup.test.ts",
+        "packages/dsh-pm-tool/src/core/meeting.ts",
+        "packages/dsh-pm-tool/src/core/task-materials.test.ts",
+        "packages/dsh-pm-tool/src/core/suggestion-engine.ts",
+        "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+        "packages/dsh-pm-tool/src/core/archive.ts",
+        "packages/dsh-pm-tool/src/core/stale-placeholder.ts",
+        "packages/dsh-pm-tool/src/core/nav.ts",
+        "packages/dsh-pm-tool/src/core/settings.ts",
+        "packages/dsh-pm-tool/src/core/stats.ts",
+        "packages/dsh-pm-tool/src/core/milestone.test.ts",
+        "packages/dsh-pm-tool/src/core/okr.test.ts",
+        "packages/dsh-pm-tool/src/core/repo.ts",
+        "packages/dsh-pm-tool/src/core/storage.ts",
+        "packages/dsh-pm-tool/src/core/task-inline.ts",
+        "packages/dsh-pm-tool/src/core/file-promotion.test.ts",
+        "packages/dsh-pm-tool/src/core/task-tree.ts",
+        "packages/dsh-pm-tool/src/core/drawer-focus.ts",
+        "packages/dsh-pm-tool/src/core/file-assets.test.ts",
+        "packages/dsh-pm-tool/src/core/backup-mid-rollback.test.ts",
+        "packages/dsh-pm-tool/src/core/load-stance.test.ts",
+        "packages/dsh-pm-tool/src/core/queue.test.ts",
+        "packages/dsh-pm-tool/src/core/wbs-ai.ts",
+        "packages/dsh-pm-tool/src/core/ask-copilot-b7.test.ts",
+        "packages/dsh-pm-tool/src/core/capture.ts",
+        "packages/dsh-pm-tool/src/core/reflect-l2.test.ts",
+        "packages/dsh-pm-tool/src/core/reflect.test.ts",
+        "packages/dsh-pm-tool/src/core/war-room.ts",
+        "packages/dsh-pm-tool/src/core/metric.ts",
+        "packages/dsh-pm-tool/src/core/settings.test.ts",
+        "packages/dsh-pm-tool/src/core/fs-atomic.ts",
+        "packages/dsh-pm-tool/src/core/export-outbound.test.ts",
+        "packages/dsh-pm-tool/src/core/provenance-store.test.ts",
+        "packages/dsh-pm-tool/src/core/progress-report.ts",
+        "packages/dsh-pm-tool/src/core/reminders.ts",
+        "packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+        "packages/dsh-pm-tool/src/core/export.ts",
+        "packages/dsh-pm-tool/src/core/report-diff.ts",
+        "packages/dsh-pm-tool/src/core/file-root.test.ts",
+        "packages/dsh-pm-tool/src/core/people-candidates.ts",
+        "packages/dsh-pm-tool/src/core/report-narrate.ts",
+        "packages/dsh-pm-tool/src/core/session-bind.ts",
+        "packages/dsh-pm-tool/src/core/export-isolation.test.ts",
+        "packages/dsh-pm-tool/src/core/meeting-summarize.ts",
+        "packages/dsh-pm-tool/src/core/ask-copilot.ts",
+        "packages/dsh-pm-tool/src/core/design-tokens.ts",
+        "packages/dsh-pm-tool/src/core/deliverable-u5.test.ts",
+        "packages/dsh-pm-tool/src/core/task-inline.test.ts",
+        "packages/dsh-pm-tool/src/core/task-materials.ts",
+        "packages/dsh-pm-tool/src/core/people-load.test.ts",
+        "packages/dsh-pm-tool/src/core/deliverable-export-u5.test.ts",
+        "packages/dsh-pm-tool/src/core/copilot.ts",
+        "packages/dsh-pm-tool/src/core/evidence.test.ts",
+        "packages/dsh-pm-tool/src/core/copilot-validate.test.ts",
+        "packages/dsh-pm-tool/src/core/lessons.test.ts",
+        "packages/dsh-pm-tool/src/core/progress-report.test.ts",
+        "packages/dsh-pm-tool/src/core/gantt.ts",
+        "packages/dsh-pm-tool/src/core/model-route.ts",
+        "packages/dsh-pm-tool/src/core/domain-error.ts",
+        "packages/dsh-pm-tool/src/core/task-import.ts",
+        "packages/dsh-pm-tool/src/core/idempotency.ts",
+        "packages/dsh-pm-tool/src/core/okr.ts",
+        "packages/dsh-pm-tool/src/core/meetings.ts",
+        "packages/dsh-pm-tool/src/core/milestones.ts",
+        "packages/dsh-pm-tool/src/core/file-asset-store.ts",
+        "packages/dsh-pm-tool/src/core/record-location.ts",
+        "packages/dsh-pm-tool/src/core/file-assets.ts",
+        "packages/dsh-pm-tool/src/core/ask-context.test.ts",
+        "packages/dsh-pm-tool/src/core/gantt.routeEdge.test.ts",
+        "packages/dsh-pm-tool/src/core/meeting-source.ts",
+        "packages/dsh-pm-tool/src/core/provenance-view.ts",
+        "packages/dsh-pm-tool/src/core/task-views.ts",
+        "packages/dsh-pm-tool/src/core/capture.test.ts",
+        "packages/dsh-pm-tool/src/core/health.ts",
+        "packages/dsh-pm-tool/src/core/csv-import.test.ts",
+        "packages/dsh-pm-tool/src/core/review-materials.test.ts",
+        "packages/dsh-pm-tool/src/core/ask-projection.test.ts",
+        "packages/dsh-pm-tool/src/core/task-checklist.ts",
+        "packages/dsh-pm-tool/src/core/nav.test.ts",
+        "packages/dsh-pm-tool/src/core/file-gc.test.ts",
+        "packages/dsh-pm-tool/src/core/progress-reports.ts",
+        "packages/dsh-pm-tool/src/core/provenance-store.ts",
+        "packages/dsh-pm-tool/src/core/lessons.ts",
+        "packages/dsh-pm-tool/src/core/task-export.ts",
+        "packages/dsh-pm-tool/src/core/check.ts",
+        "packages/dsh-pm-tool/src/core/habits.ts",
+        "packages/dsh-pm-tool/src/core/ask-projection.ts",
+        "packages/dsh-pm-tool/src/core/tasks.ts",
+        "packages/dsh-pm-tool/src/core/backup.ts",
+        "packages/dsh-pm-tool/src/core/progress-derivation.ts",
+        "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+        "packages/dsh-pm-tool/src/core/gantt.milestoneLink.test.ts",
+        "packages/dsh-pm-tool/src/core/deliverables.ts",
+        "packages/dsh-pm-tool/src/core/task.ts",
+        "packages/dsh-pm-tool/src/core/labels.ts",
+        "packages/dsh-pm-tool/src/core/provenance.test.ts",
+        "packages/dsh-pm-tool/src/core/risk-issue.ts",
+        "packages/dsh-pm-tool/src/core/queue.ts",
+        "packages/dsh-pm-tool/src/core/deliverable.ts",
+        "packages/dsh-pm-tool/src/core/file-staging.test.ts",
+        "packages/dsh-pm-tool/src/core/task-export.test.ts",
+        "packages/dsh-pm-tool/src/core/habits.test.ts",
+        "packages/dsh-pm-tool/src/core/http/asset-route.ts",
+        "packages/dsh-pm-tool/src/core/http/asset-route.test.ts",
+        "packages/dsh-pm-tool/src/core/http/limits.ts",
+        "packages/dsh-pm-tool/src/core/http/preview-route.ts",
+        "packages/dsh-pm-tool/src/core/http/preview-route.test.ts",
+        "packages/dsh-pm-tool/src/commands/project.ts",
+        "packages/dsh-pm-tool/src/commands/reflect.ts",
+        "packages/dsh-pm-tool/src/commands/doctor.ts",
+        "packages/dsh-pm-tool/src/commands/milestone.ts",
+        "packages/dsh-pm-tool/src/commands/habit-feedback.test.ts",
+        "packages/dsh-pm-tool/src/commands/progress.ts",
+        "packages/dsh-pm-tool/src/commands/search.ts",
+        "packages/dsh-pm-tool/src/commands/meeting.ts",
+        "packages/dsh-pm-tool/src/commands/archive.ts",
+        "packages/dsh-pm-tool/src/commands/settings.ts",
+        "packages/dsh-pm-tool/src/commands/stats.ts",
+        "packages/dsh-pm-tool/src/commands/due.ts",
+        "packages/dsh-pm-tool/src/commands/capture.ts",
+        "packages/dsh-pm-tool/src/commands/metric.ts",
+        "packages/dsh-pm-tool/src/commands/dashboard.ts",
+        "packages/dsh-pm-tool/src/commands/model.ts",
+        "packages/dsh-pm-tool/src/commands/review.ts",
+        "packages/dsh-pm-tool/src/commands/progress-report.ts",
+        "packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+        "packages/dsh-pm-tool/src/commands/u5-help.test.ts",
+        "packages/dsh-pm-tool/src/commands/export.ts",
+        "packages/dsh-pm-tool/src/commands/lesson.ts",
+        "packages/dsh-pm-tool/src/commands/session.ts",
+        "packages/dsh-pm-tool/src/commands/okr.ts",
+        "packages/dsh-pm-tool/src/commands/dashboard.test.ts",
+        "packages/dsh-pm-tool/src/commands/ask.ts",
+        "packages/dsh-pm-tool/src/commands/health.ts",
+        "packages/dsh-pm-tool/src/commands/habit.ts",
+        "packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+        "packages/dsh-pm-tool/src/commands/check.ts",
+        "packages/dsh-pm-tool/src/commands/task-feedback.test.ts",
+        "packages/dsh-pm-tool/src/commands/backup.ts",
+        "packages/dsh-pm-tool/src/commands/material.ts",
+        "packages/dsh-pm-tool/src/commands/task.ts",
+        "packages/dsh-pm-tool/src/commands/risk-issue.ts",
+        "packages/dsh-pm-tool/src/commands/queue.ts",
+        "packages/dsh-pm-tool/src/commands/deliverable.ts",
+        "packages/dsh-pm-tool/src/client/index.tsx",
+        "packages/dsh-pm-tool/src/client/launch-handshake.ts",
+        "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+        "packages/dsh-pm-tool/src/client/confirm-dialog.tsx",
+        "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+        "packages/dsh-pm-tool/src/client/form-validation.ts",
+        "packages/dsh-pm-tool/src/client/result-card-copy.ts",
+        "packages/dsh-pm-tool/src/client/provenance-panel.tsx",
+        "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+        "packages/dsh-pm-tool/src/client/result-card-copy.test.ts",
+        "packages/dsh-pm-tool/src/client/panel.tsx",
+        "packages/dsh-pm-tool/src/client/result-card.test.ts",
+        "packages/dsh-pm-tool/src/client/panel-cancel-close.test.ts",
+        "packages/dsh-pm-tool/src/client/download.ts",
+        "packages/dsh-pm-tool/src/client/form-validation.test.ts",
+        "packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+        "packages/dsh-pm-tool/src/client/assets.d.ts",
+        "packages/dsh-pm-tool/src/client/result-card.tsx",
+        "packages/dsh-pm-tool/src/client/panel.css",
+        "packages/dsh-pm-tool/src/client/nav-rail.tsx",
+        "packages/dsh-pm-tool/src/client/board/project-default-layout.ts",
+        "packages/dsh-pm-tool/src/client/board/history.ts",
+        "packages/dsh-pm-tool/src/client/board/editor-ops.test.ts",
+        "packages/dsh-pm-tool/src/client/board/queue-aggregate.ts",
+        "packages/dsh-pm-tool/src/client/board/refresh-confirm.ts",
+        "packages/dsh-pm-tool/src/client/board/widgets.tsx",
+        "packages/dsh-pm-tool/src/client/board/panel-library.test.ts",
+        "packages/dsh-pm-tool/src/client/board/queue-card.tsx",
+        "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+        "packages/dsh-pm-tool/src/client/board/projection.ts",
+        "packages/dsh-pm-tool/src/client/board/layout-append.ts",
+        "packages/dsh-pm-tool/src/client/board/queue-aggregate.test.ts",
+        "packages/dsh-pm-tool/src/client/board/layout-append.test.ts",
+        "packages/dsh-pm-tool/src/client/board/migration-banner.test.ts",
+        "packages/dsh-pm-tool/src/client/board/static-size.test.ts",
+        "packages/dsh-pm-tool/src/client/board/history.test.ts",
+        "packages/dsh-pm-tool/src/client/board/editor-compact.test.ts",
+        "packages/dsh-pm-tool/src/client/board/editor-ops.ts",
+        "packages/dsh-pm-tool/src/client/board/editor.tsx",
+        "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+        "packages/dsh-pm-tool/src/client/board/editor-geometry.test.ts",
+        "packages/dsh-pm-tool/src/client/board/persist.test.ts",
+        "packages/dsh-pm-tool/src/client/board/scope-snapshot.ts",
+        "packages/dsh-pm-tool/src/client/board/BoardBento.tsx",
+        "packages/dsh-pm-tool/src/client/board/types.ts",
+        "packages/dsh-pm-tool/src/client/board/formula-expr.ts",
+        "packages/dsh-pm-tool/src/client/board/migration-banner.ts",
+        "packages/dsh-pm-tool/src/client/board/projection.test.ts",
+        "packages/dsh-pm-tool/src/client/board/project-default-layout.test.ts",
+        "packages/dsh-pm-tool/src/client/board/scope-snapshot.test.ts",
+        "packages/dsh-pm-tool/src/client/board/registry.test.ts",
+        "packages/dsh-pm-tool/src/client/board/head-spacing.test.ts",
+        "packages/dsh-pm-tool/src/client/board/persist.ts",
+        "packages/dsh-pm-tool/src/client/board/refresh-confirm.test.ts",
+        "packages/dsh-pm-tool/src/client/board/formula.ts",
+        "packages/dsh-pm-tool/src/client/board/query.ts",
+        "packages/dsh-pm-tool/src/client/board/b4-guard.test.ts",
+        "packages/dsh-pm-tool/src/client/board/query.multisort.test.ts",
+        "packages/dsh-pm-tool/src/client/board/board-attn-narrow.test.ts",
+        "packages/dsh-pm-tool/src/client/board/board.css",
+        "packages/dsh-pm-tool/src/client/shared/records-callbacks.ts",
+        "packages/dsh-pm-tool/src/client/shared/asset-client.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/stage-client.ts",
+        "packages/dsh-pm-tool/src/client/shared/markdown-view.tsx",
+        "packages/dsh-pm-tool/src/client/shared/staged-lifecycle.ts",
+        "packages/dsh-pm-tool/src/client/shared/form-dirty.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-materials-view.tsx",
+        "packages/dsh-pm-tool/src/client/shared/records-props.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx",
+        "packages/dsh-pm-tool/src/client/shared/page-shell.tsx",
+        "packages/dsh-pm-tool/src/client/shared/task-materials-editor.tsx",
+        "packages/dsh-pm-tool/src/client/shared/staged-lifecycle.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/markdown.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/report-preview-client.ts",
+        "packages/dsh-pm-tool/src/client/shared/markdown.ts",
+        "packages/dsh-pm-tool/src/client/shared/asset-client.ts",
+        "packages/dsh-pm-tool/src/client/shared/b4-card-contract.md",
+        "packages/dsh-pm-tool/src/client/shared/b2-commands.ts",
+        "packages/dsh-pm-tool/src/client/shared/records-props.md",
+        "packages/dsh-pm-tool/src/client/shared/task-relation-projection.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/legacy-note.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-relation-projection.ts",
+        "packages/dsh-pm-tool/src/client/shared/records-callbacks.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/report-preview-client.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/b2-commands.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/legacy-note.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-materials-mirror.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-materials-mirror.ts",
+        "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+        "packages/dsh-pm-tool/src/client/shared/task-drawer-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/b2-ops.ts",
+        "packages/dsh-pm-tool/src/client/shared/ui-contract.md",
+        "packages/dsh-pm-tool/src/client/shared/b2-ops.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/form-dirty.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/ui/menu-pop.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/confirm-dialog.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/drawer-frame.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/field.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/empty-state.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/receipt.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/error-block.tsx",
+        "packages/dsh-pm-tool/src/client/shared/ui/index.ts",
+        "packages/dsh-pm-tool/src/client/shared/ui/use-submit-guard.ts",
+        "packages/dsh-pm-tool/src/client/shared/ui/button.tsx",
+        "packages/dsh-pm-tool/src/client/shared/drawers/settings-drawer.tsx",
+        "packages/dsh-pm-tool/src/client/shared/drawers/settings-drawer.test.ts",
+        "packages/dsh-pm-tool/src/client/shared/drawers/model-lane.tsx",
+        "packages/dsh-pm-tool/src/client/shared/drawers/ai-assistant.tsx",
+        "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx",
+        "packages/dsh-pm-tool/src/client/shared/drawers/gd-overlay-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/fonts/Inter-OFL.txt",
+        "packages/dsh-pm-tool/src/client/fonts/Inter-Variable-LatinExt.woff2",
+        "packages/dsh-pm-tool/src/client/fonts/Inter-Variable.woff2",
+        "packages/dsh-pm-tool/src/client/views/risk-issues.css",
+        "packages/dsh-pm-tool/src/client/views/tasks-tally.test.ts",
+        "packages/dsh-pm-tool/src/client/views/tasks-clipboard.test.ts",
+        "packages/dsh-pm-tool/src/client/views/d04-d05-d11-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/views/overview.css",
+        "packages/dsh-pm-tool/src/client/views/reports.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts",
+        "packages/dsh-pm-tool/src/client/views/milestones.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks.css",
+        "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/habit-form.tsx",
+        "packages/dsh-pm-tool/src/client/views/deliverables.css",
+        "packages/dsh-pm-tool/src/client/views/tasks-tally.ts",
+        "packages/dsh-pm-tool/src/client/views/deliverables.tsx",
+        "packages/dsh-pm-tool/src/client/views/growth-form-props.ts",
+        "packages/dsh-pm-tool/src/client/views/records-entry-guard.test.ts",
+        "packages/dsh-pm-tool/src/client/views/okr-model.ts",
+        "packages/dsh-pm-tool/src/client/views/growth-form.css",
+        "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks-clipboard.ts",
+        "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/risk-issues.tsx",
+        "packages/dsh-pm-tool/src/client/views/milestones.css",
+        "packages/dsh-pm-tool/src/client/views/tasks.tsx",
+        "packages/dsh-pm-tool/src/client/views/habit-model.test.ts",
+        "packages/dsh-pm-tool/src/client/views/overview.tsx",
+        "packages/dsh-pm-tool/src/client/views/reports.css",
+        "packages/dsh-pm-tool/src/client/views/records.css",
+        "packages/dsh-pm-tool/src/client/views/people-scale.ts",
+        "packages/dsh-pm-tool/src/client/views/types.ts",
+        "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/meetings.css",
+        "packages/dsh-pm-tool/src/client/views/visible-layer-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/views/b5-planning.test.ts",
+        "packages/dsh-pm-tool/src/client/views/planning-presenter.test.ts",
+        "packages/dsh-pm-tool/src/client/views/gantt.tsx",
+        "packages/dsh-pm-tool/src/client/views/habit-model.ts",
+        "packages/dsh-pm-tool/src/client/views/overview-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/views/risk-model.ts",
+        "packages/dsh-pm-tool/src/client/views/risk-model.test.ts",
+        "packages/dsh-pm-tool/src/client/views/people.css",
+        "packages/dsh-pm-tool/src/client/views/non-p0-fixes.test.ts",
+        "packages/dsh-pm-tool/src/client/views/okr-model.test.ts",
+        "packages/dsh-pm-tool/src/client/views/task-views-persist.ts",
+        "packages/dsh-pm-tool/src/client/views/growth-form-props.test.ts",
+        "packages/dsh-pm-tool/src/client/views/okr-form.tsx",
+        "packages/dsh-pm-tool/src/client/views/people.tsx",
+        "packages/dsh-pm-tool/src/client/views/tasks-contract.test.ts",
+        "packages/dsh-pm-tool/src/client/views/planning-presenter.ts",
+        "packages/dsh-pm-tool/src/client/views/people-scale.test.ts",
+        "packages/dsh-pm-tool/src/client/views/tasks-responsive.test.ts",
+        "packages/dsh-pm-tool/src/client/views/habits.tsx",
+        "packages/dsh-pm-tool/src/client/views/meetings.tsx",
+        "packages/dsh-pm-tool/src/client/views/okrs.tsx",
+        "packages/dsh-pm-tool/src/client/views/gantt.css",
+        "packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-period.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-report-form.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-payloads.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-preview.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-options.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-options.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-preview-authoritative.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-preview.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-deliverable-form.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-overlay.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-history.test.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-period.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-wiring.md",
+        "packages/dsh-pm-tool/src/client/views/records/index.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-payloads.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-history.ts",
+        "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx",
+        "packages/dsh-pm-tool/src/client/views/records/records-preview-authoritative.ts",
+        "packages/dsh-pm-tool/scripts/verify-external-skills.mjs",
+        "packages/dsh-pm-tool/scripts/verify-storage.mjs",
+        "packages/dsh-pm-tool/scripts/verify-provenance-disk.mjs",
+        "packages/dsh-pm-tool/scripts/verify-web-repo-link.mjs",
+        "packages/dsh-pm-tool/scripts/verify-tasks.mjs",
+        "packages/dsh-pm-tool/scripts/verify-board-final.mjs",
+        "packages/dsh-pm-tool/scripts/verify-r12.mjs",
+        "packages/dsh-pm-tool/scripts/verify-command.mjs",
+        "packages/dsh-pm-tool/scripts/verify-drawer-focus.mjs",
+        "packages/dsh-pm-tool/scripts/verify-copilot-cancel.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-inline.mjs",
+        "packages/dsh-pm-tool/scripts/verify-markdown.mjs",
+        "packages/dsh-pm-tool/scripts/verify-gui-contract.mjs",
+        "packages/dsh-pm-tool/scripts/verify-settings.mjs",
+        "packages/dsh-pm-tool/scripts/verify-projects.mjs",
+        "packages/dsh-pm-tool/scripts/verify-client-bundle.mjs",
+        "packages/dsh-pm-tool/scripts/verify-no-native-confirm.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p2b-okr.mjs",
+        "packages/dsh-pm-tool/scripts/test-verify-runner-aggregate.mjs",
+        "packages/dsh-pm-tool/scripts/verify-completed-date.mjs",
+        "packages/dsh-pm-tool/scripts/verify-client-module-table.mjs",
+        "packages/dsh-pm-tool/scripts/verify-external-skill-router.mjs",
+        "packages/dsh-pm-tool/scripts/verify-keyboard.mjs",
+        "packages/dsh-pm-tool/scripts/verify-objective-progress.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p1-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p1a-queue.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-repo.mjs",
+        "packages/dsh-pm-tool/scripts/verify-meeting-source.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p2a-export.mjs",
+        "packages/dsh-pm-tool/scripts/verify-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-fs-atomic.mjs",
+        "packages/dsh-pm-tool/scripts/verify-person-candidates.mjs",
+        "packages/dsh-pm-tool/scripts/verify-dashboard.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-tree.mjs",
+        "packages/dsh-pm-tool/scripts/verify-batch.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p0-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-record-location.mjs",
+        "packages/dsh-pm-tool/scripts/verify-report-ai.mjs",
+        "packages/dsh-pm-tool/scripts/verify-provenance.mjs",
+        "packages/dsh-pm-tool/scripts/verify-model-route.mjs",
+        "packages/dsh-pm-tool/scripts/e2e-web-real.mjs",
+        "packages/dsh-pm-tool/scripts/verify-isolation.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-checklist.mjs",
+        "packages/dsh-pm-tool/scripts/verify-copilot-writes.mjs",
+        "packages/dsh-pm-tool/scripts/verify-b6-report.mjs",
+        "packages/dsh-pm-tool/scripts/verify-llm-optional.mjs",
+        "packages/dsh-pm-tool/scripts/verify-xlsx.mjs",
+        "packages/dsh-pm-tool/scripts/verify-reflect.mjs",
+        "packages/dsh-pm-tool/scripts/setup-keys.mjs",
+        "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs",
+        "packages/dsh-pm-tool/scripts/verify-people-load.mjs",
+        "packages/dsh-pm-tool/scripts/verify-health.mjs",
+        "packages/dsh-pm-tool/scripts/e2e.mjs",
+        "packages/dsh-pm-tool/scripts/verify-b3-asset.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-meta.mjs",
+        "packages/dsh-pm-tool/scripts/verify-deliverables.mjs",
+        "packages/dsh-pm-tool/scripts/verify-reports.mjs",
+        "packages/dsh-pm-tool/scripts/verify-milestones.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p2-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-critical-path.mjs",
+        "packages/dsh-pm-tool/scripts/test-isolation-guard.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p1b-adopt.mjs",
+        "packages/dsh-pm-tool/scripts/verify-importmd.mjs",
+        "packages/dsh-pm-tool/scripts/verify-form-validation.mjs",
+        "packages/dsh-pm-tool/scripts/verify-gantt-d07-d08.mjs",
+        "packages/dsh-pm-tool/scripts/verify-ai-client.mjs",
+        "packages/dsh-pm-tool/scripts/verify-repo-format.mjs",
+        "packages/dsh-pm-tool/scripts/verify-meeting-ai.mjs",
+        "packages/dsh-pm-tool/scripts/verify-migration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-import-content.mjs",
+        "packages/dsh-pm-tool/scripts/verify-b2-materials.mjs",
+        "packages/dsh-pm-tool/scripts/verify-copilot-plan.mjs",
+        "packages/dsh-pm-tool/scripts/verify-risk-issues.mjs",
+        "packages/dsh-pm-tool/scripts/verify-web.mjs",
+        "packages/dsh-pm-tool/scripts/verify-copilot-plan-cancel.mjs",
+        "packages/dsh-pm-tool/scripts/verify-backup.mjs",
+        "packages/dsh-pm-tool/scripts/verify-ask-apply.mjs",
+        "packages/dsh-pm-tool/scripts/verify-meetings.mjs",
+        "packages/dsh-pm-tool/scripts/verify-b3-bytes.mjs",
+        "packages/dsh-pm-tool/scripts/verify-war-room.mjs",
+        "packages/dsh-pm-tool/scripts/verify-schema-v2.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p2c.mjs",
+        "packages/dsh-pm-tool/scripts/verify-predecessors.mjs",
+        "packages/dsh-pm-tool/scripts/verify-cascade.mjs",
+        "packages/dsh-pm-tool/scripts/verify-promote.mjs",
+        "packages/dsh-pm-tool/scripts/verify-ask-idempotency-integration.mjs",
+        "packages/dsh-pm-tool/scripts/gen-valid-backup-fixture.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p1c-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-gantt.mjs",
+        "packages/dsh-pm-tool/scripts/verify-real-model.mjs",
+        "packages/dsh-pm-tool/scripts/verify-csv.mjs",
+        "packages/dsh-pm-tool/scripts/verify-copilot.mjs",
+        "packages/dsh-pm-tool/scripts/verify-reminders.mjs",
+        "packages/dsh-pm-tool/scripts/verify-doctor.mjs",
+        "packages/dsh-pm-tool/scripts/verify-gantt-drag.mjs",
+        "packages/dsh-pm-tool/scripts/verify-web-assignee-list.mjs",
+        "packages/dsh-pm-tool/scripts/verify-export.mjs",
+        "packages/dsh-pm-tool/scripts/verify-task-move-renumber.mjs",
+        "packages/dsh-pm-tool/scripts/test-verify-external-skills.mjs",
+        "packages/dsh-pm-tool/scripts/verify-report-diff.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p3a.mjs",
+        "packages/dsh-pm-tool/scripts/verify-wbs.mjs",
+        "packages/dsh-pm-tool/scripts/verify-p3-integration.mjs",
+        "packages/dsh-pm-tool/scripts/verify-formula.mjs",
+        "launcher/src/probe.mjs",
+        "launcher/src/control-html.mjs",
+        "launcher/src/launcher-core.mjs",
+        "launcher/src/loopback.mjs",
+        "launcher/src/browsers.mjs",
+        "launcher/src/browser-open.mjs",
+        "launcher/src/launcher-app.mjs",
+        "launcher/src/panel-model.mjs",
+        "launcher/src/local-app.mjs",
+        "launcher/src/dsh-controller.mjs",
+        "launcher/bin/pm-launcher.mjs",
+        "launcher/test/cancel.race.test.mjs",
+        "launcher/test/journey-race.test.mjs",
+        "launcher/test/contract.state.test.mjs",
+        "launcher/test/app.loopback.test.mjs",
+        "launcher/test/control-html.test.mjs",
+        "launcher/test/control-html-sync.test.mjs",
+        "launcher/test/browsers.controller.test.mjs",
+        "launcher/test/browser-open.test.mjs",
+        "launcher/test/loopback-security.test.mjs",
+        "launcher/test/local-app.test.mjs",
+        "launcher/scripts/verify-launcher.mjs",
+        "launcher/scripts/make-app.mjs",
+        "packages/dsh-pm-tool/package.json",
+        "packages/dsh-pm-tool/pnpm-lock.yaml",
+        "launcher/package.json"
+      ]
+    },
+    {
+      "name": "candidate versus artifact manifest",
+      "ok": true,
+      "detail": 453
+    },
+    {
+      "name": "A11 tracked patch",
+      "ok": true,
+      "detail": "6e09d16e991120ec21a3e88bf26bd4a3e93e6d432e5c1941e53c79ce9d5312fd"
+    },
+    {
+      "name": "local CSS present exactly once",
+      "ok": true,
+      "detail": ".browser-select>svg{width:18px;height:18px;flex:0 0 18px;color:var(--muted)}"
+    },
+    {
+      "name": "GUI candidate matches independent SOURCE template",
+      "ok": true,
+      "detail": {
+        "gui": "6994cdd109d7258f14b0283a8e2f0b1d55e6cacc34b80ed5d39736c6dd90a205",
+        "sourceCandidateSha": "7c77cb0870cba5aaf05eb1ac1fbcd1bf236bb51d190c3e41bfaf558fbf9948a5"
+      }
+    },
+    {
+      "name": "1440/light chooser18 and no outer horizontal overflow",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "theme": "light",
+        "times": [
+          "2026-10-21T20:19:35.960Z",
+          "2026-10-21T20:19:36.069Z",
+          "2026-10-21T20:19:36.146Z"
+        ],
+        "svg": [
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          },
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          },
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          }
+        ],
+        "scroll": [
+          [
+            1440,
+            1440
+          ],
+          [
+            1440,
+            1440
+          ],
+          [
+            1440,
+            1440
+          ]
+        ],
+        "options": [
+          [],
+          [
+            "↗\n系统默认浏览器",
+            "C\nChrome",
+            "S\nSafari"
+          ],
+          []
+        ],
+        "expanded": [
+          "false",
+          "true",
+          "false"
+        ],
+        "escFocus": {
+          "id": "browser-toggle",
+          "outline": "solid"
+        },
+        "origins": [
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722"
+        ],
+        "timeOrigins": [
+          1792613925793.1,
+          1792613925793.1,
+          1792613925793.1
+        ]
+      }
+    },
+    {
+      "name": "1440/light menu three options and ESC focus return",
+      "ok": true,
+      "detail": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      }
+    },
+    {
+      "name": "1440/light boundary duplicate agrees",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "1440/dark chooser18 and no outer horizontal overflow",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "theme": "dark",
+        "times": [
+          "2026-10-21T20:19:36.212Z",
+          "2026-10-21T20:19:36.263Z",
+          "2026-10-21T20:19:36.312Z"
+        ],
+        "svg": [
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          },
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          },
+          {
+            "x": 872,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 890,
+            "bottom": 493.5,
+            "left": 872
+          }
+        ],
+        "scroll": [
+          [
+            1440,
+            1440
+          ],
+          [
+            1440,
+            1440
+          ],
+          [
+            1440,
+            1440
+          ]
+        ],
+        "options": [
+          [],
+          [
+            "↗\n系统默认浏览器",
+            "C\nChrome",
+            "S\nSafari"
+          ],
+          []
+        ],
+        "expanded": [
+          "false",
+          "true",
+          "false"
+        ],
+        "escFocus": {
+          "id": "browser-toggle",
+          "outline": "solid"
+        },
+        "origins": [
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722"
+        ],
+        "timeOrigins": [
+          1792613925793.1,
+          1792613925793.1,
+          1792613925793.1
+        ]
+      }
+    },
+    {
+      "name": "1440/dark menu three options and ESC focus return",
+      "ok": true,
+      "detail": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      }
+    },
+    {
+      "name": "1440/dark boundary duplicate agrees",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "390/light chooser18 and no outer horizontal overflow",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "theme": "light",
+        "times": [
+          "2026-10-21T20:19:36.408Z",
+          "2026-10-21T20:19:36.460Z",
+          "2026-10-21T20:19:36.506Z"
+        ],
+        "svg": [
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          },
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          },
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          }
+        ],
+        "scroll": [
+          [
+            390,
+            390
+          ],
+          [
+            390,
+            390
+          ],
+          [
+            390,
+            390
+          ]
+        ],
+        "options": [
+          [],
+          [
+            "↗\n系统默认浏览器",
+            "C\nChrome",
+            "S\nSafari"
+          ],
+          []
+        ],
+        "expanded": [
+          "false",
+          "true",
+          "false"
+        ],
+        "escFocus": {
+          "id": "browser-toggle",
+          "outline": "solid"
+        },
+        "origins": [
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722"
+        ],
+        "timeOrigins": [
+          1792613925793.1,
+          1792613925793.1,
+          1792613925793.1
+        ]
+      }
+    },
+    {
+      "name": "390/light menu three options and ESC focus return",
+      "ok": true,
+      "detail": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      }
+    },
+    {
+      "name": "390/light boundary duplicate agrees",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "390/dark chooser18 and no outer horizontal overflow",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "theme": "dark",
+        "times": [
+          "2026-10-21T20:19:36.591Z",
+          "2026-10-21T20:19:36.636Z",
+          "2026-10-21T20:19:36.685Z"
+        ],
+        "svg": [
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          },
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          },
+          {
+            "x": 312,
+            "y": 475.5,
+            "width": 18,
+            "height": 18,
+            "top": 475.5,
+            "right": 330,
+            "bottom": 493.5,
+            "left": 312
+          }
+        ],
+        "scroll": [
+          [
+            390,
+            390
+          ],
+          [
+            390,
+            390
+          ],
+          [
+            390,
+            390
+          ]
+        ],
+        "options": [
+          [],
+          [
+            "↗\n系统默认浏览器",
+            "C\nChrome",
+            "S\nSafari"
+          ],
+          []
+        ],
+        "expanded": [
+          "false",
+          "true",
+          "false"
+        ],
+        "escFocus": {
+          "id": "browser-toggle",
+          "outline": "solid"
+        },
+        "origins": [
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722",
+          "http://127.0.0.1:50722"
+        ],
+        "timeOrigins": [
+          1792613925793.1,
+          1792613925793.1,
+          1792613925793.1
+        ]
+      }
+    },
+    {
+      "name": "390/dark menu three options and ESC focus return",
+      "ok": true,
+      "detail": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      }
+    },
+    {
+      "name": "390/dark boundary duplicate agrees",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "selected Chrome chooser remains18 and closes menu",
+      "ok": true,
+      "detail": {
+        "id": "browser-toggle",
+        "outline": "none"
+      }
+    },
+    {
+      "name": "early open snapshot is still S0, not delivery proof",
+      "ok": true,
+      "detail": "2026-10-21T20:19:36.842Z"
+    },
+    {
+      "name": "18 compositor frames match original SHA",
+      "ok": true,
+      "detail": 18
+    },
+    {
+      "name": "N1 Google Chrome exit0 and alias200",
+      "ok": true,
+      "detail": {
+        "alias": "N1",
+        "start": {
+          "at": "2026-10-21T20:19:40.170Z",
+          "event": "open-start",
+          "pid": 76559,
+          "argv": [
+            "open",
+            "-a",
+            "Google Chrome",
+            "http://127.0.0.1:3228/?token=[REDACTED]#pm-launch=50722.N1"
+          ]
+        },
+        "exit": {
+          "at": "2026-10-21T20:19:40.815Z",
+          "event": "open-exit",
+          "pid": 76559,
+          "code": 0,
+          "signal": null
+        },
+        "request": [
+          {
+            "at": "2026-10-21T20:20:49.504Z",
+            "event": "entered-request",
+            "alias": "N1",
+            "origin": "http://127.0.0.1:3228",
+            "controlPort": 50722
+          }
+        ],
+        "response": [
+          {
+            "at": "2026-10-21T20:20:49.505Z",
+            "event": "entered-response",
+            "alias": "N1",
+            "status": 200,
+            "controlPort": 50722
+          }
+        ],
+        "openStartTo200ms": 69335
+      }
+    },
+    {
+      "name": "N2 Google Chrome exit0 and alias200",
+      "ok": true,
+      "detail": {
+        "alias": "N2",
+        "start": {
+          "at": "2026-10-21T20:21:10.781Z",
+          "event": "open-start",
+          "pid": 76773,
+          "argv": [
+            "open",
+            "-a",
+            "Google Chrome",
+            "http://127.0.0.1:3228/#pm-launch=50722.N2"
+          ]
+        },
+        "exit": {
+          "at": "2026-10-21T20:21:11.058Z",
+          "event": "open-exit",
+          "pid": 76773,
+          "code": 0,
+          "signal": null
+        },
+        "request": [
+          {
+            "at": "2026-10-21T20:21:49.962Z",
+            "event": "entered-request",
+            "alias": "N2",
+            "origin": "http://127.0.0.1:3228",
+            "controlPort": 50722
+          }
+        ],
+        "response": [
+          {
+            "at": "2026-10-21T20:21:49.962Z",
+            "event": "entered-response",
+            "alias": "N2",
+            "status": 200,
+            "controlPort": 50722
+          }
+        ],
+        "openStartTo200ms": 39181
+      }
+    },
+    {
+      "name": "N2 delivery clean origin, no query token",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "before and after display same-control S4",
+      "ok": true,
+      "detail": {
+        "before": {
+          "at": "2026-10-21T20:21:10.672Z",
+          "origin": "http://127.0.0.1:50722",
+          "text": "PM 工作台\n◐\n工作台已打开\n\n已由受认证工作台回告进入（Chrome），可以开始工作了。\n\n再次打开\n更换浏览器\n仅在这台 Mac 上运行\n关闭窗口"
+        },
+        "after": {
+          "at": "2026-10-21T20:22:22.373Z",
+          "origin": "http://127.0.0.1:50722",
+          "timeOrigin": 1792613925793.1,
+          "text": "PM 工作台\n◐\n工作台已打开\n\n已由受认证工作台回告进入（Chrome），可以开始工作了。\n\n再次打开\n更换浏览器\n仅在这台 Mac 上运行\n关闭窗口",
+          "buttons": [
+            {
+              "text": "◐",
+              "id": "theme-toggle"
+            },
+            {
+              "text": "再次打开",
+              "id": ""
+            },
+            {
+              "text": "更换浏览器",
+              "id": ""
+            },
+            {
+              "text": "关闭窗口",
+              "id": "close"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "misnamed S3 preserved as pre-delivery S4, not actual S3",
+      "ok": true,
+      "detail": {
+        "at": "2026-10-21T20:21:10.773Z",
+        "origin": "http://127.0.0.1:50722",
+        "text": "PM 工作台\n◐\n工作台已打开\n\n已由受认证工作台回告进入（Chrome），可以开始工作了。\n\n再次打开\n更换浏览器\n仅在这台 Mac 上运行\n关闭窗口"
+      }
+    },
+    {
+      "name": "control document timeOrigin preserved",
+      "ok": true,
+      "detail": 1792613925793.1
+    },
+    {
+      "name": "archived actual-body limited metadata only",
+      "ok": true,
+      "detail": {
+        "at": "2026-10-21T20:22:22.477Z",
+        "status": 200,
+        "bytes": 19012,
+        "sha": "b628e916536947fe21a2d7f9c714a083e188504f5f112cdb16f7863c173de3b8",
+        "localCSS": true,
+        "boundary": "actual production HTTP body sha only; do not store controller nonce"
+      }
+    },
+    {
+      "name": "app production launcher matches A11 source",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "app/onlySHA wrapper declarations agree, not source-body review",
+      "ok": true,
+      "detail": {
+        "/private/tmp/pmtool-a11-finder-entry-20261021.mjs": "f53ba1f944647779b84cc08d25ffc6aeb0770a5bbf42f22ca77772cf3930d9a5",
+        "/private/tmp/pmtool-a11-finder-passive-20261021.mjs": "543811343753160b7912c8279bf4c9a436ce923f037e850ec89a94802a7c1590",
+        "/private/tmp/pmtool-a11-finder-app-20261021.mjs": "53ad61b8e09b1124cc16ff67dfe204b71076e3f1c5718ddce2af48b937f1ee61"
+      }
+    }
+  ],
+  "states": [
+    {
+      "width": 1440,
+      "theme": "light",
+      "times": [
+        "2026-10-21T20:19:35.960Z",
+        "2026-10-21T20:19:36.069Z",
+        "2026-10-21T20:19:36.146Z"
+      ],
+      "svg": [
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        },
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        },
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        }
+      ],
+      "scroll": [
+        [
+          1440,
+          1440
+        ],
+        [
+          1440,
+          1440
+        ],
+        [
+          1440,
+          1440
+        ]
+      ],
+      "options": [
+        [],
+        [
+          "↗\n系统默认浏览器",
+          "C\nChrome",
+          "S\nSafari"
+        ],
+        []
+      ],
+      "expanded": [
+        "false",
+        "true",
+        "false"
+      ],
+      "escFocus": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      },
+      "origins": [
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722"
+      ],
+      "timeOrigins": [
+        1792613925793.1,
+        1792613925793.1,
+        1792613925793.1
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "times": [
+        "2026-10-21T20:19:36.212Z",
+        "2026-10-21T20:19:36.263Z",
+        "2026-10-21T20:19:36.312Z"
+      ],
+      "svg": [
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        },
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        },
+        {
+          "x": 872,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 890,
+          "bottom": 493.5,
+          "left": 872
+        }
+      ],
+      "scroll": [
+        [
+          1440,
+          1440
+        ],
+        [
+          1440,
+          1440
+        ],
+        [
+          1440,
+          1440
+        ]
+      ],
+      "options": [
+        [],
+        [
+          "↗\n系统默认浏览器",
+          "C\nChrome",
+          "S\nSafari"
+        ],
+        []
+      ],
+      "expanded": [
+        "false",
+        "true",
+        "false"
+      ],
+      "escFocus": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      },
+      "origins": [
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722"
+      ],
+      "timeOrigins": [
+        1792613925793.1,
+        1792613925793.1,
+        1792613925793.1
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "times": [
+        "2026-10-21T20:19:36.408Z",
+        "2026-10-21T20:19:36.460Z",
+        "2026-10-21T20:19:36.506Z"
+      ],
+      "svg": [
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        },
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        },
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        }
+      ],
+      "scroll": [
+        [
+          390,
+          390
+        ],
+        [
+          390,
+          390
+        ],
+        [
+          390,
+          390
+        ]
+      ],
+      "options": [
+        [],
+        [
+          "↗\n系统默认浏览器",
+          "C\nChrome",
+          "S\nSafari"
+        ],
+        []
+      ],
+      "expanded": [
+        "false",
+        "true",
+        "false"
+      ],
+      "escFocus": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      },
+      "origins": [
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722"
+      ],
+      "timeOrigins": [
+        1792613925793.1,
+        1792613925793.1,
+        1792613925793.1
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "times": [
+        "2026-10-21T20:19:36.591Z",
+        "2026-10-21T20:19:36.636Z",
+        "2026-10-21T20:19:36.685Z"
+      ],
+      "svg": [
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        },
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        },
+        {
+          "x": 312,
+          "y": 475.5,
+          "width": 18,
+          "height": 18,
+          "top": 475.5,
+          "right": 330,
+          "bottom": 493.5,
+          "left": 312
+        }
+      ],
+      "scroll": [
+        [
+          390,
+          390
+        ],
+        [
+          390,
+          390
+        ],
+        [
+          390,
+          390
+        ]
+      ],
+      "options": [
+        [],
+        [
+          "↗\n系统默认浏览器",
+          "C\nChrome",
+          "S\nSafari"
+        ],
+        []
+      ],
+      "expanded": [
+        "false",
+        "true",
+        "false"
+      ],
+      "escFocus": {
+        "id": "browser-toggle",
+        "outline": "solid"
+      },
+      "origins": [
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722",
+        "http://127.0.0.1:50722"
+      ],
+      "timeOrigins": [
+        1792613925793.1,
+        1792613925793.1,
+        1792613925793.1
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000000.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613975.983808
+      },
+      "at": "2026-10-21T20:19:36.007Z",
+      "sha256": "c25bc8158b3792c56fea0beb4dbcb861935dfb78fb5257602360a87fe8be94a7",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000001.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613975.99468
+      },
+      "at": "2026-10-21T20:19:36.012Z",
+      "sha256": "c25bc8158b3792c56fea0beb4dbcb861935dfb78fb5257602360a87fe8be94a7",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000002.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.014477
+      },
+      "at": "2026-10-21T20:19:36.019Z",
+      "sha256": "b10d6e8e69fbe362175872ff38b67c2cb0a07db3b36a1d9b4a5bd294750277c5",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000003.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.023665
+      },
+      "at": "2026-10-21T20:19:36.029Z",
+      "sha256": "8d6e14b20664f3592106d8c68c10e7b7aaecea8fa91c6737f01ce9b3e81a3919",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000004.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.109467
+      },
+      "at": "2026-10-21T20:19:36.114Z",
+      "sha256": "64e37d619b6d637b9ea45165cd934ef64d731ff55f1572927ab56e5ee0fb85b5",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000005.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 900,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.210213
+      },
+      "at": "2026-10-21T20:19:36.220Z",
+      "sha256": "64e2799d73994fa65a6e6953f194c71f37c6c9cf19124dc5cf53ab3134549b8d",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000006.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.326922
+      },
+      "at": "2026-10-21T20:19:36.332Z",
+      "sha256": "029770a0fc0283dd5c8c7d8d0f3e8fea18c2beb151a9d5073b8a701bea91f4dc",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000007.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 720,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.339822
+      },
+      "at": "2026-10-21T20:19:36.345Z",
+      "sha256": "7e089a38802a77f377bd966b8562cf8d5a6c7076ff8c1d9aa513c85a53c2563f",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000008.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 195,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.525353
+      },
+      "at": "2026-10-21T20:19:36.527Z",
+      "sha256": "47a11d82b3c2e58c783881415484804d967a5cc501b155f48a1642df16289e4c",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000009.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 195,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.540248
+      },
+      "at": "2026-10-21T20:19:36.543Z",
+      "sha256": "6c6ecbfcb4a50ad12723e7b7f752dfb29adf87f21d67ab35032fe112ea93f337",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000010.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 195,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.644651
+      },
+      "at": "2026-10-21T20:19:36.651Z",
+      "sha256": "4a22bf9a6b584b954327c654d56daed4f36cd5132e64e87681e7d28a996dafa3",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000011.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 195,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.658407
+      },
+      "at": "2026-10-21T20:19:36.661Z",
+      "sha256": "bb90968219853509f44a843d3dbed30e4707269e9d901aabe8b48572f3a924f2",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000012.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 195,
+        "deviceHeight": 450,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.706881
+      },
+      "at": "2026-10-21T20:19:36.709Z",
+      "sha256": "283e13069f440082a21df59a71899fd1833050e12bd78a32fd92d59ffb7305ef",
+      "matches": true
+    },
+    {
+      "group": "control",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/control/frames/000013.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 900,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792613976.777964
+      },
+      "at": "2026-10-21T20:19:36.784Z",
+      "sha256": "a11361f589dfa19c274bbce9c5e21b4a22d08b6fbcd102df3ebc1e08ab1cbb2c",
+      "matches": true
+    },
+    {
+      "group": "reopen",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/reopen/frames/000000.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792614070.677934
+      },
+      "at": "2026-10-21T20:21:10.696Z",
+      "sha256": "b8cb6f94bb0b9892d1f2cab854addbfc56711fd250f77e43660c530c427574a8",
+      "matches": true
+    },
+    {
+      "group": "reopen",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/reopen/frames/000001.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792614070.687598
+      },
+      "at": "2026-10-21T20:21:10.703Z",
+      "sha256": "b8cb6f94bb0b9892d1f2cab854addbfc56711fd250f77e43660c530c427574a8",
+      "matches": true
+    },
+    {
+      "group": "reopen",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/reopen/frames/000002.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792614070.790472
+      },
+      "at": "2026-10-21T20:21:10.795Z",
+      "sha256": "b78cf4f4845785fc38831e02bb0f84de71b3a89a77b8cd67175dba3878282410",
+      "matches": true
+    },
+    {
+      "group": "reopen",
+      "file": "reports/all-pending-evidence-20261021/A11/finder/reopen/frames/000003.jpg",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1440,
+        "deviceHeight": 718,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792614070.848703
+      },
+      "at": "2026-10-21T20:21:10.858Z",
+      "sha256": "884128e1f2e3939b4a8c0dd31c32835a849e751821bb5fafe6bd601f27a9acc1",
+      "matches": true
+    }
+  ],
+  "deliveries": [
+    {
+      "alias": "N1",
+      "start": {
+        "at": "2026-10-21T20:19:40.170Z",
+        "event": "open-start",
+        "pid": 76559,
+        "argv": [
+          "open",
+          "-a",
+          "Google Chrome",
+          "http://127.0.0.1:3228/?token=[REDACTED]#pm-launch=50722.N1"
+        ]
+      },
+      "exit": {
+        "at": "2026-10-21T20:19:40.815Z",
+        "event": "open-exit",
+        "pid": 76559,
+        "code": 0,
+        "signal": null
+      },
+      "request": [
+        {
+          "at": "2026-10-21T20:20:49.504Z",
+          "event": "entered-request",
+          "alias": "N1",
+          "origin": "http://127.0.0.1:3228",
+          "controlPort": 50722
+        }
+      ],
+      "response": [
+        {
+          "at": "2026-10-21T20:20:49.505Z",
+          "event": "entered-response",
+          "alias": "N1",
+          "status": 200,
+          "controlPort": 50722
+        }
+      ],
+      "openStartTo200ms": 69335
+    },
+    {
+      "alias": "N2",
+      "start": {
+        "at": "2026-10-21T20:21:10.781Z",
+        "event": "open-start",
+        "pid": 76773,
+        "argv": [
+          "open",
+          "-a",
+          "Google Chrome",
+          "http://127.0.0.1:3228/#pm-launch=50722.N2"
+        ]
+      },
+      "exit": {
+        "at": "2026-10-21T20:21:11.058Z",
+        "event": "open-exit",
+        "pid": 76773,
+        "code": 0,
+        "signal": null
+      },
+      "request": [
+        {
+          "at": "2026-10-21T20:21:49.962Z",
+          "event": "entered-request",
+          "alias": "N2",
+          "origin": "http://127.0.0.1:3228",
+          "controlPort": 50722
+        }
+      ],
+      "response": [
+        {
+          "at": "2026-10-21T20:21:49.962Z",
+          "event": "entered-response",
+          "alias": "N2",
+          "status": 200,
+          "controlPort": 50722
+        }
+      ],
+      "openStartTo200ms": 39181
+    }
+  ],
+  "nonAliasEvents": [
+    {
+      "at": "2026-10-21T20:20:49.502Z",
+      "event": "entered-response",
+      "status": 204,
+      "controlPort": 50722
+    },
+    {
+      "at": "2026-10-21T20:20:49.504Z",
+      "event": "entered-request",
+      "origin": "http://127.0.0.1:3228",
+      "controlPort": 50722
+    },
+    {
+      "at": "2026-10-21T20:21:49.961Z",
+      "event": "entered-response",
+      "status": 204,
+      "controlPort": 50722
+    },
+    {
+      "at": "2026-10-21T20:21:49.961Z",
+      "event": "entered-request",
+      "origin": "http://127.0.0.1:3228",
+      "controlPort": 50722
+    }
+  ],
+  "counts": {
+    "checks": 31,
+    "passed": 31,
+    "png": 17,
+    "jpg": 18
+  },
+  "limitations": [
+    "No browser action packet/video for Finder or personal PM target.",
+    "No HTTP method/body/full loaded bytes archived for personal PM.",
+    "body SHA cannot be independently regenerated without prohibited nonce body; localCSS is an archived boolean probe.",
+    "S3-named snapshot is actually pre-delivery S4.",
+    "No same-mounted PM hash-only GUI branch.",
+    "Wrapper bodies exist only as hash declarations in reviewed evidence."
+  ],
+  "boundary": "Consistency checks only; GUI visual judgment is separately recorded in the expert report."
+}

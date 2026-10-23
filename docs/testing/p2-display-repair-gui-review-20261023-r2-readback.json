@@ -1,0 +1,36 @@
+{
+  "execution": {
+    "start": "2026-10-23T00:47:38.251Z",
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 35402,
+    "ppid": 35400,
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "/tmp/p2-display-repair-gui-review-20261023-r2-expert-outer.mjs",
+      "readback"
+    ],
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "method": "Independent native fs/path/crypto/assert outer; no child processes or imported Main/product scripts",
+    "exitBoundary": "Actual tool exit recorded only after tool returns",
+    "end": "2026-10-23T00:47:38.600Z"
+  },
+  "seal": {
+    "bytes": 431276,
+    "sha256": "3291c0d82be367bfdeeec7b60ca6a43dab095b58bda2aac5ee7cc7fa5068940e"
+  },
+  "sealToolReceipt": {
+    "bytes": 1057,
+    "sha256": "609bc8059a5228913950041dbbc05a1b1b062e3cadb14d24a42f985cc4fce8f3"
+  },
+  "artifactCount": 4,
+  "tmpArtifactCount": 11,
+  "protectedInputCount": 1774,
+  "allArtifactsAndProtectedInputsUnchanged": true,
+  "visualCount": 32,
+  "indexSha256": "99dd2f8dc70237b661c6302fce011723dc7c9a8925429dbaad402409b5b0d852",
+  "resourceState": "released / STOP",
+  "GUIBoundary": "Readback is integrity only; finite GUI verdict is report, not this exit",
+  "excludesSelfAndLaterToolReceipt": true
+}

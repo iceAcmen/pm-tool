@@ -9,23 +9,17 @@
  *
  * 环境：PM_HOST（默认 127.0.0.1）、PM_PORT（默认 3172）、DSH_CWD（owned 启动的上游 deepseek-harness 目录）。
  */
-import { spawn } from 'node:child_process'
 import { probeService } from '../src/probe.mjs'
 import { createDshController } from '../src/dsh-controller.mjs'
 import { createLauncherApp } from '../src/launcher-app.mjs'
 import { createControlServer } from '../src/loopback.mjs'
 import { renderControlHtml } from '../src/control-html.mjs'
 import { discoverBrowsers } from '../src/browsers.mjs'
+import { openBrowser } from '../src/browser-open.mjs'
 
 const HOST = process.env.PM_HOST || '127.0.0.1'
 const PORT = Number(process.env.PM_PORT || 3172)
 const DSH_CWD = process.env.DSH_CWD || '/Users/bytedance/Projects/dsh-pm/deepseek-harness'
-
-/** 执行 open 命令（不等待、不打印 token）。 */
-function openBrowser(argv) {
-  const child = spawn(argv[0], argv.slice(1), { detached: true, stdio: 'ignore' })
-  child.unref()
-}
 
 function isReadyFactory(port) {
   return async () => {
@@ -66,7 +60,12 @@ async function main() {
   app.setLoopbackPort(port)
 
   // 在所选浏览器打开 control 页（仅 loopback 地址，不含 token）。
-  openBrowser(['open', `http://127.0.0.1:${port}/`])
+  try {
+    await openBrowser(['open', `http://127.0.0.1:${port}/`])
+  } catch (error) {
+    await close().catch(() => {})
+    throw error
+  }
 
   // 保持进程存活；关闭浏览器 tab 不停止服务，也不退出已运行 dsh。
   const shutdown = async () => {

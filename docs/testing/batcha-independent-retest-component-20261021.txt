@@ -1,0 +1,79 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool[39m
+
+ [32m✓[39m src/client/shared/contract-pilot.test.ts [2m([22m[2m11 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [31m❯[39m src/client/result-card.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[90m 18[2mms[22m[39m
+[31m   [31m×[31m ResultCard 真实组件：每条原文独立复制反馈[2m > [22m复制A后切B，B没有旧成功提示，只有复制B后才成功[90m 13[2mms[22m[31m[39m
+[31m     → React is not defined[39m
+[31m   [31m×[31m ResultCard 真实组件：每条原文独立复制反馈[2m > [22mA迟到resolve不能给B标复制结果[90m 2[2mms[22m[31m[39m
+[31m     → React is not defined[39m
+[31m   [31m×[31m ResultCard 真实组件：每条原文独立复制反馈[2m > [22mA迟到reject不能给B标复制结果[90m 1[2mms[22m[31m[39m
+[31m     → React is not defined[39m
+[31m   [31m×[31m ResultCard 真实组件：每条原文独立复制反馈[2m > [22m复制失败保留原文，切下一条后错误提示清除[90m 1[2mms[22m[31m[39m
+[31m     → React is not defined[39m
+ [32m✓[39m src/client/result-card-copy.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 15:41:30
+[2m   Duration [22m 898ms[2m (transform 71ms, setup 0ms, collect 165ms, tests 31ms, environment 0ms, prepare 192ms)[22m
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+[90mstderr[2m | src/client/result-card.test.ts[2m > [22m[2mResultCard 真实组件：每条原文独立复制反馈[2m > [22m[2m复制A后切B，B没有旧成功提示，只有复制B后才成功
+[22m[39mThe above error occurred in the <ResultCard> component:
+
+    at ResultCard (/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool/src/client/result-card.tsx:13:23)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/client/result-card.test.ts[2m > [22m[2mResultCard 真实组件：每条原文独立复制反馈[2m > [22m[2mA迟到resolve不能给B标复制结果
+[22m[39mThe above error occurred in the <ResultCard> component:
+
+    at ResultCard (/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool/src/client/result-card.tsx:13:23)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/client/result-card.test.ts[2m > [22m[2mResultCard 真实组件：每条原文独立复制反馈[2m > [22m[2mA迟到reject不能给B标复制结果
+[22m[39mThe above error occurred in the <ResultCard> component:
+
+    at ResultCard (/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool/src/client/result-card.tsx:13:23)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/client/result-card.test.ts[2m > [22m[2mResultCard 真实组件：每条原文独立复制反馈[2m > [22m[2m复制失败保留原文，切下一条后错误提示清除
+[22m[39mThe above error occurred in the <ResultCard> component:
+
+    at ResultCard (/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-batcha-JOxu2P/packages/dsh-pm-tool/src/client/result-card.tsx:13:23)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 4 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/client/result-card.test.ts[2m > [22mResultCard 真实组件：每条原文独立复制反馈[2m > [22m复制A后切B，B没有旧成功提示，只有复制B后才成功
+[31m[1m[7m FAIL [27m[22m[39m src/client/result-card.test.ts[2m > [22mResultCard 真实组件：每条原文独立复制反馈[2m > [22mA迟到resolve不能给B标复制结果
+[31m[1m[7m FAIL [27m[22m[39m src/client/result-card.test.ts[2m > [22mResultCard 真实组件：每条原文独立复制反馈[2m > [22mA迟到reject不能给B标复制结果
+[31m[1m[7m FAIL [27m[22m[39m src/client/result-card.test.ts[2m > [22mResultCard 真实组件：每条原文独立复制反馈[2m > [22m复制失败保留原文，切下一条后错误提示清除
+[31m[1mReferenceError[22m: React is not defined[39m
+[36m [2m❯[22m ResultCard src/client/result-card.tsx:[2m35:3[22m[39m
+    [90m 33| [39m    [35mif[39m (requestGeneration [33m===[39m generation[33m.[39mcurrent) [34msetCopyState[39m(copied …
+    [90m 34| [39m  }
+    [90m 35| [39m  [35mreturn[39m (
+    [90m   | [39m  [31m^[39m
+    [90m 36| [39m    [33m<[39m[33mdiv[39m [33mclassName[39m[33m=[39m[33m{[39m[32m`pm-result-card[39m[36m${[39misError [33m?[39m [32m' pm-result-card--error[39m…
+    [90m 37| [39m      [33mrole[39m[33m=[39m[33m{[39misError [33m?[39m [32m'alert'[39m [33m:[39m [32m'status'[39m[33m}[39m [33maria-live[39m[33m=[39m[33m{[39misError [33m?[39m [32m'assert[39m…
+[90m [2m❯[22m renderWithHooks ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m5608:18[22m[39m
+[90m [2m❯[22m mountIndeterminateComponent ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m9884:13[22m[39m
+[90m [2m❯[22m beginWork ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m11351:16[22m[39m
+[90m [2m❯[22m performUnitOfWork ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m15850:12[22m[39m
+[90m [2m❯[22m workLoopSync ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m15784:5[22m[39m
+[90m [2m❯[22m renderRootSync ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m15756:7[22m[39m
+[90m [2m❯[22m performSyncWorkOnRoot ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m15461:20[22m[39m
+[90m [2m❯[22m flushSyncCallbacks ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react-test-renderer@18.3.1_react@18.3.1/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:[2m2597:22[22m[39m
+[90m [2m❯[22m flushActQueue ../../../../../../../../tmp/pmtool-all-closure-20261021/packages/dsh-pm-tool/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:[2m2667:24[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+

@@ -1,0 +1,113 @@
+{
+  "platform": "trae",
+  "role": "独立 P2002 后置封签接续专家",
+  "scope": "本轮只关原 R3 §8.2 refresh 同视口视觉缺口；原 r4 和全部输入只读",
+  "environment": {
+    "os": "macOS / darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "nodePath": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+    "tmp": "/tmp/p2002-refresh-visible-gui-review-20261023-r5-expert-Pkx64s",
+    "pnpmInvoked": false
+  },
+  "preflightFailures": [
+    {
+      "tool": "functions.exec_command",
+      "request": { "cmd": "pwd", "login": false },
+      "result": "custom shell and login=false are not supported yet",
+      "exitCode": null,
+      "startedAt": null,
+      "endedAt": null,
+      "timingLimit": "设施拒绝，没有实际 shell 终码或起止时间；不补造",
+      "resolution": "默认 shell 的 pwd 实际 0，工具 wall time 0.0760 秒；路径为本仓库"
+    },
+    {
+      "tool": "functions.exec_command",
+      "command": "rg --files docs/testing reports/all-pending-evidence-20261021/P2002TreeRefreshR4",
+      "exitCode": 127,
+      "stderr": "/bin/bash: rg: command not found",
+      "wallTimeSeconds": 0.1211,
+      "startedAt": null,
+      "endedAt": null,
+      "timingLimit": "原工具仅返回 wall time，没有 UTC 起止；不补造",
+      "resolution": "改用 Node 内置 fs，仅列本轮封包及相关文件名；未安装 rg"
+    }
+  ],
+  "outputFailuresRetained": [
+    {
+      "operation": "cat 原 r4 audit",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.1490,
+      "issue": "57027 字节原件触发工具大输出持久化，仅看工具预览；没有读取工具私有 output.log"
+    },
+    {
+      "operation": "首次 Node shape 摘要",
+      "startedAt": "2026-10-23T02:42:53.680Z",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.2134,
+      "issue": "误展开 path-keyed index 的全部 118 个键及条目 shape，29.8 KB；未输出完整 index 原文，但违反先短 shape 的输出约束。保留此失误，不冒称首次摘要足够短"
+    },
+    {
+      "operation": "第二次 Node shape 摘要",
+      "startedAt": "2026-10-23T02:43:04.242Z",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.1549,
+      "issue": "大字段继续造成 24.9 KB 输出；没有读取工具私有 output.log"
+    },
+    {
+      "operation": "原 audit 分节及 manifest shape",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.5474,
+      "issue": "字符截断不等于 UTF-8 字节预算，中文及 built-artifacts 455 键展开仍造成 43.7 KB 输出；没有读取工具私有 output.log"
+    }
+  ],
+  "resolution": "后续限制 keys/sample 的数量和长度；实际 index/audit/封签/readback 用自有 reader/outer，正文落唯一 r5 前缀，终端仅小摘要",
+  "timedVerificationObserved": [
+    {
+      "mode": "index",
+      "outerStartedAt": "2026-10-23T02:45:42.581Z",
+      "outerEndedAt": "2026-10-23T02:45:42.725Z",
+      "outerDurationMs": 144,
+      "readerStartedAt": "2026-10-23T02:45:42.630Z",
+      "readerEndedAt": "2026-10-23T02:45:42.717Z",
+      "readerDurationMs": 87,
+      "parentPid": 62548,
+      "childPid": 62549,
+      "actualOuterStatus": 0,
+      "actualExecCommandExitCode": 0,
+      "execCommandWallTimeSeconds": 0.3074,
+      "receipt": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-index-tool-receipt.json"
+    },
+    {
+      "mode": "audit",
+      "outerStartedAt": "2026-10-23T02:45:49.831Z",
+      "outerEndedAt": "2026-10-23T02:45:49.953Z",
+      "outerDurationMs": 122,
+      "readerStartedAt": "2026-10-23T02:45:49.873Z",
+      "readerEndedAt": "2026-10-23T02:45:49.948Z",
+      "readerDurationMs": 75,
+      "childPid": 62645,
+      "actualOuterStatus": 0,
+      "actualExecCommandExitCode": 0,
+      "execCommandWallTimeSeconds": 0.3061,
+      "receipt": "docs/testing/p2002-refresh-visible-gui-review-20261023-r5-audit-tool-receipt.json"
+    },
+    {
+      "mode": "functions.view_image 三次补看",
+      "startedAt": "2026-10-23T02:45:58.538Z",
+      "endedAt": "2026-10-23T02:46:29.346Z",
+      "bracketDurationMs": 30808,
+      "successfulLoads": 3,
+      "processExitCode": null,
+      "limit": "仅实际时钟包络；无单图工具内部起止/进程终码"
+    }
+  ],
+  "laterStepReceiptPolicy": "seal/readback/released 的真实起止、耗时、PID、stdout/stderr/终码由各自后置工具收据记录；此文件不预填未来成功",
+  "originalFailurePolicy": "原 R3 report 中 Main prepare outer1、preparefollow0 及旧 GUI BLOCKED 表述保留；本轮不改旧档案，不把旧失败冒成本轮零失败",
+  "noProductFailureInThisRole": "本轮核封与补看没有产品执行，不能由设施失误推定产品 FAIL",
+  "noFetchInstallBuildLivingDocsGitRuntimeOrBrowser": true,
+  "noMainScriptImportedEvaluatedOrExecuted": true,
+  "onlyOwnScriptsSpawned": ["reader.mjs"],
+  "noOriginalR4ArtifactModified": true
+}

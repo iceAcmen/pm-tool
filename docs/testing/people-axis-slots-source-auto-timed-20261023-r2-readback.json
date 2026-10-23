@@ -1,0 +1,21 @@
+{
+  "startedAtUtc": "2026-10-23T03:22:09.282Z",
+  "endedAtUtc": "2026-10-23T03:22:09.362Z",
+  "durationSeconds": 0.07761775,
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/private/tmp/people-axis-slots-source-auto-timed-20261023-r2/finalize.mjs",
+    "check"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "outerPid": 70560,
+  "childPid": 70561,
+  "actualReadbackExit": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\n  \"checkedFiles\": 84,\n  \"allActualBytesAndShaMatch\": true,\n  \"seal\": {\n    \"path\": \"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-seal.json\",\n    \"bytes\": 18813,\n    \"sha256\": \"5643f96ad667f5d9b877658742b533964731c3aa0f632979bf8f7b5d0cee34d2\"\n  },\n  \"audit\": {\n    \"path\": \"/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/people-axis-slots-source-auto-timed-20261023-r2-audit.json\",\n    \"bytes\": 200457,\n    \"sha256\": \"1c1246f8f2566662d535b7a75b911227a9a79aa842fe0c67f8ada2a8e9436900\"\n  },\n  \"sourceOnly\": true,\n  \"independentAuto\": \"NOT_RUN\",\n  \"gui\": \"NOT_RUN; original FAIL retained\"\n}\n",
+  "stderr": "",
+  "receiptReread": true,
+  "durationAccounting": "outer includes check child, count once",
+  "state": "STOP / released"
+}

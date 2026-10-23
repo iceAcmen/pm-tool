@@ -1,0 +1,22 @@
+{
+  "step": "readback",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/p26-original-id-inheritance-timed-20261023-r1-reader.mjs",
+    "readback-child"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "parentPid": 70334,
+  "childPid": 70335,
+  "startedUtc": "2026-10-23T03:19:54.496Z",
+  "endedUtc": "2026-10-23T03:19:54.625Z",
+  "elapsedMs": 128.689,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\n  \"checkedOriginalIds\": 26,\n  \"completeCandidates\": 20,\n  \"unclosed\": 6,\n  \"applicable\": 1435,\n  \"explicitInputsChecked\": 140,\n  \"inputDrift\": [],\n  \"parentPass\": false,\n  \"commitAdmission\": false,\n  \"readback\": \"docs/testing/p26-original-id-inheritance-timed-20261023-r1-readback.json\",\n  \"outputPinsChecked\": 8\n}\n",
+  "stderr": "",
+  "stdoutSha256": "569db6568857175bb42e244354e4815e79d26ec0d734c01e884fbb36880fa9e6",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "meaning": "实际自有reader子退出收据，不冒工具私有输出或产品结果"
+}

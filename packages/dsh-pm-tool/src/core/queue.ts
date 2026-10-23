@@ -248,11 +248,11 @@ export function deriveQueue(
 
   items.sort(compareQueueItems)
 
-  // 4) Top1：非静默时取首个「未静音或关键项豁免」条目；静默时 top 置空、rest 全保留。
+  // 4) Top1：缺席仅折叠列示；正常到期项仍遵守静音与关键项豁免。
   let top: QueueItem | null = null
   let rest = items
   if (!quietMode) {
-    const idx = items.findIndex(it => !it.muted || isExemptFromMute(it))
+    const idx = items.findIndex(it => !it.absent && (!it.muted || isExemptFromMute(it)))
     if (idx >= 0) {
       top = items[idx]
       rest = items.filter((_, i) => i !== idx)

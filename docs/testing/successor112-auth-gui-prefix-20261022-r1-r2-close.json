@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-22T14:40:15.899Z",
+  "released": true,
+  "stop": true,
+  "actualExit": 1,
+  "counts": {
+    "total": 5,
+    "passed": 2,
+    "failed": 3,
+    "other": 0
+  },
+  "cases": [
+    {
+      "title": "P-AUTH 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "P-RATE-PREFIX 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "C-RAW 真实组件保完整原因且同场景前缀仅一次",
+      "status": "passed"
+    },
+    {
+      "title": "C-COLON 真实组件保完整原因且同场景前缀仅一次",
+      "status": "failed"
+    },
+    {
+      "title": "C-SUCCESS 真实组件保完整原因且同场景前缀仅一次",
+      "status": "passed"
+    }
+  ],
+  "observations": 5,
+  "ownedPid": 3566,
+  "ownedPidExited": true,
+  "originalAndOwnedInputsUnchanged": true,
+  "noProductTransform": true
+}

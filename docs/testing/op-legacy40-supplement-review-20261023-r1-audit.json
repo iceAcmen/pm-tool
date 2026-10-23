@@ -1,0 +1,4632 @@
+{
+  "kind": "独立替补审证；只有本旧包40旁注视觉补签，不是产品执行",
+  "at": "2026-10-22T20:24:26.384Z",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "reviewer": {
+    "role": "trae替补独立审证",
+    "GUIExecutor": false,
+    "developer": false,
+    "replacedTask": "op_legacy40_supplement_review/arun_6ada32077cfef4f845ad48a5",
+    "replacedTaskState": "用户告知killed；只核旧前缀无文件，不重跑或探任务活性"
+  },
+  "parentIndex": {
+    "bytes": 20048,
+    "mtimeNs": "1792683859043895465",
+    "ctimeNs": "1792683859043895465",
+    "ino": "56944003",
+    "sha256": "478e107080540bb25a32f250f5662c61399d0c9c166d858cd167becacf897ac2"
+  },
+  "supplementIndex": {
+    "bytes": 1616,
+    "mtimeNs": "1792684534212627476",
+    "ctimeNs": "1792684534212627476",
+    "ino": "56955392",
+    "sha256": "3791b426e641c1d1f4fb2f11e6deb0b0aeb04948dbd6426fccb6a343ff506c00"
+  },
+  "parentRows": [
+    {
+      "name": "02-legacy-first-confirm-events.json",
+      "bytes": 1352,
+      "mtimeNs": "1792683709436735341",
+      "ctimeNs": "1792683709436735341",
+      "ino": "56941043",
+      "sha256": "a3a352a0a422bd8f4d6459224de46289ab0a27d125fb5b106d657c59276afa12"
+    },
+    {
+      "name": "02-legacy-first-confirm-roots.json",
+      "bytes": 462,
+      "mtimeNs": "1792683709440268523",
+      "ctimeNs": "1792683709440268523",
+      "ino": "56941044",
+      "sha256": "5144b7365990ed01c94bd2bd08d4883fc6e8886106e5e9aec82ab8a8659802cc"
+    },
+    {
+      "name": "02-legacy-first-confirm.json",
+      "bytes": 2311,
+      "mtimeNs": "1792683709458644115",
+      "ctimeNs": "1792683709458644115",
+      "ino": "56941045",
+      "sha256": "012f32a39e9dc8427c9a78643e9f0fd5bbb404d6c9c369946814fc161e5b09a9"
+    },
+    {
+      "name": "02-legacy-first-confirm.png",
+      "bytes": 172829,
+      "mtimeNs": "1792683709533657839",
+      "ctimeNs": "1792683709533657839",
+      "ino": "56941048",
+      "sha256": "2b5d0ecd63c40327e2c5a9baddf4bb0295e166c2cfd92e4454d20dfed7966be8"
+    },
+    {
+      "name": "02-legacy-precheck-events.json",
+      "bytes": 2838,
+      "mtimeNs": "1792683709021864568",
+      "ctimeNs": "1792683709021864568",
+      "ino": "56941024",
+      "sha256": "f05df68642a75e5cdde9440a60b8ffea5be6f9107367996993b208c15bc335bd"
+    },
+    {
+      "name": "02-legacy-precheck-roots.json",
+      "bytes": 462,
+      "mtimeNs": "1792683709031505100",
+      "ctimeNs": "1792683709031505100",
+      "ino": "56941025",
+      "sha256": "5144b7365990ed01c94bd2bd08d4883fc6e8886106e5e9aec82ab8a8659802cc"
+    },
+    {
+      "name": "02-legacy-precheck.json",
+      "bytes": 1728,
+      "mtimeNs": "1792683709048643755",
+      "ctimeNs": "1792683709048643755",
+      "ino": "56941026",
+      "sha256": "88d85be445dc51692259ccb052e8bea5cf0b48f2150c4b1c8860824460280166"
+    },
+    {
+      "name": "02-legacy-precheck.png",
+      "bytes": 141588,
+      "mtimeNs": "1792683709122868425",
+      "ctimeNs": "1792683709122868425",
+      "ino": "56941027",
+      "sha256": "a9bb0365c7c63160c48d9b2072ba8103d1be9ec048670e7e3f53db2acce8564c"
+    },
+    {
+      "name": "03-browse-before-mtime.json",
+      "bytes": 2547,
+      "mtimeNs": "1792683749192698649",
+      "ctimeNs": "1792683749192698649",
+      "ino": "56942089",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    {
+      "name": "03-legacy-restored-events.json",
+      "bytes": 9172,
+      "mtimeNs": "1792683748906583687",
+      "ctimeNs": "1792683748906583687",
+      "ino": "56942062",
+      "sha256": "f80ebf5136cc32b5209e26b302f96733b8109bb9888fcbd85a334fe24154aeb2"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 297,
+      "mtimeNs": "1792683748915186161",
+      "ctimeNs": "1792683748915186161",
+      "ino": "56942069",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 383,
+      "mtimeNs": "1792683748919992781",
+      "ctimeNs": "1792683748919992781",
+      "ino": "56942073",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 387,
+      "mtimeNs": "1792683748921003964",
+      "ctimeNs": "1792683748921003964",
+      "ino": "56942074",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 451,
+      "mtimeNs": "1792683748922793160",
+      "ctimeNs": "1792683748922793160",
+      "ino": "56942075",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 390,
+      "mtimeNs": "1792683748927227983",
+      "ctimeNs": "1792683748927227983",
+      "ino": "56942076",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 389,
+      "mtimeNs": "1792683748939807188",
+      "ctimeNs": "1792683748939807188",
+      "ino": "56942078",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 382,
+      "mtimeNs": "1792683748950648032",
+      "ctimeNs": "1792683748950648032",
+      "ino": "56942079",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 382,
+      "mtimeNs": "1792683748954459427",
+      "ctimeNs": "1792683748954459427",
+      "ino": "56942080",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 383,
+      "mtimeNs": "1792683748956386250",
+      "ctimeNs": "1792683748956386250",
+      "ino": "56942081",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 382,
+      "mtimeNs": "1792683748957956734",
+      "ctimeNs": "1792683748957956734",
+      "ino": "56942082",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    {
+      "name": "03-legacy-restored-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 414,
+      "mtimeNs": "1792683748959389174",
+      "ctimeNs": "1792683748959389174",
+      "ino": "56942083",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    {
+      "name": "03-legacy-restored-roots.json",
+      "bytes": 2016,
+      "mtimeNs": "1792683748964410090",
+      "ctimeNs": "1792683748964410090",
+      "ino": "56942084",
+      "sha256": "337b2c218decc8b045ff606e7e2c57d6c4dd55e9b74ef172ede8478f41f4c9bf"
+    },
+    {
+      "name": "03-legacy-restored.json",
+      "bytes": 6804,
+      "mtimeNs": "1792683748981707414",
+      "ctimeNs": "1792683748981707414",
+      "ino": "56942085",
+      "sha256": "1a7544ac77be2c6bcfcbf2a95de949b0278053c891f5a57bdd853a63c05d5252"
+    },
+    {
+      "name": "03-legacy-restored.png",
+      "bytes": 200957,
+      "mtimeNs": "1792683749103104520",
+      "ctimeNs": "1792683749103104520",
+      "ino": "56942086",
+      "sha256": "7304670b45f2b19edcd80fc49af887124245b0762f4d035664402365117ffe27"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 297,
+      "mtimeNs": "1792683749421793014",
+      "ctimeNs": "1792683749421793014",
+      "ino": "56942100",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 383,
+      "mtimeNs": "1792683749424770187",
+      "ctimeNs": "1792683749424770187",
+      "ino": "56942103",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 387,
+      "mtimeNs": "1792683749425380322",
+      "ctimeNs": "1792683749425380322",
+      "ino": "56942104",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 451,
+      "mtimeNs": "1792683749425878789",
+      "ctimeNs": "1792683749425878789",
+      "ino": "56942105",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 390,
+      "mtimeNs": "1792683749428951172",
+      "ctimeNs": "1792683749428951172",
+      "ino": "56942106",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 389,
+      "mtimeNs": "1792683749433491371",
+      "ctimeNs": "1792683749433491371",
+      "ino": "56942107",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 382,
+      "mtimeNs": "1792683749435500112",
+      "ctimeNs": "1792683749435500112",
+      "ino": "56942109",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 382,
+      "mtimeNs": "1792683749440446068",
+      "ctimeNs": "1792683749440446068",
+      "ino": "56942110",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 383,
+      "mtimeNs": "1792683749441325332",
+      "ctimeNs": "1792683749441325332",
+      "ino": "56942111",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 382,
+      "mtimeNs": "1792683749452072466",
+      "ctimeNs": "1792683749452072466",
+      "ino": "56942112",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    {
+      "name": "03-legacy-task-list-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 414,
+      "mtimeNs": "1792683749456260410",
+      "ctimeNs": "1792683749456260410",
+      "ino": "56942113",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    {
+      "name": "03-legacy-task-list-roots.json",
+      "bytes": 2016,
+      "mtimeNs": "1792683749468442734",
+      "ctimeNs": "1792683749468442734",
+      "ino": "56942114",
+      "sha256": "337b2c218decc8b045ff606e7e2c57d6c4dd55e9b74ef172ede8478f41f4c9bf"
+    },
+    {
+      "name": "03-legacy-task-list.json",
+      "bytes": 6822,
+      "mtimeNs": "1792683749482654840",
+      "ctimeNs": "1792683749482654840",
+      "ino": "56942115",
+      "sha256": "2edd3138e9bb2d0feb0ef883416adfb43c1c432acb1623c52f61b9b511cee204"
+    },
+    {
+      "name": "03-legacy-task-list.png",
+      "bytes": 220768,
+      "mtimeNs": "1792683751523132898",
+      "ctimeNs": "1792683751523132898",
+      "ino": "56942142",
+      "sha256": "5c47dc1ebb8423c6bf502f24d76cb5639de2dc1fbf01f66660ba97dc249a5b63"
+    },
+    {
+      "name": "04-browse-after-mtime.json",
+      "bytes": 2547,
+      "mtimeNs": "1792683799610837968",
+      "ctimeNs": "1792683799610837968",
+      "ino": "56942983",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    {
+      "name": "04-browse-only-events.json",
+      "bytes": 7912,
+      "mtimeNs": "1792683799502760454",
+      "ctimeNs": "1792683799502760454",
+      "ino": "56942980",
+      "sha256": "0db4cc23652a44e75ebd52fc3bd7246a77d3e868da51196fd4f7b4b718da1699"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 297,
+      "mtimeNs": "1792683798988372223",
+      "ctimeNs": "1792683798988372223",
+      "ino": "56942943",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 383,
+      "mtimeNs": "1792683798991341855",
+      "ctimeNs": "1792683798991341855",
+      "ino": "56942945",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 387,
+      "mtimeNs": "1792683798994024815",
+      "ctimeNs": "1792683798994024815",
+      "ino": "56942946",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 451,
+      "mtimeNs": "1792683799004629364",
+      "ctimeNs": "1792683799004629364",
+      "ino": "56942947",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 390,
+      "mtimeNs": "1792683799006431268",
+      "ctimeNs": "1792683799006431268",
+      "ino": "56942949",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 389,
+      "mtimeNs": "1792683799008386967",
+      "ctimeNs": "1792683799008386967",
+      "ino": "56942950",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 382,
+      "mtimeNs": "1792683799009473443",
+      "ctimeNs": "1792683799009473443",
+      "ino": "56942951",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 382,
+      "mtimeNs": "1792683799011500226",
+      "ctimeNs": "1792683799011500226",
+      "ino": "56942952",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 383,
+      "mtimeNs": "1792683799016946690",
+      "ctimeNs": "1792683799016946690",
+      "ino": "56942953",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 382,
+      "mtimeNs": "1792683799020497914",
+      "ctimeNs": "1792683799020497914",
+      "ino": "56942954",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    {
+      "name": "04-legacy-list-reentry-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 414,
+      "mtimeNs": "1792683799021379345",
+      "ctimeNs": "1792683799021379345",
+      "ino": "56942955",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    {
+      "name": "04-legacy-list-reentry-roots.json",
+      "bytes": 2210,
+      "mtimeNs": "1792683799034938483",
+      "ctimeNs": "1792683799034938483",
+      "ino": "56942956",
+      "sha256": "0e45fa414ae9573077a6a15ffd0f6ad6a01ab406c5f2fe0cab39a68bda78ad27"
+    },
+    {
+      "name": "04-legacy-list-reentry.json",
+      "bytes": 6550,
+      "mtimeNs": "1792683799056406292",
+      "ctimeNs": "1792683799056406292",
+      "ino": "56942957",
+      "sha256": "267991cf10f79d4ed395ceb1bc51455785fc149311c5e091dc32fdd898831395"
+    },
+    {
+      "name": "04-legacy-list-reentry.png",
+      "bytes": 225515,
+      "mtimeNs": "1792683799241282143",
+      "ctimeNs": "1792683799241282143",
+      "ino": "56942961",
+      "sha256": "86a5c7d0891b225912cbbc2f4c37142e6e4e4946f4a73ce15b61144a10b26ae0"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 297,
+      "mtimeNs": "1792683797421530188",
+      "ctimeNs": "1792683797421530188",
+      "ino": "56942867",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 383,
+      "mtimeNs": "1792683797424587988",
+      "ctimeNs": "1792683797424587988",
+      "ino": "56942869",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 387,
+      "mtimeNs": "1792683797426870525",
+      "ctimeNs": "1792683797426870525",
+      "ino": "56942870",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 451,
+      "mtimeNs": "1792683797437636493",
+      "ctimeNs": "1792683797437636493",
+      "ino": "56942871",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 390,
+      "mtimeNs": "1792683797539017856",
+      "ctimeNs": "1792683797539017856",
+      "ino": "56942872",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 389,
+      "mtimeNs": "1792683797554713237",
+      "ctimeNs": "1792683797554713237",
+      "ino": "56942874",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 382,
+      "mtimeNs": "1792683797563280127",
+      "ctimeNs": "1792683797563280127",
+      "ino": "56942875",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 382,
+      "mtimeNs": "1792683797574870274",
+      "ctimeNs": "1792683797574870274",
+      "ino": "56942876",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 383,
+      "mtimeNs": "1792683797588759334",
+      "ctimeNs": "1792683797588759334",
+      "ino": "56942877",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 382,
+      "mtimeNs": "1792683797636328028",
+      "ctimeNs": "1792683797636328028",
+      "ino": "56942878",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    {
+      "name": "04-legacy-project-browse-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 414,
+      "mtimeNs": "1792683797680212119",
+      "ctimeNs": "1792683797680212119",
+      "ino": "56942879",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    {
+      "name": "04-legacy-project-browse-roots.json",
+      "bytes": 2016,
+      "mtimeNs": "1792683797757172959",
+      "ctimeNs": "1792683797757172959",
+      "ino": "56942882",
+      "sha256": "aeb7f93a0fa32f99e265b5b8a003bf148a8d706efea38037c3cb93ef6f1d9ba4"
+    },
+    {
+      "name": "04-legacy-project-browse.json",
+      "bytes": 3217,
+      "mtimeNs": "1792683797782956671",
+      "ctimeNs": "1792683797782956671",
+      "ino": "56942886",
+      "sha256": "1eb10b470794aa32fdb84a47fcc7343bfb3cec3640b9fdfea5543cc06e9465de"
+    },
+    {
+      "name": "04-legacy-project-browse.png",
+      "bytes": 169817,
+      "mtimeNs": "1792683797900116750",
+      "ctimeNs": "1792683797900116750",
+      "ino": "56942888",
+      "sha256": "fd9d8669469b320ec5a8a89ed6d5e3dc3ead0aad7f03fee769fd6a3bc0116695"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/projects/p-0001.json",
+      "bytes": 297,
+      "mtimeNs": "1792683798130943394",
+      "ctimeNs": "1792683798130943394",
+      "ino": "56942895",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0001.json",
+      "bytes": 383,
+      "mtimeNs": "1792683798144447489",
+      "ctimeNs": "1792683798144447489",
+      "ino": "56942897",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0002.json",
+      "bytes": 387,
+      "mtimeNs": "1792683798148508014",
+      "ctimeNs": "1792683798148508014",
+      "ino": "56942898",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0003.json",
+      "bytes": 451,
+      "mtimeNs": "1792683798155020412",
+      "ctimeNs": "1792683798155020412",
+      "ino": "56942899",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0004.json",
+      "bytes": 390,
+      "mtimeNs": "1792683798173773384",
+      "ctimeNs": "1792683798173773384",
+      "ino": "56942900",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0005.json",
+      "bytes": 389,
+      "mtimeNs": "1792683798200974869",
+      "ctimeNs": "1792683798200974869",
+      "ino": "56942902",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0006.json",
+      "bytes": 382,
+      "mtimeNs": "1792683798225580229",
+      "ctimeNs": "1792683798225580229",
+      "ino": "56942903",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0007.json",
+      "bytes": 382,
+      "mtimeNs": "1792683798236150444",
+      "ctimeNs": "1792683798236150444",
+      "ino": "56942904",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0008.json",
+      "bytes": 383,
+      "mtimeNs": "1792683798241324236",
+      "ctimeNs": "1792683798241324236",
+      "ino": "56942905",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0009.json",
+      "bytes": 382,
+      "mtimeNs": "1792683798243457396",
+      "ctimeNs": "1792683798243457396",
+      "ino": "56942906",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    {
+      "name": "04-legacy-task-browse-raw/data/pmtool/tasks/t-0010.json",
+      "bytes": 414,
+      "mtimeNs": "1792683798249467994",
+      "ctimeNs": "1792683798249467994",
+      "ino": "56942907",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    {
+      "name": "04-legacy-task-browse-roots.json",
+      "bytes": 2016,
+      "mtimeNs": "1792683798258663394",
+      "ctimeNs": "1792683798258663394",
+      "ino": "56942908",
+      "sha256": "aeb7f93a0fa32f99e265b5b8a003bf148a8d706efea38037c3cb93ef6f1d9ba4"
+    },
+    {
+      "name": "04-legacy-task-browse.json",
+      "bytes": 6540,
+      "mtimeNs": "1792683798292018272",
+      "ctimeNs": "1792683798292018272",
+      "ino": "56942913",
+      "sha256": "535034d6df73fe4353b770dc8bde65483179d91b83f49679beafc4106dd5ac45"
+    },
+    {
+      "name": "04-legacy-task-browse.png",
+      "bytes": 220756,
+      "mtimeNs": "1792683798456473957",
+      "ctimeNs": "1792683798456473957",
+      "ino": "56942914",
+      "sha256": "6e35fcbc14ca7949c3788bda94e14a01c7a98554f860c3004bec63b852bc3c8f"
+    },
+    {
+      "name": "execution-receipts/21eab28497c1183a8338d3d216b51c07/execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792683858994157072",
+      "ctimeNs": "1792683858994157072",
+      "ino": "56943994",
+      "sha256": "9b391e24641a85281a7245599c609398c29a62751c38d014620281bdf57390d4"
+    },
+    {
+      "name": "execution-receipts/21eab28497c1183a8338d3d216b51c07/output.log",
+      "bytes": 11611,
+      "mtimeNs": "1792683858994672247",
+      "ctimeNs": "1792683858994672247",
+      "ino": "56943995",
+      "sha256": "632d72ec7f85ba7439feb18552245e8444ab40ffe7ecdaa7d282338ca3db5614"
+    },
+    {
+      "name": "execution-receipts/21eab28497c1183a8338d3d216b51c07/stderr.log",
+      "bytes": 0,
+      "mtimeNs": "1792683747485605116",
+      "ctimeNs": "1792683858998747022",
+      "ino": "56943996",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "execution-receipts/357dd3c3d048fa959e31b39c773f14ee/execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792683858984280494",
+      "ctimeNs": "1792683858984280494",
+      "ino": "56943986",
+      "sha256": "4817aeb19c207843335d98b3379791289f9a8d01f6e77fb179b939c9a7e0b606"
+    },
+    {
+      "name": "execution-receipts/357dd3c3d048fa959e31b39c773f14ee/output.log",
+      "bytes": 2601,
+      "mtimeNs": "1792683858985059340",
+      "ctimeNs": "1792683858985059340",
+      "ino": "56943987",
+      "sha256": "635ab8f8e3cfb80dbe1c579dcabe15e584fd08ca569137daad36b99b989611d6"
+    },
+    {
+      "name": "execution-receipts/357dd3c3d048fa959e31b39c773f14ee/stderr.log",
+      "bytes": 0,
+      "mtimeNs": "1792683669797701392",
+      "ctimeNs": "1792683858985723768",
+      "ino": "56943988",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "execution-receipts/444f2a41affe08ab0c74308e5ea64359/execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792683858992255208",
+      "ctimeNs": "1792683858992255208",
+      "ino": "56943990",
+      "sha256": "d593ed866c43f141581a3534403bb9b19a6a3e50f8f44c5a4d5eba3a5406850c"
+    },
+    {
+      "name": "execution-receipts/444f2a41affe08ab0c74308e5ea64359/output.log",
+      "bytes": 6380,
+      "mtimeNs": "1792683858993034054",
+      "ctimeNs": "1792683858993034054",
+      "ino": "56943991",
+      "sha256": "636f73e6a40acab8ea5258997d605719b34758c3e0e4b9176a020fa6bb93c5d5"
+    },
+    {
+      "name": "execution-receipts/444f2a41affe08ab0c74308e5ea64359/stderr.log",
+      "bytes": 0,
+      "mtimeNs": "1792683704589267374",
+      "ctimeNs": "1792683858993399393",
+      "ino": "56943992",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "execution-receipts/80b7706c78d5fdc6801ed271cbe09837/execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792683859000328297",
+      "ctimeNs": "1792683859000328297",
+      "ino": "56943998",
+      "sha256": "d277d036b34aee2093d41ce1cb728ac2d0efb79b4b6eca1eb7a54b434e49215b"
+    },
+    {
+      "name": "execution-receipts/80b7706c78d5fdc6801ed271cbe09837/output.log",
+      "bytes": 4369,
+      "mtimeNs": "1792683859000986350",
+      "ctimeNs": "1792683859000986350",
+      "ino": "56943999",
+      "sha256": "6a701c19dde8c262caeef3e2a7743e46041e8b81165b912037bc249fa88bcccd"
+    },
+    {
+      "name": "execution-receipts/80b7706c78d5fdc6801ed271cbe09837/stderr.log",
+      "bytes": 0,
+      "mtimeNs": "1792683796523173814",
+      "ctimeNs": "1792683859001608860",
+      "ino": "56944000",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "execution-receipts/d25a13771d288ef5a1c246753fe9eb16/execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792683858971195490",
+      "ctimeNs": "1792683858971195490",
+      "ino": "56943982",
+      "sha256": "022db8f87f30131a1ba53b80c7f3fb56560f4035b475d929cae3869eac845ab3"
+    },
+    {
+      "name": "execution-receipts/d25a13771d288ef5a1c246753fe9eb16/output.log",
+      "bytes": 79,
+      "mtimeNs": "1792683858978605110",
+      "ctimeNs": "1792683858978605110",
+      "ino": "56943983",
+      "sha256": "44d008ce704950c25485f45a93ffcda15718240dc852a70aa4377699106698da"
+    },
+    {
+      "name": "execution-receipts/d25a13771d288ef5a1c246753fe9eb16/stderr.log",
+      "bytes": 0,
+      "mtimeNs": "1792683623349570290",
+      "ctimeNs": "1792683858983244353",
+      "ino": "56943984",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "execution-receipts.json",
+      "bytes": 503,
+      "mtimeNs": "1792683859001818405",
+      "ctimeNs": "1792683859001818405",
+      "ino": "56944001",
+      "sha256": "a8fa2871deac2d0c7f6c5ff41e5e28d81f0248b2637e6234ed28800a722f914d"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-round01.mjs",
+      "bytes": 302,
+      "mtimeNs": "1792683858967994980",
+      "ctimeNs": "1792683858967994980",
+      "ino": "56943975",
+      "sha256": "640ea51b24f754c65c81a5730c7cb1ddefd4de07a49a7c9af8107ba13dcd09d7"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-round02.mjs",
+      "bytes": 1526,
+      "mtimeNs": "1792683858968516321",
+      "ctimeNs": "1792683858968516321",
+      "ino": "56943976",
+      "sha256": "79327dfe56eece5cf92191e28591582af2d5fc594cc0870f782efcaf27544c80"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-round03.mjs",
+      "bytes": 1664,
+      "mtimeNs": "1792683858969082789",
+      "ctimeNs": "1792683858969082789",
+      "ino": "56943977",
+      "sha256": "0f0515564deca16df194462a0fa130dbd969b78215c6dcbdc2bdcbb9124b777e"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-round04.mjs",
+      "bytes": 1867,
+      "mtimeNs": "1792683858969312834",
+      "ctimeNs": "1792683858969312834",
+      "ino": "56943978",
+      "sha256": "3599d48722655fe7d1d4940175af3c9bd8099a51adfdaf8c37bf7bf191601de8"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-seal-r1.mjs",
+      "bytes": 4944,
+      "mtimeNs": "1792683858969755341",
+      "ctimeNs": "1792683858969755341",
+      "ino": "56943979",
+      "sha256": "4609ddb79f0cc7bd7fb74bbd04c2efa5a595ce1ca8acdda3d04f43124f07ffe1"
+    },
+    {
+      "name": "execution-scripts/pmtool-legacy-setup-r1.mjs",
+      "bytes": 2841,
+      "mtimeNs": "1792683858967456137",
+      "ctimeNs": "1792683858967456137",
+      "ino": "56943974",
+      "sha256": "fe3365592a6789961a55364872fcea8d7d2c8ad53a30f2f325b841c19b4d8928"
+    },
+    {
+      "name": "executor-observations.json",
+      "bytes": 399,
+      "mtimeNs": "1792683858966712584",
+      "ctimeNs": "1792683858966712584",
+      "ino": "56943972",
+      "sha256": "bb3b595104477bffdef1c53eb8ab9d7b901793736dc95e8e3316af51ef05db49"
+    },
+    {
+      "name": "fixture-binding.json",
+      "bytes": 898,
+      "mtimeNs": "1792683623533662095",
+      "ctimeNs": "1792683623533662095",
+      "ino": "56938372",
+      "sha256": "219744971a245f1da58daefb878392fb02f7330ea6557b70d06bc5fbd533d4cc"
+    },
+    {
+      "name": "frames/02-legacy-first-confirm-1-1792683709292.jpg",
+      "bytes": 68541,
+      "mtimeNs": "1792683709292917826",
+      "ctimeNs": "1792683709292917826",
+      "ino": "56941035",
+      "sha256": "9e328179eee33ab87b05b6c573f07836dd9a802512418effc820e1998a9d6c96"
+    },
+    {
+      "name": "frames/02-legacy-first-confirm-1-1792683709343.jpg",
+      "bytes": 68544,
+      "mtimeNs": "1792683709344433167",
+      "ctimeNs": "1792683709344433167",
+      "ino": "56941038",
+      "sha256": "7b0aad16a4cfa522437c8134072994020bdd2143dd38867c05c7078ad1e45000"
+    },
+    {
+      "name": "frames/02-legacy-first-confirm-1-1792683709389.jpg",
+      "bytes": 66431,
+      "mtimeNs": "1792683709389868201",
+      "ctimeNs": "1792683709389868201",
+      "ino": "56941040",
+      "sha256": "839bda1ee08d9ec4c8dcad27f6447bd902114c98ef2cd29ab9dd4508379715cb"
+    },
+    {
+      "name": "frames/02-legacy-precheck-1-1792683708774.jpg",
+      "bytes": 25513,
+      "mtimeNs": "1792683708775645340",
+      "ctimeNs": "1792683708775645340",
+      "ino": "56941012",
+      "sha256": "8965e8340d7b7d1a2f2c1ec3327c633ed5dfff815961343e71027bba3f2c7641"
+    },
+    {
+      "name": "frames/02-legacy-precheck-1-1792683708850.jpg",
+      "bytes": 52407,
+      "mtimeNs": "1792683708850937861",
+      "ctimeNs": "1792683708850937861",
+      "ino": "56941015",
+      "sha256": "be0a3a7edcc6f24c0fedf9f5efffc9ca5b85913b959b8ed711c021092a24a1dd"
+    },
+    {
+      "name": "frames/02-legacy-precheck-1-1792683708904.jpg",
+      "bytes": 52420,
+      "mtimeNs": "1792683708905724255",
+      "ctimeNs": "1792683708905724255",
+      "ino": "56941019",
+      "sha256": "8cfbe5d22589290dcdafbc9b0d2b9fc68045563dc77795d25eb764a19074d209"
+    },
+    {
+      "name": "frames/03-legacy-restored-1-1792683748593.jpg",
+      "bytes": 66407,
+      "mtimeNs": "1792683748597049051",
+      "ctimeNs": "1792683748597049051",
+      "ino": "56942053",
+      "sha256": "681f98ac06e2be72a8d1bce050a6934d9e895d762026883ca99b0538ff7fe920"
+    },
+    {
+      "name": "frames/03-legacy-restored-1-1792683748667.jpg",
+      "bytes": 66407,
+      "mtimeNs": "1792683748669310231",
+      "ctimeNs": "1792683748669310231",
+      "ino": "56942055",
+      "sha256": "681f98ac06e2be72a8d1bce050a6934d9e895d762026883ca99b0538ff7fe920"
+    },
+    {
+      "name": "frames/03-legacy-restored-1-1792683748731.jpg",
+      "bytes": 68541,
+      "mtimeNs": "1792683748733735407",
+      "ctimeNs": "1792683748733735407",
+      "ino": "56942057",
+      "sha256": "9e328179eee33ab87b05b6c573f07836dd9a802512418effc820e1998a9d6c96"
+    },
+    {
+      "name": "frames/04-browse-only-1-1792683799261.jpg",
+      "bytes": 97548,
+      "mtimeNs": "1792683799266677266",
+      "ctimeNs": "1792683799266677266",
+      "ino": "56942962",
+      "sha256": "fbc27016d33102236c732e11347ec6bcbf93893bb234f3df18d5567107d4af9e"
+    },
+    {
+      "name": "frames/04-browse-only-1-1792683799322.jpg",
+      "bytes": 97875,
+      "mtimeNs": "1792683799325034552",
+      "ctimeNs": "1792683799325034552",
+      "ino": "56942964",
+      "sha256": "ef34a9eefe73c7e1e7028a7b40862d16b69c49208c16a84758089acf924b648b"
+    },
+    {
+      "name": "frames/04-browse-only-1-1792683799391.jpg",
+      "bytes": 79658,
+      "mtimeNs": "1792683799392602739",
+      "ctimeNs": "1792683799392602739",
+      "ino": "56942976",
+      "sha256": "e95a1a905bc6aa864d72644568a968134396a4c62026d4a30593616b8801d640"
+    },
+    {
+      "name": "gateway-binding.json",
+      "bytes": 354,
+      "mtimeNs": "1792683623489743960",
+      "ctimeNs": "1792683623489743960",
+      "ino": "56938364",
+      "sha256": "d8e1f863e56540d64a31fc8c91d404e87c72300122d3a8e2627e0a602a1f7012"
+    },
+    {
+      "name": "helper-source.mjs",
+      "bytes": 5414,
+      "mtimeNs": "1792683623442657689",
+      "ctimeNs": "1792683623442657689",
+      "ino": "56938342",
+      "sha256": "ccac4f227e338f33b27229c25ad344c34577cfa38070e6f593b6f8b2c6ad04b8"
+    },
+    {
+      "name": "host-ready.json",
+      "bytes": 70,
+      "mtimeNs": "1792683631887117056",
+      "ctimeNs": "1792683631887117056",
+      "ino": "56939330",
+      "sha256": "37cb77839fea73b867f5fcfa86524e781586704dadf49dea318b1dd5dc209093"
+    },
+    {
+      "name": "host-setup-source.mjs",
+      "bytes": 4999,
+      "mtimeNs": "1792683623441812883",
+      "ctimeNs": "1792683623441812883",
+      "ino": "56938340",
+      "sha256": "93c6c6d7382541229bdb3555661fff2e63e27d8d320dab111825ce732334cd5c"
+    },
+    {
+      "name": "host-start.json",
+      "bytes": 1061,
+      "mtimeNs": "1792683623512699461",
+      "ctimeNs": "1792683623512699461",
+      "ino": "56938366",
+      "sha256": "336f927c0fe522730d9041ce30639772371df85402468e45547c1b1865324034"
+    },
+    {
+      "name": "isolated-profile.yml",
+      "bytes": 1200,
+      "mtimeNs": "1792683623480526559",
+      "ctimeNs": "1792683623480526559",
+      "ino": "56938362",
+      "sha256": "b7a440326f999ae637dbb73e6e17dabaa11e17553732f32d2118a0eff8e6a319"
+    },
+    {
+      "name": "legacy-f2.json",
+      "bytes": 4502,
+      "mtimeNs": "1792683623530413167",
+      "ctimeNs": "1792683623530413167",
+      "ino": "56938371",
+      "sha256": "abb086772fde51f0e96dff4d5a7e9d444b887e1acdca0180cce11631ba1473ee"
+    },
+    {
+      "name": "raw-report.md",
+      "bytes": 596,
+      "mtimeNs": "1792683859001950740",
+      "ctimeNs": "1792683859001950740",
+      "ino": "56944002",
+      "sha256": "c8a4ce6cf1b1a7f77eff9751214d9c81b7daa9d3a127e1686a196f2f4c51cfb6"
+    },
+    {
+      "name": "source-binding.json",
+      "bytes": 15337,
+      "mtimeNs": "1792683858961543750",
+      "ctimeNs": "1792683858961543750",
+      "ino": "56943971",
+      "sha256": "d456d64ad4e9d261db2503e93e76d4314bf1302be1d4aae40bb2a76350526258"
+    }
+  ],
+  "supplementRows": [
+    {
+      "name": "40-visible-r2.json",
+      "bytes": 7393,
+      "mtimeNs": "1792684414391145591",
+      "ctimeNs": "1792684414391145591",
+      "ino": "56953754",
+      "sha256": "63de419a5586958c62d389b7fba77a607aa50102847d76fa4eb0e92bc9f2b133"
+    },
+    {
+      "name": "40-visible-r2.png",
+      "bytes": 184681,
+      "mtimeNs": "1792684414584527206",
+      "ctimeNs": "1792684414584527206",
+      "ino": "56953755",
+      "sha256": "35dcab3371f1495bfe4856ad58d3149554a22afcfae31a97927cb997a45dbcd3"
+    },
+    {
+      "name": "after-mtime-r2.json",
+      "bytes": 2547,
+      "mtimeNs": "1792684414823304312",
+      "ctimeNs": "1792684414823304312",
+      "ino": "56953762",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    {
+      "name": "captured-execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792684534193515373",
+      "ctimeNs": "1792684534193515373",
+      "ino": "56955384",
+      "sha256": "e156f294e5f00d0f2946beea960adfeab187a5e853e8168afd3f599c38995d58"
+    },
+    {
+      "name": "captured-output.log",
+      "bytes": 279,
+      "mtimeNs": "1792684534194832061",
+      "ctimeNs": "1792684534194832061",
+      "ino": "56955385",
+      "sha256": "8d0029a1d4c0b218ffb6ccc0122a2d32e03fdfb247d5ed88bdd93a4fbf583af7"
+    },
+    {
+      "name": "failed-execution.json",
+      "bytes": 530,
+      "mtimeNs": "1792684534183373915",
+      "ctimeNs": "1792684534183373915",
+      "ino": "56955381",
+      "sha256": "4530dded7c779bf4fb1784660f3eea5b6b9f81f06b4473591549bc166e85b182"
+    },
+    {
+      "name": "failed-output.log",
+      "bytes": 678,
+      "mtimeNs": "1792684534190623659",
+      "ctimeNs": "1792684534190623659",
+      "ino": "56955382",
+      "sha256": "16846e6b1c630ab497e3bd8a1eb3bbc95ee0318889726d9411ae282c18de12e6"
+    },
+    {
+      "name": "observations.json",
+      "bytes": 231,
+      "mtimeNs": "1792684534195677116",
+      "ctimeNs": "1792684534195677116",
+      "ino": "56955386",
+      "sha256": "a87e2a2489a2ea7d99b43eb1f86202872cbaa08c06d21248f755a4de154347a1"
+    },
+    {
+      "name": "pmtool-legacy-40-round01.mjs",
+      "bytes": 1781,
+      "mtimeNs": "1792684534041531184",
+      "ctimeNs": "1792684534041531184",
+      "ino": "56955376",
+      "sha256": "72e4dc2b0f1ba0720d2f68e34bf1b4ceb782cc24a56595dd81490b0b6f4780e9"
+    },
+    {
+      "name": "pmtool-legacy-40-round02.mjs",
+      "bytes": 449,
+      "mtimeNs": "1792684534163186711",
+      "ctimeNs": "1792684534163186711",
+      "ino": "56955378",
+      "sha256": "13561f5806fb2dc8733001d35543bf6500ccddba2a3603edb7163ce2d28d33fc"
+    },
+    {
+      "name": "pmtool-legacy-40-round03.mjs",
+      "bytes": 1621,
+      "mtimeNs": "1792684534166056799",
+      "ctimeNs": "1792684534166056799",
+      "ino": "56955379",
+      "sha256": "3f34e3277c2f54ad59a04c5099a3b419fcd674ea9d14dcad435a3b38150bf661"
+    },
+    {
+      "name": "pmtool-legacy40-seal-r1.mjs",
+      "bytes": 1665,
+      "mtimeNs": "1792684534168560924",
+      "ctimeNs": "1792684534168560924",
+      "ino": "56955380",
+      "sha256": "963c7d33d823cabc346845a5b4785ecb935771fb1dee3b303a094ac3416c1e23"
+    }
+  ],
+  "inputs": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/AGENTS.md": {
+      "bytes": 26011,
+      "mtimeNs": "1792565348969741151",
+      "ctimeNs": "1792565348969741151",
+      "ino": "46303339",
+      "sha256": "47b6fa14e9da7ece55ce106979a8404d3a6af2ea39be9913b75886fe5ba5760d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/collaboration.md": {
+      "bytes": 31271,
+      "mtimeNs": "1792565349040489965",
+      "ctimeNs": "1792565349040489965",
+      "ino": "46228356",
+      "sha256": "8381490490f21daa0ab6494fdd8438fadc55ea7fa6580b309ae163231286eaab"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md": {
+      "bytes": 15448,
+      "mtimeNs": "1792684223563763483",
+      "ctimeNs": "1792684223563763483",
+      "ino": "56949911",
+      "sha256": "c6bd16cb043fe7fe2c351a66c3fa01e11419711eceaf19e00ad81128c515da6f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-seal.json": {
+      "bytes": 1971,
+      "mtimeNs": "1792684232861826029",
+      "ctimeNs": "1792684232861826029",
+      "ino": "56951051",
+      "sha256": "992701b239f7438231f5cc004cbf3f05c55b9470d3828f47cb9cc80a4289eff9"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-audit.json": {
+      "bytes": 1055956,
+      "mtimeNs": "1792684081697526916",
+      "ctimeNs": "1792684081697526916",
+      "ino": "56948424",
+      "sha256": "93f125b6a8d351e5ecc5e612242852dbee6ac48eba09bebc60398200ed523966"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-reader.mjs": {
+      "bytes": 20588,
+      "mtimeNs": "1792684212172387833",
+      "ctimeNs": "1792684212172387833",
+      "ino": "56948119",
+      "sha256": "56d23f95bcc04fa86a95a930c0385955c05a0cae7ea34518c63523d06fb089e4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/index-r1.json": {
+      "bytes": 20048,
+      "mtimeNs": "1792683859043895465",
+      "ctimeNs": "1792683859043895465",
+      "ino": "56944003",
+      "sha256": "478e107080540bb25a32f250f5662c61399d0c9c166d858cd167becacf897ac2"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm-events.json": {
+      "bytes": 1352,
+      "mtimeNs": "1792683709436735341",
+      "ctimeNs": "1792683709436735341",
+      "ino": "56941043",
+      "sha256": "a3a352a0a422bd8f4d6459224de46289ab0a27d125fb5b106d657c59276afa12"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm-roots.json": {
+      "bytes": 462,
+      "mtimeNs": "1792683709440268523",
+      "ctimeNs": "1792683709440268523",
+      "ino": "56941044",
+      "sha256": "5144b7365990ed01c94bd2bd08d4883fc6e8886106e5e9aec82ab8a8659802cc"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm.json": {
+      "bytes": 2311,
+      "mtimeNs": "1792683709458644115",
+      "ctimeNs": "1792683709458644115",
+      "ino": "56941045",
+      "sha256": "012f32a39e9dc8427c9a78643e9f0fd5bbb404d6c9c369946814fc161e5b09a9"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm.png": {
+      "bytes": 172829,
+      "mtimeNs": "1792683709533657839",
+      "ctimeNs": "1792683709533657839",
+      "ino": "56941048",
+      "sha256": "2b5d0ecd63c40327e2c5a9baddf4bb0295e166c2cfd92e4454d20dfed7966be8"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck-events.json": {
+      "bytes": 2838,
+      "mtimeNs": "1792683709021864568",
+      "ctimeNs": "1792683709021864568",
+      "ino": "56941024",
+      "sha256": "f05df68642a75e5cdde9440a60b8ffea5be6f9107367996993b208c15bc335bd"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck-roots.json": {
+      "bytes": 462,
+      "mtimeNs": "1792683709031505100",
+      "ctimeNs": "1792683709031505100",
+      "ino": "56941025",
+      "sha256": "5144b7365990ed01c94bd2bd08d4883fc6e8886106e5e9aec82ab8a8659802cc"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck.json": {
+      "bytes": 1728,
+      "mtimeNs": "1792683709048643755",
+      "ctimeNs": "1792683709048643755",
+      "ino": "56941026",
+      "sha256": "88d85be445dc51692259ccb052e8bea5cf0b48f2150c4b1c8860824460280166"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck.png": {
+      "bytes": 141588,
+      "mtimeNs": "1792683709122868425",
+      "ctimeNs": "1792683709122868425",
+      "ino": "56941027",
+      "sha256": "a9bb0365c7c63160c48d9b2072ba8103d1be9ec048670e7e3f53db2acce8564c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-browse-before-mtime.json": {
+      "bytes": 2547,
+      "mtimeNs": "1792683749192698649",
+      "ctimeNs": "1792683749192698649",
+      "ino": "56942089",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-events.json": {
+      "bytes": 9172,
+      "mtimeNs": "1792683748906583687",
+      "ctimeNs": "1792683748906583687",
+      "ino": "56942062",
+      "sha256": "f80ebf5136cc32b5209e26b302f96733b8109bb9888fcbd85a334fe24154aeb2"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "mtimeNs": "1792683748915186161",
+      "ctimeNs": "1792683748915186161",
+      "ino": "56942069",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683748919992781",
+      "ctimeNs": "1792683748919992781",
+      "ino": "56942073",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "mtimeNs": "1792683748921003964",
+      "ctimeNs": "1792683748921003964",
+      "ino": "56942074",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "mtimeNs": "1792683748922793160",
+      "ctimeNs": "1792683748922793160",
+      "ino": "56942075",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "mtimeNs": "1792683748927227983",
+      "ctimeNs": "1792683748927227983",
+      "ino": "56942076",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "mtimeNs": "1792683748939807188",
+      "ctimeNs": "1792683748939807188",
+      "ino": "56942078",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683748950648032",
+      "ctimeNs": "1792683748950648032",
+      "ino": "56942079",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683748954459427",
+      "ctimeNs": "1792683748954459427",
+      "ino": "56942080",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683748956386250",
+      "ctimeNs": "1792683748956386250",
+      "ino": "56942081",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683748957956734",
+      "ctimeNs": "1792683748957956734",
+      "ino": "56942082",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "mtimeNs": "1792683748959389174",
+      "ctimeNs": "1792683748959389174",
+      "ino": "56942083",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-roots.json": {
+      "bytes": 2016,
+      "mtimeNs": "1792683748964410090",
+      "ctimeNs": "1792683748964410090",
+      "ino": "56942084",
+      "sha256": "337b2c218decc8b045ff606e7e2c57d6c4dd55e9b74ef172ede8478f41f4c9bf"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored.json": {
+      "bytes": 6804,
+      "mtimeNs": "1792683748981707414",
+      "ctimeNs": "1792683748981707414",
+      "ino": "56942085",
+      "sha256": "1a7544ac77be2c6bcfcbf2a95de949b0278053c891f5a57bdd853a63c05d5252"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored.png": {
+      "bytes": 200957,
+      "mtimeNs": "1792683749103104520",
+      "ctimeNs": "1792683749103104520",
+      "ino": "56942086",
+      "sha256": "7304670b45f2b19edcd80fc49af887124245b0762f4d035664402365117ffe27"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "mtimeNs": "1792683749421793014",
+      "ctimeNs": "1792683749421793014",
+      "ino": "56942100",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683749424770187",
+      "ctimeNs": "1792683749424770187",
+      "ino": "56942103",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "mtimeNs": "1792683749425380322",
+      "ctimeNs": "1792683749425380322",
+      "ino": "56942104",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "mtimeNs": "1792683749425878789",
+      "ctimeNs": "1792683749425878789",
+      "ino": "56942105",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "mtimeNs": "1792683749428951172",
+      "ctimeNs": "1792683749428951172",
+      "ino": "56942106",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "mtimeNs": "1792683749433491371",
+      "ctimeNs": "1792683749433491371",
+      "ino": "56942107",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683749435500112",
+      "ctimeNs": "1792683749435500112",
+      "ino": "56942109",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683749440446068",
+      "ctimeNs": "1792683749440446068",
+      "ino": "56942110",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683749441325332",
+      "ctimeNs": "1792683749441325332",
+      "ino": "56942111",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683749452072466",
+      "ctimeNs": "1792683749452072466",
+      "ino": "56942112",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "mtimeNs": "1792683749456260410",
+      "ctimeNs": "1792683749456260410",
+      "ino": "56942113",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-roots.json": {
+      "bytes": 2016,
+      "mtimeNs": "1792683749468442734",
+      "ctimeNs": "1792683749468442734",
+      "ino": "56942114",
+      "sha256": "337b2c218decc8b045ff606e7e2c57d6c4dd55e9b74ef172ede8478f41f4c9bf"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list.json": {
+      "bytes": 6822,
+      "mtimeNs": "1792683749482654840",
+      "ctimeNs": "1792683749482654840",
+      "ino": "56942115",
+      "sha256": "2edd3138e9bb2d0feb0ef883416adfb43c1c432acb1623c52f61b9b511cee204"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list.png": {
+      "bytes": 220768,
+      "mtimeNs": "1792683751523132898",
+      "ctimeNs": "1792683751523132898",
+      "ino": "56942142",
+      "sha256": "5c47dc1ebb8423c6bf502f24d76cb5639de2dc1fbf01f66660ba97dc249a5b63"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-browse-after-mtime.json": {
+      "bytes": 2547,
+      "mtimeNs": "1792683799610837968",
+      "ctimeNs": "1792683799610837968",
+      "ino": "56942983",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-browse-only-events.json": {
+      "bytes": 7912,
+      "mtimeNs": "1792683799502760454",
+      "ctimeNs": "1792683799502760454",
+      "ino": "56942980",
+      "sha256": "0db4cc23652a44e75ebd52fc3bd7246a77d3e868da51196fd4f7b4b718da1699"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "mtimeNs": "1792683798988372223",
+      "ctimeNs": "1792683798988372223",
+      "ino": "56942943",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683798991341855",
+      "ctimeNs": "1792683798991341855",
+      "ino": "56942945",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "mtimeNs": "1792683798994024815",
+      "ctimeNs": "1792683798994024815",
+      "ino": "56942946",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "mtimeNs": "1792683799004629364",
+      "ctimeNs": "1792683799004629364",
+      "ino": "56942947",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "mtimeNs": "1792683799006431268",
+      "ctimeNs": "1792683799006431268",
+      "ino": "56942949",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "mtimeNs": "1792683799008386967",
+      "ctimeNs": "1792683799008386967",
+      "ino": "56942950",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683799009473443",
+      "ctimeNs": "1792683799009473443",
+      "ino": "56942951",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683799011500226",
+      "ctimeNs": "1792683799011500226",
+      "ino": "56942952",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683799016946690",
+      "ctimeNs": "1792683799016946690",
+      "ino": "56942953",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683799020497914",
+      "ctimeNs": "1792683799020497914",
+      "ino": "56942954",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "mtimeNs": "1792683799021379345",
+      "ctimeNs": "1792683799021379345",
+      "ino": "56942955",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-roots.json": {
+      "bytes": 2210,
+      "mtimeNs": "1792683799034938483",
+      "ctimeNs": "1792683799034938483",
+      "ino": "56942956",
+      "sha256": "0e45fa414ae9573077a6a15ffd0f6ad6a01ab406c5f2fe0cab39a68bda78ad27"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry.json": {
+      "bytes": 6550,
+      "mtimeNs": "1792683799056406292",
+      "ctimeNs": "1792683799056406292",
+      "ino": "56942957",
+      "sha256": "267991cf10f79d4ed395ceb1bc51455785fc149311c5e091dc32fdd898831395"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry.png": {
+      "bytes": 225515,
+      "mtimeNs": "1792683799241282143",
+      "ctimeNs": "1792683799241282143",
+      "ino": "56942961",
+      "sha256": "86a5c7d0891b225912cbbc2f4c37142e6e4e4946f4a73ce15b61144a10b26ae0"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "mtimeNs": "1792683797421530188",
+      "ctimeNs": "1792683797421530188",
+      "ino": "56942867",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683797424587988",
+      "ctimeNs": "1792683797424587988",
+      "ino": "56942869",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "mtimeNs": "1792683797426870525",
+      "ctimeNs": "1792683797426870525",
+      "ino": "56942870",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "mtimeNs": "1792683797437636493",
+      "ctimeNs": "1792683797437636493",
+      "ino": "56942871",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "mtimeNs": "1792683797539017856",
+      "ctimeNs": "1792683797539017856",
+      "ino": "56942872",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "mtimeNs": "1792683797554713237",
+      "ctimeNs": "1792683797554713237",
+      "ino": "56942874",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683797563280127",
+      "ctimeNs": "1792683797563280127",
+      "ino": "56942875",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683797574870274",
+      "ctimeNs": "1792683797574870274",
+      "ino": "56942876",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683797588759334",
+      "ctimeNs": "1792683797588759334",
+      "ino": "56942877",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683797636328028",
+      "ctimeNs": "1792683797636328028",
+      "ino": "56942878",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "mtimeNs": "1792683797680212119",
+      "ctimeNs": "1792683797680212119",
+      "ino": "56942879",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-roots.json": {
+      "bytes": 2016,
+      "mtimeNs": "1792683797757172959",
+      "ctimeNs": "1792683797757172959",
+      "ino": "56942882",
+      "sha256": "aeb7f93a0fa32f99e265b5b8a003bf148a8d706efea38037c3cb93ef6f1d9ba4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse.json": {
+      "bytes": 3217,
+      "mtimeNs": "1792683797782956671",
+      "ctimeNs": "1792683797782956671",
+      "ino": "56942886",
+      "sha256": "1eb10b470794aa32fdb84a47fcc7343bfb3cec3640b9fdfea5543cc06e9465de"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse.png": {
+      "bytes": 169817,
+      "mtimeNs": "1792683797900116750",
+      "ctimeNs": "1792683797900116750",
+      "ino": "56942888",
+      "sha256": "fd9d8669469b320ec5a8a89ed6d5e3dc3ead0aad7f03fee769fd6a3bc0116695"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "mtimeNs": "1792683798130943394",
+      "ctimeNs": "1792683798130943394",
+      "ino": "56942895",
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683798144447489",
+      "ctimeNs": "1792683798144447489",
+      "ino": "56942897",
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "mtimeNs": "1792683798148508014",
+      "ctimeNs": "1792683798148508014",
+      "ino": "56942898",
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "mtimeNs": "1792683798155020412",
+      "ctimeNs": "1792683798155020412",
+      "ino": "56942899",
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "mtimeNs": "1792683798173773384",
+      "ctimeNs": "1792683798173773384",
+      "ino": "56942900",
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "mtimeNs": "1792683798200974869",
+      "ctimeNs": "1792683798200974869",
+      "ino": "56942902",
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683798225580229",
+      "ctimeNs": "1792683798225580229",
+      "ino": "56942903",
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683798236150444",
+      "ctimeNs": "1792683798236150444",
+      "ino": "56942904",
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "mtimeNs": "1792683798241324236",
+      "ctimeNs": "1792683798241324236",
+      "ino": "56942905",
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "mtimeNs": "1792683798243457396",
+      "ctimeNs": "1792683798243457396",
+      "ino": "56942906",
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "mtimeNs": "1792683798249467994",
+      "ctimeNs": "1792683798249467994",
+      "ino": "56942907",
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-roots.json": {
+      "bytes": 2016,
+      "mtimeNs": "1792683798258663394",
+      "ctimeNs": "1792683798258663394",
+      "ino": "56942908",
+      "sha256": "aeb7f93a0fa32f99e265b5b8a003bf148a8d706efea38037c3cb93ef6f1d9ba4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse.json": {
+      "bytes": 6540,
+      "mtimeNs": "1792683798292018272",
+      "ctimeNs": "1792683798292018272",
+      "ino": "56942913",
+      "sha256": "535034d6df73fe4353b770dc8bde65483179d91b83f49679beafc4106dd5ac45"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse.png": {
+      "bytes": 220756,
+      "mtimeNs": "1792683798456473957",
+      "ctimeNs": "1792683798456473957",
+      "ino": "56942914",
+      "sha256": "6e35fcbc14ca7949c3788bda94e14a01c7a98554f860c3004bec63b852bc3c8f"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792683858994157072",
+      "ctimeNs": "1792683858994157072",
+      "ino": "56943994",
+      "sha256": "9b391e24641a85281a7245599c609398c29a62751c38d014620281bdf57390d4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/output.log": {
+      "bytes": 11611,
+      "mtimeNs": "1792683858994672247",
+      "ctimeNs": "1792683858994672247",
+      "ino": "56943995",
+      "sha256": "632d72ec7f85ba7439feb18552245e8444ab40ffe7ecdaa7d282338ca3db5614"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/stderr.log": {
+      "bytes": 0,
+      "mtimeNs": "1792683747485605116",
+      "ctimeNs": "1792683858998747022",
+      "ino": "56943996",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792683858984280494",
+      "ctimeNs": "1792683858984280494",
+      "ino": "56943986",
+      "sha256": "4817aeb19c207843335d98b3379791289f9a8d01f6e77fb179b939c9a7e0b606"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/output.log": {
+      "bytes": 2601,
+      "mtimeNs": "1792683858985059340",
+      "ctimeNs": "1792683858985059340",
+      "ino": "56943987",
+      "sha256": "635ab8f8e3cfb80dbe1c579dcabe15e584fd08ca569137daad36b99b989611d6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/stderr.log": {
+      "bytes": 0,
+      "mtimeNs": "1792683669797701392",
+      "ctimeNs": "1792683858985723768",
+      "ino": "56943988",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792683858992255208",
+      "ctimeNs": "1792683858992255208",
+      "ino": "56943990",
+      "sha256": "d593ed866c43f141581a3534403bb9b19a6a3e50f8f44c5a4d5eba3a5406850c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/output.log": {
+      "bytes": 6380,
+      "mtimeNs": "1792683858993034054",
+      "ctimeNs": "1792683858993034054",
+      "ino": "56943991",
+      "sha256": "636f73e6a40acab8ea5258997d605719b34758c3e0e4b9176a020fa6bb93c5d5"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/stderr.log": {
+      "bytes": 0,
+      "mtimeNs": "1792683704589267374",
+      "ctimeNs": "1792683858993399393",
+      "ino": "56943992",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792683859000328297",
+      "ctimeNs": "1792683859000328297",
+      "ino": "56943998",
+      "sha256": "d277d036b34aee2093d41ce1cb728ac2d0efb79b4b6eca1eb7a54b434e49215b"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/output.log": {
+      "bytes": 4369,
+      "mtimeNs": "1792683859000986350",
+      "ctimeNs": "1792683859000986350",
+      "ino": "56943999",
+      "sha256": "6a701c19dde8c262caeef3e2a7743e46041e8b81165b912037bc249fa88bcccd"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/stderr.log": {
+      "bytes": 0,
+      "mtimeNs": "1792683796523173814",
+      "ctimeNs": "1792683859001608860",
+      "ino": "56944000",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792683858971195490",
+      "ctimeNs": "1792683858971195490",
+      "ino": "56943982",
+      "sha256": "022db8f87f30131a1ba53b80c7f3fb56560f4035b475d929cae3869eac845ab3"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/output.log": {
+      "bytes": 79,
+      "mtimeNs": "1792683858978605110",
+      "ctimeNs": "1792683858978605110",
+      "ino": "56943983",
+      "sha256": "44d008ce704950c25485f45a93ffcda15718240dc852a70aa4377699106698da"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/stderr.log": {
+      "bytes": 0,
+      "mtimeNs": "1792683623349570290",
+      "ctimeNs": "1792683858983244353",
+      "ino": "56943984",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts.json": {
+      "bytes": 503,
+      "mtimeNs": "1792683859001818405",
+      "ctimeNs": "1792683859001818405",
+      "ino": "56944001",
+      "sha256": "a8fa2871deac2d0c7f6c5ff41e5e28d81f0248b2637e6234ed28800a722f914d"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round01.mjs": {
+      "bytes": 302,
+      "mtimeNs": "1792683858967994980",
+      "ctimeNs": "1792683858967994980",
+      "ino": "56943975",
+      "sha256": "640ea51b24f754c65c81a5730c7cb1ddefd4de07a49a7c9af8107ba13dcd09d7"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round02.mjs": {
+      "bytes": 1526,
+      "mtimeNs": "1792683858968516321",
+      "ctimeNs": "1792683858968516321",
+      "ino": "56943976",
+      "sha256": "79327dfe56eece5cf92191e28591582af2d5fc594cc0870f782efcaf27544c80"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round03.mjs": {
+      "bytes": 1664,
+      "mtimeNs": "1792683858969082789",
+      "ctimeNs": "1792683858969082789",
+      "ino": "56943977",
+      "sha256": "0f0515564deca16df194462a0fa130dbd969b78215c6dcbdc2bdcbb9124b777e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round04.mjs": {
+      "bytes": 1867,
+      "mtimeNs": "1792683858969312834",
+      "ctimeNs": "1792683858969312834",
+      "ino": "56943978",
+      "sha256": "3599d48722655fe7d1d4940175af3c9bd8099a51adfdaf8c37bf7bf191601de8"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-seal-r1.mjs": {
+      "bytes": 4944,
+      "mtimeNs": "1792683858969755341",
+      "ctimeNs": "1792683858969755341",
+      "ino": "56943979",
+      "sha256": "4609ddb79f0cc7bd7fb74bbd04c2efa5a595ce1ca8acdda3d04f43124f07ffe1"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-setup-r1.mjs": {
+      "bytes": 2841,
+      "mtimeNs": "1792683858967456137",
+      "ctimeNs": "1792683858967456137",
+      "ino": "56943974",
+      "sha256": "fe3365592a6789961a55364872fcea8d7d2c8ad53a30f2f325b841c19b4d8928"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/executor-observations.json": {
+      "bytes": 399,
+      "mtimeNs": "1792683858966712584",
+      "ctimeNs": "1792683858966712584",
+      "ino": "56943972",
+      "sha256": "bb3b595104477bffdef1c53eb8ab9d7b901793736dc95e8e3316af51ef05db49"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/fixture-binding.json": {
+      "bytes": 898,
+      "mtimeNs": "1792683623533662095",
+      "ctimeNs": "1792683623533662095",
+      "ino": "56938372",
+      "sha256": "219744971a245f1da58daefb878392fb02f7330ea6557b70d06bc5fbd533d4cc"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709292.jpg": {
+      "bytes": 68541,
+      "mtimeNs": "1792683709292917826",
+      "ctimeNs": "1792683709292917826",
+      "ino": "56941035",
+      "sha256": "9e328179eee33ab87b05b6c573f07836dd9a802512418effc820e1998a9d6c96"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709343.jpg": {
+      "bytes": 68544,
+      "mtimeNs": "1792683709344433167",
+      "ctimeNs": "1792683709344433167",
+      "ino": "56941038",
+      "sha256": "7b0aad16a4cfa522437c8134072994020bdd2143dd38867c05c7078ad1e45000"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709389.jpg": {
+      "bytes": 66431,
+      "mtimeNs": "1792683709389868201",
+      "ctimeNs": "1792683709389868201",
+      "ino": "56941040",
+      "sha256": "839bda1ee08d9ec4c8dcad27f6447bd902114c98ef2cd29ab9dd4508379715cb"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708774.jpg": {
+      "bytes": 25513,
+      "mtimeNs": "1792683708775645340",
+      "ctimeNs": "1792683708775645340",
+      "ino": "56941012",
+      "sha256": "8965e8340d7b7d1a2f2c1ec3327c633ed5dfff815961343e71027bba3f2c7641"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708850.jpg": {
+      "bytes": 52407,
+      "mtimeNs": "1792683708850937861",
+      "ctimeNs": "1792683708850937861",
+      "ino": "56941015",
+      "sha256": "be0a3a7edcc6f24c0fedf9f5efffc9ca5b85913b959b8ed711c021092a24a1dd"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708904.jpg": {
+      "bytes": 52420,
+      "mtimeNs": "1792683708905724255",
+      "ctimeNs": "1792683708905724255",
+      "ino": "56941019",
+      "sha256": "8cfbe5d22589290dcdafbc9b0d2b9fc68045563dc77795d25eb764a19074d209"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748593.jpg": {
+      "bytes": 66407,
+      "mtimeNs": "1792683748597049051",
+      "ctimeNs": "1792683748597049051",
+      "ino": "56942053",
+      "sha256": "681f98ac06e2be72a8d1bce050a6934d9e895d762026883ca99b0538ff7fe920"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748667.jpg": {
+      "bytes": 66407,
+      "mtimeNs": "1792683748669310231",
+      "ctimeNs": "1792683748669310231",
+      "ino": "56942055",
+      "sha256": "681f98ac06e2be72a8d1bce050a6934d9e895d762026883ca99b0538ff7fe920"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748731.jpg": {
+      "bytes": 68541,
+      "mtimeNs": "1792683748733735407",
+      "ctimeNs": "1792683748733735407",
+      "ino": "56942057",
+      "sha256": "9e328179eee33ab87b05b6c573f07836dd9a802512418effc820e1998a9d6c96"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799261.jpg": {
+      "bytes": 97548,
+      "mtimeNs": "1792683799266677266",
+      "ctimeNs": "1792683799266677266",
+      "ino": "56942962",
+      "sha256": "fbc27016d33102236c732e11347ec6bcbf93893bb234f3df18d5567107d4af9e"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799322.jpg": {
+      "bytes": 97875,
+      "mtimeNs": "1792683799325034552",
+      "ctimeNs": "1792683799325034552",
+      "ino": "56942964",
+      "sha256": "ef34a9eefe73c7e1e7028a7b40862d16b69c49208c16a84758089acf924b648b"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799391.jpg": {
+      "bytes": 79658,
+      "mtimeNs": "1792683799392602739",
+      "ctimeNs": "1792683799392602739",
+      "ino": "56942976",
+      "sha256": "e95a1a905bc6aa864d72644568a968134396a4c62026d4a30593616b8801d640"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/gateway-binding.json": {
+      "bytes": 354,
+      "mtimeNs": "1792683623489743960",
+      "ctimeNs": "1792683623489743960",
+      "ino": "56938364",
+      "sha256": "d8e1f863e56540d64a31fc8c91d404e87c72300122d3a8e2627e0a602a1f7012"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/helper-source.mjs": {
+      "bytes": 5414,
+      "mtimeNs": "1792683623442657689",
+      "ctimeNs": "1792683623442657689",
+      "ino": "56938342",
+      "sha256": "ccac4f227e338f33b27229c25ad344c34577cfa38070e6f593b6f8b2c6ad04b8"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-ready.json": {
+      "bytes": 70,
+      "mtimeNs": "1792683631887117056",
+      "ctimeNs": "1792683631887117056",
+      "ino": "56939330",
+      "sha256": "37cb77839fea73b867f5fcfa86524e781586704dadf49dea318b1dd5dc209093"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-setup-source.mjs": {
+      "bytes": 4999,
+      "mtimeNs": "1792683623441812883",
+      "ctimeNs": "1792683623441812883",
+      "ino": "56938340",
+      "sha256": "93c6c6d7382541229bdb3555661fff2e63e27d8d320dab111825ce732334cd5c"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-start.json": {
+      "bytes": 1061,
+      "mtimeNs": "1792683623512699461",
+      "ctimeNs": "1792683623512699461",
+      "ino": "56938366",
+      "sha256": "336f927c0fe522730d9041ce30639772371df85402468e45547c1b1865324034"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/isolated-profile.yml": {
+      "bytes": 1200,
+      "mtimeNs": "1792683623480526559",
+      "ctimeNs": "1792683623480526559",
+      "ino": "56938362",
+      "sha256": "b7a440326f999ae637dbb73e6e17dabaa11e17553732f32d2118a0eff8e6a319"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy-f2.json": {
+      "bytes": 4502,
+      "mtimeNs": "1792683623530413167",
+      "ctimeNs": "1792683623530413167",
+      "ino": "56938371",
+      "sha256": "abb086772fde51f0e96dff4d5a7e9d444b887e1acdca0180cce11631ba1473ee"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/raw-report.md": {
+      "bytes": 596,
+      "mtimeNs": "1792683859001950740",
+      "ctimeNs": "1792683859001950740",
+      "ino": "56944002",
+      "sha256": "c8a4ce6cf1b1a7f77eff9751214d9c81b7daa9d3a127e1686a196f2f4c51cfb6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/source-binding.json": {
+      "bytes": 15337,
+      "mtimeNs": "1792683858961543750",
+      "ctimeNs": "1792683858961543750",
+      "ino": "56943971",
+      "sha256": "d456d64ad4e9d261db2503e93e76d4314bf1302be1d4aae40bb2a76350526258"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/index-r1.json": {
+      "bytes": 1616,
+      "mtimeNs": "1792684534212627476",
+      "ctimeNs": "1792684534212627476",
+      "ino": "56955392",
+      "sha256": "3791b426e641c1d1f4fb2f11e6deb0b0aeb04948dbd6426fccb6a343ff506c00"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/40-visible-r2.json": {
+      "bytes": 7393,
+      "mtimeNs": "1792684414391145591",
+      "ctimeNs": "1792684414391145591",
+      "ino": "56953754",
+      "sha256": "63de419a5586958c62d389b7fba77a607aa50102847d76fa4eb0e92bc9f2b133"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/40-visible-r2.png": {
+      "bytes": 184681,
+      "mtimeNs": "1792684414584527206",
+      "ctimeNs": "1792684414584527206",
+      "ino": "56953755",
+      "sha256": "35dcab3371f1495bfe4856ad58d3149554a22afcfae31a97927cb997a45dbcd3"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/after-mtime-r2.json": {
+      "bytes": 2547,
+      "mtimeNs": "1792684414823304312",
+      "ctimeNs": "1792684414823304312",
+      "ino": "56953762",
+      "sha256": "7ea828ba63fca9a80002fef8bd9fe8c8f6ad73e90f6fea4b8c33e05c4972e8f4"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/captured-execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792684534193515373",
+      "ctimeNs": "1792684534193515373",
+      "ino": "56955384",
+      "sha256": "e156f294e5f00d0f2946beea960adfeab187a5e853e8168afd3f599c38995d58"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/captured-output.log": {
+      "bytes": 279,
+      "mtimeNs": "1792684534194832061",
+      "ctimeNs": "1792684534194832061",
+      "ino": "56955385",
+      "sha256": "8d0029a1d4c0b218ffb6ccc0122a2d32e03fdfb247d5ed88bdd93a4fbf583af7"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/failed-execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792684534183373915",
+      "ctimeNs": "1792684534183373915",
+      "ino": "56955381",
+      "sha256": "4530dded7c779bf4fb1784660f3eea5b6b9f81f06b4473591549bc166e85b182"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/failed-output.log": {
+      "bytes": 678,
+      "mtimeNs": "1792684534190623659",
+      "ctimeNs": "1792684534190623659",
+      "ino": "56955382",
+      "sha256": "16846e6b1c630ab497e3bd8a1eb3bbc95ee0318889726d9411ae282c18de12e6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/observations.json": {
+      "bytes": 231,
+      "mtimeNs": "1792684534195677116",
+      "ctimeNs": "1792684534195677116",
+      "ino": "56955386",
+      "sha256": "a87e2a2489a2ea7d99b43eb1f86202872cbaa08c06d21248f755a4de154347a1"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round01.mjs": {
+      "bytes": 1781,
+      "mtimeNs": "1792684534041531184",
+      "ctimeNs": "1792684534041531184",
+      "ino": "56955376",
+      "sha256": "72e4dc2b0f1ba0720d2f68e34bf1b4ceb782cc24a56595dd81490b0b6f4780e9"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round02.mjs": {
+      "bytes": 449,
+      "mtimeNs": "1792684534163186711",
+      "ctimeNs": "1792684534163186711",
+      "ino": "56955378",
+      "sha256": "13561f5806fb2dc8733001d35543bf6500ccddba2a3603edb7163ce2d28d33fc"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round03.mjs": {
+      "bytes": 1621,
+      "mtimeNs": "1792684534166056799",
+      "ctimeNs": "1792684534166056799",
+      "ino": "56955379",
+      "sha256": "3f34e3277c2f54ad59a04c5099a3b419fcd674ea9d14dcad435a3b38150bf661"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy40-seal-r1.mjs": {
+      "bytes": 1665,
+      "mtimeNs": "1792684534168560924",
+      "ctimeNs": "1792684534168560924",
+      "ino": "56955380",
+      "sha256": "963c7d33d823cabc346845a5b4785ecb935771fb1dee3b303a094ac3416c1e23"
+    },
+    "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/de773c380cdf1333e43401c4e0e63525/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792684324841386112",
+      "ctimeNs": "1792684324846723365",
+      "ino": "56952509",
+      "sha256": "4530dded7c779bf4fb1784660f3eea5b6b9f81f06b4473591549bc166e85b182"
+    },
+    "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/de773c380cdf1333e43401c4e0e63525/output.log": {
+      "bytes": 678,
+      "mtimeNs": "1792684324374027649",
+      "ctimeNs": "1792684324374027649",
+      "ino": "56952466",
+      "sha256": "16846e6b1c630ab497e3bd8a1eb3bbc95ee0318889726d9411ae282c18de12e6"
+    },
+    "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/d1f3248add09faa4d12615be2f9e283d/execution.json": {
+      "bytes": 530,
+      "mtimeNs": "1792684414957061621",
+      "ctimeNs": "1792684414960854391",
+      "ino": "56953764",
+      "sha256": "e156f294e5f00d0f2946beea960adfeab187a5e853e8168afd3f599c38995d58"
+    },
+    "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/d1f3248add09faa4d12615be2f9e283d/output.log": {
+      "bytes": 279,
+      "mtimeNs": "1792684414826607199",
+      "ctimeNs": "1792684414826607199",
+      "ino": "56953725",
+      "sha256": "8d0029a1d4c0b218ffb6ccc0122a2d32e03fdfb247d5ed88bdd93a4fbf583af7"
+    }
+  },
+  "checks": [
+    {
+      "name": "唯一新增前缀未被占用",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "被中断上一补审没有同前缀产物",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原独立签字 byte/SHA: op-legacy-browse-gui-review-20261022-r1-reader.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原独立签字 byte/SHA: op-legacy-browse-gui-review-20261022-r1-audit.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原独立签字 byte/SHA: op-legacy-browse-gui-review-20261022-r1-report.md",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原报告限定 PASS 与40视觉 BLOCKED分离",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原127索引指纹未覆盖",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-first-confirm.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/02-legacy-precheck.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-browse-before-mtime.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-raw/data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-restored.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-raw/data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/03-legacy-task-list.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-browse-after-mtime.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-browse-only-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-raw/data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-list-reentry.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-raw/data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-project-browse.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-raw/data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/04-legacy-task-browse.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/21eab28497c1183a8338d3d216b51c07/stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/357dd3c3d048fa959e31b39c773f14ee/stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/444f2a41affe08ab0c74308e5ea64359/stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/80b7706c78d5fdc6801ed271cbe09837/stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts/d25a13771d288ef5a1c246753fe9eb16/stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-receipts.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round01.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round02.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round03.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-round04.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-seal-r1.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/execution-scripts/pmtool-legacy-setup-r1.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/executor-observations.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/fixture-binding.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709292.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709343.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-first-confirm-1-1792683709389.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708774.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708850.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/02-legacy-precheck-1-1792683708904.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748593.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748667.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/03-legacy-restored-1-1792683748731.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799261.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799322.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/frames/04-browse-only-1-1792683799391.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/gateway-binding.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/helper-source.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-ready.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-setup-source.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/host-start.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/isolated-profile.yml",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy-f2.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/raw-report.md",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/source-binding.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "补证索引exact12，目录无漏项",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/40-visible-r2.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/40-visible-r2.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/after-mtime-r2.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/captured-execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/captured-output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/failed-execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/failed-output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/observations.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round01.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round02.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy-40-round03.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "索引 byte/SHA: /Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/pmtool-legacy40-seal-r1.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原03before与补证11文件全部字段exact",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "source/runtime只沿原签字归档继承",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/projects/p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "原落盘副本与原03before byte/SHA: data/pmtool/tasks/t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "旧旁注原字段身份: t-0003/F2-L1/40",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "旧旁注原字段身份: t-0005/F2-L3/40",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "旧旁注原字段身份: t-0008/F2-L6/80",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "PNG真实尺寸与DOM视口一致，不代替目视",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "只读审查focus+Tab，无click/fill/保存动作",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "真实执行收据exact: failed/de773c380cdf1333e43401c4e0e63525",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "真实执行收据exact: captured/d1f3248add09faa4d12615be2f9e283d",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "Main没有自判GUI PASS",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: AGENTS.md",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: collaboration.md",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: index-r1.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-browse-before-mtime.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-task-list-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-task-list.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-task-list.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-browse-after-mtime.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-browse-only-events.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-list-reentry-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-list-reentry.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-list-reentry.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-project-browse-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-project-browse.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-project-browse.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: p-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0001.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0002.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0003.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0004.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0005.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0006.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0007.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0008.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0009.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: t-0010.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-task-browse-roots.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-task-browse.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-legacy-task-browse.png",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: output.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: stderr.log",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: execution-receipts.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-round01.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-round02.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-round03.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-round04.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-seal-r1.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: pmtool-legacy-setup-r1.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: executor-observations.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: fixture-binding.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm-1-1792683709292.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm-1-1792683709343.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-first-confirm-1-1792683709389.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck-1-1792683708774.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck-1-1792683708850.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 02-legacy-precheck-1-1792683708904.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored-1-1792683748593.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored-1-1792683748667.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 03-legacy-restored-1-1792683748731.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-browse-only-1-1792683799261.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-browse-only-1-1792683799322.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: 04-browse-only-1-1792683799391.jpg",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: gateway-binding.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: helper-source.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: host-ready.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: host-setup-source.mjs",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: host-start.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: isolated-profile.yml",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: legacy-f2.json",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: raw-report.md",
+      "result": "符合审证预期"
+    },
+    {
+      "name": "继承原件内容身份: source-binding.json",
+      "result": "符合审证预期"
+    }
+  ],
+  "counts": {
+    "inheritedArchiveChecked": 127,
+    "supplement": 12,
+    "business": 11,
+    "receipts": 2,
+    "checks": 298,
+    "failed": 0
+  },
+  "inheritance": {
+    "previousReport": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-report.md",
+    "previousSeal": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy-browse-gui-review-20261022-r1-seal.json",
+    "originalRemaining": [
+      {
+        "assertion": "本旧包 F2-L1/L3 原手填40%在列表可见且与客观证据不足分离",
+        "status": "BLOCKED",
+        "reason": "既有 PNG 未覆盖该行；非产品 FAIL、非 MANUAL_PENDING，不派额外旅程"
+      }
+    ],
+    "host": {
+      "at": "2026-10-22T15:40:23.499Z",
+      "pid": 16671,
+      "port": 3265,
+      "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--import",
+        "tsx/esm",
+        "apps/cli/src/bin.ts",
+        "--profile",
+        "pm",
+        "--no-open",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3265"
+      ],
+      "envNames": [
+        "PATH",
+        "HOME",
+        "DSH_HOME",
+        "TMPDIR",
+        "DSH_PM_ISOLATED_ROOT",
+        "DSH_PM_FILE_ROOT",
+        "DSH_PM_BACKUP_DIR",
+        "DSH_PM_LOCAL_GATEWAY_KEY",
+        "DSH_PM_E2E"
+      ],
+      "bundle": "/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool",
+      "bundleSha256": "e4bda1dba6cd0d0110fa8eafb9f60e58b8a5cef9c6e1390b2016317b31b5c2d3",
+      "candidateSha256": "8ca3e578d69e67cef66a80716d8720fb4fc49a95e3127373227d4b773e2f7a76",
+      "sourceSha256": "7fe3232f448662b859d817316c021e78b4a28af7ed58a4ba57299cfc81143d9f",
+      "flags": {
+        "DSH_PM_E2E": "0",
+        "pilot": "default OFF; browser state recorded separately"
+      },
+      "independentGuiVerdict": "NOT_RUN"
+    },
+    "source": {
+      "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "source": {
+        "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+        "count": 114,
+        "source": {
+          "launcher/README.md": "8f51a97367848c2d5bb56f1cd4763fb4ce2e1c7a87c9a3e8410785cda3a04483",
+          "launcher/bin/pm-launcher.mjs": "ecc6d47c7a1a1d72363b038a8b8c6c95a9f136c8cfa5edfbe73eadcbbc31f734",
+          "launcher/package.json": "b8d2e0b0530d0725d64d3e7235c10ff86468580a9ce11b62e23568a8261e8e40",
+          "launcher/src/browser-open.mjs": "4d0355b4c6cf02feae295fa8ed4ff2a30fb77070fe436b16ce78c4a80183a0d6",
+          "launcher/src/control-html.mjs": "6994cdd109d7258f14b0283a8e2f0b1d55e6cacc34b80ed5d39736c6dd90a205",
+          "launcher/src/launcher-app.mjs": "840d59383d68267c7454bb76e566a1ba8335c49cc12bda9daa8cf2d6b8fe3b47",
+          "launcher/src/launcher-core.mjs": "34563cdf8a787f48b4ba3220cb27801d5551a1890922d85ae06d8999ce3b5c2b",
+          "launcher/src/local-app.mjs": "1feaba02db033136e9786a7310a96a72c7332114faece5295b5b44545f058f9b",
+          "launcher/test/app.loopback.test.mjs": "b3d003efe921098de4b80a834010ad13a2417b35bfde1a3a15aea5058015b8e7",
+          "launcher/test/browser-open.test.mjs": "0efa2fd0dab266115c3636f611ea09b99555f5d4d7014f0d5e2934c95c074819",
+          "launcher/test/browsers.controller.test.mjs": "4a1eb14dfef27852f4aef101b1b0a516c73d78cdcc79eff1bf5103caceb1659b",
+          "launcher/test/control-html-sync.test.mjs": "739e79616cf6caba764b6fcd90c57648400e7145d2c0d2d92b41b1ea3566d6a3",
+          "launcher/test/control-html.test.mjs": "00398c2b2a35e2cc79d6011ea9543ff039a243b9477fa0b049b3c9f35b26084f",
+          "launcher/test/journey-race.test.mjs": "fa9ae8e1ad5201bb8f870e5ed7fe6d6554e96bd9d6cd4315dbe2c82ef023c37a",
+          "launcher/test/local-app.test.mjs": "e15eea7885156c9e8ee5b4685647ecb2fbbe5887257000ad43e7d966121ac13a",
+          "packages/dsh-pm-tool/package.json": "8098dfa788025596ee1e4664969e4ffd4a69dee664950931313ac0d648cd55a9",
+          "packages/dsh-pm-tool/pnpm-lock.yaml": "646a1a27770cc32b8f07195a3e3c5b7c038aae7040dc408749719f8d76963caa",
+          "packages/dsh-pm-tool/scripts/feedback-context-contract.mjs": "27b834a2786ea6b71615bf6d24dc67888f79321b4bb10160a392e97f225d4e03",
+          "packages/dsh-pm-tool/scripts/verify-client-bundle.mjs": "ec7f95e9a5ca87589e9c281ed28e8ab49c54bf7fe7f73e2816508e8b986bfb1a",
+          "packages/dsh-pm-tool/scripts/verify-gantt-drag.mjs": "153cf607a7a3b07de3314b66f25871be3e99ecc91baee6981337164b08a74eb4",
+          "packages/dsh-pm-tool/scripts/verify-ui-feedback.mjs": "3694be0b1a53a886968a8de83ca76ed3a8169c9aacd6e84589b8af3eb54dd056",
+          "packages/dsh-pm-tool/scripts/verify-web.mjs": "c230b4f96460c4a0b86f4e5623a461e4ac57a34af881464aef8fac124d150c75",
+          "packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx": "57ba3f107a0e43e6f7ca9c42cc88935856988bb9ba2f707bef8ae346208a5797",
+          "packages/dsh-pm-tool/src/client/board/BoardBento.tsx": "43d4bc943867e78226eb861a2e6875717d42c519687027bc58c21617e8a786d6",
+          "packages/dsh-pm-tool/src/client/board/board.css": "646ab1916c506e0bd890a2052f157cc550ba18d871114483b0e21cb36013e280",
+          "packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx": "973fa516de33a957292a7d996d6f778d765d924f480d2534b1513625074faa79",
+          "packages/dsh-pm-tool/src/client/board/editor.tsx": "ba1bf91211c87c068fe0bb4cb887249f1c321e2eecb20885d6745b2cd3086761",
+          "packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx": "cef2f64f80a47f46be29a74357937547c783cb326d2aa14dc44f4e88ad74298e",
+          "packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx": "9c43bf4655e302eb235fd3b736e2b9397c35ec6f1df9ddbf7c8682faa10257af",
+          "packages/dsh-pm-tool/src/client/index.tsx": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a",
+          "packages/dsh-pm-tool/src/client/launch-handshake.test.ts": "0a9f531153385906d0a265a626a975d735280a881a18f7e0d994de0f85786d9a",
+          "packages/dsh-pm-tool/src/client/launch-handshake.ts": "fd4466ba53668864268f983b75c65b1cf8ae74369513ab08fbb73052c6b0d95b",
+          "packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx": "986a92ff011f4e0e47d287cffdd625e44a8832ec004f0a6304e4d0b9f7dc73c6",
+          "packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx": "f338a24048fed1a43fa96847a9e5525f2601958da1c6b30a1269a77ddac2cb2b",
+          "packages/dsh-pm-tool/src/client/panel-restore-path.test.ts": "eb8375b9aea341baf5b9c46efc1fc5de655e95c5465c437066bb5271afc48d45",
+          "packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx": "b6c4b78e9fc86012134b1dda9e6ce78b2fc8dd9eef487362681bcf0d1976862a",
+          "packages/dsh-pm-tool/src/client/panel.css": "3cc0b0ed08ea34462ded8154b05f394a46f02c6577dea5da12c495aafa0f700b",
+          "packages/dsh-pm-tool/src/client/panel.tsx": "581f2882323e729afa7f7f5b7ff40e73a8a9831c2c30b9a263baad74fc7f521d",
+          "packages/dsh-pm-tool/src/client/provenance-panel.test.tsx": "5c484781fe1609360e34359ccecb667f98101de458ddc267141671f488ac8584",
+          "packages/dsh-pm-tool/src/client/provenance-panel.tsx": "039b7d47a9fc39df0913d38d102eb54e526023c3c49eb260278f59c3de4c973b",
+          "packages/dsh-pm-tool/src/client/result-card.test.ts": "cde00f00437f802fefaf542d880f54abf9202eae9c45a3f07ca75d270ae85566",
+          "packages/dsh-pm-tool/src/client/result-card.tsx": "b6955651b80894832dc3b508c3dbbd5cdbd514f01b325ac9e62d39d38b36decf",
+          "packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts": "a6f24ae6ba5842f06c1ab306d4870c91cb749af3d7f11ec078c984211d84ec95",
+          "packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx": "26c214236164b60b11a795cfa675f64ae886ec7003de1bb01d337439b8118041",
+          "packages/dsh-pm-tool/src/client/shared/drawers/sidecar-portal.tsx": "e2e9054e9ad0d7a7e9f3c0020760a2c48a8c477ae44af6b01c2a509e8e4204dc",
+          "packages/dsh-pm-tool/src/client/shared/stage-client.test.ts": "dc6b7424e588afba3dc4c05c9dd29c7f19fd14e17d1b7d2ebd7fce05725d50d7",
+          "packages/dsh-pm-tool/src/client/shared/stage-client.ts": "3d47b8fb194cb221b7518c4f121aea93dc650b3bc1bdc1aaa8749b11b954b5d1",
+          "packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx": "95992aef68f8a97f92137a5574b215fcad760246495317c2f383c52907b7b7a8",
+          "packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx": "b7ecc42640705c61a8aa38630ce773c178674cf20b09477f0f5267422e2cf90c",
+          "packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx": "95e4396e2be961e58aaca045299e45ed339e9b883063479d0066e3953e9eee61",
+          "packages/dsh-pm-tool/src/client/views/gantt.tsx": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf",
+          "packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx": "071c2b0488e88078d15f6436c1798cced495706c15bf8ecbfcf435c343459d0d",
+          "packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx": "8d7220cff8f01ed9d43dd00d1e59584936f4aa7ed68612aa40b56f00ca7cc709",
+          "packages/dsh-pm-tool/src/client/views/habits.tsx": "ab7e625808b6c4308068c26376c02d7fae9b59fc812ab9b77484c29633bd4964",
+          "packages/dsh-pm-tool/src/client/views/meetings.tsx": "19a6af2eff6c42a290b9f6102e5a88c0e080703a564b3f30ca89fef3633147c4",
+          "packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx": "92aa22c5f8ad77dc6e7ac25fca2733115f7f4e908072c40572aca31b4adb0a48",
+          "packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx": "8ed1ca262d6f9ccf586636da39515e6acef59fe235d05a5bb51d1471005d06a7",
+          "packages/dsh-pm-tool/src/client/views/overview.tsx": "7b5076ec60f667bc0190eea5d055e055c6cd3d40d266065943b7c227a339266d",
+          "packages/dsh-pm-tool/src/client/views/records.css": "9cc498a0771c109a779b0b2eb073c675ba7f27c46c75a3b4efb9e45f8a984ce6",
+          "packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx": "fea8f4f164d1d1b174f28aa03e6c1f692d2a2abbfa5bc18de4068ad0d436254d",
+          "packages/dsh-pm-tool/src/client/views/records/records-meeting-form.tsx": "d88c9bee1d2571f7ada3551bc8b7b5f1e7c98d7c2417f78a80a06f4766bb9388",
+          "packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx": "6c7a15bc744675af0fda91dcb289366a41491e0f8107bef8c4f7d0ffd6f00344",
+          "packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx": "1f0241f9514476cd3b62980400eb7e7ef648b7c67cba4a88b99f2c84be91fa00",
+          "packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx": "bace029fc20f46cc8e65b075879966d97e2cd5e4e24a4d1673af3a528a157e1f",
+          "packages/dsh-pm-tool/src/client/views/tasks.css": "369019753cdb985016afa17c21c5bc96dd5f1ae19b7bca3a2641246c117d2583",
+          "packages/dsh-pm-tool/src/client/views/tasks.tsx": "2dc92884cac5d86a3e8a3a2dd7aa4614d2232ea13dba633e6399fda5f4f300ec",
+          "packages/dsh-pm-tool/src/commands/ask-governance.test.ts": "8d7a71f2b89d1414649caad8e541e350c203cc043816cc91bde89279a50cd7be",
+          "packages/dsh-pm-tool/src/commands/ask.ts": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884",
+          "packages/dsh-pm-tool/src/commands/backup-web.test.ts": "d7d79c55d839fcab6b3c9a3f45350e62c44f2488deccc990d96b902fa8bac6ce",
+          "packages/dsh-pm-tool/src/commands/backup.ts": "48369dafe70023bce1ebdf5a82d7b2475627ea6d6b58036187c8845491cf8cdd",
+          "packages/dsh-pm-tool/src/commands/task-import-filename.test.ts": "3575adcb202ca26cab341edee394634f16c69736d9f32fd8b8dc053e38a9b3e7",
+          "packages/dsh-pm-tool/src/commands/task.ts": "1af8ac22df8d5876c4738e5c44fe8ec019d34678a3868e5c90c37197bc88863b",
+          "packages/dsh-pm-tool/src/core/backup.ts": "a4c302bd7646478deb56a61070b4a50262c1b220805f2013a036c2d5b0870295",
+          "packages/dsh-pm-tool/src/core/csv-import.test.ts": "d31c5587c590aa01cab2efc550384c9c97b1577175861d7b5e05a98176d95d92",
+          "packages/dsh-pm-tool/src/core/csv-import.ts": "389c127aefb81fb08215512a168fd978928ec41e814faca2b6e6e26d066dabe5",
+          "packages/dsh-pm-tool/src/core/file-asset-store.ts": "b961bf1f20cb92cc887e36b7a80bbd1b58606840e91e6ae7742c5fa8ab833ac1",
+          "packages/dsh-pm-tool/src/core/file-assets.test.ts": "fab5eb2578ba022997229264bdedbb75af2f5895c70e5c7fb1af3a7916980510",
+          "packages/dsh-pm-tool/src/core/file-assets.ts": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+          "packages/dsh-pm-tool/src/core/file-root.test.ts": "88b573dcd19d54266a5d4c7fcc506a2d6f38e55c5218bbb6e9bfa228528f212d",
+          "packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts": "3e48dedb7f9dec655cbfd9e7e00edc488a971f4b0a6182a56681212a79209f26",
+          "packages/dsh-pm-tool/src/core/file-staging.ts": "3c643d5a47beeccad22908bb2c57a0d9d415b72243a169540ffa9638dc6f8e81",
+          "packages/dsh-pm-tool/src/core/http/asset-route.test.ts": "c0d623ed9884cff1def7c508d588fd970c6c490aecc69b211de0875ebe4ef01e",
+          "packages/dsh-pm-tool/src/core/http/asset-route.ts": "bac973650943798090c148f6245121781c2e7a080cb5b30f108b0ac793e1da80",
+          "packages/dsh-pm-tool/src/core/provenance-store.ts": "ee3a5051126bc14073beef540627fa2faf5d5585dab8c6d12ddeba4833f3cc00",
+          "packages/dsh-pm-tool/src/core/queue.ts": "ea816b70b725da12c165ee935f0e311272efd858db2f03f526d169ecf88a8144",
+          "packages/dsh-pm-tool/src/core/reflect-file-count.test.ts": "059a67a3dbeda0ab72284564fc627b52b3ca57bb57e7f405d489b09c4f9da16a",
+          "packages/dsh-pm-tool/src/core/reflect.ts": "3423fef5553c3314577698439022310e463ab28c2f42c7476f4886d101cf433b",
+          "packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts": "550f9cc21d4ea2c0603155ea96afe827da1b002817a59c717b2e4c277d997f35",
+          "packages/dsh-pm-tool/src/core/task-materials.ts": "6188f2bf92910c39ca9933dbdc91af00c597564838a712bd9f3c342ca63289f2",
+          "packages/dsh-pm-tool/src/core/task.ts": "ad71b6d1b26e386e297c8f3c6a555252772c5247ab94b3ceec89c787eb21646b",
+          "packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts": "5fb5b3cddd15cd6f32da923649eedbe8f55b466226462feb376474042cfc8591",
+          "packages/dsh-pm-tool/src/core/tasks.ts": "b1282115dc204d61241477d67a16a05496b364a688f1223eb773765454461b29",
+          "packages/dsh-pm-tool/src/core/ui-feedback.test.ts": "5687ee7ecefa3680c8794a5e167f6ff1f041da71266fbbc6f8ab8f221094fac0",
+          "packages/dsh-pm-tool/src/core/ui-feedback.ts": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7",
+          "packages/dsh-pm-tool/vitest.config.ts": "ef1b61eba0c112e523e535e6794c85612874522e4413665c8970a997ab4124c8",
+          "packages/dsh-pm-tool/src/core/task-views.ts": "6d1bdefbafe74f19a3446cbd0633727f1bdd40504af68948384e73f07dbc940c",
+          "packages/dsh-pm-tool/src/core/task-views.test.ts": "86b8bcaf4866bf22057c7673f48a55a18a901693d2ba9298f75ddea36c4c18ce",
+          "packages/dsh-pm-tool/src/core/task-tree.ts": "0d63b259129597098dfb3e8142fa5722c303a7a23f22eece59a60a0d47af0932",
+          "packages/dsh-pm-tool/src/core/task-tree-u4.test.ts": "2f8f9f2561ca51df273b1d0d7d9918ebdf7f49efcce9dd5e4766290260ae0d7c",
+          "packages/dsh-pm-tool/src/client/views/task-views-persist.ts": "a3b7fc0ed0fadec1832319d75b3a58e4ebb4ca7f78986da3f99521ae3b05ae90",
+          "packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx": "ebd8739299f3135d2d993dadd955dada8488cf3097381d98e7a1ab85d638876d",
+          "packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts": "51fe0e1e521c0993107894561d952c4ff7382f7d3faec65c9429ba31bcad68bd",
+          "packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts": "cc7bab8b673c3cbbf6e58fa3ab68f47343aaba98c2c883e6c476bed6332ed792",
+          "packages/dsh-pm-tool/src/client/result-card-permission.test.ts": "ff32f9024d4896b2a18fee8ff5e28b87d2e87fac81a51388db8e9086329ae4a9",
+          "packages/dsh-pm-tool/src/core/ai-client.ts": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448",
+          "packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts": "3403fbf72e5db73dd788d94f64a42bad386a4092711dfd7abce511507f14ceed",
+          "packages/dsh-pm-tool/src/client/shared/task-draft-materials-refs-dom.test.tsx": "73f5d1abc30d92e80b4e12156bbdbd99d422bfb0890b8cbd02b69148b4735a98",
+          "packages/dsh-pm-tool/src/core/progress-report-markdown.ts": "94290aaf54764628161e84f11d1bd495f7cb965c4178ea155d52b2d28ac99fbf",
+          "packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx": "06b0de03361b8003f101595be145e1c645b5b02666e08a0ffa093e6d00246e4f",
+          "packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx": "ff3897e963641159ffd6d59e9bf0a8a2d8c52631857b630dcc9470e2437b1988",
+          "packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts": "26ad8a8e72afd266d756a23dd36db7841a07d9f03050374d9158557a5dfaed29",
+          "packages/dsh-pm-tool/src/core/report-export-excerpts.test.ts": "c777b88dc003414f483a0c2f4360b845483d0a662710d9a43f351405027bbe8a",
+          "packages/dsh-pm-tool/src/client/copilot-error-prefix.test.tsx": "40aab2a19f34bb82a97cd1e7510ccbc187c8a9218bd03c47e0ab0b133f118e90",
+          "packages/dsh-pm-tool/src/client/copilot-error-prefix-fixture.json": "54386e800c3262e5bcfd67ef325ab32a3ec11f7ad8fc59c0f3a075d03169fb97"
+        }
+      },
+      "sourceCount": 3,
+      "completeCount": 521,
+      "runtime": "/private/tmp/pmtool-op-legacy-runtime-20261022-r1",
+      "pid": 16671,
+      "port": 3265,
+      "bundle": "/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool",
+      "profileTarget": "/private/tmp/pmtool-combined-successor114-20261022-r1/packages/dsh-pm-tool",
+      "sourceKeyFormat": "Original114source copied unmodified",
+      "at": "2026-10-22T15:44:18.960Z"
+    },
+    "sourceFiles": 114,
+    "completeInputs": 521,
+    "fixtureBinding": {
+      "at": "2026-10-22T15:40:23.530Z",
+      "source": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sourceBytes": 6961,
+      "sourceSha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "sha256": "abb086772fde51f0e96dff4d5a7e9d444b887e1acdca0180cce11631ba1473ee",
+      "bytes": 4502,
+      "removedRootKeys": [
+        "extra",
+        "fileBundleId"
+      ],
+      "removedTaskKeys": [
+        "checklist",
+        "manualProgress",
+        "manualProgressNote",
+        "effortHours",
+        "evidenceUrl",
+        "attachments",
+        "progressLog"
+      ],
+      "purpose": "Original OP-LEG04/OP-BD02 old-format compatibility fixture through normal precheck and confirm; no seed into domain",
+      "candidate": 114,
+      "port": 3265,
+      "runtime": "/private/tmp/pmtool-op-legacy-runtime-20261022-r1",
+      "GUI": "NOT_RUN"
+    },
+    "policy": "原127原件与原签字内容未变，补证仅视口/focus/Tab/只读row/PNG；继承原restore/browse限定PASS，不重哈希冻结源码、不读runtime或探活"
+  },
+  "businessRows": [
+    {
+      "rel": "data/pmtool/projects/p-0001.json",
+      "archivedRecord": {
+        "id": "p-0001",
+        "name": "QA-OP",
+        "description": "",
+        "owner": "",
+        "status": "planning",
+        "startDate": "2026-01-01",
+        "targetDate": "2026-12-31",
+        "createdAt": "2026-10-21T12:17:53.379Z",
+        "updatedAt": "2026-10-21T12:17:53.379Z"
+      },
+      "before": {
+        "bytes": 297,
+        "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003",
+        "mtimeMs": 1792683748269.682,
+        "ctimeMs": 1792683748275.377,
+        "ino": 56942033
+      },
+      "after": {
+        "bytes": 297,
+        "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003",
+        "mtimeMs": 1792683748269.682,
+        "ctimeMs": 1792683748275.377,
+        "ino": 56942033
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0001.json",
+      "archivedRecord": {
+        "id": "t-0001",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-P",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 100,
+        "milestoneId": null,
+        "code": "1",
+        "order": 1,
+        "createdAt": "2026-10-21T12:17:53.396Z",
+        "updatedAt": "2026-10-21T12:17:53.396Z"
+      },
+      "before": {
+        "bytes": 383,
+        "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e",
+        "mtimeMs": 1792683748282.8943,
+        "ctimeMs": 1792683748286.413,
+        "ino": 56942035
+      },
+      "after": {
+        "bytes": 383,
+        "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e",
+        "mtimeMs": 1792683748282.8943,
+        "ctimeMs": 1792683748286.413,
+        "ino": 56942035
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0002.json",
+      "archivedRecord": {
+        "id": "t-0002",
+        "projectId": "p-0001",
+        "parentId": "t-0001",
+        "title": "F2-M",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "1.1",
+        "order": 1,
+        "createdAt": "2026-10-21T12:17:53.406Z",
+        "updatedAt": "2026-10-21T12:17:53.406Z"
+      },
+      "before": {
+        "bytes": 387,
+        "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85",
+        "mtimeMs": 1792683748291.1213,
+        "ctimeMs": 1792683748292.899,
+        "ino": 56942036
+      },
+      "after": {
+        "bytes": 387,
+        "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85",
+        "mtimeMs": 1792683748291.1213,
+        "ctimeMs": 1792683748292.899,
+        "ino": 56942036
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0003.json",
+      "archivedRecord": {
+        "id": "t-0003",
+        "projectId": "p-0001",
+        "parentId": "t-0002",
+        "title": "F2-L1",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "startDate": "2026-10-21",
+        "dueDate": "2026-10-23",
+        "progress": 40,
+        "milestoneId": null,
+        "code": "1.1.1",
+        "order": 1,
+        "createdAt": "2026-10-21T12:17:53.414Z",
+        "updatedAt": "2026-10-21T12:17:53.439Z"
+      },
+      "before": {
+        "bytes": 451,
+        "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e",
+        "mtimeMs": 1792683748297.024,
+        "ctimeMs": 1792683748298.7998,
+        "ino": 56942037
+      },
+      "after": {
+        "bytes": 451,
+        "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e",
+        "mtimeMs": 1792683748297.024,
+        "ctimeMs": 1792683748298.7998,
+        "ino": 56942037
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0004.json",
+      "archivedRecord": {
+        "id": "t-0004",
+        "projectId": "p-0001",
+        "parentId": "t-0002",
+        "title": "F2-L2",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "1.1.2",
+        "order": 2,
+        "createdAt": "2026-10-21T12:17:53.446Z",
+        "updatedAt": "2026-10-21T12:17:53.499Z"
+      },
+      "before": {
+        "bytes": 390,
+        "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39",
+        "mtimeMs": 1792683748302.2166,
+        "ctimeMs": 1792683748303.8857,
+        "ino": 56942038
+      },
+      "after": {
+        "bytes": 390,
+        "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39",
+        "mtimeMs": 1792683748302.2166,
+        "ctimeMs": 1792683748303.8857,
+        "ino": 56942038
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0005.json",
+      "archivedRecord": {
+        "id": "t-0005",
+        "projectId": "p-0001",
+        "parentId": "t-0001",
+        "title": "F2-L3",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 40,
+        "milestoneId": null,
+        "code": "1.2",
+        "order": 2,
+        "createdAt": "2026-10-21T12:17:53.507Z",
+        "updatedAt": "2026-10-21T12:17:53.507Z"
+      },
+      "before": {
+        "bytes": 389,
+        "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e",
+        "mtimeMs": 1792683748308.48,
+        "ctimeMs": 1792683748313.7534,
+        "ino": 56942039
+      },
+      "after": {
+        "bytes": 389,
+        "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e",
+        "mtimeMs": 1792683748308.48,
+        "ctimeMs": 1792683748313.7534,
+        "ino": 56942039
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0006.json",
+      "archivedRecord": {
+        "id": "t-0006",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-L4",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "2",
+        "order": 2,
+        "createdAt": "2026-10-21T12:17:53.512Z",
+        "updatedAt": "2026-10-21T12:17:53.578Z"
+      },
+      "before": {
+        "bytes": 382,
+        "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f",
+        "mtimeMs": 1792683748317.7715,
+        "ctimeMs": 1792683748319.7869,
+        "ino": 56942040
+      },
+      "after": {
+        "bytes": 382,
+        "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f",
+        "mtimeMs": 1792683748317.7715,
+        "ctimeMs": 1792683748319.7869,
+        "ino": 56942040
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0007.json",
+      "archivedRecord": {
+        "id": "t-0007",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-L5",
+        "description": "",
+        "assignee": "",
+        "status": "done",
+        "priority": "P1",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "3",
+        "order": 3,
+        "createdAt": "2026-10-21T12:17:53.587Z",
+        "updatedAt": "2026-10-21T12:17:53.644Z"
+      },
+      "before": {
+        "bytes": 382,
+        "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6",
+        "mtimeMs": 1792683748324.7822,
+        "ctimeMs": 1792683748329.332,
+        "ino": 56942041
+      },
+      "after": {
+        "bytes": 382,
+        "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6",
+        "mtimeMs": 1792683748324.7822,
+        "ctimeMs": 1792683748329.332,
+        "ino": 56942041
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0008.json",
+      "archivedRecord": {
+        "id": "t-0008",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-L6",
+        "description": "",
+        "assignee": "",
+        "status": "done",
+        "priority": "P1",
+        "progress": 80,
+        "milestoneId": null,
+        "code": "4",
+        "order": 4,
+        "createdAt": "2026-10-21T12:17:53.650Z",
+        "updatedAt": "2026-10-21T12:17:53.650Z"
+      },
+      "before": {
+        "bytes": 383,
+        "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d",
+        "mtimeMs": 1792683748334.3835,
+        "ctimeMs": 1792683748337.4175,
+        "ino": 56942042
+      },
+      "after": {
+        "bytes": 383,
+        "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d",
+        "mtimeMs": 1792683748334.3835,
+        "ctimeMs": 1792683748337.4175,
+        "ino": 56942042
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0009.json",
+      "archivedRecord": {
+        "id": "t-0009",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-L7",
+        "description": "",
+        "assignee": "",
+        "status": "todo",
+        "priority": "P1",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "5",
+        "order": 5,
+        "createdAt": "2026-10-21T12:17:53.658Z",
+        "updatedAt": "2026-10-21T12:17:53.658Z"
+      },
+      "before": {
+        "bytes": 382,
+        "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015",
+        "mtimeMs": 1792683748340.7769,
+        "ctimeMs": 1792683748344.5366,
+        "ino": 56942043
+      },
+      "after": {
+        "bytes": 382,
+        "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015",
+        "mtimeMs": 1792683748340.7769,
+        "ctimeMs": 1792683748344.5366,
+        "ino": 56942043
+      }
+    },
+    {
+      "rel": "data/pmtool/tasks/t-0010.json",
+      "archivedRecord": {
+        "id": "t-0010",
+        "projectId": "p-0001",
+        "parentId": null,
+        "title": "F2-L8",
+        "description": "",
+        "assignee": "",
+        "status": "wrapped",
+        "priority": "P1",
+        "dueDate": "2026-10-20",
+        "progress": 0,
+        "milestoneId": null,
+        "code": "6",
+        "order": 6,
+        "createdAt": "2026-10-21T12:17:53.664Z",
+        "updatedAt": "2026-10-21T12:17:53.680Z"
+      },
+      "before": {
+        "bytes": 414,
+        "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258",
+        "mtimeMs": 1792683748348.5173,
+        "ctimeMs": 1792683748352.79,
+        "ino": 56942044
+      },
+      "after": {
+        "bytes": 414,
+        "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258",
+        "mtimeMs": 1792683748348.5173,
+        "ctimeMs": 1792683748352.79,
+        "ino": 56942044
+      }
+    }
+  ],
+  "originalBefore": {
+    "data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003",
+      "mtimeMs": 1792683748269.682,
+      "ctimeMs": 1792683748275.377,
+      "ino": 56942033
+    },
+    "data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e",
+      "mtimeMs": 1792683748282.8943,
+      "ctimeMs": 1792683748286.413,
+      "ino": 56942035
+    },
+    "data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85",
+      "mtimeMs": 1792683748291.1213,
+      "ctimeMs": 1792683748292.899,
+      "ino": 56942036
+    },
+    "data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e",
+      "mtimeMs": 1792683748297.024,
+      "ctimeMs": 1792683748298.7998,
+      "ino": 56942037
+    },
+    "data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39",
+      "mtimeMs": 1792683748302.2166,
+      "ctimeMs": 1792683748303.8857,
+      "ino": 56942038
+    },
+    "data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e",
+      "mtimeMs": 1792683748308.48,
+      "ctimeMs": 1792683748313.7534,
+      "ino": 56942039
+    },
+    "data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f",
+      "mtimeMs": 1792683748317.7715,
+      "ctimeMs": 1792683748319.7869,
+      "ino": 56942040
+    },
+    "data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6",
+      "mtimeMs": 1792683748324.7822,
+      "ctimeMs": 1792683748329.332,
+      "ino": 56942041
+    },
+    "data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d",
+      "mtimeMs": 1792683748334.3835,
+      "ctimeMs": 1792683748337.4175,
+      "ino": 56942042
+    },
+    "data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015",
+      "mtimeMs": 1792683748340.7769,
+      "ctimeMs": 1792683748344.5366,
+      "ino": 56942043
+    },
+    "data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258",
+      "mtimeMs": 1792683748348.5173,
+      "ctimeMs": 1792683748352.79,
+      "ino": 56942044
+    }
+  },
+  "supplementAfter": {
+    "data/pmtool/projects/p-0001.json": {
+      "bytes": 297,
+      "sha256": "8455c79c698c2300544374f62a59c52d60a7635b483486c146b23791efcf0003",
+      "mtimeMs": 1792683748269.682,
+      "ctimeMs": 1792683748275.377,
+      "ino": 56942033
+    },
+    "data/pmtool/tasks/t-0001.json": {
+      "bytes": 383,
+      "sha256": "86b2e71fe70d61a8c81a8f1e8ba8fbf785bb662523951b97f9e15074260de38e",
+      "mtimeMs": 1792683748282.8943,
+      "ctimeMs": 1792683748286.413,
+      "ino": 56942035
+    },
+    "data/pmtool/tasks/t-0002.json": {
+      "bytes": 387,
+      "sha256": "5cf46c92f5c998dbb7d4bce6210a4b5cc60c50b65cc3d26dd0581b1f6ad2ca85",
+      "mtimeMs": 1792683748291.1213,
+      "ctimeMs": 1792683748292.899,
+      "ino": 56942036
+    },
+    "data/pmtool/tasks/t-0003.json": {
+      "bytes": 451,
+      "sha256": "e486d25a9c12439420462e41ed386bc1211126f6467a3f490297bd27772e481e",
+      "mtimeMs": 1792683748297.024,
+      "ctimeMs": 1792683748298.7998,
+      "ino": 56942037
+    },
+    "data/pmtool/tasks/t-0004.json": {
+      "bytes": 390,
+      "sha256": "e258cd8512068e737e94f60cc02202142052ef437e83156b728fd737c24f8a39",
+      "mtimeMs": 1792683748302.2166,
+      "ctimeMs": 1792683748303.8857,
+      "ino": 56942038
+    },
+    "data/pmtool/tasks/t-0005.json": {
+      "bytes": 389,
+      "sha256": "b21b8d12a68305d689c71e90345a6ba1e6a286d92cf075f09c5bb0760677641e",
+      "mtimeMs": 1792683748308.48,
+      "ctimeMs": 1792683748313.7534,
+      "ino": 56942039
+    },
+    "data/pmtool/tasks/t-0006.json": {
+      "bytes": 382,
+      "sha256": "2151a44c7c88cf2b5855eaf28e79dd5f3f692e674f853c31a5c90ec5bd9ea03f",
+      "mtimeMs": 1792683748317.7715,
+      "ctimeMs": 1792683748319.7869,
+      "ino": 56942040
+    },
+    "data/pmtool/tasks/t-0007.json": {
+      "bytes": 382,
+      "sha256": "55193356d8f4d2f535c6446943f278af91b272035a73c64d137711d6d05edbd6",
+      "mtimeMs": 1792683748324.7822,
+      "ctimeMs": 1792683748329.332,
+      "ino": 56942041
+    },
+    "data/pmtool/tasks/t-0008.json": {
+      "bytes": 383,
+      "sha256": "fb517ee23e07cc4613d5fdf2ca688c4c88662b44c6dc0c0f9b0da5d6ed2a004d",
+      "mtimeMs": 1792683748334.3835,
+      "ctimeMs": 1792683748337.4175,
+      "ino": 56942042
+    },
+    "data/pmtool/tasks/t-0009.json": {
+      "bytes": 382,
+      "sha256": "97bd2d5c0a47ae58648670e3a4c5ef509aaa8d821ad76e2af3b09524e6eeb015",
+      "mtimeMs": 1792683748340.7769,
+      "ctimeMs": 1792683748344.5366,
+      "ino": 56942043
+    },
+    "data/pmtool/tasks/t-0010.json": {
+      "bytes": 414,
+      "sha256": "6cc0ea4f8d66c7e3bbcee5da48b60827a7bac03dc7e512b9045799a96f5e5258",
+      "mtimeMs": 1792683748348.5173,
+      "ctimeMs": 1792683748352.79,
+      "ino": 56942044
+    }
+  },
+  "visible": {
+    "origin": "http://127.0.0.1:3265",
+    "viewport": {
+      "innerWidth": 1440,
+      "innerHeight": 900,
+      "dpr": 1
+    },
+    "row": "1.1.1\nF2-L1\n未开始\n进行中\n受阻\n已完成\n已收尾\n–\n未指派\nP1\n客观 证据不足\n覆盖 0/1\n原手填 40%\n未导出",
+    "bbox": {
+      "x": 535,
+      "y": 422.3828125,
+      "width": 877,
+      "height": 56.5,
+      "top": 422.3828125,
+      "right": 1412,
+      "bottom": 478.8828125,
+      "left": 535
+    },
+    "leaves": [
+      {
+        "text": "",
+        "bbox": {
+          "x": 547.5,
+          "y": 443.1328125,
+          "width": 13,
+          "height": 14,
+          "top": 443.1328125,
+          "right": 560.5,
+          "bottom": 457.1328125,
+          "left": 547.5
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 579,
+          "y": 449.5078125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 449.5078125,
+          "right": 580.25,
+          "bottom": 450.7578125,
+          "left": 579
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 579,
+          "y": 445.1328125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 445.1328125,
+          "right": 580.25,
+          "bottom": 446.3828125,
+          "left": 579
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 579,
+          "y": 453.8828125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 453.8828125,
+          "right": 580.25,
+          "bottom": 455.1328125,
+          "left": 579
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 582.75,
+          "y": 449.5078125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 449.5078125,
+          "right": 584,
+          "bottom": 450.7578125,
+          "left": 582.75
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 582.75,
+          "y": 445.1328125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 445.1328125,
+          "right": 584,
+          "bottom": 446.3828125,
+          "left": 582.75
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 582.75,
+          "y": 453.8828125,
+          "width": 1.25,
+          "height": 1.25,
+          "top": 453.8828125,
+          "right": 584,
+          "bottom": 455.1328125,
+          "left": 582.75
+        }
+      },
+      {
+        "text": "1.1.1",
+        "bbox": {
+          "x": 607,
+          "y": 442.15625,
+          "width": 19,
+          "height": 15.9453125,
+          "top": 442.15625,
+          "right": 626,
+          "bottom": 458.1015625,
+          "left": 607
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 633.6666870117188,
+          "y": 448.2916564941406,
+          "width": 6.4166259765625,
+          "height": 6.41668701171875,
+          "top": 448.2916564941406,
+          "right": 640.0833129882812,
+          "bottom": 454.7083435058594,
+          "left": 633.6666870117188
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 630.9166870117188,
+          "y": 445.5416564941406,
+          "width": 6.4166259765625,
+          "height": 6.41668701171875,
+          "top": 445.5416564941406,
+          "right": 637.3333129882812,
+          "bottom": 451.9583435058594,
+          "left": 630.9166870117188
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 663,
+          "y": 446.1328125,
+          "width": 8,
+          "height": 8,
+          "top": 446.1328125,
+          "right": 671,
+          "bottom": 454.1328125,
+          "left": 663
+        }
+      },
+      {
+        "text": "F2-L1",
+        "bbox": {
+          "x": 681,
+          "y": 439.984375,
+          "width": 40.5,
+          "height": 20.296875,
+          "top": 439.984375,
+          "right": 721.5,
+          "bottom": 460.28125,
+          "left": 681
+        }
+      },
+      {
+        "text": "未开始",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "text": "进行中",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "text": "受阻",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "text": "已完成",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "text": "已收尾",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "text": "–",
+        "bbox": {
+          "x": 892,
+          "y": 439.1328125,
+          "width": 22,
+          "height": 22,
+          "top": 439.1328125,
+          "right": 914,
+          "bottom": 461.1328125,
+          "left": 892
+        }
+      },
+      {
+        "text": "未指派",
+        "bbox": {
+          "x": 922,
+          "y": 441.4296875,
+          "width": 36.7578125,
+          "height": 17.3984375,
+          "top": 441.4296875,
+          "right": 958.7578125,
+          "bottom": 458.828125,
+          "left": 922
+        }
+      },
+      {
+        "text": "P1",
+        "bbox": {
+          "x": 1020,
+          "y": 439.8828125,
+          "width": 30.09375,
+          "height": 20.5,
+          "top": 439.8828125,
+          "right": 1050.09375,
+          "bottom": 460.3828125,
+          "left": 1020
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 1084,
+          "y": 438.4296875,
+          "width": 118,
+          "height": 23.3984375,
+          "top": 438.4296875,
+          "right": 1202,
+          "bottom": 461.828125,
+          "left": 1084
+        }
+      },
+      {
+        "text": "客观 证据不足",
+        "bbox": {
+          "x": 1192,
+          "y": 426.3828125,
+          "width": 64.25,
+          "height": 14.5,
+          "top": 426.3828125,
+          "right": 1256.25,
+          "bottom": 440.8828125,
+          "left": 1192
+        }
+      },
+      {
+        "text": "覆盖 0/1",
+        "bbox": {
+          "x": 1192,
+          "y": 442.8828125,
+          "width": 132,
+          "height": 14.5,
+          "top": 442.8828125,
+          "right": 1324,
+          "bottom": 457.3828125,
+          "left": 1192
+        }
+      },
+      {
+        "text": "原手填 40%",
+        "bbox": {
+          "x": 1192,
+          "y": 459.3828125,
+          "width": 132,
+          "height": 14.5,
+          "top": 459.3828125,
+          "right": 1324,
+          "bottom": 473.8828125,
+          "left": 1192
+        }
+      },
+      {
+        "text": "未导出",
+        "bbox": {
+          "x": 1326.8046875,
+          "y": 442.5234375,
+          "width": 32.1953125,
+          "height": 15.21875,
+          "top": 442.5234375,
+          "right": 1359,
+          "bottom": 457.7421875,
+          "left": 1326.8046875
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 1376.25,
+          "y": 443.882568359375,
+          "width": 12.4998779296875,
+          "height": 12.499725341796875,
+          "top": 443.882568359375,
+          "right": 1388.7498779296875,
+          "bottom": 456.3822937011719,
+          "left": 1376.25
+        }
+      },
+      {
+        "text": "",
+        "bbox": {
+          "x": 1384.375,
+          "y": 445.7578125,
+          "width": 2.5,
+          "height": 2.5,
+          "top": 445.7578125,
+          "right": 1386.875,
+          "bottom": 448.2578125,
+          "left": 1384.375
+        }
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "name": "failed",
+      "execution": {
+        "version": 2,
+        "executionId": "de773c380cdf1333e43401c4e0e63525",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "e9b729d52812cd0ec753a7fc3e88a74f42688c615d25fbdb53e3b23253346b68",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 18924,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 1,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792684322367,
+        "startedAtMs": 1792684322415,
+        "finishedAtMs": 1792684324833
+      },
+      "output": "Error: JavaScript evaluation failed at line 0, column 0: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at <anonymous>:6:26\n    at Array.map (<anonymous>)\n    at <anonymous>:5:75\n    at __egoPageEvaluate (<anonymous>:10:4)\n    at <anonymous>:11:9; expression: () => ({\\n  origin: location.origin, viewport: { innerWidth, innerHeight, dpr: devicePixelRatio },\\n  row: document.querySelector('button[aria-label=\"编辑 F2-L...\n    at runtimeValue (file:////[eval1]:9189:15)\n    at evaluateInSession (file:////[eval1]:19460:12)\n    at async file:////[eval1]:19083:24\n    at async file:////[eval1]:16940:28\n\nego's nodejs process exited with code 1.\n",
+      "privateExecution": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/de773c380cdf1333e43401c4e0e63525/execution.json",
+      "privateOutput": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/de773c380cdf1333e43401c4e0e63525/output.log",
+      "startedAt": "2026-10-22T15:52:02.415Z",
+      "finishedAt": "2026-10-22T15:52:04.833Z",
+      "limit": "metadata未含完整stdin；收据是执行事实，不等GUI PASS"
+    },
+    {
+      "name": "captured",
+      "execution": {
+        "version": 2,
+        "executionId": "d1f3248add09faa4d12615be2f9e283d",
+        "ownerHash": "2ab1d82ae86b5594a60346f5ed63027d7d1d3ce9ea295a570750ddbd41124c81",
+        "requestDigest": "ad3a89bce7273c92f4525eaef14e33274028b246029da92ae458f2f6a63edd08",
+        "stdinMode": "piped",
+        "captureStderr": false,
+        "target": "host",
+        "status": "exited",
+        "pid": 19293,
+        "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+        "exitCode": 0,
+        "terminalReason": "process_exited",
+        "outputComplete": true,
+        "sandbox": null,
+        "createdAtMs": 1792684412777,
+        "startedAtMs": 1792684412823,
+        "finishedAtMs": 1792684414950
+      },
+      "output": "{ row: '1.1.1\\nF2-L1\\n未开始\\n进行中\\n受阻\\n已完成\\n已收尾\\n–\\n未指派\\nP1\\n客观 证据不足\\n覆盖 0/1\\n原手填 40%\\n未导出', bbox: { x: 535, y: 422.3828125, width: 877, height: 56.5, top: 422.3828125, right: 1412, bottom: 478.8828125, left: 535 } }\n\n",
+      "privateExecution": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/d1f3248add09faa4d12615be2f9e283d/execution.json",
+      "privateOutput": "/Users/bytedance/Library/Application Support/Trae CN/ModularData/ai-agent/command-execution/d1f3248add09faa4d12615be2f9e283d/output.log",
+      "startedAt": "2026-10-22T15:53:32.823Z",
+      "finishedAt": "2026-10-22T15:53:34.950Z",
+      "limit": "metadata未含完整stdin；收据是执行事实，不等GUI PASS"
+    }
+  ],
+  "observations": {
+    "parentIndexUnchanged": true,
+    "exactOriginalBusinessMtime": true,
+    "verdict": "NOT_A_GUI_PASS",
+    "originalFailure": "TR ancestor assumption failed for DIV grid; original script preserved",
+    "capture": "40-visible-r2.png"
+  },
+  "scriptReview": {
+    "importedOrExecuted": false,
+    "focusAndTabNotClick": true,
+    "originalFailurePreserved": true,
+    "failedTRNotProductFailure": true,
+    "successfulSelector": ".pm-task-row",
+    "writesObservedBySnapshot": 0,
+    "limit": "归档11业务文件exact，不宣称全机或全部runtime零写；没有新增RPC事件全量日志"
+  },
+  "visualReview": {
+    "method": "替补审证者实际functions.view_image，detail=original；不是自动bbox裁决",
+    "image": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/OpLegacyBrowseR1/legacy40-supplement/40-visible-r2.png",
+    "imageFingerprint": {
+      "bytes": 184681,
+      "mtimeNs": "1792684414584527206",
+      "ctimeNs": "1792684414584527206",
+      "ino": "56953755",
+      "sha256": "35dcab3371f1495bfe4856ad58d3149554a22afcfae31a97927cb997a45dbcd3"
+    },
+    "dimensions": "1440x900",
+    "theme": "深色",
+    "observed": [
+      "L1位于y约422-479，L3位于y约627-683，两者原手填40%与客观证据不足/覆盖0/1逐行分离可读",
+      "L6位于y约798-854，原手填80%与证据不足并列；无客观40%或80%完成度签字",
+      "任务列表真实界面，无编辑保存弹窗；顶部内容及最底L7部分出框，不签整页矩阵"
+    ],
+    "DOMLimit": "40-visible-r2.json只覆盖L1；L3/L6可见由实际PNG目视证实",
+    "reviewExecution": "只目视归档，不是第二次GUI采证"
+  },
+  "result": {
+    "status": "限定 PASS",
+    "assertion": "本旧包列表F2-L1/L3原手填40%实际可见且与客观证据不足分离",
+    "inheritedRestoreBrowse": "沿原限定PASS",
+    "remainingInThisSupplement": []
+  },
+  "exclusions": [
+    "客观40%",
+    "旧OP112R2",
+    "native",
+    "P0–P3",
+    "B8",
+    "父ordinarycommit",
+    "发布准入"
+  ],
+  "executionNotes": [
+    "首次exec的login=false不受支持，未执行；移除参数后只读成功",
+    "声明的memory绝对路径不存在；未使用私有记忆作依据",
+    "research-guide仅用于原件优先/交叉核对，不为满足通用来源数量扩本单或生成GUI"
+  ],
+  "writable": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-reader.mjs",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-audit.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-seal.json"
+  ],
+  "released": false
+}

@@ -19,6 +19,7 @@ import { dirname, join } from 'node:path'
 const here = dirname(fileURLToPath(import.meta.url))
 const panelCss = readFileSync(join(here, '..', 'panel.css'), 'utf-8')
 const panelTsx = readFileSync(join(here, '..', 'panel.tsx'), 'utf-8')
+const resultCardTsx = readFileSync(join(here, '..', 'result-card.tsx'), 'utf-8')
 const tasksCss = readFileSync(join(here, '..', 'views', 'tasks.css'), 'utf-8')
 const tasksTsx = readFileSync(join(here, '..', 'views', 'tasks.tsx'), 'utf-8')
 
@@ -106,10 +107,11 @@ describe('C 反馈状态（busy loading / 陈旧重试 / 成功 toast / 错误�
   })
 
   it('C3 错误（含 permission-denied）原始原因不被静默合并，ResultCard error role=alert 保留', () => {
-    expect(panelTsx).toContain('role={isError ? \'alert\' : \'status\'}')
-    expect(/权限不足|permission|denied/i.test(panelTsx), '需对权限类错误给通用种类标签').toBe(true)
+    expect(panelTsx).toContain("import { ResultCard } from './result-card.js'")
+    expect(resultCardTsx).toContain('role={isError ? \'alert\' : \'status\'}')
+    expect(/权限不足|permission|denied/i.test(resultCardTsx), '需对权限类错误给通用种类标签').toBe(true)
     // 非结构化错误原文原样进卡体（showInlineRaw），不改写不吞。
-    expect(panelTsx).toContain('showInlineRaw')
+    expect(resultCardTsx).toContain('showInlineRaw')
   })
 })
 

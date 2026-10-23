@@ -1,0 +1,89 @@
+TAP version 13
+# {"event":"browser","pid":6928,"version":"Chrome/139.0.7258.155"}
+# Subtest: A3-P02：生产模块同步throw/异步error/非零/信号安全拒绝；迟到error/exit不重抛或重复完成
+ok 1 - A3-P02：生产模块同步throw/异步error/非零/信号安全拒绝；迟到error/exit不重抛或重复完成
+  ---
+  duration_ms: 2082.207875
+  type: 'test'
+  ...
+# {"event":"inflight-select-attribution","actualApp":"Google Chrome","state":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"validNonce":false}
+# Subtest: A3-P11：OS等待中select-browser不得改写已投递归属或使当前有效nonce失效
+not ok 2 - A3-P11：OS等待中select-browser不得改写已投递归属或使当前有效nonce失效
+  ---
+  duration_ms: 8.510167
+  type: 'test'
+  location: '/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:347:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    当前旅程应仍归属实际投递的Chrome，或明确撤销；不得标Safari已投递
+    
+    'Safari' !== 'Chrome'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Chrome'
+  actual: 'Safari'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:361:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# {"event":"dom-inflight-select-attribution","observed":{"app":{"status":"S3","step":0,"browser":"Safari","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S3","browser":"Safari","selectedBrowser":"Safari"},"actualApp":"Google Chrome","nonceValid":false}}
+# {"event":"dom-cleanup","test":"A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器","actions":[{"type":"select-browser","browser":"Chrome"},{"type":"open","browser":"Chrome"},{"type":"select-browser","browser":"Safari"}],"trace":[{"type":"select-browser","browser":"Chrome","start":1792584560011,"closed":1792584560012},{"type":"open","browser":"Chrome","start":1792584560069,"closed":1792584560224},{"type":"select-browser","browser":"Safari","start":1792584560186,"closed":1792584560187}],"reads":1,"openedCount":1,"errors":[]}
+# {"event":"reopen-without-new-callback","resultWithoutNewCallback":{"status":"S4","step":0,"browser":"系统默认浏览器","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"系统默认浏览器","theme":"light"},"cleanUrl":true,"freshNonce":true}
+# Subtest: A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器
+not ok 3 - A3-P12：真实DOM existing慢OS投递期间仍可选Safari，不能错标投递浏览器
+  ---
+  duration_ms: 1225.536667
+  type: 'test'
+  location: '/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:364:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    实际Chrome投递不能被随后偏好写覆盖为Safari
+    
+    'Safari' !== 'Chrome'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Chrome'
+  actual: 'Safari'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:382:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A3-P13：旧S4开始reopen，无本轮回告不能沿用S4当新页成功
+not ok 4 - A3-P13：旧S4开始reopen，无本轮回告不能沿用S4当新页成功
+  ---
+  duration_ms: 1.628458
+  type: 'test'
+  location: '/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:385:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    新reopen无有效回告应等待，而不是保留旧S4
+    
+    'S4' !== 'S3'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'S3'
+  actual: 'S4'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a3-QJTpA9/launcher/test/fc-a3-probes.test.mjs:400:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# {"event":"browser-closed","pid":6928,"exitCode":0}
+1..4
+# tests 4
+# suites 0
+# pass 1
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5416.960833

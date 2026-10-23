@@ -1,0 +1,193 @@
+TAP version 13
+# Subtest: A4-P01-existing：probe await改偏好，当前Chrome/nonce一致、下一轮Safari
+ok 1 - A4-P01-existing：probe await改偏好，当前Chrome/nonce一致、下一轮Safari
+  ---
+  duration_ms: 475.185
+  type: 'test'
+  ...
+# {"event":"browser","pid":11177,"version":"Chrome/139.0.7258.155"}
+# Subtest: A4-P01-owned：probe await改偏好，当前Chrome/nonce一致、下一轮Safari
+ok 2 - A4-P01-owned：probe await改偏好，当前Chrome/nonce一致、下一轮Safari
+  ---
+  duration_ms: 929.036583
+  type: 'test'
+  ...
+# Subtest: A4-P02：owned start await改偏好，冻结S2/browser/首投，下一轮不重放认证URL
+ok 3 - A4-P02：owned start await改偏好，冻结S2/browser/首投，下一轮不重放认证URL
+  ---
+  duration_ms: 8.201709
+  type: 'test'
+  ...
+# Subtest: A4-P03-existing-early：OS await偏好变化不改argv/nonce/回告归属
+ok 4 - A4-P03-existing-early：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 2.736792
+  type: 'test'
+  ...
+# Subtest: A4-P03-existing-late：OS await偏好变化不改argv/nonce/回告归属
+ok 5 - A4-P03-existing-late：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 1.741084
+  type: 'test'
+  ...
+# Subtest: A4-P03-owned-early：OS await偏好变化不改argv/nonce/回告归属
+ok 6 - A4-P03-owned-early：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 1.158792
+  type: 'test'
+  ...
+# Subtest: A4-P03-owned-late：OS await偏好变化不改argv/nonce/回告归属
+ok 7 - A4-P03-owned-late：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 1.208583
+  type: 'test'
+  ...
+# Subtest: A4-P03-reopen-early：OS await偏好变化不改argv/nonce/回告归属
+ok 8 - A4-P03-reopen-early：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 4.378917
+  type: 'test'
+  ...
+# {"event":"old-S4-reopen","outcome":"none","observed":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"early","observed":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"late","observed":{"status":"S3","step":0,"browser":"Chrome","confirmed":false,"view":"S3","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"failure","observed":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"safe synthetic OS failure","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"cancel-ok","observed":{"status":"S0","step":0,"browser":"Chrome","confirmed":false,"view":"S0","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"cancel-error","observed":{"status":"S0","step":0,"browser":"Chrome","confirmed":false,"view":"S0","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"replace-error","observed":{"status":"S4","step":0,"browser":"Safari","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# {"event":"old-S4-reopen","outcome":"early-failure","observed":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"safe synthetic OS failure","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":true,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"freshNonce":true,"cleanUrl":true}
+# Subtest: A4-P03-reopen-late：OS await偏好变化不改argv/nonce/回告归属
+ok 9 - A4-P03-reopen-late：OS await偏好变化不改argv/nonce/回告归属
+  ---
+  duration_ms: 5.550917
+  type: 'test'
+  ...
+# Subtest: A4-P04-none：旧S4 reopen新旅程清理及结果
+ok 10 - A4-P04-none：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 1.846208
+  type: 'test'
+  ...
+# Subtest: A4-P04-early：旧S4 reopen新旅程清理及结果
+ok 11 - A4-P04-early：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 1.386708
+  type: 'test'
+  ...
+# Subtest: A4-P04-late：旧S4 reopen新旅程清理及结果
+ok 12 - A4-P04-late：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 0.559042
+  type: 'test'
+  ...
+# Subtest: A4-P04-failure：旧S4 reopen新旅程清理及结果
+ok 13 - A4-P04-failure：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 0.328875
+  type: 'test'
+  ...
+# Subtest: A4-P04-cancel-ok：旧S4 reopen新旅程清理及结果
+ok 14 - A4-P04-cancel-ok：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 0.231791
+  type: 'test'
+  ...
+# Subtest: A4-P04-cancel-error：旧S4 reopen新旅程清理及结果
+ok 15 - A4-P04-cancel-error：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 0.258833
+  type: 'test'
+  ...
+# Subtest: A4-P04-replace-error：旧S4 reopen新旅程清理及结果
+ok 16 - A4-P04-replace-error：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 0.408959
+  type: 'test'
+  ...
+# Subtest: A4-P04-early-failure：旧S4 reopen新旅程清理及结果
+not ok 17 - A4-P04-early-failure：旧S4 reopen新旅程清理及结果
+  ---
+  duration_ms: 1.526916
+  type: 'test'
+  location: '/private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher/test/fc-a4-probes.test.mjs:138:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    assertState (file:///private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher/test/fc-a4-probes.test.mjs:53:10)
+    TestContext.<anonymous> (file:///private/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pmtool-independent-fc-a4-KGojXX/launcher/test/fc-a4-probes.test.mjs:175:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A4-P05：begin-journey清所有旧状态confirmed/detail/step，并以事件browser冻结
+ok 18 - A4-P05：begin-journey清所有旧状态confirmed/detail/step，并以事件browser冻结
+  ---
+  duration_ms: 5.753292
+  type: 'test'
+  ...
+# Subtest: A4-P06：取消/替换probe或start await，旧成功失败不投递不覆盖新回告
+ok 19 - A4-P06：取消/替换probe或start await，旧成功失败不投递不覆盖新回告
+  ---
+  duration_ms: 9.663167
+  type: 'test'
+  ...
+# Subtest: A4-P07：生产HTTP当前nonce不受偏好改写；错误Origin/旧nonce/未verify/重复回告拒绝
+ok 20 - A4-P07：生产HTTP当前nonce不受偏好改写；错误Origin/旧nonce/未verify/重复回告拒绝
+  ---
+  duration_ms: 313.691292
+  type: 'test'
+  ...
+# {"event":"real-open-timeout","kind":"existing","elapsed":5001,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"本地服务探测或浏览器打开失败：浏览器打开命令等待超时，请检查浏览器后重试。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"}}
+# Subtest: A4-P08-existing：生产open真实默认5s超时撤nonce、保冻结browser并拒迟到
+ok 21 - A4-P08-existing：生产open真实默认5s超时撤nonce、保冻结browser并拒迟到
+  ---
+  duration_ms: 5003.377167
+  type: 'test'
+  ...
+# {"event":"real-open-timeout","kind":"reopen","elapsed":5003,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"浏览器打开命令等待超时，请检查浏览器后重试。","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"}}
+# Subtest: A4-P08-reopen：生产open真实默认5s超时撤nonce、保冻结browser并拒迟到
+ok 22 - A4-P08-reopen：生产open真实默认5s超时撤nonce、保冻结browser并拒迟到
+  ---
+  duration_ms: 5003.894
+  type: 'test'
+  ...
+# {"event":"dom-current-callback","observed":{"status":"S4","browser":"Chrome","selectedBrowser":"Safari","confirmed":true,"navigationCount":1}}
+# {"event":"dom-cleanup","close":"none","errors":[],"openCount":2,"starts":0,"cancels":2}
+# Subtest: A4-P09-none：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+ok 23 - A4-P09-none：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+  ---
+  duration_ms: 1259.660167
+  type: 'test'
+  ...
+# {"event":"dom-cleanup","close":"close","errors":[],"openCount":2,"starts":0,"cancels":2}
+# Subtest: A4-P09-close：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+ok 24 - A4-P09-close：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+  ---
+  duration_ms: 1842.392917
+  type: 'test'
+  ...
+# {"event":"dom-cleanup","close":"pagehide","errors":[],"openCount":2,"starts":0,"cancels":2}
+# Subtest: A4-P09-pagehide：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+ok 25 - A4-P09-pagehide：生产DOM/app旧S4重开、当前回告、关页不重建或停止服务
+  ---
+  duration_ms: 1988.293958
+  type: 'test'
+  ...
+# {"event":"browser-closed","pid":11177,"exitCode":0}
+1..25
+# tests 25
+# suites 0
+# pass 24
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17308.193416

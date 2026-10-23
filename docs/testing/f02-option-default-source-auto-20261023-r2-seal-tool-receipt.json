@@ -1,0 +1,37 @@
+{
+  "role": "trae independent SOURCE/AUTO expert",
+  "at": "2026-10-22T23:26:33.609Z",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-option-default-source-auto-20261023-r2-independent-eeSeQV/config/seal.mjs"
+  ],
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "actualToolTerminalExit": 0,
+  "actualExitOrigin": "observed functions.exec_command completed result, not seal payload self-assertion",
+  "wallTimeSeconds": 0.4544,
+  "stdout": {
+    "at": "2026-10-22T23:26:33.609Z",
+    "seal": {
+      "bytes": 621051,
+      "sha256": "ce324cdffd2d3432f9f654881199c67d37cbfe45cad25aed773ac8271860a8d1"
+    },
+    "protectedFiles": 1286,
+    "outputFiles": 45,
+    "symlinks": 4,
+    "drift": [],
+    "resources": "released / STOP; test tool already returned exit1; no builder/GUI/service resources acquired"
+  },
+  "stderrObservation": "no error output surfaced by the tool",
+  "independentProductTestTerminalExit": 1,
+  "verdict": {
+    "SOURCE": "PASS_LIMITED",
+    "AUTO_DOM9": "PASS_LIMITED",
+    "AUTO_RELATED28": "BLOCKED_INFRASTRUCTURE",
+    "AUTO_COMBINED37": "BLOCKED_INFRASTRUCTURE",
+    "originalGUI": "FAIL retained",
+    "newGUI": "NOT_RUN",
+    "parentGate": "NOT_SIGNED"
+  },
+  "boundary": "receipt written after seal returned; intentionally excluded from seal to avoid circular fingerprint",
+  "resources": "released / STOP; Main notified through completion response"
+}

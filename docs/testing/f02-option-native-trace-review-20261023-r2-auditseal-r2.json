@@ -1,0 +1,202 @@
+{
+  "at": "2026-10-22T23:26:09.886Z",
+  "startedAt": "2026-10-22T23:26:09.745Z",
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/tmp/f02-option-native-trace-review-20261023-r2-reader.mjs",
+    "seal2"
+  ],
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "computedExitCode": 0,
+  "protectedInputs": 451,
+  "changes": [],
+  "checks": [
+    {
+      "name": "round26-readonly-rpc-not-zero",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:projects",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:tasks",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:milestones",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:riskIssues",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:meetings",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:reports",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:deliverables",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:okrs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:lessons",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:habits",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "fileAsset-raw-only-relPath:fa-0001",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "fileAsset-raw-only-relPath:fa-0002",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "round26-snapshot-raw:fileAssets",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "sealed-members-unchanged",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no-trailing-whitespace:-report.md",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no-trailing-whitespace:-command-audit.md",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "protected-inputs",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "audit-no-errors",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "outputs": {
+    "docs/testing/f02-option-native-trace-review-20261023-r2-report.md": {
+      "bytes": 18841,
+      "sha256": "3e571ec4ff1bd50399cfb16524d0f7fd6274887cd779bd00f0203606fdbb912d"
+    },
+    "docs/testing/f02-option-native-trace-review-20261023-r2-audit.json": {
+      "bytes": 493676,
+      "sha256": "9e6da93ff2257da81067b0623eb18741184f92eeb64a55e7046f27fe961bafb1"
+    },
+    "docs/testing/f02-option-native-trace-review-20261023-r2-command-audit.md": {
+      "bytes": 9731,
+      "sha256": "1b7afbdd0a7774a57b3112fcd4566107ca924f8a3e7075678378bbe743f46e8e"
+    },
+    "docs/testing/f02-option-native-trace-review-20261023-r2-auditseal.json": {
+      "bytes": 4109,
+      "sha256": "4c48e976beb485794a48e7797908c13ca8b7f86e14cc75684ef44a3060d185d2"
+    }
+  },
+  "reader": {
+    "bytes": 19855,
+    "sha256": "91db7612a93db2d2e09b22d07d44b2e34337133e7582b40be31660bf8a4daf98"
+  },
+  "round26RpcCorrection": {
+    "rpcId": "7d6d3707-4a30-4824-ab2e-8edf8c62645c",
+    "command": "/pm web snapshot",
+    "requestCount": 1,
+    "responseCount": 1,
+    "snapshotCollections": {
+      "projects": {
+        "count": 3,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "tasks": {
+        "count": 8,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "milestones": {
+        "count": 1,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "riskIssues": {
+        "count": 1,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "meetings": {
+        "count": 1,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "reports": {
+        "count": 1,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "deliverables": {
+        "count": 2,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "okrs": {
+        "count": 4,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "lessons": {
+        "count": 1,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "habits": {
+        "count": 2,
+        "same": true,
+        "scope": "整record相同"
+      },
+      "fileAssets": {
+        "count": 2,
+        "same": true,
+        "scope": "公开字段全等；仅raw独有relPath另绑封存files指纹，不丢其他字段。"
+      }
+    }
+  },
+  "selfHashExcluded": true,
+  "boundary": "仅完整性封存和原只读RPC补核，不是GUI PASS或父普通提交放行。self链接将在本次创建后存在；封后真实命令收据不参与循环指纹。"
+}

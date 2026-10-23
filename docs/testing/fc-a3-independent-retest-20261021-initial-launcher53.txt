@@ -1,0 +1,328 @@
+TAP version 13
+# Subtest: 回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4
+ok 1 - 回告只属于当前旅程：重开/重试/切浏览器撤销旧句柄，取消/返回后不得进入S4
+  ---
+  duration_ms: 4.471875
+  type: 'test'
+  ...
+# Subtest: running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token
+ok 2 - running(401 鉴权墙)：open → S3，openBrowser 收到干净 URL 且无 token；状态不含 token
+  ---
+  duration_ms: 0.301584
+  type: 'test'
+  ...
+# Subtest: 自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172
+ok 3 - 自定义 host/port：探测收到 host，已运行打开的干净 URL 与状态均用配置值而非硬编码 3172
+  ---
+  duration_ms: 1.320916
+  type: 'test'
+  ...
+# Subtest: not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）
+ok 4 - not-running：owned start → 内存 token URL 投递一次后即弃 → S3；权威 nonce 回告 → S4（非按钮）
+  ---
+  duration_ms: 3.220083
+  type: 'test'
+  ...
+# Subtest: 回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效
+ok 5 - 回告 nonce 覆盖真实鉴权时长：超过 2 分钟仍有效，超过 10 分钟失效
+  ---
+  duration_ms: 0.822333
+  type: 'test'
+  ...
+# Subtest: S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token
+ok 6 - S3 反馈登录错误 → S5；retry → S3；不自动 S4、不重放 token
+  ---
+  duration_ms: 0.53875
+  type: 'test'
+  ...
+# Subtest: conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程
+ok 7 - conflict → S6；back → S0；S2 cancel 调用 cancelStartup 且回 S0，不杀进程
+  ---
+  duration_ms: 0.537083
+  type: 'test'
+  ...
+# Subtest: loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token
+ok 8 - loopback：GET / 渲染标题；GET /api/state；POST /api/entered 权威回告 S4；无效/错 origin 全拒；响应不含 token
+  ---
+  duration_ms: 57.942916
+  type: 'test'
+  ...
+# Subtest: 生产浏览器参数：显示标签映射真实应用，普通URL保持一个参数
+ok 9 - 生产浏览器参数：显示标签映射真实应用，普通URL保持一个参数
+  ---
+  duration_ms: 1.874084
+  type: 'test'
+  ...
+# Subtest: 生产OS投递：error/非零/超时有界拒绝，exit0只确认命令接收
+ok 10 - 生产OS投递：error/非零/超时有界拒绝，exit0只确认命令接收
+  ---
+  duration_ms: 24.849792
+  type: 'test'
+  ...
+# Subtest: 生产app：异步OS失败落S6且不复投，owned首投失败仍弃URL
+ok 11 - 生产app：异步OS失败落S6且不复投，owned首投失败仍弃URL
+  ---
+  duration_ms: 2.567083
+  type: 'test'
+  ...
+# Subtest: 生产app：取消后迟到OS成功/失败不覆盖S0，先到合法回告不降回S3
+ok 12 - 生产app：取消后迟到OS成功/失败不覆盖S0，先到合法回告不降回S3
+  ---
+  duration_ms: 3.189041
+  type: 'test'
+  ...
+# Subtest: discoverBrowsers：注入存在性，仅列出存在的浏览器，并标注 app 窗口能力
+ok 13 - discoverBrowsers：注入存在性，仅列出存在的浏览器，并标注 app 窗口能力
+  ---
+  duration_ms: 7.696541
+  type: 'test'
+  ...
+# Subtest: resolveBrowserOpen：Chrome真实应用普通tab；缺失选择回退默认tab
+ok 14 - resolveBrowserOpen：Chrome真实应用普通tab；缺失选择回退默认tab
+  ---
+  duration_ms: 1.037834
+  type: 'test'
+  ...
+# Subtest: controller：fake spawn 捕获内存 token URL，就绪后返回；forget 丢弃；stop 拒绝
+ok 15 - controller：fake spawn 捕获内存 token URL，就绪后返回；forget 丢弃；stop 拒绝
+  ---
+  duration_ms: 1.390708
+  type: 'test'
+  ...
+# Subtest: cancel（ready前）：SIGTERM 回收未就绪 owned 子进程并抛 STARTUP_ABORTED，不留 owned
+ok 16 - cancel（ready前）：SIGTERM 回收未就绪 owned 子进程并抛 STARTUP_ABORTED，不留 owned
+  ---
+  duration_ms: 13.770083
+  type: 'test'
+  ...
+# Subtest: ready 后 cancel：不杀已就绪 owned 服务，保留 pid（不终止已启动 PM）
+ok 17 - ready 后 cancel：不杀已就绪 owned 服务，保留 pid（不终止已启动 PM）
+  ---
+  duration_ms: 1.615583
+  type: 'test'
+  ...
+# Subtest: 重复 cancel 幂等：未就绪子进程只 SIGTERM 一次，不重复回收
+ok 18 - 重复 cancel 幂等：未就绪子进程只 SIGTERM 一次，不重复回收
+  ---
+  duration_ms: 11.01425
+  type: 'test'
+  ...
+# Subtest: 启动失败（非取消，超时）→ 抛错由编排落 S6；就绪前超时回收自己未就绪子进程；失败后 cancel 为 no-op 不重复终止
+ok 19 - 启动失败（非取消，超时）→ 抛错由编排落 S6；就绪前超时回收自己未就绪子进程；失败后 cancel 为 no-op 不重复终止
+  ---
+  duration_ms: 55.203834
+  type: 'test'
+  ...
+# Subtest: 编排：S2 取消收到 STARTUP_ABORTED 保持 S0，不转 S6，不投递浏览器
+ok 20 - 编排：S2 取消收到 STARTUP_ABORTED 保持 S0，不转 S6，不投递浏览器
+  ---
+  duration_ms: 1.883
+  type: 'test'
+  ...
+# Subtest: 隔离真实 owned 假子进程：cancel SIGTERM 后真实退出
+ok 21 - 隔离真实 owned 假子进程：cancel SIGTERM 后真实退出
+  ---
+  duration_ms: 15.078458
+  type: 'test'
+  ...
+# Subtest: 探测：端口拒绝 → not-running → 决策 start（S0）
+ok 22 - 探测：端口拒绝 → not-running → 决策 start（S0）
+  ---
+  duration_ms: 1.977375
+  type: 'test'
+  ...
+# Subtest: 探测：无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict → 安全失败，不误开未知服务
+ok 23 - 探测：无 cookie 的 200 不可能是 dsh（dsh 无 cookie 恒 401 墙）→ conflict → 安全失败，不误开未知服务
+  ---
+  duration_ms: 0.2245
+  type: 'test'
+  ...
+# Subtest: 探测：识别出的 401 鉴权墙（身份匹配）→ 仍 running(S1)，不误判为 S5/失败
+ok 24 - 探测：识别出的 401 鉴权墙（身份匹配）→ 仍 running(S1)，不误判为 S5/失败
+  ---
+  duration_ms: 0.146209
+  type: 'test'
+  ...
+# Subtest: 探测：可达但身份不匹配 → conflict → 安全失败，无 kill/spawn/争端口，可重试
+ok 25 - 探测：可达但身份不匹配 → conflict → 安全失败，无 kill/spawn/争端口，可重试
+  ---
+  duration_ms: 0.175416
+  type: 'test'
+  ...
+# Subtest: 状态机：S1 直接投递 → S3（待鉴权），未经确认不得到 S4
+ok 26 - 状态机：S1 直接投递 → S3（待鉴权），未经确认不得到 S4
+  ---
+  duration_ms: 0.577583
+  type: 'test'
+  ...
+# Subtest: 状态机：S0 需启动 → S2 → 完成 → S3；权威 entered 回告 → S4（非按钮）
+ok 27 - 状态机：S0 需启动 → S2 → 完成 → S3；权威 entered 回告 → S4（非按钮）
+  ---
+  duration_ms: 0.182042
+  type: 'test'
+  ...
+# Subtest: 状态机：S3 用户反馈登录错误 → S5（非探测推断）；S5 重试/换浏览器 → S3（不直接 S4）
+ok 28 - 状态机：S3 用户反馈登录错误 → S5（非探测推断）；S5 重试/换浏览器 → S3（不直接 S4）
+  ---
+  duration_ms: 2.301
+  type: 'test'
+  ...
+# Subtest: 状态机：S2 取消 → S0；S6 返回 → S0；关闭 → closed（均不停服务）
+ok 29 - 状态机：S2 取消 → S0；S6 返回 → S0；关闭 → closed（均不停服务）
+  ---
+  duration_ms: 0.253333
+  type: 'test'
+  ...
+# Subtest: S3 面板：等待已进入回告；无「我已进入」假成功按钮；仅「看到登录/认证错误」+更换浏览器；禁止已打开/成功措辞
+ok 30 - S3 面板：等待已进入回告；无「我已进入」假成功按钮；仅「看到登录/认证错误」+更换浏览器；禁止已打开/成功措辞
+  ---
+  duration_ms: 2.55575
+  type: 'test'
+  ...
+# Subtest: S5 面板：已打开但未登录；在标签页完成登录 / 换用已登录浏览器；折叠诊断含 401/跨profile（用户反馈触发）
+ok 31 - S5 面板：已打开但未登录；在标签页完成登录 / 换用已登录浏览器；折叠诊断含 401/跨profile（用户反馈触发）
+  ---
+  duration_ms: 0.681334
+  type: 'test'
+  ...
+# Subtest: S6 面板：白话原因 +「没有停止任何程序」+ 重新尝试/查看详情折叠/返回
+ok 32 - S6 面板：白话原因 +「没有停止任何程序」+ 重新尝试/查看详情折叠/返回
+  ---
+  duration_ms: 2.53925
+  type: 'test'
+  ...
+# Subtest: S4 面板：权威回告后显示「工作台已打开」+ 再次打开/更换浏览器
+ok 33 - S4 面板：权威回告后显示「工作台已打开」+ 再次打开/更换浏览器
+  ---
+  duration_ms: 0.256292
+  type: 'test'
+  ...
+# Subtest: 安全缝：正式参数镜像；token 解析仅内存；日志脱敏；open 参数；不重放
+ok 34 - 安全缝：正式参数镜像；token 解析仅内存；日志脱敏；open 参数；不重放
+  ---
+  duration_ms: 0.668084
+  type: 'test'
+  ...
+# Subtest: 渲染：含浅/深 token、隐私脚注；不嵌入 token；装饰灯 aria-hidden；reduced-motion
+ok 35 - 渲染：含浅/深 token、隐私脚注；不嵌入 token；装饰灯 aria-hidden；reduced-motion
+  ---
+  duration_ms: 3.651709
+  type: 'test'
+  ...
+# Subtest: 渲染：HTML 转义浏览器名，不注入原始引号
+ok 36 - 渲染：HTML 转义浏览器名，不注入原始引号
+  ---
+  duration_ms: 0.221875
+  type: 'test'
+  ...
+# Subtest: S6 失败页：访问地址用 state.host/port，不硬编码 3172（隔离 3199 不得误导）
+ok 37 - S6 失败页：访问地址用 state.host/port，不硬编码 3172（隔离 3199 不得误导）
+  ---
+  duration_ms: 0.189542
+  type: 'test'
+  ...
+# Subtest: 模板：浏览器选择与打开负载走 selectedBrowser（回退 state.browser），不回退空默认
+ok 38 - 模板：浏览器选择与打开负载走 selectedBrowser（回退 state.browser），不回退空默认
+  ---
+  duration_ms: 0.458875
+  type: 'test'
+  ...
+# Subtest: S1 内联脚本可执行并渲染打开按钮，避免首屏正文空白
+ok 39 - S1 内联脚本可执行并渲染打开按钮，避免首屏正文空白
+  ---
+  duration_ms: 14.074959
+  type: 'test'
+  ...
+# Subtest: 探测迟到：取消/返回后成功或失败都不启动、不投递、不改变S0
+ok 40 - 探测迟到：取消/返回后成功或失败都不启动、不投递、不改变S0
+  ---
+  duration_ms: 2.249375
+  type: 'test'
+  ...
+# Subtest: 旧探测不能覆盖已投递的新旅程，旧启动失败不能覆盖S4
+ok 41 - 旧探测不能覆盖已投递的新旅程，旧启动失败不能覆盖S4
+  ---
+  duration_ms: 5.580958
+  type: 'test'
+  ...
+# Subtest: 替换owned启动前回收旧在途；已取消启动返回只丢认证URL
+ok 42 - 替换owned启动前回收旧在途；已取消启动返回只丢认证URL
+  ---
+  duration_ms: 1.770125
+  type: 'test'
+  ...
+# Subtest: local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令
+ok 43 - local-app：路径中的空格、中文与单引号只作为完整字面值，不变成壳命令
+  ---
+  duration_ms: 524.434875
+  type: 'test'
+  ...
+# Subtest: local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径
+ok 44 - local-app：写出 PM工作台.app，plist 齐全，壳可执行、含 nvm 兜底与稳定启动器路径
+  ---
+  duration_ms: 30.366125
+  type: 'test'
+  ...
+# Subtest: local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝
+ok 45 - local-app：构建时安全绑定 PM_PORT/DSH_HOME 烤进 export；默认不烤；非法值拒绝
+  ---
+  duration_ms: 25.548417
+  type: 'test'
+  ...
+# Subtest: local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位
+ok 46 - local-app：nodePath 留空时 BAKED_NODE 为空串，不烤私有/沙箱路径，仍可定位
+  ---
+  duration_ms: 26.28375
+  type: 'test'
+  ...
+# Subtest: foreign Host（evil.com）→ 403，GET/POST 都拒绝，不触发动作
+ok 47 - foreign Host（evil.com）→ 403，GET/POST 都拒绝，不触发动作
+  ---
+  duration_ms: 36.559875
+  type: 'test'
+  ...
+# Subtest: evil Origin（https://evil.com）+ 合法 JSON → 403，handleAction 不被调用
+ok 48 - evil Origin（https://evil.com）+ 合法 JSON → 403，handleAction 不被调用
+  ---
+  duration_ms: 37.482583
+  type: 'test'
+  ...
+# Subtest: null Origin（Origin: null）无 nonce → 403，不触发动作
+ok 49 - null Origin（Origin: null）无 nonce → 403，不触发动作
+  ---
+  duration_ms: 14.202625
+  type: 'test'
+  ...
+# Subtest: text/plain（跨站简单请求）same Origin → 拒绝（非 JSON），不触发动作
+ok 50 - text/plain（跨站简单请求）same Origin → 拒绝（非 JSON），不触发动作
+  ---
+  duration_ms: 14.904625
+  type: 'test'
+  ...
+# Subtest: 合法 same Origin + application/json → 200，动作被调用；响应不发 CORS 头
+ok 51 - 合法 same Origin + application/json → 200，动作被调用；响应不发 CORS 头
+  ---
+  duration_ms: 14.803
+  type: 'test'
+  ...
+# Subtest: 无 Origin（CLI）无 nonce → 403；带正确内存 nonce → 200
+ok 52 - 无 Origin（CLI）无 nonce → 403；带正确内存 nonce → 200
+  ---
+  duration_ms: 17.157959
+  type: 'test'
+  ...
+# Subtest: GET /api/state 只读，不触发任何动作；不含 token 字段
+ok 53 - GET /api/state 只读，不触发任何动作；不含 token 字段
+  ---
+  duration_ms: 14.858917
+  type: 'test'
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 820.021834

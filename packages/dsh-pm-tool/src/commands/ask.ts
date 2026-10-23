@@ -123,7 +123,7 @@ export function handleAskCommand(argument: string, domain: PmDomain | undefined,
     models: route.models ? [...route.models] : undefined,
   })
   return call.then(text => ({ kind: 'success' as const, text })).catch((error: unknown) => {
-    if (error instanceof AiDraftError && (error.message === 'PROD_KEY_MISSING' || /Key|密钥/.test(error.message))) {
+    if (error instanceof AiDraftError && (error.code === 'MISSING_CREDENTIAL' || error.message === 'PROD_KEY_MISSING')) {
       return { kind: 'error' as const, text: PROD_KEY_MISSING_TEXT }
     }
     return { kind: 'error' as const, text: `副驾暂不可用：${error instanceof Error ? error.message : String(error)}` }
@@ -178,6 +178,8 @@ interface UndoChange {
   original?: unknown
   /** F14：落库后全对象快照，撤销前比对，拒绝覆盖确认后的人工改动。 */
   postimage?: Postimage
+  /** 部分撤销的进程内进度：重试只处理剩余项，不重新写已撤记录。 */
+  reverted?: boolean
 }
 
 /** 一次 ask-apply 的撤销快照。 */
@@ -233,7 +235,17 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
   const failed: string[] = []
   const conflicts: string[] = []
   const changes = [...record.changes].reverse()
+  const blockedTargets = new Map<string, 'conflict' | 'failed'>()
   for (const change of changes) {
+    if (change.reverted) continue
+    const target = `${change.table}/${change.id}`
+    const blocked = blockedTargets.get(target)
+    if (blocked) {
+      const reason = `${target}：同目标后续改动尚未撤销，保留此前步骤`
+      if (blocked === 'conflict') conflicts.push(reason)
+      else failed.push(reason)
+      continue
+    }
     const table = domain.table(change.table as never) as unknown as {
       put(key: string, value: unknown): Promise<unknown>
       delete(key: string): Promise<unknown>
@@ -247,18 +259,24 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
     )
     if (plan.action === 'refuse') {
       conflicts.push(`${change.table}/${change.id}：${plan.reason}${plan.note ? `（${plan.note}）` : ''}`)
+      blockedTargets.set(target, 'conflict')
       continue
     }
-    if (plan.action === 'skip') continue
+    if (plan.action === 'skip') {
+      change.reverted = true
+      continue
+    }
     try {
       if (plan.action === 'delete') {
         await table.delete(change.id)
       } else {
         await table.put(change.id, change.original)
       }
+      change.reverted = true
       reverted.push(`${change.table}/${change.id}`)
     } catch (e) {
       failed.push(`${change.table}/${change.id}：${e instanceof Error ? e.message : String(e)}`)
+      blockedTargets.set(target, 'failed')
     }
   }
   // m-4：仅当无冲突且无失败（全部可撤销项已处理）才烧毁句柄；混合/冲突项保留 used=false 可重试。
@@ -269,7 +287,7 @@ export async function handleAskUndoCommand(argument: string, domain: PmDomain | 
     kind: conflicts.length && reverted.length === 0 ? 'conflict' : failed.length ? 'failed' : 'undone',
     object: undoId,
     result: `撤销 ${reverted.length} 项${conflicts.length ? `，冲突保留 ${conflicts.length} 项` : ''}${failed.length ? `，失败 ${failed.length} 项` : ''}`,
-  })
+  }, record.used)
   const text = `已撤销 ${reverted.length} 项${reverted.length ? `（${reverted.join('；')}）` : ''}`
     + (conflicts.length ? `；${conflicts.length} 项因确认后已被人工修改而保留未动（${conflicts.join('；')}）` : '')
     + (failed.length ? `；${failed.length} 项撤销失败（${failed.join('；')}）` : '')
@@ -368,15 +386,14 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
     const patch = (a.patch ?? {}) as Record<string, unknown>
     switch (a.op) {
       case 'task.update': {
-        const rec = tasks.find(t => t.id === a.id)
+        // 每一步从真实表读取完整前态，不能用只同步时间戳的首步局部快照恢复后续步。
+        const rec = domain.table('tasks').get(a.id!)
         if (!rec || rec.projectId !== projectId) throw new DispatchSkip('不存在或不属于本项目')
         const base = baseline[a.id ?? '']
         if (base && rec.updatedAt && rec.updatedAt !== base) throw new DispatchSkip('内容已被他人更新，为避免覆盖未执行')
         // 落库前抓原始记录快照（供撤销恢复）。
         const original = structuredClone(rec)
         const next = await updateTask(domain, a.id!, patch)
-        // 同步本地快照 updatedAt，供同目标后续步冲突比较（与链式 baseline 一致）。
-        if (next?.updatedAt) rec.updatedAt = next.updatedAt
         return { ok: true, nextUpdatedAt: next?.updatedAt, undo: { table: 'tasks', id: a.id!, kind: 'update', original } }
       }
       case 'milestone.create': {
@@ -452,7 +469,8 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
       }
       if (typeof a.stepId === 'string') appliedStepIds.add(a.stepId)
       applied.push(label(a))
-      appliedActions.push(a) // m-1：refs 只收真正落库的动作，不含被拒/跳过/失败步
+      // create 的新 ID 来自实际 dispatch，保留 op/step 元数据；拒步不进入来源集合。
+      appliedActions.push(res.undo?.kind === 'create' ? { ...a, id: res.undo.id } : a)
     } catch (e) {
       blocked.push(`${label(a)}：${e instanceof DispatchSkip ? e.message : `写库失败（${e instanceof Error ? e.message : String(e)}）`}`)
     }
@@ -466,11 +484,9 @@ async function applyCore(projectId: string, actions: CopilotAction[], baseline: 
   // F13：业务落库成功后 best-effort 记录溯源（含 undo 句柄元数据）；账本写失败不回滚已落库业务。
   if (undoId && applied.length) {
     const recMap = new Map<string, SourceRecord>()
-    for (const tableName of ['tasks', 'milestones', 'risk_issues', 'deliverables', 'meetings'] as const) {
-      for (const [, rec] of (domain.table(tableName as never) as { entries(): IterableIterator<[string, unknown]> }).entries()) {
-        const r = rec as SourceRecord
-        if (r.projectId === projectId) recMap.set(`${tableName}:${r.id}`, r)
-      }
+    for (const change of undoChanges) {
+      const r = (domain.table(change.table as never) as { get(k: string): unknown }).get(change.id) as SourceRecord | undefined
+      if (r?.projectId === projectId) recMap.set(`${change.table}:${change.id}`, r)
     }
     const refs = buildSourceRefs({ actions: appliedActions, records: recMap, snapshotVersion: CURRENT_SNAPSHOT_VERSION, ruleRevision: CURRENT_RULE_REVISION })
     void recordProvenance(domain, {
@@ -562,4 +578,3 @@ export async function handleAskApplyCommand(argument: string, domain: PmDomain |
     inFlight.delete(keyHash)
   }
 }
-

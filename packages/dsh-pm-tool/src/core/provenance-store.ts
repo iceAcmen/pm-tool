@@ -176,13 +176,14 @@ export function recordUndoOutcome(
   domain: PmDomain,
   handle: string,
   event: ProvenanceAuditEvent,
+  used = event.kind === 'undone',
 ): Promise<void> {
   return enqueueDomainWrite(domain, async () => {
     const entries = readRows(domain, PROVENANCE_LEDGER_ROW)
     for (const e of entries) {
       if (e.undo?.handle === handle) {
         e.audit.push(event)
-        if (event.kind === 'undone') e.undo.used = true
+        e.undo.used = used
       }
     }
     await domain.table('settings').put(PROVENANCE_LEDGER_ROW, { value: { entries }, updatedAt: new Date().toISOString() })

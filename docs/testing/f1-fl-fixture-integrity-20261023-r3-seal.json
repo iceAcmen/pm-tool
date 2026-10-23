@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-23T01:10:01.875Z",
+  "type": "INDEPENDENT_FIXTURE_REVIEW_SEAL",
+  "members": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f1-fl-fixture-integrity-20261023-r3.md",
+      "bytes": 13221,
+      "sha256": "36ed82fe1cc7f919f666824d5c651eb4f6e3c48ce63642d0fcc7930ab5e23432"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f1-fl-fixture-integrity-20261023-r3-audit.json",
+      "bytes": 9607,
+      "sha256": "d07bd2498d1d7f62560763d3ca67d35508974532be501f19a328751f0f5a2810"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f1-fl-fixture-integrity-20261023-r3-outer.json",
+      "bytes": 11419,
+      "sha256": "041166b87fe42cd1150be0521bac02558fb6051dedd682489423b68fae9854a5"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/F1FLFixtureR3/index-r1.json",
+      "bytes": 26982,
+      "sha256": "66bdb7066b21c7c3176b6b2b5ee13ecfbdc4f5cd77bbbb2794ac0e2f6d3ba879"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/F1FLFixtureR3/seal.json",
+      "bytes": 544,
+      "sha256": "a0e01d24949099525beae3923fa2d74456b1bfc0f27c7b4d40cb6557034e31b2"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/F1FLFixtureR3/seal-outer-receipt.json",
+      "bytes": 555,
+      "sha256": "85761b4b381d054fea4da8e7733776d1dd76c33bac8ac27e4b8988539b50d231"
+    }
+  ],
+  "tools": [
+    {
+      "path": "/tmp/f1-fl-fixture-integrity-20261023-r3-reader.mjs",
+      "bytes": 24389,
+      "sha256": "25f8476a0a9372b7aabe017b30a85edcd375e30b18cf3caaaa54cba88af2619e"
+    },
+    {
+      "path": "/private/tmp/f1-fl-fixture-integrity-20261023-r3-outer.mjs",
+      "bytes": 4945,
+      "sha256": "ab10e10cd879c93ed5ff29828291184c1341545c2eb97fd2b5e1029cb00af1eb"
+    }
+  ],
+  "excludes": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f1-fl-fixture-integrity-20261023-r3-seal.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/f1-fl-fixture-integrity-20261023-r3-readback.json"
+  ],
+  "reason": "Seal is externally hashed in the readback receipt; no self-reference or circular sealing.",
+  "releaseCondition": "Separate readback child must actually exit 0; no further work after receipt."
+}

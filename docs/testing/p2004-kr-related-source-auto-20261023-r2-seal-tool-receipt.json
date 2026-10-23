@@ -1,0 +1,32 @@
+{
+  "provenance": "独立SOURCE/AUTO接续专家转录实际seal工具终码；只封本r2审证。此回执在seal之后新增，不冒称被seal.ownedArtifacts循环封存。",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/pm-p2004-source-auto-r2-reader-20261023.mjs seal",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "exit": 0,
+  "output": {
+    "mode": "seal",
+    "protectedInputs": 87,
+    "protectedDelta": 0,
+    "seal": {
+      "path": "docs/testing/p2004-kr-related-source-auto-20261023-r2-seal.json",
+      "bytes": 19337,
+      "sha256": "fe767598cec94e5aec9930891ad08d7bfb27f6a5736194ac9ef77304a28eded6"
+    },
+    "state": "STOP"
+  },
+  "limitedVerdict": "PASS_LIMITED_SOURCE_AUTO",
+  "gui": "BLOCKED，待Main新host采原合同证据并交另一GUI专家",
+  "originalFailuresPreserved": [
+    "开发首capture外层NOT_COLLECTED",
+    "r1 audit外层NOT_COLLECTED",
+    "r1 RED真实child1/7失败1通过",
+    "r1 AUTO真实child0/19通过，但外层1；progress唯一并发变化",
+    "r2自有只读reader前两audit各1，第三audit0"
+  ],
+  "testsRepeated": false,
+  "resourcesReleased": ["本SOURCE/AUTO审证角色"],
+  "heldResources": [],
+  "parentTask": "Main/父goal持续；本角色STOP不停止父任务",
+  "notSigned": ["整组合", "GUI", "父全部门", "ordinarycommit"],
+  "notRun": ["产品写/原testing写", "Main plans/livingdocs/封件写", "build/install/服务/GUI/Git", "正式/privatefreeze/runtime/凭据", "push/tag/release/正式切"]
+}

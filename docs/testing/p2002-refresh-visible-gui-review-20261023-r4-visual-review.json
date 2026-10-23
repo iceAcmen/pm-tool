@@ -1,0 +1,93 @@
+{
+  "platform": "trae",
+  "role": "独立 GUI 原证专家；非开发、GUI、桌面或产品执行",
+  "verdict": "PASS_LIMITED_GUI_REFRESH_VISIBLE",
+  "scope": "仅 R3 §8.2 原 refresh 完成后同 ID 父行及两子行视口原图缺口",
+  "method": "functions.view_image 实际读取两张原 PNG 和全部 13 张原 JPEG 帧；未生成、裁剪、重绘或替换原图",
+  "viewport": { "innerWidth": 1440, "innerHeight": 718, "outerWidth": 1440, "outerHeight": 857, "dpr": 2 },
+  "observations": {
+    "final": "原 PNG 与帧11/12：父任务、子甲、子乙同屏；各一完整出站文案已导出·最近21:23·外部为唯一事实源；右侧编辑入口未重叠。子编号格为8...，不冒全文编号目视。",
+    "transition": "帧2至10位于页首，三行不在视口；保留真实 refresh 过渡，不声称整个过程中三行持续可见。",
+    "identity": "真实树 ID、归属和编号由配对 RPC、sealed raw 和 rows 交叉核验；诊断卡不是子任务行。",
+    "limit": "ISO 2026-10-22T21:23:08.315Z 由 audit/snapshot/time.dateTime 核验，不称整段 ISO 在 PNG 中显示。只签刷新响应完成并沿原合同滚入视口后的当态。"
+  },
+  "images": [
+    {
+      "file": "round01-before-refresh.png",
+      "fingerprint": { "bytes": 395509, "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a" },
+      "viewed": true,
+      "observation": "刷新前已有三行同屏；不能单独用作刷新后证据。"
+    },
+    {
+      "file": "round01-after-refresh-tree-visible.png",
+      "fingerprint": { "bytes": 395509, "sha256": "797bb7aeb796b33c50b99ba0c06dbbd091de35edc984cba3e69a8441ebee145a" },
+      "viewed": true,
+      "observation": "刷新完成后父/子甲/子乙同屏且三处出站文案完整；字节恰与刷新前相同，以真实 RPC 和过渡末帧辨别先后。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-0.jpg",
+      "fingerprint": { "bytes": 80142, "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d" },
+      "viewed": true, "observation": "请求前，三行同屏。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-1.jpg",
+      "fingerprint": { "bytes": 80142, "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d" },
+      "viewed": true, "observation": "请求前，三行同屏。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-2.jpg",
+      "fingerprint": { "bytes": 79027, "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47" },
+      "viewed": true, "observation": "页首，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-3.jpg",
+      "fingerprint": { "bytes": 79027, "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47" },
+      "viewed": true, "observation": "页首，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-4.jpg",
+      "fingerprint": { "bytes": 78889, "sha256": "54d3ab8789f9151f3e4867ca8899edd8e6df414810bd117475fdb4ef51bb1159" },
+      "viewed": true, "observation": "页首过渡，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-5.jpg",
+      "fingerprint": { "bytes": 78889, "sha256": "4bad4603be5a223d892b6fcfef43ab6e96b16f949a44dec7eb0caad777df23d1" },
+      "viewed": true, "observation": "页首过渡，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-6.jpg",
+      "fingerprint": { "bytes": 79009, "sha256": "4b02fbba2f117d239c86f184c0e03ae3bffa51a41287ec828a0b03fa22c3b55b" },
+      "viewed": true, "observation": "页首过渡，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-7.jpg",
+      "fingerprint": { "bytes": 79040, "sha256": "d2084b67784bbb1273659492d643d09dcb8eb8eb7e2a8ac8f0a54100c3857f18" },
+      "viewed": true, "observation": "页首过渡，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-8.jpg",
+      "fingerprint": { "bytes": 79051, "sha256": "6391bda4c629e12c9f520b66cd45f945af44c674434b0324e70c232f9e341fa4" },
+      "viewed": true, "observation": "页首过渡，三行位于视口下方。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-9.jpg",
+      "fingerprint": { "bytes": 79027, "sha256": "03906ec14d6848c6dd3448e175788ab78e8f62cf74122d548e86fa48d81bef47" },
+      "viewed": true, "observation": "响应已返回后的页首过渡，尚不能作三行目视凭据。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-10.jpg",
+      "fingerprint": { "bytes": 79028, "sha256": "9f685fc71e1c74b1d6ad04b4f7f03879122327b7158060c31514a88bd92e8e86" },
+      "viewed": true, "observation": "响应已返回后的页首过渡，尚不能作三行目视凭据。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-11.jpg",
+      "fingerprint": { "bytes": 80142, "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d" },
+      "viewed": true, "observation": "响应后恢复三行同屏，三处出站文案完整；诊断卡与子行区分明确。"
+    },
+    {
+      "file": "frames/round01-refreshed-tree-visible-12.jpg",
+      "fingerprint": { "bytes": 80142, "sha256": "8b4f501386159652ab443d16ab6cfbac236d9c39da6ce3b06af5635b7e9b505d" },
+      "viewed": true, "observation": "响应后末帧三行同屏，三处出站文案完整，与最终 PNG 相符。"
+    }
+  ]
+}

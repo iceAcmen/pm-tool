@@ -1,0 +1,2719 @@
+{
+  "at": "2026-10-22T01:30:52.270Z",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "ok": true,
+  "counts": {
+    "steps": 25,
+    "taskAdd": 4,
+    "checklistAdd": 5,
+    "toggle": 2,
+    "statusDone": 1,
+    "projectCheck": 1,
+    "open": 5,
+    "cancel": 5,
+    "hostOpen": 1,
+    "pmNavigation": 1,
+    "requestPairs": 14,
+    "bridges": 24
+  },
+  "assertions": {
+    "A18Declared520Source453ArtifactsMatch": true,
+    "trackedPatchBytesMatch": true,
+    "signedSourceAutoExactReportHashLimitedOnly": true,
+    "archivedHost3248PID63429": true,
+    "fullLoadedBA817TimeOrigin": true,
+    "1628OriginalIndexBytesShaNoExtra": true,
+    "all796FrameHashesCompleteNotAllVisual": true,
+    "25ExitZeroCollectionOnly": true,
+    "exactActionCountsFromOriginal": true,
+    "observationsAll25Recomputed": true,
+    "allRawActualBytesEqualPostRootHashes": true,
+    "all25OriginTimeOriginSameLoadedContext": true,
+    "14RealPOSTUserRunSameIdSuccessDone": true,
+    "fourTasksRealNewProductionInputs": true,
+    "realTodayDatesDminus1Dplus2And100Todo": true,
+    "fiveStableChecklistIDsTextsAppendOnly": true,
+    "twoExplicitTrueTogglesOnlyMatchingItemChanged": true,
+    "doneExplicitOnlyStatusDateTimeNotChecklistOrProgress": true,
+    "statusWriteCreatesReflectionNotZeroWrite": true,
+    "trueT8MatchesPriorWholeRecordAndStaysEmpty": true,
+    "newTaskMaterialsAbsentExceptOriginalChecklist": true,
+    "otherBusinessOriginalBytesUnchangedWholeRun": true,
+    "13ReadonlyStepsBusinessZeroCacheOnlyAllowed": true,
+    "everyBridgeBusinessZeroNoUnobservedCreation": true,
+    "allStepsFilesBackupsExportsUnchanged": true,
+    "fiveExactRuleTaskPairsOneEach": true,
+    "eachReasonHumanDecisionNoAutomaticStatusJudgment": true,
+    "snapshotTasksWholeRecordsEqualCapturedRaw": true,
+    "sameFiveFindingsRealPMCardAllOpenCancelStates": true,
+    "fiveByIdCheckItemsOpenMatchingExistingTaskForms": true,
+    "fiveCancelNoBusinessCommandNoRewrite": true,
+    "2of5Objective40DifferentLegacy100AndStatus": true,
+    "archivedExecutorRealCheckItemByIdClickAndCancel": true,
+    "frozenSourceByIDTaskFormKeyAndCheckedOriginal": true,
+    "consoleNoCapturedErrorsNotWholeNetworkMatrix": true,
+    "protectedInputsBytesMtimeNoDrift": true
+  },
+  "declared": {
+    "manifest": {
+      "bytes": 124336,
+      "sha256": "2d533a1d214c0ae68739b354aac2e0d85b37ca6735c256d3dd3820bce3c191b9",
+      "mtimeMs": 1792629150821.7756
+    },
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "hostGitHead": "1142fb74f2bbcc54dc9499054c0448c9b876cbf2",
+    "tree": "/private/tmp/pmtool-a18-closure-20261022",
+    "sourceCount": 520,
+    "artifactCount": 453,
+    "sourceMismatch": [],
+    "artifactMismatch": []
+  },
+  "sourceAuto": {
+    "limitedSourceAuto": "PASS",
+    "independentReport": "docs/testing/a18-feedback-context-independent-retest-20261022.md",
+    "independentReportSHA": "78f560e26a14c180d6e38f3d9d7eebbebb17ef11ed1a6532c66c54c43176b9ee",
+    "originalTwenty": "FAIL retained 19/1; independent interface adapter passed 20/0",
+    "mainReview": "Report, actual candidate hashes, adapter rationale and limited scope reviewed; only authorizes A18 isolated build under continuing owner task.",
+    "gui": "NOT_RUN for new A18 product",
+    "wholeGate": "NOT_PASSED",
+    "commit": false,
+    "push": false
+  },
+  "loadedChecks": [
+    {
+      "bytes": 2584301,
+      "sha256": "b4a54301e085753ab4193ae1284156ac779064ec097d7e775970a3d6a9e9f708",
+      "first": 875361,
+      "second": -1,
+      "segmentBytes": 1705469,
+      "segmentSha": "21d941ca10d41935a5416b58f6da29f2b5520e8bf93396e850de526a68eea343",
+      "match": true
+    }
+  ],
+  "index": {
+    "bytes": 267337,
+    "sha256": "ed106f4c5f23a8479ccb857758aeae2ef3c39cf048067fe68c1f8f5a4fecbb4a",
+    "mtimeMs": 1792632262205.7686,
+    "count": 1628,
+    "indexedMismatches": [],
+    "unlisted": []
+  },
+  "observations": {
+    "bytes": 58299,
+    "sha256": "985d273f7e10a496eeac6b912b2399d545a758a83610c6d7a15bae75a753adcf",
+    "mtimeMs": 1792632257622.657
+  },
+  "frameCount": 796,
+  "pngCount": 38,
+  "inputs": [
+    {
+      "step": "command-1792631897232",
+      "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 逾期未动\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\"}",
+      "input": {
+        "projectId": "p-0001",
+        "title": "QA 检查 逾期未动",
+        "startDate": "2026-10-20",
+        "dueDate": "2026-10-21"
+      },
+      "added": [
+        "/pmtool/tasks/t-0009.json"
+      ]
+    },
+    {
+      "step": "command-1792631906500",
+      "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 两天临期\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\"}",
+      "input": {
+        "projectId": "p-0001",
+        "title": "QA 检查 两天临期",
+        "startDate": "2026-10-22",
+        "dueDate": "2026-10-24"
+      },
+      "added": [
+        "/pmtool/tasks/t-0010.json"
+      ]
+    },
+    {
+      "step": "command-1792631916605",
+      "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 进度满未完成\",\"progress\":100}",
+      "input": {
+        "projectId": "p-0001",
+        "title": "QA 检查 进度满未完成",
+        "progress": 100
+      },
+      "added": [
+        "/pmtool/tasks/t-0011.json"
+      ]
+    },
+    {
+      "step": "command-1792631923904",
+      "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 清单部分完成\"}",
+      "input": {
+        "projectId": "p-0001",
+        "title": "QA 检查 清单部分完成"
+      },
+      "added": [
+        "/pmtool/tasks/t-0012.json"
+      ]
+    }
+  ],
+  "finalTasks": {
+    "t-0008": {
+      "id": "t-0008",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "QA 真无材料复盘",
+      "description": "",
+      "assignee": "",
+      "status": "done",
+      "priority": "P1",
+      "startDate": "2026-10-22",
+      "dueDate": "2026-10-23",
+      "completedDate": "2026-10-22",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "5",
+      "order": 5,
+      "createdAt": "2026-10-22T01:09:31.815Z",
+      "updatedAt": "2026-10-22T01:10:14.743Z"
+    },
+    "t-0009": {
+      "id": "t-0009",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "QA 检查 逾期未动",
+      "description": "",
+      "assignee": "",
+      "status": "todo",
+      "priority": "P1",
+      "startDate": "2026-10-20",
+      "dueDate": "2026-10-21",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "6",
+      "order": 6,
+      "createdAt": "2026-10-22T01:18:24.810Z",
+      "updatedAt": "2026-10-22T01:18:24.810Z"
+    },
+    "t-0010": {
+      "id": "t-0010",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "QA 检查 两天临期",
+      "description": "",
+      "assignee": "",
+      "status": "todo",
+      "priority": "P1",
+      "startDate": "2026-10-22",
+      "dueDate": "2026-10-24",
+      "progress": 0,
+      "milestoneId": null,
+      "code": "7",
+      "order": 7,
+      "createdAt": "2026-10-22T01:18:34.624Z",
+      "updatedAt": "2026-10-22T01:18:34.624Z"
+    },
+    "t-0011": {
+      "id": "t-0011",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "QA 检查 进度满未完成",
+      "description": "",
+      "assignee": "",
+      "status": "todo",
+      "priority": "P1",
+      "progress": 100,
+      "milestoneId": null,
+      "code": "8",
+      "order": 8,
+      "createdAt": "2026-10-22T01:18:42.190Z",
+      "updatedAt": "2026-10-22T01:18:42.190Z"
+    },
+    "t-0012": {
+      "id": "t-0012",
+      "projectId": "p-0001",
+      "parentId": null,
+      "title": "QA 检查 清单部分完成",
+      "description": "",
+      "assignee": "",
+      "status": "done",
+      "priority": "P1",
+      "completedDate": "2026-10-22",
+      "progress": 0,
+      "milestoneId": null,
+      "checklist": [
+        {
+          "id": "20fad6ab-b230-4ddd-af30-cfba18780168",
+          "text": "需求核对",
+          "done": true
+        },
+        {
+          "id": "55c2c18d-42f9-436d-a019-4344a719027b",
+          "text": "方案核对",
+          "done": true
+        },
+        {
+          "id": "17de8423-4ac2-409d-bf94-f66ac6ab48d7",
+          "text": "实现核对",
+          "done": false
+        },
+        {
+          "id": "ec0eb4b0-4770-4768-b1da-1d9397e02178",
+          "text": "测试核对",
+          "done": false
+        },
+        {
+          "id": "d45e1c6b-04c0-4c94-93fd-3f5e19308f3b",
+          "text": "交付核对",
+          "done": false
+        }
+      ],
+      "code": "9",
+      "order": 9,
+      "createdAt": "2026-10-22T01:18:47.754Z",
+      "updatedAt": "2026-10-22T01:21:07.941Z"
+    }
+  },
+  "checklist": [
+    {
+      "id": "20fad6ab-b230-4ddd-af30-cfba18780168",
+      "text": "需求核对",
+      "done": true
+    },
+    {
+      "id": "55c2c18d-42f9-436d-a019-4344a719027b",
+      "text": "方案核对",
+      "done": true
+    },
+    {
+      "id": "17de8423-4ac2-409d-bf94-f66ac6ab48d7",
+      "text": "实现核对",
+      "done": false
+    },
+    {
+      "id": "ec0eb4b0-4770-4768-b1da-1d9397e02178",
+      "text": "测试核对",
+      "done": false
+    },
+    {
+      "id": "d45e1c6b-04c0-4c94-93fd-3f5e19308f3b",
+      "text": "交付核对",
+      "done": false
+    }
+  ],
+  "findings": [
+    {
+      "rule": "done-missing-materials",
+      "ruleLabel": "完成但缺交付/证据材料",
+      "taskId": "t-0008",
+      "title": "QA 真无材料复盘",
+      "reason": "状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。",
+      "suggestion": "缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。"
+    },
+    {
+      "rule": "done-open-checklist",
+      "ruleLabel": "完成却有未完成清单项",
+      "taskId": "t-0012",
+      "title": "QA 检查 清单部分完成",
+      "reason": "状态为 done，但清单仍有 3 项未勾选。",
+      "suggestion": "请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。"
+    },
+    {
+      "rule": "due-soon-untouched",
+      "ruleLabel": "临期未动（≤2天仍 todo）",
+      "taskId": "t-0010",
+      "title": "QA 检查 两天临期",
+      "reason": "截止日期 2026-10-24（2 天内），状态仍为 todo。",
+      "suggestion": "请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。"
+    },
+    {
+      "rule": "overdue-untouched",
+      "ruleLabel": "逾期未动",
+      "taskId": "t-0009",
+      "title": "QA 检查 逾期未动",
+      "reason": "截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。",
+      "suggestion": "请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。"
+    },
+    {
+      "rule": "progress-100-not-done",
+      "ruleLabel": "进度100但状态非 done",
+      "taskId": "t-0011",
+      "title": "QA 检查 进度满未完成",
+      "reason": "进度为 100%，但状态仍为 todo。",
+      "suggestion": "请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "t-0010",
+      "rule": "due-soon-untouched",
+      "open": "check-target-1792632157442",
+      "cancel": "task-close-1792632162506",
+      "named": {
+        "title": "QA 检查 两天临期",
+        "description": "",
+        "status": "todo",
+        "priority": "P1",
+        "assignee": "",
+        "startDate": "2026-10-22",
+        "dueDate": "2026-10-24",
+        "progress": "0",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": "",
+        "predecessorIds": "t-0012"
+      },
+      "evidenceField": "",
+      "rawChecklist": null,
+      "pmText": "P\nPM 工作台\nDeepSeek Harness\n跨项目\n总览看板\n当前项目 · QA-A-fixture-F5\n项目概览\n计划与排期\n全部任务\n11\n甘特排期\n里程碑\n1\n风险与问题\n1\n人员负载\n协作与记录\n会议纪要\n1\n进度汇报\n1\n交付物\n1\n目标与习惯\n目标（OKR）\n0\n习惯\n0\n口径设置\n项目工作台\nQA-A-fixture-F5\n新建项目\n新建任务\nAI 助手\nAI 副驾\n更多\nQA-A-fixture-F5\n/\n全部任务\n逾期 2 · 临期 5\n任务\n11 项任务\n· 完成 2（18%）· 进行中 2 · 阻塞 0 · 待办 7\n未命名视图\n全部\n11\n进行中\n2\n已完成\n3\n已逾期\n1\n我负责的\n4\n保存视图\n按状态分组\n按 WBS 编号\n按截止日期\n按优先级\n按进度\n模板\n导入\n导出\n分享\n密度（全局偏好）\n舒适\n紧凑\n全部视图生效 · 持久保存\n交付前核对\n对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决\n5 条提示\n日期与排期待核对（日期冲突）\n2\n临期未动（≤2天仍待办）\nt-0010 · QA 检查 两天临期\n截止日期 2026-10-24（2 天内），状态仍为 todo。\n请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n逾期未动\nt-0009 · QA 检查 逾期未动\n截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\n请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n完成前未回应要求\n1\n完成却有未完成清单项\nt-0012 · QA 检查 清单部分完成\n状态为 done，但清单仍有 3 项未勾选。\n请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n缺依据与状态不符\n2\n完成但缺交付/证据材料\nt-0008 · QA 真无材料复盘\n状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\n缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n进度100但状态未完成\nt-0011 · QA 检查 进度满未完成\n进度为 100%，但状态仍为 todo。\n请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。\n\n编号\n任务\n负责人\n优先级\n截止日期\n进度\n操作\n1\nError register · Failed delivery · 成功重试\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n2\nF5共享文件任务\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n4\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n4.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n5\nQA 真无材料复盘\n无子任务\n未指派\n2026-10-23\n客观 证据不足\n覆盖 0/1\n原手填 0%\n6\nQA 检查 逾期未动\n无子任务\n未指派\n2026-10-21\n客观 证据不足\n覆盖 0/1\n原手填 0%\n7\nQA 检查 两天临期\n无子任务\n未指派\n2026-10-24\n客观 证据不足\n覆盖 0/1\n原手填 0%\n8\nQA 检查 进度满未完成\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 100%\n9\nQA 检查 清单部分完成\n无子任务\n未指派\n—\n客观 40%\n清单 2/5 · 覆盖 1/1\n请确认验收\nJK 移动 · Space 勾选 · Enter 打开 · Del 批量删除\n11 条记录\n项目记录\n编辑任务\n01\n基础信息\n任务名称 *\n任务说明\n状态\n未开始\n进行中\n受阻\n已完成\n已收尾\n优先级\nP0 - 高优\nP1 - 一般\nP2 - 较低\n执行人\n02\n排期与进度\n开始日期\n截止日期\n完成进度\n客观进度（清单完成度）\n证据不足\n清单检查点（勾选后即时保存）\n\n暂无清单检查点。\n\n实际工时（小时，可选）\n证据链接（可选）\n人工设定进度（0-100，可选）\n人工设定备注（来源/口径，可选）\n03\n关联与仓库\n关联里程碑\n不关联\nQA里程碑\n当前关联\n暂无已保存的里程碑或交付物关联。\n仓库地址（可选）\n分支（可选）\n前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）\n1\nError register · Failed delivery · 成功重试\n未开始\n2\nF5共享文件任务\n未开始\n3\nQA原生导入根\n未开始\n3.1\nQA原生导入子\n进行中\n4\nQA原生导入根\n未开始\n4.1\nQA原生导入子\n进行中\n5\nQA 真无材料复盘\n已完成\n6\nQA 检查 逾期未动\n未开始\n8\nQA 检查 进度满未完成\n未开始\n9\nQA 检查 清单部分完成\n已完成\n已选 0 项\n资料\n资料链接\n标题（可选）\n备注（可选）\n加链接\n交付物\n选择交付物（可选）\nQA交付物V1（v1）\n备注（可选）\n关联交付物\n选择文件（暂存，提交时保存）\n进展日志\n追加进展（草稿）\n删除\n取消\n保存更改",
+      "png": "check-target-1792632157442/actual.png",
+      "cancelPng": "task-close-1792632162506/actual.png",
+      "openJpg": "check-target-1792632157442/frames/000005.jpg",
+      "cancelJpg": "task-close-1792632162506/frames/000003.jpg",
+      "targetMatches": true,
+      "cancelled": true,
+      "unchanged": true
+    },
+    {
+      "id": "t-0009",
+      "rule": "overdue-untouched",
+      "open": "check-target-1792632166691",
+      "cancel": "task-close-1792632171176",
+      "named": {
+        "title": "QA 检查 逾期未动",
+        "description": "",
+        "status": "todo",
+        "priority": "P1",
+        "assignee": "",
+        "startDate": "2026-10-20",
+        "dueDate": "2026-10-21",
+        "progress": "0",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": "",
+        "predecessorIds": "t-0012"
+      },
+      "evidenceField": "",
+      "rawChecklist": null,
+      "pmText": "P\nPM 工作台\nDeepSeek Harness\n跨项目\n总览看板\n当前项目 · QA-A-fixture-F5\n项目概览\n计划与排期\n全部任务\n11\n甘特排期\n里程碑\n1\n风险与问题\n1\n人员负载\n协作与记录\n会议纪要\n1\n进度汇报\n1\n交付物\n1\n目标与习惯\n目标（OKR）\n0\n习惯\n0\n口径设置\n项目工作台\nQA-A-fixture-F5\n新建项目\n新建任务\nAI 助手\nAI 副驾\n更多\nQA-A-fixture-F5\n/\n全部任务\n逾期 2 · 临期 5\n任务\n11 项任务\n· 完成 2（18%）· 进行中 2 · 阻塞 0 · 待办 7\n未命名视图\n全部\n11\n进行中\n2\n已完成\n3\n已逾期\n1\n我负责的\n4\n保存视图\n按状态分组\n按 WBS 编号\n按截止日期\n按优先级\n按进度\n模板\n导入\n导出\n分享\n密度（全局偏好）\n舒适\n紧凑\n全部视图生效 · 持久保存\n交付前核对\n对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决\n5 条提示\n日期与排期待核对（日期冲突）\n2\n临期未动（≤2天仍待办）\nt-0010 · QA 检查 两天临期\n截止日期 2026-10-24（2 天内），状态仍为 todo。\n请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n逾期未动\nt-0009 · QA 检查 逾期未动\n截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\n请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n完成前未回应要求\n1\n完成却有未完成清单项\nt-0012 · QA 检查 清单部分完成\n状态为 done，但清单仍有 3 项未勾选。\n请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n缺依据与状态不符\n2\n完成但缺交付/证据材料\nt-0008 · QA 真无材料复盘\n状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\n缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n进度100但状态未完成\nt-0011 · QA 检查 进度满未完成\n进度为 100%，但状态仍为 todo。\n请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。\n\n编号\n任务\n负责人\n优先级\n截止日期\n进度\n操作\n1\nError register · Failed delivery · 成功重试\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n2\nF5共享文件任务\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n4\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n4.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n5\nQA 真无材料复盘\n无子任务\n未指派\n2026-10-23\n客观 证据不足\n覆盖 0/1\n原手填 0%\n6\nQA 检查 逾期未动\n无子任务\n未指派\n2026-10-21\n客观 证据不足\n覆盖 0/1\n原手填 0%\n7\nQA 检查 两天临期\n无子任务\n未指派\n2026-10-24\n客观 证据不足\n覆盖 0/1\n原手填 0%\n8\nQA 检查 进度满未完成\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 100%\n9\nQA 检查 清单部分完成\n无子任务\n未指派\n—\n客观 40%\n清单 2/5 · 覆盖 1/1\n请确认验收\nJK 移动 · Space 勾选 · Enter 打开 · Del 批量删除\n11 条记录\n项目记录\n编辑任务\n01\n基础信息\n任务名称 *\n任务说明\n状态\n未开始\n进行中\n受阻\n已完成\n已收尾\n优先级\nP0 - 高优\nP1 - 一般\nP2 - 较低\n执行人\n02\n排期与进度\n开始日期\n截止日期\n完成进度\n客观进度（清单完成度）\n证据不足\n清单检查点（勾选后即时保存）\n\n暂无清单检查点。\n\n实际工时（小时，可选）\n证据链接（可选）\n人工设定进度（0-100，可选）\n人工设定备注（来源/口径，可选）\n03\n关联与仓库\n关联里程碑\n不关联\nQA里程碑\n当前关联\n暂无已保存的里程碑或交付物关联。\n仓库地址（可选）\n分支（可选）\n前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）\n1\nError register · Failed delivery · 成功重试\n未开始\n2\nF5共享文件任务\n未开始\n3\nQA原生导入根\n未开始\n3.1\nQA原生导入子\n进行中\n4\nQA原生导入根\n未开始\n4.1\nQA原生导入子\n进行中\n5\nQA 真无材料复盘\n已完成\n7\nQA 检查 两天临期\n未开始\n8\nQA 检查 进度满未完成\n未开始\n9\nQA 检查 清单部分完成\n已完成\n已选 0 项\n资料\n资料链接\n标题（可选）\n备注（可选）\n加链接\n交付物\n选择交付物（可选）\nQA交付物V1（v1）\n备注（可选）\n关联交付物\n选择文件（暂存，提交时保存）\n进展日志\n追加进展（草稿）\n删除\n取消\n保存更改",
+      "png": "check-target-1792632166691/actual.png",
+      "cancelPng": "task-close-1792632171176/actual.png",
+      "openJpg": "check-target-1792632166691/frames/000005.jpg",
+      "cancelJpg": "task-close-1792632171176/frames/000004.jpg",
+      "targetMatches": true,
+      "cancelled": true,
+      "unchanged": true
+    },
+    {
+      "id": "t-0012",
+      "rule": "done-open-checklist",
+      "open": "check-target-1792632175401",
+      "cancel": "task-close-1792632179943",
+      "named": {
+        "title": "QA 检查 清单部分完成",
+        "description": "",
+        "status": "done",
+        "priority": "P1",
+        "assignee": "",
+        "startDate": "",
+        "dueDate": "",
+        "progress": "0",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": "",
+        "predecessorIds": "t-0011"
+      },
+      "evidenceField": "",
+      "rawChecklist": [
+        {
+          "id": "20fad6ab-b230-4ddd-af30-cfba18780168",
+          "text": "需求核对",
+          "done": true
+        },
+        {
+          "id": "55c2c18d-42f9-436d-a019-4344a719027b",
+          "text": "方案核对",
+          "done": true
+        },
+        {
+          "id": "17de8423-4ac2-409d-bf94-f66ac6ab48d7",
+          "text": "实现核对",
+          "done": false
+        },
+        {
+          "id": "ec0eb4b0-4770-4768-b1da-1d9397e02178",
+          "text": "测试核对",
+          "done": false
+        },
+        {
+          "id": "d45e1c6b-04c0-4c94-93fd-3f5e19308f3b",
+          "text": "交付核对",
+          "done": false
+        }
+      ],
+      "pmText": "P\nPM 工作台\nDeepSeek Harness\n跨项目\n总览看板\n当前项目 · QA-A-fixture-F5\n项目概览\n计划与排期\n全部任务\n11\n甘特排期\n里程碑\n1\n风险与问题\n1\n人员负载\n协作与记录\n会议纪要\n1\n进度汇报\n1\n交付物\n1\n目标与习惯\n目标（OKR）\n0\n习惯\n0\n口径设置\n项目工作台\nQA-A-fixture-F5\n新建项目\n新建任务\nAI 助手\nAI 副驾\n更多\nQA-A-fixture-F5\n/\n全部任务\n逾期 2 · 临期 5\n任务\n11 项任务\n· 完成 2（18%）· 进行中 2 · 阻塞 0 · 待办 7\n未命名视图\n全部\n11\n进行中\n2\n已完成\n3\n已逾期\n1\n我负责的\n4\n保存视图\n按状态分组\n按 WBS 编号\n按截止日期\n按优先级\n按进度\n模板\n导入\n导出\n分享\n密度（全局偏好）\n舒适\n紧凑\n全部视图生效 · 持久保存\n交付前核对\n对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决\n5 条提示\n日期与排期待核对（日期冲突）\n2\n临期未动（≤2天仍待办）\nt-0010 · QA 检查 两天临期\n截止日期 2026-10-24（2 天内），状态仍为 todo。\n请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n逾期未动\nt-0009 · QA 检查 逾期未动\n截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\n请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n完成前未回应要求\n1\n完成却有未完成清单项\nt-0012 · QA 检查 清单部分完成\n状态为 done，但清单仍有 3 项未勾选。\n请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n缺依据与状态不符\n2\n完成但缺交付/证据材料\nt-0008 · QA 真无材料复盘\n状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\n缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n进度100但状态未完成\nt-0011 · QA 检查 进度满未完成\n进度为 100%，但状态仍为 todo。\n请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。\n\n编号\n任务\n负责人\n优先级\n截止日期\n进度\n操作\n1\nError register · Failed delivery · 成功重试\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n2\nF5共享文件任务\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n4\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n4.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n5\nQA 真无材料复盘\n无子任务\n未指派\n2026-10-23\n客观 证据不足\n覆盖 0/1\n原手填 0%\n6\nQA 检查 逾期未动\n无子任务\n未指派\n2026-10-21\n客观 证据不足\n覆盖 0/1\n原手填 0%\n7\nQA 检查 两天临期\n无子任务\n未指派\n2026-10-24\n客观 证据不足\n覆盖 0/1\n原手填 0%\n8\nQA 检查 进度满未完成\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 100%\n9\nQA 检查 清单部分完成\n无子任务\n未指派\n—\n客观 40%\n清单 2/5 · 覆盖 1/1\n请确认验收\nJK 移动 · Space 勾选 · Enter 打开 · Del 批量删除\n11 条记录\n项目记录\n编辑任务\n01\n基础信息\n任务名称 *\n任务说明\n状态\n未开始\n进行中\n受阻\n已完成\n已收尾\n优先级\nP0 - 高优\nP1 - 一般\nP2 - 较低\n执行人\n02\n排期与进度\n开始日期\n截止日期\n完成进度\n客观进度（清单完成度）\n40%（2/5）\n清单检查点（勾选后即时保存）\n需求核对\n方案核对\n实现核对\n测试核对\n交付核对\n完成日期\n2026-10-22\n实际工时（小时，可选）\n证据链接（可选）\n人工设定进度（0-100，可选）\n人工设定备注（来源/口径，可选）\n03\n关联与仓库\n关联里程碑\n不关联\nQA里程碑\n当前关联\n暂无已保存的里程碑或交付物关联。\n仓库地址（可选）\n分支（可选）\n前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）\n1\nError register · Failed delivery · 成功重试\n未开始\n2\nF5共享文件任务\n未开始\n3\nQA原生导入根\n未开始\n3.1\nQA原生导入子\n进行中\n4\nQA原生导入根\n未开始\n4.1\nQA原生导入子\n进行中\n5\nQA 真无材料复盘\n已完成\n6\nQA 检查 逾期未动\n未开始\n7\nQA 检查 两天临期\n未开始\n8\nQA 检查 进度满未完成\n未开始\n已选 0 项\n资料\n资料链接\n标题（可选）\n备注（可选）\n加链接\n交付物\n选择交付物（可选）\nQA交付物V1（v1）\n备注（可选）\n关联交付物\n选择文件（暂存，提交时保存）\n进展日志\n追加进展（草稿）\n删除\n取消\n保存更改",
+      "png": "check-target-1792632175401/actual.png",
+      "cancelPng": "task-close-1792632179943/actual.png",
+      "openJpg": "check-target-1792632175401/frames/000006.jpg",
+      "cancelJpg": "task-close-1792632179943/frames/000004.jpg",
+      "targetMatches": true,
+      "cancelled": true,
+      "unchanged": true
+    },
+    {
+      "id": "t-0008",
+      "rule": "done-missing-materials",
+      "open": "check-target-1792632184037",
+      "cancel": "task-close-1792632188942",
+      "named": {
+        "title": "QA 真无材料复盘",
+        "description": "",
+        "status": "done",
+        "priority": "P1",
+        "assignee": "",
+        "startDate": "2026-10-22",
+        "dueDate": "2026-10-23",
+        "progress": "0",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": "",
+        "predecessorIds": "t-0012"
+      },
+      "evidenceField": "",
+      "rawChecklist": null,
+      "pmText": "P\nPM 工作台\nDeepSeek Harness\n跨项目\n总览看板\n当前项目 · QA-A-fixture-F5\n项目概览\n计划与排期\n全部任务\n11\n甘特排期\n里程碑\n1\n风险与问题\n1\n人员负载\n协作与记录\n会议纪要\n1\n进度汇报\n1\n交付物\n1\n目标与习惯\n目标（OKR）\n0\n习惯\n0\n口径设置\n项目工作台\nQA-A-fixture-F5\n新建项目\n新建任务\nAI 助手\nAI 副驾\n更多\nQA-A-fixture-F5\n/\n全部任务\n逾期 2 · 临期 5\n任务\n11 项任务\n· 完成 2（18%）· 进行中 2 · 阻塞 0 · 待办 7\n未命名视图\n全部\n11\n进行中\n2\n已完成\n3\n已逾期\n1\n我负责的\n4\n保存视图\n按状态分组\n按 WBS 编号\n按截止日期\n按优先级\n按进度\n模板\n导入\n导出\n分享\n密度（全局偏好）\n舒适\n紧凑\n全部视图生效 · 持久保存\n交付前核对\n对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决\n5 条提示\n日期与排期待核对（日期冲突）\n2\n临期未动（≤2天仍待办）\nt-0010 · QA 检查 两天临期\n截止日期 2026-10-24（2 天内），状态仍为 todo。\n请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n逾期未动\nt-0009 · QA 检查 逾期未动\n截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\n请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n完成前未回应要求\n1\n完成却有未完成清单项\nt-0012 · QA 检查 清单部分完成\n状态为 done，但清单仍有 3 项未勾选。\n请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n缺依据与状态不符\n2\n完成但缺交付/证据材料\nt-0008 · QA 真无材料复盘\n状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\n缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n进度100但状态未完成\nt-0011 · QA 检查 进度满未完成\n进度为 100%，但状态仍为 todo。\n请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。\n\n编号\n任务\n负责人\n优先级\n截止日期\n进度\n操作\n1\nError register · Failed delivery · 成功重试\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n2\nF5共享文件任务\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n4\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n4.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n5\nQA 真无材料复盘\n无子任务\n未指派\n2026-10-23\n客观 证据不足\n覆盖 0/1\n原手填 0%\n6\nQA 检查 逾期未动\n无子任务\n未指派\n2026-10-21\n客观 证据不足\n覆盖 0/1\n原手填 0%\n7\nQA 检查 两天临期\n无子任务\n未指派\n2026-10-24\n客观 证据不足\n覆盖 0/1\n原手填 0%\n8\nQA 检查 进度满未完成\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 100%\n9\nQA 检查 清单部分完成\n无子任务\n未指派\n—\n客观 40%\n清单 2/5 · 覆盖 1/1\n请确认验收\nJK 移动 · Space 勾选 · Enter 打开 · Del 批量删除\n11 条记录\n项目记录\n编辑任务\n01\n基础信息\n任务名称 *\n任务说明\n状态\n未开始\n进行中\n受阻\n已完成\n已收尾\n优先级\nP0 - 高优\nP1 - 一般\nP2 - 较低\n执行人\n02\n排期与进度\n开始日期\n截止日期\n完成进度\n客观进度（清单完成度）\n证据不足\n清单检查点（勾选后即时保存）\n\n暂无清单检查点。\n\n完成日期\n2026-10-22\n实际工时（小时，可选）\n证据链接（可选）\n人工设定进度（0-100，可选）\n人工设定备注（来源/口径，可选）\n03\n关联与仓库\n关联里程碑\n不关联\nQA里程碑\n当前关联\n暂无已保存的里程碑或交付物关联。\n仓库地址（可选）\n分支（可选）\n前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）\n1\nError register · Failed delivery · 成功重试\n未开始\n2\nF5共享文件任务\n未开始\n3\nQA原生导入根\n未开始\n3.1\nQA原生导入子\n进行中\n4\nQA原生导入根\n未开始\n4.1\nQA原生导入子\n进行中\n6\nQA 检查 逾期未动\n未开始\n7\nQA 检查 两天临期\n未开始\n8\nQA 检查 进度满未完成\n未开始\n9\nQA 检查 清单部分完成\n已完成\n已选 0 项\n资料\n资料链接\n标题（可选）\n备注（可选）\n加链接\n交付物\n选择交付物（可选）\nQA交付物V1（v1）\n备注（可选）\n关联交付物\n选择文件（暂存，提交时保存）\n进展日志\n追加进展（草稿）\n删除\n取消\n保存更改",
+      "png": "check-target-1792632184037/actual.png",
+      "cancelPng": "task-close-1792632188942/actual.png",
+      "openJpg": "check-target-1792632184037/frames/000005.jpg",
+      "cancelJpg": "task-close-1792632188942/frames/000004.jpg",
+      "targetMatches": true,
+      "cancelled": true,
+      "unchanged": true
+    },
+    {
+      "id": "t-0011",
+      "rule": "progress-100-not-done",
+      "open": "check-target-1792632192656",
+      "cancel": "task-close-1792632195724",
+      "named": {
+        "title": "QA 检查 进度满未完成",
+        "description": "",
+        "status": "todo",
+        "priority": "P1",
+        "assignee": "",
+        "startDate": "",
+        "dueDate": "",
+        "progress": "100",
+        "milestoneId": "",
+        "repoUrl": "",
+        "branch": "",
+        "predecessorIds": "t-0012"
+      },
+      "evidenceField": "",
+      "rawChecklist": null,
+      "pmText": "P\nPM 工作台\nDeepSeek Harness\n跨项目\n总览看板\n当前项目 · QA-A-fixture-F5\n项目概览\n计划与排期\n全部任务\n11\n甘特排期\n里程碑\n1\n风险与问题\n1\n人员负载\n协作与记录\n会议纪要\n1\n进度汇报\n1\n交付物\n1\n目标与习惯\n目标（OKR）\n0\n习惯\n0\n口径设置\n项目工作台\nQA-A-fixture-F5\n新建项目\n新建任务\nAI 助手\nAI 副驾\n更多\nQA-A-fixture-F5\n/\n全部任务\n逾期 2 · 临期 5\n任务\n11 项任务\n· 完成 2（18%）· 进行中 2 · 阻塞 0 · 待办 7\n未命名视图\n全部\n11\n进行中\n2\n已完成\n3\n已逾期\n1\n我负责的\n4\n保存视图\n按状态分组\n按 WBS 编号\n按截止日期\n按优先级\n按进度\n模板\n导入\n导出\n分享\n密度（全局偏好）\n舒适\n紧凑\n全部视图生效 · 持久保存\n交付前核对\n对照承诺 / 进度 / 材料指出缺口 · 只读提示，不下完成裁决\n5 条提示\n日期与排期待核对（日期冲突）\n2\n临期未动（≤2天仍待办）\nt-0010 · QA 检查 两天临期\n截止日期 2026-10-24（2 天内），状态仍为 todo。\n请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n逾期未动\nt-0009 · QA 检查 逾期未动\n截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\n请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n完成前未回应要求\n1\n完成却有未完成清单项\nt-0012 · QA 检查 清单部分完成\n状态为 done，但清单仍有 3 项未勾选。\n请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n缺依据与状态不符\n2\n完成但缺交付/证据材料\nt-0008 · QA 真无材料复盘\n状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\n缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n进度100但状态未完成\nt-0011 · QA 检查 进度满未完成\n进度为 100%，但状态仍为 todo。\n请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n本卡只做一致性与缺口提示，提示不代替人验收；「未覆盖≠未完成」，是否完成由人判断，系统不自动改状态、不自动标记完成。\n\n编号\n任务\n负责人\n优先级\n截止日期\n进度\n操作\n1\nError register · Failed delivery · 成功重试\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n2\nF5共享文件任务\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n3.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n4\nQA原生导入根\n0/1 完成\n测\n测试甲\n2026-11-01\n客观 证据不足\n覆盖 0/1\n原手填 0%\n4.1\nQA原生导入子\n未开始\n进行中\n受阻\n已完成\n已收尾\n测\n测试乙\nP2\n客观 证据不足\n覆盖 0/1\n原手填 10%\n未导出\n5\nQA 真无材料复盘\n无子任务\n未指派\n2026-10-23\n客观 证据不足\n覆盖 0/1\n原手填 0%\n6\nQA 检查 逾期未动\n无子任务\n未指派\n2026-10-21\n客观 证据不足\n覆盖 0/1\n原手填 0%\n7\nQA 检查 两天临期\n无子任务\n未指派\n2026-10-24\n客观 证据不足\n覆盖 0/1\n原手填 0%\n8\nQA 检查 进度满未完成\n无子任务\n未指派\n—\n客观 证据不足\n覆盖 0/1\n原手填 100%\n9\nQA 检查 清单部分完成\n无子任务\n未指派\n—\n客观 40%\n清单 2/5 · 覆盖 1/1\n请确认验收\nJK 移动 · Space 勾选 · Enter 打开 · Del 批量删除\n11 条记录\n项目记录\n编辑任务\n01\n基础信息\n任务名称 *\n任务说明\n状态\n未开始\n进行中\n受阻\n已完成\n已收尾\n优先级\nP0 - 高优\nP1 - 一般\nP2 - 较低\n执行人\n02\n排期与进度\n开始日期\n截止日期\n完成进度\n客观进度（清单完成度）\n证据不足\n清单检查点（勾选后即时保存）\n\n暂无清单检查点。\n\n实际工时（小时，可选）\n证据链接（可选）\n人工设定进度（0-100，可选）\n人工设定备注（来源/口径，可选）\n03\n关联与仓库\n关联里程碑\n不关联\nQA里程碑\n当前关联\n暂无已保存的里程碑或交付物关联。\n仓库地址（可选）\n分支（可选）\n前置依赖（未完成时本任务显示「等待前置」；DAG 独立于 WBS，仅不可选自身；真正成环由后端拒绝）\n1\nError register · Failed delivery · 成功重试\n未开始\n2\nF5共享文件任务\n未开始\n3\nQA原生导入根\n未开始\n3.1\nQA原生导入子\n进行中\n4\nQA原生导入根\n未开始\n4.1\nQA原生导入子\n进行中\n5\nQA 真无材料复盘\n已完成\n6\nQA 检查 逾期未动\n未开始\n7\nQA 检查 两天临期\n未开始\n9\nQA 检查 清单部分完成\n已完成\n已选 0 项\n资料\n资料链接\n标题（可选）\n备注（可选）\n加链接\n交付物\n选择交付物（可选）\nQA交付物V1（v1）\n备注（可选）\n关联交付物\n选择文件（暂存，提交时保存）\n进展日志\n追加进展（草稿）\n删除\n取消\n保存更改",
+      "png": "check-target-1792632192656/actual.png",
+      "cancelPng": "task-close-1792632195724/actual.png",
+      "openJpg": "check-target-1792632192656/frames/000004.jpg",
+      "cancelJpg": "task-close-1792632195724/frames/000002.jpg",
+      "targetMatches": true,
+      "cancelled": true,
+      "unchanged": true
+    }
+  ],
+  "visual": [
+    {
+      "path": "pm-nav-1792632076499/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632079299.9604,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632157442/actual.png",
+      "bytes": 368865,
+      "sha256": "ad6bf139885f5b672ce5b4f0a36c278fafedd6489fc17d8fa3505696e4c87b07",
+      "mtimeMs": 1792632160904.2075,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "task-close-1792632162506/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632164718.9717,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632157442/frames/000005.jpg",
+      "bytes": 85953,
+      "sha256": "289013b15daccce85999b3c1f8dcaeda23f9c1abc6b3570407b3ca1b1d6b98e0",
+      "mtimeMs": 1792632161010.266,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "task-close-1792632162506/frames/000003.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632164322.1326,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "check-target-1792632166691/actual.png",
+      "bytes": 369749,
+      "sha256": "45e80d4e9c11750f1e15cea46b29118777c9d186958c0fc6c7ffa8b318a999b9",
+      "mtimeMs": 1792632170026.717,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "task-close-1792632171176/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632173893.342,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632166691/frames/000005.jpg",
+      "bytes": 85921,
+      "sha256": "8f51107177954372d86765e8c1fc16fdeba778982ee78755b1dcb40fb18d444b",
+      "mtimeMs": 1792632170139.1682,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "task-close-1792632171176/frames/000004.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632173419.5884,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "check-target-1792632175401/actual.png",
+      "bytes": 367950,
+      "sha256": "f6680152d64023f33a08b9a999435bd717d9359b4491fd6e26b2ab9b6a51a71b",
+      "mtimeMs": 1792632178671.4624,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "task-close-1792632179943/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632182815.3484,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632175401/frames/000006.jpg",
+      "bytes": 85726,
+      "sha256": "0cc441f9c4130e146e28933179dab084dc2675f280c6c81a1ade0c15feff7364",
+      "mtimeMs": 1792632178820.9373,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "task-close-1792632179943/frames/000004.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632182357.3071,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "check-target-1792632184037/actual.png",
+      "bytes": 368958,
+      "sha256": "0104a56aa0976d814ba428e8d42ed1d95358f769403d8c2d4416800c1a0427dc",
+      "mtimeMs": 1792632187302.3643,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "task-close-1792632188942/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632191983.7268,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632184037/frames/000005.jpg",
+      "bytes": 86111,
+      "sha256": "361fbcdb8062705cf1c64f194b2b62c759049d0d28c4ffb89bdefb146590961d",
+      "mtimeMs": 1792632187461.1675,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "task-close-1792632188942/frames/000004.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632191842.5789,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "check-target-1792632192656/actual.png",
+      "bytes": 369331,
+      "sha256": "47b68d3bf56c6d35d3e2f3dc9fd88db1ddcca9204b21712f3df58b90c368b8e8",
+      "mtimeMs": 1792632194968.309,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "task-close-1792632195724/actual.png",
+      "bytes": 443189,
+      "sha256": "b3927895e60bbbacd6d92f990321a40ee3a16b82be8c37822bfc9d75f7281a5e",
+      "mtimeMs": 1792632197667.3647,
+      "role": "actual screenshot; review separately"
+    },
+    {
+      "path": "check-target-1792632192656/frames/000004.jpg",
+      "bytes": 85887,
+      "sha256": "7a51f4fd7caf246d55948ff51ddb815fe77f561ec67a379e37feb090f6d6274a",
+      "mtimeMs": 1792632195024.5823,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "task-close-1792632195724/frames/000002.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632197422.4268,
+      "role": "original compositor frame; review separately"
+    },
+    {
+      "path": "pm-nav-1792632076499/frames/000022.jpg",
+      "bytes": 110510,
+      "sha256": "67dcf70b52b46a69bc2e991ac7f016d8ea433f06ff70217ea5079d2a0683406e",
+      "mtimeMs": 1792632078948.996,
+      "role": "original compositor frame; review separately"
+    }
+  ],
+  "steps": [
+    {
+      "name": "host-open-1792631875322",
+      "exit": {
+        "at": "2026-10-22T01:17:58.603Z",
+        "exit": 0,
+        "action": "host-open",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 375,
+        "sha256": "5d1b3422b63bff2b2e8612990d63a0e2d35996e116861267e2d7e5188685a0f5",
+        "mtimeMs": 1792631877809.59
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792631878630.1821
+      }
+    },
+    {
+      "name": "command-1792631897232",
+      "exit": {
+        "at": "2026-10-22T01:18:25.311Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 逾期未动\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\"}",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/tasks/t-0009.json": "69f7b81eaa3557e767f4c913dab5c0df6436b2dd8defda0d166a51d8567b4fc8"
+          },
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 逾期未动\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\"}",
+          "commandId": "cmd-2b310026-25",
+          "runTime": 1792631904761,
+          "doneTime": 1792631904872,
+          "kind": "success",
+          "text": "[pm:summary]任务已新增｜6｜t-0009 QA 检查 逾期未动\n[pm:summary]根层级\n[pm:detail]\n```\n任务 ID：t-0009\nWBS：6\n项目 ID：p-0001\n父任务：无\n标题：QA 检查 逾期未动\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：2026-10-20\n截止日期：2026-10-21\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:18:24.810Z\n更新时间：2026-10-22T01:18:24.810Z\n```",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "8d4f9fbd82305f3ab63fcf6cd7fc923bf41f50c508a29f13ec78761495c708bc",
+        "mtimeMs": 1792631904917.094
+      },
+      "requestsFingerprint": {
+        "bytes": 544,
+        "sha256": "d181c5d958d703b3ad082cd238fe806856c988f762d42b719eed3f37072bda0b",
+        "mtimeMs": 1792631905344.2217
+      }
+    },
+    {
+      "name": "command-1792631906500",
+      "exit": {
+        "at": "2026-10-22T01:18:35.213Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 两天临期\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\"}",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/tasks/t-0010.json": "4c9ea4425ee165f17ee116cc0cee20419ed59f911afe526bc1517a80020c6105"
+          },
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 两天临期\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\"}",
+          "commandId": "cmd-2b310026-26",
+          "runTime": 1792631914618,
+          "doneTime": 1792631914677,
+          "kind": "success",
+          "text": "[pm:summary]任务已新增｜7｜t-0010 QA 检查 两天临期\n[pm:summary]根层级\n[pm:detail]\n```\n任务 ID：t-0010\nWBS：7\n项目 ID：p-0001\n父任务：无\n标题：QA 检查 两天临期\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：2026-10-22\n截止日期：2026-10-24\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:18:34.624Z\n更新时间：2026-10-22T01:18:34.624Z\n```",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "4af95b3897e74b0f933f6805245fcee378f03a226fdac2de36404b3d8d7ce4d9",
+        "mtimeMs": 1792631914842.1592
+      },
+      "requestsFingerprint": {
+        "bytes": 544,
+        "sha256": "9f7b0a3e8d6bf2d93542364ba55e8d205de5fc0beab25c2ad3d3137a775979ba",
+        "mtimeMs": 1792631915239.558
+      }
+    },
+    {
+      "name": "command-1792631916605",
+      "exit": {
+        "at": "2026-10-22T01:18:42.735Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 进度满未完成\",\"progress\":100}",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/tasks/t-0011.json": "4408c728266449ab45b112e72c13cedae82083d581884fb84b63c8fb65148793"
+          },
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "947181bde77a00ca63e76e9fe2db8fc11d7057500bf67110ec867a1caca6c1e3",
+              "after": "5d3dfa6e18c68c9fcaa76fb5158d0bd9ecee8f4ec2d58493955eb91b5a5c10bb"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 进度满未完成\",\"progress\":100}",
+          "commandId": "cmd-2b310026-27",
+          "runTime": 1792631922153,
+          "doneTime": 1792631922231,
+          "kind": "success",
+          "text": "[pm:summary]任务已新增｜8｜t-0011 QA 检查 进度满未完成\n[pm:summary]根层级\n[pm:detail]\n```\n任务 ID：t-0011\nWBS：8\n项目 ID：p-0001\n父任务：无\n标题：QA 检查 进度满未完成\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：未填写\n截止日期：未填写\n完成日期：未填写\n进度：100%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:18:42.190Z\n更新时间：2026-10-22T01:18:42.190Z\n```",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "09200affc901efbe3b2cd88e34e4f1dc9a568c2cc7a03b9be09a2fb239e3b5e1",
+        "mtimeMs": 1792631922281.8643
+      },
+      "requestsFingerprint": {
+        "bytes": 511,
+        "sha256": "7cb6189a70ba000aa1d17152503a00dbadac8ea9a5c320d7f320cc70b841a1a4",
+        "mtimeMs": 1792631922750.5227
+      }
+    },
+    {
+      "name": "command-1792631923904",
+      "exit": {
+        "at": "2026-10-22T01:18:48.271Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 清单部分完成\"}",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/tasks/t-0012.json": "1538fcb7a48ab60ea352daf01ed773261df2cfe0a0a2f15e11b7c3511af4b4fb"
+          },
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "5d3dfa6e18c68c9fcaa76fb5158d0bd9ecee8f4ec2d58493955eb91b5a5c10bb",
+              "after": "636132b69cc79d70d0cec3e8443a577db25c6f9af032ff52f06cdb88b63b8a32"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task add {\"projectId\":\"p-0001\",\"title\":\"QA 检查 清单部分完成\"}",
+          "commandId": "cmd-2b310026-28",
+          "runTime": 1792631927733,
+          "doneTime": 1792631927798,
+          "kind": "success",
+          "text": "[pm:summary]任务已新增｜9｜t-0012 QA 检查 清单部分完成\n[pm:summary]根层级\n[pm:detail]\n```\n任务 ID：t-0012\nWBS：9\n项目 ID：p-0001\n父任务：无\n标题：QA 检查 清单部分完成\n说明：未填写\n负责人：未填写\n状态：未开始\n优先级：P1\n开始日期：未填写\n截止日期：未填写\n完成日期：未填写\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:18:47.754Z\n更新时间：2026-10-22T01:18:47.754Z\n```",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "f903723425603e89deba2a84431ff03135445514e22091e6faa0bfd891755fa0",
+        "mtimeMs": 1792631927897.9497
+      },
+      "requestsFingerprint": {
+        "bytes": 494,
+        "sha256": "ee7b496fd5e8605464a21c70be086fd0f503f5816f2a814ed13f5a1826c7dd3f",
+        "mtimeMs": 1792631928309.9424
+      }
+    },
+    {
+      "name": "command-1792631945236",
+      "exit": {
+        "at": "2026-10-22T01:19:09.617Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist add t-0012 需求核对",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "1538fcb7a48ab60ea352daf01ed773261df2cfe0a0a2f15e11b7c3511af4b4fb",
+              "after": "98302053801194bdd40b2d615609759948f5865c5b14a70679739d27f716b579"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist add t-0012 需求核对",
+          "commandId": "cmd-2b310026-29",
+          "runTime": 1792631948864,
+          "doneTime": 1792631948950,
+          "kind": "success",
+          "text": "清单已追加 1 项。任务 t-0012 现有清单 1 项（已勾 0）：\n清单项：1 项（已勾 0）\n  [ ] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "c51cd0c859488e7661aa3e9c3b6905e4d9da8791f96eaf233b7ab06942406261",
+        "mtimeMs": 1792631949201.3118
+      },
+      "requestsFingerprint": {
+        "bytes": 454,
+        "sha256": "f1920376ad6b2397b73a8968835870be05b247ae9ae9204782f692edf7a8e8b6",
+        "mtimeMs": 1792631949637.7625
+      }
+    },
+    {
+      "name": "command-1792631950316",
+      "exit": {
+        "at": "2026-10-22T01:19:15.108Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist add t-0012 方案核对",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "98302053801194bdd40b2d615609759948f5865c5b14a70679739d27f716b579",
+              "after": "e83ba662e665bb442708945c0e266982e1c908f4eebb005260a04ab7e7f60cc0"
+            },
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "7b565cfe06b667376ddc4e6bff4d938c1fea2b79aac66c15295ba2a7357bfc6e",
+              "after": "d7c380f4c2a5c5dfb7b96ae8e81565c62e48d093e1558d54eb81c35faa37d920"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist add t-0012 方案核对",
+          "commandId": "cmd-2b310026-30",
+          "runTime": 1792631954321,
+          "doneTime": 1792631954358,
+          "kind": "success",
+          "text": "清单已追加 1 项。任务 t-0012 现有清单 2 项（已勾 0）：\n清单项：2 项（已勾 0）\n  [ ] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [ ] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "ee3c5019891abe07edb67e751d132ad7e3d7819c92510a04635a13ee4d6b543d",
+        "mtimeMs": 1792631954391.1487
+      },
+      "requestsFingerprint": {
+        "bytes": 454,
+        "sha256": "8a834d6daa5039af9d1e159250156601475d83759c1538c852de7982ae66fcb7",
+        "mtimeMs": 1792631955151.9858
+      }
+    },
+    {
+      "name": "command-1792631956554",
+      "exit": {
+        "at": "2026-10-22T01:19:23.364Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist add t-0012 实现核对",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "e83ba662e665bb442708945c0e266982e1c908f4eebb005260a04ab7e7f60cc0",
+              "after": "afda3956dd175f535ff23e058ab98e051ae4d2977197ead992f0fd5a81813515"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist add t-0012 实现核对",
+          "commandId": "cmd-2b310026-31",
+          "runTime": 1792631962630,
+          "doneTime": 1792631962706,
+          "kind": "success",
+          "text": "清单已追加 1 项。任务 t-0012 现有清单 3 项（已勾 0）：\n清单项：3 项（已勾 0）\n  [ ] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [ ] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "28b904d1467c3c8b73d802830cc475017b0864899196c8a89bab8e346017bde5",
+        "mtimeMs": 1792631962772.9243
+      },
+      "requestsFingerprint": {
+        "bytes": 454,
+        "sha256": "f6fe49f8ab707fbbbec5eeab7ed5203e7629d99cd6430f8fc08b04ae7d4dc57d",
+        "mtimeMs": 1792631963427.3691
+      }
+    },
+    {
+      "name": "command-1792631964567",
+      "exit": {
+        "at": "2026-10-22T01:19:31.338Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist add t-0012 测试核对",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "afda3956dd175f535ff23e058ab98e051ae4d2977197ead992f0fd5a81813515",
+              "after": "cdf665d987675b2ed3b369f46bd967d6c2081a089b3bacc33fa81d29210e6bf3"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist add t-0012 测试核对",
+          "commandId": "cmd-2b310026-32",
+          "runTime": 1792631970104,
+          "doneTime": 1792631970164,
+          "kind": "success",
+          "text": "清单已追加 1 项。任务 t-0012 现有清单 4 项（已勾 0）：\n清单项：4 项（已勾 0）\n  [ ] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [ ] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对\n  [ ] ec0eb4b0-4770-4768-b1da-1d9397e02178 测试核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "1f5c423d38408f1315710e062559e929de02df46c573f8011005bbe4c9a4a0cf",
+        "mtimeMs": 1792631970207.7297
+      },
+      "requestsFingerprint": {
+        "bytes": 454,
+        "sha256": "ec46b6296d3dec46792735a82d5e56c41400fc1fc22070e0804f713870bc0b7f",
+        "mtimeMs": 1792631971375.4988
+      }
+    },
+    {
+      "name": "command-1792631973363",
+      "exit": {
+        "at": "2026-10-22T01:19:38.970Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist add t-0012 交付核对",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "cdf665d987675b2ed3b369f46bd967d6c2081a089b3bacc33fa81d29210e6bf3",
+              "after": "2e1c59718684591aabbc747465160c2946728d52a5e6a0e6196d21817086e587"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist add t-0012 交付核对",
+          "commandId": "cmd-2b310026-33",
+          "runTime": 1792631978212,
+          "doneTime": 1792631978569,
+          "kind": "success",
+          "text": "清单已追加 1 项。任务 t-0012 现有清单 5 项（已勾 0）：\n清单项：5 项（已勾 0）\n  [ ] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [ ] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对\n  [ ] ec0eb4b0-4770-4768-b1da-1d9397e02178 测试核对\n  [ ] d45e1c6b-04c0-4c94-93fd-3f5e19308f3b 交付核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "cb0accfd551853e857631550126b627b23f76367ca850e4494dd6065012fcc7f",
+        "mtimeMs": 1792631978610.6162
+      },
+      "requestsFingerprint": {
+        "bytes": 454,
+        "sha256": "a198f860bc65a28abd27aea931269f42c6c619e8cf2afe8d384009f0b6fa6568",
+        "mtimeMs": 1792631978986.0676
+      }
+    },
+    {
+      "name": "command-1792632051618",
+      "exit": {
+        "at": "2026-10-22T01:20:57.283Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist toggle t-0012 20fad6ab-b230-4ddd-af30-cfba18780168 true",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "2e1c59718684591aabbc747465160c2946728d52a5e6a0e6196d21817086e587",
+              "after": "7b0c032e68d214432ccadbc9855cabf4f780ca98baca9bdbfe2c50751229744c"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist toggle t-0012 20fad6ab-b230-4ddd-af30-cfba18780168 true",
+          "commandId": "cmd-2b310026-34",
+          "runTime": 1792632056869,
+          "doneTime": 1792632056900,
+          "kind": "success",
+          "text": "清单项状态已设为 已勾选。任务 t-0012 现有清单 5 项（已勾 1）：\n清单项：5 项（已勾 1）\n  [x] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [ ] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对\n  [ ] ec0eb4b0-4770-4768-b1da-1d9397e02178 测试核对\n  [ ] d45e1c6b-04c0-4c94-93fd-3f5e19308f3b 交付核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "8b7abbe7a7db13a057a38b79f2c36fe09d7d94a9c9994c8b5d4accbd1ff38c93",
+        "mtimeMs": 1792632056929.4873
+      },
+      "requestsFingerprint": {
+        "bytes": 486,
+        "sha256": "7a76459ffb7ce8079e51449c1ce7078c23da7bcaaf76d16318825ff7ecf2fb42",
+        "mtimeMs": 1792632057301.346
+      }
+    },
+    {
+      "name": "command-1792632057999",
+      "exit": {
+        "at": "2026-10-22T01:21:02.684Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task checklist toggle t-0012 55c2c18d-42f9-436d-a019-4344a719027b true",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "7b0c032e68d214432ccadbc9855cabf4f780ca98baca9bdbfe2c50751229744c",
+              "after": "33265cde01ec38dbcda658005480de9599c67c621f9c59cf7cb6355d6491b7f2"
+            },
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "43644f626dd0b6ea110d9e9c4593880e1de113d8fea79f7cec48c9338349887d",
+              "after": "537d329c1dd5327cf4e9aed8bfd62a355be341136f00dec622cce911def38f71"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task checklist toggle t-0012 55c2c18d-42f9-436d-a019-4344a719027b true",
+          "commandId": "cmd-2b310026-35",
+          "runTime": 1792632062062,
+          "doneTime": 1792632062106,
+          "kind": "success",
+          "text": "清单项状态已设为 已勾选。任务 t-0012 现有清单 5 项（已勾 2）：\n清单项：5 项（已勾 2）\n  [x] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [x] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对\n  [ ] ec0eb4b0-4770-4768-b1da-1d9397e02178 测试核对\n  [ ] d45e1c6b-04c0-4c94-93fd-3f5e19308f3b 交付核对",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "5279921852a2a13af4142730cfb85a948fd47183976170967728d53001cc9924",
+        "mtimeMs": 1792632062162.4995
+      },
+      "requestsFingerprint": {
+        "bytes": 486,
+        "sha256": "440d94b528fbd630cecf15026161b13af2ef0a1473f8a4c8411ad16f23f5f215",
+        "mtimeMs": 1792632062699.9338
+      }
+    },
+    {
+      "name": "command-1792632063665",
+      "exit": {
+        "at": "2026-10-22T01:21:08.683Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm task update t-0012 {\"status\":\"done\"}",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {
+            "/pmtool/reflections/ref-mviuuk58-6z5qvo.json": "04d4b943f316dd2bd52e71ff33cce4885fc3f1ca6e431a6fdf03e1b6be4b0a51"
+          },
+          "removed": {},
+          "changed": {
+            "/pmtool/tasks/t-0012.json": {
+              "before": "33265cde01ec38dbcda658005480de9599c67c621f9c59cf7cb6355d6491b7f2",
+              "after": "74ef638598740b5fbcc7218455e4ed626c290ed89b589056200f83018260ab79"
+            },
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "537d329c1dd5327cf4e9aed8bfd62a355be341136f00dec622cce911def38f71",
+              "after": "f95b81366b8805d8486594a834a95126f9df2e3637e068bcf9ead68813a89da8"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm task update t-0012 {\"status\":\"done\"}",
+          "commandId": "cmd-2b310026-36",
+          "runTime": 1792632067928,
+          "doneTime": 1792632067968,
+          "kind": "success",
+          "text": "[pm:summary]任务已更新｜t-0012 QA 检查 清单部分完成\n[pm:summary]已修改：状态：未开始 → 已完成\n[pm:detail]\n```\n任务 ID：t-0012\nWBS：9\n项目 ID：p-0001\n父任务：无\n标题：QA 检查 清单部分完成\n说明：未填写\n负责人：未填写\n状态：已完成\n优先级：P1\n开始日期：未填写\n截止日期：未填写\n完成日期：2026-10-22\n进度：0%\n里程碑：无\n仓库：未填写\n创建时间：2026-10-22T01:18:47.754Z\n更新时间：2026-10-22T01:21:07.941Z\n清单项：5 项（已勾 2）\n  [x] 20fad6ab-b230-4ddd-af30-cfba18780168 需求核对\n  [x] 55c2c18d-42f9-436d-a019-4344a719027b 方案核对\n  [ ] 17de8423-4ac2-409d-bf94-f66ac6ab48d7 实现核对\n  [ ] ec0eb4b0-4770-4768-b1da-1d9397e02178 测试核对\n  [ ] d45e1c6b-04c0-4c94-93fd-3f5e19308f3b 交付核对\n```",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "2845014d96a3e0a0991448db6b92b84be9a9424518dc15f9825e2d9beecd9933",
+        "mtimeMs": 1792632068008.2666
+      },
+      "requestsFingerprint": {
+        "bytes": 456,
+        "sha256": "c7e59f3c149f8019608baa1bcc05c1f204c5c2d10b2bf00aeb15ad0504a2c68d",
+        "mtimeMs": 1792632068792.617
+      }
+    },
+    {
+      "name": "command-1792632069800",
+      "exit": {
+        "at": "2026-10-22T01:21:13.670Z",
+        "exit": 0,
+        "action": "command",
+        "line": "/pm check p-0001",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "f95b81366b8805d8486594a834a95126f9df2e3637e068bcf9ead68813a89da8",
+              "after": "647d945e09bbb8e9736e4cc9067b845bd92daf1f91732a27811adc8b4f4e3eb2"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm check p-0001",
+          "commandId": "cmd-2b310026-37",
+          "runTime": 1792632073218,
+          "doneTime": 1792632073230,
+          "kind": "success",
+          "text": "交付检查（项目 p-0001）：命中 5 条提示（只读，不下完成裁决）。\n\n```json\n[\n  {\n    \"rule\": \"done-missing-materials\",\n    \"ruleLabel\": \"完成但缺交付/证据材料\",\n    \"taskId\": \"t-0008\",\n    \"title\": \"QA 真无材料复盘\",\n    \"reason\": \"状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。\",\n    \"suggestion\": \"缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\"\n  },\n  {\n    \"rule\": \"done-open-checklist\",\n    \"ruleLabel\": \"完成却有未完成清单项\",\n    \"taskId\": \"t-0012\",\n    \"title\": \"QA 检查 清单部分完成\",\n    \"reason\": \"状态为 done，但清单仍有 3 项未勾选。\",\n    \"suggestion\": \"请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\"\n  },\n  {\n    \"rule\": \"due-soon-untouched\",\n    \"ruleLabel\": \"临期未动（≤2天仍 todo）\",\n    \"taskId\": \"t-0010\",\n    \"title\": \"QA 检查 两天临期\",\n    \"reason\": \"截止日期 2026-10-24（2 天内），状态仍为 todo。\",\n    \"suggestion\": \"请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\"\n  },\n  {\n    \"rule\": \"overdue-untouched\",\n    \"ruleLabel\": \"逾期未动\",\n    \"taskId\": \"t-0009\",\n    \"title\": \"QA 检查 逾期未动\",\n    \"reason\": \"截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。\",\n    \"suggestion\": \"请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\"\n  },\n  {\n    \"rule\": \"progress-100-not-done\",\n    \"ruleLabel\": \"进度100但状态非 done\",\n    \"taskId\": \"t-0011\",\n    \"title\": \"QA 检查 进度满未完成\",\n    \"reason\": \"进度为 100%，但状态仍为 todo。\",\n    \"suggestion\": \"请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\"\n  }\n]\n```\n\n逐条：\n· [完成但缺交付/证据材料] t-0008｜QA 真无材料复盘：状态为 done，但未登记证据链接、无客观清单、未关联交付物，资料区也无链接或交付物。 建议：缺交付/证据材料（未覆盖≠未完成，最终验收由人判断）；可补 evidenceUrl、清单、关联交付物，或在资料区挂链接/交付物。\n· [完成却有未完成清单项] t-0012｜QA 检查 清单部分完成：状态为 done，但清单仍有 3 项未勾选。 建议：请核对未勾选项是否真的完成；清单未覆盖不等于任务未完成，最终验收由人判断。\n· [临期未动（≤2天仍 todo）] t-0010｜QA 检查 两天临期：截止日期 2026-10-24（2 天内），状态仍为 todo。 建议：请评估是否启动或调整排期；临期提示不等于逾期违约，最终由人判断。\n· [逾期未动] t-0009｜QA 检查 逾期未动：截止日期 2026-10-21 已早于今天 2026-10-22，状态仍为 todo。 建议：请核对是否已完成并更新状态，或调整截止日期；是否完成由人判断。\n· [进度100但状态非 done] t-0011｜QA 检查 进度满未完成：进度为 100%，但状态仍为 todo。 建议：请核对是否应标记 done；进度数值不自动等于完成，最终验收由人判断。\n\n注：未覆盖≠未完成；以上仅为缺口提示，最终验收由人判断。",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 481,
+        "sha256": "5d3252fa4131ab907688fbe738d4b1dc92d16a8df2694c0ed49fd963bd95c7c4",
+        "mtimeMs": 1792632073283.918
+      },
+      "requestsFingerprint": {
+        "bytes": 428,
+        "sha256": "7132e0b7f581f1be7dd5f012c615823892b43176955ca0357111ec6550b69a4b",
+        "mtimeMs": 1792632073716.4082
+      }
+    },
+    {
+      "name": "pm-nav-1792632076499",
+      "exit": {
+        "at": "2026-10-22T01:21:19.357Z",
+        "exit": 0,
+        "action": "pm-nav",
+        "line": "全部任务",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "647d945e09bbb8e9736e4cc9067b845bd92daf1f91732a27811adc8b4f4e3eb2",
+              "after": "d6a6dfca4738e6e75897682ba695fb1db90d1237166c9025e2b8d23b11b7abba"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [
+        {
+          "line": "/pm web snapshot",
+          "commandId": "cmd-2b310026-38",
+          "runTime": 1792632078172,
+          "doneTime": 1792632078464,
+          "kind": "success",
+          "text": "{\"projects\":[{\"id\":\"p-0001\",\"name\":\"QA-A-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.927Z\",\"updatedAt\":\"2026-10-21T13:44:54.927Z\"},{\"id\":\"p-0002\",\"name\":\"QA-B-fixture-F5\",\"description\":\"\",\"owner\":\"\",\"status\":\"planning\",\"startDate\":\"2026-01-01\",\"targetDate\":\"2026-12-31\",\"createdAt\":\"2026-10-21T13:44:54.940Z\",\"updatedAt\":\"2026-10-21T13:44:54.940Z\"}],\"tasks\":[{\"id\":\"t-0001\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"Error register · Failed delivery · 成功重试\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":\"m-0001\",\"deliverableId\":\"dlv-0001\",\"evidenceUrl\":\"https://example.com/qa-legacy\",\"manualProgress\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"link\",\"url\":\"https://example.com/qa-spec\",\"title\":\"QA规范\",\"addedAt\":\"2026-10-21T13:44:55.003Z\",\"note\":\"link原备注\"},{\"id\":\"at-2\",\"kind\":\"deliverable\",\"deliverableId\":\"dlv-0001\",\"addedAt\":\"2026-10-21T13:44:55.015Z\",\"frozenVersion\":\"v1\",\"frozenName\":\"QA交付物V1\",\"note\":\"冻结V1\"},{\"id\":\"at-3\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"at-4\",\"kind\":\"file\",\"assetId\":\"fa-0002\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"createdAt\":\"2026-10-21T13:44:55.021Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试甲\",\"content\":\"E1 rv1正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.021Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E1 rv2正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.034Z\"},{\"id\":\"rv-3\",\"date\":\"2026-10-21\",\"author\":\"测试甲\",\"content\":\"E1 rv3正文\",\"refs\":[\"at-1\"],\"revisedAt\":\"2026-10-21T13:44:55.053Z\"}],\"refs\":[\"at-1\"]},{\"id\":\"pl-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.063Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv1已删除\",\"revisedAt\":\"2026-10-21T13:44:55.063Z\"},{\"id\":\"rv-2\",\"date\":\"2026-10-20\",\"author\":\"测试乙\",\"content\":\"E2 rv2已删除\",\"revisedAt\":\"2026-10-21T13:44:55.072Z\"}],\"deletedAt\":\"2026-10-21T13:44:55.088Z\"},{\"id\":\"pl-3\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"createdAt\":\"2026-10-21T13:44:55.101Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-19\",\"author\":\"测试乙\",\"content\":\"E3 rv1同日异ID\",\"revisedAt\":\"2026-10-21T13:44:55.101Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.980Z\",\"updatedAt\":\"2026-10-22T01:01:27.792Z\"},{\"id\":\"t-0002\",\"projectId\":\"p-0002\",\"parentId\":null,\"title\":\"QA-B任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"progressLog\":[{\"id\":\"pl-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"createdAt\":\"2026-10-21T13:44:55.113Z\",\"revisions\":[{\"id\":\"rv-1\",\"date\":\"2026-10-21\",\"author\":\"QA-B乙\",\"content\":\"QA-B不得入A\",\"revisedAt\":\"2026-10-21T13:44:55.113Z\"}]}],\"code\":\"1\",\"order\":1,\"createdAt\":\"2026-10-21T13:44:54.993Z\",\"updatedAt\":\"2026-10-21T13:44:55.113Z\"},{\"id\":\"t-0003\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"F5共享文件任务\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":0,\"milestoneId\":null,\"attachments\":[{\"id\":\"at-1\",\"kind\":\"file\",\"assetId\":\"fa-0001\",\"addedAt\":\"2026-10-21T13:44:55.172Z\"}],\"code\":\"2\",\"order\":2,\"createdAt\":\"2026-10-21T13:44:55.125Z\",\"updatedAt\":\"2026-10-21T13:44:55.172Z\"},{\"id\":\"t-0004\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"3\",\"order\":3,\"createdAt\":\"2026-10-22T00:41:50.176Z\",\"updatedAt\":\"2026-10-22T00:41:50.176Z\"},{\"id\":\"t-0005\",\"projectId\":\"p-0001\",\"parentId\":\"t-0004\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"3.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:41:50.392Z\",\"updatedAt\":\"2026-10-22T00:41:50.392Z\"},{\"id\":\"t-0006\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA原生导入根\",\"description\":\"\",\"assignee\":\"测试甲\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-11-01\",\"progress\":0,\"milestoneId\":null,\"code\":\"4\",\"order\":4,\"createdAt\":\"2026-10-22T00:43:59.846Z\",\"updatedAt\":\"2026-10-22T00:43:59.846Z\"},{\"id\":\"t-0007\",\"projectId\":\"p-0001\",\"parentId\":\"t-0006\",\"title\":\"QA原生导入子\",\"description\":\"\",\"assignee\":\"测试乙\",\"status\":\"in_progress\",\"priority\":\"P2\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-30\",\"progress\":10,\"milestoneId\":null,\"code\":\"4.1\",\"order\":1,\"createdAt\":\"2026-10-22T00:43:59.888Z\",\"updatedAt\":\"2026-10-22T00:43:59.888Z\"},{\"id\":\"t-0008\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 真无材料复盘\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-23\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"code\":\"5\",\"order\":5,\"createdAt\":\"2026-10-22T01:09:31.815Z\",\"updatedAt\":\"2026-10-22T01:10:14.743Z\"},{\"id\":\"t-0009\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 逾期未动\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-20\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"milestoneId\":null,\"code\":\"6\",\"order\":6,\"createdAt\":\"2026-10-22T01:18:24.810Z\",\"updatedAt\":\"2026-10-22T01:18:24.810Z\"},{\"id\":\"t-0010\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 两天临期\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"startDate\":\"2026-10-22\",\"dueDate\":\"2026-10-24\",\"progress\":0,\"milestoneId\":null,\"code\":\"7\",\"order\":7,\"createdAt\":\"2026-10-22T01:18:34.624Z\",\"updatedAt\":\"2026-10-22T01:18:34.624Z\"},{\"id\":\"t-0011\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 进度满未完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"todo\",\"priority\":\"P1\",\"progress\":100,\"milestoneId\":null,\"code\":\"8\",\"order\":8,\"createdAt\":\"2026-10-22T01:18:42.190Z\",\"updatedAt\":\"2026-10-22T01:18:42.190Z\"},{\"id\":\"t-0012\",\"projectId\":\"p-0001\",\"parentId\":null,\"title\":\"QA 检查 清单部分完成\",\"description\":\"\",\"assignee\":\"\",\"status\":\"done\",\"priority\":\"P1\",\"completedDate\":\"2026-10-22\",\"progress\":0,\"milestoneId\":null,\"checklist\":[{\"id\":\"20fad6ab-b230-4ddd-af30-cfba18780168\",\"text\":\"需求核对\",\"done\":true},{\"id\":\"55c2c18d-42f9-436d-a019-4344a719027b\",\"text\":\"方案核对\",\"done\":true},{\"id\":\"17de8423-4ac2-409d-bf94-f66ac6ab48d7\",\"text\":\"实现核对\",\"done\":false},{\"id\":\"ec0eb4b0-4770-4768-b1da-1d9397e02178\",\"text\":\"测试核对\",\"done\":false},{\"id\":\"d45e1c6b-04c0-4c94-93fd-3f5e19308f3b\",\"text\":\"交付核对\",\"done\":false}],\"code\":\"9\",\"order\":9,\"createdAt\":\"2026-10-22T01:18:47.754Z\",\"updatedAt\":\"2026-10-22T01:21:07.941Z\"}],\"milestones\":[{\"id\":\"m-0001\",\"projectId\":\"p-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\",\"achievedDate\":null,\"description\":\"\",\"createdAt\":\"2026-10-21T13:44:54.949Z\",\"updatedAt\":\"2026-10-21T13:44:54.949Z\"}],\"riskIssues\":[{\"id\":\"ri-0001\",\"projectId\":\"p-0001\",\"type\":\"risk\",\"title\":\"F5风险\",\"description\":\"\",\"owner\":\"\",\"dueDate\":null,\"status\":\"open\",\"probability\":\"medium\",\"impact\":\"high\",\"responsePlan\":\"\",\"solution\":\"\",\"createdAt\":\"2026-10-21T13:44:55.221Z\",\"updatedAt\":\"2026-10-21T13:44:55.221Z\"}],\"meetings\":[{\"id\":\"mtg-0001\",\"projectId\":\"p-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"startTime\":null,\"durationMinutes\":null,\"location\":\"\",\"facilitator\":\"\",\"recorder\":\"\",\"participants\":[],\"status\":\"draft\",\"summary\":\"\",\"topics\":[],\"decisions\":[\"保留标准来源\"],\"actions\":[],\"notes\":\"\",\"sourceType\":\"manual\",\"sourceSessionId\":null,\"createdAt\":\"2026-10-21T13:44:55.241Z\",\"updatedAt\":\"2026-10-21T13:44:55.241Z\"}],\"reports\":[{\"id\":\"rpt-0001\",\"projectId\":\"p-0001\",\"periodStart\":\"2026-10-19\",\"periodEnd\":\"2026-10-21\",\"title\":\"QA-A-fixture-F5 2026-10-19 至 2026-10-21 进度汇报\",\"status\":\"draft\",\"executiveSummary\":\"\",\"completedWork\":[],\"nextPlans\":[],\"blockers\":[],\"snapshotAt\":\"2026-10-21T13:44:55.347Z\",\"snapshot\":{\"project\":{\"name\":\"QA-A-fixture-F5\",\"owner\":\"\",\"status\":\"planning\",\"targetDate\":\"2026-12-31\"},\"tasks\":{\"total\":2,\"todo\":2,\"inProgress\":0,\"blocked\":0,\"done\":0,\"averageProgress\":null,\"calcVersion\":1},\"milestones\":{\"total\":1,\"achieved\":0,\"atRisk\":0,\"missed\":0},\"meetings\":{\"inPeriod\":1,\"decisions\":1},\"periodMilestones\":[{\"id\":\"m-0001\",\"title\":\"QA里程碑\",\"targetDate\":\"2026-10-21\",\"status\":\"planned\"}],\"periodMeetings\":[{\"id\":\"mtg-0001\",\"title\":\"F5会议\",\"meetingDate\":\"2026-10-21\",\"decisions\":[\"保留标准来源\"]}],\"exceptions\":[{\"kind\":\"risk_issue\",\"severity\":\"warning\",\"id\":\"ri-0001\",\"title\":\"F5风险\",\"detail\":\"风险未关闭，影响为 high\",\"owner\":\"\",\"dueDate\":null}]},\"sourceType\":\"session\",\"sourceSessionId\":\"qa-f5-session\",\"createdAt\":\"2026-10-21T13:44:55.347Z\",\"updatedAt\":\"2026-10-21T13:44:55.347Z\"}],\"deliverables\":[{\"id\":\"dlv-0001\",\"projectId\":\"p-0001\",\"name\":\"QA交付物V1\",\"version\":\"v1\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":\"m-0001\",\"note\":\"合法备注\",\"history\":[{\"at\":\"2026-10-21T13:44:54.960Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.960Z\",\"updatedAt\":\"2026-10-21T13:44:54.960Z\"},{\"id\":\"dlv-0002\",\"projectId\":\"p-0002\",\"name\":\"QA-B V2\",\"version\":\"v2\",\"owner\":\"\",\"status\":\"planned\",\"location\":\"\",\"description\":\"\",\"dueDate\":null,\"milestoneId\":null,\"note\":\"\",\"history\":[{\"at\":\"2026-10-21T13:44:54.969Z\",\"field\":\"created\",\"from\":\"\",\"to\":\"planned\",\"by\":\"\",\"note\":\"创建交付物\"}],\"createdAt\":\"2026-10-21T13:44:54.969Z\",\"updatedAt\":\"2026-10-21T13:44:54.969Z\"}],\"okrs\":[{\"id\":\"okr-mvi5z847-33y3xk\",\"projectId\":\"p-0001\",\"title\":\"F5目标\",\"kind\":\"objective\",\"primaryOkrId\":null,\"relatedOkrIds\":[],\"status\":\"draft\",\"createdAt\":\"2026-10-21T13:44:55.255Z\",\"updatedAt\":\"2026-10-21T13:44:55.255Z\"}],\"lessons\":[{\"id\":\"lesson-mvi5z858-cxvv9t\",\"projectId\":\"p-0001\",\"taskId\":\"t-0001\",\"status\":\"draft\",\"lines\":[{\"text\":\"已核：备份需保留原字节\",\"mark\":\"known\"}],\"gaps\":[],\"createdAt\":\"2026-10-21T13:44:55.291Z\",\"updatedAt\":\"2026-10-21T13:44:55.291Z\"}],\"habits\":[{\"id\":\"habit-mvi5z84q-32ztau\",\"projectId\":\"p-0001\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"title\":\"F5习惯\",\"status\":\"draft\",\"checkIns\":[],\"streak\":{\"current\":0,\"longest\":0,\"totalDays\":0},\"createdAt\":\"2026-10-21T13:44:55.274Z\",\"updatedAt\":\"2026-10-21T13:44:55.274Z\"}],\"fileAssets\":[{\"id\":\"fa-0001\",\"projectId\":\"p-0001\",\"fileName\":\"QA 中文 文件.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a\",\"addedAt\":\"2026-10-21T13:44:55.146Z\"},{\"id\":\"fa-0002\",\"projectId\":\"p-0001\",\"fileName\":\"version-two.md\",\"mediaType\":\"text/markdown\",\"size\":22,\"sha256\":\"875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522\",\"addedAt\":\"2026-10-21T13:44:55.197Z\"}],\"okrInbox\":[],\"habitInbox\":[],\"dashboards\":{\"user\":null,\"project\":null,\"byProject\":{}},\"settings\":{\"healthOverduePer\":3,\"healthBlockedPer\":4,\"healthHighRiskPer\":6,\"healthCriticalRiskPer\":10,\"healthOverdueMilestonePer\":8,\"healthCapOverdueTasks\":15,\"healthCapBlockedTasks\":12,\"healthCapOpenRisk\":20,\"healthCapOverdueMilestones\":16,\"healthGreenAt\":80,\"healthYellowAt\":60,\"reminderWithinDays\":7,\"loadOverloadThreshold\":5},\"queue\":{\"p-0001\":{\"projectId\":\"p-0001\",\"openedAt\":null,\"quietMode\":false,\"top\":{\"taskId\":\"t-0009\",\"title\":\"QA 检查 逾期未动\",\"status\":\"todo\",\"priority\":\"P1\",\"dueDate\":\"2026-10-21\",\"progress\":0,\"severity\":\"late\",\"lateDays\":1,\"muted\":false,\"backlog\":false},\"rest\":[]},\"p-0002\":{\"projectId\":\"p-0002\",\"openedAt\":null,\"quietMode\":false,\"top\":null,\"rest\":[]}},\"capabilities\":{\"httpAvailable\":true,\"previewApi\":true,\"assetUpload\":true,\"assetDownload\":true,\"stageCancel\":true,\"limits\":{\"previewBodyBytes\":65536,\"assetMaxBytes\":10485760}}}",
+          "valid": true
+        }
+      ],
+      "actualFingerprint": {
+        "bytes": 15874,
+        "sha256": "a0ba5cea41816f51dde665de04a72127319edc096267c742ec235382b0550372",
+        "mtimeMs": 1792632078910.4724
+      },
+      "requestsFingerprint": {
+        "bytes": 428,
+        "sha256": "d9ac390bc30bf565ceb3aa9bb516327b6f026f9cdec4d43134536955428c0b81",
+        "mtimeMs": 1792632079391.122
+      }
+    },
+    {
+      "name": "check-target-1792632157442",
+      "exit": {
+        "at": "2026-10-22T01:22:41.005Z",
+        "exit": 0,
+        "action": "check-target",
+        "line": "t-0010",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 24089,
+        "sha256": "29e8c96137beea555fc26d510854c6cfeab09c62b5551fc17ee97d877b77223a",
+        "mtimeMs": 1792632160542.9404
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632161024.316
+      }
+    },
+    {
+      "name": "task-close-1792632162506",
+      "exit": {
+        "at": "2026-10-22T01:22:44.853Z",
+        "exit": 0,
+        "action": "task-close",
+        "line": "t-0010",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 16082,
+        "sha256": "9d8d5670b4dc24024decb3b5b06cf2e29add1d5eac1a5382cb9b7a0700a11f14",
+        "mtimeMs": 1792632164101.1091
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632164870.2866
+      }
+    },
+    {
+      "name": "check-target-1792632166691",
+      "exit": {
+        "at": "2026-10-22T01:22:50.128Z",
+        "exit": 0,
+        "action": "check-target",
+        "line": "t-0009",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 24089,
+        "sha256": "bd233f3ab384a1bf030c07fef133fe49743fd5bcd003f98bdc0c316a6def49c6",
+        "mtimeMs": 1792632169652.0918
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632170154.51
+      }
+    },
+    {
+      "name": "task-close-1792632171176",
+      "exit": {
+        "at": "2026-10-22T01:22:54.040Z",
+        "exit": 0,
+        "action": "task-close",
+        "line": "t-0009",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 16070,
+        "sha256": "615d40f558961c93ea2982f58549df1fd9fcf88054ce80d2c2fe7ad403c8f03a",
+        "mtimeMs": 1792632173377.6494
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632174074.7651
+      }
+    },
+    {
+      "name": "check-target-1792632175401",
+      "exit": {
+        "at": "2026-10-22T01:22:58.797Z",
+        "exit": 0,
+        "action": "check-target",
+        "line": "t-0012",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 24765,
+        "sha256": "056f0c8d9a9209f111fa52732bfa294fba882f3aaca207057deebf1323fa24b6",
+        "mtimeMs": 1792632177928.366
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632178834.6125
+      }
+    },
+    {
+      "name": "task-close-1792632179943",
+      "exit": {
+        "at": "2026-10-22T01:23:02.886Z",
+        "exit": 0,
+        "action": "task-close",
+        "line": "t-0012",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 16089,
+        "sha256": "b083d13aeb7f61fbac13cf7e9290a5a7075feea87cec098ccabf4dc057a677c9",
+        "mtimeMs": 1792632182311.317
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632182904.878
+      }
+    },
+    {
+      "name": "check-target-1792632184037",
+      "exit": {
+        "at": "2026-10-22T01:23:07.447Z",
+        "exit": 0,
+        "action": "check-target",
+        "line": "t-0008",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 24115,
+        "sha256": "ad1714310f98245b1073b89d2538f1cd59e24fca5e6775148b8dca41cd8ec3c6",
+        "mtimeMs": 1792632186892.2302
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632187477.9873
+      }
+    },
+    {
+      "name": "task-close-1792632188942",
+      "exit": {
+        "at": "2026-10-22T01:23:12.067Z",
+        "exit": 0,
+        "action": "task-close",
+        "line": "t-0008",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 16123,
+        "sha256": "aebd0abad1c1e98d8c5b26a15c48d7cd16a9d938228a8b4cf9918af1ad1be1ec",
+        "mtimeMs": 1792632191552.756
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632192087.1946
+      }
+    },
+    {
+      "name": "check-target-1792632192656",
+      "exit": {
+        "at": "2026-10-22T01:23:15.020Z",
+        "exit": 0,
+        "action": "check-target",
+        "line": "t-0011",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 24071,
+        "sha256": "0b306c9b3c9d53fe09ff097bdaa19247951d535abe808c8ed38237450b180761",
+        "mtimeMs": 1792632194765.3972
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632195033.3918
+      }
+    },
+    {
+      "name": "task-close-1792632195724",
+      "exit": {
+        "at": "2026-10-22T01:23:17.699Z",
+        "exit": 0,
+        "action": "task-close",
+        "line": "t-0011",
+        "boundary": "Main actual A13 UI/command evidence only; no PASS or visible output invented"
+      },
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "observationMatch": true,
+      "rawMismatch": [],
+      "pairs": [],
+      "actualFingerprint": {
+        "bytes": 16060,
+        "sha256": "49de9b94905df601c3d9fe3a09bb5fb308243d8d48c20bd9277961f0f38ca67b",
+        "mtimeMs": 1792632197251.622
+      },
+      "requestsFingerprint": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "mtimeMs": 1792632197706.9617
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "from": "host-open-1792631875322",
+      "to": "command-1792631897232",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631897232",
+      "to": "command-1792631906500",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "06c705df995e9c3471817f67ef97b6dd54cde7f385dce245ac3b8f25895027a8",
+              "after": "947181bde77a00ca63e76e9fe2db8fc11d7057500bf67110ec867a1caca6c1e3"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631906500",
+      "to": "command-1792631916605",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631916605",
+      "to": "command-1792631923904",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631923904",
+      "to": "command-1792631945236",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "636132b69cc79d70d0cec3e8443a577db25c6f9af032ff52f06cdb88b63b8a32",
+              "after": "7b565cfe06b667376ddc4e6bff4d938c1fea2b79aac66c15295ba2a7357bfc6e"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631945236",
+      "to": "command-1792631950316",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631950316",
+      "to": "command-1792631956554",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "d7c380f4c2a5c5dfb7b96ae8e81565c62e48d093e1558d54eb81c35faa37d920",
+              "after": "3a1ed21a122fd5508466f83803265e97d5ad67007c8a761fe7bdcfb4f9a143fe"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631956554",
+      "to": "command-1792631964567",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "3a1ed21a122fd5508466f83803265e97d5ad67007c8a761fe7bdcfb4f9a143fe",
+              "after": "d213216070a64c37f7a9b592af45688a948aab7e1c955ae825099db709c996b2"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631964567",
+      "to": "command-1792631973363",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "d213216070a64c37f7a9b592af45688a948aab7e1c955ae825099db709c996b2",
+              "after": "75035156041194aa93a294cda339ff4f457e8b0dfc51de2fc6da238e6ad15055"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792631973363",
+      "to": "command-1792632051618",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {
+            "/session_projcache/sessions/session-04548dcf-b6ba-4259-a7ad-e7957eb0593f.json": {
+              "before": "75035156041194aa93a294cda339ff4f457e8b0dfc51de2fc6da238e6ad15055",
+              "after": "43644f626dd0b6ea110d9e9c4593880e1de113d8fea79f7cec48c9338349887d"
+            }
+          }
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792632051618",
+      "to": "command-1792632057999",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792632057999",
+      "to": "command-1792632063665",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792632063665",
+      "to": "command-1792632069800",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "command-1792632069800",
+      "to": "pm-nav-1792632076499",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "pm-nav-1792632076499",
+      "to": "check-target-1792632157442",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "check-target-1792632157442",
+      "to": "task-close-1792632162506",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "task-close-1792632162506",
+      "to": "check-target-1792632166691",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "check-target-1792632166691",
+      "to": "task-close-1792632171176",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "task-close-1792632171176",
+      "to": "check-target-1792632175401",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "check-target-1792632175401",
+      "to": "task-close-1792632179943",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "task-close-1792632179943",
+      "to": "check-target-1792632184037",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "check-target-1792632184037",
+      "to": "task-close-1792632188942",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "task-close-1792632188942",
+      "to": "check-target-1792632192656",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    },
+    {
+      "from": "check-target-1792632192656",
+      "to": "task-close-1792632195724",
+      "diff": {
+        "data": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "files": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "backups": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        },
+        "exports": {
+          "added": {},
+          "removed": {},
+          "changed": {}
+        }
+      },
+      "businessZero": true
+    }
+  ],
+  "protectedCount": 4470,
+  "protectedDrift": {
+    "added": {},
+    "removed": {},
+    "changed": {}
+  },
+  "boundary": "Audit assertions are not product PASS; only original five actual rule/ID project-check journeys are reviewed. No replay or global gate."
+}

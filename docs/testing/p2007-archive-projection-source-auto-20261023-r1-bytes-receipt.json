@@ -1,0 +1,43 @@
+{
+  "role": "independent SOURCE/AUTO expert",
+  "label": "bytes",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+  "args": [
+    "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/config/bytes.config.mjs",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile",
+    "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/output/bytes/vitest-result.json"
+  ],
+  "cwd": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/input",
+  "env": {
+    "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+    "HOME": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/home",
+    "TMPDIR": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/output/tmp",
+    "XDG_CONFIG_HOME": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/config",
+    "XDG_CACHE_HOME": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/cache",
+    "XDG_DATA_HOME": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/output/data",
+    "LANG": "en_US.UTF-8",
+    "TZ": "UTC",
+    "CI": "1",
+    "NO_COLOR": "1",
+    "P2007_SOURCE_AUTO_OUTPUT": "/tmp/p2007-archive-projection-source-auto-20261023-r1-PkIBQo/output/bytes"
+  },
+  "start": "2026-10-22T21:31:53.758Z",
+  "end": "2026-10-22T21:31:54.724Z",
+  "exit": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "bytes": 862,
+    "sha256": "242579a5582aabcff53505d25a01f6707822fe3528dbc0b1d5664074afc397c8"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "judgment": "原始执行结果；由独立专家结合schema/输入/输出另审"
+}

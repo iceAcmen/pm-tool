@@ -1,0 +1,63 @@
+--- input/panel.tsx
++++ output/panel.tsx
+@@ -691,6 +691,16 @@
+   const [copilotLayer, setCopilotLayer] = useState(false)
+   // R-S2：最小化（40px 竖 tab，保留上下文）；R-S3：可调宽 420–560，默认 480，持久化到 localStorage。
+   const [copilotMin, setCopilotMin] = useState(false)
++  // P1004: yield only for a task opened from the sidecar, retaining its mounted context.
++  const [copilotTaskHandoff, setCopilotTaskHandoff] = useState(false)
++  const copilotYielding = copilotTaskHandoff && drawer != null
++  const openCopilotRecord = (projectId: string, type: string, id: string) => {
++    if (type === 'task' && findRecord(data, type, id)) setCopilotTaskHandoff(true)
++    openRecord(projectId, type, id)
++  }
++  useEffect(() => {
++    if (!drawer) setCopilotTaskHandoff(false)
++  }, [drawer])
+   const [copilotWidth, setCopilotWidth] = useState<number>(() => {
+     try {
+       const v = Number(localStorage.getItem('pm.sidecar.width'))
+@@ -706,14 +716,14 @@
+     copilotOpenBtnRef.current?.focus()
+   }
+   useEffect(() => {
+-    if (!copilotLayer) return
++    if (!copilotLayer || copilotYielding) return
+     const onKey = (e: globalThis.KeyboardEvent) => {
+       if (e.key === 'Escape') { e.stopPropagation(); closeSidecar() }
+     }
+     window.addEventListener('keydown', onKey)
+     return () => window.removeEventListener('keydown', onKey)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+-  }, [copilotLayer])
++  }, [copilotLayer, copilotYielding])
+   // R-S3：右缘拖动手柄，clamp 420–560 并持久化。
+   const startSidecarResize = (e: { clientX: number, preventDefault: () => void }) => {
+     e.preventDefault()
+@@ -1466,7 +1476,7 @@
+             {copilotLayer && project && (
+               <>
+                 {/* 最小化只隐藏同一子树，保留草稿、未发送输入及本轮撤销上下文。 */}
+-                <aside className="pm-sidecar" hidden={copilotMin} role="region" aria-label="AI 副驾" style={{ width: `${copilotWidth}px` }}>
++                <aside className="pm-sidecar" hidden={copilotMin || copilotYielding} role="region" aria-label="AI 副驾" style={{ width: `${copilotWidth}px` }}>
+                   <div
+                     className="pm-sidecar-handle"
+                     role="separator"
+@@ -1497,7 +1507,7 @@
+                       executeRaw={executeRaw}
+                       disabled={busy}
+                       onSaved={refresh}
+-                      onOpenRecord={openRecord}
++                      onOpenRecord={openCopilotRecord}
+                       embedded
+                       diagnosis={diagnosis}
+                       onDismissDiagnosis={dismissDiagnosis}
+@@ -1506,7 +1516,7 @@
+                     />
+                   </div>
+                 </aside>
+-                {copilotMin && (
++                {copilotMin && !copilotYielding && (
+                   <button type="button" className="pm-sidecar-tab" onClick={() => setCopilotMin(false)} aria-label="展开 AI 副驾，保留此前上下文">
+                     <MessageSquare size={15}/><span>副驾</span>
+                   </button>

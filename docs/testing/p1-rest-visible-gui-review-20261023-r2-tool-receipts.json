@@ -1,0 +1,52 @@
+{
+  "role": "独立审证专家",
+  "receiptType": "实际工具返回的转录，不是child_process outer或产品执行",
+  "environment": {
+    "os": "macOS/darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "commands": [
+    {
+      "tool": "functions.exec_command",
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check docs/testing/p1-rest-visible-gui-review-20261023-r2-reader.mjs",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.1364,
+      "stdout": ""
+    },
+    {
+      "tool": "functions.exec_command",
+      "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/p1-rest-visible-gui-review-20261023-r2-reader.mjs capture",
+      "exitCode": 0,
+      "wallTimeSeconds": 0.2991,
+      "stdout": "{\"mode\":\"capture\",\"members\":710,\"frames\":93,\"rawFiles\":558,\"states\":9,\"rootsPerState\":63,\"protectedNewRoots\":44,\"differences\":0,\"GUIVerdict\":\"由独立目视裁决，reader不签GUI\"}\n",
+      "readerRecordedPid": 35331,
+      "readerRecordedParentPid": 35329,
+      "auditRecordedAt": "2026-10-23T00:46:53.633Z"
+    }
+  ],
+  "visualToolReceipts": {
+    "tool": "functions.view_image",
+    "result": "6次实际返回Image loaded，独立目视完成",
+    "evidenceRoot": "reports/all-pending-evidence-20261021/P1RestVisibleR2",
+    "filesInCallOrder": [
+      "round03-absence-rest-visible.png",
+      "round03-expired-rest-visible.png",
+      "frames/round03-rest-follow-2.jpg",
+      "frames/round03-rest-follow-4.jpg",
+      "round02-error-state.png",
+      "round04-returned-new-candidate.png"
+    ],
+    "newBrowserOrDesktopExecution": false
+  },
+  "retainedExplorationFailure": {
+    "tool": "functions.exec_command",
+    "command": "rg --files docs/testing -g '*p1-history-remaining-gui-review-20261023-r1*' -g '*p1-rest-visible-gui-review-20261023-r2*' -g '*op-growth-final-inheritance*' -g '*remaining-governance*'",
+    "exitCode": 127,
+    "output": "/bin/bash: rg: command not found\n",
+    "disposition": "只读定位改用find；不视为产品FAIL或缺证"
+  },
+  "sealExecutionReceipt": "docs/testing/p1-rest-visible-gui-review-20261023-r2-seal-outer-receipt.json",
+  "receiptPolicy": "seal收据在真实工具返回后写入，自排除于seal输出；绑定实际seal SHA，readback再次核对",
+  "noGitBuildProductGuiOrSpawn": true
+}

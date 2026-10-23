@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-23T03:30:30.010Z",
+  "reason": "createRequire bypassed ESM aliases; reuse existing isolated DOM dependency anchor",
+  "original": {
+    "exitCode": 1,
+    "passedTests": 41,
+    "failedTests": 0,
+    "failedCollectors": [
+      "src/client/panel-firstload.test.tsx",
+      "src/client/panel-confirm-escape.test.tsx"
+    ]
+  },
+  "patches": [
+    {
+      "name": "src/client/panel-firstload.test.tsx",
+      "beforeSha256": "ec0bcc59fb57b925968ba533c2075ef21f39f7c120a252b8935027b280777277",
+      "from": "const require = createRequire(import.meta.url)",
+      "to": "const require = createRequire(\"/private/tmp/pmtool-combined-tasks-people-repair-20261023-r1/dom-deps/require-anchor.cjs\")",
+      "transformedSha256": "77c38f60ced12e54af4793d6682e63abf1d322d5b5b19f5de3ca902146895550",
+      "assertionsUnchanged": true
+    },
+    {
+      "name": "src/client/panel-confirm-escape.test.tsx",
+      "beforeSha256": "99bf57340577783747c56e33452634c5f953c66ba451c70ffa60bae859a92d40",
+      "from": "const require = createRequire(import.meta.url)",
+      "to": "const require = createRequire(\"/private/tmp/pmtool-combined-tasks-people-repair-20261023-r1/dom-deps/require-anchor.cjs\")",
+      "transformedSha256": "da7d11d669a935c04b73b7e8865e32fde7e193da2bbdb2e0602f7250f0c0548e",
+      "assertionsUnchanged": true
+    }
+  ],
+  "packageDependenciesUnchanged": true,
+  "productAndOracleFilesUnchanged": true,
+  "onlyUnexecutedTestsRerun": true,
+  "effectiveDomExpectedTests": 61,
+  "notIndependentVerdict": true
+}

@@ -1,0 +1,142 @@
+{
+  "at": "2026-10-21T13:45:04.870Z",
+  "own": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD",
+  "archive": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-evidence/typecheck-MvbEmD",
+  "referenceArchive": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-evidence/run-BgYW1S",
+  "sourceSnapshotCount": 374,
+  "changes": [],
+  "commands": [
+    {
+      "id": "current-package-noEmit",
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/current-package",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "env": {
+        "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+        "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_ISOLATED_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_FILE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/files",
+        "DSH_PM_BACKUP_DIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/backups",
+        "PM_STORAGE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/storage",
+        "NODE_ENV": "test",
+        "QA_OWN": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD",
+        "QA_AUDIT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/write-audit.ndjson",
+        "NODE_OPTIONS": "--import=/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/guard.mjs"
+      },
+      "at": "2026-10-21T13:44:04.064Z",
+      "ended": "2026-10-21T13:44:40.312Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "current-package-showConfig",
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/current-package",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--showConfig"
+      ],
+      "env": {
+        "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+        "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_ISOLATED_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_FILE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/files",
+        "DSH_PM_BACKUP_DIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/backups",
+        "PM_STORAGE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/storage",
+        "NODE_ENV": "test",
+        "QA_OWN": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD",
+        "QA_AUDIT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/write-audit.ndjson",
+        "NODE_OPTIONS": "--import=/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/guard.mjs"
+      },
+      "at": "2026-10-21T13:44:40.320Z",
+      "ended": "2026-10-21T13:44:40.678Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "4def63d4fbad41f2490f321205fea0cc3978df59f20a90a4a8d6f7e8ecd0cc2d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "frozen-related-package-noEmit",
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/frozen-related-package",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "env": {
+        "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+        "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_ISOLATED_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_FILE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/files",
+        "DSH_PM_BACKUP_DIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/backups",
+        "PM_STORAGE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/storage",
+        "NODE_ENV": "test",
+        "QA_OWN": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD",
+        "QA_AUDIT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/write-audit.ndjson",
+        "NODE_OPTIONS": "--import=/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/guard.mjs"
+      },
+      "at": "2026-10-21T13:44:40.693Z",
+      "ended": "2026-10-21T13:45:04.392Z",
+      "exit": 2,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "c8ec1becda2d7047393ce37b4d35e20aa2652b534c05f947923c2f5bbabd4043",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "frozen-related-package-showConfig",
+      "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/frozen-related-package",
+      "executable": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "argv": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--showConfig"
+      ],
+      "env": {
+        "PATH": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin:/usr/bin:/bin",
+        "HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "TMPDIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_HOME": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_ISOLATED_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime",
+        "DSH_PM_FILE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/files",
+        "DSH_PM_BACKUP_DIR": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/backups",
+        "PM_STORAGE_ROOT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/runtime/storage",
+        "NODE_ENV": "test",
+        "QA_OWN": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD",
+        "QA_AUDIT": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/write-audit.ndjson",
+        "NODE_OPTIONS": "--import=/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/objective-number-independent-retest-20261021-selftmp/typecheck-MvbEmD/guard.mjs"
+      },
+      "at": "2026-10-21T13:45:04.394Z",
+      "ended": "2026-10-21T13:45:04.645Z",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "4def63d4fbad41f2490f321205fea0cc3978df59f20a90a4a8d6f7e8ecd0cc2d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "compilerOptionsEqual": true,
+  "scope": "原package tsconfig完整noEmit对照，不运行实际package build、不签整包/GUI",
+  "currentFileAssets": "56e98ea6a8943468e69f7bc1a5e89ae6223b0f6d9ff010dee9c1a1a1b8853fc4",
+  "frozenFileAssets": "7e6c3c3705e6d1b89732f5c6b404f5930d004b99bf6ab282c11401242a07f5ef"
+}

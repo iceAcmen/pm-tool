@@ -19,12 +19,36 @@ import {
 
 import type { WidgetCatalogEntry } from './widgets.js'
 
+type CanonicalGridProps = React.ComponentProps<typeof RGL> & { canonicalRevision: number }
+type RglSyncState = {
+  activeDrag: Layout | null
+  propsLayout?: Layout[]
+  canonicalRevision?: number
+}
+// RGL 1.4.4 仅比较 layout 与上次 props，不比较已被拖动修改的内部 layout。
+// 显式提交时走其原生同步方法；不重挂载、改 key 或向草稿反写被动布局。
+const StatefulRGL = RGL as unknown as {
+  new(props: CanonicalGridProps): React.Component<CanonicalGridProps, RglSyncState>
+  getDerivedStateFromProps(props: CanonicalGridProps, state: RglSyncState): Partial<RglSyncState> | null
+}
+class CanonicalRGL extends StatefulRGL {
+  static getDerivedStateFromProps(props: CanonicalGridProps, state: RglSyncState) {
+    if (!state.activeDrag && props.canonicalRevision !== state.canonicalRevision) {
+      return {
+        ...StatefulRGL.getDerivedStateFromProps(props, { ...state, propsLayout: undefined }),
+        canonicalRevision: props.canonicalRevision,
+      }
+    }
+    return StatefulRGL.getDerivedStateFromProps(props, state)
+  }
+}
+
 /**
  * 自适应宽度 RGL：替代 RGL 1.4.4 的 WidthProvider（只在 window resize 时测量，
  * flex 布局初次挂载 clientWidth=0 会被固定成 0；卡片库/配置面板开关是 flex 变化不触发 window resize）。
  * 这里用 ResizeObserver 监听容器 clientWidth 即时把 width 传给 RGL，rAF 先测一次，window resize 兜底。
  */
-function ResizeWidthRGL(props: React.ComponentProps<typeof RGL>) {
+function ResizeWidthRGL(props: CanonicalGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
   useEffect(() => {
@@ -47,10 +71,10 @@ function ResizeWidthRGL(props: React.ComponentProps<typeof RGL>) {
     }
   }, [])
   return <div ref={wrapRef} style={{ width: '100%' }}>
-    {width > 0 && <RGL {...props} width={width} />}
+    {width > 0 && <CanonicalRGL {...props} width={width} />}
   </div>
 }
-const GridLayout: ComponentType<React.ComponentProps<typeof RGL>> = ResizeWidthRGL
+const GridLayout: ComponentType<CanonicalGridProps> = ResizeWidthRGL
 
 let idSeq = 100
 function nextId(): string { return `w-user-${++idSeq}` }
@@ -132,6 +156,8 @@ export function BoardEditor(props: BoardEditorProps) {
   // R-B7：撤销栈 ≤20 步（仅离散动作入栈；拖拽/缩放帧不逐帧入栈，避免淹没历史）。
   const historyRef = useRef<DashboardLayout[]>([])
   const [canUndo, setCanUndo] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const [canonicalRevision, setCanonicalRevision] = useState(0)
   // D-01：删除后 1.5s 单行轻反馈（success 条 + 撤销），不弹原生 confirm；撤销进既有 20 步栈。
   const [notice, setNotice] = useState<{ label: string } | null>(null)
   const noticeTimer = useRef<number | null>(null)
@@ -177,8 +203,7 @@ export function BoardEditor(props: BoardEditorProps) {
 
   const live = draft
 
-  // 契约 §3.6：draft 永远是 canonical 12 列真源；rglLayout 仅按当前断点投影显示，
-  // onLayoutChange 再回算 12 列写回 draft，杜绝窄断点坐标直接落盘导致宽屏塌缩。
+  // draft 永远是 canonical 真源；仅显式 stop 回算，被动 onLayoutChange 不写草稿。
   const rglLayout: Layout[] = useMemo(
     () => projection.projectToBreakpoint(live.widgets, activeCols).map(l => ({
       i: l.i, x: l.x, y: l.y, w: l.w, h: l.h,
@@ -186,6 +211,11 @@ export function BoardEditor(props: BoardEditorProps) {
     })),
     [live, activeCols],
   )
+  const commitGeometry = (next: Layout[]) => {
+    setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))
+    setCanonicalRevision(revision => revision + 1)
+    setDragging(false)
+  }
 
   const saveEdit = async () => {
     const bad: string[] = []
@@ -456,6 +486,7 @@ export function BoardEditor(props: BoardEditorProps) {
         <GridLayout
           className="pm-rgl"
           layout={rglLayout}
+          canonicalRevision={canonicalRevision}
           cols={activeCols}
           rowHeight={grid.rowHeight}
           margin={grid.margin}
@@ -477,15 +508,17 @@ export function BoardEditor(props: BoardEditorProps) {
             }
             addWidgetAt(type, x, y)
           }}
-          compactType={null}
+          compactType={dragging ? 'vertical' : null}
           onDragStart={(_layout: Layout[], oldItem: Layout) => {
             pushHistory(snapshotBeforeGeometryChange(draft, oldItem, activeCols, projection))
+            // 仅真实拖动启用垂直碰撞排序，空闲宽度/面板变化不重新排版。
+            setDragging(true)
           }}
           onResizeStart={(_layout: Layout[], oldItem: Layout) => {
             pushHistory(snapshotBeforeGeometryChange(draft, oldItem, activeCols, projection))
           }}
-          onDragStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
-          onResizeStop={(next: Layout[]) => setDraft(d => ({ ...d, widgets: compactVertical(projection.reverseFromBreakpoint(d.widgets, next, activeCols), grid.cols) }))}
+          onDragStop={commitGeometry}
+          onResizeStop={commitGeometry}
           draggableHandle=".pm-rgl-item-wrap"
           cancel=".pm-rgl-x, button, input, select, textarea, a, [data-nodrag]"
         >

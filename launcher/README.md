@@ -2,7 +2,7 @@
 
 > 容器 = 普通浏览器 tab + 127.0.0.1 loopback control 页；S4 **仅由受认证工作台 `/api/entered` 有效 nonce 回告到达**，非用户按钮、非程序化自判。
 > 本工作包只含启动器代码、配套测试与本文档；不改工作台页面、不改公共 UI；DSH 全程只读。
-> 可点击本机入口 = 零编译 `.app` bundle（`npm run make-app`）；Chrome `--app=` 专用窗只是浏览器专用窗，**不**冒充原生 app。
+> 可点击本机入口 = 零编译 `.app` bundle（`npm run make-app`）；工作台投递为所选浏览器普通tab，Chrome显示名映射到真实Google Chrome应用。
 
 ## 1. 状态机（七态 + closed）
 
@@ -11,10 +11,10 @@
 | S0 idle / 未启动 | 端口探测失败 | 「工作台尚未启动」+ 主按钮「打开 PM 工作台」+ 打开方式选择 |
 | S1 running / 已运行 | 端口可达且识别出 dsh 401 鉴权墙（无 cookie 探测恒 401；200/其他状态码身份不明 → Conflict 安全失败，不误开） | 只代表端口可达，**≠成功**；「将打开现有服务，不重复启动」 |
 | S2 starting / 启动中 | 需启动时用户点打开 | 三步清单 + 进度 + spin；「取消打开」仅放弃在途，不杀已启动 PM |
-| S3 opened / 已投递待鉴权 | 已向所选浏览器发出 URL（hash 携带 single-use nonce 句柄） | 「已在浏览器投递，等待已进入回告」；**禁止宣称已打开/成功**；无回告绝不进 S4 |
+| S3 opened / 已投递待鉴权 | OS打开命令exit0（hash携带single-use nonce） | 仅命令接收；真实收页/认证仍待回告，无回告绝不进S4 |
 | S4 authenticated / 打开成功 | 受认证 PM 工作台 mount 后 `POST /api/entered` 有效 nonce 回告 | 唯一权威来源；启动器不做程序化已认证自判，无「我已进入」按钮 |
 | S5 auth-required / 未登录 | **用户反馈**看到登录/认证错误（非探测推断） | 「已打开，但当前浏览器未登录」；完成登录 / 换已登录浏览器 / 折叠诊断 |
-| S6 failure / 启动失败 | 端口占用 / 身份不匹配 / 启动超时 | 白话原因 +「没有停止任何程序」+ 重试 / 查看详情折叠 / 返回 |
+| S6 failure / 启动失败 | 端口占用 / 身份不匹配 / 启动超时 / OS投递失败 | 白话原因 +「没有停止任何程序」+ 重试 / 查看详情折叠 / 返回 |
 | closed | 关闭 control 页 | 不停止后端服务 |
 
 转移：S0/S1 →(打开)→ S2（需启动）或 S3（直接投递）；S2 完成 → S3；S3 →(有效 nonce 权威回告)→ S4；S3 →(用户反馈)→ S5；S5 →(重试/换浏览器)→ S3；占用/身份不符/超时 → S6；S6 →(重试)→ S2/S3、→(返回)→ S0；S2 取消 → S0。
@@ -52,7 +52,8 @@ Main 已采原始 GUI（仍待独立专家审证）：
 
 ```bash
 cd launcher
-pnpm test         # 44 例单元/集成（假探测/假 open/假控制器 + cancel 竞态 + loopback CSRF/Origin 加固 + nonce 回告/TTL + host/port 透传 + bundle 契约，临时端口）
+pnpm test         # 53例单元/集成，含真实生产OS投递接缝与取消/拒旧/安全断言；模拟OS不是GUI PASS
+pnpm run test:control-gui # 7例真实Chrome DOM，隔离HTTP fixture；不代替Finder/认证
 pnpm run verify   # 隔离假监听者自检
 # 构建可点击 app（零编译、烤稳定 nvm v22、Finder 有兜底、脱敏日志、不写全局）：
 node scripts/make-app.mjs <输出目录>                      # 默认 PM_PORT=3172
@@ -71,6 +72,7 @@ pnpm start        # 启动 loopback control 页并在所选浏览器打开（PM_
 - `src/probe.mjs`：无 cookie 的 TCP+GET 探测（connect/fetch 可注入）。
 - `src/dsh-controller.mjs`：owned 实例内存捕获、即弃；cancel 仅回收未就绪 owned 子进程（SIGTERM+有界等待），ready/现网/未知 PID 不杀；stop 拒绝。
 - `src/browsers.mjs`：本机浏览器发现 / 选择回退。
+- `src/browser-open.mjs`：生产OS命令有界等待、错误类别与非零退出反馈，不读命令输出或重放URL。
 - `src/panel-model.mjs`：状态 → 面板视图模型（纯）。
 - `src/control-html.mjs`：自包含 control HTML（浅深 token、reduced-motion、Esc、44px 热区、装饰灯 aria-hidden、隐私脚注）。
 - `src/loopback.mjs`：仅绑定 127.0.0.1 临时端口的 control 服务（GET /、/api/state、POST /api/action、POST /api/entered）。

@@ -3,7 +3,8 @@
  *
  * 路由契约（data）：
  *   - 暂存：POST `/api/pm/v1/assets/upload`，**不带 x-pm-task-id**，原始 octet body，
- *     文件名/类型经 `x-pm-file-name` / `x-pm-media-type` 头携带；201 返回
+ *     整个文件名经 encodeURIComponent + `x-pm-file-name-encoding: uri-component` 携带，
+ *     类型经 `x-pm-media-type` 头携带；201 返回
  *     `{ stageId, fileName, mediaType, size, sha256, expiresAt }`，不落 file_assets、不挂任务。
  *   - 取消：DELETE `/api/pm/v1/stages/:stageId` → `{ ok, removed }`（幂等，best-effort）。
  *
@@ -76,7 +77,8 @@ export async function stageAsset(input: StageUploadInput): Promise<StageUploadRe
       cache: 'no-store',
       headers: {
         'content-type': mediaType,
-        'x-pm-file-name': fileName,
+        'x-pm-file-name': encodeURIComponent(fileName),
+        ...(fileName ? { 'x-pm-file-name-encoding': 'uri-component' } : {}),
         'x-pm-media-type': mediaType,
       },
       body: input.body,

@@ -1,0 +1,1051 @@
+{
+  "at": "2026-10-22T13:52:57.532Z",
+  "role": "different independent regression evidence reviewer",
+  "mode": "preflight",
+  "reader": {
+    "bytes": 16765,
+    "sha256": "0d14764093d3f896ab806835faf5810c1cb82bd91f5ac4786a2cebc1c036e873"
+  },
+  "candidate": {
+    "at": "2026-10-22T13:42:10.389Z",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "freeze": "/private/tmp/pmtool-combined-successor112-20261022-r1",
+    "pkg": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool",
+    "sourceCount": 112,
+    "completeInputCount": 519,
+    "version": "0.7.4",
+    "builder": "Main",
+    "runtimeLoaded": false,
+    "authorization": "Existing closure and ordinary commit after total gates; no release/push",
+    "independent": [
+      "fixed-report-export-fence-independent-retest-20261022-r2-report.md",
+      "ask-auth-feedback-independent-retest-20261022-r1-report.md",
+      "task-predecessor-selection-independent-retest-20261022-r1-report.md"
+    ]
+  },
+  "evidenceRoot": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1",
+  "testsExecutedByThisRole": 0,
+  "subprocessesByThisReader": 0,
+  "checks": [
+    {
+      "name": "候选112与原107沿革、519输入",
+      "verified": true,
+      "details": {
+        "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+        "declared": 112,
+        "packageInputs": 519,
+        "addedTo107": [
+          "packages/dsh-pm-tool/src/core/progress-report-markdown.ts",
+          "packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx",
+          "packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx",
+          "packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts",
+          "packages/dsh-pm-tool/src/core/report-export-excerpts.test.ts"
+        ],
+        "trackedPatch": {
+          "bytes": 341587,
+          "sha256": "b1a7ff5d591ffa95f39c8ffd75e29f3e36dc17ae69f5819373b7e1c81f58d077"
+        },
+        "newFiles": {
+          "bytes": 2756,
+          "sha256": "f9043486db9650c2028a954ac5169d6541034483c64da9e90879ad0465680bfe"
+        }
+      }
+    },
+    {
+      "name": "原包与DOM依赖独占",
+      "verified": true,
+      "details": {
+        "package": {
+          "from": "/private/tmp/pmtool-combined-repair-20261022-r2/packages/dsh-pm-tool/node_modules",
+          "to": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules",
+          "files": 13579,
+          "links": 1030,
+          "sharedInode": 0,
+          "externalLinks": 0
+        },
+        "dom": {
+          "from": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/TaskPredSelectionRetestR1/r1/dom-deps/node_modules",
+          "to": "/private/tmp/pmtool-combined-successor112-20261022-r1/dom-deps/node_modules",
+          "files": 1595,
+          "links": 2,
+          "sharedInode": 0,
+          "externalLinks": 0
+        }
+      }
+    },
+    {
+      "name": "上游副本及三内链入口合法、LLM同身份",
+      "verified": true,
+      "details": {
+        "from": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/AskAuthRetestR1/frozen/packages/dsh-pm-tool/node_modules",
+        "to": "/private/tmp/pmtool-combined-successor112-20261022-r1/upstream-deps/node_modules",
+        "files": 14394,
+        "links": 1031,
+        "sharedInode": 0,
+        "externalLinks": 0,
+        "mappings": {
+          "@deepseek-ai/dsh-brand": "/private/tmp/pmtool-combined-successor112-20261022-r1/upstream-deps/node_modules/@deepseek-ai/dsh-brand",
+          "@deepseek-ai/dsh-llm": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/@deepseek-ai/dsh-llm",
+          "@earendil-works/pi-ai": "/private/tmp/pmtool-combined-successor112-20261022-r1/upstream-deps/node_modules/@earendil-works/pi-ai"
+        },
+        "upstreamFiles": 25,
+        "productDependenciesReplaced": false
+      }
+    },
+    {
+      "name": "C02、完整document与真实RAF只复用原专家设施",
+      "verified": true,
+      "details": {
+        "adapter": {
+          "bytes": 4189,
+          "sha256": "936684094e69e27a26dc8d31fcbee8a3fbe8f7c284d6915e72b1dfc06a98d453"
+        },
+        "c02": {
+          "bytes": 14266,
+          "sha256": "e60c433287bcac5d658dd0448e852f153dfd33b787529e6218e754292b640fab"
+        },
+        "checklist": {
+          "bytes": 3820,
+          "sha256": "6d5791cb9370d2ec6ad4c55504555961c0911d8fcb7902124b470af48e695cbb"
+        },
+        "scheduler": {
+          "bytes": 1139,
+          "sha256": "214985bd4e332fab764b339783fb8241f054ff76e9edd4e60e557607cc70d7a6"
+        },
+        "productTransform": "export TaskForm only",
+        "originalOracleRedRetained": true
+      }
+    },
+    {
+      "name": "实际JSON计数、全src测试集合与专项去重",
+      "verified": true,
+      "details": {
+        "first": {
+          "passedFiles": 159,
+          "totalFileEntries": 160,
+          "tests": 1675,
+          "success": false,
+          "exitCode": 1,
+          "files": [
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/form-validation.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-cancel-close.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/provenance-panel.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card-copy.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card-permission.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/dashboard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/habit-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-import-filename.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/u5-help.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/archive.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-context.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-copilot-b7.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/backup-mid-rollback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/backup-precheck.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/capture.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/check.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/copilot-task-fields.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/copilot-validate.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/csv-import.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/deliverable-export-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/deliverable-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/derived.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/design-tokens.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/evidence.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/export-isolation.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/export-outbound.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-assets.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-backup.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-gc.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-promotion.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-root.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-staging.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.criticalPath.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.milestoneLink.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.routeEdge.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/habits.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/lessons.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/load-stance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/metric.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/milestone.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/nav.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/okr.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/people-load.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-clamp.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-meta.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-report-markdown-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-report.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance-store.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance-view.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/queue.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect-file-count.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect-l2.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/report-export-excerpts.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/review-materials.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/session-bind.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/settings.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/stale-placeholder.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/suggestion-engine.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-export.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-inline.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-materials.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-tree-u4.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-views.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/b4-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/board-attn-narrow.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-compact.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-geometry.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/head-spacing.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/history.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/layout-append.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/migration-banner.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/panel-library.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/persist.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/project-default-layout.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/query.multisort.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/queue-aggregate.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/refresh-confirm.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/registry.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/scope-snapshot.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/static-size.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/asset-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/b2-commands.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/b2-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/form-dirty.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/legacy-note.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/markdown.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/records-callbacks.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/report-preview-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/stage-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/staged-lifecycle.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-drawer-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-materials-mirror.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-relation-projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/b5-planning.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/d04-d05-d11-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/growth-form-props.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habit-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/non-p0-fixes.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/okr-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/overview-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/people-scale.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/planning-presenter.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records-entry-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/risk-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-clipboard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-responsive.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-tally.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/visible-layer-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/http/asset-route.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/http/preview-route.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/gd-overlay-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/settings-drawer.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-history.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-options.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-payloads.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-period.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-preview-authoritative.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-preview.test.ts"
+          ],
+          "failedFileEntries": [
+            {
+              "assertionResults": [],
+              "startTime": 1792676658180,
+              "endTime": 1792676658180,
+              "status": "failed",
+              "message": "Failed to load url @deepseek-ai/dsh-brand (resolved id: @deepseek-ai/dsh-brand) in /private/tmp/pmtool-combined-successor112-20261022-r1/upstream/pi-src/stream.ts. Does the file exist?",
+              "name": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts"
+            }
+          ]
+        },
+        "ordinary": {
+          "passedFiles": 160,
+          "totalFileEntries": 160,
+          "tests": 1686,
+          "success": true,
+          "exitCode": 0,
+          "files": [
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/copilot-extension-baseline.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/form-validation.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/index-command-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/launch-handshake.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-cancel-close.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-checklist-toggle.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-launch-handshake.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-restore-path.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/panel-transport-error-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/provenance-panel.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card-copy.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card-permission.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/result-card.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/sidecar-minimize-retention.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/ask-auth-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/ask-governance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/backup-web.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/dashboard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/habit-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-import-filename.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/task-predecessor-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/commands/u5-help.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/BoardBento-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/b4-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/board-attn-narrow.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-compact.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-drag-stop.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-geometry.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/editor-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/head-spacing.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/history.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/layout-append.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/migration-banner.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/panel-library.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/persist.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/project-default-layout.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/query.multisort.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/queue-aggregate.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/refresh-confirm.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/registry.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/scope-snapshot.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/board/static-size.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ai-client-terminal.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/archive.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-context.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-copilot-b7.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ask-projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/backup-mid-rollback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/backup-precheck.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/capture.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/check.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/copilot-task-fields.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/copilot-validate.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/csv-import.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/deliverable-export-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/deliverable-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/derived.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/design-tokens.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/evidence.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/export-isolation.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/export-outbound.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-assets.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-backup.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-gc.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-promotion.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-root.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-staging-symlink.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/file-staging.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.criticalPath.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.milestoneLink.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.routeEdge.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/habits.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/lessons.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/load-stance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/metric.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/milestone.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/nav.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/okr.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/people-load.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-clamp.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-meta.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-report-markdown-u5.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-report.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance-store.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance-view.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/provenance.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/queue.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect-file-count.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect-l2.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/reflect.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/report-export-excerpts.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/review-materials.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/session-bind.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/settings.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/stale-placeholder.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/suggestion-engine.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-evidence-protocol.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-export.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-inline.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-materials.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-tree-u4.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/task-views.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/tasks-files-atomic.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/ui-feedback.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/asset-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/b2-commands.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/b2-ops.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/contract-pilot.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/form-dirty.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/legacy-note.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/markdown.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/records-callbacks.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/report-preview-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/stage-client.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/staged-lifecycle.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-draft-materials-stage.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-drawer-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-materials-mirror.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-relation-projection.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/b5-planning.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/d04-d05-d11-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/growth-form-props.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habit-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habits-card-wrap.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/habits-suggestion-okr.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/non-p0-fixes.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/objective-consumers.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/okr-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/overview-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/overview-done-card.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/people-scale.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/planning-presenter.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records-entry-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/reports-entry-guard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/risk-model.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/task-views-u4.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-clipboard.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-number-feedback.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-p0-toolbar.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-responsive.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/tasks-tally.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/visible-layer-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/http/asset-route.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/http/preview-route.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/copilot-preconfirm.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/gd-overlay-contract.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/drawers/settings-drawer.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-history.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-meeting-entry.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-meeting-layout.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-options.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-payloads.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-period.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-preview-authoritative.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/views/records/records-preview.test.ts"
+          ],
+          "failedFileEntries": []
+        },
+        "dom": {
+          "passedFiles": 3,
+          "totalFileEntries": 3,
+          "tests": 17,
+          "success": true,
+          "exitCode": 0,
+          "files": [
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/shared/task-draft-materials-refs-dom.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/task-predecessor-refs-dom.test.tsx",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/client/task-predecessor-hidden-submit-dom.test.tsx"
+          ],
+          "failedFileEntries": []
+        },
+        "special": {
+          "passedFiles": 2,
+          "totalFileEntries": 2,
+          "tests": 7,
+          "success": true,
+          "exitCode": 0,
+          "files": [
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/retest-stress.test.ts",
+            "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/retest-probes.test.ts"
+          ],
+          "failedFileEntries": []
+        },
+        "srcInventory": 163,
+        "ordinaryPlusDomInstances": 1703,
+        "specialInstancesSeparate": 7
+      }
+    },
+    {
+      "name": "原四模块coverage阈值不改变",
+      "verified": true,
+      "details": {
+        "total": {
+          "lines": {
+            "total": 1123,
+            "covered": 1004,
+            "skipped": 0,
+            "pct": 89.4
+          },
+          "statements": {
+            "total": 1123,
+            "covered": 1004,
+            "skipped": 0,
+            "pct": 89.4
+          },
+          "functions": {
+            "total": 78,
+            "covered": 67,
+            "skipped": 0,
+            "pct": 85.89
+          },
+          "branches": {
+            "total": 564,
+            "covered": 466,
+            "skipped": 0,
+            "pct": 82.62
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "thresholds": {
+          "lines": 40,
+          "branches": 80,
+          "functions": 35,
+          "statements": 40
+        },
+        "modules": [
+          "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/copilot.ts",
+          "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/gantt.ts",
+          "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/progress-derivation.ts",
+          "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/src/core/settings.ts"
+        ],
+        "wholePackageCoverageClaimed": false,
+        "summary": {
+          "bytes": 1728,
+          "sha256": "83d40f64772419693733f5580ad36b0ab19fbcff952a3ea07263ed20c6ce5e45"
+        }
+      }
+    },
+    {
+      "name": "原commands、95默认verify及guard实际输出",
+      "verified": true,
+      "details": {
+        "commands": {
+          "tsc": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+              "-p",
+              "tsconfig.json"
+            ],
+            "pid": 91341,
+            "started": "2026-10-22T13:43:56.278Z",
+            "ended": "2026-10-22T13:44:10.999Z",
+            "exitCode": 0
+          },
+          "bundle": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/tsdown/dist/run.mjs",
+              "--config",
+              "tsdown.config.ts"
+            ],
+            "pid": 91527,
+            "started": "2026-10-22T13:44:27.286Z",
+            "ended": "2026-10-22T13:44:32.821Z",
+            "exitCode": 0
+          },
+          "noemit": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/typescript/bin/tsc",
+              "-p",
+              "tsconfig.json",
+              "--noEmit",
+              "--incremental",
+              "false"
+            ],
+            "pid": 91833,
+            "started": "2026-10-22T13:45:26.034Z",
+            "ended": "2026-10-22T13:45:42.102Z",
+            "exitCode": 0
+          },
+          "full-r2": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+              "run",
+              "--config",
+              "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/vitest-full-r2.config.mjs",
+              "--no-cache",
+              "--coverage",
+              "--reporter=default",
+              "--reporter=json",
+              "--outputFile=/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/full-r2.result.json"
+            ],
+            "pid": 92297,
+            "started": "2026-10-22T13:48:11.300Z",
+            "ended": "2026-10-22T13:49:52.423Z",
+            "exitCode": 0
+          },
+          "dom": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+              "run",
+              "--config",
+              "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/vitest-dom.config.mjs",
+              "--no-cache",
+              "--reporter=default",
+              "--reporter=json",
+              "--outputFile=/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/dom.result.json"
+            ],
+            "pid": 91526,
+            "started": "2026-10-22T13:44:27.255Z",
+            "ended": "2026-10-22T13:44:44.372Z",
+            "exitCode": 0
+          },
+          "special": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool/node_modules/vitest/vitest.mjs",
+              "run",
+              "--config",
+              "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/vitest-special.config.mjs",
+              "--no-cache",
+              "--reporter=default",
+              "--reporter=json",
+              "--outputFile=/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSuccessor112R1/special.result.json"
+            ],
+            "pid": 92188,
+            "started": "2026-10-22T13:47:55.373Z",
+            "ended": "2026-10-22T13:47:57.783Z",
+            "exitCode": 0
+          },
+          "verify": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "scripts/verify-isolation.mjs"
+            ],
+            "pid": 92187,
+            "started": "2026-10-22T13:47:55.370Z",
+            "ended": "2026-10-22T13:48:57.080Z",
+            "exitCode": 0
+          },
+          "guard": {
+            "argv": [
+              "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+              "scripts/test-isolation-guard.mjs"
+            ],
+            "pid": 92296,
+            "started": "2026-10-22T13:48:11.292Z",
+            "ended": "2026-10-22T13:48:11.586Z",
+            "exitCode": 0
+          }
+        },
+        "verifyTargets": [
+          "verify-ai-client.mjs",
+          "verify-ask-apply.mjs",
+          "verify-ask-idempotency-integration.mjs",
+          "verify-b2-materials.mjs",
+          "verify-b3-asset.mjs",
+          "verify-b3-bytes.mjs",
+          "verify-b6-report.mjs",
+          "verify-backup.mjs",
+          "verify-batch.mjs",
+          "verify-board-final.mjs",
+          "verify-cascade.mjs",
+          "verify-client-bundle.mjs",
+          "verify-client-module-table.mjs",
+          "verify-command.mjs",
+          "verify-completed-date.mjs",
+          "verify-copilot-cancel.mjs",
+          "verify-copilot-plan-cancel.mjs",
+          "verify-copilot-plan.mjs",
+          "verify-copilot-writes.mjs",
+          "verify-copilot.mjs",
+          "verify-critical-path.mjs",
+          "verify-csv.mjs",
+          "verify-dashboard.mjs",
+          "verify-deliverables.mjs",
+          "verify-doctor.mjs",
+          "verify-drawer-focus.mjs",
+          "verify-export.mjs",
+          "verify-external-skill-router.mjs",
+          "verify-external-skills.mjs",
+          "verify-form-validation.mjs",
+          "verify-formula.mjs",
+          "verify-fs-atomic.mjs",
+          "verify-gantt-d07-d08.mjs",
+          "verify-gantt-drag.mjs",
+          "verify-gantt.mjs",
+          "verify-gui-contract.mjs",
+          "verify-health.mjs",
+          "verify-import-content.mjs",
+          "verify-importmd.mjs",
+          "verify-integration.mjs",
+          "verify-keyboard.mjs",
+          "verify-llm-optional.mjs",
+          "verify-markdown.mjs",
+          "verify-meeting-ai.mjs",
+          "verify-meeting-source.mjs",
+          "verify-meetings.mjs",
+          "verify-migration.mjs",
+          "verify-milestones.mjs",
+          "verify-model-route.mjs",
+          "verify-no-native-confirm.mjs",
+          "verify-objective-progress.mjs",
+          "verify-p0-integration.mjs",
+          "verify-p1-integration.mjs",
+          "verify-p1a-queue.mjs",
+          "verify-p1b-adopt.mjs",
+          "verify-p1c-integration.mjs",
+          "verify-p2-integration.mjs",
+          "verify-p2a-export.mjs",
+          "verify-p2b-okr.mjs",
+          "verify-p2c.mjs",
+          "verify-p3-integration.mjs",
+          "verify-p3a.mjs",
+          "verify-people-load.mjs",
+          "verify-person-candidates.mjs",
+          "verify-predecessors.mjs",
+          "verify-projects.mjs",
+          "verify-promote.mjs",
+          "verify-provenance-disk.mjs",
+          "verify-provenance.mjs",
+          "verify-r12.mjs",
+          "verify-record-location.mjs",
+          "verify-reflect.mjs",
+          "verify-reminders.mjs",
+          "verify-repo-format.mjs",
+          "verify-report-ai.mjs",
+          "verify-report-diff.mjs",
+          "verify-reports.mjs",
+          "verify-risk-issues.mjs",
+          "verify-schema-v2.mjs",
+          "verify-settings.mjs",
+          "verify-storage.mjs",
+          "verify-task-checklist.mjs",
+          "verify-task-inline.mjs",
+          "verify-task-meta.mjs",
+          "verify-task-move-renumber.mjs",
+          "verify-task-repo.mjs",
+          "verify-task-tree.mjs",
+          "verify-tasks.mjs",
+          "verify-ui-feedback.mjs",
+          "verify-war-room.mjs",
+          "verify-wbs.mjs",
+          "verify-web-assignee-list.mjs",
+          "verify-web-repo-link.mjs",
+          "verify-web.mjs",
+          "verify-xlsx.mjs"
+        ],
+        "verifyWatchEntries": 5,
+        "historicalWarnings": [
+          "TaskTable key",
+          "Node EventTarget keydown listeners"
+        ],
+        "zeroWarningClaimed": false,
+        "closeAt": "2026-10-22T13:50:08.463Z",
+        "guardOutput": {
+          "bytes": 1800,
+          "sha256": "179dece2674c0bd5ec5e331a1b121b1f06da2cecb9b65e7436e58d1e4807ce2d"
+        }
+      }
+    },
+    {
+      "name": "Main完整输入、主lib、107lib、Launcher和冻结产物保护",
+      "verified": true,
+      "details": {
+        "mainInputs": 519,
+        "mainLib": 463,
+        "old107Lib": 453,
+        "launcher": 26,
+        "builtArtifacts": 455,
+        "wholeDiskClaimed": false
+      }
+    }
+  ],
+  "evidenceFiles": {
+    "archive-executions.mjs": {
+      "bytes": 2894,
+      "sha256": "d08af15a6ad67b5ccf0e0772d03bce07ca16571ec3e2f4c303ad7a2b9ab6b3cf"
+    },
+    "ask-auth-observations.ndjson": {
+      "bytes": 54319,
+      "sha256": "b42961426b5e95ae50c0914b29eb6221e551038503a17cf1927e6fb56abd40a7"
+    },
+    "browser-scheduler-setup.mjs": {
+      "bytes": 1139,
+      "sha256": "214985bd4e332fab764b339783fb8241f054ff76e9edd4e60e557607cc70d7a6"
+    },
+    "built-artifacts.json": {
+      "bytes": 63704,
+      "sha256": "d1b55a2aa317ab05dabcabdd9342c71110c85d5a164fca0c1a38a2ffdde30941"
+    },
+    "bundle.command.json": {
+      "bytes": 3076,
+      "sha256": "74bebdc7143da9fc1a2713cef629780208f70a3ba2682e82ec12b2ca2e614a9d"
+    },
+    "bundle.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "bundle.stdout.txt": {
+      "bytes": 1048,
+      "sha256": "d7fee38ae0ac64c88a4c5a9f43fc2738750c47e7503f4da7485203cfb1f3217e"
+    },
+    "c02-adapted.test.tsx": {
+      "bytes": 14266,
+      "sha256": "e60c433287bcac5d658dd0448e852f153dfd33b787529e6218e754292b640fab"
+    },
+    "c02-adapter.json": {
+      "bytes": 410,
+      "sha256": "d2f8583e52adc54edefaeb494b8cc5ecbdcc33d1501e67793c5b6ce1be85e857"
+    },
+    "candidate.json": {
+      "bytes": 704,
+      "sha256": "9ca4dc612b76ea633ca8bba7eed4ac921ac56fdd394727ccdc9aa9ea989e6396"
+    },
+    "checklist-fixture.test.tsx": {
+      "bytes": 3820,
+      "sha256": "6d5791cb9370d2ec6ad4c55504555961c0911d8fcb7902124b470af48e695cbb"
+    },
+    "close.json": {
+      "bytes": 26959,
+      "sha256": "a3e8a0a59663ec7e6ade09dc030f92174d0de5c753e83f8d0a7029c4a5ba12a1"
+    },
+    "complete-inputs.json": {
+      "bytes": 74653,
+      "sha256": "22869ac1590786c4359fda5953da83970dda23bf9a543c7902791bfe3cf019e8"
+    },
+    "dom-dependencies.json": {
+      "bytes": 314,
+      "sha256": "7c227851d9caa134aff257cf47e5cc4c91c58278d33f83eb62790a23f6c96750"
+    },
+    "dom.command.json": {
+      "bytes": 3397,
+      "sha256": "b318acfefca630dfac7dd27b7c674a1d73529736615f5db02ba98e2ce439e908"
+    },
+    "dom.result.json": {
+      "bytes": 6579,
+      "sha256": "6dc2edfc63d12507e33a5d7b99119548c7900e3016dabb8000ccefb802ecaf17"
+    },
+    "dom.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "dom.stdout.txt": {
+      "bytes": 1115,
+      "sha256": "7c80169504ccbdadd1f786e3e52e10c58bc34824d1a6843a832fe46fb411f4e5"
+    },
+    "execution-receipts.json": {
+      "bytes": 47290,
+      "sha256": "c3475a1e85b5a33580b35185dd0590963a68f94f6c30754b6e2a068bd17a43d4"
+    },
+    "executor-initial-preserved.mjs": {
+      "bytes": 15532,
+      "sha256": "dda8cee720ccd60876ad79733f2a03e5d46dcf9adc36a1bf50f5b428d7d2d612"
+    },
+    "executor.mjs": {
+      "bytes": 16563,
+      "sha256": "7148511fbf210abd0634dd5141af8c337c41553593bb36aaf4d15d343d8c8e26"
+    },
+    "facilities.json": {
+      "bytes": 609,
+      "sha256": "611e626392eb08a64278ab0f30f9d9406b963510a341fda8967a796a67e65886"
+    },
+    "facility-resume.json": {
+      "bytes": 215,
+      "sha256": "21db054830d3d065a0f71b4758f93184d806ebf30bbba2f8d9249e408ebe2e11"
+    },
+    "facility-upstream-r2.mjs": {
+      "bytes": 3680,
+      "sha256": "3c56c2bab0cd104fa055c3ef18ec5c369b55f146bd30f3bae6d61255e5b6dec5"
+    },
+    "full-r2.command.json": {
+      "bytes": 3423,
+      "sha256": "5f93cfd528f712ccf8d292520d271501529449313a29ecdf53a2696dc51780f5"
+    },
+    "full-r2.result.json": {
+      "bytes": 651876,
+      "sha256": "29260a38e194af9143c6a993af5655b2b71bdb048dc47662a79eb33ec8ac76c3"
+    },
+    "full-r2.stderr.txt": {
+      "bytes": 13075,
+      "sha256": "cda5c3d4f30bfff6fee6d58fefa7023e4fc3ee216540bb373b35d8a6d6dde6d0"
+    },
+    "full-r2.stdout.txt": {
+      "bytes": 27537,
+      "sha256": "0073a83de03aafe1f0a9da2973687d5737be8410940c4e0e4ea4bb6ec49d8d4f"
+    },
+    "full.command.json": {
+      "bytes": 3417,
+      "sha256": "b8c26bf78dfc3ea5f9c7b679ce38973022b1f0d5d4a6fd9a92c2661cb60d75b6"
+    },
+    "full.result.json": {
+      "bytes": 648291,
+      "sha256": "10e8a6cefc326d32c2583c011c7c67f0d225d757b3af073eb81439dd7f148a3f"
+    },
+    "full.stderr.txt": {
+      "bytes": 13761,
+      "sha256": "7496e832d5f9fb7d898c9abd7076e90739c1f8b5ec489fd883ba9eb382435310"
+    },
+    "full.stdout.txt": {
+      "bytes": 25238,
+      "sha256": "fa6fb68b79b9117b706e0fea00ab4b292b03081631826338864d3a9d32707a19"
+    },
+    "guard.command.json": {
+      "bytes": 2961,
+      "sha256": "600fbc0787a40738c0e97e52c4a77606f59ed6802c709f01778ed492f16671ec"
+    },
+    "guard.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "guard.stdout.txt": {
+      "bytes": 1800,
+      "sha256": "179dece2674c0bd5ec5e331a1b121b1f06da2cecb9b65e7436e58d1e4807ce2d"
+    },
+    "new-product-files.txt": {
+      "bytes": 2756,
+      "sha256": "f9043486db9650c2028a954ac5169d6541034483c64da9e90879ad0465680bfe"
+    },
+    "noemit.command.json": {
+      "bytes": 3116,
+      "sha256": "cb527ba86d32d1ac93ccd53d96ace3fa7c7ae32e76b8063bc96c6553cdd1d1e0"
+    },
+    "noemit.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "noemit.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "package-dependencies.json": {
+      "bytes": 282,
+      "sha256": "bd9c649308e42da1d9dab38abdc07698a2f21b165f4a87f5dec10bb54ef3b6ff"
+    },
+    "parent107.json": {
+      "bytes": 13624,
+      "sha256": "13a7eeb283f983b215551c57b6f610d7a769ff09e1e0f53571064801bf2f5393"
+    },
+    "protected-before.json": {
+      "bytes": 218157,
+      "sha256": "3761fd7beed489da600431deed0f06cc3c2282facb10672482103807000cfa25"
+    },
+    "report-special-inputs.json": {
+      "bytes": 300,
+      "sha256": "decc3bbe4f5522928c376c7d956331dd6d835144693b1c96b18fe284befb966d"
+    },
+    "source-files.json": {
+      "bytes": 14321,
+      "sha256": "2d1de5490bb745611d4c298415756fa5ccb1b3eaf68d5ae29fc9f5c62a8fdbae"
+    },
+    "source-files.sha256": {
+      "bytes": 13219,
+      "sha256": "18380a538120cd2b7372dc8c7d3b2e5626978b1fb6481920fd298bffd2fa762b"
+    },
+    "special.command.json": {
+      "bytes": 3405,
+      "sha256": "0579dd1e276eb865396cffce50e5a83ca2543f1e9aa9aae41e658a4efe84569c"
+    },
+    "special.result.json": {
+      "bytes": 3657,
+      "sha256": "c094f3ef0568629307d1264f8df312bb34d1cfe1dd5d47cbeaf91b87726e01a9"
+    },
+    "special.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "special.stdout.txt": {
+      "bytes": 765,
+      "sha256": "dd4b68a0ca169d74c2e3a6104e13ad8c206838d8334c05da7873ccdd6cb00fda"
+    },
+    "tracked-product.diff": {
+      "bytes": 341587,
+      "sha256": "b1a7ff5d591ffa95f39c8ffd75e29f3e36dc17ae69f5819373b7e1c81f58d077"
+    },
+    "tsc.command.json": {
+      "bytes": 3066,
+      "sha256": "9315ba154e99dd6ad76723cf02c8074ed5f5e065e6a00a48b5df2cc101cb5033"
+    },
+    "tsc.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "tsc.stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "upstream-dependencies-r2.json": {
+      "bytes": 1157,
+      "sha256": "16da939132ac011407316695c012611651cf98d837ab48c6a48921339f044394"
+    },
+    "upstream-inputs.json": {
+      "bytes": 3295,
+      "sha256": "e62d5493693d1f331535c6999d67d0314a4c68502cdb186d61b6e7ef68efd700"
+    },
+    "verify.command.json": {
+      "bytes": 2957,
+      "sha256": "678efb006ec8e05a7fef78f7e2428af7d5d94600d7ae5695283cec1f4d968bf5"
+    },
+    "verify.stderr.txt": {
+      "bytes": 7711,
+      "sha256": "a29fef7a42aa8f1dab2394a264dccf776550bb35325963681a3cd4dcc2cf37b8"
+    },
+    "verify.stdout.txt": {
+      "bytes": 76499,
+      "sha256": "cc6182e9fac8375742397f2c3cc120152a06c5f19f36b01464744539a149b923"
+    },
+    "vitest-dom.config.mjs": {
+      "bytes": 2266,
+      "sha256": "d0778cc13cbfd62506fa9a26f3da6259374d8bd693c47144756dfe3f767d8e08"
+    },
+    "vitest-full-r2.config.mjs": {
+      "bytes": 306,
+      "sha256": "1e941facfa3bbabbcabc65c4f0bfdf8f0c6277779bc172c75efa57f9b602013d"
+    },
+    "vitest-full.config.mjs": {
+      "bytes": 1292,
+      "sha256": "ee86758e1269280e955443dedcbd863fbd688fe35dacd589e547815df608d74b"
+    },
+    "vitest-special.config.mjs": {
+      "bytes": 481,
+      "sha256": "9de6d7cb0b2dfc2a459c524ab5204e0ab145c4fbec1dbee2ea598109c9eea2a7"
+    }
+  },
+  "verdict": "NOT_SIGNED_PENDING_FINAL_RECEIPTS_REVIEW",
+  "gui": "NOT_SIGNED_THIS_ROLE",
+  "parentTotalCommit": "NOT_SIGNED_THIS_ROLE",
+  "release": "STOP"
+}

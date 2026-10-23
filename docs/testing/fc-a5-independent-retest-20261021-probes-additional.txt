@@ -1,0 +1,276 @@
+TAP version 13
+# {"event":"browser","pid":16789,"version":"Chrome/139.0.7258.155"}
+# {"event":"current-S4-OS-result","kind":"existing","mode":"success","enteredHttp":200,"elapsed":936,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-existing-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 1 - A5-P01-existing-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 2997.560875
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"existing","mode":"nonzero","enteredHttp":200,"elapsed":1033,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-existing-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 2 - A5-P01-existing-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1282.94225
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"existing","mode":"error","enteredHttp":200,"elapsed":1010,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-existing-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 3 - A5-P01-existing-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1173.23675
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"existing","mode":"timeout","enteredHttp":200,"elapsed":5048,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[],"unrefs":1}
+# Subtest: A5-P01-existing-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 4 - A5-P01-existing-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 5201.401958
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"owned","mode":"success","enteredHttp":200,"elapsed":1037,"app":{"status":"S4","step":2,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[6655443],"unrefs":0}
+# Subtest: A5-P01-owned-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 5 - A5-P01-owned-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1190.867667
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"owned","mode":"nonzero","enteredHttp":200,"elapsed":1001,"app":{"status":"S4","step":2,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[6655443],"unrefs":0}
+# Subtest: A5-P01-owned-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 6 - A5-P01-owned-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1173.207917
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"owned","mode":"error","enteredHttp":200,"elapsed":1003,"app":{"status":"S4","step":2,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[6655443],"unrefs":0}
+# Subtest: A5-P01-owned-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 7 - A5-P01-owned-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1159.035333
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"owned","mode":"timeout","enteredHttp":200,"elapsed":5034,"app":{"status":"S4","step":2,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":1,"forgotten":[6655443],"unrefs":1}
+# Subtest: A5-P01-owned-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 8 - A5-P01-owned-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 5268.0325
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"reopen","mode":"success","enteredHttp":200,"elapsed":1011,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":2,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-reopen-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 9 - A5-P01-reopen-success：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1194.932958
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"reopen","mode":"nonzero","enteredHttp":200,"elapsed":1007,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":2,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-reopen-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 10 - A5-P01-reopen-nonzero：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1159.973083
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"reopen","mode":"error","enteredHttp":200,"elapsed":1033,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":2,"forgotten":[],"unrefs":0}
+# Subtest: A5-P01-reopen-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 11 - A5-P01-reopen-error：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 1218.349792
+  type: 'test'
+  ...
+# {"event":"current-S4-OS-result","kind":"reopen","mode":"timeout","enteredHttp":200,"elapsed":5039,"app":{"status":"S4","step":0,"browser":"Chrome","confirmed":true,"view":"S4","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Safari","theme":"light"},"dom":{"status":"S4","confirmed":true,"browser":"Chrome","heading":"工作台已打开","navigationCount":1},"errors":[],"openCount":2,"forgotten":[],"unrefs":1}
+# Subtest: A5-P01-reopen-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+ok 12 - A5-P01-reopen-timeout：生产DOM本轮S4后OS结果保真；timeout默认真实5秒
+  ---
+  duration_ms: 5199.655
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"existing","mode":"nonzero","elapsed":6,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"本地服务探测或浏览器打开失败：浏览器打开命令未成功，请选择可用浏览器后重试。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":1}
+# Subtest: A5-P02-existing-nonzero：无本轮回告失败S6/false，撤nonce不复投
+ok 13 - A5-P02-existing-nonzero：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 10.4565
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"existing","mode":"error","elapsed":1,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"本地服务探测或浏览器打开失败：浏览器打开命令无法执行，请检查所选浏览器是否可用。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":1}
+# Subtest: A5-P02-existing-error：无本轮回告失败S6/false，撤nonce不复投
+ok 14 - A5-P02-existing-error：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 2.41425
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"existing","mode":"timeout","elapsed":5002,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"本地服务探测或浏览器打开失败：浏览器打开命令等待超时，请检查浏览器后重试。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":1}
+# Subtest: A5-P02-existing-timeout：无本轮回告失败S6/false，撤nonce不复投
+ok 15 - A5-P02-existing-timeout：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 5008.979583
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"owned","mode":"nonzero","elapsed":0,"state":{"status":"S6","step":2,"browser":"Chrome","detail":{"detection":"本地服务启动失败：浏览器打开命令未成功，请选择可用浏览器后重试。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[6655443],"openCount":1}
+# Subtest: A5-P02-owned-nonzero：无本轮回告失败S6/false，撤nonce不复投
+ok 16 - A5-P02-owned-nonzero：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 2.909167
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"owned","mode":"error","elapsed":0,"state":{"status":"S6","step":2,"browser":"Chrome","detail":{"detection":"本地服务启动失败：浏览器打开命令无法执行，请检查所选浏览器是否可用。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[6655443],"openCount":1}
+# Subtest: A5-P02-owned-error：无本轮回告失败S6/false，撤nonce不复投
+ok 17 - A5-P02-owned-error：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 2.167125
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"owned","mode":"timeout","elapsed":5002,"state":{"status":"S6","step":2,"browser":"Chrome","detail":{"detection":"本地服务启动失败：浏览器打开命令等待超时，请检查浏览器后重试。","outcome":"没有停止任何程序，项目数据和现有服务保持不变。","suggestion":"确认环境后点击“重新尝试”。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[6655443],"openCount":1}
+# Subtest: A5-P02-owned-timeout：无本轮回告失败S6/false，撤nonce不复投
+ok 18 - A5-P02-owned-timeout：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 5006.049542
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"reopen","mode":"nonzero","elapsed":2,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"浏览器打开命令未成功，请选择可用浏览器后重试。","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":2}
+# Subtest: A5-P02-reopen-nonzero：无本轮回告失败S6/false，撤nonce不复投
+ok 19 - A5-P02-reopen-nonzero：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 4.592625
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"reopen","mode":"error","elapsed":0,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"浏览器打开命令无法执行，请检查所选浏览器是否可用。","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":2}
+# Subtest: A5-P02-reopen-error：无本轮回告失败S6/false，撤nonce不复投
+ok 20 - A5-P02-reopen-error：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 1.913834
+  type: 'test'
+  ...
+# {"event":"no-callback-OS-failure","kind":"reopen","mode":"timeout","elapsed":5002,"state":{"status":"S6","step":0,"browser":"Chrome","detail":{"detection":"浏览器打开命令等待超时，请检查浏览器后重试。","outcome":"没有停止现有服务，也没有重放启动令牌。","suggestion":"选择可用浏览器后重试。"},"confirmed":false,"view":"S6","host":"127.0.0.1","port":0,"browsers":["系统默认浏览器","Chrome","Safari"],"selectedBrowser":"Chrome","theme":"light"},"lateEnteredHttp":403,"forgotten":[],"openCount":2}
+# Subtest: A5-P02-reopen-timeout：无本轮回告失败S6/false，撤nonce不复投
+ok 21 - A5-P02-reopen-timeout：无本轮回告失败S6/false，撤nonce不复投
+  ---
+  duration_ms: 5006.657458
+  type: 'test'
+  ...
+# Subtest: A5-P03-existing：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+ok 22 - A5-P03-existing：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+  ---
+  duration_ms: 0.691125
+  type: 'test'
+  ...
+# Subtest: A5-P04-existing-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 23 - A5-P04-existing-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 0.348084
+  type: 'test'
+  ...
+# Subtest: A5-P04-existing-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 24 - A5-P04-existing-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 0.242292
+  type: 'test'
+  ...
+# Subtest: A5-P05-existing-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 25 - A5-P05-existing-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.375708
+  type: 'test'
+  ...
+# Subtest: A5-P05-existing-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 26 - A5-P05-existing-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.207708
+  type: 'test'
+  ...
+# Subtest: A5-P03-owned：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+ok 27 - A5-P03-owned：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+  ---
+  duration_ms: 0.879375
+  type: 'test'
+  ...
+# Subtest: A5-P04-owned-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 28 - A5-P04-owned-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 0.38825
+  type: 'test'
+  ...
+# Subtest: A5-P04-owned-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 29 - A5-P04-owned-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 0.216917
+  type: 'test'
+  ...
+# Subtest: A5-P05-owned-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 30 - A5-P05-owned-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.199375
+  type: 'test'
+  ...
+# Subtest: A5-P05-owned-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 31 - A5-P05-owned-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.200291
+  type: 'test'
+  ...
+# Subtest: A5-P03-reopen：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+ok 32 - A5-P03-reopen：仅verify未onEntered不算confirmed；失败必须S6false并撤句柄
+  ---
+  duration_ms: 2.116709
+  type: 'test'
+  ...
+# Subtest: A5-P04-reopen-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 33 - A5-P04-reopen-nonzero：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 1.892
+  type: 'test'
+  ...
+# Subtest: A5-P04-reopen-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+ok 34 - A5-P04-reopen-error：当前S4后取消，旧OS失败不复活S4或覆盖S0
+  ---
+  duration_ms: 1.873167
+  type: 'test'
+  ...
+# Subtest: A5-P05-reopen-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 35 - A5-P05-reopen-false：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.459458
+  type: 'test'
+  ...
+# Subtest: A5-P05-reopen-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+ok 36 - A5-P05-reopen-true：新旅程S3/S4不能被旧失败覆盖，owned不复投
+  ---
+  duration_ms: 0.289792
+  type: 'test'
+  ...
+# {"event":"ready-owned-preserved","mode":"nonzero","elapsed":1,"spawned":1,"openCount":2,"forgotten":[6655443],"terminated":[]}
+# Subtest: A5-P06-nonzero：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+ok 37 - A5-P06-nonzero：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+  ---
+  duration_ms: 1.552417
+  type: 'test'
+  ...
+# {"event":"ready-owned-preserved","mode":"error","elapsed":1,"spawned":1,"openCount":2,"forgotten":[6655443],"terminated":[]}
+# Subtest: A5-P06-error：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+ok 38 - A5-P06-error：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+  ---
+  duration_ms: 0.49275
+  type: 'test'
+  ...
+# {"event":"ready-owned-preserved","mode":"timeout","elapsed":5001,"spawned":1,"openCount":2,"forgotten":[6655443],"terminated":[]}
+# Subtest: A5-P06-timeout：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+ok 39 - A5-P06-timeout：生产controller已ready不kill，S4失败finally弃URL一次、后续clean reopen
+  ---
+  duration_ms: 5002.121208
+  type: 'test'
+  ...
+# Subtest: A5-P07：core failure明确清confirmed且保当前browser，begin清旧detail；不扩其他状态合同
+ok 40 - A5-P07：core failure明确清confirmed且保当前browser，begin清旧detail；不扩其他状态合同
+  ---
+  duration_ms: 0.45425
+  type: 'test'
+  ...
+# {"event":"browser-closed","pid":16789,"exitCode":0}
+1..40
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49341.506625

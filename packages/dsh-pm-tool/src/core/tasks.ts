@@ -15,7 +15,6 @@ import {
 import { assertParentHasNoChecklist } from './task-checklist.js'
 import {
   normalizeTaskDraft,
-  applyTaskDraftOps,
   rejectRawAndOpsMixed,
   TaskOpsError,
   type TaskDraft,
@@ -23,9 +22,11 @@ import {
 import { localTodayIso } from './derived.js'
 import { ensureReflectionOnDone } from './reflect.js'
 import {
-  prepareFilePromotion,
+  prepareTaskDraftWithFiles,
+  publishPreparedTask,
   rollbackNewAssets,
   finalizePreparedStages,
+  type PreparedTaskFiles,
 } from './file-asset-store.js'
 import type { PmDomain } from './storage.js'
 
@@ -40,6 +41,7 @@ export class TaskDeliverableNotFoundError extends Error {}
 export class TaskDeliverableProjectMismatchError extends Error {}
 export class TaskReferencedByMeetingError extends Error {}
 export class TaskReferencedByPredecessorError extends Error {}
+export class PredecessorRelationError extends Error {}
 
 function validateMilestoneRelation(domain: PmDomain, projectId: string, milestoneId: string | null): void {
   if (!milestoneId) return
@@ -88,17 +90,17 @@ function validatePredecessorRelation(
   if (!normalized) return undefined
   const table = domain.table('tasks')
   for (const pid of normalized) {
-    if (pid === taskId) throw new Error('前置依赖不能包含任务自身')
+    if (pid === taskId) throw new PredecessorRelationError('前置依赖不能包含任务自身')
     const pre = table.get(pid)
-    if (!pre) throw new Error(`前置依赖任务不存在：${pid}`)
-    if (pre.projectId !== projectId) throw new Error(`前置依赖任务 ${pid} 不属于当前项目`)
+    if (!pre) throw new PredecessorRelationError(`前置依赖任务不存在：${pid}`)
+    if (pre.projectId !== projectId) throw new PredecessorRelationError(`前置依赖任务 ${pid} 不属于当前项目`)
   }
   // 成环检测：从每个前置沿既有 predecessorIds BFS，能回到 taskId 即成环。
   const seen = new Set<string>()
   const queue = [...normalized]
   while (queue.length) {
     const cur = queue.shift()!
-    if (cur === taskId) throw new Error('前置依赖存在循环：任务不能间接地依赖自己')
+    if (cur === taskId) throw new PredecessorRelationError('前置依赖存在循环：任务不能间接地依赖自己')
     if (seen.has(cur)) continue
     seen.add(cur)
     const rec = table.get(cur)
@@ -164,55 +166,32 @@ export function addTask(domain: PmDomain, input: unknown): Promise<Task> {
       updatedAt: at,
     }
     // 新建 draft 原子合并：raw 数组或 ops 信封二选一，同一临界区校验，任一失败在 put 前抛出，任务不落库。
-    let fileState: Awaited<ReturnType<typeof prepareFilePromotion>> | undefined
-    if (draft) {
-      rejectRawAndOpsMixed(draft)
-      const fileOps = (draft.attachmentOps ?? []).filter(o => o.op === 'addFile')
-      const pureAttachmentOps = (draft.attachmentOps ?? []).filter(o => o.op !== 'addFile')
-      const hasOps = draft.attachmentOps || draft.progressOps
-      let nd
-      if (fileOps.length) {
-        const promoted = await prepareFilePromotion(domain, fields.projectId, fileOps, at)
-        fileState = promoted
-        nd = applyTaskDraftOps(domain, fields.projectId, {}, { attachmentOps: pureAttachmentOps, progressOps: draft.progressOps }, at)
-        for (const p of promoted.prepared) {
-          if (nd.attachments.some(a => a.kind === 'file' && a.assetId === p.assetId)) continue
-          let maxAtt = 0
-          for (const a of nd.attachments) {
-            const m = /^at-(\d+)$/.exec(a.id)
-            if (m) maxAtt = Math.max(maxAtt, Number(m[1]))
-          }
-          const item: AttachmentItem = {
-            id: `at-${maxAtt + 1}`,
-            kind: 'file',
-            assetId: p.assetId,
-            addedAt: at,
-          }
-          if (p.note?.trim()) item.note = p.note.trim()
-          nd.attachments.push(item)
-        }
-      } else if (hasOps) {
-        nd = applyTaskDraftOps(domain, fields.projectId, {}, draft, at)
-      } else {
-        nd = normalizeTaskDraft(domain, fields.projectId, draft, at)
-      }
-      recordInput.attachments = nd.attachments
-      recordInput.progressLog = nd.progressLog
-    }
-    // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
-    omitEmptyRepoKeys(recordInput)
-    const record = taskWriteSchema.parse(recordInput)
+    let fileState: PreparedTaskFiles | undefined
     try {
-      if (fileState) {
-        for (const row of fileState.newRows) await domain.table('file_assets').put(row.id, row)
+      if (draft) {
+        rejectRawAndOpsMixed(draft)
+        const hasOps = draft.attachmentOps || draft.progressOps
+        let nd
+        if (hasOps) {
+          const prepared = await prepareTaskDraftWithFiles(domain, fields.projectId, {}, draft, at)
+          fileState = prepared.fileState
+          nd = prepared
+        } else {
+          nd = normalizeTaskDraft(domain, fields.projectId, draft, at)
+        }
+        recordInput.attachments = nd.attachments
+        recordInput.progressLog = nd.progressLog
       }
-      await table.put(id, record)
+      // 空仓库地址/分支归一为缺键，不留空字符串污染 v2 记录。
+      omitEmptyRepoKeys(recordInput)
+      const record = taskWriteSchema.parse(recordInput)
+      await publishPreparedTask(domain, record, fileState)
+      if (fileState) await finalizePreparedStages(fileState.prepared)
+      return structuredClone(record)
     } catch (err) {
       if (fileState) await rollbackNewAssets(domain, fileState.newRows, fileState.prepared)
       throw err
     }
-    if (fileState) await finalizePreparedStages(fileState.prepared)
-    return structuredClone(record)
   })
 }
 
@@ -304,72 +283,80 @@ export function updateTask(domain: PmDomain, id: string, input: unknown): Promis
     // 任一校验失败在此抛出，后续 put 不执行，基本字段保持原值，杜绝两请求半写。
     let draftAttachments: AttachmentItem[] | undefined
     let draftProgressLog: ProgressEntry[] | undefined
-    if (draft) {
-      rejectRawAndOpsMixed(draft)
-      if (draft.attachments !== undefined || draft.progressLog !== undefined) {
-        throw new TaskOpsError('task update 的 draft 仅接受 attachmentOps/progressOps；raw 数组为 create-only')
+    let fileState: PreparedTaskFiles | undefined
+    try {
+      if (draft) {
+        rejectRawAndOpsMixed(draft)
+        if (draft.attachments !== undefined || draft.progressLog !== undefined) {
+          throw new TaskOpsError('task update 的 draft 仅接受 attachmentOps/progressOps；raw 数组为 create-only')
+        }
+        const at = new Date().toISOString()
+        const applied = await prepareTaskDraftWithFiles(
+          domain,
+          current.projectId,
+          { attachments: current.attachments, progressLog: current.progressLog },
+          draft,
+          at,
+        )
+        fileState = applied.fileState
+        draftAttachments = applied.attachments
+        draftProgressLog = applied.progressLog
       }
-      const at = new Date().toISOString()
-      const applied = applyTaskDraftOps(
-        domain,
-        current.projectId,
-        { attachments: current.attachments, progressLog: current.progressLog },
-        draft,
-        at,
-      )
-      draftAttachments = applied.attachments
-      draftProgressLog = applied.progressLog
+      const nextInput: Record<string, unknown> = {
+        ...current,
+        ...fields,
+        id: current.id,
+        projectId: current.projectId,
+        parentId: current.parentId,
+        code: current.code,
+        order: current.order,
+        createdAt: current.createdAt,
+        updatedAt: new Date().toISOString(),
+      }
+      if (draftAttachments) nextInput.attachments = draftAttachments
+      if (draftProgressLog) nextInput.progressLog = draftProgressLog
+      if (fields.startDate === null) delete nextInput.startDate
+      if (fields.dueDate === null) delete nextInput.dueDate
+      // 完成日期随状态流转自动维护（batchUpdateTasks 逐条走 updateTask，口径自动一致）：
+      //  - 非 done → done：显式传入的合法 completedDate 优先，否则记为【今天】(YYYY-MM-DD)；
+      //  - done → 其它状态：清除 completedDate（归一为缺键，与 startDate/dueDate 用 null 清除同构）；
+      //  - 已处于 done 但本次更新不含状态/不传 completedDate：spread 已保留原值，绝不因 updatedAt 刷新而覆盖。
+      const transitioningIntoDone = fields.status !== undefined
+        && current.status !== 'done'
+        && fields.status === 'done'
+      becameDone = transitioningIntoDone
+      const transitioningOutOfDone = fields.status !== undefined
+        && current.status === 'done'
+        && fields.status !== 'done'
+      if (transitioningIntoDone) {
+        nextInput.completedDate = typeof fields.completedDate === 'string' && fields.completedDate
+          ? fields.completedDate
+          : localTodayIso()
+      } else if (transitioningOutOfDone) {
+        delete nextInput.completedDate
+      } else if (fields.completedDate !== undefined) {
+        // 显式纠正/清除完成日期（在状态未发生流转时）：null 即清除，字符串即采纳。
+        if (fields.completedDate === null) delete nextInput.completedDate
+        else nextInput.completedDate = fields.completedDate
+      }
+      if (fields.predecessorIds !== undefined) {
+        // 整体替换：显式传即覆盖；空数组归一为缺键（清空前置）。
+        const normalized = validatePredecessorRelation(domain, current.projectId, current.id, fields.predecessorIds)
+        if (normalized) nextInput.predecessorIds = normalized
+        else delete nextInput.predecessorIds
+      }
+      // 空仓库地址/分支归一为缺键（显式传空白即清空），不留空字符串。
+      omitEmptyRepoKeys(nextInput)
+      // #23：显式清除人工设定（manualProgress=null）时，一并清掉人工备注，避免残留旧口径。
+      if (fields.manualProgress === null) delete nextInput.manualProgressNote
+      const next = taskWriteSchema.parse(nextInput)
+      await publishPreparedTask(domain, next, fileState, current)
+      if (fileState) await finalizePreparedStages(fileState.prepared)
+      return structuredClone(next)
+    } catch (error) {
+      if (fileState) await rollbackNewAssets(domain, fileState.newRows, fileState.prepared)
+      throw error
     }
-    const nextInput: Record<string, unknown> = {
-      ...current,
-      ...fields,
-      id: current.id,
-      projectId: current.projectId,
-      parentId: current.parentId,
-      code: current.code,
-      order: current.order,
-      createdAt: current.createdAt,
-      updatedAt: new Date().toISOString(),
-    }
-    if (draftAttachments) nextInput.attachments = draftAttachments
-    if (draftProgressLog) nextInput.progressLog = draftProgressLog
-    if (fields.startDate === null) delete nextInput.startDate
-    if (fields.dueDate === null) delete nextInput.dueDate
-    // 完成日期随状态流转自动维护（batchUpdateTasks 逐条走 updateTask，口径自动一致）：
-    //  - 非 done → done：显式传入的合法 completedDate 优先，否则记为【今天】(YYYY-MM-DD)；
-    //  - done → 其它状态：清除 completedDate（归一为缺键，与 startDate/dueDate 用 null 清除同构）；
-    //  - 已处于 done 但本次更新不含状态/不传 completedDate：spread 已保留原值，绝不因 updatedAt 刷新而覆盖。
-    const transitioningIntoDone = fields.status !== undefined
-      && current.status !== 'done'
-      && fields.status === 'done'
-    becameDone = transitioningIntoDone
-    const transitioningOutOfDone = fields.status !== undefined
-      && current.status === 'done'
-      && fields.status !== 'done'
-    if (transitioningIntoDone) {
-      nextInput.completedDate = typeof fields.completedDate === 'string' && fields.completedDate
-        ? fields.completedDate
-        : localTodayIso()
-    } else if (transitioningOutOfDone) {
-      delete nextInput.completedDate
-    } else if (fields.completedDate !== undefined) {
-      // 显式纠正/清除完成日期（在状态未发生流转时）：null 即清除，字符串即采纳。
-      if (fields.completedDate === null) delete nextInput.completedDate
-      else nextInput.completedDate = fields.completedDate
-    }
-    if (fields.predecessorIds !== undefined) {
-      // 整体替换：显式传即覆盖；空数组归一为缺键（清空前置）。
-      const normalized = validatePredecessorRelation(domain, current.projectId, current.id, fields.predecessorIds)
-      if (normalized) nextInput.predecessorIds = normalized
-      else delete nextInput.predecessorIds
-    }
-    // 空仓库地址/分支归一为缺键（显式传空白即清空），不留空字符串。
-    omitEmptyRepoKeys(nextInput)
-    // #23：显式清除人工设定（manualProgress=null）时，一并清掉人工备注，避免残留旧口径。
-    if (fields.manualProgress === null) delete nextInput.manualProgressNote
-    const next = taskWriteSchema.parse(nextInput)
-    await table.put(id, next)
-    return structuredClone(next)
   }).then((result) => {
     // X6-L1：任务已落库为 done 后 best-effort 建即时复盘草稿。
     // 钩子在写队列外链式触发（不嵌套入队、不参与本事务）；失败仅 console.warn，绝不阻断任务落库。

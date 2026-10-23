@@ -1,0 +1,303 @@
+import { createElement } from 'react'
+import { act, create, type ReactTestRenderer } from 'react-test-renderer'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { PmPanel, type Snapshot } from './panel.js'
+import { apply } from './index.js'
+import { armLaunchHandshake, createLaunchHandshakeRetrier } from './launch-handshake.js'
+
+const fixture: Snapshot = {
+  projects: [], tasks: [], milestones: [], riskIssues: [], meetings: [], reports: [], deliverables: [],
+}
+const encoded = JSON.stringify(fixture)
+const pending = <T,>() => {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>(ok => { resolve = ok })
+  return { promise, resolve }
+}
+let mounted: ReactTestRenderer | undefined
+let location: { hash: string; pathname: string; search: string }
+let events: EventTarget
+let fetcher: ReturnType<typeof vi.fn>
+let history: ReturnType<typeof vi.fn>
+let storage: { getItem: ReturnType<typeof vi.fn>; setItem: ReturnType<typeof vi.fn>; removeItem: ReturnType<typeof vi.fn> }
+let hashListeners: Set<EventListener>
+
+beforeEach(() => {
+  location = { hash: '#pm-launch=18345.N1', pathname: '/workbench', search: '?view=pm' }
+  events = new EventTarget()
+  hashListeners = new Set()
+  fetcher = vi.fn().mockResolvedValue({ ok: true } as Response)
+  history = vi.fn((_state, _title, url: string) => {
+    location.hash = url.includes('#') ? url.slice(url.indexOf('#')) : ''
+  })
+  storage = { getItem: vi.fn(() => null), setItem: vi.fn(), removeItem: vi.fn() }
+  vi.stubGlobal('window', {
+    location,
+    history: { replaceState: history },
+    addEventListener: (type: string, handler: EventListener) => {
+      if (type === 'hashchange') hashListeners.add(handler)
+      events.addEventListener(type, handler)
+    },
+    removeEventListener: (type: string, handler: EventListener) => {
+      if (type === 'hashchange') hashListeners.delete(handler)
+      events.removeEventListener(type, handler)
+    },
+    matchMedia: () => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }),
+  })
+  vi.stubGlobal('document', { activeElement: null })
+  vi.stubGlobal('localStorage', storage)
+  vi.stubGlobal('sessionStorage', storage)
+  vi.stubGlobal('fetch', fetcher)
+})
+
+afterEach(() => {
+  if (mounted) act(() => mounted!.unmount())
+  mounted = undefined
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
+})
+
+async function mount(execute = vi.fn().mockResolvedValue(encoded)) {
+  await act(async () => { mounted = create(createElement(PmPanel, { execute })) })
+  return execute
+}
+async function hashChange(hash: string) {
+  await act(async () => {
+    location.hash = hash
+    events.dispatchEvent(new Event('hashchange'))
+  })
+}
+async function refresh() {
+  const button = mounted!.root.findAllByType('button').find(node => node.props.title === '刷新数据')
+  expect(button).toBeDefined()
+  await act(async () => { button!.props.onClick() })
+}
+function sent() {
+  return fetcher.mock.calls.map(([url, init]) => ({ url, ...JSON.parse(String(init.body)) }))
+}
+function retrier() {
+  return createLaunchHandshakeRetrier({
+    getHash: () => location.hash,
+    replaceState: cleaned => { location.hash = cleaned },
+    fetchImpl: fetcher,
+  })
+}
+
+describe('Independent bridge ownership', () => {
+  it('B01 same-token shares flight; failed token retries independently after another success', async () => {
+    const n1 = pending<Response>()
+    const n2 = pending<Response>()
+    fetcher.mockReset().mockReturnValueOnce(n1.promise).mockReturnValueOnce(n2.promise)
+      .mockResolvedValue({ ok: true } as Response)
+    const r = retrier()
+    const first = r.reportReady()
+    expect(r.reportReady()).toBe(first)
+    location.hash = '#pm-launch=18345.N2'
+    const second = r.reportReady()
+    expect(second).not.toBe(first)
+    n1.resolve({ ok: true } as Response)
+    await expect(first).resolves.toBe(true)
+    expect(location.hash).toBe('#pm-launch=18345.N2')
+    n2.resolve({ ok: false } as Response)
+    await expect(second).resolves.toBe(false)
+    expect(location.hash).toBe('#pm-launch=18345.N2')
+    await expect(r.reportReady()).resolves.toBe(true)
+    expect(sent().map(item => item.nonce)).toEqual(['N1', 'N2', 'N2'])
+  })
+
+  it('B03 old finally cannot remove new token flight; reverse completion preserves business hash', async () => {
+    const n1 = pending<Response>()
+    const n2 = pending<Response>()
+    fetcher.mockReset().mockReturnValueOnce(n1.promise).mockReturnValueOnce(n2.promise)
+    const r = retrier()
+    const first = r.reportReady()
+    location.hash = '#/tasks&pm-launch=18346.N2'
+    const second = r.reportReady()
+    n1.resolve({ ok: false } as Response)
+    await first
+    expect(r.reportReady()).toBe(second)
+    expect(fetcher).toHaveBeenCalledTimes(2)
+    n2.resolve({ ok: true } as Response)
+    await second
+    expect(location.hash).toBe('#/tasks')
+  })
+
+  it('B04 in-flight success must not erase a newer plain business route', async () => {
+    const response = pending<Response>()
+    fetcher.mockReturnValueOnce(response.promise)
+    const clean = vi.fn()
+    const first = armLaunchHandshake({
+      getHash: () => location.hash, replaceState: clean, fetchImpl: fetcher,
+    })
+    location.hash = '#/reports?tab=history'
+    response.resolve({ ok: true } as Response)
+    await first
+    expect(clean).not.toHaveBeenCalled()
+    expect(location.hash).toBe('#/reports?tab=history')
+  })
+
+  it('B02 completed same token is not reposted; equal nonce on another port is distinct', async () => {
+    const r = retrier()
+    await r.reportReady()
+    location.hash = '#pm-launch=18345.N1'
+    await r.reportReady()
+    expect(fetcher).toHaveBeenCalledTimes(1)
+    location.hash = '#/tasks&pm-launch=18346.N1'
+    await r.reportReady()
+    expect(sent()).toEqual([
+      { url: 'http://127.0.0.1:18345/api/entered', nonce: 'N1' },
+      { url: 'http://127.0.0.1:18346/api/entered', nonce: 'N1' },
+    ])
+  })
+})
+
+describe('Independent real PmPanel integration', () => {
+  it('P01 pending snapshot sees no POST; latest token waits for successful actual execute', async () => {
+    const read = pending<string>()
+    const execute = await mount(vi.fn().mockReturnValue(read.promise))
+    expect(execute.mock.calls).toEqual([['web snapshot']])
+    await hashChange('#pm-launch=18345.N2')
+    await hashChange('#pm-launch=18345.N2')
+    expect(fetcher).not.toHaveBeenCalled()
+    await act(async () => { read.resolve(encoded) })
+    expect(sent().map(item => item.nonce)).toEqual(['N2'])
+  })
+
+  it('P03 successful panel closes ready during next read; N2 sends only after success', async () => {
+    const read = pending<string>()
+    const execute = vi.fn().mockResolvedValueOnce(encoded).mockReturnValueOnce(read.promise)
+    await mount(execute)
+    await refresh()
+    await hashChange('#pm-launch=18345.N2')
+    expect(sent().map(item => item.nonce)).toEqual(['N1'])
+    expect(location.hash).toBe('#pm-launch=18345.N2')
+    await act(async () => { read.resolve(encoded) })
+    expect(sent().map(item => item.nonce)).toEqual(['N1', 'N2'])
+    expect(execute).toHaveBeenCalledTimes(2)
+  })
+
+  it('P03 malformed snapshot JSON fails ready; real retry processes current token', async () => {
+    const execute = vi.fn().mockResolvedValueOnce('not json').mockResolvedValueOnce(encoded)
+    await mount(execute)
+    await hashChange('#pm-launch=18345.N2')
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(location.hash).toBe('#pm-launch=18345.N2')
+    const retry = mounted!.root.findAllByType('button').find(node => node.children.includes('重试'))
+    expect(retry).toBeDefined()
+    await act(async () => { retry!.props.onClick() })
+    expect(sent().map(item => item.nonce)).toEqual(['N2'])
+  })
+
+  it('P02 hash-only new nonce and same-nonce new port report without second snapshot', async () => {
+    const execute = await mount()
+    await hashChange('#/tasks&pm-launch=18346.N1')
+    await hashChange('#/tasks&pm-launch=18346.N2')
+    expect(sent()).toEqual([
+      { url: 'http://127.0.0.1:18345/api/entered', nonce: 'N1' },
+      { url: 'http://127.0.0.1:18346/api/entered', nonce: 'N1' },
+      { url: 'http://127.0.0.1:18346/api/entered', nonce: 'N2' },
+    ])
+    expect(execute.mock.calls).toEqual([['web snapshot']])
+    expect(history).toHaveBeenLastCalledWith(null, '', '/workbench?view=pm#/tasks')
+  })
+
+  it('P04 plain/invalid/repeated business hashes do not POST or read snapshot', async () => {
+    location.hash = '#/tasks'
+    const execute = await mount()
+    for (const hash of ['#/tasks', '#/tasks', '#/reports', '#pm-launch=0.N1', '#pm-launch=70000.N2', '#pm-launch=12.5.N3', '#pm-launch=18345.']) {
+      await hashChange(hash)
+    }
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(history).not.toHaveBeenCalled()
+    expect(execute).toHaveBeenCalledTimes(1)
+  })
+
+  it('P04 POST failure preserves token; repeated hash retries then completed-token events dedupe', async () => {
+    fetcher.mockReset().mockRejectedValueOnce(new Error('network')).mockResolvedValue({ ok: true } as Response)
+    const execute = await mount()
+    expect(location.hash).toBe('#pm-launch=18345.N1')
+    await hashChange('#pm-launch=18345.N1')
+    expect(sent().map(item => item.nonce)).toEqual(['N1', 'N1'])
+    expect(location.hash).toBe('')
+    await hashChange('#pm-launch=18345.N1')
+    await hashChange('#pm-launch=18345.N1')
+    expect(fetcher).toHaveBeenCalledTimes(2)
+    expect(execute).toHaveBeenCalledTimes(1)
+  })
+
+  it('P05 old snapshot resolves while new actual mount is pending: no false N2 readiness', async () => {
+    const oldRead = pending<string>()
+    const newRead = pending<string>()
+    await mount(vi.fn().mockReturnValue(oldRead.promise))
+    expect(hashListeners.size).toBe(1)
+    act(() => mounted!.unmount())
+    mounted = undefined
+    expect(hashListeners.size).toBe(0)
+    location.hash = '#pm-launch=18345.N2'
+    await mount(vi.fn().mockReturnValue(newRead.promise))
+    expect(hashListeners.size).toBe(1)
+    await act(async () => { oldRead.resolve(encoded) })
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(location.hash).toBe('#pm-launch=18345.N2')
+    await act(async () => { newRead.resolve(encoded) })
+    expect(sent().map(item => item.nonce)).toEqual(['N2'])
+    act(() => mounted!.unmount())
+    mounted = undefined
+    expect(hashListeners.size).toBe(0)
+  })
+
+  it('P05 N2 completes before old N1; unmount removes listener without new POST', async () => {
+    const n1 = pending<Response>()
+    const n2 = pending<Response>()
+    fetcher.mockReset().mockReturnValueOnce(n1.promise).mockReturnValueOnce(n2.promise)
+    await mount()
+    await hashChange('#/tasks&pm-launch=18345.N2')
+    expect(sent().map(item => item.nonce)).toEqual(['N1', 'N2'])
+    await act(async () => { n2.resolve({ ok: true } as Response) })
+    expect(location.hash).toBe('#/tasks')
+    await act(async () => { n1.resolve({ ok: true } as Response) })
+    expect(location.hash).toBe('#/tasks')
+    act(() => mounted!.unmount())
+    mounted = undefined
+    expect(hashListeners.size).toBe(0)
+    await hashChange('#pm-launch=18345.N3')
+    expect(fetcher).toHaveBeenCalledTimes(2)
+  })
+
+  it('P06 actual index apply only registers actual PmPanel, not snapshot/global ready', () => {
+    const execute = vi.fn()
+    const register = vi.fn()
+    const ctx = {
+      sessions: { list: { getSnapshot: () => ({ ids: ['synthetic-session'] }) }, create: vi.fn() },
+      remote: { commands: { execute } },
+      slots: { inject: vi.fn((_name, callback) => callback()), register },
+    }
+    apply(ctx as never)
+    expect(register.mock.calls[0][1]).toBe(PmPanel)
+    expect(register.mock.calls[0][0].key).toBe('pm-tool')
+    expect(execute).not.toHaveBeenCalled()
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(hashListeners.size).toBe(0)
+  })
+
+  it('S01/S02 request contract preserved; token never written to storage/log/query/cookie', async () => {
+    const logs = ['log', 'warn', 'error', 'info', 'debug'].map(method => vi.spyOn(console, method as 'log').mockImplementation(() => {}))
+    await mount()
+    await hashChange('#/tasks&pm-launch=18345.N2')
+    for (const [url, init] of fetcher.mock.calls) {
+      expect(url).toBe('http://127.0.0.1:18345/api/entered')
+      expect(init).toEqual({
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ nonce: JSON.parse(init.body).nonce }), credentials: 'omit',
+      })
+    }
+    expect(storage.setItem).not.toHaveBeenCalled()
+    expect(storage.removeItem.mock.calls).toEqual([['pm-selected-project']])
+    expect(JSON.stringify([...storage.getItem.mock.calls, ...storage.setItem.mock.calls, ...storage.removeItem.mock.calls]))
+      .not.toMatch(/N1|N2|pm-launch|18345/)
+    expect(location.search).toBe('?view=pm')
+    expect(JSON.stringify(logs.flatMap(log => log.mock.calls))).not.toMatch(/N1|N2|pm-launch/)
+    expect(history.mock.calls.map(call => call[2]).join(' ')).not.toMatch(/N1|N2|pm-launch/)
+    expect(document).not.toHaveProperty('cookie')
+  })
+})

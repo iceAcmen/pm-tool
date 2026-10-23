@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-22T15:44:49.729Z",
+  "checkedInputs": 907,
+  "drift": [],
+  "missingLinks": [
+    "op-growth-remaining-gui-review-20261022-r2-seal.json"
+  ],
+  "trailingWhitespaceLines": [],
+  "artifacts": [
+    {
+      "file": "docs/testing/op-growth-remaining-gui-review-20261022-r2-reader.mjs",
+      "bytes": 16637,
+      "sha256": "46849ec25c0d71e45097b4c018509834bf6ec458b920a8002a8db44ba5f102af"
+    },
+    {
+      "file": "docs/testing/op-growth-remaining-gui-review-20261022-r2-audit.json",
+      "bytes": 620980,
+      "sha256": "47c2b4108787c30c2fe795afbc29edbbb0a7f25ed57ae2d50f5d1d377e75cae3"
+    },
+    {
+      "file": "docs/testing/op-growth-remaining-gui-review-20261022-r2-report.md",
+      "bytes": 17294,
+      "sha256": "b2fd3591e699427efab216685237f665f3d21d6b9fbda0a644d790f05cd18815"
+    }
+  ],
+  "exitCode": 1,
+  "scope": "只封自有审证文件及已读明列输入；非产品回归/新GUI执行/全盘污染审计",
+  "release": "STOP",
+  "ownership": "无业务/builder/Git写/浏览器/服务/密钥资源锁；审结释放"
+}

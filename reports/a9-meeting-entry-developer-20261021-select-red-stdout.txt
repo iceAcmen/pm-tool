@@ -1,0 +1,15 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/private/tmp/pmtool-a9-meeting-SYJUDV[39m
+
+ [32m✓[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01b 主保存两条既有草稿，按 stable ID 保关联、来源与创建历史
+ [31m×[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01 默认会议编辑透传同项目 task/issue select，可解除且拒绝跨项目或 risk
+[31m   → No instances found with props: {"aria-label":"关联任务"}[39m
+ [31m×[39m src/client/views/records/records-meeting-entry.test.tsx[2m > [22mLG-01 未提供候选时仍显示已存关联，不用空列表清空 ID
+[31m   → No instances found with props: {"aria-label":"关联任务"}[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 22:57:55
+[2m   Duration [22m 698ms[2m (transform 266ms, setup 0ms, collect 483ms, tests 47ms, environment 0ms, prepare 45ms)[22m
+
+JSON report written to /private/tmp/pmtool-a9-meeting-SYJUDV/vitest.json

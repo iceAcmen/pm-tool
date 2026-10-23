@@ -7,6 +7,7 @@ import { addTask } from './tasks.js'
 import { getProject } from './projects.js'
 import { projectIdSchema } from './project.js'
 import { parseProgressInput } from './task-inline.js'
+import { taskCreateSchema } from './task.js'
 import type { PmDomain } from './storage.js'
 
 export class CsvImportError extends Error {}
@@ -144,45 +145,62 @@ export async function readXlsxGridFromBuffer(data: ArrayBuffer | Uint8Array): Pr
 /** 已用二维数组（来自 CSV 或 XLSX）解析为任务计划。 */
 export function planGridCsvImport(domain: PmDomain, projectId: string, grid: string[][]): { total: number, outline: { depth: number, code: string, title: string }[] } {
   ensureProject(domain, projectId)
-  const rows = parseGridTasks(grid)
+  const rows = preflightGridTasks(projectId, grid)
   const counters: number[] = []
   const outline = rows.map(row => {
     counters.length = row.depth + 1
     counters[row.depth] = (counters[row.depth] ?? 0) + 1
-    return { depth: row.depth, code: counters.slice(0, row.depth + 1).join('.'), title: row.title }
+    return { depth: row.depth, code: counters.slice(0, row.depth + 1).join('.'), title: row.fields.title }
   })
   return { total: rows.length, outline }
 }
 
 export async function importTasksFromGrid(domain: PmDomain, projectId: string, grid: string[][]): Promise<{ id: string, code: string, title: string }[]> {
   ensureProject(domain, projectId)
-  const rows = parseGridTasks(grid)
+  const rows = preflightGridTasks(projectId, grid)
   const stack: { depth: number, id: string }[] = []
   const created: { id: string, code: string, title: string }[] = []
   for (const row of rows) {
     while (stack.length && stack[stack.length - 1].depth >= row.depth) stack.pop()
     const parentId = stack.length ? stack[stack.length - 1].id : null
-    const done = row.progress === 100
-    const priority = row.priority && /^P[012]$/i.test(row.priority) ? row.priority.toUpperCase() : undefined
-    const task = await addTask(domain, {
-      projectId,
-      parentId,
-      title: row.title,
-      assignee: row.assignee ?? '',
-      dueDate: row.dueDate,
-      startDate: row.startDate,
-      ...(priority ? { priority } : {}),
-      progress: row.progress ?? 0,
-      status: done ? 'done' : (row.progress && row.progress > 0 ? 'in_progress' : 'todo'),
-    })
+    const task = await addTask(domain, { ...row.fields, parentId })
     stack.push({ depth: row.depth, id: task.id })
     created.push({ id: task.id, code: task.code, title: task.title })
   }
   return created
 }
 
+/** 预览与确认共用映射/schema；所有可预判字段错误在第一条 addTask 前拒绝。 */
+function preflightGridTasks(projectId: string, grid: string[][]) {
+  const prepared: { depth: number, fields: ReturnType<typeof taskCreateSchema.parse> }[] = []
+  const errors: string[] = []
+  for (const row of parseGridTasks(grid)) {
+    const priority = row.priority && /^P[012]$/i.test(row.priority) ? row.priority.toUpperCase() : undefined
+    // 父 ID 由顺序 addTask 产生；这里只验证文件字段，关系/编号仍由领域写入负责。
+    const result = taskCreateSchema.safeParse({
+      projectId,
+      parentId: null,
+      title: row.title,
+      assignee: row.assignee ?? '',
+      dueDate: row.dueDate,
+      startDate: row.startDate,
+      ...(priority ? { priority } : {}),
+      progress: row.progress ?? 0,
+      status: row.progress === 100 ? 'done' : (row.progress && row.progress > 0 ? 'in_progress' : 'todo'),
+    })
+    if (result.success) {
+      prepared.push({ depth: row.depth, fields: result.data })
+    } else {
+      errors.push(`第 ${row.sourceRow} 行：${result.error.issues.map(issue =>
+        `${issue.path.join('.')}：${issue.message}`).join('；')}`)
+    }
+  }
+  if (errors.length) throw new CsvImportError(errors.join('；'))
+  return prepared
+}
+
 /** 把已解析的文本（CSV 字符串）当网格。 */
-function parseGridTasks(grid: string[][]): CsvRow[] {
+function parseGridTasks(grid: string[][]): (CsvRow & { sourceRow: number })[] {
   if (grid.length < 2) throw new CsvImportError('至少需要一行表头和一行数据')
   const header = grid[0].map(h => h.trim())
   const colIndex = new Map<keyof CsvRow, number>()
@@ -193,7 +211,7 @@ function parseGridTasks(grid: string[][]): CsvRow[] {
   if (!colIndex.has('title')) {
     throw new CsvImportError('表头缺少「标题」列；约定表头：层级/标题/负责人/优先级/开始/截止/进度')
   }
-  const rows: CsvRow[] = []
+  const rows: (CsvRow & { sourceRow: number })[] = []
   for (let r = 1; r < grid.length; r++) {
     const cells = grid[r]
     const title = (cells[colIndex.get('title')!] ?? '').trim()
@@ -201,6 +219,7 @@ function parseGridTasks(grid: string[][]): CsvRow[] {
     const depthRaw = colIndex.has('depth') ? (cells[colIndex.get('depth')!] ?? '').trim() : ''
     const progressRaw = colIndex.has('progress') ? (cells[colIndex.get('progress')!] ?? '').trim() : ''
     rows.push({
+      sourceRow: r + 1,
       depth: depthRaw ? Math.max(0, parseInt(depthRaw, 10) - 1) : 0,
       title,
       assignee: cell(cells, colIndex.get('assignee')),

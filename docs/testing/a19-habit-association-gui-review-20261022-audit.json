@@ -1,0 +1,953 @@
+{
+  "at": "2026-10-22T02:15:39.541Z",
+  "pid": 90135,
+  "checks": [
+    {
+      "name": "limited protected files unchanged at audit start",
+      "verified": true
+    },
+    {
+      "name": "699 original files: exact list, SHA, bytes; all JSON parses",
+      "verified": true
+    },
+    {
+      "name": "candidate 531 source inputs, 453 artifacts, patch, new-inputs, explicit 5 inherited probes",
+      "verified": true
+    },
+    {
+      "name": "SOURCE/AUTO signed source exactly matches actual candidate",
+      "verified": true
+    },
+    {
+      "name": "build and regression receipts retain failed first coverage and final successful rounds",
+      "verified": true
+    },
+    {
+      "name": "531-input candidate identity and complete loaded client bound to new 3249 host",
+      "verified": true
+    },
+    {
+      "name": "19 steps, 18 successful, 1 original nav timeout; actual pages share origin/timeOrigin",
+      "verified": true
+    },
+    {
+      "name": "complete requests correspond one-to-one to user run/done, snapshots to raw",
+      "verified": true
+    },
+    {
+      "name": "all successful raw tables match after-root exact hashes",
+      "verified": true
+    },
+    {
+      "name": "standard F5 backup: exact old habit and OKR; no fabricated missing target",
+      "verified": true
+    },
+    {
+      "name": "4 real suggest writes: only inbox, unchanged old habit/OKR, stable initial fields",
+      "verified": true
+    },
+    {
+      "name": "own-item pending/confirmed/ignored exact title+ID, rationale, state, no borrowed targets",
+      "verified": true
+    },
+    {
+      "name": "confirm creates exactly one linked draft, ignore no creation, immutable original fields",
+      "verified": true
+    },
+    {
+      "name": "real OKR update: only title/updatedAt changed, current title refresh on each own suggestion",
+      "verified": true
+    },
+    {
+      "name": "local 1440/390 layout only: body width, association row shrink/wrap, missing and no-ref unchanged",
+      "verified": true
+    },
+    {
+      "name": "7 expected business writes / 11 read-only successful steps; files/backups/exports unchanged",
+      "verified": true
+    },
+    {
+      "name": "inter-step changes do not mutate business tables/files/backups/exports",
+      "verified": true
+    },
+    {
+      "name": "protected files unchanged after audit",
+      "verified": true
+    }
+  ],
+  "rows": [
+    {
+      "step": "host-open-1792634770204",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "command-1792634784038",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "command-1792634795946",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "command-1792634807916",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "command-1792634817411",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "nav-1792634874169",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "confirm-1792634886688",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [
+            "/pmtool/habits/habit-mviwizum-xt2ji6.json"
+          ],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "ignore-1792634894762",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/settings/pmHabitInbox.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "reenter-1792634905223",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "host-open-1792634916951",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "command-1792634928532",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/pmtool/okrs/okr-mvi5z847-33y3xk.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "nav-1792634940470",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "width-1792634952489",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "suggestion-visible-1792634962691",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 1440
+    },
+    {
+      "step": "width-1792634972808",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 390
+    },
+    {
+      "step": "suggestion-visible-1792634986861",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 390
+    },
+    {
+      "step": "suggestion-visible-1792634996320",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 390
+    },
+    {
+      "step": "suggestion-visible-1792635005070",
+      "exit": 0,
+      "rootDiff": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      },
+      "width": 390
+    }
+  ],
+  "commands": [
+    {
+      "step": "command-1792634784038",
+      "seq": [
+        13,
+        14
+      ],
+      "line": "/pm habit suggest p-0001 {\"title\":\"QA 采纳习惯草稿\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"目标F5，确认只建立草稿，需人定稿。\"}",
+      "kind": "success"
+    },
+    {
+      "step": "command-1792634795946",
+      "seq": [
+        15,
+        16
+      ],
+      "line": "/pm habit suggest p-0001 {\"title\":\"QA 忽略习惯建议\",\"okrId\":\"okr-mvi5z847-33y3xk\",\"rationale\":\"忽略仍保留建议自己的目标与理由。\"}",
+      "kind": "success"
+    },
+    {
+      "step": "command-1792634807916",
+      "seq": [
+        17,
+        18
+      ],
+      "line": "/pm habit suggest p-0001 {\"title\":\"QA 缺失目标建议\",\"okrId\":\"okr-qa-missing-original-reference\",\"rationale\":\"当前快照未找到时保原目标ID，不借其他标题。\"}",
+      "kind": "success"
+    },
+    {
+      "step": "command-1792634817411",
+      "seq": [
+        19,
+        20
+      ],
+      "line": "/pm habit suggest p-0001 {\"title\":\"QA 未关联建议\",\"rationale\":\"无目标字段，保持原行为，不借习惯卡目标。\"}",
+      "kind": "success"
+    },
+    {
+      "step": "nav-1792634827620",
+      "seq": [
+        21,
+        22
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    },
+    {
+      "step": "confirm-1792634886688",
+      "seq": [
+        23,
+        24
+      ],
+      "line": "/pm habit confirm habitsug-mviwgthg-lmdjlu",
+      "kind": "success"
+    },
+    {
+      "step": "confirm-1792634886688",
+      "seq": [
+        25,
+        26
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    },
+    {
+      "step": "confirm-1792634886688",
+      "seq": [
+        27,
+        28
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    },
+    {
+      "step": "ignore-1792634894762",
+      "seq": [
+        29,
+        30
+      ],
+      "line": "/pm habit ignore habitsug-mviwh2or-orovb8",
+      "kind": "success"
+    },
+    {
+      "step": "ignore-1792634894762",
+      "seq": [
+        31,
+        32
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    },
+    {
+      "step": "ignore-1792634894762",
+      "seq": [
+        33,
+        34
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    },
+    {
+      "step": "command-1792634928532",
+      "seq": [
+        35,
+        36
+      ],
+      "line": "/pm okr update okr-mvi5z847-33y3xk {\"title\":\"QA 长目标标题：交付验收材料与证据逐条核对，保留建议原始目标标识；包含普通文本 <strong>仅供人阅读</strong> 与较长连续编号 ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789，用于窄屏自然换行检查。\"}",
+      "kind": "success"
+    },
+    {
+      "step": "nav-1792634940470",
+      "seq": [
+        37,
+        38
+      ],
+      "line": "/pm web snapshot",
+      "kind": "success"
+    }
+  ],
+  "gaps": [
+    {
+      "from": "command-1792634784038",
+      "to": "command-1792634795946",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "command-1792634795946",
+      "to": "command-1792634807916",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "command-1792634807916",
+      "to": "command-1792634817411",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "command-1792634817411",
+      "to": "nav-1792634874169",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "confirm-1792634886688",
+      "to": "ignore-1792634894762",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "ignore-1792634894762",
+      "to": "reenter-1792634905223",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "command-1792634928532",
+      "to": "nav-1792634940470",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    },
+    {
+      "from": "nav-1792634940470",
+      "to": "width-1792634952489",
+      "delta": {
+        "data": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "/session_projcache/sessions/session-9d713d48-47cb-4993-b794-3f1f5a085317.json"
+          ]
+        },
+        "files": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "backups": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "exports": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        }
+      }
+    }
+  ],
+  "counts": {
+    "indexed": 699,
+    "frames": 325,
+    "steps": 19,
+    "successes": 18,
+    "originalFailures": 1,
+    "requests": 13,
+    "events": 26,
+    "snapshots": 6,
+    "rawFiles": 137
+  },
+  "candidate": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A19/candidate.json",
+    "bytes": 144892,
+    "sha256": "e6ae8366eeaae4293d4d960cfe4002bf249b10f148aad13f97eecdb28fee25d7",
+    "mtimeNs": "1792634699700982143",
+    "ino": "54836133"
+  },
+  "loaded": {
+    "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/A19/final/loaded/result.json",
+    "bytes": 4518,
+    "sha256": "75f4d5581e3220cbaa8b7809f4f64b8680f33e61cee34566d7d1ae250120a928",
+    "mtimeNs": "1792634748503127505",
+    "ino": "54837130"
+  },
+  "bounded": "File-consistency checks support independent visual judgment; not GUI or whole-product PASS by themselves."
+}

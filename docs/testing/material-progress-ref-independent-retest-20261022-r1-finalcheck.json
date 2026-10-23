@@ -1,0 +1,45 @@
+{
+  "sealedEntries": 17276,
+  "sealedEntriesUnchanged": true,
+  "sealSha256": "317310ec2e6d48e5e7f22474bdb85693b358a6280d288b2890c45f39836c36e9",
+  "artifacts": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-plan.md",
+      "bytes": 7273,
+      "sha256": "a872e363d337698c759d5e8c33996a087bbe87a4acb363c237aad477b7233c8c"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-report.md",
+      "bytes": 11008,
+      "sha256": "ababd51a2d4ad73c73cf81f0e4d3cb2354f77beb14ad3f6e3d3debba7b45e7d3"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-run.mjs",
+      "bytes": 18454,
+      "sha256": "28467ba6cc68e4c0f430f2fc89a7ba916cc9c9adae4d7c30118307cf1bbd597f"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-source-audit.mjs",
+      "bytes": 3674,
+      "sha256": "6d518da28a40a181bbbbf4e84bddf456d9904c6736b66ea262c0d0ae28c6e2e0"
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-finalize.mjs",
+      "bytes": 2036,
+      "sha256": "a1a9650215a85a69aecdeb4d0f70fc253f77218a6e4cf69f9939653f11dd0a2c"
+    }
+  ],
+  "verdict": "PASS_SOURCE_AUTO_LIMITED",
+  "protectedUnchanged": true,
+  "sourceUnchanged": true,
+  "release": true,
+  "stop": true,
+  "node": "v22.23.3",
+  "pid": 54387,
+  "argv": [
+    "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/material-progress-ref-independent-retest-20261022-r1-finalize.mjs"
+  ],
+  "scope": "仅本修复SOURCE/AUTO，不签GUI/整域/父goalcommit",
+  "exitOnSuccess": 0
+}

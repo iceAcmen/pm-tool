@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-23",
+  "role": "trae独立原F02 GUI审证",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "origin": "每次exec_command返回后按实际工具终码记录；不是reader自填预计成功，不读取工具runtime",
+  "commands": [
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-repair-gui-review-20261023-r2-reader.mjs",
+        "audit"
+      ],
+      "actualToolExitCode": 1,
+      "actualToolWallSeconds": 0.6607,
+      "readerPidFromActualStdout": 24385,
+      "stdoutSummary": "mode=audit; members=1460; frames=298; rawStages=25; rawFiles=950；旧宿主正常backup新增四件后的roots整体全等断言失败",
+      "preservedOutput": "docs/testing/f02-repair-gui-review-20261023-r2-audit.json"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "/tmp/f02-repair-gui-review-20261023-r2-reader.mjs",
+        "audit2"
+      ],
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.5633,
+      "readerPidFromActualStdout": 24421,
+      "actualToolStdout": "{\"mode\":\"audit\",\"errors\":[],\"members\":1460,\"frames\":298,\"rawStages\":25,\"rawFiles\":950,\"pid\":24421}",
+      "stdoutBoundary": "旧输出标签mode=audit；真实命令参数audit2，未补造不同stdout",
+      "preservedOutput": "docs/testing/f02-repair-gui-review-20261023-r2-audit-r2.json"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "/tmp/f02-repair-gui-review-20261023-r2-reader.mjs"
+      ],
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.0916,
+      "actualToolStdout": "",
+      "boundary": "补充format纯结构核验前的reader语法检查；不是产品检查"
+    },
+    {
+      "argv": [
+        "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+        "--check",
+        "/tmp/f02-repair-gui-review-20261023-r2-reader.mjs"
+      ],
+      "actualToolExitCode": 0,
+      "actualToolWallSeconds": 0.1448,
+      "actualToolStdout": "",
+      "boundary": "最终reader语法检查；工具未返回PID，不补造"
+    }
+  ],
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "spawnExecutions": 0,
+  "formatAndSealReceipts": "分别在其实际执行终止后单列，不循环自指纹"
+}

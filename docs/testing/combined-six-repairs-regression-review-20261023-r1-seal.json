@@ -1,0 +1,183 @@
+{
+  "at": "2026-10-22T22:45:21.141Z",
+  "role": "independent raw evidence reviewer; no product/GUI execution",
+  "verdict": "PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE",
+  "object": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/index-r1.json",
+  "objectHash": {
+    "bytes": 378764,
+    "sha256": "4f281d7291ff76aa32f422d638c916da75892777fc34493bafee2e28e3e30548"
+  },
+  "candidate": {
+    "at": "2026-10-22T22:33:23.257Z",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "freeze": "/private/tmp/pmtool-combined-six-repairs-20261023-r1",
+    "pkg": "/private/tmp/pmtool-combined-six-repairs-20261023-r1/packages/dsh-pm-tool",
+    "sourceCount": 124,
+    "completeInputCount": 525,
+    "version": "0.7.4",
+    "builder": "Main",
+    "runtimeLoaded": false,
+    "authorization": "All existing pending acceptance to ordinary commit; no push/release/formal switch",
+    "independent": [
+      "p1004-handoff-source-auto-20261023-r1-report.md",
+      "p1005-reflect-entry-source-auto-20261023-r1-report.md",
+      "p1005-listbox-backdrop-source-auto-20261023-r1.md",
+      "p2007-archive-projection-source-auto-20261023-r1-report.md",
+      "p2002-outbound-slot-source-auto-20261023-r2-report.md",
+      "p2004-kr-related-source-auto-20261023-r2-report.md"
+    ],
+    "gitResults": {
+      "tracked-product.diff": {
+        "argv": [
+          "/usr/bin/git",
+          "diff",
+          "--binary",
+          "--",
+          "packages/dsh-pm-tool",
+          "launcher"
+        ],
+        "exitCode": 0
+      },
+      "changed-product-files.txt": {
+        "argv": [
+          "/usr/bin/git",
+          "diff",
+          "--name-only",
+          "--",
+          "packages/dsh-pm-tool",
+          "launcher"
+        ],
+        "exitCode": 0
+      },
+      "new-product-files.txt": {
+        "argv": [
+          "/usr/bin/git",
+          "ls-files",
+          "--others",
+          "--exclude-standard",
+          "--",
+          "packages/dsh-pm-tool/src",
+          "packages/dsh-pm-tool/scripts",
+          "launcher"
+        ],
+        "exitCode": 0
+      }
+    }
+  },
+  "verifiedAtSeal": {
+    "indexedMembers": 1822,
+    "productInputs": 525,
+    "built": 455,
+    "dependencies": true,
+    "sourceReports": 6
+  },
+  "members": [
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-report.md",
+      "bytes": 16177,
+      "sha256": "1101c72e1efbbd950efcb5111f9581b6bf7bc29e4757596c133e1f57929f2995"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-command-audit.md",
+      "bytes": 7606,
+      "sha256": "fc8e95fcdb44138d9511380ca77e364ffb77d51b8c386bfc587d0042b722feba"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-audit-attempt1.json",
+      "bytes": 1390546,
+      "sha256": "bf144a8383a3dfd7fac9ad9c6dbf7b987fec8f5b539dc54769a265141a702dee"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-audit-facility-check.json",
+      "bytes": 1910,
+      "sha256": "79e55999a4d33cef988a85c5acb7f851cc6dc5bc2016d027cd993e67425305d0"
+    },
+    {
+      "file": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-audit-final.json",
+      "bytes": 1372877,
+      "sha256": "c0614483a3865cb77fba325977ec88c4c8f2c3375b93cf9786ed24999f5a2b9e"
+    }
+  ],
+  "reader": {
+    "file": "/tmp/combined-six-repairs-regression-review-20261023-r1-reader.mjs",
+    "bytes": 33455,
+    "sha256": "6b1bb87cd06299722671bba9d9b6a8a59dd97bf7f017593b9bc4b215394cb34d"
+  },
+  "sealReader": {
+    "file": "/tmp/combined-six-repairs-regression-review-20261023-r1-seal.mjs",
+    "bytes": 4784,
+    "sha256": "67d1f9e1cfac180fce3dfc3cd5a225a7f9a32dca573b07090bef3e3c7e1939f9"
+  },
+  "actualTools": [
+    {
+      "executionId": "fb4c7dca76774ebfb11ce771b357fe89",
+      "pid": 8242,
+      "status": "exited",
+      "exitCode": 1,
+      "outputComplete": true,
+      "startedAtMs": 1792708754737,
+      "finishedAtMs": 1792708783303,
+      "metadata": {
+        "bytes": 529,
+        "sha256": "2f9300ff6e39eb5745cdfcb53031c8fdf6813f6ce8f21d17cd213644228a191d"
+      },
+      "stdout": {
+        "bytes": 20048,
+        "sha256": "3b2609a6cd3b15982d97e6beec4fbc36cd2c301e2abbb2953220ff3c5c565268"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "executionId": "73e01bd0c0705e658b7cd72ac578a463",
+      "pid": 9200,
+      "status": "exited",
+      "exitCode": 0,
+      "outputComplete": true,
+      "startedAtMs": 1792708889462,
+      "finishedAtMs": 1792708930039,
+      "metadata": {
+        "bytes": 529,
+        "sha256": "a2cc02ba9e9b4ed84664cf882ad4ecf9b50dd97262a37d980cf1aa1dd4e679a4"
+      },
+      "stdout": {
+        "bytes": 442,
+        "sha256": "eb68e6245869e0171c7a890b38f1004d77e518f4dc02fb120f0febf748e148ee"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "failedFacilitiesPreserved": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/combined-six-repairs-regression-review-20261023-r1-audit-attempt1.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/special.command.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/special.result.json",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/special.stdout.txt",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/special.stderr.txt",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/special-outer-receipt.json"
+  ],
+  "mainSealActualExit": 0,
+  "mainSealEvidence": "owner explicit actual observation; no synthetic outer metadata",
+  "selfSealCompletedChecks": true,
+  "selfSealOuterExit": "see actual command result; not inferred from file existence",
+  "productExecutions": 0,
+  "guiExecutions": 0,
+  "gitExecutions": 0,
+  "notSigned": [
+    "new host",
+    "six-repair GUI",
+    "styles/UX",
+    "parent all-goal",
+    "parent ordinarycommit",
+    "release/formal switch"
+  ],
+  "released": true,
+  "STOP": true,
+  "excludes": [
+    "this seal itself"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-22T22:40:29.332Z",
+  "mode": "facility-check",
+  "reader": {
+    "path": "/tmp/combined-six-repairs-regression-review-20261023-r1-reader.mjs",
+    "sha256": "afd20e3e4561fcf5c825e01c9dab430bc99708496d34f026ffd3d48ab6b61ebd"
+  },
+  "object": "/Users/bytedance/Projects/dsh-pm/pm-tool/reports/all-pending-evidence-20261021/CombinedSixRepairsR1/index-r1.json",
+  "groups": {
+    "facilities_executor_configs_correction": {
+      "at": "2026-10-22T22:40:29.333Z",
+      "ok": true,
+      "result": {
+        "scheduler": "64a435eaf2f3a835489e5f1d3789100d077e15342213fd68e84d30f3e5df3f1f",
+        "c02": {
+          "bytes": 14266,
+          "sha256": "e60c433287bcac5d658dd0448e852f153dfd33b787529e6218e754292b640fab"
+        },
+        "additions": [
+          "src/client/panel-sidecar-task-handoff.test.tsx",
+          "src/client/views/okrs-related.test.tsx",
+          "src/client/views/records/records-deliverable-pointer-dom.test.tsx"
+        ],
+        "fullWrapperDerivationIdentical": true,
+        "literalReplacements": 12,
+        "commonExecuteOnlyObservationMkdirChanged": true,
+        "tscThroughGuardIdentical": true,
+        "closeOnlyRequiredReceiptChanged": true,
+        "supplemental": {
+          "retest-stress.test.ts": "c27de301f66f8ecd8193d49f6fea98ff8d5999602ba33149959fb68c8249c588",
+          "retest-probes.test.ts": "547e72ee5f00ac8a2272f3a96d762e2ebae28e51a1999029457556f1b7240dac",
+          "src/core/retest-legacy-renderer.ts": "8ddea982eac50078f999acfec17910f01687737dd200c00413abd7df32f575de"
+        },
+        "specialR2Script": {
+          "bytes": 2870,
+          "sha256": "721f74e57cac70e57ef30f4fd61ec210a6b719c79a4a06e87780bc79e00994d1"
+        },
+        "allConfigsByteDerived": true,
+        "notGUI": true
+      }
+    }
+  },
+  "errors": [],
+  "productExecutions": 0,
+  "exitCode": 0,
+  "verdict": "PASS_LIMITED_COMBINED_REGRESSION_EVIDENCE"
+}

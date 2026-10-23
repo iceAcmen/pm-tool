@@ -1,0 +1,72 @@
+{
+  "provenance": "独立SOURCE/AUTO接续专家逐实际工具结果转录；只读reader，不是产品测试重跑。",
+  "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node /tmp/pm-p2004-source-auto-r2-reader-20261023.mjs audit",
+  "exit": 0,
+  "output": {
+    "mode": "audit",
+    "verdict": "PASS_LIMITED_SOURCE_AUTO",
+    "developerArtifacts": 32,
+    "r1Originals": 21,
+    "byteReadInputs": 87,
+    "readWindowDelta": 0,
+    "red": [8, 1, 7],
+    "auto": [19, 19, 0],
+    "repeatedTests": false
+  },
+  "readerAttempts": [
+    {
+      "attempt": 1,
+      "exit": 1,
+      "stderrKeyText": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n21 !== 22\n\nat file:///private/tmp/pm-p2004-source-auto-r2-reader-20261023.mjs:134:10",
+      "reason": "自有reader误填r1原件数22，实数21。",
+      "disposition": "只改自有/tmp reader计数；尚未写audit；没有改产品/oracle/原证。"
+    },
+    {
+      "attempt": 2,
+      "exit": 1,
+      "stderrKeyText": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ bytes: 9707\n- bytes: 9854\npath: 'src/client/views/okrs.tsx'\n+ sha256: '2408f42a166060596cd7d72462fe34ffcba5c7a69f2f0233da17a102c4926b8f'\n- sha256: '122516a490b80da4a2fc9da0da66fb1283062efb3c54827c8a8399e3a28bc128'\nat file:///private/tmp/pm-p2004-source-auto-r2-reader-20261023.mjs:263:12",
+      "reason": "自有reader误把开发RED阶段repoSource与修后AUTO比较。原开发RED的repoSource实际为旧SHA，GREEN/affected为新SHA。",
+      "disposition": "只改自有/tmp reader为按阶段比较；尚未写audit；不是产品失败，也不改原RED/GREEN。"
+    },
+    {
+      "attempt": 3,
+      "exit": 0,
+      "outputMatchesTopLevel": true
+    }
+  ],
+  "failureTextBoundary": "上列保留关键原文与差异，不称完整stderr转存；第二轮工具stderr含408项数组、显示被截断。原r1红绿日志完整保留且未覆盖。",
+  "syntaxChecks": {
+    "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node --check /tmp/pm-p2004-source-auto-r2-reader-20261023.mjs",
+    "beforeReaderCorrections": 0,
+    "afterReaderCorrections": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "explorationFacilities": [
+    {
+      "command": "rg --files docs/testing docs/plans -g '*p2004-kr-related*' -g '*p2-okr-habit-remaining-gui-review-20261023-r1-report.md'",
+      "exit": 127,
+      "stderr": "/bin/bash: rg: command not found",
+      "disposition": "转定向find及Node结构化读取，不安装。"
+    },
+    {
+      "command": "rg --files -g '*user_profile.md' -g '*project_memory.md' /Users/bytedance/.trae-cn",
+      "exit": 127,
+      "stderr": "/bin/bash: rg: command not found",
+      "disposition": "命令未执行扫描；不扩大历史目录搜索。"
+    },
+    {
+      "command": "cat /user_profile.md /projects/-Users-bytedance-Projects-dsh-pm-pm-tool--p2-11b908a9362bd421871f/project_memory.md",
+      "exit": 1,
+      "reason": "两个指定memory入口均No such file or directory，以仓库为准。"
+    },
+    {
+      "command": "cat docs/plans/2026-10-23-p2004-kr-related-result.md docs/plans/2026-10-23-p2004-kr-related-seal.json docs/plans/2026-10-23-p2004-kr-related-toolreceipt.json",
+      "exit": 1,
+      "reason": "末项文件名错误，且seal输出过大；随后准确读取tool-receipts.json/seal-tool-receipt.json，并以Node解析和SHA回核seal，不引用截断正文冒签。"
+    }
+  ],
+  "notRun": ["r1或开发runner", "RED/AUTO/Vitest重跑", "产品导入", "build/install", "服务/GUI/Git", "正式/privatefreeze/runtime/凭据"],
+  "sealTerminal": "本回执生成时尚未执行seal；其实际终码由另增seal-tool-receipt.json记录。"
+}

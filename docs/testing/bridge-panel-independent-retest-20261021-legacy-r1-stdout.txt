@@ -1,0 +1,87 @@
+
+ RUN  v2.1.9 /private/tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/legacy-r1
+
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B01 same-token shares flight; failed token retries independently after another success
+   → expected Promise{…} not to be Promise{…} // Object.is equality
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B03 old finally cannot remove new token flight; reverse completion preserves business hash
+   → expected Promise{…} to be Promise{…} // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: Promise{…}
+Received: serializes to the same string
+
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B04 in-flight success must not erase a newer plain business route
+   → expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "#/reports?tab=history",
+    ]
+
+
+Number of calls: 1
+
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent bridge ownership > B02 completed same token is not reposted; equal nonce on another port is distinct
+   → expected [ { …(2) } ] to deeply equal [ { …(2) }, { …(2) } ]
+ ✓ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P01 pending snapshot sees no POST; latest token waits for successful actual execute
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P03 successful panel closes ready during next read; N2 sends only after success
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+ ✓ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P03 malformed snapshot JSON fails ready; real retry processes current token
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P02 hash-only new nonce and same-nonce new port report without second snapshot
+   → expected [ { …(2) } ] to deeply equal [ { …(2) }, { …(2) }, { …(2) } ]
+ ✓ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P04 plain/invalid/repeated business hashes do not POST or read snapshot
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P04 POST failure preserves token; repeated hash retries then completed-token events dedupe
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N1' ]
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P05 old snapshot resolves while new actual mount is pending: no false N2 readiness
+   → expected +0 to be 1 // Object.is equality
+ × src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P05 N2 completes before old N1; unmount removes listener without new POST
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+ ✓ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P06 actual index apply only registers actual PmPanel, not snapshot/global ready
+ ✓ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > S01/S02 request contract preserved; token never written to storage/log/query/cookie
+ ✓ src/client/launch-handshake.test.ts > parseLaunchToken：hash 令牌解析与校验 > 合法 port.nonce 解析成功
+ ✓ src/client/launch-handshake.test.ts > parseLaunchToken：hash 令牌解析与校验 > 无参数 → null（不发请求）
+ ✓ src/client/launch-handshake.test.ts > parseLaunchToken：hash 令牌解析与校验 > 端口越界/非整数 → null
+ ✓ src/client/launch-handshake.test.ts > parseLaunchToken：hash 令牌解析与校验 > 缺 nonce → null
+ ✓ src/client/launch-handshake.test.ts > stripLaunchHash：清参数但保留业务 hash > 独立令牌 hash 清成空
+ ✓ src/client/launch-handshake.test.ts > stripLaunchHash：清参数但保留业务 hash > 业务路由在前、令牌在后（& 拼接）→ 保留路由
+ ✓ src/client/launch-handshake.test.ts > stripLaunchHash：清参数但保留业务 hash > 业务路由在前、# 拼接令牌 → 保留路由
+ ✓ src/client/launch-handshake.test.ts > stripLaunchHash：清参数但保留业务 hash > 无令牌原样返回
+ ✓ src/client/launch-handshake.test.ts > buildLaunchHistoryUrl：空 hash 也真正改写当前 URL > 独立令牌被清除后回到当前 pathname/search，不把空串当“不改 URL”
+ ✓ src/client/launch-handshake.test.ts > buildLaunchHistoryUrl：空 hash 也真正改写当前 URL > 保留清理后的业务 hash
+ ✓ src/client/launch-handshake.test.ts > reportEntered：仅 2xx 成功，失败不假成功 > 200 → true；credentials omit、body 仅 nonce
+ ✓ src/client/launch-handshake.test.ts > reportEntered：仅 2xx 成功，失败不假成功 > 非 2xx（403/500）→ false
+ ✓ src/client/launch-handshake.test.ts > reportEntered：仅 2xx 成功，失败不假成功 > 网络异常 reject → false，不抛出
+ ✓ src/client/launch-handshake.test.ts > armLaunchHandshake：解析→清参数→POST，无令牌不发 > 有令牌：replaceState 清参数并 POST 一次
+ ✓ src/client/launch-handshake.test.ts > armLaunchHandshake：解析→清参数→POST，无令牌不发 > 无令牌：不 replaceState、不发请求
+ ✓ src/client/launch-handshake.test.ts > armLaunchHandshake：解析→清参数→POST，无令牌不发 > POST 失败 → false，不假成功且保留 hash 供后续成功刷新重试
+ ✓ src/client/launch-handshake.test.ts > createLaunchHandshakeRetrier：首次就绪失败不永久错过 S4 > 第一次 POST 失败、下一次工作台刷新成功 → 重试并仅在成功后清 hash
+ ✓ src/client/launch-handshake.test.ts > createLaunchHandshakeRetrier：首次就绪失败不永久错过 S4 > 成功后重复刷新不重复 POST
+ × src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R05/R06：N1成功后新令牌18345.N2独立回告
+   → expected [ Array(1) ] to have a length of 2 but got 1
+ × src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R05/R06：N1成功后新令牌18346.N1独立回告
+   → expected [ Array(1) ] to have a length of 2 but got 1
+ × src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R07：旧N1成功不能清新N2 hash
+   → expected '#/tasks' to be '#/tasks&pm-launch=18345.N2' // Object.is equality
+ × src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > R08：旧请求在途不能合并新N2，新finally不丢同token并发守卫
+   → expected Promise{…} not to be Promise{…} // Object.is equality
+ ✓ src/client/launch-handshake.test.ts > 跨旅程回告：令牌成功与在途分别归属 > 同token并发合并、失败可再试，普通业务hash不发
+ × src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 成功snapshot后同一挂载收到N2，直接回告新旅程；业务hash不发
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+ ✓ src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 未成功snapshot不回告，失败后真实重试成功才处理当前N2
+ × src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 成功读取后若刷新失败，新hash仍保留到后续成功重读
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+ × src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 旧N1在途换N2不吞新请求，旧成功不清新hash，重复事件合并
+   → expected [ 'N1' ] to deeply equal [ 'N1', 'N2' ]
+ × src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 卸载移除监听；卸载后迟到snapshot也不回告，重新真实挂载可处理N2
+   → expected [ 'N2' ] to deeply equal []
+
+ Test Files  3 failed (3)
+      Tests  17 failed | 25 passed (42)
+   Start at  21:20:08
+   Duration  2.24s (transform 834ms, setup 0ms, collect 1.56s, tests 158ms, environment 0ms, prepare 147ms)
+
+JSON report written to /tmp/pmtool-bridge-panel-independent-retest-20261021.PudVGM/legacy-r1/vitest-result.json

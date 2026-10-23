@@ -1,0 +1,162 @@
+{
+  "candidate": "2a7603023bc54ef13d788e50069ee3fde4671bf3",
+  "capturedAt": "2026-10-21T07:19:05.253Z",
+  "runtime": "v22.23.3",
+  "platform": "darwin",
+  "scratch": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-qa-batcha-ecUNO7",
+  "sources": {
+    "launcher/src/local-app.mjs": "334032cc4a0f5b86fac002b2b0e8f6f406b725ae27cdfc959c2056588c0099dd",
+    "launcher/src/launcher-app.mjs": "2d13d8e302ed34413045c51ab4a9d9c9ef4dd3dd3304b69e9dc7ba051eb864da",
+    "launcher/src/launcher-core.mjs": "4374c611a0faa6948d6d035b5091b5449b25d2a0aac9089dde203ab98661e85c",
+    "launcher/src/panel-model.mjs": "6e1a7460025c3887e4a8251f22ca661668ed6c6e9ad03c3f96c956eb9d079a62"
+  },
+  "paths": [
+    {
+      "label": "plain",
+      "syntaxExit": 0,
+      "stderr": "",
+      "assignment": [
+        "LAUNCHER_BIN='/tmp/pm-qa/bin/main.mjs'",
+        "BAKED_NODE='/tmp/pm-qa/node'"
+      ],
+      "scriptSha256": "15602c211ecbb0c9cb39d5c0f0ea1dbf8d0d6759732cbc6813710d42277442c3"
+    },
+    {
+      "label": "space",
+      "syntaxExit": 0,
+      "stderr": "",
+      "assignment": [
+        "LAUNCHER_BIN='/tmp/pm qa/bin/main.mjs'",
+        "BAKED_NODE='/tmp/pm qa/node'"
+      ],
+      "scriptSha256": "1ead597e670363cd7500d9d94e9fa7b75f94c38df938b751bd00c64c910ee157"
+    },
+    {
+      "label": "quote-launcher",
+      "syntaxExit": 2,
+      "stderr": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-qa-batcha-ecUNO7/quote-launcher/QA.app/Contents/MacOS/launch: line 27: unexpected EOF while looking for matching `''\n/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-qa-batcha-ecUNO7/quote-launcher/QA.app/Contents/MacOS/launch: line 32: syntax error: unexpected end of file",
+      "assignment": [
+        "LAUNCHER_BIN='/tmp/pm'qa/bin/main.mjs'",
+        "BAKED_NODE='/tmp/pm-qa/node'"
+      ],
+      "scriptSha256": "22135ea4e96d7952f5e70caa0e1b32649403b059a3385b4df90407472cdf4ea8"
+    },
+    {
+      "label": "quote-node",
+      "syntaxExit": 2,
+      "stderr": "/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-qa-batcha-ecUNO7/quote-node/QA.app/Contents/MacOS/launch: line 27: unexpected EOF while looking for matching `''\n/var/folders/hk/r3xm2t6x7b9c_g_rg7cbw55w0000gn/T/pm-qa-batcha-ecUNO7/quote-node/QA.app/Contents/MacOS/launch: line 32: syntax error: unexpected end of file",
+      "assignment": [
+        "LAUNCHER_BIN='/tmp/pm-qa/bin/main.mjs'",
+        "BAKED_NODE='/tmp/pm'qa/node'"
+      ],
+      "scriptSha256": "d41ce754e5dd2aa1b0135fdfaabff53a0f2bdd044ee5b6d42991dfa289861841"
+    },
+    {
+      "label": "injection-syntax-only",
+      "syntaxExit": 0,
+      "stderr": "",
+      "assignment": [
+        "LAUNCHER_BIN='/tmp/qa'; :; #/main.mjs'",
+        "BAKED_NODE='/tmp/pm-qa/node'"
+      ],
+      "scriptSha256": "89b697ea3beea5795a73eda03bf3486ebff890939e35422dc7ab3e56d7c8585f"
+    }
+  ],
+  "journeys": [
+    {
+      "action": "reopen",
+      "beforeStatus": "S3",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "switch-browser",
+      "beforeStatus": "S3",
+      "beforeBrowser": "Safari",
+      "selectedBrowser": "Safari",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Safari",
+      "subtitle": "已由受认证工作台回告进入（Safari），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "select-browser",
+      "beforeStatus": "S3",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Safari",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "cancel",
+      "beforeStatus": "S0",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "back",
+      "beforeStatus": "S0",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "report-auth-error",
+      "beforeStatus": "S5",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "open",
+      "beforeStatus": "S3",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    },
+    {
+      "action": "retry",
+      "beforeStatus": "S3",
+      "beforeBrowser": "Chrome",
+      "selectedBrowser": "Chrome",
+      "oldAccepted": true,
+      "afterStatus": "S4",
+      "afterBrowser": "Chrome",
+      "subtitle": "已由受认证工作台回告进入（Chrome），可以开始工作了。",
+      "replayAccepted": false
+    }
+  ],
+  "boundaries": [
+    "未启动服务",
+    "未执行生成壳",
+    "无浏览器或HTTP采证",
+    "未改时钟",
+    "nonce仅内存且不输出"
+  ]
+}

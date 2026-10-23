@@ -1,0 +1,418 @@
+{
+  "at": "2026-10-22T14:36:58.189Z",
+  "actor": "independent evidence reviewer; not developer or GUI executor",
+  "index": {
+    "bytes": 126487,
+    "sha256": "111a838096c657b19203b7cd16c440d7d4cf4b69c52a5c0e2c6c7100119ae322"
+  },
+  "indexedCount": 747,
+  "candidate": {
+    "at": "2026-10-22T13:42:10.389Z",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "freeze": "/private/tmp/pmtool-combined-successor112-20261022-r1",
+    "pkg": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool",
+    "sourceCount": 112,
+    "completeInputCount": 519,
+    "version": "0.7.4",
+    "builder": "Main",
+    "runtimeLoaded": false,
+    "authorization": "Existing closure and ordinary commit after total gates; no release/push",
+    "independent": [
+      "fixed-report-export-fence-independent-retest-20261022-r2-report.md",
+      "ask-auth-feedback-independent-retest-20261022-r1-report.md",
+      "task-predecessor-selection-independent-retest-20261022-r1-report.md"
+    ]
+  },
+  "declarations": {
+    "total": 112,
+    "pluginInFreeze": 97,
+    "launcherDeclarationOnly": 15
+  },
+  "inputCount": 519,
+  "artifactCount": 455,
+  "protectedCount": 1734,
+  "loaded": {
+    "fullClient": {
+      "bytes": 1719114,
+      "sha256": "415e24f2fc660370256aa9a186f141aae24064a80cdcd2d6729b7ff28c9fe8d7"
+    },
+    "response": {
+      "bytes": 2597914,
+      "sha256": "a928625c3556242a83bd2bb2aa5ce1367214128594edfc14ba5bed9ab58352b8"
+    },
+    "segment": {
+      "bytes": 1719080,
+      "sha256": "18c631bcdabedd5082b9c8fee14e896d56b91d7df0179ea5aa0cc85e666b9fde"
+    },
+    "offset": 875361,
+    "unique": true,
+    "firstLoadCacheNotSigned": true,
+    "hostGitIdentityNotSigned": true
+  },
+  "sourceBindings": {
+    "src/commands/ask.ts": {
+      "frozen": {
+        "bytes": 34931,
+        "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+      },
+      "mainAtRead": {
+        "bytes": 34931,
+        "sha256": "084efb5b33e7cda7368b87c4708f87f460d28588f3e7476cadfad2de0fd35884"
+      }
+    },
+    "src/core/ai-client.ts": {
+      "frozen": {
+        "bytes": 8933,
+        "sha256": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448"
+      },
+      "mainAtRead": {
+        "bytes": 8933,
+        "sha256": "b0348f33a6a38202147819d9d8128f12c46f024fde08cb94258508faefcd0448"
+      }
+    },
+    "src/core/ui-feedback.ts": {
+      "frozen": {
+        "bytes": 13794,
+        "sha256": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7"
+      },
+      "mainAtRead": {
+        "bytes": 13794,
+        "sha256": "94bab4055958c6abb22caf6343173b8e643c58c9da85a28e421b5ef7f86d35d7"
+      }
+    },
+    "src/client/index.tsx": {
+      "frozen": {
+        "bytes": 3403,
+        "sha256": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a"
+      },
+      "mainAtRead": {
+        "bytes": 3403,
+        "sha256": "61f927ed6773b22c2894368a7865ef8ecc719a8e684d3b9c1599517f392d339a"
+      }
+    },
+    "src/client/shared/drawers/sidecar-portal.tsx": {
+      "frozen": {
+        "bytes": 45842,
+        "sha256": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269"
+      },
+      "mainAtRead": {
+        "bytes": 45842,
+        "sha256": "7cf48821e7e6ee570288c385b59897fd33f8ab0ec32da42ef87111c2c016a269"
+      }
+    },
+    "src/client/shared/markdown-view.tsx": {
+      "frozen": {
+        "bytes": 10868,
+        "sha256": "c0cc51402a72e44a7a31f9aa05aae58882d897ba57bf0bfc3702761e95e2120c"
+      },
+      "mainAtRead": {
+        "bytes": 10868,
+        "sha256": "c0cc51402a72e44a7a31f9aa05aae58882d897ba57bf0bfc3702761e95e2120c"
+      }
+    }
+  },
+  "mainSourceChangesSinceBefore": [],
+  "host": {
+    "at": "2026-10-22T13:50:21.146Z",
+    "pid": 92870,
+    "port": 3262,
+    "cwd": "/Users/bytedance/Projects/dsh-pm/deepseek-harness",
+    "argv": [
+      "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node",
+      "--import",
+      "tsx/esm",
+      "apps/cli/src/bin.ts",
+      "--profile",
+      "pm",
+      "--no-open",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "3262"
+    ],
+    "envNames": [
+      "PATH",
+      "HOME",
+      "DSH_HOME",
+      "TMPDIR",
+      "DSH_PM_ISOLATED_ROOT",
+      "DSH_PM_FILE_ROOT",
+      "DSH_PM_BACKUP_DIR",
+      "DSH_PM_LOCAL_GATEWAY_KEY",
+      "DSH_PM_E2E"
+    ],
+    "bundle": "/private/tmp/pmtool-combined-successor112-20261022-r1/packages/dsh-pm-tool",
+    "bundleSha256": "415e24f2fc660370256aa9a186f141aae24064a80cdcd2d6729b7ff28c9fe8d7",
+    "candidateSha256": "9ca4dc612b76ea633ca8bba7eed4ac921ac56fdd394727ccdc9aa9ea989e6396",
+    "sourceSha256": "2d1de5490bb745611d4c298415756fa5ccb1b3eaf68d5ae29fc9f5c62a8fdbae",
+    "flags": {
+      "DSH_PM_E2E": "0",
+      "pilot": "default OFF; browser state recorded separately"
+    },
+    "independentGuiVerdict": "NOT_RUN"
+  },
+  "gateway": [
+    {
+      "at": "2026-10-22T14:13:00.628Z",
+      "sequence": 8,
+      "behavior": "auth",
+      "model": "deepseek-v4-1-flash-260910"
+    },
+    {
+      "at": "2026-10-22T14:13:39.622Z",
+      "sequence": 9,
+      "behavior": "rate_limit",
+      "model": "deepseek-v4-1-flash-260910"
+    },
+    {
+      "at": "2026-10-22T14:13:40.581Z",
+      "sequence": 10,
+      "behavior": "success",
+      "model": "deepseek-v4-1-flash-260910"
+    }
+  ],
+  "gatewayCode": {
+    "bytes": 2945,
+    "sha256": "eec02e1af4cb97387f3b1607c40b04219c65a38c0907672a1a48aa05b4e3d2e7"
+  },
+  "modelWireResponseNotArchived": true,
+  "rpc": [
+    {
+      "requestId": "24317.1521",
+      "rpcId": "3595dff4-0a2b-457b-aeb5-f39873e2ef10",
+      "line": "/pm model mode prod",
+      "hostHttpStatus": 200,
+      "command": {
+        "kind": "success",
+        "text": "已切到 生产车道：ark-plan/deepseek-v4-1-flash-260910。\n生产车道已就绪（检测到 Key）。"
+      }
+    },
+    {
+      "requestId": "24317.1522",
+      "rpcId": "b809dc3b-c575-42c1-aecf-434478be5a5b",
+      "line": "/pm ask p-0001  \"只读验证凭据失效原因\"",
+      "hostHttpStatus": 200,
+      "command": {
+        "kind": "error",
+        "text": "副驾暂不可用：模型 ark-plan/deepseek-v4-1-flash-260910 凭据无效或已失效，请检查 API Key。"
+      }
+    },
+    {
+      "requestId": "24317.1523",
+      "rpcId": "94da94a8-2e52-4145-b363-89674d43bd7e",
+      "line": "/pm ask p-0001  \"只读验证限流原因\"",
+      "hostHttpStatus": 200,
+      "command": {
+        "kind": "error",
+        "text": "副驾暂不可用：模型服务限流，请稍后再试。"
+      }
+    },
+    {
+      "requestId": "24317.1524",
+      "rpcId": "3210ce0b-5606-4e98-bb80-00e923cd1e44",
+      "line": "/pm ask p-0001  \"只读确认正常恢复\"",
+      "hostHttpStatus": 200,
+      "command": {
+        "kind": "success",
+        "text": "修后副驾正常恢复：这是只读回答，不修改项目。"
+      }
+    }
+  ],
+  "rawCounts": {
+    "19-cycle-retry-reopened": 21,
+    "21-auth": 21,
+    "22-rate": 21,
+    "22-normal": 21
+  },
+  "modeBefore": {
+    "version": 2,
+    "record": {
+      "value": "prod",
+      "updatedAt": "2026-10-22T12:31:43.291Z"
+    }
+  },
+  "modeAfter": {
+    "version": 2,
+    "record": {
+      "value": "prod",
+      "updatedAt": "2026-10-22T14:12:58.750Z"
+    }
+  },
+  "rootDeltas": {
+    "19-cycle-retry-reopened->21-auth": {
+      "allRoots": [
+        "data/pmtool/settings/aiModelMode.json",
+        "data/session_projcache/sessions/session-7c6757cc-30e3-41fa-b8db-0d987e779161.json"
+      ],
+      "productChanges": [
+        "data/pmtool/settings/aiModelMode.json"
+      ],
+      "unchangedOtherSettings": [
+        "data/pmtool/settings/pmExportAudit.json",
+        "data/pmtool/settings/pmExportSent.json"
+      ]
+    },
+    "21-auth->22-rate": {
+      "allRoots": [
+        "data/session_projcache/sessions/session-7c6757cc-30e3-41fa-b8db-0d987e779161.json"
+      ],
+      "productChanges": [],
+      "unchangedOtherSettings": [
+        "data/pmtool/settings/pmExportAudit.json",
+        "data/pmtool/settings/pmExportSent.json"
+      ]
+    },
+    "22-rate->22-normal": {
+      "allRoots": [],
+      "productChanges": [],
+      "unchangedOtherSettings": [
+        "data/pmtool/settings/pmExportAudit.json",
+        "data/pmtool/settings/pmExportSent.json"
+      ]
+    }
+  },
+  "viewport": {
+    "innerWidth": 1458,
+    "innerHeight": 734,
+    "outerWidth": 1470,
+    "outerHeight": 857,
+    "dpr": 2
+  },
+  "timeOrigin": 1792677670591.4,
+  "frames": [
+    {
+      "file": "frames/21-auth-1-1792678380762.jpg",
+      "sha256": "eb751775ad9f2b889cd2139c80073dd305feb01c0c82dbf60b4a3a7138a2dfc1",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678378.599691
+      }
+    },
+    {
+      "file": "frames/21-auth-1-1792678380864.jpg",
+      "sha256": "eb751775ad9f2b889cd2139c80073dd305feb01c0c82dbf60b4a3a7138a2dfc1",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678378.728457
+      }
+    },
+    {
+      "file": "frames/21-auth-1-1792678380932.jpg",
+      "sha256": "b05ccaca59e0836c70484ca36cff3b4eacb3ce2d808cc20b731feef21172eb32",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678378.731823
+      }
+    },
+    {
+      "file": "frames/22-rate-1-1792678419758.jpg",
+      "sha256": "8a20ffe7524f42a8ccbf7ef09bad4b5167b5de153713964907f01d897dbf6267",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678419.137587
+      }
+    },
+    {
+      "file": "frames/22-rate-1-1792678419806.jpg",
+      "sha256": "9b3da41ff1557d96a24ca3be7431a310de0ffe517a9506c00f2ef7a3c3036d10",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678419.218789
+      }
+    },
+    {
+      "file": "frames/22-rate-1-1792678419859.jpg",
+      "sha256": "bfb620c08133e0635cff646604f41448d65d3cd15b403505dbd7422a8d819a99",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678419.236909
+      }
+    },
+    {
+      "file": "frames/22-normal-1-1792678420945.jpg",
+      "sha256": "78bea952f07fd835aeeda64508652e8c48402a711d45a59666564065a987aeff",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 729,
+        "deviceHeight": 367,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678420.112333
+      }
+    },
+    {
+      "file": "frames/22-normal-1-1792678421034.jpg",
+      "sha256": "c7fca5e3ecb1fa6dac5a64cef233874d9478d53bcf08242bddf3e4c508a213db",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 729,
+        "deviceHeight": 367,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678420.115674
+      }
+    },
+    {
+      "file": "frames/22-normal-1-1792678421106.jpg",
+      "sha256": "c123e323518efa78330d4b244cd2442a8d42ee33c297f6ad0b624944dbe0d30f",
+      "metadata": {
+        "offsetTop": 0,
+        "pageScaleFactor": 1,
+        "deviceWidth": 1458,
+        "deviceHeight": 734,
+        "scrollOffsetX": 0,
+        "scrollOffsetY": 0,
+        "timestamp": 1792678420.213981
+      }
+    }
+  ],
+  "capturedExceptions": [
+    0,
+    0,
+    0
+  ],
+  "consoleNotCapturedByHelper": true,
+  "fullRuntimeNotSigned": true,
+  "verdict": {
+    "authCause": "PASS_LIMITED_GUI",
+    "rateCauseAndHealthyRecovery": "PASS_LIMITED_GUI",
+    "prefixCompleteMessage": "FAIL",
+    "cancel": "NOT_SIGNED",
+    "realExternalModel": "NOT_SIGNED",
+    "RA_AI06": "NOT_SIGNED",
+    "parentGoal": "NOT_SIGNED",
+    "ordinaryCommit": "MAIN_ONLY_NOT_AUTHORIZED_THIS_ROLE"
+  }
+}

@@ -1,0 +1,55 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > P05 old snapshot resolves while new actual mount is pending: no false N2 readiness
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "http://127.0.0.1:18345/api/entered",
+      Object {
+        "body": "{"nonce":"N2"}",
+        "credentials": "omit",
+        "headers": Object {
+          "content-type": "application/json",
+        },
+        "method": "POST",
+      },
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:240:25
+    238|     expect(hashListeners.size).toBe(1)
+    239|     await act(async () => { oldRead.resolve(encoded) })
+    240|     expect(fetcher).not.toHaveBeenCalled()
+       |                         ^
+    241|     expect(location.hash).toBe('#pm-launch=18345.N2')
+    242|     await act(async () => { newRead.resolve(encoded) })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/client/panel-launch-handshake.test.tsx > 真实PmPanel就绪与hashchange回告门 > 卸载移除监听；卸载后迟到snapshot也不回告，重新真实挂载可处理N2
+AssertionError: expected [ 'N2' ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "N2",
++ ]
+
+ ❯ src/client/panel-launch-handshake.test.tsx:119:20
+    117|     await changeHash('#pm-launch=18345.N2')
+    118|     await act(async () => { request.resolve(JSON.stringify(snapshot)) …
+    119|     expect(sent()).toEqual([])
+       |                    ^
+    120|     await mount()
+    121|     expect(sent()).toEqual(['N2'])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

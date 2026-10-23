@@ -22,6 +22,7 @@ import { EmptyState, PmButton } from '../shared/ui/index.js'
 import type { Meeting } from './types.js'
 import type { MeetingCallbacks } from '../shared/records-props.js'
 import { RecordsOverlay, RecordsMeetingForm } from './records/index.js'
+import type { RecordsMeetingFormProps } from './records/records-meeting-form.js'
 
 /** 可选受控接线：panel 注入 records 回调时视图内打开表单；缺省仍走 onCreate/onEdit 交 panel 抽屉。 */
 export interface MeetingsRecordsSlot {
@@ -53,13 +54,15 @@ function actionOverdue(a: Meeting['actions'][number], today: string): boolean {
 
 export function MeetingsView(props: {
   meetings: Meeting[]
+  tasks?: RecordsMeetingFormProps['tasks']
+  riskIssues?: RecordsMeetingFormProps['riskIssues']
   onCreate: () => void
   onEdit: (m: Meeting) => void
   records?: MeetingsRecordsSlot
   /** 页头主 CTA 触发计数；统一打开 records 会议表单。 */
   createRequest?: number
 }) {
-  const { meetings, onCreate, onEdit, records, createRequest = 0 } = props
+  const { meetings, tasks, riskIssues, onCreate, onEdit, records, createRequest = 0 } = props
   const today = localTodayIso()
   const [form, setForm] = useState<{ mode: 'create' } | { mode: 'edit', meeting: Meeting } | null>(null)
 
@@ -129,6 +132,8 @@ export function MeetingsView(props: {
           <RecordsOverlay eyebrow="会议纪要" title="新增会议纪要" onClose={closeForm}>
             <RecordsMeetingForm
               projectId={records.projectId}
+              tasks={tasks}
+              riskIssues={riskIssues}
               callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
               onCancel={closeForm}
             />
@@ -317,6 +322,8 @@ export function MeetingsView(props: {
         >
           <RecordsMeetingForm
             projectId={records.projectId}
+            tasks={tasks}
+            riskIssues={riskIssues}
             meeting={form.mode === 'edit' ? form.meeting : undefined}
             callbacks={{ ...records.callbacks, onSaved: () => { records.callbacks.onSaved(); closeForm() } }}
             onCancel={closeForm}

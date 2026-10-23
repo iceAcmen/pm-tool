@@ -1,0 +1,99 @@
+{
+  "kind": "本旧包40旁注补审封存；不是产品测试/发布签字",
+  "at": "2026-10-22T20:25:33.742Z",
+  "environment": {
+    "platform": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "readerCaptureExit": 0,
+  "readerSealChecksPassed": true,
+  "inputCount": 151,
+  "counts": {
+    "inheritedArchiveChecked": 127,
+    "supplement": 12,
+    "business": 11,
+    "receipts": 2,
+    "checks": 298,
+    "failed": 0
+  },
+  "drift": [],
+  "badWhitespace": [],
+  "brokenLinks": [],
+  "ownedFingerprints": {
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-reader.mjs": {
+      "bytes": 19340,
+      "mtimeNs": "1792700654572118305",
+      "ctimeNs": "1792700654572118305",
+      "ino": "57156736",
+      "sha256": "31d6255d154999b4d8cfa4cdbeaa9dacc9d0640258028890e9827d99d79e07f6"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-audit.json": {
+      "bytes": 194837,
+      "mtimeNs": "1792700666385168158",
+      "ctimeNs": "1792700666385168158",
+      "ino": "57157060",
+      "sha256": "fcb4850cc7e851226273758f1a7249b116b346eacfc996eba870a1b3e93821b8"
+    },
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-report.md": {
+      "bytes": 11196,
+      "mtimeNs": "1792700721603836696",
+      "ctimeNs": "1792700721603836696",
+      "ino": "57158938",
+      "sha256": "7bd509adc721742babbe7f490055deaee6ec897393805fcb1ae526cb4600d1c0"
+    }
+  },
+  "supplementIndex": {
+    "bytes": 1616,
+    "mtimeNs": "1792684534212627476",
+    "ctimeNs": "1792684534212627476",
+    "ino": "56955392",
+    "sha256": "3791b426e641c1d1f4fb2f11e6deb0b0aeb04948dbd6426fccb6a343ff506c00"
+  },
+  "original127Index": {
+    "bytes": 20048,
+    "mtimeNs": "1792683859043895465",
+    "ctimeNs": "1792683859043895465",
+    "ino": "56944003",
+    "sha256": "478e107080540bb25a32f250f5662c61399d0c9c166d858cd167becacf897ac2"
+  },
+  "result": {
+    "status": "限定 PASS",
+    "assertion": "本旧包列表F2-L1/L3原手填40%实际可见且与客观证据不足分离",
+    "inheritedRestoreBrowse": "沿原限定PASS",
+    "remainingInThisSupplement": []
+  },
+  "inherited": "原restore/browse限定PASS，source/runtime归档继承",
+  "scope": {
+    "productExecuted": false,
+    "MainScriptExecuted": false,
+    "GitUsed": false,
+    "browserUsed": false,
+    "viewImageUsed": true,
+    "serviceProbed": false,
+    "runtimeBusinessRead": false,
+    "installBuildTestsRun": false,
+    "writable": [
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-reader.mjs",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-audit.json",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-report.md",
+      "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-legacy40-supplement-review-20261023-r1-seal.json"
+    ],
+    "otherTestingOrLivingdocsWritten": false
+  },
+  "remaining": [],
+  "outsideScope": [
+    "客观40%",
+    "旧OP112R2",
+    "native",
+    "P0–P3",
+    "B8",
+    "父ordinarycommit",
+    "发布准入"
+  ],
+  "parentStatus": "不裁父门；Main继续P0；native EGO错误窗口BLOCKED沿父报告待证",
+  "released": true,
+  "stop": true,
+  "serviceStopped": false,
+  "selfHashPolicy": "seal不自哈希；read/capture/seal仅为自有审证检查，不等产品回归"
+}

@@ -1,0 +1,108 @@
+{
+  "sealReceipt": {
+    "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-seal.json",
+    "sha256": "53a1c8cc2174b9c54d98fd2eba55a0267d3cd2dae786fefce8b1f36a9c38110d",
+    "bytes": 692697,
+    "mtimeMs": 1792723872735.1838,
+    "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-seal.json"
+  },
+  "checks": [
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-report.json",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-report.md",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-audit.json",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-plan.md",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow.json",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r2.json",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r3.json",
+      "matches": true
+    }
+  ],
+  "summary": {
+    "sealedFiles": 7,
+    "mismatches": 0
+  },
+  "released": true,
+  "STOP": true,
+  "runningChildren": 0,
+  "locksHeld": [],
+  "timing": {
+    "started": "2026-10-23T02:51:36.290Z",
+    "ended": "2026-10-23T02:51:36.312Z",
+    "durationMs": 17.729458
+  },
+  "environment": {
+    "os": "darwin",
+    "node": "v22.23.3",
+    "cwd": "/Users/bytedance/Projects/dsh-pm/pm-tool"
+  },
+  "inputs": {
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-seal.json": {
+      "sha256": "53a1c8cc2174b9c54d98fd2eba55a0267d3cd2dae786fefce8b1f36a9c38110d",
+      "bytes": 692697,
+      "mtimeMs": 1792723872735.1838,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-seal.json"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-report.json": {
+      "sha256": "44b7f44f0da46ca199149e3ab0469360ff63acb13a71dc5645e3a2c8a895cc13",
+      "bytes": 1613872,
+      "mtimeMs": 1792723718160.8135,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-report.json"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-report.md": {
+      "sha256": "5c1f3726b5bdfe5b67b1f1a18974a43f819ad01ec46bc89525284c16a3aaa5c7",
+      "bytes": 7713,
+      "mtimeMs": 1792723822543.6082,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-report.md"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-audit.json": {
+      "sha256": "c962851caf173fae9ec8a53cc2229b2f9d112599b2b1dd2be663f02726cbc8a0",
+      "bytes": 966910,
+      "mtimeMs": 1792723211409.8557,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-audit.json"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-plan.md": {
+      "sha256": "2085bf233c9442a43f1f30f1668a9aa47892fcc207974bb5fe40a5ac1cf0ba11",
+      "bytes": 3656,
+      "mtimeMs": 1792723766826.3665,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-plan.md"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow.json": {
+      "sha256": "2315b670c6d427e77ef74dcbe58a4545553a49c292d7610b738d869ef8b877a3",
+      "bytes": 434568,
+      "mtimeMs": 1792723414887.0195,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow.json"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r2.json": {
+      "sha256": "fadd010dd588a1b8fb418f2f482c87cb53ff71e89dc1b88f56b7160340272770",
+      "bytes": 375790,
+      "mtimeMs": 1792723526093.502,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r2.json"
+    },
+    "docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r3.json": {
+      "sha256": "76982cb6410a77d89e339197b35df3232e02877809244f87bcaf539b77eb860e",
+      "bytes": 379725,
+      "mtimeMs": 1792723611565.5178,
+      "realpath": "/Users/bytedance/Projects/dsh-pm/pm-tool/docs/testing/op-auto20-inheritance-timed-20261023-r1-narrow-r3.json"
+    }
+  },
+  "failures": []
+}

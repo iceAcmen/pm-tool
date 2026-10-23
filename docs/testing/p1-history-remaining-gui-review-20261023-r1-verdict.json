@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-23",
+  "platform": "trae",
+  "role": "独立 GUI 审证者，非开发、非 GUI 执行端",
+  "decision": "LIMITED_SLICE_PASS_WITH_EXACT_REMAINING",
+  "parentGoalOriginal": "父goal持续原授权全部已实现未验独立收口至ordinarycommit无push/release/正式切",
+  "latestBoundary": "Main已续接，当前新冻结六修完整输入与统一回归中；继续你原2122件P1历史限定审证，不重复派/重执行/改原案。",
+  "report": "docs/testing/p1-history-remaining-gui-review-20261023-r1.md",
+  "audit": "docs/testing/p1-history-remaining-gui-review-20261023-r1-audit.json",
+  "seal": "docs/testing/p1-history-remaining-gui-review-20261023-r1-seal.json",
+  "evidence": {
+    "root": "reports/all-pending-evidence-20261021/P1HistoryRemainingR1",
+    "index": "index-r1.json",
+    "count": 2122,
+    "indexSha256": "229946f9f242766b58ecb986c26fbf59fa1e6ffbf554b58dc0e0ba62e6d9a5bc",
+    "sourceSeal": "seal-r1.json",
+    "returnRoot": "reports/all-pending-evidence-20261021/P1HistoryReturnR1",
+    "baseline": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+    "sourceCount": 114,
+    "completeInputCount": 521,
+    "completeSha256": "f7d918b92b7fa65551d5ba2072b04a8e3273950deeca66dea902790bdcf9871a",
+    "sourceCopies": 12,
+    "port": 3267,
+    "pid": 3133,
+    "e2e": "0",
+    "pilot": "OFF",
+    "standardBackupSha256": "6de364e671f87c661833110034f1bdf48eefe12b13a75dafda1658835f19c63e",
+    "tasks": 23,
+    "projects": 6,
+    "realDay": "2026-10-23",
+    "notF1Flat24": true,
+    "notFLMAX": true,
+    "beforeTimeOrigin": 1792707484654.6,
+    "reloadedTimeOrigin": 1792707870679.2,
+    "returnOrigin": "http://127.0.0.1:3264"
+  },
+  "cases": [
+    {
+      "originalId": "RA-P1001",
+      "wholeIdPass": false,
+      "finitePass": [
+        "标准包真实预检、双确认、恢复成功与23任务/6项目回读",
+        "宿主composer原参数真bind两session，阶段仅session写",
+        "absence-only宿主正文top=null/rest t22 absent=true",
+        "p4缺席t21真实读及正确任务打开",
+        "t21真表单描述主save一次成功，snapshot更新及重载派生回读",
+        "全局卡积压9变8；DOM t21消失/t22留存，仅数据断言"
+      ],
+      "exactRemaining": [
+        {
+          "status": "BLOCKED",
+          "reason": "缺原卡片下部rest可见图证，不是已证明产品FAIL",
+          "assertion": "两absence的项目名/缺席标签，以及跟进刷新后t21不在、t22仍在的原rest可见画面",
+          "dedupKey": "ORIGINAL_QUEUE_LOWER_REST_VISUAL",
+          "doesNotRequireRepeat": [
+            "session bind",
+            "task save",
+            "普通queue open",
+            "普通mute/unmute",
+            "quiet/off"
+          ]
+        }
+      ]
+    },
+    {
+      "originalId": "RA-P1002",
+      "wholeIdPass": false,
+      "finitePass": [
+        "真实D10/23读取t18到期muted=false的RPC与宿主正文图",
+        "历史mutedAt10/13+7D记录前后字节保全"
+      ],
+      "exactRemaining": [
+        {
+          "status": "BLOCKED",
+          "reason": "缺原卡片下部rest可见图证，DOM不代独立目视",
+          "assertion": "t18到期后原rest普通行及无已静音标记的可见画面",
+          "dedupKey": "ORIGINAL_QUEUE_LOWER_REST_VISUAL",
+          "doesNotRequireRepeat": [
+            "标准恢复",
+            "queue list",
+            "普通mute/unmute",
+            "TTL自动矩阵"
+          ]
+        }
+      ]
+    },
+    {
+      "originalId": "RA-P1006",
+      "wholeIdPass": false,
+      "finitePass": [
+        "p4未分配4open展开及零signal筛选",
+        "p1真实33d/10d/progress20历史建议与仅烂尾筛选",
+        "正确t23打开/cancel/实际点击People返回",
+        "历史task全record与版本零改",
+        "真实chart wheel后当前小尺度轴与建议可读"
+      ],
+      "exactRemaining": [
+        {
+          "status": "NOT_RUN",
+          "reason": "本2122件未采原FL/MAX，不自动豁免",
+          "assertion": "原人员MAX尺度的同fixture事实/建议/标签读出口",
+          "dedupKey": "ORIGINAL_PEOPLE_FL_MAX",
+          "notManualPending": true,
+          "doesNotRequireRepeat": [
+            "小尺度历史恢复",
+            "33d/10d筛选",
+            "t23打开/cancel/People返回",
+            "p4零signal"
+          ]
+        }
+      ]
+    }
+  ],
+  "exactRemainingCount": 3,
+  "deduplicatedEvidenceGapCount": 2,
+  "visualReview": {
+    "executedNewGui": false,
+    "selectedStoredImagesViewed": 15,
+    "all2122VisuallyReviewed": false,
+    "files": [
+      "round03-precheck-observed.png",
+      "round04-explicit-confirm.png",
+      "round08-after-command-reads.png",
+      "frames/round08-56.jpg",
+      "round11-global-queue-expanded.png",
+      "frames/round11-3.jpg",
+      "frames/round11-4.jpg",
+      "frames/round11-5.jpg",
+      "round12-followup-before-save.png",
+      "frames/round12-14.jpg",
+      "round14-reloaded-expanded.png",
+      "round15-no-stale-signal.png",
+      "round15-people-historical-filtered.png",
+      "round15-historical-task-open.png",
+      "round16-people-chart-visible.png"
+    ],
+    "rawAndDomAreAuxiliary": true
+  },
+  "retainedFailures": {
+    "round02": "exit1；错role等待，实际预检已返回",
+    "round04": "exit1；成功恢复后等错项目名",
+    "round06": "exit1；无composer且没有dispatch",
+    "round12": "exit1；wait漏/pm前缀，实际save成功，不重save",
+    "round13": "exit1；reload回宿主需点击PM重进，不重reload",
+    "bootstrap": "NOT_COLLECTED；host-ready/实际PID仅证明启动"
+  },
+  "protected": [
+    {
+      "label": "既有F5 runtime",
+      "beforeCount": 54,
+      "afterCount": 54,
+      "delta": 0,
+      "readRuntime": false
+    },
+    {
+      "label": "原F7 runtime",
+      "beforeCount": 3,
+      "afterCount": 3,
+      "delta": 0,
+      "readRuntime": false
+    }
+  ],
+  "productFailEstablished": false,
+  "productExecution": "NOT_RUN",
+  "guiExecution": "NOT_RUN",
+  "parentCommitPass": false,
+  "combinedSixFixPass": false,
+  "wholeP1Pass": false,
+  "pushAuthorizedByThisReview": false,
+  "releaseAuthorizedByThisReview": false,
+  "formalSwitchAuthorizedByThisReview": false,
+  "repeatedDispatch": false,
+  "writeScope": "仅docs/testing/p1-history-remaining-gui-review-20261023-r1*新文件",
+  "stop": true
+}

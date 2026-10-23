@@ -1,16 +1,16 @@
 /**
  * 单项目概览（重设计 v2 · dsh 主题对齐版）。
  *
- * 数据口径全部复用现有纯函数，不在本文件手算/编造：
+ * 健康/KPI/日程复用现有纯函数，状态完成卡与 core/stats.ts 一致：
  * - 健康分：core/derived.ts scoreFromInputs（别名 healthFromInputs），计数口径与 panel.tsx Overview 一致。
- * - KPI / 日程：core/war-room.ts computeKPI / buildAgenda（done 口径 = status==='done' 或 progress>=100）。
- * - 阶段进度：沿用 panel.tsx Overview 的 WBS 口径（顶层 code 为纯数字的任务组，子任务 code 以 "code." 开头）。
+ * - 风险 KPI / 日程：core/war-room.ts computeKPI / buildAgenda 保留历史口径，不用于状态完成卡。
+ * - 阶段进度：WBS 顶层阶段入口，客观值只来自 core 清单派生；人工显示独立分轨。
  *
  * 视觉基准：artifacts/redesign/overview/index.html；主题 token 由 panel.css .pm-shell 统一重映射为
  * dsh 宿主 --dsw-* 别名（深浅色跟随 body[data-ds-dark-theme]），本页只消费变量、不写死色值。
  * 样式见 overview.css，全部选择器 scope 在 .pm-ov-root 下。
  */
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
 import CalendarClock from 'lucide-react/dist/esm/icons/calendar-clock.mjs'
 import CircleCheck from 'lucide-react/dist/esm/icons/circle-check.mjs'
@@ -24,7 +24,10 @@ import {
   type HealthLamp,
   type HealthFactor,
 } from '../../core/derived.js'
-import { clampProgress } from '../../core/progress-derivation.js'
+import {
+  clampProgress, deriveProgressMap, resolveTaskProgressMeta, progressHeadline,
+  formatProgressValue, checklistFraction, type TaskProgressMetaInput,
+} from '../../core/progress-derivation.js'
 import { computeKPI, buildAgenda } from '../../core/war-room.js'
 import { DEFAULT_PROJECT_SETTINGS, type ProjectSettings } from '../../core/settings.js'
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels } from '../../core/labels.js'
@@ -42,7 +45,7 @@ const LAMP_LABEL: Record<HealthLamp, string> = {
   gray: '数据不足',
 }
 
-/** done 口径与 war-room.isTaskDone 保持一致：status==='done' 或 progress>=100。 */
+/** 团队/无主提示保留历史口径；状态完成卡不复用此谓词。 */
 const isTaskDone = (t: Task): boolean => t.status === 'done' || (t.progress ?? 0) >= 100
 
 /** 距今天数（与 war-room daysFrom 同一公式）；无日期返回 null。 */
@@ -156,7 +159,8 @@ export function Overview(props: {
   }, settings)
 
   // ---- 派生计数（展示层聚合，不改变扣分/统计口径）；5 态互斥，wrapped 单独成桶 ----
-  const done = tasks.filter(isTaskDone).length
+  const done = tasks.filter(t => t.status === 'done').length
+  const doneRate = tasks.length ? Math.round(done / tasks.length * 100) : 0
   const todoCount = tasks.filter(t => t.status === 'todo').length
   const inProgressCount = tasks.filter(t => t.status === 'in_progress').length
   const blockedCount = tasks.filter(t => t.status === 'blocked').length
@@ -167,16 +171,14 @@ export function Overview(props: {
   // 项目负责人(project.owner) 与任务执行人(assignee) 语义分离：未指派执行人只看 open 任务。
   const unassigned = tasks.filter(t => !isTaskDone(t) && t.status !== 'wrapped' && !t.assignee?.trim()).length
 
-  // 阶段进度：WBS 顶层分组口径（同 panel.tsx Overview）
+  const progressMap = useMemo(() => deriveProgressMap(tasks), [tasks])
+  // 保留 WBS 顶层阶段入口，不平均中间层/legacy，不因阶段 done 强填客观100。
   const phases = tasks
     .filter(t => /^\d+$/.test(t.code ?? ''))
     .map(r => {
-      const kids = tasks.filter(t => (t.code ?? '').startsWith(`${r.code}.`))
-      const group = kids.length ? kids : [r]
-      // 累加前逐个 clamp 手工 progress（脏值如 123 / -5 不入平均），结果再收口到 0..100。
-      const rawAvg = group.reduce((a, t) => a + clampProgress(t.progress), 0) / group.length
-      const avg = clampProgress(Math.round(rawAvg))
-      return { id: r.id, name: r.title, pct: r.status === 'done' ? 100 : avg }
+      const derived = progressMap.get(r.id)!
+      const meta = resolveTaskProgressMeta(r as Task & TaskProgressMetaInput, derived)
+      return { id: r.id, name: r.title, derived, meta, pct: meta.display }
     })
 
   // 团队负载：按负责人聚合
@@ -338,8 +340,8 @@ export function Overview(props: {
           <div className="ov-card ov-stat">
             <span className="ov-lab">任务完成</span>
             <span className="ov-num">{done}<small>/{tasks.length}</small></span>
-            <span className="ov-mini-bar"><i style={{ width: `${kpi.doneRate}%`, background: 'var(--c-done)' }}/></span>
-            <span className="ov-sub">{kpi.doneRate}% 已完成</span>
+            <span className="ov-mini-bar"><i style={{ width: `${doneRate}%`, background: 'var(--c-done)' }}/></span>
+            <span className="ov-sub">{doneRate}% 已完成</span>
           </div>
           <div className="ov-card ov-stat">
             <span className="ov-lab">里程碑</span>
@@ -372,16 +374,27 @@ export function Overview(props: {
               <span className="more">{phases.length} 个阶段 · 任务口径</span>
             </div>
             {phases.length ? phases.map(p => (
-              <div className="ov-phase" key={p.id}>
+              <div className="ov-phase" key={p.id} data-progress-mode={p.meta.mode}>
                 <span className="ov-pname">
-                  <i className="ov-dot" style={{ background: p.pct >= 100 ? 'var(--c-done)' : p.pct > 0 ? 'var(--c-prog)' : 'var(--c-todo)' }}/>
+                  <i className="ov-dot" style={{ background: (p.pct ?? 0) >= 100 ? 'var(--c-done)' : (p.pct ?? 0) > 0 ? 'var(--c-prog)' : 'var(--c-todo)' }}/>
                   <span className="ov-pname-t">{p.name}</span>
                 </span>
                 <span className="ov-track"><i style={{
-                  width: `${p.pct}%`,
-                  background: p.pct >= 100 ? 'var(--c-done)' : p.pct > 0 ? 'var(--c-prog)' : 'transparent',
+                  width: `${p.pct ?? 0}%`,
+                  background: (p.pct ?? 0) >= 100 ? 'var(--c-done)' : (p.pct ?? 0) > 0 ? 'var(--c-prog)' : 'transparent',
                 }}/></span>
-                <span className="ov-pct">{p.pct}%</span>
+                <span className="ov-pct">{p.pct === null ? '—' : `${p.pct}%`}</span>
+                <small style={{ gridColumn: '1 / -1', minWidth: 0, overflowWrap: 'anywhere', fontSize: 'var(--t-10)', color: 'var(--muted)' }}>
+                  {p.meta.mode === 'manual' && <>人工设定 {p.pct}% · </>}
+                  客观 {formatProgressValue(p.derived)}
+                  {checklistFraction(p.derived) && <> · 清单 {checklistFraction(p.derived)}</>}
+                  {' · '}覆盖 {p.derived.coverage.coveredLeaves}/{p.derived.coverage.totalLeaves}
+                  {p.derived.source === 'rollup' && <> · {progressHeadline(p.derived)}</>}
+                  {p.derived.value === null && p.derived.legacyProgress !== null && <> · 原手填 {clampProgress(p.derived.legacyProgress)}%</>}
+                  {p.derived.pendingAcceptance && <> · 待验收</>}
+                  {p.derived.warnings.length > 0 && <span title={p.derived.warnings.join('\n')}> · 请确认验收</span>}
+                  {p.meta.mode === 'manual' && p.meta.manualNote && <span title={p.meta.manualNote}> · {p.meta.manualNote}</span>}
+                </small>
               </div>
             )) : <p className="ov-empty">尚未拆分阶段任务（code 形如 1 / 1.1）</p>}
           </div>

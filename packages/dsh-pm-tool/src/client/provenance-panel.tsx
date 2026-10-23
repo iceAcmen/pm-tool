@@ -117,6 +117,7 @@ export function ProvenancePanel({ projectId, execute, onOpenRecord }: Provenance
           <span className="pm-prov-ref-label">{ref.label || ref.id}</span>
         )}
         <span className="pm-prov-ref-meta">
+          {ref.label ? `${ref.id} · ` : ''}
           {tableLabel} · 快照 v{ref.snapshotVersion} · 口径 v{ref.ruleRevision}
         </span>
         {row && (

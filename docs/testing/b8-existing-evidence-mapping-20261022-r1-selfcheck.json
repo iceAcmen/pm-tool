@@ -1,0 +1,151 @@
+{
+  "kind": "自有文档交付自检，非产品test/verify/GUI",
+  "at": "2026-10-22T11:19:38.244Z",
+  "os": "darwin",
+  "node": "v22.23.3",
+  "command": "/Users/bytedance/.nvm/versions/node/v22.23.3/bin/node docs/testing/b8-existing-evidence-mapping-20261022-r1-selfcheck.mjs",
+  "completed": true,
+  "counts": {
+    "matrix": 1184,
+    "drawers": 42,
+    "menus": 39,
+    "widgets": 16,
+    "specials": 3,
+    "matrixWithPartialSegments": 14,
+    "matrixEntirePass": 0,
+    "layerEntirePass": 0,
+    "widgetEntirePass": 0,
+    "evidenceCatalog": 24
+  },
+  "uniqueIds": 1284,
+  "linksChecked": [
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.json",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "AGENTS.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/collaboration.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/final-remaining-acceptance-reconcile-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/remaining-journey-cases-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/remaining-layer-map-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/gui-b8-expanded-checklist-20261020.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a13-u4-gui-total-retest-r2-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/cycle-feedback-independent-retest-20261022-r1-report.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a11-meeting-layout-gui-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a8-gui-supplement-independent-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a11-overview-visible-final-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a19-number-visual-retest-review-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a16-extension-selection-gui-review-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a13-materials-report-gui-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a13-materials-report-gui-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a19hc-gui-independent-review-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "reports/all-pending-evidence-20261021/A8/restore/native-zoom/execution.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a20v2-gui-independent-review-20261022.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.json",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "reports/layer-entry-map-source-20261021.json",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a18-material-composition-gui-review-20261022-visible.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/a8-layer-gap-contract-review-20261021.md",
+      "selfReferenceGeneratedByThisCommand": false
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1-selfcheck.json",
+      "selfReferenceGeneratedByThisCommand": true
+    }
+  ],
+  "missingLinks": [],
+  "sourceDrift": [],
+  "ownFiles": [
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.md",
+      "bytes": 16742,
+      "sha256": "5637da660a591e93344671fb4b04c9a1dc80f20e648b892e33ea81d2424c68f7"
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.json",
+      "bytes": 4516365,
+      "sha256": "10142e18e4ba79b6262caef90d632c6049b71c4462da45973c0ae64eb72312aa"
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1.mjs",
+      "bytes": 37521,
+      "sha256": "e0f801ce7dfda3480af0e3a6862c0129c082c76566ee9ecc21a30e1a3a3aad1f"
+    },
+    {
+      "path": "docs/testing/b8-existing-evidence-mapping-20261022-r1-selfcheck.mjs",
+      "bytes": 3839,
+      "sha256": "df2ba4b947ced53cab9577eb393f6f79ea84a58bff91cb2916c3915cf87ec671"
+    }
+  ],
+  "evidencePointerChecks": 46,
+  "checkBoundary": "只读取列明docs/reports与自有文件；证据根仅存在性检查，没有递归读/审原包。自检记录自身不纳自身SHA，避免递归自签",
+  "productOrGuiExecuted": false,
+  "network": false,
+  "subprocess": false,
+  "gitReadOrWrite": false,
+  "output": "docs/testing/b8-existing-evidence-mapping-20261022-r1-selfcheck.json",
+  "released": true
+}

@@ -18,9 +18,9 @@ import { AiAssistant } from './shared/drawers/ai-assistant.js'
 import { CopilotPanel } from './shared/drawers/sidecar-portal.js'
 import { projectStatusLabels, taskStatusLabels, milestoneStatusLabels, deliverableStatusLabels } from '../core/labels.js'
 import { deriveProgressMap, checklistFraction, resolveTaskProgressMeta, clampProgress } from '../core/progress-derivation.js'
-import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard, buildSuccessEnvelope, prefixFeedbackOnce } from '../core/ui-feedback.js'
-import { buildLaunchHistoryUrl, createLaunchHandshakeRetrier } from './launch-handshake.js'
-import { copyResultText } from './result-card-copy.js'
+import { extractBackupPath, classifyFeedback, commandAccepted, shouldPersistResultCard, buildSuccessEnvelope, prefixFeedbackOnce, type FeedbackContext } from '../core/ui-feedback.js'
+import { buildLaunchHistoryUrl, createLaunchHandshakeRetrier, parseLaunchToken } from './launch-handshake.js'
+import { ResultCard } from './result-card.js'
 import { buildDiagnosis } from '../core/suggestion-engine.js'
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.mjs'
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.mjs'
@@ -338,6 +338,8 @@ export type Snapshot = {
   fileAssets?: Record<string, { id: string, fileName?: string, size?: number, hash?: string, kind?: string, uploadedAt?: string }>
   /** #21 口径设置：服务端已归一化的生效口径；缺失/异常时前端再归一化回落默认。 */
   settings?: unknown
+  /** P2002：审计只读项目投影，不携带完整日志或目标路径；旧快照缺字段回落未导出。 */
+  latestExports?: Record<string, { at: string, format: 'markdown' | 'web' | 'plain' } | null>
   /** 宿主 HTTP 能力探测（webServer+connection）：httpAvailable/previewApi 齐备才提供权威预览，否则 CLI-only。 */
   capabilities?: {
     httpAvailable?: boolean
@@ -573,8 +575,15 @@ function ViewSwitcher({ current, items, onPick }: {
 
 
 export function PmPanel({ execute, executeRaw }: PmPanelApi) {
-  const [restorePreview, setRestorePreview] = useState<{ fileName: string, content: string, text: string } | null>(null)
+  const [restorePreview, setRestorePreview] = useState<
+    { fileName: string, text: string } & ({ mode: 'content', content: string } | { mode: 'path', path: string })
+    | null
+  >(null)
+  const [restorePath, setRestorePath] = useState('')
   const [data, setData] = useState<Snapshot>(empty)
+  // empty 初值是未知，不是已确认空库；首读状态不能借用通用命令 busy。
+  const [hasSnapshot, setHasSnapshot] = useState(false)
+  const [snapshotPending, setSnapshotPending] = useState(true)
   const [selected, setSelectedRaw] = useState<string>(() => {
     try { return localStorage.getItem('pm-selected-project') ?? '' } catch { return '' }
   })
@@ -669,7 +678,14 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   // E10：在途命令并发守卫。同一时刻只允许一条命令执行；第二次并发调用直接返回 false，
   // 不重复落库（双击 / 回车连发 / pending 期间二次点击都被挡）。
   const inflightRef = useRef(false)
-  const [message, setMessage] = useState('')
+  const [feedback, setFeedback] = useState<{ message: string, context?: FeedbackContext, generation: number }>({
+    message: '', generation: 0,
+  })
+  const { message, context: feedbackContext, generation: messageGeneration } = feedback
+  // 正文、类别与代际同次更新；普通通知和关闭默认清除 catch 类别。
+  const setMessage = (next: string, context?: FeedbackContext) => {
+    setFeedback(previous => ({ message: next, context, generation: previous.generation + 1 }))
+  }
   // B1-C2：读取失败保留旧数据（不清空、不伪装最新），标陈旧并提供本地重试。
   const [stale, setStale] = useState(false)
   // O4：当前抽屉注册的关闭守卫（dirty 确认）；无注册时直接关闭。
@@ -680,6 +696,16 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   const [copilotLayer, setCopilotLayer] = useState(false)
   // R-S2：最小化（40px 竖 tab，保留上下文）；R-S3：可调宽 420–560，默认 480，持久化到 localStorage。
   const [copilotMin, setCopilotMin] = useState(false)
+  // P1004: yield only for a task opened from the sidecar, retaining its mounted context.
+  const [copilotTaskHandoff, setCopilotTaskHandoff] = useState(false)
+  const copilotYielding = copilotTaskHandoff && drawer != null
+  const openCopilotRecord = (projectId: string, type: string, id: string) => {
+    if (type === 'task' && findRecord(data, type, id)) setCopilotTaskHandoff(true)
+    openRecord(projectId, type, id)
+  }
+  useEffect(() => {
+    if (!drawer) setCopilotTaskHandoff(false)
+  }, [drawer])
   const [copilotWidth, setCopilotWidth] = useState<number>(() => {
     try {
       const v = Number(localStorage.getItem('pm.sidecar.width'))
@@ -695,14 +721,14 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
     copilotOpenBtnRef.current?.focus()
   }
   useEffect(() => {
-    if (!copilotLayer) return
+    if (!copilotLayer || copilotYielding) return
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') { e.stopPropagation(); closeSidecar() }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [copilotLayer])
+  }, [copilotLayer, copilotYielding])
   // R-S3：右缘拖动手柄，clamp 420–560 并持久化。
   const startSidecarResize = (e: { clientX: number, preventDefault: () => void }) => {
     e.preventDefault()
@@ -726,6 +752,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
   // 已逐条关闭的诊断气泡 id（仅前端态，不写盘）。
   const [dismissedDiagnosis, setDismissedDiagnosis] = useState<ReadonlySet<string>>(new Set())
   const launchHandshakeRef = useRef<ReturnType<typeof createLaunchHandshakeRetrier> | null>(null)
+  const launchMountRef = useRef({ active: false, generation: 0, snapshotReady: false })
   if (!launchHandshakeRef.current && typeof window !== 'undefined') {
     launchHandshakeRef.current = createLaunchHandshakeRetrier({
       getHash: () => window.location.hash,
@@ -739,32 +766,57 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
 
   /** 重读 web snapshot；返回是否成功（失败仅置消息并返回 false，不抛，兼容既有 void 调用方）。 */
   const refresh = async (): Promise<boolean> => {
+    const generation = launchMountRef.current.generation
+    launchMountRef.current.snapshotReady = false
+    setSnapshotPending(true)
     setBusy(true)
     try {
       const next = JSON.parse(await execute('web snapshot')) as Snapshot
+      // 卸载或StrictMode重新挂载后的旧响应，不能替当前面板宣布数据就绪。
+      if (!launchMountRef.current.active || launchMountRef.current.generation !== generation) return false
+      const ids = next.projects.map(p => p.id)
       setData(next)
+      setHasSnapshot(true)
       setStale(false)
       // OPT-03：刷新后回填记住的项目；已删除则回退到当前首个项目，不留脏值。
-      const ids = next.projects.map(p => p.id)
       let stored = ''
       try { stored = localStorage.getItem('pm-selected-project') ?? '' } catch { /* ignore */ }
       setSelected(resolveRememberedProject(stored, ids, selected && ids.includes(selected) ? selected : undefined))
-      // 首次读取失败不永久错过 Finder 启动回告；后续任一成功刷新都会补试，成功后幂等。
+      launchMountRef.current.snapshotReady = true
+      // 首次失败可由后续成功刷新补试；成功仅属于本轮令牌。
       void launchHandshakeRef.current?.reportReady()
       return true
     } catch (error) {
+      if (!launchMountRef.current.active || launchMountRef.current.generation !== generation) return false
       // B1-C2：失败不清空已有数据（保留旧内容），仅标陈旧；错误原文进 ResultCard，不静默合并。
       setStale(true)
       setMessage(error instanceof Error ? error.message : String(error))
       return false
     } finally {
-      setBusy(false)
+      if (launchMountRef.current.active && launchMountRef.current.generation === generation) {
+        setSnapshotPending(false)
+        setBusy(false)
+      }
     }
   }
 
   useEffect(() => {
-    // 面板挂载后读取；权威回告由 refresh 的成功分支统一处理。
+    launchMountRef.current.active = true
+    launchMountRef.current.generation += 1
+    // 已就绪的同一PM面板可收到reopen新hash；只观察本面板的成功snapshot门。
+    const onLaunchHash = () => {
+      if (launchMountRef.current.snapshotReady && parseLaunchToken(window.location.hash)) {
+        void launchHandshakeRef.current?.reportReady()
+      }
+    }
+    window.addEventListener('hashchange', onLaunchHash)
     void refresh()
+    return () => {
+      launchMountRef.current.active = false
+      launchMountRef.current.snapshotReady = false
+      launchMountRef.current.generation += 1
+      window.removeEventListener('hashchange', onLaunchHash)
+    }
   }, [])
 
   // 「更多」菜单：Escape 关闭并把焦点还给触发按钮。
@@ -796,7 +848,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       if (!options?.quiet) setMessage(response)
       return accepted
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : String(error))
+      setMessage(prefixFeedbackOnce('执行失败', error), { kind: 'error' })
       setBusy(false)
       return false
     } finally {
@@ -923,46 +975,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
       onClickCapture={recordDrawerOpener}
     >
       {busy && <div className="pm-busy-indicator" aria-hidden="true"/>}
-      <FeedbackToast message={message}/>
+      <FeedbackToast message={message} context={feedbackContext} messageGeneration={messageGeneration}/>
 
-      {stale && !busy && (
-        <div className="pm-stale-banner" role="status">
-          <span className="pm-stale-banner__text">当前为上次读取的旧数据，最新内容暂未加载成功。</span>
-          <button type="button" className="pm-stale-banner__retry" onClick={() => { void refresh() }}>重试</button>
-        </div>
-      )}
-
-      {restorePreview && (
-        <div className="pm-restore-preview">
-          <div className="pm-warn">危险：恢复将用「{restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照）。</div>
-          <pre className="pm-restore-preview-text">{restorePreview.text}</pre>
-          <button
-            className="pm-button pm-button-primary pm-restore-confirm"
-            onClick={async () => {
-              // 预览面板（已展示全文+危险说明）之上再走阻断式二次确认，防误触整体替换。
-              const ok = await confirmDanger({
-                title: '确认整体恢复？',
-                objectType: '七类实体',
-                objectTitle: restorePreview.fileName,
-                impact: `将用「${restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照，现有数据会被覆盖）。`,
-                confirmLabel: '确认恢复',
-              })
-              if (!ok) return
-              const enc = JSON.stringify(restorePreview.content)
-              try {
-                const r = await execute(`restore-content ${enc} confirm`)
-                // P1-1：本地成功走统一成功信封 → 3s toast，不再裸文本常驻大卡；错误仍由 catch 走 alert。
-                setMessage(buildSuccessEnvelope([String(r ?? '已恢复（七类实体已替换）')]))
-                setRestorePreview(null)
-                void refresh()
-              } catch (e) {
-                setMessage(prefixFeedbackOnce('恢复失败', e))
-              }
-            }}
-          >确认恢复</button>
-          <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
-        </div>
-      )}
       <NavRail
         view={view}
         dashOpen={dashOpen}
@@ -983,6 +997,47 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
         onOpenSettings={() => setDrawer({ kind: 'settings' })}
       />
       <div className="pm-main">
+      {hasSnapshot && stale && !busy && (
+        <div className="pm-stale-banner" role="status">
+          <span className="pm-stale-banner__text">当前为上次读取的旧数据，最新内容暂未加载成功。</span>
+          <button type="button" className="pm-stale-banner__retry" onClick={() => { void refresh() }}>重试</button>
+        </div>
+      )}
+      {restorePreview && (
+        <div className="pm-restore-preview">
+          <div className="pm-restore-preview-warning">危险：恢复将用「{restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照）。</div>
+          <pre className="pm-restore-preview-text">{restorePreview.text}</pre>
+          <div className="pm-restore-preview-actions">
+          <button
+            className="pm-button pm-button-primary pm-restore-confirm"
+            onClick={async () => {
+              // 预览面板（已展示全文+危险说明）之上再走阻断式二次确认，防误触整体替换。
+              const ok = await confirmDanger({
+                title: '确认整体恢复？',
+                objectType: '七类实体',
+                objectTitle: restorePreview.fileName,
+                impact: `将用「${restorePreview.fileName}」替换当前七类实体（恢复前自动存安全快照，现有数据会被覆盖）。`,
+                confirmLabel: '确认恢复',
+              })
+              if (!ok) return
+              try {
+                const command = restorePreview.mode === 'path'
+                  ? `restore "${restorePreview.path}" confirm`
+                  : `restore-content ${JSON.stringify(restorePreview.content)} confirm`
+                const r = await execute(command)
+                // P1-1：本地成功走统一成功信封 → 3s toast，不再裸文本常驻大卡；错误仍由 catch 走 alert。
+                setMessage(buildSuccessEnvelope([String(r ?? '已恢复（七类实体已替换）')]))
+                setRestorePreview(null)
+                void refresh()
+              } catch (e) {
+                setMessage(prefixFeedbackOnce('恢复失败', e))
+              }
+            }}
+          >确认恢复</button>
+          <button className="pm-tool-button pm-restore-cancel" onClick={() => setRestorePreview(null)}>取消</button>
+          </div>
+        </div>
+      )}
       <header className="pm-topbar">
         <div className="pm-project-switch">
           <span className="pm-app-mark"><FolderKanban size={17}/></span>
@@ -994,7 +1049,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                   currentId={project.id}
                   onPick={id => { setSelected(id); setDrawer(undefined) }}
                 />
-              : <strong>暂无项目</strong>}
+              : <strong>{hasSnapshot ? '暂无项目' : snapshotPending ? '正在读取项目' : '读取失败'}</strong>}
           </div>
         </div>
         <div className="pm-top-actions">
@@ -1140,6 +1195,28 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
           >
             <Database size={15}/>备份
           </button>
+          <div className="pm-menu-restore-path" style={{ padding: '8px 12px', maxWidth: '100%' }}>
+            <label htmlFor="pm-restore-path">本机备份完整路径</label>
+            <input id="pm-restore-path" value={restorePath} style={{ width: '100%', boxSizing: 'border-box' }}
+              placeholder="粘贴备份成功提示中的完整路径"
+              onChange={e => setRestorePath(e.currentTarget.value)}/>
+            <p className="pm-muted" style={{ whiteSpace: 'normal' }}>含附件的备份须保留旁边的文件目录，预检会一起核对。</p>
+            <button type="button" className="pm-button" disabled={busy || !restorePath.trim()}
+              onClick={async () => {
+                const path = restorePath.trim()
+                // 路径是命令数据，不执行shell；拒引号/换行，防截断路径成为额外confirm参数。
+                if (/["\r\n]/.test(path)) {
+                  setMessage('备份路径不能包含双引号或换行，请输入完整本机路径。')
+                  return
+                }
+                try {
+                  const text = String(await execute(`restore "${path}"`))
+                  if (!commandAccepted(text)) { setMessage(text); return }
+                  setRestorePreview({ mode: 'path', fileName: path, path, text })
+                  setTopMenuOpen(false)
+                } catch (error) { setMessage(prefixFeedbackOnce('恢复失败', error)) }
+              }}>预检本机备份</button>
+          </div>
           <label className="pm-button pm-restore-btn" title="按备份成功提示的完整路径选取本地 pm-tool 备份 JSON；选文件后先预览，确认才替换当前七类实体">
             <Package size={15}/>选择备份文件恢复
             <input
@@ -1158,7 +1235,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                     .then((r) => {
                       const text = String(r ?? '')
                       if (/失败|错误|不支持|无法/.test(text)) { setMessage(text); return }
-                      setRestorePreview({ fileName: file.name, content, text })
+                      setRestorePreview({ mode: 'content', fileName: file.name, content, text })
                     })
                     .catch((e) => setMessage(prefixFeedbackOnce('恢复失败', e)))
                 }
@@ -1234,7 +1311,17 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
         </div>
       )}
 
-      {dashOpen
+      {!hasSnapshot
+        ? snapshotPending
+          ? <div className="pm-empty-workspace" role="status">
+              <strong>正在读取项目数据…</strong>
+              <p>首次读取成功后显示项目与任务。</p>
+            </div>
+          : <div className="pm-stale-banner" role="status">
+              <span className="pm-stale-banner__text">首次读取失败，请重试。{message && ` ${message}`}</span>
+              <button type="button" className="pm-stale-banner__retry" onClick={() => { void refresh() }}>重试</button>
+            </div>
+        : dashOpen
         ? <GlobalBoard
             data={data}
             execute={execute}
@@ -1273,6 +1360,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               <div className="pm-result-zone">
                 <ResultCard
                   message={message}
+                  context={feedbackContext}
+                  messageGeneration={messageGeneration}
                   onClose={() => setMessage('')}
                   onAction={(command) => { void run(command) }}
                 />
@@ -1299,6 +1388,7 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                 execute={execute}
                 projectId={project.id}
                 projectName={project.name}
+                latestExport={data.latestExports?.[project.id] ?? null}
                 density={density}
                 onDensityChange={setDensity}
                 overlayOpen={drawer != null || dashOpen || restorePreview != null}
@@ -1324,6 +1414,8 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
               />}
               {view === 'meetings' && <MeetingTable
                 meetings={meetings}
+                tasks={tasks}
+                riskIssues={riskIssues}
                 onCreate={() => setDrawer({ kind: 'meeting' })}
                 onEdit={meeting => setDrawer({ kind: 'meeting', meeting })}
                 records={meetingRecords}
@@ -1402,12 +1494,9 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
             </div>
             {/* R-S：Portal fixed 浮层，脱离 flex 流；开关前后主列宽完全一致（非 modal，role=region）。 */}
             {copilotLayer && project && (
-              copilotMin ? (
-                <button type="button" className="pm-sidecar-tab" onClick={() => setCopilotMin(false)} aria-label="展开 AI 副驾，保留此前上下文">
-                  <MessageSquare size={15}/><span>副驾</span>
-                </button>
-              ) : (
-                <aside className="pm-sidecar" role="region" aria-label="AI 副驾" style={{ width: `${copilotWidth}px` }}>
+              <>
+                {/* 最小化只隐藏同一子树，保留草稿、未发送输入及本轮撤销上下文。 */}
+                <aside className="pm-sidecar" hidden={copilotMin || copilotYielding} role="region" aria-label="AI 副驾" style={{ width: `${copilotWidth}px` }}>
                   <div
                     className="pm-sidecar-handle"
                     role="separator"
@@ -1430,12 +1519,15 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                       riskIssues={riskIssues}
                       deliverables={deliverables}
                       meetings={meetings}
-                      baselineMap={Object.fromEntries(tasks.map(t => [t.id, (t as { updatedAt?: string }).updatedAt ?? '']))}
+                      baselineMap={Object.fromEntries(
+                        [...tasks, ...milestones, ...riskIssues, ...deliverables, ...meetings]
+                          .map(record => [record.id, (record as { updatedAt?: string }).updatedAt ?? '']),
+                      )}
                       execute={execute}
                       executeRaw={executeRaw}
                       disabled={busy}
                       onSaved={refresh}
-                      onOpenRecord={openRecord}
+                      onOpenRecord={openCopilotRecord}
                       embedded
                       diagnosis={diagnosis}
                       onDismissDiagnosis={dismissDiagnosis}
@@ -1444,7 +1536,12 @@ export function PmPanel({ execute, executeRaw }: PmPanelApi) {
                     />
                   </div>
                 </aside>
-              )
+                {copilotMin && !copilotYielding && (
+                  <button type="button" className="pm-sidecar-tab" onClick={() => setCopilotMin(false)} aria-label="展开 AI 副驾，保留此前上下文">
+                    <MessageSquare size={15}/><span>副驾</span>
+                  </button>
+                )}
+              </>
             )}
           </>}
       </div>
@@ -1954,92 +2051,30 @@ function downloadText(filename: string, text: string, mime: string) {  try {
  *   非结构化原样持久（不吞不改写）；[pm:action] 渲染独立确认按钮，命令不进保存正文。
  * 两层都从不 focus()，不抢焦点；表单输入在错误时保留（抽屉不卸载）。
  */
-function FeedbackToast({ message }: { message: string }) {
-  const fb = classifyFeedback(message)
+function FeedbackToast({ message, context, messageGeneration }: {
+  message: string, context?: FeedbackContext, messageGeneration?: number
+}) {
+  const fb = classifyFeedback(message, context)
   const [visible, setVisible] = useState(true)
-  useEffect(() => {
+  const generation = useRef(0)
+  useLayoutEffect(() => {
+    generation.current += 1
     setVisible(true)
+    return () => { generation.current += 1 }
+  }, [message, context?.kind, messageGeneration])
+  useEffect(() => {
     if (!fb.autoDismissMs) return
-    const timer = setTimeout(() => setVisible(false), fb.autoDismissMs)
+    const requestGeneration = generation.current
+    const timer = setTimeout(() => {
+      if (requestGeneration === generation.current) setVisible(false)
+    }, fb.autoDismissMs)
     return () => clearTimeout(timer)
-  }, [message, fb.autoDismissMs])
+  }, [message, context?.kind, messageGeneration, fb.autoDismissMs])
   if (!visible || fb.isError || !fb.autoDismissMs || !fb.summary.length) return null
   return (
     <div className="pm-toast pm-toast--success" role="status" aria-live="polite">
       <Check size={15}/>
       <div className="pm-toast__msg">{fb.summary.slice(0, 2).join('\n')}</div>
-    </div>
-  )
-}
-
-function ResultCard({ message, onClose, onAction }: {
-  message: string
-  onClose: () => void
-  onAction: (command: string) => void
-}) {
-  const fb = classifyFeedback(message)
-  const [detailOpen, setDetailOpen] = useState(false)
-  const [copyState, setCopyState] = useState<'copied' | 'failed' | null>(null)
-  const path = extractBackupPath(message)
-  const isError = fb.isError
-  // D-09/C-11：纯结构化成功短摘要只进 3s toast，不开常驻大卡（消除 toast+大卡双发、离页残留）；
-  // 仅错误/非结构化/带 action/带备份路径才常驻本卡。
-  if (!shouldPersistResultCard(fb, path)) return null
-  // 非结构化回退：原样全量进卡体（不强行折叠、不改写）；结构化成功：摘要常显、详情折叠。
-  const showInlineRaw = !fb.structured
-  // B1-C3：permission-denied 给通用错误种类标签（权限不足），原始 command 错误原因原样保留，
-  // 不静默合并、不改写、不吞；其余错误种类仍走通用 error 呈现。
-  const isPermissionDenied = isError && /权限|denied|permission|无权|not allowed/i.test(message)
-  const copy = async (value: string) => {
-    setCopyState(await copyResultText(value) ? 'copied' : 'failed')
-  }
-  return (
-    <div className={`pm-result-card${isError ? ' pm-result-card--error' : ''}`}
-      role={isError ? 'alert' : 'status'}
-      aria-live={isError ? 'assertive' : 'polite'}
-    >
-      <div className="pm-result-card__bar">
-        {isError ? <AlertTriangle size={15}/> : <Check size={15}/>}
-        <div className="pm-result-card__summary">
-          {isPermissionDenied && <div className="pm-result-card__kind">权限不足</div>}
-          {showInlineRaw ? message : fb.summary.join('\n')}
-        </div>
-        <button className="pm-plain-icon" aria-label="关闭结果卡" onClick={onClose}><X size={14}/></button>
-      </div>
-      {fb.detail && (
-        <>
-          <button
-            className="pm-result-card__toggle"
-            aria-expanded={detailOpen}
-            onClick={() => setDetailOpen(v => !v)}
-          >{detailOpen ? '收起详情 ▴' : '详情 ▾'}</button>
-          {detailOpen ? <pre className="pm-result-card__detail">{fb.detail}</pre> : null}
-        </>
-      )}
-      {fb.action && (
-        <div className="pm-result-card__actions">
-          <button className="pm-result-action" onClick={() => onAction(fb.action!.command)}>
-            {fb.action.label}
-          </button>
-        </div>
-      )}
-      <div className="pm-result-card__actions">
-        <button
-          className="pm-result-card__copy"
-          onClick={() => { void copy(message) }}
-        >复制原文</button>
-        {path && (
-          <button
-            className="pm-result-card__copy"
-            onClick={() => { void copy(path) }}
-          >复制路径</button>
-        )}
-        {copyState && (
-          <span className={`pm-result-card__copy-state pm-result-card__copy-state--${copyState}`} role="status">
-            {copyState === 'copied' ? '已复制' : '复制失败，请手动复制'}
-          </span>
-        )}
-      </div>
     </div>
   )
 }
@@ -2199,6 +2234,8 @@ function DrawerPanel({ title, onClose, beforeClose, children }: {
 }) {
   // O4：统一关闭入口，ESC/scrim/X 都先过守卫，避免任一路径绕过 dirty 确认。
   const requestClose = () => {
+    // 确认层显示期间，关闭动作归确认；同次 keydown 不再重入底层 dirty 守卫。
+    if (asideRef.current?.ownerDocument.querySelector('.pm-confirm-dialog')) return
     if (beforeClose && beforeClose() === false) return
     onClose()
   }
@@ -2528,6 +2565,27 @@ function TaskForm({
   const [evidenceUrl, setEvidenceUrl] = useState<string>(task?.evidenceUrl ?? '')
   const [manualProgress, setManualProgress] = useState<string>(task?.manualProgress != null ? String(task.manualProgress) : '')
   const [manualNote, setManualNote] = useState<string>(task?.manualProgressNote ?? '')
+  const [checklistBusy, setChecklistBusy] = useState(false)
+  const checklistBusyRef = useRef(false)
+  const [checklistError, setChecklistError] = useState('')
+  const checklistTask = task ? tasks.find(item => item.id === task.id) ?? task : undefined
+  const checklistHasChildren = !!task && tasks.some(item => item.parentId === task.id)
+  const toggleChecklist = async (itemId: string, expectedDone: boolean) => {
+    if (!task || disabled || checklistHasChildren || checklistBusyRef.current) return
+    checklistBusyRef.current = true
+    setChecklistBusy(true)
+    setChecklistError('')
+    try {
+      const ok = await run(`task checklist toggle ${task.id} ${itemId} ${expectedDone}`)
+      if (ok) onChanged?.()
+      else setChecklistError('清单更新失败，请重试；当前勾选仍以已保存内容为准。')
+    } catch (error) {
+      setChecklistError(prefixFeedbackOnce('清单更新失败', error))
+    } finally {
+      checklistBusyRef.current = false
+      setChecklistBusy(false)
+    }
+  }
   // B2 ops 草稿信封：draft 面板本地追加 attachmentOps/progressOps，提交时随单条命令合并；
   // 无改动为 null（不发 draft 键）；draftErrors 非空则拦截提交、保留输入不关层。
   const [draftEnvelope, setDraftEnvelope] = useState<{ draft: TaskDraftOps } | null>(null)
@@ -2603,8 +2661,8 @@ function TaskForm({
     // T7：trim 后空串照传，core 落盘时删键；非空传原值。局部更新不误触其它字段。
     const repoUrl = repoValues.repoUrl.trim()
     const branch = repoValues.branch.trim()
-    // PROD-11：前置依赖整体替换（多选复选）；空数组即清空。
-    const predecessorIds = form.getAll('predecessorIds').map(String)
+    // PROD-11：完整受控集合整体替换，搜索只过滤视图；空数组即清空。
+    const predecessorIds = Array.from(checkedIds)
     // 写路径「必须有值」语义：空 → 0，复用 task-inline 的 clampProgress（round + 0..100）。
     const progressRaw = values.progress ?? '0'
     const progressNum = progressRaw.trim() === '' ? 0 : writeClampProgress(progressRaw)
@@ -2752,6 +2810,24 @@ function TaskForm({
             {stale && <span className="pm-muted pm-meta-stale">（数据陈旧，重试后更新）</span>}
           </span>
         </div>
+        {task && (
+          <div className="pm-task-checklist" aria-label="任务清单" aria-busy={checklistBusy || undefined}>
+            <span className="pm-meta-label">清单检查点（勾选后即时保存）</span>
+            {checklistHasChildren
+              ? <p className="pm-muted">有子任务的任务不挂清单；客观进度由子任务汇总。</p>
+              : checklistTask?.checklist?.length
+                ? checklistTask.checklist.map(item => (
+                  <label key={item.id} className="pm-task-checklist-item">
+                    <input type="checkbox" aria-label={`清单：${item.text}`} checked={item.done}
+                      disabled={disabled || checklistBusy}
+                      onChange={event => toggleChecklist(item.id, event.currentTarget.checked)}/>
+                    <span>{item.text}</span>
+                  </label>
+                ))
+                : <p className="pm-muted">暂无清单检查点。</p>}
+            {checklistError && <p className="pm-field-error" role="alert">{checklistError}</p>}
+          </div>
+        )}
         {task?.completedDate && (
           <div className="pm-meta-row"><span className="pm-meta-label">完成日期</span><span>{task.completedDate}</span></div>
         )}
@@ -2889,11 +2965,14 @@ function TaskForm({
                 <input
                   type="checkbox" name="predecessorIds" value={row.task.id}
                   checked={checkedIds.has(row.task.id)}
-                  onChange={e => setCheckedIds(prev => {
-                    const next = new Set(prev)
-                    if (e.currentTarget.checked) next.add(row.task.id); else next.delete(row.task.id)
-                    return next
-                  })}
+                  onChange={e => {
+                    const checked = e.currentTarget.checked
+                    setCheckedIds(prev => {
+                      const next = new Set(prev)
+                      if (checked) next.add(row.task.id); else next.delete(row.task.id)
+                      return next
+                    })
+                  }}
                 />
                 <span className="pm-predecessor-code">{row.task.code}</span>
                 <span className="pm-predecessor-name">{row.task.title}</span>

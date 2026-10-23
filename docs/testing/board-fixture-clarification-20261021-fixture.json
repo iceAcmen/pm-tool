@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "scope": "user",
+  "widgets": [
+    {
+      "i": "w-hero",
+      "type": "completionHero",
+      "config": {},
+      "layout": { "i": "w-hero", "x": 0, "y": 0, "w": 12, "h": 6, "minW": 3, "minH": 6 }
+    },
+    {
+      "i": "w-ms-deliver",
+      "type": "milestoneDeliverable",
+      "config": {},
+      "layout": { "i": "w-ms-deliver", "x": 0, "y": 6, "w": 12, "h": 2, "minW": 4, "minH": 2 }
+    },
+    {
+      "i": "w-scale",
+      "type": "projectScale",
+      "config": {},
+      "layout": { "i": "w-scale", "x": 0, "y": 8, "w": 12, "h": 2, "minW": 3, "minH": 2 }
+    },
+    {
+      "i": "w-obj",
+      "type": "objectiveProgress",
+      "config": {},
+      "layout": { "i": "w-obj", "x": 0, "y": 10, "w": 12, "h": 2, "minW": 3, "minH": 2 }
+    },
+    {
+      "i": "w-load",
+      "type": "peopleLoad",
+      "config": {},
+      "layout": { "i": "w-load", "x": 0, "y": 12, "w": 12, "h": 2, "minW": 4, "minH": 2 }
+    },
+    {
+      "i": "w-risk",
+      "type": "riskMatrix",
+      "config": {},
+      "layout": { "i": "w-risk", "x": 0, "y": 14, "w": 12, "h": 3, "minW": 3, "minH": 3 }
+    }
+  ]
+}

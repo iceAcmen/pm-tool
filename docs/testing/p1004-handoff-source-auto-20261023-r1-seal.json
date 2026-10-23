@@ -1,0 +1,153 @@
+{
+  "at": "2026-10-22T21:12:56.791Z",
+  "role": "independent SOURCE/AUTO expert",
+  "node": "v22.23.3",
+  "ok": true,
+  "exit": 0,
+  "protectedCount": 483,
+  "unchangedProtectedCount": 481,
+  "inputDrift": [
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx",
+    "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/commands/reflect.ts"
+  ],
+  "concurrentSourceBinding": [
+    {
+      "path": "src/client/views/records/records-listbox.tsx",
+      "tested": {
+        "bytes": 4737,
+        "sha256": "790533aed66fa35a6258e8a37c345058b8204d9d91cb86684e48453218f9cf7d"
+      },
+      "current": {
+        "bytes": 4886,
+        "sha256": "db16c2e6dcb9c574855b9f0bc82f2d976b7f1756a8d0abcab275c4bbc07683f2"
+      },
+      "command": [
+        "/usr/bin/diff",
+        "-u",
+        "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/client/views/records/records-listbox.tsx",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/client/views/records/records-listbox.tsx"
+      ],
+      "exit": 1,
+      "output": "source-binding-close-listbox-delta.patch",
+      "inheritance": "none to the changed combined candidate; isolated P1004 result retained"
+    },
+    {
+      "path": "src/commands/reflect.ts",
+      "tested": {
+        "bytes": 6015,
+        "sha256": "69be050f31870274fcb831e935dd791f1903b031f20b1d0917c2665bda62f07c"
+      },
+      "current": {
+        "bytes": 7461,
+        "sha256": "7198072968f7ae02cd145ba97ee690870406918f3d036d191de27d196bb2a951"
+      },
+      "command": [
+        "/usr/bin/diff",
+        "-u",
+        "/tmp/pmtool-p1004-independent-source-auto-eTiFFN/src/commands/reflect.ts",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/packages/dsh-pm-tool/src/commands/reflect.ts"
+      ],
+      "exit": 1,
+      "output": "source-binding-close-reflect-delta.patch",
+      "inheritance": "none to the changed combined candidate; isolated P1004 result retained"
+    }
+  ],
+  "isolatedCopies": [
+    {
+      "mode": "dom",
+      "root": "/tmp/pmtool-p1004-independent-source-auto-eTiFFN",
+      "count": 407,
+      "drift": []
+    },
+    {
+      "mode": "affected",
+      "root": "/tmp/pmtool-p1004-independent-source-auto-GsOUAc",
+      "count": 407,
+      "drift": []
+    }
+  ],
+  "outputs": {
+    "run.mjs": {
+      "bytes": 20021,
+      "sha256": "b0c6c19b6408b9668462ffa753e53193d90e4fc22866362bf13ad17d906b07a8"
+    },
+    "audit.json": {
+      "bytes": 192403,
+      "sha256": "182bfedeb783cf6fc093a0e03dc1020edbd5f6d6bcd1ee40e3ad85cbaa3872d6"
+    },
+    "dom-receipt.json": {
+      "bytes": 3280,
+      "sha256": "043b9ff5a5975b78e69f73e73379dd5dd3d921a833cec512d62d6953b97a8563"
+    },
+    "dom-stdout.log": {
+      "bytes": 1498,
+      "sha256": "4511313fdb94e41f43f89738ae90ea2fc63bd56b644e8b7489b9f45cb0db21e3"
+    },
+    "dom-stderr.log": {
+      "bytes": 764,
+      "sha256": "8ba7d8324157ee961ec700ab860db9f65f7725b6d84e5379cfc5be87db5c25a3"
+    },
+    "dom-vitest.json": {
+      "bytes": 4617,
+      "sha256": "06382964df6f30b079137839727957cbe764ffa88e9530d183d7c6679333edf5"
+    },
+    "affected-receipt.json": {
+      "bytes": 7518,
+      "sha256": "f4aca65dbbeff14d53ad76ee542a50db161ffcea7dca43b57b9f6e5ac680da5e"
+    },
+    "affected-stdout.log": {
+      "bytes": 717,
+      "sha256": "1c993b7da4c7aa23643318c95739eca71cad24583d2277168ada47b8f383f2e7"
+    },
+    "affected-stderr.log": {
+      "bytes": 1065,
+      "sha256": "1f1bceea4a88f684bd476534fca9e053602d5d995f880d9abb70f44d7385303b"
+    },
+    "affected-vitest.json": {
+      "bytes": 12840,
+      "sha256": "6d45d2e61933417b349d9591551b9bc958ce51eeaed7187dc7eb339cddbd9213"
+    },
+    "observations.json": {
+      "bytes": 1247783,
+      "sha256": "f455a03488dfe4c315fd9acf603e9a8711f08c7a36550460bfc0ccf5816e0aab"
+    },
+    "prefix-observations.ndjson": {
+      "bytes": 3201,
+      "sha256": "ca32f4939f06f067a8014caac9456c0f28af4c801ddbf4971cf9c5c063c7aebd"
+    },
+    "inspection.json": {
+      "bytes": 55110,
+      "sha256": "3c47a55cf1d8f948717e97252d7c3a4ff5b9aa4febc8d2caed96c9701cebbf18"
+    },
+    "report.md": {
+      "bytes": 19304,
+      "sha256": "a65bd833d533773361716b8d33594e47aceb9aa4237e6e2fad660bdd318a3589"
+    },
+    "seal-attempt1.json": {
+      "bytes": 836,
+      "sha256": "93897c150b5cffb649c75904a697b0c6823b56ae44eee244bc70ecb1fd7e0386"
+    },
+    "source-binding-close.json": {
+      "bytes": 2312,
+      "sha256": "0f2ad0929e603b77607fc1642d1f4b7d40d1d10769711d5750001a12de0b8b2f"
+    },
+    "source-binding-close-listbox-delta.patch": {
+      "bytes": 739,
+      "sha256": "519376b81b46ba2a7bb8085bface0d1c2e6512da999f01dad3e20e0f69d5549c"
+    },
+    "source-binding-close-reflect-delta.patch": {
+      "bytes": 7243,
+      "sha256": "3cfcfc7f8530eb4d5c504d131def26f82f7ce1164080b71dfd2e6d52f72a9ba6"
+    }
+  },
+  "reportCheck": {
+    "exit": 0,
+    "localLinks": 31,
+    "onlyPendingSeal": [
+      "p1004-handoff-source-auto-20261023-r1-seal.json"
+    ],
+    "whitespace": "ok"
+  },
+  "conclusion": "PASS limited to original isolated P1004 SOURCE/AUTO; changed combined candidate not signed; GUI FAIL unchanged",
+  "release": "released / STOP; no SOURCE, builder, GUI, service or Git ownership"
+}

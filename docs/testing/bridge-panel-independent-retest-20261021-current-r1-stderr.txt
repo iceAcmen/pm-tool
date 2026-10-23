@@ -1,0 +1,26 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/client/bridge-panel-independent-retest-20261021-additional.test.tsx > Independent real PmPanel integration > S01/S02 request contract preserved; token never written to storage/log/query/cookie
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "pm-selected-project",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/client/bridge-panel-independent-retest-20261021-additional.test.tsx:295:36
+    293|     }
+    294|     expect(storage.setItem).not.toHaveBeenCalled()
+    295|     expect(storage.removeItem).not.toHaveBeenCalled()
+       |                                    ^
+    296|     expect(location.search).toBe('?view=pm')
+    297|     expect(JSON.stringify(logs.flatMap(log => log.mock.calls))).not.to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

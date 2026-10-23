@@ -13,6 +13,7 @@ import {
   moveTaskAndRenumber,
   ParentTaskNotFoundError,
   ParentTaskProjectMismatchError,
+  PredecessorRelationError,
   renumberTasks,
   TaskHasChildrenError,
   TaskMoveCycleError,
@@ -533,14 +534,27 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
     if (action === 'import-content') {
       // OPT-12：/pm task import-content <项目ID> <文件名> <JSON编码内容> [confirm]
       // csv: 内容为 CSV 原文；xlsx: 内容为 base64。网页 FileReader 读取后经 execute 桥传入。
-      const tokens = argument.split(/\s+/).filter(Boolean)
-      if (tokens.length < 3) {
+      // 只在此分支识别 JSON 字符串边界；JSON.parse 严格校转义，不拆/拼内容空白。
+      const importMatch = /^(\S+)\s+("(?:[^"\\]|\\[\s\S])*"|[^\s"]+)\s+("(?:[^"\\]|\\[\s\S])*")(?:\s+(confirm))?$/i.exec(argument)
+      if (!importMatch) {
         return { kind: 'error', text: '请使用：/pm task import-content <项目ID> <文件名.csv|.xlsx> "<JSON 编码内容>" [confirm]' }
       }
-      const projectId = tokens[0]
-      const filename = tokens[1]
-      const confirmation = tokens[tokens.length - 1].toLowerCase() === 'confirm'
-      const jsonArg = confirmation ? tokens.slice(2, -1).join(' ') : tokens.slice(2).join(' ')
+      const projectId = importMatch[1]
+      const filenameArg = importMatch[2]
+      let filename: string
+      try {
+        if (filenameArg.startsWith('"')) {
+          filename = JSON.parse(filenameArg)
+          if (typeof filename !== 'string') throw new Error()
+        } else {
+          if (!/^[\x21-\x7e]+$/.test(filenameArg)) throw new Error()
+          filename = filenameArg
+        }
+      } catch {
+        return { kind: 'error', text: '文件名须为有效的 JSON 字符串或无空白 ASCII 文件名（请由 Web 面板生成）。' }
+      }
+      const confirmation = Boolean(importMatch[4])
+      const jsonArg = importMatch[3]
       const isCsv = /\.csv$/i.test(filename)
       const isXlsx = /\.xlsx$/i.test(filename)
       if (!isCsv && !isXlsx) {
@@ -808,6 +822,7 @@ export async function handleTaskCommand(rawInput: string, domain?: PmDomain, llm
     if (error instanceof TaskProjectNotFoundError
       || error instanceof ParentTaskNotFoundError
       || error instanceof ParentTaskProjectMismatchError
+      || error instanceof PredecessorRelationError
       || error instanceof TaskHasChildrenError
       || error instanceof TaskMoveCycleError
       || error instanceof TaskMilestoneNotFoundError
