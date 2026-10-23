@@ -1,0 +1,447 @@
+{
+  "at": "2026-10-23T18:46:05.701Z",
+  "result": "HISTORICAL_WORKTREES_CLEAN",
+  "mainArchiveAtStart": "4a879e8",
+  "worktreesChecked": 21,
+  "remainingOriginalChanges": 0,
+  "gitStashFilesVerified": 168,
+  "headsUnchanged": true,
+  "localStashes": [
+    {
+      "group": "all-closure-20261021",
+      "path": "/private/tmp/pmtool-all-closure-20261021",
+      "originalHead": "9b1a8c5317774ff07cc594a0acd12a5cc7893ebd",
+      "stashCommit": "24bc354d197ad22c77f6718abb93c1539dfed255",
+      "savedFiles": 114,
+      "message": "pm-tool historical worktree all-closure-20261021 archived at 4a879e8; recoverable retirement 2026-10-24",
+      "started": "2026-10-23T18:44:28.185Z",
+      "ended": "2026-10-23T18:44:28.685Z",
+      "seconds": 0.5,
+      "argv": [
+        "git",
+        "stash",
+        "push",
+        "--include-untracked",
+        "--message",
+        "pm-tool historical worktree all-closure-20261021 archived at 4a879e8; recoverable retirement 2026-10-24"
+      ],
+      "exitCode": 0,
+      "recoverArgv": [
+        "git",
+        "-C",
+        "/private/tmp/pmtool-all-closure-20261021",
+        "stash",
+        "apply",
+        "--index",
+        "24bc354d197ad22c77f6718abb93c1539dfed255"
+      ],
+      "warning": "仅需恢复时执行；先确认目标工作树干净，不自动恢复或删除stash。"
+    },
+    {
+      "group": "doubao-freeze-06a131c",
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38447212582650882/agents/s_000ElkeZqJ2/freeze/wt-06a131c",
+      "originalHead": "06a131cd5fdc4486dd74afe89cc4c5630f0a4c98",
+      "stashCommit": "5f78d27f42621925ad18aceeb4903aeb9fdf7206",
+      "savedFiles": 9,
+      "message": "pm-tool historical worktree doubao-freeze-06a131c archived at 4a879e8; recoverable retirement 2026-10-24",
+      "started": "2026-10-23T18:44:29.374Z",
+      "ended": "2026-10-23T18:44:29.626Z",
+      "seconds": 0.252,
+      "argv": [
+        "git",
+        "stash",
+        "push",
+        "--include-untracked",
+        "--message",
+        "pm-tool historical worktree doubao-freeze-06a131c archived at 4a879e8; recoverable retirement 2026-10-24"
+      ],
+      "exitCode": 0,
+      "recoverArgv": [
+        "git",
+        "-C",
+        "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38447212582650882/agents/s_000ElkeZqJ2/freeze/wt-06a131c",
+        "stash",
+        "apply",
+        "--index",
+        "5f78d27f42621925ad18aceeb4903aeb9fdf7206"
+      ],
+      "warning": "仅需恢复时执行；先确认目标工作树干净，不自动恢复或删除stash。"
+    },
+    {
+      "group": "ui-impeccable",
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/ui-impeccable",
+      "originalHead": "740c1e85ebb2354ddccce62ca0b5dcf1b57a4efd",
+      "stashCommit": "1e8f963337e89fa222f794b38e317454353293d6",
+      "savedFiles": 45,
+      "message": "pm-tool historical worktree ui-impeccable archived at 4a879e8; recoverable retirement 2026-10-24",
+      "started": "2026-10-23T18:44:29.866Z",
+      "ended": "2026-10-23T18:44:30.060Z",
+      "seconds": 0.194,
+      "argv": [
+        "git",
+        "stash",
+        "push",
+        "--include-untracked",
+        "--message",
+        "pm-tool historical worktree ui-impeccable archived at 4a879e8; recoverable retirement 2026-10-24"
+      ],
+      "exitCode": 0,
+      "recoverArgv": [
+        "git",
+        "-C",
+        "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/ui-impeccable",
+        "stash",
+        "apply",
+        "--index",
+        "1e8f963337e89fa222f794b38e317454353293d6"
+      ],
+      "warning": "仅需恢复时执行；先确认目标工作树干净，不自动恢复或删除stash。"
+    }
+  ],
+  "correctedMainReferences": [
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/board-fullwidth-independent-retest-20261021-evidence/source/docs/testing/board-fixture-clarification-20261021-fixture.json",
+      "sha256": "41c91b49024270667b5a43e2f927bc43c478b8b69384c95b157aa01643176b87",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/backup.json",
+      "sha256": "7c28e49e68fb9c6197c9b9ac11b793e7f1deb0b17514417d568386f48de20c56",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/expected.json",
+      "sha256": "3fbc9398fb3e03cd27a5378b42a34813ac3df6b68de2eaac700459f6768fc47e",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/ids.json",
+      "sha256": "0844aa23fd9748f837a749961f93fe128a7396ab00e769eb1d3d96d1d50c761a",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F3/pmtool-backup-2026-10-21T13-44-52-909Z.json",
+      "sha256": "7c28e49e68fb9c6197c9b9ac11b793e7f1deb0b17514417d568386f48de20c56",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json",
+      "sha256": "8f9bf659a59077af3753900b9fec43dbca752673e59516d025f649a1982f8b4c",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+      "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+      "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/backup.json.files.c4489a2257c622df/manifest.json",
+      "sha256": "239d947c7124fcf3286a666f57d729f0b3ebbd54618a433021a6f01378a5ad04",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/expected.json",
+      "sha256": "b2af85cd52e9a6c773d5418dfd7891d392b4c40883600cc57e52c08581055bb6",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/ids.json",
+      "sha256": "5e4c5d1576fd69d5c1c8d0070115bf4d086fd0959884db068263becf4ff4ecea",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json",
+      "sha256": "8f9bf659a59077af3753900b9fec43dbca752673e59516d025f649a1982f8b4c",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522.md",
+      "sha256": "875a72ee9315a77dc0407dbfe29ce8823dfd2671e3c785ee69ffc6e18dbb2522",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/87/87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a.md",
+      "sha256": "87ef7d4f570468db73bd600a35b913cba4f82d5101a4e559536ecab8cf472d1a",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/materials-files-reports-independent-auto-20261021-evidence/materials-files-reports-independent-auto-20261021-fiKpOr/fixtures/F5/pmtool-backup-2026-10-21T13-44-55-392Z.json.files.c4489a2257c622df/manifest.json",
+      "sha256": "239d947c7124fcf3286a666f57d729f0b3ebbd54618a433021a6f01378a5ad04",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2-backup.json",
+      "sha256": "8175cde22e0b275193b3a86c85a41b5ee3cf980758e278f324f7dbadc301f3f0",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-5003Yo/f2.json",
+      "sha256": "ed3b44ef0b613b47d42935f8e0fab74e7370f3d5fb94a28ce9abeb87e4844a6f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2-backup.json",
+      "sha256": "cf66c955930e5fce2837b0c930209ebb3a3fc710f1d7864d35e6daf3469e6c83",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-JID1P6/f2.json",
+      "sha256": "82468bedf2f3bb71339896ac9fd8152d559d44f1b517298c7e7c48e9aed1c790",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2-backup.json",
+      "sha256": "c280dd81def587b38e1ce3efc974e5befc8c07970ce455f63e797634e63729b1",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-Rhq82s/f2.json",
+      "sha256": "17e7574387bd4cbd3940d072afb4ea1278b042981ae11656fdeeddc1e2bf71d0",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-5dSUl6/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-B0TOqc/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-BgYW1S/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/current/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2-backup.json",
+      "sha256": "451ce27c0b84c61419a6770dee27bf70795fef24b081e6be73c551bd9e7a1d8b",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    },
+    {
+      "group": "all-closure-20261021",
+      "path": "docs/testing/objective-number-independent-retest-20261021-selftmp/run-Jf7jWf/old/docs/testing/objective-independent-auto-20261021-evidence/objective-independent-auto-20261021-9dg1J5/f2.json",
+      "sha256": "ec25f42d12190f509c32a78f760c21fcc817afcedb45ea33039436c17b03c22f",
+      "meaning": "Same bytes in local main directory, but absent from main Git commit; full original retained in local stash."
+    }
+  ],
+  "correction": "先前manifest的98项sameAsMain仅证明主目录同字节，其中39项位于被忽略原证目录，不在daedefc提交；对应旧archivedReference不作为Git入库证明。本记录给出完整168项经字节校验的本机stash保管位置。",
+  "portability": "stash仅在本机Git对象库，不随普通clone获得；70独有原件和3份差异已在main历史存档中。39份本机重复原始夹具仍作为本机证据保留，不声称随main发布。",
+  "checks": [
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/private/tmp/pmtool-all-closure-20261021",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVAD6ex/verify-wt",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADfXc/worktrees/sh4-gantt-milestone",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EAVADW57/worktrees/pm-launcher",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsAUo/worktrees/sh2-sh7",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsAUo/worktrees/sh6-d10",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/it-wt/ux-launcher-batch",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/worktrees/d03-d06-d09-d08-d11",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000EjjEsPUp/worktrees/non-p0",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/pm-e-board",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/pm-e-board-p0",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38446250805701122/agents/s_000ELV8LVen/worktrees/sh1-board",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Library/Application Support/DoubaoWork/Default/.doubaowork/agent_mode/workspace/.sessions/38447212582650882/agents/s_000ElkeZqJ2/freeze/wt-06a131c",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1a",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1b",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/batch-1d-gd",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/p0-tasks",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/sh8-sh9-d12-d13",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/ui-impeccable",
+      "exitCode": 0,
+      "status": ""
+    },
+    {
+      "path": "/Users/bytedance/Projects/dsh-pm/pm-tool/.tmp/v0.7.1-restore",
+      "exitCode": 0,
+      "status": ""
+    }
+  ],
+  "scope": "历史树可恢复封存；不修改当前产品、不触发GUI验收、不变更正式服务。"
+}

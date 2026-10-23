@@ -7,13 +7,45 @@
     "bytes": 18015,
     "sha256": "d4558c19abf95b8e9420bdf1b6171721c3ec6c41b6e224e6fc610403a2cd24d1"
   },
+  "ui-impeccable.patch": {
+    "bytes": 84670,
+    "sha256": "cda0e4d27d5ee341b4ffd61d33326932b22a4576c637d1bae68cc61654d50c23"
+  },
+  "status.md": {
+    "bytes": 4313,
+    "sha256": "9ded989e86427da58f19298424312353817992a705e775a801e235680c65a8fe"
+  },
   "manifest.json": {
     "bytes": 105143,
     "sha256": "168e13b2ac421e9bef07e36529ba496b546d218bf64759a5c4e741b64eb30f24"
   },
-  "snapshots/all-closure-20261021/launcher/test/fc-a2-additional.test.mjs": {
-    "bytes": 13413,
-    "sha256": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0"
+  "retirement.json": {
+    "bytes": 26228,
+    "sha256": "88b19274f40d19909006f784a0b6860c23eaa773e79e7a882221df60c4263ec4"
+  },
+  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.ts": {
+    "bytes": 12459,
+    "sha256": "02fd446aa9a956ce32c3004cb8e79225d711a8f20fcc974306fb8aa6599db8c7"
+  },
+  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.test.ts": {
+    "bytes": 8129,
+    "sha256": "c5eea9acca37121bd478a00842c7f5fb09cd43705761a67b4aacc8ecc284e648"
+  },
+  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.ts": {
+    "bytes": 3127,
+    "sha256": "1b6aa212b8647f7f3ec99c680696ad5847ba9fb136452a77f5302d61b88a5b9a"
+  },
+  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/panel.tsx": {
+    "bytes": 186847,
+    "sha256": "ff284377adc2c3ce72bb348d5eccc2bfcba32fa5d1d8009b94b27f8af52199d8"
+  },
+  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.test.ts": {
+    "bytes": 3880,
+    "sha256": "4fe25dc158771c652d326b35369ce7951a86fddc8d7bc49f0f6cb5e669123ca2"
+  },
+  "snapshots/all-closure-20261021/launcher/test/fc-independent-probes.test.mjs": {
+    "bytes": 9595,
+    "sha256": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740"
   },
   "snapshots/all-closure-20261021/launcher/test/fc-a2-followup.test.mjs": {
     "bytes": 14850,
@@ -27,9 +59,9 @@
     "bytes": 19686,
     "sha256": "9a3e015baecea113a415f778299a16266a525044e03395c911422d8ba3af7ab6"
   },
-  "snapshots/all-closure-20261021/launcher/test/fc-independent-probes.test.mjs": {
-    "bytes": 9595,
-    "sha256": "4599aa376bbc2d349da9956fec48c85f50593e66fbf90dfe96a5c661143de740"
+  "snapshots/all-closure-20261021/launcher/test/fc-a2-additional.test.mjs": {
+    "bytes": 13413,
+    "sha256": "dd033590aae6b11aab1b54bd35f89b4d3825fa2d2955b18f268c312f6a5b66b0"
   },
   "snapshots/all-closure-20261021/packages/dsh-pm-tool/package.json": {
     "bytes": 3109,
@@ -39,9 +71,21 @@
     "bytes": 25674,
     "sha256": "492f4cb47083e98360acdf7e08df92d36cec3b4db2743fd93f3f4c7dc076d110"
   },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/panel.css": {
-    "bytes": 325752,
-    "sha256": "42f1222456948542464e22de87340c64dd443089183602a6d6a9baf9f25e2063"
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.ts": {
+    "bytes": 13365,
+    "sha256": "3808eef79e34595754ea9d8970d62c5c5da87feb1f42722eba593a061f1bbde7"
+  },
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.test.ts": {
+    "bytes": 9779,
+    "sha256": "a5e7ff8b13cecb6d0fcbcb6f8f214a61c5aec0ea54152af91af4dc1490a5c805"
+  },
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/tasks.ts": {
+    "bytes": 33273,
+    "sha256": "c3e0d8a379b5dbbe41331ba42df265711c90a12dbcb8a47955ee70c4d4723fe3"
+  },
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/commands/ask.ts": {
+    "bytes": 34928,
+    "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26"
   },
   "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/panel.tsx": {
     "bytes": 189611,
@@ -55,248 +99,208 @@
     "bytes": 3328,
     "sha256": "c7c2578c2b3799c422ff202bde7b2003492e3688a30dac3ee84c9e3b4c9e517b"
   },
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/panel.css": {
+    "bytes": 325752,
+    "sha256": "42f1222456948542464e22de87340c64dd443089183602a6d6a9baf9f25e2063"
+  },
   "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/shared/task-draft-materials.tsx": {
     "bytes": 22420,
     "sha256": "66af8221d089a2ad65fa4d831be218c4a78d3299c23239cfaf750497c4edc2ae"
-  },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/gantt.tsx": {
-    "bytes": 30901,
-    "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf"
-  },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx": {
-    "bytes": 12312,
-    "sha256": "eeb6e71ec5f7908119a05a6fb7f92c34f92c9f49117da335210041bcb8f88539"
   },
   "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks.css": {
     "bytes": 42828,
     "sha256": "101a5f01bbd77dd8f234bbe2145df143cbc35682841f8317f5f18d8247d961b4"
   },
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks-import-confirm.test.tsx": {
+    "bytes": 12312,
+    "sha256": "eeb6e71ec5f7908119a05a6fb7f92c34f92c9f49117da335210041bcb8f88539"
+  },
   "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/tasks.tsx": {
     "bytes": 66935,
     "sha256": "9789e5811ab09dcbc1c561ccec463e905795b34da1eb7f996bab73d8d21ef91e"
   },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/commands/ask.ts": {
-    "bytes": 34928,
-    "sha256": "3db897be1275cbbc2473f73e8eb71bb061365a2ddd882008b33698972905bf26"
-  },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/tasks.ts": {
-    "bytes": 33273,
-    "sha256": "c3e0d8a379b5dbbe41331ba42df265711c90a12dbcb8a47955ee70c4d4723fe3"
-  },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.test.ts": {
-    "bytes": 9779,
-    "sha256": "a5e7ff8b13cecb6d0fcbcb6f8f214a61c5aec0ea54152af91af4dc1490a5c805"
-  },
-  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/core/ui-feedback.ts": {
-    "bytes": 13365,
-    "sha256": "3808eef79e34595754ea9d8970d62c5c5da87feb1f42722eba593a061f1bbde7"
-  },
-  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.test.ts": {
-    "bytes": 3880,
-    "sha256": "4fe25dc158771c652d326b35369ce7951a86fddc8d7bc49f0f6cb5e669123ca2"
-  },
-  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/launch-handshake.ts": {
-    "bytes": 3127,
-    "sha256": "1b6aa212b8647f7f3ec99c680696ad5847ba9fb136452a77f5302d61b88a5b9a"
-  },
-  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/client/panel.tsx": {
-    "bytes": 186847,
-    "sha256": "ff284377adc2c3ce72bb348d5eccc2bfcba32fa5d1d8009b94b27f8af52199d8"
-  },
-  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.test.ts": {
-    "bytes": 8129,
-    "sha256": "c5eea9acca37121bd478a00842c7f5fb09cd43705761a67b4aacc8ecc284e648"
-  },
-  "snapshots/doubao-freeze-06a131c/packages/dsh-pm-tool/src/core/ui-feedback.ts": {
-    "bytes": 12459,
-    "sha256": "02fd446aa9a956ce32c3004cb8e79225d711a8f20fcc974306fb8aa6599db8c7"
+  "snapshots/all-closure-20261021/packages/dsh-pm-tool/src/client/views/gantt.tsx": {
+    "bytes": 30901,
+    "sha256": "838a43451e037fdff363ce73e00570512d785f09f45688bf17afdb08ebc730bf"
   },
   "snapshots/ui-impeccable/docs/changelog.md": {
     "bytes": 129934,
     "sha256": "37cee1219989842ba57b23c33ff1a630936813d349647b1db9ca8edc4f91290c"
   },
-  "snapshots/ui-impeccable/docs/issues-and-solutions.md": {
-    "bytes": 31808,
-    "sha256": "0ce19bed8266c5c49b4b74e68048b9da87c47d8101e085c20fa05b23cce1f285"
-  },
   "snapshots/ui-impeccable/docs/progress.md": {
     "bytes": 49960,
     "sha256": "1ba8d2ab5135d3f39f36ff1df5d8de49116520456c0e17e10513c9875db42c2b"
   },
-  "snapshots/ui-impeccable/docs/reports/impeccable-site-ui-optimization.md": {
-    "bytes": 38891,
-    "sha256": "1b7b31d3633eea64efee6e1230e4ebc527e2c9ac085be239c4f6f2d2ac28b616"
+  "snapshots/ui-impeccable/docs/issues-and-solutions.md": {
+    "bytes": 31808,
+    "sha256": "0ce19bed8266c5c49b4b74e68048b9da87c47d8101e085c20fa05b23cce1f285"
   },
   "snapshots/ui-impeccable/docs/testing/impeccable-ui-acceptance.md": {
     "bytes": 35974,
     "sha256": "b99f9f40785fefcd60ed7a5c9e2b0c13f88b49128ecf50981072615eb0580851"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/01-tasks.png": {
-    "bytes": 104451,
-    "sha256": "d72b9e136025af9fccd4a7a970dc9ec2e79b1ff54db7c3372efc5017fc0abafa"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/02-milestones.png": {
-    "bytes": 90795,
-    "sha256": "41c48a52cf1cc1fe32e6a1b1b9cea4ff59a35eb87f047049506f98f5f2ed6051"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/03-risk-issues.png": {
-    "bytes": 90927,
-    "sha256": "e088a74290e81d05f9a147ed733e19a2e6ca2e82fb063b6fcea52acc95683de6"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/04-meetings.png": {
-    "bytes": 86397,
-    "sha256": "6e20b803593bab2009ee547ca2619b8c36b0e9ae191df3a7d517425bcc0046df"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/05-reports.png": {
-    "bytes": 86369,
-    "sha256": "739a8ad6a78791e8164c9260a0bb56c14a844e628a26ff51e5319a0dde0a7d21"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/06-deliverables.png": {
-    "bytes": 101648,
-    "sha256": "d361d846da80e49ae5fea13dc0385bb86d2ad096c97c81300b511dc77dac37dc"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/07-overview.png": {
-    "bytes": 82475,
-    "sha256": "c063d8e1a5f37d05fb0058a072f366d744b3828a8a392285de760a82c43a8c75"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/08-gantt.png": {
-    "bytes": 101134,
-    "sha256": "5fe8752ecdf1ac81ad8ceb87c3a2d5a7d01fc3da8661ce2d747f33a80485bc27"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/09-people.png": {
-    "bytes": 103723,
-    "sha256": "45c8839cd1667d060e380984a84e1972102abd03a616744a971d0c4a7665eac6"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after-evidence-report.md": {
+    "bytes": 11699,
+    "sha256": "4ac56cbccd44d53ac6e02b72e3868ed5a4d90e897790663b2f101a2f63d17887"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/10-global-board.png": {
     "bytes": 100083,
     "sha256": "856b36823aea5aedaf8a92d191cdd3c756734404b246f07dfc397c7221c282cd"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/11-drawer-project-edit.png": {
-    "bytes": 69031,
-    "sha256": "977c6b51c1e96e9b349deb7a7156b950e7d1cb56269087f48fde07323e58af89"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/09-people.png": {
+    "bytes": 103723,
+    "sha256": "45c8839cd1667d060e380984a84e1972102abd03a616744a971d0c4a7665eac6"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/12-drawer-task-create.png": {
-    "bytes": 68754,
-    "sha256": "9cea9b64b3d095c378fad62ecd280ebd969696c0700a07d2dbadba0122528816"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/01-tasks.png": {
+    "bytes": 104451,
+    "sha256": "d72b9e136025af9fccd4a7a970dc9ec2e79b1ff54db7c3372efc5017fc0abafa"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/13-drawer-task-edit.png": {
-    "bytes": 76461,
-    "sha256": "8a4a58d0216a5aed6f8999eb94c0acca4aa964d1f94adc38d3b2bb61e97372de"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/04-meetings.png": {
+    "bytes": 86397,
+    "sha256": "6e20b803593bab2009ee547ca2619b8c36b0e9ae191df3a7d517425bcc0046df"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/06-deliverables.png": {
+    "bytes": 101648,
+    "sha256": "d361d846da80e49ae5fea13dc0385bb86d2ad096c97c81300b511dc77dac37dc"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/14-move-picker.png": {
     "bytes": 82482,
     "sha256": "e5c26a3d2c4281d0344323a924ed884aa48a1102414f16a82fb5803bf144f071"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/15-drawer-milestone-create.png": {
-    "bytes": 54675,
-    "sha256": "25f8165bf9b4cd463004f71042d142b92d6962a43ff843795f0d05b202c22ff9"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-1440-tasks.png": {
+    "bytes": 182787,
+    "sha256": "e1705a5b0e08efbebb69434429a1e022a6b073837e197c375d41886f4d29c54f"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/16-drawer-meeting-create.png": {
-    "bytes": 56188,
-    "sha256": "f026d540a37ad770d17d40b588618859d939d04271b885d9e7d4d20b173cf926"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/05-reports.png": {
+    "bytes": 86369,
+    "sha256": "739a8ad6a78791e8164c9260a0bb56c14a844e628a26ff51e5319a0dde0a7d21"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/17-drawer-report-create.png": {
-    "bytes": 56733,
-    "sha256": "20433a2abc9ff17cacf2cbafca002b59c6f8892b722af57860aaefacf7875033"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/03-risk-issues.png": {
+    "bytes": 90927,
+    "sha256": "e088a74290e81d05f9a147ed733e19a2e6ca2e82fb063b6fcea52acc95683de6"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/18-drawer-deliverable-create.png": {
-    "bytes": 69376,
-    "sha256": "c22b153f235c0b26a09bd92bfdde668a62c0a2cea7e2dc43caae386deca42b4c"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/19-empty-project.png": {
-    "bytes": 88777,
-    "sha256": "bd6955ddf0e12af11a1e0e8b7bee120ec396c4e6b4e0bfac9eaefde2dfbbdaca"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/21-theme-dark-tasks.png": {
-    "bytes": 106967,
-    "sha256": "ca8fc9e3d5781f0d53ccf0c816fe037655f6b0d242700541b331ce49385c27c1"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/12-drawer-task-create.png": {
+    "bytes": 68754,
+    "sha256": "9cea9b64b3d095c378fad62ecd280ebd969696c0700a07d2dbadba0122528816"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/21-theme-dark.png": {
     "bytes": 83944,
     "sha256": "b52abf81c8f345ef979ecb46c206148beb02a2857932fe57e142ba9986b567bf"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/after-measurements.json": {
-    "bytes": 19697,
-    "sha256": "65b5c59f4c6b8dfa62c95e787fdfc73d0e7ab277984e2edff81f010e2fbf3e47"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/13-drawer-task-edit.png": {
+    "bytes": 76461,
+    "sha256": "8a4a58d0216a5aed6f8999eb94c0acca4aa964d1f94adc38d3b2bb61e97372de"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/dark-host-real-overview.png": {
-    "bytes": 106329,
-    "sha256": "60f53e5a7b33372103a0ac2161126251b29a8f29218072794e87dfa06eab567e"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/17-drawer-report-create.png": {
+    "bytes": 56733,
+    "sha256": "20433a2abc9ff17cacf2cbafca002b59c6f8892b722af57860aaefacf7875033"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/dark-host-real-tasks.png": {
     "bytes": 106329,
     "sha256": "60f53e5a7b33372103a0ac2161126251b29a8f29218072794e87dfa06eab567e"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-after.txt": {
-    "bytes": 2709,
-    "sha256": "d3deb362d212f0e81354b5d02a3d497720c27601decccb2c423f8ae79d688e3a"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-before.txt": {
-    "bytes": 2709,
-    "sha256": "818875726c87ded617ffe48a7fad5acd176b7f44173d2fa81a99c1649096f31d"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/detect-after.json": {
-    "bytes": 3,
-    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-390-drawer.json": {
-    "bytes": 258,
-    "sha256": "5234474640b3ef8a3370f19dda313b46e9897f0fd82497d3334f71e03d60011a"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/08-gantt.png": {
+    "bytes": 101134,
+    "sha256": "5fe8752ecdf1ac81ad8ceb87c3a2d5a7d01fc3da8661ce2d747f33a80485bc27"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-390-probe.json": {
     "bytes": 2600,
     "sha256": "cac7fe180ea5169c2b948d77e5e223e809ea8a8116db42699fc777b917df7534"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-dark-probe.json": {
-    "bytes": 1719,
-    "sha256": "f2bac9a6c226ea0f494bedcba194488414d2652d681a82b1b29da34bf3a2aba4"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-tasks-independent.png": {
+    "bytes": 78128,
+    "sha256": "2c5467e47b62fec8a67c739242eeea2b72f3d5458821086ba4d17c845ccbf5ec"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-keyboard-probe.json": {
-    "bytes": 577,
-    "sha256": "ffe960b01bf27ff1e5877ee86ef59a1912cc3ca44a160b69455987c5252c3bbf"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/15-drawer-milestone-create.png": {
+    "bytes": 54675,
+    "sha256": "25f8165bf9b4cd463004f71042d142b92d6962a43ff843795f0d05b202c22ff9"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/07-overview.png": {
+    "bytes": 82475,
+    "sha256": "c063d8e1a5f37d05fb0058a072f366d744b3828a8a392285de760a82c43a8c75"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-after-create.png": {
     "bytes": 186106,
     "sha256": "705e8f8623994652306d6bb477da211f4e8116f8261a0e811c7ac12f2ad6180e"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-01-list.png": {
-    "bytes": 169654,
-    "sha256": "67f7882f8818ad1024ad8f2d34039062918b2dfdf96fbbe618e9811c690d3ee3"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/19-empty-project.png": {
+    "bytes": 88777,
+    "sha256": "bd6955ddf0e12af11a1e0e8b7bee120ec396c4e6b4e0bfac9eaefde2dfbbdaca"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-02-afteradd.png": {
-    "bytes": 161325,
-    "sha256": "c5384e6465c89052d5b0e5190575de38c6338cacf0a8a89edb0fa784e30ab1c3"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-1440-tasks.png": {
-    "bytes": 182787,
-    "sha256": "e1705a5b0e08efbebb69434429a1e022a6b073837e197c375d41886f4d29c54f"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-drawer-independent.png": {
-    "bytes": 29062,
-    "sha256": "f402c8a2a6a9d4e07bbc90dfbb3d61ae7e8bf8a8061877ea34eff90386b45ad2"
-  },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-tasks-independent.png": {
-    "bytes": 78128,
-    "sha256": "2c5467e47b62fec8a67c739242eeea2b72f3d5458821086ba4d17c845ccbf5ec"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-after.txt": {
+    "bytes": 2709,
+    "sha256": "d3deb362d212f0e81354b5d02a3d497720c27601decccb2c423f8ae79d688e3a"
   },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-tasks.png": {
     "bytes": 78214,
     "sha256": "dea0c8c8efa014b9ac6fb7db1b8d3a446646d1b426883ffb3718bd8d415fe390"
   },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/11-drawer-project-edit.png": {
+    "bytes": 69031,
+    "sha256": "977c6b51c1e96e9b349deb7a7156b950e7d1cb56269087f48fde07323e58af89"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/02-milestones.png": {
+    "bytes": 90795,
+    "sha256": "41c48a52cf1cc1fe32e6a1b1b9cea4ff59a35eb87f047049506f98f5f2ed6051"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/18-drawer-deliverable-create.png": {
+    "bytes": 69376,
+    "sha256": "c22b153f235c0b26a09bd92bfdde668a62c0a2cea7e2dc43caae386deca42b4c"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-keyboard-probe.json": {
+    "bytes": 577,
+    "sha256": "ffe960b01bf27ff1e5877ee86ef59a1912cc3ca44a160b69455987c5252c3bbf"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/data-hash-before.txt": {
+    "bytes": 2709,
+    "sha256": "818875726c87ded617ffe48a7fad5acd176b7f44173d2fa81a99c1649096f31d"
+  },
   "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-768-tasks.png": {
     "bytes": 138445,
     "sha256": "e542f277f83d6b8539effcfe4f89210a6f14650b864ed9d085e2aa354f5b24ba"
   },
-  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after-evidence-report.md": {
-    "bytes": 11699,
-    "sha256": "4ac56cbccd44d53ac6e02b72e3868ed5a4d90e897790663b2f101a2f63d17887"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/width-390-drawer-independent.png": {
+    "bytes": 29062,
+    "sha256": "f402c8a2a6a9d4e07bbc90dfbb3d61ae7e8bf8a8061877ea34eff90386b45ad2"
   },
-  "status.md": {
-    "bytes": 2837,
-    "sha256": "d6199d0e92a669ef821ced66c2dff9cdfd6694dcdce4bb07f142d31f4ac16110"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-390-drawer.json": {
+    "bytes": 258,
+    "sha256": "5234474640b3ef8a3370f19dda313b46e9897f0fd82497d3334f71e03d60011a"
   },
-  "ui-impeccable.patch": {
-    "bytes": 84670,
-    "sha256": "cda0e4d27d5ee341b4ffd61d33326932b22a4576c637d1bae68cc61654d50c23"
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/dark-host-real-overview.png": {
+    "bytes": 106329,
+    "sha256": "60f53e5a7b33372103a0ac2161126251b29a8f29218072794e87dfa06eab567e"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/detect-after.json": {
+    "bytes": 3,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-02-afteradd.png": {
+    "bytes": 161325,
+    "sha256": "c5384e6465c89052d5b0e5190575de38c6338cacf0a8a89edb0fa784e30ab1c3"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/int-dbg-01-list.png": {
+    "bytes": 169654,
+    "sha256": "67f7882f8818ad1024ad8f2d34039062918b2dfdf96fbbe618e9811c690d3ee3"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/16-drawer-meeting-create.png": {
+    "bytes": 56188,
+    "sha256": "f026d540a37ad770d17d40b588618859d939d04271b885d9e7d4d20b173cf926"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/independent-dark-probe.json": {
+    "bytes": 1719,
+    "sha256": "f2bac9a6c226ea0f494bedcba194488414d2652d681a82b1b29da34bf3a2aba4"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/after-measurements.json": {
+    "bytes": 19697,
+    "sha256": "65b5c59f4c6b8dfa62c95e787fdfc73d0e7ab277984e2edff81f010e2fbf3e47"
+  },
+  "snapshots/ui-impeccable/docs/verification/impeccable-ui/after/21-theme-dark-tasks.png": {
+    "bytes": 106967,
+    "sha256": "ca8fc9e3d5781f0d53ccf0c816fe037655f6b0d242700541b331ce49385c27c1"
+  },
+  "snapshots/ui-impeccable/docs/reports/impeccable-site-ui-optimization.md": {
+    "bytes": 38891,
+    "sha256": "1b7b31d3633eea64efee6e1230e4ebc527e2c9ac085be239c4f6f2d2ac28b616"
   }
 }
